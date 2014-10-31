@@ -224,3 +224,4 @@ config.cfg
 .idea/
 out/
 data/drop dump.cfg
+data/logSaves.txt

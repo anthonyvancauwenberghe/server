@@ -51,6 +51,8 @@ public class WeaponAnimManager {
     public static int getDefendAnimation(Player player, int id, int shield) {
         if(shield >= 8844 && shield <= 8850)
             return 4177;
+            if (id == 15486 && shield == 6889) //todo more
+            return 12806;
         if(shield != - 1) {
             return 1156;
         }

@@ -221,4 +221,5 @@ config.cfg
 /data/characters/*.txt
 /data/characters/wiped/*.txt
 /logs/*.txt
-.idea/*
+.idea/
+out/

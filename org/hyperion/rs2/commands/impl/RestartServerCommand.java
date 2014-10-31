@@ -18,12 +18,13 @@ public class RestartServerCommand extends Command {
 
 	@Override
 	public boolean execute(Player player, String input) {
-        if (true)
+        player.sendMessage("excecuted");
+        if (!Rank.hasAbility(player, Rank.OWNER)) //done ill update :)
             return false;
-		if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME && Rank.hasAbility(player, Rank.DEVELOPER)) {
+	/*	if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME && Rank.hasAbility(player, Rank.OWNER)) {
 			player.getActionSender().sendMessage("Minimum uptime hasn't been reached yet.");
 			return false;
-		}
+		}*/
 		String reason = filterInput(input);
 		if(reason.length() < 2) {
 			player.getActionSender().sendMessage("Please specify a reason for the restart.");
@@ -31,6 +32,8 @@ public class RestartServerCommand extends Command {
 			return false;
 		}
 		World.getWorld().update(UPDATE_TIMER, player.getName() + "\t" + reason);
+
+        player.sendMessage("4");
 		return true;
 
 	}

@@ -1,0 +1,35 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.Packet;
+
+public class PickupItemPacketHandler implements PacketHandler {
+
+	@Override
+	public void handle(Player player, Packet packet) {
+		switch(packet.getOpcode()) {
+		case 236:
+			/*
+			 * Option 1.
+			 */
+			option1(player, packet);
+			break;
+		}
+	}
+
+	/**
+	 * Handles the first option on a player option menu.
+	 * @param player
+	 * @param packet
+	 */
+	private void option1(final Player player, Packet packet) {
+		int itemY = packet.getLEShort();
+		int itemID = packet.getShort();
+		int itemX = packet.getLEShort();
+		World.getWorld().getGlobalItemManager().pickupItem(player,itemID,itemX,itemY);
+	}
+
+		
+}
+

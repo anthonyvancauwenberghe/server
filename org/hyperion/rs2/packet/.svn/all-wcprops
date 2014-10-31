@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/packet
+END
+NPCOptionPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/NPCOptionPacketHandler.java
+END
+ActionButtonPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/ActionButtonPacketHandler.java
+END
+PickupItemPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/PickupItemPacketHandler.java
+END
+CommandPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/CommandPacketHandler.java
+END
+PacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/PacketHandler.java
+END
+ChatPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/packet/ChatPacketHandler.java
+END
+SwitchItemPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/SwitchItemPacketHandler.java
+END
+DropItemPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/DropItemPacketHandler.java
+END
+ObjectClickHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/packet/ObjectClickHandler.java
+END
+DefaultPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/DefaultPacketHandler.java
+END
+PlayerOptionPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/PlayerOptionPacketHandler.java
+END
+CloseInterfacePacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/CloseInterfacePacketHandler.java
+END
+ItemOptionPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/packet/ItemOptionPacketHandler.java
+END
+QuietPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/QuietPacketHandler.java
+END
+CastMagicPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/CastMagicPacketHandler.java
+END
+WalkingPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/darkstar/!svn/ver/11/trunk/src/org/hyperion/rs2/packet/WalkingPacketHandler.java
+END
+ObjectOptionPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/ObjectOptionPacketHandler.java
+END
+FriendModifier.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/packet/FriendModifier.java
+END
+EnterAmountPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/EnterAmountPacketHandler.java
+END
+WieldPacketHandler.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/packet/WieldPacketHandler.java
+END
+ReportAbuse.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/packet/ReportAbuse.java
+END

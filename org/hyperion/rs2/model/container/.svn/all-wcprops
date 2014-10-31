@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/model/container
+END
+Trade.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/model/container/Trade.java
+END
+Container.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/Container.java
+END
+ShopManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/container/ShopManager.java
+END
+Equipment.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/Equipment.java
+END
+ContainerListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/ContainerListener.java
+END
+Bank.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/model/container/Bank.java
+END
+Inventory.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/Inventory.java
+END

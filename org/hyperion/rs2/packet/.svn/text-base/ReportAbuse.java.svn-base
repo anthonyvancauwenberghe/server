@@ -1,0 +1,17 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.util.NameUtils;
+
+public class ReportAbuse implements PacketHandler {
+
+	@Override
+	public void handle(Player player, Packet packet) {
+		String name = NameUtils.longToName(packet.getLong());
+		int rule = packet.get();
+		boolean mute = packet.get() == 1 ? true : false;
+		World.getWorld().getAbuseHandler().reportAbuse(player,name,rule);
+	}
+}

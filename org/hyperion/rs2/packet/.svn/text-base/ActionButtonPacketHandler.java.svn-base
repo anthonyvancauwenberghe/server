@@ -1,0 +1,320 @@
+package org.hyperion.rs2.packet;
+
+import java.util.logging.Logger;
+
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.UpdateSpecialBar;
+import org.hyperion.rs2.model.combat.Defence;
+import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.model.container.Equipment;
+
+/**
+ * Handles clicking on most buttons in the interface.
+ * @author Graham Edgecombe
+ *
+ */
+public class ActionButtonPacketHandler implements PacketHandler {
+
+	/**
+	 * The logger instance.
+	 */
+	private static final Logger logger = Logger.getLogger(ActionButtonPacketHandler.class.getName());
+	
+	@Override
+	public void handle(Player player, Packet packet) {
+		final int button = packet.getShort();
+		if(World.getWorld().getContentManager().handlePacket(0,player,button,-1,-1,-1))
+			return;
+		switch(button) {
+		/*case 5609:
+		case 5610:
+		case 5611:
+		case 5612:
+		case 5613:
+		case 5614:
+		case 5615:
+		case 5616:
+		case 5617:
+		case 5618:
+		case 5619:
+		case 5620:
+		case 5621:
+		case 5622:
+		case 5623:
+		case 683:
+		case 684:
+		case 685:
+			Prayer.actionButton(player,button);
+			break;*/
+		//axe
+		case 2429://accurate slash
+		case 2432://agre slash
+		case 2431://control stab
+		case 2430://def slash
+
+		//whip:
+		case 12298://accur,slash
+		case 12297://control,slash
+		case 12296://def,slash
+
+		//dagger:
+		case 2282://acc stab
+		case 2285://agre stab
+		case 2284://agre stab
+		case 2283://defensive stab
+
+		/*//scim
+		case 2429://slash accurate
+		case 2432://slash agre
+		case 2433://stab control
+		case 2434://slash def*/
+
+		//staff
+		case 336://acc crush
+		case 335://agre crush
+		case 334://def crush
+
+		//halbeard
+		case 8466://control stab 
+		case 8468://agre slash
+		case 8467://def stab
+
+		//unarmed
+		case 5860://accur crush 
+		case 5862://agre crush
+		case 5861://def crush
+			player.cE.setAtkType(Defence.atkType(button));
+			player.cE.trainSkill = Defence.trainStat(button);
+		break;
+		case 4454://accur
+		case 1772://accur
+		player.cE.bowType = 0;
+		break;
+		case 4453://rapid
+		case 1771://rapid
+		player.cE.bowType = 1;
+		break;
+		case 4452://long
+		case 1770://long
+		player.cE.bowType = 2;
+		break;
+		case 1164:
+			Magic.teleport(player,"edgeville");
+			break;
+		case 1167:
+			Magic.teleport(player,"lumbridge");
+			break;
+		case 1170:
+			Magic.teleport(player,"falnor");
+			break;
+		case 1174:
+			Magic.teleport(player,"camelot");
+			break;
+		case 1540:
+			Magic.teleport(player,"argonoue");
+			break;
+		case 12311:
+		case 7587:
+		case 8481:
+		case 7537:
+		case 7562:
+			if(!player.specOn)
+			player.specOn = true;
+				else
+			player.specOn = false;
+			UpdateSpecialBar.refreshSendQuest(player);
+			break;
+		case 3420:
+			player.tradeAccept1 = true;
+			player.openingTrade = false;
+			Trade.finishTrade(player);
+			break;
+		case 3546:
+			player.tradeAccept2 = true;
+			player.openingTrade = false;
+			Trade.finishTrade(player);
+			break;
+		case 15101:
+			player.getActionSender().showInterface(15106);
+			break;
+		case 161:
+			player.playAnimation(Animation.CRY);
+			break;
+		case 162:
+			player.playAnimation(Animation.THINKING);
+			break;
+		case 163:
+			player.playAnimation(Animation.WAVE);
+			break;
+		case 164:
+			player.playAnimation(Animation.BOW);
+			break;
+		case 165:
+			player.playAnimation(Animation.ANGRY);
+			break;
+		case 166:
+			player.playAnimation(Animation.DANCE);
+			break;
+		case 167:
+			player.playAnimation(Animation.BECKON);
+			break;
+		case 168:
+			player.playAnimation(Animation.YES_EMOTE);
+			break;
+		case 169:
+			player.playAnimation(Animation.NO_EMOTE);
+			break;
+		case 170:
+			player.playAnimation(Animation.LAUGH);
+			break;
+		case 171:
+			player.playAnimation(Animation.CHEER);
+			break;
+		case 172:
+			player.playAnimation(Animation.CLAP);
+			break;
+		case 13362:
+			player.playAnimation(Animation.PANIC);
+			break;
+		case 13363:
+			player.playAnimation(Animation.JIG);
+			break;
+		case 13364:
+			player.playAnimation(Animation.SPIN);
+			break;
+		case 13365:
+			player.playAnimation(Animation.HEADBANG);
+			break;
+		case 13366:
+			player.playAnimation(Animation.JOYJUMP);
+			break;
+		case 13367:
+			player.playAnimation(Animation.RASPBERRY);
+			break;
+		case 13368:
+			player.playAnimation(Animation.YAWN);
+			break;
+		case 13383:
+			player.playAnimation(Animation.GOBLIN_BOW);
+			break;
+		case 13384:
+			player.playAnimation(Animation.GOBLIN_DANCE);
+			break;
+		case 13369:
+			player.playAnimation(Animation.SALUTE);
+			break;
+		case 13370:
+			player.playAnimation(Animation.SHRUG);
+			break;
+		case 11100:
+			player.playAnimation(Animation.BLOW_KISS);
+			break;
+		case 667:
+			player.playAnimation(Animation.GLASS_BOX);
+			break;
+		case 6503:
+			player.playAnimation(Animation.CLIMB_ROPE);
+			break;
+		case 6506:
+			player.playAnimation(Animation.LEAN);
+			break;
+		case 666:
+			player.playAnimation(Animation.GLASS_WALL);
+			break;
+		case 2458:
+			player.getActionSender().sendLogout();
+			break;
+		case 5387:
+			player.getSettings().setWithdrawAsNotes(false);
+			break;
+		case 5386:
+			player.getSettings().setWithdrawAsNotes(true);
+			break;
+		case 8130:
+			player.getSettings().setSwapping(true);
+			break;
+		case 8131:
+			player.getSettings().setSwapping(false);
+			break;
+		case 152:
+			player.getWalkingQueue().setRunningToggled(false);
+			break;
+		case 153://run
+			player.getWalkingQueue().setRunningToggled(true);
+			break;
+		/*normal*/
+		case 1830:
+		case 1831:
+		case 1832:
+		case 1833:
+		case 1834:
+		case 1835:
+		case 1836:
+		case 1837:
+		case 1838:
+		case 1839:
+		case 1840:
+		case 1841:
+		case 1842:
+		case 1843:
+		case 1844:
+		case 1845:
+		/*ancients*/
+		case 13189:
+		case 13241:
+		case 13147:
+		case 6162:
+		case 13215:
+		case 13267:
+		case 13167:
+		case 13125:
+		case 13202:
+		case 13254:
+		case 13158:
+		case 13114:
+		case 13228:
+		case 13280:
+		case 13178:
+		case 13136:
+			player.cE.setAutoCastId(Magic.getAutoCastId(button));
+			player.getActionSender().sendSidebarInterface(0, 328);
+			player.getActionSender().sendClientConfig(108, 1);
+			break;
+		case 2004:
+			player.cE.setAutoCastId(-1);
+			player.getActionSender().sendSidebarInterface(0, 328);
+			player.getActionSender().sendClientConfig(108, 0);
+			break;
+		case 349://intergrated to next case
+			if(player.cE.getAutoCastId() > 0){
+				player.cE.setAutoCastId(-1);
+				player.getActionSender().sendSidebarInterface(0, 328);
+				player.getActionSender().sendClientConfig(108, 0);
+				break;
+			}
+		case 353:
+			if(player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4675)
+				if(player.ancients)
+					player.getActionSender().sendSidebarInterface(0, 1689);
+				else
+					player.getActionSender().sendMessage("You need to switch to ancient magicks before you can autocast them.");
+			else
+				player.getActionSender().sendSidebarInterface(0, 1829);
+			break;
+		case 151:
+			player.autoRetailate = true;
+			break;
+		case 150:
+			player.autoRetailate = false;
+			break;
+		default:
+			logger.info("Unhandled action button : " + button);
+			break;
+		}
+	}
+
+}

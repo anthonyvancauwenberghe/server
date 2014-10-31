@@ -1,0 +1,978 @@
+package org.hyperion.rs2.model;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Map;
+import java.util.HashMap;
+
+import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.mina.core.session.IoSession;
+import org.hyperion.data.Persistable;
+import org.hyperion.rs2.action.ActionQueue;
+import org.hyperion.rs2.event.impl.DeathEvent;
+import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.Damage.Hit;
+import org.hyperion.rs2.model.Damage.HitType;
+import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.rs2.net.ISAACCipher;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.packet.ObjectClickHandler;
+import org.hyperion.rs2.util.IoBufferUtils;
+import org.hyperion.rs2.util.NameUtils;
+
+
+/**
+ * Represents a player-controller character.
+ * @author Graham Edgecombe
+ *
+ */
+public class Player extends Entity implements Persistable {
+	
+	/**
+	 * Represents the rights of a player.
+	 * @author Graham Edgecombe
+	 *
+	 */
+	public enum Rights {
+		
+		/**
+		 * A standard account.
+		 */
+		PLAYER(0),
+		
+		/**
+		 * A player-moderator account.
+		 */
+		MODERATOR(1),
+		
+		/**
+		 * An administrator account.
+		 */
+		ADMINISTRATOR(2);
+		
+		/**
+		 * The integer representing this rights level.
+		 */
+		public int value;
+		
+		/**
+		 * Creates a rights level.
+		 * @param value The integer representing this rights level.
+		 */
+		private Rights(int value) {
+			this.value = value;
+		}
+		
+		/**
+		 * Gets an integer representing this rights level.
+		 * @return An integer representing this rights level.
+		 */
+		public int toInteger() {
+			return value;
+		}
+
+		/**
+		 * Gets rights by a specific integer.
+		 * @param value The integer returned by {@link #toInteger()}.
+		 * @return The rights level.
+		 */
+		public static Rights getRights(int value) {
+			if(value == 1) {
+				return MODERATOR;
+			} else if(value == 2) {
+				return ADMINISTRATOR;
+			} else {
+				return PLAYER;
+			}
+		}
+	}
+	
+	/*
+	 * Attributes specific to our session.
+	 */
+	
+	/**
+	 * The <code>IoSession</code>.
+	 */
+	private final IoSession session;
+	
+	/**
+	 * The ISAAC cipher for incoming data.
+	 */
+	private final ISAACCipher inCipher;
+	
+	/**
+	 * The ISAAC cipher for outgoing data.
+	 */
+	private final ISAACCipher outCipher;
+	
+	/**
+	 * The action sender.
+	 */
+	private final ActionSender actionSender = new ActionSender(this);
+	
+	/**
+	 * A queue of pending chat messages.
+	 */
+	private final Queue<ChatMessage> chatMessages = new LinkedList<ChatMessage>();
+	
+	/**
+	 * A queue of actions.
+	 */
+	private final ActionQueue actionQueue = new ActionQueue();
+	
+	/**
+	 * The current chat message.
+	 */
+	private ChatMessage currentChatMessage;
+	
+	/**
+	 * Active flag: if the player is not active certain changes (e.g. items)
+	 * should not send packets as that indicates the player is still loading. 
+	 */
+	private boolean active = false;
+	
+	/**
+	 * The interface state.
+	 */
+	private final InterfaceState interfaceState = new InterfaceState(this);
+	
+	/**
+	 * A queue of packets that are pending.
+	 */
+	private final Queue<Packet> pendingPackets = new LinkedList<Packet>();
+	
+	/**
+	 * The request manager which manages trading and duelling requests.
+	 */
+	private final RequestManager requestManager = new RequestManager(this);
+	
+	/*
+	 * Core login details.
+	 */
+	
+	/**
+	 * The name.
+	 */
+	private String name;
+	
+	/**
+	 * The name expressed as a long.
+	 */
+	private long nameLong;
+	
+	/**
+	 * The UID, i.e. number in <code>random.dat</code>.
+	 */
+	private final int uid;
+	
+	/**
+	 * The password.
+	 */
+	private String password;
+	
+	/**
+	 * The rights level.
+	 */
+	private Rights rights = Rights.PLAYER;
+	
+	/**
+	 * The members flag.
+	 */
+	private boolean members = true;
+	
+	private int[] bonus = new int[12];
+	
+	private int shopId = 0;
+	
+	private Player tradeWith = null;
+	
+	public boolean tradeAccept1 = false;
+	public boolean tradeAccept2 = false;
+	public boolean onComfirmScreen = false;
+	public boolean openingTrade = false;
+	
+	public int[] barrowRoom = new int[6];
+	public boolean hasBarrowMonster = false;
+	
+	public int killId = -1;//the npc id to kill
+	public int shouldKill = 0;//the required kill count will apply to all minigames
+	public int hasKill = 0;//kill count will apply to all minigames
+	
+	public int specialPower = 100;
+	public boolean specOn = false;
+	
+	public boolean isFollowing = false;
+	public boolean isMoving = false;
+	
+	public Player tradeWith2 = null;
+	
+	public boolean autoRetailate = false;
+	
+	public long foodTimer = System.currentTimeMillis();
+	
+	private boolean isPlayerBusy = false;
+	
+	public boolean checkBusy(){
+		return isPlayerBusy;
+	}
+	
+	public boolean isBusy(){
+		return isPlayerBusy;
+	}
+	
+	public void setBusy(boolean b){
+		isPlayerBusy = b;
+	}
+	
+	private boolean canWalk = false;
+	
+	public boolean canWalk(){
+		return canWalk;
+	}
+	
+	public void setCanWalk(boolean b){
+		canWalk = b;
+	}
+	
+	public int smithingMenu = -1;
+	
+	private Map<String, Object> extraData = new HashMap<String, Object>();
+
+	public Map<String, Object> getExtraData() {
+		return extraData;
+	}
+	
+	public int[] delayObjectClick = new int[4];//id,x,y,type
+	
+	public boolean handleClickNow(){
+		if(delayObjectClick[3] > 0){
+			int i = 0;
+			while(delayObjectClick[3] >= 4){
+				delayObjectClick[3] -= 4;
+				i++;
+			}
+			if(i == 0){//objects
+				ObjectClickHandler.clickObject(this,delayObjectClick[0],delayObjectClick[1],delayObjectClick[2],delayObjectClick[3]);
+			} else if(i == 1){//npcs
+				
+			}
+			delayObjectClick[3] = -1;
+			return true;
+		}
+		return false;
+	}
+	
+	public int wildernessLevel = -1;
+	public boolean isInMutli = false;
+	public boolean isSkulled = false;
+	public int headIconId = 0;
+	
+	/*
+	 * Player NPC
+	 */
+	
+	private boolean npcState = false;
+	private int npcId = -1;
+
+	public void setPNpc(int id) {
+		this.npcId = id;
+		this.npcState = id > -1 ? true : false;
+		getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+	}
+
+	public boolean getNpcState() {
+		return npcState;
+	}
+
+	public int getNpcId() {
+		return npcId;
+	}
+	
+	private boolean[] prayers = new boolean[18];
+	
+	public void setPrayer(int i) {
+		prayers[i] = !prayers[i];
+	}	
+	
+	public boolean[] getPrayer() {
+		return prayers;
+	}
+	
+	private double drainRate;
+	
+	public double getDrainRate() {
+		return drainRate;
+	}
+	
+	public double setDrainRate(double i) {
+		return drainRate = i;
+	}
+	
+	public void resetDrainRate() {
+		drainRate = 0;
+	}	
+	
+	public void resetPrayers() {
+		int i = 0;
+		for(boolean prayer : getPrayer()) {
+			if(prayer) {
+				setPrayer(i);					
+			}			
+			i++;
+		}
+		resetDrainRate();
+		for(int a = 83; a < 100; a++)
+			getActionSender().sendClientConfig(a, 0);
+		Prayer.setHeadIcon(this);
+		//reset headicon;
+	}
+	
+	
+	/*
+	 * Attributes.
+	 */
+	
+	/**
+	 * The player's appearance information.
+	 */
+	private final Appearance appearance = new Appearance();
+	
+	/**
+	 * The player's equipment.
+	 */
+	private final Container equipment = new Container(Container.Type.STANDARD, Equipment.SIZE);
+	
+	/**
+	 * The player's skill levels.
+	 */
+	private final Skills skills = new Skills(this);
+	
+	/**
+	 * The player's inventory.
+	 */
+	private final Container inventory = new Container(Container.Type.STANDARD, Inventory.SIZE);
+	
+	private final Container trade = new Container(Container.Type.STANDARD, Trade.SIZE);
+	
+	/**
+	 * The player's bank.
+	 */
+	private final Container bank = new Container(Container.Type.ALWAYS_STACK, Bank.SIZE);
+	
+	/**
+	 * The player's settings.
+	 */
+	private final Settings settings = new Settings();
+	
+	/*
+	 * Cached details.
+	 */
+	/**
+	 * The cached update block.
+	 */
+	private Packet cachedUpdateBlock;
+	
+	
+	/**
+	 * Creates a player based on the details object.
+	 * @param details The details object.
+	 */
+	public Player(PlayerDetails details,boolean newCharacter) {
+		super();
+		this.session = details.getSession();
+		this.inCipher = details.getInCipher();
+		this.outCipher = details.getOutCipher();
+		this.name = details.getName();
+		this.nameLong = NameUtils.nameToLong(this.name);
+		this.password = details.getPassword();
+		this.uid = details.getUID();
+		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+		this.setTeleporting(true);
+		this.resetPrayers();
+		this.newCharacter = newCharacter;
+	}
+	
+	private boolean newCharacter = false;
+	
+	public boolean isNew(){
+		return newCharacter;
+	}
+	
+	/**
+	 * Gets the request manager.
+	 * @return The request manager.
+	 */
+	public RequestManager getRequestManager() {
+		return requestManager;
+	}
+	
+	/**
+	 * Gets the player's name expressed as a long.
+	 * @return The player's name expressed as a long.
+	 */
+	public long getNameAsLong() {
+		return nameLong;
+	}
+	
+	/**
+	 * Gets the player's settings.
+	 * @return The player's settings.
+	 */
+	public Settings getSettings() {
+		return settings;
+	}
+	
+	public int getShopId(){
+		return shopId;
+	}
+	
+	public void setShopId(int a){
+		shopId = a;
+	}
+	
+	public Player getTrader(){
+		return tradeWith;
+	}
+	
+	public void setTradeWith(Player p){
+		tradeWith = p;
+	}
+	
+	/**
+	 * Writes a packet to the <code>IoSession</code>. If the player is not
+	 * yet active, the packets are queued.
+	 * @param packet The packet.
+	 */
+	public void write(Packet packet) {
+		synchronized(this) {
+			if(!active) {
+				pendingPackets.add(packet);
+			} else {
+				for(Packet pendingPacket : pendingPackets) {
+					session.write(pendingPacket);
+				}
+				pendingPackets.clear();
+				session.write(packet);
+			}
+		}
+	}
+	
+	/**
+	 * Gets the player's bank.
+	 * @return The player's bank.
+	 */
+	public Container getBank() {
+		return bank;
+	}
+	
+	/**
+	 * Gets the interface state.
+	 * @return The interface state.
+	 */
+	public InterfaceState getInterfaceState() {
+		return interfaceState;
+	}
+	
+	/**
+	 * Checks if there is a cached update block for this cycle.
+	 * @return <code>true</code> if so, <code>false</code> if not.
+	 */
+	public boolean hasCachedUpdateBlock() {
+		return cachedUpdateBlock != null;
+	}
+	
+	/**
+	 * Sets the cached update block for this cycle.
+	 * @param cachedUpdateBlock The cached update block.
+	 */
+	public void setCachedUpdateBlock(Packet cachedUpdateBlock) {
+		this.cachedUpdateBlock = cachedUpdateBlock;
+	}
+	
+	/**
+	 * Gets the cached update block.
+	 * @return The cached update block.
+	 */
+	public Packet getCachedUpdateBlock() {
+		return cachedUpdateBlock;
+	}
+	
+	/**
+	 * Resets the cached update block.
+	 */
+	public void resetCachedUpdateBlock() {
+		cachedUpdateBlock = null;
+	}
+	
+	/**
+	 * Gets the current chat message.
+	 * @return The current chat message.
+	 */
+	public ChatMessage getCurrentChatMessage() {
+		return currentChatMessage;
+	}
+	
+	/**
+	 * Sets the current chat message.
+	 * @param currentChatMessage The current chat message to set.
+	 */
+	public void setCurrentChatMessage(ChatMessage currentChatMessage) {
+		this.currentChatMessage = currentChatMessage;
+	}
+	
+	/**
+	 * Gets the queue of pending chat messages.
+	 * @return The queue of pending chat messages.
+	 */
+	public Queue<ChatMessage> getChatMessageQueue() {
+		return chatMessages;
+	}
+	
+	/**
+	 * Gets the player's appearance.
+	 * @return The player's appearance.
+	 */
+	public Appearance getAppearance() {
+		return appearance;
+	}
+	
+	/**
+	 * Gets the player's equipment.
+	 * @return The player's equipment.
+	 */
+	public Container getEquipment() {
+		return equipment;
+	}
+	
+	/**
+	 * Gets the player's skills.
+	 * @return The player's skills.
+	 */
+	public Skills getSkills() {
+		return skills;
+	}
+	
+	/**
+	 * Gets the action sender.
+	 * @return The action sender.
+	 */
+	public ActionSender getActionSender() {
+		return actionSender;
+	}
+	
+	/**
+	 * Gets the incoming ISAAC cipher.
+	 * @return The incoming ISAAC cipher.
+	 */
+	public ISAACCipher getInCipher() {
+		return inCipher;
+	}
+	
+	/**
+	 * Gets the outgoing ISAAC cipher.
+	 * @return The outgoing ISAAC cipher.
+	 */
+	public ISAACCipher getOutCipher() {
+		return outCipher;
+	}
+	
+	/**
+	 * Gets the player's name.
+	 * @return The player's name.
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * Gets the player's password.
+	 * @return The player's password.
+	 */
+	public String getPassword() {
+		return password;
+	}
+	
+	/**
+	 * Sets the player's password.
+	 * @param pass The password.
+	 */
+	public void setPassword(String pass) {
+		this.password = pass;
+	}
+	
+	/**
+	 * Gets the player's UID.
+	 * @return The player's UID.
+	 */
+	public int getUID() {
+		return uid;
+	}
+	
+	/**
+	 * Gets the <code>IoSession</code>.
+	 * @return The player's <code>IoSession</code>.
+	 */
+	public IoSession getSession() {
+		return session;
+	}
+	
+	/**
+	 * Sets the rights.
+	 * @param rights The rights level to set.
+	 */
+	public void setRights(Rights rights) {
+		this.rights = rights;
+	}
+
+	/**
+	 * Gets the rights.
+	 * @return The player's rights.
+	 */
+	public Rights getRights() {
+		return rights;
+	}
+
+	/**
+	 * Checks if this player has a member's account.
+	 * @return <code>true</code> if so, <code>false</code> if not.
+	 */
+	public boolean isMembers() {
+		return members;
+	}
+	
+	/**
+	 * Sets the members flag.
+	 * @param members The members flag.
+	 */
+	public void setMembers(boolean members) {
+		this.members = members;
+	}
+	
+	@Override
+	public String toString() {
+		return Player.class.getName() + " [name=" + name + " rights=" + rights + " members=" + members + " index=" + this.getIndex() + "]";
+	}
+	
+	/**
+	 * Sets the active flag.
+	 * @param active The active flag.
+	 */
+	public void setActive(boolean active) {
+		synchronized(this) {
+			this.active = active;
+		}
+	}
+
+	/**
+	 * Gets the active flag.
+	 * @return The active flag.
+	 */
+	public boolean isActive() {
+		synchronized(this) {
+			return active;
+		}
+	}
+	
+	/**
+	 * Gets the action queue.
+	 * @return The action queue.
+	 */
+	public ActionQueue getActionQueue() {
+		return actionQueue;
+	}
+
+	/**
+	 * Gets the inventory.
+	 * @return The inventory
+	 */
+	public Container getInventory() {
+		return inventory;
+	}
+	
+	public Container getTrade() {
+		return trade;
+	}
+	
+	public int[] getBonus() {
+		return bonus;
+	}
+	
+	
+	/**
+	 * Updates the players' options when in a PvP area.
+	 */
+	public void updatePlayerAttackOptions(boolean enable) {
+		if(enable) {
+			actionSender.sendInteractionOption("Attack", 1, true);
+			//actionSender.sendOverlay(381);
+		} else {
+			
+		}
+	}
+	
+	/**
+	 * Manages updateflags and HP modification when a hit occurs.
+	 * @param source The Entity dealing the blow.
+	 */
+	public void inflictDamage(Hit inc, Entity source) {
+		if(!getUpdateFlags().get(UpdateFlag.HIT)) {
+			getDamage().setHit1(inc);
+			getUpdateFlags().flag(UpdateFlag.HIT);
+		} else {
+			if(!getUpdateFlags().get(UpdateFlag.HIT_2)) {
+				getDamage().setHit2(inc);
+				getUpdateFlags().flag(UpdateFlag.HIT_2);
+			}
+		}
+		skills.detractLevel(Skills.HITPOINTS, inc.getDamage());
+		if(skills.getLevel(Skills.HITPOINTS) <= 0) {
+			if(!this.isDead()) {
+				Prayer.retribution(this);
+				World.getWorld().submit(new DeathEvent(this));
+			}
+			this.setDead(true);
+		}
+	}
+	public void heal(int hp){
+		heal(hp,3);
+	}
+	public void heal(int hp,int skill){
+		int cHp = skills.getLevel(Skills.HITPOINTS);
+		if((cHp+hp) > skills.getLevelForExperience(skill))
+			skills.setLevel(skill,skills.getLevelForExperience(skill));
+		else
+			skills.setLevel(skill,(cHp+hp));
+	}
+	
+	public void inflictDamage(Hit inc) {
+		this.inflictDamage(inc, null);
+	}
+	
+	public void inflictDamage(int damg, Entity source,boolean poison){
+		HitType h1 = HitType.NORMAL_DAMAGE;
+		if(damg > skills.getLevel(Skills.HITPOINTS))
+			damg = skills.getLevel(Skills.HITPOINTS);
+		if(poison)
+			h1 = HitType.POISON_DAMAGE;
+		else if(damg <= 0)
+			h1 = HitType.NO_DAMAGE;
+		Hit h2 = new Hit(damg,h1);
+		inflictDamage(h2,source);
+		Prayer.redemption(this);
+	}
+
+	@Override
+	public void deserialize(IoBuffer buf) {//load method
+		this.name = IoBufferUtils.getRS2String(buf);
+		this.nameLong = NameUtils.nameToLong(this.name);
+		this.password = IoBufferUtils.getRS2String(buf);
+		this.rights = Player.Rights.getRights(buf.getUnsigned());
+		this.members = buf.getUnsigned() == 1 ? true : false;
+		setLocation(Location.create(buf.getUnsignedShort(), buf.getUnsignedShort(), buf.getUnsigned()));
+		int[] look = new int[13];
+		for(int i = 0; i < 13; i++) {
+			look[i] = buf.getUnsigned();
+		}
+		appearance.setLook(look);
+		for(int i = 0; i < Equipment.SIZE; i++) {
+			int id = buf.getUnsignedShort();
+			if(id != 65535) {
+				int amt = buf.getInt();
+				Item item = new Item(id, amt);
+				equipment.set(i, item);
+			}
+		}
+		for(int i = 0; i < Skills.SKILL_COUNT; i++) {
+			skills.setSkill(i, buf.getUnsigned(), buf.getDouble());
+		}
+		for(int i = 0; i < Inventory.SIZE; i++) {
+			int id = buf.getUnsignedShort();
+			if(id != 65535) {
+				int amt = buf.getInt();
+				Item item = new Item(id, amt);
+				inventory.set(i, item);
+			}
+		}
+		if(buf.hasRemaining()) { // backwards compat
+			for(int i = 0; i < Bank.SIZE; i++) {
+				int id = buf.getUnsignedShort();
+				if(id != 65535) {
+					int amt = buf.getInt();
+					Item item = new Item(id, amt);
+					bank.set(i, item);
+				}
+			}
+		}
+		if(buf.hasRemaining()) { // backwards compat
+			for(int i = 0; i < friends.length; i++) {
+				long friend = buf.getLong();
+				friends[i] = friend;
+			}
+		}
+		if(buf.hasRemaining()) { // backwards compat
+			for(int i = 0; i < ingores.length; i++) {
+				long friend = buf.getLong();
+				ingores[i] = friend;
+			}
+		}
+		startUpEvents();
+	}
+	
+	public void startUpEvents(){
+		FriendsAssistant.initialize(this);
+		//special recharge
+		final Player p = this;
+		World.getWorld().submit(new Event(15000) {
+			@Override
+			public void execute() {
+				if(p == null)
+					this.stop();
+				int a = specialPower;
+				if(specialPower < 100)
+					specialPower += 10;
+				if(specialPower > 100)
+					specialPower = 100;
+				if(specialPower != a){
+					UpdateSpecialBar.specialPower(p);
+				}
+			}
+		});
+		World.getWorld().submit(new Event(1000) {
+			@Override
+			public void execute() {
+				if(getDrainRate() > 0) {
+					//System.out.println("drain rate: "+getDrainRate()+" prayer level: "+getSkills().getLevel2(5));
+					if(getSkills().getLevel(5) - getDrainRate() <= 0) {
+						getActionSender().sendMessage("You've run out of Prayer points.");
+						getSkills().detractLevel(5,getSkills().getLevel(5));
+						resetPrayers();
+						getActionSender().sendSkill(5);
+						return;
+					}			
+					getSkills().detractLevel(5,getDrainRate());
+					getActionSender().sendSkill(5);
+				}
+			}
+		});
+		World.getWorld().submit(new Event(10000) {
+			@Override
+			public void execute() {
+				for(int i = 0; i < 21; i++){
+					if(getSkills().getLevel(i) > getSkills().getLevelForExperience(i)){
+						getSkills().decrementLevel(i);
+					}
+				}
+			}
+		});
+	}
+
+	@Override
+	public void serialize(IoBuffer buf) {//save method
+		IoBufferUtils.putRS2String(buf, NameUtils.formatName(name));
+		IoBufferUtils.putRS2String(buf, password);
+		buf.put((byte) rights.toInteger());
+		buf.put((byte) (members ? 1 : 0));
+		buf.putShort((short) getLocation().getX());
+		buf.putShort((short) getLocation().getY());
+		buf.put((byte) getLocation().getZ());
+		int[] look = appearance.getLook();
+		for(int i = 0; i < 13; i++) {
+			buf.put((byte) look[i]);
+		}
+		for(int i = 0; i < Equipment.SIZE; i++) {
+			Item item = equipment.get(i);
+			if(item == null) {
+				buf.putShort((short) 65535);
+			} else {
+				buf.putShort((short) item.getId());
+				buf.putInt(item.getCount());
+			}
+		}
+		for(int i = 0; i < Skills.SKILL_COUNT; i++) {
+			buf.put((byte) skills.getLevel(i));
+			buf.putDouble((double) skills.getExperience(i));
+		}
+		for(int i = 0; i < Inventory.SIZE; i++) {
+			Item item = inventory.get(i);
+			if(item == null) {
+				buf.putShort((short) 65535);
+			} else {
+				buf.putShort((short) item.getId());
+				buf.putInt(item.getCount());
+			}
+		}
+		for(int i = 0; i < Bank.SIZE; i++) {
+			Item item = bank.get(i);
+			if(item == null) {
+				buf.putShort((short) 65535);
+			} else {
+				buf.putShort((short) item.getId());
+				buf.putInt(item.getCount());
+			}
+		}
+		for(int i = 0; i < friends.length; i++) {
+			buf.putLong(friends[i]);
+		}
+		for(int i = 0; i < ingores.length; i++) {
+			buf.putLong(ingores[i]);
+		}
+		FriendsAssistant.refreshGlobalList(this,true);
+	}
+
+	@Override
+	public void addToRegion(Region region) {
+		region.addPlayer(this);
+	}
+
+	@Override
+	public void removeFromRegion(Region region) {
+		region.removePlayer(this);
+	}
+
+	@Override
+	public int getClientIndex() {
+		return this.getIndex() + 32768;
+	}
+
+	@Override
+	public void inflictDamage(int damage, HitType type) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void decreaseEnergy(int am){
+	
+	}
+	
+	public int getEnergy(){
+		return 100;
+	}
+	
+	public void playerSoundEffect() {
+		//TODO: Develop a optcode 174 from server to client for sfx
+		//This will play multiple sounds
+		
+	}
+	
+	public void playerMusic() {
+		//-1 turns off the player music
+		//TODO: Develop a optcode 74 from server to the Client for music
+		
+	}
+	
+	public boolean ancients = false;
+	public long[] friends = new long[200];
+	public long[] ingores = new long[200];
+	public int[] chatStatus = new int[3];//normal,friends,trade, 0 - on, 1 friends, 2 off
+
+	public long teleportTimer = System.currentTimeMillis();
+}

@@ -1,0 +1,90 @@
+package org.hyperion.rs2.model;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class GlobalItemManager {
+
+	public GlobalItemManager() {
+		GlobalItem g1 = new GlobalItem(3200,3201,0,new Item(4151,1));
+		GlobalItem g4 = new GlobalItem(3200,3201,0,new Item(4151,1));
+		GlobalItem g5 = new GlobalItem(3200,3201,0,new Item(4151,1));
+		GlobalItem g6 = new GlobalItem(3200,3201,0,new Item(4151,1));
+		GlobalItem g2 = new GlobalItem(3200,3202,0,new Item(995,1000));
+		GlobalItem g3 = new GlobalItem(3200,3203,0,new Item(4675,1));
+		globalItems.add(g1);
+		globalItems.add(g2);
+		globalItems.add(g3);
+		globalItems.add(g4);
+		globalItems.add(g5);
+		globalItems.add(g6);
+	}
+	
+	public List<GlobalItem> globalItems = new LinkedList<GlobalItem>();
+	
+	public void displayItems(Player player){
+		for(GlobalItem globalItem : globalItems){
+			if(player.getLocation().isWithinDistance(globalItem.getLocation(),15)){
+				//display the item
+				player.getActionSender().createGlobalItem(globalItem.getLocation(),globalItem.getItem());
+			}
+		}
+	}
+	
+	public void dropItem(Player player,int itemId,int slot){
+		Item item = player.getInventory().get(slot);
+		if(item == null || itemId != item.getId()){
+			player.getActionSender().sendMessage("Client is out of sync, Please logout.");
+			return;
+		}
+		GlobalItem globalItem = new GlobalItem(player.getLocation().getX(),player.getLocation().getY(),player.getLocation().getZ(),new Item(item.getId(),item.getCount()));
+		globalItems.add(globalItem);
+		player.getActionSender().createGlobalItem(globalItem.getLocation(),globalItem.getItem());
+		for(Player p2 : player.getLocalPlayers()){
+			p2.getActionSender().createGlobalItem(globalItem.getLocation(),globalItem.getItem());
+		}
+		player.getInventory().remove(item);
+	}
+	
+	public void pickupItem(Player player,int item,int x,int y){
+		GlobalItem globalItem = null;
+		for(GlobalItem g : globalItems){
+			//System.out.println(""+g.getItem().getId()+", "+g.getLocation().getX()+", "+g.getLocation().getY());
+			if(g.getLocation().getX() == x && g.getLocation().getY() == y && g.getLocation().getZ() == player.getLocation().getZ()){
+				if(g.getItem().getId() == item){
+					globalItem = g;
+					break;
+				}
+			}
+		}
+		if(globalItem != null){
+			globalItems.remove(globalItem);
+			player.getInventory().add(globalItem.getItem());
+			player.getActionSender().removeGlobalItem(globalItem.getItem(),globalItem.getLocation());
+			for(Player p2 : player.getLocalPlayers()){
+				p2.getActionSender().removeGlobalItem(globalItem.getItem(),globalItem.getLocation());
+			}
+		} else {
+			player.getActionSender().sendMessage("That item doesn't exist.");
+		}
+	}
+	
+	public class GlobalItem {
+		private Location location;
+		
+		private Item item;
+		
+		public GlobalItem(int x,int y,int z,Item item){
+			location = Location.create(x,y,z);
+			this.item = item;
+		}
+		
+		public Location getLocation(){
+			return location;
+		}
+		
+		public Item getItem(){
+			return item;
+		}
+	}
+}

@@ -1,0 +1,255 @@
+package org.hyperion.rs2.model.content.minigame;
+// Yay
+
+import org.hyperion.rs2.model.content.*;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.event.*;
+
+import java.io.FileNotFoundException;
+
+public class Barrows2 implements ContentTemplate {	
+
+	private static final int DIGGING_EMOTE = 0x33f;
+	
+	public boolean setupPlayer(Player client){
+		int[] j = {-1,-1,-1,-1,-1,-1};
+		j[0] = ContentEntity.random(5);
+		while(j[0] == j[1]){
+			j[1] = ContentEntity.random(5);
+		}
+		while(j[0] == j[2] || j[1] == j[2]){
+			j[2] = ContentEntity.random(5);
+		}
+		while(j[0] == j[3] || j[1] == j[3] || j[2] == j[3]){
+			j[3] = ContentEntity.random(5);
+		}
+		while(j[0] == j[4] || j[1] == j[4] || j[2] == j[4] || j[3] == j[4]){
+			j[4] = ContentEntity.random(5);
+		}
+		client.barrowRoom = j;
+		client.barrowRoom[5] = monsterId(j);
+		client.killId = roomToMonster(client.barrowRoom[0]);
+		return true;
+	}
+
+	public void dig(final Player client){
+		try {
+		if(!ContentEntity.isInArea(client,3550,3269,3580,3305)){
+			return;
+		}
+		if(client.killId == -1)
+			setupPlayer(client);
+		int roomId = -1;
+		int j = 0;
+		for(int i : client.barrowRoom){
+			if(i == -1){
+				j++;
+				continue;
+			} else{
+				roomId = client.barrowRoom[j];
+			}
+			break;
+		}
+		int roomX = 0;
+		int roomY = 0;
+		int h = 3;
+		if(roomId == 0){
+			roomX = 3568;//torag
+			roomY = 9683;
+		} else if(roomId == 1){
+			roomX = 3546;//karil
+			roomY = 9684;
+		} else if(roomId == 2){
+			roomX = 3557;//ahrim
+			roomY = 9703;
+		} else if(roomId == 3){
+			roomX = 3534;//guthan
+			roomY = 9704;
+		} else if(roomId == 4){
+			roomX = 3556;//dharok
+			roomY = 9718;
+		} else if(roomId == 5){
+			roomX = 3578;//verac
+			roomY = 9706;
+		} else if(roomId >= 2000){
+			roomX = 3551;
+			roomY = 9692;
+			h = 0;	
+			//go to tunnels
+		}
+		ContentEntity.startAnimation(client,DIGGING_EMOTE);
+		final int roomId2 = roomId;
+		final int roomX2 = roomX;
+		final int roomY2 = roomY;
+		final int h2 = h;
+		// Start the event to TELEPORT to the correct location.
+		// TODO: Find the correct coordinates for each tunnel/hole.
+		World.getWorld().submit(new Event(600) {
+			@Override
+			public void execute(){
+				ContentEntity.startAnimation(client,-1);
+				client.setBusy(false);
+				client.setCanWalk(true);
+				ContentEntity.sendString(client,"Killcount: " +client.hasKill, 4536);
+				ContentEntity.showInterfaceWalkable(client,4535);
+				ContentEntity.teleport(client,roomX2,roomY2,h2);
+				if(roomId2 >= 2000){
+					client.hasBarrowMonster = true;
+					//spawn guy in tunnel
+					World.getWorld().getNPCManager().addNPC(3551,9694,0,roomId2,-1);
+				}
+				this.stop();
+			}
+		});
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	public int roomToMonster(int j){
+		switch(j){
+			case 0:
+				return 2029;
+			case 1:
+				return 2028;
+			case 2:
+				return 2025;
+			case 3:
+				return 2027;
+			case 4:
+				return 2026;
+			case 5:
+				return 2030;
+		}
+		return 0;
+	}
+	public int monsterId(int[] rooms){
+		int room = 5;
+		while(room == rooms[0] || room == rooms[1] || room == rooms[2] || room == rooms[3] || room == rooms[4] || room == rooms[5])
+			room--;
+		switch(room){
+			case 0:
+				return 2029;
+			case 1:
+				return 2028;
+			case 2:
+				return 2025;
+			case 3:
+				return 2027;
+			case 4:
+				return 2026;
+			case 5:
+				return 2030;
+		}
+		return 2025;
+	}
+	
+	public int npcForCoffin(int id){
+		switch(id) {
+			case 6771:
+				return 2026;
+			case 6772:
+				return 2029;
+			case 6773:
+				return 2027;
+			case 6821:
+				return 2025;
+			case 6822:
+				return 2028;
+			case 6823:
+				return 2030;
+		}
+		return -1;
+	}
+	
+	public void openChest(final Player client){
+		int[] rewards = {/*ahrim*/4856,4862,4868,4874,/*dharok*/4880,4886,4892,4898,/*verac*/4976,4982,4988,4994,/*guthan*/4904,4910,4916,4922,/*karil*/4928,4934,4940,4946,/*torag*/4952,4958,4964,4970,};
+		int[] bonusAwards = {4740,4694,4695,4696,4697,4698,4699,};
+		if(client.hasKill >= 6){
+			int amountOfBarrows = 0;
+			while(client.hasKill >= 6){
+				client.hasKill -= 6;
+				amountOfBarrows++;
+			}
+			for(int i = 0; i < amountOfBarrows; i++){
+				if(ContentEntity.random(2) == 1)
+					ContentEntity.addItem(client,rewards[ContentEntity.random(rewards.length)],1);
+				else
+					ContentEntity.addItem(client,bonusAwards[ContentEntity.random(bonusAwards.length)],1);
+			}
+			ContentEntity.sendMessage(client,"Congratulations on completing the barrows mini-game.");
+		} else {
+			ContentEntity.sendMessage(client,"You have not got enough kills to open the chest.");
+		}
+	}
+	
+	public void clickStairs(Player client){
+		for(int i = 0; i < 5; i++){
+			if(client.barrowRoom[i] >= 0){
+				client.barrowRoom[i] = -1;
+				client.hasBarrowMonster = false;
+				if(client.barrowRoom[i+1] > 10)
+					client.killId = client.barrowRoom[i+1];
+				else
+					client.killId = roomToMonster(client.barrowRoom[i+1]);
+				ContentEntity.teleport(client,3550+ContentEntity.random(30),3269+ContentEntity.random(35),0);
+				return;
+			}
+		}
+	}
+	public void killNpc(Player client,int id){
+		if(client.killId == id){
+			client.hasKill++;
+			client.hasBarrowMonster = false;
+			ContentEntity.sendString(client,"Killcount: " +client.hasKill, 4536);
+		}
+	}
+	
+	public boolean clickCoffin(Player client,int oId,int oX,int oY){
+		if(npcForCoffin(oId) == client.killId && !client.hasBarrowMonster){
+		//spawn npc
+			World.getWorld().getNPCManager().addNPC(oX+2,oY+2,3,client.killId,-1);
+			client.hasBarrowMonster = true;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void init() throws FileNotFoundException {
+	}	
+	
+	@Override
+	public int[] getValues(int type){
+		if(type == 1){
+			int[] j = {952};
+			return j;
+		}
+		if(type == 6){
+			int[] j = {6771,6772,6773,6821,6822,6823,/*stairs*/6707,6706,6705,6702,6704,6703,/*chest*/10284};
+			return j;
+		}
+		if(type == 16){
+			int[] j = {2025,2026,2027,2028,2029,2030,};
+			return j;
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean clickObject(final Player client,final int type,final int oId,final int oX,final int oY,final int a){
+		if(type == 1){
+			dig(client);
+		} else if(type == 6){
+			if(oId == 10284)
+				openChest(client);
+			else if(oId >= 6702 && oId <= 6707)
+				clickStairs(client);
+			else
+				clickCoffin(client,oId,oX,oY);
+		} else if(type == 16){
+			killNpc(client,oId);
+		}
+		return false;
+	}
+}

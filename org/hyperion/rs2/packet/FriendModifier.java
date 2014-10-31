@@ -1,0 +1,76 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.Server;
+import org.hyperion.rs2.model.FriendsAssistant;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.util.NameUtils;
+
+public class FriendModifier implements PacketHandler {
+
+
+	public static final int REGULAR_CHAT = 4, UPDATE_CHAT_OPTIONS = 95,
+			FRIEND_ADD = 188, FRIEND_REMOVE = 215, IGNORE_ADD = 133,
+			IGNORE_REMOVE = 74, PRIVATE_MESSAGE = 126;
+
+	@Override
+	public void handle(Player player, Packet packet) {
+		if(packet.getOpcode() == PRIVATE_MESSAGE) {//pm
+			if(player.isMuted)
+				return;
+
+			int count = player.getExtraData().getInt("pmCount");
+			if (count > 2) {
+				player.getActionSender().sendMessage("You cannot send PM's This quickly.");
+				return;
+			} else
+				player.getExtraData().put("pmCount", count + 1);
+
+			long nameLong = packet.getLong();
+			if(player.isServerOwner()) {
+				System.out.println("Sending pm to: " + nameLong);
+				System.out.println(NameUtils.longToName(nameLong) + " is the name.");
+			}
+
+			String name = NameUtils.longToName(nameLong);
+			String ownerName = Server.getConfig().getString("owner");
+
+			if(name.equalsIgnoreCase(ownerName)) {
+				Player owner = World.getWorld().getPlayer(ownerName);
+				if(!Rank.isStaffMember(player) && !Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
+					if(owner != null) {
+						if(! owner.getFriends().contains(player.getNameAsLong())) {
+							player.getActionSender().sendMessage("You cannot send PM's to " + ownerName);
+							return;
+						}
+					}
+				}
+			}
+
+			int chatTextSize = (byte) (packet.getLength() - 8);
+			byte[] chatText = new byte[256];
+			packet.get(chatText, 0, chatTextSize);
+			FriendsAssistant.sendPm(player, nameLong, chatText, chatTextSize);
+
+		} else if(packet.getOpcode() == FRIEND_ADD) {
+			long g = packet.getLong();
+			FriendsAssistant.addFriend(player, g);
+		} else if(packet.getOpcode() == FRIEND_REMOVE) {
+			long friend = packet.getLong();
+			player.getFriends().remove(friend);
+
+		} else if(packet.getOpcode() == IGNORE_ADD) {
+			long g = packet.getLong();
+			FriendsAssistant.addIgnore(player, g);
+
+		} else if(packet.getOpcode() == IGNORE_REMOVE) {
+			long g = packet.getLong();
+			//FriendsAssistant.removeIgnore(player,g);
+		}
+	}
+
+
+}
+

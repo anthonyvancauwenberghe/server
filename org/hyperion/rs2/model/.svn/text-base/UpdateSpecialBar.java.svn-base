@@ -1,0 +1,281 @@
+package org.hyperion.rs2.model;
+
+public class UpdateSpecialBar {
+
+	public static void specialPower(Player p) {
+		if(p.specialPower >= 100) {
+			setSpecials100(p);
+		} else if(p.specialPower >= 90) {
+			setSpecials90(p);
+		} else if(p.specialPower >= 80) {
+			setSpecials80(p);
+		} else if(p.specialPower >= 70) {
+			setSpecials70(p);
+		} else if(p.specialPower >= 60) {
+			setSpecials60(p);
+		} else if(p.specialPower >= 50) {
+			setSpecials50(p);
+		} else if(p.specialPower >= 40) {
+			setSpecials40(p);
+		} else if(p.specialPower >= 30) {
+			setSpecials30(p);
+		} else if(p.specialPower >= 20) {
+			setSpecials20(p);
+		} else if(p.specialPower >= 10) {
+			setSpecials10(p);
+		} else {
+			setSpecials0(p);
+		}
+		refreshSendQuest(p);
+	}
+	
+	private static int sendQuests[] = { 12335, 7586, 7611, 7561, 8505, 7511};
+	
+	public static void refreshSendQuest(Player p) {
+		String color = "";
+		if(p.specOn)
+			color = "@blu@";
+		for(int i = 0; i < sendQuests.length; i++) {
+			p.getActionSender().sendString( sendQuests[i],color+"S P E C I A L  A T T A C K");
+		}
+	}
+	
+	
+	public static void setSpecials0(Player p) {
+		for(int i = 7576; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7601; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12325; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7551; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials10(Player p) {
+		int specials10[] = {7576, 
+							7601, 
+							12325, 
+							7551};
+		
+		for(int i = 7577; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7602; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12326; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7552; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 0; i < specials10.length; i++) {
+			p.getActionSender().packet70(500, 0, specials10[i]);
+		}
+	}
+	
+	public static void setSpecials20(Player p) {
+		int specials20[] = {7576, 7577, 
+							7601, 7602, 
+							12325, 12326, 
+							7551,7552};
+		
+		for(int i = 0; i < specials20.length; i++) {
+			p.getActionSender().packet70(500, 0, specials20[i]);
+		}
+		for(int i = 7578; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7603; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12327; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7553; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials30(Player p) {
+		int specials30[] = {7576, 7577, 7578, 
+							7601, 7602, 7603, 
+							12325, 12326, 12327, 
+							7551, 7552, 7553};
+		
+		for(int i = 0; i < specials30.length; i++) {
+			p.getActionSender().packet70(500, 0, specials30[i]);
+		}
+		for(int i = 7579; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7604; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12328; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7554; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials40(Player p) {
+		int specials40[] = {7576, 7577, 7578, 7579,
+							7601, 7602, 7603, 7604, 
+							12325, 12326, 12327, 12328,
+							7551, 7552, 7553, 7554};
+		
+		for(int i = 0; i < specials40.length; i++) {
+			p.getActionSender().packet70(500, 0, specials40[i]);
+		}
+		for(int i = 7580; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7605; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12329; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7555; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials50(Player p) {
+		int specials50[] = {7576, 7577, 7578, 7579, 7580,
+							7601, 7602, 7603, 7604, 7605,
+							12325, 12326, 12327, 12328, 12329,
+							7551, 7552, 7553, 7554, 7555};
+
+		for(int i = 0; i < specials50.length; i++) {
+			p.getActionSender().packet70(500, 0, specials50[i]);
+		}
+		for(int i = 7581; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7606; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12330; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7556; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials60(Player p) {
+		int specials60[] = {7576, 7577, 7578, 7579, 7580, 7581,
+							7601, 7602, 7603, 7604, 7605, 7606,
+							12325, 12326, 12327, 12328, 12329, 12330,
+							7551, 7552, 7553, 7554, 7555, 7556};
+
+		for(int i = 0; i < specials60.length; i++) {
+			p.getActionSender().packet70(500, 0, specials60[i]);
+		}
+		for(int i = 7582; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7607; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12331; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7557; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials70(Player p) {
+		int specials70[] = {7576, 7577, 7578, 7579, 7580, 7581, 7582,
+							7601, 7602, 7603, 7604, 7605, 7606, 7607,
+							12325, 12326, 12327, 12328, 12329, 12330, 12331,
+							7551, 7552, 7553, 7554, 7555, 7556, 7557};
+
+		for(int i = 0; i < specials70.length; i++) {
+			p.getActionSender().packet70(500, 0, specials70[i]);
+		}
+		for(int i = 7583; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7608; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12332; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7558; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials80(Player p) {
+		int specials80[] = {7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583,
+							7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608,
+							12325, 12326, 12327, 12328, 12329, 12330, 12331, 12332,
+							7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558};
+
+		for(int i = 0; i < specials80.length; i++) {
+			p.getActionSender().packet70(500, 0, specials80[i]);
+		}
+		for(int i = 7584; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7609; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12333; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7559; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials90(Player p) {
+		int specials90[] = {7576, 7577, 7578, 7579, 7580, 7581, 7582, 7583, 7584,
+							7601, 7602, 7603, 7604, 7605, 7606, 7607, 7608, 7609,
+							12325, 12326, 12327, 12328, 12329, 12330, 12331, 12332, 12333,
+							7551, 7552, 7553, 7554, 7555, 7556, 7557, 7558, 7559};
+
+		for(int i = 0; i < specials90.length; i++) {
+			p.getActionSender().packet70(500, 0, specials90[i]);
+		}		
+		for(int i = 7585; i < 7586; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7610; i < 7611; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+		for(int i = 12334; i < 12335; i ++) {
+			p.getActionSender().packet70(0, 0, i);
+		}
+		for(int i = 7560; i < 7561; i ++) {
+			p.getActionSender().packet70(0, 0, i);	
+		}
+	}
+	
+	public static void setSpecials100(Player p) {
+		for(int i = 7576; i < 7586; i ++) {
+			p.getActionSender().packet70(600, 0, i);
+		}
+		for(int i = 7601; i < 7611; i ++) {
+			p.getActionSender().packet70(500, 0, i);	
+		}
+		for(int i = 12325; i < 12335; i ++) {
+			p.getActionSender().packet70(500, 0, i);
+		}
+		for(int i = 7551; i < 7561; i ++) {
+			p.getActionSender().packet70(500, 0, i);	
+		}
+	}
+	
+}

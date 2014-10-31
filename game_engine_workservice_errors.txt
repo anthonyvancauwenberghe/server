@@ -1,0 +1,24 @@
+Tue Apr 15 19:33:06 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.model.ItemDefinition.forId(ItemDefinition.java:76)
+	at org.hyperion.rs2.model.Item.getDefinition(Item.java:48)
+	at org.hyperion.rs2.model.shops.DonatorShop.getPrice2(DonatorShop.java:182)
+	at org.hyperion.rs2.model.shops.DonatorShop.getPrice(DonatorShop.java:480)
+	at org.hyperion.rs2.util.AccountValue.getItemValue(AccountValue.java:84)
+	at org.hyperion.rs2.util.AccountValue.getContainerValue(AccountValue.java:71)
+	at org.hyperion.rs2.util.AccountValue.getEquipmentValue(AccountValue.java:47)
+	at org.hyperion.rs2.util.AccountValue.getTotalValue(AccountValue.java:32)
+	at org.hyperion.rs2.saving.impl.SaveAccValue.getValue(SaveAccValue.java:26)
+	at org.hyperion.rs2.saving.SaveInteger.save(SaveInteger.java:26)
+	at org.hyperion.rs2.saving.PlayerSaving.save(PlayerSaving.java:247)
+	at org.hyperion.rs2.GenericWorldLoader.savePlayer(GenericWorldLoader.java:66)
+	at org.hyperion.rs2.model.World$6.run(World.java:867)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(null:-1)
+	at java.util.concurrent.FutureTask.run(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null:-1)
+	at java.lang.Thread.run(null:-1)
+
+================================

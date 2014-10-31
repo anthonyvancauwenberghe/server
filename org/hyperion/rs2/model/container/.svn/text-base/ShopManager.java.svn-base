@@ -1,0 +1,256 @@
+package org.hyperion.rs2.model.container;
+
+import java.util.List;
+import java.util.LinkedList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+
+/**
+ * Shopping utility class.
+ * @author Martin
+ *
+ */
+public class ShopManager {
+	
+	/**
+	 * The shop size.
+	 */
+	public static final int SIZE = 40;
+	
+	/**
+	 * The player inventory interface.
+	 */
+	public static final int PLAYER_INVENTORY_INTERFACE = 3823;
+
+	/**
+	 * The shop inventory interface.
+	 */
+	public static final int SHOP_INVENTORY_INTERFACE = 3900;
+	
+	/**
+	 * Opens the shop for the specified player.
+	 * @param player The player to open the shop for.
+	 */
+	public static void open(Player player,int id) {
+		player.getActionSender().sendInterfaceInventory(3824, 3822);
+		player.getActionSender().sendUpdateItems(3823,player.getInventory().toArray());
+		player.getActionSender().sendUpdateItems(3900,getShop(id).shop.toArray());
+		player.getActionSender().sendString(3901,getShop(id).name);
+		player.setShopId(id);
+		//having these enabled will make shopping look quite blocky for when option 5+ is used.
+		/*player.getInterfaceState().addListener(getShop(id).shop, new InterfaceContainerListener(player, SHOP_INVENTORY_INTERFACE));
+		player.getInterfaceState().addListener(player.getInventory(), new InterfaceContainerListener(player, PLAYER_INVENTORY_INTERFACE));*/
+	}
+	
+	public static void sellItem(Player player,int itemId,int slot,int amm){
+		if(player.getShopId() == -1 || itemId == 995)
+			return;
+		if(getShop(player.getShopId()).SPECIALIST && getShop(player.getShopId()).shop.getById(itemId) == null){
+			player.getActionSender().sendMessage("You cannot sell that item to this shop");
+			return;
+		}
+		int moneyAmm = 0;
+		for(int i = 0; i < amm; i++){
+			Item item = player.getInventory().getById(itemId);
+			if(item != null){
+				if(item.getDefinition().isNoted()){
+					player.getActionSender().sendMessage("You cannot sell that item.");
+					return;
+				}
+				if(getShop(player.getShopId()).SPECIALIST)
+					moneyAmm += item.getDefinition().getHighAlcValue();
+				else
+					moneyAmm += item.getDefinition().getLowAlcValue();
+				if(item.getDefinition().isStackable()){
+					int am2 = item.getCount()-amm;
+					player.getInventory().remove(item);
+					if(am2 > 0)
+						player.getInventory().add(new Item(itemId,am2));
+					getShop(player.getShopId()).shop.add(new Item(itemId,amm));
+					amm = 0;
+				} else {
+					player.getInventory().remove(item);
+					getShop(player.getShopId()).shop.add(item);
+				}
+			}
+		}
+		if(moneyAmm > 0)
+			player.getInventory().add(new Item(getShop(player.getShopId()).CURRENCY,moneyAmm));
+		player.getActionSender().sendUpdateItems(3823,player.getInventory().toArray());
+		for(Player p : World.getWorld().getPlayers()){
+			if(player.getShopId() == p.getShopId()){
+				p.getActionSender().sendUpdateItems(3900,getShop(player.getShopId()).shop.toArray());
+			}
+		}
+	}
+	
+	public static void valueSellItem(Player player,int itemId){
+		Item item = player.getInventory().getById(itemId);
+		int price = 0;
+		if(getShop(player.getShopId()).SPECIALIST)
+			price = item.getDefinition().getHighAlcValue();
+		else
+			price = item.getDefinition().getLowAlcValue();
+		player.getActionSender().sendMessage("The shop will buy an "+item.getDefinition().getName()+ " for "+price+" coins.");
+	}
+	
+	public static void valueBuyItem(Player player,int itemId){
+		Item item = getShop(player.getShopId()).shop.getById(itemId);
+		if(item != null){
+			int price = item.getDefinition().getHighAlcValue()+((int) item.getDefinition().getHighAlcValue() / 10);
+			player.getActionSender().sendMessage("The shop will sell an "+item.getDefinition().getName()+ " for "+price+" coins.");
+		}
+	}
+	
+	public static void buyItem(Player player,int itemId,int slot,int amm){
+		if(player.getShopId() == -1)
+			return;
+		if(amm > player.getInventory().freeSlots())
+			amm = player.getInventory().freeSlots();
+		Item coins = player.getInventory().getById(getShop(player.getShopId()).CURRENCY);
+		if(coins == null){
+			player.getActionSender().sendMessage("You havent got enough to buy this item.");
+			return;
+		}
+		Item item = getShop(player.getShopId()).shop.getById(itemId);
+		if(item != null){
+			int price = item.getDefinition().getHighAlcValue()+((int) item.getDefinition().getHighAlcValue() / 10);
+			if(coins.getCount() >= price){
+				if(price > 0)
+					player.getInventory().remove(new Item(getShop(player.getShopId()).CURRENCY,price));
+				int amm2 = item.getCount()-amm;
+				if(amm2 <= 0){
+					amm2 = 0;
+					amm = item.getCount();
+				}
+				getShop(player.getShopId()).shop.remove(item);
+				if(amm2 >= 1 || getShop(player.getShopId()).isStaticItem(item.getId()))
+					getShop(player.getShopId()).shop.add(new Item(item.getId(),amm2));
+				player.getInventory().add(new Item(item.getId(),amm));
+				amm = 0;
+			} else {
+				player.getActionSender().sendMessage("You havent got enough to buy this item.");
+			}
+		}
+		player.getActionSender().sendUpdateItems(3823,player.getInventory().toArray());
+		for(Player p : World.getWorld().getPlayers()){
+			if(player.getShopId() == p.getShopId()){
+				p.getActionSender().sendUpdateItems(3900,getShop(player.getShopId()).shop.toArray());
+			}
+		}
+	}
+	
+	public static class Shop {
+	
+		public Shop(String name,boolean SPECIALIST,int CURRENCY,Container shop){
+			this.SPECIALIST = SPECIALIST;
+			this.CURRENCY = CURRENCY;
+			this.shop = shop;
+			this.name = name;
+		}
+		
+		public boolean isStaticItem(int id){
+			for(int i = 0; i < 40; i++){
+				if(staticItems[i] == id)
+					return true;
+			}
+			return false;
+		}
+		
+		public void addStaticItem(int id){
+			if(id < 1)
+				return;
+			for(int i = 0; i < 40; i++){
+				if(staticItems[i] <= 0){
+					staticItems[i] = id;
+					return;
+				}
+			}
+		}
+		
+		public int[] staticItems = new int[40];
+		public String name;
+		public boolean SPECIALIST;
+		public int CURRENCY;
+		public Container shop;
+		
+	}
+	
+	/**
+	 * A List of Shops.
+	 */
+	
+	private static List<Shop> shops = new LinkedList<Shop>();
+
+	public static Shop getShop(int id){
+		int i = 0;
+		for(Shop s : shops){
+			if(i == id)
+				return s;
+			i++;
+		}
+		return null;
+	}
+	
+	/**
+	 * Loads spawns from a file.
+	 * 
+	 * @param name
+	 * @throws IOException
+	 */
+	private static void loadShops(String name) throws IOException {
+		BufferedReader file = null;
+		try {
+			file = new BufferedReader(new FileReader(name));
+			while (true) {
+				String line = file.readLine();
+				if (line == null)
+					break;
+				int spot = line.indexOf('=');
+				if (spot > -1) {
+					String values = line.substring(spot + 1);
+					values = values.replace("\t\t", "\t");
+					values = values.replace("\t\t", "\t");
+					values = values.replace("\t\t", "\t");
+					values = values.trim();
+					String[] valuesArray = values.split("\t");
+					int id = Integer.valueOf(valuesArray[0]);
+					String sname = valuesArray[1];
+					String type = valuesArray[2];
+					int currency = Integer.valueOf(valuesArray[3]);
+					boolean t = false;
+					if (type.equals("SPECIALIST"))
+						t = true;
+					Shop s = new Shop(sname,t,currency,new Container(Container.Type.ALWAYS_STACK, SIZE));
+					shops.add(s);
+					int ptr = 4;
+					while (true) {
+						if (ptr >= valuesArray.length) {
+							break;
+						}
+						int itemId = Integer.valueOf(valuesArray[ptr++]);
+						int itemAmt = Integer.valueOf(valuesArray[ptr++]);
+						s.shop.add(new Item(itemId, itemAmt));
+						s.addStaticItem(itemId);
+					}
+				}
+			}
+			System.out.println("Loaded " + shops.size() + " shops.");
+		} finally {
+			if (file != null)
+				file.close();
+		}
+	}
+	
+	static {
+		try {
+			loadShops("./data/shops.cfg");
+		} catch(Exception e){
+		}
+	}
+}

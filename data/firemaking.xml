@@ -1,0 +1,45 @@
+<!-- Firemaking XML configuration file -->
+<list>
+    <!-- Normal Logs -->
+    <log>
+        <logId>1511</logId>
+        <level>1</level>
+        <experience>40</experience>
+        <burnTimer>25000</burnTimer>
+    </log>
+    <!-- Oak Logs -->
+    <log>
+        <logId>1522</logId>
+        <level>15</level>
+        <experience>60</experience>
+        <burnTimer>30000</burnTimer>
+    </log>
+    <!-- Willow Logs -->
+    <log>
+        <logId>1519</logId>
+        <level>30</level>
+        <experience>90</experience>
+        <burnTimer>35000</burnTimer>
+    </log>
+    <!-- Maple Logs -->
+    <log>
+        <logId>1517</logId>
+        <level>45</level>
+        <experience>135</experience>
+        <burnTimer>40000</burnTimer>
+    </log>
+    <!-- Yew Logs -->
+    <log>
+        <logId>1515</logId>
+        <level>60</level>
+        <experience>202</experience>
+        <burnTimer>45000</burnTimer>
+    </log>
+    <!-- Magic Logs -->
+    <log>
+        <logId>1513</logId>
+        <level>75</level>
+        <experience>303</experience>
+        <burnTimer>50000</burnTimer>
+    </log>
+</list>

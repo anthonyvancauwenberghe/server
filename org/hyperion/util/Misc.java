@@ -1,0 +1,229 @@
+package org.hyperion.util;
+
+import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.ContentEntity;
+
+import java.text.DecimalFormat;
+
+public class Misc {
+
+	/**
+	 * @param amount , for instance 14300000
+	 * @return formatted value, in this case 14,3 Mil
+	 */
+	public static String getFormattedValue(int amount) {
+		if(amount >= 1000000) {
+			double mills = (double) amount / (double) 1000000;
+			mills = round(mills, 2);
+			return mills + " Mil";
+		}
+		DecimalFormat formatter = new DecimalFormat("#,###,###");
+		String priceString = formatter.format(amount);
+		return priceString;
+	}
+
+	/**
+	 * @param needle
+	 * @param haystack
+	 * @return if needle is in haystack return true , else false ( case non sensitive)
+	 */
+	public static boolean contains(char needle, char[] haystack) {
+		for(int i = 0; i < haystack.length; i++) {
+			if(needle == Character.toLowerCase(haystack[i]) || needle == Character.toUpperCase(haystack[i])) {
+				//System.out.println(needle + "");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @param bigarray
+	 * @param columnindex
+	 * @return an array which is actually column nr columnindex in the big array
+	 * for example
+	 * {
+	 * <p/>
+	 * columnindex
+	 * <p/>
+	 * 0 1 2
+	 * <p/>
+	 * {2,3,4},
+	 * {4,5,6},
+	 * {7,9,8},
+	 * }
+	 * getColumn(bigarray,2) will return
+	 * <p/>
+	 * {4,6,8}
+	 */
+	public static int[] getColumn(int[][] bigarray, int columnindex) {
+		int[] smallarray = new int[bigarray.length];
+		int counter = 0;
+		for(int i = 0; i < bigarray.length; i++) {
+			smallarray[counter++] = bigarray[i][columnindex];
+		}
+		return smallarray;
+	}
+
+	/**
+	 * @param range
+	 * @return Returns a random Integer from 0 to "range".
+	 */
+	public static int random(int range) {
+		return (int) (java.lang.Math.random() * (range + 1));
+	}
+
+	/**
+	 * @param array1
+	 * @param array2
+	 * @returns Array1 + Array2
+	 */
+	public static int[] mergeArrays(int[] array1, int[] array2) {
+		int length1 = array1.length;
+		int length2 = array2.length;
+		int[] newarray = new int[length1 + length2];
+		int count = 0;
+		for(int i = 0; i < array1.length; i++) {
+			newarray[count++] = array1[i];
+		}
+		for(int i = 0; i < array2.length; i++) {
+			newarray[count++] = array2[i];
+		}
+		return newarray;
+	}
+
+	/**
+	 * @param value        for example 13,615465
+	 * @param decimalPlace for example 2,
+	 * @return returns 13,61
+	 */
+	public static double round(double value, int decimalPlace) {
+		double power_of_ten = 1;
+
+		while(decimalPlace-- > 0)
+			power_of_ten *= 10.0;
+		return Math.round(value * power_of_ten) / power_of_ten;
+	}
+
+
+	public static String formatDocumentNumber(int value) {
+		char[] chars;
+		int i;
+		int c;
+		int size;
+		int width = 3;
+		size = 10 + 2;
+		chars = new char[size];
+		for(i = 0; i < size; i++) {
+			if(i == 3 || i == 7) {
+				chars[width - i - 1] = ',';
+				continue;
+			}
+			c = value % 10;
+			chars[width - i - 1] = (char) ('0' + c);
+			value = value / 10;
+		}
+		return new String(chars);
+	}
+
+	/**
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @returns distance cuz we love Pythagoreans
+	 */
+	public static int distance(int x1, int y1, int x2, int y2) {
+		int deltax = x2 - x1;
+		int deltay = y2 - y1;
+
+		int distancesquared = deltax * deltax + deltay * deltay;
+		int distance = (int) Math.sqrt(distancesquared);
+		return distance;
+	}
+
+	private static int RestAnimation = 11786;
+
+	private static int DaxeSpecial = 2876;
+
+	public static int[] HomeTeleportGfx = {775, 800, 801, 802, 803, 804, 1703, 1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711, 1712, 1713};
+	public static int[] HomeTeleportAnimations = {1722, 1723, 1724, 1725, 2798, 2799, 2800, 3195, 4643, 4645, 4646, 4847, 4848, 4849, 4850, 4851, 4852};
+
+	public static void doHomeTeleport(final Player player) {
+		player.getActionSender().sendMessage("Starting HomeTeleport");
+		World.getWorld().submit(new Event(600) {
+			int index = 0;
+
+			public void execute() {
+				ContentEntity.startAnimation(player, HomeTeleportAnimations[index]);
+				player.cE.doGfx(HomeTeleportGfx[index], 0);
+				index++;
+				if(index == 17)
+					this.stop();
+			}
+		});
+		player.getActionSender().sendMessage("Done with HomeTeleport");
+	}
+
+	/**
+	 * @param level
+	 * @return Returns the Skill Name as String.
+	 */
+
+	public static String getSkillName(int level) {
+		switch(level) {
+			case 0:
+				return " Attack ";
+			case 1:
+				return " Defence ";
+			case 2:
+				return " Strength ";
+			case 3:
+				return " Hitpoints ";
+			case 4:
+				return " Ranged ";
+			case 5:
+				return " Prayer ";
+			case 6:
+				return " Magic ";
+			case 7:
+				return " Cooking ";
+			case 8:
+				return " Woodcutting ";
+			case 9:
+				return " Fletching ";
+			case 10:
+				return " Fishing ";
+			case 11:
+				return " Firemaking ";
+			case 12:
+				return " Crafting ";
+			case 13:
+				return " Smithing ";
+			case 14:
+				return " Mining ";
+			case 15:
+				return " Herblore ";
+			case 16:
+				return " Agility ";
+			case 17:
+				return " Thieving ";
+			case 18:
+				return " Slayer ";
+			case 19:
+				return " Farming ";
+			case 20:
+				return " Runecrafting ";
+			case 21:
+				return "Construction ";
+			case 22:
+				return "Hunter ";
+			case 23:
+				return "Summoning ";
+		}
+		return " ";
+	}
+
+}

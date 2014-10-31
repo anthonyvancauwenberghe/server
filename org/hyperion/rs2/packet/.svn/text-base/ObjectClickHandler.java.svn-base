@@ -1,0 +1,70 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.action.impl.ProspectingAction;
+import org.hyperion.rs2.action.impl.WoodcuttingAction;
+import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
+import org.hyperion.rs2.action.impl.MiningAction;
+import org.hyperion.rs2.action.impl.MiningAction.Node;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.Bank;
+
+public class ObjectClickHandler {
+
+	public static void clickObject(Player p,int id,int x, int y, int type){
+		if(World.getWorld().getContentManager().handlePacket(5+type,p,id,x,y,-1))
+			return;
+		if(type == 1){
+			objectClickOne(p,id,x,y);
+		} else if(type == 2){
+			objectClickTwo(p,id,x,y);
+		}
+	}
+	
+	public static void objectClickOne(Player player,int id,int x, int y){
+		Location loc = Location.create(x, y, player.getLocation().getZ());
+		// woodcutting
+		Tree tree = Tree.forId(id);
+		if(tree != null && player.getLocation().isWithinInteractionDistance(loc)) {
+			player.getActionQueue().addAction(new WoodcuttingAction(player, loc, tree));
+		}
+		// mining
+		Node node = Node.forId(id);
+		if(node != null && player.getLocation().isWithinInteractionDistance(loc)) {
+			player.getActionQueue().addAction(new MiningAction(player, loc, node));
+		}
+		switch(id){
+			/*case 14831:
+			case 14830:
+			case 14832:
+			case 14829:
+			case 14828:
+			case 14826:
+			case 14827:
+				World.getWorld().getWilderness().useObelisk(player,x,y);
+				break;*/
+			case 2213:
+				Bank.open(player);
+				break;
+			case 9398:
+				Bank.openDepositBox(player);
+				break;
+		}
+	}
+	
+	public static void objectClickTwo(Player player,int id,int x, int y){
+		Location loc = Location.create(x, y, player.getLocation().getZ());
+        Node node = Node.forId(id);
+        if(node != null && player.getLocation().isWithinInteractionDistance(loc)) {
+            player.getActionQueue().addAction(new ProspectingAction(player, loc, node));
+            return;
+        }
+		switch(id){
+			case 2213:
+				Bank.open(player);
+				break;
+		}
+	}
+	
+}

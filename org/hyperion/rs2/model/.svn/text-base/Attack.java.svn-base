@@ -1,0 +1,13 @@
+package org.hyperion.rs2.model;
+
+import org.hyperion.rs2.model.combat.CombatEntility;
+
+public interface Attack {
+	
+	public String getName();
+	
+	public int[] npcIds = new int[5];
+	
+	public int handleAttack(NPC n,CombatEntility attack);
+	
+}

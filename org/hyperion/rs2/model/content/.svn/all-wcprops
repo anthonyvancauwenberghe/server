@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/model/content
+END
+ContentManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/33/trunk/src/org/hyperion/rs2/model/content/ContentManager.java
+END
+ContentTemplate.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/content/ContentTemplate.java
+END
+ContentEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/darkstar/!svn/ver/14/trunk/src/org/hyperion/rs2/model/content/ContentEntity.java
+END

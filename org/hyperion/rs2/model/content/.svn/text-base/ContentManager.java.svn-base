@@ -1,0 +1,96 @@
+package org.hyperion.rs2.model.content;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.io.File;
+
+import org.hyperion.rs2.model.Player;
+
+public class ContentManager {
+
+	public void init(){
+		try {
+			for(int i = 0; i < packetHandlers; i++){
+				contentMaps[i] = new HashMap<Integer,ContentTemplate>();
+			}
+			addContent("random");
+			addContent("skill");
+			addContent("quest");
+			addContent("minigame");
+			addContent("misc2");
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void addContent(String folder){
+		try {
+			File dir = new File("./bin/org/hyperion/rs2/model/content/"+folder+"/");
+			if(dir.exists()){
+				for(File file : dir.listFiles()) {
+					String s = file.getName().replace(".class","");
+					if(s.contains("$") || s.contains("svn"))
+						continue;//ingore all sub classes
+					ContentTemplate a = (ContentTemplate) Class.forName("org.hyperion.rs2.model.content."+folder+"."+s).newInstance();
+					if(s.contains("prayer"))
+						prayer = a;
+					a.init();
+					for(int i = 0; i < packetHandlers; i++){
+						int[] j = a.getValues(i);
+						if(j != null){
+							addListener(a,i,j);
+						}
+					}
+				}
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public final int packetHandlers = 18;
+	
+	public ContentTemplate prayer = null;//key classes like this may be nessary for skills like this
+	
+	public Map<Integer,ContentTemplate>[] contentMaps = new Map[packetHandlers];
+	/**
+	* mapId - packet
+	* 0 - actionButtons
+	* 1 - bury, eat item
+	* 2 - item option 1
+	* 3 - item option 2
+	* 4 - item option 3
+	* 5 - item option 4
+	* 6 - object 1
+	* 7 - object 2
+	* 8 - object 3
+	* 9 - npc attack
+	* 10 - npc 1
+	* 11 - npc 2
+	* 12 - npc 3
+	* 13 - item on item
+	* 14 - item on object
+	* 15 - item on npc
+	* 16 - npc died
+	*/
+	
+	public void addListener(ContentTemplate cT,int type,int[] ids){
+		for(int i = 0; i < ids.length; i++){
+			contentMaps[type].put(ids[i],cT);
+		}
+	}
+	
+	public boolean handlePacket(int type,Player player,int id,int b,int c,int d){
+		if(type > packetHandlers-1)
+			return false;
+		ContentTemplate a = (ContentTemplate) contentMaps[type].get(id);
+		if(a != null){
+			return a.clickObject(player,type,id,b,c,d);
+		} else {
+			if(player.getName().equalsIgnoreCase("mad turnip"))
+				System.out.println("no template exists for: "+id+" type: "+type);
+			return false;
+		}
+	}
+
+}

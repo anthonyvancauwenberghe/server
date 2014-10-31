@@ -1,0 +1,20 @@
+package org.hyperion.rs2.model.combat.attack;
+
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.combat.CombatEntility;
+
+public class KBD implements Attack {
+
+	public String getName(){
+		return "KBD";
+	}
+	
+	public int handleAttack(NPC n,CombatEntility attack){
+		return 1;
+	}
+	
+	static {
+		npcIds[0] = 50;
+	}
+}

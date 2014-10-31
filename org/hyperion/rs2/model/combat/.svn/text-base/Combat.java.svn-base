@@ -1,0 +1,695 @@
+package org.hyperion.rs2.model.combat;
+
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.UpdateSpecialBar;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.content.skill.Prayer;
+
+/**
+ * @author Martin
+ */
+
+public class Combat {
+
+	public static boolean processCombat(final CombatEntility combatEntity){
+		if(combatEntity.getOpponent() == null)
+			return false;
+		if(combatEntity.getEntity().isDead() || combatEntity.getOpponent().getEntity().isDead() || !combatEntity.getOpponent().isNpcAttackAble())
+			return false;
+		//can attack
+		String message = canAtk(combatEntity,combatEntity.getOpponent());
+		if(message.length() > 1){
+			combatEntity.getPlayer().getActionSender().sendMessage(message);
+			return false;
+		}
+		if(combatEntity.getEntity() instanceof Player){//we must seperate it somewhat
+			//timer
+			if(combatEntity.predictedAtk > System.currentTimeMillis())
+				return true;//we dont want to reset attack but just wait another 500ms or so...
+			boolean hit = false;
+			int wep = -1;//c se
+			int arrowId = -1;
+			int maxHit = CombatAssistant.calculateMaxHit(combatEntity.getPlayer(),combatEntity.getPlayer().getSkills().getLevel(combatEntity.getPlayer().getSkills().STRENGTH),combatEntity.getPlayer().getSkills().getLevel(combatEntity.getPlayer().getSkills().RANGE),combatEntity.getPlayer().getBonus()[10],combatEntity.getPlayer().getBonus()[4],combatEntity.getFightType());
+			Item weapon = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON);
+			Item arrow = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_ARROWS);
+			int damg = 0;
+			int delay = 500;
+			boolean finishOff = true;
+			final int extraDis;
+			if(combatEntity.getPlayer().isMoving)
+				extraDis = 3;
+			else
+				extraDis = 0;
+			if(weapon != null)
+				wep = weapon.getId();
+			if(arrow != null)
+				arrowId = arrow.getId();
+			if(combatEntity.getOpponent().getOpponent() != combatEntity && !combatEntity.getPlayer().isSkulled && combatEntity.getOpponent().getEntity() instanceof Player){
+				if(System.currentTimeMillis() - combatEntity.lastHit > 10000){
+					combatEntity.getPlayer().isSkulled = true;
+					Prayer.setHeadIcon(combatEntity.getPlayer());
+				}
+			}
+			//queued magic
+			int magicAtk = combatEntity.getNextMagicAtk();
+			if(combatEntity.getNextMagicAtk() > 0){
+				if(Magic.castSpell(combatEntity,combatEntity.getOpponent(),magicAtk) == 2){
+					combatEntity.deleteSpellAttack(magicAtk);
+					combatEntity.predictedAtk2 = System.currentTimeMillis()+2000;
+					combatEntity.predictedAtk = System.currentTimeMillis()+2000;
+					hit = true;
+					finishOff = false;
+				}
+			}
+			//special
+			if(!hit){
+				if(combatEntity.getPlayer().specOn){
+					combatEntity.getPlayer().specOn = false;
+					if(special(combatEntity,maxHit,weapon.getId(),extraDis)){
+						UpdateSpecialBar.refreshSendQuest(combatEntity.getPlayer());
+						hit = true;
+						finishOff = false;
+						combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());//we must add a food timer etc later
+						combatEntity.predictedAtk2 = (System.currentTimeMillis() + 2000);
+					}
+				}
+			}
+			//autocast
+			if(!hit){
+				if(combatEntity.getAutoCastId() > 0){
+					combatEntity.predictedAtk = (combatEntity.predictedAtk - combatEntity.getAtkSpeed());
+					Magic.castSpell(combatEntity,combatEntity.getOpponent(),combatEntity.getAutoCastId());
+					hit = true;
+					finishOff = false;
+				}
+			}
+			//range
+			int bowType = CombatAssistant.hasAmo(combatEntity);//never learned to spell it hmm.....
+			if(!hit){
+				if(bowType == 0){
+					combatEntity.getPlayer().getWalkingQueue().reset();
+					combatEntity.getPlayer().getActionSender().sendMessage("You have no arrows left in your quiver.");
+					return false;
+				}
+			}
+			if(!hit){
+				if(bowType != 0 && bowType != 8){
+					removeArrow(combatEntity.getPlayer(),bowType);
+					int dis = 7;
+					if(combatEntity.bowType == 2)
+						dis += 2;
+					if(!combatEntity.getEntity().getLocation().isWithinDistance(
+												Location.create(combatEntity.getOpponent().getEntity().getLocation().getX() + combatEntity.getOpponent().getOffsetX(),combatEntity.getOpponent().getEntity().getLocation().getY() + combatEntity.getOpponent().getOffsetY(), combatEntity.getOpponent().getEntity().getLocation().getZ())
+												,(dis+extraDis+((combatEntity.getOpponent().getOffsetX()+combatEntity.getOpponent().getOffsetY()) / 2) ))){
+						if(combatEntity.getOpponent().getEntity() instanceof Player)
+							combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(),1);
+						return true;//too far away
+					} else
+						combatEntity.getPlayer().getActionSender().resetFollow();
+					int arrowType = CombatAssistant.getArrowType(arrowId);
+					maxHit = CombatAssistant.getRangedHit2(combatEntity.getPlayer());
+					if(bowType == 1)
+						combatEntity.doAnim(806);//throw stuff anim
+					else {
+						combatEntity.doAtkEmote();
+						maxHit = CombatAssistant.getRangedHit(maxHit,arrowType);//we do not calculate an extra max hit unless there using a arrow
+					}
+					System.out.println("range max: "+maxHit);
+					int proj = CombatAssistant.getArrowGfx(wep,bowType,arrowType);
+					//offset values for the projectile
+					int offsetY = (combatEntity.getAbsX() - combatEntity.getOpponent().getAbsX()+combatEntity.getOpponent().getOffsetX()) * -1;
+					int offsetX = (combatEntity.getAbsY() - combatEntity.getOpponent().getAbsY()+combatEntity.getOpponent().getOffsetY()) * -1;
+					//find our lockon target
+					int hitId = combatEntity.getSlotId();
+					//extra variables - not for release
+					int distance = combatEntity.getEntity().getLocation().distance((Location.create(combatEntity.getOpponent().getEntity().getLocation().getX() + combatEntity.getOpponent().getOffsetX(),combatEntity.getOpponent().getEntity().getLocation().getY() + combatEntity.getOpponent().getOffsetY(), combatEntity.getOpponent().getEntity().getLocation().getZ())));
+					int timer = 1;
+					int min = 16;
+					if(distance > 8) {
+						timer += 2;
+					} else if(distance >= 4) {
+						timer++;
+					}
+					min -= (distance-1)*2;
+					int speed = 75-min;
+					int slope = 7+distance;
+					delay = timer*500;
+					//create the projectile
+					combatEntity.getPlayer().getActionSender().createGlobalProjectile(combatEntity.getAbsY(), combatEntity.getAbsX(), offsetY, offsetX, 50, speed,proj, 43, 35, hitId,slope);
+					//drawback gfx
+					combatEntity.doGfx(CombatAssistant.getDrawback(wep,arrowId,bowType));
+					//deal damage
+					damg = random(maxHit);
+					//attack / defence
+					int attack = random(combatEntity.rangeAtk(false));
+					if(combatEntity.bowType == 0)
+						attack += (int)(attack / 10);
+					int defence = random(combatEntity.getOpponent().rangeDef());
+					if(defence > attack)
+						damg = 0;
+					if(combatEntity.getOpponent().getEntity() instanceof Player){
+						if(combatEntity.getOpponent().getPlayer().getPrayer()[13] && random(2) == 1)
+							damg = 0;
+					}
+					//delay = 1500;
+					hit = true;
+					combatEntity.getPlayer().getWalkingQueue().reset();//dont move!
+				}
+			}
+			//melee
+			if(!hit){
+				int dis = 1;
+				if(!combatEntity.getEntity().getLocation().isWithinDistance(
+						Location.create(combatEntity.getOpponent().getEntity().getLocation().getX() + combatEntity.getOpponent().getOffsetX(),combatEntity.getOpponent().getEntity().getLocation().getY() + combatEntity.getOpponent().getOffsetY(), combatEntity.getOpponent().getEntity().getLocation().getZ())
+						,(1+((combatEntity.getOpponent().getOffsetX()+combatEntity.getOpponent().getOffsetY()) / 2) ))){
+					if(combatEntity.getOpponent().getEntity() instanceof Player)
+							combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(),1);
+						return true;//too far away
+				} else 
+					combatEntity.getPlayer().getWalkingQueue().reset();
+				/* else 
+					combatEntity.getPlayer().getActionSender().resetFollow();*///this isnt too nessary in melee, only magic and range
+				if(bowType != 0)
+					combatEntity.doAtkEmote();
+				else
+					combatEntity.doAnim(422);//you dont try shoot arrows wen u have no arrows
+				damg = random(maxHit);
+				//attack / defence
+				int attack = combatEntity.meleeAtk(false);
+				int defence = combatEntity.getOpponent().meleeDef(combatEntity.getAtkType());
+				int probility = (int)(1 / (0.515*(attack / defence)));
+				if(random(probility) == 1)
+					if(!isVeracEquiped(combatEntity.getPlayer()) || random(3) != 1)
+						damg = 0;
+				if(combatEntity.getOpponent().getEntity() instanceof Player){
+					if(combatEntity.getOpponent().getPlayer().getPrayer()[14] && random(2) == 1)
+						if(!isVeracEquiped(combatEntity.getPlayer()) || random(3) != 1)
+							damg = 0;
+				}
+				hit = true;
+			}
+			//this code is for all types of combat
+			combatEntity.face(combatEntity.getOpponent().getAbsX()+combatEntity.getOpponent().getOffsetX(),combatEntity.getOpponent().getAbsY()+combatEntity.getOpponent().getOffsetY());
+			if(finishOff){
+				//set timer
+				combatEntity.getOpponent().lastHit = System.currentTimeMillis();
+				combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());//we must add a food timer etc later
+				combatEntity.predictedAtk2 = (System.currentTimeMillis() + 2000);
+				if(bowType != 0 && combatEntity.bowType == 1)
+					combatEntity.predictedAtk -= 300;
+				final int damg2 = damg;
+				if(hit){
+					World.getWorld().submit(new Event(delay) {
+						@Override
+						public void execute() {
+							if(combatEntity != null && combatEntity.getOpponent() != null){
+								if(combatEntity.getWeaponPoison() > 0 && random(10) <= combatEntity.getWeaponPoison() && !combatEntity.getOpponent().isPoisoned() && damg2 > 0)
+									poisonEntity(combatEntity.getOpponent());
+								if(combatEntity.getOpponent().getEntity() instanceof Player && combatEntity.getOpponent().getPlayer().getPrayer()[17])
+									Prayer.smite(combatEntity.getPlayer(),damg2);
+								combatEntity.getOpponent().hit(damg2,combatEntity.getEntity(),false);
+								if(combatEntity.getOpponent().getCurrentAtker() == null || combatEntity.getOpponent().getCurrentAtker() == combatEntity){
+									combatEntity.getOpponent().face(combatEntity.getAbsX(),combatEntity.getAbsY());
+									if(combatEntity.getOpponent().getEntity() instanceof Player || combatEntity.getOpponent().getNPC().getDefinition().doesDefEmote())
+										combatEntity.getOpponent().doDefEmote();
+									if(combatEntity.getOpponent().getEntity() instanceof NPC || combatEntity.getOpponent().getPlayer().autoRetailate){
+										combatEntity.getOpponent().setOpponent(combatEntity);
+									}
+								}
+								if(!combatEntity.getOpponent().getAttackers().contains(combatEntity)){
+									combatEntity.getOpponent().getAttackers().add(combatEntity);
+								}
+							}
+							this.stop();
+						}
+					});
+				}
+			}
+		} else {
+			if(combatEntity.attack == null)
+				combatEntity.attack = World.getWorld().getNPCManager().getAttack(combatEntity.getNPC());
+			//combatEntity.doAtkEmote();
+			if(combatEntity.attack != null){
+				//timer
+				/*if(combatEntity.predictedAtk > System.currentTimeMillis()){
+					follow(combatEntity,combatEntity.getOpponent());
+					return true;//we dont want to reset attack but just wait another 500ms or so...
+				}*/
+				int type = combatEntity.attack.handleAttack(combatEntity.getNPC(),combatEntity.getOpponent());
+				if(type == 5){
+					
+					//successful
+				} else if(type == 1){
+					//cancel
+					return false;
+				} else if(type == 0){
+					//out of range
+					follow(combatEntity,combatEntity.getOpponent());
+				}
+			}
+			//combatEntity.getOpponent().hit(1,combatEntity.getOpponent().getEntity(),false);
+			//npc combat, not as complicated as player combat
+		}
+		return true;//was successful, false - reset attack
+	}
+	
+	public static void npcAttack(final NPC npc,final CombatEntility combatEntity,final int damg,final int delay,final int type){
+		World.getWorld().submit(new Event(delay) {
+			@Override
+			public void execute() {
+				int newDamg = damg;
+				if(combatEntity.getEntity() instanceof Player){
+					if(combatEntity.getPlayer().getPrayer()[12] && type == 2)
+						newDamg = 0;
+					else if(combatEntity.getPlayer().getPrayer()[13] && type == 1)
+						newDamg = 0;
+					else if(combatEntity.getPlayer().getPrayer()[14] && type == 0)
+						newDamg = 0;
+				}
+				combatEntity.doDefEmote();
+				combatEntity.hit(newDamg,npc.cE.getEntity(),false);
+				this.stop();
+			}
+		});
+	}
+	
+	//1 - attack is ok
+	//0 - wild level not enough
+	//2 - aready in combat them
+	//3 - your being attacked
+		
+	public static String canAtk(CombatEntility combatEntity,CombatEntility attacking){
+		if(!isInMulti(combatEntity) || !isInMulti(attacking)){
+			String type = "NPC";
+			if(attacking.getEntity() instanceof Player)
+				type = "player";
+			if(combatEntity.getCurrentAtker() != null && combatEntity.getCurrentAtker() != attacking)
+				return "You are already under attack.";
+			else if(attacking.getCurrentAtker() != null && attacking.getCurrentAtker() != combatEntity)
+				return "This "+type+" is already under attack.";
+			else if(attacking.getOpponent() != null && attacking.getOpponent() != combatEntity)
+				return "This "+type+" is already in combat.";
+		}
+		if(combatEntity.getEntity() instanceof Player && attacking.getEntity() instanceof Player){
+			//wilderness level is too great
+			String differenceOk = "You need to move deeper into the wilderness to attack this player.";
+			int cb1 = combatEntity.getCombat();
+			int cb2 = attacking.getCombat();
+			int difference = getRealLevel(combatEntity,attacking);
+			if(cb1 - cb2 < difference && cb1 - cb2 >= 0 && difference > 0)
+				differenceOk = "";
+			else if(cb2 - cb1 < difference && cb2 - cb1 >= 0 && difference > 0)
+				differenceOk = "";
+			return differenceOk;
+		}
+		return "";
+	}
+	
+	public static void resetAttack(CombatEntility combatEntity){
+		if(combatEntity.getOpponent() != null){
+			if(combatEntity.getOpponent().getAttackers().contains(combatEntity)){
+				combatEntity.getOpponent().getAttackers().remove(combatEntity);
+			}
+			combatEntity.setOpponent(null);
+		}
+	}
+	public static void logoutReset(CombatEntility combatEntity){//if we teleport / logout or anything like that call this method (die too)
+		if(combatEntity.getAttackers().size() > 0){
+			CombatEntility c3[] = new CombatEntility[combatEntity.getAttackers().size()];
+			int i = 0;
+			for(CombatEntility c4 : combatEntity.getAttackers()){
+				c3[i] = c4;
+				i++;
+			}
+			for(CombatEntility c2 : c3){
+				resetAttack(c2);
+			}
+			c3 = null;
+		}
+		resetAttack(combatEntity);
+	}
+	
+	public static int getRealLevel(CombatEntility combatEntity,CombatEntility b){//this will return the lowest wilderness level of the 2 players so as to avoid being able for 1 player to attack the other while the other cant attack them
+		int a = getWildLevel(combatEntity.getAbsX(),combatEntity.getAbsY());
+		int d = getWildLevel(b.getAbsX(),b.getAbsY());
+		if(a < d)
+			return a;
+		else return d;
+	}
+	public static int getWildLevel(int absX,int absY){
+		if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+			return (((absY - 3520) / 8) + 1);
+		else
+			return -1;
+	}
+	public static boolean isInMulti(CombatEntility combatEntity){
+		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327 && combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607) || 
+			(combatEntity.getAbsX() >= 3190 && combatEntity.getAbsX() <= 3327 && combatEntity.getAbsY() >= 3648 && combatEntity.getAbsY() <= 3839) ||  
+			(combatEntity.getAbsX() >= 3200 && combatEntity.getAbsX() <= 3390 && combatEntity.getAbsY() >= 3840 && combatEntity.getAbsY() <= 3967) || 
+			(combatEntity.getAbsX() >= 2992 && combatEntity.getAbsX() <= 3007 && combatEntity.getAbsY() >= 3912 && combatEntity.getAbsY() <= 3967) || 
+			(combatEntity.getAbsX() >= 2946 && combatEntity.getAbsX() <= 2959 && combatEntity.getAbsY() >= 3816 && combatEntity.getAbsY() <= 3831) || 
+			(combatEntity.getAbsX() >= 3008 && combatEntity.getAbsX() <= 3199 && combatEntity.getAbsY() >= 3856 && combatEntity.getAbsY() <= 3903) || 
+			(combatEntity.getAbsX() >= 3008 && combatEntity.getAbsX() <= 3071 && combatEntity.getAbsY() >= 3600 && combatEntity.getAbsY() <= 3711) || 
+			(combatEntity.getAbsX() >= 3072 && combatEntity.getAbsX() <= 3327 && combatEntity.getAbsY() >= 3608 && combatEntity.getAbsY() <=3647))
+			return true;
+		return false;
+	}
+	public static int random(int range) {
+		return (int) (java.lang.Math.random() * (range + 1));
+	}
+	
+	
+	public static void follow(final CombatEntility combatEntity, final CombatEntility opponent){
+		int moveX = 0;
+		int moveY = 0;
+		if(combatEntity.getEntity().getLocation().getX()-1 > opponent.getEntity().getLocation().getX())
+			moveX = -1;
+		else if(combatEntity.getEntity().getLocation().getX()+1 < opponent.getEntity().getLocation().getX())
+			moveX = 1;
+		if(combatEntity.getEntity().getLocation().getY()-1 > opponent.getEntity().getLocation().getY())
+			moveY = -1;
+		else if(combatEntity.getEntity().getLocation().getY()+1 < opponent.getEntity().getLocation().getY())
+			moveY = 1;
+		combatEntity.getEntity().getWalkingQueue().addStep(combatEntity.getEntity().getLocation().getX()+moveX, combatEntity.getEntity().getLocation().getY()+moveY);
+		combatEntity.getEntity().getWalkingQueue().finish();
+	}
+	
+	
+	public static void poisonEntity(final CombatEntility combatEntity){
+		if(combatEntity.getPlayer() != null)
+			combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
+		combatEntity.setPoisoned(true);
+		World.getWorld().submit(new Event(16000) {// 16 seconds should be enough
+			private int lastDamg = -1;
+			private int ticks = 4;
+			@Override
+			public void execute() {
+				if(!combatEntity.isPoisoned())
+					this.stop();
+				if(lastDamg == -1)
+					lastDamg = random(10);
+				if(ticks == 0){
+					lastDamg--;
+					ticks = 4;
+				}
+				ticks--;
+				if(lastDamg == 0){
+					if(combatEntity.getPlayer() != null)
+						combatEntity.getPlayer().getActionSender().sendMessage("Your poison clears up.");
+					combatEntity.setPoisoned(false);
+					this.stop();
+				} else {
+					combatEntity.hit(lastDamg,combatEntity.getEntity(),true);
+				}
+			}
+		});
+	}
+	
+	public static boolean special(final CombatEntility combatEntity,int maxDamg,final int wep,final int extraDis){
+		int i2 = -1;
+		for(int j = 0; j < specialWeapons.length; j++){
+			if(specialWeapons[j] == wep){
+				i2 = j;
+				break;
+			}
+		}
+		
+		if(i2 < 0)
+			return false;
+		final int i = i2;
+		if(!combatEntity.getEntity().getLocation().isWithinDistance(combatEntity.getOpponent().getEntity().getLocation(),(specialDis[i]+extraDis))){
+			return false;//too far away
+		}
+		if(combatEntity.getPlayer().specialPower < specialDrainage[i]){
+			combatEntity.getPlayer().getActionSender().sendMessage("You dont have enough special energy to do this attack.");
+			return false;
+		}
+		maxDamg += (maxDamg / 5);
+		if(wep == 5698)
+			maxDamg -= (maxDamg / 3);
+		//attack / defence
+		int attack = random(combatEntity.meleeAtk(false));
+		int defence = random(combatEntity.getOpponent().meleeDef(combatEntity.getAtkType()));
+		if(defence > attack)
+			maxDamg = 0;
+		if(combatEntity.getOpponent().getEntity() instanceof Player){
+			if(combatEntity.getOpponent().getPlayer().getPrayer()[14] && random(2) == 1)
+				maxDamg = 0;
+		}
+		final int maxDamg2 = maxDamg;
+		combatEntity.doAnim(specialAnimations[i]);
+		if(specialGFX[i] > 0 && wep != 861)
+			combatEntity.doGfx(specialGFX[i]);
+		if(oppGfx[i] > 0)
+			combatEntity.getOpponent().doGfx(oppGfx[i]);
+		combatEntity.getPlayer().specialPower -= specialDrainage[i];
+		UpdateSpecialBar.specialPower(combatEntity.getPlayer());
+		World.getWorld().submit(new Event(hitDelay[i]) {
+			@Override
+			public void execute() {
+				if(combatEntity.getOpponent() == null){
+					this.stop();
+					return;
+				}
+				if(combatEntity.getWeaponPoison() > 0 && random(10) <= combatEntity.getWeaponPoison() && !combatEntity.getOpponent().isPoisoned())
+					poisonEntity(combatEntity.getOpponent());
+				int damg = random(maxDamg2);
+				combatEntity.getOpponent().hit(damg,combatEntity.getEntity(),false);
+				if(isGuthanEquiped(combatEntity.getPlayer()))
+					combatEntity.getPlayer().heal(damg);
+				else if(isToragEquiped(combatEntity.getPlayer()) && combatEntity.getOpponent().getEntity() instanceof Player && random(3) == 1)
+					combatEntity.getOpponent().getPlayer().decreaseEnergy((combatEntity.getOpponent().getPlayer().getEnergy() / 5));
+				this.stop();
+			}
+		});
+		switch(wep){
+			case 5698://dds
+			case 1215:
+			case 1231:
+			case 5680:
+				World.getWorld().submit(new Event(1000) {
+					@Override
+					public void execute() {
+						if(combatEntity.getOpponent() == null){
+							this.stop();
+							return;
+						}
+						combatEntity.getOpponent().hit(random(maxDamg2),combatEntity.getEntity(),false);
+						this.stop();
+					}
+				});
+				break;
+			case 861:
+				combatEntity.getPlayer().getWalkingQueue().reset();
+				int proj = 249;
+				//offset values for the projectile
+				int offsetY = (combatEntity.getAbsX() - combatEntity.getOpponent().getAbsX()) * -1;
+				int offsetX = (combatEntity.getAbsY() - combatEntity.getOpponent().getAbsY()) * -1;
+				//find our lockon target
+				int hitId = combatEntity.getSlotId();
+				//extra variables - not for release
+				int distance = combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation());
+				int timer = 1;
+				int min = 16;
+				if(distance > 8) {
+					timer += 2;
+				} else if(distance >= 4) {
+					timer++;
+				}
+				min -= (distance-1)*2;
+				int speed = 75-min;
+				int slope = 7+distance;
+				//final int delay = timer*500;
+				//create the projectile
+				combatEntity.getPlayer().getActionSender().createGlobalProjectile(combatEntity.getAbsY(), combatEntity.getAbsX(), offsetY, offsetX, 50, speed,proj, 43, 35, hitId,slope);
+				World.getWorld().submit(new Event(500) {
+					@Override
+					public void execute() {
+						if(combatEntity.getOpponent() == null){
+							this.stop();
+							return;
+						}
+						combatEntity.doAnim(specialAnimations[i]);
+						int proj = 249;
+						//offset values for the projectile
+						int offsetY = (combatEntity.getAbsX() - combatEntity.getOpponent().getAbsX()) * -1;
+						int offsetX = (combatEntity.getAbsY() - combatEntity.getOpponent().getAbsY()) * -1;
+						//find our lockon target
+						int hitId = combatEntity.getSlotId();
+						//extra variables - not for release
+						int distance = combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation());
+						int timer = 1;
+						int min = 16;
+						if(distance > 8) {
+							timer += 2;
+						} else if(distance >= 4) {
+							timer++;
+						}
+						min -= (distance-1)*2;
+						int speed = 75-min;
+						int slope = 7+distance;
+						final int delayArrow = timer*500;
+						//create the projectile
+						combatEntity.getPlayer().getActionSender().createGlobalProjectile(combatEntity.getAbsY(), combatEntity.getAbsX(), offsetY, offsetX, 50, speed,proj, 43, 35, hitId,slope);
+						World.getWorld().submit(new Event(delayArrow) {
+							@Override
+							public void execute() {
+								if(combatEntity.getOpponent() == null){
+									this.stop();
+									return;
+								}
+								combatEntity.getOpponent().hit(random(maxDamg2),combatEntity.getEntity(),false);
+								this.stop();
+							}
+						});
+						this.stop();
+					}
+				});
+		}
+		return true;
+	}
+
+	private static int specialAnimations[] = {0x426,0x426,0x426,0x426, 426,440,451,1658,1060,1667,1667,1667,1667,3157,3157,1058};
+	private static int specialGFX[] = {252,252,252,252, 249,282,347,-1,251,253,253,253,253,405,559,248,};
+	private static int oppGfx[] = {-1,-1,-1,-1,-1,-1,-1,341,-1,-1,-1,-1,-1,-1,-1,-1,-1,};
+	private static int specialDrainage[] = {25,25,25,25, 55,50,60,100,50,75,75,75,75,100,100,60,};
+	private static int specialWeapons[] = {5698,1215,1231,5680, 861,3204,4587,4151,1434,1249,1263,5716,5730,4153,7158,1305,};
+	private static int specialDis[] = {1,1,1,1, 9,2,1,1,1,1,1,1,1,1,1,1,};
+	private static int hitDelay[] = {500,500,500,500,1000,500,500,500,500,500,500,500,500,500,500,500};
+	
+	public void ateFood(final CombatEntility combatEntity){
+		if(combatEntity.predictedAtk > System.currentTimeMillis()+1000)//this should make sure, you dont eat and hit at the same time.
+			return;
+		combatEntity.predictedAtk = System.currentTimeMillis()+1000;
+		
+	}
+	
+	public static void removeArrow(Player player,int bowType){
+		if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
+			return;
+		int slot = Equipment.SLOT_WEAPON;
+		if(bowType == 2){
+			slot = Equipment.SLOT_ARROWS;
+		}
+		if(player.getEquipment().get(slot).getCount() <= 1)
+			player.getEquipment().set(slot,null);
+		else
+			player.getEquipment().set(slot,new Item(player.getEquipment().get(slot).getId(),(player.getEquipment().get(slot).getCount()-1)));
+	}
+	
+	public static boolean isVeracEquiped(Player player){
+		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
+			|| player.getEquipment().get(Equipment.SLOT_WEAPON) == null
+			|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
+			|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
+			return false;
+		if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4753
+			&& player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4755
+			&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4757
+			&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4759)
+			return true;
+		return false;
+	}	
+	public static boolean isGuthanEquiped(Player player){
+		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
+			|| player.getEquipment().get(Equipment.SLOT_WEAPON) == null
+			|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
+			|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
+			return false;
+		if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4724
+			&& player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4726
+			&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4728
+			&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4730)
+			return true;
+		return false;
+	}	
+	public static boolean isToragEquiped(Player player){
+		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
+			|| player.getEquipment().get(Equipment.SLOT_WEAPON) == null
+			|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
+			|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
+			return false;
+		if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4745
+			&& player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4747
+			&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4749
+			&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4751)
+			return true;
+		return false;
+	}	
+	
+	/*
+	magic speed proj
+	
+	int timer = 3;
+	int d = 105;
+
+	if(d2 >= 9) {
+		timer = 6;
+	} else if(d2 >= 6) {
+		timer = 5;
+	} else if(d2 >= 3) {
+		timer = 4;
+	}
+	
+	int min = 40;
+	min -= (d2-1)*8;
+	d -= min;
+
+	GraphicsHandler.addProjectile(casterY,casterX,offsetY,offsetX,50,d,94,43,30+npcHeight,Index-1,12+d2,combatEntity.heightLevel);
+	
+	int timer = 3;
+	int speed = 105;
+
+	if(distance >= 9) {
+		timer = 6;
+	} else ifdistance >= 6) {
+		timer = 5;
+	} else if(distance >= 3) {
+		timer = 4;
+	}
+	
+	int min = 40;
+	min -= (distance-1)*8;
+	speed -= min;
+	int slope = 12+distance;
+	*/
+	
+	
+	/*range
+	
+	
+	int timer = 1;
+
+	double timerpart = 4;
+	double dpart1 = 8;
+	int min = 16;
+	if(d > dpart1) {
+		timer += 2;
+	} else if(d >= timerpart) {
+		timer++;
+	}
+	min -= (d-1)*2;
+	
+	
+	Handlers.GraphicsHandler.addProjectile(absY, absX, offsetY, offsetX, 50, 75-min, arrowgfx, 43, 35, b, 7+d, combatEntity.heightLevel);
+	addProjectile(int casterY, int casterX, int offsetY, int offsetX, int angle, int speed, int movegfxID ,int startHeight, int endHeight, int lockon, int slope, int heightLevel)
+
+	int timer = 1;
+	int min = 16;
+	if(distance > 8) {
+		timer += 2;
+	} else if(distance >= 4) {
+		timer++;
+	}
+	min -= (distance-1)*2;
+	int speed = 75-min;
+	int slope = 7+distance;
+	int delay = timer*500
+	*/
+	
+}

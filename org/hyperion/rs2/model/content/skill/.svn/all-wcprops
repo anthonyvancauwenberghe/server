@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/model/content/skill
+END
+Herblore.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Herblore.java
+END
+Prayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Prayer.java
+END
+Smelting.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Smelting.java
+END
+Smithing.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Smithing.java
+END
+Fletching.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Fletching.java
+END
+Fishing.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Fishing.java
+END
+RuneCrafting.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/RuneCrafting.java
+END
+Cooking.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/model/content/skill/Cooking.java
+END
+Crafting.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Crafting.java
+END
+Thieving.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/content/skill/Thieving.java
+END

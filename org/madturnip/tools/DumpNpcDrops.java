@@ -1,0 +1,121 @@
+package org.madturnip.tools;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartDocument;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.util.TextUtils;
+
+public class DumpNpcDrops {
+	public static void main(String[] args) throws Exception{
+		ItemDefinition.init();
+	}
+	
+	
+	
+	  public static void createNode(XMLEventWriter eventWriter, String name,
+		      String value, int tabs) throws XMLStreamException {
+
+		    XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+		    XMLEvent end = eventFactory.createDTD("\n");
+		    XMLEvent tab = eventFactory.createDTD("\t");
+		    // create Start node
+		    StartElement sElement = eventFactory.createStartElement("", "", name);
+		    while(tabs-- != 0) {
+		    	eventWriter.add(tab);
+		    }
+		    eventWriter.add(sElement);
+		    // create Content
+		    Characters characters = eventFactory.createCharacters(value);
+		    eventWriter.add(characters);
+		    // create End node
+		    EndElement eElement = eventFactory.createEndElement("", "", name);
+		    eventWriter.add(eElement);
+		    eventWriter.add(end);
+	}
+	
+	public static void startDump2() {
+		int dumped = 0;
+		long startTime = System.currentTimeMillis();
+		for(NPCDefinition def : NPCDefinition.getDefinitions()) {
+			if(def == null)
+				continue;
+			if(def.getDrops().size() > 1) {
+				TextUtils.writeToFile("./data/drop dump.cfg", "[" + def.getName().toUpperCase() + "]");
+				for(NPCDrop drop : def.getDrops()) {
+					ItemDefinition itemDef = ItemDefinition.forId(drop.getId());
+					TextUtils.writeToFile("./data/drop dump.cfg", 
+							String.format("%s %1.2f%%\tAmount:%d-%d", 
+									itemDef.getName(), (((double)drop.getChance() + 1D)/1001D) * 100D ,  drop.getMin(), drop.getMax()));
+				}
+				dumped++;
+			}
+		}
+		System.out.printf("Dumped %d npc drops in %d ms%s", dumped, System.currentTimeMillis() - startTime, System.getProperty("line.separator"));
+	}
+	
+	public static void startDump() throws IOException {
+		String name = "./data/npcdrops.cfg";
+		BufferedReader file = null;
+		int lineInt = 1;
+		try {
+			file = new BufferedReader(new FileReader(name));
+			while(true) {
+				String line = file.readLine();
+				if(line == null)
+					break;
+				int spot = line.indexOf('=');
+				if(spot > - 1) {
+					String values = line.substring(spot + 1);
+					values = values.replaceAll("\t\t", "\t");
+					values = values.trim();
+					String[] valuesArray = values.split("\t");
+					int id = Integer.valueOf(valuesArray[0]);
+
+					//NPCDefinition.forId(id).dropId = new int[(valuesArray.length + 1)][4];
+					int i = 1;
+					NPCDefinition.forId(id).getDrops().clear();
+					System.out.println("[COLOR=\"Orange\"][SIZE=\"4\"][B]" + NPCDefinition.forId(id).getName() + "[/B][/SIZE][/COLOR]");
+					TextUtils.writeToFile("./data/drop dump.cfg", "[COLOR=\"Orange\"][SIZE=\"4\"][B]" + NPCDefinition.forId(id).getName() + "[/B][/SIZE][/COLOR]");
+					try {
+						for(i = 1; i < valuesArray.length; i++) {
+							String[] itemData = valuesArray[i].split("-");
+							int itemId = Integer.valueOf(itemData[0]);//itemId
+							int minAmount = Integer.valueOf(itemData[1]);//minAm
+							int maxAmount = Integer.valueOf(itemData[2]);//maxAm
+							int chance = Integer.valueOf(itemData[3]);//chance
+							NPCDefinition.forId(id).getDrops().add(NPCDrop.create(itemId, minAmount, maxAmount, chance));
+							TextUtils.writeToFile("./data/drop dump.cfg", ItemDefinition.forId(Integer.valueOf(itemData[0])).getName());
+						}
+					} catch(Exception e) {
+						e.printStackTrace();
+						System.out.println("error on array: " + i + " npcId: " + id);
+					}
+					TextUtils.writeToFile("./data/drop dump.cfg", "");
+				}
+				lineInt++;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("error on line: " + lineInt + " ");
+		} finally {
+			if(file != null)
+				file.close();
+		}
+	}
+}

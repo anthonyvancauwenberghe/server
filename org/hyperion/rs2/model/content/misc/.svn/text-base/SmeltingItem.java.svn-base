@@ -1,0 +1,32 @@
+package org.hyperion.rs2.model.content.misc;
+	
+	public class SmeltingItem {
+		private int barId, experience, oreId, secondOreId, secondOreAmmount, level;
+
+		public int getBarId() {
+			return barId;
+		}
+
+		@SuppressWarnings("unused")
+		public int getOreId() {
+			return oreId;
+		}
+
+		@SuppressWarnings("unused")
+		public int getSecondOreId() {
+			return secondOreId;
+		}
+		
+		@SuppressWarnings("unused")
+		public int getSecondOreAmount() {
+			return secondOreAmmount;
+		}
+		
+		public int getLevel() {
+			return level;
+		}
+		
+		public int getExperience() {
+			return experience;
+		}
+	}

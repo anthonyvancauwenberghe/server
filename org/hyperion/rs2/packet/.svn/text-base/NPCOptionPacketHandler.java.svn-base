@@ -1,0 +1,109 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.ShopManager;
+
+/**
+ * npc options
+ * @author Martin
+ *
+ */
+public class NPCOptionPacketHandler implements PacketHandler {
+	
+	/**
+	 * Option 1 opcode.
+	 */
+	private static final int OPTION_1 = 155, OPTION_2 = 17;
+
+	@Override
+	public void handle(Player player, Packet packet) {
+		switch(packet.getOpcode()) {
+		case OPTION_1:
+			handleOption1(player, packet);
+			break;
+		case OPTION_2:
+			handleOption2(player, packet);
+			break;
+		}
+	}
+
+	/**
+	 * Handles the option 1 packet.
+	 * @param player The player.
+	 * @param packet The packet.
+	 */
+	private void handleOption1(Player player, Packet packet) {
+		int slot = packet.getLEShort();
+		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		System.out.println("id: "+npc.getDefinition().getId());
+		if(World.getWorld().getContentManager().handlePacket(10,player,npc.getDefinition().getId(),npc.getLocation().getX(),npc.getLocation().getY(),-1))
+			return;
+		switch(npc.getDefinition().getId()){
+			case 495:
+			case 494:
+				Bank.open(player);
+				break;
+			case 536://food
+				ShopManager.open(player,6);
+				break;
+			case 519://pk stuff
+				ShopManager.open(player,4);
+				break;
+			case 520://melee
+				ShopManager.open(player,3);
+				break;
+			case 528://range
+				ShopManager.open(player,1);
+				break;
+			case 553://magic
+				ShopManager.open(player,2);
+				break;
+			case 538://barrows
+				ShopManager.open(player,43);
+				break;
+		}
+	}
+	
+    /**
+     * Handles the option 2 packet.
+     * @param player The player.
+     * @param packet The packet.
+     */
+    private void handleOption2(Player player, Packet packet) {        
+        int slot = packet.getLEShortA() & 0xFFFF;
+		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		System.out.println("id: "+npc.getDefinition().getId());
+		if(World.getWorld().getContentManager().handlePacket(11,player,npc.getDefinition().getId(),npc.getLocation().getX(),npc.getLocation().getY(),-1))
+			return;
+        switch(npc.getDefinition().getId()){
+			case 495:
+			case 494:
+				Bank.open(player);
+				break;
+			case 536://food
+				ShopManager.open(player,6);
+				break;
+			case 519://pk stuff
+				ShopManager.open(player,4);
+				break;
+			case 520://melee
+				ShopManager.open(player,3);
+				break;
+			case 528://range
+				ShopManager.open(player,1);
+				break;
+			case 553://magic
+				ShopManager.open(player,2);
+				break;
+			case 538://barrows
+				ShopManager.open(player,43);
+				break;
+		}
+    }
+
+
+}

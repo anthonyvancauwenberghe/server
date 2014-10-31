@@ -1,0 +1,22 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.Packet;
+
+public class DropItemPacketHandler implements PacketHandler {
+
+	@Override
+	public void handle(Player player, Packet packet) {
+		int itemId = packet.getShortA();
+		/*junk?*/
+		packet.get();
+		packet.get();
+		int itemSlot = packet.getShortA();
+		World.getWorld().getGlobalItemManager().dropItem(player,itemId,itemSlot);
+		//System.out.println("id: "+itemId+" slot: "+itemSlot);
+	}
+
+		
+}
+

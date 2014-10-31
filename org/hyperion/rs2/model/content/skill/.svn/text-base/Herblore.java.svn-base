@@ -1,0 +1,239 @@
+package org.hyperion.rs2.model.content.skill;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+import org.hyperion.rs2.model.content.*;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.data.PersistenceManager;
+import org.hyperion.rs2.model.content.misc.Herb;
+import org.hyperion.rs2.model.content.misc.UnfinishedPotion;
+import org.hyperion.rs2.model.content.misc.Potion;
+
+/**
+ * Handles Herbloring
+ * @author Jonas(++)
+ *
+ */
+
+public class Herblore implements ContentTemplate {
+	
+		public Herblore() { }
+		
+		private List<Herb> herbs;
+		private List<UnfinishedPotion> unfinishedPotions;
+		private List<Potion> potions;
+
+		
+		/**
+		 * Gets the index of the item
+		 * @param item The item of which index has to be returned.
+		 */
+		
+		public int getIndex(int herb) {
+			for(Herb c : herbs) {
+				if(c.getHerbId() == herb)
+					return herbs.indexOf(c);
+			}
+			return -1;
+		}
+		
+		/**
+		 * Gets the index of the item
+		 * @param item The item of which index has to be returned.
+		 */
+		
+		public int getPotionIndex(int herb) {
+			for(UnfinishedPotion u : unfinishedPotions) {
+				if(u.getHerb() == herb)
+					return unfinishedPotions.indexOf(u);
+			}
+			return -1;
+		}
+		
+		/**
+		 * Identifies an herb
+		 * @param c The {@link Client}.
+		 * @param herb The herb that needs to be indentified.
+		 */
+		
+		public void identifyHerb(Player c, int herb,int slot) {
+			Herb h = herbs.get(getIndex(herb));
+			
+			if (ContentEntity.returnSkillLevel(c,15) >= h.getLevel()) {
+				ContentEntity.sendMessage(c,"You identify the herb.");
+				ContentEntity.deleteItem(c,herb,slot, 1);
+				ContentEntity.addItem(c,(h.getCleanHerb()), 1,slot);
+				ContentEntity.addSkillXP(c,h.getExperience(), 15);
+			} else {
+				ContentEntity.sendMessage(c,"You need a Herbloring level of " +
+						"" + h.getLevel() + " to identify this herb.");
+			}
+		}		
+		
+		/**
+		 * Makes an unfinished potion
+		 * @param client The {@link Client}.
+		 * @param herb The herb.
+		 * @return
+		 */
+		
+		public void mixPotion(Player c, int herb,int slot,int slot2) {
+			UnfinishedPotion u = unfinishedPotions.get(getPotionIndex(herb));
+				
+			if (ContentEntity.returnSkillLevel(c,15) >= u.getPotionLevel()) {
+				ContentEntity.sendMessage(c,"You make an unfinished potion.");
+				ContentEntity.deleteItem(c,herb,slot, 1);
+				ContentEntity.deleteItem(c,herb,slot2, 1);	
+				ContentEntity.deleteItem(c,227,slot, 1);
+				ContentEntity.deleteItem(c,227,slot2, 1);	
+				//ContentEntity.deleteItem(c,227, 1);
+				ContentEntity.addItem(c,u.getPotion(), 1,slot);
+				ContentEntity.addSkillXP(c,u.getPotionExp(), 15);
+			} else {
+				ContentEntity.sendMessage(c,"You need a Herbloring level of " +
+						"" + u.getPotionLevel() + " to make this potion.");
+			}		
+		}
+		
+		/**
+		 * Gets the index of the unfinished potion, and will return everything of the finised potion.
+		 * @param potion The unfinished potion of which index has to be returned.
+		 */
+		
+		public int getEndPotionIndex(int potion) {
+			for(Potion pot : potions) {
+				if(pot.getPotionId() == potion)
+					return potions.indexOf(pot);
+			}
+			return -1;
+		}
+		
+		public Potion getEndPotionIndex2(int potion) {
+			for(Potion pot : potions) {
+				System.out.println(potion+" : "+pot.getPotionId());
+				if(pot.getPotionId() == potion)
+					return pot;
+			}
+			return null;
+		}
+		
+		/**
+		 * Checks if we're using a unfinished potion with one of their second ingredients.
+		 * @param c The {@link Client}.
+		 * @param potion The potion we're using.
+		 * @param item The item we're using.
+		 */
+		
+		public boolean checkPotion(Player c, int potion, int item) {
+			for(Potion pot : potions) {
+				if(pot.getPotionId() == potion) {
+					int[] items = pot.getSecondItems();
+					for(int i = 0; i < items.length; i++) {
+						if(items[i] == item)
+							return true;
+					}
+				}					
+			}			
+			return false;
+		}
+		
+		/**
+		 * Gets the place in the array of the 2nd ingredients.
+		 * @param potion The unfinished potion.
+		 * @param item The 2nd ingredient we're using.
+		 */
+		
+		public int getPlace(int potion, int item) {
+			Potion p = potions.get(getEndPotionIndex(potion));
+		
+			int[] items = p.getSecondItems();
+			
+			for(int i = 0; i < items.length; i++) {
+				if(items[i] == item)
+					return i;
+			}
+			return -1;
+		}
+		
+		/**
+		 * Ends a unfinished potion by using the 2nd ingredient on it.
+		 * @param c The {@link Client}.
+		 * @param potion The unfinished potion.
+		 * @param item The 2nd ingredient.
+		 */
+
+		public boolean endPotion(Player c, int potion, int item,int slot1,int slot2) {
+			Potion p = getEndPotionIndex2(potion);
+			if(p == null)
+				return false;
+			int i = getPlace(potion, item);
+			
+			if(ContentEntity.returnSkillLevel(c,15) >= p.getPotionLevel()[i]) {
+				ContentEntity.sendMessage(c,"You make a " +ItemDefinition.forId(p.getFinishedPotion()[i]).getName());
+				ContentEntity.deleteItem(c,potion, slot1,1);
+				ContentEntity.deleteItem(c,item, slot2,1);
+				ContentEntity.addItem(c,p.getFinishedPotion()[i], 1,slot1);
+				ContentEntity.addSkillXP(c,p.getPotionExp()[i], 15);
+				ContentEntity.startAnimation(c,0x378);
+			} else {
+				ContentEntity.sendMessage(c,"You need a herblore level of " +
+						"" + p.getPotionLevel()[i] + " to make this potion.");
+			}
+			return true;
+		}
+		@Override
+		public boolean clickObject(final Player client,final int type,final int id,final int slot,final int itemId2,final int itemSlot2){
+			if(type == 1){
+				identifyHerb(client,id,slot);
+			} else if(type == 13){
+				ContentEntity.sendMessage(client,id+" : "+slot+" : "+itemId2+" : "+itemSlot2);
+				if(!endPotion(client,id,slot,itemId2,itemSlot2))
+					mixPotion(client,id,slot,itemSlot2);
+			}
+			return true;
+		}
+		
+		/**
+		 * Loads the XML file of herbloring.
+		 * @throws FileNotFoundException
+		 */
+		
+		@Override
+		public void init() throws FileNotFoundException {
+			herbs = (List<Herb>) PersistenceManager.load(new FileInputStream("./data/herbs.xml"));
+			unfinishedPotions = (List<UnfinishedPotion>) PersistenceManager.load(new FileInputStream("./data/unfinishedPotions.xml"));
+			potions = (List<Potion>) PersistenceManager.load(new FileInputStream("./data/potions.xml"));
+		}
+		
+		@Override
+		public int[] getValues(int type) {
+			if(type == 1){
+				int[] j = new int[herbs.size()];
+				int i2 = 0;
+				for(Herb i : herbs) {
+					j[i2] = i.getHerbId();
+					i2++;
+				}
+				return j;
+			} else if(type == 13){
+				int[] j = new int[(potions.size()*3)];
+				int i2 = 0;
+				/*for(UnfinishedPotion i : unfinishedPotions) {
+					j[i2] = i.getHerb();
+					i2++;
+				}*/
+				for(Potion i : potions) {
+					j[i2++] = i.getPotionId();
+					for(int i7 : i.getSecondItems()){
+						j[i2] = i7;
+						i2++;
+					}
+				}
+				return j;
+			}
+			return null;
+		}
+}

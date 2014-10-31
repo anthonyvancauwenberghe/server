@@ -1,0 +1,203 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/model
+END
+UpdateFlags.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/UpdateFlags.java
+END
+Appearance.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Appearance.java
+END
+GameObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/GameObject.java
+END
+WalkingQueue.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/WalkingQueue.java
+END
+Skills.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/darkstar/!svn/ver/14/trunk/src/org/hyperion/rs2/model/Skills.java
+END
+InterfaceState.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/model/InterfaceState.java
+END
+PlayerDetails.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/PlayerDetails.java
+END
+ItemDefinition.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/ItemDefinition.java
+END
+UpdateSpecialBar.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/UpdateSpecialBar.java
+END
+GameObjectDefinition.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/GameObjectDefinition.java
+END
+GlobalItemManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/GlobalItemManager.java
+END
+Entity.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Entity.java
+END
+Wilderness.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Wilderness.java
+END
+NPC.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/NPC.java
+END
+RequestManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/RequestManager.java
+END
+ChatMessage.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/ChatMessage.java
+END
+NPCDefinition.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/darkstar/!svn/ver/39/trunk/src/org/hyperion/rs2/model/NPCDefinition.java
+END
+Player.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/darkstar/!svn/ver/44/trunk/src/org/hyperion/rs2/model/Player.java
+END
+Tile.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Tile.java
+END
+Settings.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Settings.java
+END
+ObjectManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/ObjectManager.java
+END
+EntityCooldowns.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/EntityCooldowns.java
+END
+Attack.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Attack.java
+END
+Location.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Location.java
+END
+NPCManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/darkstar/!svn/ver/37/trunk/src/org/hyperion/rs2/model/NPCManager.java
+END
+Graphic.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Graphic.java
+END
+Damage.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Damage.java
+END
+Animation.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Animation.java
+END
+FriendsAssistant.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/darkstar/!svn/ver/28/trunk/src/org/hyperion/rs2/model/FriendsAssistant.java
+END
+World.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/darkstar/!svn/ver/45/trunk/src/org/hyperion/rs2/model/World.java
+END
+Sprites.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Sprites.java
+END
+Palette.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Palette.java
+END
+Item.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/Item.java
+END

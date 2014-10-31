@@ -1,0 +1,222 @@
+package org.hyperion.rs2.model.content.skill;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Random;
+
+import org.hyperion.rs2.model.content.*;
+import org.hyperion.rs2.model.content.misc.CookingItem;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.data.PersistenceManager;
+import org.hyperion.rs2.event.*;
+
+
+/**
+ * Handles the cooking.
+ * @author Jonas(++);
+ *
+ */
+
+public class Cooking implements ContentTemplate {
+	
+	/**
+	 * Range cooking animation
+	 */
+	private final int COOKING_ANIM_RANGE = 896;
+	
+	/**
+	 * Fire cooking animation
+	 */
+	private final int COOKING_ANIM_FIRE = 897;
+	
+	/**
+	 * Class constructor.
+	 */
+	public Cooking() {
+		
+	}
+	
+	/**
+	 * List with all the cookingItems in.
+	 */
+	
+	private List<CookingItem> cookingItems;
+	
+	private final Random r = new Random();
+	
+	/**
+	 * Checks if the item is cookable.
+	 * @param item The item that needs to be checked.
+	 */
+	
+	public boolean isCookItem(int item) {
+		for(CookingItem c : cookingItems) {
+			int id = c.getCookId();
+			if(id == item)
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Gets the index of the item
+	 * @param item The item of which index has to be returned.
+	 */
+	
+	public int getIndex(int item) {
+		for(CookingItem c : cookingItems) {
+			if(c.getCookId() == item)
+				return cookingItems.indexOf(c);
+		}
+		return -1;
+	}
+	
+	private static final int[] FIRE_OBJECTS = {2732};
+	
+	private static final int[] RANGE_OBJECTS = {114};
+	
+	public boolean interfaceLook(final Player player, final int item, final int objId) {
+		if(player.isBusy())
+			return false;
+		//Check if we are using a proper object
+		boolean fireCook;
+		boolean canCook = false;
+		for(int i = 0; i < RANGE_OBJECTS.length; i++) {
+			if(i == objId) {
+				fireCook = false;
+				canCook = true;
+			}
+		}
+		for(int i = 0; i < FIRE_OBJECTS.length; i++) {
+			if(i == objId) {
+				fireCook = true;
+				canCook = true;
+			}
+		}
+		if(canCook == false) {
+			return false;
+		}
+		player.getActionSender().sendPacket164(1743);
+		player.getActionSender().sendInterfaceModel(13716, 250, item);
+		return false;
+	}
+	
+	/**
+	 * Cooks an item.
+	 * @param client The {@link Client}.
+	 * @param item The item that has to be cooked.
+	 */
+	public boolean cookItem(final Player client, final int item, final boolean fireCook) {
+		final CookingItem cookItem;
+		try{
+		// Create the variable.
+			cookItem = cookingItems.get(getIndex(item));
+		} catch(Exception e){
+			return false;
+		}
+		//TODO: Add in face object
+		// Check if the player can cook this item.
+		if(ContentEntity.returnSkillLevel(client,7) < cookItem.getLevel()) {
+			ContentEntity.sendMessage(client,"Your Cooking level is not high enough.");
+			return true;
+		}
+		
+		// Start animation.
+		if(!fireCook) {
+			ContentEntity.startAnimation(client,COOKING_ANIM_RANGE);
+		} else {
+			ContentEntity.startAnimation(client,COOKING_ANIM_FIRE);
+		}
+		
+		World.getWorld().submit(new Event(3000) {
+			@Override
+			public void execute() {
+				// Check if the player still have the item that has to be cooked.
+				if(ContentEntity.getItemAmount(client,item) != 0) {
+					
+					// Remove the item.
+					ContentEntity.deleteItem(client,item);
+					
+					String name = ContentEntity.getItemName(item);
+					
+					// Check if the item has a succes level.
+					if(cookItem.getSuccesLevel() != -1 && ContentEntity.returnSkillLevel(client,7) >= cookItem.getSuccesLevel()) {
+						ContentEntity.addItem(client,cookItem.getCookedItem(), 1);
+						ContentEntity.addSkillXP(client,cookItem.getExperience(), 7);
+						ContentEntity.sendMessage(client,"You succesfully cook the "+name+".");
+	
+					} else {
+						// Add the cooked/burned item.
+						if(r.nextInt(3) != 1) {
+							ContentEntity.addItem(client,cookItem.getCookedItem(), 1);
+							ContentEntity.addSkillXP(client,cookItem.getExperience(), 7);
+							ContentEntity.sendMessage(client,"You succesfully cook the "+name+".");
+						} else {
+							ContentEntity.addItem(client,cookItem.getBurnedItem(), 1);
+							ContentEntity.sendMessage(client,"You accidentally burn the "+name+".");
+						}
+					}
+					
+					// Start animation.
+					if(ContentEntity.getItemSlot(client,item) != -1) {
+						if(!fireCook) {
+							ContentEntity.startAnimation(client,COOKING_ANIM_RANGE);
+						} else {
+							ContentEntity.startAnimation(client,COOKING_ANIM_FIRE);
+						}
+					} else {
+						stop2();
+					}
+					
+				} else {
+					stop2();
+				}				
+				
+			}
+			
+			public void stop2() {
+				ContentEntity.startAnimation(client,-1);
+				client.setBusy(false);
+				this.stop();
+			}
+
+		});		
+		return true;
+	}
+	
+	/**
+	 * Loads the XML file of cooking.
+	 * @throws FileNotFoundException
+	 */
+	
+	@Override
+	public void init() throws FileNotFoundException {
+		cookingItems = (List<CookingItem>) PersistenceManager.load(new FileInputStream("./data/cooking.xml"));
+	}	
+	
+	@Override
+	public int[] getValues(int type){
+		if(type == 14){
+			int[] j = new int[cookingItems.size()];
+			int i = 0;
+			for(CookingItem cI : cookingItems){
+				if(cI.getCookId() > 0){
+					j[i] = cI.getCookId();
+					i++;
+				}
+			}
+			return j;
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean clickObject(final Player client,final int type,final int itemId,final int slot,final int objId,final int a){
+		if(type == 14)
+			return interfaceLook(client, itemId, objId);
+		return false;
+	}
+	
+}

@@ -1,0 +1,42 @@
+package org.hyperion.data;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import org.hyperion.rs2.model.content.misc.*;
+import org.hyperion.rs2.model.content.misc.UnfinishedPotion;
+import com.thoughtworks.xstream.XStream;
+
+/**
+ * Has the xstream object.
+ * @author Graham
+ *
+ */
+public class PersistenceManager {
+	private PersistenceManager() {}
+	
+	private static XStream xstream;
+	
+	static {
+		xstream = new XStream();
+		xstream.alias("foodItem", FoodItem.class);
+		xstream.alias("icon", PrayerIcon.class);
+		xstream.alias("herb", Herb.class);
+		xstream.alias("potion", Potion.class);
+		xstream.alias("unfinPotion", UnfinishedPotion.class);
+		xstream.alias("smeltingItem", SmeltingItem.class);
+		xstream.alias("cookingItem", CookingItem.class);
+		xstream.alias("npc", PickpocketNpc.class);
+		xstream.alias("stall", Stall.class);
+		xstream.alias("runes", Runes.class);
+	}
+	
+	public static void save(Object object, OutputStream out) {
+		xstream.toXML(object, out);
+	}
+	
+	public static Object load(InputStream in) {
+		return xstream.fromXML(in);
+	}
+
+}

@@ -1,0 +1,352 @@
+package org.hyperion.rs2.model.combat;
+
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.container.Equipment;
+
+public class CombatAssistant {
+	/**
+	* @return if the client will use range or not - 1,range weapon - 2 bow - 0no amo
+	*/
+	public static int hasAmo(CombatEntility c){
+		Item weapon = c.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON);
+		int returnCode = 8;
+		if(weapon == null)
+			return returnCode;
+		int wep = weapon.getId();
+		for(int g : RANGED_WEAPONS){
+			if(g == wep)
+				return 1;
+		}
+		boolean hasBow = false;
+		for(int g : BOWS){
+			if(wep == g)
+				hasBow = true;
+		}
+		if(hasBow){
+			Item arrow = c.getPlayer().getEquipment().get(Equipment.SLOT_ARROWS);
+			if(arrow != null){
+				int aId = arrow.getId();
+				if(getArrowType(aId) != 0){
+					return 2;
+				}
+			}
+			returnCode = 0;
+		}
+		return returnCode;
+	}
+	
+	public static boolean is2H(int wep){
+		for(int i : BOWS){
+			if(i == wep)
+				return true;
+		}
+		for(int i : TWO_HANDED){
+			if(i == wep)
+				return true;
+		}
+		return false;
+	}
+	
+	public static final int[] TWO_HANDED = { 1307, 1309, 1311, 1313, 1315, 1317, 1319, 6609, 7158,/*2h weps*/
+											4718, 4710, 4755, 4747, 4734, 4726,/*barrows*/};
+	
+	public static final int[] RANGED_WEAPONS = {
+		/*knives*/864, 863, 865, 866, 867, 868, 869,
+		/*darts*/ 806, 807, 808, 809, 810, 811, 3093,
+		/*javelins*/825, 826, 827, 828, 829, 830,
+		/*thorwn axes*/800, 801, 802, 803, 804, 805,
+	};
+	
+	public static final int[] BOWS = {
+		839, 841, 843, 845, 847, 849, 851, 853, 855, 857, 859, 861, 4212, 4214, 4734, 4827
+	};
+	
+	public static int getArrowType(int arrow) {
+		switch(arrow) {
+		case 882: // Bronze
+			return 1;
+		case 884: // Iron
+			return 2;
+		case 886: // Steel
+			return 3;
+		case 888: // Mithril
+			return 4;
+		case 890: // Adamant
+			return 5;
+		case 892: // Rune
+			return 6;
+		case 598: // Fire arrows
+		case 942:
+		case 2533:
+		case 2535:
+		case 2537:
+		case 2539:
+		case 2541:
+			return 7;
+		case 78: // Ice arrows
+			return 8;
+		case 2866: // Flighted ogre arrow
+			return 9;
+		default:
+			return 0;
+		}
+	}
+	
+	public static int getDrawback(int weapon,int arrow,int type) {
+		if(type == 2){
+			if(weapon == 4212) // Crystal bow.
+				return 472;
+			switch(arrow) {
+				case 882: // Bronze arrow
+					return 18; 
+				case 884: // Iron arrow
+					return 19; 	
+				case 886: // Steel arrow
+					return 20; 
+				case 888: // Mithril arrow
+					return 21; 
+				case 890: // Adamant arrow
+					return 22; 
+				case 892: // Rune arrow
+					return 24; 
+				case 4740: // Bolt
+					return 28;
+				default:
+					System.out.println("Missing drawback :"+arrow);
+					return -1;
+			}
+		} else if(type == 1){
+			switch(weapon) {
+				case 863: // Knife
+					return 220;
+				case 864:
+					return 219;
+				case 865:
+					return 221;
+				case 866:
+					return 223;
+				case 867:
+					return 224;
+				case 868:
+					return 225;
+				case 869:
+					return 222;
+				case 806: // Dart
+					return 233;
+				case 807:
+					return 232;
+				case 808:
+					return 234;
+				case 809:
+					return 235;
+				case 810:
+					return 236;
+				case 811:
+					return 237;
+				case 3093:
+					return 235;
+				case 825://javelins
+					return 207;
+				case 826:
+					return 206;
+				case 827:
+					return 208;
+				case 828:
+					return 209;
+				case 829:
+					return 210;
+				case 830:
+					return 211;
+				case 800://thrown axe
+					return 42;
+				case 801:
+					return 43;
+				case 802:
+					return 44;
+				case 803:
+					return 45;
+				case 804:
+					return 46;
+				case 805:
+					return 48;
+				default:
+					System.out.println("Missing throwDrawback :"+weapon);
+					return -1;
+			}
+		}
+		return -1;
+	}
+	
+	public static int getArrowGfx(int weapon,int bowType,int type) {
+		if(bowType == 2){
+			// Check first if we're using a Crystal bow.
+			if(weapon == 4212) // Crystal bow.
+				return 472;
+			
+			switch(type) {
+				case 1: // Bronze
+					return 10;
+				case 2: // Iron
+					return 9;
+				case 3: // Steel
+					return 11;
+				case 4: // Mithril
+					return 12;
+				case 5: // Admanant
+					return 13;
+				case 6: // Rune
+					return 15;
+				case 7: // Fire
+					return 17;
+				case 8: // Ice
+					return 16;
+				case 9: // Flighted ogre arrow
+					return 471;
+				default:
+					return 0;		
+			}
+		} else if(bowType == 1){
+			switch(weapon) {
+				case 863: // Iron knife
+					return 213;
+				case 864: // Bronze knife
+					return 212;
+				case 865: // Steel knife
+					return 214;
+				case 866: // Mithril knife
+					return 216;
+				case 867: // Adamant knife
+					return 217;
+				case 868: // Rune knife
+					return 218;
+				case 869: // Black knife
+					return 215;
+				case 806: // Bronze dart
+					return 226;
+				case 807: // Iron dart
+					return 227;
+				case 808: // Steel dart
+					return 228;
+				case 809: // Mithril dart
+					return 229;
+				case 810: // Adamant dart
+					return 230;
+				case 811: // Rune dart
+					return 231;
+				case 3093: // Black dart
+					return 229;		
+				default: 
+					System.out.println("Missing throwGfx :"+weapon);
+					return -1;
+			}
+		}
+		return -1;
+	}	
+	
+	public static int calculateMaxHit(Player player,int strLevel,int rngLevel,int strBonus,int rngBonus,int f) {
+		double MaxHit = 0;
+		if ((f == 1) || (f == 4)) {
+			// Accurate & Defensive
+			MaxHit += (double) (1.05 + (double) ((double) (strBonus * strLevel) * 0.00175));
+		} else if (f == 2) {
+			// Aggresive
+			MaxHit += (double) (1.05 + (double) ((double) (strBonus * strLevel) * 0.00175));
+		} else if (f == 3) {
+			// Controlled
+			MaxHit += (double) (1.05 + (double) ((double) (strBonus * strLevel) * 0.00175));
+		}
+		MaxHit += (double) (strLevel * 0.1);
+		/*
+		 if (StrPotion == 1) { // Strength Potion 
+		 MaxHit += (double) (strLevel * 0.0014); 
+		 } else if (StrPotion == 2) { // Super Strength Potion 
+		 MaxHit += (double) (strLevel * 0.0205); }
+		 */
+		if (player.getPrayer()[1]) {
+			// Burst Of Strength
+			MaxHit += 1;
+		} else if (player.getPrayer()[7]) {
+			// Super Human Strength
+			MaxHit += 2;
+		} else if (player.getPrayer()[10]) {
+			// Ultimate Strength
+			MaxHit += 3;
+		}
+		if ((f == 5) || (f == 6)) {
+			// Accurate and Longranged
+			MaxHit += (double) (1.05 + (double) ((double) (rngBonus * rngLevel) * 0.00075));
+		} else if (f == 7) {
+			// Rapid
+			MaxHit += (double) (1.35 + (double) ((double) (rngBonus) * 0.00025));
+		}
+		// MaxHit += (double) (rngLevel * 0.03);
+		if(isDharokEquiped(player)) {
+	    	MaxHit += (player.getSkills().getLevelForExperience(3) - player.getSkills().getLevel(3))/3;
+	    }
+		int MaxHit2 = (int) Math.floor(MaxHit);
+		if(MaxHit2 <= 2)
+			MaxHit2 = 2;//this gives lvl 3s a chacne to actally do damage
+		return MaxHit2;
+	}
+	
+	public static boolean isDharokEquiped(Player player){
+		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
+			|| player.getEquipment().get(Equipment.SLOT_WEAPON) == null
+			|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
+			|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
+			return false;
+		if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4716
+			&& player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4718
+			&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4720
+			&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4722)
+			return true;
+		return false;
+	}
+	
+	public static int getRangedHit2(Player p) {
+		int effectiveStrength = p.getSkills().getLevel(4);
+		if(p.cE.bowType == 0)
+			effectiveStrength += 3;
+		int max = (int)(1.3 + (effectiveStrength / 10) 
+						+ (p.getBonus()[4] / 80) 
+							+ ((p.getBonus()[10] * p.getBonus()[4]) / 640));
+		return max;
+	}
+	
+	/**
+	 * Get the ranged hit.
+	 * @param maxHit the current maxhit for melee
+	 * @param type The type of the arrow.
+	 */
+	
+	public static int getRangedHit(int maxHit, int type) {
+		/*switch(type) {
+		case 1: // Bronze
+			return maxHit + (int) Math.floor(Math.random() * 1);
+		case 2: // Iron
+			return maxHit + (int) Math.floor(Math.random() * 2);
+		case 3: // Steel
+			return maxHit + (int) Math.floor(Math.random() * 3);
+		case 4: // Mithril
+			return maxHit + (int) Math.floor(Math.random() * 4);
+		case 5: // Admanant
+			return maxHit + (int) Math.floor(Math.random() * 5);
+		case 6: // Rune
+			return maxHit + (int) Math.floor(Math.random() * 6);
+		case 7: // Fire
+			return maxHit + (int) Math.floor(Math.random() * 7);
+		case 8: // Ice
+			return maxHit + (int) Math.floor(Math.random() * 8);
+		case 9: // Flighted ogre arrow
+			return maxHit + (int) Math.floor(Math.random() * 8);
+			default: // Type is 0
+				return 2;			
+		}*/
+		int am = type;
+		if(am > 8)
+			am = 8;
+		maxHit += type;
+		return maxHit;
+	}
+}

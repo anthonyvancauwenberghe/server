@@ -1,0 +1,32 @@
+package org.hyperion.rs2.model.combat.attack;
+
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.combat.CombatEntility;
+
+public class DefaultAttack implements Attack {
+
+	public String getName(){
+		return "DefaultAttack";
+	}
+	
+	public int handleAttack(NPC n,CombatEntility attack){
+		if(Location.create(n.getLocation().getX() + n.cE.getOffsetX(),n.getLocation().getY() + n.cE.getOffsetY(), n.getLocation().getZ()).isWithinDistance(n.cE.getOpponent().getEntity().getLocation(),1+((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))){
+			if(n.cE.predictedAtk > System.currentTimeMillis()){
+				return 6;//we dont want to reset attack but just wait another 500ms or so...
+			}
+			n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
+			attack.hit(1,attack.getEntity(),false);
+			n.cE.doAtkEmote();
+			return 5;
+		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(),9)){
+			return 0;
+		} else {
+			return 1;
+		}	
+	}
+	static {
+		npcIds[0] = -1;
+	}
+}

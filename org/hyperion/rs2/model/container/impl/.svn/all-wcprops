@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/impl
+END
+EquipmentContainerListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/impl/EquipmentContainerListener.java
+END
+WeaponContainerListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/impl/WeaponContainerListener.java
+END
+InterfaceContainerListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/impl/InterfaceContainerListener.java
+END
+WeaponAnimManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/model/container/impl/WeaponAnimManager.java
+END

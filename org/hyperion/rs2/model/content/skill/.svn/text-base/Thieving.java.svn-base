@@ -1,0 +1,347 @@
+package org.hyperion.rs2.model.content.skill;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Random;
+
+import org.hyperion.rs2.model.content.*;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
+import org.hyperion.data.PersistenceManager;
+import org.hyperion.rs2.event.*;
+import org.hyperion.rs2.model.content.misc.Stall;
+import org.hyperion.rs2.model.content.misc.PickpocketNpc;
+
+public class Thieving implements ContentTemplate {
+	
+	/**
+	 * Class constructor.
+	 */
+	
+	public Thieving() {}
+	
+	private List<Stall> stalls;
+	private List<PickpocketNpc> pickpockets;
+	
+	@SuppressWarnings("unused")
+	private final int STUN_TIMER = 4000,
+		STUN_GFX = 245,
+		STEAL_ANIM = 881;	
+	
+	private final Random r = new Random();
+
+	
+	
+	/**
+	 * Checks if the NPC can be pickpocketed.
+	 * @param client The {@link Player}.
+	 * @param npc The npc that we're pickpocketing.
+	 */
+
+	public boolean pickpocket(Player client, int npc) {
+		for(PickpocketNpc p : pickpockets) {
+			if(p.getNpcId() == npc)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Gets the index of the stall.
+	 * @param stall The stall.
+	 */
+	
+	public int getStallIndex(int stall) {
+		for(Stall s : stalls) {
+			if(s.getStallId() == stall)
+				return stalls.indexOf(s);
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get the index of the npc that is being pickpocketed.
+	 * @param npc The npc we're pickpocketing.
+	 */
+	
+	public int getPickpocketIndex(int npc) {
+		for(PickpocketNpc p : pickpockets) {
+			if(p.getNpcId() == npc)
+				return pickpockets.indexOf(p);
+		}
+		return -1;
+	}
+	
+	/**
+	 * Steal from a stall.
+	 * @param client The {@link Player}.
+	 * @param stall The stall where we're thieving from.
+	 */
+	
+	public boolean stealFromStall(final Player client, final int stall) {		
+		// Check if the player is busy.
+		if(client.isBusy())
+			return false;
+		
+		// Get the info about the stall.
+		int k = getStallIndex(stall);
+		if(k == -1)
+			return false;
+		final Stall s = stalls.get(k);
+		if(s == null)
+			return false;
+		
+		// Check if the player has a high enough level to steal.
+		if(ContentEntity.returnSkillLevel(client,17) < s.getLevel()) {
+			ContentEntity.sendMessage(client,(new StringBuilder())
+					.append("You need a Thieving level of ")
+					.append(s.getLevel())
+					.append("to thieve from a ")
+					.append(ContentEntity.getObjectName(stall)).toString());
+			return true;
+		}
+		
+		// Check if the player has space.
+		if(ContentEntity.freeSlots(client) <= 0) {
+			ContentEntity.sendMessage(client,"You don't have enough space in your inventory.");
+			return true;
+		}
+		
+		// Check if the player is in combat.
+		//TODO
+		
+		// Start the animation.
+		ContentEntity.startAnimation(client,STEAL_ANIM);
+		
+		// Start the event.
+		World.getWorld().submit(new Event(750) {
+			@Override
+			public void execute() {			
+				
+				if(r.nextInt(3) == 1) {
+				
+					int item = s.getItems()[r.nextInt(s.getItems().length)];
+					String name = ContentEntity.getItemName(item).toLowerCase();
+
+					// Add a random amount of a random item of the stall.
+					ContentEntity.addItem(client,item, 1);
+					
+					// Send the message.
+					ContentEntity.sendMessage(client,"You steal "+
+							(item == 2309 ? "some bread." : ("a "+name+".")));
+					
+					// Add the experience.
+					ContentEntity.addSkillXP(client,s.getExperience(), 17);		
+					
+					// Stop the event.
+					stop2();
+					
+				} else {
+					/*int sDis = 8;
+					NPC npc = null;
+					for (Map.Entry<Integer, NPC> entry : Server.getNpcManager().npcMap.entrySet()) {
+						NPC n = entry.getValue();
+						if(n == null)
+							continue;
+						int dis = ContentEntity.getDis(client,n.getAbsX(),n.getAbsY(),client.getAbsX(),client.getAbsY());
+						if(dis < sDis && n.getHP() > 0 && !n.isDead()){
+							npc = n;
+							sDis = dis;
+						}
+					}
+					if(npc == null)
+						return;
+					npc.setShout("Hey! Get your hands off there!");
+					npc.setShoutUpdateRequired(true);
+					npc.setUpdateRequired(true);
+					final NPC npc2 = npc;
+					World.getWorld().submit(new Event(2000) {
+						@Override
+						public void execute() {		
+							
+							//npc attacks player
+							if(!npc2.isObject)
+								npc2.faceTo(client.playerId);
+				
+							if (npc2.getAttacker() == null && !npc2.isObject) {
+								npc2.setAttacker(client);
+							}
+							
+							//npc.setAttacker(client);
+							this.stop();
+							
+						}		
+					});*/
+				}
+			}
+				
+			public void stop2() {
+				ContentEntity.startAnimation(client,-1);
+				client.setBusy(false);
+				this.stop();
+			}
+
+		});	
+		return true;
+	}
+	
+	/**
+	 * Pickpocket a npc.
+	 * @param client The {@link Player}.
+	 * @param stall The npc.
+	 */
+	
+	public void stealFromNpc(final Player client, final NPC npc) {		
+		// Check if the player is busy.
+		/*if(client.isBusy())
+			return;
+		else client.setBusy(true);
+		
+		// Check if the player is stunned.
+		if(client.isStunned()) {
+			ContentEntity.sendMessage(client,"You're stunned.");
+			return;
+		}
+		
+		// Get the info about the stall.
+		final PickpocketNpc p = pickpockets.get(getPickpocketIndex(npc.getDefinition().getType()));
+		
+		// Check if the player has a high enough level to steal.
+		if(ContentEntity.returnSkillLevel(c,17) < p.getLevel()) {
+			ContentEntity.sendMessage(client,(new StringBuilder())
+					.append("You need a Thieving level of ")
+					.append(p.getLevel())
+					.append("to thieve a ")
+					.append(npc.getDefinition().getName()).toString());
+			return;
+		}
+		
+		// Check if the player has space.
+		if(ContentEntity.freeSlots(client) <= 0) {
+			ContentEntity.sendMessage(client,"You don't have enough space in your inventory.");
+			return;
+		}
+		
+		// Check if the player is in combat.
+		//TODO: You can't pickpocket during combat.
+		
+		// Send the message
+		ContentEntity.sendMessage(client,(new StringBuilder())
+				.append("You attempt to pick the ")
+				.append(npc.getDefinition().getName())
+				.append("'s pocket.").toString());		
+		
+		// Start the animation.
+		ContentEntity.startAnimation(client,STEAL_ANIM);
+		
+		// Start the event.
+		World.getWorld().submit(new Event(2000) {
+			@Override
+			public void execute() {				
+
+					if(r.nextInt(3) <= 1) {
+				
+						// Add a random amount of a random item of the stall.
+						ContentEntity.addItem(client,p.getItems()[r.nextInt(p.getItems().length)],
+								p.getAmounts()[r.nextInt(p.getAmounts().length)]);
+						
+						// Add the experience.
+						ContentEntity.addSkillXP(client,p.getExperience(), 17);		
+						
+						// Send the message
+						ContentEntity.sendMessage(client,(new StringBuilder())
+								.append("You pick the ")
+								.append(npc.getDefinition().getName())
+								.append("'s pocket.").toString());		
+
+					} else {
+						// Npc shout text.
+						npc.setShout("What do you think that you're doing?");
+						npc.setShoutUpdateRequired(true);
+						npc.setUpdateRequired(true);
+						//npc.setAttacker(client);
+						// Stop the npc from walking.
+						npc.setWalking(false);
+						
+						// Show the stun gfx.
+						ContentEntity.playerGfx(client,STUN_GFX);
+						
+						// Npc attacks player.
+						// TODO: test on webclient, gives npcpos error in mps, also faceto does
+						//npc.setAnimNumber(422);
+						//npc.setAnimUpdateRequired(true);
+						//npc.setUpdateRequired(true);
+
+						// Send the messages
+						ContentEntity.sendMessage(client,(new StringBuilder())
+								.append("You fail to pick the ")
+								.append(npc.getDefinition().getName())
+								.append("'s pocket.").toString());		
+						ContentEntity.sendMessage(client,"You've been stunned!");
+						
+						// Stop the player from walking
+						client.setCanWalk(false);		
+						
+						// Hit the player.
+						ContentEntity.hit(client,p.getDamage(), 1);
+						
+						// Set the player stunned.
+						client.setStunned(true);
+						
+						// Set the npc back to walking
+						npc.setWalking(true);
+						
+						// Start the event.
+						World.getWorld().submit(new Event(4000) {
+							@Override
+							public void execute() {		
+								// We don't have todo anything
+								stop3();
+							}
+							public void stop3() {
+								client.setStunned(false);
+								client.setCanWalk(true);
+								client.setBusy(false);
+								this.stop();
+							}
+						});
+					}          			
+					
+					// Stop the event.
+					stop2();
+
+			}
+				
+			public void stop2() {
+				client.setBusy(false);
+				this.stop();
+			}
+
+		});		*/
+	}
+	
+	/**
+	 * Loads the XML file of thieving.
+	 * @throws FileNotFoundException
+	 */
+	
+	@Override
+	public void init() throws FileNotFoundException {
+		pickpockets = (List<PickpocketNpc>) PersistenceManager.load(new FileInputStream("./data/pickpockets.xml"));
+		stalls = (List<Stall>) PersistenceManager.load(new FileInputStream("./data/stalls.xml"));
+	}
+	
+	@Override
+	public int[] getValues(int type){
+		return null;
+	}
+	
+	@Override
+	public boolean clickObject(final Player client,final int type,final int id,final int slot,final int itemId2,final int itemSlot2){
+		return false;
+	}
+	
+	
+}

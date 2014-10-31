@@ -1,0 +1,343 @@
+package org.hyperion.rs2.model.content.skill;
+
+//Shard Revolutions Generic MMORPG Server
+//Copyright (C) 2008  Graham Edgecombe
+
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+
+//You should have received a copy of the GNU General Public License
+//along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.data.PersistenceManager;
+import org.hyperion.rs2.model.content.misc.PrayerIcon;
+
+
+/**
+ * Prayer skill handler
+ * 
+ * @author Graham
+ * 
+ */
+public class Prayer implements ContentTemplate {
+
+	public boolean buryBones(final Player p, int fromSlot) {
+		/*final int buryItem = client.playerItems[fromSlot] - 1;
+		int buryXP = 4;
+		switch (buryItem) {
+		case 532:
+		case 526:
+		case 3125:
+		case 3127:
+		case 3128:
+		case 3129:
+		case 3130:
+		case 3131:
+		case 3132:
+		case 3133:
+			buryXP = 15;
+			break;
+		case 536:
+			buryXP = 72;
+			break;
+		case 534:
+			buryXP = 30;
+			break;
+		case 4812:
+			buryXP = 25;
+			break;
+		case 4830:
+			buryXP = 348;
+			break;
+		case 4832:
+			buryXP = 384;
+			break;
+		case 4834:
+			buryXP = 560;
+			break;
+		default:
+			return false;
+		}
+
+		final int fBuryXP = buryXP;
+
+		if (client.checkBusy()) {
+			return true;
+		}
+		client.isUsingItem = true;
+		client.resetWalkingQueue();
+		client.setBusy(true);
+		client.setCanWalk(false);
+		client.getActionAssistant().sendMessage(client,
+				"You dig a hole in the ground...");
+		client.getActionAssistant().startAnimation(client,827);
+
+		EventManager.getSingleton().addEvent(client, new Event() {
+			public void execute(EventContainer c) {
+				if (client.getActionAssistant().getItemSlot(client,(buryItem)) == -1) {
+					c.stop();
+					return;
+				}
+				// here we finally change the skill
+				client.getActionAssistant().addSkillXP(client,fBuryXP, 5); // 5 for
+																	// prayer
+																	// skill
+				client.getActionAssistant().deleteItem(client,buryItem,
+						client.getActionAssistant().getItemSlot(client,buryItem), 1);
+				client.getActionAssistant().sendMessage(client,"You bury the bones.");
+				client.setBusy(false);
+				client.setCanWalk(true);
+				c.stop();
+			}
+
+			public void stop() {
+				client.setBusy(false);
+				client.isUsingItem = false;
+				client.getActionAssistant().startAnimation(client,-1);
+			}
+		}, 1000);
+		*/
+		return true;
+	}	
+	
+	public static void retribution(Player p){
+		if(p.getPrayer()[15]){
+			p.cE.doGfx(437,0);
+			for(Player player : p.getLocalPlayers()){
+				if(Combat.canAtk(p.cE,player.cE).length() <= 1){
+					player.cE.hit(Combat.random((p.getSkills().getLevelForExperience(3) / 10)),(Entity) p,false);
+				}
+			}
+		}
+	}
+	public static void redemption(Player p){
+		if(p.getPrayer()[16]){
+			if(p.getSkills().getLevel(3) < (p.getSkills().getLevelForExperience(3) / 10) && p.getSkills().getLevel(3) > 0){
+				p.cE.doGfx(436,0);
+				p.getSkills().detractLevel(5,p.getSkills().getLevel(5));
+				p.heal((int)(p.getSkills().getLevelForExperience(3) / 5));
+			}
+		}
+	}
+	public static void smite(Player p,double hit){
+		hit = (hit / 4);
+		p.getSkills().detractLevel(5,hit);	
+	}
+
+	
+	private List<PrayerIcon> prayers;
+
+	public void rechargePrayer(Player p) {
+		/*if(c.playerLevel[5] >= 
+			c.getActionAssistant().getLevelForXP(c,c.playerXP[5])) {
+			c.getActionAssistant().sendMessage(c,"You have already full Prayer points.");
+		} else {
+			c.setPrayerLevel(c.getActionAssistant().getLevelForXP(c,c.playerXP[5]));
+			c.getActionAssistant().startAnimation(c,250);
+			c.getActionAssistant().sendMessage(c,"You recharge your Prayer points.");
+			c.playerLevel[5] = c.getActionAssistant().getLevelForXP(c,c.playerXP[5]);
+			c.getActionAssistant().setSkillLevel(c,5, c.playerLevel[5], c.playerXP[5]);			
+		}*/		
+	}
+	
+	
+	/**
+	 * Gets the index of the item
+	 * @param item The item of which index has to be returned.
+	 */
+	
+	public int getIndex(int item) {
+		for(PrayerIcon p : prayers) {
+			if(p.getId() == item)
+				return prayers.indexOf(p);
+		}
+		return -1;
+	}
+	
+	public double getPryDrain(Player c){
+		double start = 0.0;//so if multiable prayers are on, it drains faster
+		for(int i = 0; i < c.getPrayer().length; i++){
+			for(PrayerIcon p : prayers) {
+				if(p.getId() == i && c.getPrayer()[i])
+					start += p.getDrain();
+			}
+		}
+		return start;
+	}
+	
+	/**
+	 * Activates a prayer.
+	 * @param c The {@link Client}.
+	 * @param prayer The id of the prayer.
+	 */
+	@Override
+	public boolean clickObject(Player p,int type, int prayer,int b,int c,int d) {
+		if(prayer < 5609)
+			prayer = prayer-683+15;
+		else
+			prayer -= 5609;
+		PrayerIcon p2 = prayers.get(getIndex(prayer));
+		
+		// Initialize the prayerLevel (double).
+		//c.setPrayerLevel(c.playerLevel[5]);
+		
+		// Check if the player has prayer left.
+		if(p.getSkills().getLevel(Skills.PRAYER) <= 0) {
+			p.getActionSender().sendClientConfig(p2.getFrame(), 0);
+			p.getActionSender().sendMessage("You need to recharge your Prayer at a altar.");
+			return true;
+		}
+		
+		// Check if the player has a high enough level.
+		if(p.getSkills().getLevelForExperience(5) < p2.getLevel()) {
+			p.getActionSender().sendClientConfig(p2.getFrame(), 0);
+			p.getActionSender().sendMessage("You need a Prayer level of "+p2.getLevel()+" to use "+p2.getName()+".");
+			p.getActionSender().sendString(357,"You need a @dbl@Prayer level of "+p2.getLevel()+" to use "+p2.getName()+"."); 
+			p.getActionSender().sendPacket164(356);
+			return true;
+		}	
+
+		// Check if the prayer is already activated.
+		if(p.getPrayer()[p2.getId()]) {
+			p.getActionSender().sendClientConfig(p2.getFrame(), 0);
+			p.getPrayer()[p2.getId()] = false;
+			//p.setDrainRate(-p.getDrain());
+			p.setDrainRate(getPryDrain(p));
+			setHeadIcon(p);
+		} else {
+			/*System.out.println("0; "+p.getPrayers()[0]);
+			System.out.println("1; "+p.getPrayers()[1]);
+			System.out.println("0 bol; "+p.getPrayer()[p.getPrayers()[0]]);
+			System.out.println("1 bol; "+p.getPrayer()[p.getPrayers()[1]]);*/
+			for(int j = 0; j < p2.getPrayers().length; j++){
+				if((p2.getPrayers()[j] != -1) && (p.getPrayer()[p2.getPrayers()[j]])) {
+					PrayerIcon p1 = prayers.get(getIndex(p2.getPrayers()[j]));
+					// Set the config to 0.
+					p.getActionSender().sendClientConfig(p1.getFrame(), 0);
+					// Delete the drain of them.
+					/*p.setDrainRate(-p1.getDrain());
+					p.setDrainRate(-p2.getDrain());*/			
+					// Set the prayers to false.
+					p.getPrayer()[p1.getId()] = false;
+					// Reset headicon.
+					//TODO	
+					p.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+				}
+			}
+			
+			// Set the prayer to true (activating)
+			p.getPrayer()[p2.getId()] = true;
+			// Light up the prayer.
+			p.getActionSender().sendClientConfig(p2.getFrame(), 1);
+			// Add the drain.
+			p.setDrainRate(getPryDrain(p));
+			//c.setDrainRate(p.getDrain());
+			// Set the headicon.
+			setHeadIcon(p);
+		}
+		return true;
+	}
+	public static void setHeadIcon(Player c){
+		c.headIconId = getIconId(c);
+		c.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+	}
+	public static int getIconId(Player p){
+		boolean prayers[] = p.getPrayer();
+		/*boolean isSkulled = p.isSkulled;*/
+		
+		/*if(prayers[12] && isSkulled)
+			return 68;
+		if(prayers[13] && isSkulled)
+			return 66;
+		if(prayers[14] && isSkulled)
+			return 65;
+		if(prayers[15] && isSkulled)
+			return 72;
+		if(prayers[16] && isSkulled)
+			return 96;
+		if(prayers[17] && isSkulled)
+			return 80;*/
+			
+		if(prayers[12])//magic
+			return 4;
+		if(prayers[13])
+			return 2;
+		if(prayers[14])
+			return 1;
+		if(prayers[15])
+			return 8;
+		if(prayers[16])
+			return 32;
+		if(prayers[17])
+			return 16;
+			
+		/*if(isSkulled)
+			return 64;*/
+		return 0;
+	}
+	
+	/**
+	 * 0: Thick skin - 1 prayer point every 12 seconds - 0.0416
+	 * 1: Burst of strength - 1 prayer point every 12 seconds - 0.0416
+	 * 2: Clarity of Thought - 1 prayer point every 12 seconds - 0.0416
+	 * 3: Rock Skin - 1 prayer point every 6 seconds - 0.0833
+	 * 4: Superhuman Strength - 1 prayer point every 6 seconds - 0.0833
+	 * 5: Improved Reflexes - 1 prayer point every 6 seconds - 0.0833
+	 * 6: Rapid Restore - 1 point every 34 seconds - 0.0147
+	 * 7: Rapid Heal - 1 point every 18 seconds - 0.0277
+	 * 8: Protect Item - 1 point every 18 seconds - 0.0277
+	 * 9: Steel Skin - 1 prayer point every 3 seconds - 0.1666
+	 * 10: Ultimate Strength - 1 prayer point every 3 seconds - 0.1666
+	 * 11: Incredible Reflexes - 1 prayer point every 3 seconds - 0.1666
+	 * 12: Protect from Magic - 1 point every 3 seconds - 0.1666
+	 * 13: Protect from Ranged - 1 point every 3 seconds - 0.1666
+	 * 14: Protect from Melee - 1 point every 3 seconds - 0.1666
+	 * 15: Retribution - 1 point every 14 seconds - 0.0357
+	 * 16: Redemption - 1 point every 7 seconds - 0.0174
+	 * 17: Smite - 1 point every 2 seconds - 0.2500
+	 */
+		
+	// protect 50% in pvp 100% in pvnpc
+	// smite 1/4 damage of other prayer
+	// retri  hit 25% of the dead player's prayer level
+	// redemp: lower then 10% of hp , will heal a number of hitpoints equal to 25% the player's Prayer level
+	// rapid restore: 2x restore skill
+	// rapid heal: 2x faster hp heal
+	
+	/**
+	 * Loads the XML file of prayer.
+	 * @throws FileNotFoundException
+	 */
+	
+	@Override
+	public void init() throws FileNotFoundException {
+		prayers = (List<PrayerIcon>) PersistenceManager.load(new FileInputStream("./data/prayer.xml"));
+	}
+
+	@Override
+	public int[] getValues(int type) {
+		if(type != 0)
+			return null;
+		int[] j = {5609,5610,5611,5612,5613,5614,5615,5616,5617,5618,5619,5620,5621,5622,5623,683,684,685};
+		return j;
+	}
+	
+
+}

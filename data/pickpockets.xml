@@ -1,0 +1,409 @@
+<!-- Pickpockets XML configuration file -->
+
+<!-- Man -->
+<list>
+    <npc>
+        <npcId>1</npcId>
+        <level>1</level>
+        <experience>8</experience>
+        <items>
+            <int>995</int>
+        </items>
+        <amounts>
+            <int>900</int>
+        </amounts>
+        <damage>1</damage>
+    </npc>
+</list>
+<list>
+<npc>
+    <npcId>2</npcId>
+    <level>1</level>
+    <experience>8</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>1100</int>
+    </amounts>
+    <damage>1</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>3</npcId>
+    <level>1</level>
+    <experience>8</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>30</int>
+    </amounts>
+    <damage>1</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>4</npcId>
+    <level>1</level>
+    <experience>8</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>30</int>
+    </amounts>
+    <damage>1</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>5</npcId>
+    <level>1</level>
+    <experience>8</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>30</int>
+    </amounts>
+    <damage>1</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>6</npcId>
+    <level>1</level>
+    <experience>8</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>30</int>
+    </amounts>
+    <damage>1</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>7</npcId>
+    <level>10</level>
+    <experience>14</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+    </items>
+    <amounts>
+        <int>90</int>
+        <int>5</int>
+    </amounts>
+    <damage>1</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>15</npcId>
+    <level>25</level>
+    <experience>26</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>3</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>18</npcId>
+    <level>25</level>
+    <experience>26</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>187</npcId>
+    <level>32</level>
+    <experience>35</experience>
+    <items>
+        <int>995</int>
+        <int>556</int>
+        <int>1523</int>
+        <int>5668</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1710</npcId>
+    <level>23</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1711</npcId>
+    <level>23</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1712</npcId>
+    <level>23</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1714</npcId>
+    <level>20</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1715</npcId>
+    <level>20</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1716</npcId>
+    <level>18</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>1717</npcId>
+    <level>18</level>
+    <experience>22</experience>
+    <items>
+        <int>995</int>
+        <int>2677</int>
+        <int>1739</int>
+        <int>2485</int>
+        <int>1129</int>
+        <int>4298</int>
+        <int>4300</int>
+        <int>4302</int>
+        <int>4304</int>
+        <int>4306</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>2234</npcId>
+    <level>38</level>
+    <experience>43</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>900</int>
+        <int>884</int>
+        <int>700</int>
+    </amounts>
+    <damage>3</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>9</npcId>
+    <level>40</level>
+    <experience>45</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>10</npcId>
+    <level>40</level>
+    <experience>45</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>344</npcId>
+    <level>40</level>
+    <experience>45</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>
+<list>
+<npc>
+    <npcId>345</npcId>
+    <level>40</level>
+    <experience>45</experience>
+    <items>
+        <int>995</int>
+    </items>
+    <amounts>
+        <int>439</int>
+        <int>884</int>
+        <int>273</int>
+    </amounts>
+    <damage>2</damage>
+</npc>
+</list>

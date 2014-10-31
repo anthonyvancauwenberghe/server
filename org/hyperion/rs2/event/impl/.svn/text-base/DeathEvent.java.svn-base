@@ -1,0 +1,90 @@
+package org.hyperion.rs2.event.impl;
+
+import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatEntility;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.World;
+
+/**
+ * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
+ * @author Graham
+ *
+ */
+@SuppressWarnings("unused")
+public class DeathEvent extends Event {
+	
+	private Entity entity;
+
+	/**
+	 * Creates the death event for the specified entity.
+	 * @param entity The player or npc whose death has just happened.
+	 */
+	public DeathEvent(Entity entity) {
+		super(500);
+		this.entity = entity;
+	}
+	public int timer = 9;
+
+	@Override
+	public void execute() {
+		if(entity instanceof Player) {
+			Player p = (Player) entity;
+			if(timer == 7){
+				p.playAnimation(Animation.create(0x900, 0));
+				Combat.logoutReset(p.cE);
+				p.cE.setPoisoned(false);
+			} else if(timer == 0){
+				p.playAnimation(Animation.create(-1, 0));
+				p.getSkills().setLevel(Skills.HITPOINTS, p.getSkills().getLevelForExperience(Skills.HITPOINTS));
+				entity.setDead(false);
+				entity.setTeleportTarget(Entity.DEFAULT_LOCATION);
+				p.cE.setPoisoned(false);
+				p.resetPrayers();
+				p.isSkulled = false;
+				p.cE.freezeTimer = 0;
+				p.getActionSender().sendMessage("Oh dear, you are dead!");
+				/*if(entity.cE.getKiller().getEntity() instanceof Player)
+					World.getWorld().getContentManager().handlePacket(16,entity.cE.getKiller().getPlayer(),entity.cE.getSlotId(),-1,-1,-1);*/
+				this.stop();
+			}
+			timer--;
+		} else {
+			NPC p = (NPC) entity;
+			if(timer == 7){
+				p.playAnimation(Animation.create(p.getDefinition().deathEmote(), 0));
+				Combat.logoutReset(p.cE);
+				p.cE.setPoisoned(false);
+			} else if(timer == 0){
+				CombatEntility ddd = entity.cE.getKiller();
+				if(ddd != null){
+					if(ddd.getEntity() instanceof Player){
+						World.getWorld().getContentManager().handlePacket(16,ddd.getPlayer(),p.getDefinition().getId(),-1,-1,-1);
+					}
+				}
+				if(p.npcDeathTimer != -1){
+					timer = 10+p.npcDeathTimer;
+					p.isHidden(true);
+				} else {
+					p.isHidden(true);
+				}
+			} else if(timer == -1){
+				World.getWorld().unregister(p);
+				this.stop();
+			} else if(timer == 10){
+				p.isHidden(false);
+				p.playAnimation(Animation.create(-1, 0));
+				entity.setDead(false);
+				p.cE.freezeTimer = 0;
+				p.health = p.maxHealth;
+				this.stop();
+			}
+			timer--;
+		}
+	}
+
+}

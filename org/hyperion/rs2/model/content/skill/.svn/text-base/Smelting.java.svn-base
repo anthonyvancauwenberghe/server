@@ -1,0 +1,139 @@
+package org.hyperion.rs2.model.content.skill;
+
+/**
+ * Smithing
+ * 
+ * @author Lil str kid
+ * 
+ *
+ */
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+import org.hyperion.rs2.model.content.*;
+import org.hyperion.rs2.model.content.misc.SmeltingItem;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.data.PersistenceManager;
+import org.hyperion.rs2.event.*;
+
+public class Smelting  implements ContentTemplate{
+	
+	public Smelting() {}
+	
+	private List<SmeltingItem> smeltingItem;
+
+	private final int SMELTING_ANIM = 899;
+	
+	@Override
+	public void init() throws FileNotFoundException {
+		smeltingItem = (List<SmeltingItem>) PersistenceManager.load(new FileInputStream("./data/Smelting.xml"));
+	}
+	
+	
+	public boolean isSmeltingItem(int item) {
+		for(SmeltingItem c : smeltingItem) {
+			if(c == null)
+				continue;
+			int id = c.getOreId();
+			if(id == item)
+				return true;
+			id = c.getSecondOreId();
+			if(id == item)
+				return true;
+		}
+		return false;
+	}
+
+	public int getIndex(int item) {
+		for(SmeltingItem c : smeltingItem) {
+			if(c == null)
+				continue;
+			if(c.getBarId() == item)
+				return smeltingItem.indexOf(c);
+		}
+		return -1;
+	}
+
+	public void smeltingItem(final Player client, final int item,final int am) {
+		if(client.isBusy())
+			return;
+		ContentEntity.removeAllWindows(client);
+		final SmeltingItem smeltingItem  = this.smeltingItem.get(getIndex(item));
+		if(smeltingItem == null) {
+			return;
+		}
+		
+		if(ContentEntity.returnSkillLevel(client,13) < smeltingItem.getLevel()) {
+			ContentEntity.sendMessage(client,"Your Smithing level is not high enough to do this.");
+			return;
+		}
+		
+		World.getWorld().submit(new Event(3000) {
+			int amount = am;
+			@Override
+			public void execute() {
+				if(amount <= 0){
+					stop2();
+					return;
+				}
+				if(ContentEntity.getItemAmount(client,smeltingItem.getOreId()) <= 0 ||
+					(smeltingItem.getSecondOreId() > 5 && ContentEntity.getItemAmount(client,smeltingItem.getSecondOreId()) < smeltingItem.getSecondOreAmount())){
+					ContentEntity.sendMessage(client,"you need more ore to make this bar");
+					stop2();
+					return;
+				}
+				/*if(amount == am)
+					c.setTick(3000);*/
+				ContentEntity.startAnimation(client,SMELTING_ANIM);
+				ContentEntity.deleteItem(client,smeltingItem.getOreId(),1);
+				if(smeltingItem.getSecondOreId() > 2)
+					ContentEntity.deleteItem(client,smeltingItem.getSecondOreId(),smeltingItem.getSecondOreAmount());
+				ContentEntity.addItem(client,item,1);
+				amount--;
+			}
+			
+			public void stop2() {
+				ContentEntity.startAnimation(client,-1);
+				client.setBusy(false);
+				this.stop();
+			}
+
+		});		
+
+	}
+	public void openSmelting(Player c,int itemId){
+		if(!isSmeltingItem(itemId)){
+			ContentEntity.sendMessage(c,"you cannot smelt this item.");
+			return;
+		}
+		ContentEntity.sendInterfaceModel(c,2405, 150, 2349);
+		ContentEntity.sendInterfaceModel(c,2406, 150, 2351);
+		ContentEntity.sendInterfaceModel(c,2407, 150, 2355);
+		ContentEntity.sendInterfaceModel(c,2409, 150, 2353);
+		ContentEntity.sendInterfaceModel(c,2410, 150, 2357);
+		ContentEntity.sendInterfaceModel(c,2411, 150, 2359);
+		ContentEntity.sendInterfaceModel(c,2412, 150, 2361);
+		ContentEntity.sendInterfaceModel(c,2413, 150, 2363);
+        c.getActionSender().sendPacket164(2400);
+		ContentEntity.sendString(c,"", 4158);
+	}
+	
+	@Override
+	public int[] getValues(int type){
+		return null;
+	}
+	
+	@Override
+	public boolean clickObject(final Player client,final int type,final int id,final int slot,final int itemId2,final int itemSlot2){
+		return false;
+	}
+ 
+}
+
+  
+
+
+

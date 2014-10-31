@@ -1,0 +1,7 @@
+What needs to be changed
+
+[NOT DONE] - Remove them once you're done
+Make item 12825 stackable, preferably make ALL summoning scrolls stackable so this doesn't come up again
+(Especially magic focus scroll, healing aura scroll)
+
+Attack anim for steel titan 8190

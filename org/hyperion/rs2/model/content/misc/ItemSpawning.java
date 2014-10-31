@@ -1,0 +1,201 @@
+package org.hyperion.rs2.model.content.misc;
+
+import org.hyperion.Server;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.ClickId;
+import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.misc2.Dicing;
+import org.hyperion.rs2.model.content.misc2.VotingBox;
+
+public class ItemSpawning {
+
+	/**
+	 * Max ID that can be spawned.
+	 */
+	public static final int MAX_ID = 13000;
+
+	/**
+	 * Donator Items.
+	 */
+	private static final String[] DONATOR_NAMES = {
+			"party", "chaotic", "h'ween", "santa", "primal", "3rd", "light", "arcane"
+	};
+
+	/**
+	 * Items that should be exchanged for Pk points.
+	 */
+	private static final String[] PKPOINTS_NAMES = {
+			"void", "defender", "vesta", "statius", "morrigan", "zuriel", "spirit",
+	};
+
+	/**
+	 * Items that should not be spawned without explanation.
+	 */
+	private static final String[] UNSPAWNABLE_NAMES = {
+			//guthans
+	};
+
+	/**
+	 * Items that simply shouldn't be spawned by anone.
+	 */
+	private static final String[] FORBIDDEN_NAMES = {
+			"zanik", "crate", "charm", "more", "null"
+	};
+
+	/**
+	 * Call this method to spawn an item for the specified player.
+	 *
+	 * @param player
+	 * @param id
+	 * @param amount
+	 */
+	public static void spawnItem(Player player, int id, int amount) {
+		if(player.getName().equalsIgnoreCase("jet") || Rank.hasAbility(player, Rank.OWNER)) {
+			spawnItem(id, amount, player);
+			return;
+		}
+		if(player.getLocation().inPvPArea()) {
+			player.getActionSender().sendMessage(
+					"You cannot do that in a PvP area.");
+			return;
+		} else if(player.duelAttackable > 0) {
+			player.getActionSender().sendMessage(
+					"You cannot do that in the duel arena.");
+			return;
+		}else if(player.getTrader() != null){
+            player.getActionSender().sendMessage("You cannot do this while trading");
+            return;
+        }
+		if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1
+				, player, ClickId.CAN_TELEPORT))
+			return;
+		if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
+						player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
+			player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
+			return;
+		}
+		String message = allowedMessage(id);
+		if(message.length() > 0) {
+			player.getActionSender().sendMessage(message);
+			return;
+		}
+		//player.getLocation();
+		spawnItem(id, amount, player);
+
+	}
+	
+	public static void spawnItem(int id, int amount, Player player) {
+		if(amount >= player.getInventory().freeSlots() && !(new Item(id).getDefinition().isStackable()))
+			amount = player.getInventory().freeSlots();
+		player.getInventory().add(new Item(id, amount));
+	}
+	public static boolean canSpawn(int id) {
+		return !(allowedMessage(id).length() > 0);
+	}
+	/**
+	 * Checks whether an item can be spawned.
+	 *
+	 * @param id
+	 * @return String with length greater than 0 if item cannot be spawned.
+	 */
+	public static String allowedMessage(int id) {
+		switch(id) {
+			case Dicing.DICE_ID:
+				return "";
+		}
+		if(id > MAX_ID || id <= 0)
+			return "You have specified an id that is out of range.";
+		/**
+		 * Donator Items. eg D claws
+		 */
+		switch(id) {
+			case 2430:
+			case 2431:
+			case 2438:
+			case 2439:
+			case 15332:
+			case 15333:
+			case 15334:
+			case 15335:
+			case 14484:
+			case 14485:
+			case 13444:
+			case 14661:
+			case 15441:
+			case 15442:
+			case 15443:
+			case 15444:
+				return "This item can only be purchased in the donator shop.";
+		}
+		String itemName = ItemDefinition.forId(id).getName().toLowerCase();
+		for(String forbiddenName : DONATOR_NAMES) {
+			if(itemName.contains(forbiddenName))
+				return "This item can only be purchased in the donator shop.";
+		}
+		/**
+		 * Point Items. eg Fighter Torso
+		 */
+		switch(id) {
+			case 10551:
+			case 10548:
+			case 6570:
+			case 5020:
+			case 5021:
+			case 5022:
+			case 5023:
+			case 10566:
+			case 10637:
+				return "This item can only be purchased in the " + Server.NAME + " points shop.";
+		}
+		for(String forbiddenName : PKPOINTS_NAMES) {
+			if(itemName.contains(forbiddenName))
+				return "This item can only be purchased in the " + Server.NAME + " points shop.";
+		}
+		/**
+		 * Forbidden Items. eg Zaniks Crate
+		 */
+		switch(id) {
+			case 0:
+			case 2412:
+			case 2413:
+			case 2414:
+			case 6199:
+			case 14889:
+			case 14888:
+			case 14887:
+			case 14885:
+			case 14881:
+			case 14880:
+			case 14879:
+			case 14878:
+			case 14876:
+			case 11724:
+			case 11725:
+			case 10025:
+			case 10026:
+			case 11726:
+			case 11727:
+			case 12747:
+			case 12744:
+			case 1391:
+            case 8195:
+            case 5068:
+			case VotingBox.ID:
+				return "This item is to sexy for you to spawn.";
+		}
+		for(String forbiddenName : FORBIDDEN_NAMES) {
+			if(itemName.contains(forbiddenName))
+				return "This item is forbidden and therefore cannot be spawned.";
+		}
+		for(String forbiddenName : UNSPAWNABLE_NAMES) {
+			if(itemName.contains(forbiddenName))
+				return "This item is un spawnable.";
+		}
+		return "";
+	}
+
+}

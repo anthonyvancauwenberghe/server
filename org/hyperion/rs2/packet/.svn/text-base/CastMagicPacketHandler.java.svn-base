@@ -1,0 +1,61 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.Packet;
+
+public class CastMagicPacketHandler implements PacketHandler {
+
+	@Override
+	public void handle(Player player, Packet packet) {
+		switch(packet.getOpcode()) {
+		case 249:
+			/*
+			 * Option 1.
+			 */
+			option1(player, packet);
+			break;
+		case 131:
+			/*
+			 * Option 2.
+			 */
+			option2(player, packet);
+			break;
+		}
+	}
+
+	/**
+	 * Handles the first option on a player option menu.
+	 * @param player
+	 * @param packet
+	 */
+	private void option1(final Player player, Packet packet) {
+		int id = packet.getShortA();
+		if(id < 0 || id >= Constants.MAX_PLAYERS) {
+			return;
+		}
+		Player victim = (Player) World.getWorld().getPlayers().get(id);
+		int spell = packet.getLEShort();
+		if(victim != null){
+			Magic.castSpell(player.cE,victim.cE,spell);
+		}
+	}
+	
+	private void option2(final Player player, Packet packet) {
+		int id = packet.getLEShortA();
+		if(id < 0 || id >= Constants.MAX_PLAYERS) {
+			return;
+		}
+		NPC victim = (NPC) World.getWorld().getNPCs().get(id);
+		int spell = packet.getShortA();
+		if(victim != null){
+			Magic.castSpell(player.cE,victim.cE,spell);
+		}
+	}
+
+		
+}
+

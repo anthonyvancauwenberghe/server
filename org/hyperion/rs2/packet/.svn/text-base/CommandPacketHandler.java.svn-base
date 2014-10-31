@@ -1,0 +1,227 @@
+package org.hyperion.rs2.packet;
+
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.Graphic;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.event.impl.CutSceneEvent;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.pf.*;
+import org.hyperion.rs2.model.container.ShopManager;
+
+/**
+ * Handles player commands (the ::words).
+ * @author Graham Edgecombe
+ *
+ */
+public class CommandPacketHandler implements PacketHandler {
+	
+	/*ARMOURS*/
+	public static final int[] AHRIM = {4708,4710,4712,4714,}; 
+	public static final int[] DHAROK = {4716,4718,4720,4722,}; 
+	public static final int[] KARIL = {4732,4734,4736,4738,}; 
+	public static final int[] GUTHAN = {4724,4726,4728,4730,}; 
+	public static final int[] VERAC = {4753,4755,4757,4759,}; 
+	public static final int[] TORAG = {4745,4747,4749,4751,}; 
+	public static final int[] DRAGON = {1149,1187,3140,4087,4585,}; 
+	public static final int[] RUNE = {1079,1093,1127,1163,1201,}; 
+	public static final int[] RUNES = {554,555,556,557,558,559,560,561,562,563,564,565,566,}; 
+	public static final int[] INFINITY = {6916,6918,6920,6922,6924,}; 
+	public static final int[] MYSTIC = {4089,4091,4093,4095,4097,/*WHITE*/4099,4101,4103,4105,4107,/*BLACK*/4109,4111,4113,4115,4117,};
+
+	/*WEAPONS*/	
+	public static final int[] DRAGON_WEP = {1305,1377,1434,3204,4587,5698,5730,7158,}; 
+	//WHIP - 4151	
+	/*STAFFS*/
+	public static final int[] NORMAL_STAFF = {1381,1383,1385,1387,1389,}; 
+	public static final int[] BATTLE_STAFF = {1393,1395,1397,1399,}; 
+	public static final int[] MYSTIC_STAFF = {1401,1403,1405,1407,}; 
+	public static final int[] GOD_STAFF = {1409,2415,2416,2417,}; 
+	public static final int[] GOOD_STAFF = {3053,3054,3055,3056,6562,6563,4675,}; 
+	
+	@SuppressWarnings("static-access")
+	@Override
+	public void handle(Player player, Packet packet) {
+		String commandString = packet.getRS2String();
+		String[] args = commandString.split(" ");
+		String command = args[0].toLowerCase();
+		try {
+			if(command.equals("tele")) {
+				if(args.length == 3 || args.length == 4) {
+					int x = Integer.parseInt(args[1]);
+					int y = Integer.parseInt(args[2]);
+					int z = player.getLocation().getZ();
+					if(args.length == 4) {
+						z = Integer.parseInt(args[3]);
+					}
+					player.setTeleportTarget(Location.create(x, y, z));
+				} else {
+					player.getActionSender().sendMessage("Syntax is ::tele [x] [y] [z].");
+				}
+			} else if(command.equals("switch")) {
+				if(!player.ancients){
+					player.ancients = true;
+					player.getActionSender().sendSidebarInterface(6, 12855);
+				}else{
+					player.ancients = false;
+					player.getActionSender().sendSidebarInterface(6, 1151);
+				}
+			} else if(command.equals("item")) {
+				if(args.length == 2 || args.length == 3) {
+					int id = Integer.parseInt(args[1]);
+					int count = 1;
+					if(args.length == 3) {
+						count = Integer.parseInt(args[2]);
+					}
+					player.getInventory().add(new Item(id, count));
+				} else {
+					player.getActionSender().sendMessage("Syntax is ::item [id] [count].");
+				}
+			} else if(command.equals("mypos")) {
+				player.getActionSender().sendMessage(player.getLocation().getX()+", "+player.getLocation().getY());
+			} else if(command.equals("npc")) {
+				World.getWorld().getNPCManager().addNPC(player.getLocation().getX(),player.getLocation().getY(),player.getLocation().getZ(),Integer.parseInt(args[1]),-1);
+			} else if(command.equals("anim")) {
+				if(args.length == 2 || args.length == 3) {
+					int id = Integer.parseInt(args[1]);
+					int delay = 0;
+					if(args.length == 3) {
+						delay = Integer.parseInt(args[2]);
+					}
+					player.playAnimation(Animation.create(id, delay));
+				}
+			} else if(command.equals("gfx")) {
+				if(args.length == 2 || args.length == 3) {
+					int id = Integer.parseInt(args[1]);
+					int delay = 0;
+					if(args.length == 3) {
+						delay = Integer.parseInt(args[2]);
+					}
+					player.playGraphics(Graphic.create(id, delay));
+				}
+			} else if(command.equals("bank")) {
+				Bank.open(player);
+			} else if(command.equals("pnpc")) {
+				player.setPNpc(Integer.parseInt(args[1]));
+			} else if(command.equals("trade")) {
+				Trade.open(player,null);
+			} else if(command.equals("shop")) {
+				ShopManager.open(player,Integer.parseInt(args[1]));
+			} else if(command.equals("max")) {
+				for(int i = 0; i <= player.getSkills().SKILL_COUNT; i++) {
+					player.getSkills().setLevel(i, 99);
+					player.getSkills().setExperience(i, 13034431);
+				}
+			} else if(command.startsWith("empty")) {
+				player.getInventory().clear();
+				player.getActionSender().sendMessage("Your inventory has been emptied.");
+			} else if(command.startsWith("lvl")) {
+				try {
+					player.getSkills().setLevel(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+					player.getSkills().setExperience(Integer.parseInt(args[1]), player.getSkills().getXPForLevel(Integer.parseInt(args[2])) + 1);
+					player.getActionSender().sendMessage(player.getSkills().SKILL_NAME[Integer.parseInt(args[1])] + " level is now " + Integer.parseInt(args[2]) + ".");	
+				} catch(Exception e) {
+					e.printStackTrace();
+					player.getActionSender().sendMessage("Syntax is ::lvl [skill] [lvl].");				
+				}
+			} else if(command.startsWith("skill")) {
+				try {
+					player.getSkills().setLevel(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+					player.getActionSender().sendMessage(player.getSkills().SKILL_NAME[Integer.parseInt(args[1])] + " level is temporarily boosted to " + Integer.parseInt(args[2]) + ".");	
+				} catch(Exception e) {
+					e.printStackTrace();
+					player.getActionSender().sendMessage("Syntax is ::skill [skill] [lvl].");				
+				}
+			} else if(command.startsWith("enablepvp")) {
+				try {
+					player.updatePlayerAttackOptions(true);
+					player.getActionSender().sendMessage("PvP combat enabled.");
+				} catch(Exception e) {
+					
+				}
+			} else if(command.startsWith("admin")) {
+				try {
+					player.getRights().value = 2;
+				} catch(Exception e) {
+					
+				}
+			} else if(command.startsWith("goto")) {
+				if(args.length == 3) {
+					try {
+						int radius = 16;
+						
+						int x = Integer.parseInt(args[1]) - player.getLocation().getX() + radius;
+						int y = Integer.parseInt(args[2]) - player.getLocation().getY() + radius;
+												
+						TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), radius);
+						TileMap map = bldr.build();
+						
+						PathFinder pf = new AStarPathFinder();
+						Path p = pf.findPath(player.getLocation(), radius, map, radius, radius, x, y);
+						
+						if(p == null) return;
+												
+						player.getWalkingQueue().reset();
+						for(Point p2 : p.getPoints()) {
+							player.getWalkingQueue().addStep(p2.getX(), p2.getY());
+						}
+						player.getWalkingQueue().finish();
+					} catch(Throwable ex) {
+						ex.printStackTrace();
+					}
+				}
+			} else if(command.startsWith("cutscene")) {
+				World.getWorld().submit(new CutSceneEvent(player));
+			} else if(command.startsWith("resetcam")) {
+				player.getActionSender().cameraReset();
+			} else if(command.startsWith("camera1")) {
+				player.getActionSender().cameraMovement(Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3]),Integer.parseInt(args[4]),Integer.parseInt(args[5]),Integer.parseInt(args[6]),Integer.parseInt(args[7]));
+			} else if(command.startsWith("camera3")) {
+				//player.getActionSender().camera3(player.getLocation().getX(), player.getLocation().getY(),Integer.parseInt(args[1]),200,Integer.parseInt(args[2]),Integer.parseInt(args[3]));
+			} else if(command.startsWith("camera2")) {
+				player.getActionSender().rotateCamera(Integer.parseInt(args[1]), Integer.parseInt(args[2]),Integer.parseInt(args[3]),Integer.parseInt(args[4]),Integer.parseInt(args[5]),Integer.parseInt(args[6]),Integer.parseInt(args[7]));
+			} else if(command.startsWith("go2")) {
+				if(args.length == 3) {
+					try {
+						int radius = 1;
+						
+						int x = Integer.parseInt(args[1]) - player.getLocation().getX() + radius;
+						int y = Integer.parseInt(args[2]) - player.getLocation().getY() + radius;
+						
+						TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), radius);
+						TileMap map = bldr.build();
+						
+						PathFinder pf = new DumbPathFinder();
+						Path p = pf.findPath(player.getLocation(), radius, map, radius, radius, x, y);
+						
+						if(p == null) return;
+												
+						player.getWalkingQueue().reset();
+						for(Point p2 : p.getPoints()) {
+							player.getWalkingQueue().addStep((player.getLocation().getX() + p2.getX()), (p2.getY() + player.getLocation().getY()));
+						}
+						player.getWalkingQueue().finish();
+					} catch(Throwable ex) {
+						ex.printStackTrace();
+					}
+				}
+			} else if(command.startsWith("tmask")) {
+				int radius = 0;
+				TileMapBuilder bldr = new TileMapBuilder(player.getLocation(), radius);
+				TileMap map = bldr.build();
+				Tile t = map.getTile(0, 0);
+				player.getActionSender().sendMessage("N: " + t.isNorthernTraversalPermitted() +
+					" E: " + t.isEasternTraversalPermitted() +
+					" S: " + t.isSouthernTraversalPermitted() +
+					" W: " + t.isWesternTraversalPermitted());
+			}
+		} catch(Exception ex) {
+			player.getActionSender().sendMessage("Error while processing command.");
+		}
+	}
+
+}

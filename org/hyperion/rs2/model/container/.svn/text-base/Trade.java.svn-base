@@ -1,0 +1,330 @@
+package org.hyperion.rs2.model.container;
+
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
+import org.hyperion.rs2.util.NameUtils;
+
+/**
+ * Trading utility class.
+ * @author Martin
+ *
+ */
+public class Trade {
+	
+	/**
+	 * The trade limit size.
+	 */
+	public static final int SIZE = 28;
+	
+	/**
+	 * The player inventory interface.
+	 */
+	public static final int PLAYER_INVENTORY_INTERFACE = 3322;
+
+	/**
+	 * The shop inventory interface.
+	 */
+	public static final int TRADE_INVENTORY_INTERFACE = 3415;
+	
+	/**
+	 * Opens the shop for the specified player.
+	 * @param player The player to open the shop for.
+	 */
+	public static void open(Player player,Player player2) {
+		if(!player.getLocation().isWithinDistance(player.getLocation(),3)){
+			player.getActionSender().sendMessage("You are too far away to open a trade.");
+			return;
+		}
+		World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": opened a trade with: "+player2.getName());
+		World.getWorld().getAbuseHandler().cacheMessage(player2,player2.getName()+": opened a trade with: "+player.getName());
+		player.openingTrade = true;
+		player2.openingTrade = true;
+		player.setTradeWith(player2);
+		player2.setTradeWith(player);
+		player.tradeWith2 = null;
+		player2.tradeWith2 = null;
+		player.tradeAccept1 = false;
+		player.tradeAccept2 = false;
+		player.onComfirmScreen = false;
+		player.getTrader().onComfirmScreen = false;
+		player.getTrader().tradeAccept1 = false;
+		player.getTrader().tradeAccept2 = false;
+		player.getActionSender().sendInterfaceInventory(3323, 3321);
+		player.getActionSender().sendUpdateItems(3322,player.getInventory().toArray());
+		player.getActionSender().sendUpdateItems(3415,player.getTrade().toArray());
+		player.getActionSender().sendUpdateItems(3416,player.getTrade().toArray());
+		player.getTrader().getActionSender().sendUpdateItems(3322,player.getInventory().toArray());
+		player.getTrader().getActionSender().sendUpdateItems(3415,player.getTrade().toArray());
+		player.getTrader().getActionSender().sendUpdateItems(3416,player.getTrade().toArray());
+		player.getInterfaceState().addListener(player.getTrade(), new InterfaceContainerListener(player, TRADE_INVENTORY_INTERFACE));
+		player.getInterfaceState().addListener(player.getInventory(), new InterfaceContainerListener(player, PLAYER_INVENTORY_INTERFACE));
+		player.getTrader().getActionSender().sendInterfaceInventory(3323, 3321);
+		player.getTrader().getInterfaceState().addListener(player.getTrader().getTrade(), new InterfaceContainerListener(player.getTrader(), TRADE_INVENTORY_INTERFACE));
+		player.getTrader().getInterfaceState().addListener(player.getTrader().getInventory(), new InterfaceContainerListener(player.getTrader(), PLAYER_INVENTORY_INTERFACE));
+		player.getActionSender().sendString(3535, "Are you sure you want to make this trade?");
+		player.getTrader().getActionSender().sendString(3535, "Are you sure you want to make this trade?");
+		player.openingTrade = false;
+		player.getTrader().openingTrade = false;
+	}
+	
+	
+	
+	/**
+	 * Withdraws an item.
+	 * @param player The player.
+	 * @param slot The slot in the player's inventory.
+	 * @param id The item id.
+	 * @param amount The amount of the item to deposit.
+	 */
+	public static void withdraw(Player player, int slot, int id, int amount) {
+		if(player.tradeAccept1 && player.getTrader().tradeAccept1)
+			return;
+		Item item = player.getTrade().get(slot);
+		if(item == null) {
+			return; // invalid packet, or client out of sync
+		}
+		if(item.getId() != id) {
+			return; // invalid packet, or client out of sync
+		}
+		player.openingTrade = false;
+		player.getTrader().openingTrade = false;
+		int transferAmount = item.getCount();
+		if(transferAmount >= amount) {
+			transferAmount = amount;
+		} else if(transferAmount == 0) {
+			return; // invalid packet, or client out of sync
+		}
+		int newId = item.getId(); // TODO deal with withdraw as notes!
+		ItemDefinition def = ItemDefinition.forId(newId);
+		if(def.isStackable()) {
+			if(player.getInventory().freeSlots() <= 0 && player.getInventory().getById(newId) == null) {
+				player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many."); // this is the real message
+			}
+		} else {
+			int free = player.getInventory().freeSlots();
+			if(transferAmount > free) {
+				player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many."); // this is the real message
+				transferAmount = free;
+			}
+		}
+		// now add it to inv
+		if(player.getInventory().add(new Item(newId, transferAmount))) {
+			// all items in the bank are stacked, makes it very easy!
+			int newAmount = item.getCount() - transferAmount;
+			if(newAmount <= 0) {
+				player.getTrade().set(slot, null);
+			} else {
+				player.getTrade().set(slot, new Item(item.getId(), newAmount));
+			}
+			player.getTrader().getActionSender().sendUpdateItems(3416,player.getTrade().toArray());
+			player.tradeAccept1 = false;
+			player.tradeAccept2 = false;
+			player.getTrader().tradeAccept1 = false;
+			player.getTrader().tradeAccept2 = false;
+			World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": removed: "+newId+":"+transferAmount+" from trade.");
+			player.getTrader().getActionSender().sendString(3431, "Are you sure you want to make this trade?");
+			player.getActionSender().sendString(3431, "Are you sure you want to make this trade?");
+		} else {
+			player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many."); // this is the real message
+		}
+	}
+	
+	
+	/**
+	 * Deposits an item.
+	 * @param player The player.
+	 * @param slot The slot in the player's inventory.
+	 * @param id The item id.
+	 * @param amount The amount of the item to deposit.
+	 */
+	public static void deposit(Player player, int slot, int id, int amount) {
+		if(player.tradeAccept1 && player.getTrader().tradeAccept1)
+			return;
+		boolean inventoryFiringEvents = player.getInventory().isFiringEvents();
+		player.getInventory().setFiringEvents(false);
+		try {
+			Item item = player.getInventory().get(slot);
+			if(item == null) {
+				return; // invalid packet, or client out of sync
+			}
+			if(item.getId() != id) {
+				return; // invalid packet, or client out of sync
+			}
+			player.openingTrade = false;
+			player.getTrader().openingTrade = false;
+			int transferAmount = player.getInventory().getCount(id);
+			if(transferAmount >= amount) {
+				transferAmount = amount;
+			} else if(transferAmount == 0) {
+				return; // invalid packet, or client out of sync
+			}
+			boolean noted = item.getDefinition().isNoted();
+			if(item.getDefinition().isStackable() || noted) {
+				int bankedId = item.getId();
+				if(player.getTrade().freeSlots() < 1 && player.getTrade().getById(bankedId) == null) {
+					player.getActionSender().sendMessage("You don't have enough space."); // this is the real message
+				}
+				// we only need to remove from one stack
+				int newInventoryAmount = item.getCount() - transferAmount;
+				Item newItem;
+				if(newInventoryAmount <= 0) {
+					newItem = null;
+				} else {
+					newItem = new Item(item.getId(), newInventoryAmount);
+				}
+				if(!player.getTrade().add(new Item(bankedId, transferAmount))) {
+					player.getActionSender().sendMessage("You don't have enough space."); // this is the real message
+				} else {
+					player.getInventory().set(slot, newItem);
+					player.getInventory().fireItemsChanged();
+					player.getTrade().fireItemsChanged();
+				}
+			} else {
+				if(player.getTrade().freeSlots() < transferAmount) {
+					player.getActionSender().sendMessage("You don't have enough space."); // this is the real message
+				}
+				if(!player.getTrade().add(new Item(item.getId(), transferAmount))) {
+					player.getActionSender().sendMessage("You don't have enough space."); // this is the real message
+				} else {
+					// we need to remove multiple items
+					for(int i = 0; i < transferAmount; i++) {
+						/* if(i == 0) {
+							player.getInventory().set(slot, null);
+						} else { */
+							player.getInventory().set(player.getInventory().getSlotById(item.getId()), null);
+						// }
+					}
+					player.getInventory().fireItemsChanged();
+				}
+			}
+		} finally {
+			World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": added: "+id+":"+amount+" to trade.");
+			player.getInventory().setFiringEvents(inventoryFiringEvents);
+			player.getTrader().getActionSender().sendUpdateItems(3416,player.getTrade().toArray());
+			player.tradeAccept1 = false;
+			player.tradeAccept2 = false;
+			player.getTrader().tradeAccept1 = false;
+			player.getTrader().tradeAccept2 = false;
+			player.getTrader().getActionSender().sendString(3431, "Are you sure you want to make this trade?");
+			player.getActionSender().sendString(3431, "Are you sure you want to make this trade?");
+		}
+	}
+	public static String listConfirmScreen(Item[] items){
+		String sendTrade = "Absolutely nothing!";
+		String sendAmount = "";
+		int count = 0;
+		for (Item item : items) {
+			if(item == null)
+				continue;
+			if (item.getId() > 0) {
+				if ((item.getCount() >= 1000) && (item.getCount() < 1000000)) {
+					sendAmount = "@cya@" + (item.getCount() / 1000) + "K @whi@("
+							+ NameUtils.formatInt(item.getCount()) + ")";
+				} else if (item.getCount() >= 1000000) {
+					sendAmount = "@gre@" + (item.getCount() / 1000000)
+							+ " million @whi@(" + NameUtils.formatInt(item.getCount())
+							+ ")";
+				} else {
+					sendAmount = "" + NameUtils.formatInt(item.getCount());
+				}
+				if (count == 0) {
+					sendTrade = "";
+					count = 2;
+				}
+				if(count == 1){
+					sendTrade = sendTrade + "\\n" + item.getDefinition().getName();
+				} else if(count == 2){
+					sendTrade = sendTrade + " " + item.getDefinition().getName();
+					count = 0;
+				}
+				if (item.getDefinition().isStackable()) {
+					sendTrade = sendTrade + " x " + sendAmount;
+				}
+				sendTrade = sendTrade + "     ";
+				count++;
+			}
+		}
+		return sendTrade;
+	}
+	public static void confirmScreen(Player player){
+		String sendTrade1 = listConfirmScreen(player.getTrade().toArray());
+		String sendTrade2 = listConfirmScreen(player.getTrader().getTrade().toArray());
+		player.getActionSender().sendString(3557,sendTrade1);
+		player.getTrader().getActionSender().sendString(3557,sendTrade2);
+		player.getActionSender().sendString(3558,sendTrade2);
+		player.getTrader().getActionSender().sendString(3558,sendTrade1);
+		player.getActionSender().sendInterfaceInventory(3443, 3213);
+		player.getActionSender().sendUpdateItems(3214,player.getInventory().toArray());
+		player.getTrader().getActionSender().sendInterfaceInventory(3443, 3213);
+		player.getTrader().getActionSender().sendUpdateItems(3214,player.getTrader().getInventory().toArray());
+		player.onComfirmScreen = true;
+		player.getTrader().onComfirmScreen = true;
+	}
+	
+	public static void finishTrade(Player player){
+		if(player.tradeAccept1 && player.getTrader().tradeAccept1 && !player.tradeAccept2 && !player.getTrader().tradeAccept2){
+			//we open the confirm screen.
+			confirmScreen(player);
+		}
+		if(!player.tradeAccept1 || !player.getTrader().tradeAccept1 || !player.tradeAccept2 || !player.getTrader().tradeAccept2){
+			//do nothing.
+			int id = 3535;
+			if(!player.onComfirmScreen && !player.getTrader().onComfirmScreen)
+				id = 3431;
+			if(player.tradeAccept1 && !player.getTrader().tradeAccept1){
+				player.getActionSender().sendString(id, "Waiting on the other player.");
+				player.getTrader().getActionSender().sendString(id, "Other player has accepted.");
+			} else if(!player.tradeAccept1 && player.getTrader().tradeAccept1){
+				player.getTrader().getActionSender().sendString(id, "Waiting on the other player.");
+				player.getActionSender().sendString(id, "Other player has accepted.");
+			}
+			return;
+		}
+		if(player.getInventory().freeSlots() < player.getTrader().getTrade().size()){
+			player.getActionSender().sendMessage("You don't have enough space to make this trade.");
+			player.getTrader().getActionSender().sendMessage("The other player doesn't have enough space to make this trade.");
+			return;
+		}
+		if(player.getTrader().getInventory().freeSlots() < player.getTrade().size()){
+			player.getTrader().getActionSender().sendMessage("You don't have enough space to make this trade.");
+			player.getActionSender().sendMessage("The other player doesn't have enough space to make this trade.");
+			return;
+		}
+		World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": completed a trade with: "+player.getTrader().getName());
+		player.getInventory().transfer(player.getTrader().getTrade(), player.getInventory());
+		player.getInventory().transfer(player.getTrade(), player.getTrader().getInventory());
+		player.getActionSender().removeAllInterfaces();
+		player.getTrader().getActionSender().removeAllInterfaces();
+		player.getTrader().tradeAccept2 = false;
+		player.tradeAccept2 = false;
+		declineTrade(player);
+	}
+	
+	public static void declineTrade(Player player){
+		if(player.openingTrade){
+			player.openingTrade = false;
+			return;
+		}
+		boolean reset = true;
+		if(player.getTrader() != null){
+			World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": declined a trade with: "+player.getTrader().getName());
+			if((player.tradeAccept1 && player.getTrader().tradeAccept1 && (!player.onComfirmScreen || !player.getTrader().onComfirmScreen))
+			|| (player.tradeAccept1 && player.getTrader().tradeAccept1 && player.tradeAccept2 && player.getTrader().tradeAccept2))
+				reset = false;
+			if(reset){
+				player.getTrader().getInventory().transfer(player.getTrader().getTrade(), player.getTrader().getInventory());
+				player.getTrader().getActionSender().removeAllInterfaces();
+				player.getTrader().setTradeWith(null);
+			}
+			player.getActionSender().removeAllInterfaces();
+		}
+		if(reset){
+			player.setTradeWith(null);
+			player.getInventory().transfer(player.getTrade(), player.getInventory());
+		}
+	}
+
+}

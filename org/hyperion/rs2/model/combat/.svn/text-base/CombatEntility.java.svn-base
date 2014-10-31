@@ -1,0 +1,311 @@
+package org.hyperion.rs2.model.combat;
+
+import org.hyperion.rs2.model.*;
+
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.LinkedList;
+
+public class CombatEntility {
+	
+	public CombatEntility(Entity e){
+		entity = e;
+		if(getEntity() instanceof Player){
+			p = (Player) getEntity();
+		} else {
+			n = (NPC) getEntity();
+		}
+	}
+	public Attack attack = null;
+	private List<CombatEntility> attackers = new LinkedList<CombatEntility>();
+	private Entity entity;
+	private Player p = null;
+	private NPC n = null;
+	private boolean isPoisoned = false;
+	public long lastHit = System.currentTimeMillis()-30000;
+	public long predictedAtk = System.currentTimeMillis();
+	public long predictedAtk2 = System.currentTimeMillis();
+	private int atkSpeed = 2000;
+	public long freezeTimer = System.currentTimeMillis();//can move after this time
+	private int autoCastId = -1;
+	private int weaponPoisons = 0;
+	private int atkEmote = 422;
+	private int defEmote = 404;
+	private int atkType = 0;
+	public int trainSkill = 0;
+	public int specialArmour = -1;
+	public int bowType = 0;//accurate, rapid, long
+	private CombatEntility opponent = null;
+	private int[] magicAttacks = new int[2];//you can change this to queue up magic attacks so they are executed in the right order
+	private Map<CombatEntility,Integer> damageDelt = new HashMap<CombatEntility,Integer>();
+	
+	public boolean isNpcAttackAble(){
+		if(getEntity() instanceof Player)
+			return true;
+		else if(n.maxHealth <= 0)
+			return false;
+		return true;
+	}
+	
+	public int getNextMagicAtk(){
+		int j = 0;
+		for(int i : magicAttacks){
+			if(i > 0){
+				return i;
+			}
+			j++;
+		}
+		return 0;
+	}
+	public void addSpellAttack(int j){
+		for(int i = 0; i < magicAttacks.length; i++){
+			if(magicAttacks[i] <= 0){
+				magicAttacks[i] = j;
+				return;
+			}
+		}
+	}
+	public void deleteSpellAttack(int j){
+		for(int i = 0; i < magicAttacks.length; i++){
+			if(magicAttacks[i] == j){
+				magicAttacks[i] = 0;
+				return;
+			}
+		}
+	}
+	
+	public CombatEntility getOpponent(){
+		return opponent;
+	}
+	
+	public List<CombatEntility> getAttackers(){
+		return attackers;
+	}
+	
+	public Player getPlayer(){
+		return p;
+	}
+	
+	public NPC getNPC(){
+		return n;
+	}
+	
+	public boolean isPoisoned(){
+		return isPoisoned;
+	}
+	
+	public int getAtkSpeed(){
+		return atkSpeed;
+	}
+	
+	public int getAutoCastId(){
+		return autoCastId;
+	}
+	
+	public int getAtkEmote(){
+		return atkEmote;
+	}
+	
+	public int getDefEmote(){
+		return defEmote;
+	}
+	
+	public int getWeaponPoison(){
+		return weaponPoisons;
+	}
+	
+	public int getAtkType(){
+		return atkType;
+	}
+	
+	
+	public Entity getEntity(){
+		return entity;
+	}
+	public void setPoisoned(boolean b){
+		isPoisoned = b;
+	}
+	
+	public void setAtkType(int i){
+		atkType= i;
+	}
+	
+	public void setWeaponPoison(int a){
+		weaponPoisons = a;
+	}
+	
+	public void setDefEmote(int a){
+		defEmote = a;
+	}
+	public void setAtkEmote(int a){
+		atkEmote = a;
+	}
+	public void setAutoCastId(int a){
+		autoCastId = a;
+	}
+	public void setAtkSpeed(int a){
+		atkSpeed = a;
+	}
+	public void setOpponent(CombatEntility e){
+		opponent = e;
+	}
+	
+	
+	public boolean canMove(){
+		if(System.currentTimeMillis() > freezeTimer)
+			return true;
+		return false;
+	}
+	
+	public int getFightType(){
+		return 1;
+	}
+	
+	public CombatEntility getKiller(){
+		CombatEntility winner = null;
+		int damg = 0;
+		for (Map.Entry<CombatEntility, Integer> entry : damageDelt.entrySet()) {
+			Integer m = entry.getValue();
+			if(m > damg){
+				winner = entry.getKey();
+				damg = m;
+			}
+			System.out.println("killer: "+m+" : "+entry.getKey());
+		}
+		damageDelt.clear();
+		return winner;
+	}
+	
+	
+	public void hit(int damg,Entity atker,boolean poison){
+		int sofar = 0;
+		if(damageDelt.containsKey(atker.cE))
+			sofar = damageDelt.get(atker.cE);
+		damageDelt.put(atker.cE,sofar+damg);
+		if(getEntity() instanceof Player)
+			p.inflictDamage(damg,atker,poison);
+		else {
+			n.inflictDamage(damg,atker,poison);
+		}
+	}
+	
+	public CombatEntility getCurrentAtker(){
+		Object o[] = attackers.toArray();
+		if(o != null)
+			if(o.length > 0)
+				return ((CombatEntility) o[0]);
+		return null;
+	}
+	
+	
+	public int getAbsX(){
+		if(getEntity() instanceof Player)
+			return p.getLocation().getX();
+		else
+			return n.getLocation().getX();
+	}
+	
+	public int getAbsY(){
+		if(getEntity() instanceof Player)
+			return p.getLocation().getY();
+		else
+			return n.getLocation().getY();
+	}
+	
+	public int getCombat(){
+		if(getEntity() instanceof Player)
+			return p.getSkills().getCombatLevel();
+		else
+			return n.getDefinition().combat();
+	}
+	
+	public boolean isDoingAtk = false;
+	
+	public void doAtkEmote(){
+		isDoingAtk = true;
+		if(getEntity() instanceof Player)
+			doAnim(atkEmote);
+			else
+		doAnim( n.getDefinition().getAtkEmote(0) );
+	}
+	
+	public int getOffsetX(){
+		if(getEntity() instanceof Player)
+			return 0;
+		return n.getDefinition().sizeX();
+	}
+	
+	public int getOffsetY(){
+		if(getEntity() instanceof Player)
+			return 0;
+		return n.getDefinition().sizeY();
+	}
+	
+	public void doDefEmote(){
+		if(isDoingAtk)
+			return;
+		if(getEntity() instanceof Player)
+			doAnim(defEmote);
+		else if(n.getDefinition().blockEmote() > 0)
+			doAnim( n.getDefinition().blockEmote() );
+	}
+	public void doAnim(int id){
+		getEntity().playAnimation(Animation.create(id, 0));
+	}
+	public void doGfx(int id){
+		doGfx(id,6553600);
+	}
+	public void doGfx(int id,int delay){
+		getEntity().playGraphics(Graphic.create(id, delay));
+	}
+	
+	public void face(int x,int y){
+		getEntity().face(Location.create(x,y,0));
+	}
+	
+	public int getSlotId(){
+		if(getEntity() instanceof Player){
+			return (-p.getIndex());
+		} else {
+			return (n.getClientIndex()+1);
+		}
+	}
+	
+	public int meleeDef(int fightType) {
+		if(getEntity() instanceof Player)
+			return Defence.meleeDef((Player) getEntity(),fightType);
+		return 10;
+	}	
+	
+    public int rangeDef() {
+		if(getEntity() instanceof Player)
+			return Defence.rangeDef((Player) getEntity());
+		return 10;
+	}
+	
+    public int mageDef() {
+		if(getEntity() instanceof Player)
+			return Defence.mageDef((Player) getEntity());
+		return 10;
+	}
+	
+    public int meleeAtk(boolean bool) {
+		if(getEntity() instanceof Player)
+			return Defence.meleeAtk((Player) getEntity(),atkType,bool);
+		return 10;
+	}
+	
+    public int rangeAtk(boolean bool) {
+		if(getEntity() instanceof Player)
+			return Defence.rangeAtk((Player) getEntity(),bool);
+		return 10;
+	}
+	
+    public int mageAtk(int spellId) {
+		if(getEntity() instanceof Player)
+			return Defence.mageAtk((Player) getEntity(),spellId);
+		return 10;
+	}
+	
+}

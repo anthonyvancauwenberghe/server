@@ -1,0 +1,85 @@
+package org.hyperion.rs2.model;
+
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.hyperion.rs2.model.region.Region;
+
+public class NPCManager {
+
+	public NPCManager() throws IOException {
+		NPCDefinition.init();
+		startUp();
+		String name = "./data/spawns.cfg";
+			BufferedReader file = null;
+			try {
+				file = new BufferedReader(new FileReader(name));
+				while (true) {
+					String line = file.readLine();
+					if (line == null)
+						break;
+					int spot = line.indexOf('=');
+					if (spot > -1) {
+						String values = line.substring(spot + 1);
+						values = values.replace("\t\t", "\t");
+						values = values.replace("\t\t", "\t");
+						values = values.trim();
+						String[] valuesArray = values.split("\t");
+						int id = Integer.valueOf(valuesArray[0]);
+						addNPC(Integer.valueOf(valuesArray[1]), 
+								Integer.valueOf(valuesArray[2]), 
+								Integer.valueOf(valuesArray[3]),id,60);
+					}
+				}
+			} finally {
+				if (file != null)
+					file.close();
+			}
+	}
+	public void addNPC(int x,int y,int z,int npcId,int respawnTime){
+		NPCDefinition nD =  NPCDefinition.forId(npcId);
+		NPC n = new NPC(nD,respawnTime);
+		n.setLocation(Location.create(x,y,z));
+		Region region = World.getWorld().getRegionManager().getRegionByLocation(n.getLocation());
+		region.addNpc(n);
+		World.getWorld().register(n);
+	}
+	
+	
+	public void startUp(){
+		try {
+			int j = 0;
+			File dir = new File("./bin/org/hyperion/rs2/model/combat/attack/");
+			if(dir.exists()){
+				for(File file : dir.listFiles()) {
+					String s = file.getName().replace(".class","");
+					if(s.contains("svn") || s.contains("$"))
+						continue;
+					Attack a = (Attack) Class.forName("org.hyperion.rs2.model.combat.attack."+s).newInstance();
+					if(a.npcIds[0] == -1){
+						for(int i3 = 0; i3 < attacks.length; i3++){
+							if(attacks[i3] == null)
+								attacks[i3] = a;
+						}
+					} else {
+						for(int i = 0; i < a.npcIds.length; i++){
+							attacks[a.npcIds[i]] = a;
+						}
+					}
+					j++;
+				}
+			}
+			System.out.println("Loaded " + j + " NPC Attacks.");
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public Attack getAttack(NPC n){
+		return attacks[n.getDefinition().getId()];
+	}
+	
+	public Attack[] attacks = new Attack[4300];//3000 npcs?
+}

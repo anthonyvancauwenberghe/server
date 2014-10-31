@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/darkstar/!svn/ver/36/trunk/src/org/hyperion/rs2/net
+END
+PacketManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/PacketManager.java
+END
+RS2LoginDecoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/RS2LoginDecoder.java
+END
+RS2Encoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/RS2Encoder.java
+END
+Packet.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/Packet.java
+END
+ISAACCipher.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/ISAACCipher.java
+END
+RS2CodecFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/RS2CodecFactory.java
+END
+RS2Decoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/RS2Decoder.java
+END
+ActionSender.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/darkstar/!svn/ver/36/trunk/src/org/hyperion/rs2/net/ActionSender.java
+END
+PacketBuilder.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/darkstar/!svn/ver/2/trunk/src/org/hyperion/rs2/net/PacketBuilder.java
+END

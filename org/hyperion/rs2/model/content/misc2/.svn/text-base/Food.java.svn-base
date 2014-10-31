@@ -1,0 +1,108 @@
+package org.hyperion.rs2.model.content.misc2;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.content.*;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.data.PersistenceManager;
+import org.hyperion.rs2.model.content.misc.FoodItem;
+/**
+ * Food and potion system.
+ * @author Martin
+ *
+ */
+public class Food implements ContentTemplate {
+	
+	/**
+	 * Animation IDs sent to the client.
+	 */
+	public final int ANIMATION_EAT_ID 	= 829,
+							ANIMATION_DRINK_ID 	= 829;//1652
+	
+	private List<FoodItem> foods;
+
+	
+	@Override
+	public void init() throws FileNotFoundException {
+		foods = (List<FoodItem>) PersistenceManager.load(new FileInputStream("./data/food.xml"));
+	}
+	@Override
+	public int[] getValues(int type) {
+		if(type != 1)
+			return null;
+		int[] j = new int[foods.size()];
+		int i2 = 0;
+		for(FoodItem i : foods) {
+			j[i2] = i.getId();
+			i2++;
+		}
+		return j;
+	}
+	
+	private FoodItem get(int id) {
+		for(FoodItem i : foods) {
+			if(i.getId() == id) {
+				return i;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Eating hook.
+	 * @param client
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public boolean clickObject(final Player client,final int type,final int id,final int slot,final int c,final int d) {
+		final FoodItem foodItem = get(id);
+		if(foodItem == null) return false;
+		//TODO FIX THE MASSING
+		if(System.currentTimeMillis() - client.foodTimer < 1600)
+			return true;
+		if(!ContentEntity.isItemInBag(client,id,slot)) return true;
+		client.foodTimer = System.currentTimeMillis();
+
+		/*if((foodItem.isDrink() && client.duelRule[6]) || (!foodItem.isDrink() && client.duelRule[7])){
+			ContentEntity.sendMessage(client,"You cannot use this in a duel.");
+		}*/
+		if(!foodItem.isDrink())
+			ContentEntity.startAnimation(client,ANIMATION_EAT_ID);
+		else 
+			ContentEntity.startAnimation(client,ANIMATION_DRINK_ID);
+		ContentEntity.deleteItem(client,id,slot, 1);
+		if(foodItem.getNewId() != -1) {
+			ContentEntity.replaceItem(client,slot,foodItem.getNewId(),1);
+		}
+		if(foodItem.isDrink()) {
+			ContentEntity.sendMessage(client,"You drink the " + ItemDefinition.forId(id).getName() + ".");
+		} else {
+			ContentEntity.sendMessage(client,"You eat the " + ItemDefinition.forId(id).getName() + ".");
+		}
+		World.getWorld().submit(new Event(1500) {
+			@Override
+			public void execute() {
+				if(foodItem.getHeal() < 0 || (foodItem.getHeal() > 0)) {
+					ContentEntity.heal(client,foodItem.getHeal());
+				}
+				if(foodItem.getSkillId() != -1 && foodItem.getSkillAdd() != -1) {
+					ContentEntity.increaseSkill(client,foodItem.getSkillId(), foodItem.getSkillAdd());
+				}
+				this.stop();
+			}
+		});
+		return true;
+	}
+	
+	/*
+	 * We are a wholly class.
+	 */
+	public Food() {}
+
+}

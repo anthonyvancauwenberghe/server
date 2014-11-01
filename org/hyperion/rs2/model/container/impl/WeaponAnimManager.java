@@ -52,7 +52,7 @@ public class WeaponAnimManager {
         if(shield >= 8844 && shield <= 8850)
             return 4177;
             if (id == 15486 && shield == 6889) //todo more
-            return 12806;
+            return 12806; //if the shield is mage book+ sol equip
         if(shield != - 1) {
             return 1156;
         }

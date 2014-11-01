@@ -1,7 +1,9 @@
 package org.hyperion.rs2.model.punishment;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 public class Time {
@@ -83,6 +85,37 @@ public class Time {
 
     public boolean isExpired(){
         return expired || System.currentTimeMillis() > getExpirationTime();
+    }
+
+    public String getRemainingTimeStamp(){
+        if(isExpired())
+            return "----";
+        long remaining = getExpirationTime() - System.currentTimeMillis();
+        long seconds = remaining / 60;
+        long minutes = seconds / 60;
+        seconds -= minutes * 60;
+        long hours = minutes / 60;
+        minutes -= hours * 60;
+        long days = hours / 24;
+        hours -= days * 24;
+        long weeks = days / 7;
+        days -= weeks * 7;
+        long years = weeks / 52;
+        weeks -= years * 52;
+        final StringBuilder bldr = new StringBuilder();
+        if(years > 0)
+            bldr.append(String.format("%,d Year%s", years, years > 1 ? "s" : "")).append(" ");
+        if(weeks > 0)
+            bldr.append(String.format("%,d Week%s", weeks, weeks > 1 ? "s" : "")).append(" ");
+        if(days > 0)
+            bldr.append(String.format("%,d Day%s", days, days > 1 ? "s" : "")).append(" ");
+        if(hours > 0)
+            bldr.append(String.format("%,d Hour%s", hours, hours > 1 ? "s" : "")).append(" ");
+        if(minutes > 0)
+            bldr.append(String.format("%,d Minute%s", minutes, minutes > 1 ? "s" : "")).append(" ");
+        if(seconds > 0)
+            bldr.append(String.format("%,d Second%s", seconds, seconds > 1 ? "s" : "")).append(" ");
+        return bldr.toString();
     }
 
     public String toString(){

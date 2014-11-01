@@ -56,6 +56,8 @@ public class Punishment {
             player.sendf("Reason: @blu@%s", TextUtils.titleCase(getReason()));
             player.sendf("Issued: @blu@%s", getTime().getStartDateStamp());
             player.sendf("Expires: @blu@%s", getTime().isExpired() ? "NOW!" : getTime().getExpirationDateStamp());
+            if(!getTime().isExpired())
+                player.sendf("Remaining: @blu@%s", getTime().getRemainingTimeStamp());
             player.sendf("@red@----------------------------------------------------------------------------------------");
         }
     }

@@ -69,6 +69,7 @@ import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
 import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
 import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
 import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
@@ -1018,6 +1019,7 @@ public class CommandHandler {
         CommandHandler.submit(new CheckPunishmentCommand());
         CommandHandler.submit(new RemovePunishmentCommand());
         CommandHandler.submit(new ViewPunishmentsCommand());
+        CommandHandler.submit(new MyPunishmentsCommand());
 
         submit(new GiveIntCommand("givekills", Rank.ADMINISTRATOR){
             public void process(final Player player, final Player target, final int value){

@@ -57,7 +57,7 @@ public class WeaponAnimManager2 {
             case 6563:
             case 6914:
             case 5730:
-            case 15486:
+            case 15486://sol
                 return 1146;
             case 13905:
             case 13988:

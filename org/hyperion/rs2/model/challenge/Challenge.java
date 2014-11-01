@@ -40,7 +40,7 @@ public class Challenge {
     public void send(final Player player, final boolean alert){
         if(alert){
             player.sendf(
-                    "Alert##%s's Challenge##First person to type ::challenge %s wins...##%s x%,d!",
+                    "Alert##%s's Challenge##First to type ::challenge %s##Wins: %s x%,d!",
                     getName(), getText(), getPrize().getDefinition().getName(), getPrize().getCount()
             );
         }else{

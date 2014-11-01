@@ -57,7 +57,7 @@ public class CreateChallengeCommand extends Command{
         }else{
             int maxCount = 0;
             for(final Item it : player.getInventory().toArray())
-                if(it.getId() == id)
+                if(it != null && it.getId() == id)
                     maxCount++;
             if(amount > maxCount)
                 player.sendf("Lowered amount from %,d to %,d", amount, amount = item.getCount());

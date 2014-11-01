@@ -36,11 +36,11 @@ public class PunishCommand extends Command{
             return false;
         }
         final String victimName = parts[0].trim();
-        if(victimName.isEmpty() || !PlayerFiles.exists(victimName)){
+        final Player victim = World.getWorld().getPlayer(victimName);
+        if(victimName.isEmpty() || (!PlayerFiles.exists(victimName) && victim == null)){
             player.sendf("Unable to find player: %s", victimName);
             return false;
         }
-        final Player victim = World.getWorld().getPlayer(victimName);
         if(victim != null && Rank.isStaffMember(victim)){
             player.sendf("You cannot punish other staff members");
             return false;

@@ -470,7 +470,7 @@ public class Skills {
         if(player.xpLock)
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_HELM) == 17279) {
-        	exp *= 1.3;
+        	exp *= 1.02;
         }
 		if(skill == BONUS_SKILL)
 			exp *= 2;

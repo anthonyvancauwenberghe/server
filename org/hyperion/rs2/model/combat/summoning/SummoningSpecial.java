@@ -1,13 +1,16 @@
 package org.hyperion.rs2.model.combat.summoning;
 
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.SummoningBar;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.SummoningData;
 import org.hyperion.rs2.model.combat.SummoningData.SummonType;
 import org.hyperion.rs2.model.combat.summoning.impl.PackYak;
 import org.hyperion.rs2.model.combat.summoning.impl.SteelTitanSpecial;
 import org.hyperion.rs2.model.combat.summoning.impl.Unicorn;
 import org.hyperion.rs2.model.combat.summoning.impl.WolpertingerSpecial;
+import org.hyperion.rs2.model.container.BoB;
+import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.skill.Summoning;
+import org.hyperion.rs2.model.Animation;
 
 /**
  * @author Wasay
@@ -41,6 +44,20 @@ public final class SummoningSpecial {
 				}
 			}
 		} else {
+            if(Summoning.isBoB(6873)) {
+                synchronized (p) {
+                    int index2 = -1;
+                    for (Item item : p.getBoB().toArray()) {
+                        index2++;
+                        if (item != null)
+                            BoB.withdraw(p, index2, item.getId(), item.getCount());
+                            p.playAnimation(Animation.create(7270));
+                        if (p.getInventory().freeSlots() == 0)
+                            break;
+                    }
+                }
+                return;
+            }
 			p.getActionSender().sendMessage("You do not have a familiar with a special attack!");
 		}
 	}

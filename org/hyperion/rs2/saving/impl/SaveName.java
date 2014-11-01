@@ -18,7 +18,7 @@ public class SaveName extends SaveString {
 
 	@Override
 	public String getValue(Player player) {
-		return player.getDisplay().toLowerCase();
+		return player.getDisplay();
 	}
 
 }

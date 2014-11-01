@@ -95,6 +95,10 @@ public class SpecialBar {
 				player.getActionSender().sendFrame171(0, 12323);
 				sendColouredBar(12335);
 				break;
+            case 15486://sol
+                player.getActionSender().sendFrame171(0,  7574);
+                sendColouredBar(7586);
+                break;
 
 			case 859: // magic bows
 			case 861:

@@ -132,7 +132,8 @@ public class ActionSender {
 		sendDetails();
 		sendMessage("@blu@Welcome To " + Server.NAME + "!");
 		sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
-        sendMessage("@blu@NEW: Survey Donations! FREE Donator Points: @whi@http://deviouspk.com/surveys/?name= "+  player.getName() +" #url#");
+        sendMessage("@blu@NEW: Survey Donations are NOW available! click the link below!");
+        sendMessage("@blu@FREE Donator Points: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
         //sendMessage("Alert##We removed Divines and Special restores from the economy##Anyone with them was refunded their shop value!");
 		// sendMessage("@blu@Please register on our forums!");
 		loadAnnouncements();

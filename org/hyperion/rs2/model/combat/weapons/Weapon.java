@@ -89,8 +89,8 @@ public class Weapon extends Item {
 			return new Bow(id, 1200);
 		if(id == 16887)
 			return new Bow(id, 900);
-        if (name.contains("maul") && !name.contains("granite"))
-            return new DungeoneeringMaul(id);
+        //if (name.contains("maul") && !name.contains("granite"))
+        //    return new DungeoneeringMaul(id);
 		if(name.contains("ahrim") && name.contains("staff"))
 			return new AhrimsStaff(id);
 		if(name.contains("dharok") && name.contains("greataxe"))

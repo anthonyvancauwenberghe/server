@@ -225,3 +225,5 @@ config.cfg
 out/
 data/drop dump.cfg
 data/logSaves.txt
+data/possiblehacks.txt
+rebel.xml

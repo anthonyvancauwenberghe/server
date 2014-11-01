@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 public class CreateChallengeCommand extends Command{
 
@@ -41,13 +42,26 @@ public class CreateChallengeCommand extends Command{
             player.sendf("Error parsing prize");
             return false;
         }
+        if(ItemSpawning.canSpawn(id)){
+            player.sendf("You cannot do this with spawnables");
+            return false;
+        }
         final Item item = player.getInventory().getById(id);
         if(item == null){
             player.sendf("No item in inventory with id: %d", id);
             return false;
         }
-        if(amount > item.getCount())
-            player.sendf("Lowered amount from %,d to %,d", amount, amount = item.getCount());
+        if(item.getDefinition().isStackable()){
+            if(amount > item.getCount())
+                player.sendf("Lowered amount from %,d to %,d", amount, amount = item.getCount());
+        }else{
+            int maxCount = 0;
+            for(final Item it : player.getInventory().toArray())
+                if(it.getId() == id)
+                    maxCount++;
+            if(amount > maxCount)
+                player.sendf("Lowered amount from %,d to %,d", amount, amount = item.getCount());
+        }
         player.getInventory().remove(new Item(id, amount));
         final Challenge challenge = Challenge.create(player, length, id, amount);
         ChallengeManager.add(challenge);

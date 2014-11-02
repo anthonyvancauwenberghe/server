@@ -7,14 +7,11 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
-import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
-import org.hyperion.rs2.model.content.skill.Slayer;
-import org.hyperion.rs2.model.content.skill.slayer.SlayerTasks;
-import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.util.Misc;
 
 import java.util.HashMap;
@@ -282,7 +279,7 @@ public class Magic {
 		} else /** NPC Part */ {
 			DefBonus = opponent.getNPC().combatLevel
 					+ opponent.getNPC().getDefinition().getBonus()[8];
-			if(SlayerTasks.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
+			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
 					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
 				splash = true;
 			}

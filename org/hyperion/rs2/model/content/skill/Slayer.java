@@ -1,15 +1,12 @@
 package org.hyperion.rs2.model.content.skill;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.skill.slayer.SlayerTasks;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 
 
 /**
@@ -33,12 +30,18 @@ public class Slayer implements ContentTemplate {
             return true;
         }
         if(type == ClickType.NPC_OPTION1) { // talk to slayer masker
-            if(!player.getSlayerTask().assignTask())
+            if(player.getSlayerTask().assignTask(player.getSkills().getRealLevels()[Skills.SLAYER]))
                 player.sendf("You still have %d %s to kill!", player.getSlayerTask().getTaskAmount(), player.getSlayerTask().getTask());
             return true;
         }
         if(type == ClickType.NPC_DEATH) {
-            if(player.getSlayerTask().killedTask(npcId));
+            int slayerXP = player.getSlayerTask().killedTask(npcId);
+            if(slayerXP > 0) {
+                ContentEntity.addSkillXP(player, slayerXP, Skills.SLAYER);
+            }
+            if(player.getSlayerTask().getTaskAmount() == 0) {
+                player.sendf("You have completed %d tasks in a row and have %d slayer points", player.getSlayerTask().getTotalTasks(),player.getSlayerTask().getSlayerPoints());
+            }
             return false;
         }
         return false;
@@ -60,7 +63,7 @@ public class Slayer implements ContentTemplate {
 			return j;
 		}
         if(type == ClickType.NPC_DEATH)
-            return SlayerTasks.getTasks();
+            return SlayerTask.getTasks();
         return null;
 	}
 

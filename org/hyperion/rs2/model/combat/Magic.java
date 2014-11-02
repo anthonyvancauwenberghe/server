@@ -118,6 +118,14 @@ public class Magic {
 			attacker.getPlayer().getActionSender().sendMessage(message);
 			return 0;
 		}
+        if (opp.getEntity() instanceof NPC) {
+           String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
+            for (String familiarName : FAMILIARS)
+            if (opp.getNPC().getDefinition().name().toLowerCase().contains(familiarName)) {
+                ContentEntity.sendMessage((Player) attacker.getEntity(), "You cannot attack familiars.");
+                return 0;
+            }
+        }
 		if(attacker.getPlayer().duelRule[4] && attacker.getPlayer().duelAttackable > 0) {
 			attacker.getPlayer().getActionSender().sendMessage("You cannot use magic in this duel.");
 			return 0;

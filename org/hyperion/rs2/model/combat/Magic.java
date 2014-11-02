@@ -119,12 +119,12 @@ public class Magic {
 			return 0;
 		}
         if (opp.getEntity() instanceof NPC) {
-           String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
+            String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
             for (String familiarName : FAMILIARS)
-            if (opp.getNPC().getDefinition().name().toLowerCase().contains(familiarName)) {
-                ContentEntity.sendMessage((Player) attacker.getEntity(), "You cannot attack familiars.");
-                return 0;
-            }
+                if (opp.getNPC().getDefinition().name().toLowerCase().contains(familiarName)) {
+                    ContentEntity.sendMessage((Player) attacker.getEntity(), "You cannot attack familiars.");
+                    return 0;
+                }
         }
 		if(attacker.getPlayer().duelRule[4] && attacker.getPlayer().duelAttackable > 0) {
 			attacker.getPlayer().getActionSender().sendMessage("You cannot use magic in this duel.");
@@ -276,8 +276,8 @@ public class Magic {
 			}
 			// elysian spirit shield
 			if(shieldId == 13742 && Misc.random(9) >= 6) {
-				Damage = (int) (Damage * 0.75);
-			}
+                Damage = (int) (Damage * 0.75);
+            }
 		} else /** NPC Part */ {
 			DefBonus = opponent.getNPC().combatLevel
 					+ opponent.getNPC().getDefinition().getBonus()[8];

@@ -58,7 +58,7 @@ public enum SlayerTasks {
     BLACK_DEMON(Difficulty.HARD, 60, 1700, 84),
     GORAK(Difficulty.HARD, 68, 1200, 6218),
     HELL_HOUND(Difficulty.HARD, 77, 1109, 6210),
-    DARK_BEAST(Difficulty.HARD, 95, 3471, 6210),
+    DARK_BEAST(Difficulty.HARD, 95, 3471,2783),
     ABYSSAL_DEMON(Difficulty.HARD, 85, 2405, 2783),
     GARGOYLE(Difficulty.HARD, 75, 1905, 1610),
     STEEL_DRAGON(Difficulty.HARD, 81, 2632, 1592),

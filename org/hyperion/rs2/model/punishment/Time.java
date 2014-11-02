@@ -91,7 +91,7 @@ public class Time {
         if(isExpired())
             return "----";
         long remaining = getExpirationTime() - System.currentTimeMillis();
-        long seconds = remaining / 60;
+        long seconds = remaining / 1000;
         long minutes = seconds / 60;
         seconds -= minutes * 60;
         long hours = minutes / 60;

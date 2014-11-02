@@ -25,7 +25,7 @@ public class Slayer implements ContentTemplate {
 
 	}
 
-    private static final int SLAYER_MASTER = -1, SLAYER_GEM = -1;
+    private static final int SLAYER_MASTER = 1599, SLAYER_GEM = 4155;
 
     @Override
     public boolean clickObject(final Player player, final int type, final int npcId, final int slot, final int objId, final int a) {

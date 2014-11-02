@@ -113,11 +113,6 @@ public class Magic {
 	public static int castSpell(final CombatEntity attacker, final CombatEntity opp, int spellId) {
 		if(attacker.getEntity().isDead() || opp.getEntity().isDead())
 			return 0;
-        if (opp.getFamiliar() != null || attacker.getFamiliar() != null) {
-            if(!Combat.isInMulti(attacker)) { //if they're not multi familiars cannot be killed.
-                return 0;
-            }
-        }
 		String message = Combat.canAtk(attacker, opp);
 		if(message.length() > 1) {
 			attacker.getPlayer().getActionSender().sendMessage(message);

@@ -203,7 +203,6 @@ public class DialogueManager {
 				break;
 			case 25:
 				player.slayerTask = 0;
-				Slayer.talkMaster(player, npc.getDefinition().getId(), npc.getIndex(), true);
 				break;
 			case 26:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,

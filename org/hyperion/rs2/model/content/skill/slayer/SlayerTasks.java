@@ -89,6 +89,21 @@ public enum SlayerTasks {
         return n;
     }
 
+    public static SlayerTasks taskForId(int npcID) {
+        for(final SlayerTasks task : SlayerTasks.values()) {
+            if(task.ids.contains(npcID))
+                return task;
+        }
+        return null;
+    }
+
+    public static int getLevelById(int npcID) {
+        SlayerTasks task = taskForId(npcID);
+        if(task != null)
+            return task.slayerLevel;
+        else return 0;
+    }
+
 }
 
 

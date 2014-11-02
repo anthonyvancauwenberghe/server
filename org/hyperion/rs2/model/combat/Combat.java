@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.Slayer;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTasks;
 import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
 
@@ -413,7 +414,7 @@ public class Combat {
 				} else {
 					if(random(CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer())) < random(combatEntity.getOpponent().getNPC().getDefinition().getBonus()[9]))
 						damg = 0;
-					if(Slayer.getSlayerLevel(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
+					if(SlayerTasks.getLevelById(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
 						damg = 0;
 				}
 
@@ -516,7 +517,7 @@ public class Combat {
 				if(! verac
 						&& random(CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer())) < random(combatEntity.getOpponent().getNPC().getDefinition().getBonus()[(combatEntity.getAtkType() + 2)]))
 					damg = 0;
-				if(Slayer.getSlayerLevel(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
+				if(SlayerTasks.getLevelById(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
 					damg = 0;
 			}
 			hit = true;

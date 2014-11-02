@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.Slayer;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTasks;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 
@@ -281,7 +282,7 @@ public class Magic {
 		} else /** NPC Part */ {
 			DefBonus = opponent.getNPC().combatLevel
 					+ opponent.getNPC().getDefinition().getBonus()[8];
-			if(Slayer.getSlayerLevel(opponent.getNPC().getDefinition().getId()) > attacker
+			if(SlayerTasks.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
 					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
 				splash = true;
 			}

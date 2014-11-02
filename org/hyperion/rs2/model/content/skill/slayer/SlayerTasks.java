@@ -49,33 +49,33 @@ import java.util.List;
 public enum SlayerTasks {
 
     /** The elite tasks */
-    TORMENTED_DEMON(Difficulty.ELITE, 87, 6349, 8349),
-    MITHRIL_DRAGON(Difficulty.ELITE, 82, 5220, 5363),
-    ICE_WYRM(Difficulty.ELITE, 82, 5220, 9463),
-    KING_BLACK_DRAGON(Difficulty.ELITE, 92, 7220, 50),
+    TORMENTED_DEMON(Difficulty.ELITE, 1, 634, 8349),
+    MITHRIL_DRAGON(Difficulty.ELITE, 1, 522, 5363),
+    ICE_WYRM(Difficulty.ELITE, 1, 522, 9463),
+    KING_BLACK_DRAGON(Difficulty.ELITE, 1, 722, 50),
 
     /** The hard tasks */
-    BLACK_DEMON(Difficulty.HARD, 60, 1700, 84),
-    GORAK(Difficulty.HARD, 68, 1200, 6218),
-    HELL_HOUND(Difficulty.HARD, 77, 1109, 6210),
-    DARK_BEAST(Difficulty.HARD, 95, 3471,2783),
-    ABYSSAL_DEMON(Difficulty.HARD, 85, 2405, 2783),
-    GARGOYLE(Difficulty.HARD, 75, 1905, 1610),
-    STEEL_DRAGON(Difficulty.HARD, 81, 2632, 1592),
+    BLACK_DEMON(Difficulty.HARD, 1, 170, 84),
+    GORAK(Difficulty.HARD, 68, 120, 6218),
+    HELL_HOUND(Difficulty.HARD, 1, 119, 6210),
+    DARK_BEAST(Difficulty.HARD, 95, 347,2783),
+    ABYSSAL_DEMON(Difficulty.HARD, 85, 240, 2783),
+    GARGOYLE(Difficulty.HARD, 75, 190, 1610),
+    STEEL_DRAGON(Difficulty.HARD, 1, 263, 1592),
 
     /** Medium tasks  */
-     FIRE_GIANT(Difficulty.MEDIUM, 42, 753, 1582),
-     BLOOD_VELD(Difficulty.MEDIUM, 50, 877, 6215, 1618, 1619),
-     JELLY(Difficulty.MEDIUM, 52, 702, 1637),
-     BLUE_DRAGON(Difficulty.MEDIUM, 24, 1205, 55),
+     FIRE_GIANT(Difficulty.MEDIUM, 1, 353, 1582),
+     BLOOD_VELD(Difficulty.MEDIUM, 50, 277, 6215, 1618, 1619),
+     JELLY(Difficulty.MEDIUM, 52, 102, 1637),
+     BLUE_DRAGON(Difficulty.MEDIUM, 1, 205, 55),
 
     /** Easy tasks */
 
-    SKELETON(Difficulty.EASY, 1, 190, 89,459),
-    EXPERIMENT(Difficulty.EASY, 1, 190, 1678, 1677),
-    ROCK_CRAB(Difficulty.EASY, 1, 311, 1265,1266),
-    CHAOS_DRUID(Difficulty.EASY, 1, 172, 181),
-    GIANT_BAT(Difficulty.EASY, 1, 126, 78);
+    SKELETON(Difficulty.EASY, 1, 34, 89,459),
+    EXPERIMENT(Difficulty.EASY, 1, 42, 1678, 1677),
+    ROCK_CRAB(Difficulty.EASY, 1, 57, 1265,1266),
+    CHAOS_DRUID(Difficulty.EASY, 1, 60, 181),
+    GIANT_BAT(Difficulty.EASY, 1, 35, 78);
 
     private final Difficulty difficulty;
     private final int slayerLevel, slayerXP;

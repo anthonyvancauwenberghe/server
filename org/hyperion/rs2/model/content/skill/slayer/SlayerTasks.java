@@ -13,18 +13,75 @@ import java.util.List;
  * Time: 8:48 AM
  * To change this template use File | Settings | File Templates.
  */
+	/*
+	private static int[] level100 = {269, 749, 84, 1590, 1591, 1592, 55,};
+	private static int[] level70 = {4381, 110, 3026, 3027, 3028, 6285, 52, 82, 83,};
+	private static int[] level40 = {110, 1976, 125, 111, 117, 112, 119,};
+	private static int[] level20 = {1265, 103, 125, 111, 117, 112,};
+	private static int[] level3 = {1265, 103,};
+
+	monsterForLevel.put(84, (byte) 1); // Black demons
+		monsterForLevel.put(54, (byte) 1); // Black dragons
+		monsterForLevel.put(55, (byte) 1); // Blue dragons
+		monsterForLevel.put(1582, (byte) 1); // Fire giants
+		monsterForLevel.put(6218, (byte) 1); // Goraks
+		monsterForLevel.put(83, (byte) 1); // Greater demons
+		monsterForLevel.put(6210, (byte) 1); // Hellhounds
+		monsterForLevel.put(1591, (byte) 1); // Iron dragons
+		monsterForLevel.put(5363, (byte) 1); // Mithril dragons
+		monsterForLevel.put(1592, (byte) 1); // Steel dragons
+		monsterForLevel.put(5361, (byte) 1); // Waterfiends
+		monsterForLevel.put(6215, (byte) 50); // Bloodvelds
+		monsterForLevel.put(1618, (byte) 50); // Bloodvelds
+		monsterForLevel.put(1619, (byte) 50); // Bloodvelds
+		monsterForLevel.put(1637, (byte) 52); // Jellies
+		monsterForLevel.put(1607, (byte) 60); // Aberrant spectres
+		monsterForLevel.put(1624, (byte) 65); // Dust devils (drops dragon chain)
+		monsterForLevel.put(3068, (byte) 72); // Skeletal wyverns (drops dragonic visage)
+		monsterForLevel.put(1610, (byte) 75); // Gargoyles (drops granite maul)
+		monsterForLevel.put(1613, (byte) 80); // Nechryael (drops black mask)
+		monsterForLevel.put(6221, (byte) 83); // Spiritual mages (drops d boots)
+		monsterForLevel.put(6231, (byte) 83); // Spiritual mages (drops d boots)
+		monsterForLevel.put(6257, (byte) 83); // Spiritual mages (drops d boots)
+		monsterForLevel.put(6278, (byte) 83); // Spiritual mages (drops d boots)
+		monsterForLevel.put(1615, (byte) 85); // Abyssal demons (drops whips)
+		monsterForLevel.put(2783, (byte) 90); // Dark beast (drops dark bow) */
 public enum SlayerTasks {
-    //ELITE TASKS
-    //Tormented Demons
-    //Corp Beast
-    //Chaos Ele
-    //Daggy Kings
-    ;
+
+    /** The elite tasks */
+    TORMENTED_DEMON(Difficulty.ELITE, 87, 6349, 8349),
+    MITHRIL_DRAGON(Difficulty.ELITE, 82, 5220, 5363),
+    ICE_WYRM(Difficulty.ELITE, 82, 5220, 9463),
+    KING_BLACK_DRAGON(Difficulty.ELITE, 92, 7220, 50),
+
+    /** The hard tasks */
+    BLACK_DEMON(Difficulty.HARD, 60, 1700, 84),
+    GORAK(Difficulty.HARD, 68, 1200, 6218),
+    HELL_HOUND(Difficulty.HARD, 77, 1109, 6210),
+    DARK_BEAST(Difficulty.HARD, 95, 3471, 6210),
+    ABYSSAL_DEMON(Difficulty.HARD, 85, 2405, 2783),
+    GARGOYLE(Difficulty.HARD, 75, 1905, 1610),
+    STEEL_DRAGON(Difficulty.HARD, 81, 2632, 1592),
+
+    /** Medium tasks  */
+     FIRE_GIANT(Difficulty.MEDIUM, 42, 753, 1582),
+     BLOOD_VELD(Difficulty.MEDIUM, 50, 877, 6215, 1618, 1619),
+     JELLY(Difficulty.MEDIUM, 52, 702, 1637),
+     BLUE_DRAGON(Difficulty.MEDIUM, 24, 1205, 55),
+
+    /** Easy tasks */
+
+    SKELETON(Difficulty.EASY, 1, 190, 89,459),
+    EXPERIMENT(Difficulty.EASY, 1, 190, 1678, 1677),
+    ROCK_CRAB(Difficulty.EASY, 1, 311, 1265,1266),
+    CHAOS_DRUID(Difficulty.EASY, 1, 172, 181),
+    GIANT_BAT(Difficulty.EASY, 1, 126, 78);
 
     private final Difficulty difficulty;
     private final int slayerLevel, slayerXP;
     private final List<Integer> ids = new ArrayList<>();
     private static final int EXP_MULTIPLIER = 3;
+
     private SlayerTasks(final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
         this.difficulty = difficulty;
         this.slayerLevel = slayerLevel;
@@ -105,39 +162,3 @@ public enum SlayerTasks {
     }
 
 }
-
-
-//reference these for tasks
-	/*
-	private static int[] level100 = {269, 749, 84, 1590, 1591, 1592, 55,};
-	private static int[] level70 = {4381, 110, 3026, 3027, 3028, 6285, 52, 82, 83,};
-	private static int[] level40 = {110, 1976, 125, 111, 117, 112, 119,};
-	private static int[] level20 = {1265, 103, 125, 111, 117, 112,};
-	private static int[] level3 = {1265, 103,};
-
-	monsterForLevel.put(84, (byte) 1); // Black demons
-		monsterForLevel.put(54, (byte) 1); // Black dragons
-		monsterForLevel.put(55, (byte) 1); // Blue dragons
-		monsterForLevel.put(1582, (byte) 1); // Fire giants
-		monsterForLevel.put(6218, (byte) 1); // Goraks
-		monsterForLevel.put(83, (byte) 1); // Greater demons
-		monsterForLevel.put(6210, (byte) 1); // Hellhounds
-		monsterForLevel.put(1591, (byte) 1); // Iron dragons
-		monsterForLevel.put(5363, (byte) 1); // Mithril dragons
-		monsterForLevel.put(1592, (byte) 1); // Steel dragons
-		monsterForLevel.put(5361, (byte) 1); // Waterfiends
-		monsterForLevel.put(6215, (byte) 50); // Bloodvelds
-		monsterForLevel.put(1618, (byte) 50); // Bloodvelds
-		monsterForLevel.put(1619, (byte) 50); // Bloodvelds
-		monsterForLevel.put(1637, (byte) 52); // Jellies
-		monsterForLevel.put(1607, (byte) 60); // Aberrant spectres
-		monsterForLevel.put(1624, (byte) 65); // Dust devils (drops dragon chain)
-		monsterForLevel.put(3068, (byte) 72); // Skeletal wyverns (drops dragonic visage)
-		monsterForLevel.put(1610, (byte) 75); // Gargoyles (drops granite maul)
-		monsterForLevel.put(1613, (byte) 80); // Nechryael (drops black mask)
-		monsterForLevel.put(6221, (byte) 83); // Spiritual mages (drops d boots)
-		monsterForLevel.put(6231, (byte) 83); // Spiritual mages (drops d boots)
-		monsterForLevel.put(6257, (byte) 83); // Spiritual mages (drops d boots)
-		monsterForLevel.put(6278, (byte) 83); // Spiritual mages (drops d boots)
-		monsterForLevel.put(1615, (byte) 85); // Abyssal demons (drops whips)
-		monsterForLevel.put(2783, (byte) 90); // Dark beast (drops dark bow) */

@@ -5,6 +5,8 @@ import org.hyperion.rs2.model.Entity;
 import org.hyperion.rs2.model.Graphic;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.summoning.AbstractSummoningSpecial;
 
@@ -17,7 +19,7 @@ public final class PackYak extends AbstractSummoningSpecial {
 	}
 	@Override
 	public int requiredSpecial() {
-		return 50;
+		return 0;
 	}
 
 	@Override
@@ -27,23 +29,17 @@ public final class PackYak extends AbstractSummoningSpecial {
 	}
 
 	@Override
-	public int getScrollId() {
-		return 12435;
-	}
+	public int getScrollId() { return -1; }
 
 	@Override
 	public boolean checkRequirements(Player p) {
-		if(!p.getInventory().contains(getScrollId()))
-			return false;
+        this.execute(p);
 		return true;
 	}
 
 	@Override
 	public void execute(Player player) {
-		player.playGraphics(Graphic.create(1316, 0));
-		player.playAnimation(Animation.create(7660));
-        int amount = player.getInventory().remove(slot, Item.create(usedWith));
-        player.getBank().add(Item.create(usedWith, amount));
+
 	}
 
 	@Override

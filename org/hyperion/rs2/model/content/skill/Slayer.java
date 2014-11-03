@@ -40,9 +40,9 @@ public class Slayer implements ContentTemplate {
             int slayerXP = player.getSlayerTask().killedTask(npcId);
             if(slayerXP > 0) {
                 ContentEntity.addSkillXP(player, slayerXP, Skills.SLAYER);
-            }
-            if(player.getSlayerTask().getTaskAmount() == 0) {
-                player.sendf("You have completed %d tasks in a row and have %d slayer points", player.getSlayerTask().getTotalTasks(),player.getSlayerTask().getSlayerPoints());
+                if(player.getSlayerTask().getTaskAmount() == 0) {
+                    player.sendf("You have completed %d tasks in a row and have %d slayer points", player.getSlayerTask().getTotalTasks(),player.getSlayerTask().getSlayerPoints());
+                }
             }
             return false;
         }
@@ -65,10 +65,7 @@ public class Slayer implements ContentTemplate {
 			return j;
 		}
         if(type == ClickType.NPC_DEATH)  {
-            int[] slayerTasks = SlayerTask.getTasks();
-            for(int i : slayerTasks)
-                System.out.println("Task: "+i);
-            System.out.println("reached");
+
             return SlayerTask.getTasks();
         }
         return null;

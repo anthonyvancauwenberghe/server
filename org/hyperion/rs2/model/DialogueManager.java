@@ -1156,7 +1156,7 @@ public class DialogueManager {
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 177:
-                ShopManager.open(player, 76);
+                ShopManager.open(player, 77);
                 break;
 			default:
 				player.getActionSender().removeChatboxInterface();

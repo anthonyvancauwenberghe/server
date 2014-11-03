@@ -139,7 +139,7 @@ public enum SlayerTask {
     public static final int[] getTasks() {
         final List<Integer> list = new ArrayList<>();
         for(final SlayerTask tasks : SlayerTask.values()) {
-            for(final int i : list)
+            for(final int i : tasks.ids)
                 list.add(i);
         }
         final int[] n = new int[list.size()];

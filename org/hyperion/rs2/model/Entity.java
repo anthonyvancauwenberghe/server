@@ -17,6 +17,7 @@ import java.util.Set;
  * Represents a character in the game world, i.e. a <code>Player</code> or
  * an <code>NPC</code>.
  *
+ *
  * @author Graham Edgecombe
  */
 public abstract class Entity {

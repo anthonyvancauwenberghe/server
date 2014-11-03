@@ -275,6 +275,7 @@ public class Food implements ContentTemplate {
         player.comboFoodTimer = System.currentTimeMillis();
        // player.potionTimer = System.currentTimeMillis();
         player.getActionSender().sendMessage("You eat the "+foodName+".");
+        return;
 
     }
 	private void saraBrew(Player client) {

@@ -753,6 +753,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean autoRetailate = true;
 
 	public long foodTimer = System.currentTimeMillis();
+    public long comboFoodTimer = System.currentTimeMillis();
 	public long specPotionTimer = 0;
     public long chargeTill;
     private boolean chargeSpell;

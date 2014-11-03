@@ -28,6 +28,8 @@ public class Food implements ContentTemplate {
 
 	private static List<FoodItem> foods;
 
+    /** Holds the item ids of combo foods.*/
+    public static final int[] COMBO_FOODS = {3144, 2185};
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -95,9 +97,24 @@ public class Food implements ContentTemplate {
 	@Override
 	public boolean clickObject(final Player player, final int type, final int id, final int slot, final int c, final int d) {
 		final FoodItem foodItem = get(id);
-		if(foodItem == null) return false;
+
+        if(System.currentTimeMillis() - (player.comboFoodTimer) < 1500 || player.isDead())
+            return true;
+            for (int comboFood : COMBO_FOODS)
+                switch (id) {
+                    case 3144:
+                        eatComboFood(player, slot, id, 18, "cooked karambwan");
+                        break;
+                    case 2185:
+                        eatComboFood(player, slot, id, 18, "chocolate bomb");
+                        break;
+        }
+			if(foodItem == null)
+                return false;
 		//TODO FIX THE MASSING
 		player.cE.deleteSpellAttack();
+        /** Combo food eating */
+
 		if(System.currentTimeMillis() - (! foodItem.isDrink() ? player.foodTimer : player.potionTimer) < 1500 || player.isDead())
 			return true;
 		if(! ContentEntity.isItemInBag(player, id, slot)) return true;
@@ -114,12 +131,13 @@ public class Food implements ContentTemplate {
 				player.getActionSender().sendMessage("You cannot use drinks in this duel.");
 				return true;
 			}
+
 			player.foodTimer = System.currentTimeMillis();
-			player.potionTimer = System.currentTimeMillis();
 		}
 
 		boolean doAnim = true;
 		switch(foodItem.getId()) {
+
 		case 15272:
 			rocktail(player, slot);
 			return true;
@@ -182,6 +200,7 @@ public class Food implements ContentTemplate {
 		}
 		if(foodItem.isDrink()) {
 			ContentEntity.sendMessage(player, "You drink the " + ItemDefinition.forId(id).getName() + ".");
+            player.potionTimer = System.currentTimeMillis();
 		} else {
 			ContentEntity.sendMessage(player, "You eat the " + ItemDefinition.forId(id).getName() + ".");
 		}
@@ -243,6 +262,15 @@ public class Food implements ContentTemplate {
 		ContentEntity.deleteItem(player, 15272, slot, 1);
 	}
 
+    private void eatComboFood(Player player, int slot, int id, int healAmt, String foodName) {
+        int heal = healAmt;
+        player.heal(heal, true);
+        player.getActionSender().sendMessage("You eat the "+foodName+".");
+        ContentEntity.startAnimation(player, ANIMATION_EAT_ID);
+        ContentEntity.deleteItem(player, id, slot, 1);
+        player.comboFoodTimer = System.currentTimeMillis();
+       // player.potionTimer = System.currentTimeMillis();
+    }
 	private void saraBrew(Player client) {
 		final int newDefLevel = (int) (0.25 * ContentEntity.getLevelForXP(client, 1));
 		final int newHpLevel = (int) (0.15 * client.getSkills().calculateMaxLifePoints());

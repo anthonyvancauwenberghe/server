@@ -49,7 +49,6 @@ public final class SummoningSpecial {
                     int index2 = -1;
                     for (Item item : p.getBoB().toArray()) {
                         index2++;
-                        if (item != null)
                             BoB.withdraw(p, index2, item.getId(), item.getCount());
                             p.playAnimation(Animation.create(7270));
                         if (p.getInventory().freeSlots() == 0)

@@ -43,6 +43,7 @@ import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTaskHolder;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
@@ -1466,6 +1467,16 @@ public class Player extends Entity implements Persistable, Cloneable{
 			if(n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE))
 				npc = false;
 		}
+
+        /** The phoenix necklace effect. */
+        if (Combat.usingPhoenixNecklace(this)) {
+            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 3)) {
+                getEquipment().set(Equipment.SLOT_AMULET, null);
+                heal((int) Math.floor(this.getSkills().calculateMaxLifePoints() / 5.5));
+                ContentEntity.playerGfx(this, 436);
+                sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
+            }
+        }
 		//getActionSender().sendMessage("Generated damg: " + damg + ", npc: " + npc + ", style = " + style);
 		int trueStyle = style;
 		if(trueStyle >= 5)

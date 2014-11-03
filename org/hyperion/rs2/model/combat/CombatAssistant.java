@@ -915,9 +915,16 @@ public class CombatAssistant {
 		return false;
 	}
 
+    /**
+     * farseer
+     * @param player
+     * @return
+     */
     public static boolean wearingFarseer(Player player) {
-        if (player.getEquipment().get(Equipment.SLOT_SHIELD).getId() == 18363)
-        return true;
+        if(player.getEquipment().get(Equipment.SLOT_SHIELD) == null)
+            return false;
+        if(player.getEquipment().get(Equipment.SLOT_SHIELD).getId() == 18363)
+            return true;
         return false;
     }
 
@@ -1045,6 +1052,7 @@ public class CombatAssistant {
 		int rangedBoosted = p.getSkills().getLevel(4);
 		int rangedLevel = p.getSkills().getLevelForExp(4);
 		int rangedStr = 0;
+
 		if(CombatAssistant.getCombatStyle(p.cE) == Constants.RANGEDWEPSTYPE)
 			rangedStr = getRangeStr(p.getEquipment().get(Equipment.SLOT_WEAPON)
 					.getId());

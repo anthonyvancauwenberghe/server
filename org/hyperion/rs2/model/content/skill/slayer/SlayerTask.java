@@ -49,7 +49,7 @@ import java.util.List;
 public enum SlayerTask {
 
     /** The elite tasks */
-    GENERAL_GRAARDOR(27, Difficulty.ELITE, 1, 1100, 6600),
+    GENERAL_GRAARDOR(27, Difficulty.ELITE, 1, 1100, 6260),
     CORPOREAL_BEAST(22, Difficulty.ELITE, 1, 1700, 8133),
     TORMENTED_DEMON(1,Difficulty.ELITE, 1, 634, 8349),
     MITHRIL_DRAGON(2, Difficulty.ELITE, 1, 522, 5363),
@@ -74,6 +74,7 @@ public enum SlayerTask {
     BLACK_DRAGON(29, Difficulty.HARD, 1, 490, 54),
 
     /** Medium tasks  */
+    ORK(30, Difficulty.DIFFICULT, 1, 320, 6272),
     GREATER_DEMON(26, Difficulty.DIFFICULT, 1, 210, 83),
     JELLY(14,Difficulty.DIFFICULT, 52, 102,
             1637),

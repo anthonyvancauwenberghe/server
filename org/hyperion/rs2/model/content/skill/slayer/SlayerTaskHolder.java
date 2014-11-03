@@ -46,6 +46,7 @@ public class SlayerTaskHolder {
         if(slayerPoints < 20)
             return false;
         slayerPoints -= 20;
+        taskAmount = 0;
         return true;
     }
 

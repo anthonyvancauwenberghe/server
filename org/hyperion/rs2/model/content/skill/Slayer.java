@@ -27,6 +27,9 @@ public class Slayer implements ContentTemplate {
     @Override
     public boolean clickObject(final Player player, final int type, final int npcId, final int slot, final int objId, final int a) {
         if(type == ClickType.EAT) { //slayer gem
+            player.sendMessage("You have "+player.getSlayerTask().getTaskAmount()+ " "+player.getSlayerTask().getTask()+" npcs left to kill",
+                    "You have "+player.getSlayerTask().getSlayerPoints()+" slayer points",
+                    "You have completed "+player.getSlayerTask().getTotalTasks()+ " tasks");
             return true;
         }
         if(type == ClickType.NPC_OPTION1) { // talk to slayer masker
@@ -61,8 +64,13 @@ public class Slayer implements ContentTemplate {
 			int[] j = {SLAYER_GEM,};
 			return j;
 		}
-        if(type == ClickType.NPC_DEATH)
+        if(type == ClickType.NPC_DEATH)  {
+            int[] slayerTasks = SlayerTask.getTasks();
+            for(int i : slayerTasks)
+                System.out.println("Task: "+i);
+            System.out.println("reached");
             return SlayerTask.getTasks();
+        }
         return null;
 	}
 

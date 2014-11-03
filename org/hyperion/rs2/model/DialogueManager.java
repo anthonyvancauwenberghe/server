@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
@@ -1126,6 +1127,37 @@ public class DialogueManager {
 					Magic.teleport(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), false);
 				}
 				break;
+            case 174:
+                player.getActionSender().sendDialogue("", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+                        "Get slayer task",
+                        "Remove Slayer Task (20 points)",
+                        "Open Shop"
+                );
+
+                player.getInterfaceState().setNextDialogueId(0, 175);
+                player.getInterfaceState().setNextDialogueId(1, 176);
+                player.getInterfaceState().setNextDialogueId(2, 177);
+                break;
+            case 175:
+                final String toDisplay;
+                if(player.getSlayerTask().assignTask(player.getSkills().getRealLevels()[Skills.SLAYER]))
+                    toDisplay = String.format("You have %d %s to kill!", player.getSlayerTask().getTaskAmount(), player.getSlayerTask().getTask());
+                else
+                     toDisplay = String.format("You still have %d %s to kill", player.getSlayerTask().getTaskAmount(), player.getSlayerTask().getTask() );
+                player.getActionSender().sendDialogue("Slayer Master", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT,
+                       toDisplay);
+
+                break;
+            case 176:
+                if(player.getSlayerTask().resetTask())
+                    player.sendMessage("Your task has been successfully reset!");
+                else
+                    player.sendMessage("You need more slayer points to reset your task");
+                player.getActionSender().removeChatboxInterface();
+                break;
+            case 177:
+                ShopManager.open(player, 76);
+                break;
 			default:
 				player.getActionSender().removeChatboxInterface();
 				break;

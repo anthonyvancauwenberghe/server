@@ -42,6 +42,13 @@ public class SlayerTaskHolder {
         return 0;
     }
 
+    public boolean resetTask() {
+        if(slayerPoints < 20)
+            return false;
+        slayerPoints -= 20;
+        return true;
+    }
+
     public int handleTotalTasks() {
         int pointsToAdd =0;
         if(totalTasks%250 == 0)
@@ -54,6 +61,26 @@ public class SlayerTaskHolder {
             pointsToAdd = 20;
         return pointsToAdd;
 
+    }
+
+    public void load(final String string) {
+        try {
+            final String[] split = string.split(",");
+            task = SlayerTask.load(Integer.parseInt(split[0]));
+            taskAmount = Integer.parseInt(split[1]);
+            slayerPoints = Integer.parseInt(split[2]);
+            totalTasks = Integer.parseInt(split[3]);
+        } catch (Exception e) { //fail safe
+            e.printStackTrace();
+        }
+    }
+
+    public void setPoints(int value) {
+        slayerPoints = value;
+    }
+
+    @Override public String toString() {
+        return String.format("%d,%d,%d,%d", task == null ? -1 : task.getId(), taskAmount, slayerPoints, totalTasks);
     }
 
     public int getTotalTasks() {

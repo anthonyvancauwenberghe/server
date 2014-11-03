@@ -49,43 +49,44 @@ import java.util.List;
 public enum SlayerTask {
 
     /** The elite tasks */
-    TORMENTED_DEMON(Difficulty.ELITE, 1, 634, 8349),
-    MITHRIL_DRAGON(Difficulty.ELITE, 1, 522, 5363),
-    ICE_WYRM(Difficulty.ELITE, 1, 522, 9463),
-    KING_BLACK_DRAGON(Difficulty.ELITE, 1, 722, 50),
+    TORMENTED_DEMON(1,Difficulty.ELITE, 1, 634, 8349),
+    MITHRIL_DRAGON(2, Difficulty.ELITE, 1, 522, 5363),
+    KING_BLACK_DRAGON(3, Difficulty.ELITE, 1, 722, 50),
 
     /** The hard tasks */
-    BLACK_DEMON(Difficulty.HARD, 1, 170, 84),
-    GORAK(Difficulty.HARD, 68, 120, 6218),
-    HELL_HOUND(Difficulty.HARD, 1, 119, 6210),
-    DARK_BEAST(Difficulty.HARD, 95, 347,2783),
-    ABYSSAL_DEMON(Difficulty.HARD, 85, 240, 2783),
-    GARGOYLE(Difficulty.HARD, 75, 190, 1610),
-    STEEL_DRAGON(Difficulty.HARD, 1, 263, 1592),
+    BLACK_DEMON(4,Difficulty.HARD, 1, 170, 84),
+    GORAK(5, Difficulty.HARD, 68, 120, 6218),
+    HELL_HOUND(6,Difficulty.HARD, 1, 119, 6210),
+    DARK_BEAST(7,Difficulty.HARD, 95, 347,2783),
+    ABYSSAL_DEMON(8,Difficulty.HARD, 85, 240, 2783),
+    GARGOYLE(9,Difficulty.HARD, 75, 190, 1610),
+    STEEL_DRAGON(10,Difficulty.HARD, 1, 263, 1592),
+    ICE_WYRM(11,Difficulty.HARD, 1, 522, 9463),
 
     /** Medium tasks  */
-     FIRE_GIANT(Difficulty.MEDIUM, 1, 353, 1582),
-     BLOOD_VELD(Difficulty.MEDIUM, 50, 277, 6215, 1618, 1619),
-     JELLY(Difficulty.MEDIUM, 52, 102, 1637),
-     BLUE_DRAGON(Difficulty.MEDIUM, 1, 205, 55),
+     FIRE_GIANT(12,Difficulty.MEDIUM, 1, 353, 1582),
+     BLOOD_VELD(13,Difficulty.MEDIUM, 50, 277, 6215, 1618, 1619),
+     JELLY(14,Difficulty.MEDIUM, 52, 102, 1637),
+     BLUE_DRAGON(15,Difficulty.MEDIUM, 1, 205, 55),
 
     /** Easy tasks */
 
-    SKELETON(Difficulty.EASY, 1, 34, 89,459),
-    EXPERIMENT(Difficulty.EASY, 1, 42, 1678, 1677),
-    ROCK_CRAB(Difficulty.EASY, 1, 57, 1265,1266),
-    CHAOS_DRUID(Difficulty.EASY, 1, 60, 181),
-    GIANT_BAT(Difficulty.EASY, 1, 35, 78);
+    SKELETON(16,Difficulty.EASY, 1, 34, 89,459),
+    EXPERIMENT(17,Difficulty.EASY, 1, 42, 1678, 1677),
+    ROCK_CRAB(18,Difficulty.EASY, 1, 57, 1265,1266),
+    CHAOS_DRUID(19,Difficulty.EASY, 1, 60, 181),
+    GIANT_BAT(20,Difficulty.EASY, 1, 35, 78);
 
     private final Difficulty difficulty;
-    private final int slayerLevel, slayerXP;
+    private final int slayerLevel, slayerXP, index;
     private final List<Integer> ids = new ArrayList<>();
     private static final int EXP_MULTIPLIER = 3;
 
-    private SlayerTask(final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
+    private SlayerTask(final int index,final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
         this.difficulty = difficulty;
         this.slayerLevel = slayerLevel;
         this.slayerXP = slayerXP * EXP_MULTIPLIER;
+        this.index = index;
         for(int i : ids)
             this.ids.add(i);
     }
@@ -93,6 +94,7 @@ public enum SlayerTask {
     public Difficulty getDifficulty() { return difficulty; }
     public List<Integer> getIds() { return ids; }
     public int getXP() { return slayerXP; }
+    public int getId() { return index; }
 
     public static SlayerTask forLevel(final int slayerLevel) {
         final SlayerTask task = values()[Misc.random(values().length - 1)];
@@ -104,8 +106,9 @@ public enum SlayerTask {
     static enum Difficulty {
         EASY(10, 40, 0, 4),
         MEDIUM(20, 80, 26, 6),
-        HARD(60, 150, 50, 8),
-        ELITE(5, 10, 75, 8);
+        DIFFICULT(40, 100, 50, 7),
+        HARD(60, 150, 75, 8),
+        ELITE(5, 10, 99, 8);
 
         private final int minAmount, maxAmount, slayerLevel, slayerPoints;
         private Difficulty(final int minAmount, final int maxAmount, final int slayerLevel, final int slayerPoints) {
@@ -151,6 +154,13 @@ public enum SlayerTask {
             if(task.ids.contains(npcID))
                 return task;
         }
+        return null;
+    }
+
+    public static SlayerTask load(final int index) {
+        for(SlayerTask task : SlayerTask.values())
+            if(index == task.index)
+                return task;
         return null;
     }
 

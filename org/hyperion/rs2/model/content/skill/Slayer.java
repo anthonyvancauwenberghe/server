@@ -30,8 +30,7 @@ public class Slayer implements ContentTemplate {
             return true;
         }
         if(type == ClickType.NPC_OPTION1) { // talk to slayer masker
-            if(player.getSlayerTask().assignTask(player.getSkills().getRealLevels()[Skills.SLAYER]))
-                player.sendf("You still have %d %s to kill!", player.getSlayerTask().getTaskAmount(), player.getSlayerTask().getTask());
+            DialogueManager.openDialogue(player, 174);
             return true;
         }
         if(type == ClickType.NPC_DEATH) {

@@ -648,7 +648,10 @@ public class ShopManager {
 					shop = new CurrencyShop(shopId, shopName, shopContainer, Shop.COINS_ID, false);
 				} else if(type.contains("tzhaar")) {
 					shop = new CurrencyShop(shopId, shopName, shopContainer, 6529, false);
-				}
+				} else if(type.contains("slayer")) {
+                    shop = new SlayerShop(shopId, shopName
+                    , shopContainer);
+                }
 				for(int i = 3; i < parts.length; i++) {
 					String part = parts[i];
 					part = part.trim();

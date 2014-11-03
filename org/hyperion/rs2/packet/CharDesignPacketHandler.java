@@ -61,7 +61,7 @@ public class CharDesignPacketHandler implements PacketHandler {
 		 */
 		for(int i = 0; i < ALLOWED_COLORS.length; i++) {
 			int value = packet.getByte();
-			value = Boundary.checkBounds(value, ALLOWED_COLORS[i]);
+			//value = Boundary.checkBounds(value, ALLOWED_COLORS[i]);
 			look[i + 1 + MALE_VALUES.length] = value;
 		}
 		/**

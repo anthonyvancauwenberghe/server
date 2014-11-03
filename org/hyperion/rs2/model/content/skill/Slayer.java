@@ -68,6 +68,7 @@ public class Slayer implements ContentTemplate {
             int[] slayerTasks = SlayerTask.getTasks();
             for(int i : slayerTasks)
                 System.out.println("Task: "+i);
+            System.out.println("reached");
             return SlayerTask.getTasks();
         }
         return null;

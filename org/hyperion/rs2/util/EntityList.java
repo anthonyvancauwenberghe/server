@@ -35,13 +35,6 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		entities = new Entity[capacity + 1]; // do not use idx 0
 	}
 
-	/**
-	 * Gets an entity.
-	 *
-	 * @param index The index.
-	 * @return The entity.
-	 * @throws IndexOutOufBoundException if the index is out of bounds.
-	 */
 	public Entity get(int index) {
 		if(index <= 0 || index >= entities.length) {
 			throw new IndexOutOfBoundsException("Index : " + index);
@@ -152,13 +145,8 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		}
 		return false;
 	}
-	/**
-	 * Ensures that players do not surpass unregister2 method to be removed
-	 * @param player The player to be removed
-	 * @param force If the player will actually be removed
-	 * @return false if either the method is called where it shouldn't be or if it fails
-	 */
-	/*public boolean remove(Player player, boolean force) {
+
+	public boolean remove(Player player, boolean force) {
 		if(force) {	
 			for(int i = 1; i < entities.length; i++) {
 				if(entities[i] == player) {
@@ -173,7 +161,7 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 			World.getWorld().unregister(player);
 		}
 		return false;
-	}*/
+	}
 
 	@Override
 	public boolean removeAll(Collection<?> arg0){

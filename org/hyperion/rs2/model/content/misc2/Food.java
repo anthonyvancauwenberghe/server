@@ -98,24 +98,27 @@ public class Food implements ContentTemplate {
 	public boolean clickObject(final Player player, final int type, final int id, final int slot, final int c, final int d) {
 		final FoodItem foodItem = get(id);
 
+        /** Combo food eating */
         if(System.currentTimeMillis() - (player.comboFoodTimer) < 1500 || player.isDead())
             return true;
-            for (int comboFood : COMBO_FOODS)
-                switch (id) {
-                    case 3144:
-                        eatComboFood(player, slot, id, 18, "cooked karambwan");
-                        break;
-                    case 2185:
-                    case 2229:
-                    case 9553:
-                        eatComboFood(player, slot, id, 15, "chocolate bomb");
-                        break;
-        }
+            for (int comboFood : COMBO_FOODS) {
+                if (id == comboFood) {
+                    switch (id) {
+                        case 3144:
+                            eatComboFood(player, slot, id, 18, "cooked karambwan");
+                            break;
+                        case 2185:
+                        case 2229:
+                        case 9553:
+                            eatComboFood(player, slot, id, 15, "chocolate bomb");
+                            break;
+                    }
+                }
+            }
 			if(foodItem == null)
                 return false;
 		//TODO FIX THE MASSING
 		player.cE.deleteSpellAttack();
-        /** Combo food eating */
 
 		if(System.currentTimeMillis() - (! foodItem.isDrink() ? player.foodTimer : player.potionTimer) < 1500 || player.isDead())
 			return true;
@@ -267,11 +270,12 @@ public class Food implements ContentTemplate {
     private void eatComboFood(Player player, int slot, int id, int healAmt, String foodName) {
         int heal = healAmt;
         player.heal(heal, true);
-        player.getActionSender().sendMessage("You eat the "+foodName+".");
         ContentEntity.startAnimation(player, ANIMATION_EAT_ID);
         ContentEntity.deleteItem(player, id, slot, 1);
         player.comboFoodTimer = System.currentTimeMillis();
        // player.potionTimer = System.currentTimeMillis();
+        player.getActionSender().sendMessage("You eat the "+foodName+".");
+
     }
 	private void saraBrew(Player client) {
 		final int newDefLevel = (int) (0.25 * ContentEntity.getLevelForXP(client, 1));

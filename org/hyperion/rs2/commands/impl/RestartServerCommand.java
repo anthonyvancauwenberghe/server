@@ -10,6 +10,7 @@ import org.hyperion.util.Time;
 public class RestartServerCommand extends Command {
 
 	public static final long MINIMUM_MINUTES_UPTIME = Time.FIVE_TEEN_HOURS;
+
 	public static final int UPDATE_TIMER = 150;
 
 	public RestartServerCommand() {

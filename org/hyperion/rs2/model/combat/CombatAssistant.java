@@ -915,7 +915,13 @@ public class CombatAssistant {
 		return false;
 	}
 
-	public static boolean fullVoidMage(Player player) {
+    public static boolean wearingFarseer(Player player) {
+        if (player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840)
+        return true;
+        return false;
+    }
+
+    public static boolean fullVoidMage(Player player) {
 		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
 				|| player.getEquipment().get(Equipment.SLOT_GLOVES) == null
 				|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
@@ -1239,8 +1245,7 @@ public class CombatAssistant {
 	}
 
 	/**
-	 * @param player
-	 * @return Melee Defence
+     * @return Melee Defence
 	 */
 	public static int calculateMeleeDefence(Entity entity) {
 		if(entity instanceof Player) {

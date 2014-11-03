@@ -105,9 +105,7 @@ public class Combat {
 		 * Degrading
 		 */
 		PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
-		/**
-		 * Magic Combat
-		 */
+
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
 			if(distance > 10) {
@@ -276,8 +274,6 @@ public class Combat {
 					combatEntity.getPlayer().getActionSender().resetFollow();
 					combatEntity.getPlayer().getWalkingQueue().reset();
 				}
-
-
 				int arrowType = CombatAssistant.getArrowType(arrowId);
 				maxHit = CombatAssistant.calculateRangeMaxHit(combatEntity.getPlayer());
 				int wepId = 0;
@@ -543,7 +539,6 @@ public class Combat {
 		final CombatEntity opponent = combatEntity.getOpponent();
 		opponent.lastHit = System.currentTimeMillis();
 		int delay = 300 + distance * 200;
-
 		//Auto kill ring :p
 		if(combatEntity.getEntity() instanceof Player) {
 			Player player = ((Player)combatEntity.getEntity());
@@ -565,6 +560,8 @@ public class Combat {
 				damgDoubl = opponent.getPlayer().getInflictDamage(damgDoubl, combatEntity.getEntity(), false, combatStyle);
             if(combatEntity.getEntity() instanceof Player)
                 opponent.getPlayer().getLastAttack().updateLastAttacker(combatEntity.getPlayer().getName());
+
+
 		}
 		final int damgDouble = damgDoubl;
 		final int damage = damg;
@@ -625,7 +622,7 @@ public class Combat {
 						Magic.recoil(opponent.getPlayer(), combatEntity, actualDoubleHit);
 					}
 				}
-				
+
 				/**
 				 * Soulsplit.
 				 */
@@ -656,6 +653,7 @@ public class Combat {
 						opponent.summonedNpc.setInteractingEntity(combatEntity.getEntity());
 					}
 				}
+
 				this.stop();
 			}
 		});
@@ -1285,6 +1283,13 @@ public class Combat {
 		}
 	}
 
+    public static boolean usingPhoenixNecklace(Player player) {
+        if(player.getEquipment().get(Equipment.SLOT_AMULET) == null)
+            return false;
+        if(player.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11090)
+            return true;
+        return false;
+    }
 	public static boolean isGuthanEquiped(Player player) {
 		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
 				|| player.getEquipment().get(Equipment.SLOT_WEAPON) == null

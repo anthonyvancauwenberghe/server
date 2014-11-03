@@ -916,7 +916,7 @@ public class CombatAssistant {
 	}
 
     public static boolean wearingFarseer(Player player) {
-        if (player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840)
+        if (player.getEquipment().get(Equipment.SLOT_SHIELD).getId() == 18363)
         return true;
         return false;
     }

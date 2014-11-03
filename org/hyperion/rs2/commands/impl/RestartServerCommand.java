@@ -19,7 +19,6 @@ public class RestartServerCommand extends Command {
 
 	@Override
 	public boolean execute(Player player, String input) {
-        player.sendMessage("excecuted");
 		if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME &&  !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			player.getActionSender().sendMessage("Minimum uptime hasn't been reached yet.");
 			return false;

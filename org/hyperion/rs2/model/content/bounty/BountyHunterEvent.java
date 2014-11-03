@@ -15,7 +15,7 @@ public class BountyHunterEvent extends Event{
 		super(Time.ONE_MINUTE);
 	}
 	
-	private int counter = 10;
+	private int counter = 7;
 	
 	public void execute() {
 		counter--;

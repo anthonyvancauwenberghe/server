@@ -195,6 +195,14 @@ public class Magic {
 			attacker.getPlayer().debugMessage("Attack bonus with void: "+AtkBonus);
 			maxDamg *= 1.05;
 		}
+            /** Farseer shield*/
+            if(attacker.getEntity() instanceof Player &&
+                    ((Player) attacker.getEntity()).getEquipment().get(Equipment.SLOT_HELM).getId() == 18363) {
+                attacker.getPlayer().debugMessage("Attack bonus: "+AtkBonus);
+                AtkBonus *=1.33;
+                attacker.getPlayer().debugMessage("Attack bonus with void: "+AtkBonus);
+                maxDamg *= 1.03;
+            }
 		int DefBonus;
 		int shieldId = - 1;
 		int necklaceId = - 1;

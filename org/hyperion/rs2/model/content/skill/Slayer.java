@@ -64,8 +64,12 @@ public class Slayer implements ContentTemplate {
 			int[] j = {SLAYER_GEM,};
 			return j;
 		}
-        if(type == ClickType.NPC_DEATH)
+        if(type == ClickType.NPC_DEATH)  {
+            int[] slayerTasks = SlayerTask.getTasks();
+            for(int i : slayerTasks)
+                System.out.println("Task: "+i);
             return SlayerTask.getTasks();
+        }
         return null;
 	}
 

@@ -42,6 +42,7 @@ import java.util.Date;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTaskHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
@@ -712,6 +713,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public long lastTickReq() {
 		return lastTicketRequest;
 	}
+
+    private final SlayerTaskHolder slayTask = new SlayerTaskHolder(this);
+
+    public final SlayerTaskHolder getSlayerTask() {
+        return slayTask;
+    }
 	
 	public void refreshTickReq() {
 		this.lastTicketRequest = System.currentTimeMillis();

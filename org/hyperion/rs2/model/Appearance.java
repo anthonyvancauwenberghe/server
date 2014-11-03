@@ -208,6 +208,7 @@ public class Appearance {
 		legColour = look[10];
 		feetColour = look[11];
 		skinColour = look[12];
+
 	}
 
 	public void setAnimations(int a, int b, int c) {

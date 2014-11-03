@@ -7,13 +7,11 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
-import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
-import org.hyperion.rs2.model.content.skill.Slayer;
-import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.util.Misc;
 
 import java.util.HashMap;
@@ -118,6 +116,14 @@ public class Magic {
 			attacker.getPlayer().getActionSender().sendMessage(message);
 			return 0;
 		}
+        if (opp.getEntity() instanceof NPC) {
+            String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
+            for (String familiarName : FAMILIARS)
+                if (opp.getNPC().getDefinition().name().toLowerCase().contains(familiarName)) {
+                    ContentEntity.sendMessage((Player) attacker.getEntity(), "You cannot attack familiars.");
+                    return 0;
+                }
+        }
 		if(attacker.getPlayer().duelRule[4] && attacker.getPlayer().duelAttackable > 0) {
 			attacker.getPlayer().getActionSender().sendMessage("You cannot use magic in this duel.");
 			return 0;
@@ -268,12 +274,12 @@ public class Magic {
 			}
 			// elysian spirit shield
 			if(shieldId == 13742 && Misc.random(9) >= 6) {
-				Damage = (int) (Damage * 0.75);
-			}
+                Damage = (int) (Damage * 0.75);
+            }
 		} else /** NPC Part */ {
 			DefBonus = opponent.getNPC().combatLevel
 					+ opponent.getNPC().getDefinition().getBonus()[8];
-			if(Slayer.getSlayerLevel(opponent.getNPC().getDefinition().getId()) > attacker
+			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
 					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
 				splash = true;
 			}

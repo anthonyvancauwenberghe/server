@@ -26,6 +26,7 @@ public class Time {
 
 	ONE_HOUR = ONE_MINUTE * 60,
 			TEN_HOURS = ONE_HOUR * 10,
+            FIVE_TEEN_HOURS = ONE_HOUR * 15,
 			ONE_DAY = ONE_HOUR * 24,
 			TWO_DAYS = ONE_DAY * 2,
 			ONE_WEEK = ONE_DAY * 7,

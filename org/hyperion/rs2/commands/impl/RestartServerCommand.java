@@ -9,8 +9,8 @@ import org.hyperion.util.Time;
 
 public class RestartServerCommand extends Command {
 
-	public static final long MINIMUM_MINUTES_UPTIME = Time.TEN_HOURS;
-	public static final int UPDATE_TIMER = 30;
+	public static final long MINIMUM_MINUTES_UPTIME = Time.FIVE_TEEN_HOURS;
+	public static final int UPDATE_TIMER = 150;
 
 	public RestartServerCommand() {
 		super("restartserver", Rank.MODERATOR);
@@ -19,12 +19,10 @@ public class RestartServerCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
         player.sendMessage("excecuted");
-        if (!Rank.hasAbility(player, Rank.OWNER)) //done ill update :)
-            return false;
-	/*	if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME && Rank.hasAbility(player, Rank.OWNER)) {
+		if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME &&  !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			player.getActionSender().sendMessage("Minimum uptime hasn't been reached yet.");
 			return false;
-		}*/
+		}
 		String reason = filterInput(input);
 		if(reason.length() < 2) {
 			player.getActionSender().sendMessage("Please specify a reason for the restart.");
@@ -32,8 +30,6 @@ public class RestartServerCommand extends Command {
 			return false;
 		}
 		World.getWorld().update(UPDATE_TIMER, player.getName() + "\t" + reason);
-
-        player.sendMessage("4");
 		return true;
 
 	}

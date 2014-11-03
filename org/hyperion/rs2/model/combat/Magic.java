@@ -190,17 +190,13 @@ public class Magic {
 		int maxDamg = spell.getMaxHit();
 		int AtkBonus = CombatAssistant.calculateMageAtk(attacker.getPlayer());
 		if(attacker.getEntity() instanceof Player && CombatAssistant.fullVoidMage(attacker.getPlayer())) {
-			attacker.getPlayer().debugMessage("Attack bonus: "+AtkBonus);
 			AtkBonus *= 1.30;
-			attacker.getPlayer().debugMessage("Attack bonus with void: "+AtkBonus);
 			maxDamg *= 1.05;
 		}
             /** Farseer shield*/
             if(attacker.getEntity() instanceof Player &&
                     ((Player) attacker.getEntity()).getEquipment().get(Equipment.SLOT_HELM).getId() == 18363) {
-                attacker.getPlayer().debugMessage("Attack bonus: "+AtkBonus);
                 AtkBonus *=1.33;
-                attacker.getPlayer().debugMessage("Attack bonus with void: "+AtkBonus);
                 maxDamg *= 1.03;
             }
 		int DefBonus;

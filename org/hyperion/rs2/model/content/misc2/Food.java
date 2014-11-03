@@ -29,7 +29,7 @@ public class Food implements ContentTemplate {
 	private static List<FoodItem> foods;
 
     /** Holds the item ids of combo foods.*/
-    public static final int[] COMBO_FOODS = {3144, 2185};
+    public static final int[] COMBO_FOODS = {3144, 2185,9553,2229};
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -106,7 +106,9 @@ public class Food implements ContentTemplate {
                         eatComboFood(player, slot, id, 18, "cooked karambwan");
                         break;
                     case 2185:
-                        eatComboFood(player, slot, id, 18, "chocolate bomb");
+                    case 2229:
+                    case 9553:
+                        eatComboFood(player, slot, id, 15, "chocolate bomb");
                         break;
         }
 			if(foodItem == null)

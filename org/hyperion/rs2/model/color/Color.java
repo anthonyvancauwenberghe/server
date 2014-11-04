@@ -36,7 +36,13 @@ public enum Color {
     RUNE(36133),
     ZAMORAK(937),
     GUTHIX(21939),
-    DRAGONSTONE(51111);
+    DRAGONSTONE(51111),
+    BARROWS(10512),
+    VOID(4550),
+    PARTY_YELLOW(11200),
+    PARTY_BLUE(43968),
+    PARTY_PURPLE(51136),
+    LUNAR(16652);
 
     public final int color;
 

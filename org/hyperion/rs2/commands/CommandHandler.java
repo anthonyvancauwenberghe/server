@@ -1047,7 +1047,7 @@ public class CommandHandler {
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
                 if(target != null){
-                    player.sendf("%s mac: %d", target.getUID());
+                    player.sendf("%s mac: %d", target.getName(), target.getUID());
                     return true;
                 }
                 final String value = CommandPacketHandler.findCharString(targetName, "Mac");
@@ -1156,5 +1156,11 @@ public class CommandHandler {
         submit(new ViewChallengesCommand());
         submit(new CreateChallengeCommand());
 
+        submit(new Command("a3place", Rank.MODERATOR){
+            public boolean execute(final Player player, final String input){
+                Magic.teleport(player, 3108, 3159, 3, false);
+                return true;
+            }
+        });
 	}
 }

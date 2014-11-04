@@ -35,7 +35,8 @@ public enum Color {
     ADAMANT(21662),
     RUNE(36133),
     ZAMORAK(937),
-    GUTHIX(21939);
+    GUTHIX(21939),
+    DRAGONSTONE(51111);
 
     public final int color;
 

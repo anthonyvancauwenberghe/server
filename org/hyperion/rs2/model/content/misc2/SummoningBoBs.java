@@ -36,15 +36,17 @@ public class SummoningBoBs implements ContentTemplate {
                     return false;
                 player.playAnimation(Animation.create(7270));
                 synchronized(player) {
-                    int index2 = - 1;
+                   int index2 = - 1;
                     for(Item item : player.getBoB().toArray()) {
+                        if (item != null)
+                            continue;
                         index2++;
-                        if(item != null)
                             BoB.withdraw(player, index2, item.getId(), item.getCount());
                         if(player.getInventory().freeSlots() == 0)
                             break;
                     }
                 }
+                    player.sendMessage("This is temprary removed");
                 return true;
             }
         } else if(type == ClickType.ITEM_ON_ITEM){

@@ -43,7 +43,12 @@ public enum Color {
     PARTY_YELLOW(11200),
     PARTY_BLUE(43968),
     PARTY_PURPLE(51136),
-    LUNAR(16652);
+    LUNAR(16652),
+    RUBY(931),
+    EMERALD(22443),
+    SAPPHIRE(43951),
+    OPAL(10465),
+    JADE(17633);
 
     public final int color;
 

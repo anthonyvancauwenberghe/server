@@ -48,7 +48,8 @@ public enum Color {
     EMERALD(22443),
     SAPPHIRE(43951),
     OPAL(10465),
-    JADE(17633);
+    JADE(17633),
+    ONYX(43528);
 
     public final int color;
 

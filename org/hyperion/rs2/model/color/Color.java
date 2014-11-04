@@ -26,7 +26,14 @@ public enum Color {
     PINK_RED(130770),
     GUM_PINK(129770),
     PINK(123770),
-    CRAYON_BLUE(305770);
+    CRAYON_BLUE(305770),
+    IRON(33),
+    STEEL(61),
+    SILVER(43096),
+    GOLD(8128),
+    MITHRIL(43297),
+    ADAMANT(21662),
+    RUNE(36133);
 
     public final int color;
 

@@ -698,19 +698,20 @@ public class CommandHandler {
                 try{
                     final int amount = Math.min(Integer.parseInt(filterInput(input)), player.getPoints().getPkPoints());
                     if(amount < 1){
-                        player.getActionSender().sendMessage("Enter a valid amount");
+                        player.getActionSender().sendMessage("Enter a valid amount.");
                         return false;
                     }
                     if(player.getPoints().getPkPoints() < amount){
-                        player.getActionSender().sendMessage("You don't have enough pkp to buy this many rocktails");
+                        player.getActionSender().sendMessage("You don't have enough pkp to buy this many rocktails.");
                         return false;
                     }
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - amount);
                     player.getBank().add(new Item(15272, amount));
-                    player.getActionSender().sendMessage(String.format("%d rocktails have been added to your bank", amount));
+                    player.getActionSender().sendMessage(String.format("%d rocktails have been added to your bank.", amount));
                     return true;
-                }catch(Exception ex){
-                    player.getActionSender().sendMessage("Error buying rocktails: invalid amount");
+                } catch(Exception ex) {
+                    player.getActionSender().sendMessage("Error buying rocktails: invalid amount.");
+                    ex.printStackTrace();
                     return false;
                 }
             }
@@ -1047,7 +1048,7 @@ public class CommandHandler {
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
                 if(target != null){
-                    player.sendf("%s mac: %d", target.getUID());
+                    player.sendf("%s mac: %d", target.getName(), target.getUID());
                     return true;
                 }
                 final String value = CommandPacketHandler.findCharString(targetName, "Mac");
@@ -1156,5 +1157,11 @@ public class CommandHandler {
         submit(new ViewChallengesCommand());
         submit(new CreateChallengeCommand());
 
+        submit(new Command("a3place", Rank.MODERATOR){
+            public boolean execute(final Player player, final String input){
+                Magic.teleport(player, 3108, 3159, 3, false);
+                return true;
+            }
+        });
 	}
 }

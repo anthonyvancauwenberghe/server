@@ -46,13 +46,15 @@ public final class SummoningSpecial {
 		} else {
             if(Summoning.isBoB(6873)) {
                 synchronized (p) {
-                    int index2 = -1;
+                    int index2 = 0;
                     for (Item item : p.getBoB().toArray()) {
-                        index2++;
+                        if (item == null) {
+                            index2++;
                             BoB.withdraw(p, index2, item.getId(), item.getCount());
                             p.playAnimation(Animation.create(7270));
-                        if (p.getInventory().freeSlots() == 0)
-                            break;
+                            if (p.getInventory().freeSlots() == 0)
+                                break;
+                        }
                     }
                 }
                 return;

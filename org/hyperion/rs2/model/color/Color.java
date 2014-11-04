@@ -33,7 +33,8 @@ public enum Color {
     GOLD(8128),
     MITHRIL(43297),
     ADAMANT(21662),
-    RUNE(36133);
+    RUNE(36133),
+    ZAMORAK(937);
 
     public final int color;
 

@@ -48,7 +48,7 @@ public final class SummoningSpecial {
                 synchronized (p) {
                     int index2 = 0;
                     for (Item item : p.getBoB().toArray()) {
-                        if (item != null)
+                        if (item == null)
                             continue;
                         index2++;
                             BoB.withdraw(p, index2, item.getId(), item.getCount());

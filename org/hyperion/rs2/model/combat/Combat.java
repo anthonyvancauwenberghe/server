@@ -1296,6 +1296,13 @@ public class Combat {
             return true;
         return false;
     }
+    public static boolean ringOfLifeEqupped(Player player) {
+        if(player.getEquipment().get(Equipment.SLOT_RING) == null)
+            return false;
+        if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 2570)
+            return true;
+        return false;
+    }
 	public static boolean isGuthanEquiped(Player player) {
 		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
 				|| player.getEquipment().get(Equipment.SLOT_WEAPON) == null

@@ -1467,7 +1467,32 @@ public class Player extends Entity implements Persistable, Cloneable{
 			if(n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE))
 				npc = false;
 		}
+        /** Ring of life  */
+        if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
+            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 4.7)
+             && !(Combat.getWildLevel(getLocation().getX(), getLocation().getY()) > 20)) {
+                getEquipment().set(Equipment.SLOT_RING, null);
+                heal((int) getSkills().calculateMaxLifePoints());
+                getWalkingQueue().reset();
+                ContentEntity.playerGfx(this, 1684);
+                ContentEntity.startAnimation(this, 9603);
+                World.getWorld().submit(new Event(0x258) {
+                    int loop = 0;
 
+                    public void execute() {
+                        if (loop == 5) {
+                            setLocation(Location.create(3225, 3218, 0));
+                            sendMessage("Your ring of life saves you, but is destroyed in the process.");
+                            this.stop();
+                        }
+                        heal((int) getSkills().calculateMaxLifePoints());
+                        loop++;
+                        return;
+                    }
+                });
+                return 0;
+            }
+        }
         /** The phoenix necklace effect. */
         if (Combat.usingPhoenixNecklace(this)) {
             if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 3)) {

@@ -48,13 +48,13 @@ public final class SummoningSpecial {
                 synchronized (p) {
                     int index2 = 0;
                     for (Item item : p.getBoB().toArray()) {
-                        if (item != null)
-                            continue;
-                        index2++;
+                        if (item == null) {
+                            index2++;
                             BoB.withdraw(p, index2, item.getId(), item.getCount());
                             p.playAnimation(Animation.create(7270));
-                        if (p.getInventory().freeSlots() == 0)
-                            break;
+                            if (p.getInventory().freeSlots() == 0)
+                                break;
+                        }
                     }
                 }
                 return;

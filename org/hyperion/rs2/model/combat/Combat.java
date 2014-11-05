@@ -823,7 +823,7 @@ public class Combat {
 	}
 
 	public static void npcRangeAttack(final NPC n, final CombatEntity attack, int gfx, int height, boolean slowdown) {
-
+        int timer;
 		// offset values for the projectile
 		int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.getAbsX())
 				* - 1;
@@ -835,22 +835,17 @@ public class Combat {
 		int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX()
 				+ n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY()
 				+ n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-		int timer = 1;
+		timer = 1;
 		int min = 16;
-		if(distance > 8) {
+		if(distance > 8)
 			timer += 2;
-		} else if(distance >= 4) {
+		 else if(distance >= 4)
 			timer++;
-		}
 		min -= (distance - 1) * 2;
 		int speed = 75 - min;
 		int slope = 7 + distance;
-		if(slowdown)
-			speed = speed * 2;
-		// create the projectile
-		// System.out.println("hitId: "+hitId);
-		attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY()
-				+ n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, gfx, height, 35, hitId, slope);
+        attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY()
+				+ n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY,  offsetX, 50, speed, gfx, height, 35, hitId, slope);
 	}
 
 	// 1 - attack is ok

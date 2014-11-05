@@ -27,8 +27,8 @@ public class SlayerShop extends PointsShop {
     @Override
     public int getPrice(int itemId) {
         switch(itemId) {
-            case 15390:
-            case 15388:
+            case 15490:
+            case 15488:
                 return 300;
             case 13263:
                 return 400;

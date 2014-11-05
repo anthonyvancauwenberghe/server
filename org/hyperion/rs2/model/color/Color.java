@@ -56,4 +56,8 @@ public enum Color {
     private Color(final int color){
         this.color = color;
     }
+
+    public String toString(){
+        return super.toString().replace("_", "");
+    }
 }

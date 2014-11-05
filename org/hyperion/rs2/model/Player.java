@@ -1470,9 +1470,8 @@ public class Player extends Entity implements Persistable, Cloneable{
         /** Ring of life  */
         if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
             if (duelAttackable > 0 || Duel.inDuelLocation(this))
-            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 4.7)
-             && !(Combat.getWildLevel(getLocation().getX(), getLocation().getY()) > 20)) {
-                if (duelAttackable > 0  || !Duel.inDuelLocation(this) || !isTeleBlocked()) {
+            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp
+                if (!Duel.inDuelLocation(this)) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
                     getEquipment().set(Equipment.SLOT_RING, null);
                     heal((int) getSkills().calculateMaxLifePoints());
                     getWalkingQueue().reset();
@@ -1483,7 +1482,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
                         public void execute() {
                             if (loop == 5) {
-                                setLocation(Location.create(3225, 3218, 0));
+                                setTeleportTarget(Location.create(3225, 3218, 0));
                                 sendMessage("Your ring of life saves you, but is destroyed in the process.");
                                 this.stop();
                             }

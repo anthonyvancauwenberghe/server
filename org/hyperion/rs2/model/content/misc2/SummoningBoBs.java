@@ -35,7 +35,7 @@ public class SummoningBoBs implements ContentTemplate {
                 if(npc.ownerId < 1)
                     return false;
                 player.playAnimation(Animation.create(7270));
-                synchronized(player) {
+                if(player.getBoB() != null) {
                    int index2 = - 1;
                     for(Item item : player.getBoB().toArray()) {
                         if (item == null)

@@ -23,7 +23,7 @@ public class SlayerShop extends PointsShop {
 
 
 
-    public static final int SLAYER_HELM = 13262, FOCUS_SIGHT = 15490, HEX_CREST = 15488, FULL_HELM = 15492;
+    public static final int SLAYER_HELM = 13263, FOCUS_SIGHT = 15490, HEX_CREST = 15488, FULL_HELM = 15492;
     @Override
     public int getPrice(int itemId) {
         switch(itemId) {

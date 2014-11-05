@@ -44,21 +44,6 @@ public final class SummoningSpecial {
 				}
 			}
 		} else {
-            if(Summoning.isBoB(6873)) {
-                synchronized (p) {
-                    int index2 = 0;
-                    for (Item item : p.getBoB().toArray()) {
-                        if (item == null) {
-                            index2++;
-                            BoB.withdraw(p, index2, item.getId(), item.getCount());
-                            p.playAnimation(Animation.create(7270));
-                            if (p.getInventory().freeSlots() == 0)
-                                break;
-                        }
-                    }
-                }
-                return;
-            }
 			p.getActionSender().sendMessage("You do not have a familiar with a special attack!");
 		}
 	}

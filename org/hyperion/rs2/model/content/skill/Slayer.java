@@ -60,6 +60,19 @@ public class Slayer implements ContentTemplate {
                 }
             }
         }
+        if(type == ClickType.OBJECT_CLICK1) {
+            final int objectId = npcId;
+            if(objectId == 4493)
+                player.setTeleportTarget(Location.create(3433, 3538, 1));
+            if(objectId == 4495)
+                player.setTeleportTarget(Location.create(3417, 3541, 2));
+            if(objectId == 10529)
+                player.setTeleportTarget(Location.create(3427, 3555, 1));
+            if(objectId == 5126)
+                player.setTeleportTarget(Location.create(3445, 3555, 2));
+            if(objectId == 9319)
+                player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ() + 1));
+        }
         return false;
     }
 
@@ -84,6 +97,9 @@ public class Slayer implements ContentTemplate {
         }
         if(type == ClickType.ITEM_ON_ITEM) {
             return new int[]{SlayerShop.FOCUS_SIGHT, SlayerShop.SLAYER_HELM, SlayerShop.HEX_CREST,};
+        }
+        if(type == ClickType.OBJECT_CLICK1) {
+            return new int[]{9319, 4495, 4493, 10529, 5126} ;
         }
         return null;
 	}

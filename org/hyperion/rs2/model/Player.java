@@ -1469,28 +1469,31 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
         /** Ring of life  */
         if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
+            if (duelAttackable > 0 || Duel.inDuelLocation(this))
             if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 4.7)
              && !(Combat.getWildLevel(getLocation().getX(), getLocation().getY()) > 20)) {
-                getEquipment().set(Equipment.SLOT_RING, null);
-                heal((int) getSkills().calculateMaxLifePoints());
-                getWalkingQueue().reset();
-                ContentEntity.playerGfx(this, 1684);
-                ContentEntity.startAnimation(this, 9603);
-                World.getWorld().submit(new Event(0x258) {
-                    int loop = 0;
+                if (duelAttackable > 0  || !Duel.inDuelLocation(this) || !isTeleBlocked()) {
+                    getEquipment().set(Equipment.SLOT_RING, null);
+                    heal((int) getSkills().calculateMaxLifePoints());
+                    getWalkingQueue().reset();
+                    ContentEntity.playerGfx(this, 1684);
+                    ContentEntity.startAnimation(this, 9603);
+                    World.getWorld().submit(new Event(0x258) {
+                        int loop = 0;
 
-                    public void execute() {
-                        if (loop == 5) {
-                            setLocation(Location.create(3225, 3218, 0));
-                            sendMessage("Your ring of life saves you, but is destroyed in the process.");
-                            this.stop();
+                        public void execute() {
+                            if (loop == 5) {
+                                setLocation(Location.create(3225, 3218, 0));
+                                sendMessage("Your ring of life saves you, but is destroyed in the process.");
+                                this.stop();
+                            }
+                            heal((int) getSkills().calculateMaxLifePoints());
+                            loop++;
+                            return;
                         }
-                        heal((int) getSkills().calculateMaxLifePoints());
-                        loop++;
-                        return;
-                    }
-                });
-                return 0;
+                    });
+                    return 0;
+                }
             }
         }
         /** The phoenix necklace effect. */

@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
 
@@ -312,6 +313,11 @@ public class Combat {
 					rangeDef = CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer());
 				else
 					rangeDef = combatEntity.getOpponent().getCombat() / 2;
+                if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayerTask().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+                    if(SlayerShop.hasFocus(combatEntity.getPlayer()))
+                        damg *= 1.15;
+                }
+
 				int deltaRangeBonus = rangeAtk - rangeDef;
 				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 					combatEntity.getPlayer().getActionSender().sendMessage("Delta Range Bonus is : " + deltaRangeBonus); 
@@ -437,6 +443,11 @@ public class Combat {
 					return true;
 				//combatEntity.getPlayer().getWalkingQueue().reset();
 			}
+
+            if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayerTask().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+                if(SlayerShop.hasHelm(combatEntity.getPlayer()))
+                    damg *= 1.15;
+            }
 			/*
 			 * if(!WorldMap.projectileClear(combatEntity.getEntity().
 			 * getLocation().getZ(),

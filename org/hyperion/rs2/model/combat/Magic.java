@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
 import java.util.HashMap;
@@ -297,6 +298,11 @@ public class Magic {
 		if(Misc.random(AtkBonus) < Misc.random(DefBonus)) {
 			splash = true;
 		}
+
+       if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayerTask().isTask(opponent.getNPC().getDefinition().getId())) {
+                if(SlayerShop.hasHex(attacker.getPlayer()))
+                    Damage *= 1.15;
+       }
 
 		/**
 		 * Checks if using Prayers

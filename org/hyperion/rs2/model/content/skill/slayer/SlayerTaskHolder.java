@@ -32,7 +32,7 @@ public class SlayerTaskHolder {
 
     public int killedTask(final int npcid) {
         if(task == null) return 0;
-        if(task.getIds().contains(npcid) && taskAmount > 0) {
+        if(isTask(npcid)) {
             if(--taskAmount == 0) {
                 totalTasks++;
                 slayerPoints += task.getDifficulty().getSlayerPoints() + handleTotalTasks();
@@ -41,6 +41,11 @@ public class SlayerTaskHolder {
         }
         return 0;
     }
+
+    public boolean isTask(final int npcId) {
+        return task != null && task.getIds().contains(npcId) && taskAmount > 0;
+    }
+
 
     public boolean resetTask() {
         if(slayerPoints < 20)

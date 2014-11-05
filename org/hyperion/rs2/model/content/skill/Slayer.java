@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.shops.SlayerShop;
 
 
 /**
@@ -46,6 +47,19 @@ public class Slayer implements ContentTemplate {
             }
             return false;
         }
+        if(type == ClickType.ITEM_ON_ITEM) {
+            int usedItem = npcId;
+            int onItem = objId;
+            if(usedItem == SlayerShop.SLAYER_HELM || onItem == SlayerShop.SLAYER_HELM) {
+                if(player.getInventory().contains(SlayerShop.FOCUS_SIGHT) && player.getInventory().contains(SlayerShop.HEX_CREST) && player.getInventory().contains(SlayerShop.SLAYER_HELM))
+                {
+                    player.getInventory().remove(Item.create(SlayerShop.FOCUS_SIGHT));
+                    player.getInventory().remove(Item.create(SlayerShop.HEX_CREST));
+                    player.getInventory().remove(Item.create(SlayerShop.SLAYER_HELM));
+                    player.getInventory().add(Item.create(SlayerShop.FULL_HELM));
+                }
+            }
+        }
         return false;
     }
 
@@ -67,6 +81,9 @@ public class Slayer implements ContentTemplate {
         if(type == ClickType.NPC_DEATH)  {
 
             return SlayerTask.getTasks();
+        }
+        if(type == ClickType.ITEM_ON_ITEM) {
+            return new int[]{SlayerShop.FOCUS_SIGHT, SlayerShop.SLAYER_HELM, SlayerShop.HEX_CREST,};
         }
         return null;
 	}

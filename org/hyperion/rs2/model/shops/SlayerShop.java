@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.Equipment;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,9 +21,15 @@ public class SlayerShop extends PointsShop {
         return "Slayer Points";  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+
+
+    public static final int SLAYER_HELM = 13262, FOCUS_SIGHT = 15390, HEX_CREST = 15388, FULL_HELM = 15492;
     @Override
     public int getPrice(int itemId) {
         switch(itemId) {
+            case 15390:
+            case 15388:
+                return 300;
             case 13263:
                 return 400;
             case 15492:
@@ -44,4 +51,22 @@ public class SlayerShop extends PointsShop {
     protected void setPointsAmount(Player player, int value) {
         player.getSlayerTask().setPoints(value);
     }
+
+    public static boolean isFullHelm(final Player player) {
+        return player.getEquipment().getItemId(Equipment.SLOT_HELM)== 15492;
+    }
+
+    public static boolean hasHex(final Player player) {
+        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 15488;
+    }
+
+    public static boolean hasFocus(final Player player) {
+        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM)== 15490;
+    }
+
+    public static boolean hasHelm(final Player player) {
+        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 13263;
+    }
+
+
 }

@@ -38,7 +38,7 @@ public class SummoningBoBs implements ContentTemplate {
                 synchronized(player) {
                    int index2 = - 1;
                     for(Item item : player.getBoB().toArray()) {
-                        if (item != null)
+                        if (item == null)
                             continue;
                         index2++;
                             BoB.withdraw(player, index2, item.getId(), item.getCount());
@@ -46,7 +46,6 @@ public class SummoningBoBs implements ContentTemplate {
                             break;
                     }
                 }
-                    player.sendMessage("This is temprary removed");
                 return true;
             }
         } else if(type == ClickType.ITEM_ON_ITEM){

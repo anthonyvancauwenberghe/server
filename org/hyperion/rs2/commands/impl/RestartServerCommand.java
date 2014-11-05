@@ -14,7 +14,7 @@ public class RestartServerCommand extends Command {
 	public static final int UPDATE_TIMER = 150;
 
 	public RestartServerCommand() {
-		super("restartserver", Rank.MODERATOR);
+		super("restartserver", Rank.ADMINISTRATOR);
 	}
 
 	@Override

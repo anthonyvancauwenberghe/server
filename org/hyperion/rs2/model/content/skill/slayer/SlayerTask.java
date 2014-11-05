@@ -109,7 +109,7 @@ public enum SlayerTask {
     private final Difficulty difficulty;
     private final int slayerLevel, slayerXP, index;
     private final List<Integer> ids = new ArrayList<>();
-    private static final int EXP_MULTIPLIER = 4;
+    private static final int EXP_MULTIPLIER = 8;
 
     private SlayerTask(final int index,final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
         this.difficulty = difficulty;

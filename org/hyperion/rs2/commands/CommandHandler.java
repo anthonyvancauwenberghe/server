@@ -1088,8 +1088,14 @@ public class CommandHandler {
                     if(amount > item.getCount())
                         amount = item.getCount();
                     c.remove(new Item(id, amount));
-                    player.getInventory().add(new Item(id, amount));
                     player.sendf("Removed %s x%d from %s's %s", ItemDefinition.forId(id).getName(), amount, name, c.getClass().getSimpleName());
+                    if(player.getInventory().hasRoomFor(new Item(id, amount))){
+                        player.getInventory().add(new Item(id, amount));
+                        player.sendf("Added to your inventory");
+                    }else{
+                        player.getBank().add(new Item(id, amount));
+                        player.sendf("Added to your bank");
+                    }
                     return true;
                 }
                 player.sendf("Unable to find %s in %s's containers", ItemDefinition.forId(id).getName(), name);

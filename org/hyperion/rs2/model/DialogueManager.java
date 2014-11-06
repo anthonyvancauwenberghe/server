@@ -1137,6 +1137,7 @@ public class DialogueManager {
                 player.getInterfaceState().setNextDialogueId(0, 175);
                 player.getInterfaceState().setNextDialogueId(1, 176);
                 player.getInterfaceState().setNextDialogueId(2, 177);
+                player.getInterfaceState().setNextDialogueId(3, 177);
                 break;
             case 175:
                 final String toDisplay;
@@ -1160,8 +1161,8 @@ public class DialogueManager {
                 break;
             case 178:
                 player.getSlayer().removeTask();
-                player.getActionSender().sendMessage("You have 0 total tasks and your task has been reset!");
-
+                player.getActionSender().sendMessage("You now have 0 total tasks and your task has been reset!");
+                player.getActionSender().removeChatboxInterface();
                 break;
 			default:
 				player.getActionSender().removeChatboxInterface();

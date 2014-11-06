@@ -1251,6 +1251,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		return name;
 	}
+
+    public String getSafeDisplayName(){
+        return getDisplay() != null && !getDisplay().isEmpty() ? getDisplay() : getName();
+    }
 	
 	public String getDisplay() {
 		return display;

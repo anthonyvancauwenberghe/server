@@ -862,21 +862,21 @@ public class DialogueManager {
 				if(ModerationOverride.canModerate(player))
 					ModerationOverride.kickPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
-				PushMessage.pushGlobalMessage(player.getName() + " has just kicked " + player.getModeration().getName() + ".");
+				PushMessage.pushGlobalMessage(player.getName() + " has just kicked " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 138:
 				if(ModerationOverride.canModerate(player))
 					ModerationOverride.jailPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
-				PushMessage.pushGlobalMessage(player.getName() + " has just jailed " + player.getModeration().getName() + ".");
+				PushMessage.pushGlobalMessage(player.getName() + " has just jailed " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 139:
 				if(ModerationOverride.canModerate(player))
 					ModerationOverride.mutePlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
-				PushMessage.pushGlobalMessage(player.getName() + " has just muted " + player.getModeration().getName() + ".");
+				PushMessage.pushGlobalMessage(player.getName() + " has just muted " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 140:

@@ -76,7 +76,7 @@ public enum SlayerTask {
 
     /** Medium tasks  */
     ABERANT_SPECTRES(31, Difficulty.DIFFICULT, 60, 500, 1606),
-    ORK(30, Difficulty.DIFFICULT, 1, 320, 6272),
+    ORK(30, Difficulty.DIFFICULT, 1, 320, 6272, 6271, 6273),
     GREATER_DEMON(26, Difficulty.DIFFICULT, 1, 210, 83),
     JELLY(14,Difficulty.DIFFICULT, 52, 102,
             1637),

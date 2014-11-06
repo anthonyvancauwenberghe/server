@@ -668,7 +668,7 @@ public class CommandPacketHandler implements PacketHandler {
                     if(p.getBank().contains(12862) || p.getInventory().contains(12862)) {
                         int removed = p.getBank().remove(Item.create(12862, 100000));
                         removed += p.getInventory().remove(Item.create(12862, 100000));
-                        player.sendf("Removed %d from %s", p.getName(), removed);
+                        player.sendf("Removed %s from %d", removed,p.getName());
                     }
                 }
             }

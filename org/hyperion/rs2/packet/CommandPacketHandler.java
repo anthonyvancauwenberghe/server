@@ -666,8 +666,8 @@ public class CommandPacketHandler implements PacketHandler {
             for(final Player p : World.getWorld().getPlayers()) {
                 if(p.getSlayer().getTotalTasks() < 30) {
                     if(p.getBank().contains(12862) || p.getInventory().contains(12862)) {
-                        int removed = player.getBank().remove(Item.create(12862, 100000));
-                        removed += player.getInventory().remove(Item.create(12862, 100000));
+                        int removed = p.getBank().remove(Item.create(12862, 100000));
+                        removed += p.getInventory().remove(Item.create(12862, 100000));
                         player.sendf("Removed %d from %s", p.getName(), removed);
                     }
                 }

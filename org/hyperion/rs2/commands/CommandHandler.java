@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -806,9 +807,7 @@ public class CommandHandler {
                             continue;
                         if(!p1.getLocation().inPvPArea() || !p2.getLocation().inPvPArea())
                             continue;
-                        if(p1.getShortIP() == null || p2.getShortIP() == null)
-                            continue;
-                        if(!p1.getShortIP().equals(p2.getShortIP()))
+                        if(!Objects.equals(p1.getShortIP(), p2.getShortIP()) && p1.getUID() != p2.getUID())
                             continue;
                         player.getActionSender().sendMessage(String.format(
                                 "%s (%d, %d) AND %s (%d, %d)",

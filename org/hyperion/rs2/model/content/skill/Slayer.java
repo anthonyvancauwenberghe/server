@@ -28,9 +28,9 @@ public class Slayer implements ContentTemplate {
     @Override
     public boolean clickObject(final Player player, final int type, final int npcId, final int slot, final int objId, final int a) {
         if(type == ClickType.EAT) { //slayer gem
-            player.sendMessage("You have "+player.getSlayerTask().getTaskAmount()+ " "+player.getSlayerTask().getTask()+" npcs left to kill",
-                    "You have "+player.getSlayerTask().getSlayerPoints()+" slayer points",
-                    "You have completed "+player.getSlayerTask().getTotalTasks()+ " tasks");
+            player.sendMessage("You have "+player.getSlayer().getTaskAmount()+ " "+player.getSlayer().getTask()+" npcs left to kill",
+                    "You have "+player.getSlayer().getSlayerPoints()+" slayer points",
+                    "You have completed "+player.getSlayer().getTotalTasks()+ " tasks");
             return true;
         }
         if(type == ClickType.NPC_OPTION1) { // talk to slayer masker
@@ -38,11 +38,11 @@ public class Slayer implements ContentTemplate {
             return true;
         }
         if(type == ClickType.NPC_DEATH) {
-            int slayerXP = player.getSlayerTask().killedTask(npcId);
+            int slayerXP = player.getSlayer().killedTask(npcId);
             if(slayerXP > 0) {
                 ContentEntity.addSkillXP(player, slayerXP, Skills.SLAYER);
-                if(player.getSlayerTask().getTaskAmount() == 0) {
-                    player.sendf("You have completed %d tasks in a row and have %d slayer points", player.getSlayerTask().getTotalTasks(),player.getSlayerTask().getSlayerPoints());
+                if(player.getSlayer().getTaskAmount() == 0) {
+                    player.sendf("You have completed %d tasks in a row and have %d slayer points", player.getSlayer().getTotalTasks(),player.getSlayer().getSlayerPoints());
                 }
             }
             return false;

@@ -313,7 +313,7 @@ public class Combat {
 					rangeDef = CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer());
 				else
 					rangeDef = combatEntity.getOpponent().getCombat() / 2;
-                if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayerTask().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+                if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
                     if(SlayerShop.hasFocus(combatEntity.getPlayer()))
                         damg *= 1.15;
                 }
@@ -444,7 +444,7 @@ public class Combat {
 				//combatEntity.getPlayer().getWalkingQueue().reset();
 			}
 
-            if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayerTask().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+            if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
                 if(SlayerShop.hasHelm(combatEntity.getPlayer()))
                     damg *= 1.15;
             }

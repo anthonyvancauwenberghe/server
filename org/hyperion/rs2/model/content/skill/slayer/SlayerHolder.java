@@ -11,15 +11,15 @@ import org.hyperion.rs2.model.content.ContentEntity;
  * Time: 8:48 AM
  * To change this template use File | Settings | File Templates.
  */
-public class SlayerTaskHolder {
+public class SlayerHolder {
 
     private int taskAmount, totalTasks, slayerPoints;
     /**
-     * SlayerTaskHolder that they have, save the ordinal
+     * SlayerHolder that they have, save the ordinal
      */
     private SlayerTask task;
 
-    public SlayerTaskHolder(final Player player) {
+    public SlayerHolder(final Player player) {
     }
 
     public boolean assignTask(final int slayerLevel) {
@@ -53,6 +53,11 @@ public class SlayerTaskHolder {
         slayerPoints -= 20;
         taskAmount = 0;
         return true;
+    }
+
+    public void removeTask() {
+        taskAmount = 0;
+        totalTasks = 0;
     }
 
     public int handleTotalTasks() {

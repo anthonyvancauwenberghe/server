@@ -153,7 +153,7 @@ public class NpcDeathEvent extends Event {
 					
 				}
 				player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
-                final boolean isTask = player.getSlayerTask().isTask(npc.getDefinition().getId());
+                final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                 //normal drops
 				if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                     final int chance =  isTask ? 500 : 1000;

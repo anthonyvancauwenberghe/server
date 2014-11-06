@@ -42,7 +42,7 @@ import java.util.Date;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
-import org.hyperion.rs2.model.content.skill.slayer.SlayerTaskHolder;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -715,9 +715,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return lastTicketRequest;
 	}
 
-    private final SlayerTaskHolder slayTask = new SlayerTaskHolder(this);
+    private final SlayerHolder slayTask = new SlayerHolder(this);
 
-    public final SlayerTaskHolder getSlayerTask() {
+    public final SlayerHolder getSlayer() {
         return slayTask;
     }
 	

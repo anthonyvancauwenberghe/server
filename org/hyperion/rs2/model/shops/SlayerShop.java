@@ -44,12 +44,12 @@ public class SlayerShop extends PointsShop {
 
     @Override
     protected int getPointsAmount(Player player) {
-        return player.getSlayerTask().getSlayerPoints();  //To change body of implemented methods use File | Settings | File Templates.
+        return player.getSlayer().getSlayerPoints();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     protected void setPointsAmount(Player player, int value) {
-        player.getSlayerTask().setPoints(value);
+        player.getSlayer().setPoints(value);
     }
 
     public static boolean isFullHelm(final Player player) {

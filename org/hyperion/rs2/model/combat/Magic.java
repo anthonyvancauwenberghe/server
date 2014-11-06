@@ -299,7 +299,7 @@ public class Magic {
 			splash = true;
 		}
 
-       if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayerTask().isTask(opponent.getNPC().getDefinition().getId())) {
+       if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
                 if(SlayerShop.hasHex(attacker.getPlayer()))
                     Damage *= 1.15;
        }

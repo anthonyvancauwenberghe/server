@@ -42,7 +42,7 @@ import java.util.Date;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
-import org.hyperion.rs2.model.content.skill.slayer.SlayerTaskHolder;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -715,9 +715,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return lastTicketRequest;
 	}
 
-    private final SlayerTaskHolder slayTask = new SlayerTaskHolder(this);
+    private final SlayerHolder slayTask = new SlayerHolder(this);
 
-    public final SlayerTaskHolder getSlayerTask() {
+    public final SlayerHolder getSlayer() {
         return slayTask;
     }
 	
@@ -1251,6 +1251,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		return name;
 	}
+
+    public String getSafeDisplayName(){
+        return getDisplay() != null && !getDisplay().isEmpty() ? getDisplay() : getName();
+    }
 	
 	public String getDisplay() {
 		return display;
@@ -1470,9 +1474,8 @@ public class Player extends Entity implements Persistable, Cloneable{
         /** Ring of life  */
         if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
             if (duelAttackable > 0 || Duel.inDuelLocation(this))
-            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 4.7)
-             && !(Combat.getWildLevel(getLocation().getX(), getLocation().getY()) > 20)) {
-                if (duelAttackable > 0  || !Duel.inDuelLocation(this) || !isTeleBlocked()) {
+            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp
+                if (!Duel.inDuelLocation(this)) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
                     getEquipment().set(Equipment.SLOT_RING, null);
                     heal((int) getSkills().calculateMaxLifePoints());
                     getWalkingQueue().reset();
@@ -1483,7 +1486,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
                         public void execute() {
                             if (loop == 5) {
-                                setLocation(Location.create(3225, 3218, 0));
+                                setTeleportTarget(Location.create(3225, 3218, 0));
                                 sendMessage("Your ring of life saves you, but is destroyed in the process.");
                                 this.stop();
                             }

@@ -153,11 +153,13 @@ public class NpcDeathEvent extends Event {
 					
 				}
 				player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
-				//normal drops
+                final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
+                //normal drops
 				if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
+                    final int chance =  isTask ? 500 : 1000;
 					for(NPCDrop drop : npc.getDefinition().getDrops()) {
 						if(drop == null) continue;
-						if(Combat.random(1000) <= drop.getChance()) {
+						if(Combat.random(chance) <= drop.getChance()) {
 							int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
 							if(amt < 1) amt = 1; //fix glitched drops
 							GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(), 
@@ -170,7 +172,15 @@ public class NpcDeathEvent extends Event {
 							World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
 						}
 					}
+
 				}
+                if(isTask && Misc.random(1000) < 1) {
+                    GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                            npc.getLocation().getY(), npc.getLocation().getZ(),
+                            Item.create(18768, 1));
+                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+
+                }
 			}
 		} else if(timer == - 1) {
 			World.getWorld().unregister(npc);

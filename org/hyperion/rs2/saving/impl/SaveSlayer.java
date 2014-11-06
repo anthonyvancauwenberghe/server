@@ -18,11 +18,11 @@ public class SaveSlayer extends SaveString {
 
     @Override
     public void setValue(Player player, String value) {
-        player.getSlayerTask().load(value);
+        player.getSlayer().load(value);
     }
 
     @Override
     public String getValue(Player player) {
-        return player.getSlayerTask().toString();  //To change body of implemented methods use File | Settings | File Templates.
+        return player.getSlayer().toString();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -19,7 +19,6 @@ import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
-import org.hyperion.rs2.model.content.skill.Slayer;
 import org.hyperion.rs2.model.sets.SetData;
 import org.hyperion.rs2.model.sets.SetUtility;
 import org.hyperion.rs2.net.ActionSender.DialogueType;
@@ -862,21 +861,21 @@ public class DialogueManager {
 				if(ModerationOverride.canModerate(player))
 					ModerationOverride.kickPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
-				PushMessage.pushGlobalMessage(player.getName() + " has just kicked " + player.getModeration().getName() + ".");
+				PushMessage.pushGlobalMessage(player.getName() + " has just kicked " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 138:
 				if(ModerationOverride.canModerate(player))
 					ModerationOverride.jailPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
-				PushMessage.pushGlobalMessage(player.getName() + " has just jailed " + player.getModeration().getName() + ".");
+				PushMessage.pushGlobalMessage(player.getName() + " has just jailed " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 139:
 				if(ModerationOverride.canModerate(player))
 					ModerationOverride.mutePlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
-				PushMessage.pushGlobalMessage(player.getName() + " has just muted " + player.getModeration().getName() + ".");
+				PushMessage.pushGlobalMessage(player.getName() + " has just muted " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 140:
@@ -1128,28 +1127,30 @@ public class DialogueManager {
 				}
 				break;
             case 174:
-                player.getActionSender().sendDialogue("", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+                player.getActionSender().sendDialogue("Choose", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
                         "Get slayer task",
                         "Remove Slayer Task (20 points)",
-                        "Open Shop"
+                        "Open Shop",
+                        "Reset Task (Lose total task streak)"
                 );
 
                 player.getInterfaceState().setNextDialogueId(0, 175);
                 player.getInterfaceState().setNextDialogueId(1, 176);
                 player.getInterfaceState().setNextDialogueId(2, 177);
+                player.getInterfaceState().setNextDialogueId(3, 177);
                 break;
             case 175:
                 final String toDisplay;
-                if(player.getSlayerTask().assignTask(player.getSkills().getRealLevels()[Skills.SLAYER]))
-                    toDisplay = String.format("You have %d %s to kill!", player.getSlayerTask().getTaskAmount(), player.getSlayerTask().getTask());
+                if(player.getSlayer().assignTask(player.getSkills().getRealLevels()[Skills.SLAYER]))
+                    toDisplay = String.format("You have %d %s to kill!", player.getSlayer().getTaskAmount(), player.getSlayer().getTask());
                 else
-                     toDisplay = String.format("You still have %d %s to kill", player.getSlayerTask().getTaskAmount(), player.getSlayerTask().getTask() );
+                     toDisplay = String.format("You still have %d %s to kill", player.getSlayer().getTaskAmount(), player.getSlayer().getTask() );
                 player.getActionSender().sendDialogue("Slayer Master", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT,
                        toDisplay);
 
                 break;
             case 176:
-                if(player.getSlayerTask().resetTask())
+                if(player.getSlayer().resetTask())
                     player.sendMessage("Your task has been successfully reset!");
                 else
                     player.sendMessage("You need more slayer points to reset your task");
@@ -1157,6 +1158,11 @@ public class DialogueManager {
                 break;
             case 177:
                 ShopManager.open(player, 77);
+                break;
+            case 178:
+                player.getSlayer().removeTask();
+                player.getActionSender().sendMessage("You now have 0 total tasks and your task has been reset!");
+                player.getActionSender().removeChatboxInterface();
                 break;
 			default:
 				player.getActionSender().removeChatboxInterface();

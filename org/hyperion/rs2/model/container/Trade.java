@@ -88,8 +88,8 @@ public class Trade {
 		player2.getInterfaceState().addListener(player2.getInventory(), new InterfaceContainerListener(player2, PLAYER_INVENTORY_INTERFACE));
 		player.getActionSender().sendString(3535, "Are you sure you want to make this trade?");
 		player2.getActionSender().sendString(3535, "Are you sure you want to make this trade?");
-		player2.getActionSender().sendString(3417, "Trading with: " + player.getName());
-		player.getActionSender().sendString(3417, "Trading with: " + player2.getName());
+		player2.getActionSender().sendString(3417, "Trading with: " + player.getSafeDisplayName());
+		player.getActionSender().sendString(3417, "Trading with: " + player2.getSafeDisplayName());
 		player.openingTrade = false;
 		player2.openingTrade = false;
 	}

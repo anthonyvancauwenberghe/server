@@ -76,10 +76,10 @@ public enum SlayerTask {
 
     /** Medium tasks  */
     ABERANT_SPECTRES(31, Difficulty.DIFFICULT, 60, 500, 1606),
-    ORK(30, Difficulty.DIFFICULT, 1, 320, 6272),
+    ORK(30, Difficulty.DIFFICULT, 1, 320, 6272, 6271, 6273),
     GREATER_DEMON(26, Difficulty.DIFFICULT, 1, 210, 83),
     JELLY(14,Difficulty.DIFFICULT, 52, 102,
-            1637),
+            1637, 1638, 1640),
     FIRE_GIANT(12,Difficulty.DIFFICULT, 1, 353,
             1582, 110, 1583, 1584),
     BLOOD_VELD(13,Difficulty.MEDIUM, 50, 277,
@@ -109,7 +109,7 @@ public enum SlayerTask {
     private final Difficulty difficulty;
     private final int slayerLevel, slayerXP, index;
     private final List<Integer> ids = new ArrayList<>();
-    private static final int EXP_MULTIPLIER = 4;
+    private static final int EXP_MULTIPLIER = 8;
 
     private SlayerTask(final int index,final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
         this.difficulty = difficulty;

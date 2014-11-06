@@ -159,6 +159,7 @@ public class ItemSpawning {
 		 * Forbidden Items. eg Zaniks Crate
 		 */
 		switch(id) {
+            case 12862:
 			case 0:
 			case 2412:
 			case 2413:

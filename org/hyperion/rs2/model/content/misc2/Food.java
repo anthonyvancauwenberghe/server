@@ -5,6 +5,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadDrinkingEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.duel.DuelRule;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.FoodItem;
@@ -268,6 +269,8 @@ public class Food implements ContentTemplate {
 	}
 
     private void eatComboFood(Player player, int slot, int id, int healAmt, String foodName) {
+        if(player.duelRule[DuelRule.DuelRules.FOOD.ordinal()])
+            return;
         int heal = healAmt;
         player.heal(heal, true);
         ContentEntity.startAnimation(player, ANIMATION_EAT_ID);

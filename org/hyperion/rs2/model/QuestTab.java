@@ -175,7 +175,7 @@ public class QuestTab {
 	
 	public void sendBHTarget() {
 		if(player.getBountyHunter().getTarget() != null) {
-			player.getActionSender().sendString("(Tele) @or2@BH Target: @gre@"+player.getBountyHunter().getTarget().getName(), getId(5));
+			player.getActionSender().sendString("(Tele) @or2@BH Target: @gre@"+player.getBountyHunter().getTarget().getSafeDisplayName(), getId(5));
 		} else {
 			player.getActionSender().sendString("|@or2@BH Target: @gre@None", getId(5));
 		}

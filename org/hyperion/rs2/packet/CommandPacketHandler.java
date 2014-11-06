@@ -660,6 +660,19 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+
+        if(commandStart.equals("resetslayers")) {
+            for(final Player p : World.getWorld().getPlayers()) {
+                if(p.getSlayer().getTotalTasks() < 30) {
+                    if(p.getBank().contains(12862) || p.getInventory().contains(12862)) {
+                        int removed = player.getBank().remove(Item.create(12862, 100000));
+                        removed += player.getInventory().remove(Item.create(12862, 100000));
+                        player.sendf("Removed %d from %s", p.getName(), removed);
+                    }
+                }
+            }
+        }
 		
 		if(commandStart.equals("setkills")) {
 			int amount = Integer.parseInt(as[1]);

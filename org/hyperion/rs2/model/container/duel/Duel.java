@@ -102,8 +102,8 @@ public class Duel {
 		opponent.getInterfaceState().addListener(opponent.getInventory(), new InterfaceContainerListener(opponent, 3322));
 		player.getActionSender().sendString(6684, "Are you sure you want to make this duel?");
 		opponent.getActionSender().sendString(6684, "Are you sure you want to make this duel?");
-		opponent.getActionSender().sendString(6671, "Dueling with: " + player.getName() + "           Opponent's Equipment");
-		player.getActionSender().sendString(6671, "Dueling with: " + opponent.getName() + "           Opponent's Equipment");
+		opponent.getActionSender().sendString(6671, "Dueling with: " + player.getSafeDisplayName() + "           Opponent's Equipment");
+		player.getActionSender().sendString(6671, "Dueling with: " + opponent.getSafeDisplayName() + "           Opponent's Equipment");
 		player.setTradeWith(opponent);
 		opponent.setTradeWith(player);
 	}

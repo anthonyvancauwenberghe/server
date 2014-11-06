@@ -63,9 +63,8 @@ public class Curses {
 									}
 								}*/
 					}
-					opponentPlayer.getActionSender().sendMessage("Your " + DRAIN_NAMES[leechId - 40] + " has been leeched by " + player.getName() + " !");
-                    final String oppName = opponentPlayer.getDisplay() != null && !opponentPlayer.getDisplay().isEmpty() ? opponentPlayer.getDisplay() : opponentPlayer.getName();
-					player.getActionSender().sendMessage("You have leeched " + oppName + "'s " + DRAIN_NAMES[leechId - 40] + " !");
+					opponentPlayer.getActionSender().sendMessage("Your " + DRAIN_NAMES[leechId - 40] + " has been leeched by " + player.getSafeDisplayName() + " !");
+					player.getActionSender().sendMessage("You have leeched " + opponentPlayer.getSafeDisplayName() + "'s " + DRAIN_NAMES[leechId - 40] + " !");
 				}
 				this.stop();
 			}

@@ -33,6 +33,10 @@ public class CheckPunishmentCommand extends Command {
                     punishments.add(p);
             }
         }
+        if(punishments.isEmpty()){
+            player.sendf("%s is not punished", targetName);
+            return false;
+        }
         for(final Punishment p : punishments)
             p.send(player, false);
         return true;

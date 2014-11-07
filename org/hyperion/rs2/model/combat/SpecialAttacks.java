@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.combat.weapons.SpecialWeapon;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
 public class SpecialAttacks {
@@ -361,12 +362,21 @@ public class SpecialAttacks {
 		}
 
 		tempDamage = SpiritShields.applyEffects(player.cE.getOpponent(), tempDamage);
+
+
 		/*
 		 * Determine if damage is critical..
 		 */
         final CombatEntity oldEntity = player.getCombat().getOpponent();
         if(oldEntity.getEntity() instanceof Player)
             tempDamage = oldEntity.getPlayer().getInflictDamage(tempDamage, player, false, combatStyle);
+        else {
+            if(SlayerShop.hasHelm(player) && !ranged && player.getSlayer().isTask(oldEntity.getNPC().getDefinition().getId())) {
+                tempDamage *= 1.15;
+            } else if (player.getSlayer().isTask(oldEntity.getNPC().getDefinition().getId()) && SlayerShop.hasFocus(player)) {
+                tempDamage *= 1.15;
+            }
+        }
 		final int hitDamage = tempDamage;
 		int critical = hitDamage >= maxDamg * 0.85 ? 5 : 0;
 		/*

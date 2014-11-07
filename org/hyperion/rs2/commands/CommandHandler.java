@@ -49,6 +49,7 @@ import org.hyperion.rs2.model.OSPK;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerPoints;
 import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.SpellBook;
 import org.hyperion.rs2.model.UpdateFlags;
@@ -1166,6 +1167,31 @@ public class CommandHandler {
             public boolean execute(final Player player, final String input){
                 Magic.teleport(player, 3108, 3159, 3, false);
                 return true;
+            }
+        });
+
+        submit(new Command("getskill", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                final String[] parts = filterInput(input).split(",");
+                if(parts.length != 2){
+                    player.sendf("Wrong syntax: ::getskill name,skill name");
+                    return false;
+                }
+                final String targetName = parts[0].trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                final String skillName = parts[1].trim();
+                for(int i = 0; i < Skills.SKILL_COUNT; i++){
+                    final String skill = Skills.SKILL_NAME[i];
+                    if(!skillName.equalsIgnoreCase(skill))
+                        continue;
+                    player.sendf("%s: %s = %d (%,d XP)", targetName, target.getSkills().getLevel(i), target.getSkills().getExperience(i));
+                    return true;
+                }
+                return false;
             }
         });
 	}

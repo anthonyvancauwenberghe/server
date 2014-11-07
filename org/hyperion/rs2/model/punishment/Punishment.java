@@ -64,25 +64,83 @@ public class Punishment {
 
     public boolean apply(){
         final Player victim = getVictim();
-        if(victim == null)
-            return false;
-        getCombination().apply(victim);
-        return true;
+        if(victim != null){
+            getCombination().apply(victim);
+            return true;
+        }
+        boolean applied = false;
+        for(final Player p : World.getWorld().getPlayers()){
+            if(p == null)
+                continue;
+            switch(getCombination().getTarget()){
+                case IP:
+                    if(!p.getShortIP().equals(getVictimIp()))
+                        break;
+                    getCombination().getType().apply(p);
+                    applied = true;
+                    break;
+                case MAC:
+                    if(p.getUID() != getVictimMac())
+                        break;
+                    getCombination().getType().apply(p);
+                    applied = true;
+                    break;
+            }
+        }
+        return applied;
     }
 
     public boolean isApplied(){
         final Player victim = getVictim();
-        if(victim == null)
-            return true;
-        return getCombination().isApplied(victim);
+        if(victim != null)
+            return getCombination().isApplied(victim);
+        for(final Player p : World.getWorld().getPlayers()){
+            if(p == null)
+                continue;
+            switch(getCombination().getTarget()){
+                case IP:
+                    if(!p.getShortIP().equals(getVictimIp()))
+                        break;
+                    if(!getCombination().getType().isApplied(p))
+                        return false;
+                    break;
+                case MAC:
+                    if(p.getUID() != getVictimMac())
+                        break;
+                    if(!getCombination().getType().isApplied(p))
+                        return false;
+                    break;
+            }
+        }
+        return true;
     }
 
     public boolean unapply(){
         final Player victim = getVictim();
-        if(victim == null)
-            return false;
-        getCombination().unapply(victim);
-        return false;
+        if(victim != null){
+            getCombination().unapply(victim);
+            return true;
+        }
+        boolean unapplied = false;
+        for(final Player p : World.getWorld().getPlayers()){
+            if(p == null)
+                continue;
+            switch(getCombination().getTarget()){
+                case IP:
+                    if(!p.getShortIP().equals(getVictimIp()))
+                        break;
+                    getCombination().getType().unapply(p);
+                    unapplied = true;
+                    break;
+                case MAC:
+                    if(p.getUID() != getVictimMac())
+                        break;
+                    getCombination().getType().unapply(p);
+                    unapplied = true;
+                    break;
+            }
+        }
+        return unapplied;
     }
 
     public String getIssuerName(){

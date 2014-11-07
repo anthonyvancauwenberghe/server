@@ -296,7 +296,7 @@ public class QuestTab {
 						if(wildLevel <= 20 && !inMulti) {
 							Magic.teleport(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), false);
 						} else {
-							DialogueManager.openDialogue(player, 167);
+							DialogueManager.openDialogue(player, 171);
 						}
 					}
 				}

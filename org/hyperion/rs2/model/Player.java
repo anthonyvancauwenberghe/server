@@ -1471,7 +1471,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			if(n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE))
 				npc = false;
 		}
-        /** Ring of life  */
+        /** Ring of life */
         if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
             if (duelAttackable > 0 || !Duel.inDuelLocation(this)) {
                 if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp

@@ -101,13 +101,13 @@ public class Punishment {
                 case IP:
                     if(!p.getShortIP().equals(getVictimIp()))
                         break;
-                    if(!getCombination().isApplied(p))
+                    if(!getCombination().getType().isApplied(p))
                         return false;
                     break;
                 case MAC:
                     if(p.getUID() != getVictimMac())
                         break;
-                    if(!getCombination().isApplied(p))
+                    if(!getCombination().getType().isApplied(p))
                         return false;
                     break;
             }

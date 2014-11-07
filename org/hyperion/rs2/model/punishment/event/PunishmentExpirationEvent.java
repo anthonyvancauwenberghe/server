@@ -19,14 +19,14 @@ public class PunishmentExpirationEvent extends Event {
             for(final Punishment punishment : holder.getPunishments()){
                 if(!punishment.getTime().isExpired()){
                     if(!punishment.isApplied()){
-                        if(punishment.apply()) {
+                        if(punishment.apply() && punishment.getVictim() != null) {
                             punishment.getVictim().sendf("Your %s did not expire!", punishment.getCombination());
                             punishment.send(punishment.getVictim(), true);
                         }
                     }
                     continue;
                 }
-                if(punishment.unapply())
+                if(punishment.unapply() && punishment.getVictim() != null)
                     punishment.send(punishment.getVictim(), true);
                 holder.remove(punishment);
                 punishment.setActive(false);

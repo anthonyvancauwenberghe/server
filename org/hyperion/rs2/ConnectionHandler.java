@@ -83,14 +83,14 @@ public class ConnectionHandler extends IoHandlerAdapter {
             p.getExtraData().put("packetsRead", p.getExtraData().getInt("packetsRead")+1);
             p.getExtraData().put("packetCount", p.getExtraData().getInt("packetCount")+1);
             int packetCount = p.getExtraData().getInt("packetCount");
-            if(packetCount > 30){
+            if(packetCount > 50){
                 p.sendf("@red@PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
-				if (p.getExtraData().getInt("packetCount") > 100) {
+				if (p.getExtraData().getInt("packetCount") > 150) {
 					long expiration_time = System.currentTimeMillis() + Time.ONE_MINUTE;
 					World.getWorld().getBanManager().moderate("Server", p, 2, true, expiration_time, "Suspected layer 7 ddos.");
 				}
-				if(packetCount > 50) {
-					System.out.printf("%s has a a %,d packet count, closing session\n", p.getName(), p.getExtraData().getInt("packetCount"));
+				if(packetCount > 150) {
+					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
                 	session.close(false);
 				}
                 return;

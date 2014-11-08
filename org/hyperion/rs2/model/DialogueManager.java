@@ -1106,7 +1106,7 @@ public class DialogueManager {
 						"Prayer Leech Perk: @blu@Leech your opponent's prayer (stacks with soulsplit & smite)");
 				break;
 			case 171:
-				player.getActionSender().sendDialogue("RISK!", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+				player.getActionSender().sendDialogue("RISK!", DialogueType.NPC, -1, FacialAnimation.DEFAULT,
 						"Your opponent is in deep or multi wilderness...", "Are you sure you want to teleport to him/her?");
 				player.getInterfaceState().setNextDialogueId(0, 172);//TODO
 				break;

@@ -108,7 +108,7 @@ public class Highscores {
 			sb.append(player.getSkills().getExperience(i)).append(",");
 		}
 		sb.append(total + "," + overall + "," + elo + ",'" + name + "')");
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
 		return sb.toString();
 	}
 

@@ -1475,7 +1475,7 @@ public class Player extends Entity implements Persistable, Cloneable{
         if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
             if (duelAttackable > 0 || !Duel.inDuelLocation(this)) {
                 if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp
-                    if (!Duel.inDuelLocation(this)) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
+                    if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
                         getEquipment().set(Equipment.SLOT_RING, null);
                         heal((int) getSkills().calculateMaxLifePoints());
                         getWalkingQueue().reset();

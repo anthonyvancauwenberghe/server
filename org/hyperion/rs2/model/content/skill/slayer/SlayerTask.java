@@ -117,7 +117,8 @@ public enum SlayerTask {
         this.slayerXP = slayerXP * EXP_MULTIPLIER;
         this.index = index;
         for(int i : ids)
-            this.ids.add(i);
+            this.ids.add(i
+            );
     }
 
     public Difficulty getDifficulty() { return difficulty; }

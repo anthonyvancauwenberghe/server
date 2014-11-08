@@ -415,7 +415,7 @@ public class Duel {
 		//player.cannotSwitch = false;
 		player.debugMessage("declined trade");
 		//System.out.println("decline: "+player.getName());
-		if(player.getTrader() != null) {
+		if(player.getTrader() != null && player.getTrader().getTrader().equals(player)) {
 			//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": declined a trade with: ").append(player.getTrader().getName()).toString());
 			if(player.duelAttackable == 0) {
 				player.getTrader().duelAttackable = 0;

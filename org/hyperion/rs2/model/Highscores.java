@@ -134,7 +134,7 @@ public class Highscores {
 		}
 		sb.deleteCharAt(sb.length() - 1); //delete the comma at the end.
 		sb.append(" WHERE Name = '" + name + "'");
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
 		player.getExtraData().remove("rhsu");
 		return sb.toString();
 	}

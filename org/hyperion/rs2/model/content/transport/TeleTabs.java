@@ -32,7 +32,7 @@ public class TeleTabs implements ContentTemplate {
 			return;
 		}
 		if(player.duelAttackable > 0 || Duel.inDuelLocation(player)) {
-            if(Duel.inDuelLocation(player) && player.duelAttackable > 0)
+            if(Duel.inDuelLocation(player) && player.duelAttackable < 1)
                 Duel.finishFullyDuel(player);
 			player.getActionSender().sendMessage("You cannot teleport from duel arena.");
 			return;

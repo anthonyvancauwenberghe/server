@@ -4,6 +4,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
+import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
@@ -68,6 +69,11 @@ public class NpcDeathEvent extends Event {
 			if(npc.getDefinition().getId() == 8133) {
 				for(Player p : World.getWorld().getPlayers()) {
 					if(p.getCorpDamage() > 100) {
+                        if(!p.equals(killer)) {
+                            int slayerXp =  p.getSlayer().killedTask(npc.getDefinition().getId());
+                            if(slayerXp > 0)
+                                ContentEntity.addSkillXP(p, slayerXp, Skills.SLAYER);
+                        }
 						/**
 						 * /500 is really low (max of like 6 dp /kill if soloed)
 						 * /60 is also really low (max of like 50 pkp in total for everyone / kill)

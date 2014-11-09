@@ -849,8 +849,9 @@ public class Combat {
             speed = speed * 2;
         // create the projectile
         // System.out.println("hitId: "+hitId);
-        attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY()
-                + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, gfx, height, 35, hitId, slope);
+        if(attack.getPlayer() != null)
+            attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY()
+                    + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, gfx, height, 35, hitId, slope);
     }
 
 	// 1 - attack is ok

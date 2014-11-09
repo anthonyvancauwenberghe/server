@@ -43,7 +43,7 @@ public class Dragons implements Attack {
 				//firebreath
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				boolean antiFire = (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000) && attack.getPlayer().superAntiFire;
+				boolean antiFire = attack.getPlayer() != null && (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000) && attack.getPlayer().superAntiFire;
 				if(antiFire)
 					Combat.npcAttack(n, attack, 0, 1000, 3);
 				else if(attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null && (attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 1540 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11283 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11284))

@@ -219,7 +219,7 @@ public class ActionSender {
 		}
 		if(player.isNew()) {
 			sendSkills();
-			String helpcc = "help" + (Misc.random(1) == 0 ? "2" : "");
+			String helpcc = "help";
 			ClanManager.joinClanChat(player, helpcc, false);
 			for(int i = 0; i < MAIN_STARTER.length; i++) {
 				try {

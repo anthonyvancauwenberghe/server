@@ -42,7 +42,7 @@ public class YellCommand extends Command {
 	}
 
 	public static final int NORMAL_YELL_DELAY = 30000;
-	public static final int DONATOR_YELL_DELAY = 5000;
+	public static final int DONATOR_YELL_DELAY = 10000;
 	public static final int SKILLER_YELL_DELAY = 15000;
 	
 	public static int minYellRank = 0;
@@ -111,25 +111,15 @@ public class YellCommand extends Command {
 					return false;
 				}
 				player.getYelling().updateYellTimer();
-			} else if(player.getSkills().getTotalLevel() >= 2200) {
-				if(yellMilliseconds < SKILLER_YELL_DELAY) {
-					player.getActionSender().sendMessage("Please wait " + (int) ((SKILLER_YELL_DELAY - yellMilliseconds) / 1000) + " seconds before yelling.");
-					return false;
-				}
-				player.getYelling().updateYellTimer();
-			} else {
-				/**
-				 * Ensure people don't make new accs to spam
-				 */
-				if(player.getPoints().getPkPoints() < 10) {
-					player.getActionSender().sendMessage("@red@To avoid spammers, normal players with less than 10 PKP cannot yell! Get pking ;)");
-					return false;
-				}
+			} else if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 2000)) {
 				if(yellMilliseconds < getYellDelay(player)) {
 					player.getActionSender().sendMessage("Please wait " + (int) ((getYellDelay(player) - yellMilliseconds) / 1000) + " seconds before yelling.");
 					return false;
 				}
 				player.getYelling().updateYellTimer();
+			} else {
+               player.sendMessage("Use the @red@help@bla@ clan chat for help", "Use the @red@::market@bla@ or the @red@market@bla@ cc for selling/buying", "Use the @red@duel@bla@ cc for staking");
+               return false;
 			}
 		}
 		final String colors = Rank.getPrimaryRank(player).getYellColor();

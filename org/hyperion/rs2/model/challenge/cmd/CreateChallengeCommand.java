@@ -25,10 +25,10 @@ public class CreateChallengeCommand extends Command{
         int length;
         try{
             length = Integer.parseInt(line.substring(0, i).trim());
-            if(length < 15 || length > 50)
+            if(length < 15 || length > 70)
                 throw new Exception();
         }catch(Exception ex){
-            player.sendf("Enter a valid length (15-50)");
+            player.sendf("Enter a valid length (15-70)");
             return false;
         }
         final String[] itemParts = line.substring(i+1).trim().split(" +");

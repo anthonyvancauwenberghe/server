@@ -2059,32 +2059,32 @@ public class Player extends Entity implements Persistable, Cloneable{
 			bounty = 5;
 		switch(killStreak) {
 			case 5:
-				ActionSender.yellMessage("@blu@" + getName() + " is on a "
+				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " is on a "
 						+ killStreak + " killStreak!");
 				break;
 			case 7:
-				ActionSender.yellMessage("@blu@" + getName()
+				ActionSender.yellMessage("@blu@" + getSafeDisplayName()
 						+ " has begun a rampage with a killstreak of " + killStreak);
 				break;
 			case 9:
-				ActionSender.yellMessage("@blu@" + getName()
+				ActionSender.yellMessage("@blu@" + getSafeDisplayName()
 						+ " is on a massacre with " + killStreak + " kills!");
 				break;
 		}
 		if(killStreak >= 10) {
 			if(Math.random() > 0.5)
-				ActionSender.yellMessage("@blu@" + getName() + " has now "
+				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " has now "
 						+ killStreak + " kills in a row! Kill him and gain "
 						+ bounty + " Pk Points!");
 			else {
 				String ppl = getPeopleString();
-				ActionSender.yellMessage("@blu@" + getName() + " has killed "
+				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " has killed "
 						+ killStreak + ppl + " in a row! Kill him and gain "
 						+ bounty + " Pk Points!");
 			}
 		}
         if(killStreak >= 120) {
-            ActionSender.yellMessage("@blu@" + getName() + "s kill streak has internally malfunctioned, it is now 0.");
+            ActionSender.yellMessage("@blu@" + getSafeDisplayName() + "s kill streak has internally malfunctioned, it is now 0.");
             resetKillStreak();
             bounty = 5;
         }

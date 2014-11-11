@@ -148,7 +148,7 @@ public class PlayerDeathEvent extends Event {
 					/**
 					 * Increasing stupid points and stuff.
 					 */
-					killer.sendMessage(sendKillMessage(player.getName()));
+					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
 					killer.getBountyHunter().handleBHKill(player);
 					BountyPerkHandler.handleSpecialPerk(killer);
 					if(true || killer.getLocation().inPvPArea()) {
@@ -178,7 +178,7 @@ public class PlayerDeathEvent extends Event {
 							killer.addLastKill(player.getName());
 							int pointsToAdd = player.wildernessLevel / 4 + player.getBounty();
 							if(player.getKillStreak() >= 6) {
-								ActionSender.yellMessage("@blu@" + killer.getName() + " has just ended " + player.getName() + "'s rampage of " + player.getKillStreak() + " kills.");
+								ActionSender.yellMessage("@blu@" + killer.getName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
 							killer.getPoints().inceasePkPoints(pointsToAdd > 0 ? pointsToAdd : 5);
 						}

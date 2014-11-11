@@ -40,13 +40,13 @@ public class Challenge {
     public void send(final Player player, final boolean alert){
         if(alert){
             player.sendf(
-                    "Alert##%s's Challenge##First to type ::challenge %s##Wins: %s x%,d!",
+                    "Alert##%s's Challenge##::challenge %s##Prize: %s x%,d!",
                     getName(), getText(), getPrize().getDefinition().getName(), getPrize().getCount()
             );
         }else{
             player.sendf("@red@----------------------------------------------------------------------------------------");
             player.sendf("@blu@%s@bla@'s Challenge!", getName());
-            player.sendf("Type: ::challenge @blu@%s", getText());
+            player.sendf("::challenge @blu@%s", getText());
             player.sendf("Prize: @blu@%s@bla@ x@blu@%,d@blu@", getPrize().getDefinition().getName(), getPrize().getCount());
             player.sendf("@red@----------------------------------------------------------------------------------------");
         }

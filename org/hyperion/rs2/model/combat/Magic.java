@@ -1113,11 +1113,12 @@ public class Magic {
 					"You cannot teleport out of jail.");
 			return;
 		}
-		if(player.duelAttackable > 0) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from duel arena.");
-			return;
-		}
+        if(player.duelAttackable > 0 || Duel.inDuelLocation(player)) {
+            if(Duel.inDuelLocation(player) && player.duelAttackable < 1)
+                Duel.finishFullyDuel(player);
+            player.getActionSender().sendMessage("You cannot teleport from duel arena.");
+            return;
+        }
 		if(World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()

@@ -33,6 +33,8 @@ public class ItemsTradeable {
 	private static final List<Integer> UNTRADABLES = Arrays.asList(ITEM_NON_TRADEABLE);
 
 	public static boolean isTradeable(int id) {
+        if(id == 13263 || id == 15492)
+            return true;
 		return !UNTRADABLES.contains(Integer.valueOf(id));
 	}
 

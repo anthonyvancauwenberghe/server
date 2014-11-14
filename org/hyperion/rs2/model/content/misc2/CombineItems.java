@@ -33,7 +33,9 @@ public class CombineItems implements ContentTemplate {
 				}
 			}
 			if(index != - 1) {
-				ContentEntity.deleteItem(player, id, slot, 1);
+                if (player.getInventory().contains(id) || player.getInventory().contains(itemId2))
+	                return false;
+							ContentEntity.deleteItem(player, id, slot, 1);
 				ContentEntity.deleteItem(player, itemId2, itemSlot2, 1);
 				ContentEntity.addItem(player, combineItems[index][2]);
 				return true;

@@ -35,7 +35,7 @@ public final class PunishmentManager {
     public boolean load(){
         ResultSet rs = null;
         try{
-            rs = connection.query("SELECT * FROM punishments WHERE active = 1");
+            rs = connection.query("SELECT * FROM punishments");
             while(rs.next()){
                 final String issuer = rs.getString("issuer");
                 final String victim = rs.getString("victim");

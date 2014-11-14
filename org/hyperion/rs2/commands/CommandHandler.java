@@ -1018,7 +1018,6 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new CheckPunishmentCommand());
-        CommandHandler.submit(new RemovePunishmentCommand());
         CommandHandler.submit(new ViewPunishmentsCommand());
         CommandHandler.submit(new MyPunishmentsCommand());
 

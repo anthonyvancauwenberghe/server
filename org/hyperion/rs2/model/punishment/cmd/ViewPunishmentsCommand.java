@@ -17,9 +17,18 @@ public class ViewPunishmentsCommand extends Command {
     }
 
     public boolean execute(final Player player, final String input){
-        for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders())
-            for(final Punishment p : holder.getPunishments())
-                p.send(player, false);
+        String issuerName = filterInput(input);
+        if(issuerName.startsWith("@")){
+            issuerName = issuerName.substring(1);
+            for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders())
+                for(final Punishment p : holder.getPunishments())
+                    if(p.getIssuerName().equalsIgnoreCase(issuerName))
+                        p.send(player, false);
+        }else{
+            for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders())
+                for(final Punishment p : holder.getPunishments())
+                    p.send(player, false);
+        }
         return true;
     }
 }

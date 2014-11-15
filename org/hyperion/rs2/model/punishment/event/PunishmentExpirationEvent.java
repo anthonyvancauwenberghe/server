@@ -28,7 +28,6 @@ public class PunishmentExpirationEvent extends Event {
                 }
                 if(punishment.unapply() && punishment.getVictim() != null)
                     punishment.send(punishment.getVictim(), true);
-                holder.remove(punishment);
                 punishment.setActive(false);
             }
         }

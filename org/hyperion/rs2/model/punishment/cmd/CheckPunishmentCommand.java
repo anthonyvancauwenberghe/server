@@ -23,6 +23,8 @@ public class CheckPunishmentCommand extends Command {
         final List<Punishment> punishments = new ArrayList<>();
         for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
             for(final Punishment p : h.getPunishments()){
+                if(p.getTime().isExpired())
+                    continue;
                 if(p.getVictimName().equalsIgnoreCase(targetName)){
                     punishments.add(p);
                     continue;

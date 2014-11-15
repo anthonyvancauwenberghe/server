@@ -41,7 +41,6 @@ public class UnPunishCommand extends Command {
         if(punishment.unapply())
             punishment.send(punishment.getVictim(), true);
         punishment.send(player, true);
-        holder.remove(punishment);
         punishment.setActive(false);
         return false;
     }

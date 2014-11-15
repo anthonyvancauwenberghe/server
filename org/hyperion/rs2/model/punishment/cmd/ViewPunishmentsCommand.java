@@ -22,12 +22,13 @@ public class ViewPunishmentsCommand extends Command {
             issuerName = issuerName.substring(1);
             for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders())
                 for(final Punishment p : holder.getPunishments())
-                    if(p.getIssuerName().equalsIgnoreCase(issuerName))
+                    if(!p.getTime().isExpired() && p.getIssuerName().equalsIgnoreCase(issuerName))
                         p.send(player, false);
         }else{
             for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders())
                 for(final Punishment p : holder.getPunishments())
-                    p.send(player, false);
+                    if(!p.getTime().isExpired())
+                        p.send(player, false);
         }
         return true;
     }

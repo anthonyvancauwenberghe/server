@@ -183,7 +183,7 @@ public class EquipmentReq {
 			equipReqData[skillCape] = 99;
 			return equipReqData;
 		}
-		if(s.contains("vesta") || s.contains("statius")) {
+		if(s.contains("vesta") || s.contains("statius") || s.contains("morrigan") || s.contains("zuriel")) {
 			if(s.contains("corrupt"))
 				equipReqData[1] = 20;
 			else
@@ -231,6 +231,19 @@ public class EquipmentReq {
 			else
 				equipReqData[1] = 99;
 		}
+        if(s.contains("saradomin") || s.contains("guthix") || s.contains("zamorak")) {
+            if(s.contains("chap") || s.toLowerCase().endsWith(" body"))
+                equipReqData[4] = 70;
+            if(!s.contains("robe"))
+                equipReqData[1] = 40;
+            else {
+                equipReqData[6] = 40;
+                equipReqData[5] = 30;
+            }
+
+        }
+        if(s.toLowerCase().startsWith("combat robe"))
+            equipReqData[1] = 40;
 		if(s.contains("chaotic")) {
 			if(isWep)
 				if(ItemId == 18355)
@@ -333,7 +346,7 @@ public class EquipmentReq {
 				equipReqData[1] = 30;
 			return equipReqData;
 		}
-		if(s.contains("rune")) {
+		if(s.contains("rune") || s.contains("gilded") || s.contains("rock-shell")) {
 			if(s.contains("dagger") || s.contains("sword") || s.contains("scimitar") || s.contains("spear") || s.contains("axe") || s.contains("mace")) {
 				equipReqData[0] = 40;
 			} else if(s.contains("bow") || s.contains("knife") || s.contains("dart") || s.contains("javelin") || s.contains("thrownaxe") || s.contains("arrow") || s.contains("bolts")) {
@@ -342,8 +355,6 @@ public class EquipmentReq {
 				equipReqData[1] = 40;
 			return equipReqData;
 		}
-		if(s.contains("rock-shell"))
-			equipReqData[1] = 60;
 		if(s.contains("dragon") && ! s.contains("nti-") && ! s.contains("fire")) {
 			if(s.contains("dagger") || s.contains("sword") || s.contains("scimitar") || s.contains("spear") || s.contains("axe") || s.contains("mace") || s.contains("claws")) {
 				equipReqData[0] = 60;
@@ -384,6 +395,8 @@ public class EquipmentReq {
 		if(s.contains("Initiate")) {
 			equipReqData[1] = 20;
 		}
+        if(s.contains("whip"))
+            equipReqData[0] = 70;
 		if(s.contains("verac") || s.contains("guthan") || s.contains("dharok") || s.contains("torag")) {
 			if(s.contains("hammers")) {
 				equipReqData[0] = 70;

@@ -73,7 +73,6 @@ import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
 import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
 import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
 import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
 import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;

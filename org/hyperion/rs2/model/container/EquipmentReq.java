@@ -242,7 +242,7 @@ public class EquipmentReq {
             }
 
         }
-        if(s.toLowerCase().startsWith("combat robe"))
+        if(s.toLowerCase().startsWith("combat robe") || s.toLowerCase().startsWith("battle robe"))
             equipReqData[1] = 40;
 		if(s.contains("chaotic")) {
 			if(isWep)
@@ -337,7 +337,7 @@ public class EquipmentReq {
 				equipReqData[1] = 20;
 			return equipReqData;
 		}
-		if(s.contains("adamant")) {
+		if(s.contains("adamant") || s.toLowerCase().startsWith("adam")) {
 			if(s.contains("dagger") || s.contains("sword") || s.contains("scimitar") || s.contains("spear") || s.contains("axe") || s.contains("mace")) {
 				equipReqData[0] = 30;
 			} else if(s.contains("bow") || s.contains("knife") || s.contains("dart") || s.contains("javelin") || s.contains("thrownaxe") || s.contains("arrow") || s.contains("bolts")) {

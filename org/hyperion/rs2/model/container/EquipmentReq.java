@@ -487,8 +487,8 @@ public class EquipmentReq {
 			case 3749:
 			case 3751:
 			case 3755:
-            case 12674:
-            case 12675:
+            case 12673:
+            case 12672:
 				equipReqData[1] = 45;
 				break;
 

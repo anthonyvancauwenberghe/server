@@ -120,6 +120,16 @@ public class NpcDeathEvent extends Event {
                             new Item(npc.bones, 1));
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
+
+                /** Thanks giving event turkeys*/
+                if (npc.getDefinition().getId() == 3375) {
+                    if (player.getTurkeyKills() == 50) {
+                        player.sendf("@red@You have defeated 50 turkeys, speak to Grandpa Jack for more information.");
+                        return;
+                    }
+                    player.setTurkeyKills(player.getTurkeyKills() + 1);
+                    player.sendf("@red@You have defeated currently "+player.getTurkeyKills()+"/50 turkeys.");
+                }
                 //charms
                 if (npc.charm > 0) {
                     GlobalItem globalItem5 = new GlobalItem(
@@ -140,7 +150,6 @@ public class NpcDeathEvent extends Event {
                     );
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
-
                 if (HaloweenEvent.zombies.contains(npc.getDefinition().getId())) {
                     player.sshCharges++;
                     player.sendf("You have @red@%d@bla@ zombie kills", player.sshCharges);
@@ -160,6 +169,7 @@ public class NpcDeathEvent extends Event {
 
 
                 }
+                if (!(npc.getDefinition().getId() == 3375))
                 player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
                 final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                 //normal drops

@@ -90,6 +90,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
 
+    private boolean completedTG;
 	private boolean hasMaxCape = false;
 	private boolean hasCompCape = false;
 
@@ -155,6 +156,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	
 	public int sshCharges;
 
+    private int turkeyKills;
 	/**
 	 * Gets the KDR value rounded to 3 decimals.
 	 *
@@ -2320,4 +2322,18 @@ public class Player extends Entity implements Persistable, Cloneable{
     return chargeSpell || chargeTill > System.currentTimeMillis();
     }
 
+    public int getTurkeyKills() {
+        return turkeyKills;
+    }
+    public void setTurkeyKills(int turkeyKills) {
+        turkeyKills = turkeyKills;
+    }
+
+    public void completeTGEvent(boolean b) {
+       b = completedTG;
+    }
+
+    public boolean hasFinishedTG() {
+        return completedTG;
+    }
 }

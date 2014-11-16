@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.RangingGuild;
 import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
 import org.hyperion.rs2.model.content.misc.Starter;
+import org.hyperion.rs2.model.content.misc.TGEvent;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
@@ -1162,6 +1163,54 @@ public class DialogueManager {
             case 178:
                 player.getSlayer().removeTask();
                 player.getActionSender().sendMessage("You now have 0 total tasks and your task has been reset!");
+                player.getActionSender().removeChatboxInterface();
+                break;
+            /** Thanks giving event dialogues*/
+            case 179: //jack D
+                player.getInterfaceState().setNextDialogueId(0, -1);
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.ANNOYED,
+                        "Good day " + player.getName() + "! I'm kind of in trouble.",
+                        "In order to save thanks-giving I need your help to",
+                        "defeat 50 evil chickens, once you've done that", "please come back to me and that speak to me again.");
+                break;
+            case 180: //jack D
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "You have killed "+player.getTurkeyKills()+" out of "+player.getTurkeyKills()+" evil chickens.",
+                        "Speak with me once you have killed 50 of them,",
+                        "we must save the thanks-giving after all!");
+                player.getInterfaceState().setNextDialogueId(0, -1);//
+                break;
+            case 181: //jack D
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "So you managed to kill all the evil chickens, "+player.getName()+"!",
+                        "Now the thanks-giving is all safe thanks to you!");
+                player.getInterfaceState().setNextDialogueId(0, 182);//
+                break;
+            case 182: //jack D
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "Please accept my reward as a gift,", "it's the least I can do!");
+                player.getInterfaceState().setNextDialogueId(0, 183);//
+                break;
+            case 183:
+                player.sendMessage("DeviousPK wishes you happy thanks-giving!");
+                player.getActionSender().removeChatboxInterface();
+                player.sendMessage("@red@You have received x1 Web cloak to your bank account!");
+                player.completeTGEvent(true);
+                player.getBank().add(new Item(15352, 1));
+                break;
+            case 184: //gala
+                if (player.hasFinishedTG()) {
+                    player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                            "You have already saved the thanks-giving, "+player.getName()+"!");
+                    return;
+                }
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "My friend called Grandpa Jack is in need of help.",
+                        "I will take you to him for more instructions.");
+                player.getInterfaceState().setNextDialogueId(0, 185);
+                break;
+            case 185: //gala
+                TGEvent.teleport(player);
                 player.getActionSender().removeChatboxInterface();
                 break;
 			default:

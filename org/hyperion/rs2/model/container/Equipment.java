@@ -363,13 +363,25 @@ public class Equipment {
 	 */
 	public static EquipmentType getType(Item item) {
 		int id = item.getId();
+        switch (id) {
+            case 11021:
+                return EquipmentType.FULL_MASK;
+            case 11016:
+            case 11019:
+                return EquipmentType.BOOTS;
+            case 11017:
+            case 11020:
+                return EquipmentType.PLATEBODY;
+            case 11018:
+            case 11022:
+                return EquipmentType.LEGS;
+        }
 		if(equipmentTypes.containsKey(id)) {
 			return equipmentTypes.get(id);
-		}  else if (id == 11021) {
-            return EquipmentType.FULL_MASK;
-        }  else {
-			return EquipmentType.WEAPON;
 		}
+        else {
+            return EquipmentType.WEAPON;
+        }
 	}
 
 	/**

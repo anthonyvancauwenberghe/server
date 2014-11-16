@@ -28,7 +28,6 @@ public class NpcDeathEvent extends Event {
 	/**
 	 * Creates te death event for the specified entity.
 	 *
-	 * @param entity The player or npc whose death has just happened.
 	 */
 	public NpcDeathEvent(NPC npc) {
 		super(500, "npcdeath");
@@ -127,6 +126,9 @@ public class NpcDeathEvent extends Event {
 					GlobalItem globalItem5 = new GlobalItem(
 							player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
 							new Item(npc.charm, 1));
+                    if (player.getInventory().contains(16639))
+                        ContentEntity.addItem(player, npc.charm);
+                    else
 					World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
 				}
 				//talismines

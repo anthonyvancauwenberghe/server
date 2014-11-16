@@ -122,7 +122,7 @@ public class Equipment {
 			4947, 4948, 4949, 4970, 4971, 4972, 4973, 4994, 4995, 4996, 4997,
 			5048, 5050, 5052, 5576, 6107, 6130, 6187, 6390, 6386, 6390, 6396,
 			6404, 6135, 6809, 6916, 4091, 4111, 6655, 6654, 7398, 7398, 7386,
-			6324, 6343, 6353, 3387, 5036, 5038, 5040, 14734, 15622,6181,5047,5045,5044,5042,11018,7593};
+			6324, 6343, 6353, 3387, 5036, 5038, 5040, 14734, 15622,6181,5047,5045,5044,5042,11018,7593,11022};
 
 	/**
 	 * Items which are classified as platebody.
@@ -136,7 +136,7 @@ public class Equipment {
 			4712, 6107, 2661, 3140, 1115, 1117, 1119, 1121, 1123, 1125, 1127,
 			2583, 2591, 2599, 2607, 2615, 6322, 2623, 2653, 2669, 3481, 4720,
 			4728, 4749, 2661, 6129, 6916, 4091, 6654, 6133, 75, 7399, 7390,
-			5575, 6341, 6351, 3387, 5030, 5032, 5034, 7392};
+			5575, 6341, 6351, 3387, 5030, 5032, 5034, 7392,11020};
 
 	/**
 	 * Items which are classified as full helmets.
@@ -146,14 +146,14 @@ public class Equipment {
 			4753, 4732, 4753, 6188, 4511, 4056, 4071, 4724, 6109, 2665, 1153,
 			1155, 1157, 1159, 1161, 1163, 1165, 2587, 2595, 2605, 2613, 2619,
 			2627, 2657, 2673, 3486, 6402, 6394, 6131, 74, 7539, 7539, 7534,
-			5574, 6326, 19716,12681,10828,1153,1155,1157,1159,1161,1163,11021,6722,7594};
+			5574, 6326, 19716,12681,10828,1153,1155,1157,1159,1161,1163,11021,6722,7594,11021};
 
 	/**
 	 * Items which are classified as full masks.
 	 */
 	public static int FULL_MASK[] = {4502, 6623, 7990, 7594, 1153, 1155, 1157,
 			1159, 1161, 1163, 1165, 4732, 5554, 4611, 6188, 3507, 4511,
-			4056, 4071, 4724, 2665, 1053, 1055, 1057,7003};
+			4056, 4071, 4724, 2665, 1053, 1055, 1057,7003,11021};
 
 	/**
 	 * Items which are classified as hats.
@@ -179,7 +179,7 @@ public class Equipment {
 			5554, 5574, 6109, 6128, 6131, 6137, 6182, 6188, 6335, 6337, 6339,
 			6345, 6355, 6365, 6375, 6382, 6392, 6400, 6918, 6656, 2581, 7539,
 			7394, 7396, 7534, 5574, 6885, 6858, 6860, 6862, 6856, 6326, 6128,
-			6137, 7400, 7323, 7325, 7327, 7003};
+			6137, 7400, 7323, 7325, 7327, 7003, 11021};
 	/**
 	 * The helmet slot.
 	 */
@@ -257,6 +257,7 @@ public class Equipment {
 		GLOVES("Gloves", Equipment.SLOT_GLOVES),
 		SHIELD("Shield", Equipment.SLOT_SHIELD),
 		HAT("Hat", Equipment.SLOT_HELM),
+        HAT2("Chicken head", Equipment.SLOT_HELM),
 		AMULET("Amulet", Equipment.SLOT_AMULET),
 		ARROWS("Arrows", Equipment.SLOT_ARROWS),
 		RING("Ring", Equipment.SLOT_RING),
@@ -362,11 +363,25 @@ public class Equipment {
 	 */
 	public static EquipmentType getType(Item item) {
 		int id = item.getId();
+        switch (id) {
+            case 11021:
+                return EquipmentType.FULL_MASK;
+            case 11016:
+            case 11019:
+                return EquipmentType.BOOTS;
+            case 11017:
+            case 11020:
+                return EquipmentType.PLATEBODY;
+            case 11018:
+            case 11022:
+                return EquipmentType.LEGS;
+        }
 		if(equipmentTypes.containsKey(id)) {
 			return equipmentTypes.get(id);
-		} else {
-			return EquipmentType.WEAPON;
 		}
+        else {
+            return EquipmentType.WEAPON;
+        }
 	}
 
 	/**

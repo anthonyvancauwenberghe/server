@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.shops.SlayerShop;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class ItemsTradeable {
 	public static boolean isTradeable(int id) {
         if(id == 16639)
             return false;
+        if(id == SlayerShop.SLAYER_HELM || id == SlayerShop.FULL_HELM)
+            return true;
 		return !UNTRADABLES.contains(Integer.valueOf(id));
 	}
 

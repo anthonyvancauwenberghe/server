@@ -188,11 +188,11 @@ public class NpcDeathEvent extends Event {
                 /** Thanks giving event turkeys*/
                 if (npc.getDefinition().getId() == 3375) {
                     if (player.getTurkeyKills() == 50) {
-                        player.sendf("@red@You have defeated 50 turkeys, speak to Grandpa Jack for more information.");
+                        player.sendf("@red@You have defeated 50 evil chickens, speak to Grandpa Jack for more information.");
                         return;
                     }
                     player.setTurkeyKills(player.getTurkeyKills() + 1);
-                    player.sendf("@red@You have defeated currently "+player.getTurkeyKills()+"/50 turkeys.");
+                    player.sendf("@red@You have defeated currently "+player.getTurkeyKills()+"/50 evil chickens.");
                 }
             }
         } else if(timer == - 1) {

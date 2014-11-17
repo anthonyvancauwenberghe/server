@@ -100,10 +100,15 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("xteletome", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
+
 				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					return false;
 				if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					return false;
+                if (player.getLocation().inDuel()) {
+                    player.sendMessage("You cannot use this command at duel arena.");
+                    return false;
+                }
 				String name = filterInput(input);
 				Player target = World.getWorld().getPlayer(name);
 				if(target != null) {
@@ -128,6 +133,10 @@ public class TeleportCommands {
 			public boolean execute(Player player, String input) {
 				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
+                if (player.getLocation().inDuel()) {
+                    player.sendMessage("You cannot use this command at duel arena.");
+                    return false;
+                }
 				String name = filterInput(input);
 				Player x = World.getWorld().getPlayer(name);
 				if(x != null) {

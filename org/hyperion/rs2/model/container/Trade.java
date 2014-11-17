@@ -316,8 +316,8 @@ public class Trade {
 	}
 
 	public static void finishTrade(Player player) {
-		if(player.getTrader() == null)
-			return;
+        if (player != null && player.getTrader() != null) {
+
 		if(player.getTrader().getTrader() != player) {
 			player.sendMessage("Anti-bug, stopped");
 			PushMessage.pushStaffMessage("is trying to do a 3-way trade", player);
@@ -331,11 +331,13 @@ public class Trade {
 			//we open the confirm screen.
 			confirmScreen(player);
 		}
-		if(! player.tradeAccept1 || ! player.getTrader().tradeAccept1 || ! player.tradeAccept2 || ! player.getTrader().tradeAccept2) {
+		if(! player.tradeAccept1 || !player.getTrader().tradeAccept1 || ! player.tradeAccept2 || ! player.getTrader().tradeAccept2) {
 			//do nothing.
 			int id = 3535;
-			if(! player.onConfirmScreen && ! player.getTrader().onConfirmScreen)
-				id = 3431;
+			if(! player.onConfirmScreen && !player.getTrader().onConfirmScreen) {
+                id = 3431;
+                return;
+            }
 			if((player.tradeAccept1 && ! player.getTrader().tradeAccept1) || (player.tradeAccept2 && ! player.getTrader().tradeAccept2)) {
 				player.getActionSender().sendString(id, "Waiting on the other player.");
 				player.getTrader().getActionSender().sendString(id, "Other player has accepted.");
@@ -381,6 +383,7 @@ public class Trade {
 		player.getTrader().getLogging().log("Finished trade with: " + player.getName());
 		declineTrade(player);
 	}
+    }
 
 	public static synchronized void declineTrade(Player player) {
 		if(player.getTrader() != null) {

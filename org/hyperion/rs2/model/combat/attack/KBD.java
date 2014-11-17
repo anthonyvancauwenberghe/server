@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.combat.attack;
 import org.hyperion.rs2.model.Attack;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Equipment;
@@ -10,7 +11,7 @@ import org.hyperion.rs2.model.container.Equipment;
 public class KBD implements Attack {
 
 	public String getName() {
-		return "KBD";
+        return "KBD";
 	}
 
 	public int handleAttack(NPC n, CombatEntity attack) {
@@ -52,9 +53,10 @@ public class KBD implements Attack {
 				//firebreath
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
+
 				boolean antiFire = (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000) && attack.getPlayer().superAntiFire;
-				if(antiFire)
-					Combat.npcAttack(n, attack, 0, 1000, 3);
+                    if (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000 && attack.getPlayer().superAntiFire)
+                        Combat.npcAttack(n, attack.getOpponent(), 0, 1000, 3);
 				else if(attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null && (attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 1540 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11283 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11284))
 					if(System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000)
 						Combat.npcAttack(n, attack, 0, 1000, 3);

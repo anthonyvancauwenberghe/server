@@ -6042,6 +6042,7 @@ item = 6566	Onyx_amulet	It_needs_a_string_so_I_can_wear_it.	1	1	0	0	0	0	0	0	0	0	
 item = 6568	Obsidian_cape	A_cape_of_woven_obsidian_plates.	24000	36000	0	0	0	0	0	0	9	9	9	9	9	0	0
 item = 6569	Obsidian_cape	Swap_this_note_at_any_bank_for_the_equivalent_item.	24000	36000	0	0	0	0	0	0	0	0	0	0	0	0	0
 item = 6570	Fire_cape	A_cape_of_fire.	60000	60000	60000	1	1	1	1	1	11	11	11	11	11	4	2
+item = 15352	Web_cloak	A_cape_of_fire.	60000	60000	60000	1	1	1	1	1	11	11	11	11	11	4	2
 item = 6571	Uncut_onyx	This_would_be_worth_more_cut.	200000	200000	200000	0	0	0	0	0	0	0	0	0	0	0	0
 item = 6572	Uncut_onyx	Swap_this_note_at_any_bank_for_the_equivalent_item.	200000	200000	200000	0	0	0	0	0	0	0	0	0	0	0	0
 item = 6573	Onyx	This_looks_valuable.	200000	200000	200000	0	0	0	0	0	0	0	0	0	0	0	0

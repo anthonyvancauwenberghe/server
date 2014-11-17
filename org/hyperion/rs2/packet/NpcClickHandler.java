@@ -52,7 +52,6 @@ public class NpcClickHandler {
 	 * Handles the option 1 packet.
 	 *
 	 * @param player The player.
-	 * @param packet The packet.
 	 */
 	private static void handleOption1(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
@@ -73,7 +72,30 @@ public class NpcClickHandler {
 		}
 		npc.face(player.getLocation());
 		switch(npc.getDefinition().getId()) {
+
+            case 817:
+                if (player.getBank().contains(15352) || player.getInventory().contains(15352) || player.getEquipment().contains(15352)) {
+                    player.sendMessage("You have already saved the thanks-giving!");
+                    return;
+                }
+                DialogueManager.openDialogue(player, 184);
+                break;
+            case 230: //Grandpa Jack
+            if (player.getBank().contains(15352) || player.getInventory().contains(15352) || player.getEquipment().contains(15352)) {
+                    player.sendMessage("You have already saved the thanks-giving!");
+                    return;
+                }
+                if (player.getTurkeyKills() == 50) {
+                    DialogueManager.openDialogue(player, 181);
+                return;
+                }
+                if (player.getTurkeyKills() > 0 && player.getTurkeyKills() < 49)
+                    DialogueManager.openDialogue(player, 180);
+                else
+                    DialogueManager.openDialogue(player, 179);
+                break;
 			case 2999:
+
 				DialogueManager.openDialogue(player, 149);
 				break;
 			case 1846://godwars bridge to zammy
@@ -227,7 +249,6 @@ public class NpcClickHandler {
 	 * Handles the option 2 packet.
 	 *
 	 * @param player The player.
-	 * @param packet The packet.
 	 */
 	private static void handleOption2(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)

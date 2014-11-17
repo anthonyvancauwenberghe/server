@@ -131,6 +131,7 @@ public class PlayerSaving {
 		saveList.add(new SavePass("Pass"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
+        saveList.add(new SaveTurkeyKills("TurkeyKills"));
 		saveList.add(new SaveRank("Rank"));
 		saveList.add(new SaveCreatedString("CreatedStr"));
 		saveList.add(new SaveLocation("Location"));
@@ -331,9 +332,6 @@ public class PlayerSaving {
 	}
 
 	/**
-	 * @param playerName
-	 * @param arrows
-	 * @param sql
 	 * @throws SQLException
 	 */
 	public void saveFriends(Player player) {
@@ -360,8 +358,6 @@ public class PlayerSaving {
 	}
 
 	/**
-	 * @param playerName
-	 * @param look
 	 * @throws SQLException
 	 */
 	public void saveLook(Player player) {
@@ -477,9 +473,6 @@ public class PlayerSaving {
 	}
 
 	/**
-	 * @param tableName
-	 * @param player
-	 * @throws SQLException
 	 */
 	private void createPlayer(Player player) {
 		StringBuilder sb = new StringBuilder();
@@ -676,7 +669,6 @@ public class PlayerSaving {
 	 * Saves a line to the specified log file.
 	 *
 	 * @param file
-	 * @param line
 	 */
 	public void saveLog(final File file, List<String> lines) {
 		String[] stringArray = new String[lines.size()];
@@ -691,7 +683,6 @@ public class PlayerSaving {
 	 * Saves a line to the specified log file.
 	 *
 	 * @param file
-	 * @param line
 	 */
 	public void saveLog(final String file, final String... lines) {
 		saveLog(new File(file), lines);

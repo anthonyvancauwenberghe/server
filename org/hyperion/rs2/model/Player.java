@@ -90,6 +90,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
 
+    private boolean completedTG;
 	private boolean hasMaxCape = false;
 	private boolean hasCompCape = false;
 
@@ -155,6 +156,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	
 	public int sshCharges;
 
+    public int turkeyKills;
 	/**
 	 * Gets the KDR value rounded to 3 decimals.
 	 *
@@ -979,16 +981,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		//	yellMuted = true;
 		//else if(banstatus == BanManager.MUTE)
 		//	isMuted = true;
-        for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
-            for(final Punishment p : holder.getPunishments()){
-                if(p.getVictimName().equalsIgnoreCase(getName())
-                        || p.getVictimIp().equals(getShortIP())
-                        || p.getVictimMac() == getUID()){
-                    p.apply();
-                    p.send(this, false);
-                }
-            }
-        }
 		active = false;
 		if(newCharacter) {
 			this.created = System.currentTimeMillis();
@@ -2309,6 +2301,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		if(other == this)
 			return true;
 		return getName().equalsIgnoreCase(((Player) other).getName());
+
 	}
 
     public void setKillStreak(int killStreak) {
@@ -2320,4 +2313,18 @@ public class Player extends Entity implements Persistable, Cloneable{
     return chargeSpell || chargeTill > System.currentTimeMillis();
     }
 
+    public int getTurkeyKills() {
+        return turkeyKills;
+    }
+    public void setTurkeyKills(int turkeyKills) {
+        this.turkeyKills = turkeyKills;
+    }
+
+    public void completeTGEvent(boolean b) {
+       b = completedTG;
+    }
+
+    public boolean hasFinishedTG() {
+        return completedTG;
+    }
 }

@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
@@ -136,6 +137,20 @@ public class CommandHandler {
 				return true;
 			}
 		});
+        /*
+
+
+            if (commandStart.equalsIgnoreCase("changeclanname")) {
+                final String[] args = s.substring(9).trim().split(",");
+                if (player.getClanRank() == 7) {
+                    player.setClanName(args[1]);
+                    player.getActionSender().sendClanInfo();
+                    player.sendMessage("Your clan chat's name has been changed to '"+player.getClanName()+"'.");
+                } else
+                    player.sendMessage("You are not the owner of this clan chat.");
+
+            }
+         */
 		submit(new Command("ks", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
@@ -381,9 +396,18 @@ public class CommandHandler {
 				return true;
 			}
 		});
+        submit(new Command("nexonsplace", Rank.SUPER_DONATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                Magic.teleport(player, 2464,4782,0, false, false);
+                return true;
+            }
+        });
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
+                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+                    return false;
 				Bank.open(player, false);
 				return true;
 			}

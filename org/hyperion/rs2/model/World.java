@@ -59,7 +59,9 @@ import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.event.PunishmentExpirationEvent;
+import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.region.RegionManager;
@@ -731,6 +733,16 @@ public class World {
 						"Could not register player " + player.getName());
 			}
 		}
+        for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
+            for(final Punishment p : holder.getPunishments()){
+                if(p.getVictimName().equalsIgnoreCase(player.getName())
+                        || p.getVictimIp().equals(player.getShortIP())
+                        || p.getVictimMac() == player.getUID()){
+                    p.getCombination().getType().apply(player);
+                    p.send(player, false);
+                }
+            }
+        }
 		final int fReturnCode = returnCode;
 		PacketBuilder bldr = new PacketBuilder();
 		bldr.put((byte) returnCode);

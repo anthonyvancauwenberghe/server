@@ -534,7 +534,7 @@ public class Duel {
             player.getInventory();
             Container.transfer(opponent.getDuel(), player.getInventory());
         }
-
+        opponent.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.getActionSender().sendMessage("You have "+(won ? "won" : "lost")+ " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);

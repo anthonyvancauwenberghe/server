@@ -128,6 +128,9 @@ public class TeleportCommands {
 			public boolean execute(Player player, String input) {
 				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
+                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+                    return false;
+
 				String name = filterInput(input);
 				Player x = World.getWorld().getPlayer(name);
 				if(x != null) {

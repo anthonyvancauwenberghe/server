@@ -155,8 +155,7 @@ public class ClanManager {
 
 	public static void sendClanMessage(Player player, String message, boolean toMe) {
 		// message = message+":clan:";
-		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@][@blu@" + player.getName() + "@bla@]: " + message;
-
+		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@] " + player.getName() + ": @bla@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {
 			player.getActionSender().sendMessage("You need to join a clan chat before you can send messages.");
@@ -212,8 +211,8 @@ public class ClanManager {
 				player.getActionSender().sendMessage("Player has been kicked succesfully");
 			return true;
 		}
-		if(s1.equals("setname") && ! player.getClanName().equals("")) {
-			String name = s.replace("setname ", "");
+		if(s1.equals("changeclanname") && ! player.getClanName().equals("")) {
+			String name = s.replace("changeclanname ", "");
 			Clan clan = ClanManager.clans.get(player.getClanName());
 			if(! clan.getOwner().equalsIgnoreCase(player.getName())
 					&& !Rank.hasAbility(player, Rank.MODERATOR)) {

@@ -121,10 +121,9 @@ public class NpcDeathEvent extends Event {
                     GlobalItem globalItem5 = new GlobalItem(
                             player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
                             new Item(npc.charm, 1));
-                    if (player.getInventory().contains(16639)) {
+                    if (player.getInventory().contains(16639))
                         ContentEntity.addItem(player, npc.charm, 1);
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
-                    } else
+                     else
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
                 //talismines

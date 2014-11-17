@@ -74,10 +74,14 @@ public class NpcClickHandler {
 		switch(npc.getDefinition().getId()) {
 
             case 817:
+                if (player.getBank().contains(15352) || player.getInventory().contains(15352) || player.getEquipment().contains(15352)) {
+                    player.sendMessage("You have already saved the thanks-giving!");
+                    return;
+                }
                 DialogueManager.openDialogue(player, 184);
                 break;
             case 230: //Grandpa Jack
-                if (player.hasFinishedTG()) {
+            if (player.getBank().contains(15352) || player.getInventory().contains(15352) || player.getEquipment().contains(15352)) {
                     player.sendMessage("You have already saved the thanks-giving!");
                     return;
                 }
@@ -91,6 +95,7 @@ public class NpcClickHandler {
                     DialogueManager.openDialogue(player, 179);
                 break;
 			case 2999:
+
 				DialogueManager.openDialogue(player, 149);
 				break;
 			case 1846://godwars bridge to zammy

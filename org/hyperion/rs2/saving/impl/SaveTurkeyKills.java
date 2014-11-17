@@ -15,15 +15,15 @@ public class SaveTurkeyKills extends SaveInteger {
         // TODO Auto-generated method stub
         return 0;
     }
-
     @Override
     public void setValue(Player player, int value) {
-        player.turkeyKills = value;
+        player.setTurkeyKills(value);
     }
 
     @Override
     public Integer getValue(Player player) {
-        return player.turkeyKills;
+        return player.getTurkeyKills();
     }
+
 
 }

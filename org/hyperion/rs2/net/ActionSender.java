@@ -1093,9 +1093,9 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendNPCHead(int npcId, int interfaceId, int childId) {
-		sendPlayerHead(interfaceId);
-		// player.getSession().write(new
-		// PacketBuilder(75).putLEShortA(npcId).putLEShortA(interfaceId).toPacket());
+		//sendPlayerHead(interfaceId);
+		 player.getSession().write(new
+		 PacketBuilder(75).putLEShortA(npcId).putLEShortA(interfaceId).toPacket());
 		return this;
 	}
 

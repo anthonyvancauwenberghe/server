@@ -155,8 +155,7 @@ public class ClanManager {
 
 	public static void sendClanMessage(Player player, String message, boolean toMe) {
 		// message = message+":clan:";
-		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@][@blu@" + player.getName() + "@bla@]: " + message;
-
+		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@] " + player.getName() + ": @bla@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {
 			player.getActionSender().sendMessage("You need to join a clan chat before you can send messages.");
@@ -178,6 +177,15 @@ public class ClanManager {
 		}
 
 	}
+    /** Clan chat name changing, will be finished later by fuzenseth / nexon*/
+    private static void changeClanName(Player player, Clan clan, String name) {
+        if (!(player.getClanRank() == 7)) {
+            player.sendMessage("You cannot change the clan's name.");
+            return;
+        }
+       for (Player clanPlayers : clan.getPlayers())
+        clanPlayers.sendMessage("@red@The clan's display name has been changed to '"+name+"'.");
+    }
 
 	public static void sendDiceMessage(Player player, Clan clan, int thrown) {
 		String message = "You roll @red@" + thrown

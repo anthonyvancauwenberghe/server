@@ -14,6 +14,8 @@ public class Clan {
 	private CopyOnWriteArrayList<String> peopleKicked = new CopyOnWriteArrayList<String>();
 	private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<Player>();
 
+    private static final int MAX_CLAN_MEMBERS = 100;
+
 	public CopyOnWriteArrayList<Player> getPlayers() {
 		return players;
 	}
@@ -32,19 +34,19 @@ public class Clan {
 	}
 
 	public boolean isFull() {
-		if(players.size() >= 21)
+		if(players.size() >= MAX_CLAN_MEMBERS)
 			return true;
 		return false;
 	}
 
 	public String getName() {
-		return clanName;
+		return clanName.toUpperCase();
 	}
 
 	public void setName(String newName) {
 		this.clanName = newName;
 		for(Player p : players) {
-			p.getActionSender().sendString(18139, "Talking in: " + newName);
+			p.getActionSender().sendString(18139, "Talking in: " + newName.toUpperCase());
 		}
 	}
 
@@ -55,7 +57,7 @@ public class Clan {
 	public void setOwner(String owner) {
 		this.owner = owner;
 		for(Player p : players)
-			p.getActionSender().sendString(18140, "Owner: " + owner);
+			p.getActionSender().sendString(18140, "Owner: " + owner.toUpperCase());
 	}
 
 	public Clan(String owner, String name) {

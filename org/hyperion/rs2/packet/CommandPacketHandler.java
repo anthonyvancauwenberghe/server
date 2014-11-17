@@ -50,6 +50,7 @@ import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.clan.ClanMember;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
@@ -105,7 +106,6 @@ public class CommandPacketHandler implements PacketHandler {
 				p.setPlayerRank(Rank.addAbility(p, Rank.GLOBAL_MODERATOR));
 			}
 		}
-
 		if (commandStart.equalsIgnoreCase("sdonors")) {
 			for (Player p : World.getWorld().getPlayers()) {
 				if (Rank.hasAbility(p, Rank.SUPER_DONATOR))
@@ -2195,7 +2195,6 @@ public class CommandPacketHandler implements PacketHandler {
 							"Invalid ticket request");
 				}
 			}
-
 			if (s.equals("resetbankpin")) {
 				if (player.bankPin.length() >= 4
 						&& !player.bankPin.equals(player.enterPin)) {

@@ -396,6 +396,13 @@ public class CommandHandler {
 				return true;
 			}
 		});
+        submit(new Command("nexonsplace", Rank.SUPER_DONATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                Magic.teleport(player, 2464,4782,0, false, false);
+                return true;
+            }
+        });
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {

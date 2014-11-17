@@ -62,6 +62,7 @@ public class NpcDeathEvent extends Event {
                 jet = World.getWorld().getPlayer("jet").debug ? World.getWorld().getPlayer("jet") : null;
             }
             Player killer = npc.cE.getKiller();
+
             if (jet != null && killer != null && npc != null)
                 jet.getActionSender().sendMessage("Killer is: " + killer.getName() + " for npc: " + npc.getDefinition().getName());
             if (npc.getDefinition().getId() == 8133) {
@@ -121,22 +122,13 @@ public class NpcDeathEvent extends Event {
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
 
-                /** Thanks giving event turkeys*/
-                if (npc.getDefinition().getId() == 3375) {
-                    if (player.getTurkeyKills() == 50) {
-                        player.sendf("@red@You have defeated 50 turkeys, speak to Grandpa Jack for more information.");
-                        return;
-                    }
-                    player.setTurkeyKills(player.getTurkeyKills() + 1);
-                    player.sendf("@red@You have defeated currently "+player.getTurkeyKills()+"/50 turkeys.");
-                }
                 //charms
                 if (npc.charm > 0) {
                     GlobalItem globalItem5 = new GlobalItem(
                             player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
                             new Item(npc.charm, 1));
                     if (player.getInventory().contains(16639)) {
-                        if (!ContentEntity.addItem(player, npc.charm))
+                         ContentEntity.addItem(player, npc.charm);
                             World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                     } else
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
@@ -166,8 +158,6 @@ public class NpcDeathEvent extends Event {
                                 Item.create(1053 + Misc.random(5)));
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                     }
-
-
                 }
                 if (!(npc.getDefinition().getId() == 3375))
                 player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
@@ -198,6 +188,15 @@ public class NpcDeathEvent extends Event {
                             Item.create(18768, 1));
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
 
+                }
+                /** Thanks giving event turkeys*/
+                if (npc.getDefinition().getId() == 3375) {
+                    if (player.getTurkeyKills() == 50) {
+                        player.sendf("@red@You have defeated 50 turkeys, speak to Grandpa Jack for more information.");
+                        return;
+                    }
+                    player.setTurkeyKills(player.getTurkeyKills() + 1);
+                    player.sendf("@red@You have defeated currently "+player.getTurkeyKills()+"/50 turkeys.");
                 }
             }
         } else if (timer == -1) {

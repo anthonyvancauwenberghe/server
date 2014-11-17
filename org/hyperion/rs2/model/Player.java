@@ -986,7 +986,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 if(p.getVictimName().equalsIgnoreCase(getName())
                         || p.getVictimIp().equals(getShortIP())
                         || p.getVictimMac() == getUID()){
-                    p.apply();
+                    p.getCombination().getType().apply(this);
                     p.send(this, false);
                 }
             }

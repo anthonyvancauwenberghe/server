@@ -404,7 +404,7 @@ public class Fletching implements ContentTemplate {
 			return isFletchable(player, slot, itemSlot2, id, itemId2);
 		}
 		if(type == 0) {
-			if((Integer) player.getExtraData().get("crafting") == 1) {
+			if((int) player.getExtraData().get("crafting") == 1) {
 				switch(id) {
 
 					case 8889:

@@ -176,21 +176,21 @@ public class NpcDeathEvent extends Event {
                 if (npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                     final int chance = isTask ? 500 : 1000;
                     for (NPCDrop drop : npc.getDefinition().getDrops()) {
-                        if (drop == null) continue;
-                        if (Combat.random(chance) <= drop.getChance()) {
-                            int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
-                            if (amt < 1) amt = 1; //fix glitched drops
-                            GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                                    npc.getLocation().getY(), npc.getLocation().getZ(),
-                                    Item.create(drop.getId(), amt));
-                            if (DonatorShop.getPrice(drop.getId()) > 50) {
-                                for (Player p : player.getRegion().getPlayers())
-                                    p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                        if (drop == null) {
+                            if (Combat.random(chance) <= drop.getChance()) {
+                                int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
+                             //   if (amt < 1) amt = 1; //fix glitched drops
+                                GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                                        npc.getLocation().getY(), npc.getLocation().getZ(),
+                                        Item.create(drop.getId(), amt));
+                                if (DonatorShop.getPrice(drop.getId()) > 50) {
+                                    for (Player p : player.getRegion().getPlayers())
+                                        p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                                }
+                                World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                             }
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         }
                     }
-
                 }
                 if (isTask && Misc.random(1000) < 1) {
                     GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),

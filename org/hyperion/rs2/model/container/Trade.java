@@ -316,6 +316,8 @@ public class Trade {
 	}
 
 	public static void finishTrade(Player player) {
+        if (player != null && player.getTrader() != null) {
+
 		if(player.getTrader().getTrader() != player) {
 			player.sendMessage("Anti-bug, stopped");
 			PushMessage.pushStaffMessage("is trying to do a 3-way trade", player);
@@ -381,6 +383,7 @@ public class Trade {
 		player.getTrader().getLogging().log("Finished trade with: " + player.getName());
 		declineTrade(player);
 	}
+    }
 
 	public static synchronized void declineTrade(Player player) {
 		if(player.getTrader() != null) {

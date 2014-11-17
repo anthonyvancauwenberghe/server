@@ -399,10 +399,8 @@ public class CommandHandler {
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-                if (player.getLocation().inDuel()) {
-                    player.sendMessage("You cannot use this command at duel arena.");
+                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
                     return false;
-                }
 				Bank.open(player, false);
 				return true;
 			}

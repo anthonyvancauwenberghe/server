@@ -1198,6 +1198,7 @@ public class DialogueManager {
                 player.completeTGEvent(true);
                 player.getBank().add(new Item(15352, 1));
                 break;
+
             case 184: //gala
                 if (player.hasFinishedTG()) {
                     player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,

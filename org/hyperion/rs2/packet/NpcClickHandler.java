@@ -72,6 +72,7 @@ public class NpcClickHandler {
 		}
 		npc.face(player.getLocation());
 		switch(npc.getDefinition().getId()) {
+
             case 817:
                 DialogueManager.openDialogue(player, 184);
                 break;

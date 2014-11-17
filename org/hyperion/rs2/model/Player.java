@@ -2311,6 +2311,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		if(other == this)
 			return true;
 		return getName().equalsIgnoreCase(((Player) other).getName());
+
 	}
 
     public void setKillStreak(int killStreak) {

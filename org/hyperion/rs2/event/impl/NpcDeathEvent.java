@@ -4,6 +4,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
+import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
@@ -120,7 +121,11 @@ public class NpcDeathEvent extends Event {
                     GlobalItem globalItem5 = new GlobalItem(
                             player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
                             new Item(npc.charm, 1));
-                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                    if (player.getInventory().contains(16639)) {
+                        ContentEntity.addItem(player, npc.charm);
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                    } else
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
                 //talismines
                 int tali = NPCManager.getTalismine(npc.getDefinition());

@@ -156,7 +156,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	
 	public int sshCharges;
 
-    private int turkeyKills;
+    public int turkeyKills;
 	/**
 	 * Gets the KDR value rounded to 3 decimals.
 	 *

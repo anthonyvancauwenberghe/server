@@ -29,7 +29,7 @@ public class WalkingPacketHandler implements PacketHandler {
 			player.inAction = false;
 			ContentEntity.startAnimation(player, - 1);
 		}
-		if(player.duelRule[DuelRules.MOVEMENT.ordinal()] && player.duelWith2 != null) {
+		if(player.duelRule[DuelRules.MOVEMENT.ordinal()] && player.duelAttackable > 0) {
 			player.getActionSender().sendMessage("You cannot move in this duel.");
 			return;
 		}

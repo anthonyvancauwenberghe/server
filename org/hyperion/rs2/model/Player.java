@@ -981,16 +981,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		//	yellMuted = true;
 		//else if(banstatus == BanManager.MUTE)
 		//	isMuted = true;
-        for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
-            for(final Punishment p : holder.getPunishments()){
-                if(p.getVictimName().equalsIgnoreCase(getName())
-                        || p.getVictimIp().equals(getShortIP())
-                        || p.getVictimMac() == getUID()){
-                    p.getCombination().getType().apply(this);
-                    p.send(this, false);
-                }
-            }
-        }
 		active = false;
 		if(newCharacter) {
 			this.created = System.currentTimeMillis();

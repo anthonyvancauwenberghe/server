@@ -2327,7 +2327,7 @@ public class Player extends Entity implements Persistable, Cloneable{
         return turkeyKills;
     }
     public void setTurkeyKills(int turkeyKills) {
-        turkeyKills = turkeyKills;
+        this.turkeyKills = turkeyKills;
     }
 
     public void completeTGEvent(boolean b) {

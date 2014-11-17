@@ -177,17 +177,6 @@ public class ClanManager {
 		}
 
 	}
-    /** Clan chat name changing, will be finished later by fuzenseth / nexon*/
-    private static void changeClanName(Player player, Clan clan, String name) {
-        if (!(player.getClanRank() == 7)) {
-            player.sendMessage("You cannot change the clan's name.");
-            return;
-        }
-        clan.setName(name);
-        clan.setOwner(player.getName());
-       for (Player clanPlayers : clan.getPlayers())
-        clanPlayers.sendMessage("@red@The clan's display name has been changed to '"+name.toUpperCase()+"'.");
-    }
 
 	public static void sendDiceMessage(Player player, Clan clan, int thrown) {
 		String message = "You roll @red@" + thrown
@@ -210,11 +199,6 @@ public class ClanManager {
 			ClanManager.sendClanMessage(player, s.replace("cc ", ""), true);
 			return true;
 		}
-       /* if(s1.equals("changeclanname") && ! player.getClanName().equals("")) {
-            String name = s1.replace("changeclanname ", "");
-            Clan clan = ClanManager.clans.get(player.getClanName());
-             changeClanName(player, clan, s1);
-        }*/
 		if(s1.equals("kick") && ! player.getClanName().equals("")) {
 			String name = s.replace("kick ", "");
 			Clan clan = ClanManager.clans.get(player.getClanName());
@@ -228,7 +212,7 @@ public class ClanManager {
 			return true;
 		}
 		if(s1.equals("changeclanname") && ! player.getClanName().equals("")) {
-			String name = s.replace("setname ", "");
+			String name = s.replace("changeclanname ", "");
 			Clan clan = ClanManager.clans.get(player.getClanName());
 			if(! clan.getOwner().equalsIgnoreCase(player.getName())
 					&& !Rank.hasAbility(player, Rank.MODERATOR)) {

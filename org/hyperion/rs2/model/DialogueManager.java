@@ -899,7 +899,7 @@ public class DialogueManager {
 					player.setPvPTask(PvPTask.toTask(Combat.random(2) + 1));
 					player.setPvPTaskAmount(Combat.random(10) + 10);
 					//DialogueManager.openDialogue(player, 139);
-					player.getActionSender().sendDialogue("Sir", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT, 
+					player.getActionSender().sendDialogue("Sir", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT,
 							"I've assigned you "+player.getPvPTaskAmount()+" "+PvPTask.toString(player.getPvPTask())+"s to kill!");
 				} else {
 					player.getActionSender().sendDialogue("Sir", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT, 
@@ -1168,7 +1168,7 @@ public class DialogueManager {
             /** Thanks giving event dialogues*/
             case 179: //jack D
                 player.getInterfaceState().setNextDialogueId(0, -1);
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.ANNOYED,
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
                         "Good day " + player.getName() + "! I'm kind of in trouble.",
                         "In order to save thanks-giving I need your help to",
                         "defeat 50 evil chickens, once you've done that", "please come back to me and that speak to me again.");

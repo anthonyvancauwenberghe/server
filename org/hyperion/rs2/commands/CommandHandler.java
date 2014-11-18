@@ -675,6 +675,8 @@ public class CommandHandler {
                         player.getActionSender().sendMessage("Enter a valid amount.");
                         return false;
                     }
+                    if (amount > Integer.MAX_VALUE)
+                        return false;
                     if(player.getPoints().getPkPoints() < amount){
                         player.getActionSender().sendMessage("You don't have enough pkp to buy this many rocktails.");
                         return false;
@@ -685,7 +687,7 @@ public class CommandHandler {
                     return true;
                 } catch(Exception ex) {
                     player.getActionSender().sendMessage("Error buying rocktails: invalid amount.");
-                    ex.printStackTrace();
+                    //wont print expection anymore
                     return false;
                 }
             }

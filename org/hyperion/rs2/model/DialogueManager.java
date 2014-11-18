@@ -818,7 +818,8 @@ public class DialogueManager {
 				player.getActionSender().removeAllInterfaces();
 				break;
 			case 130:
-				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+				if(npc != null)
+                    player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
 						"Hey, I'm a dice game hoster ", "if I throw 55 or higher I'll double your item!", "if I throw less than 55, you'll lose your item");
 				player.getInterfaceState().setNextDialogueId(0, 131);
 				break;

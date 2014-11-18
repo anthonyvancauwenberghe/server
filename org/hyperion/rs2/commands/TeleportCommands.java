@@ -107,7 +107,7 @@ public class TeleportCommands {
 				String name = filterInput(input);
 				Player target = World.getWorld().getPlayer(name);
 				if(target != null) {
-                    if(target.duelAttackable > 0) {
+                    if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && target.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
                         return false;
                     }
@@ -134,7 +134,7 @@ public class TeleportCommands {
 				String name = filterInput(input);
 				Player x = World.getWorld().getPlayer(name);
 				if(x != null) {
-                    if(x.duelAttackable > 0) {
+                    if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && x.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
                         return false;
                     }

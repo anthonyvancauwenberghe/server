@@ -1128,11 +1128,11 @@ public class DialogueManager {
 				}
 				break;
             case 174:
-                player.getActionSender().sendDialogue("Choose", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-                        "Get slayer task",
-                        "Remove Slayer Task (20 points)",
-                        "Open Shop",
-                        "Reset Task (Lose total task streak)"
+                player.getActionSender().sendDialogue("Select an option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+                        "I would like to have a new assignment.",
+                        "Remove current slayer task (20 pts).",
+                        "I would like to view the slayer store.",
+                        "I would like to reset my task progress (lose total task streak)."
                 );
 
                 player.getInterfaceState().setNextDialogueId(0, 175);
@@ -1161,8 +1161,19 @@ public class DialogueManager {
                 ShopManager.open(player, 77);
                 break;
             case 178:
+                player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+                        "Yes i'm sure. I want to reset my task progress!",
+                        "Nevermind."
+                );
+                player.getInterfaceState().setNextDialogueId(0, 200);
+                player.getInterfaceState().setNextDialogueId(1, 201);
+                break;
+            case 200:
                 player.getSlayer().removeTask();
                 player.getActionSender().sendMessage("You now have 0 total tasks and your task has been reset!");
+                player.getActionSender().removeChatboxInterface();
+                break;
+            case 201:
                 player.getActionSender().removeChatboxInterface();
                 break;
             /** Thanks giving event dialogues*/

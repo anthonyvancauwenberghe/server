@@ -86,6 +86,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     public int maxCapePrimaryColor = -1;
     public int maxCapeSecondaryColor = -1;
+    private int treasureScroll;
 
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
@@ -2327,4 +2328,13 @@ public class Player extends Entity implements Persistable, Cloneable{
     public boolean hasFinishedTG() {
         return completedTG;
     }
+
+     public int setTreasureScroll(int treasureScroll) {
+        return this.treasureScroll = treasureScroll;
+     }
+
+    public int getTreasureScroll() {
+        return treasureScroll;
+    }
+
 }

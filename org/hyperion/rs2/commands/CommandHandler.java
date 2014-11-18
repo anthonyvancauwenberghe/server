@@ -994,9 +994,10 @@ public class CommandHandler {
         CommandHandler.submit(new CheckPunishmentCommand());
         CommandHandler.submit(new ViewPunishmentsCommand());
         CommandHandler.submit(new MyPunishmentsCommand());
+        CommandHandler.submit(new RemovePunishmentCommand());
 
-        submit(new GiveIntCommand("givekills", Rank.ADMINISTRATOR){
-            public void process(final Player player, final Player target, final int value){
+        submit(new GiveIntCommand("givekills", Rank.ADMINISTRATOR) {
+            public void process(final Player player, final Player target, final int value) {
                 target.setKillCount(target.getKillCount() + value);
                 player.sendf("%s now has %,d kills", target.getName(), target.getKillCount());
             }

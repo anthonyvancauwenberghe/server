@@ -40,19 +40,21 @@ public class Punishment {
     }
 
     public void send(final Player player, final boolean alert){
+        final Player issuer = getIssuer();
+        final String issuerName = issuer != null ? issuer.getSafeDisplayName() : getIssuerName();
         if(alert){
             player.sendf(
                     "Alert##%s %s - Issued By %s (%s)##%s##Expires: %s",
                     TextUtils.titleCase(getVictimName()),
                     getCombination(),
-                    TextUtils.titleCase(getIssuerName()),
+                    TextUtils.titleCase(issuerName),
                     getTime(),
                     TextUtils.titleCase(getReason()),
                     getTime().isExpired() ? "NOW!" : getTime().getExpirationDateStamp()
             );
         }else{
             player.sendf("@red@----------------------------------------------------------------------------------------");
-            player.sendf("@blu@%s %s@bla@ - Issued By @blu@%s@bla@ (@blu@%s@bla@)", TextUtils.titleCase(getVictimName()), getCombination(), TextUtils.titleCase(getIssuerName()), getTime());
+            player.sendf("@blu@%s %s@bla@ - Issued By @blu@%s@bla@ (@blu@%s@bla@)", TextUtils.titleCase(getVictimName()), getCombination(), TextUtils.titleCase(issuerName), getTime());
             player.sendf("Reason: @blu@%s", TextUtils.titleCase(getReason()));
             player.sendf("Issued: @blu@%s", getTime().getStartDateStamp());
             player.sendf("Expires: @blu@%s", getTime().isExpired() ? "NOW!" : getTime().getExpirationDateStamp());

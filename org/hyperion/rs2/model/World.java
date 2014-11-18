@@ -60,6 +60,7 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.event.PunishmentExpirationEvent;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
@@ -733,13 +734,23 @@ public class World {
 						"Could not register player " + player.getName());
 			}
 		}
-        for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
+        final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
+        if(holder != null){
             for(final Punishment p : holder.getPunishments()){
-                if(p.getVictimName().equalsIgnoreCase(player.getName())
-                        || p.getVictimIp().equals(player.getShortIP())
-                        || p.getVictimMac() == player.getUID()){
-                    p.getCombination().getType().apply(player);
-                    p.send(player, false);
+                p.getCombination().getType().apply(player);
+                p.send(player, false);
+            }
+        }else{
+            for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
+                if(player.getName().equalsIgnoreCase(h.getVictimName())) //skip acc punishments ^ wouldve been previously applied
+                    continue;
+                for(final Punishment p : h.getPunishments()){
+                    if((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
+                    || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())){
+                        p.getCombination().getType().apply(player);
+                        p.send(player, false);
+                    }
+
                 }
             }
         }

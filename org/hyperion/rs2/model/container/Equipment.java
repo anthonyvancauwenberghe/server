@@ -258,6 +258,7 @@ public class Equipment {
 		SHIELD("Shield", Equipment.SLOT_SHIELD),
 		HAT("Hat", Equipment.SLOT_HELM),
         HAT2("Chicken head", Equipment.SLOT_HELM),
+        HAT3("Tiara", Equipment.SLOT_HELM),
 		AMULET("Amulet", Equipment.SLOT_AMULET),
 		ARROWS("Arrows", Equipment.SLOT_ARROWS),
 		RING("Ring", Equipment.SLOT_RING),
@@ -332,8 +333,8 @@ public class Equipment {
 			equipmentTypes.put(shield, EquipmentType.SHIELD);
 		}
 		for(int hat : HATS) {
-			equipmentTypes.put(hat, EquipmentType.HAT);
-		}
+            equipmentTypes.put(hat, EquipmentType.HAT);
+        }
 		for(int amulet : AMULETS) {
 			equipmentTypes.put(amulet, EquipmentType.AMULET);
 		}
@@ -364,6 +365,20 @@ public class Equipment {
 	public static EquipmentType getType(Item item) {
 		int id = item.getId();
         switch (id) {
+            case 5527:
+            case 5525:
+            case 5529:
+            case 5531:
+            case 5541:
+            case 5524:
+            case 5526:
+            case 5528:
+            case 5530:
+            case 5532:
+            case 5534:
+            case 5536:
+            case 5538:
+                return EquipmentType.HAT;
             case 11021:
                 return EquipmentType.FULL_MASK;
             case 11016:

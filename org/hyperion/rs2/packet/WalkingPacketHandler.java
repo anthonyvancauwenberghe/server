@@ -100,13 +100,13 @@ public class WalkingPacketHandler implements PacketHandler {
         org.hyperion.map.Region.p = player;
         org.hyperion.map.Region.findRoute(toX, toY, false, xLength, yLength);*/
 
-		if(player.debug) {
+	/**	if(player.debug) { Done wrong too
 			int toX = path[(steps-1)][0]+firstX;
 	        int toY = path[(steps-1)][1]+firstY;
 	        player.setTeleportTarget(Location.create(toX,  toY, player.getLocation().getZ()));
 	        player.getWalkingQueue().finish();
 	        return;
-		}
+		}*/
 		player.getWalkingQueue().setRunningQueue(runSteps);
 		player.getWalkingQueue().addStep(firstX, firstY);
 

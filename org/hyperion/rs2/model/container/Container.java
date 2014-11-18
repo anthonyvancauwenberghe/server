@@ -307,7 +307,9 @@ public class Container {
 	 * @return The item.
 	 */
 	public Item get(int index) {
-		return items[index];
+       if (items != null)
+           return items[index];
+        return items[items.length];
 	}
 
 	/**

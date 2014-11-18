@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.punishment.event;
 
+import java.util.Iterator;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -16,7 +17,9 @@ public class PunishmentExpirationEvent extends Event {
 
     public void execute(){
         for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
-            for(final Punishment punishment : holder.getPunishments()){
+            final Iterator<Punishment> itr = holder.getPunishments().iterator();
+            while(itr.hasNext()){
+                final Punishment punishment = itr.next();
                 if(!punishment.getTime().isExpired()){
                     if(!punishment.isApplied()){
                         if(punishment.apply() && punishment.getVictim() != null) {
@@ -28,7 +31,7 @@ public class PunishmentExpirationEvent extends Event {
                 }
                 if(punishment.unapply() && punishment.getVictim() != null)
                     punishment.send(punishment.getVictim(), true);
-                holder.remove(punishment);
+                itr.remove();
                 punishment.setActive(false);
             }
         }

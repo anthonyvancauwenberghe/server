@@ -1189,7 +1189,7 @@ public class DialogueManager {
                         "You have killed "+player.getTurkeyKills()+" out of "+player.getTurkeyKills()+" evil chickens.",
                         "Speak with me once you have killed 50 of them,",
                         "we must save the thanks-giving after all!");
-                player.getInterfaceState().setNextDialogueId(0, -1);//
+                player.getInterfaceState().setNextDialogueId(0, 6000);//
                 break;
             case 181: //jack D
                 player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
@@ -1223,6 +1223,9 @@ public class DialogueManager {
                 break;
             case 185: //gala
                 TGEvent.teleport(player);
+                player.getActionSender().removeChatboxInterface();
+                break;
+            case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;
 			default:

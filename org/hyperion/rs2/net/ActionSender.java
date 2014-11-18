@@ -1425,6 +1425,8 @@ public class ActionSender {
 		if(System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
 			player.write((new PacketBuilder(109)).toPacket());
 			if(player.getHighscores().needsUpdate()) {
+                if (!Rank.hasAbility(player, Rank.DEVELOPER) || !Rank.hasAbility(player, Rank.ADMINISTRATOR)
+                        || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 			}
 			player.loggedOut = true;

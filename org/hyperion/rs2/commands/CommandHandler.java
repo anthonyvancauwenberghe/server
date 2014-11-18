@@ -996,6 +996,13 @@ public class CommandHandler {
         CommandHandler.submit(new MyPunishmentsCommand());
         CommandHandler.submit(new RemovePunishmentCommand());
 
+        submit(new GiveIntCommand("giveelo", Rank.ADMINISTRATOR) {
+            public void process(final Player player, final Player target, final int value) {
+                target.getPoints().setEloRating(target.getPoints().getEloRating() + value);
+                player.sendf("%s now has %,d elo", target.getName(), target.getPoints().getEloRating());
+            }
+        });
+
         submit(new GiveIntCommand("givekills", Rank.ADMINISTRATOR) {
             public void process(final Player player, final Player target, final int value) {
                 target.setKillCount(target.getKillCount() + value);
@@ -1014,6 +1021,20 @@ public class CommandHandler {
             public void process(final Player player, final Player target, final int value){
                 target.getPoints().setVotingPoints(target.getPoints().getVotingPoints() + value);
                 player.sendf("%s now has %,d vote points", target.getPoints().getVotingPoints());
+            }
+        });
+
+        submit(new GiveIntCommand("givebhp", Rank.ADMINISTRATOR){
+            public void process(final Player player, final Player target, final int value){
+                target.getBountyHunter().setKills(target.getBountyHunter().getKills() + value);
+                player.sendf("%s now has %,d bounty hunter points", target.getBountyHunter().getKills());
+            }
+        });
+
+        submit(new GiveIntCommand("givesp", Rank.ADMINISTRATOR){
+            public void process(final Player player, final Player target, final int value){
+                target.getSlayer().setPoints(target.getSlayer().getSlayerPoints() + value);
+                player.sendf("%s now has %,d slayer points", target.getSlayer().getSlayerPoints());
             }
         });
 

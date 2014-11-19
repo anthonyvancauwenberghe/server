@@ -766,10 +766,11 @@ public class Combat {
 		World.getWorld().submit(new Event(delay, "npcatx") {
 			@Override
 			public void execute() {
-				if((combatEntity.getEntity() != null && combatEntity.getEntity().isDead()) || npc.isDead()) {
-					this.stop();
-					return;
-				}
+                if (combatEntity.getEntity() == null && combatEntity.getOpponent() == null) {
+                    if (combatEntity.getEntity().isDead() || combatEntity.getOpponent().getEntity().isDead())
+                        this.stop();
+                        return;
+                }
 				int newDamg = SpiritShields.applyEffects(combatEntity, damg);;
 				if(combatEntity.getEntity() instanceof Player) {
 					//divine spirit shield

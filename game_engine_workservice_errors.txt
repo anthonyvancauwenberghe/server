@@ -22,3 +22,15 @@ Tue Apr 15 19:33:06 GMT+01:00 2014
 	at java.lang.Thread.run(null:-1)
 
 ================================
+Tue Nov 18 22:54:10 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.World.isPlayerOnline(World.java:812)
+	at org.hyperion.rs2.model.World$2.run(World.java:597)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

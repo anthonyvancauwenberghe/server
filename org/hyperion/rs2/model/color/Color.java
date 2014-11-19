@@ -38,7 +38,7 @@ public enum Color {
     GUTHIX(21939),
     DRAGONSTONE(51111),
     BARROWS(10512),
-    VOID(4550),
+    VOID(45),
     VOID2(43528),
     PARTY_YELLOW(11200),
     PARTY_BLUE(43968),

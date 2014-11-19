@@ -766,6 +766,7 @@ public class Combat {
 		World.getWorld().submit(new Event(delay, "npcatx") {
 			@Override
 			public void execute() {
+                
                 if (combatEntity.getEntity() == null && combatEntity.getOpponent() == null) {
                     if (combatEntity.getEntity().isDead() || combatEntity.getOpponent().getEntity().isDead())
                         this.stop();

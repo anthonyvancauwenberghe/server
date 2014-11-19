@@ -172,16 +172,18 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int i = packet.getShortA();
 		int invslot = packet.getLEShort();
 		Item item = player.getInventory().get(invslot);
-		if(player.getLocation().isWithinDistance(Edgeville.DICER.getLocation(), 4)) {
-			Dicing.diceNpc(player, Edgeville.DICER, item);
-		} else if(player.getLocation().isWithinDistance(RecklessDonatorsPlace.DICER.getLocation(), 4)) {
-			Dicing.diceNpc(player, RecklessDonatorsPlace.DICER, item);
-		} else if(player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER.getLocation(), 4)) {
-            Dicing.diceNpc(player, OtherDonatorsPlace.DICER, item);
-        } else if(player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER1.getLocation(), 4)) {
-            Dicing.diceNpc(player, OtherDonatorsPlace.DICER1, item);
-        } else if(player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER2.getLocation(), 4)) {
-            Dicing.diceNpc(player, OtherDonatorsPlace.DICER2, item);
+        if (item != null) {
+            if (player.getLocation().isWithinDistance(Edgeville.DICER.getLocation(), 4)) {
+                Dicing.diceNpc(player, Edgeville.DICER, item);
+            } else if (player.getLocation().isWithinDistance(RecklessDonatorsPlace.DICER.getLocation(), 4)) {
+                Dicing.diceNpc(player, RecklessDonatorsPlace.DICER, item);
+            } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER.getLocation(), 4)) {
+                Dicing.diceNpc(player, OtherDonatorsPlace.DICER, item);
+            } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER1.getLocation(), 4)) {
+                Dicing.diceNpc(player, OtherDonatorsPlace.DICER1, item);
+            } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER2.getLocation(), 4)) {
+                Dicing.diceNpc(player, OtherDonatorsPlace.DICER2, item);
+            }
         }
 	}
 
@@ -471,6 +473,11 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			player.sendf("@blu@You have approximately @red@%d%%@blu@ charges left on your %s", player.getPvPStorage().get(id)/10, ItemDefinition.forId(id).getName());
 		}
 		switch(id) {
+            case 7510:
+            case 7509:
+                player.forceMessage("Ow! I nearly broke a tooth!");
+
+                break;
 		case 11283:
 		case 11284:
 			player.debugMessage("Click'd other");

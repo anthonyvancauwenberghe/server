@@ -1,5 +1,6 @@
 package org.hyperion.rs2.packet;
 
+import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
@@ -15,6 +16,7 @@ import org.hyperion.rs2.model.container.Inventory;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
@@ -209,6 +211,18 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int buryA = packet.getLEShortA();
 		int burySlot = (packet.getShortA());
 		int buryItemID = packet.getLEShort();
+        switch (buryItemID) {
+            case 7510:
+            case 7509:
+                if(!(player.getSkills().getLevel(3) > 1)) {
+                    player.sendMessage("You have too low hitpoints to eat the dwarven rock cake.");
+                    return;
+                }
+                ContentEntity.startAnimation(player, 829);
+                player.forceMessage("Ow! I nearly broke a tooth!");
+                player.cE.hit(1, null, false, Constants.MELEE);
+                break;
+        }
 		if(burySlot < 0 || burySlot > 27 || buryItemID < 0 || buryItemID > ItemDefinition.MAX_ID)
 			return;
 		if(player.getInventory().get(burySlot) == null || player.getInventory().get(burySlot).getId() != buryItemID)
@@ -473,11 +487,6 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			player.sendf("@blu@You have approximately @red@%d%%@blu@ charges left on your %s", player.getPvPStorage().get(id)/10, ItemDefinition.forId(id).getName());
 		}
 		switch(id) {
-            case 7510:
-            case 7509:
-                player.forceMessage("Ow! I nearly broke a tooth!");
-
-                break;
 		case 11283:
 		case 11284:
 			player.debugMessage("Click'd other");

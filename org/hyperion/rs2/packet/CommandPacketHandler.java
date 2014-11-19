@@ -1190,7 +1190,7 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Displays strings
 		 */
 		if (commandStart.equalsIgnoreCase("sendstrings")) {
-			for (int i = 0; i < 30000; i++) {
+			for (int i = 0; i < 50000; i++) {
 				try {
 					player.getActionSender().sendString(i, "" + i);
 				} catch (Throwable t) {

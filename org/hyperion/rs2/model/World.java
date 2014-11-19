@@ -809,7 +809,7 @@ public class World {
 		LoginDebugger.getDebugger().log("Checking online players!");
 		name = NameUtils.formatName(name);
 		for(Player player : players) {
-			if(player.getName().equalsIgnoreCase(name)) {
+			if(player != null && player.getName().equalsIgnoreCase(name)) {
 				return true;
 			}
 		}

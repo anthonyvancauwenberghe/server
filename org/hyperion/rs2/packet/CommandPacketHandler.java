@@ -1704,6 +1704,16 @@ public class CommandPacketHandler implements PacketHandler {
             	Magic.teleport(player, Location.create(2607, 9672, 0), false);
             }
 
+            if(commandStart.equalsIgnoreCase("clearnulls")) {
+                for(Player p : World.getWorld().getPlayers()) {
+                    if(p == null) {
+                        player.sendMessage("Null");
+                        World.getWorld().getPlayers().remove(p);
+                    }
+
+                }
+            }
+
 			if (commandStart.equalsIgnoreCase("placebounty")) {
 				final String input = s.substring(11).trim();
 				final String data[] = input.split(",");

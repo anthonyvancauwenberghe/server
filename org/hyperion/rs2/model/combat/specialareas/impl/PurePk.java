@@ -1,0 +1,35 @@
+package org.hyperion.rs2.model.combat.specialareas.impl;
+
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: Wasay
+ * Date: 11/20/14
+ * Time: 3:43 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public class PurePk extends SpecialArea {
+    public static final int HEIGHT = 444;
+
+    @Override public String canEnter(final Player player) {
+        if(player.getSkills().getRealLevels()[Skills.DEFENCE] > 1)
+            return "You need 1 def to enter this area";
+        return "";
+    }
+
+    @Override public boolean inArea(final Player player) {
+        return player.getLocation().getZ() == HEIGHT;
+    }
+
+    @Override public boolean isPkArea() {
+        return false;
+    }
+
+    @Override public Location getDefaultLocation() {
+        return Location.create(3087, 3515, HEIGHT);
+    }
+}

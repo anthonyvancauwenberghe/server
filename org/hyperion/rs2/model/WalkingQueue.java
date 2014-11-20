@@ -5,6 +5,8 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent.OverloadFactory;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
@@ -385,6 +387,9 @@ public class WalkingQueue {
 				player.wildernessLevel = 12;
 				player.getActionSender().sendPvPLevel(false);
 			}
+
+            for(final SpecialArea area : SpecialAreaHolder.getAll())
+                area.check(player);
 			
 			if(DangerousPK.inDangerousPK(player)) {
 				player.wildernessLevel = 12;

@@ -313,10 +313,6 @@ public class Combat {
 					rangeDef = CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer());
 				else
 					rangeDef = combatEntity.getOpponent().getCombat() / 2;
-                if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
-                    if(SlayerShop.hasFocus(combatEntity.getPlayer()))
-                        damg *= 1.15;
-                }
 
 				int deltaRangeBonus = rangeAtk - rangeDef;
 				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
@@ -395,6 +391,11 @@ public class Combat {
 					combatEntity.getPlayer().sendMessage("@red@Your arrows slice through the armour!");
 
 				}
+                if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+                    if(SlayerShop.hasFocus(combatEntity.getPlayer()))
+                        damg *= 1.15;
+                }
+
 				if(combatEntity.getOpponent().getEntity() instanceof Player) {
 					//divine spirit shield
 
@@ -444,10 +445,6 @@ public class Combat {
 				//combatEntity.getPlayer().getWalkingQueue().reset();
 			}
 
-            if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
-                if(SlayerShop.hasHelm(combatEntity.getPlayer()))
-                    damg *= 1.15;
-            }
 			/*
 			 * if(!WorldMap.projectileClear(combatEntity.getEntity().
 			 * getLocation().getZ(),
@@ -537,6 +534,12 @@ public class Combat {
 		} else {
 			damg = SpiritShields.applyEffects(opponent.cE, damg);
 		}
+
+        if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+            if(SlayerShop.hasHelm(combatEntity.getPlayer()))
+                damg *= 1.15;
+        }
+
 		if(finishOff) {
 			finishOff(combatEntity, damg, hit, bowType, damgDouble, doubleHit, distance, possibleMaxHit, combatStyle);
 		}

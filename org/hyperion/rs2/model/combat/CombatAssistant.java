@@ -226,7 +226,7 @@ public class CombatAssistant {
 		return Constants.MELEETYPE;
 	}
 
-	public static final int DRAGON_ARROWS = 112;
+	public static final int DRAGON_ARROWS = 11212;
 
 
 	public static boolean isControlled(int id) {

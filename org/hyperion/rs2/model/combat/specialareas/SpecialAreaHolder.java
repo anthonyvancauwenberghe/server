@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.combat.specialareas.impl.PurePk;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,8 +26,8 @@ public class SpecialAreaHolder {
         return Optional.of(map.get(key));
     }
 
-    public static SpecialArea[] getAll() {
-        return map.entrySet().toArray(new SpecialArea[map.size()]);
+    public static Set<Map.Entry<String, SpecialArea>> getAll() {
+        return map.entrySet();
     }
 
 }

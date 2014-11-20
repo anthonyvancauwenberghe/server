@@ -2326,7 +2326,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     }
 
     public boolean hasFinishedTG() {
-        return completedTG;
+        return turkeyKills >= 50;
     }
 
      public int setTreasureScroll(int treasureScroll) {

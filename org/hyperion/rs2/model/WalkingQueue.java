@@ -19,6 +19,7 @@ import org.hyperion.rs2.util.DirectionUtils;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Map;
 
 /**
  * <p>
@@ -388,8 +389,8 @@ public class WalkingQueue {
 				player.getActionSender().sendPvPLevel(false);
 			}
 
-            for(final SpecialArea area : SpecialAreaHolder.getAll())
-                area.check(player);
+            for(final Map.Entry<String, SpecialArea> area : SpecialAreaHolder.getAll())
+                area.getValue().check(player);
 			
 			if(DangerousPK.inDangerousPK(player)) {
 				player.wildernessLevel = 12;

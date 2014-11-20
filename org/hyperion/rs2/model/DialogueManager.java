@@ -1207,7 +1207,6 @@ public class DialogueManager {
                 player.sendMessage("DeviousPK wishes you happy thanks-giving!");
                 player.getActionSender().removeChatboxInterface();
                 player.sendMessage("@red@You have received x1 Web cloak to your bank account!");
-                player.completeTGEvent(true);
                 player.getBank().add(new Item(15352, 1));
                 break;
 
@@ -1215,6 +1214,7 @@ public class DialogueManager {
                 if (player.hasFinishedTG()) {
                     player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
                             "You have already saved the thanks-giving, "+player.getName()+"!");
+                    player.getInterfaceState().setNextDialogueId(0, -1);
                     return;
                 }
                 player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,

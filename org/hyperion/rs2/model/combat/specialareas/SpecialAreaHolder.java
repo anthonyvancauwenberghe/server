@@ -2,6 +2,8 @@ package org.hyperion.rs2.model.combat.specialareas;
 
 import org.hyperion.rs2.model.combat.specialareas.impl.PurePk;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -12,16 +14,19 @@ import java.util.Optional;
  * To change this template use File | Settings | File Templates.
  */
 public class SpecialAreaHolder {
-    private static final int PURE_PK = 0;
-    private static final SpecialArea[] areas = {new PurePk()};
+    private static final Map<String, SpecialArea> map;
+
+    static {
+        map = new HashMap<>();
+        map.put("purepk", new PurePk());
+    }
+
     public static Optional<SpecialArea> get(final String key) {
-        if(key.equalsIgnoreCase("PUREPK"))
-            return Optional.of(areas[PURE_PK]);
-        return Optional.empty();
+        return Optional.of(map.get(key));
     }
 
     public static SpecialArea[] getAll() {
-        return areas;
+        return map.entrySet().toArray(new SpecialArea[map.size()]);
     }
 
 }

@@ -389,8 +389,10 @@ public class WalkingQueue {
 				player.getActionSender().sendPvPLevel(false);
 			}
 
-            for(final Map.Entry<String, SpecialArea> area : SpecialAreaHolder.getAll())
+            for(final Map.Entry<String, SpecialArea> area : SpecialAreaHolder.getAll()) {
                 area.getValue().check(player);
+
+            }
 			
 			if(DangerousPK.inDangerousPK(player)) {
 				player.wildernessLevel = 12;

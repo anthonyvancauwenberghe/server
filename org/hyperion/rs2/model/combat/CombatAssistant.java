@@ -984,6 +984,8 @@ public class CombatAssistant {
 			case 15702:
 			case 15703:
 			case 15704:
+            case 16337:
+            case 16887:
 				return true;
 		}
 		return false;

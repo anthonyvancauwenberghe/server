@@ -38,6 +38,8 @@ import org.hyperion.rs2.model.challenge.ChallengeManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
@@ -50,7 +52,6 @@ import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.clan.ClanMember;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
@@ -2219,6 +2220,16 @@ public class CommandPacketHandler implements PacketHandler {
 							"Bank Pin successfully reset.");
 				}
 			}
+
+            if(commandStart.equalsIgnoreCase("purepk")) {
+                final Optional<SpecialArea> purePk = SpecialAreaHolder.get("purepk");
+                System.out.println(purePk);
+                if(purePk.isPresent()) {
+                    final SpecialArea area = purePk.get();
+                    area.enter(player);
+                }
+            }
+
 			if (commandStart.equals("commands")) {
 				// player.getActionSender().
 				player.getActionSender().openQuestInterface(

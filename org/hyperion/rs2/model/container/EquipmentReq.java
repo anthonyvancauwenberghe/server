@@ -429,6 +429,12 @@ public class EquipmentReq {
 			case 16425:
 				equipReqData[2] = 99;
 				break;
+            case 10548:
+            case 6141:
+            case 10547:
+            case 10549:
+                equipReqData[1] = 40;
+                break;
 
 			case 1135:
 			case 2499:

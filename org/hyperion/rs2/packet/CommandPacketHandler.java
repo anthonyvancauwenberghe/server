@@ -2223,7 +2223,6 @@ public class CommandPacketHandler implements PacketHandler {
 
             if(commandStart.equalsIgnoreCase("purepk")) {
                 final Optional<SpecialArea> purePk = SpecialAreaHolder.get("purepk");
-                System.out.println(purePk);
                 if(purePk.isPresent()) {
                     final SpecialArea area = purePk.get();
                     area.enter(player);

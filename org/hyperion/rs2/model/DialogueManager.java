@@ -4,6 +4,8 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -26,6 +28,8 @@ import org.hyperion.rs2.net.ActionSender.DialogueType;
 import org.hyperion.rs2.packet.ModerationOverride;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
+
+import java.util.Optional;
 
 
 public class DialogueManager {
@@ -962,11 +966,13 @@ public class DialogueManager {
 				player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
 						"Hybridding Area",
 						"Oldschool Pk Area",
-						"Fun Pk Area"
+						"Fun Pk Area",
+                        "Pure Pk Area"
 				);
 				player.getInterfaceState().setNextDialogueId(0, 152);
 				player.getInterfaceState().setNextDialogueId(1, 153);
 				player.getInterfaceState().setNextDialogueId(2, 154);
+                player.getInterfaceState().setNextDialogueId(3, 186);
 				break;
 			case 152:
 				Magic.goTo13s(player);
@@ -1225,6 +1231,13 @@ public class DialogueManager {
             case 185: //gala
                 TGEvent.teleport(player);
                 player.getActionSender().removeChatboxInterface();
+                break;
+            case 186: //tele to pure pk
+                final Optional<SpecialArea> purePk = SpecialAreaHolder.get("purepk");
+                if(purePk.isPresent()) {
+                    final SpecialArea area = purePk.get();
+                    area.enter(player);
+                }
                 break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

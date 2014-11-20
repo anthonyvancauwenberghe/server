@@ -232,14 +232,12 @@ public class EquipmentReq {
 				equipReqData[1] = 99;
 		}
         if(s.contains("saradomin") || s.contains("guthix") || s.contains("zamorak")) {
-
             if(s.contains("chap") || s.toLowerCase().endsWith(" body"))
                 equipReqData[4] = 70;
-            if(!s.contains("robe"))
+            if(!s.contains("robe") && !s.contains("staff") && !s.contains("cape"))
                 equipReqData[1] = 40;
-            else if(!s.contains("staff") && !s.contains("cape")) {
+            else {
                 equipReqData[6] = 40;
-                equipReqData[5] = 30;
             }
 
         }

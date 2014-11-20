@@ -1126,7 +1126,7 @@ public class CombatAssistant {
 		}
 		if(fullVoidRange(p))
 			rangeAtk *= 1.15;
-		return (int) (0.70 * (rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)));
+		return (int) (0.55 * (rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)));
 	}
 
 	public static int calculateRangeDefence(Entity entity) {
@@ -1148,7 +1148,7 @@ public class CombatAssistant {
 			} else if(player.getPrayers().isEnabled(49)) {
 				rangeDef = rangeDef *= 1.15;
 			}
-			return rangeDef + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 4;
+			return rangeDef/2 + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 4;
 		} else //NPCs
 			return entity.cE.getCombat()/2;
 	}

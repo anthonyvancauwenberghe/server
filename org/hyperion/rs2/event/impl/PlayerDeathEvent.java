@@ -181,6 +181,8 @@ public class PlayerDeathEvent extends Event {
 								ActionSender.yellMessage("@blu@" + killer.getName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
 							killer.getPoints().inceasePkPoints(pointsToAdd > 0 ? pointsToAdd : 5);
+                            if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
+                                killer.getSpecBar().increment(SpecialBar.FULL);
 						}
 						if(!isDev) {
 						player.increaseDeathCount();

@@ -13,11 +13,11 @@ public class SaveMaxCapeSecondaryColor extends SaveInteger{
     }
 
     public int getDefaultValue(){
-        return -1;
+        return 0;
     }
 
     public void setValue(final Player player, final int value){
-        player.maxCapeSecondaryColor = value;
+        player.maxCapeSecondaryColor = value == -1 ? 0 : value;
     }
 
     public Integer getValue(final Player player){

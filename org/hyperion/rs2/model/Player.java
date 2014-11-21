@@ -84,8 +84,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 
-    public int maxCapePrimaryColor = -1;
-    public int maxCapeSecondaryColor = -1;
+    public int maxCapePrimaryColor = 0;
+    public int maxCapeSecondaryColor = 0;
     private int treasureScroll;
 
     public int compCapePrimaryColor;

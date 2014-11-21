@@ -85,7 +85,7 @@ public class NpcClickHandler {
                     player.sendMessage("You have already saved the thanks-giving!");
                     return;
                 }
-                if (player.getTurkeyKills() == 50) {
+                if (player.getTurkeyKills() >= 50) {
                     DialogueManager.openDialogue(player, 181);
                 return;
                 }

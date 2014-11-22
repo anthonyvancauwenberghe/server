@@ -2257,9 +2257,11 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 
             if(commandStart.equalsIgnoreCase("listcolors")) {
-                for(final Color c : Color.values()) {
-                    player.sendf("@%d@%s", c.color, c.toString());
-                }
+                final Color[] colors = Color.values();
+                final String[] strings = new String[colors.length];
+                for(int i = 0; i < colors.length; i++)
+                    strings[i] = colors[i].toString();
+                player.getActionSender().openQuestInterface("Colors", strings);
             }
 			
 			if (commandStart.equals("changepass")

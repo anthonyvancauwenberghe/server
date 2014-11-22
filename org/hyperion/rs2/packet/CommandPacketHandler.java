@@ -2258,7 +2258,7 @@ public class CommandPacketHandler implements PacketHandler {
 
             if(commandStart.equalsIgnoreCase("listcolors")) {
                 for(final Color c : Color.values()) {
-                    player.sendf("@%s@%s", Integer.toHexString(c.color), c.toString());
+                    player.sendf("@%d@%s", c.color, c.toString());
                 }
             }
 			

@@ -35,6 +35,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.Yelling;
 import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
+import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
@@ -2254,6 +2255,12 @@ public class CommandPacketHandler implements PacketHandler {
 						);
 				return;
 			}
+
+            if(commandStart.equalsIgnoreCase("listcolors")) {
+                for(final Color c : Color.values()) {
+                    player.sendf("@%s@%s", Integer.toHexString(c.color), c.toString());
+                }
+            }
 			
 			if (commandStart.equals("changepass")
 					|| commandStart.equals("pass")

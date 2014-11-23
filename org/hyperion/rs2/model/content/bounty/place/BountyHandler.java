@@ -1,10 +1,11 @@
-package org.hyperion.rs2.model.content.bounty;
+package org.hyperion.rs2.model.content.bounty.place;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.bounty.place.Bounty;
 import org.hyperion.rs2.util.PushMessage;
 
 public final class BountyHandler {

@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.content.bounty;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.hyperion.rs2.model.GlobalItem;
@@ -10,11 +9,15 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
+import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.util.Misc;
 
 public class BountyHunter {
-	
-	private static final int DP_SPLIT = 850;
+
+    private int bhKills = 0;
+
+    public static final int BASE_POINTS = 50_000;
+    private static final int DP_SPLIT = 850;
 	private static final List<BHDrop> list;
 	
 	static {
@@ -30,8 +33,7 @@ public class BountyHunter {
 	
 	private final Player player;
 	private Player target;
-	private int bhKills = 0;
-	private boolean enabled = true;
+    private boolean enabled = true;
 
 	public BountyHunter(Player player) {
 		this.player = player;
@@ -75,7 +77,7 @@ public class BountyHunter {
 	}
 	
 	public boolean levelCheck(Player p) {
-		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12;
+		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getLocation().getZ() == p.getLocation().getZ();
 	}
 	
 	public boolean wildLevelCheck(final Player opp) {

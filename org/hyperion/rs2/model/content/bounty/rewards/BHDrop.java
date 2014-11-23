@@ -1,4 +1,4 @@
-package org.hyperion.rs2.model.content.bounty;
+package org.hyperion.rs2.model.content.bounty.rewards;
 
 public final class BHDrop {
 	//The id of the item

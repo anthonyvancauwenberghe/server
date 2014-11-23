@@ -1,4 +1,4 @@
-package org.hyperion.rs2.model.content.bounty;
+package org.hyperion.rs2.model.content.bounty.place;
 
 public class Bounty {
 	private final long declared;

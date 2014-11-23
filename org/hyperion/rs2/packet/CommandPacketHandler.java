@@ -1376,8 +1376,13 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getInterfaceState().addListener(
 						player.getChecking().getInv(),
 						player.getChecking().getInvListener());
+                final Item[] item = player.getChecking().getInv().toArray().clone();
+                for(int i = 0; i < item.length; i++) {
+                    if(item[i] == null) continue;
+                    if(item[i].getId() == 13560) item[i] = null;
+                }
 				player.getActionSender().sendUpdateItems(5064,
-						player.getChecking().getInv().toArray());
+						item);
 			}
 		}
 

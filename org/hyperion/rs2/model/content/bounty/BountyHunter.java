@@ -10,15 +10,50 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.util.Misc;
 
 public class BountyHunter {
 
-    private int bhKills = 0;
 
     public static final int BASE_POINTS = 50_000;
     private static final int DP_SPLIT = 850;
-	private static final List<BHDrop> list;
+    private static final List<BHDrop> list;
+
+    private enum Emblem {
+        TIER_1(1),
+        TIER_2(2),
+        TIER_3(4),
+        TIER_4(8),
+        TIER_5(15),
+        TIER_6(25),
+        TIER_7(35),
+        TIER_8(50),
+        TIER_9(70),
+        TIER_10(100);
+
+
+        private static final int BASE_ID = 13195;
+
+        private final int reward;
+        private final int id;
+        private Emblem(final int multiplier) {
+            this.reward = multiplier * BASE_POINTS;
+            this.id = ordinal() + BASE_ID;
+        }
+
+        private Emblem upgrade() {
+            return ordinal() == values().length - 1 ? this : values()[ordinal() + 1];
+        }
+
+        public static Emblem getBest(final Container inventory) {
+            for(int i = values().length - 1; i >= 0; i--) {
+                if(inventory.contains(values()[i].id))
+                    return values()[i];
+            }
+            return null;
+        }
+    }
 	
 	static {
 		list = new ArrayList<>();
@@ -30,7 +65,9 @@ public class BountyHunter {
 			list.add(BHDrop.create(id, 1, false));
 		}
 	}
-	
+
+    private int bhPoints = 0;
+    private int emblemPoints = 0;
 	private final Player player;
 	private Player target;
     private boolean enabled = true;
@@ -47,14 +84,6 @@ public class BountyHunter {
 		}
 	}
 	
-	public boolean switchEnabled() {
-		return enabled = !enabled;
-	}
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
-	
 	public void assignTarget(Player p) {
 		this.target = p;
 		p.getBountyHunter().target = player;
@@ -62,18 +91,6 @@ public class BountyHunter {
 		p.getActionSender().createArrow(player);
 		p.getQuestTab().sendBHTarget();
 		player.getQuestTab().sendBHTarget();
-	}
-	
-	public int getKills() {
-		return bhKills;
-	}
-	
-	public int incrementAndGet() {
-		return ++bhKills;
-	}
-	
-	public void setKills(final int kills) {
-		this.bhKills = kills;
 	}
 	
 	public boolean levelCheck(Player p) {
@@ -84,14 +101,6 @@ public class BountyHunter {
 		final int oppLevel = Combat.getWildLevel(opp.cE.getAbsX(), opp.cE.getAbsY());
 		final int playerLevel = Combat.getWildLevel(player.cE.getAbsX(), player.cE.getAbsY());
 		return (oppLevel < 10 && playerLevel < 10) || (oppLevel >= 10 && oppLevel >= 10);
-	}
-	
-	public Player getTarget() {
-		return target;
-	}
-	
-	public void setTarget(Player target) {
-		this.target = target;
 	}
 	
 	private boolean wealthCheck(final Player opp) {
@@ -135,5 +144,51 @@ public class BountyHunter {
 			}
 		}
 	}
+
+    private void upgradeEmblem() {
+        final Container inventory = player.getInventory();
+        final Emblem best = Emblem.getBest(inventory);
+        if(best != null) {
+            final int slot = player.getInventory().getSlotById(best.id);
+            inventory.remove(slot, Item.create(best.id));
+            inventory.add(Item.create(best.upgrade().id, slot));
+        }
+    }
+
+    public boolean switchEnabled() {
+        return enabled = !enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public int getKills() {
+        return bhPoints;
+    }
+
+    public int incrementAndGet() {
+        return ++bhPoints;
+    }
+
+    public void setKills(final int kills) {
+        this.bhPoints = kills;
+    }
+
+    public Player getTarget() {
+        return target;
+    }
+
+    public void setTarget(Player target) {
+        this.target = target;
+    }
+
+    public int getEmblemPoints() {
+        return emblemPoints;
+    }
+
+    public int setEmblemPoints(final int points) {
+        return emblemPoints = points;
+    }
 	
 }

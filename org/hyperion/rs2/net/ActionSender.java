@@ -790,7 +790,11 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendMessage(String message) {
-		player.write(new PacketBuilder(253, Type.VARIABLE)
+        if(message == null) return this;
+        if(message.startsWith("~x"))
+            player.write(new PacketBuilder(252, Type.VARIABLE).putRS2String(message.substring(2)).toPacket());
+        else
+		    player.write(new PacketBuilder(253, Type.VARIABLE)
 				.putRS2String(message).toPacket());
 		return this;
 	}

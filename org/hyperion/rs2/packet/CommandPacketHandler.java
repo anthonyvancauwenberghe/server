@@ -2256,6 +2256,14 @@ public class CommandPacketHandler implements PacketHandler {
 				return;
 			}
 
+            if(commandStart.equalsIgnoreCase("clearjunk")) {
+                for(final Item item : player.getBank().toArray()) {
+                    if(item.getCount() < 10 && ItemSpawning.canSpawn(item.getId())) {
+                        player.getBank().remove(item);
+                    }
+                }
+            }
+
             if(commandStart.equalsIgnoreCase("listcolors")) {
                 final Color[] colors = Color.values();
                 final String[] strings = new String[colors.length];

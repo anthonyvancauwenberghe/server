@@ -127,7 +127,7 @@ public class Weapon extends Item {
 			return new TwohandedSword(id);
 		if(name.contains("halberd"))
 			return new Halberd(id);
-		if(name.contains("hand cannon"))
+		if(name.equals("hand cannon"))
 			return new HandCannon(id);
 		if(name.contains("javelin"))
 			return new Javelin(id);

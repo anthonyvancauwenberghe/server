@@ -193,7 +193,7 @@ public class CombatAssistant {
 		if(arrowId == DRAGON_ARROWS && darkBow(weaponId))
 			return Constants.RANGEDARROWS;
 		else if(arrowId == DRAGON_ARROWS)
-			return Constants.RANGEDNOARROWS;
+			return Constants.MELEETYPE;
 
 		for(int g : BOWS) {
 			if(weaponId == g) {

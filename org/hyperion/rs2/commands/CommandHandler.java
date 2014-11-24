@@ -1183,7 +1183,7 @@ public class CommandHandler {
                     final String skill = Skills.SKILL_NAME[i];
                     if(!skillName.equalsIgnoreCase(skill))
                         continue;
-                    player.sendf("%s: %s = %d (%,d XP)", targetName, target.getSkills().getLevel(i), target.getSkills().getExperience(i));
+                    player.sendf("%s: %s = %d (%,d XP)", targetName, skill, target.getSkills().getLevel(i), target.getSkills().getExperience(i));
                     return true;
                 }
                 return false;

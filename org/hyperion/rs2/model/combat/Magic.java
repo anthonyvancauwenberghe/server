@@ -1249,7 +1249,9 @@ public class Magic {
 			}
 		}
 
-		final int x1 = x;
+        Duel.declineTrade(player);
+
+        final int x1 = x;
 		final int y1 = y;
 		final int z1 = z;
 		int delay = 1400;

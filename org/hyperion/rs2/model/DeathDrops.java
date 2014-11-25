@@ -99,6 +99,8 @@ public class DeathDrops {
 				return false;
 			return true;
 		} else {
+            if(item.getId() >= 13195 && item.getId() <= 13205)
+                return true;
 			switch(item.getId()) {
 			case 20000:
 			case 19713://nex helms

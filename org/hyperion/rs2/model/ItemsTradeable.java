@@ -35,7 +35,7 @@ public class ItemsTradeable {
 	private static final List<Integer> UNTRADABLES = Arrays.asList(ITEM_NON_TRADEABLE);
 
 	public static boolean isTradeable(int id) {
-        if(id == 16639 || id == 13560)
+        if(id == 16639 || id == 13560 || (id >= 13195 && id <= 13205)) //emblems n shit
             return false;
         if(id == SlayerShop.SLAYER_HELM || id == SlayerShop.FULL_HELM)
             return true;

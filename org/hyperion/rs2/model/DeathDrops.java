@@ -272,7 +272,7 @@ public class DeathDrops {
 	}
 	public static int calculateAlchValue(int id) {
         if(ItemSpawning.canSpawn(id))
-            return 0;
+            return -5;
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
 		if(dpVal > 100)

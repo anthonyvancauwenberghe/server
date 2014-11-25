@@ -32,4 +32,8 @@ public class PurePk extends SpecialArea {
     @Override public Location getDefaultLocation() {
         return Location.create(3087, 3515, HEIGHT);
     }
+
+    @Override public boolean canSpawn() {
+        return true;
+    }
 }

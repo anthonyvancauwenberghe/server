@@ -336,18 +336,6 @@ public class WalkingQueue {
 				debug("Sending null cuz duelopt");
 				player.duelOption = false;
 			}
-			if(ATTACK_DEBUG != null && (System.currentTimeMillis() - lastRecord) > 30000) {
-				try {
-					ATTACK_DEBUG.write(player.getName()+" wildy level: "+Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY())+" attack option: "+player.attackOption);
-					ATTACK_DEBUG.write(System.getProperty("line.separator"));
-					ATTACK_DEBUG.write("with set spawning set to "+player.canSpawnSet());
-					ATTACK_DEBUG.write(System.getProperty("line.separator"));
-					ATTACK_DEBUG.write(System.getProperty("line.separator"));
-					lastRecord = System.currentTimeMillis();
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
 			if(! player.attackOption) {
 
 				if(Location.inAttackableArea(player)) {

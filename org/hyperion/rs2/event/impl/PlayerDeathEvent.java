@@ -172,7 +172,7 @@ public class PlayerDeathEvent extends Event {
 								System.err.println("PvP tasks error!");
 								e.printStackTrace();
 							}
-							if(player.getPoints().getPkPoints() >= 50) {
+							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
 							killer.addLastKill(player.getName());

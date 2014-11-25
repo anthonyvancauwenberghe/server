@@ -3,6 +3,7 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.SpecialAttacks;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
@@ -62,6 +63,22 @@ public class ActionButtonPacketHandler implements PacketHandler {
 		if(SetHandler.handleSet(player, button))
 			return;
 		switch(button) {
+            case -29034:
+                final Player opp = player.getBountyHunter().getTarget();
+                if(opp != null) {
+                    final int x = opp.getLocation().getX();
+                    final int y = opp.getLocation().getY();
+                    final int wildLevel = Combat.getWildLevel(x, y);
+                    final boolean inMulti = Combat.isInMulti(opp.cE);
+                    if(opp.getLocation().inPvPArea()) {
+                        if(wildLevel <= 20 && !inMulti) {
+                            Magic.teleport(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), false);
+                        } else {
+                            DialogueManager.openDialogue(player, 171);
+                        }
+                    }
+                }
+                break;
             case 1193:
                 Magic.preformCharge(player);
                 break;

@@ -134,6 +134,10 @@ public class BountyHunter {
 	}
 	
 	public void handleBHDrops(final Player opp) {
+        GlobalItem gI = new GlobalItem(player, opp.getLocation().getX(),
+                opp.getLocation().getY(), opp.getLocation().getZ(),
+                Item.create(Emblem.BASE_ID, 1));
+        World.getWorld().getGlobalItemManager().newDropItem(player, gI);
 		for(final BHDrop drop : list) {
 			if(Misc.random(drop.isRare() ? 5000 : 250) < drop.getChance()) {
 					GlobalItem globalItem = new GlobalItem(player, opp.getLocation().getX(), 
@@ -143,6 +147,8 @@ public class BountyHunter {
 					break;
 			}
 		}
+
+        upgradeEmblem();
 	}
 
     private void upgradeEmblem() {

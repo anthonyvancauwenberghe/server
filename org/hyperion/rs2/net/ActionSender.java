@@ -352,7 +352,7 @@ public class ActionSender {
 	}
 
 	public ActionSender sendWildLevel(int i) {
-		int j = 15000;// 197,12278
+		int j = 36500;// 197,12278
 		if(i == - 1)
 			j = i;
 		player.write(new PacketBuilder(208).putLEShort(j).toPacket());
@@ -362,6 +362,7 @@ public class ActionSender {
 		}
 		if(i != - 1) {
 			sendEP();
+            sendString(36505, "Killstreak:@red@"+player.getKillStreak());
 		}
 		return this;
 	}
@@ -410,8 +411,7 @@ public class ActionSender {
 	}
 
 	public ActionSender sendEP() {
-		sendString(12280, " Potential :");// ep
-		sendString(12281, getEPString());
+		sendString(36504, "EP: "+getEPString());
 		return this;
 	}
 

@@ -2047,6 +2047,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public void increaseKillStreak() {
 		killStreak++;
+        actionSender.sendString(36505, "Killstreak: @red@"+killStreak);
 		bounty = 5 * killStreak * killStreak;
 		if(bounty < 5)
 			bounty = 5;

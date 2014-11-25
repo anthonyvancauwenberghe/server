@@ -40,4 +40,5 @@ public abstract class SpecialArea {
     public abstract String canEnter(final Player player);
     public abstract boolean isPkArea();
     public abstract Location getDefaultLocation();
+    public abstract boolean canSpawn();
 }

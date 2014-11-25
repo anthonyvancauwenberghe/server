@@ -155,9 +155,9 @@ public class BountyHunter {
         final Container inventory = player.getInventory();
         final Emblem best = Emblem.getBest(inventory);
         if(best != null) {
-            final int slot = player.getInventory().getSlotById(best.id);
+            final int slot = inventory.getSlotById(best.id);
             inventory.remove(slot, Item.create(best.id));
-            inventory.add(Item.create(best.upgrade().id, slot));
+            inventory.add(Item.create(best.upgrade().id), slot);
         }
     }
 

@@ -179,7 +179,8 @@ public class QuestTab {
 		} else {
 			player.getActionSender().sendString("Target: @gre@None", 36502);
 		}
-	}
+        player.getActionSender().sendString("", getId(5));
+    }
 	
 	public void sendBHKills() {
 		player.getActionSender().sendString("@or2@BH Points: @gre@"+player.getBountyHunter().getKills(), getId(16));

@@ -411,9 +411,15 @@ public class ActionSender {
 	}
 
 	public ActionSender sendEP() {
-		sendString(36504, "EP: "+getEPString());
+		sendString(12280, " Potential :");// ep
+		sendString(12281, getEPString());
 		return this;
 	}
+
+    public ActionSender sendEP2() {
+        sendString(36504, "EP :"+getEPString());
+        return this;
+    }
 
 	public ActionSender showInterfaceWalkable(int i) {
 		player.write(new PacketBuilder(208).putLEShort(i).toPacket());

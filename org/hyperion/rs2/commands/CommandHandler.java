@@ -1123,6 +1123,7 @@ public class CommandHandler {
                         "This is a temporary ban"
                 );
                 PunishmentManager.getInstance().add(p);
+                player.display = newName;
                 player.setName(newName);
                 player.getSession().close();
                 return true;

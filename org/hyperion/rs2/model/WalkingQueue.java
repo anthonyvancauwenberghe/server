@@ -306,7 +306,7 @@ public class WalkingQueue {
 						player.getCombat().getAbsX()-1, 
 						player.getCombat().getAbsY()-1, player.getCombat().getAbsZ());
 			}**/
-			if(entity.cE.isFrozen()) {
+			if(entity.cE.isFrozen() || entity.isDead()) {
 				reset();
 			}
 

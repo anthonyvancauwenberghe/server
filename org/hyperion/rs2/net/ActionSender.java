@@ -361,7 +361,7 @@ public class ActionSender {
 			sendString(199, "Level: " + i);// wild levle
 		}
 		if(i != - 1) {
-			sendEP();
+			sendEP2();
             sendString(36505, "Killstreak:@red@"+player.getKillStreak());
 		}
 		return this;

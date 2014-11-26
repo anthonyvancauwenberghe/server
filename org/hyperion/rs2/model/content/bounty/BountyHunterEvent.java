@@ -12,7 +12,7 @@ import org.hyperion.util.Time;
 public class BountyHunterEvent extends Event{
 
 	public BountyHunterEvent() {
-		super(Time.ONE_MINUTE);
+		super(Time.TEN_SECONDS);
 	}
 	
 	private int counter = 7;

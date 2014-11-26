@@ -1270,6 +1270,7 @@ public class DialogueManager {
                 else
                     player.getActionSender().sendMessage(
                             "You don't have any Statuettes with you..");
+                player.getActionSender().removeChatboxInterface();
                 break;
             case 190:
                 player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
@@ -1284,6 +1285,7 @@ public class DialogueManager {
             case 192:
                 player.getBountyHunter().exchangeEmblems();
                 player.sendf("You now have @red@%d@bla@ emblem points", player.getBountyHunter().getEmblemPoints());
+                player.getActionSender().removeChatboxInterface();
                 break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

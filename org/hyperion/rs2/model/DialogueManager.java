@@ -1134,7 +1134,6 @@ public class DialogueManager {
 					final int x = opp.getLocation().getX();
 					final int y = opp.getLocation().getY();
                     TeleTabs.TeleTab(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), 18806);
-                    player.getInventory().remove(Item.create(18806, 1));
                 }
 				break;
             case 174:

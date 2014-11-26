@@ -112,7 +112,6 @@ public class TeleTabs implements ContentTemplate {
                         if(opp.getLocation().inPvPArea()) {
                             if(wildLevel <= 20 && !inMulti) {
                                 TeleTab(p, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), a);
-                                p.getInventory().remove(Item.create(18806, 1));
                             } else {
                                 DialogueManager.openDialogue(p, 171);
                             }

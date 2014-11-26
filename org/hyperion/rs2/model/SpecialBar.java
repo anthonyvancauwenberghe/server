@@ -118,7 +118,7 @@ public class SpecialBar {
 
 			case 4587: // dscimmy
 			case 11694: // ags
-            case 19605:
+            		case 19605:
 			case 11696:
 			case 11698:
 			case 19780:

@@ -133,7 +133,7 @@ public class TeleTabs implements ContentTemplate {
 	@Override
 	public int[] getValues(int type) {
 		if(type == 1) {
-			int[] j = {8007, 8008, 8009, 8010, 8011, 8012,};
+			int[] j = {8007, 8008, 8009, 8010, 8011, 8012,18806,};
 			return j;
 		}
 		return null;

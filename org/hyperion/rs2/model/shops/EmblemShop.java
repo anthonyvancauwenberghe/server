@@ -48,7 +48,7 @@ public class EmblemShop extends PointsShop{
             case 13192:
             case 13193:
             case 13194:
-                return 500;
+                return 250;
 
         }
         return 50_000;  //To change body of implemented methods use File | Settings | File Templates.

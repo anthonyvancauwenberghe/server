@@ -1258,18 +1258,6 @@ public class CommandPacketHandler implements PacketHandler {
 							ServerMessages.size() - 1, message));
 		}
 
-		if (commandStart.equalsIgnoreCase("givekorasi")) {
-			Player p = World.getWorld().getPlayer(s.substring(11).trim());
-			if (p != null) {
-				p.getInventory().add(new Item(19780, 1));
-			}
-		}
-		if (commandStart.equalsIgnoreCase("givevigour")) {
-			Player p = World.getWorld().getPlayer(s.substring(11).trim());
-			if (p != null) {
-				p.getInventory().add(new Item(19669, 1));
-			}
-		}
 		if (commandStart.equalsIgnoreCase("spamnpc")) {
 			String message = s.substring(8).trim();
 			for (NPC npc : World.getWorld().getNPCs()) {
@@ -1585,6 +1573,19 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+        if (commandStart.equalsIgnoreCase("givekorasi")) {
+            Player p = World.getWorld().getPlayer(s.substring(11).trim());
+            if (p != null) {
+                p.getInventory().add(new Item(19780, 1));
+            }
+        }
+        if (commandStart.equalsIgnoreCase("givevigour")) {
+            Player p = World.getWorld().getPlayer(s.substring(11).trim());
+            if (p != null) {
+                p.getInventory().add(new Item(19669, 1));
+            }
+        }
 		if (commandStart.equalsIgnoreCase("resetks")) {
 			try {
 				String name = withCaps.substring(8);

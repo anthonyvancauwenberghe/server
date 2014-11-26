@@ -2,6 +2,9 @@ package org.hyperion.rs2.model.content.bounty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.hyperion.rs2.model.GlobalItem;
 import org.hyperion.rs2.model.Item;
@@ -16,9 +19,8 @@ import org.hyperion.util.Misc;
 public class BountyHunter {
 
 
-    public static final int BASE_POINTS = 50_000;
+    public static final int BASE_POINTS = 5;
     private static final int DP_SPLIT = 850;
-    private static final List<BHDrop> list;
 
     private enum Emblem {
         TIER_1(1),
@@ -53,18 +55,30 @@ public class BountyHunter {
             }
             return null;
         }
+
+        public static Emblem forId(int id) {
+            for(int i = values().length - 1; i >= 0; i--) {
+                if(id == values()[i].id)
+                    return values()[i];
+            }
+            return null;
+        }
+
+        private static List<Item> getEmblems(final Container inventory) {
+            return Stream.of(inventory.toArray()).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).collect(Collectors.toList());
+        }
+
+        private static int getTotalVal(final List<Item> items) {
+            return getTotalValue(items.stream().map(item -> forId(item.getId())).collect(Collectors.toList()));
+        }
+
+        private static int getTotalValue(List<Emblem> emblems) {
+            int amount = 0;
+            for(Emblem emblem : emblems)
+                amount += emblem.reward;
+            return amount;
+        }
     }
-	
-	static {
-		list = new ArrayList<>();
-        list.add(BHDrop.create(13898, 5, true));
-        list.add(BHDrop.create(13886, 3, true));
-		list.add(BHDrop.create(13892, 4, true));
-		
-		for(int id : PvPArmourStorage.getArmours()) {
-			list.add(BHDrop.create(id, 1, false));
-		}
-	}
 
     private int bhPoints = 0;
     private int emblemPoints = 0;
@@ -138,16 +152,6 @@ public class BountyHunter {
                 opp.getLocation().getY(), opp.getLocation().getZ(),
                 Item.create(Emblem.BASE_ID, 1));
         World.getWorld().getGlobalItemManager().newDropItem(player, gI);
-		for(final BHDrop drop : list) {
-			if(Misc.random(drop.isRare() ? 5000 : 250) < drop.getChance()) {
-					GlobalItem globalItem = new GlobalItem(player, opp.getLocation().getX(), 
-							opp.getLocation().getY(), opp.getLocation().getZ(),
-							Item.create(drop.getId(), 1));
-					World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
-					break;
-			}
-		}
-
         upgradeEmblem();
 	}
 
@@ -159,6 +163,19 @@ public class BountyHunter {
             inventory.remove(slot, Item.create(best.id));
             inventory.add(Item.create(best.upgrade().id), slot);
         }
+    }
+
+    public int emblemExchagePrice() {
+        return Emblem.getTotalVal(Emblem.getEmblems(player.getInventory()));
+    }
+
+    public void exchangeEmblems() {
+        final List<Item> toSubtract = Emblem.getEmblems(player.getInventory());
+        final int toAdd = Emblem.getTotalVal(toSubtract);
+        for(Item item : toSubtract) {
+            player.getInventory().remove(item);
+        }
+        emblemPoints += toAdd;
     }
 
     public boolean switchEnabled() {

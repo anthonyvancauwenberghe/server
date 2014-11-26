@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.EP.EPExchange;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
 import org.hyperion.rs2.model.content.minigame.Barrows3;
@@ -1139,7 +1140,7 @@ public class DialogueManager {
                         "I would like to have a new assignment.",
                         "Remove current slayer task (20 pts).",
                         "I would like to view the slayer store.",
-                        "I would like to reset my task progress (lose total task streak)."
+                        "I would like to reset my task progress (lose total task streak + 3 pts)."
                 );
 
                 player.getInterfaceState().setNextDialogueId(0, 175);
@@ -1158,6 +1159,14 @@ public class DialogueManager {
 
                 break;
             case 176:
+                player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+                        "Yes i'm sure I want to use 20 slayer points",
+                        "Nevermind."
+                );
+                player.getInterfaceState().setNextDialogueId(0, 187);
+                player.getInterfaceState().setNextDialogueId(1, -1);
+                break;
+            case 187:
                 if(player.getSlayer().resetTask())
                     player.sendMessage("Your task has been successfully reset!");
                 else
@@ -1168,6 +1177,11 @@ public class DialogueManager {
                 ShopManager.open(player, 77);
                 break;
             case 178:
+                if(player.getSlayer().getSlayerPoints() < 3) {
+                    player.getActionSender().sendMessage("You need at least 3 slayer points to do this");
+                    player.getActionSender().removeChatboxInterface();
+                    return;
+                }
                 player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
                         "Yes i'm sure. I want to reset my task progress!",
                         "Nevermind."
@@ -1238,6 +1252,38 @@ public class DialogueManager {
                     final SpecialArea area = purePk.get();
                     area.enter(player);
                 }
+                break;
+
+            case 188:
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "Exhcnage my PvP Artifacts for PKP",
+                        "Exchange my emblems for points",
+                        "Open up Emblem Point shop");
+                player.getInterfaceState().setNextDialogueId(0, 189);
+                player.getInterfaceState().setNextDialogueId(1, 190);
+                player.getInterfaceState().setNextDialogueId(2, 191);
+                break;
+            case 189:
+                if(EPExchange.exchangeDrops(player))
+                    player.getActionSender().sendMessage(
+                            "You have exchanged your Statuettes.");
+                else
+                    player.getActionSender().sendMessage(
+                            "You don't have any Statuettes with you..");
+                break;
+            case 190:
+                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "Exchange my emblems for "+player.getBountyHunter().emblemExchagePrice()+ " emblem points",
+                        "Nevermind");
+                player.getInterfaceState().setNextDialogueId(0, 192);
+                player.getInterfaceState().setNextDialogueId(1, -1);
+                break;
+            case 191:
+                ShopManager.open(player, 78);
+                break;
+            case 192:
+                player.getBountyHunter().exchangeEmblems();
+                player.sendf("You now have @red@%d@bla@ emblem points", player.getBountyHunter().getEmblemPoints());
                 break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

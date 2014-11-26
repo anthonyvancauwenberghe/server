@@ -91,6 +91,7 @@ public class WeaponAnimManager2 {
             case 10887:
                 return 5867;
             case 11694:
+            case 19605:
             case 11696:
             case 11698:
             case 11700:
@@ -183,6 +184,7 @@ public class WeaponAnimManager2 {
                 return 813;
             case 10887:
                 return 5869;
+            case 19605:
             case 11694:
             case 11696:
             case 11698:
@@ -244,6 +246,7 @@ public class WeaponAnimManager2 {
                 return 1664;
             case 10887:
                 return 5868;
+            case 19605:
             case 11694:
             case 11696:
             case 11698:
@@ -396,6 +399,7 @@ public class WeaponAnimManager2 {
             case 1319:
             case 6609:
             case 16909:
+            case 19605:
             case 11694:
             case 11696:
             case 11698:

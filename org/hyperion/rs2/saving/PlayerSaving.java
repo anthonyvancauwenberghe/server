@@ -196,6 +196,7 @@ public class PlayerSaving {
 
         saveList.add(new SaveMac());
         saveList.add(new SaveSlayer("slayerdata"));
+        saveList.add(new SaveEmblemPoints("emblemPoints"));
 	}
 
 	/**

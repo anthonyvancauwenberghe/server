@@ -114,12 +114,8 @@ public class NpcClickHandler {
 				TaskHandler.assignTask(player);
 				break;
 			case 8725:
-				if(EPExchange.exchangeDrops(player))
-					player.getActionSender().sendMessage(
-							"You have exchanged your Statuettes.");
-				else
-					player.getActionSender().sendMessage(
-							"You don't have any Statuettes with you..");
+                DialogueManager.openDialogue(player, 188);
+                //
 				break;
 			case 1337:
 				DialogueManager.openDialogue(player, 165);

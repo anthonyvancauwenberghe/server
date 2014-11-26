@@ -55,7 +55,10 @@ public class ShopManager {
 		Shop shop = Shop.forId(id);
 		player.getActionSender().sendUpdateItems(3900,
 				shop.getContainer().toArray());
-		player.getActionSender().sendString(3901, shop.getName());
+        if(id != 78) {
+		    player.getActionSender().sendString(3901, shop.getName());
+        } else
+            player.getActionSender().sendString(3901, "Emblem Points: @red@"+player.getBountyHunter().getEmblemPoints());
 		player.setShopId(id);
 	}
 
@@ -651,6 +654,9 @@ public class ShopManager {
 				} else if(type.contains("slayer")) {
                     shop = new SlayerShop(shopId, shopName
                     , shopContainer);
+                } else if(type.contains("emblem")) {
+                    shop = new EmblemShop(shopId, shopName
+                            , shopContainer);
                 }
 				for(int i = 3; i < parts.length; i++) {
 					String part = parts[i];

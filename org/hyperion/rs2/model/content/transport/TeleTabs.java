@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.transport;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -101,6 +102,23 @@ public class TeleTabs implements ContentTemplate {
 				case 8012:
 					TeleTab(p, 2549, 3113, 0, a);
 					break;
+                case 18806:
+                    final Player opp = p.getBountyHunter().getTarget();
+                    if(opp != null) {
+                        final int x = opp.getLocation().getX();
+                        final int y = opp.getLocation().getY();
+                        final int wildLevel = Combat.getWildLevel(x, y);
+                        final boolean inMulti = Combat.isInMulti(opp.cE);
+                        if(opp.getLocation().inPvPArea()) {
+                            if(wildLevel <= 20 && !inMulti) {
+                                TeleTab(p, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), a);
+                                p.getInventory().remove(Item.create(18806, 1));
+                            } else {
+                                DialogueManager.openDialogue(p, 171);
+                            }
+                        }
+                    }
+                    break;
 			}
 
 		}

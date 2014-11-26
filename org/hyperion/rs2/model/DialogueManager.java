@@ -23,6 +23,7 @@ import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
+import org.hyperion.rs2.model.content.transport.TeleTabs;
 import org.hyperion.rs2.model.sets.SetData;
 import org.hyperion.rs2.model.sets.SetUtility;
 import org.hyperion.rs2.net.ActionSender.DialogueType;
@@ -1132,8 +1133,9 @@ public class DialogueManager {
 				if(opp != null) {
 					final int x = opp.getLocation().getX();
 					final int y = opp.getLocation().getY();
-					Magic.teleport(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), false);
-				}
+                    TeleTabs.TeleTab(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), 18806);
+                    player.getInventory().remove(Item.create(18806, 1));
+                }
 				break;
             case 174:
                 player.getActionSender().sendDialogue("Select an option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,

@@ -287,20 +287,7 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(5), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				final Player opp = player.getBountyHunter().getTarget();
-				if(opp != null) {
-					final int x = opp.getLocation().getX();
-					final int y = opp.getLocation().getY();
-					final int wildLevel = Combat.getWildLevel(x, y);
-					final boolean inMulti = Combat.isInMulti(opp.cE);
-					if(opp.getLocation().inPvPArea()) {
-						if(wildLevel <= 20 && !inMulti) {
-							Magic.teleport(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), false);
-						} else {
-							DialogueManager.openDialogue(player, 171);
-						}
-					}
-				}
+
 			}
 		});
 		

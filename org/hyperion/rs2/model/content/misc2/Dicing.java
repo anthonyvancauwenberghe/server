@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.shops.DonatorShop;
+import org.hyperion.rs2.model.shops.EmblemShop;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.util.Misc;
@@ -133,6 +134,10 @@ public class Dicing implements ContentTemplate {
 			player.getActionSender().sendMessage("Sorry, I only gamble with unspawnables.");
 			return;
 		}
+        if((item.getId() >= 13195 && item.getId() <= 13205)) {
+            player.sendMessage("The gambler doesn't know what to do with these...");
+            return;
+        }
 		if(item.getCount() > 1000 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			player.getActionSender().sendMessage("You can't gamble more than 1000 of an item!");
 			return;

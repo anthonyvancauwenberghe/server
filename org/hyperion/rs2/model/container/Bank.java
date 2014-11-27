@@ -141,9 +141,9 @@ public class Bank {
             // all items in the bank are stacked, makes it very easy!
             int newAmount = item.getCount() - transferAmount;
             if(newAmount <= 0) {
-                player.getBank().remove(Item.create(id, transferAmount));
+                player.getBank().set(slot, null);
             } else {
-                player.getBank().remove(Item.create(id, transferAmount));
+                player.getBank().set(slot, new Item(item.getId(), newAmount));
             }
         } else {
             player.getActionSender()

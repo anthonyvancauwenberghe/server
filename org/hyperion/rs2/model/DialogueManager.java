@@ -1141,7 +1141,7 @@ public class DialogueManager {
                         "I would like to have a new assignment.",
                         "Remove current slayer task (20 pts).",
                         "I would like to view the slayer store.",
-                        "I would like to reset my task progress (lose total task streak + 3 pts)."
+                        "I would like to reset my task progress (lose total task streak + 1 pt)."
                 );
 
                 player.getInterfaceState().setNextDialogueId(0, 175);
@@ -1178,8 +1178,8 @@ public class DialogueManager {
                 ShopManager.open(player, 77);
                 break;
             case 178:
-                if(player.getSlayer().getSlayerPoints() < 3) {
-                    player.getActionSender().sendMessage("You need at least 3 slayer points to do this");
+                if(player.getSlayer().getSlayerPoints() < 1) {
+                    player.getActionSender().sendMessage("You need at least 1 slayer point to do this");
                     player.getActionSender().removeChatboxInterface();
                     return;
                 }

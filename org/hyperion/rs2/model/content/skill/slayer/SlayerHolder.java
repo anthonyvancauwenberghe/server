@@ -58,7 +58,7 @@ public class SlayerHolder {
     public void removeTask() {
         taskAmount = 0;
         totalTasks = 0;
-        slayerPoints -= 3;
+        slayerPoints -= 1;
     }
 
     public int handleTotalTasks() {

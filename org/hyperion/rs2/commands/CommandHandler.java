@@ -1020,21 +1020,28 @@ public class CommandHandler {
         submit(new GiveIntCommand("givevp", Rank.ADMINISTRATOR){
             public void process(final Player player, final Player target, final int value){
                 target.getPoints().setVotingPoints(target.getPoints().getVotingPoints() + value);
-                player.sendf("%s now has %,d vote points", target.getPoints().getVotingPoints());
+                player.sendf("%s now has %,d vote points", target.getName(), target.getPoints().getVotingPoints());
             }
         });
 
         submit(new GiveIntCommand("givebhp", Rank.ADMINISTRATOR){
             public void process(final Player player, final Player target, final int value){
                 target.getBountyHunter().setKills(target.getBountyHunter().getKills() + value);
-                player.sendf("%s now has %,d bounty hunter points", target.getBountyHunter().getKills());
+                player.sendf("%s now has %,d bounty hunter points", target.getName(), target.getBountyHunter().getKills());
             }
         });
 
         submit(new GiveIntCommand("givesp", Rank.ADMINISTRATOR){
             public void process(final Player player, final Player target, final int value){
                 target.getSlayer().setPoints(target.getSlayer().getSlayerPoints() + value);
-                player.sendf("%s now has %,d slayer points", target.getSlayer().getSlayerPoints());
+                player.sendf("%s now has %,d slayer points", target.getName(), target.getSlayer().getSlayerPoints());
+            }
+        });
+
+        submit(new GiveIntCommand("giveep", Rank.ADMINISTRATOR){
+            public void process(final Player player, final Player target, final int value){
+                target.getBountyHunter().setEmblemPoints(target.getBountyHunter().getEmblemPoints() + value);
+                player.sendf("%s now has %,d emblem points", target.getName(), target.getBountyHunter().getEmblemPoints());
             }
         });
 
@@ -1188,6 +1195,35 @@ public class CommandHandler {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        submit(new Command("sendcmd", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String line = filterInput(input).trim();
+                final int i = line.indexOf(',');
+                if(i == -1){
+                    player.sendf("Incorrect usage: ::sendcmd target,cmd");
+                    return false;
+                }
+                final String targetName = line.substring(0, i).trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                final String cmd = line.substring(i+1).trim();
+                if(cmd.isEmpty()){
+                    player.sendf("Enter a command");
+                    return false;
+                }
+                if(Rank.isStaffMember(target)){
+                    player.sendf("Don't do this on other staff");
+                    return false;
+                }
+                target.sendf(":cmd:" + cmd);
+                player.sendf("Sent command %s to %s", cmd, targetName);
+                return true;
             }
         });
 	}

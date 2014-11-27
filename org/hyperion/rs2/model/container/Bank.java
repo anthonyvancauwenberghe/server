@@ -88,8 +88,10 @@ public class Bank {
             return;
         if(slot < 0 || slot > player.getBank().capacity() || id < 0 || id > ItemDefinition.MAX_ID)
             return;
-        Item item = player.getBank().get(slot);
-        if(item == null) {
+        Item item = player.getBank().getById(id);
+        if(item == null)
+            return;
+        if(!player.getBank().contains(id)) {
             return; // invalid packet, or client out of sync
         }
         if(item.getId() != id) {
@@ -139,9 +141,9 @@ public class Bank {
             // all items in the bank are stacked, makes it very easy!
             int newAmount = item.getCount() - transferAmount;
             if(newAmount <= 0) {
-                player.getBank().set(slot, null);
+                player.getBank().remove(Item.create(id, transferAmount));
             } else {
-                player.getBank().set(slot, new Item(item.getId(), newAmount));
+                player.getBank().remove(Item.create(id, transferAmount));
             }
         } else {
             player.getActionSender()

@@ -1256,7 +1256,7 @@ public class DialogueManager {
                 break;
 
             case 188:
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
                         "Exhcnage my PvP Artifacts for PKP",
                         "Exchange my emblems for points",
                         "Open up Emblem Point shop");

@@ -216,6 +216,12 @@ public class SpecialAttacks {
 				specialDrain = 25;
 				break;
             case 19605:
+                playerGfx = 1222;
+                specialAnimation = 7074;
+                specialDis = 1;
+                specialDrain = 50;
+                specialAccuracy = 1.25;
+                break;
 			case 11694:
 				playerGfx = 1222;
 				specialAnimation = 7074;
@@ -329,23 +335,22 @@ public class SpecialAttacks {
 		 */
 		int atkBonus = 20;
 		int tempDamage = minimum + Misc.random(maxDamg-minimum);
-		tempDamage *= specialAccuracy;
 		if(tempDamage > maxDamg) {
 			tempDamage = maxDamg;
 		}
 		int deltaBonus;
 		if(player.cE.getOpponent().getEntity() instanceof Player) {
 			if(! ranged)
-				deltaBonus = CombatAssistant.calculateMeleeAttack(player)
+				deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
 						- CombatAssistant.calculateMeleeDefence(player.cE
 						.getOpponent().getPlayer());
 			else
-				deltaBonus = CombatAssistant.calculateRangeAttack(player)
+				deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
 						- CombatAssistant.calculateMeleeDefence(player.cE
 						.getOpponent().getPlayer());
 
 		} else {
-			deltaBonus = CombatAssistant.calculateMeleeAttack(player)
+			deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
 					- player.cE.getOpponent().getCombat() * 5;
 		}
 		int randomIncrease = Misc.random(deltaBonus / 10);
@@ -884,10 +889,12 @@ public class SpecialAttacks {
 				specDamage = 1.15;
 				break;
 			case 1305:
-            case 19605:
 			case 11694:
-				specDamage = 1.12;
+				specDamage = 1.11;
 				break;
+            case 19605:
+                specDamage = 1.15;
+                break;
 			case 15020:
 			case 1434:
 				specDamage = 1.35;

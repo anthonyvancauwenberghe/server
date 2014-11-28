@@ -539,11 +539,10 @@ public class Duel {
         player.getActionSender().sendMessage("You have "+(won ? "won" : "lost")+ " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);
         healup(player);
-
+        PlayerSaving.getSaving().saveLog("./logs/accounts/" + opponent.getName(), (new Date()) + " Duel "+(won ? "Won" : "Lost") +" against "+player.getName());
 		player.tradeAccept2 = false;
 		player.duelAttackable = 0;
         PlayerSaving.getSaving().save(player);
-		PlayerSaving.getSaving().saveLog("./logs/accounts/" + opponent.getName(), (new Date()) + " Duel "+(won ? "Won" : "Lost"));
 
         if(won)
             player.getActionSender().showInterface(6733);

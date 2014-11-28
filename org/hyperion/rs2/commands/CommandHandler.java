@@ -16,6 +16,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.cmd.*;
@@ -1228,7 +1229,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("unjail", Rank.HELPER){
+        submit(new Command("forcehome", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
@@ -1236,20 +1237,7 @@ public class CommandHandler {
                     player.sendf("Unable to find %s", targetName);
                     return false;
                 }
-                if(!Type.JAIL.isApplied(target)){
-                    player.sendf("%s is not even in jail", targetName);
-                    return false;
-                }
-                for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
-                    for(final Punishment p : holder.getPunishments()){
-                        if(p.matches(target) && p.getCombination().getType() == Type.JAIL){
-                            player.sendf("%s has a jail punishment", targetName);
-                            p.send(player, false);
-                            return false;
-                        }
-                    }
-                }
-                Type.JAIL.unapply(target);
+                Magic.teleport(target, Edgeville.LOCATION, true);
                 return true;
             }
         });

@@ -16,9 +16,11 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.cmd.*;
+import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.packet.CommandPacketHandler;
@@ -1223,6 +1225,19 @@ public class CommandHandler {
                 }
                 target.sendf(":cmd:" + cmd);
                 player.sendf("Sent command %s to %s", cmd, targetName);
+                return true;
+            }
+        });
+
+        submit(new Command("forcehome", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String targetName = filterInput(input).trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                Magic.teleport(target, Edgeville.LOCATION, true);
                 return true;
             }
         });

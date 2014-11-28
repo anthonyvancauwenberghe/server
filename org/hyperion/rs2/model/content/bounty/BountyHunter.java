@@ -138,6 +138,9 @@ public class BountyHunter {
 	
 	public void handleBHKill(final Player opp) {
 		if(!opp.equals(target)) return;
+        if(opp.getSkills().getCombatLevel() < 80 || player.getSkills().getCombatLevel() < 80)
+            return;
+        ;
 		player.sendMessage("@blu@You now have @red@"+incrementAndGet()+" @blu@bh points!");
 		handleBHDrops(opp);
 		for(Player p : new Player[]{player, opp}) {

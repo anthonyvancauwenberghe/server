@@ -35,7 +35,7 @@ public class EmblemShop extends PointsShop{
             case 18806:
                 return 1;
             case 19605:
-                return 3000;
+                return 2500;
             case 13898:
                 return 600;
             case 13892:

@@ -40,9 +40,7 @@ public class DeviousHonorShop extends PointsShop {
 			case 18349:
 			case 18351:
 			case 18353:
-			case 18355:
-			case 18357:
-				return 399;
+				return 699;
 
 			case 19713:
 			case 19716:
@@ -50,10 +48,8 @@ public class DeviousHonorShop extends PointsShop {
 				return 999;
 
 			case 15332:
-				//return 10;
 			case 2430:
-				//return 20;
-				return 1;
+				return 3;
 		}
 		return 5000;
 	}

@@ -22,8 +22,14 @@
         <frame>84</frame>
         <drain>0.0416</drain>
         <prayers>
+            <int>3</int>
+            <int>4</int>
             <int>6</int>
+            <int>11</int>
+            <int>12</int>
             <int>14</int>
+            <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -36,8 +42,14 @@
         <frame>85</frame>
         <drain>0.0416</drain>
         <prayers>
+            <int>3</int>
+            <int>4</int>
             <int>7</int>
+            <int>11</int>
+            <int>12</int>
             <int>15</int>
+            <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -50,8 +62,17 @@
         <frame>601</frame>
         <drain>0.0416</drain>
         <prayers>
+            <int>1</int>
+            <int>2</int>
+            <int>4</int>
+            <int>6</int>
+            <int>7</int>
             <int>11</int>
+            <int>12</int>
+            <int>14</int>
+            <int>15</int>
             <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -64,7 +85,16 @@
         <frame>602</frame>
         <drain>0.0416</drain>
         <prayers>
+            <int>1</int>
+            <int>2</int>
+            <int>3</int>
+            <int>6</int>
+            <int>7</int>
+            <int>11</int>
             <int>12</int>
+            <int>14</int>
+            <int>15</int>
+            <int>19</int>
             <int>20</int>
             <int>24</int>
             <int>25</int>
@@ -93,7 +123,13 @@
         <drain>0.0833</drain>
         <prayers>
             <int>1</int>
+            <int>3</int>
+            <int>4</int>
+            <int>11</int>
+            <int>12</int>
             <int>14</int>
+            <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -107,7 +143,13 @@
         <drain>0.0833</drain>
         <prayers>
             <int>2</int>
+            <int>3</int>
+            <int>4</int>
+            <int>11</int>
+            <int>12</int>
             <int>15</int>
+            <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -156,8 +198,17 @@
         <frame>603</frame>
         <drain>0.0833</drain>
         <prayers>
+            <int>1</int>
+            <int>2</int>
             <int>3</int>
+            <int>4</int>
+            <int>6</int>
+            <int>7</int>
+            <int>12</int>
+            <int>14</int>
+            <int>15</int>
             <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -170,7 +221,16 @@
         <frame>604</frame>
         <drain>0.0833</drain>
         <prayers>
+            <int>1</int>
+            <int>2</int>
+            <int>3</int>
             <int>4</int>
+            <int>6</int>
+            <int>7</int>
+            <int>11</int>
+            <int>14</int>
+            <int>15</int>
+            <int>19</int>
             <int>20</int>
             <int>24</int>
             <int>25</int>
@@ -199,7 +259,13 @@
         <drain>0.1666</drain>
         <prayers>
             <int>1</int>
+            <int>3</int>
+            <int>4</int>
             <int>6</int>
+            <int>11</int>
+            <int>12</int>
+            <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -213,7 +279,13 @@
         <drain>0.1666</drain>
         <prayers>
             <int>2</int>
+            <int>3</int>
+            <int>4</int>
             <int>7</int>
+            <int>11</int>
+            <int>12</int>
+            <int>19</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -271,8 +343,16 @@
         <frame>605</frame>
         <drain>0.1666</drain>
         <prayers>
+            <int>1</int>
+            <int>2</int>
             <int>3</int>
+            <int>4</int>
+            <int>6</int>
+            <int>7</int>
             <int>11</int>
+            <int>12</int>
+            <int>14</int>
+            <int>15</int>
             <int>24</int>
             <int>25</int>
         </prayers>
@@ -285,8 +365,17 @@
         <frame>606</frame>
         <drain>0.1666</drain>
         <prayers>
+            <int>1</int>
+            <int>2</int>
+            <int>3</int>
             <int>4</int>
+            <int>6</int>
+            <int>7</int>
+            <int>11</int>
             <int>12</int>
+            <int>14</int>
+            <int>15</int>
+            <int>19</int>
             <int>24</int>
             <int>25</int>
         </prayers>

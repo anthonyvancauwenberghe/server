@@ -39,6 +39,12 @@ public class Punishment {
         return PunishmentManager.getInstance().get(getVictimName());
     }
 
+    public boolean matches(final Player player){
+        return getVictimName().equalsIgnoreCase(player.getName())
+                || getVictimIp().equals(player.getShortIP())
+                || getVictimMac() == player.getUID();
+    }
+
     public void send(final Player player, final boolean alert){
         final Player issuer = getIssuer();
         final String issuerName = issuer != null ? issuer.getSafeDisplayName() : getIssuerName();

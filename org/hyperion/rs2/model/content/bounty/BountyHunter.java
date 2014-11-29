@@ -108,7 +108,7 @@ public class BountyHunter {
 	}
 	
 	public boolean levelCheck(Player p) {
-		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getLocation().getZ() == p.getLocation().getZ();
+		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getLocation().getZ() == p.getLocation().getZ() && !player.getShortIP().equalsIgnoreCase(p.getShortIP());
 	}
 	
 	public boolean wildLevelCheck(final Player opp) {

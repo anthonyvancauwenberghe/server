@@ -38,7 +38,7 @@ public final class BountyPerkHandler {
         if(opponent != null)  {
             int toDrain = (int)(hit * .1);
             toDrain *= Math.pow(2, level);
-            if(attacker.getBountyHunter().getTarget() != null &&  !attacker.getBountyHunter().getTarget().equals(opponent))
+            if(!opponent.equals(attacker.getBountyHunter().getTarget()))
             	toDrain = toDrain/3;
             opponent.getSkills().detractLevel(5, toDrain);
         }

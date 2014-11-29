@@ -228,10 +228,10 @@ public class Magic {
 		}
 		switch(necklaceId) {
 			case 18333:
-				maxDamg *= 1.10;
+				maxDamg *= 1.05;
 				break;
 			case 18335:
-				maxDamg *= 1.15;
+				maxDamg *= 1.10;
 				break;
 		}
 		switch(weaponId) {
@@ -244,11 +244,11 @@ public class Magic {
                 }
                 break;
 			case 13867:
+            case 17017:
 				maxDamg *= 1.10;
 			case 15486:
 				maxDamg *= 1.15;
 				break;
-			case 17017:
 			case 18355:
 				maxDamg *= 1.20;
 				break;

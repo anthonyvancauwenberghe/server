@@ -48,6 +48,7 @@ public class DeviousHonorShop extends PointsShop {
 				return 999;
 
 			case 15332:
+                return 1;
 			case 2430:
 				return 3;
 		}

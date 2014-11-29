@@ -182,8 +182,12 @@ public class PlayerDeathEvent extends Event {
 							}
 							killer.getPoints().inceasePkPoints(pointsToAdd > 0 ? pointsToAdd : 5);
                             if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
-                                killer.getSpecBar().increment(SpecialBar.FULL);
-						}
+                                killer.getSpecBar().increment(SpecialBar.FULL/5);
+                            if(Rank.hasAbility(killer, Rank.DONATOR))
+                                killer.getSpecBar().increment(SpecialBar.CYCLE_INCREMENT);
+                            killer.getSpecBar().sendSpecBar();
+
+                        }
 						if(!isDev) {
 						player.increaseDeathCount();
 						player.resetKillStreak();

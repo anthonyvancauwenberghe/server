@@ -1237,7 +1237,7 @@ public class CommandHandler {
                     player.sendf("Unable to find %s", targetName);
                     return false;
                 }
-                Magic.teleport(target, Edgeville.LOCATION, true);
+                target.setTeleportTarget(Edgeville.LOCATION);
                 return true;
             }
         });

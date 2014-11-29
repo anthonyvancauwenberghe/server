@@ -6,12 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.EquipmentStats;
-import org.hyperion.rs2.model.Graphic;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
@@ -1047,6 +1042,11 @@ public class CombatAssistant {
 				str = RANGEDDATA[l][1];
 			}
 		}
+        if(str < 40) {
+            ItemDefinition def = ItemDefinition.forId(i);
+            if(def != null && def.getName().toLowerCase().contains("knife") || def.getName().toLowerCase().contains("dart"))
+                str *= .7;
+        }
 		return str;
 	}
 

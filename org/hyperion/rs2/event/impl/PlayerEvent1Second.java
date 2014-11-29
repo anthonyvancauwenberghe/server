@@ -43,7 +43,7 @@ public class PlayerEvent1Second extends Event {
 					return;
 				}
 				p.prayerDrain += p.getDrainRate();
-				if(p.prayerDrain > 1) {
+				if(p.prayerDrain > 1 && !p.isDead()) {
 					p.getSkills().detractLevel(5, (int) p.prayerDrain);
 					p.prayerDrain = 0;
 				}

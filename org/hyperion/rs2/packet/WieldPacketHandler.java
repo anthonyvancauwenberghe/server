@@ -65,7 +65,7 @@ public class WieldPacketHandler implements PacketHandler {
 			removeShield = true;
 		switch(interfaceId) {
 			case Inventory.INTERFACE:
-				if(player.cannotSwitch || player.duelRule[DuelRules.SWITCH.ordinal()]) {
+				if((player.cannotSwitch || player.duelRule[DuelRules.SWITCH.ordinal()]) && (player.duelAttackable > 0 || Duel.inDuelLocation(player))) {
 					player.getActionSender().sendMessage("You cannot switch in this duel!");
 					return;
 				}

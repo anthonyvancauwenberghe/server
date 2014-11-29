@@ -138,7 +138,7 @@ public class ActionSender {
 		loadAnnouncements();
 		writeQuestTab();
 		player.getPoints().loginCheck();
-		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.HEAD_MODERATOR)) {
+		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			String rank = Rank.getPrimaryRank(player).toString();
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}

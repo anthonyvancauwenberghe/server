@@ -248,8 +248,8 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				World.getWorld().getNPCManager().addNPC(player.getLocation(),
-						parts[0], -1);
+				    World.getWorld().getNPCManager().addNPC(player.getLocation(),
+						parts[0], parts.length == 2 ? parts[1] : 50);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
 						+ parts[0] + "	" + player.getLocation() + "	"
 						+ (player.getLocation().getX() - 1) + "	"

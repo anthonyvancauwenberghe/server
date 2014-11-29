@@ -1,11 +1,5 @@
 package org.hyperion.rs2.packet;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
-
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -15,24 +9,8 @@ import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.CutSceneEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.event.impl.ServerMessages;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.BankPin;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.FriendsAssistant;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Graphic;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.Yelling;
 import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
 import org.hyperion.rs2.model.color.Color;
@@ -44,12 +22,7 @@ import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
-import org.hyperion.rs2.model.container.Bank;
-import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.EquipmentReq;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
@@ -57,19 +30,17 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
-import org.hyperion.rs2.model.content.misc2.Afk;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.content.misc2.Jail;
-import org.hyperion.rs2.model.content.misc2.SpawnTab;
-import org.hyperion.rs2.model.content.misc2.Zanaris;
+import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.util.EventBuilder;
-import org.hyperion.rs2.util.MassEvent;
-import org.hyperion.rs2.util.PlayerFiles;
-import org.hyperion.rs2.util.PushMessage;
-import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -77,7 +48,7 @@ import org.hyperion.util.Misc;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "relentless", "jet", "c", "graham", "arre", "secret", "nexon");
+			"j", "relentless", "jet", "c", "arre", "secret", "nexon");
 
 	/**
 	 * OWNER COMMANDS

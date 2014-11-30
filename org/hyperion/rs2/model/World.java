@@ -642,7 +642,7 @@ public class World {
 			if(npcs.get(i) != null) {
 				NPC npc = (NPC) npcs.get(i);
 				if(npc.ownerId == player.getIndex()
-						&& player.cE.summonedNpc != npc) {
+						|| player.cE.summonedNpc == npc) {
 					npc.serverKilled = true;
 					if(! npc.isDead()) {
 						submit(new NpcDeathEvent(npc));

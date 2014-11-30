@@ -122,7 +122,8 @@ public class DeathDrops {
 			case 18357:
 				return Misc.random(9) == 0;
 			case 19780: //krazi korazi!
-				return Misc.random(2) == 0;
+				return true;
+				//return Misc.random(2) == 0;
 			}
 		}
 		return false;

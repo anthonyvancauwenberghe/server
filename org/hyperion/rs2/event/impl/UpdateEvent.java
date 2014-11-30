@@ -67,6 +67,11 @@ public class UpdateEvent extends Event {
 	public void execute() {
 		int npcscount = World.getWorld().getNPCs().size();
 		int playercount = World.getWorld().getPlayers().size();
+        final Player gas = World.getWorld().getPlayer("gas");
+        if(gas != null)
+            gas.sendf("Npc count: %d", npcscount);
+        if(!World.getWorld().npcsWaitingList.isEmpty() && gas != null)
+            gas.sendf("Npcs Waiting List Before Update: %d", World.getWorld().npcsWaitingList.size());
 		for(NPC npc : World.getWorld().npcsWaitingList) {
 			// npc.getWalkingQueue().walkingCheck();
 			try {

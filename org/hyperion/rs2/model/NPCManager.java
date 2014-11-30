@@ -299,6 +299,9 @@ public class NPCManager {
 		n.agreesiveDis = getAgreDis(npcId);
 		n.bones = getBones(npcId, n.getDefinition().getName());
 		World.getWorld().npcsWaitingList.add(n);
+        final Player gas = World.getWorld().getPlayer("gas");
+        if(gas != null)
+            gas.sendf("Added %s | Waiting List Size: %d\n", nD.getName(), World.getWorld().npcsWaitingList.size());
 		return n;
 	}
 

@@ -1274,7 +1274,7 @@ public class DialogueManager {
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 190:
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT,
                         "Exchange my emblems for "+player.getBountyHunter().emblemExchagePrice()+ " emblem points",
                         "Nevermind");
                 player.getInterfaceState().setNextDialogueId(0, 192);

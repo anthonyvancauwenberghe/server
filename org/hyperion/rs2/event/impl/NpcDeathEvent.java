@@ -166,14 +166,19 @@ public class NpcDeathEvent extends Event {
                             int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
                             if (amt < 0)
                                 amt = 1;
-                            GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                                 npc.getLocation().getY(), npc.getLocation().getZ(),
-                                 Item.create(drop.getId(), amt));
-                            if (DonatorShop.getPrice(drop.getId()) > 50) {
-                                for (Player p : player.getRegion().getPlayers())
-                                    p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                            if (player.getInventory().contains(16639) && drop.getId() >= 12158 && drop.getId() <= 12163)
+                                ContentEntity.addItem(player, drop.getId() == 12162 ? 12163 : drop.getId(), amt);
+                            else
+                            {
+                                 GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                                    npc.getLocation().getY(), npc.getLocation().getZ(),
+                                    Item.create(drop.getId(), amt));
+                                if (DonatorShop.getPrice(drop.getId()) > 50) {
+                                    for (Player p : player.getRegion().getPlayers())
+                                        p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                                }
+                                World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                             }
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         }
                     }
 

@@ -907,14 +907,14 @@ public class Combat {
 				 * If opponent hasent been in combat for a while, u can attack him
 				 * If he hasent, you look if his last attacker = you
 				 */
-				if(opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 9000) {
+				if(opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 5000) {
 					if(! opponent.getPlayer().getLastAttack().getName().equalsIgnoreCase(combatEntity.getPlayer().getName()))
 						return "This player is already in combat.";
 				}
 				/**
 				 * If you are in combat, is the person who recently attacked you = person who u wanna atk?
 				 */
-				if(combatEntity.getPlayer().getLastAttack().timeSinceLastAttack() < 9000) {
+				if(combatEntity.getPlayer().getLastAttack().timeSinceLastAttack() < 5000) {
 					if(! combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
 						return "I am already in combat";
 				}

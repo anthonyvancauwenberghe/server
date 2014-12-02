@@ -1,8 +1,7 @@
 package org.hyperion.rs2.model.content.bounty;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,6 +34,8 @@ public class BountyHunter {
         TIER_10(100);
 
 
+        private static final Map<Integer, Emblem> EMBLEM_MAP = Stream.of(values()).collect(Collectors.toMap(e -> e.id, Function.<Emblem>identity()));;
+
         private static final int BASE_ID = 13195;
 
         private final int reward;
@@ -57,26 +58,15 @@ public class BountyHunter {
         }
 
         public static Emblem forId(int id) {
-            for(int i = values().length - 1; i >= 0; i--) {
-                if(id == values()[i].id)
-                    return values()[i];
-            }
-            return null;
+            return EMBLEM_MAP.get(id);
         }
 
         private static List<Item> getEmblems(final Container inventory) {
             return Stream.of(inventory.toArray()).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).collect(Collectors.toList());
         }
 
-        private static int getTotalVal(final List<Item> items) {
-            return getTotalValue(items.stream().map(item -> forId(item.getId())).collect(Collectors.toList()));
-        }
-
-        private static int getTotalValue(List<Emblem> emblems) {
-            int amount = 0;
-            for(Emblem emblem : emblems)
-                amount += emblem.reward;
-            return amount;
+        private static int getTotalVal(final Item[] items) {
+            return Stream.of(items).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).mapToInt(item -> forId(item.getId()).reward).sum();
         }
     }
 
@@ -169,12 +159,12 @@ public class BountyHunter {
     }
 
     public int emblemExchagePrice() {
-        return Emblem.getTotalVal(Emblem.getEmblems(player.getInventory()));
+        return Emblem.getTotalVal(player.getInventory().toArray());
     }
 
     public void exchangeEmblems() {
         final List<Item> toSubtract = Emblem.getEmblems(player.getInventory());
-        final int toAdd = Emblem.getTotalVal(toSubtract);
+        final int toAdd = Emblem.getTotalVal(toSubtract.toArray(new Item[toSubtract.size()]));
         for(Item item : toSubtract) {
             player.getInventory().remove(item);
         }

@@ -135,26 +135,6 @@ public class NpcDeathEvent extends Event {
                     );
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
-
-                if(HaloweenEvent.zombies.contains(npc.getDefinition().getId())) {
-                    player.sshCharges++;
-                    player.sendf("You have @red@%d@bla@ zombie kills", player.sshCharges);
-                    if(player.sshCharges%50 == 0) {
-                        GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                                npc.getLocation().getY(), npc.getLocation().getZ(),
-                                Item.create(17279));
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
-                    }
-
-                    if(Misc.random(1000) < 1) {
-                        GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                                npc.getLocation().getY(), npc.getLocation().getZ(),
-                                Item.create(1053 + Misc.random(5)));
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
-                    }
-
-
-                }
                 player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
                 final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                 //normal drops

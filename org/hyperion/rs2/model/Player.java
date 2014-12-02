@@ -718,7 +718,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return lastTicketRequest;
 	}
 
-    private final SlayerHolder slayTask = new SlayerHolder(this);
+    private final SlayerHolder slayTask = new SlayerHolder();
 
     public final SlayerHolder getSlayer() {
         return slayTask;

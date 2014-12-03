@@ -1305,6 +1305,8 @@ public class Magic {
 		}
 		if(!player.getSpellBook().isAncient())
 			return false;
+        if(player.getSkills().getLevel(Skills.HITPOINTS) < 48)
+            return false;
 		return true;
 	}
 	
@@ -1312,7 +1314,7 @@ public class Magic {
 		if(canGoTo13s(player))
 			Magic.teleport(player, 2981, 3599, 0, false);
 		else
-			player.sendMessage("@red@You have to be on the Ancient Spellooks to go to 13s", "@red@You cannot bring Divine or Elysian Spirit Shields with you here");
+			player.sendMessage("@red@You have to be on the Ancient Spellooks to go to 13s", "@red@You cannot bring Divine or Elysian Spirit Shields with you here", "@red@You must be above half health to enter");
 	}
 	
 	

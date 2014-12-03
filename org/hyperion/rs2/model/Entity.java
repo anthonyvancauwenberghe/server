@@ -496,6 +496,7 @@ public abstract class Entity {
 			if(cE.getAbsX() >= 2814 && cE.getAbsX() <= 2942 && cE.getAbsY() >= 5250 && cE.getAbsY() <= 5373) {
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
+            World.getWorld().resetPlayersNpcs(player);
 		}
 	}
 

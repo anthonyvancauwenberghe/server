@@ -642,7 +642,7 @@ public class World {
 			if(npcs.get(i) != null) {
 				NPC npc = (NPC) npcs.get(i);
 				if(npc.ownerId == player.getIndex()
-						|| player.cE.summonedNpc == npc) {
+						&& player.cE.summonedNpc != npc) {
 					npc.serverKilled = true;
 					if(! npc.isDead()) {
 						submit(new NpcDeathEvent(npc));
@@ -885,6 +885,7 @@ public class World {
 		player.setActive(false);
 		// Combat.resetAttack(player.cE);
 		resetPlayersNpcs(player);
+        resetSummoningNpcs(player);
 
 		try {
 			ClanManager.leaveChat(player, false, false);

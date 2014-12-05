@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cluescrolls>
+    <cluescroll difficulty="EASY" id="2677" trigger="DIG">
+        <description>Stand on the welcome mat for the general store&lt;br&gt;
+Go level 80 equipped with a rune scim and dig</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3080</x>
+                <y>3507</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>80</combatLevel>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>1333</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>10000</minAmount>
+                <maxAmount>100</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>100</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>10</chance>
+            </reward>
+            <reward type="EXPERIENCE">
+                <skill>1</skill>
+                <minAmount>10000</minAmount>
+                <maxAmount>1000</maxAmount>
+                <chance>1</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+</cluescrolls>

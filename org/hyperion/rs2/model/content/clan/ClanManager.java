@@ -74,7 +74,6 @@ public class ClanManager {
 
 	private static void sendLoginMessage(Player player, String clanName) {
 		player.getActionSender().sendMessage("Talking in: " + clanName);
-		player.getActionSender().sendMessage("@blu@To talk , please use @red@::cc@blu@ before the message.");
 	}
 
 

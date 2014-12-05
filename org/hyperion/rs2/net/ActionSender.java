@@ -131,12 +131,13 @@ public class ActionSender {
 		player.isHidden(false);
 		sendDetails();
         if(player.isNew()){
-            sendMessage("@blu@Welcome To @red@Artero! @blu@Happy Playing!");
-            sendMessage("@blu@Questions? Visit @red@::forums@blu@ or do @red@::onlinestaff@blu@ and PM a staff member");
-            sendMessage("@blu@Do not forget to @red@::vote@blu@ and @red@::donate@blu@ to keep the server alive!");
+            sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
+            sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
+            sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
-            sendMessage("@blu@Welcome Back To @red@Artero! @blu@Happy Playing!");
+            sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
         }
+        sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
 		//sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
         //sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");

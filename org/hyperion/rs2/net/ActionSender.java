@@ -130,12 +130,19 @@ public class ActionSender {
 		player.setActive(true);
 		player.isHidden(false);
 		sendDetails();
-		sendMessage("@blu@Welcome To " + Server.NAME + "!");
-		sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
-        sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
+        if(player.isNew()){
+            sendMessage("@blu@Welcome To @red@Artero! @blu@Happy Playing!");
+            sendMessage("@blu@Questions? Visit @red@::forums@blu@ or do @red@::onlinestaff@blu@ and PM a staff member");
+            sendMessage("@blu@Do not forget to @red@::vote@blu@ and @red@::donate@blu@ to keep the server alive!");
+        }else{
+            sendMessage("@blu@Welcome Back To @red@Artero! @blu@Happy Playing!");
+        }
+		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
+		//sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
+        //sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
         //sendMessage("Alert##We removed Divines and Special restores from the economy##Anyone with them was refunded their shop value!");
 		// sendMessage("@blu@Please register on our forums!");
-		loadAnnouncements();
+		//loadAnnouncements();
 		writeQuestTab();
 		player.getPoints().loginCheck();
 		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {

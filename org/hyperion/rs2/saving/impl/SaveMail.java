@@ -10,7 +10,7 @@ public class SaveMail extends SaveString {
 	}
 	@Override
 	public void setValue(Player player, String value) {
-		player.getMail().setMail(value);
+		player.getMail().setMail(value, false);
 	}
 
 	@Override

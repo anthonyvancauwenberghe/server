@@ -120,6 +120,7 @@ public class DeathDrops {
 			case 18353:
 			case 18355:
 			case 18357:
+            case 17660:
 				return Misc.random(9) == 0;
 			case 19780: //krazi korazi!
 				return true;

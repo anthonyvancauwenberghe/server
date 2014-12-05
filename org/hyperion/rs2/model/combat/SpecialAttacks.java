@@ -321,6 +321,9 @@ public class SpecialAttacks {
 		if(player.getEquipment().get(Equipment.SLOT_RING) != null)
 			if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 19669)
 				specialDrain = (int)(specialDrain - (specialDrain * .1));
+        if(player.getEquipment().get(Equipment.SLOT_RING) != null)
+            if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 17660)
+                specialDrain = (int)(specialDrain - (specialDrain * .17));
 		/*
 		 * If you don't have enough special energy, reset.
 		 */

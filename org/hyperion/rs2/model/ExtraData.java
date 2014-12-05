@@ -111,4 +111,11 @@ public class ExtraData {
 		return extraData.get(key);
 	}
 
+    /**
+     * Enables saving of extradata inside the player file
+     */
+    public String getSaveableString() {
+       return null;
+    }
+
 }

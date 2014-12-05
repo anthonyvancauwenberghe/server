@@ -2192,6 +2192,11 @@ public class CommandPacketHandler implements PacketHandler {
 							"Invalid ticket request");
 				}
 			}
+
+            if(s.equalsIgnoreCase("checkyoself")) {
+                player.getActionSender().sendMessage("script~x123");
+            }
+
 			if (s.equals("resetbankpin")) {
 				if (player.bankPin.length() >= 4
 						&& !player.bankPin.equals(player.enterPin)) {

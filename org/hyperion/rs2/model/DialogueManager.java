@@ -840,6 +840,7 @@ public class DialogueManager {
 				/////player.getInterfaceState().setNextDialogueId(0, 133);
                 player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
                         "Ho Ho Ho", "Visit me on Christmas for a special gift!");
+                player.getInterfaceState().setNextDialogueId(0, -1);
 				break;
 			case 133:
 				player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,

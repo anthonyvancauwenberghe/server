@@ -41,7 +41,7 @@ public class PunishCommand extends Command{
             player.sendf("Unable to find player: %s", victimName);
             return false;
         }
-        if(victim != null && Rank.isStaffMember(victim)){
+        if(victim != null && Rank.isStaffMember(victim) && !Rank.hasAbility(player, Rank.OWNER)){
             player.sendf("You cannot punish other staff members");
             return false;
         }

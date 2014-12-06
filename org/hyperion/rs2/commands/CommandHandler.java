@@ -1235,5 +1235,20 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        submit(new Command("masspnpc", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                try{
+                    final int id = Integer.parseInt(filterInput(input).trim());
+                    for(final Player p : World.getWorld().getPlayers())
+                        if(p != null)
+                            p.setPNpc(id);
+                    return true;
+                }catch(Exception ex){
+                    player.sendf("Enter a valid item id");
+                    return false;
+                }
+            }
+        });
 	}
 }

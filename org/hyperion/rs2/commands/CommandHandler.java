@@ -644,6 +644,8 @@ public class CommandHandler {
                 as.sendMessage(String.format("%s has %,d honor points.", name, pp.getHonorPoints()));
                 as.sendMessage(String.format("%s has %,d voting points.", name, pp.getVotingPoints()));
                 as.sendMessage(String.format("%s has %,d donor points. Bought: %,d", name, pp.getDonatorPoints(), pp.getDonatorPointsBought()));
+                as.sendMessage(String.format("%s has %,d bounty hunter points", name, target.getBountyHunter().getKills()));
+                as.sendMessage(String.format("%s has %,d emblem points", name, target.getBountyHunter().getEmblemPoints()));
                 return true;
             }
         });
@@ -744,35 +746,6 @@ public class CommandHandler {
                     if(!player.equals(p))
                         p.getSession().close();
                 return true;
-            }
-        });
-
-        submit(new Command("givehp", Rank.DEVELOPER){
-            public boolean execute(final Player player, final String input){
-                final String line = filterInput(input);
-                final int i = line.indexOf(',');
-                if(i == -1){
-                    player.getActionSender().sendMessage("Syntax: ::givehp name,amount");
-                    return false;
-                }
-                final Player target = World.getWorld().getPlayer(line.substring(0, i).trim());
-                if(target == null){
-                    player.getActionSender().sendMessage("Player not found");
-                    return false;
-                }
-                try{
-                    final int amount = Integer.parseInt(line.substring(i+1).trim());
-                    /*if(amount < 1){ you know, incase to deduct
-                        player.getActionSender().sendMessage("Enter a positive integer amount");
-                        return false;
-                    }*/
-                    target.getPoints().setHonorPoints(target.getPoints().getHonorPoints() + amount);
-                    //target.getQuestTab().sendHonorPoints();
-                    return true;
-                }catch(Exception ex){
-                    player.getActionSender().sendMessage("Enter a valid integer amount");
-                    return false;
-                }
             }
         });
 
@@ -997,6 +970,13 @@ public class CommandHandler {
         CommandHandler.submit(new ViewPunishmentsCommand());
         CommandHandler.submit(new MyPunishmentsCommand());
         CommandHandler.submit(new RemovePunishmentCommand());
+
+        submit(new GiveIntCommand("givehp", Rank.ADMINISTRATOR) {
+            public void process(final Player player, final Player target, final int value) {
+                target.getPoints().setHonorPoints(target.getPoints().getHonorPoints() + value);
+                player.sendf("%s now has %,d honor pts", target.getName(), target.getPoints().getHonorPoints());
+            }
+        });
 
         submit(new GiveIntCommand("giveelo", Rank.ADMINISTRATOR) {
             public void process(final Player player, final Player target, final int value) {
@@ -1238,6 +1218,20 @@ public class CommandHandler {
                     return false;
                 }
                 target.setTeleportTarget(Edgeville.LOCATION);
+                return true;
+            }
+        });
+
+        submit(new Command("getinfo", Rank.MODERATOR){
+            public boolean execute(final Player player, final String input){
+                final String targetName = filterInput(input).trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                player.sendf("Creation Date: " + new Date(target.getCreatedTime()));
+                player.sendf("Last HP Reward: %s", new Date(target.getLastHonorPointsReward()));
                 return true;
             }
         });

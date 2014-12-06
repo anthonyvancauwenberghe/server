@@ -40,6 +40,8 @@ public class ItemsTradeable {
             return false;
         if(id == SlayerShop.SLAYER_HELM || id == SlayerShop.FULL_HELM)
             return true;
+        if(id == 15426)
+            return false;
 		return !UNTRADABLES.contains(Integer.valueOf(id));
 	}
 

@@ -309,8 +309,8 @@ public class Trade {
 		player.getActionSender().sendUpdateItems(3214, player.getInventory().toArray());
 		player.getTrader().getActionSender().sendInterfaceInventory(3443, 3213);
 		player.getTrader().getActionSender().sendUpdateItems(3214, player.getTrader().getInventory().toArray());
-		player.getTrader().getActionSender().sendString(3451, player.getName());
-		player.getActionSender().sendString(3451, player.getTrader().getName());
+		player.getTrader().getActionSender().sendString(3451, player.getSafeDisplayName());
+		player.getActionSender().sendString(3451, player.getTrader().getSafeDisplayName());
 		player.onConfirmScreen = true;
 		player.getTrader().onConfirmScreen = true;
 	}

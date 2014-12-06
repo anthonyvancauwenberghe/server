@@ -835,9 +835,11 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, -1);
 				break;
 			case 132:
-				player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Hello Adventurer", "I have a challenge for you..");
-				player.getInterfaceState().setNextDialogueId(0, 133);
+				//player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+				//		"Hello Adventurer", "I have a challenge for you..");
+				/////player.getInterfaceState().setNextDialogueId(0, 133);
+                player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "Ho Ho Ho", "Come Back and talk to me when it's Christmas!");
 				break;
 			case 133:
 				player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,

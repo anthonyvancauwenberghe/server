@@ -52,6 +52,12 @@ public class SummoningBoBs implements ContentTemplate {
             if(player.getCombat().getFamiliar() != null && player.cE.getFamiliar().getDefinition().getId() == SummonType.PACKYAK.npcId && useItem == PACK_YAK_SCROLL) {
             	SummoningSpecial.preformSpecial(player, new PackYak(onItem, slot));
             }
+        } else if (type == ClickType.ITEM_OPTION1) {
+            if(useItem == 15262) {
+                if(player.getInventory().remove(Item.create(useItem)) >= 1) {
+                    player.getInventory().add(Item.create(18016, 10000));
+                }
+            }
         }
         return false;
     }
@@ -63,9 +69,11 @@ public class SummoningBoBs implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-    	if(type != ClickType.ITEM_ON_ITEM)
+    	if(type == ClickType.NPC_OPTION1)
     		return org.hyperion.rs2.model.content.skill.Summoning.BoBids;
-    	else 
+    	else if(type == ClickType.ITEM_ON_ITEM)
     		return new int[]{PACK_YAK_SCROLL};  //To change body of implemented methods use File | Settings | File Templates.
+        else
+            return new int[]{15262};
     }
 }

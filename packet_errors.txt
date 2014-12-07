@@ -12775,3 +12775,902 @@ Sun Nov 30 19:39:44 GMT+01:00 2014
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sun Nov 30 22:56:42 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:1277)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:249)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:54)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Mon Dec 01 18:43:30 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:339)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:140)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:984)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Dec 02 01:54:02 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:1158)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:242)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:54)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Dec 02 03:50:38 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 20077
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Dec 02 06:09:32 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -17
+	at org.hyperion.rs2.util.NameUtils.longToName(NameUtils.java:60)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:37)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Dec 02 08:18:40 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -14697
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Dec 02 11:57:06 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Dec 02 15:34:36 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Dec 02 15:34:44 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Dec 02 23:45:33 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -10368
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 00:18:04 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:339)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:140)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:984)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 06:05:29 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 768
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 07:41:48 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Dec 03 07:41:56 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Dec 03 08:24:04 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:24:04 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:24:09 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.shops.Shop.updatePlayers(Shop.java:120)
+	at org.hyperion.rs2.model.shops.PointsShop.buyFromShop(PointsShop.java:26)
+	at org.hyperion.rs2.model.container.ShopManager.buyItem(ShopManager.java:148)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption2(ItemOptionPacketHandler.java:466)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:101)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:24:22 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:24:32 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.shops.Shop.updatePlayers(Shop.java:120)
+	at org.hyperion.rs2.model.shops.PointsShop.buyFromShop(PointsShop.java:26)
+	at org.hyperion.rs2.model.shops.DeviousHonorShop.buyFromShop(DeviousHonorShop.java:74)
+	at org.hyperion.rs2.model.container.ShopManager.buyItem(ShopManager.java:148)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption2(ItemOptionPacketHandler.java:466)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:101)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:24:47 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:25:52 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.shops.Shop.updatePlayers(Shop.java:120)
+	at org.hyperion.rs2.model.shops.PointsShop.buyFromShop(PointsShop.java:26)
+	at org.hyperion.rs2.model.shops.DeviousHonorShop.buyFromShop(DeviousHonorShop.java:74)
+	at org.hyperion.rs2.model.container.ShopManager.buyItem(ShopManager.java:148)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption2(ItemOptionPacketHandler.java:466)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:101)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:26:05 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:26:18 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:26:22 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.updateList(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.addFriend(FriendsAssistant.java:74)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:59)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:26:26 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:26:30 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.updateList(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.addFriend(FriendsAssistant.java:74)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:59)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:27:06 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.updateList(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.addFriend(FriendsAssistant.java:74)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:59)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:27:13 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:27:13 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:27:15 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:27:50 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:27:51 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.updateList(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.addFriend(FriendsAssistant.java:74)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:59)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:28:16 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.updateList(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.addFriend(FriendsAssistant.java:74)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:59)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:28:29 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:30:04 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:30:41 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:32:21 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:32:24 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:32:50 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:33:12 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:43)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 08:34:08 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 08:36:42 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 09:27:54 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Wed Dec 03 14:50:09 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:909)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:242)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:54)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 15:13:57 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:1158)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:242)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:54)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 16:25:45 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.packet.ModerationOverride.kickPlayer(ModerationOverride.java:30)
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:870)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:242)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:54)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 17:09:34 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -32384
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 20:14:02 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:339)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:140)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:984)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Dec 03 21:01:31 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Dec 04 01:08:24 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.container.Bank.withdraw(Bank.java:115)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption4(ItemOptionPacketHandler.java:618)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:107)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Dec 04 01:08:46 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.container.Bank.withdraw(Bank.java:115)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption4(ItemOptionPacketHandler.java:618)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:107)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Dec 04 06:27:11 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -2825
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Dec 04 12:30:07 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Dec 04 12:30:13 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Fri Dec 05 01:41:18 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Fri Dec 05 04:27:08 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:340)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:141)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:988)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Fri Dec 05 04:27:17 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:340)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:141)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:988)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Fri Dec 05 04:27:18 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:340)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:141)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:988)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Fri Dec 05 04:27:32 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Fri Dec 05 04:27:37 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Fri Dec 05 04:51:16 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Dec 06 09:21:21 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 4
+	at org.hyperion.rs2.model.DeathDrops.keepItem(DeathDrops.java:340)
+	at org.hyperion.rs2.model.DeathDrops.itemsKeptOnDeath(DeathDrops.java:141)
+	at org.hyperion.rs2.net.ActionSender.openItemsKeptOnDeathInterface(ActionSender.java:996)
+	at org.hyperion.rs2.model.QuestTab$6.handle(QuestTab.java:308)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:52)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Dec 06 15:52:22 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -4132
+	at org.hyperion.rs2.model.container.Container.get(Container.java:310)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:176)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:128)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Dec 06 21:13:17 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Dec 06 21:13:22 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Dec 06 21:14:03 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Dec 06 21:14:05 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sun Dec 07 09:37:29 GMT+01:00 2014
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.util.NameUtils.longToName(NameUtils.java:60)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:37)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

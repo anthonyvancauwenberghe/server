@@ -2,12 +2,11 @@ package org.hyperion.rs2.model.recolor;
 
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.recolor.pattern.Pattern;
-import org.hyperion.rs2.net.PacketBuilder;
 
 public class Recolor {
 
     private final int id;
-    private Pattern pattern;
+    private final Pattern pattern;
 
     public Recolor(final int id, final Pattern pattern){
         this.id = id;
@@ -24,15 +23,6 @@ public class Recolor {
 
     public Pattern getPattern(){
         return pattern;
-    }
-
-    public void setPattern(final Pattern pattern){
-        this.pattern = pattern;
-    }
-
-    public void append(final PacketBuilder bldr){
-        bldr.putShort(id);
-        pattern.append(bldr);
     }
 
     public String toString(){

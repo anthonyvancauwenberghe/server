@@ -48,6 +48,7 @@ import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
@@ -219,6 +220,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public TriviaSettings getTrivia() {
 		return ts;
 	}
+
+    private final RecolorManager recolorManager = new RecolorManager(this);
+
+    public RecolorManager getRecolorManager(){
+        return recolorManager;
+    }
 	
 	public SummoningBar getSummBar() {
 		return summoningBar;

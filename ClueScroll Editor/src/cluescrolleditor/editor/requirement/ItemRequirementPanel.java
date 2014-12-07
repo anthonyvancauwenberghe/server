@@ -7,7 +7,6 @@ import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.cluescroll.requirement.ItemRequirement;
 
 public class ItemRequirementPanel extends RequirementPanel<ItemRequirement> implements ChangeListener {
@@ -18,7 +17,7 @@ public class ItemRequirementPanel extends RequirementPanel<ItemRequirement> impl
     public ItemRequirementPanel(final ItemRequirement requirement){
         super(requirement);
 
-        idSpinner = EditorUtils.createSpinner(requirement.getId(), 1, ItemDefinition.MAX_ID);
+        idSpinner = EditorUtils.createSpinner(requirement.getId(), 1, Integer.MAX_VALUE);
         idSpinner.setBorder(new TitledBorder("ID"));
         idSpinner.addChangeListener(this);
 

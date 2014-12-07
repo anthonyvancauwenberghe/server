@@ -10,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Optional;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,7 +23,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.cluescroll.ClueScroll;
 import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 import org.hyperion.rs2.model.cluescroll.reward.Reward;
@@ -54,7 +52,7 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
     public ClueScrollEditor(){
         super(new BorderLayout());
 
-        idSpinner = EditorUtils.createSpinner(1, 1, ItemDefinition.MAX_ID);
+        idSpinner = EditorUtils.createSpinner(1, 1, Integer.MAX_VALUE);
         idSpinner.setEnabled(false);
         idSpinner.setBorder(new TitledBorder("ID"));
         idSpinner.addChangeListener(this);
@@ -151,26 +149,28 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
 
     public void setClueScroll(final ClueScroll cs){
         this.cs = cs;
-        final Optional<ClueScroll> opt = Optional.ofNullable(cs);
-        SwingUtilities.invokeLater(() -> {
-            idSpinner.setEnabled(opt.isPresent());
-            idSpinner.setValue(opt.orElse(DUMMY).getId());
-            idSpinner.repaint();
-            difficultyBox.setEnabled(opt.isPresent());
-            difficultyBox.setSelectedItem(opt.orElse(DUMMY).getDifficulty());
-            difficultyBox.repaint();
-            triggerBox.setEnabled(opt.isPresent());
-            triggerBox.setSelectedItem(opt.orElse(DUMMY).getTrigger());
-            triggerBox.repaint();
-            descriptionArea.setEnabled(opt.isPresent());
-            descriptionArea.setText(opt.orElse(DUMMY).getDescription());
-            descriptionArea.repaint();
-            requirementList.clear();
-            for(final Requirement req : opt.orElse(DUMMY).getRequirements())
-                requirementList.add(req);
-            rewardList.clear();
-            for(final Reward reward : opt.orElse(DUMMY).getRewards())
-                rewardList.add(reward);
+        final ClueScroll value = cs == null ? DUMMY : cs;
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                idSpinner.setEnabled(cs != null);
+                idSpinner.setValue(value.getId());
+                idSpinner.repaint();
+                difficultyBox.setEnabled(cs != null);
+                difficultyBox.setSelectedItem(value.getDifficulty());
+                difficultyBox.repaint();
+                triggerBox.setEnabled(cs != null);
+                triggerBox.setSelectedItem(value.getTrigger());
+                triggerBox.repaint();
+                descriptionArea.setEnabled(cs != null);
+                descriptionArea.setText(value.getDescription());
+                descriptionArea.repaint();
+                requirementList.clear();
+                for(final Requirement req : value.getRequirements())
+                    requirementList.add(req);
+                rewardList.clear();
+                for(final Reward reward : value.getRewards())
+                    rewardList.add(reward);
+            }
         });
     }
 

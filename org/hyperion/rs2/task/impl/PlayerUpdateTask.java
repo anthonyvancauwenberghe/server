@@ -1,5 +1,6 @@
 package org.hyperion.rs2.task.impl;
 
+import java.util.List;
 import org.hyperion.rs2.GameEngine;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -16,6 +17,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
+import org.hyperion.rs2.model.recolor.Recolor;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.task.Task;
@@ -713,6 +715,16 @@ public class PlayerUpdateTask implements Task {
         }else{
             playerProps.put((byte)0);
         }
+
+        final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
+        final Iterator<Recolor> itr = recolors.iterator();
+        while(itr.hasNext())
+            if(!eq.contains(itr.next().getId()))
+                itr.remove();
+        playerProps.putShort(recolors.size());
+        for(final Recolor recolor : recolors)
+                recolor.append(playerProps);
+
 
         //System.out.println("player = otherPlayer: " + (player == otherPlayer));
 

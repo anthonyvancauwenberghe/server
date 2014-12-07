@@ -6,16 +6,11 @@ import cluescrolleditor.util.Slot;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.cluescroll.requirement.EquipmentRequirement;
 
 public class EquipmentRequirementPanel extends RequirementPanel<EquipmentRequirement> implements ItemListener, ChangeListener{
@@ -31,7 +26,7 @@ public class EquipmentRequirementPanel extends RequirementPanel<EquipmentRequire
         slotBox.setBorder(new TitledBorder("Slot"));
         slotBox.addItemListener(this);
 
-        itemIdSpinner = EditorUtils.createSpinner(requirement.getItemId(), 1, ItemDefinition.MAX_ID);
+        itemIdSpinner = EditorUtils.createSpinner(requirement.getItemId(), 1, Integer.MAX_VALUE);
         itemIdSpinner.setBorder(new TitledBorder("Item"));
         itemIdSpinner.addChangeListener(this);
 

@@ -38,7 +38,12 @@ public class ClueScrollList extends JPanel implements ListSelectionListener {
     }
 
     public void repaintList(){
-        SwingUtilities.invokeLater(list::repaint);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                list.repaint();
+            }
+        });
     }
 
     public ClueScroll getSelected(){
@@ -46,13 +51,16 @@ public class ClueScrollList extends JPanel implements ListSelectionListener {
     }
 
     public void add(final ClueScroll clueScroll, final boolean select){
-        SwingUtilities.invokeLater(() -> {
-            model.addElement(clueScroll);
-            if(select){
-                list.setSelectedValue(clueScroll, true);
-                valueChanged(new ListSelectionEvent(list, -1, -1, false));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                model.addElement(clueScroll);
+                if (select) {
+                    list.setSelectedValue(clueScroll, true);
+                    valueChanged(new ListSelectionEvent(list, -1, -1, false));
+                }
+                list.repaint();
             }
-            list.repaint();
         });
     }
 
@@ -61,14 +69,17 @@ public class ClueScrollList extends JPanel implements ListSelectionListener {
     }
 
     public void remove(final ClueScroll clueScroll){
-        SwingUtilities.invokeLater(() -> {
-            model.removeElement(clueScroll);
-            if(model.isEmpty())
-                list.clearSelection();
-            else
-                list.setSelectedIndex(0);
-            valueChanged(new ListSelectionEvent(list, -1, -1, false));
-            list.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                model.removeElement(clueScroll);
+                if (model.isEmpty())
+                    list.clearSelection();
+                else
+                    list.setSelectedIndex(0);
+                valueChanged(new ListSelectionEvent(list, -1, -1, false));
+                list.repaint();
+            }
         });
     }
 }

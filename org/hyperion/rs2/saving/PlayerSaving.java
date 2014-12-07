@@ -28,6 +28,7 @@ import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
 import org.hyperion.rs2.saving.impl.*;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.util.TextUtils;
@@ -197,6 +198,8 @@ public class PlayerSaving {
         saveList.add(new SaveMac());
         saveList.add(new SaveSlayer("slayerdata"));
         saveList.add(new SaveEmblemPoints("emblemPoints"));
+
+        saveList.add(new SaveRecolorManager());
 	}
 
 	/**

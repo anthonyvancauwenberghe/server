@@ -8,6 +8,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
+import org.hyperion.rs2.model.cluescroll.ClueScroll;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 
 public class ClueScrollEditorFrame extends JFrame {
@@ -38,7 +39,8 @@ public class ClueScrollEditorFrame extends JFrame {
             public Void doInBackground(){
                 try{
                     ClueScrollManager.load();
-                    ClueScrollManager.getAll().forEach(list::add);
+                    for(final ClueScroll cs : ClueScrollManager.getAll())
+                        list.add(cs);
                 }catch(Exception ex){
                     ex.printStackTrace();
                 }
@@ -64,6 +66,11 @@ public class ClueScrollEditorFrame extends JFrame {
     }
 
     public static void main(String[] args){
-        SwingUtilities.invokeLater(ClueScrollEditorFrame::getInstance);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ClueScrollEditorFrame.getInstance();
+            }
+        });
     }
 }

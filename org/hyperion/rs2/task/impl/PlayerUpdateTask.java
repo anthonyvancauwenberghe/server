@@ -723,7 +723,7 @@ public class PlayerUpdateTask implements Task {
                 itr.remove();
         playerProps.putShort(recolors.size());
         for(final Recolor recolor : recolors)
-                recolor.append(playerProps);
+            playerProps.putRS2String(recolor.toString());
 
 
         //System.out.println("player = otherPlayer: " + (player == otherPlayer));

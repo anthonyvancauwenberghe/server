@@ -49,6 +49,7 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.sets.CustomSetHolder;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
 import org.hyperion.rs2.net.LoginDebugger;
@@ -215,6 +216,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private Mail mail = new Mail(this);
 
 	private SkillingData sd = new SkillingData();
+
+    private final CustomSetHolder customSetHolder = new CustomSetHolder(this);
+
+    public CustomSetHolder getCustomSetHolder() {
+        return customSetHolder;
+    }
 
 	public TriviaSettings getTrivia() {
 		return ts;

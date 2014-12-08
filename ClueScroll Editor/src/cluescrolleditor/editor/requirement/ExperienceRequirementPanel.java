@@ -11,7 +11,6 @@ import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.cluescroll.requirement.ExperienceRequirement;
 
 public class ExperienceRequirementPanel extends RequirementPanel<ExperienceRequirement> implements ItemListener, ChangeListener {
@@ -27,7 +26,7 @@ public class ExperienceRequirementPanel extends RequirementPanel<ExperienceRequi
         skillBox.setBorder(new TitledBorder("Skill"));
         skillBox.addItemListener(this);
 
-        xpSpinner = EditorUtils.createSpinner(requirement.getXp(), 1, Skills.MAXIMUM_EXP);
+        xpSpinner = EditorUtils.createSpinner(requirement.getXp(), 1, 200_000_000);
         xpSpinner.setBorder(new TitledBorder("XP"));
         xpSpinner.addChangeListener(this);
 

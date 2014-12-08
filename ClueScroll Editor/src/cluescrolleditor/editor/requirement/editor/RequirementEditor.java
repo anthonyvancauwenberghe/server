@@ -18,12 +18,14 @@ public class RequirementEditor extends JPanel {
 
     public void setRequirement(final Requirement requirement){
         this.requirement = requirement;
-        SwingUtilities.invokeLater(() -> {
-            removeAll();
-            if(requirement != null)
-                add(RequirementPanelManager.create(requirement), BorderLayout.CENTER);
-            revalidate();
-            repaint();
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                removeAll();
+                if(requirement != null)
+                    add(RequirementPanelManager.create(requirement), BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            }
         });
     }
 

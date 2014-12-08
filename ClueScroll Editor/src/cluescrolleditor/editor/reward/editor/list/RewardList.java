@@ -31,7 +31,11 @@ public class RewardList extends JPanel implements ListSelectionListener{
     }
 
     public void repaintList(){
-        SwingUtilities.invokeLater(list::repaint);
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                list.repaint();
+            }
+        });
     }
 
     public void valueChanged(final ListSelectionEvent e){
@@ -46,21 +50,25 @@ public class RewardList extends JPanel implements ListSelectionListener{
     }
 
     public void clear(){
-        SwingUtilities.invokeLater(() -> {
-            model.removeAllElements();
-            list.clearSelection();
-            list.repaint();
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                model.removeAllElements();
+                list.clearSelection();
+                list.repaint();
+            }
         });
     }
 
     public void add(final Reward reward, final boolean select){
-        SwingUtilities.invokeLater(() -> {
-            model.addElement(reward);
-            if(select){
-                list.setSelectedValue(reward, true);
-                valueChanged(new ListSelectionEvent(list, -1, -1, false));
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                model.addElement(reward);
+                if(select){
+                    list.setSelectedValue(reward, true);
+                    valueChanged(new ListSelectionEvent(list, -1, -1, false));
+                }
+                list.repaint();
             }
-            list.repaint();
         });
     }
 
@@ -69,14 +77,16 @@ public class RewardList extends JPanel implements ListSelectionListener{
     }
 
     public void remove(final Reward reward){
-        SwingUtilities.invokeLater(() -> {
-            model.removeElement(reward);
-            if (model.isEmpty())
-                list.clearSelection();
-            else
-                list.setSelectedIndex(0);
-            valueChanged(new ListSelectionEvent(list, -1, -1, false));
-            list.repaint();
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                model.removeElement(reward);
+                if (model.isEmpty())
+                    list.clearSelection();
+                else
+                    list.setSelectedIndex(0);
+                valueChanged(new ListSelectionEvent(list, -1, -1, false));
+                list.repaint();
+            }
         });
     }
 }

@@ -60,4 +60,11 @@ public enum Color {
     public String toString(){
         return super.toString().replace("_", "");
     }
+
+    public static Color byName(final String name){
+        for(final Color c : values())
+            if(c.toString().equalsIgnoreCase(name))
+                return c;
+        return null;
+    }
 }

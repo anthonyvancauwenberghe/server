@@ -16,12 +16,15 @@ public class RewardEditor extends JPanel {
 
     public void setReward(final Reward reward){
         this.reward = reward;
-        SwingUtilities.invokeLater(() -> {
-            removeAll();
-            if(reward != null)
-                add(RewardPanelManager.create(reward), BorderLayout.CENTER);
-            revalidate();
-            repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                removeAll();
+                if (reward != null)
+                    add(RewardPanelManager.create(reward), BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            }
         });
     }
 

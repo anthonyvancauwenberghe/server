@@ -56,14 +56,17 @@ public class ToolBar extends JToolBar implements ActionListener{
         final JPopupMenu addRequirementPopup = new JPopupMenu();
         for(final Requirement.Type type : Requirement.Type.values()){
             final JMenuItem item = new JMenuItem(type.name(), Res.LOCK_16);
-            item.addActionListener(e -> {
-                if(ClueScrollEditorFrame.getInstance().getEditor().getClueScroll() == null)
-                    return;
-                final ClueScroll cs = ClueScrollEditorFrame.getInstance().getEditor().getClueScroll();
-                final Requirement req = type.createDefault();
-                cs.getRequirements().add(req);
-                ClueScrollEditorFrame.getInstance().getEditor().getRequirementList().add(req, true);
-                ClueScrollEditorFrame.getInstance().getList().repaintList();
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (ClueScrollEditorFrame.getInstance().getEditor().getClueScroll() == null)
+                        return;
+                    final ClueScroll cs = ClueScrollEditorFrame.getInstance().getEditor().getClueScroll();
+                    final Requirement req = type.createDefault();
+                    cs.getRequirements().add(req);
+                    ClueScrollEditorFrame.getInstance().getEditor().getRequirementList().add(req, true);
+                    ClueScrollEditorFrame.getInstance().getList().repaintList();
+                }
             });
             addRequirementPopup.add(item);
         }
@@ -76,14 +79,17 @@ public class ToolBar extends JToolBar implements ActionListener{
         final JPopupMenu addRewardPopup = new JPopupMenu();
         for(final Reward.Type type : Reward.Type.values()){
             final JMenuItem item = new JMenuItem(type.name(), Res.REWARD_16);
-            item.addActionListener(e -> {
-                if (ClueScrollEditorFrame.getInstance().getEditor().getClueScroll() == null)
-                    return;
-                final ClueScroll cs = ClueScrollEditorFrame.getInstance().getEditor().getClueScroll();
-                final Reward reward = type.createDefault();
-                cs.getRewards().add(reward);
-                ClueScrollEditorFrame.getInstance().getEditor().getRewardList().add(reward, true);
-                ClueScrollEditorFrame.getInstance().getList().repaintList();
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (ClueScrollEditorFrame.getInstance().getEditor().getClueScroll() == null)
+                        return;
+                    final ClueScroll cs = ClueScrollEditorFrame.getInstance().getEditor().getClueScroll();
+                    final Reward reward = type.createDefault();
+                    cs.getRewards().add(reward);
+                    ClueScrollEditorFrame.getInstance().getEditor().getRewardList().add(reward, true);
+                    ClueScrollEditorFrame.getInstance().getList().repaintList();
+                }
             });
             addRewardPopup.add(item);
         }

@@ -11,7 +11,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class RequirementList extends JPanel implements ListSelectionListener{
 
@@ -32,7 +31,11 @@ public class RequirementList extends JPanel implements ListSelectionListener{
     }
 
     public void repaintList(){
-        SwingUtilities.invokeLater(list::repaint);
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                list.repaint();
+            }
+        });
     }
 
     public void valueChanged(final ListSelectionEvent e){
@@ -47,21 +50,27 @@ public class RequirementList extends JPanel implements ListSelectionListener{
     }
 
     public void clear(){
-        SwingUtilities.invokeLater(() -> {
-            model.removeAllElements();
-            list.clearSelection();
-            list.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                model.removeAllElements();
+                list.clearSelection();
+                list.repaint();
+            }
         });
     }
 
     public void add(final Requirement requirement, final boolean select){
-        SwingUtilities.invokeLater(() -> {
-            model.addElement(requirement);
-            if(select){
-                list.setSelectedValue(requirement, true);
-                valueChanged(new ListSelectionEvent(list, -1, -1, false));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                model.addElement(requirement);
+                if (select) {
+                    list.setSelectedValue(requirement, true);
+                    valueChanged(new ListSelectionEvent(list, -1, -1, false));
+                }
+                list.repaint();
             }
-            list.repaint();
         });
     }
 
@@ -70,14 +79,17 @@ public class RequirementList extends JPanel implements ListSelectionListener{
     }
 
     public void remove(final Requirement requirement){
-        SwingUtilities.invokeLater(() -> {
-            model.removeElement(requirement);
-            if (model.isEmpty())
-                list.clearSelection();
-            else
-                list.setSelectedIndex(0);
-            valueChanged(new ListSelectionEvent(list, -1, -1, false));
-            list.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                model.removeElement(requirement);
+                if (model.isEmpty())
+                    list.clearSelection();
+                else
+                    list.setSelectedIndex(0);
+                valueChanged(new ListSelectionEvent(list, -1, -1, false));
+                list.repaint();
+            }
         });
     }
 }

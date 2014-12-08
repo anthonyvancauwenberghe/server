@@ -1,9 +1,7 @@
 package cluescrolleditor.util;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public enum Slot{
     HELMET(0),
@@ -21,8 +19,12 @@ public enum Slot{
     FULL_HELM(16),
     FULL_MASK(17);
 
-    private static final Map<Integer, Slot> MAP = Arrays.stream(values())
-            .collect(Collectors.toMap(s -> s.id, Function.<Slot>identity()));
+    private static final Map<Integer, Slot> MAP = new HashMap<>();
+
+    static{
+        for(final Slot slot : values())
+            MAP.put(slot.id, slot);
+    }
 
     public final int id;
 

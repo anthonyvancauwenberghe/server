@@ -94,6 +94,7 @@ public class CustomSet {
         final Item[] items = inventory.toArray();
         final int[] inventoryIds = Stream.of(items).mapToInt(item -> item == null ? 391 : item.getId()).toArray();
         final int[] inventoryStackSizes = Stream.of(items).filter(Objects::nonNull).mapToInt(item -> item == null ? 1 : item.getCount()).toArray();
+        System.out.println("Made it here");
         return new CustomSet(equipmentIds, inventoryIds, inventoryStackSizes);
     }
 

@@ -38,8 +38,8 @@ public class CustomSetHolder {
 
     public boolean save(int slot) {
         System.out.println("Slot: " + slot);
-        final boolean save = slot < getSlotCount();
-        if(!save)
+        final boolean save = slot <= getSlotCount();
+        if(save)
             sets[slot] = CustomSet.fromGear(player.getInventory(), player.getEquipment());
         return save;
     }

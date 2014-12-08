@@ -75,13 +75,20 @@ public class CustomSetHolder {
     }
 
     public void parse(final String read) {
-        System.out.println("parsing: "+read);
-        if(read == null || read.length() < 10)
-            return;
-        final String parts[] = read.split("NEW_SET");
-        for(int i = 1; i < parts.length; i++)  {
-            sets[i-1] = CustomSet.fromString(parts[i]);
-
+        try {
+           System.out.println("parsing: "+read);
+           if(read == null || read.length() < 10)
+               return;
+            final String parts[] = read.split("NEW_SET");
+            for(int i = 1; i < parts.length; i++)  {
+                try {
+                    sets[i-1] = CustomSet.fromString(parts[i]);
+                }catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
         }
     }
 

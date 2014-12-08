@@ -74,4 +74,9 @@ public class RecolorManager {
     public boolean contains(final int id){
         return map.containsKey(id);
     }
+
+    public void clear(){
+        map.clear();
+        player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
+    }
 }

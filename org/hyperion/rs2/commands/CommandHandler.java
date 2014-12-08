@@ -23,6 +23,7 @@ import org.hyperion.rs2.model.punishment.cmd.*;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
+import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.ViewRecolorsCommand;
 import org.hyperion.rs2.net.ActionSender;
@@ -1257,5 +1258,6 @@ public class CommandHandler {
         submit(new RecolorCommand());
         submit(new UncolorCommand());
         submit(new ViewRecolorsCommand());
+        submit(new UncolorAllCommand());
 	}
 }

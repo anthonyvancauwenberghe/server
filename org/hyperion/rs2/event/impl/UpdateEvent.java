@@ -67,7 +67,7 @@ public class UpdateEvent extends Event {
 	public void execute() {
 		int npcscount = World.getWorld().getNPCs().size();
 		int playercount = World.getWorld().getPlayers().size();
-		for(NPC npc : World.getWorld().npcsWaitingList) {
+        for(NPC npc : World.getWorld().npcsWaitingList) {
 			// npc.getWalkingQueue().walkingCheck();
 			try {
 				World.getWorld().removeFromWaiting(npc);

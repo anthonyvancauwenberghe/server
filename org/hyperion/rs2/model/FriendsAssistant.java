@@ -48,12 +48,12 @@ public class FriendsAssistant {
 
 	public static int lastChatId = 1;
 
-	public static void sendPM(Player p, long from, byte[] chatText, int chatTextSize, int rights) {
-		if(lastChatId == 10000) {
-			lastChatId = 1;
-		}
-		p.write(new PacketBuilder(196, Type.VARIABLE).putLong(from).putInt(lastChatId++).put((byte) rights).put(chatText, 0, chatTextSize).toPacket());
-	}
+    public static void sendPM(Player p, long from, byte[] chatText, int chatTextSize, int rights) {
+        if(lastChatId == 10000) {
+            lastChatId = 1;
+        }
+        p.write(new PacketBuilder(196, Type.VARIABLE).putLong(from).putInt(lastChatId++).put((byte) rights).put(chatText, 0, chatTextSize).toPacket());
+    }
 
 	public static void updateList(Player p, long friend) {
 		for(Player c : World.getWorld().getPlayers()) {

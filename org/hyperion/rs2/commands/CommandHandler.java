@@ -20,6 +20,9 @@ import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.cmd.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
+import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
+import org.hyperion.rs2.model.recolor.cmd.ViewRecolorsCommand;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.pf.Tile;
@@ -1226,5 +1229,9 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        submit(new RecolorCommand());
+        submit(new UncolorCommand());
+        submit(new ViewRecolorsCommand());
 	}
 }

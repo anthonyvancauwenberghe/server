@@ -16,6 +16,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
+import org.hyperion.rs2.model.recolor.Recolor;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.task.Task;
@@ -23,6 +24,7 @@ import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * A task which creates and sends the player update block.
@@ -700,7 +702,6 @@ public class PlayerUpdateTask implements Task {
 		playerProps.putShort(0); // (skill-level instead of combat-level) otherPlayer.getSkills().getTotalLevel()); // total level
 		playerProps.putShort(otherPlayer.getKillCount());
         final int id = eq.getItemId(Equipment.SLOT_CAPE);
-        //commented out until client changes
         if(eq.isSlotUsed(Equipment.SLOT_CAPE) && (id == 12747 || id == 12744)){
             playerProps.put((byte) 1);
             if(id == 12747){
@@ -713,6 +714,15 @@ public class PlayerUpdateTask implements Task {
         }else{
             playerProps.put((byte)0);
         }
+
+        final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
+        final Iterator<Recolor> itr = recolors.iterator();
+        while(itr.hasNext())
+            if(!eq.contains(itr.next().getId()))
+                itr.remove();
+        playerProps.putShort(recolors.size());
+        for(final Recolor recolor : recolors)
+                playerProps.putRS2String(recolor.toString());
 
         //System.out.println("player = otherPlayer: " + (player == otherPlayer));
 

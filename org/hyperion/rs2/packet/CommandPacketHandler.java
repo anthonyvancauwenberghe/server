@@ -77,7 +77,7 @@ import org.hyperion.util.Misc;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "relentless", "jet", "c", "graham", "arre", "secret", "nexon");
+			"j", "relentless", "jet", "c", "graham", "arre", "secret", "nexon", "secret");
 
 	/**
 	 * OWNER COMMANDS

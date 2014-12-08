@@ -200,6 +200,7 @@ public class PlayerSaving {
         saveList.add(new SaveEmblemPoints("emblemPoints"));
 
         saveList.add(new SaveRecolorManager());
+        saveList.add(new SaveCustomSet());
 	}
 
 	/**

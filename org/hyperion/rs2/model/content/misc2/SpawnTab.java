@@ -152,13 +152,13 @@ public class SpawnTab implements ContentTemplate {
 	}
 
 	private static int[] ActionButtonIds = {
-			29162, 29163, 29164, 29165, 29167, 29168, 29169, 29170, 29171, 29172
+			 29167, 29168, 29169, 29170, 29171, 29172
 	};
 
 	@Override
 	public boolean clickObject(Player player, int type, int a, int b, int c,
 	                           int d) {
-		if(! Server.SPAWN)
+		if(!Server.SPAWN)
 			return false;
 		if(type == 0) {
 			if(player.wildernessLevel > 0) {

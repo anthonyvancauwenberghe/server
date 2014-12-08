@@ -1291,6 +1291,7 @@ public class DialogueManager {
                 player.sendf("You now have @red@%d@bla@ emblem points", player.getBountyHunter().getEmblemPoints());
                 player.getActionSender().removeChatboxInterface();
                 break;
+
             case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;

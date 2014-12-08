@@ -58,9 +58,9 @@ public class CustomSetDialogueHandler implements ContentTemplate {
                         "Save slot 1",
                         "Save slot 2",
                         "Save slot 3");
-                player.getInterfaceState().setNextDialogueId(0, 194);
-                player.getInterfaceState().setNextDialogueId(1, 195);
-                player.getInterfaceState().setNextDialogueId(2, 196);
+                player.getInterfaceState().setNextDialogueId(0, 1001);
+                player.getInterfaceState().setNextDialogueId(1, 1002);
+                player.getInterfaceState().setNextDialogueId(2, 1003);
                 return true;
             case 1001:
             case 1002:
@@ -75,9 +75,9 @@ public class CustomSetDialogueHandler implements ContentTemplate {
                         "Load slot 1",
                         "Load slot 2",
                         "Load slot 3");
-                player.getInterfaceState().setNextDialogueId(0, 198);
-                player.getInterfaceState().setNextDialogueId(1, 199);
-                player.getInterfaceState().setNextDialogueId(2, 200);
+                player.getInterfaceState().setNextDialogueId(0, 1005);
+                player.getInterfaceState().setNextDialogueId(1, 1006);
+                player.getInterfaceState().setNextDialogueId(2, 1007);
                 return true;
             case 1005:
             case 1006:

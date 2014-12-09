@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -35,7 +36,7 @@ public class CustomSetDialogueHandler implements ContentTemplate {
     }
 
     public boolean actionButton(Player player, int actionButton) {
-        if(player.wildernessLevel > 0) {
+        if(Location.inAttackableArea(player)) {
             player.getActionSender().sendMessage("You cannot spawn Items in the wilderness.");
             return false;
         }

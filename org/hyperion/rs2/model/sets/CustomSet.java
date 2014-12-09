@@ -90,12 +90,10 @@ public class CustomSet {
     }
 
     public static CustomSet fromGear(final Container inventory, final Container equipment) {
-        System.out.println("Made it here");
         final int[] equipmentIds = Stream.of(equipment.toArray()).filter(Objects::nonNull).mapToInt(item -> item.getId()).toArray();
         final Item[] items = inventory.toArray();
         final int[] inventoryIds = Stream.of(items).mapToInt(item -> item == null ? 391 : item.getId()).toArray();
         final int[] inventoryStackSizes = Stream.of(items).mapToInt(item -> item == null ? 1 : item.getCount()).toArray();
-        System.out.println("Made it here "+inventoryIds.length+" stack: "+inventoryStackSizes.length);
         return new CustomSet(equipmentIds, inventoryIds, inventoryStackSizes);
     }
 

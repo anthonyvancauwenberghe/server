@@ -37,7 +37,6 @@ public class CustomSetHolder {
      */
 
     public boolean save(int slot) {
-        System.out.println("Slot: " + slot);
         final boolean save = slot < getSlotCount();
         if(save)
             sets[slot] = CustomSet.fromGear(player.getInventory(), player.getEquipment());
@@ -69,14 +68,11 @@ public class CustomSetHolder {
         for(final CustomSet set : sets)
             if(set != null)
                 builder.append(set.toSaveableString());
-        System.out.println(builder.toString());
-
         return builder.toString();
     }
 
     public void parse(final String read) {
         try {
-           System.out.println("parsing: "+read);
            if(read == null || read.length() < 10)
                return;
             final String parts[] = read.split("NEW_SET");

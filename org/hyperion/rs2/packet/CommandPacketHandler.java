@@ -663,8 +663,7 @@ public class CommandPacketHandler implements PacketHandler {
             for(int i = 0; i < 100; i++) {
 
                 NPC npc = new NPC(NPCDefinition.forId(id), -1, player.getLocation());
-                npc.cE.getDamageDealt().put(player.getName(), 10);
-                World.getWorld().submit(new NpcDeathEvent(npc));
+                npc.cE.hit(npc.health, player, false, Constants.MELEE);
 
             }
         }

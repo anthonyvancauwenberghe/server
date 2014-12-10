@@ -1,10 +1,10 @@
-package org.hyperion.rs2.model.cluescroll.reward;
+package cluescrolleditor.cluescroll.reward;
 
-import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
+import cluescrolleditor.cluescroll.util.ClueScrollUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class ItemReward extends Reward{
+public class ItemReward extends Reward {
 
     private int id;
 
@@ -31,8 +31,8 @@ public class ItemReward extends Reward{
 
     public static ItemReward parse(final Element element){
         final int itemId = ClueScrollUtils.getInteger(element, "id");
-        final int minAmount = ClueScrollUtils.getInteger(element, "maxAmount");
-        final int maxAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int minAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int maxAmount = ClueScrollUtils.getInteger(element, "maxAmount");
         final int chance = ClueScrollUtils.getInteger(element, "chance");
         return new ItemReward(itemId, minAmount, maxAmount, chance);
     }

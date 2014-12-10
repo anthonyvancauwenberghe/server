@@ -1,6 +1,7 @@
 package cluescrolleditor.editor.list;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.ClueScroll;
 import java.awt.BorderLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -10,7 +11,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
 
 public class ClueScrollList extends JPanel implements ListSelectionListener {
 

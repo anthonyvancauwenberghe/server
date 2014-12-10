@@ -1,10 +1,10 @@
 package cluescrolleditor.editor.reward.editor;
 
+import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.editor.reward.RewardPanelManager;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class RewardEditor extends JPanel {
 

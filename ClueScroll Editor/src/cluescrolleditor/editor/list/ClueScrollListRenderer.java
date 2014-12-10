@@ -1,13 +1,13 @@
 package cluescrolleditor.editor.list;
 
+import cluescrolleditor.cluescroll.ClueScroll;
+import cluescrolleditor.cluescroll.requirement.Requirement;
+import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.res.Res;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class ClueScrollListRenderer extends DefaultListCellRenderer{
 

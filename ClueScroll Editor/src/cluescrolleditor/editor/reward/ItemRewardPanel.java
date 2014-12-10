@@ -1,13 +1,13 @@
 package cluescrolleditor.editor.reward;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.reward.ItemReward;
 import cluescrolleditor.util.EditorUtils;
 import java.awt.BorderLayout;
 import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.cluescroll.reward.ItemReward;
 
 public class ItemRewardPanel extends RewardPanel<ItemReward> implements ChangeListener {
 

@@ -1,10 +1,10 @@
-package org.hyperion.rs2.model.cluescroll.reward;
+package cluescrolleditor.cluescroll.reward;
 
-import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
+import cluescrolleditor.cluescroll.util.ClueScrollUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class PointsReward extends Reward{
+public class PointsReward extends Reward {
 
     public enum Type{
         PK_POINTS("Pk Points"),
@@ -46,8 +46,8 @@ public class PointsReward extends Reward{
 
     public static PointsReward parse(final Element element){
         final Type type = Type.valueOf(ClueScrollUtils.getString(element, "type"));
-        final int minAmount = ClueScrollUtils.getInteger(element, "maxAmount");
-        final int maxAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int minAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int maxAmount = ClueScrollUtils.getInteger(element, "maxAmount");
         final int chance = ClueScrollUtils.getInteger(element, "chance");
         return new PointsReward(type, minAmount, maxAmount, chance);
     }

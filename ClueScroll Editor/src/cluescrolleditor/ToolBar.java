@@ -1,5 +1,9 @@
 package cluescrolleditor;
 
+import cluescrolleditor.cluescroll.ClueScroll;
+import cluescrolleditor.cluescroll.ClueScrollManager;
+import cluescrolleditor.cluescroll.requirement.Requirement;
+import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.editor.ClueScrollEditor;
 import cluescrolleditor.res.Res;
 import java.awt.BorderLayout;
@@ -14,11 +18,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class ToolBar extends JToolBar implements ActionListener{
 

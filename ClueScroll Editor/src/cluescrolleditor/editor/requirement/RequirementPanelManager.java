@@ -1,12 +1,12 @@
 package cluescrolleditor.editor.requirement;
 
+import cluescrolleditor.cluescroll.requirement.CombatLevelRequirement;
+import cluescrolleditor.cluescroll.requirement.EquipmentRequirement;
+import cluescrolleditor.cluescroll.requirement.ExperienceRequirement;
+import cluescrolleditor.cluescroll.requirement.ItemRequirement;
+import cluescrolleditor.cluescroll.requirement.LocationRequirement;
+import cluescrolleditor.cluescroll.requirement.Requirement;
 import java.awt.Dimension;
-import org.hyperion.rs2.model.cluescroll.requirement.CombatLevelRequirement;
-import org.hyperion.rs2.model.cluescroll.requirement.EquipmentRequirement;
-import org.hyperion.rs2.model.cluescroll.requirement.ExperienceRequirement;
-import org.hyperion.rs2.model.cluescroll.requirement.ItemRequirement;
-import org.hyperion.rs2.model.cluescroll.requirement.LocationRequirement;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 
 public final class RequirementPanelManager {
 

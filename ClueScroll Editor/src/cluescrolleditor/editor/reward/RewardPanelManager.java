@@ -1,10 +1,10 @@
 package cluescrolleditor.editor.reward;
 
+import cluescrolleditor.cluescroll.reward.ExperienceReward;
+import cluescrolleditor.cluescroll.reward.ItemReward;
+import cluescrolleditor.cluescroll.reward.PointsReward;
+import cluescrolleditor.cluescroll.reward.Reward;
 import java.awt.Dimension;
-import org.hyperion.rs2.model.cluescroll.reward.ExperienceReward;
-import org.hyperion.rs2.model.cluescroll.reward.ItemReward;
-import org.hyperion.rs2.model.cluescroll.reward.PointsReward;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public final class RewardPanelManager {
 

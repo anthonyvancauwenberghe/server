@@ -1,13 +1,13 @@
 package cluescrolleditor.editor.requirement;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.requirement.CombatLevelRequirement;
 import cluescrolleditor.util.EditorUtils;
 import java.awt.BorderLayout;
 import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.cluescroll.requirement.CombatLevelRequirement;
 
 public class CombatLevelRequirementPanel extends RequirementPanel<CombatLevelRequirement> implements ChangeListener {
 

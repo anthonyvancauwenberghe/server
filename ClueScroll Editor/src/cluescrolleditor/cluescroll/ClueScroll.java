@@ -1,10 +1,10 @@
-package org.hyperion.rs2.model.cluescroll;
+package cluescrolleditor.cluescroll;
 
+import cluescrolleditor.cluescroll.requirement.Requirement;
+import cluescrolleditor.cluescroll.reward.Reward;
+import cluescrolleditor.cluescroll.util.ClueScrollUtils;
 import java.util.ArrayList;
 import java.util.List;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
-import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

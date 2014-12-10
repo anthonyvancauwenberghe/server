@@ -112,7 +112,7 @@ public class RevAttack implements Attack {
     }
     public void handleRangeAttack(NPC n, Player attack) {
 
-        n.cE.doAnim(n.getDefinition().getAtkEmote(1));
+        n.cE.doAnim(n.getDefinition().getAtkEmote(2));
         final int maxHit = n.getDefinition().combat()/3;
         final int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.RANGE);
@@ -120,7 +120,7 @@ public class RevAttack implements Attack {
 
     }
     public void handleMeleeAttack(NPC n, Player attack) {
-        n.cE.doAnim(n.getDefinition().getAtkEmote(1));
+        n.cE.doAnim(n.getDefinition().getAtkEmote(0));
         final int maxHit = n.getDefinition().combat()/5;
         final int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MELEE);
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MELEE);

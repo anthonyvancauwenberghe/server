@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.model.combat.attack.GodWarsBandos;
+import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.util.IoBufferUtils;
 
 /**
@@ -305,8 +306,11 @@ public class NPCDefinition {
 						definition[8133] = NPCDefinition.create(8133, 2000, 785, bonus, 10059, 10053, new int[]{10057, 10058}, 4, "Corporeal_Beast", 184);
 						for(int n : SummoningMonsters.SUMMONING_MONSTERS) {
 							definition[n] = SummoningMonsters.loadDefinition(n);
-							System.out.println("Summoning monster: "+n+" added, name: "+ definition[n].getName());
 						}
+                        for(int n : RevAttack.getRevs()) {
+                            if((definition[n] = RevAttack.loadDefinition(n)) != null);
+                                System.out.println("Rev monster: "+n+" added, name: "+definition[n].getName());
+                        }
 						//int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime
 						System.out.println("Loaded " + j + " NPC Definitions.");
 						return;

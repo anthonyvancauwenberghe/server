@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.EquipmentReq;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Misc;
 
@@ -60,6 +61,8 @@ public class CustomSet {
                 return false;
         for(final int id : equipmentIds) {
             final Item item = Item.create(id);
+            if(!EquipmentReq.canEquipItem(player, id))
+                continue;
             if(!ItemSpawning.canSpawn(id))
                 if(player.getBank().remove(item) < 1)
                     continue;

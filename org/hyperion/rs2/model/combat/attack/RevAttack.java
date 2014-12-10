@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.combat.SpiritShields;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.util.ArrayUtils;
@@ -97,9 +98,13 @@ public class RevAttack implements Attack {
             else
                 handleMagicAttack(n, player);
         } else {
-        if(hasPrayMelee)
-            handleMagicAttack(n, player);
-        else if(hasPrayMagic) {
+        if(hasPrayMelee) {
+            if(Misc.random(1) == 0) {
+                handleRangeAttack(n, player);
+            } else {
+                handleMagicAttack(n, player);
+            }
+        } else if(hasPrayMagic) {
             if(Misc.random(1) == 0) {
                 handleRangeAttack(n, player);
             } else {
@@ -115,6 +120,7 @@ public class RevAttack implements Attack {
         final int maxHit = n.getDefinition().combat()/4;
         int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MAGE);
         damage -= Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
+        damage = SpiritShields.applyEffects(attack.cE, damage);
         if(damage <= 0)
             damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
@@ -127,6 +133,7 @@ public class RevAttack implements Attack {
         final int maxHit = (int)(n.getDefinition().combat()/3.5);
         int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
         damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
+        damage = SpiritShields.applyEffects(attack.cE, damage);
         if(damage <= 0)
             damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.RANGE);
@@ -138,6 +145,7 @@ public class RevAttack implements Attack {
         final int maxHit = n.getDefinition().combat()/5;
         int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MELEE);
         damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
+        damage = SpiritShields.applyEffects(attack.cE, damage);
         if(damage <= 0)
             damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MELEE);

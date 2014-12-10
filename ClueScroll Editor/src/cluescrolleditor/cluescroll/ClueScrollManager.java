@@ -1,4 +1,4 @@
-package org.hyperion.rs2.model.cluescroll;
+package cluescrolleditor.cluescroll;
 
 import java.io.File;
 import java.io.FileOutputStream;

@@ -1,6 +1,10 @@
 package cluescrolleditor.editor;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.ClueScroll;
+import cluescrolleditor.cluescroll.ClueScrollManager;
+import cluescrolleditor.cluescroll.requirement.Requirement;
+import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.editor.requirement.editor.RequirementEditor;
 import cluescrolleditor.editor.requirement.editor.list.RequirementList;
 import cluescrolleditor.editor.reward.editor.RewardEditor;
@@ -23,10 +27,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class ClueScrollEditor extends JPanel implements ChangeListener, ItemListener, DocumentListener{
 

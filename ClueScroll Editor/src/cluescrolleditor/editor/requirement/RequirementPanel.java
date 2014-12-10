@@ -1,8 +1,8 @@
 package cluescrolleditor.editor.requirement;
 
+import cluescrolleditor.cluescroll.requirement.Requirement;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 
 public class RequirementPanel<T extends Requirement> extends JPanel{
 

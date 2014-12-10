@@ -39,8 +39,8 @@ public class ExperienceReward extends Reward{
 
     public static ExperienceReward parse(final Element element){
         final int skill = ClueScrollUtils.getInteger(element, "skill");
-        final int minAmount = ClueScrollUtils.getInteger(element, "maxAmount");
-        final int maxAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int minAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int maxAmount = ClueScrollUtils.getInteger(element, "maxAmount");
         final int chance = ClueScrollUtils.getInteger(element, "chance");
         return new ExperienceReward(skill, minAmount, maxAmount, chance);
     }

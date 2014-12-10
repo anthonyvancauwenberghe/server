@@ -1,11 +1,11 @@
 package cluescrolleditor.editor.requirement.editor.list;
 
+import cluescrolleditor.cluescroll.requirement.Requirement;
 import cluescrolleditor.res.Res;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 
 public class RequirementListRenderer extends DefaultListCellRenderer {
 

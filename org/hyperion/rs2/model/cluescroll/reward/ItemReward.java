@@ -45,8 +45,8 @@ public class ItemReward extends Reward{
 
     public static ItemReward parse(final Element element){
         final int itemId = ClueScrollUtils.getInteger(element, "id");
-        final int minAmount = ClueScrollUtils.getInteger(element, "maxAmount");
-        final int maxAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int minAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int maxAmount = ClueScrollUtils.getInteger(element, "maxAmount");
         final int chance = ClueScrollUtils.getInteger(element, "chance");
         return new ItemReward(itemId, minAmount, maxAmount, chance);
     }

@@ -1,6 +1,7 @@
 package cluescrolleditor.editor.reward;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.util.EditorUtils;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -9,7 +10,6 @@ import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class RewardPanel<T extends Reward> extends JPanel implements ChangeListener{
 

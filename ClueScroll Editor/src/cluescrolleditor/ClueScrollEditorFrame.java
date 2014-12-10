@@ -1,5 +1,7 @@
 package cluescrolleditor;
 
+import cluescrolleditor.cluescroll.ClueScroll;
+import cluescrolleditor.cluescroll.ClueScrollManager;
 import cluescrolleditor.editor.ClueScrollEditor;
 import cluescrolleditor.editor.list.ClueScrollList;
 import java.awt.BorderLayout;
@@ -8,8 +10,6 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 
 public class ClueScrollEditorFrame extends JFrame {
 

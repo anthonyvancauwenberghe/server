@@ -1,10 +1,10 @@
-package org.hyperion.rs2.model.cluescroll.requirement;
+package cluescrolleditor.cluescroll.requirement;
 
-import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
+import cluescrolleditor.cluescroll.util.ClueScrollUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class CombatLevelRequirement extends Requirement{
+public class CombatLevelRequirement extends Requirement {
 
     private int combatLevel;
 

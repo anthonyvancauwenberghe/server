@@ -1,6 +1,7 @@
 package cluescrolleditor.editor.requirement;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.requirement.ExperienceRequirement;
 import cluescrolleditor.util.EditorUtils;
 import cluescrolleditor.util.Skill;
 import java.awt.BorderLayout;
@@ -11,7 +12,6 @@ import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.cluescroll.requirement.ExperienceRequirement;
 
 public class ExperienceRequirementPanel extends RequirementPanel<ExperienceRequirement> implements ItemListener, ChangeListener {
 

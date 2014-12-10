@@ -1,6 +1,7 @@
 package cluescrolleditor.editor.requirement;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.requirement.EquipmentRequirement;
 import cluescrolleditor.util.EditorUtils;
 import cluescrolleditor.util.Slot;
 import java.awt.BorderLayout;
@@ -11,7 +12,6 @@ import javax.swing.JSpinner;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.hyperion.rs2.model.cluescroll.requirement.EquipmentRequirement;
 
 public class EquipmentRequirementPanel extends RequirementPanel<EquipmentRequirement> implements ItemListener, ChangeListener{
 

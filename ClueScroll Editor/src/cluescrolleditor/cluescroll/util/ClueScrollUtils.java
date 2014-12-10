@@ -1,4 +1,4 @@
-package org.hyperion.rs2.model.cluescroll.util;
+package cluescrolleditor.cluescroll.util;
 
 import java.util.Random;
 import org.w3c.dom.Document;

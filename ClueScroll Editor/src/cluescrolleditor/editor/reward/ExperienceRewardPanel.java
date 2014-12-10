@@ -1,13 +1,13 @@
 package cluescrolleditor.editor.reward;
 
 import cluescrolleditor.ClueScrollEditorFrame;
+import cluescrolleditor.cluescroll.reward.ExperienceReward;
 import cluescrolleditor.util.Skill;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.border.TitledBorder;
-import org.hyperion.rs2.model.cluescroll.reward.ExperienceReward;
 
 public class ExperienceRewardPanel extends RewardPanel<ExperienceReward> implements ItemListener {
 

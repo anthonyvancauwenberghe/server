@@ -1,11 +1,11 @@
 package cluescrolleditor.editor.reward.editor.list;
 
+import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.res.Res;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
 public class RewardListRenderer extends DefaultListCellRenderer {
 

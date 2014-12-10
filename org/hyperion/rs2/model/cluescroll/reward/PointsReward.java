@@ -63,8 +63,8 @@ public class PointsReward extends Reward{
 
     public static PointsReward parse(final Element element){
         final Type type = Type.valueOf(ClueScrollUtils.getString(element, "type"));
-        final int minAmount = ClueScrollUtils.getInteger(element, "maxAmount");
-        final int maxAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int minAmount = ClueScrollUtils.getInteger(element, "minAmount");
+        final int maxAmount = ClueScrollUtils.getInteger(element, "maxAmount");
         final int chance = ClueScrollUtils.getInteger(element, "chance");
         return new PointsReward(type, minAmount, maxAmount, chance);
     }

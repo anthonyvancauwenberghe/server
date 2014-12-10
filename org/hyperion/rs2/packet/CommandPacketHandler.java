@@ -1539,7 +1539,7 @@ public class CommandPacketHandler implements PacketHandler {
 		// goto here
 		if (commandStart.equals("namenpc")) {
 			s = s.substring(8).toLowerCase();
-			for (int i = 0; i < 6393; i++) {
+			for (int i = 0; i < 6693; i++) {
 				if (NPCDefinition.forId(i).name().toLowerCase().contains(s)) {
 					player.getActionSender().sendMessage(
 							i + "	" + NPCDefinition.forId(i).name());

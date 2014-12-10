@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.combat.attack;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
@@ -112,7 +113,10 @@ public class RevAttack implements Attack {
     public void handleMagicAttack(NPC n, Player attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
         final int maxHit = n.getDefinition().combat()/4;
-        final int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MAGE);
+        int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MAGE);
+        damage -= Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
+        if(damage <= 0)
+            damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
         n.cE.predictedAtk = System.currentTimeMillis() + 1800;
 
@@ -120,8 +124,11 @@ public class RevAttack implements Attack {
     public void handleRangeAttack(NPC n, Player attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-        final int maxHit = n.getDefinition().combat()/3;
-        final int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
+        final int maxHit = (int)(n.getDefinition().combat()/3.5);
+        int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
+        damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
+        if(damage <= 0)
+            damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.RANGE);
         n.cE.predictedAtk = System.currentTimeMillis() + 2400;
 
@@ -129,7 +136,10 @@ public class RevAttack implements Attack {
     public void handleMeleeAttack(NPC n, Player attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(0));
         final int maxHit = n.getDefinition().combat()/5;
-        final int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MELEE);
+        int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MELEE);
+        damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
+        if(damage <= 0)
+            damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MELEE);
         n.cE.predictedAtk = System.currentTimeMillis() + 1200;
     }

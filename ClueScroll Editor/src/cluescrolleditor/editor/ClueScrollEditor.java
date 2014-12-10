@@ -24,6 +24,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import org.hyperion.rs2.model.cluescroll.ClueScroll;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 import org.hyperion.rs2.model.cluescroll.reward.Reward;
 
@@ -35,6 +36,8 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
     public static final ClueScroll.Trigger TRIGGER = ClueScroll.Trigger.DIG;
 
     private static final ClueScroll DUMMY = createDummyClueScroll();
+
+    public static int id = 2677;
 
     private ClueScroll cs;
 
@@ -195,6 +198,8 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
     }
 
     public static ClueScroll createDummyClueScroll(){
-        return new ClueScroll(ID, DESCRIPTION, DIFFICULTY, TRIGGER);
+        while(ClueScrollManager.get(id) != null)
+            ++id;
+        return new ClueScroll(id++, DESCRIPTION, DIFFICULTY, TRIGGER);
     }
 }

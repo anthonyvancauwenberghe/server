@@ -57,7 +57,6 @@ public class CustomSetHolder {
         try {
             return sets[slot].apply(player);
         } catch(final Exception exception) {
-            exception.printStackTrace();
             return false;
         }
     }
@@ -80,7 +79,6 @@ public class CustomSetHolder {
                 try {
                     sets[i-1] = CustomSet.fromString(parts[i]);
                 }catch(Exception ex) {
-                    ex.printStackTrace();
                 }
             }
         }catch(Exception e) {

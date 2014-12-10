@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
@@ -53,9 +52,9 @@ import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
-import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
+import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
@@ -74,6 +73,7 @@ import org.hyperion.rs2.sql.DonationsSQLConnection;
 import org.hyperion.rs2.sql.DummyConnection;
 import org.hyperion.rs2.sql.LogsSQLConnection;
 import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.ConfigurationParser;
@@ -936,6 +936,8 @@ public class World {
 				// player.getSession().removeAttribute("player");
 			}
 		});
+        if(!Rank.hasAbility(player, Rank.DEVELOPER) && player.getHighscores().needsUpdate())
+            getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 	}
 
 	/**

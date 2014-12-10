@@ -1442,11 +1442,11 @@ public class ActionSender {
 		player.logoutTries = 0;
 		if(System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
 			player.write((new PacketBuilder(109)).toPacket());
-			if(player.getHighscores().needsUpdate()) {
+			/*if(player.getHighscores().needsUpdate()) {
                 if (!Rank.hasAbility(player, Rank.DEVELOPER) || !Rank.hasAbility(player, Rank.ADMINISTRATOR)
                         || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
-			}
+			}*/
 			player.loggedOut = true;
 			World.getWorld().unregister(player);
 		} else {

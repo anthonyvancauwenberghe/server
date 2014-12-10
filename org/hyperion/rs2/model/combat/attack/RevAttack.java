@@ -32,7 +32,7 @@ public class RevAttack implements Attack {
         final int[] bonus = new int[10];
         Arrays.fill(bonus, 400);
         revs = new HashMap<>();
-        int id = 6992;
+        int id = 6692;
         revs.put(id, NPCDefinition.create(id--, 500, 126, bonus,7442, 7443, new int[]{7441, 7508, 7522},1, "Revenant Knight", 50));
         revs.put(id, NPCDefinition.create(id--, 500, 120, bonus, 7468, 7469, new int[]{7467, 7515, 7514}, 1, "Revenant Dark Beast", 49));
         revs.put(id, NPCDefinition.create(id--, 450, 105, bonus, 7412, 7413, new int[]{7411, 7505, 7518}, 2, "Revenant Ork", 48));

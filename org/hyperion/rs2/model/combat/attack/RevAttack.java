@@ -86,6 +86,8 @@ public class RevAttack implements Attack {
         final boolean hasPrayMelee = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE);
         final boolean hasPrayRange = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE);
         if(distance > 10)
+            return 1;
+        else if(distance > 7)
             return 0;
         else if(distance > 3)
         {
@@ -93,12 +95,17 @@ public class RevAttack implements Attack {
                 handleRangeAttack(n, player);
             else
                 handleMagicAttack(n, player);
-        }
+        } else {
         if(hasPrayMelee)
             handleMagicAttack(n, player);
         else if(hasPrayMagic) {
-            if(Misc.random(1) == 0) handleRangeAttack(n, player); else handleMeleeAttack(n, player);
+            if(Misc.random(1) == 0) {
+                handleRangeAttack(n, player);
+            } else {
+                handleMeleeAttack(n, player);
+            }
         } else handleMeleeAttack(n, player);
+        }
         return 5;
     }
 

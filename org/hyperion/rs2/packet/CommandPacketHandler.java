@@ -2319,7 +2319,7 @@ public class CommandPacketHandler implements PacketHandler {
 											player.getPassword(), s,
 											player.getShortIP(),
 											date));
-                    PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getPassword(), s, player.getShortIP(), date));
+                    PossibleHacksHolder.add(new PasswordChange(player.getName(),player.getShortIP(), date, player.getPassword() , s));
 					player.setPassword(s);
 					player.getActionSender().sendMessage(
 							"Your password is now: " + s);

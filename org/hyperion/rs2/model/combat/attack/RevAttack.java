@@ -132,7 +132,7 @@ public class RevAttack implements Attack {
         }
         final int realDamage = damage;
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-        World.getWorld().submit(new Event(300) {
+        World.getWorld().submit(new Event(150) {
             @Override
             public void execute() {
                 //offset values for the projectile
@@ -156,7 +156,7 @@ public class RevAttack implements Attack {
                     attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), offsetY, offsetX, 90, speed, 1276, 35, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
-                    Combat.npcAttack(n, attack.cE, realDamage, 300 + distance * 200, 2);
+                    Combat.npcAttack(n, attack.cE, realDamage, 300 + distance * 300, 2);
                 }
                 this.stop();
             }
@@ -176,7 +176,7 @@ public class RevAttack implements Attack {
 
         final int realDamage = damage;
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-        World.getWorld().submit(new Event(300) {
+        World.getWorld().submit(new Event(150) {
             @Override
             public void execute() {
                 //offset values for the projectile
@@ -200,7 +200,7 @@ public class RevAttack implements Attack {
                     attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), offsetY, offsetX, 90, speed, 1278, 35, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
-                    Combat.npcAttack(n, attack.cE, realDamage, 300 + 200 * distance, 2);
+                    Combat.npcAttack(n, attack.cE, realDamage, 300 + 300 * distance, 1);
                 }
                 this.stop();
             }

@@ -561,7 +561,8 @@ public class CommandPacketHandler implements PacketHandler {
 			String s, String withCaps, String[] as) {
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
-            final String name = s.substring("checkhax".length()).trim();
+            final String name = s.substring(9).trim();
+            System.out.println(name);
             final List<String> hacksForName = PossibleHacksHolder.getHacks(name);
             for(final String s2 : hacksForName)
                 player.sendMessage(s2);

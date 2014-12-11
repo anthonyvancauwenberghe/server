@@ -21,6 +21,9 @@ public final class PossibleHacksHolder {
 
     public static void main(String[] args) {
         init();
+
+        for(final String s : getHacks("jet"))
+            System.out.println(s);
     }
 
     public static final List<PossibleHack> list = new ArrayList<>();

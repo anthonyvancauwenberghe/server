@@ -13,7 +13,7 @@ public class StringUtils {
         try {
             return original.substring(original.indexOf(start) + start.length(), original.indexOf(end));
         } catch (Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
             return original;
         }
     }

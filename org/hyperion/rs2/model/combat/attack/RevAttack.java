@@ -94,12 +94,19 @@ public class RevAttack implements Attack {
             return 1;
         else if(distance > 7)
             return 0;
-        else if(distance > 3)
+        else if(distance > 2)
         {
             if(hasPrayMagic)
                 handleRangeAttack(n, player);
-            else
+            else if(hasPrayRange)
                 handleMagicAttack(n, player);
+            else {
+                if(Misc.random(1) == 0)
+                    handleRangeAttack(n, player);
+                else
+                    handleMagicAttack(n, player);
+
+            }
         } else {
         if(hasPrayMelee) {
             if(Misc.random(1) == 0) {
@@ -120,7 +127,7 @@ public class RevAttack implements Attack {
 
     public void handleMagicAttack(NPC n, Player attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
-        final int maxHit = n.getDefinition().combat()/4;
+        final int maxHit = n.getDefinition().combat()/3;
         int damage = Combat.random(maxHit) - Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
         if(damage <= 0)
             damage = 0;
@@ -167,7 +174,7 @@ public class RevAttack implements Attack {
     public void handleRangeAttack(NPC n, Player attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-        final int maxHit = (int)(n.getDefinition().combat()/3.5);
+        final int maxHit = (int)(n.getDefinition().combat()/3);
         int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
         damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
         damage = SpiritShields.applyEffects(attack.cE, damage);

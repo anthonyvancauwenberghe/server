@@ -151,7 +151,7 @@ public class RevAttack implements Attack {
                     timer++;
                 }
                 min -= (distance - 1) * 2;
-                int speed = 45 - min;
+                int speed = 105 - min;
                 int slope = 7 + distance;
                 //create the projectile
                 if(attack != null){

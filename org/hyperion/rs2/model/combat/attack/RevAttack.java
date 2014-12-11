@@ -127,7 +127,7 @@ public class RevAttack implements Attack {
 
     public void handleMagicAttack(NPC n, Player attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
-        final int maxHit = n.getDefinition().combat()/3;
+        final int maxHit = n.getDefinition().combat()/4;
         int damage = Combat.random(maxHit) - Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
         if(damage <= 0)
             damage = 0;
@@ -174,7 +174,7 @@ public class RevAttack implements Attack {
     public void handleRangeAttack(NPC n, Player attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-        final int maxHit = (int)(n.getDefinition().combat()/3);
+        final int maxHit = (int)(n.getDefinition().combat()/3.5);
         int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
         damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
         damage = SpiritShields.applyEffects(attack.cE, damage);

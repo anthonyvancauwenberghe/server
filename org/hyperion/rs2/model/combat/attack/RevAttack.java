@@ -127,7 +127,7 @@ public class RevAttack implements Attack {
         if(damage <= 0)
             damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
-        if(Misc.random(8) == 1) {
+        if(Misc.random(8) == 1 && attack.cE.canBeFrozen()) {
             attack.cE.doAnim(1279);
             attack.cE.setFreezeTimer(10000);
             attack.sendMessage("You have been frozen!");

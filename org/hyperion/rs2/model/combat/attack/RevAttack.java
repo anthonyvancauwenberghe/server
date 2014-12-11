@@ -83,16 +83,19 @@ public class RevAttack implements Attack {
         if(attack.getEntity() instanceof NPC)
             return 0;
         if(Misc.random(3) == 1 && n.health < n.maxHealth/2) {
-            n.health += 25;
+            n.health += 15;
             return 5;
         }
         final Player player = attack.getPlayer();
+        if(!player.isSkulled() && player.cE.getOpponent() != null && player.cE.getOpponent().equals(n.cE)) {
+            player.setSkulled(true);
+        }
         final boolean hasPrayMagic = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE);
         final boolean hasPrayMelee = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE);
         final boolean hasPrayRange = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE);
         if(distance > 10)
             return 1;
-        else if(distance > 7)
+        else if(distance > 8)
             return 0;
         else if(distance > 2)
         {
@@ -160,7 +163,7 @@ public class RevAttack implements Attack {
                 int slope = 7 + distance;
                 //create the projectile
                 if(attack != null){
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), offsetY, offsetX, 90, speed, 1276, 35, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), 0, 0, 90, speed, 1276, 35, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
                     Combat.npcAttack(n, attack.cE, realDamage, 300 + distance * 300, 2);

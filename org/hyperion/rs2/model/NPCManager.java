@@ -309,8 +309,6 @@ public class NPCManager {
 	}
 
 	public static final int getAgreDis(int npcId) {
-        if(ArrayUtils.contains(npcId, RevAttack.getRevs()))
-            return 10;
 		switch(npcId) {
 			case 2881:
 			case 2882:

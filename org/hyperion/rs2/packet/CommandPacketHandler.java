@@ -14,6 +14,8 @@ import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.combat.attack.RevAttack;
+import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
 import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
@@ -35,6 +37,7 @@ import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
+import org.madturnip.tools.DumpNpcDrops;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -658,16 +661,23 @@ public class CommandPacketHandler implements PacketHandler {
 			String commandStart, String s, String withCaps, String[] as) {
 
 
-        if(commandStart.equals("resetslayers")) {
-            for(final Player p : World.getWorld().getPlayers()) {
-                if(p.getSlayer().getTotalTasks() < 30) {
-                    if(p.getBank().contains(12862) || p.getInventory().contains(12862)) {
-                        int removed = p.getBank().remove(Item.create(12862, 100000));
-                        removed += p.getInventory().remove(Item.create(12862, 100000));
-                        player.sendf("Removed %s from %d", removed,p.getName());
-                    }
-                }
+
+        if(commandStart.equalsIgnoreCase("reloadrevs")) {
+            for(final NPC n : World.getWorld().getNPCs()) {
+                n.agreesiveDis = NPCManager.getAgreDis(n.getDefinition().getId());
             }
+            for(int k : RevAttack.getRevs()) {
+                final NPCDefinition def = NPCDefinition.forId(k);
+            if(def != null) {
+                for(final int i : PvPArmourStorage.getArmours())
+                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 10));
+                def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 50));
+                def.getDrops().add(NPCDrop.create(13889, 1, 1, def.combat()/30));
+
+            }
+            }
+
+            DumpNpcDrops.startDump2();
         }
 
         if(commandStart.equals("imitatedeaths")) {

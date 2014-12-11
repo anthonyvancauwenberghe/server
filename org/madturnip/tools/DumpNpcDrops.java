@@ -50,7 +50,16 @@ public class DumpNpcDrops {
 	}
 	
 	public static void startDump2() {
-		int dumped = 0;
+        final File file = new File("./data/drop dump.cfg");
+        if(file.exists())
+            if(file.delete()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        int dumped = 0;
 		long startTime = System.currentTimeMillis();
 		for(NPCDefinition def : NPCDefinition.getDefinitions()) {
 			if(def == null)

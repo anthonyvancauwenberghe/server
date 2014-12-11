@@ -769,7 +769,7 @@ public class Combat {
 		World.getWorld().submit(new Event(delay, "npcatx") {
 			@Override
 			public void execute() {
-
+                System.out.println("Hit npc atx");
                 if (combatEntity == null ||
                         combatEntity.getEntity() == null ||
                         combatEntity.getOpponent() == null ||
@@ -777,7 +777,8 @@ public class Combat {
                     this.stop();
                     return;
                 }
-				int newDamg = SpiritShields.applyEffects(combatEntity, damg);;
+                System.out.println("Hit npc atx2");
+                int newDamg = SpiritShields.applyEffects(combatEntity, damg);;
 				if(combatEntity.getEntity() instanceof Player) {
 					//divine spirit shield
 					newDamg = combatEntity.getPlayer().getInflictDamage(newDamg, npc, false, type);
@@ -820,7 +821,9 @@ public class Combat {
 					}
 
 				}
-				// combatEntity.doDefEmote();
+                System.out.println("Hit npc atx3");
+
+                // combatEntity.doDefEmote();
 				combatEntity.hit(newDamg, npc.cE.getEntity(), false, type >= 3 ? Constants.MAGE
 						: type);
 				this.stop();

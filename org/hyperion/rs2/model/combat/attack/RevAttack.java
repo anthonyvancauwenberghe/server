@@ -155,9 +155,9 @@ public class RevAttack implements Attack {
                 int slope = 7 + distance;
                 //create the projectile
                 if(attack != null){
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 15, speed, 1276, 99, 35, hitId, slope);
-                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 99, 35, hitId, slope);
-                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 20, 1276, 99, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed, 1276, 99, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 10, 1276, 99, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
                     Combat.npcAttack(n, attack.cE, realDamage, 500, 2);
                 }
                 this.stop();

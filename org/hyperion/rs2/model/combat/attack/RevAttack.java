@@ -121,19 +121,18 @@ public class RevAttack implements Attack {
     public void handleMagicAttack(NPC n, Player attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
         final int maxHit = n.getDefinition().combat()/4;
-        int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MAGE);
-        damage -= Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
-        damage = SpiritShields.applyEffects(attack.cE, damage);
+        int damage = Combat.random(maxHit) - Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
         if(damage <= 0)
             damage = 0;
-        attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
+       //attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
         if(Misc.random(8) == 1 && attack.cE.canBeFrozen()) {
             attack.cE.doGfx(1279);
             attack.cE.setFreezeTimer(10000);
             attack.sendMessage("You have been frozen!");
         }
         final int realDamage = damage;
-        World.getWorld().submit(new Event(1500) {
+        final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+        World.getWorld().submit(new Event(300) {
             @Override
             public void execute() {
                 //offset values for the projectile
@@ -142,7 +141,6 @@ public class RevAttack implements Attack {
                 //find our lockon target
                 int hitId = attack.cE.getSlotId((Entity) n);
                 //extra variables - not for release
-                int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
                 int timer = 1;
                 int min = 16;
                 if(distance > 8) {
@@ -158,7 +156,7 @@ public class RevAttack implements Attack {
                     attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), offsetY, offsetX, 90, speed, 1276, 35, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
                     //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
-                    Combat.npcAttack(n, attack.cE, realDamage, 500, 2);
+                    Combat.npcAttack(n, attack.cE, realDamage, 300 + distance * 200, 2);
                 }
                 this.stop();
             }
@@ -175,7 +173,38 @@ public class RevAttack implements Attack {
         damage = SpiritShields.applyEffects(attack.cE, damage);
         if(damage <= 0)
             damage = 0;
-        attack.cE.hit(Combat.random(maxHit), n, false, Constants.RANGE);
+
+        final int realDamage = damage;
+        final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+        World.getWorld().submit(new Event(300) {
+            @Override
+            public void execute() {
+                //offset values for the projectile
+                int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.cE.getAbsX()) * - 1;
+                int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.cE.getAbsY()) * - 1;
+                //find our lockon target
+                int hitId = attack.cE.getSlotId((Entity) n);
+                //extra variables - not for release
+                int timer = 1;
+                int min = 16;
+                if(distance > 8) {
+                    timer += 2;
+                } else if(distance >= 4) {
+                    timer++;
+                }
+                min -= (distance - 1) * 2;
+                int speed = 115 - min;
+                int slope = 7 + distance;
+                //create the projectile
+                if(attack != null){
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), offsetY, offsetX, 90, speed, 1278, 35, 35, hitId, slope);
+                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
+                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
+                    Combat.npcAttack(n, attack.cE, realDamage, 300 + 200 * distance, 2);
+                }
+                this.stop();
+            }
+        });
         n.cE.predictedAtk = System.currentTimeMillis() + 2400;
 
     }

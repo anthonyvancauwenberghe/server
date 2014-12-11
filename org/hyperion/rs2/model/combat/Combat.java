@@ -772,7 +772,6 @@ public class Combat {
                 System.out.println("Hit npc atx");
                 if (combatEntity == null ||
                         combatEntity.getEntity() == null ||
-                        combatEntity.getOpponent() == null ||
                         npc == null) {
                     this.stop();
                     return;

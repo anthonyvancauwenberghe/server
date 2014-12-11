@@ -151,13 +151,13 @@ public class RevAttack implements Attack {
                     timer++;
                 }
                 min -= (distance - 1) * 2;
-                int speed = 75 - min;
+                int speed = 45 - min;
                 int slope = 7 + distance;
                 //create the projectile
                 if(attack != null){
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 1276, 99, 35, hitId, slope);
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 99, 35, hitId, slope);
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 20, 1276, 99, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 15, speed, 1276, 99, 35, hitId, slope);
+                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 99, 35, hitId, slope);
+                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 20, 1276, 99, 35, hitId, slope);
                     Combat.npcAttack(n, attack.cE, realDamage, 500, 2);
                 }
                 this.stop();

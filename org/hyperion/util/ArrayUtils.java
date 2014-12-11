@@ -33,6 +33,9 @@ public final class ArrayUtils {
     }
 
     public static boolean contains(final int i, final int... ints) {
-        return Stream.of(ints).anyMatch(Predicate.isEqual(i));
+        for(final int integer : ints)
+            if(i == integer)
+                return true;
+        return false;
     }
 }

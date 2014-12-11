@@ -669,6 +669,7 @@ public class CommandPacketHandler implements PacketHandler {
             for(int k : RevAttack.getRevs()) {
                 final NPCDefinition def = NPCDefinition.forId(k);
             if(def != null) {
+                def.getDrops().clear();
                 for(final int i : PvPArmourStorage.getArmours())
                     def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 15));
                 def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 50));

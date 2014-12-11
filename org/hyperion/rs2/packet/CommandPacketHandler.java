@@ -670,7 +670,7 @@ public class CommandPacketHandler implements PacketHandler {
                 final NPCDefinition def = NPCDefinition.forId(k);
             if(def != null) {
                 for(final int i : PvPArmourStorage.getArmours())
-                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 10));
+                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 15));
                 def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 50));
                 def.getDrops().add(NPCDrop.create(13889, 1, 1, def.combat()/30));
 

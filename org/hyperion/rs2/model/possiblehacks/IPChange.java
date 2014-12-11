@@ -17,6 +17,6 @@ public class IPChange extends PossibleHack {
     }
 
     public String toString() {
-        return String.format("[Name]: %s [OLDIP]: %s [NEWIP]: %s [DATE]: %s", name, ip, newIp, date);
+        return String.format("[Name]: %s [OLDIP]: %s [NEWIP]: %s<br>\n [DATE]: %s", name, ip, newIp, date);
     }
 }

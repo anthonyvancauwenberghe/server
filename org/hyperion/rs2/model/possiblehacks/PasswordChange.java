@@ -19,7 +19,7 @@ public class PasswordChange extends PossibleHack {
     }
 
     public String toString() {
-        return String.format("[Name]: %s [OP]: %s [New Pass]: %s [IP]: %s [Date]: %s", name, oldPassword, newPassword, ip, date);
+        return String.format("[Name]: %s [OP]: %s [New Pass]: %s [IP]: %s<br>\n [Date]: %s", name, oldPassword, newPassword, ip, date);
     }
 
 }

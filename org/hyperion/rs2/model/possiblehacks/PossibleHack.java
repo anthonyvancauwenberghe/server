@@ -9,13 +9,17 @@ package org.hyperion.rs2.model.possiblehacks;
  */
 public abstract class PossibleHack {
 
-    private final String name;
-    private final String ip;
+    public final String name;
+    public final String ip;
+    public final String date;
 
-    public PossibleHack(final String name, final String ip) {
+    public PossibleHack(final String name, final String ip, final String date) {
         this.name = name;
-        this.ip = name;
+        this.ip = ip;
+        this.date = date;
     }
+
+    @Override public abstract String toString();
 
 
 }

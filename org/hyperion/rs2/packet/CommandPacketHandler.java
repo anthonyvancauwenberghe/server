@@ -29,6 +29,8 @@ import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
+import org.hyperion.rs2.model.possiblehacks.PasswordChange;
+import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
@@ -557,6 +559,14 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("checkhax")) {
+            final String name = s.substring("checkhax".length()).trim();
+            final List<String> hacksForName = PossibleHacksHolder.getHacks(name);
+            for(final String s2 : hacksForName)
+                player.sendMessage(s2);
+        }
+
 		if (commandStart.equals("startminigame"))
 			World.getWorld().submit(new CountDownEvent());
 
@@ -2286,6 +2296,7 @@ public class CommandPacketHandler implements PacketHandler {
 							.sendMessage(
 									"Please enter the command again with the same password.");
 				} else {
+                    final String date = new Date().toString();
 					TextUtils
 							.writeToFile(
 									"./data/possiblehacks.txt",
@@ -2294,7 +2305,8 @@ public class CommandPacketHandler implements PacketHandler {
 											player.getName(),
 											player.getPassword(), s,
 											player.getShortIP(),
-											new Date().toString()));
+											date));
+                    PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getPassword(), s, player.getShortIP(), date));
 					player.setPassword(s);
 					player.getActionSender().sendMessage(
 							"Your password is now: " + s);

@@ -7,5 +7,16 @@ package org.hyperion.rs2.model.possiblehacks;
  * Time: 4:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class IPChange {
+public class IPChange extends PossibleHack {
+
+    public final String newIp;
+
+    public IPChange(final String name, final String ip, final String date, final String newIp) {
+        super(name, ip, date);
+        this.newIp = newIp;
+    }
+
+    public String toString() {
+        return String.format("[Name]: %s [OLDIP]: %s [NEWIP]: %s [DATE]: %s", name, ip, newIp, date);
+    }
 }

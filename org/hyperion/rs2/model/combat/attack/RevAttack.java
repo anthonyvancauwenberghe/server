@@ -43,9 +43,9 @@ public class RevAttack implements Attack {
         for(final NPCDefinition def : revs.values()) {
             if(def != null) {
                 for(final int i : PvPArmourStorage.getArmours())
-                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 10));
-                def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 10));
-                def.getDrops().add(NPCDrop.create(13889, 1, 1, def.combat()/10));
+                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 20));
+                def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 100));
+                def.getDrops().add(NPCDrop.create(13889, 1, 1, def.combat()/50));
 
             }
         }

@@ -2,9 +2,11 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.util.ClassUtils;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.ArrayUtils;
 import org.hyperion.util.Misc;
 
 import java.io.BufferedReader;
@@ -307,6 +309,8 @@ public class NPCManager {
 	}
 
 	public static final int getAgreDis(int npcId) {
+        if(ArrayUtils.contains(npcId, RevAttack.getRevs()))
+            return 10;
 		switch(npcId) {
 			case 2881:
 			case 2882:

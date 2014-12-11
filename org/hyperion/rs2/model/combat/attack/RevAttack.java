@@ -128,7 +128,7 @@ public class RevAttack implements Attack {
             damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
         if(Misc.random(8) == 1 && attack.cE.canBeFrozen()) {
-            attack.cE.doAnim(1279);
+            attack.cE.doGfx(1279);
             attack.cE.setFreezeTimer(10000);
             attack.sendMessage("You have been frozen!");
         }
@@ -151,13 +151,13 @@ public class RevAttack implements Attack {
                     timer++;
                 }
                 min -= (distance - 1) * 2;
-                int speed = 105 - min;
+                int speed = 115 - min;
                 int slope = 7 + distance;
                 //create the projectile
                 if(attack != null){
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed, 1276, 99, 35, hitId, slope);
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 10, 1276, 99, 35, hitId, slope);
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 1276, 50, 35, hitId, slope);
+                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
+                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
                     Combat.npcAttack(n, attack.cE, realDamage, 500, 2);
                 }
                 this.stop();

@@ -21,9 +21,6 @@ public final class PossibleHacksHolder {
 
     public static void main(String[] args) {
         init();
-
-        for(final String s : getHacks("jet"))
-            System.out.println(s);
     }
 
     public static final List<PossibleHack> list = new ArrayList<>();
@@ -63,12 +60,12 @@ public final class PossibleHacksHolder {
 
     }
 
-    public static List<String> getHacks(final String name) {
-        final List<String> hacks = new ArrayList<>();
+    public static List<PossibleHack> getHacks(final String name) {
+        final List<PossibleHack> hacks = new ArrayList<>();
         for(final PossibleHack hack : list) {
             if(hack != null)
                 if(hack.name.equalsIgnoreCase(name))
-                    hacks.add(hack.toString());
+                    hacks.add(hack);
         }
         return hacks;
     }

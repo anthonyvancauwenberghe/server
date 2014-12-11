@@ -30,6 +30,7 @@ import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
+import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.util.*;
@@ -563,9 +564,9 @@ public class CommandPacketHandler implements PacketHandler {
         if(commandStart.equalsIgnoreCase("checkhax")) {
             final String name = s.substring(9).trim();
             System.out.println(name);
-            final List<String> hacksForName = PossibleHacksHolder.getHacks(name);
-            for(final String s2 : hacksForName)
-                player.sendMessage(s2);
+            final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
+            for(final PossibleHack hack : hacksForName)
+                player.sendMessage(hack.toString(), "@blu@"+hack.date);
         }
 
 		if (commandStart.equals("startminigame"))

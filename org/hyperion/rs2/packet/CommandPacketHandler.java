@@ -681,6 +681,22 @@ public class CommandPacketHandler implements PacketHandler {
             DumpNpcDrops.startDump2();
         }
 
+        if(commandStart.equalsIgnoreCase("removeinfpkt")) {
+            final boolean bool = Boolean.valueOf(s.substring("removeinfpkt".length()).trim());
+            if(bool) {
+                for(final Player p : World.getWorld().getPlayers()) {
+
+                    p.getBank().remove(Item.create(5020, 0));
+                    p.getInventory().remove(Item.create(5020, 0));
+
+                }
+            }
+            else {
+                player.getBank().remove(Item.create(5020, 0));
+                player.getInventory().remove(Item.create(5020, 0));
+            }
+        }
+
         if(commandStart.equals("imitatedeaths")) {
             final int id = Integer.parseInt(as[1]);
             for(int i = 0; i < 100; i++) {

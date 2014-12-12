@@ -472,8 +472,8 @@ public class Container {
 			System.out.println("Container null , PLEASE FIX MARTIN!");
 			return removed;
 		}
-		if(item.getCount() == 0)
-			return 0;
+		//if(item.getCount() == 0)
+		//	return 0;
 		if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
 			int slot = getSlotById(item.getId());
 			if(slot == - 1)

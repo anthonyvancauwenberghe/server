@@ -93,7 +93,9 @@ public class RevAttack implements Attack {
             n.health += 15;
             return 5;
         }
-        final Player player = attack.getPlayer();
+        final Player player = n.cE.getOpponent() == null ? null : n.cE.getOpponent().getPlayer();
+        if(player == null)
+            return 1;
         if(!player.isSkulled() && player.cE.getOpponent() != null && player.cE.getOpponent().equals(n.cE)) {
             player.setSkulled(true);
         }

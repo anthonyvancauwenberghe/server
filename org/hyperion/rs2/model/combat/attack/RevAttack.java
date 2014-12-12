@@ -84,9 +84,10 @@ public class RevAttack implements Attack {
             final Player plr = (Player)World.getWorld().getPlayers().get(attack.getNPC().ownerId);
             if(plr != null)
                 attack.setOpponent(plr.cE);
-            else
+            else {
                 attack.setOpponent(null);
-            return 1;
+                return 1;
+            }
         }
         if(Misc.random(3) == 1 && n.health < n.maxHealth/2) {
             n.health += 15;

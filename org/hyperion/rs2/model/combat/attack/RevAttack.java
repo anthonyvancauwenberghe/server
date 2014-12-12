@@ -80,8 +80,14 @@ public class RevAttack implements Attack {
         }
         final int distance = n.getLocation().distance(attack.getEntity().getLocation());
 
-        if(attack.getEntity() instanceof NPC)
-            return 0;
+        if(attack.getEntity() instanceof NPC) {
+            final Player plr = (Player)World.getWorld().getPlayers().get(attack.getNPC().ownerId);
+            if(plr != null)
+                attack.setOpponent(plr.cE);
+            else
+                attack.setOpponent(null);
+            return 1;
+        }
         if(Misc.random(3) == 1 && n.health < n.maxHealth/2) {
             n.health += 15;
             return 5;

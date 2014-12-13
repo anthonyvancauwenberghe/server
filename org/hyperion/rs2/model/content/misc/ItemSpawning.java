@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.misc2.Dicing;
@@ -107,6 +108,8 @@ public class ItemSpawning {
 			case Dicing.DICE_ID:
 				return "";
 		}
+        if(id >= ClueScrollManager.MIN_ID && id <= ClueScrollManager.MAX_ID)
+            return "You cannot spawn these!";
 		if(id > MAX_ID || id <= 0)
 			return "You have specified an id that is out of range.";
 		/**

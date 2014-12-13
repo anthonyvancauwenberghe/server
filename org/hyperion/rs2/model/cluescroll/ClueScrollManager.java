@@ -12,6 +12,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,7 +24,46 @@ public final class ClueScrollManager {
     private static final File FILE = new File("./data/cluescrolls.xml");
     private static final Map<Integer, ClueScroll> MAP = new HashMap<>();
 
+    public static final int MIN_ID = 2677;
+    public static final int MAX_ID = 2696;
+
     private ClueScrollManager(){}
+
+    public static void trigger(final Player player, final int id){
+        final ClueScroll cs = getInInventory(player);
+        if(cs == null)
+            return;
+        if(cs.getTrigger().getId() != id)
+            return;
+        if(getInventoryCount(player) > 1){
+            player.sendf("You are only allowed to have 1 clue scroll in your inventory");
+            return;
+        }
+        cs.apply(player);
+    }
+
+    public static void trigger(final Player player, final ClueScroll.Trigger trigger){
+        trigger(player, trigger.getId());
+    }
+
+    public static ClueScroll getInInventory(final Player player){
+        for(final Item i : player.getInventory().toArray()){
+            if(i == null)
+                continue;
+            final ClueScroll cs = get(i.getId());
+            if(cs != null)
+                return cs;
+        }
+        return null;
+    }
+
+    public static int getInventoryCount(final Player player){
+        int count = 0;
+        for(final Item i : player.getInventory().toArray())
+            if(i != null && get(i.getId()) != null)
+                ++count;
+        return count;
+    }
 
     public static ClueScroll get(final int id){
         return MAP.get(id);

@@ -2,6 +2,8 @@ package org.hyperion.rs2.model.cluescroll;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 import org.hyperion.rs2.model.cluescroll.reward.Reward;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
@@ -17,7 +19,20 @@ public class ClueScroll {
     }
 
     public enum Trigger{
-        DIG, WAVE, BOW
+        CRY(161),
+        THINK(162),
+        WAVE(163),
+        BOW(164);
+
+        private final int id;
+
+        private Trigger(final int id){
+            this.id = id;
+        }
+
+        public int getId(){
+            return id;
+        }
     }
 
     private int id;
@@ -76,6 +91,29 @@ public class ClueScroll {
 
     public List<Reward> getRewards(){
         return rewards;
+    }
+
+    public boolean hasAllRequirements(final Player player){
+        for(final Requirement req : requirements)
+            if(!req.apply(player))
+                return false;
+        return true;
+    }
+
+    public void send(final Player player){
+        final String[] lines = description.replaceAll("<br>", "\n").split("\n");
+        player.getActionSender().openQuestInterface(String.format("%s Clue Scroll", difficulty), lines);
+    }
+
+    public void apply(final Player player){
+        if(player.getInventory().remove(Item.create(id)) < 1)
+            return;
+        boolean awarded = false;
+        for(final Reward reward : rewards)
+            if(reward.apply(player))
+                awarded = true;
+        if(!awarded)
+            player.sendf("@blu@Unlucky! You never got anything from this clue scroll");
     }
 
     public Element toElement(final Document doc){

@@ -16,6 +16,7 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
@@ -1698,6 +1699,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 				}
 
 			});
+            //ClueScrollManager.trigger(this, anim.getId());
 		}
 	}
 

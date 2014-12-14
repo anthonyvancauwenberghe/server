@@ -86,7 +86,7 @@ public class Constants {
 	/**
 	 * The NPC cap.
 	 */
-	public static final int MAX_NPCS = 2500;
+	public static final int MAX_NPCS = 3500;
 
 	/**
 	 * The NPC cap.

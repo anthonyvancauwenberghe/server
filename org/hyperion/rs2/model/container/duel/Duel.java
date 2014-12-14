@@ -479,7 +479,8 @@ public class Duel {
 		player.vengeance = false;
 		player.getTrader().vengeance = false;
 		teleportToArena(player);
-		player.getWalkingQueue().reset();
+        player.getWalkingQueue().finish();
+        player.getWalkingQueue().reset();
 		removeBanEquip(player);
 		removeBanEquip(player.getTrader());
 		World.getWorld().submit(new Event(1000, "duel") {
@@ -498,6 +499,10 @@ public class Duel {
 					return;
 				}
 				player.getTrader().forceMessage((new StringBuilder()).append("").append(timer).toString());
+                player.getWalkingQueue().finish();
+                player.getWalkingQueue().reset();
+                player.getTrader().getWalkingQueue().finish();
+                player.getTrader().getWalkingQueue().reset();
 				if(timer == 0) {
 					player.forceMessage("FIGHT!");
 					player.getTrader().forceMessage("FIGHT!");

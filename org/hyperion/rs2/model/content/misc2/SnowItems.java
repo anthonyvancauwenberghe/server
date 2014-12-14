@@ -30,7 +30,7 @@ public class SnowItems implements ContentTemplate {
 			startSnowing(player);
 		} else if(type == 10) {
 			if(a == 9400) {
-				if(player.getExtraData().getInt("impscaught") >= 20) {
+				if(player.getExtraData().getInt("impscaught") >= 900000) {
 					DialogueManager.openDialogue(player, 135);
 					//player.getActionSender().sendMessage("Santa Claus gives you a snow globe!");
 					player.getInventory().add(new Item(11949, 1));

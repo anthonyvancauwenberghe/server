@@ -25,7 +25,7 @@ public final class ClueScrollManager {
     private static final Map<Integer, ClueScroll> MAP = new HashMap<>();
 
     public static final int MIN_ID = 2677;
-    public static final int MAX_ID = 2696;
+    public static final int MAX_ID = 2713;
 
     private ClueScrollManager(){}
 

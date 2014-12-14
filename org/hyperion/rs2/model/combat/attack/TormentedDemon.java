@@ -56,6 +56,8 @@ public class TormentedDemon implements Attack {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;
 			}
+
+
 			int attackId = Combat.random(3);
 			if(attackId == 0 && distance - ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2) > 1)
 				attackId = 1 + Combat.random(1);

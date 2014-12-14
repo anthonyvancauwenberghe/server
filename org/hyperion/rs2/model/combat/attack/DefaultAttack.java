@@ -3,8 +3,10 @@ package org.hyperion.rs2.model.combat.attack;
 import org.hyperion.rs2.model.Attack;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.Player;
 
 public class DefaultAttack implements Attack {
 
@@ -18,6 +20,11 @@ public class DefaultAttack implements Attack {
 				//System.out.println("Predicted attack waiting.");
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
 			}
+            if(attack != null && attack.getEntity() instanceof NPC && attack.getNPC().ownerId > 0) {
+                final Player player = (Player)World.getWorld().getPlayers().get(attack.getNPC().ownerId);
+                if(player != null)
+                    attack = player.cE;
+            }
 			if(! Combat.canAtkDis(n.cE, attack)) {
 				//System.out.println("Can atk waiting");
 				return 6;//we dont want to reset attack but just wait another 500ms or so...

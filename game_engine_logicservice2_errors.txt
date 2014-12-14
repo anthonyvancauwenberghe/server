@@ -4884,3 +4884,407 @@ Wed Dec 03 09:24:26 GMT+01:00 2014
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Thu Dec 11 21:00:21 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:22 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:24 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:24 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:25 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:26 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:26 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:27 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:28 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:28 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:29 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:29 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:30 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:31 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:31 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:32 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:32 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:33 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:34 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:34 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:35 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:35 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:36 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:37 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:37 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:38 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:38 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:39 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:40 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:40 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:41 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:41 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:42 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:43 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:43 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:44 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:44 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:45 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:46 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:46 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:47 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:47 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:48 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:49 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:49 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:50 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:50 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:51 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:52 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:52 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:53 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:54 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:55 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:55 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:56 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:56 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:57 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:58 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:58 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:00:59 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:00 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:01 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:01 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:02 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:02 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:03 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:04 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:04 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:05 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:05 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:06 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:07 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:07 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:08 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:08 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:09 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:10 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:10 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:11 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:11 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:12 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:13 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:13 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:14 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:14 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:15 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:16 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:17 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:17 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:18 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:18 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:19 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:20 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:20 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:21 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:21 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:22 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:23 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:23 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:24 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================
+Thu Dec 11 21:01:24 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+
+================================

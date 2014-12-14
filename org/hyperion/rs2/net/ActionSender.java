@@ -27,6 +27,8 @@ import org.hyperion.util.Misc;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -40,6 +42,12 @@ public class ActionSender {
 	 * The player.
 	 */
 	private Player player;
+
+    /**
+     * Map of stored frame strings
+     */
+
+    private final Map<Integer, String> sendStringStrings = new HashMap<>();
 
 	/**
 	 * Creates an action sender for the specified player.
@@ -1679,12 +1687,26 @@ public class ActionSender {
 	}
 
 	public ActionSender sendString(String string, int id) {
+        if(!sendFrame126String(string, id))
+            return this;
 		PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
 		bldr.putRS2String(string);
 		bldr.putShortA(id);
 		player.write(bldr.toPacket());
 		return this;
 	}
+
+    private boolean sendFrame126String(final String string, final int id) {
+        if(!sendStringStrings.containsKey(id)) {
+            sendStringStrings.put(id, string);
+            return true;
+        }
+        final String old = sendStringStrings.get(id);
+        if(old.equals(string))
+            return false;
+        sendStringStrings.put(id, string);
+        return true;
+    }
 
 	public ActionSender sendString(int id, int offset, String string) {
 		PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);

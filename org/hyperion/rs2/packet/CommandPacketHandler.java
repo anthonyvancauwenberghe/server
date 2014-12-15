@@ -51,7 +51,7 @@ import java.util.*;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "relentless", "jet", "c", "arre", "secret", "nexon");
+			"j", "relentless", "jet", "c", "arre", "secret", "nexon", "atomic");
 
 	/**
 	 * OWNER COMMANDS

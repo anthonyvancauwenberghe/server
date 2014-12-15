@@ -61,6 +61,8 @@ public final class ClueScrollManager {
     }
 
     public static void load() throws Exception{
+        for(int i = 2677; i <= 2713; i++)
+            add(new ClueScroll(i, "Enter Description", ClueScroll.Difficulty.EASY, ClueScroll.Trigger.BOW));
         if(!FILE.exists())
             return;
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

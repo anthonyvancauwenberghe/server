@@ -157,7 +157,7 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
         final ClueScroll value = cs == null ? DUMMY : cs;
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
-                idSpinner.setEnabled(cs != null);
+                //idSpinner.setEnabled(cs != null);
                 idSpinner.setValue(value.getId());
                 idSpinner.repaint();
                 difficultyBox.setEnabled(cs != null);

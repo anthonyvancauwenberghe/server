@@ -9,6 +9,8 @@ import cluescrolleditor.res.Res;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -18,6 +20,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 public class ToolBar extends JToolBar implements ActionListener{
 
@@ -50,7 +53,9 @@ public class ToolBar extends JToolBar implements ActionListener{
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
         addButton = new Button("Add", Res.SCROLL_ADD_32);
+        addButton.setEnabled(false);
         deleteButton = new Button("Delete", Res.SCROLL_DELETE_32);
+        deleteButton.setEnabled(false);
 
         final JPopupMenu addRequirementPopup = new JPopupMenu();
         for(final Requirement.Type type : Requirement.Type.values()){
@@ -71,7 +76,19 @@ public class ToolBar extends JToolBar implements ActionListener{
         }
 
         addRequirementButton = new Button("Add Requirement", Res.LOCK_ADD_32);
-        addRequirementButton.setComponentPopupMenu(addRequirementPopup);
+        addRequirementButton.addMouseListener(
+                new MouseAdapter(){
+                    public void mousePressed(final MouseEvent e){
+                        SwingUtilities.invokeLater(
+                                new Runnable(){
+                                    public void run(){
+                                        addRequirementPopup.show(addRequirementButton, e.getX(), e.getY());
+                                    }
+                                }
+                        );
+                    }
+                }
+        );
 
         deleteRequirementButton = new Button("Delete Requirement", Res.LOCK_DELETE_32);
 
@@ -94,7 +111,19 @@ public class ToolBar extends JToolBar implements ActionListener{
         }
 
         addRewardButton = new Button("Add Reward", Res.REWARD_ADD_32);
-        addRewardButton.setComponentPopupMenu(addRewardPopup);
+        addRewardButton.addMouseListener(
+                new MouseAdapter(){
+                    public void mousePressed(final MouseEvent e){
+                        SwingUtilities.invokeLater(
+                                new Runnable(){
+                                    public void run(){
+                                        addRewardPopup.show(addRewardButton, e.getX(), e.getY());
+                                    }
+                                }
+                        );
+                    }
+                }
+        );
 
         deleteRewardButton = new Button("Delete Reward", Res.REWARD_DELETE_32);
 

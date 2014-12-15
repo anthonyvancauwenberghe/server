@@ -33,7 +33,7 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
     public static final int ID = 1;
     public static final String DESCRIPTION = "Enter description here";
     public static final ClueScroll.Difficulty DIFFICULTY = ClueScroll.Difficulty.EASY;
-    public static final ClueScroll.Trigger TRIGGER = ClueScroll.Trigger.DIG;
+    public static final ClueScroll.Trigger TRIGGER = ClueScroll.Trigger.CRY;
 
     private static final ClueScroll DUMMY = createDummyClueScroll();
 
@@ -108,7 +108,9 @@ public class ClueScrollEditor extends JPanel implements ChangeListener, ItemList
             return;
         final Object source = e.getSource();
         if(source.equals(idSpinner)){
+            ClueScrollManager.remove(cs);
             cs.setId((Integer)idSpinner.getValue());
+            ClueScrollManager.add(cs);
             ClueScrollEditorFrame.getInstance().getList().repaintList();
         }
     }

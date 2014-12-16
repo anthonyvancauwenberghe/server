@@ -1271,7 +1271,7 @@ public class CommandHandler {
         submit(new Command("buyshards", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
                 try{
-                    final int amount = Math.min(Integer.parseInt(filterInput(input)), player.getPoints().getPkPoints()*2);
+                    final int amount = Integer.parseInt(filterInput(input));
                     if(amount < 2){
                         player.getActionSender().sendMessage("Enter a valid amount greater than 2.");
                         return false;

@@ -467,7 +467,7 @@ public class Skills {
         }
         
 
-        if(player.xpLock)
+        if(player.xpLock && skill <= MAGIC)
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_HELM) == 17279) {
         	exp *= 1.02;

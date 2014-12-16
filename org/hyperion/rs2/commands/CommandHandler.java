@@ -1270,8 +1270,13 @@ public class CommandHandler {
 
         submit(new Command("buyshards", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
+                final String line = filterInput(input).trim();
+                if(line.length() > 6){
+                    player.sendf("You could only buy 999,999 at a time");
+                    return false;
+                }
                 try{
-                    final int amount = Integer.parseInt(filterInput(input));
+                    final int amount = Integer.parseInt(line);
                     if(amount < 2){
                         player.getActionSender().sendMessage("Enter a valid amount greater than 2.");
                         return false;

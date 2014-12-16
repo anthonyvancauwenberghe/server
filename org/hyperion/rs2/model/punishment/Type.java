@@ -62,7 +62,7 @@ public enum Type {
     },
     WILDY_FORBID{
         public void apply(final Player player){
-            player.setTeleportTarget(Location.create(3087, 3493, 0));
+            player.setTeleportTarget(Jail.LOCATION);
         }
 
         public boolean isApplied(final Player player){

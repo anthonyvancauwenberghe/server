@@ -42,17 +42,17 @@ public class GnomeStronghold implements ContentTemplate{
 	public static boolean objectClicking(Player p, int objectId) {
 		switch(objectId) {
 		case 2295://log
-			Agility.walkAcross(p, Location.create(2474, 3429, 0), 762, 0, 20, COURSE_TYPE, 7, 15);
+			Agility.walkAcross(p, Location.create(2474, 3429, 0), 762, 0, 10, COURSE_TYPE, 7, 15);
 		return true;
 		case 2313://branch up
 			Agility.obstacle(p, Location.create(2473, 3419, 2), 828, 2, 30, COURSE_TYPE);
 		return true;
 		case 2285://net up
-				Agility.obstacle(p, Location.create(2474, 3424, 1), 828, 1, 20, COURSE_TYPE);
+				Agility.obstacle(p, Location.create(2474, 3424, 1), 828, 1, 15, COURSE_TYPE);
 		break;
 		case 2312://rope
 			if(p.getLocation().getX() <= 2478)
-			Agility.walkAcross(p, Location.create(2483, 3420, 2), 762, 3, 20, COURSE_TYPE, 6, 0);
+			Agility.walkAcross(p, Location.create(2483, 3420, 2), 762, 3, 10, COURSE_TYPE, 6, 0);
 		return true;
 		case 2286://net up
 				if(p.getLocation().getY() <= 3425)

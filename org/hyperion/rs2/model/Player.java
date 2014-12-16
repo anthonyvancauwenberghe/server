@@ -129,8 +129,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean checkMaxCapeRequirment() {
         if(hasMaxCape)
             return !getBank().contains(12744) && !getInventory().contains(12744) && !getEquipment().contains(12744);
-		for(int i = 0; i < this.getSkills().getLevels().length; i++) {
-			if(i >= 21)
+		for(int i = 6; i < this.getSkills().getLevels().length; i++) {
+			if(i >= 21 && i != Skills.SUMMONING)
 				continue;
 			if(this.getSkills().getLevels()[i] < 99)
 				return false;
@@ -143,7 +143,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean checkCompCapeReq() {
 		if(hasCompCape)
             return !getBank().contains(12747) && !getInventory().contains(12747) && !getEquipment().contains(12747);
-		for(int i = 0; i < this.getSkills().getXps().length; i++) {
+		for(int i = 6; i < this.getSkills().getXps().length; i++) {
 			if(i >= 21)
 				continue;
 			if(this.getSkills().getXps()[i] < 200000000)

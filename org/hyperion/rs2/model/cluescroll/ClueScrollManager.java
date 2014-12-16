@@ -39,6 +39,8 @@ public final class ClueScrollManager {
             player.sendf("You are only allowed to have 1 clue scroll in your inventory");
             return;
         }
+        if(!cs.hasAllRequirements(player))
+            return;
         cs.apply(player);
     }
 

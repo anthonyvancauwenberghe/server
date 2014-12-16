@@ -453,7 +453,8 @@ public class Duel {
 			return;
 		if(! player.onConfirmScreen)
 			return;
-
+        if(player.duelAttackable > 0)
+            return;
 		player.setOverloaded(false);
 		player.getTrader().setOverloaded(false);
 		player.getExtraData().remove(OverloadStatsEvent.KEY);

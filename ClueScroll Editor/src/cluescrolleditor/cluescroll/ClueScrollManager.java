@@ -3,7 +3,7 @@ package cluescrolleditor.cluescroll;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,7 +20,7 @@ import org.w3c.dom.NodeList;
 public final class ClueScrollManager {
 
     private static final File FILE = new File("cluescrolls.xml");
-    private static final Map<Integer, ClueScroll> MAP = new HashMap<>();
+    private static final Map<Integer, ClueScroll> MAP = new LinkedHashMap<>();
 
     private ClueScrollManager(){}
 
@@ -61,6 +61,8 @@ public final class ClueScrollManager {
     }
 
     public static void load() throws Exception{
+        for(int i = 2677; i <= 2713; i++)
+            add(new ClueScroll(i, "Enter Description", ClueScroll.Difficulty.EASY, ClueScroll.Trigger.BOW));
         if(!FILE.exists())
             return;
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

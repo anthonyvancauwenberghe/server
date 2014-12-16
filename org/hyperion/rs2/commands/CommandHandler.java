@@ -763,6 +763,10 @@ public class CommandHandler {
                             continue;
                         if(!Objects.equals(p1.getShortIP(), p2.getShortIP()) && p1.getUID() != p2.getUID())
                             continue;
+                        final int dx = Math.abs(p1.getLocation().getX() - p2.getLocation().getX());
+                        final int dy = Math.abs(p1.getLocation().getY() - p2.getLocation().getY());
+                        if(dx > 10 && dy > 10)
+                            continue;
                         player.getActionSender().sendMessage(String.format(
                                 "%s (%d, %d) AND %s (%d, %d)",
                                 p1.getName(), p1.getLocation().getX(), p1.getLocation().getY(),

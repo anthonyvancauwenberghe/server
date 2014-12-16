@@ -887,7 +887,7 @@ public class Combat {
 						// another npc
 						// in a singles
 						// area = OK
-						return "blablabla";
+						return "1";
 					else
 						// otherwise there attacking a player in singles
 						return "blablabla";

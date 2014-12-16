@@ -28,11 +28,15 @@ public class SteelTitan implements Attack {
 		attack.doAtkEmote();
 
 		n.cE.predictedAtk = System.currentTimeMillis() + 2200;
-		if(distance > 2) {
+		if(distance > 2 && distance < 8) {
 			Combat.npcAttack(n, attack, Combat.random(22), 1700, Constants.RANGE);
-		} else {
+		} else if (distance < 8) {
 			Combat.npcAttack(n, attack, Combat.random(17), 700, Constants.MELEE);
-		}
+		} else if (distance < 11) {
+            return 0;
+        } else if (distance >= 11) {
+            return 1;
+        }
 		return 5;
 	}
 

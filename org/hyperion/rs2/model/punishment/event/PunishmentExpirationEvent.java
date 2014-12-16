@@ -12,7 +12,7 @@ import org.hyperion.util.Time;
 public class PunishmentExpirationEvent extends Event {
 
     public PunishmentExpirationEvent(){
-        super(Time.ONE_MINUTE / 2);
+        super(Time.TEN_SECONDS);
     }
 
     public void execute(){

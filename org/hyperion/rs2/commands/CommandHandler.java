@@ -954,6 +954,10 @@ public class CommandHandler {
         CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
         CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
 
+        CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+
         CommandHandler.submit(new UnPunishCommand("unjail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new UnPunishCommand("unipjail", Target.IP, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new UnPunishCommand("unmacjail", Target.MAC, Type.JAIL, Rank.HELPER));
@@ -969,6 +973,10 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
+
+        CommandHandler.submit(new UnPunishCommand("unwildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new UnPunishCommand("unipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new UnPunishCommand("unmacwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new CheckPunishmentCommand());
         CommandHandler.submit(new ViewPunishmentsCommand());
@@ -1262,8 +1270,13 @@ public class CommandHandler {
 
         submit(new Command("buyshards", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
+                final String line = filterInput(input).trim();
+                if(line.length() > 6){
+                    player.sendf("You could only buy 999,999 at a time");
+                    return false;
+                }
                 try{
-                    final int amount = Math.min(Integer.parseInt(filterInput(input)), player.getPoints().getPkPoints()*2);
+                    final int amount = Integer.parseInt(line);
                     if(amount < 2){
                         player.getActionSender().sendMessage("Enter a valid amount greater than 2.");
                         return false;

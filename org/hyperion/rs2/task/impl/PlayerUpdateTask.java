@@ -716,7 +716,7 @@ public class PlayerUpdateTask implements Task {
             playerProps.put((byte)0);
         }
 
-        final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
+        /*final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
         final Iterator<Recolor> itr = recolors.iterator();
         while(itr.hasNext())
             if(!eq.contains(itr.next().getId()))
@@ -726,7 +726,7 @@ public class PlayerUpdateTask implements Task {
             playerProps.putRS2String(recolor.toString());
 
 
-        //System.out.println("player = otherPlayer: " + (player == otherPlayer));
+        //System.out.println("player = otherPlayer: " + (player == otherPlayer)); */
 
 		Packet propsPacket = playerProps.toPacket();
 

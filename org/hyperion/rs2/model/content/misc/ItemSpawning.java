@@ -188,6 +188,7 @@ public class ItemSpawning {
 			case 1391:
             case 8195:
             case 5068:
+            case 4295:
 			case VotingBox.ID:
 				return "This item is to sexy for you to spawn.";
 		}

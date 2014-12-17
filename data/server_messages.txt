@@ -1,4 +1,3 @@
 Voting is back up! VOTE NOW
 Contact Battery to Donate with RSGP
-Pures can now PK at ::purepk! Check it out
-Find revenants west of east wilderness teleport!
+Buy shards by doing ::buyshards <amount> (1 pkp = 2 shards)

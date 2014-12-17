@@ -41,7 +41,7 @@ public class PunishCommand extends Command{
             player.sendf("Unable to find player: %s", victimName);
             return false;
         }
-        if(victim != null && Rank.isStaffMember(victim) && !Rank.hasAbility(player, Rank.OWNER)){
+        if(victim != null && Rank.isStaffMember(victim) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)){
             player.sendf("You cannot punish other staff members");
             return false;
         }
@@ -65,7 +65,9 @@ public class PunishCommand extends Command{
             duration = Long.parseLong(durationParts[0].trim());
             if(durationParts.length == 2){
                 final String unitStr = durationParts[1].trim();
-                if(unitStr.contains("minute"))
+                if(unitStr.contains("second"))
+                    unit = TimeUnit.SECONDS;
+                else if(unitStr.contains("minute"))
                     unit = TimeUnit.MINUTES;
                 else if(unitStr.contains("hour"))
                     unit = TimeUnit.HOURS;

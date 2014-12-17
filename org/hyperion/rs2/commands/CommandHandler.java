@@ -1303,5 +1303,30 @@ public class CommandHandler {
                 }
             }
         });
+
+        submit(new Command("npcinfo", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String line){
+                player.sendf("NPC Count: %,d", World.getWorld().getNPCs().size());
+                try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt"))){
+                    for(final NPC npc : World.getWorld().getNPCs()){
+                        writer.write(String.format(
+                                "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",
+                                npc.getDefinition().getName(),
+                                npc.getDefinition().getId(),
+                                npc.getLocation().getX(),
+                                npc.getLocation().getY(),
+                                npc.health, npc.maxHealth,
+                                npc.isDead()
+                        ));
+                        writer.newLine();
+                    }
+                    player.sendf("Dumped to data/npc-info.txt");
+                    return true;
+                }catch(Exception ex){
+                    player.sendf("Error dumping npc info: %s", ex);
+                }
+                return true;
+            }
+        });
 	}
 }

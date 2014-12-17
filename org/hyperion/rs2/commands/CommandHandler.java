@@ -1198,6 +1198,8 @@ public class CommandHandler {
 
         submit(new Command("sendcmd", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
+                if(!Server.NAME.equalsIgnoreCase("arteropk"))
+                    return false;
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');
                 if(i == -1){

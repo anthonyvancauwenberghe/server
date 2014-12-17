@@ -593,7 +593,7 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Get player's pass, before it checks for external commands because
 		 * "getpass" exists for DeviousPK (Too lazy to edit it so it works :( )
 		 */
-		if (commandStart.equals("getpass")) {
+		if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
 			String r = findCharString(s.substring(7).trim(), "Rank")
 					.replaceAll("=", "").replaceAll("Rank", "").trim();
 			player.sendMessage(r);
@@ -613,7 +613,7 @@ public class CommandPacketHandler implements PacketHandler {
 			player.getActionSender().sendMessage(findCharString(name, "Pass"));
 			return;
 		}
-		if (commandStart.equalsIgnoreCase("getip")) {
+		if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
             final String name = s.substring(5).trim();
             if (tooCool4School.contains(name.toLowerCase()))
                 return;

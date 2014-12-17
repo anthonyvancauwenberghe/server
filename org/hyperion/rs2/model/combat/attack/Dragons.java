@@ -46,7 +46,7 @@ public class Dragons implements Attack {
 				boolean antiFire = attack.getPlayer() != null && (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000) && attack.getPlayer().superAntiFire;
 				if(antiFire)
 					Combat.npcAttack(n, attack, 0, 1000, 3);
-				else if(attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null && (attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 1540 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11283 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11284))
+				else if(attack.getPlayer() != null && attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null && (attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 1540 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11283 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11284))
 					if(System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000)
 						Combat.npcAttack(n, attack, 0, 1000, 3);
 					else

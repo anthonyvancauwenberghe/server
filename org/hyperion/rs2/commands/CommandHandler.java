@@ -1307,7 +1307,13 @@ public class CommandHandler {
         submit(new Command("npcinfo", Rank.DEVELOPER){
             public boolean execute(final Player player, final String line){
                 player.sendf("NPC Count: %,d", World.getWorld().getNPCs().size());
-                try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt"))){
+                try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt", true))){
+                    writer.newLine();
+                    writer.newLine();
+                    writer.write("Date: " + new Date());
+                    writer.newLine();
+                    writer.write(String.format("NPC Count: %,d", World.getWorld().getNPCs().size()));
+                    writer.newLine();
                     for(final NPC npc : World.getWorld().getNPCs()){
                         writer.write(String.format(
                                 "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",

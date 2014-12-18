@@ -1314,7 +1314,7 @@ public class CommandHandler {
                 try{
                     final int id = Integer.parseInt(filterInput(input).trim());
                     for(final Player p : World.getWorld().getPlayers())
-                        if(p != null && (id == -1 || (!p.getLocation().inPvPArea() && p.cE.getOpponent() == null)))
+                        if(p != null && !p.getLocation().inPvPArea() && p.cE.getOpponent() == null)
                             p.setPNpc(id);
                     return true;
                 }catch(Exception ex){
@@ -1395,5 +1395,41 @@ public class CommandHandler {
         submit(new ViewLogsCommand());
         submit(new ViewLogStatsCommand());
         submit(new ClearLogsCommand());
+
+        submit(new Command("checkip", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String ip = filterInput(input).trim();
+                final File directory = new File("./data/characters");
+                for(final File f : directory.listFiles()){
+                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
+                        continue;
+                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
+                    final Player target = World.getWorld().getPlayer(playerName);
+                    final String playerIp = target != null ? target.getShortIP() : CommandPacketHandler.findCharString(playerName, "IP");
+                    if(playerIp.contains(ip))
+                        player.sendf("%s has the same ip (%s)", playerName, playerIp);
+                }
+                player.sendf("Finished checking ips: " + ip);
+                return true;
+            }
+        });
+
+        submit(new Command("checkpass", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String pass = filterInput(input).trim();
+                final File directory = new File("./data/characters");
+                for(final File f : directory.listFiles()){
+                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
+                        continue;
+                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
+                    final Player target = World.getWorld().getPlayer(playerName);
+                    final String playerPass = target != null ? target.getPassword() : CommandPacketHandler.findCharString(playerName, "Pass");
+                    if(playerPass.contains(pass) || pass.contains(playerPass))
+                        player.sendf("%s has similiar password (%s)", playerName, playerPass);
+                }
+                player.sendf("Finished checking passwords: " + pass);
+                return true;
+            }
+        });
 	}
 }

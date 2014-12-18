@@ -1407,7 +1407,7 @@ public class CommandHandler {
                     final Player target = World.getWorld().getPlayer(playerName);
                     final String playerIp = target != null ? target.getShortIP() : CommandPacketHandler.findCharString(playerName, "IP");
                     if(playerIp.contains(ip))
-                        player.sendf("%s has the same ip (%s)", playerName, playerIp);
+                        player.sendf("%s (%s) has the same ip (%s)", playerName, target != null ? "Online" : "Offline", playerIp);
                 }
                 player.sendf("Finished checking ips: " + ip);
                 return true;
@@ -1425,9 +1425,27 @@ public class CommandHandler {
                     final Player target = World.getWorld().getPlayer(playerName);
                     final String playerPass = target != null ? target.getPassword() : CommandPacketHandler.findCharString(playerName, "Pass");
                     if(playerPass.contains(pass) || pass.contains(playerPass))
-                        player.sendf("%s has similiar password (%s)", playerName, playerPass);
+                        player.sendf("%s (%s) has similiar password (%s)", playerName, target != null ? "Online" : "Offline", playerPass);
                 }
                 player.sendf("Finished checking passwords: " + pass);
+                return true;
+            }
+        });
+
+        submit(new Command("checkmac", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String mac = filterInput(input).trim();
+                final File directory = new File("./data/characters");
+                for(final File f : directory.listFiles()){
+                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
+                        continue;
+                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
+                    final Player target = World.getWorld().getPlayer(playerName);
+                    final String playerMac = target != null ? target.getPassword() : CommandPacketHandler.findCharString(playerName, "Mac");
+                    if(playerMac.equals(playerMac))
+                        player.sendf("%s (%s) has the same mac (%s)", playerName, target != null ? "Online" : "Offline", playerMac);
+                }
+                player.sendf("Finished checking mac: " + mac);
                 return true;
             }
         });

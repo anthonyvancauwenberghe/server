@@ -704,6 +704,17 @@ public class CommandPacketHandler implements PacketHandler {
 			String commandStart, String s, String withCaps, String[] as) {
 
 
+        if(commandStart.equalsIgnoreCase("emptysummnpcs")) {
+            for(final int i : SummoningMonsters.SUMMONING_MONSTERS) {
+                for(final NPC npc : World.getWorld().getNPCs()) {
+                    if(npc.getDefinition().getId() == i) {
+                        World.getWorld().submit(new NpcDeathEvent(npc));
+                        World.getWorld().getNPCs().remove(npc);
+
+                    }
+                }
+            }
+        }
 
         if(commandStart.equalsIgnoreCase("reloadrevs")) {
             for(final NPC n : World.getWorld().getNPCs()) {

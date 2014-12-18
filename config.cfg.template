@@ -1,0 +1,35 @@
+owner::<ownername>
+name::DeviousPk
+
+version::317
+//for devious use 43597
+port::43599
+
+spawn::true
+spawncommand::spawn
+
+minplayers::20
+
+localhost::false
+connectiondebugger::true
+restarterthread::false
+
+highscores::true
+votes::true
+donations::true
+mail::false
+
+sql::false
+
+donationsurl::jdbc:mysql:// <host/database>
+donationsuser:: <username>
+donationspass:: <pass>
+
+logsurl::jdbc:mysql:// <host/database>
+logsuser:: <username>
+logspass:: <pass>
+
+hstable::highscores
+votestable::votes
+
+votepoints::3

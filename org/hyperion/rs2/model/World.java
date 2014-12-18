@@ -58,6 +58,7 @@ import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.event.PunishmentExpirationEvent;
@@ -688,7 +689,7 @@ public class World {
 	/**
 	 * Registers a new npc.
 	 *
-	 * @param npc The npc to register.
+	 * @param n The npc to register.
 	 */
 	public void register(NPC n) {
 		npcs.add(n);
@@ -921,6 +922,8 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
+                player.getLogManager().add(LogEntry.logout(player));
+                player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");
 				resetSummoningNpcs(player);
 				if(World.getWorld().getLoginServerConnector() != null) {

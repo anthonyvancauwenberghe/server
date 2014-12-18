@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.model.shops.EmblemShop;
 import org.hyperion.rs2.saving.PlayerSaving;
@@ -181,6 +182,7 @@ public class Dicing implements ContentTemplate {
 				}*/
 				int itemvalue = DonatorShop.getPrice(id) * count;
 				String query = null;
+                player.getLogManager().add(LogEntry.gamble(dicer, item, r));
 				if(r >= 55) {
 					int amount = count;
 					if(amount > 10 && Misc.random(2) == 0) {

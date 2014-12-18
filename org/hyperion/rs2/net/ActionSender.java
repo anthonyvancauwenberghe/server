@@ -19,6 +19,7 @@ import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.util.NewcomersLogging;
@@ -133,6 +134,7 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
+        player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
 		player.setActive(true);
@@ -437,7 +439,7 @@ public class ActionSender {
 	}
 
     public ActionSender sendEP2() {
-        sendString(36504, "EP :"+getEPString());
+        sendString(36504, "EP :" + getEPString());
         return this;
     }
 
@@ -871,7 +873,7 @@ public class ActionSender {
 		if(ClanManager.clans.get(player.getClanName()) == null)
 			return this;
 		player.write(new PacketBuilder(213, Type.VARIABLE).putRS2String(
-				playerName).toPacket());
+                playerName).toPacket());
 		return this;
 	}
 
@@ -1129,7 +1131,7 @@ public class ActionSender {
 
 	public ActionSender sendChatboxInterface(int interfaceId) {
 		player.getSession().write(
-				new PacketBuilder(164).putLEShort(interfaceId).toPacket());
+                new PacketBuilder(164).putLEShort(interfaceId).toPacket());
 		return this;
 	}
 

@@ -1,10 +1,5 @@
 package org.hyperion.rs2.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.Server;
@@ -16,7 +11,7 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
@@ -39,16 +34,12 @@ import org.hyperion.rs2.model.content.misc.Mail;
 import org.hyperion.rs2.model.content.misc.SkillingData;
 import org.hyperion.rs2.model.content.misc.TriviaSettings;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
-import java.util.Date;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.sets.CustomSetHolder;
@@ -64,6 +55,13 @@ import org.hyperion.rs2.util.AccountValue;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents a player-controller character.
@@ -961,6 +959,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 */
 	private Packet cachedUpdateBlock;
 	public String display;
+
+    private LogManager logManager;
+
+
 	/**
 	 * Creates a player based on the details object.
 	 *
@@ -1003,7 +1005,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();
+
+        logManager = new LogManager(name);
 	}
+
+    public LogManager getLogManager(){
+        return logManager;
+    }
 
 	private String IP;
 

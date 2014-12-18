@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.container.duel;
 
-import java.util.Date;
-
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.Item;
@@ -16,8 +14,11 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
+
+import java.util.Date;
 
 // Referenced classes of package org.hyperion.rs2.model.container:
 //            Container
@@ -455,6 +456,22 @@ public class Duel {
 			return;
         if(player.duelAttackable > 0)
             return;
+        player.getLogManager().add(
+                LogEntry.duel(
+                        player.getName(),
+                        player.getTrader().getName(),
+                        player.getDuel().toArray(),
+                        player.getTrader().getDuel().toArray()
+                )
+        );
+        player.getTrader().getLogManager().add(
+                LogEntry.duel(
+                        player.getName(),
+                        player.getTrader().getName(),
+                        player.getDuel().toArray(),
+                        player.getTrader().getDuel().toArray()
+                )
+        );
 		player.setOverloaded(false);
 		player.getTrader().setOverloaded(false);
 		player.getExtraData().remove(OverloadStatsEvent.KEY);
@@ -536,7 +553,8 @@ public class Duel {
             player.getActionSender().sendString(6840, (new StringBuilder()).append("").append(player.getName()).toString());
 
             player.getInventory();
-            Container.transfer(player.getDuel(), player.getInventory());
+            Container.transfer(player.getDuel(), player.getInventory());//jet is a dumbass
+
             player.getInventory();
             Container.transfer(opponent.getDuel(), player.getInventory());
         }
@@ -560,6 +578,12 @@ public class Duel {
 		try {
 			Player player1 = player.getTrader();
 			if(player1 != null) {
+                player1.getLogManager().add(
+                        LogEntry.duelResult(player1.getName(), player.getName())
+                );
+                player.getLogManager().add(
+                        LogEntry.duelResult(player1.getName(), player.getName())
+                );
                 finishDuel(player1, player, true);
                 finishDuel(player, player1, false);
             } else {

@@ -19,6 +19,7 @@ import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -89,7 +90,8 @@ public class PlayerDeathEvent extends Event {
                     PlayerSaving.getSaving().save(player);
 					break;
 				case 9:
-					resetPlayer();
+                    player.getLogManager().add(LogEntry.death(player));
+                    resetPlayer();
                     PlayerSaving.getSaving().save(player);
 					break;
 				case 11:

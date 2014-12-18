@@ -10,12 +10,9 @@ import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.Container.Type;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
-import org.hyperion.rs2.model.sets.SetData;
 import org.hyperion.rs2.model.sets.SetHandler;
-import org.hyperion.rs2.model.sets.SetUtility;
 import org.hyperion.rs2.net.Packet;
 
 import java.util.LinkedList;
@@ -717,11 +714,11 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
 			case 161:
 				player.emoteTabPlay(Animation.CRY);
-				break;
+                break;
 			case 19206:
 			case 162:
 				player.emoteTabPlay(Animation.THINKING);
-				break;
+                break;
 			case 19207:
 			case 163:
 				player.emoteTabPlay(Animation.WAVE);

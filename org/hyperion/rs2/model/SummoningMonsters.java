@@ -59,6 +59,7 @@ public class SummoningMonsters {
 			p.cE.summonedNpc.cE.setOpponent(null);
 			Combat.follow(p.cE.summonedNpc.cE, p.cE);
 			p.cE.summonedNpc.setInteractingEntity(p);
+
 			
 		} else if(/*distance > p.cE.summonedNpc.getDefinition().sizeX() && */distance >= 2) {
 			//if(p.cE.summonedNpc.cE.getOpponent() == null || p.cE.summonedNpc.cE.getOpponent().getEntity().isDead()) {

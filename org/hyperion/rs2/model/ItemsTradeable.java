@@ -43,7 +43,7 @@ public class ItemsTradeable {
             return true;
         if(id == 15426 || id == 6542)
             return false;
-		return ArrayUtils.contains(id, untradeables());
+		return !ArrayUtils.contains(id, untradeables());
 	}
 
     private static int[] untradeables() {

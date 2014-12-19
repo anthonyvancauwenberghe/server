@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.content.EP.EPDrops;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
@@ -67,6 +68,7 @@ public class DeathDrops {
 		/**
 		 * Drops the items for the killer
 		 */
+        player.getLogManager().add(LogEntry.death(player, droppingItems.toArray(new Item[droppingItems.size()])));
 		for(Item item : droppingItems) {
 			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
 		}

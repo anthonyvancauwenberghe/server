@@ -96,7 +96,7 @@ public class LogEntry implements Comparable<LogEntry>{
 
     public static LogEntry privateChat(final String from, final String to, final String msg){
         return new LogEntry(Category.PRIVATE_CHAT,
-                String.format("@red@%s@blu@ -> @red@%s@blu@: @red@%s", from, to, msg)
+                String.format("@red@%s@blu@ -> @red@%s@blu@: @bla@%s", from, to, msg)
         );
     }
 

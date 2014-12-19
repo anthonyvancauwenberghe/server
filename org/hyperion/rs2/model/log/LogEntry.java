@@ -96,7 +96,7 @@ public class LogEntry implements Comparable<LogEntry>{
 
     public static LogEntry privateChat(final String from, final String to, final String msg){
         return new LogEntry(Category.PRIVATE_CHAT,
-                String.format("@red@%s@blu@ -> @red@%s@blu@: @red@%s", from, to, msg)
+                String.format("@red@%s@blu@ -> @red@%s@blu@: @bla@%s", from, to, msg)
         );
     }
 
@@ -146,8 +146,7 @@ public class LogEntry implements Comparable<LogEntry>{
         return new LogEntry(Category.ACTIVITY, "Logout");
     }
 
-    public static LogEntry death(final Player player, final Item[] items){
-        final Player killer = player.cE.getKiller();;
+    public static LogEntry death(final Player player, final Player killer, final Item[] items){
         return new LogEntry(Category.DEATH,
                 String.format(
                         "@blu@Killed By: @red@%s%s@blu@Lost:@bla@ %s",

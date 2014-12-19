@@ -176,7 +176,7 @@ public class PlayerDeathEvent extends Event {
                             killer.addLastKill(player.getName());
 							int pointsToAdd = player.wildernessLevel / 4 + player.getBounty();
 							if(player.getKillStreak() >= 6) {
-								ActionSender.yellMessage("@blu@" + killer.getName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
 							killer.getPoints().inceasePkPoints(pointsToAdd > 0 ? pointsToAdd : 5);
                             if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))

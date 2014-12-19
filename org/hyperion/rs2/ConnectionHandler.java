@@ -91,7 +91,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				}
 				if(packetCount > 149) {
 					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
-                	session.close(false);
+                	//session.close(false);
 				}
                 return;
             }

@@ -207,6 +207,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private ExtraData extraData = new ExtraData();
 
+    private final ExtraData permExtraData = new ExtraData();
+
 	private QuestTab questtab = new QuestTab(this);
 
 	private ItemDropping itemDropping = new ItemDropping();
@@ -259,6 +261,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public ExtraData getExtraData() {
 		return extraData;
 	}
+
+    public ExtraData getPermExtraData() {
+        return permExtraData;
+    }
 
 	public Yelling getYelling() {
 		return yelling;

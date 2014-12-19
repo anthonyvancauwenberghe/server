@@ -115,7 +115,28 @@ public class ExtraData {
      * Enables saving of extradata inside the player file
      */
     public String getSaveableString() {
-       return null;
+        return extraData.toString();
     }
+
+    public void parse(String saved) {
+        if(saved == null || saved.length() < 4)
+            return;
+        try {
+            saved = saved.replace('{', '\u0000').replace("}", "").trim();
+            final String parts[] = saved.split(", ");
+            for(final String s : parts) {
+                try {
+                    final String p[] = s.split("=");
+                    extraData.put(p[0], p[1]);
+                }catch(Exception e) {
+
+                }
+            }
+        } catch(Exception e) {
+
+        }
+    }
+
+
 
 }

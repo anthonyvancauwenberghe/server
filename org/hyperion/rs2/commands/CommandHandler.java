@@ -1,6 +1,7 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.Server;
+import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.impl.AllToMeCommand;
 import org.hyperion.rs2.commands.impl.DemoteCommand;
 import org.hyperion.rs2.commands.impl.EpicRapeCommand;
@@ -20,6 +21,7 @@ import org.hyperion.rs2.commands.impl.StaffYellCommand;
 import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
 import org.hyperion.rs2.commands.impl.VoteCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.model.Ban;
@@ -1428,6 +1430,35 @@ public class CommandHandler {
                         player.sendf("%s has similiar password (%s)", playerName, playerPass);
                 }
                 player.sendf("Finished checking passwords: " + pass);
+                return true;
+            }
+        });
+
+        submit(new Command("killplayer", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                String targetName = filterInput(input).trim();
+                boolean isInstant = false;
+                if(targetName.startsWith("@")){
+                    isInstant = true;
+                    targetName = targetName.substring(1);
+                }
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                if(isInstant){
+                    target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
+                }else{
+                    World.getWorld().submit(new Event(1000) {
+                        public void execute() {
+                            if(!target.isDead())
+                                target.cE.hit(5, player, true, Constants.MELEE);
+                            else
+                                stop();
+                        }
+                    });
+                }
                 return true;
             }
         });

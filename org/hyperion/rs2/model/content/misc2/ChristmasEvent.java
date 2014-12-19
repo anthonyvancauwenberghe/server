@@ -89,6 +89,6 @@ public class ChristmasEvent implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, -1);
                 break;
         }
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

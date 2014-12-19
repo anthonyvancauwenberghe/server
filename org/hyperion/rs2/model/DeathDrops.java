@@ -72,7 +72,7 @@ public class DeathDrops {
 			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
 		}
 
-        player.getLogManager().add(LogEntry.death(player, droppingItems.toArray(new Item[droppingItems.size()])));;
+        player.getLogManager().add(LogEntry.death(player, killer, droppingItems.toArray(new Item[droppingItems.size()])));;
 
 
     }

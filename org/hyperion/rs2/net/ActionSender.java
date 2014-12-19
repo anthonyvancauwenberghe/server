@@ -1681,6 +1681,8 @@ public class ActionSender {
 	}
 
 	public ActionSender sendString(int id, String string) {
+        if(!sendFrame126String(string, id))
+            return this;
 		PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
 		bldr.putRS2String(string);
 		bldr.putShortA(id);

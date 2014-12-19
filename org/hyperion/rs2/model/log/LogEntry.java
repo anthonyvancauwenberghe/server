@@ -147,7 +147,7 @@ public class LogEntry implements Comparable<LogEntry>{
     }
 
     public static LogEntry death(final Player player, final Item[] items){
-        final Player killer = player.cE.getKiller();
+        final Player killer = player.cE.getKiller();;
         return new LogEntry(Category.DEATH,
                 String.format(
                         "@blu@Killed By: @red@%s%s@blu@Lost:@bla@ %s",

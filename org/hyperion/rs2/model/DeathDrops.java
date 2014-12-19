@@ -68,12 +68,14 @@ public class DeathDrops {
 		/**
 		 * Drops the items for the killer
 		 */
-        player.getLogManager().add(LogEntry.death(player, droppingItems.toArray(new Item[droppingItems.size()])));
 		for(Item item : droppingItems) {
 			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
 		}
 
-	}
+        player.getLogManager().add(LogEntry.death(player, droppingItems.toArray(new Item[droppingItems.size()])));;
+
+
+    }
 	/**
 	 * Adds unspawnables from equip/inv - only takes items that are unspawnable
 	 */

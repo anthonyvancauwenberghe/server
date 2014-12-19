@@ -29,19 +29,7 @@ public class SnowItems implements ContentTemplate {
 		if(type == 1) {
 			startSnowing(player);
 		} else if(type == 10) {
-			if(a == 9400) {
-				if(player.getExtraData().getInt("impscaught") >= 900000) {
-					DialogueManager.openDialogue(player, 135);
-					//player.getActionSender().sendMessage("Santa Claus gives you a snow globe!");
-					player.getInventory().add(new Item(11949, 1));
-					for(int id : SANTA_SUIT_IDS) {
-						player.getInventory().add(new Item(id));
-					}
-					player.getExtraData().remove("impscaught");
-				} else {
-					DialogueManager.openDialogue(player, 132);
-				}
-			}
+
 		}
 		return false;
 	}
@@ -56,10 +44,6 @@ public class SnowItems implements ContentTemplate {
 	public int[] getValues(int type) {
 		if(type == 1) {
 			int[] a = {11949};
-			return a;
-		}
-		if(type == 10) {
-			int[] a = {9400};
 			return a;
 		}
 		return null;

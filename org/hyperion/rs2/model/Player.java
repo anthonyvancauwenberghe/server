@@ -423,7 +423,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     private final List<TeamBossSession> teamBossSessions = new ArrayList<>();
 
-    public final List<TeamBossSession> getTeamSessions() {
+    public final List<TeamBossSession> getTeamSessions() { ;
         return teamBossSessions;
     }
 

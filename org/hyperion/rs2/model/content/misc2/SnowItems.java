@@ -50,10 +50,6 @@ public class SnowItems implements ContentTemplate {
 	}
 
 	private void startSnowing(final Player player) {
-		if(System.currentTimeMillis() > MAXTIME) {
-			player.getActionSender().sendMessage("You can't do this anymore :( ");
-			return;
-		}
 		ContentEntity.startAnimation(player, 7528);
 		ContentEntity.playerGfx(player, 1284);//11951
 		player.getInventory().add(new Item(11951, player.getInventory().freeSlots()));
@@ -68,19 +64,15 @@ public class SnowItems implements ContentTemplate {
 
 
 	public static void fireSnowBall(Player player, Player victim) {
-		if(System.currentTimeMillis() > MAXTIME) {
-			player.getActionSender().sendMessage("You can't do this anymore :( ");
-			return;
-		}
 		player.face(victim.getLocation());
-	    /*int offsetY = (player.cE.getAbsX() - (victim.cE.getAbsX() + victim.cE.getOffsetX())) * -1;
+	    int offsetY = (player.cE.getAbsX() - (victim.cE.getAbsX() + victim.cE.getOffsetX())) * -1;
         int offsetX = (player.cE.getAbsY() - (victim.cE.getAbsY() + victim.cE.getOffsetY())) * -1;
 		// Lockon Target
 		int hitId = player.cE.getSlotId(player.cE.getEntity());
 		// create the projectile
 		player.getActionSender().createGlobalProjectile(player.cE.getAbsY(),
 						player.cE.getAbsX(), offsetY, offsetX, 50, 50,
-						1281, 31, 31, hitId, 65, 16);*/
+						1281, 31, 31, hitId, 65, 16);
 	}
 
 	public static void main(String... args) {

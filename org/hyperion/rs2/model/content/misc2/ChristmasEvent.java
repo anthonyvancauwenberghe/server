@@ -1,9 +1,7 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.net.ActionSender;
@@ -20,7 +18,7 @@ import java.io.FileNotFoundException;
 public class ChristmasEvent implements ContentTemplate {
 
 
-    private static final Item GIFT = Item.create(6542, 1);
+    private static final Item GIFT = Item.create(15420, 1);
     private static final String CHRISTMAS_EVENT_KEY = "christmasevent";
 
 
@@ -33,6 +31,8 @@ public class ChristmasEvent implements ContentTemplate {
     public int[] getValues(int type) {
         if(type == 6)
             return new int[]{358};
+        if(type == ClickType.EAT)
+            return new int[]{GIFT.getId()};
         if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{5000, 5001, 5002} ;
         if(type == ClickType.NPC_OPTION1)
@@ -45,9 +45,11 @@ public class ChristmasEvent implements ContentTemplate {
         int christmasevent = player.getPermExtraData().getInt(CHRISTMAS_EVENT_KEY);
         switch(christmasevent) {
             case 0:
+            case 1:
                 DialogueManager.openDialogue(player, 5000);
                 break;
-            case 1:
+            case 2:
+                DialogueManager.openDialogue(player, 5003);
                 break;
         }
         return true;
@@ -55,15 +57,20 @@ public class ChristmasEvent implements ContentTemplate {
 
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        player.getActionSender().sendDialogue("Are you sure?", ActionSender.DialogueType.OPTION, 9400, Animation.FacialAnimation.DEFAULT,
+                "Yes, Santa is fat anyways","No... can't ruin Christmas!");
+        player.getInterfaceState().setNextDialogueId(0, 5005);
+        player.getInterfaceState().setNextDialogueId(1, -1);
+        return true;
     }
 
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
-        if(x == 3091 && y == 3507 && player.getPermExtraData().getInt(CHRISTMAS_EVENT_KEY) == 4) {
+        if(x == 3091 && y == 3507 && player.getPermExtraData().getInt(CHRISTMAS_EVENT_KEY) == 1) {
             player.getInventory().add(GIFT);
-            player.sendMessage("You find the present!", "You should return it back to santa...");
-            player.getExtraData().put(CHRISTMAS_EVENT_KEY, 5);
+            player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 2);
+            player.getActionSender().sendDialogue("Gift", ActionSender.DialogueType.ITEM, GIFT.getId(), Animation.FacialAnimation.DEFAULT,
+                    "You found a present", "You should return this to santa!");
             return true;
         }
         return false;
@@ -84,11 +91,50 @@ public class ChristmasEvent implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(1, -1);
                 break;
             case 5002:
-                player.getActionSender().sendDialogue(player.getName(), ActionSender.DialogueType.PLAYER, 9400, Animation.FacialAnimation.DEFAULT,
-                        "I want to help you but I don't think","it is that urgent right now...", "I'll talk to you again soon!");
-                player.getInterfaceState().setNextDialogueId(0, -1);
+                Magic.teleport(player, Location.create(3096, 3509, 1), true);
+                player.getActionSender().sendDialogue("Find the present", ActionSender.DialogueType.MESSAGE, 9400, Animation.FacialAnimation.DEFAULT,
+                        "Search the crates for Santa's gift!");
+                player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 1);
+                break;
+            case 5003:
+                if(player.getInventory().contains(GIFT.getId())) {
+                    player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
+                            "Thank you kind warrior");
+                    player.getInterfaceState().setNextDialogueId(0, 5004);
+
+                } else {
+                    player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
+                            "Where is my present?!");
+                    player.getInterfaceState().setNextDialogueId(0, -1);
+                }
+                break;
+            case 5004:
+                handleReward(player, true);
+                break;
+            case 5005:
+                handleReward(player, false);
                 break;
         }
         return true;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+    public static final int[] SANTA_SUIT_IDS = {
+            14595, 14602, 14603, 14604, 14605
+    };
+
+    public void handleReward(final Player player, final boolean fair) {
+        if(player.getInventory().freeSlots() <= 8) {
+            player.sendMessage("You need at least 8 free slots to do this");
+            return;
+        }
+        player.getActionSender().removeChatboxInterface();
+        if(player.getInventory().remove(GIFT) > 0) {
+            player.getInventory().add(Item.create(fair ? 19469 : 19468));
+            player.sendMessage("@red@Congratulations you have completed the event!");
+            player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 3);
+            for(final int i : SANTA_SUIT_IDS)
+                player.getInventory().add(Item.create(i));
+        }
     }
 }

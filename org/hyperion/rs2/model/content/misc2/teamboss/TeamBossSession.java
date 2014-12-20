@@ -42,16 +42,20 @@ public abstract class TeamBossSession {
     }
 
     public final void handlePlayerDeath(final Player player) {
-        if(players.remove(player) && players.isEmpty())  {
+        if(players.remove(player))  {
+            if(players.isEmpty())
                 destroySession();
+            player.getTeamSessions().remove(this);
         }
     }
 
     public final void destroySession() {
-        for(final Player player : players)
-            sendHome(player);
-        for(final NPC npc : npcs)
-            World.getWorld().submit(new NpcDeathEvent(npc));
+        players.forEach(p -> {
+            sendHome(p);
+            players.remove(p);
+            p.getTeamSessions().remove(TeamBossSession.this);
+        });
+        npcs.stream().map(NpcDeathEvent::new).forEach(World.getWorld()::submit);
         sessions.remove(this);
     }
 

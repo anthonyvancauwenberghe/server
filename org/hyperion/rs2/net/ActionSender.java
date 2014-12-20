@@ -1039,7 +1039,7 @@ public class ActionSender {
 
 
     public enum DialogueType {
-		NPC, PLAYER, OPTION, MESSAGE, MESSAGE_MODEL_LEFT, AGILITY_LEVEL_UP, ATTACK_LEVEL_UP, COOKING_LEVEL_UP, CRAFTING_LEVEL_UP, DEFENCE_LEVEL_UP, FARMING_LEVEL_UP, FIREMAKING_LEVEL_UP, FISHING_LEVEL_UP, FLETCHING_LEVEL_UP, HERBLORE_LEVEL_UP, HITPOINT_LEVEL_UP, MAGIC_LEVEL_UP, MINING_LEVEL_UP, PRAYER_LEVEL_UP, RANGING_LEVEL_UP, RUNECRAFTING_LEVEL_UP, SLAYER_LEVEL_UP, SMITHING_LEVEL_UP, STRENGTH_LEVEL_UP, THIEVING_LEVEL_UP, WOODCUTTING_LEVEL_UP
+		ITEM, NPC, PLAYER, OPTION, MESSAGE, MESSAGE_MODEL_LEFT, AGILITY_LEVEL_UP, ATTACK_LEVEL_UP, COOKING_LEVEL_UP, CRAFTING_LEVEL_UP, DEFENCE_LEVEL_UP, FARMING_LEVEL_UP, FIREMAKING_LEVEL_UP, FISHING_LEVEL_UP, FLETCHING_LEVEL_UP, HERBLORE_LEVEL_UP, HITPOINT_LEVEL_UP, MAGIC_LEVEL_UP, MINING_LEVEL_UP, PRAYER_LEVEL_UP, RANGING_LEVEL_UP, RUNECRAFTING_LEVEL_UP, SLAYER_LEVEL_UP, SMITHING_LEVEL_UP, STRENGTH_LEVEL_UP, THIEVING_LEVEL_UP, WOODCUTTING_LEVEL_UP
 	}
 
 	public DialogueType getSkillInterface(int skill) {
@@ -1214,6 +1214,19 @@ public class ActionSender {
 		int interfaceId = - 1;
 		int[] interfaceIds;
 		switch(dialogueType) {
+            case ITEM:
+                sendInterfaceModel(4893, 200, entityId);
+                sendString(4895, title);
+                for(int i = 0; i < text.length; i++) {
+                   sendString(4896 + i, text[i]);
+                }
+                player.getSession().write(
+                        new PacketBuilder(164).putLEShort(4893).toPacket());
+                /**
+                 *      c.getPA().sendFrame126(text, 308);
+                 c.getPA().sendFrame246(307, 200, item);
+                 c.getPA().sendFrame164(306);
+                 */
 			case NPC:
 				interfaceId = 4883;
 				interfaceIds = new int[]{4883, 4888, 4894, 4901};

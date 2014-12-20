@@ -1465,5 +1465,62 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        submit(new Command("wipebank", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String targetName = filterInput(input).trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                if(Rank.isStaffMember(target)){
+                    player.sendf("Cannot do this to other staff members");
+                    return false;
+                }
+                target.getBank().clear();
+                player.sendf("Wiped %s's bank", targetName);
+                return true;
+            }
+        });
+
+        submit(new Command("wipeinv", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String targetName = filterInput(input).trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                if(Rank.isStaffMember(target)){
+                    player.sendf("Cannot do this to other staff members");
+                    return false;
+                }
+                target.getInventory().clear();
+                player.sendf("Wiped %s's inventory", targetName);
+                return true;
+            }
+        });
+
+        submit(new Command("wipeskills", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                final String targetName = filterInput(input).trim();
+                final Player target = World.getWorld().getPlayer(targetName);
+                if(target == null){
+                    player.sendf("Unable to find %s", targetName);
+                    return false;
+                }
+                if(Rank.isStaffMember(target)){
+                    player.sendf("Cannot do this to other staff members");
+                    return false;
+                }
+                for(int i = 0; i < Skills.SKILL_COUNT; i++){
+                    target.getSkills().setLevel(i, 1);
+                    target.getSkills().setExperience(i, 0);
+                }
+                player.sendf("Wiped %s's skills", targetName);
+                return true;
+            }
+        });
 	}
 }

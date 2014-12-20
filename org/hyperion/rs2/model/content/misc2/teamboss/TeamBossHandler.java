@@ -22,8 +22,6 @@ public class TeamBossHandler implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        if(type == ClickType.OBJECT_CLICK1)
-            return new int[]{ClickId.FIGHT_PITS_DEATH};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 

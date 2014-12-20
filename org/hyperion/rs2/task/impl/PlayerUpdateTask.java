@@ -595,7 +595,7 @@ public class PlayerUpdateTask implements Task {
 		if(! otherPlayer.getNpcState()) {
 			for(int i = 0; i < 4; i++) {
 				if(eq.isSlotUsed(i)) {
-					playerProps.putShort((short) 0x200 | eq.get(i).getId());
+					playerProps.putShort((short) 0x200 + eq.get(i).getId());
 					print((short) 0x200 | eq.get(i).getId());
 				} else {
 					playerProps.put((byte) 0);
@@ -619,10 +619,10 @@ public class PlayerUpdateTask implements Task {
 			Item chest = eq.get(Equipment.SLOT_CHEST);
 			if(chest != null) {
 				if(! Equipment.is(EquipmentType.PLATEBODY, chest)) {
-					playerProps.putShort((short) 0x100 | app.getArms());
+					playerProps.putShort((short) 0x100 + app.getArms());
 					print((short) 0x100 + app.getArms());
 				} else {
-					playerProps.putShort((short) 0x200 | chest.getId());
+					playerProps.putShort((short) 0x200 + chest.getId());
 					print((short) 0x200 + chest.getId());
 				}
 			} else {
@@ -630,7 +630,7 @@ public class PlayerUpdateTask implements Task {
 				print((short) 0x100 + app.getArms());
 			}
 			if(eq.isSlotUsed(Equipment.SLOT_BOTTOMS)) {
-				playerProps.putShort((short) 0x200 | eq.get(Equipment.SLOT_BOTTOMS).getId());
+				playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_BOTTOMS).getId());
 				print((short) 0x200 + eq.get(Equipment.SLOT_BOTTOMS).getId());
 			} else {
 				playerProps.putShort((short) 0x100 + app.getLegs());
@@ -639,14 +639,14 @@ public class PlayerUpdateTask implements Task {
 			Item helm = eq.get(Equipment.SLOT_HELM);
 			if(helm != null) {
 				if(! Equipment.is(EquipmentType.FULL_HELM, helm) && ! Equipment.is(EquipmentType.FULL_MASK, helm)) {
-					playerProps.putShort((short) 0x100 | app.getHead());
+					playerProps.putShort((short) 0x100 + app.getHead());
 					print((short) 0x100 + app.getHead());
 				} else {
 					playerProps.put((byte) 0);
 					print((byte) 0);
 				}
 			} else {
-				playerProps.putShort((short) 0x100 |  app.getHead()); //CHANGED HERE
+				playerProps.putShort((short) 0x100 +  app.getHead()); //CHANGED HERE
 				print((short) 0x100 + app.getHead());
 				//playerProps.put((byte) 0);
 			}

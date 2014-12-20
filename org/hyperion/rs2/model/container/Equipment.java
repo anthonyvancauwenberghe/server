@@ -380,8 +380,6 @@ public class Equipment {
             case 5538:
                 return EquipmentType.HAT;
             case 11021:
-            case 19468:
-            case 19469:
                 return EquipmentType.FULL_MASK;
             case 11016:
             case 11019:

@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
 public class TeamBossHandler implements ContentTemplate {
 
     @Override
-    public void init() throws FileNotFoundException {
+    public void init() throws FileNotFoundException {;
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

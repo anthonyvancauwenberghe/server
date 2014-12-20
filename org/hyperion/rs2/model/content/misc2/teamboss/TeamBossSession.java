@@ -76,7 +76,7 @@ public abstract class TeamBossSession {
     public abstract void handleReward();
     public abstract SpecialArea getArea();
 
-    public void sendHome(final Player player) {
+    public void sendHome(final Player player) {;
         player.setTeleportTarget(Edgeville.LOCATION);
     }
 

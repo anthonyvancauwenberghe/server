@@ -32,7 +32,7 @@ public class SkeletalTrioSession extends TeamBossSession {
 
 
     @Override
-    public void handleReward() {
+    public void handleReward() {;
         final int distribution = players.size();
         for(Player p : players) {
             for(final NPCDrop drop : rewards) {

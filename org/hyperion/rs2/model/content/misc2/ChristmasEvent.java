@@ -34,7 +34,7 @@ public class ChristmasEvent implements ContentTemplate {
         if(type == ClickType.EAT)
             return new int[]{GIFT.getId()};
         if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{5000, 5001, 5002} ;
+            return new int[]{5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008} ;
         if(type == ClickType.NPC_OPTION1)
             return new int[]{9400};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
@@ -69,7 +69,7 @@ public class ChristmasEvent implements ContentTemplate {
         if(x == 3091 && y == 3507 && player.getPermExtraData().getInt(CHRISTMAS_EVENT_KEY) == 1) {
             player.getInventory().add(GIFT);
             player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 2);
-            player.getActionSender().sendDialogue("You found the gift! Return this to santa!", ActionSender.DialogueType.ITEM, GIFT.getId(), Animation.FacialAnimation.DEFAULT,
+            player.getActionSender().sendDialogue("You found the gift! Return this to santa!", ActionSender.DialogueType.MESSAGE_MODEL_LEFT, GIFT.getId(), Animation.FacialAnimation.DEFAULT,
                     "You found a present", "You should return this to santa!");
             return true;
         }

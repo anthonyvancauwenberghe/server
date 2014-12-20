@@ -126,6 +126,7 @@ public class ExtraData {
             final String parts[] = saved.split(", ");
             for(final String s : parts) {
                 try {
+                    System.out.println(s);
                     final String p[] = s.split("=");
                     extraData.put(p[0], p[1]);
                 }catch(Exception e) {

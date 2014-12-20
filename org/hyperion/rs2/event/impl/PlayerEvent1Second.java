@@ -1,9 +1,11 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 
 /**
@@ -27,6 +29,7 @@ public class PlayerEvent1Second extends Event {
 	@Override
 	public void execute() {
 		for(Player p : World.getWorld().getPlayers()) {
+
 			if(! p.active)
 				continue;
 
@@ -50,7 +53,12 @@ public class PlayerEvent1Second extends Event {
 				p.getActionSender().sendSkill(5);
 			}
 
-			for(int i = 0; i < Skills.SKILL_COUNT; i++) {
+            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 10000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15246) {
+                p.playAnimation(Animation.create(12664));
+            }
+
+
+            for(int i = 0; i < Skills.SKILL_COUNT; i++) {
 				p.skillRecoverTimer[i]++;
 				if(p.skillRecoverTimer[i] == 60 && i != 5 && i != 23) {
 					p.skillRecoverTimer[i] = 0;

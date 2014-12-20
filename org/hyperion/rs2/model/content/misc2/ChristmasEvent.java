@@ -138,7 +138,7 @@ public class ChristmasEvent implements ContentTemplate {
 
 
     public static final int[] SANTA_SUIT_IDS = {
-            14595, 14602, 14603, 11949, 14605
+            14595, 14602, 14603, 11949, 14605, 15426
     };
 
     public void handleReward(final Player player, final boolean fair) {

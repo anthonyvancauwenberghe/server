@@ -60,7 +60,7 @@ public class WalkingPacketHandler implements PacketHandler {
 		player.getWalkingQueue().reset();
 		player.getActionQueue().clearNonWalkableActions();
 		player.resetInteractingEntity();
-
+        player.getExtraData().put("lastwalk", System.currentTimeMillis());
 		final int steps = (size - 5) / 2;
 		if(steps < 0)
 			return;

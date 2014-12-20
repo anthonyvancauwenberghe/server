@@ -106,7 +106,7 @@ public class LogManager {
             dir.mkdir();
         for(final Map.Entry<LogEntry.Category, Set<LogEntry>> entry : logs.entrySet()){
             final File file = new File(dir, entry.getKey().path);
-            try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))){
                 for(final LogEntry log : entry.getValue()){
                     writer.write(log.toString());
                     writer.newLine();

@@ -73,7 +73,7 @@ public class ExtraData {
 	public int getInt(String key) {
 		Object value = extraData.get(key);
 		if(value == null) return DEFAULT_INT_VALUE;
-		return (Integer) value;
+		return value instanceof String ? Integer.parseInt(value.toString()) : (Integer)value;
 	}
 
 
@@ -129,7 +129,7 @@ public class ExtraData {
                     //{christmasevent=2, zombiewave=0}
                     System.out.println(s);
                     final String p[] = s.split("-");
-                    extraData.put(p[0], (Object)p[1].trim());
+                    extraData.put(p[0], p[1].trim());
                 }catch(Exception e) {
                     e.printStackTrace();
                 }

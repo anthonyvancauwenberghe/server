@@ -69,7 +69,7 @@ public class ChristmasEvent implements ContentTemplate {
         if(x == 3091 && y == 3507 && player.getPermExtraData().getInt(CHRISTMAS_EVENT_KEY) == 1) {
             player.getInventory().add(GIFT);
             player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 2);
-            player.getActionSender().sendDialogue("Gift", ActionSender.DialogueType.ITEM, GIFT.getId(), Animation.FacialAnimation.DEFAULT,
+            player.getActionSender().sendDialogue("You found the gift! Return this to santa!", ActionSender.DialogueType.ITEM, GIFT.getId(), Animation.FacialAnimation.DEFAULT,
                     "You found a present", "You should return this to santa!");
             return true;
         }
@@ -92,8 +92,11 @@ public class ChristmasEvent implements ContentTemplate {
                 break;
             case 5002:
                 Magic.teleport(player, Location.create(3096, 3509, 1), true);
+                player.getActionSender().removeChatboxInterface();
                 player.getActionSender().sendDialogue("Find the present", ActionSender.DialogueType.MESSAGE, 9400, Animation.FacialAnimation.DEFAULT,
                         "Search the crates for Santa's gift!");
+                player.sendMessage("You need to search for Santa's gift in the crates");
+                player.getInterfaceState().setNextDialogueId(0, -1);
                 player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 1);
                 break;
             case 5003:
@@ -112,6 +115,21 @@ public class ChristmasEvent implements ContentTemplate {
                 handleReward(player, true);
                 break;
             case 5005:
+                player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.ANNOYED,
+                        "What are you doing?!");
+                player.getInterfaceState().setNextDialogueId(0, 5006);
+                break;
+            case 5006:
+                player.getActionSender().sendDialogue(player.getName(), ActionSender.DialogueType.PLAYER, 9400, Animation.FacialAnimation.DELIGHTED_EVIL,
+                        "What are you going to do?", "Sit on me?");
+                player.getInterfaceState().setNextDialogueId(0, 5007);
+                break;
+            case 5007:
+                player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.ANGER_3,
+                        "Be cursed.");
+                player.getInterfaceState().setNextDialogueId(0, 5008);
+                break;
+            case 5008:
                 handleReward(player, false);
                 break;
         }
@@ -124,11 +142,12 @@ public class ChristmasEvent implements ContentTemplate {
     };
 
     public void handleReward(final Player player, final boolean fair) {
+        player.getActionSender().removeChatboxInterface();
         if(player.getInventory().freeSlots() <= 8) {
             player.sendMessage("You need at least 8 free slots to do this");
             return;
         }
-        player.getActionSender().removeChatboxInterface();
+        player.debugMessage(""+player.getInventory().remove(GIFT));
         if(player.getInventory().remove(GIFT) > 0) {
             player.getInventory().add(Item.create(fair ? 19469 : 19468));
             player.sendMessage("@red@Congratulations you have completed the event!");

@@ -1215,13 +1215,10 @@ public class ActionSender {
 		int[] interfaceIds;
 		switch(dialogueType) {
             case ITEM:
-                sendInterfaceModel(4893, 200, entityId);
-                sendString(4895, title);
-                for(int i = 0; i < text.length; i++) {
-                   sendString(4896 + i, text[i]);
-                }
+                sendInterfaceModel(307, 200, entityId);
+                sendString(307, title);
                 player.getSession().write(
-                        new PacketBuilder(164).putLEShort(4893).toPacket());
+                        new PacketBuilder(164).putLEShort(306).toPacket());
                 /**
                  *      c.getPA().sendFrame126(text, 308);
                  c.getPA().sendFrame246(307, 200, item);

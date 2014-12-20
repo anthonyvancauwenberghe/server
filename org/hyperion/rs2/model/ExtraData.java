@@ -129,11 +129,11 @@ public class ExtraData {
                     final String p[] = s.split("=");
                     extraData.put(p[0], p[1]);
                 }catch(Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         } catch(Exception e) {
-
+            e.printStackTrace();
         }
     }
 

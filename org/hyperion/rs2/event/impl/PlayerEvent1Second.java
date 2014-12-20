@@ -30,6 +30,10 @@ public class PlayerEvent1Second extends Event {
 	public void execute() {
 		for(Player p : World.getWorld().getPlayers()) {
 
+            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 10000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15426) {
+                p.playAnimation(Animation.create(12664));
+            }
+
 			if(! p.active)
 				continue;
 
@@ -52,10 +56,6 @@ public class PlayerEvent1Second extends Event {
 				}
 				p.getActionSender().sendSkill(5);
 			}
-
-            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 10000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15246) {
-                p.playAnimation(Animation.create(12664));
-            }
 
 
             for(int i = 0; i < Skills.SKILL_COUNT; i++) {

@@ -115,7 +115,7 @@ public class ExtraData {
      * Enables saving of extradata inside the player file
      */
     public String getSaveableString() {
-        return extraData.toString();
+        return extraData.toString().replace("=", "-");
     }
 
     public void parse(String saved) {
@@ -126,8 +126,9 @@ public class ExtraData {
             final String parts[] = saved.split(", ");
             for(final String s : parts) {
                 try {
+                    //{christmasevent=2, zombiewave=0}
                     System.out.println(s);
-                    final String p[] = s.split("=");
+                    final String p[] = s.split("-");
                     extraData.put(p[0], p[1]);
                 }catch(Exception e) {
                     e.printStackTrace();

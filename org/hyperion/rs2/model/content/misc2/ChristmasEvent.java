@@ -108,7 +108,7 @@ public class ChristmasEvent implements ContentTemplate {
                 } else {
                     player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
                             "Where is my present?!");
-                    player.getInterfaceState().setNextDialogueId(0, -1);
+                    player.getInterfaceState().setNextDialogueId(0, 5004);
                 }
                 break;
             case 5004:

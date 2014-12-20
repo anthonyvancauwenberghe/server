@@ -129,7 +129,7 @@ public class ExtraData {
                     //{christmasevent=2, zombiewave=0}
                     System.out.println(s);
                     final String p[] = s.split("-");
-                    extraData.put(p[0], p[1]);
+                    extraData.put(p[0], p[1].trim());
                 }catch(Exception e) {
                     e.printStackTrace();
                 }

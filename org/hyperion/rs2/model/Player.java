@@ -33,6 +33,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Mail;
 import org.hyperion.rs2.model.content.misc.SkillingData;
 import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
@@ -419,6 +420,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public long onlineTime() {
 		return System.currentTimeMillis() - logintime;
 	}
+
+    private final List<TeamBossSession> teamBossSessions = new ArrayList<>();
 
 	public boolean loggedOut = false;
 

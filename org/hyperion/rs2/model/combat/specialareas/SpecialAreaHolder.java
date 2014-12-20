@@ -2,10 +2,7 @@ package org.hyperion.rs2.model.combat.specialareas;
 
 import org.hyperion.rs2.model.combat.specialareas.impl.PurePk;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,6 +25,10 @@ public class SpecialAreaHolder {
 
     public static Set<Map.Entry<String, SpecialArea>> getAll() {
         return map.entrySet();
+    }
+
+    public static Collection<SpecialArea> getAreas() {
+        return map.values();
     }
 
 }

@@ -17,8 +17,11 @@ public interface ContentTemplate {
             return actionButton(player, a);
         if(type == ClickType.DIALOGUE_MANAGER)
             return dialogueAction(player, a);
-        if(type == ClickType.OBJECT_CLICK1)
+        if(type == ClickType.OBJECT_CLICK1) {
+            if(a == ClickId.FIGHT_PITS_DEATH)
+                return handleDeath(player);
             return objectClickOne(player, a, b, c);
+        }
         return false;
     }//this will work for all items, objects , npcs etc, specify value -1 if the value is unused
 
@@ -32,4 +35,5 @@ public interface ContentTemplate {
     public default boolean objectClickOne(Player player, int id, int x, int y) { return false; }
     public default boolean actionButton(Player player, int buttonId) { return false; }
     public default boolean dialogueAction(Player player, int dialogueId) { return false; }
+    public default boolean handleDeath(Player player) { return false; }
 }

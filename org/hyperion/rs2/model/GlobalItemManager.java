@@ -101,10 +101,6 @@ public class GlobalItemManager {
 			}
 		}
 		if(globalItem != null) {
-			if(globalItem.itemHidden && player != globalItem.owner){
-                player.sendf("@blu@Contact a staff member if you believe this drop is yours.");
-				return;//a security measure so people cant remove items that shouldnt be visable yet
-            }
 			synchronized(globalItems) {
 				globalItems.remove(globalItem);
 			}

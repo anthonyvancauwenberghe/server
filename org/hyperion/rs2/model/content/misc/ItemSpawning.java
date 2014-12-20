@@ -7,8 +7,11 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.VotingBox;
 
@@ -59,26 +62,8 @@ public class ItemSpawning {
 			spawnItem(id, amount, player);
 			return;
 		}
-		if(player.getLocation().inPvPArea()) {
-			player.getActionSender().sendMessage(
-					"You cannot do that in a PvP area.");
-			return;
-		} else if(player.duelAttackable > 0) {
-			player.getActionSender().sendMessage(
-					"You cannot do that in the duel arena.");
-			return;
-		}else if(player.getTrader() != null){
-            player.getActionSender().sendMessage("You cannot do this while trading");
+        if(!ItemSpawning.canSpawn(player))
             return;
-        }
-		if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1
-				, player, ClickId.CAN_TELEPORT))
-			return;
-		if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
-						player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
-			player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
-			return;
-		}
 		String message = allowedMessage(id);
 		if(message.length() > 0) {
 			player.getActionSender().sendMessage(message);
@@ -97,6 +82,35 @@ public class ItemSpawning {
 	public static boolean canSpawn(int id) {
 		return !(allowedMessage(id).length() > 0);
 	}
+
+    public static boolean canSpawn(final Player player) {
+        if(player.getLocation().inPvPArea()) {
+            player.getActionSender().sendMessage(
+                    "You cannot do that in a PvP area.");
+            return false;
+        } else if(player.duelAttackable > 0) {
+            player.getActionSender().sendMessage(
+                    "You cannot do that in the duel arena.");
+            return false;
+        }else if(player.getTrader() != null){
+            player.getActionSender().sendMessage("You cannot do this while trading");
+            return false;
+        }
+        if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1
+                , player, ClickId.CAN_TELEPORT))
+            return false;
+        if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
+                player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
+            player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
+            return false;
+        }
+        if(FightPits.inPits(player))
+            return false;
+        for(final SpecialArea area : SpecialAreaHolder.getAreas())
+            if(!area.inArea(player) && !area.canSpawn())
+                return false;
+        return true;
+    }
 	/**
 	 * Checks whether an item can be spawned.
 	 *

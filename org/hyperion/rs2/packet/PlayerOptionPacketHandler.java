@@ -118,7 +118,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 					ContentEntity.startAnimation(player, 7530);
 					SnowItems.fireSnowBall(player, victim);
 					player.getWalkingQueue().reset();
-					World.getWorld().submit(new Event(1000) {
+					World.getWorld().submit(new Event(2000) {
 						public void execute() {
 							if(player.getInventory().getCount(SnowItems.SNOWBALL.getId()) > 0)
 								player.getInventory().remove(new Item(11951, 1));

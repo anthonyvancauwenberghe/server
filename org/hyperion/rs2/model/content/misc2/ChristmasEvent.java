@@ -69,8 +69,8 @@ public class ChristmasEvent implements ContentTemplate {
         if(x == 3091 && y == 3507 && player.getPermExtraData().getInt(CHRISTMAS_EVENT_KEY) == 1) {
             player.getInventory().add(GIFT);
             player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 2);
-            player.getActionSender().sendDialogue("You found the gift! Return this to santa!", ActionSender.DialogueType.MESSAGE_MODEL_LEFT, GIFT.getId(), Animation.FacialAnimation.DEFAULT,
-                    "You found a present", "You should return this to santa!");
+            player.getActionSender().sendDialogue(player.getName(), ActionSender.DialogueType.PLAYER, GIFT.getId(), Animation.FacialAnimation.PLAIN_EVIL,
+                    "I found his present...", "I should probably give it back to him");
             return true;
         }
         return false;
@@ -93,8 +93,8 @@ public class ChristmasEvent implements ContentTemplate {
             case 5002:
                 Magic.teleport(player, Location.create(3096, 3509, 1), true);
                 player.getActionSender().removeChatboxInterface();
-                player.getActionSender().sendDialogue("Find the present", ActionSender.DialogueType.MESSAGE, 9400, Animation.FacialAnimation.DEFAULT,
-                        "Search the crates for Santa's gift!");
+                player.getActionSender().sendDialogue("Find the present", ActionSender.DialogueType.PLAYER, 9400, Animation.FacialAnimation.DISTRESSED,
+                        "Must be inside one of these crates...");
                 player.sendMessage("You need to search for Santa's gift in the crates");
                 player.getInterfaceState().setNextDialogueId(0, -1);
                 player.getPermExtraData().put(CHRISTMAS_EVENT_KEY, 1);
@@ -108,14 +108,14 @@ public class ChristmasEvent implements ContentTemplate {
                 } else {
                     player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
                             "Where is my present?!");
-                    player.getInterfaceState().setNextDialogueId(0, 5004);
+                    player.getInterfaceState().setNextDialogueId(0, -1);
                 }
                 break;
             case 5004:
                 handleReward(player, true);
                 break;
             case 5005:
-                player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.ANNOYED,
+                player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
                         "What are you doing?!");
                 player.getInterfaceState().setNextDialogueId(0, 5006);
                 break;
@@ -125,7 +125,7 @@ public class ChristmasEvent implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 5007);
                 break;
             case 5007:
-                player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.ANGER_3,
+                player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
                         "Be cursed.");
                 player.getInterfaceState().setNextDialogueId(0, 5008);
                 break;
@@ -138,7 +138,7 @@ public class ChristmasEvent implements ContentTemplate {
 
 
     public static final int[] SANTA_SUIT_IDS = {
-            14595, 14602, 14603, 14604, 14605
+            14595, 14602, 14603, 11949, 14605
     };
 
     public void handleReward(final Player player, final boolean fair) {
@@ -147,7 +147,6 @@ public class ChristmasEvent implements ContentTemplate {
             player.sendMessage("You need at least 8 free slots to do this");
             return;
         }
-        player.debugMessage(""+player.getInventory().remove(GIFT));
         if(player.getInventory().remove(GIFT) > 0) {
             player.getInventory().add(Item.create(fair ? 19469 : 19468));
             player.sendMessage("@red@Congratulations you have completed the event!");

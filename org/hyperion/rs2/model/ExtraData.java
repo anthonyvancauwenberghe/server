@@ -86,7 +86,7 @@ public class ExtraData {
 	public long getLong(String key) {
 		Object value = extraData.get(key);
 		if(value == null) return DEFAULT_INT_VALUE;
-		return (Long) value;
+		return value instanceof String ? Long.valueOf(value.toString()) :(Long) value;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ExtraData {
 	public boolean getBoolean(String key) {
 		Object value = extraData.get(key);
 		if(value == null) return DEFAULT_BOOL_VALUE;
-		return (Boolean) value;
+		return value instanceof String ? Boolean.valueOf(value.toString()) : (Boolean) value;
 	}
 
 	/**

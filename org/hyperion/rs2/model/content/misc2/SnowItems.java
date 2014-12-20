@@ -71,7 +71,7 @@ public class SnowItems implements ContentTemplate {
 		int hitId = player.cE.getSlotId(player.cE.getEntity());
 		// create the projectile
 		player.getActionSender().createGlobalProjectile(player.cE.getAbsY(),
-						player.cE.getAbsX(), offsetY, offsetX, 30, 105,
+						player.cE.getAbsX(), 0, 0, 30, 105,
 						1281, 31, 31, hitId, 65, 16);
 	}
 

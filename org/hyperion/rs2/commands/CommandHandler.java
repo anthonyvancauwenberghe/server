@@ -924,7 +924,14 @@ public class CommandHandler {
 
         submit(new Command("changemaxcolors", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                final String[] colors = filterInput(input).split(" ");
+                final String line = filterInput(input).trim();
+                if(line.equals("none")){
+                    player.maxCapePrimaryColor = 0;
+                    player.maxCapeSecondaryColor = 0;
+                    player.sendf("Reset your max cape colors!");
+                    return true;
+                }
+                final String[] colors = line.split(" ");
                 if(colors.length != 2) {
                     player.getActionSender().sendMessage("Invalid syntax");
                     return false;
@@ -963,7 +970,14 @@ public class CommandHandler {
 
         submit(new Command("changecompcolors", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                final String[] colors = filterInput(input).split(" ");
+                final String line = filterInput(input).trim();
+                if(line.equals("none")){
+                    player.compCapePrimaryColor = 0;
+                    player.compCapeSecondaryColor = 0;
+                    player.sendf("Reset your comp cape colors!");
+                    return true;
+                }
+                final String[] colors = line.split(" ");
                 if(colors.length != 2) {
                     player.getActionSender().sendMessage("Invalid syntax");
                     return false;

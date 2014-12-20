@@ -1317,7 +1317,7 @@ public class CommandHandler {
                 try{
                     final int id = Integer.parseInt(filterInput(input).trim());
                     for(final Player p : World.getWorld().getPlayers())
-                        if(p != null && !p.getLocation().inPvPArea() && p.cE.getOpponent() == null)
+                        if(p != null && (id == -1 || (!p.getLocation().inPvPArea() && p.cE.getOpponent() == null)))
                             p.setPNpc(id);
                     return true;
                 }catch(Exception ex){

@@ -37,6 +37,7 @@ import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.combat.SummoningData;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
@@ -54,6 +55,7 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.BunyipEvent;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
@@ -608,6 +610,21 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("summonnpc")) {
+            int id = Integer.parseInt(as[1]);
+            final NPC monster = World
+                    .getWorld()
+                    .getNPCManager()
+                    .addNPC(player.getLocation().getX(), player.getLocation().getY(),
+                            player.getLocation().getZ(), id, - 1);
+            player.SummoningCounter = 6000;
+            monster.ownerId = player.getIndex();
+            Combat.follow(monster.getCombat(), player.getCombat());
+            monster.summoned = true;
+            player.cE.summonedNpc = monster;
+            monster.playGraphics(Graphic.create(1315));
+        }
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
             final String name = s.substring(9).trim();

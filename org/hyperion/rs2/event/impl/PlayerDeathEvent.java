@@ -110,7 +110,13 @@ public class PlayerDeathEvent extends Event {
 		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
 			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
 		}
-		player.getSpecBar().setAmount(SpecialBar.FULL);
+        if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 60000) {
+		    player.getSpecBar().setAmount(SpecialBar.FULL);
+            player.getExtraData().put("lastdeath", System.currentTimeMillis());
+        } else {
+            player.sendMessage("You don't restore special energy as you have died too quickly");
+        }
+
 		player.specOn = false;
 		player.teleBlockTimer = System.currentTimeMillis();
 		player.getActionSender().resetFollow();

@@ -115,6 +115,11 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			}
 			if(player.getEquipment().get(Equipment.SLOT_WEAPON) != null) {
 				if(player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 11951) {
+                    if(System.currentTimeMillis() - player.getExtraData().getLong("snowball") < 5000) {
+                        player.sendMessage("Your hands are too frosty to be throwing again");
+                        return;
+                    }
+                    player.getExtraData().put("snowball", System.currentTimeMillis());
 					ContentEntity.startAnimation(player, 7530);
 					SnowItems.fireSnowBall(player, victim);
 					player.getWalkingQueue().reset();

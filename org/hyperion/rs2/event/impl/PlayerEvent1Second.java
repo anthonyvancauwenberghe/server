@@ -30,8 +30,10 @@ public class PlayerEvent1Second extends Event {
 	public void execute() {
 		for(Player p : World.getWorld().getPlayers()) {
 
-            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 10000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15426) {
+            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 13000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15426
+                    && System.currentTimeMillis() - p.getExtraData().getLong("lastcanespin") > 6000) {
                 p.playAnimation(Animation.create(12664));
+                p.getExtraData().put("lastcanespin", System.currentTimeMillis());
             }
 
 			if(! p.active)

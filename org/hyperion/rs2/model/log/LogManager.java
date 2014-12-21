@@ -105,7 +105,7 @@ public class LogManager {
         if(!dir.exists())
             dir.mkdir();
         for(final Map.Entry<LogEntry.Category, Set<LogEntry>> entry : logs.entrySet()){
-            if(!entry.getKey().save)
+            if(!entry.getKey().save && entry.getKey() != LogEntry.Category.PRIVATE_CHAT)
                 continue;
             final File file = new File(dir, entry.getKey().path);
             try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file, !loaded.containsKey(entry.getKey())))){

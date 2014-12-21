@@ -644,7 +644,7 @@ public class SpecialAttacks {
 					deltaBonus = CombatAssistant.calculateMeleeAttack(player)
 							- player.cE.getOpponent().getNPC().getDefinition().combat();
 				}
-				randomIncrease = Misc.random(deltaBonus / 3);
+				randomIncrease = Misc.random(deltaBonus / 10);
 				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
 					player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
 				}

@@ -110,7 +110,7 @@ public class PlayerDeathEvent extends Event {
 		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
 			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
 		}
-        if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 60000) {
+        if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 120000) {
 		    player.getSpecBar().setAmount(SpecialBar.FULL);
             player.getExtraData().put("lastdeath", System.currentTimeMillis());
         } else {

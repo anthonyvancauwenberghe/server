@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.Player;
 
 public final class LogUtils {
 
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a z");
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a");
     public static final String NEW_LINE = "-NEWLINE-";
 
     private LogUtils(){}

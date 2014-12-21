@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class LogManager {
 
-    private static final File DIR = new File(".", "logs2");
+    private static final File DIR = new File(".", "logs3");
 
     static{
         if(!DIR.exists())
@@ -75,7 +75,7 @@ public class LogManager {
                 if(line.isEmpty())
                     continue;
                 try{
-                    final LogEntry log = LogEntry.parse(line);
+                    final LogEntry log = LogEntry.parse(category, line);
                     add(log);
                 }catch(Exception ex){
                     ex.printStackTrace();
@@ -105,6 +105,8 @@ public class LogManager {
         if(!dir.exists())
             dir.mkdir();
         for(final Map.Entry<LogEntry.Category, Set<LogEntry>> entry : logs.entrySet()){
+            if(!entry.getKey().save)
+                continue;
             final File file = new File(dir, entry.getKey().path);
             try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file, !loaded.containsKey(entry.getKey())))){
                 for(final LogEntry log : entry.getValue()){

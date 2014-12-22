@@ -161,8 +161,6 @@ public class ContentEntity {
 	}
 
 	public static void addSkillXP(Player player, double addXp, int skill) {
-        double multiplier = 1.25;
-        addXp *= multiplier;
 		player.getSkills().addExperience(skill, addXp);
 	}
 

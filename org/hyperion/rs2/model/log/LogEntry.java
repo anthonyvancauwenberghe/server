@@ -15,12 +15,13 @@ public class LogEntry implements Comparable<LogEntry>{
         DUEL("duel.log", "duel"),
         TRADE("trade.log", "trade"),
         PUBLIC_CHAT("public-chat.log", false, "public chat"),
-        PRIVATE_CHAT("private-chat.log", false, "private chat", "private msg", "pm"),
+        PRIVATE_CHAT("private-chat.log", "private chat", "private msg", "pm"),
         ACTIVITY("activity.log", "activity"),
         DEATH("death.log", "death"),
         PICKUP_ITEM("pickup-items.log", "pickup item"),
         COMMAND("command.log", "command"),
-        GAMBLE("gamble.log", "gamble", "gambling", "stake");
+        GAMBLE("gamble.log", "gamble", "gambling", "stake"),
+        YELL("yell.log", "yell");
 
         public final String path;
         public final boolean save;
@@ -99,6 +100,10 @@ public class LogEntry implements Comparable<LogEntry>{
         return new LogEntry(Category.PUBLIC_CHAT, msg);
     }
 
+    public static LogEntry yell(final String msg){
+        return new LogEntry(Category.YELL, msg);
+    }
+
     public static LogEntry privateChat(final String from, final String to, final String msg){
         return new LogEntry(Category.PRIVATE_CHAT,
                 String.format("@red@%s@blu@ -> @red@%s@blu@: @bla@%s", from, to, msg)
@@ -167,7 +172,10 @@ public class LogEntry implements Comparable<LogEntry>{
     }
 
     public static LogEntry command(final String cmd){
-        return new LogEntry(Category.COMMAND, cmd);
+        if(cmd.startsWith("yell "))
+            return yell(cmd.substring(4).trim());
+        else
+            return new LogEntry(Category.COMMAND, cmd);
     }
 
     public static LogEntry gamble(final NPC npc, final Item item, final int n){

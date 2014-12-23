@@ -8,10 +8,7 @@ import org.hyperion.rs2.model.combat.attack.TormentedDemon;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CombatEntity {
 
@@ -127,6 +124,14 @@ public class CombatEntity {
 	public NPC getNPC() {
 		return n;
 	}
+
+    public Optional<NPC> _getNPC() {
+        return Optional.ofNullable(n);
+    }
+
+    public Optional<Player> _getPlayer() {
+        return Optional.ofNullable(player);
+    }
 
 	public boolean isPoisoned() {
 		return isPoisoned;

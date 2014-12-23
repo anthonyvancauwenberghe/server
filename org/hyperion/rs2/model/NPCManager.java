@@ -331,6 +331,9 @@ public class NPCManager {
 			case 6206:
 			case 6203:
 				return 20;
+
+            case 50:
+                return 15;
 			default:
 				return 0;
 		}

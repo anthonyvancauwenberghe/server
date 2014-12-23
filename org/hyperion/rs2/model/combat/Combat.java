@@ -784,14 +784,6 @@ public class Combat {
 						//old prayers code
 					}
 					//defence
-					if(type == 1
-							&& Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
-						newDamg = 0;
-					}
-					if(type == 2
-							&& Combat.random(npc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
-						newDamg = 0;
-					}
 					if(npc.getDefinition().getId() == 9463) {
 						if(Misc.random(12) == 0) {
 							combatEntity.setFreezeTimer(20000);
@@ -818,6 +810,9 @@ public class Combat {
 					}
 
 				}
+
+                newDamg = CombatCalculation.getCalculatedDamage(npc, combatEntity.getEntity(), newDamg, type > 3 ? 3 : type);
+
 
                 // combatEntity.doDefEmote();
 				combatEntity.hit(newDamg, npc.cE.getEntity(), false, type >= 3 ? Constants.MAGE

@@ -24,6 +24,15 @@ public final class ClueScrollManager {
     private static final File FILE = new File("./data/cluescrolls.xml");
     private static final Map<Integer, ClueScroll> MAP = new HashMap<>();
 
+    static{
+        try{
+            load();
+            System.out.println("ClueScrolls Loaded: " + MAP.size());
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
     public static final int MIN_ID = 2677;
     public static final int MAX_ID = 2713;
 

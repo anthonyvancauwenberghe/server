@@ -44,6 +44,7 @@ import org.hyperion.rs2.model.UpdateFlags;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.Magic;
@@ -1534,6 +1535,27 @@ public class CommandHandler {
                 }
                 player.sendf("Wiped %s's skills", targetName);
                 return true;
+            }
+        });
+
+        submit(new Command("givemeclues", Rank.ADMINISTRATOR){
+            public boolean execute(final Player player, final String input){
+                try{
+                    int amount = Integer.parseInt(filterInput(input).trim());
+                    if(amount < 1){
+                        player.sendf("retard");
+                        return false;
+                    }
+                    if(amount == 1)
+                        amount = 2;
+                    for(int n = 0; n < amount; n++)
+                        for(int id = ClueScrollManager.MIN_ID; id <= ClueScrollManager.MAX_ID; id++)
+                            player.getBank().add(new Item(id, n));
+                    return true;
+                }catch(Exception ex){
+                    player.sendf("Enter a valid amount");
+                    return false;
+                }
             }
         });
 	}

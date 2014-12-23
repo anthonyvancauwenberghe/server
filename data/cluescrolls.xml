@@ -1,0 +1,1997 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cluescrolls>
+    <cluescroll difficulty="EASY" id="2677" trigger="JUMP_FOR_JOY">
+        <description>Next to the store of defensive
+            walls, jump for joy near the stool.
+            Equip a Sled and Void Melee Set.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2979</x>
+                <y>3383</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>0</skill>
+                <xp>45529</xp>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>1</skill>
+                <xp>45529</xp>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>2</skill>
+                <xp>45529</xp>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>4</skill>
+                <xp>45529</xp>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>6</skill>
+                <xp>45529</xp>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>4084</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>11665</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>4</slot>
+                <itemId>8839</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>7</slot>
+                <itemId>8840</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>9</slot>
+                <itemId>8842</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>100</minAmount>
+                <maxAmount>200</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>20</minAmount>
+                <maxAmount>60</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15242</id>
+                <minAmount>1</minAmount>
+                <maxAmount>20</maxAmount>
+                <chance>53</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2678" trigger="CRY">
+        <description>Cry under the Gambler.
+            Equip Magic Secateurs
+            and be level 70 combat.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3089</x>
+                <y>3485</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>7409</itemId>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>70</combatLevel>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>50</minAmount>
+                <maxAmount>80</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>5</minAmount>
+                <maxAmount>15</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>30</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2679" trigger="ANGRY">
+        <description>I'M TIRED OF THESE ARROWS!
+            SHOW YOUR ANGER at the
+            Ranging Guild door!
+            I know you're fearless because
+            of the Bravery Potion you have.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2657</x>
+                <y>3439</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="ITEM">
+                <id>739</id>
+                <amount>1</amount>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>60</minAmount>
+                <maxAmount>100</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>20</minAmount>
+                <maxAmount>30</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>85</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2681" trigger="LAUGH">
+        <description>The horrible smell from above
+            will not be able to keep me from
+            my treasure! Laugh south of the chain
+            with a Gas Mask and Cattleprod.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3422</x>
+                <y>3549</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>278</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>1506</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>50</minAmount>
+                <maxAmount>100</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>30</minAmount>
+                <maxAmount>60</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13879</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>64</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2682" trigger="HEAD_BANG">
+        <description>Those greedy Dwaves won't let you
+            into their guild? Let's see
+            what they think when you have a Bomber
+            Jacket and Gunpowder on you
+            at the door. Headbang with 60 Firemaking.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3046</x>
+                <y>9757</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>9944</itemId>
+            </requirement>
+            <requirement type="ITEM">
+                <id>7108</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>11</skill>
+                <xp>273747</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>75</minAmount>
+                <maxAmount>150</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>30</minAmount>
+                <maxAmount>70</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>43</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13876</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>53</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2683" trigger="PANIC">
+        <description>UH OH!
+            It's time for to get new clothes!
+            Panic at  'As Hat Lies' 's
+            store next to the ladder
+            Have 31 agility.</description>
+        <requirements>
+            <requirement type="EXPERIENCE">
+                <skill>16</skill>
+                <xp>14838</xp>
+            </requirement>
+            <requirement type="LOCATION">
+                <x>3203</x>
+                <y>3416</y>
+                <z>-1</z>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>30</minAmount>
+                <maxAmount>60</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>100</minAmount>
+                <maxAmount>250</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13893</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>42</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13902</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>84</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2684" trigger="RASPBERRY">
+        <description>Blow a Raspberry next to the Fishing
+            Trawler Net. Wear a Brass Necklace,
+            Rainbow Afro, and a Handcannon Shot.
+            You must also be 91 Combat.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2667</x>
+                <y>3166</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>2</slot>
+                <itemId>1009</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>19747</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>13</slot>
+                <itemId>15243</itemId>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>91</combatLevel>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>70</minAmount>
+                <maxAmount>120</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>30</minAmount>
+                <maxAmount>70</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13905</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>42</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13879</id>
+                <minAmount>1</minAmount>
+                <maxAmount>22</maxAmount>
+                <chance>62</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2685" trigger="HERBLORE_CAPE">
+        <description>Do the Herblore Emote in front
+            of the Statue of Saradomin.
+            Wear a Morrigan's Zuriel's Staff,
+            Morrigan's Leather Body, and
+            Pirate Boots.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2515</x>
+                <y>3160</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>6665</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>15444</itemId>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>60</combatLevel>
+            </requirement>
+            <requirement type="ITEM">
+                <id>3062</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>9</skill>
+                <xp>737632</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>375</minAmount>
+                <maxAmount>575</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>75</minAmount>
+                <maxAmount>130</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13876</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>83</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>18016</id>
+                <minAmount>1</minAmount>
+                <maxAmount>86</maxAmount>
+                <chance>65</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2686" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2687" trigger="BOW">
+        <description>Do the Herblore Emote in front
+            of the Statue of Saradomin.
+            Wear a Morrigan's Zuriel's Staff,
+            Morrigan's Leather Body, and
+            Pirate Boots.</description>
+        <requirements>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>5607</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>3844</itemId>
+            </requirement>
+            <requirement type="LOCATION">
+                <x>2464</x>
+                <y>4830</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>20</skill>
+                <xp>150887</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>500</minAmount>
+                <maxAmount>650</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>75</minAmount>
+                <maxAmount>125</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>50</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>50</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>61</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2688" trigger="ATTACK_CAPE">
+        <description>Do the Attack Cape Emote north
+            of the Ladder that takes you down
+            to the Dagannoth Kings' Lair.
+            You must have 40 slayer and
+            a seercull bow.</description>
+        <requirements>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9747</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>6724</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>18</skill>
+                <xp>37229</xp>
+            </requirement>
+            <requirement type="LOCATION">
+                <x>1911</x>
+                <y>4368</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>0</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>400</minAmount>
+                <maxAmount>550</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>50</minAmount>
+                <maxAmount>100</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>18016</id>
+                <minAmount>1</minAmount>
+                <maxAmount>64</maxAmount>
+                <chance>73</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13893</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>82</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15242</id>
+                <minAmount>1</minAmount>
+                <maxAmount>41</maxAmount>
+                <chance>82</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2689" trigger="FIREMAKING_CAPE">
+        <description>The Unholy Spirit summoned from
+            the Black Candle to find the tool to
+            help Merlin. Do the Firemaking emote
+            in this symbol. Make sure you bring
+            your Lantern to keep the bugs away and
+            your War-Chief Cap.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2780</x>
+                <y>3515</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>15033</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>7053</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9804</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>11</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>400</minAmount>
+                <maxAmount>600</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>50</minAmount>
+                <maxAmount>95</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13879</id>
+                <minAmount>1</minAmount>
+                <maxAmount>23</maxAmount>
+                <chance>42</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12160</id>
+                <minAmount>1</minAmount>
+                <maxAmount>44</maxAmount>
+                <chance>68</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2690" trigger="WOODUCTTING_CAPE">
+        <description>This tiny little Island, it looks like
+            a pilot crashed. It has a pit with..
+            GIANT SNAKES!? I'll have to fight them
+            off with my Full Fungicide and the Extreme
+            Defence will help me survive longer. Good
+            thing I can cut any tree with my Cape's Emote.</description>
+        <requirements>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9807</itemId>
+            </requirement>
+            <requirement type="LOCATION">
+                <x>2923</x>
+                <y>2721</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="ITEM">
+                <id>15317</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>7421</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>8</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>500</minAmount>
+                <maxAmount>600</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>45</minAmount>
+                <maxAmount>100</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>74</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>67</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13876</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>52</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2691" trigger="SALUTE">
+        <description>The Black Knights have taken the White
+            Tree for 'Mountain Daughter'! Salute
+            north of the tree while wielding a
+            pair of Initiate Cuisse and
+            Proselyte Hauberk, with 75 Herblore. </description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3534</x>
+                <y>9677</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>19302</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>575</minAmount>
+                <maxAmount>675</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>75</minAmount>
+                <maxAmount>125</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>46</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>5</maxAmount>
+                <chance>35</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12163</id>
+                <minAmount>1</minAmount>
+                <maxAmount>41</maxAmount>
+                <chance>31</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2692" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2693" trigger="WAVE">
+        <description>The Black Knights have taken the White
+            Tree for 'Mountain Daughter'! Salute
+            north of the tree while wielding a
+            pair of Initiate Cuisse and
+            Proselyte Hauberk, with 75 Herblore. </description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2386</x>
+                <y>3335</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>54</combatLevel>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>18353</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>12</slot>
+                <itemId>15018</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>750</minAmount>
+                <maxAmount>900</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>850</minAmount>
+                <maxAmount>940</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13879</id>
+                <minAmount>1</minAmount>
+                <maxAmount>35</maxAmount>
+                <chance>71</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12158</id>
+                <minAmount>1</minAmount>
+                <maxAmount>50</maxAmount>
+                <chance>42</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="MEDIUM" id="2694" trigger="SMITHING_CAPE">
+        <description>Smithing emote at the South
+            Eastern corner of Duel Arena?
+            Maybe you should get a Top hat,
+            Brown Infinity Robe and Adamant
+            Defender to go with that.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3392</x>
+                <y>3203</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>13</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9795</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>8849</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>4</slot>
+                <itemId>15816</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>13101</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>80</minAmount>
+                <maxAmount>120</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>500</minAmount>
+                <maxAmount>600</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13887</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>74</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13899</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>84</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2695" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2696" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="HARD" id="2697" trigger="SPIN">
+        <description>I don't think the guardsmen with
+            their glass bows will just open
+            the Huge Gate by Waving....
+            Especially when I'm only level 54
+            with a Chaotic Maul and Imbued
+            Seer's Ring.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2994</x>
+                <y>3116</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>13905</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>7</slot>
+                <itemId>15024</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>13876</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9798</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>10</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>750</minAmount>
+                <maxAmount>980</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>145</minAmount>
+                <maxAmount>175</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13905</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>73</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15333</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>72</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>10025</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>63</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2698" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="HARD" id="2699" trigger="WAVE">
+        <description>I don't think the guardsmen with
+            their glass bows will just open
+            the Huge Gate by Waving....
+            Especially when I'm only level 54
+            with a Chaotic Maul and Imbued
+            Seer's Ring.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3441</x>
+                <y>3328</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>1357</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>10045</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>7</slot>
+                <itemId>10414</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>19</skill>
+                <xp>3972299</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>750</minAmount>
+                <maxAmount>900</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>150</minAmount>
+                <maxAmount>190</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>80</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>45</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>64</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15242</id>
+                <minAmount>1</minAmount>
+                <maxAmount>64</maxAmount>
+                <chance>34</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2700" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="HARD" id="2701" trigger="FLETCHING_CAPE">
+        <description>I don't think the guardsmen with
+            their glass bows will just open
+            the Huge Gate by Waving....
+            Especially when I'm only level 54
+            with a Chaotic Maul and Imbued
+            Seer's Ring.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3294</x>
+                <y>3945</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>119</combatLevel>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>7</slot>
+                <itemId>15604</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>15486</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>8845</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>1</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>17</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>800</minAmount>
+                <maxAmount>1000</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>150</minAmount>
+                <maxAmount>190</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>80</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13883</id>
+                <minAmount>1</minAmount>
+                <maxAmount>20</maxAmount>
+                <chance>52</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12158</id>
+                <minAmount>1</minAmount>
+                <maxAmount>68</maxAmount>
+                <chance>62</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>10025</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>65</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2702" trigger="BOW">
+        <description>Enter Description</description>
+        <requirements/>
+        <rewards/>
+    </cluescroll>
+    <cluescroll difficulty="HARD" id="2703" trigger="YAWN">
+        <description>Yawn south of the eastern most
+            Tree in Level 18 Wild. You must wield
+            a Chaotic Kiteshield, Bandos Boots,
+            and have 4 Rockcakes, 2 Gold Rings,
+            and 1 Special Restore Potion on you.
+        </description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3356</x>
+                <y>3642</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="ITEM">
+                <id>2430</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>15272</id>
+                <amount>4</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>1635</id>
+                <amount>2</amount>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>18359</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>10</slot>
+                <itemId>11728</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>800</minAmount>
+                <maxAmount>1050</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>125</minAmount>
+                <maxAmount>145</maxAmount>
+                <chance>60</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>80</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12159</id>
+                <minAmount>1</minAmount>
+                <maxAmount>51</maxAmount>
+                <chance>84</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13893</id>
+                <minAmount>1</minAmount>
+                <maxAmount>5</maxAmount>
+                <chance>72</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13899</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>59</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2704" trigger="BOW">
+        <description>Solve this anagram to find out
+            what npc's store to go to.
+            Risk Gun elm.
+            Bow at the location with
+            a Warrior Ring (i), Fighter
+            Torso, and Bandos Tassets.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2661</x>
+                <y>3692</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>12</slot>
+                <itemId>15020</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>4</slot>
+                <itemId>10551</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>7</slot>
+                <itemId>11726</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1200</minAmount>
+                <maxAmount>1500</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>220</minAmount>
+                <maxAmount>260</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>6</maxAmount>
+                <chance>67</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15272</id>
+                <minAmount>1</minAmount>
+                <maxAmount>42</maxAmount>
+                <chance>73</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13902</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>65</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2705" trigger="THIEVING_CAPE">
+        <description>This yellow unburdened soil, among the black.
+            With the Two mushrooms on the top.
+            Do the Thieving emote above the brown
+            entrance. Equip a pair of Novite
+            Boots and have a Charm Collector
+            in your inventory.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3167</x>
+                <y>3882</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>10</slot>
+                <itemId>16339</itemId>
+            </requirement>
+            <requirement type="ITEM">
+                <id>16639</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9777</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>17</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1150</minAmount>
+                <maxAmount>1400</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>220</minAmount>
+                <maxAmount>240</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>18016</id>
+                <minAmount>1</minAmount>
+                <maxAmount>283</maxAmount>
+                <chance>74</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13887</id>
+                <minAmount>1</minAmount>
+                <maxAmount>5</maxAmount>
+                <chance>81</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2706" trigger="CLIMB_ROPE">
+        <description>Climb the rope when your in
+            search of a wedding ring to the
+            North while wearing your lucky Silver
+            Necklace and the purple otherworldy
+            ward. Have 83 Summoning and 115 combat.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2912</x>
+                <y>4463</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>2</slot>
+                <itemId>1797</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>13744</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>23</skill>
+                <xp>83</xp>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>115</combatLevel>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1150</minAmount>
+                <maxAmount>1375</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>215</minAmount>
+                <maxAmount>255</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>2430</id>
+                <minAmount>1</minAmount>
+                <maxAmount>5</maxAmount>
+                <chance>72</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13893</id>
+                <minAmount>1</minAmount>
+                <maxAmount>6</maxAmount>
+                <chance>62</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15242</id>
+                <minAmount>1</minAmount>
+                <maxAmount>42</maxAmount>
+                <chance>54</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2707" trigger="ANGRY">
+        <description>I'm not of a lover of fowl, but
+            solve this anagram to reveal
+            my true identity!
+            'IRAN COVE'
+            Show your anger on the steps.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3497</x>
+                <y>3502</y>
+                <z>-1</z>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>2000</minAmount>
+                <maxAmount>3500</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>220</minAmount>
+                <maxAmount>250</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>5</maxAmount>
+                <chance>57</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12159</id>
+                <minAmount>1</minAmount>
+                <maxAmount>72</maxAmount>
+                <chance>82</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15242</id>
+                <minAmount>1</minAmount>
+                <maxAmount>62</maxAmount>
+                <chance>83</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2708" trigger="MAGIC_CAPE">
+        <description>I heard this house holds mages
+            that perform Death Magic. I'll
+            show them my Magical Emote
+            under these charms. My Mastery
+            of Runecrafting will also be of use,
+            aswell as my Virtus Mask.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2665</x>
+                <y>3239</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>19719</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>6</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>20</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>12169</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1125</minAmount>
+                <maxAmount>1450</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>200</minAmount>
+                <maxAmount>255</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13873</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>30</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13883</id>
+                <minAmount>1</minAmount>
+                <maxAmount>30</maxAmount>
+                <chance>62</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12163</id>
+                <minAmount>1</minAmount>
+                <maxAmount>36</maxAmount>
+                <chance>83</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2709" trigger="FARMING_CAPE">
+        <description>I don't think this crude raft
+            will survive down such a rough
+            stream. Even if I am a master of
+            Agility, I don't think my lucky Golden
+            Dark bow and my small Pirate
+            Friend can help me out. Before
+            I head out, I'll plant some flowers.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2510</x>
+                <y>3494</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>3</slot>
+                <itemId>15701</itemId>
+            </requirement>
+            <requirement type="ITEM">
+                <id>13337</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>16</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>19</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9810</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1200</minAmount>
+                <maxAmount>1400</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>230</minAmount>
+                <maxAmount>255</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>61</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13905</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>63</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12158</id>
+                <minAmount>1</minAmount>
+                <maxAmount>60</maxAmount>
+                <chance>71</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>10025</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>49</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2710" trigger="JUMP_FOR_JOY">
+        <description>They say that across the bridge,
+            that is over lava, holds a monster
+            so fearsome in a cave. That is a delight
+            for a master Slayer, I Jump for Joy. With
+            my Focus Sight on, and my Spirit
+            Kyatt in my inventory, I'm Ready.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2529</x>
+                <y>3013</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>15490</itemId>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>23</skill>
+                <xp>203259</xp>
+            </requirement>
+            <requirement type="ITEM">
+                <id>12812</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>18</skill>
+                <xp>13034436</xp>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1200</minAmount>
+                <maxAmount>1550</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>230</minAmount>
+                <maxAmount>265</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13861</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>76</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15333</id>
+                <minAmount>1</minAmount>
+                <maxAmount>6</maxAmount>
+                <chance>82</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>10025</id>
+                <minAmount>1</minAmount>
+                <maxAmount>2</maxAmount>
+                <chance>27</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2711" trigger="MINING_CAPE">
+        <description>Journey to Red Dragon Island
+            and do the Mining Emote in the
+            middle of 6 Skeletons. Carry
+            1 of each Pk statuette and Sagittarian
+            Vambraces. You must be level 121.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>3211</x>
+                <y>3812</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14889</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14878</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14879</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14881</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14876</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14880</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14888</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14887</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="ITEM">
+                <id>14885</id>
+                <amount>1</amount>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>9</slot>
+                <itemId>17215</itemId>
+            </requirement>
+            <requirement type="COMBAT_LEVEL">
+                <combatLevel>121</combatLevel>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>14</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>9792</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1250</minAmount>
+                <maxAmount>1475</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>220</minAmount>
+                <maxAmount>245</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13883</id>
+                <minAmount>1</minAmount>
+                <maxAmount>28</maxAmount>
+                <chance>82</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>2430</id>
+                <minAmount>1</minAmount>
+                <maxAmount>3</maxAmount>
+                <chance>72</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12160</id>
+                <minAmount>1</minAmount>
+                <maxAmount>53</maxAmount>
+                <chance>85</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2712" trigger="DANCE">
+        <description>Beneath the Totem made of a
+            pure Tropical Tree, lies the lair
+            of shadows. Go to the end of this
+            dungeon, next to the fungi and Dance.
+            Wield a Purple Tricorn Hat, Dragon
+            Defender and Amulet of Range.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2697</x>
+                <y>9784</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>0</slot>
+                <itemId>13193</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>13351</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>2</slot>
+                <itemId>15126</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1120</minAmount>
+                <maxAmount>1360</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>180</minAmount>
+                <maxAmount>215</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12163</id>
+                <minAmount>1</minAmount>
+                <maxAmount>42</maxAmount>
+                <chance>68</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13887</id>
+                <minAmount>1</minAmount>
+                <maxAmount>8</maxAmount>
+                <chance>23</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>138991</id>
+                <minAmount>1</minAmount>
+                <maxAmount>4</maxAmount>
+                <chance>54</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="ELITE" id="2713" trigger="SUMMONING_CAPE">
+        <description>I hope with this emote I can
+            Summon a familiar that is able
+            to take me across this balancing ledge.
+            Underneath the ledge are poison spiders.
+            I'll bring my Eagle-Eye Kiteshield to protect
+            me aswell as my downgraded Cloak.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2580</x>
+                <y>9521</y>
+                <z>-1</z>
+            </requirement>
+            <requirement type="EXPERIENCE">
+                <skill>23</skill>
+                <xp>13034436</xp>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>5</slot>
+                <itemId>18361</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>15345</itemId>
+            </requirement>
+            <requirement type="EQUIPMENT">
+                <slot>1</slot>
+                <itemId>12169</itemId>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>1250</minAmount>
+                <maxAmount>1570</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>240</minAmount>
+                <maxAmount>265</maxAmount>
+                <chance>70</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15333</id>
+                <minAmount>1</minAmount>
+                <maxAmount>5</maxAmount>
+                <chance>82</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>12158</id>
+                <minAmount>1</minAmount>
+                <maxAmount>57</maxAmount>
+                <chance>91</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>10025</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>56</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+    <cluescroll difficulty="EASY" id="2680" trigger="NO">
+        <description>Potions? I would think that
+            true warriors would not need
+            such false strength.
+            Show your disapproval by
+            standing north of the potions.</description>
+        <requirements>
+            <requirement type="LOCATION">
+                <x>2845</x>
+                <y>3553</y>
+                <z>-1</z>
+            </requirement>
+        </requirements>
+        <rewards>
+            <reward type="POINTS">
+                <type>PK_POINTS</type>
+                <minAmount>50</minAmount>
+                <maxAmount>100</maxAmount>
+                <chance>100</chance>
+            </reward>
+            <reward type="POINTS">
+                <type>DONATOR_POINTS</type>
+                <minAmount>30</minAmount>
+                <maxAmount>50</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>11640</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>20</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>13870</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>40</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>15242</id>
+                <minAmount>1</minAmount>
+                <maxAmount>47</maxAmount>
+                <chance>61</chance>
+            </reward>
+            <reward type="ITEM">
+                <id>14081</id>
+                <minAmount>1</minAmount>
+                <maxAmount>1</maxAmount>
+                <chance>1</chance>
+            </reward>
+        </rewards>
+    </cluescroll>
+</cluescrolls>

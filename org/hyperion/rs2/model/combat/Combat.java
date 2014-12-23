@@ -1060,7 +1060,9 @@ public class Combat {
 				||
 				(combatEntity.getAbsX() >= 2343 && combatEntity.getAbsY() >= 9823 &&
 					combatEntity.getAbsX() <= 2354 && combatEntity.getAbsY() <= 9834)
-				)
+				||
+                (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
+                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711))
 			
 			return true;
 		if(combatEntity.getEntity() instanceof Player)

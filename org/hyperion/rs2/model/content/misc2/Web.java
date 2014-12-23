@@ -4,6 +4,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
@@ -48,8 +49,13 @@ public class Web implements ContentTemplate {
 	public boolean clickObject(Player player, int type, int objectId, int x, int y,
 	                           int d) {
 		if(type == 6) {
-			slash(player, Location.create(x, y, 0), objectId);
-		}
+            if(objectId == 1765) {
+                Magic.teleport(player, Location.create(2272, 4682, 0), true);
+                return true;
+            }
+            slash(player, Location.create(x, y, 0), objectId);
+
+        }
 		return false;
 	}
 
@@ -60,7 +66,7 @@ public class Web implements ContentTemplate {
 	@Override
 	public int[] getValues(int type) {
 		if(type == 6) {
-			int[] webs = {733};
+			int[] webs = {733, 1765};
 			return webs;
 		}
 		return null;

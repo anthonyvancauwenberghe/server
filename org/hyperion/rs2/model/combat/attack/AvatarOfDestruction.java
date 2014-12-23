@@ -25,7 +25,7 @@ public class AvatarOfDestruction implements Attack {
         final int[] bonus = new int[10];
         Arrays.fill(bonus, 487);
         NPCDefinition.getDefinitions()[8596] =
-                NPCDefinition.create(8597, 5000, 525, bonus, 11199, 11198, new int[]{11197}, 3, "Avatar of Destruction", 120);
+                NPCDefinition.create(8596, 5000, 525, bonus, 11199, 11198, new int[]{11197}, 3, "Avatar of Destruction", 120);
     }
 
     @Override

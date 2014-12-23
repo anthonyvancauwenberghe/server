@@ -20,7 +20,9 @@ public class KBD implements Attack {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
 			}
-			int attackId = Combat.random(20);
+            n.getDefinition().getBonus()[4] = 400;
+            n.getDefinition().getBonus()[3] = 400;
+			int attackId = Combat.random(10);
 	        /*
 			 * 
 			 * 393 = KBD = red projectile
@@ -31,21 +33,21 @@ public class KBD implements Attack {
 			if(attackId > 6 && distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 				//melee
 				n.cE.doAnim(n.getDefinition().getAtkEmote(1));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(25), 500, 0);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 1000);
+				Combat.npcAttack(n, attack, Combat.random(35), 500, 0);
 			} else if(attackId == 0) {
 				//posison
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(8), 1000, 1);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 1000);
+				Combat.npcAttack(n, attack, 12, 1000, 1);
 				if(n.getDefinition().getId() == 50)
 					Combat.poisonEntity(attack);
 				Combat.npcRangeAttack(n, attack, 394, 40, false);
 			} else if(attackId == 1) {
 				//ice freeze
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(25), 1000, 1);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
+				Combat.npcAttack(n, attack, Combat.random(45), 1000, 1);
 				if(n.getDefinition().getId() == 50)
 					attack.setFreezeTimer(20000);
 				Combat.npcRangeAttack(n, attack, 396, 40, false);

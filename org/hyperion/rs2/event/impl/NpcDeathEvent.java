@@ -116,6 +116,7 @@ public class NpcDeathEvent extends Event {
                             new Item(npc.bones, 1));
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
+
                 //charms
                 if(npc.charm > 0) {
                     GlobalItem globalItem5 = new GlobalItem(

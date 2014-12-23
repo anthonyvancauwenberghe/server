@@ -137,6 +137,8 @@ public enum CombatCalculation {
     }
 
     public static int getCalculatedDamage(final Entity attacker, final Entity defender, int randomDamage, int type) {
+        if(attacker == null || defender == null)
+            return 0;
         final CombatCalculation calculation = getCalculationFor(attacker, defender);
         if (type == Constants.MAGE)
             return calculation.magicAttack(attacker, defender, randomDamage);

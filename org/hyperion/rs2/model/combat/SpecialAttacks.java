@@ -299,7 +299,7 @@ public class SpecialAttacks {
 			default:
 				return false;
 		}
-		
+
 		if(ranged && (player.getLocation().disabledRange() || player.duelRule[DuelRules.RANGE.ordinal()])) {
 			player.getActionSender().sendMessage("You cannot used ranged weapons here!");
 			return false;
@@ -423,7 +423,7 @@ public class SpecialAttacks {
 		/**
 		 * Apply damage
 		 */
-		
+
 		ApplyHitBlock:{
             if(oldEntity.getEntity() instanceof Player)
                 oldEntity.getPlayer().getLastAttack().updateLastAttacker(player.getName());
@@ -517,9 +517,9 @@ public class SpecialAttacks {
 				int deltaBonus2 = -5;
 				int deltaBonus3 = -5;
 				if(player.getCombat().getOpponent() != null && player.getCombat().getOpponent().getEntity() instanceof Player) {
-					deltaBonus2 = CombatAssistant.calculateRangeAttack(player) - 
+					deltaBonus2 = CombatAssistant.calculateRangeAttack(player) -
 						CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer());
-					deltaBonus3 = CombatAssistant.calculateRangeAttack(player) - 
+					deltaBonus3 = CombatAssistant.calculateRangeAttack(player) -
 							CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer());
 					player.debugMessage("ur range atk is: "+CombatAssistant.calculateRangeAttack(player));
 					player.debugMessage("opp range def is: "+CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer()));
@@ -848,6 +848,7 @@ public class SpecialAttacks {
 				break;**/
 			case 861:
 				// TODO
+
 				break;
 		}
 

@@ -66,7 +66,7 @@ public class Web implements ContentTemplate {
 	@Override
 	public int[] getValues(int type) {
 		if(type == 6) {
-			int[] webs = {733, 1765};
+			int[] webs = {733, 1765,};
 			return webs;
 		}
 		return null;

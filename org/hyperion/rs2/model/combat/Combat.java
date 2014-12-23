@@ -783,6 +783,15 @@ public class Combat {
 					if(! prayerBlock) {
 						//old prayers code
 					}
+
+                    if(type == 1
+                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
+                        newDamg = 0;
+                    }
+                    if(type == 2
+                            && Combat.random(npc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
+                        newDamg = 0;
+                    }
 					//defence
 					if(npc.getDefinition().getId() == 9463) {
 						if(Misc.random(12) == 0) {

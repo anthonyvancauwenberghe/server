@@ -56,9 +56,7 @@ public class DefaultAttack implements Attack {
 	        /*if(Combat.random(n.getDefinition().getBonus()[1]) < Combat.random(CombatAssistant.calculateMeleeDefence(attack.getPlayer(), 1))){
 				maxHit = 0;
 			}*/
-            int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxHit), 0);
-            if(tempDamage > maxHit)
-                tempDamage = maxHit;
+            int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxHit), 0, maxHit);
 			Combat.npcAttack(n, attack, tempDamage, 500, 0);
 			n.cE.doAtkEmote();
 			return 5;

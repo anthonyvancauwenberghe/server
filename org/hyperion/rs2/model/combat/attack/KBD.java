@@ -33,7 +33,7 @@ public class KBD implements Attack {
 			if(attackId > 6 && distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 				//melee
 				n.cE.doAnim(n.getDefinition().getAtkEmote(1));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 1000);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
 				Combat.npcAttack(n, attack, Combat.random(35), 500, 0);
 			} else if(attackId == 0) {
 				//posison

@@ -50,10 +50,8 @@ public class AvatarOfDestruction implements Attack {
         int distance = attack.getEntity().getLocation().distance(n.getLocation());
         if(distance < 5) {
             n.getCombat().doAtkEmote();
-                int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_DAMAGE), Constants.MELEE);
-                if(tempDamage > MAX_DAMAGE)
-                    tempDamage = MAX_DAMAGE;
-                Combat.npcAttack(n, attack, tempDamage, 300, Constants.MELEE);
+            int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_DAMAGE), Constants.MELEE, MAX_DAMAGE);
+            Combat.npcAttack(n, attack, tempDamage, 300, Constants.MELEE);
             final int dmg = tempDamage;
             attack._getPlayer().ifPresent(p -> {
                 p.getSkills().detractLevel(Skills.PRAYER, dmg);

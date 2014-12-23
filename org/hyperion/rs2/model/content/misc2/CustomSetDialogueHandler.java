@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.FileNotFoundException;
@@ -36,7 +37,7 @@ public class CustomSetDialogueHandler implements ContentTemplate {
     }
 
     public boolean actionButton(Player player, int actionButton) {
-        if(Location.inAttackableArea(player)) {
+        if(!ItemSpawning.canSpawn(player)) {
             player.getActionSender().sendMessage("You cannot spawn Items in the wilderness.");
             return false;
         }

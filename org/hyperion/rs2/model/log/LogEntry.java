@@ -14,20 +14,27 @@ public class LogEntry implements Comparable<LogEntry>{
 
         DUEL("duel.log", "duel"),
         TRADE("trade.log", "trade"),
-        PUBLIC_CHAT("public-chat.log", "public chat"),
+        PUBLIC_CHAT("public-chat.log", false, "public chat"),
         PRIVATE_CHAT("private-chat.log", "private chat", "private msg", "pm"),
         ACTIVITY("activity.log", "activity"),
         DEATH("death.log", "death"),
         PICKUP_ITEM("pickup-items.log", "pickup item"),
         COMMAND("command.log", "command"),
-        GAMBLE("gamble.log", "gamble", "gambling");
+        GAMBLE("gamble.log", "gamble", "gambling", "stake"),
+        YELL("yell.log", "yell");
 
         public final String path;
+        public final boolean save;
         public final List<String> names;
 
-        private Category(final String path, final String... names){
+        private Category(final String path, final boolean save, final String... names){
             this.path = path;
+            this.save = save;
             this.names = Arrays.asList(names);
+        }
+
+        private Category(final String path, final String... names){
+            this(path, true, names);
         }
 
         public static Category byName(final String name){
@@ -74,15 +81,14 @@ public class LogEntry implements Comparable<LogEntry>{
     }
 
     public String toString(){
-        return String.format("%s | %s | %s", getDateStamp(), category, info);
+        return String.format("%s | %s", getDateStamp(), info);
     }
 
-    public static LogEntry parse(final String line){
+    public static LogEntry parse(final Category category, final String line){
         final String[] parts = line.split("\\|");
         try{
             final Date date = LogUtils.DATE_FORMAT.parse(parts[0].trim());
-            final Category category = Category.valueOf(parts[1].trim());
-            final String info = parts[2].trim();
+            final String info = parts[1].trim();
             return new LogEntry(date, category, info);
         }catch(Exception ex){
             ex.printStackTrace();
@@ -92,6 +98,10 @@ public class LogEntry implements Comparable<LogEntry>{
 
     public static LogEntry publicChat(final String msg){
         return new LogEntry(Category.PUBLIC_CHAT, msg);
+    }
+
+    public static LogEntry yell(final String msg){
+        return new LogEntry(Category.YELL, msg);
     }
 
     public static LogEntry privateChat(final String from, final String to, final String msg){
@@ -162,7 +172,10 @@ public class LogEntry implements Comparable<LogEntry>{
     }
 
     public static LogEntry command(final String cmd){
-        return new LogEntry(Category.COMMAND, cmd);
+        if(cmd.startsWith("yell "))
+            return yell(cmd.substring(4).trim());
+        else
+            return new LogEntry(Category.COMMAND, cmd);
     }
 
     public static LogEntry gamble(final NPC npc, final Item item, final int n){

@@ -12,29 +12,38 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 
 public class LogManager {
 
-    private static final File DIR = new File(".", "logs2");
+    private static final File DIR = new File(".", "logs3");
+    private static final File STAFF_DIR = new File(".", "stafflogs");
 
     static{
         if(!DIR.exists())
             DIR.mkdir();
+        if(!STAFF_DIR.exists())
+            STAFF_DIR.mkdir();
     }
 
-    private final String name;
     private final File dir;
 
     private final Map<LogEntry.Category, Set<LogEntry>> logs;
     private final Map<LogEntry.Category, Boolean> loaded;
 
     public LogManager(final String name){
-        this.name = name;
+        this(new File(STAFF_DIR, name.toLowerCase()).exists() ? STAFF_DIR : DIR, name);
+    }
 
-        dir = new File(DIR, name.toLowerCase());
+    public LogManager(final Player player){
+        this(Rank.hasAbility(player, Rank.MODERATOR) ? STAFF_DIR : DIR, player.getName());
+    }
+
+    public LogManager(final File dir, final String name){
+        this.dir = new File(dir, name.toLowerCase());
 
         logs = new HashMap<>();
-
         loaded = new HashMap<>();
     }
 
@@ -75,7 +84,7 @@ public class LogManager {
                 if(line.isEmpty())
                     continue;
                 try{
-                    final LogEntry log = LogEntry.parse(line);
+                    final LogEntry log = LogEntry.parse(category, line);
                     add(log);
                 }catch(Exception ex){
                     ex.printStackTrace();
@@ -105,8 +114,10 @@ public class LogManager {
         if(!dir.exists())
             dir.mkdir();
         for(final Map.Entry<LogEntry.Category, Set<LogEntry>> entry : logs.entrySet()){
+            if(!entry.getKey().save && entry.getKey() != LogEntry.Category.PRIVATE_CHAT)
+                continue;
             final File file = new File(dir, entry.getKey().path);
-            try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
+            try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file, !loaded.containsKey(entry.getKey())))){
                 for(final LogEntry log : entry.getValue()){
                     writer.write(log.toString());
                     writer.newLine();

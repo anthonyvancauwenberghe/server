@@ -1020,7 +1020,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();
 
-        logManager = new LogManager(name);
+        logManager = new LogManager(this);
 	}
 
     public LogManager getLogManager(){

@@ -76,12 +76,15 @@ public class DonationRequest extends SQLRequest {
 				return;
 			}
 			if(amount < 0) {
-				player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + amount);
+                player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + amount);
 				player.getActionSender().sendMessage(Math.abs(amount) + " donator points have been removed from your account.");
 				player.getQuestTab().sendDonatePoints();
 			}
 			if(amount > 0) {
+                double multiplier = 1.25;
+                amount *= multiplier;
 				player.getPoints().increaseDonatorPoints(amount);
+                player.getActionSender().sendMessage("You have received a 25% donation bonus from santa!");
 			} else {
 				if(!didSurvey)
                     player.getActionSender().sendMessage("There are no points available. It can take up to 24h to receive your points!");

@@ -127,15 +127,15 @@ public class ExtraData {
             for(final String s : parts) {
                 try {
                     //{christmasevent=2, zombiewave=0}
-                    System.out.println(s);
+                    //System.out.println(s);
                     final String p[] = s.split("-");
                     extraData.put(p[0], p[1].trim());
                 }catch(Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 

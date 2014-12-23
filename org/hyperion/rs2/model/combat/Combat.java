@@ -811,9 +811,6 @@ public class Combat {
 
 				}
 
-                newDamg = CombatCalculation.getCalculatedDamage(npc, combatEntity.getEntity(), newDamg, type > 3 ? 3 : type);
-
-
                 // combatEntity.doDefEmote();
 				combatEntity.hit(newDamg, npc.cE.getEntity(), false, type >= 3 ? Constants.MAGE
 						: type);

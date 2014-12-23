@@ -18,16 +18,16 @@ public enum CombatCalculation {
         int magicAttack(final Entity attacker, final Entity defender, int randomDamage) {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
-            final int deltaBonus = attack.getDefinition().getBonus()[4] - CombatAssistant.calculateMageDef(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateMageDef(def);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
         int rangeAttack(final Entity attacker, final Entity defender, int randomDamage) {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
-            final int deltaBonus = attack.getDefinition().getBonus()[3] - CombatAssistant.calculateRangeDefence(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateRangeDefence(def);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -35,7 +35,7 @@ public enum CombatCalculation {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
             final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateMageDef(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
     },
@@ -45,16 +45,16 @@ public enum CombatCalculation {
         int magicAttack(final Entity attacker, final Entity defender, int randomDamage) {
             final NPC attack = (NPC)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = attack.getDefinition().getBonus()[4] - def.getDefinition().getBonus()[4];
-            randomDamage += Misc.random(deltaBonus/3);
+            final int deltaBonus = attack.getDefinition().combat() - def.getDefinition().getBonus()[4];
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
         int rangeAttack(final Entity attacker, final Entity defender, int randomDamage) {
             final NPC attack = (NPC)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = attack.getDefinition().getBonus()[3] - def.getDefinition().getBonus()[3];
-            randomDamage += Misc.random(deltaBonus/3);
+            final int deltaBonus = attack.getDefinition().combat() - def.getDefinition().getBonus()[3];
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -62,7 +62,7 @@ public enum CombatCalculation {
             final NPC attack = (NPC)attacker;
             final NPC def = (NPC)defender;
             final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateMeleeDefence(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
 
@@ -74,7 +74,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
             final int deltaBonus = CombatAssistant.calculateMageAtk(attack) - def.getDefinition().getBonus()[4];
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -82,7 +82,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
             final int deltaBonus = CombatAssistant.calculateRangeAttack(attack) - def.getDefinition().getBonus()[3];
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -90,7 +90,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
             final int deltaBonus = CombatAssistant.calculateMeleeAttack(attack) - CombatAssistant.calculateMeleeDefence(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
 
@@ -102,7 +102,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final Player def = (Player)defender;
             final int deltaBonus = CombatAssistant.calculateMageAtk(attack) - CombatAssistant.calculateMageDef(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -110,7 +110,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final Player def = (Player)defender;
             final int deltaBonus = CombatAssistant.calculateRangeAttack(attack) - CombatAssistant.calculateRangeDefence(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -118,7 +118,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final Player def = (Player)defender;
             final int deltaBonus = CombatAssistant.calculateMeleeAttack(attack) - CombatAssistant.calculateMeleeDefence(def);
-            randomDamage += Misc.random(deltaBonus/3);
+            randomDamage += Misc.random(deltaBonus/5);
             return randomDamage < 0 ? 0 : randomDamage;
         }
 

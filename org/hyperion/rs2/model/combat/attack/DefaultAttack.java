@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.Player;
 
@@ -55,7 +56,10 @@ public class DefaultAttack implements Attack {
 	        /*if(Combat.random(n.getDefinition().getBonus()[1]) < Combat.random(CombatAssistant.calculateMeleeDefence(attack.getPlayer(), 1))){
 				maxHit = 0;
 			}*/
-			Combat.npcAttack(n, attack, Combat.random(maxHit), 500, 0);
+            int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxHit), 0);
+            if(tempDamage > maxHit)
+                tempDamage = maxHit;
+			Combat.npcAttack(n, attack, tempDamage, 500, 0);
 			n.cE.doAtkEmote();
 			return 5;
 		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 9)) {

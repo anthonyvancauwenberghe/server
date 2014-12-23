@@ -51,9 +51,12 @@ public class AvatarOfDestruction implements Attack {
         if(distance < 5) {
             n.getCombat().doAtkEmote();
                 int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_DAMAGE), Constants.MELEE);
+                if(tempDamage > MAX_DAMAGE)
+                    tempDamage = MAX_DAMAGE;
                 Combat.npcAttack(n, attack, tempDamage, 300, Constants.MELEE);
+            final int dmg = tempDamage;
             attack._getPlayer().ifPresent(p -> {
-                p.getSkills().detractLevel(Skills.PRAYER, tempDamage);
+                p.getSkills().detractLevel(Skills.PRAYER, dmg);
                 p.sendMessage("The avatar drains your prayer");
             });
         } else  if (distance < 10){

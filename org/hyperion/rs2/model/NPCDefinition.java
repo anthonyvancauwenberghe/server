@@ -302,6 +302,7 @@ public class NPCDefinition {
 							bonus[i2] = 400;
 						}
 						int[] atks = {12791};
+                        definition[50].maxHp = 850;
 						definition[9463] = new NPCDefinition(9463, 450, 220, bonus, 12793, 12791, atks, 2, "Ice_Skry", 30);
 						definition[8349] = new NPCDefinition(8349, 800, 450, bonus, 10924, 10923, atks, 2, "Tormented_Demons", 30);
 						definition[8133] = NPCDefinition.create(8133, 2000, 785, bonus, 10059, 10053, new int[]{10057, 10058}, 4, "Corporeal_Beast", 184);

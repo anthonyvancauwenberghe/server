@@ -876,6 +876,21 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.SummoningCounter = 0;
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
+            case 10137:
+                if(player.cE.summonedNpc == null) {
+                    player.sendMessage("You don't have a summoned familiar");
+                    break;
+                }
+                Location newlocation = player.getLocation().getCloseLocation();
+                player.cE.summonedNpc.setTeleportTarget(newlocation);
+                player.cE.summonedNpc.playGraphics(Graphic.create(1315));
+                player.cE.summonedNpc.ownerId = player.getIndex();
+                if(player.cE.getOpponent() != null) {
+                    Combat.follow(player.cE.summonedNpc.cE, player.cE);
+                    player.cE.summonedNpc.setInteractingEntity(player);
+                }
+                player.cE.summonedNpc.cE.setOpponent(player.cE.getOpponent());
+                break;
 		/* normal */
 			case 1830:
 			case 1831:

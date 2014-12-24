@@ -18,7 +18,7 @@ import org.hyperion.rs2.util.PlayerFiles;
 public class ViewLogsCommand extends Command {
 
     public ViewLogsCommand(){
-        super("viewlogs", Rank.ADMINISTRATOR);
+        super("viewlogs", Rank.DEVELOPER);
     }
 
     public boolean execute(final Player player, final String input){

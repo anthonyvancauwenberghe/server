@@ -645,7 +645,7 @@ public class SpecialAttacks {
 							- player.cE.getOpponent().getNPC().getDefinition().combat();
 				}
 				randomIncrease = Misc.random(deltaBonus / 3);
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
 				}
 				// System.out.println("RandomIncrease " + randomIncrease +
@@ -680,7 +680,7 @@ public class SpecialAttacks {
                 player.cE.getOpponent().setFreezeTimer(20000);
                 break;
             case 11061:
-               // if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+               // if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Damage: "+hitDamage);
                     try {
                         if(player.cE.getOpponent().getEntity() instanceof Player) {

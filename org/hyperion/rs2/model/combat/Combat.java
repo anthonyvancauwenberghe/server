@@ -527,7 +527,7 @@ public class Combat {
 		/**
 		 * Spirit shield effects.
 		 */
-		if(combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.DEVELOPER)) {
+		if(combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
 			//combatEntity.getPlayer().getActionSender().sendMessage("Damg without divine would be: " + damg);
 			damg = SpiritShields.applyEffects(opponent.cE, damg);
 			//combatEntity.getPlayer().getActionSender().sendMessage("Damg with divine is: " + damg);

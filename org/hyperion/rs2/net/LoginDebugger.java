@@ -65,7 +65,7 @@ public class LoginDebugger extends Debugger {
 
 	static {
 		CommandHandler.submit(new Command("sendloginlogs",
-				Rank.DEVELOPER) {
+				Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int counter = 0;
@@ -79,7 +79,7 @@ public class LoginDebugger extends Debugger {
 			}
 		});
 		CommandHandler.submit(new Command("enablelogindebugger",
-				Rank.DEVELOPER) {
+				Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				getDebugger().setEnabled(true);
@@ -88,7 +88,7 @@ public class LoginDebugger extends Debugger {
 			}
 		});
 		CommandHandler.submit(new Command("disablelogindebugger",
-				Rank.DEVELOPER) {
+				Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				getDebugger().setEnabled(false);
@@ -97,7 +97,7 @@ public class LoginDebugger extends Debugger {
 			}
 		});
 		CommandHandler.submit(new Command("dumploginlogs",
-				Rank.DEVELOPER) {
+				Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				boolean succesful = LoginDebugger.getDebugger().dumpLogs();

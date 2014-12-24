@@ -52,7 +52,7 @@ public class EPEvent extends Event {
 	}
 
 	static {
-		CommandHandler.submit(new Command("maxep", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("maxep", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				for(int i = 0; i < 10; i++) {

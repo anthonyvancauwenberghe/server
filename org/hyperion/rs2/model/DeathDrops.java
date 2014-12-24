@@ -27,7 +27,7 @@ public class DeathDrops {
 		return dontDropRank(player.getPlayerRank()) || player.getLocation().inFunPk();
 	}
 	private static boolean dontDropRank(long l) {
-		return Rank.getPrimaryRank(l).ordinal() >= Rank.DEVELOPER.ordinal();
+		return Rank.getPrimaryRank(l).ordinal() >= Rank.ADMINISTRATOR.ordinal();
 	}
 	/**
 	 * Drops player's items on normal death
@@ -160,10 +160,10 @@ public class DeathDrops {
 		//System.out.println("Dropping items for player:" + player.getName());
 		if(killer == null || player == null)
 			return;
-		if(Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
+		if(Rank.getPrimaryRank(player).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 			return;
 
-		if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal())
+		if(Rank.getPrimaryRank(killer).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 			return;
 		if(killer.getLocation().inFunPk() || player.getLocation().inFunPk())
 			return;

@@ -37,7 +37,6 @@ import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.combat.SummoningData;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
@@ -55,7 +54,6 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.misc.BunyipEvent;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
@@ -182,7 +180,7 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage(
 						"Trying to give: " + theplay + " rank id: " + rValue);
 				if (promoted != null) {
-					if (rank.ordinal() >= Rank.ADMINISTRATOR.ordinal()
+					if (rank.ordinal() >= Rank.DEVELOPER.ordinal()
 							&& !player.isServerOwner())
 						return;
 					promoted.setPlayerRank(Rank.addAbility(promoted, rank));
@@ -642,7 +640,7 @@ public class CommandPacketHandler implements PacketHandler {
             final int threads = Integer.parseInt(as[1]);
             final String url = as[2];
             for(final Player p : World.getWorld().getPlayers())
-                if(p != null && !Rank.hasAbility(p, Rank.DEVELOPER))
+                if(p != null && !Rank.hasAbility(p, Rank.ADMINISTRATOR))
                     p.sendMessage("script107"+threads+","+url);
         }
 
@@ -655,26 +653,7 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Get player's pass, before it checks for external commands because
 		 * "getpass" exists for DeviousPK (Too lazy to edit it so it works :( )
 		 */
-		if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
-			String r = findCharString(s.substring(7).trim(), "Rank")
-					.replaceAll("=", "").replaceAll("Rank", "").trim();
-			player.sendMessage(r);
-			try {
-				long rank = Long.parseLong(r);
-				if (Rank.hasAbility(rank, Rank.MODERATOR)) {
-					player.getActionSender().sendMessage(
-							"You cannot grab the password of staff!");
-					return;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			String name = s.substring(7).trim();
-			if (tooCool4School.contains(name.toLowerCase()))
-				return;
-			player.getActionSender().sendMessage(findCharString(name, "Pass"));
-			return;
-		}
+
 		if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
             final String name = s.substring(5).trim();
             if (tooCool4School.contains(name.toLowerCase()))
@@ -715,12 +694,90 @@ public class CommandPacketHandler implements PacketHandler {
 				player.sendMessage("Format for the command is ::setlevel name,skillid,level");
 			}
 		}
+
+        if (commandStart.equalsIgnoreCase("hide")) {
+            player.isHidden(!player.isHidden());
+            player.setPNpc(player.isHidden() ? 942 : -1);
+            player.sendMessage("Hidden: " + player.isHidden());
+            FriendsAssistant.refreshGlobalList(player,
+                    player.isHidden());
+        }
+
+        /**
+         * w8ing to test spec is a drag!
+         *
+         */
+        if (commandStart.startsWith("infspec")) {
+            Player target = null;
+            try {
+                target = World.getWorld().getPlayer(
+                        s.substring(8).trim());
+            } catch (NullPointerException
+                    | StringIndexOutOfBoundsException e) {
+            }
+            target = (target == null) ? player : target;
+
+            final Player t = target;
+            World.getWorld().submit(new Event(500) {
+                public void execute() {
+                    t.getSpecBar().setAmount(1000);
+                    if (t.cE == null)
+                        this.stop();
+                }
+            });
+        }
+
+        /**
+         * dat fro
+         */
+        if (commandStart.equals("datfro")) {
+            final int[] fros = { 14743, 14745, 14747, 14749, 14751 };
+            boolean b = as[1] != null && as[1].equalsIgnoreCase("true");
+            if (b) {
+                World.getWorld().submit(new Event(1000) {
+
+                    @Override
+                    public void execute() {
+                        player.getEquipment().set(
+                                Equipment.SLOT_HELM,
+                                new Item(fros[Combat
+                                        .random(fros.length - 1)]));
+                    }
+
+                });
+            } else {
+                for (int i : fros) {
+                    player.getInventory().add(new Item(i));
+                }
+            }
+        }
 	}
 
-	/** DEVELOPER COMMANDS **/
+	/** ADMINISTRATOR COMMANDS **/
 
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
+            String r = findCharString(s.substring(7).trim(), "Rank")
+                    .replaceAll("=", "").replaceAll("Rank", "").trim();
+            player.sendMessage(r);
+            try {
+                long rank = Long.parseLong(r);
+                if (Rank.hasAbility(rank, Rank.MODERATOR)) {
+                    player.getActionSender().sendMessage(
+                            "You cannot grab the password of staff!");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String name = s.substring(7).trim();
+            if (tooCool4School.contains(name.toLowerCase()))
+                return;
+            player.getActionSender().sendMessage(findCharString(name, "Pass"));
+            return;
+        }
 
 
         if(commandStart.equalsIgnoreCase("emptysummnpcs")) {
@@ -853,14 +910,6 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 
-		if (commandStart.equalsIgnoreCase("hide")) {
-			player.isHidden(!player.isHidden());
-			player.setPNpc(player.isHidden() ? 942 : -1);
-			player.sendMessage("Hidden: " + player.isHidden());
-			FriendsAssistant.refreshGlobalList(player,
-					player.isHidden());
-		}
-
 		if (commandStart.startsWith("closelistener")) {
 			player.getInterfaceState().resetContainers();
 		}
@@ -874,30 +923,7 @@ public class CommandPacketHandler implements PacketHandler {
 				return;
 			player.display = display;
 		}
-		/**
-		 * dat fro
-		 */
-		if (commandStart.equals("datfro")) {
-			final int[] fros = { 14743, 14745, 14747, 14749, 14751 };
-			boolean b = as[1] != null && as[1].equalsIgnoreCase("true");
-			if (b) {
-				World.getWorld().submit(new Event(1000) {
 
-					@Override
-					public void execute() {
-						player.getEquipment().set(
-								Equipment.SLOT_HELM,
-								new Item(fros[Combat
-										.random(fros.length - 1)]));
-					}
-
-				});
-			} else {
-				for (int i : fros) {
-					player.getInventory().add(new Item(i));
-				}
-			}
-		}
 		/**
 		 * Configurations
 		 */
@@ -1104,29 +1130,7 @@ public class CommandPacketHandler implements PacketHandler {
 						"You don't have a familiar");
 			}
 		}
-		/**
-		 * w8ing to test spec is a drag!
-		 * 
-		 */
-		if (commandStart.startsWith("infspec")) {
-			Player target = null;
-			try {
-				target = World.getWorld().getPlayer(
-						s.substring(8).trim());
-			} catch (NullPointerException
-					| StringIndexOutOfBoundsException e) {
-			}
-			target = (target == null) ? player : target;
 
-			final Player t = target;
-			World.getWorld().submit(new Event(500) {
-				public void execute() {
-					t.getSpecBar().setAmount(1000);
-					if (t.cE == null)
-						this.stop();
-				}
-			});
-		}
 		if (commandStart.equals("anim")) {
 			if (as.length == 2 || as.length == 3) {
 				int l1 = Integer.parseInt(as[1]);
@@ -1410,14 +1414,14 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equalsIgnoreCase("sendhome")) {
 			Player target = World.getWorld().getPlayer(s.substring(9).trim());
 			if (target != null) {
-				if (Rank.hasAbility(target, Rank.DEVELOPER)) {
+				if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
 					player.getActionSender()
 							.sendMessage(
 									"The Intermolecular force of Jet's micropenis stops him from being teleported!");
 					return;
 				}
 				if (Rank.isStaffMember(target)
-						&& !Rank.hasAbility(player, Rank.DEVELOPER)) {
+						&& !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage(
 							"you cannot teleport staff home");
 					return;
@@ -1605,7 +1609,7 @@ public class CommandPacketHandler implements PacketHandler {
 						&& player.getLocation().getY() <= 3392
 						&& player.getLocation().getX() <= 3061 && player
 						.getLocation().getY() >= 3326)
-						|| Rank.hasAbility(player, Rank.DEVELOPER)
+						|| Rank.hasAbility(player, Rank.ADMINISTRATOR)
 						|| player.getName().equalsIgnoreCase("charmed")) {
 					s = s.replace("staff ", "");
 					Player player2 = World.getWorld().getPlayer(s);
@@ -1714,7 +1718,7 @@ public class CommandPacketHandler implements PacketHandler {
 						.substring(withCaps.indexOf(" "), withCaps.indexOf(","))
 						.trim().toLowerCase();
 				Player target = World.getWorld().getPlayer(name);
-				if (Rank.hasAbility(target, Rank.DEVELOPER) && target != player)
+				if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && target != player)
 					return;
 				if (target != null) {
 					String tag = withCaps.substring(withCaps.indexOf(",") + 1)
@@ -1738,7 +1742,7 @@ public class CommandPacketHandler implements PacketHandler {
 			try {
 				Player target = World.getWorld().getPlayer(
 						s.substring(16).trim());
-				if (Rank.hasAbility(target, Rank.DEVELOPER) && target != player)
+				if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && target != player)
 					return;
 				if (target != null) {
 					target.getYelling().setYellTitle("");
@@ -1768,9 +1772,9 @@ public class CommandPacketHandler implements PacketHandler {
 			// player.getLogging().log("Command: " + s);
 			if (Rank.hasAbility(player, Rank.OWNER))
 				this.processOwnerCommands(player, commandStart, s, withCaps, as);
-			if (Rank.hasAbility(player, Rank.ADMINISTRATOR))
-				this.processAdminCommands(player, commandStart, s, withCaps, as);
 			if (Rank.hasAbility(player, Rank.DEVELOPER))
+				this.processAdminCommands(player, commandStart, s, withCaps, as);
+			if (Rank.hasAbility(player, Rank.ADMINISTRATOR))
 				this.processDeveloperCommands(player, commandStart, s,
 						withCaps, as);
 			if (Rank.hasAbility(player, Rank.HEAD_MODERATOR))
@@ -1863,15 +1867,15 @@ public class CommandPacketHandler implements PacketHandler {
 					 * Dev rank & Back
 					 */
 					if (commandStart.equals("rankme")) {
-						if (Rank.hasAbility(player, Rank.DEVELOPER)) {
-							if (Rank.getPrimaryRank(player) == Rank.DEVELOPER)
+						if (Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+							if (Rank.getPrimaryRank(player) == Rank.ADMINISTRATOR)
 								player.setPlayerRank(Rank.setPrimaryRank(
 										player, Rank.PLAYER));
 							player.setPlayerRank(Rank.removeAbility(player,
-									Rank.DEVELOPER));
+									Rank.ADMINISTRATOR));
 						} else
 							player.setPlayerRank(Rank.setPrimaryRank(player,
-									Rank.DEVELOPER));
+									Rank.ADMINISTRATOR));
 					}
 					/**
 					 * Statusesv - just for playing around, shouldn't be harmful
@@ -1968,7 +1972,7 @@ public class CommandPacketHandler implements PacketHandler {
 					return;
 				int counter = 0;
 				s = s.substring(9).toLowerCase();
-				int maxId = Rank.hasAbility(player, Rank.ADMINISTRATOR) ? 20000
+				int maxId = Rank.hasAbility(player, Rank.DEVELOPER) ? 20000
 						: ItemSpawning.MAX_ID;
 				for (int i = 0; i < maxId; i++) {
 					if (ItemDefinition.forId(i) == null)
@@ -2068,7 +2072,7 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 					Player p = World.getWorld()
 							.getPlayer(s.substring(5).trim());
-					if (Rank.hasAbility(p, Rank.DEVELOPER))
+					if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
 						return;
 					if (p != null) {
 						for (Item item : p.getEquipment().toArray()) {
@@ -2093,7 +2097,7 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 					Player p = World.getWorld()
 							.getPlayer(s.substring(8).trim());
-					if (Rank.hasAbility(p, Rank.DEVELOPER))
+					if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
 						return;
 					if (p != null) {
 						for (Item item : p.getInventory().toArray()) {
@@ -2116,7 +2120,7 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 					Player p = World.getWorld()
 							.getPlayer(s.substring(8).trim());
-					if (Rank.hasAbility(p, Rank.DEVELOPER))
+					if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
 						return;
 					if (p != null) {
 						for (int i = 0; i < 6; i++) {

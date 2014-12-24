@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.combat;
 
-import debug.Debugger;
-
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.attack.CorporealBeast;
 import org.hyperion.rs2.model.combat.attack.TormentedDemon;
@@ -55,7 +53,7 @@ public class CombatEntity {
 	public boolean isFrozen() {
 		if(System.currentTimeMillis() < freezeTimer) {
             if(player != null) {
-                if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+                if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                    player.debugMessage("You are frozen for another: " + (freezeTimer - System.currentTimeMillis()) + "MS");
                 }
             }

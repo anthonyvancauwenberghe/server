@@ -939,7 +939,7 @@ public class World {
 				// player.getSession().removeAttribute("player");
 			}
 		});
-        if(!Rank.hasAbility(player, Rank.DEVELOPER) && player.getHighscores().needsUpdate())
+        if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
             getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 	}
 

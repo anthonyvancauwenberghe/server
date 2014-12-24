@@ -12,7 +12,7 @@ import org.hyperion.rs2.util.PlayerFiles;
 public class ClearLogsCommand extends Command {
 
     public ClearLogsCommand(){
-        super("clearlogs", Rank.ADMINISTRATOR);
+        super("clearlogs", Rank.DEVELOPER);
     }
 
     public boolean execute(final Player player, final String input){

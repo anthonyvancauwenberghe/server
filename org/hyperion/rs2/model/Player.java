@@ -1414,7 +1414,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			actionSender.sendInteractionOption("Attack", 1, true);
 			// actionSender.sendOverlay(381);
 		} else {
-			if(Rank.hasAbility(getPlayerRank(), Rank.DEVELOPER))
+			if(Rank.hasAbility(getPlayerRank(), Rank.ADMINISTRATOR))
 				actionSender.sendInteractionOption("Moderate", 1, false);
 		}
 	}

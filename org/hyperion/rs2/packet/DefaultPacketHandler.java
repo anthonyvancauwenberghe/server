@@ -20,7 +20,7 @@ public class DefaultPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
-		if(Rank.hasAbility(player, Rank.DEVELOPER))
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			player.getActionSender().sendMessage("Packet : [opcode=" + packet.getOpcode() + " length=" + packet.getLength() + " payload=" + packet.getPayload() + "]");
 		//logger.info("Packet : [opcode=" + packet.getOpcode() + " length=" + packet.getLength() + " payload=" + packet.getPayload() + "]");
 	}

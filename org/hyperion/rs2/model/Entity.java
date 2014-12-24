@@ -551,7 +551,7 @@ public abstract class Entity {
 	//}
 
 	static {
-		CommandHandler.submit(new Command("getlocalplayers", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("getlocalplayers", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Localplayers: " + player.getLocalPlayers().size());

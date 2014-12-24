@@ -56,7 +56,7 @@ public class HighscoresRequest extends SQLRequest {
 	}
 
 	static {
-		CommandHandler.submit(new Command("saveallhighscores", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("saveallhighscores", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Saving highscores");

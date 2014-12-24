@@ -42,7 +42,7 @@ public class Lottery {
 	}
 
 	static {
-		CommandHandler.submit(new Command("howmanyguesses", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("howmanyguesses", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Counter: " + guessesCounter);

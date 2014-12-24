@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.recolor.Recolor;
 public class UncolorCommand extends Command{
 
     public UncolorCommand(){
-        super("uncolor", Rank.ADMINISTRATOR);
+        super("uncolor", Rank.DEVELOPER);
     }
 
     public boolean execute(final Player player, final String input){

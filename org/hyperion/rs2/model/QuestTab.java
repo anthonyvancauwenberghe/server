@@ -3,9 +3,6 @@ package org.hyperion.rs2.model;
 import java.io.BufferedReader;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
@@ -110,7 +107,7 @@ public class QuestTab {
 	}
 
 	public void sendUptime() {
-		if(Rank.hasAbility(player, Rank.DEVELOPER))
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			player.getActionSender().sendString("@or2@Uptime: @gre@" + Server.getUptime(), getId(0));
 
 	}

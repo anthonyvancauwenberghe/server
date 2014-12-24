@@ -30,7 +30,7 @@ public class RecolorManager {
     }
 
     public int getLimit(){
-        if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
+        if(Rank.hasAbility(player, Rank.DEVELOPER))
             return Integer.MAX_VALUE;
         return player.getPoints().getDonatorPointsBought() / DONATED_AMOUNT_REQUIRED;
     }

@@ -14,12 +14,12 @@ public class RestartServerCommand extends Command {
 	public static final int UPDATE_TIMER = 150;
 
 	public RestartServerCommand() {
-		super("restartserver", Rank.ADMINISTRATOR);
+		super("restartserver", Rank.DEVELOPER);
 	}
 
 	@Override
 	public boolean execute(Player player, String input) {
-		if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME &&  !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+		if(Server.getUptime().millisUptime() < MINIMUM_MINUTES_UPTIME &&  !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			player.getActionSender().sendMessage("Minimum uptime hasn't been reached yet.");
 			return false;
 		}

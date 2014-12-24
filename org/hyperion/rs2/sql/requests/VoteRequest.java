@@ -102,7 +102,7 @@ public class VoteRequest extends SQLRequest {
      */
     /*@Override
 	public void process(SQLConnection sql) {
-        if(Rank.hasAbility(player, Rank.DEVELOPER))
+        if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
             player.getActionSender().sendMessage("processing vote before try");
 		long currentTime = System.currentTimeMillis();
 		try {
@@ -124,7 +124,7 @@ public class VoteRequest extends SQLRequest {
 				//Comment when not betaing
 
 				//can't believe this hasn't been commented out yet guess no owner/devs vote :-(
-				//if(Rank.hasAbility(player, Rank.DEVELOPER))
+				//if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					//waiting = Combat.random(50);
 				if(waiting == 0) {
 					player.getActionSender().sendMessage(
@@ -141,7 +141,7 @@ public class VoteRequest extends SQLRequest {
                     waiting=5;
                 }
                 if(player.getFirstVoteTime() < 1 || currentTime - player.getFirstVoteTime() > Time.ONE_HOUR * 12){
-                    if(Rank.hasAbility(player, Rank.DEVELOPER))
+                    if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
                         player.getActionSender().sendMessage("[voting] resetting first vote time + vote count to 0");
                     player.setFirstVoteTime(currentTime);
                     player.setVoteCount(0);
@@ -179,11 +179,11 @@ public class VoteRequest extends SQLRequest {
                 sql.query("DELETE FROM waitingVotes WHERE fakeUsername = realUsername AND timestamp <= date_sub(now(), interval 12 hour)");
 				//sql.query("UPDATE " + VOTES_TABLE + " SET claimed = claimed + waiting, waiting = 0 WHERE name = '" + player.getName().toLowerCase() + "'");
 			}else{
-                if(Rank.hasAbility(player, Rank.DEVELOPER))
+                if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
                     player.getActionSender().sendMessage("[voting] rs.next returned false");
             }
 		} catch(Exception e) {
-            if(Rank.hasAbility(player, Rank.DEVELOPER))
+            if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
                 player.getActionSender().sendMessage("Error voting: " + e);
 			e.printStackTrace();
 		}

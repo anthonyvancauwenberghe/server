@@ -16,7 +16,7 @@ import java.util.Set;
 public class ViewLogStatsCommand extends Command {
 
     public ViewLogStatsCommand(){
-        super("viewlogstats", Rank.ADMINISTRATOR);
+        super("viewlogstats", Rank.DEVELOPER);
     }
 
     public boolean execute(final Player player, final String input){

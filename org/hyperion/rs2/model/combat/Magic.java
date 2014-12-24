@@ -502,7 +502,7 @@ public class Magic {
 		}
 		if((ContentEntity.getItemAmount(player, 9075) < 4
 				|| ContentEntity.getItemAmount(player, 557) < 10
-				|| ContentEntity.getItemAmount(player, 560) < 2) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+				|| ContentEntity.getItemAmount(player, 560) < 2) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			ContentEntity.sendMessage(player,
 					"You need more runes to cast Vengeance.");
 			return;
@@ -512,7 +512,7 @@ public class Magic {
 					"You already have Vengeance casted!.");
 			return;
 		}
-		if(!(System.currentTimeMillis() > player.lastVeng + BountyPerkHandler.getVengTimer(player)) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+		if(!(System.currentTimeMillis() > player.lastVeng + BountyPerkHandler.getVengTimer(player)) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			player.getActionSender().sendMessage(
 					"You can only cast Vengeance every" + (BountyPerkHandler.getVengTimer(player)/1000)+" seconds.");
 			return;
@@ -697,7 +697,7 @@ public class Magic {
 	public static int hasRunes(CombatEntity c, Spell spell) {
         if(c.getEntity() instanceof Player) {
            Player player = (Player)c.getEntity();
-           if(Rank.hasAbility(player, Rank.DEVELOPER))
+           if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
                return -1;
         }
 		if(spell.getFirstRune() > 0 && spell.getFirstAmount() > 0)

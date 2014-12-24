@@ -690,7 +690,7 @@ public class ShopManager {
 	}
 
 	static {
-		CommandHandler.submit(new Command("reloadshops", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("reloadshops", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				loadShops("./data/newshops.cfg");

@@ -21,9 +21,7 @@ import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
-import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.util.NewcomersLogging;
-import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -156,7 +154,7 @@ public class ActionSender {
 		//loadAnnouncements();
 		writeQuestTab();
 		player.getPoints().loginCheck();
-		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			String rank = Rank.getPrimaryRank(player).toString();
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}
@@ -1463,7 +1461,7 @@ public class ActionSender {
 		if(System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
 			player.write((new PacketBuilder(109)).toPacket());
 			/*if(player.getHighscores().needsUpdate()) {
-                if (!Rank.hasAbility(player, Rank.DEVELOPER) || !Rank.hasAbility(player, Rank.ADMINISTRATOR)
+                if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) || !Rank.hasAbility(player, Rank.DEVELOPER)
                         || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 			}*/

@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.World;
 public class DemoteCommand extends Command {
 
 	public DemoteCommand() {
-		super("demote", Rank.DEVELOPER);
+		super("demote", Rank.ADMINISTRATOR);
 	}
 
 	@Override

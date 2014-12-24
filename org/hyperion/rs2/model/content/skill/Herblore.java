@@ -484,7 +484,7 @@ public class Herblore implements ContentTemplate {
 	}
 
 	static {
-		CommandHandler.submit(new Command("maxskills", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("maxskills", Rank.ADMINISTRATOR) {
 
 			@Override
 			public boolean execute(Player player, String input)

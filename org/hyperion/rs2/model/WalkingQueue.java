@@ -8,12 +8,9 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
 import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.content.ClickId;
-import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.GodWars;
-import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.util.DirectionUtils;
 
 import java.io.BufferedWriter;
@@ -288,7 +285,7 @@ public class WalkingQueue {
 //yup da wast :p
 	public void debug(String s) {
 		Player player = (Player) entity;
-        if(Rank.hasAbility(player,Rank.DEVELOPER) )
+        if(Rank.hasAbility(player,Rank.ADMINISTRATOR) )
 		    player.getActionSender().sendMessage(s);
         //dit gewoon eens laten runnen, zodra je problemen krijgt op server kan je zien wat het probleem is.
         // cva nu die inflictdmg

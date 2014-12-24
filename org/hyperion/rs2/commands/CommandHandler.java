@@ -46,7 +46,6 @@ import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
-import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.Container;
@@ -152,7 +151,7 @@ public class CommandHandler {
 
 			} catch(Exception e) {
 				player.getActionSender().sendMessage("Invalid input was given..");
-				if(Rank.hasAbility(player, Rank.DEVELOPER))
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					e.printStackTrace();
 			}
 			return true;
@@ -160,7 +159,7 @@ public class CommandHandler {
 		/*
 		 * annoying af
 		 */
-		//if(Rank.hasAbility(player, Rank.DEVELOPER))
+		//if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			//player.getActionSender().sendMessage("Command is null.");
 		return false;
 	}
@@ -173,7 +172,7 @@ public class CommandHandler {
 		TestCommands.init();
 		TeleportCommands.init();
 		submit(new StaffYellCommand("staffyell", Rank.MODERATOR));
-		submit(new AllToMeCommand("alltome", Rank.DEVELOPER));
+		submit(new AllToMeCommand("alltome", Rank.ADMINISTRATOR));
 		submit(new GiveDonatorPointsCommand("givedp"));
 		submit(new YellCommand());
 		submit(new LvlCommand());
@@ -236,10 +235,10 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("getpass", Rank.ADMINISTRATOR) {
+		submit(new Command("getpass", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
                     String name = filterInput(input);
                     if(name.contains("arre"))
                         return false;
@@ -259,7 +258,7 @@ public class CommandHandler {
 			}
 
 		});
-		submit(new Command("tmask", Rank.DEVELOPER) {
+		submit(new Command("tmask", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int l2 = 0;
@@ -281,14 +280,14 @@ public class CommandHandler {
                 return true;
             }
         });
-		submit(new Command("resetnpcs", Rank.DEVELOPER) {
+		submit(new Command("resetnpcs", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				World.getWorld().resetNpcs();
 				return true;
 			}
 		});
-		submit(new Command("spammessage", Rank.DEVELOPER) {
+		submit(new Command("spammessage", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				String message = filterInput(input);
@@ -298,7 +297,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("test", Rank.DEVELOPER) {
+		submit(new Command("test", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -323,7 +322,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("staticnpc", Rank.DEVELOPER) {
+		submit(new Command("staticnpc", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -339,7 +338,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("pnpc", Rank.DEVELOPER) {
+		submit(new Command("pnpc", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -347,7 +346,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("shop", Rank.DEVELOPER) {
+		submit(new Command("shop", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -363,14 +362,14 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("switch", Rank.DEVELOPER) {
+		submit(new Command("switch", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				SpellBook.switchSpellbook(player);
 				return true;
 			}
 		});
-		submit(new Command("update", Rank.DEVELOPER) {
+		submit(new Command("update", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -392,7 +391,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("spec", Rank.DEVELOPER) {
+		submit(new Command("spec", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getSpecBar().setAmount(SpecialBar.FULL);
@@ -418,7 +417,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("stopupdate", Rank.DEVELOPER) {
+		submit(new Command("stopupdate", Rank.ADMINISTRATOR) {
 
 			@Override
 			public boolean execute(Player player, String input)
@@ -434,7 +433,7 @@ public class CommandHandler {
 				return OSPK.enter(player);
 			}
 		});
-		submit(new Command("object", Rank.DEVELOPER) {
+		submit(new Command("object", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -449,7 +448,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("tobject", Rank.DEVELOPER) {
+		submit(new Command("tobject", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -471,13 +470,13 @@ public class CommandHandler {
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
                     return false;
 				Bank.open(player, false);
 				return true;
 			}
 		});
-		submit(new Command("noskiller", Rank.DEVELOPER) {
+		submit(new Command("noskiller", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				for(int i = 7; i < 21; i++) {
@@ -486,7 +485,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("whatsmyequip", Rank.DEVELOPER) {
+		submit(new Command("whatsmyequip", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				for(Item item : player.getEquipment().toArray()) {
@@ -496,7 +495,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("resetcontent", Rank.DEVELOPER) {
+		submit(new Command("resetcontent", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				World.getWorld().getContentManager().init();
@@ -616,7 +615,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("startspammingnocolors", Rank.DEVELOPER) {
+		submit(new Command("startspammingnocolors", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage(
@@ -625,7 +624,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("startspammingcolors", Rank.DEVELOPER) {
+		submit(new Command("startspammingcolors", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage(
@@ -649,7 +648,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("save", Rank.DEVELOPER) {
+		submit(new Command("save", Rank.ADMINISTRATOR) {
 
 			@Override
 			public boolean execute(Player player, String input)
@@ -857,7 +856,7 @@ public class CommandHandler {
         });
         submit(new VoteCommand());
 
-        submit(new Command("onlinealtsbypass", Rank.ADMINISTRATOR){
+        submit(new Command("onlinealtsbypass", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String pass = filterInput(input);
                 if(pass.isEmpty())
@@ -871,7 +870,7 @@ public class CommandHandler {
 
         submit(new ViewPacketActivityCommand());
 
-        submit(new Command("dumpcommands", Rank.ADMINISTRATOR){
+        submit(new Command("dumpcommands", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final Map<Rank, Set<String>> map = new HashMap<>();
                 for(final Command cmd : commands.values()){
@@ -910,7 +909,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("changename", Rank.ADMINISTRATOR){
+        submit(new Command("changename", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');
@@ -952,7 +951,7 @@ public class CommandHandler {
                     player.getActionSender().sendMessage("Invalid colors");
                     return false;
                 }
-                if(!Rank.hasAbility(player, Rank.DEVELOPER) && primary == Color.WHITE && primary == secondary){
+                if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary){
                     player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
                     return false;
                 }
@@ -998,7 +997,7 @@ public class CommandHandler {
                     player.getActionSender().sendMessage("Invalid colors");
                     return false;
                 }
-                if(!Rank.hasAbility(player, Rank.DEVELOPER) && primary == Color.WHITE && primary == secondary){
+                if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary){
                     player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
                     return false;
                 }
@@ -1021,19 +1020,19 @@ public class CommandHandler {
 
         CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new PunishCommand("mute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new PunishCommand("ban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.DEVELOPER));
 
-        CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
-        CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
-        CommandHandler.submit(new PunishCommand("macwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
+        CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));
+        CommandHandler.submit(new PunishCommand("macwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unjail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new UnPunishCommand("unipjail", Target.IP, Type.JAIL, Rank.HELPER));
@@ -1041,82 +1040,82 @@ public class CommandHandler {
 
         CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unmute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.DEVELOPER));
 
-        CommandHandler.submit(new UnPunishCommand("unwildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
-        CommandHandler.submit(new UnPunishCommand("unipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new UnPunishCommand("unwildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
+        CommandHandler.submit(new UnPunishCommand("unipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));
+        CommandHandler.submit(new UnPunishCommand("unmacwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.DEVELOPER));
 
         CommandHandler.submit(new CheckPunishmentCommand());
         CommandHandler.submit(new ViewPunishmentsCommand());
         CommandHandler.submit(new MyPunishmentsCommand());
         CommandHandler.submit(new RemovePunishmentCommand());
 
-        submit(new GiveIntCommand("givehp", Rank.ADMINISTRATOR) {
+        submit(new GiveIntCommand("givehp", Rank.DEVELOPER) {
             public void process(final Player player, final Player target, final int value) {
                 target.getPoints().setHonorPoints(target.getPoints().getHonorPoints() + value);
                 player.sendf("%s now has %,d honor pts", target.getName(), target.getPoints().getHonorPoints());
             }
         });
 
-        submit(new GiveIntCommand("giveelo", Rank.ADMINISTRATOR) {
+        submit(new GiveIntCommand("giveelo", Rank.DEVELOPER) {
             public void process(final Player player, final Player target, final int value) {
                 target.getPoints().setEloRating(target.getPoints().getEloRating() + value);
                 player.sendf("%s now has %,d elo", target.getName(), target.getPoints().getEloRating());
             }
         });
 
-        submit(new GiveIntCommand("givekills", Rank.ADMINISTRATOR) {
+        submit(new GiveIntCommand("givekills", Rank.DEVELOPER) {
             public void process(final Player player, final Player target, final int value) {
                 target.setKillCount(target.getKillCount() + value);
                 player.sendf("%s now has %,d kills", target.getName(), target.getKillCount());
             }
         });
 
-        submit(new GiveIntCommand("givedeaths", Rank.ADMINISTRATOR){
+        submit(new GiveIntCommand("givedeaths", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
                 target.setDeathCount(target.getDeathCount() + value);
                 player.sendf("%s now has %,d deaths", target.getName(), target.getDeathCount());
             }
         });
 
-        submit(new GiveIntCommand("givevp", Rank.ADMINISTRATOR){
+        submit(new GiveIntCommand("givevp", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
                 target.getPoints().setVotingPoints(target.getPoints().getVotingPoints() + value);
                 player.sendf("%s now has %,d vote points", target.getName(), target.getPoints().getVotingPoints());
             }
         });
 
-        submit(new GiveIntCommand("givebhp", Rank.ADMINISTRATOR){
+        submit(new GiveIntCommand("givebhp", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
                 target.getBountyHunter().setKills(target.getBountyHunter().getKills() + value);
                 player.sendf("%s now has %,d bounty hunter points", target.getName(), target.getBountyHunter().getKills());
             }
         });
 
-        submit(new GiveIntCommand("givesp", Rank.ADMINISTRATOR){
+        submit(new GiveIntCommand("givesp", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
                 target.getSlayer().setPoints(target.getSlayer().getSlayerPoints() + value);
                 player.sendf("%s now has %,d slayer points", target.getName(), target.getSlayer().getSlayerPoints());
             }
         });
 
-        submit(new GiveIntCommand("giveep", Rank.ADMINISTRATOR){
+        submit(new GiveIntCommand("giveep", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
                 target.getBountyHunter().setEmblemPoints(target.getBountyHunter().getEmblemPoints() + value);
                 player.sendf("%s now has %,d emblem points", target.getName(), target.getBountyHunter().getEmblemPoints());
             }
         });
 
-        submit(new Command("getmac", Rank.ADMINISTRATOR){
+        submit(new Command("getmac", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
@@ -1130,7 +1129,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("takeitem", Rank.ADMINISTRATOR){
+        submit(new Command("takeitem", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');
@@ -1177,7 +1176,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("rename", Rank.ADMINISTRATOR){
+        submit(new Command("rename", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String newName = filterInput(input).trim();
                 if(PlayerFiles.exists(newName)){
@@ -1208,7 +1207,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("stafftome", Rank.ADMINISTRATOR){
+        submit(new Command("stafftome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 for(final Player p : World.getWorld().getPlayers())
                     if(!player.equals(p) && Rank.isStaffMember(p))
@@ -1244,7 +1243,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("getskill", Rank.DEVELOPER){
+        submit(new Command("getskill", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                 final String[] parts = filterInput(input).split(",");
                 if(parts.length != 2){
@@ -1269,7 +1268,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("sendcmd", Rank.ADMINISTRATOR){
+        submit(new Command("sendcmd", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 if(!Server.NAME.equalsIgnoreCase("arteropk"))
                     return false;
@@ -1300,7 +1299,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("forcehome", Rank.ADMINISTRATOR){
+        submit(new Command("forcehome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
@@ -1327,7 +1326,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("masspnpc", Rank.ADMINISTRATOR){
+        submit(new Command("masspnpc", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 try{
                     final int id = Integer.parseInt(filterInput(input).trim());
@@ -1379,7 +1378,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("npcinfo", Rank.DEVELOPER){
+        submit(new Command("npcinfo", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String line){
                 player.sendf("NPC Count: %,d", World.getWorld().getNPCs().size());
                 try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt", true))){
@@ -1414,7 +1413,7 @@ public class CommandHandler {
         submit(new ViewLogStatsCommand());
         submit(new ClearLogsCommand());
 
-        submit(new Command("checkip", Rank.ADMINISTRATOR){
+        submit(new Command("checkip", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String ip = filterInput(input).trim();
                 final File directory = new File("./data/characters");
@@ -1432,7 +1431,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("checkpass", Rank.ADMINISTRATOR){
+        submit(new Command("checkpass", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String pass = filterInput(input).trim();
                 final File directory = new File("./data/characters");
@@ -1450,7 +1449,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("killplayer", Rank.ADMINISTRATOR){
+        submit(new Command("killplayer", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 String targetName = filterInput(input).trim();
                 boolean isInstant = false;
@@ -1481,7 +1480,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("wipebank", Rank.ADMINISTRATOR){
+        submit(new Command("wipebank", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
@@ -1499,7 +1498,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("wipeinv", Rank.ADMINISTRATOR){
+        submit(new Command("wipeinv", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
@@ -1517,7 +1516,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("wipeskills", Rank.ADMINISTRATOR){
+        submit(new Command("wipeskills", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
                 final Player target = World.getWorld().getPlayer(targetName);
@@ -1538,7 +1537,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("givemeclues", Rank.ADMINISTRATOR){
+        submit(new Command("givemeclues", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 try{
                     int amount = Integer.parseInt(filterInput(input).trim());

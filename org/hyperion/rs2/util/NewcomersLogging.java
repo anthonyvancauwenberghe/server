@@ -166,7 +166,7 @@ public class NewcomersLogging {
 		/**
 		 * Adds the command to the command handler
 		 */
-		CommandHandler.submit(new Command("howmanynewcomers", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("howmanynewcomers", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Newcomers: " + getLogging().getCounter());

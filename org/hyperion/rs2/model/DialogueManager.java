@@ -959,7 +959,7 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(1, 150);
 				break;
 			case 150:
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendInterfaceInventory(5292, 5063);
 					player.getActionSender().sendUpdateItems(5382, Dicing.getGambledItems());
 				} else {

@@ -5,7 +5,6 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponManager;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
 import org.hyperion.rs2.model.container.impl.WeaponAnimManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -515,7 +514,7 @@ public class ItemDefinition {
 			}
 		});
 
-		CommandHandler.submit(new Command("unstack", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("unstack", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				try {
@@ -535,7 +534,7 @@ public class ItemDefinition {
 			}
 		});
 
-		CommandHandler.submit(new Command("stack", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("stack", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				try {
@@ -555,7 +554,7 @@ public class ItemDefinition {
 			}
 		});
 
-		CommandHandler.submit(new Command("reloaditems", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("reloaditems", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				ItemDefinition.loadItems();

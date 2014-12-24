@@ -46,7 +46,7 @@ public class ViewPacketActivityCommand extends Command {
     }
 
     public ViewPacketActivityCommand(){
-        super("viewpacketactivity", Rank.DEVELOPER);
+        super("viewpacketactivity", Rank.ADMINISTRATOR);
     }
 
     public boolean execute(final Player player, final String input){

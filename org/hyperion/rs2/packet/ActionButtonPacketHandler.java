@@ -26,7 +26,7 @@ import java.util.LinkedList;
 public class ActionButtonPacketHandler implements PacketHandler {
 
 	static {
-		CommandHandler.submit(new Command("doaction", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("doaction", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -853,12 +853,12 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			case 19136:
 			case 152:
 				// player.getWalkingQueue().setRunningToggled(false);
-				if(player.getWalkingQueue().isRunning() && !Rank.hasAbility(player, Rank.DEVELOPER))
+				if(player.getWalkingQueue().isRunning() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					player.getWalkingQueue().setRunningToggled(false);
 				else if(!player.getWalkingQueue().isRunning()){
 					player.getWalkingQueue().setRunningToggled(true);
 				}
-				if(Rank.hasAbility(player, Rank.DEVELOPER) && player.getCombat().getFamiliar() != null) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getCombat().getFamiliar() != null) {
 					SummoningSpecial.preformSpecial(player, 
 							SummoningSpecial.getCorrectSpecial(player.getCombat().getFamiliar().getDefinition().getId()));
 				}
@@ -954,13 +954,13 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
 			case 151:
 				player.autoRetailate = ! player.autoRetailate;
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage("Auto retaliate if now: " + player.autoRetailate);
 				}
 				break;
 			case 150:
 				player.autoRetailate = ! player.autoRetailate;
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage("Auto retaliate if now: " + player.autoRetailate);
 				}
 				break;

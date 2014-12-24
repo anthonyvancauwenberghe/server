@@ -224,7 +224,7 @@ public class PlayerSaving {
 	public boolean save(Player player) {
 		//saveSQL(player);
 		//return true;
-		if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			player.getActionSender().sendMessage("Saving your account");
 		}
 		try {
@@ -616,11 +616,11 @@ public class PlayerSaving {
 						if(value == 1)
 							rank = Rank.MODERATOR;
 						if(value == 2)
-							rank = Rank.ADMINISTRATOR;
+							rank = Rank.DEVELOPER;
 						if(value == 3)
 							rank = Rank.SUPER_DONATOR;
 						if(value == 4)
-							rank = Rank.DEVELOPER;
+							rank = Rank.ADMINISTRATOR;
 						if(rank != null) {
 							if(primary)
 								player.setPlayerRank(Rank.setPrimaryRank(player, rank));

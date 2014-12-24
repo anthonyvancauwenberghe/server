@@ -162,7 +162,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	static {
 		CommandHandler
-				.submit(new Command("dumpconnlogs", Rank.DEVELOPER) {
+				.submit(new Command("dumpconnlogs", Rank.ADMINISTRATOR) {
 					@Override
 					public boolean execute(Player player, String input) {
 						debugger.dumpLogs();

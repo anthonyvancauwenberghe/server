@@ -96,7 +96,7 @@ public class ChatPacketHandler implements PacketHandler {
 	}
 
 	static {
-		CommandHandler.submit(new Command("chatdebug", Rank.ADMINISTRATOR) {
+		CommandHandler.submit(new Command("chatdebug", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				debug = ! debug;

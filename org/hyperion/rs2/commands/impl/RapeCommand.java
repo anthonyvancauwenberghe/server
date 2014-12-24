@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.World;
 public class RapeCommand extends Command {
 
 	public RapeCommand() {
-		super("darape", Rank.DEVELOPER);
+		super("darape", Rank.ADMINISTRATOR);
 	}
 
 	@Override

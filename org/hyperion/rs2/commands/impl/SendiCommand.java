@@ -23,7 +23,7 @@ public class SendiCommand extends Command {
 	}
 
 	public SendiCommand() {
-		super("sendi", Rank.DEVELOPER);
+		super("sendi", Rank.ADMINISTRATOR);
 	}
 
 	@Override

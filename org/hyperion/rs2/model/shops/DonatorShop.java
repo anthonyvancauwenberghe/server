@@ -345,6 +345,12 @@ public class DonatorShop extends Shop {
 		if(FightPits.rewardItems.contains(itemId))
 			return 1000;
 		switch(itemId) {
+
+            case 18739:
+            case 18740:
+                return 2000;
+            case 17039:
+                return 5000;
 			case 16691:  //novite full helm
 			case 17239:  //novite platebody
 			case 16669:  //novite platelegs

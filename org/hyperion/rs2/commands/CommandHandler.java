@@ -172,7 +172,7 @@ public class CommandHandler {
 		TestCommands.init();
 		TeleportCommands.init();
 		submit(new StaffYellCommand("staffyell", Rank.MODERATOR));
-		submit(new AllToMeCommand("alltome", Rank.ADMINISTRATOR));
+		submit(new AllToMeCommand("alltome", Rank.DEVELOPER));
 		submit(new GiveDonatorPointsCommand("givedp"));
 		submit(new YellCommand());
 		submit(new LvlCommand());
@@ -280,14 +280,14 @@ public class CommandHandler {
                 return true;
             }
         });
-		submit(new Command("resetnpcs", Rank.ADMINISTRATOR) {
+		submit(new Command("resetnpcs", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				World.getWorld().resetNpcs();
 				return true;
 			}
 		});
-		submit(new Command("spammessage", Rank.ADMINISTRATOR) {
+		submit(new Command("spammessage", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				String message = filterInput(input);
@@ -322,7 +322,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("staticnpc", Rank.ADMINISTRATOR) {
+		submit(new Command("staticnpc", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -369,7 +369,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("update", Rank.ADMINISTRATOR) {
+		submit(new Command("update", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
@@ -433,7 +433,7 @@ public class CommandHandler {
 				return OSPK.enter(player);
 			}
 		});
-		submit(new Command("object", Rank.ADMINISTRATOR) {
+		submit(new Command("object", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -495,7 +495,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("resetcontent", Rank.ADMINISTRATOR) {
+		submit(new Command("resetcontent", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				World.getWorld().getContentManager().init();

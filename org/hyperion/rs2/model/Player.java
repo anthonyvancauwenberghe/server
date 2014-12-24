@@ -1498,7 +1498,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		boolean npc = source instanceof NPC;
 		if(npc) {
 			NPC n = (NPC)source;
-			if(n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE))
+			if(n.getDefinition().getId() == 50 || ( n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE)))
 				npc = false;
 		}
         /** Ring of life */

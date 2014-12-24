@@ -772,7 +772,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
-            String r = findCharString(s.substring(7).trim(), "Rank")
+            String r = findCharString(s.substring(8).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
             player.sendMessage(r);
             try {

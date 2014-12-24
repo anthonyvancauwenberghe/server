@@ -1,10 +1,12 @@
 package org.hyperion.rs2.model.combat.attack;
 
+import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Attack;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Equipment;
 
@@ -34,22 +36,24 @@ public class KBD implements Attack {
 				//melee
 				n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
-				Combat.npcAttack(n, attack, Combat.random(40), 500, 0);
-			} else if(attackId >= 0 && attackId < 2) {
+				Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(40), Constants.MELEE, 40), 500, Constants.MELEE);
+			} else if(attackId <= 1) {
 				//posison
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 1000);
-				Combat.npcAttack(n, attack, 12, 1000, 1);
+				Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(37), Constants.RANGE, 37), 1000, Constants.RANGE);
 				if(n.getDefinition().getId() == 50)
 					Combat.poisonEntity(attack);
 				Combat.npcRangeAttack(n, attack, 394, 40, false);
-			} else if(attackId >= 3 && attackId <= 4) {
+			} else if(attackId > 1 && attackId <= 4) {
 				//ice freeze
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 1800);
-				Combat.npcAttack(n, attack, Combat.random(45), 1000, 1);
-				if(n.getDefinition().getId() == 50)
-					attack.setFreezeTimer(20000);
+				Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(45), Constants.MAGE, 45), 1000, Constants.MAGE);
+				if(n.getDefinition().getId() == 50 && Combat.random(2) == 1) {
+                    if(attack.canBeFrozen())
+					    attack.setFreezeTimer(20000);
+                }
 				Combat.npcRangeAttack(n, attack, 396, 40, false);
 			} else {
 				//firebreath

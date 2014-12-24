@@ -40,7 +40,7 @@ public class KBD implements Attack {
 			} else if(attackId <= 1) {
 				//posison
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 1000);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
 				Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(37), Constants.RANGE, 37), 1000, Constants.RANGE);
 				if(n.getDefinition().getId() == 50)
 					Combat.poisonEntity(attack);

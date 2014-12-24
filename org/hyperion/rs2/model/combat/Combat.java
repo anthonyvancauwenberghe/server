@@ -1209,7 +1209,7 @@ public class Combat {
 		int distance = combatEntity.getEntity().getLocation().distance(attack.getEntity().getLocation());
 		if(distance > 1) {
 			//System.out.println("Distance check can atk " + distance);
-			return ! WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
+			return WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
 		} else {
 			//System.out.println("Pos check can atk");
 			return WorldMap.checkPos(attack.getEntity().getLocation().getZ(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), attack.getEntity().getLocation().getX(), attack.getEntity().getLocation().getY(), 1);

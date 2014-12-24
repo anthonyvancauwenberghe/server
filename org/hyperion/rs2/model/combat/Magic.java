@@ -117,7 +117,7 @@ public class Magic {
 			attacker.getPlayer().getActionSender().sendMessage(message);
 			return 0;
 		}
-        if(Combat.canAtkDis(attacker, opp)) {
+        if(!Combat.canAtkDis(attacker, opp)) {
             return 0;
         }
 

@@ -104,6 +104,15 @@ public class ItemSpawning {
             player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
             return false;
         }
+        if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
+                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711)) {
+            player.sendMessage("It's too hot in here to do that!");
+            return false;
+        }
+        if(player.getLastAttack().timeSinceLastAttack() < 5000) {
+            player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
+            return false;
+        }
         if(FightPits.inPits(player))
             return false;
         for(final SpecialArea area : SpecialAreaHolder.getAreas())

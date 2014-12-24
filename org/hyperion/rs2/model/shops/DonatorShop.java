@@ -180,6 +180,12 @@ public class DonatorShop extends Shop {
 		case 15347: //ardougne cloak 2
 			return 3500;
 
+            case 18739:
+            case 18740:
+                return 2000;
+            case 17039:
+                return 5000;
+
 
 		case 17341:  //novite kiteshield
 		case 16339:  //novite boots

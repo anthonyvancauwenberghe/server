@@ -46,7 +46,7 @@ public class KBD implements Attack {
 			} else if(attackId >= 3 && attackId <= 4) {
 				//ice freeze
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 1800);
 				Combat.npcAttack(n, attack, Combat.random(45), 1000, 1);
 				if(n.getDefinition().getId() == 50)
 					attack.setFreezeTimer(20000);
@@ -54,17 +54,17 @@ public class KBD implements Attack {
 			} else {
 				//firebreath
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
+				n.cE.predictedAtk = (System.currentTimeMillis() + 1800);
 
 				boolean antiFire = (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000) && attack.getPlayer().superAntiFire;
-                    if (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000 && attack.getPlayer().superAntiFire)
+                if (System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000 && attack.getPlayer().superAntiFire) {
                         Combat.npcAttack(n, attack.getOpponent(), 0, 1000, 3);
-				else if(attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null && (attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 1540 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11283 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11284))
-					if(System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000)
+                } else if(attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null && (attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 1540 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11283 || attack.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD).getId() == 11284)) {
+					if(System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000) {
 						Combat.npcAttack(n, attack, 0, 1000, 3);
-					else
+                    } else
 						Combat.npcAttack(n, attack, Combat.random(10), 1000, 3);
-				else if(System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000)
+                } else if(System.currentTimeMillis() - attack.getPlayer().antiFireTimer < 360000)
 					Combat.npcAttack(n, attack, Combat.random(10), 1000, 3);
 				else
 					Combat.npcAttack(n, attack, Combat.random(60), 1000, 3);

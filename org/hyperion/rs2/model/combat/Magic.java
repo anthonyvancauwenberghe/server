@@ -117,6 +117,10 @@ public class Magic {
 			attacker.getPlayer().getActionSender().sendMessage(message);
 			return 0;
 		}
+        if(!Combat.canAtkDis(attacker, opp)) {
+            return 0;
+        }
+
         if (opp.getEntity() instanceof NPC) {
             String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
             for (String familiarName : FAMILIARS)

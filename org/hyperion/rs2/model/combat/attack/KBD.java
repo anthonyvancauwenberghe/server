@@ -30,12 +30,12 @@ public class KBD implements Attack {
 				395 = KBD = white projectile
 				396 = KBD = blue projectile
 			 */
-			if(attackId > 6 && distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
+			if(attackId > 4 && distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 				//melee
 				n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
-				Combat.npcAttack(n, attack, Combat.random(35), 500, 0);
-			} else if(attackId == 0) {
+				Combat.npcAttack(n, attack, Combat.random(40), 500, 0);
+			} else if(attackId >= 0 && attackId < 2) {
 				//posison
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 1000);
@@ -43,7 +43,7 @@ public class KBD implements Attack {
 				if(n.getDefinition().getId() == 50)
 					Combat.poisonEntity(attack);
 				Combat.npcRangeAttack(n, attack, 394, 40, false);
-			} else if(attackId == 1) {
+			} else if(attackId >= 3 && attackId <= 4) {
 				//ice freeze
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2000);

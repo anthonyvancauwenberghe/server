@@ -4,6 +4,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.summoning.AbstractSummoningSpecial;
 
@@ -50,7 +51,7 @@ public class SteelTitanSpecial extends AbstractSummoningSpecial {
 		}
 		World.getWorld().submit(new Event(800) {
 			int i = 1;
-			int damage = (int) (Math.random() * 30);
+			int damage = CombatCalculation.getCalculatedDamage(ce.getOpponent().getEntity(), ce.getEntity(), (int) (Math.random() * 30), Constants.RANGE, 30);
 
 			public void execute() {
 				try {

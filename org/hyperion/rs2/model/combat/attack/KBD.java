@@ -29,13 +29,8 @@ public class KBD implements Attack {
             n.getDefinition().getBonus()[3] = 400;
 			int attackId = Combat.random(9);
 
-            final Set<Player> playerSet = new TreeSet<>();
-            playerSet.addAll(attack.getEntity().getRegion().getPlayers());
-            if(attack.getEntity() instanceof Player) {
-                playerSet.add(attack.getPlayer());
-            }
 
-            for(final Player p : playerSet) {
+            for(final Player p : attack.getEntity().getRegion().getPlayers()) {
                 try {
 	        /*
 			 * 

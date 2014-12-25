@@ -32,6 +32,7 @@ public class KBD implements Attack {
             playerSet.addAll(attack.getEntity().getLocalPlayers());
             attack._getPlayer().ifPresent(playerSet::add);
             for(final Player p : playerSet) {
+                try {
 	        /*
 			 * 
 			 * 393 = KBD = red projectile
@@ -81,6 +82,9 @@ public class KBD implements Attack {
 					    Combat.npcAttack(n, p.cE, Combat.random(60), 1000, 3);
 				    Combat.npcRangeAttack(n, p.cE, 393, 40, false);
 			    }
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
 
 			return 5;

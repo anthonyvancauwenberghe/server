@@ -43,8 +43,8 @@ public class WalkingPacketHandler implements PacketHandler {
 		if(player.isDead())
 			return;
 		if(! player.cE.canMove()) {
-			if(player.isFollowing != null && packet.getOpcode() != 99)
-				player.getActionSender().sendMessage("You are currently frozen.");
+			if(player.isFollowing == null && packet.getOpcode() != 99)
+				player.getActionSender().sendMessage("A magical force stops you from moving!");
 			return;
 		}
 		if(player.cE.getAttackers().size() > 1 && System.currentTimeMillis() - player.cE.lastHit > 10000)

@@ -51,6 +51,7 @@ import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -470,7 +471,7 @@ public class CommandHandler {
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
+                if(ItemSpawning.canSpawn(player) && !Rank.hasAbility(player, Rank.DEVELOPER))
                     return false;
 				Bank.open(player, false);
 				return true;

@@ -25,7 +25,7 @@ public class KBD implements Attack {
             n.getDefinition().getBonus()[4] = 400;
             n.getDefinition().getBonus()[3] = 400;
 			int attackId = Combat.random(9);
-            for(final Player p : attack.getEntity().getRegion().getPlayers()) {
+            for(final Player p : attack.getEntity().getLocalPlayers()) {
 	        /*
 			 * 
 			 * 393 = KBD = red projectile

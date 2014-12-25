@@ -20,7 +20,6 @@ public class KBD implements Attack {
 	}
 
 	public int handleAttack(NPC n, CombatEntity attack) {
-        System.out.println("Hitting block 1");
 		int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 		if(distance < (7 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
@@ -29,12 +28,12 @@ public class KBD implements Attack {
             n.getDefinition().getBonus()[4] = 400;
             n.getDefinition().getBonus()[3] = 400;
 			int attackId = Combat.random(9);
-            System.out.println("Hitting block 2");
 
             final Set<Player> playerSet = new TreeSet<>();
             playerSet.addAll(attack.getEntity().getLocalPlayers());
-            attack._getPlayer().ifPresent(playerSet::add);
-            System.out.println("Hitting block 3");
+            if(attack.getEntity() instanceof Player) {
+                playerSet.add(attack.getPlayer());
+            }
 
             for(final Player p : playerSet) {
                 try {

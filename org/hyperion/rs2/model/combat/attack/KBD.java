@@ -10,6 +10,8 @@ import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Equipment;
 
+import java.util.Set;
+
 public class KBD implements Attack {
 
 	public String getName() {
@@ -25,7 +27,9 @@ public class KBD implements Attack {
             n.getDefinition().getBonus()[4] = 400;
             n.getDefinition().getBonus()[3] = 400;
 			int attackId = Combat.random(9);
-            for(final Player p : attack.getEntity().getLocalPlayers()) {
+            final Set<Player> playerSet = attack.getEntity().getLocalPlayers();
+            attack._getPlayer().ifPresent(playerSet::add);
+            for(final Player p : playerSet) {
 	        /*
 			 * 
 			 * 393 = KBD = red projectile

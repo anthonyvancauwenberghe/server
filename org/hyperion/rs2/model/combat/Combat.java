@@ -318,7 +318,7 @@ public class Combat {
 				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 					combatEntity.getPlayer().getActionSender().sendMessage("Delta Range Bonus is : " + deltaRangeBonus); 
 				}*/
-				int toadd = Misc.random(deltaRangeBonus / 20);
+				int toadd = Misc.random(deltaRangeBonus / 5);
 				//System.out.println("Toadd is " + toadd);
 				damg += toadd;
 				if(damg < 0)

@@ -137,15 +137,19 @@ public enum CombatCalculation {
     }
 
     public static int getCalculatedDamage(final Entity attacker, final Entity defender, int randomDamage, int type, int maxDamage) {
-        if(attacker == null || defender == null)
+        try {
+            if(attacker == null || defender == null)
+                return 0;
+            final CombatCalculation calculation = getCalculationFor(attacker, defender);
+            if (type == Constants.MAGE)
+                return calculation.magicAttack(attacker, defender, randomDamage, maxDamage);
+            else if(type == Constants.RANGE)
+                return calculation.rangeAttack(attacker, defender, randomDamage, maxDamage);
+            else
+                return calculation.meleeAttack(attacker, defender, randomDamage, maxDamage);
+        }catch(Exception e) {
             return 0;
-        final CombatCalculation calculation = getCalculationFor(attacker, defender);
-        if (type == Constants.MAGE)
-            return calculation.magicAttack(attacker, defender, randomDamage, maxDamage);
-        else if(type == Constants.RANGE)
-            return calculation.rangeAttack(attacker, defender, randomDamage, maxDamage);
-        else
-            return calculation.meleeAttack(attacker, defender, randomDamage, maxDamage);
+        }
     }
 
     private static CombatCalculation getCalculationFor(final Entity attacker, final Entity defender) {

@@ -190,9 +190,6 @@ public class NpcDeathEvent extends Event {
             npc.setDead(false);
             npc.cE.setFreezeTimer(0);
             npc.health = npc.maxHealth;
-            if(npc.getDefinition().getId() == 50) {
-                npc.health = npc.maxHealth = 1800;
-            }
             this.stop();
         }
         timer--;

@@ -36,21 +36,21 @@ public class KBD implements Attack {
 			    if(attackId > 4 && distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 				//melee
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(1));
-				    n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(25), Constants.MELEE, 25), 500, Constants.MELEE);
+				    n.cE.predictedAtk = (System.currentTimeMillis() + 1800);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(28), Constants.MELEE, 28), 500, Constants.MELEE);
 			    } else if(attackId <= 2) {
 				    //posison
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				    n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(35), Constants.RANGE, 35), 1000, Constants.RANGE);
+				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(42), Constants.RANGE, 42), 1000, Constants.RANGE);
 				    if(n.getDefinition().getId() == 50)
 					    Combat.poisonEntity(p.cE);
 				    Combat.npcRangeAttack(n, p.cE, 394, 40, false);
 			    } else if(attackId > 2 && attackId <= 4) {
 				//ice freeze
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				    n.cE.predictedAtk = (System.currentTimeMillis() + 1800);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(42), Constants.MAGE, 42), 1000, Constants.MAGE);
+				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(47), Constants.MAGE, 47), 1000, Constants.MAGE);
 				    if(n.getDefinition().getId() == 50 && Combat.random(2) == 1) {
                         if(p.cE.canBeFrozen())
 					        p.cE.setFreezeTimer(10000);

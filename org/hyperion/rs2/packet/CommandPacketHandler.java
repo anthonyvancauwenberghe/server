@@ -1338,7 +1338,8 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 		if (commandStart.equals("bank")) {
-			Bank.open(player, false);
+            if(ItemSpawning.canSpawn(player))
+			    Bank.open(player, false);
 			return;
 		}
 

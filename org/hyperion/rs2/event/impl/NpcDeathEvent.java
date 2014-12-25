@@ -140,7 +140,7 @@ public class NpcDeathEvent extends Event {
                 final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                 //normal drops
                 if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
-                    final int chance =  isTask ? 750 : 1000;
+                    final int chance =  isTask ? 750/2 : 1000/2;
                     for(NPCDrop drop : npc.getDefinition().getDrops()) {
                         if(drop == null) continue;
                         if(Combat.random(chance) <= drop.getChance()) {

@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Equipment;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 public class KBD implements Attack {
 
@@ -27,7 +28,9 @@ public class KBD implements Attack {
             n.getDefinition().getBonus()[4] = 400;
             n.getDefinition().getBonus()[3] = 400;
 			int attackId = Combat.random(9);
-            final Set<Player> playerSet = attack.getEntity().getLocalPlayers();
+            final Set<Player> set = attack.getEntity().getLocalPlayers();
+            final Set<Player> playerSet = new TreeSet<>();
+            playerSet.addAll(set);
             attack._getPlayer().ifPresent(playerSet::add);
             for(final Player p : playerSet) {
 	        /*

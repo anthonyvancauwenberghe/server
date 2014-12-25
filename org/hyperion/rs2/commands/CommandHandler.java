@@ -471,8 +471,6 @@ public class CommandHandler {
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-                if(ItemSpawning.canSpawn(player) && !Rank.hasAbility(player, Rank.DEVELOPER))
-                    return false;
 				Bank.open(player, false);
 				return true;
 			}

@@ -96,7 +96,7 @@ public class KBD implements Attack {
 
 	@Override
 	public int[] npcIds() {
-		int[] j = {50, 5363};
+		int[] j = {50,};
 		return j;
 	}
 }

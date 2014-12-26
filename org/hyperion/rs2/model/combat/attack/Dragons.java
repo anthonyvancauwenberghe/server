@@ -68,7 +68,7 @@ public class Dragons implements Attack {
 
 	@Override
 	public int[] npcIds() {
-		int[] j = {53, 54, 55, 941, 1592, 1591, 1590,};
+		int[] j = {53, 54, 55, 941, 1592, 1591, 1590,5363,};
 		return j;
 	}
 

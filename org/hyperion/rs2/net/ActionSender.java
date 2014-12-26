@@ -145,8 +145,7 @@ public class ActionSender {
         }else{
             sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
             sendMessage("@blu@Christmas Boosts Active:");
-            player.sendMessage("     @red@25% Donator Point Boost 50% Honor point boost, 100% EXP Boost",
-                               "     @red@2X drop rate, 2X slayer points, 2X bh points");
+            player.sendMessage("     @red@25% Donator Point Boost 50% Honor point boost");
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");

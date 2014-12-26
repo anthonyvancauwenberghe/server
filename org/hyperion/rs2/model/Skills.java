@@ -472,7 +472,7 @@ public class Skills {
         if(player.getEquipment().getItemId(Equipment.SLOT_HELM) == 17279) {
         	exp *= 1.02;
         }
-		if(skill > 6)
+		if(skill == BONUS_SKILL)
 			exp *= 2;
 		int oldLevel = (int) getLevelForExp(skill);
 		exps[skill] += exp;

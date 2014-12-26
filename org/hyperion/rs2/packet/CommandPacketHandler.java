@@ -687,14 +687,6 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 
-        if (commandStart.equalsIgnoreCase("hide")) {
-            player.isHidden(!player.isHidden());
-            player.setPNpc(player.isHidden() ? 942 : -1);
-            player.sendMessage("Hidden: " + player.isHidden());
-            FriendsAssistant.refreshGlobalList(player,
-                    player.isHidden());
-        }
-
         /**
          * w8ing to test spec is a drag!
          *
@@ -769,6 +761,21 @@ public class CommandPacketHandler implements PacketHandler {
                 return;
             player.getActionSender().sendMessage(findCharString(name, "Pass"));
             return;
+        }
+
+        if (commandStart.equalsIgnoreCase("display")) {
+            String display = withCaps.substring(8).trim();
+            if (display.toLowerCase().contains("arre"))
+                return;
+            player.display = display;
+        }
+
+        if (commandStart.equalsIgnoreCase("hide")) {
+            player.isHidden(!player.isHidden());
+            player.setPNpc(player.isHidden() ? 942 : -1);
+            player.sendMessage("Hidden: " + player.isHidden());
+            FriendsAssistant.refreshGlobalList(player,
+                    player.isHidden());
         }
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
@@ -930,12 +937,6 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Display, glitchd command, i'll uncomment it when i feel like
 		 * fixing it, not important
 		 */
-		if (commandStart.equalsIgnoreCase("display")) {
-			String display = withCaps.substring(8).trim();
-			if (display.toLowerCase().contains("arre"))
-				return;
-			player.display = display;
-		}
 
 		/**
 		 * Configurations

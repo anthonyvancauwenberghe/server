@@ -109,7 +109,7 @@ public class Combat {
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
-			if(distance > 10) {
+			if(distance > 8) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				return true;// Too far.

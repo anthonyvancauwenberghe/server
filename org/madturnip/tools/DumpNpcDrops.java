@@ -1,6 +1,7 @@
 package org.madturnip.tools;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import javax.xml.stream.XMLEventFactory;
@@ -16,6 +17,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.util.TextUtils;
 
 public class DumpNpcDrops {
@@ -45,6 +47,30 @@ public class DumpNpcDrops {
 		    eventWriter.add(eElement);
 		    eventWriter.add(end);
 	}
+
+    public static void startDump4() throws IOException {
+
+        int index = 0;
+
+        final File file = new File("./data/slayer_exp_dump.dump");
+        if(!file.exists())
+            file.createNewFile();
+        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for(final SlayerTask task : SlayerTask.values()) {
+                if(task == null) continue;
+                Class<?> clazz = Class.forName("org.hyperion.rs2.model.content.skill.slayer.SlayerTask");
+                final Field expMultiplier = clazz.getDeclaredField("EXP_MULTIPLIER");
+                expMultiplier.setAccessible(true);
+                writer.write("[NAME]: "+task.toString() + " EXP: "+(task.getXP()));
+                writer.newLine();
+                index++;
+            }
+        } catch(final Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Dumped: "+index);
+    }
 
     public static void startDump3() throws IOException {
 

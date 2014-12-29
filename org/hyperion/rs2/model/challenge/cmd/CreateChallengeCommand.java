@@ -12,7 +12,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 public class CreateChallengeCommand extends Command{
 
     public CreateChallengeCommand(){
-        super("createchallenge", Rank.DEVELOPER);
+        super("createchallenge", Rank.COMMUNITY_MANAGER);
     }
 
     public boolean execute(final Player player, final String input){

@@ -113,7 +113,7 @@ public class Combat {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				return true;// Too far.
-			} else if(! WorldMap.projectileClear(attacker.getLocation(), attacker.getLocation())) {
+			} else if(! WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				else

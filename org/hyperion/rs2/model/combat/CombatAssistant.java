@@ -983,7 +983,7 @@ public class CombatAssistant {
             case 16887:
 				return true;
 		}
-		return false;
+		return FightPits.isBow(itemId);
 	}
 
 	/**

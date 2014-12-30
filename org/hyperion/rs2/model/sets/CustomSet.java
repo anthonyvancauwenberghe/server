@@ -63,7 +63,7 @@ public class CustomSet {
             final Item item = Item.create(id);
             if(!EquipmentReq.canEquipItem(player, id))
                 continue;
-            if(!ItemSpawning.canSpawn(id))
+            if(!ItemSpawning.canSpawn(id) || player.hardMode())
                 if(player.getBank().remove(item) < 1)
                     continue;
             player.getEquipment().set(Equipment.getType(Item.create(id)).getSlot(), Item.create(id));

@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.content.EP.EPDrops;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
@@ -69,8 +70,15 @@ public class DeathDrops {
 		 * Drops the items for the killer
 		 */
 		for(Item item : droppingItems) {
-			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
-		}
+            if(killer.getGameMode() <= player.getGameMode())
+			    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
+            else
+                World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, NewGameMode.getUnitPrice(item))));
+        }
+
+        if(killer.hardMode()) {
+            World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 50_000)));
+        }
 
         player.getLogManager().add(LogEntry.death(player, killer, droppingItems.toArray(new Item[droppingItems.size()])));;
 
@@ -86,7 +94,7 @@ public class DeathDrops {
 			if((!inv && player.equipSlot[slot]))
 				continue;
 			Item item = container.get(slot);
-			if(toDrop(item)) {
+			if(toDrop(item, player.getGameMode())) {
 				if(ItemsTradeable.isTradeable(item.getId()))
 					originalDrops.add(item);
 				container.remove(slot, item);
@@ -95,11 +103,11 @@ public class DeathDrops {
 		return originalDrops;
 	}
 	
-	public static boolean toDrop(Item item) {
+	public static boolean toDrop(Item item, final int gameMode) {
 		if(item == null)
 			return false;
 		if(ItemsTradeable.isTradeable(item.getId())) {
-			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null)
+			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null && gameMode == 0)
 				return false;
 			return true;
 		} else {
@@ -278,12 +286,14 @@ public class DeathDrops {
 		}
 		return null;
 	}
-	public static int calculateAlchValue(int id) {
+	public static int calculateAlchValue(final Player player ,int id) {
         if(ItemSpawning.canSpawn(id))
             return -5;
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
-		if(dpVal > 100)
+        if(player.hardMode())
+            inventoryItemValue = NewGameMode.getUnitPrice(id);
+		else if(dpVal > 100)
 			inventoryItemValue = dpVal * 150000;
 		else
 			inventoryItemValue = (int) Math.floor(ItemDefinition.forId(id).getHighAlcValue());
@@ -297,11 +307,7 @@ public class DeathDrops {
 		for(int i = 0; i < player.getInventory().capacity(); i++) {
 			if(player.getInventory().get(i) != null) {
 				int dpVal = DonatorShop.getPrice(player.getInventory().get(i).getId());
-				int inventoryItemValue = 0;
-				if(dpVal > 100)
-					inventoryItemValue = dpVal * 150000;
-				else
-					inventoryItemValue = (int) Math.floor(ItemDefinition.forId(player.getInventory().get(i).getId()).getHighAlcValue());
+				int inventoryItemValue = calculateAlchValue(player ,player.getEquipment().get(i).getId());
 				if(inventoryItemValue > value && (! player.invSlot[i])) {
 					value = inventoryItemValue;
 					item = player.getInventory().get(i).getId();
@@ -313,11 +319,7 @@ public class DeathDrops {
 		for(int i1 = 0; i1 < player.getEquipment().capacity(); i1++) {
 			if(player.getEquipment().get(i1) != null) {
 				int dpValue = (int)Math.floor(DonatorShop.getPrice(player.getEquipment().get(i1).getId()));
-				int equipmentItemValue = 0;
-				if(dpValue > 100)
-					equipmentItemValue = dpValue * 150000; 
-				else 
-					equipmentItemValue = (int) Math.floor(ItemDefinition.forId(player.getEquipment().get(i1).getId()).getHighAlcValue());
+				int equipmentItemValue = calculateAlchValue(player ,player.getEquipment().get(i1).getId());
 
 				if(equipmentItemValue > value && (! player.equipSlot[i1])) {
 					value = equipmentItemValue;

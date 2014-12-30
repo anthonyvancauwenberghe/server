@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.log.LogEntry;
@@ -176,6 +177,10 @@ public class Duel {
 	public static void deposit(Player player, int slot, int id, int amount) {
 		if(player.tradeAccept1 && player.getTrader() != null && player.getTrader().tradeAccept1)
 			return;
+        if(player.getGameMode() != player.getTrader().getGameMode()) {
+            player.sendMessage("You cannot stake when you are in separate game modes");
+            return;
+        }
 		if(!ItemsTradeable.isTradeable(id)) {
 			player.getActionSender().sendMessage("You cannot stake this item.");
 			return;
@@ -379,6 +384,10 @@ public class Duel {
 			player.getActionSender().sendMessage("The other player doesn't have enough space for this duel.");
 			return;
 		}
+        if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != player.getTrader().getEquipment().getItemId(Equipment.SLOT_WEAPON) && player.duelRule[DuelRules.SWITCH.ordinal()]) {
+            player.sendMessage("You cannot accept a duel with a different weapon than your opponent");
+            return;
+        }
 		if(player.tradeAccept1 && player.getTrader().tradeAccept1 && ! player.tradeAccept2 && ! player.getTrader().tradeAccept2) {
 			confirmScreen(player);
 		}
@@ -596,11 +605,11 @@ public class Duel {
 	}
 
 	public static void selectRule(Player player, int i, boolean flag, int j) {
-		if(player.duelAttackable > 0)
-			return;
 		if(player == null || player.getTrader() == null)
 			return;
-		if(!player.equals(player.getTrader().getTrader())) {
+        if(player.duelAttackable > 0 || player.onConfirmScreen)
+            return;
+        if(!player.equals(player.getTrader().getTrader())) {
 			player.getActionSender().sendMessage("Anti-bug has stopped you!");
 			return;
 		}

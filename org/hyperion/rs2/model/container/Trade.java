@@ -43,6 +43,10 @@ public class Trade {
 	public static void open(Player player, Player player2) {
 		if(World.getWorld().updateInProgress())
 			return;
+        if(player.getGameMode() != player2.getGameMode()) {
+            player.sendMessage("You cannot trade players in different game modes");
+            return;
+        }
 		if(player.getName().equalsIgnoreCase(player2.getName())) {
 			System.out.println("Trading yourself is not good. 1");
 			return;

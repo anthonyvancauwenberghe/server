@@ -65,7 +65,7 @@ public class NewGameMode implements ContentTemplate {
 
     static {
         prices = new TreeMap<Integer, Integer>();
-        try(final BufferedReader reader = new BufferedReader(new FileReader(new File("./data/New Game Prices.txt")))) {
+        try(final BufferedReader reader = new BufferedReader(new FileReader(new File("./data/prices.txt")))) {
             for(String s = ""; (s = reader.readLine()) != null;) {
                 try {
                     final String[] parts = s.split(" ");
@@ -184,7 +184,7 @@ public class NewGameMode implements ContentTemplate {
 
                 try {
                     int[] array = getIntArray(input);
-                    final List<String> lines = Files.readAllLines(Paths.get("./data/New Game Prices.txt"), Charset.defaultCharset());
+                    final List<String> lines = Files.readAllLines(Paths.get("./data/prices.txt"), Charset.defaultCharset());
                     int id = array[0];
                     int price = array[1];
                     prices.put(id, price);
@@ -196,7 +196,7 @@ public class NewGameMode implements ContentTemplate {
                             }
                         }
                     }
-                    final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/New Game Prices.txt"));
+                    final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/prices.txt"));
                     for(final String line : lines) {
                         writer.write(line);
                         writer.newLine();

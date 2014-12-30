@@ -50,7 +50,11 @@ public class Web implements ContentTemplate {
 	                           int d) {
 		if(type == 6) {
             if(objectId == 1765) {
-                Magic.teleport(player, Location.create(2272, 4682, 0), true);
+                if(player.getLastAttack().timeSinceLastAttack() > 5000) {
+                    Magic.teleport(player, Location.create(2272, 4682, 0), true);
+                } else {
+                    player.sendMessage("You're a bit busy to be climbing down a ladder");
+                }
                 return true;
             }
             slash(player, Location.create(x, y, 0), objectId);

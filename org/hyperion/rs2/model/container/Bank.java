@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 /**
  * Banking utility class.
@@ -43,6 +44,9 @@ public class Bank {
      */
     public static void open(Player player, boolean setPin) {
         if(player.getLocation().inPvPArea()) { //:(
+            return;
+        }
+        if(!ItemSpawning.canSpawn(player)) {
             return;
         }
         if(FightPits.inPits(player))

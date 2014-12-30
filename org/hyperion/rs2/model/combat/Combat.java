@@ -109,11 +109,11 @@ public class Combat {
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
-			if(distance > 10) {
+			if(distance > 8) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				return true;// Too far.
-			} else if(! WorldMap.projectileClear(attacker.getLocation(), attacker.getLocation())) {
+			} else if(! WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				else
@@ -318,7 +318,7 @@ public class Combat {
 				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 					combatEntity.getPlayer().getActionSender().sendMessage("Delta Range Bonus is : " + deltaRangeBonus); 
 				}*/
-				int toadd = Misc.random(deltaRangeBonus / 20);
+				int toadd = Misc.random(deltaRangeBonus / 5);
 				//System.out.println("Toadd is " + toadd);
 				damg += toadd;
 				if(damg < 0)
@@ -1209,7 +1209,7 @@ public class Combat {
 		int distance = combatEntity.getEntity().getLocation().distance(attack.getEntity().getLocation());
 		if(distance > 1) {
 			//System.out.println("Distance check can atk " + distance);
-			return ! WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
+			return WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
 		} else {
 			//System.out.println("Pos check can atk");
 			return WorldMap.checkPos(attack.getEntity().getLocation().getZ(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), attack.getEntity().getLocation().getX(), attack.getEntity().getLocation().getY(), 1);

@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.content.misc;
 
 import org.hyperion.Server;
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
@@ -13,7 +15,10 @@ import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Dicing;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.VotingBox;
+
+import java.util.Map;
 
 public class ItemSpawning {
 
@@ -77,6 +82,18 @@ public class ItemSpawning {
 	public static void spawnItem(int id, int amount, Player player) {
 		if(amount >= player.getInventory().freeSlots() && !(new Item(id).getDefinition().isStackable()))
 			amount = player.getInventory().freeSlots();
+        if(player.hardMode()) {
+            int price = NewGameMode.getUnitPrice(Item.create(id, amount));
+            if(price < 2) {
+                player.getActionSender().sendMessage("This item doesn't have a proper price. If its important please contact an admin!");
+            }
+            if(player.getInventory().getCount(995) >= price)
+               player.getInventory().remove(Item.create(995, price));
+            else {
+               player.sendf("You need %d coins to spawn %d of %s", price, amount, ItemDefinition.forId(id).getName());
+               return;
+           }
+        }
 		player.getInventory().add(new Item(id, amount));
 	}
 	public static boolean canSpawn(int id) {
@@ -102,6 +119,15 @@ public class ItemSpawning {
         if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
                 player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
             player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
+            return false;
+        }
+        if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
+                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711)) {
+            player.sendMessage("It's too hot in here to do that!");
+            return false;
+        }
+        if(player.getLastAttack().timeSinceLastAttack() < 5000) {
+            player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
             return false;
         }
         if(FightPits.inPits(player))
@@ -176,6 +202,7 @@ public class ItemSpawning {
 		 * Forbidden Items. eg Zaniks Crate
 		 */
 		switch(id) {
+            case 995:
             case 12862:
 			case 0:
 			case 2412:
@@ -217,5 +244,6 @@ public class ItemSpawning {
 		}
 		return "";
 	}
+
 
 }

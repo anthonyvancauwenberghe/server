@@ -43,8 +43,8 @@ public class WalkingPacketHandler implements PacketHandler {
 		if(player.isDead())
 			return;
 		if(! player.cE.canMove()) {
-			if(player.isFollowing != null && packet.getOpcode() != 99)
-				player.getActionSender().sendMessage("You are currently frozen.");
+			if(player.isFollowing == null && packet.getOpcode() != 99)
+				player.getActionSender().sendMessage("A magical force stops you from moving!");
 			return;
 		}
 		if(player.cE.getAttackers().size() > 1 && System.currentTimeMillis() - player.cE.lastHit > 10000)
@@ -111,11 +111,9 @@ public class WalkingPacketHandler implements PacketHandler {
 		player.getWalkingQueue().addStep(firstX, firstY);
 
 		for(int i = 0; i < steps; i++) {
-
-            path[i][0] += firstX;
+			path[i][0] += firstX;
 			path[i][1] += firstY;
-            System.out.printf("Steps: %d FirstX: %d FirstY: %d Path WalkX: %d Path WalkY: %d\n", i, firstX, firstY, path[i][0], path[i][1]);
-
+            //System.out.printf("Steps: %d FirstX: %d FirstY: %d Path WalkX: %d Path WalkY: %d", i, firstX, firstY, path[i][0], path[i][1]);
             player.getWalkingQueue().addStep(path[i][0], path[i][1]);
 		}
 		player.getWalkingQueue().finish();

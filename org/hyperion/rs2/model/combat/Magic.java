@@ -117,9 +117,6 @@ public class Magic {
 			attacker.getPlayer().getActionSender().sendMessage(message);
 			return 0;
 		}
-        if(!Combat.canAtkDis(attacker, opp)) {
-            return 0;
-        }
 
         if (opp.getEntity() instanceof NPC) {
             String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
@@ -286,7 +283,7 @@ public class Magic {
                 Damage = (int) (Damage * 0.75);
             }
 		} else /** NPC Part */ {
-			DefBonus = opponent.getNPC().combatLevel
+			DefBonus = opponent.getNPC().getDefinition().combat()
 					+ opponent.getNPC().getDefinition().getBonus()[8];
 			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
 					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {

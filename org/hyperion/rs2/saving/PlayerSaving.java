@@ -202,6 +202,7 @@ public class PlayerSaving {
         saveList.add(new SaveRecolorManager());
         saveList.add(new SaveCustomSet());
         saveList.add(new SavePermExtraData());
+        saveList.add(new SaveGameMode());
 	}
 
 	/**

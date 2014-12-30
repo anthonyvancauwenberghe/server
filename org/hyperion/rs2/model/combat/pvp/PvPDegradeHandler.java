@@ -3,10 +3,13 @@ package org.hyperion.rs2.model.combat.pvp;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 
 public final class PvPDegradeHandler {
 	
 	public static void checkDegrade(final Player player) {
+        if(Rank.hasAbility(player, Rank.DEVELOPER))
+            return;
 		for(Item item : player.getEquipment().toArray()) {
 			if(item == null) continue;
 			final int id = item.getId();

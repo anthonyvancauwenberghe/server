@@ -25,6 +25,10 @@ public class CurrencyShop extends Shop {
 
 	@Override
 	public void sellToShop(Player player, Item item) {
+        if(player.hardMode()) {
+            player.sendMessage("You cannot sell items to currency shops in this mode");
+            return;
+        }
 		int payment = calculateUnitSellPrice(item) * item.getCount();
 		player.getInventory().remove(item);
 		getContainer().add(item);

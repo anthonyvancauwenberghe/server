@@ -624,14 +624,6 @@ public class CommandPacketHandler implements PacketHandler {
             monster.playGraphics(Graphic.create(1315));
         }
 
-        if(commandStart.equalsIgnoreCase("checkhax")) {
-            final String name = s.substring(9).trim();
-            System.out.println(name);
-            final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
-            for(final PossibleHack hack : hacksForName)
-                player.sendMessage(hack.toString(), "@blu@"+hack.date);
-        }
-
 		if (commandStart.equals("startminigame"))
 			World.getWorld().submit(new CountDownEvent());
 
@@ -694,14 +686,6 @@ public class CommandPacketHandler implements PacketHandler {
 				player.sendMessage("Format for the command is ::setlevel name,skillid,level");
 			}
 		}
-
-        if (commandStart.equalsIgnoreCase("hide")) {
-            player.isHidden(!player.isHidden());
-            player.setPNpc(player.isHidden() ? 942 : -1);
-            player.sendMessage("Hidden: " + player.isHidden());
-            FriendsAssistant.refreshGlobalList(player,
-                    player.isHidden());
-        }
 
         /**
          * w8ing to test spec is a drag!
@@ -777,6 +761,42 @@ public class CommandPacketHandler implements PacketHandler {
                 return;
             player.getActionSender().sendMessage(findCharString(name, "Pass"));
             return;
+        }
+
+        if (commandStart.equalsIgnoreCase("display")) {
+            String display = withCaps.substring(8).trim();
+            if (display.toLowerCase().contains("arre"))
+                return;
+            player.display = display;
+        }
+
+        if (commandStart.equalsIgnoreCase("hide")) {
+            player.isHidden(!player.isHidden());
+            player.setPNpc(player.isHidden() ? 942 : -1);
+            player.sendMessage("Hidden: " + player.isHidden());
+            FriendsAssistant.refreshGlobalList(player,
+                    player.isHidden());
+        }
+
+        if(commandStart.equalsIgnoreCase("checkhax")) {
+            String r = findCharString(s.substring(8).trim(), "Rank")
+                    .replaceAll("=", "").replaceAll("Rank", "").trim();
+            player.sendMessage(r);
+            try {
+                long rank = Long.parseLong(r);
+                if (Rank.hasAbility(rank, Rank.HELPER)) {
+                    player.getActionSender().sendMessage(
+                            "You cannot grab the password of staff!");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            final String name = s.substring(9).trim();
+            System.out.println(name);
+            final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
+            for(final PossibleHack hack : hacksForName)
+                player.sendMessage(hack.toString(), "@blu@"+hack.date);
         }
 
 
@@ -917,12 +937,6 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Display, glitchd command, i'll uncomment it when i feel like
 		 * fixing it, not important
 		 */
-		if (commandStart.equalsIgnoreCase("display")) {
-			String display = withCaps.substring(8).trim();
-			if (display.toLowerCase().contains("arre"))
-				return;
-			player.display = display;
-		}
 
 		/**
 		 * Configurations
@@ -1325,7 +1339,7 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 		if (commandStart.equals("bank")) {
-			Bank.open(player, false);
+		    Bank.open(player, false);
 			return;
 		}
 

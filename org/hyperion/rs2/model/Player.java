@@ -94,6 +94,20 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
 
+    private int gameMode;
+
+    public boolean hardMode() {
+        return gameMode == 1;
+    }
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(int mode) {
+        this.gameMode = mode;
+    }
+
     private boolean completedTG;
 	private boolean hasMaxCape = false;
 	private boolean hasCompCape = false;
@@ -1498,7 +1512,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		boolean npc = source instanceof NPC;
 		if(npc) {
 			NPC n = (NPC)source;
-			if(n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE))
+			if(n.getDefinition().getId() == 50 || ( n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE)))
 				npc = false;
 		}
         /** Ring of life */

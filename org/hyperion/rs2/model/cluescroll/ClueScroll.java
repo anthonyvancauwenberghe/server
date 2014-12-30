@@ -2,6 +2,8 @@ package org.hyperion.rs2.model.cluescroll;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
@@ -15,38 +17,41 @@ import org.w3c.dom.NodeList;
 public class ClueScroll {
 
     public enum Difficulty{
-        EASY, MEDIUM, HARD, ELITE
+        EASY,
+        MEDIUM,
+        HARD,
+        ELITE
     }
 
     public enum Trigger{
-        CRY(161),
-        THINK(162),
-        WAVE(163),
-        BOW(164),
-        ANGRY(165),
-        YES(168),
-        NO(169),
-        SHRUG(13370),
-        CHEER(171),
-        BECKON(167),
-        LAUGH(170),
-        JUMP_FOR_JOY(13366),
-        YAWN(13368),
-        DANCE(166),
-        JIG(13363),
-        SPIN(13364),
-        HEAD_BANG(13365),
-        BLOW_KISS(11100),
-        PANIC(13362),
-        RASPBERRY(13367),
-        CLAP(172),
-        SALUTE(13369),
-        GOBLIN_BOW(13383),
-        GOBLIN_SALUTE(13384),
-        GLASS_BOX(667),
-        CLIMB_ROPE(6503),
-        LEAN_ON_AIR(6506),
-        GLASS_WALL(666),
+        CRY(Animation.CRY),
+        THINK(Animation.THINKING),
+        WAVE(Animation.WAVE),
+        BOW(Animation.BOW),
+        ANGRY(Animation.ANGRY),
+        YES(Animation.YES_EMOTE),
+        NO(Animation.NO_EMOTE),
+        SHRUG(Animation.SHRUG),
+        CHEER(Animation.CHEER),
+        BECKON(Animation.BECKON),
+        LAUGH(Animation.LAUGH),
+        JUMP_FOR_JOY(Animation.JOYJUMP),
+        YAWN(Animation.YAWN),
+        DANCE(Animation.DANCE),
+        JIG(Animation.JIG),
+        SPIN(Animation.SPIN),
+        HEAD_BANG(Animation.HEADBANG),
+        BLOW_KISS(Animation.BLOW_KISS),
+        PANIC(Animation.PANIC),
+        RASPBERRY(Animation.RASPBERRY),
+        CLAP(Animation.CLAP),
+        SALUTE(Animation.SALUTE),
+        GOBLIN_BOW(Animation.GOBLIN_BOW),
+        GOBLIN_SALUTE(Animation.GOBLIN_DANCE),
+        GLASS_BOX(Animation.GLASS_BOX),
+        CLIMB_ROPE(Animation.CLIMB_ROPE),
+        LEAN_ON_AIR(Animation.LEAN),
+        GLASS_WALL(Animation.GLASS_WALL),
         ATTACK_CAPE(4959),
         DEFENCE_CAPE(4961),
         STRENGTH_CAPE(4981),
@@ -77,6 +82,10 @@ public class ClueScroll {
 
         private Trigger(final int id){
             this.id = id;
+        }
+
+        private Trigger(final Animation anim){
+            this(anim.getId());
         }
 
         public int getId(){
@@ -152,6 +161,11 @@ public class ClueScroll {
     public void send(final Player player){
         final String[] lines = description.replaceAll("<br>", "\n").split("\n");
         player.getActionSender().openQuestInterface(String.format("%s Clue Scroll", difficulty), lines);
+        if(player.debug) {
+            player.sendf("trigger: %s", trigger);
+            for(final Requirement req : requirements)
+                player.sendf(req.toString());
+        }
     }
 
     public void apply(final Player player){

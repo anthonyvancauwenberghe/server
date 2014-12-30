@@ -42,14 +42,20 @@ public final class ClueScrollManager {
         final ClueScroll cs = getInInventory(player);
         if(cs == null)
             return;
-        if(cs.getTrigger().getId() != id)
+        if(cs.getTrigger().getId() != id) {
+            if(player.debug)
+                player.sendf("cluescroll trigger: %d | your trigger: %d", cs.getTrigger().getId(), id);
             return;
+        }
         if(getInventoryCount(player) > 1){
             player.sendf("You are only allowed to have 1 clue scroll in your inventory");
             return;
         }
-        if(!cs.hasAllRequirements(player))
+        if(!cs.hasAllRequirements(player)) {
+            if(player.debug)
+                player.sendf("you don't meet all requirements");
             return;
+        }
         cs.apply(player);
     }
 

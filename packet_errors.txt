@@ -17532,3 +17532,26 @@ Tue Dec 23 18:07:07 GMT+01:00 2014
 	class: class java.lang.ArrayIndexOutOfBoundsException
 
 ================================
+Wed Dec 24 05:52:07 GMT+01:00 2014
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.container.Container.hasRoomFor(Container.java:685)
+	at org.hyperion.rs2.model.cluescroll.reward.ItemReward.give(ItemReward.java:28)
+	at org.hyperion.rs2.model.cluescroll.reward.Reward.apply(Reward.java:85)
+	at org.hyperion.rs2.model.cluescroll.ClueScroll.apply(ClueScroll.java:176)
+	at org.hyperion.rs2.model.cluescroll.ClueScrollManager.trigger(ClueScrollManager.java:59)
+	at org.hyperion.rs2.model.Player.emoteTabPlay(Player.java:1724)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:736)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:51)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:77)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

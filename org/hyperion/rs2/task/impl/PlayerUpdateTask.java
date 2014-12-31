@@ -701,7 +701,6 @@ public class PlayerUpdateTask implements Task {
 		playerProps.put((byte) otherPlayer.getSkills().getCombatLevel()); // combat level
 		playerProps.putShort(0); // (skill-level instead of combat-level) otherPlayer.getSkills().getTotalLevel()); // total level
 		playerProps.putShort(otherPlayer.getKillCount());
-        playerProps.put((byte)otherPlayer.getGameMode());
         final int id = eq.getItemId(Equipment.SLOT_CAPE);
         //commented out until client changes
         if(eq.isSlotUsed(Equipment.SLOT_CAPE) && (id == 12747 || id == 12744)){
@@ -716,6 +715,9 @@ public class PlayerUpdateTask implements Task {
         }else{
             playerProps.put((byte)0);
         }
+
+        playerProps.put((byte)otherPlayer.getGameMode());
+
 
         /*final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
         final Iterator<Recolor> itr = recolors.iterator();

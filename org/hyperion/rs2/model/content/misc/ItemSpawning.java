@@ -83,6 +83,10 @@ public class ItemSpawning {
 		if(amount >= player.getInventory().freeSlots() && !(new Item(id).getDefinition().isStackable()))
 			amount = player.getInventory().freeSlots();
         if(player.hardMode()) {
+            if(amount > 1000 || amount < 1) {
+                player.sendMessage("Invalid amount");
+                return;
+            }
             int price = NewGameMode.getUnitPrice(Item.create(id, amount));
             if(price < 2) {
                 player.getActionSender().sendMessage("This item doesn't have a proper price. If its important please contact an admin!");

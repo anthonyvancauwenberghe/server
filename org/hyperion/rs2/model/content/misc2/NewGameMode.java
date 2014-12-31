@@ -166,7 +166,8 @@ public class NewGameMode implements ContentTemplate {
             @Override
             public boolean execute(final Player p, final String command) {
                 int[] id = getIntArray(command);
-                p.sendf("Price of %s costs %,df coins, it sells for %,d coins. Incorrect? Please contact an admin", ItemDefinition.forId(id[0]).getName(), getUnitPrice(id[0]), (int)(getUnitPrice(id[0]) * SELL_REDUCTION));
+                p.sendf("Price of %s costs %,df coins, it sells for %,d coins.", ItemDefinition.forId(id[0]).getName(), getUnitPrice(id[0]), (int)(getUnitPrice(id[0]) * SELL_REDUCTION));
+                p.sendMessage("Incorrect? Please contact an admin");
                 return true;
             }
         });
@@ -179,8 +180,10 @@ public class NewGameMode implements ContentTemplate {
                     player.sendMessage("You cannot sell this for coins");
                 }
                 int amount = parts.length == 2 ? parts[1] : 1;
-                if(amount < 1)
+                if(amount > 1000 || amount < 1) {
+                    player.sendMessage("Amount is too small or too large");
                     return false;
+                }
 
                 int price = (int)(getUnitPrice(id) * SELL_REDUCTION);
                 int amountsold = player.getInventory().remove(Item.create(id, amount));

@@ -310,7 +310,7 @@ public class DeathDrops {
 		for(int i = 0; i < player.getInventory().capacity(); i++) {
 			if(player.getInventory().get(i) != null) {
 				int dpVal = DonatorShop.getPrice(player.getInventory().get(i).getId());
-				int inventoryItemValue = calculateAlchValue(player ,player.getEquipment().get(i).getId());
+				int inventoryItemValue = calculateAlchValue(player ,player.getInventory().get(i).getId());
 				if(inventoryItemValue > value && (! player.invSlot[i])) {
 					value = inventoryItemValue;
 					item = player.getInventory().get(i).getId();

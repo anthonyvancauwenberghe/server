@@ -180,6 +180,8 @@ public class Bank {
             return;
         if(Location.inAttackableArea(player))
             return;
+        if(FightPits.inPits(player))
+            return;
         boolean inventoryFiringEvents = container.isFiringEvents();
         container.setFiringEvents(false);
         try {

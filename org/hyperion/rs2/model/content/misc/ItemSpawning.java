@@ -18,6 +18,7 @@ import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.VotingBox;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 public class ItemSpawning {
@@ -78,26 +79,32 @@ public class ItemSpawning {
 		spawnItem(id, amount, player);
 
 	}
+
+    public static boolean buy(final int id, final int amount, final Player player) {
+        if(amount > 1000 || amount < 1) {
+            player.sendMessage("Invalid amount");
+            return false;
+        }
+        final long full_price = NewGameMode.getUnitPrice(Item.create(id, amount));
+        if(full_price < 2 || full_price > Integer.MAX_VALUE) {
+            player.getActionSender().sendMessage("This item doesn't have a proper price. If its important please contact an admin!");
+            return false;
+        }
+        int price = (int)full_price;
+        if(player.getInventory().getCount(995) >= price) {
+            return player.getInventory().remove(Item.create(995, price)) == price;
+        } else {
+            player.sendf("You need %,d coins to spawn %d of %s", price, amount, ItemDefinition.forId(id).getName());
+            return false;
+        }
+    }
 	
 	public static void spawnItem(int id, int amount, Player player) {
 		if(amount >= player.getInventory().freeSlots() && !(new Item(id).getDefinition().isStackable()))
 			amount = player.getInventory().freeSlots();
         if(player.hardMode()) {
-            if(amount > 1000 || amount < 1) {
-                player.sendMessage("Invalid amount");
+            if(!buy(id, amount, player))
                 return;
-            }
-            int price = NewGameMode.getUnitPrice(Item.create(id, amount));
-            if(price < 2) {
-                player.getActionSender().sendMessage("This item doesn't have a proper price. If its important please contact an admin!");
-                return;
-            }
-            if(player.getInventory().getCount(995) >= price)
-               player.getInventory().remove(Item.create(995, price));
-            else {
-               player.sendf("You need %,d coins to spawn %d of %s", price, amount, ItemDefinition.forId(id).getName());
-               return;
-           }
         }
 		player.getInventory().add(new Item(id, amount));
 	}

@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -85,22 +86,22 @@ public class NewGameMode implements ContentTemplate {
         }
     }
 
-    public static int getUnitPrice(final int id) {
+    public static long getUnitPrice(final int id) {
         return getUnitPrice(id, 1);
     }
 
-    public static int getUnitPrice(final int id, int amount)  {
+    public static long getUnitPrice(final int id, int amount)  {
         int donorprice = DonatorShop.getPrice(id);
         if(donorprice > 100)
-            return donorprice * 20_000 * amount;
-        return prices.getOrDefault(id, 0) * amount;
+            return BigInteger.valueOf(donorprice).multiply(BigInteger.valueOf(amount)).multiply(BigInteger.valueOf(20_000)).longValueExact();
+        return BigInteger.valueOf(prices.getOrDefault(id, 0)).multiply(BigInteger.valueOf(amount)).longValueExact();
     }
 
-    public static int getSetPrice(final Item... items) {
-        return Stream.of(items).mapToInt(NewGameMode::getUnitPrice).sum();
+    public static long getSetPrice(final Item... items) {
+        return Stream.of(items).mapToLong(NewGameMode::getUnitPrice).sum();
     }
 
-    public static int getUnitPrice(final Item item) {
+    public static long getUnitPrice(final Item item) {
         return item == null ? 0 : getUnitPrice(item.getId(), item.getCount());
     }
 

@@ -147,7 +147,7 @@ public class NewGameMode implements ContentTemplate {
     }
 
     static {
-        CommandHandler.submit(new Command("getitemprice", Rank.PLAYER) {
+        CommandHandler.submit(new Command("getprice", Rank.PLAYER) {
             @Override
             public boolean execute(final Player p, final String command) {
                 int id = Integer.parseInt(filterInput(command));
@@ -164,7 +164,7 @@ public class NewGameMode implements ContentTemplate {
                 if(amount < 1)
                     return false;
 
-                int price = (int)(getUnitPrice(id, amount) * SELL_REDUCTION);
+                int price = (int)(getUnitPrice(id) * SELL_REDUCTION);
                 int amountsold = player.getInventory().remove(Item.create(id, amount));
                 long $money = price * amountsold;
                 if($money > Integer.MAX_VALUE) {

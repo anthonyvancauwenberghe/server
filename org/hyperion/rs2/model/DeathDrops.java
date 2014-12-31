@@ -301,7 +301,7 @@ public class DeathDrops {
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
         if(player.hardMode())
-            inventoryItemValue = NewGameMode.getUnitPrice(id);
+            inventoryItemValue = (int)NewGameMode.getUnitPrice(id);
 		else if(dpVal > 100)
 			inventoryItemValue = dpVal * 150000;
 		else

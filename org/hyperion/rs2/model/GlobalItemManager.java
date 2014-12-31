@@ -102,6 +102,10 @@ public class GlobalItemManager {
 		}
 		if(globalItem != null) {
 			synchronized(globalItems) {
+                if (globalItem.owner != null && globalItem.owner.getGameMode() != player.getGameMode()) {
+                    player.sendMessage("You cannot pick up this item as it belongs to another game mode");
+                    return;
+                }
 				globalItems.remove(globalItem);
 
                 player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));

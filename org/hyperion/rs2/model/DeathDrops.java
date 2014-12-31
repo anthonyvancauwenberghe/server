@@ -73,7 +73,8 @@ public class DeathDrops {
             if(killer.getGameMode() <= player.getGameMode())
 			    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
             else
-                World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, NewGameMode.getUnitPrice(item))));
+                World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(),
+                        Item.create(995, NewGameMode.getUnitPrice(item) <= 0 ? 1 : NewGameMode.getUnitPrice(item))));
         }
 
         if(killer.hardMode()) {

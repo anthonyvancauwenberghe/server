@@ -160,6 +160,8 @@ public class SpawnTab implements ContentTemplate {
 	                           int d) {
 		if(!Server.SPAWN)
 			return false;
+        if(player.hardMode())
+            return false;
 		if(type == 0) {
 			if(player.wildernessLevel > 0) {
 				player.getActionSender().sendMessage("You cannot spawn Items in the wilderness.");

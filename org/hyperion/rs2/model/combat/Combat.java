@@ -1008,6 +1008,8 @@ public class Combat {
 	public static int getWildLevel(int absX, int absY) {
 		if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
 			return (((absY - 3520) / 8) + 3);
+        else if (absY <= 10347 && absX >= 3014 && absX <= 3048 && absY >= 10306) //stair case nigga shit
+            return 57;
 		else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
 			return 12;
 		else

@@ -28,6 +28,10 @@ import java.util.stream.Stream;
  */
 public class NewGameMode implements ContentTemplate {
 
+
+    private static final String HARD_GAME_GUIDE = "http://forums.arteropk.com/index.php/topic/10309-hard-game-mode-guide/";
+    private static final String NORMAL_GAME_GUIDE = "http://forums.arteropk.com/index.php/forum/62-golden-guides/";
+
     /**
      * Bank starter
      */
@@ -134,6 +138,9 @@ public class NewGameMode implements ContentTemplate {
                 }
 
                 player.setGameMode(1);
+                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
+
+                player.getActionSender().removeChatboxInterface();
 
                 return true;
             case 10002:
@@ -146,6 +153,9 @@ public class NewGameMode implements ContentTemplate {
                     }
                 }
                 player.getInventory().add(Item.create(1856));
+                player.sendMessage("A starter has been added to your bank!");
+                player.sendMessage("l4unchur13 "+NORMAL_GAME_GUIDE);
+                player.getActionSender().removeChatboxInterface();
                 return true;
         }
         return false;
@@ -192,23 +202,9 @@ public class NewGameMode implements ContentTemplate {
 
                 try {
                     int[] array = getIntArray(input);
-                    final List<String> lines = Files.readAllLines(Paths.get("./data/prices.txt"), Charset.defaultCharset());
                     int id = array[0];
                     int price = array[1];
                     prices.put(id, price);
-                    for(final String line : lines) {
-                        if(line != null) {
-                            if(line.startsWith(id + "")) {
-                                lines.remove(line);
-                                lines.add(id + " " + price);
-                            }
-                        }
-                    }
-                    final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/prices.txt"));
-                    for(final String line : lines) {
-                        writer.write(line);
-                        writer.newLine();
-                    }
                 }catch(Exception e) {
                     player.sendMessage("Unable to add price");
                     e.printStackTrace();

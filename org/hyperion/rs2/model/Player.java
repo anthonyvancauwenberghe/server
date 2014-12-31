@@ -57,6 +57,7 @@ import org.hyperion.rs2.util.AccountValue;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -206,6 +207,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public long getPreviousSessionTime() {
 		return previousSessionTime;
 	}
+
+    public final long loginTime = System.currentTimeMillis();
 
 	private AccountValue accountValue = new AccountValue(this);
 
@@ -1067,6 +1070,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean isNew() {
 		return newCharacter;
 	}
+
+    public boolean isNewlyCreated() {
+        return permExtraData.getLong("logintime") < Time.FIVE_MINUTES * 3;
+    }
 
 	/**
 	 * Gets the request manager.

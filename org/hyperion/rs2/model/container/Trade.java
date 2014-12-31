@@ -47,6 +47,12 @@ public class Trade {
             player.sendMessage("You cannot trade players in different game modes");
             return;
         }
+
+        if(player.isNewlyCreated() && player.hardMode() || player2.isNewlyCreated() && player2.hardMode()) {
+            player.sendMessage("You or your partner is too new to trade");
+            return;
+        }
+
 		if(player.getName().equalsIgnoreCase(player2.getName())) {
 			System.out.println("Trading yourself is not good. 1");
 			return;
@@ -188,6 +194,13 @@ public class Trade {
 			player.getActionSender().sendMessage("You cannot trade this item.");
 			return;
 		}
+        if((player.hardMode()) && (player.getUID() == player.getTrader().getUID() || player.getShortIP().equalsIgnoreCase(player.getTrader().getShortIP())))
+        {
+            player.sendMessage("You cannot trade with this person");
+            return;
+        }
+
+
 		boolean inventoryFiringEvents = player.getInventory().isFiringEvents();
 		player.getInventory().setFiringEvents(false);
 		try {

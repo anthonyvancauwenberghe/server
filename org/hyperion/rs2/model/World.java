@@ -887,6 +887,7 @@ public class World {
 		// Combat.resetAttack(player.cE);
 		resetPlayersNpcs(player);
         resetSummoningNpcs(player);
+        player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.loginTime));
 
 		try {
 			ClanManager.leaveChat(player, false, false);

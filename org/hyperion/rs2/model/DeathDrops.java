@@ -38,6 +38,7 @@ public class DeathDrops {
 			return;
 		if(dontDrop(player) || dontDrop(killer))
 			return;
+
 		/**
 		 * Resets death variables - which slots are being protected
 		 * Sets which items are being kept, deletes them 
@@ -70,6 +71,10 @@ public class DeathDrops {
 		 * Drops the items for the killer
 		 */
 		for(Item item : droppingItems) {
+            if(player.isNewlyCreated() && player.hardMode()) {
+                player.sendMessage("You don't get any loot from a new player");
+                break;
+            }
             if(killer.getGameMode() <= player.getGameMode())
 			    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
             else {
@@ -80,7 +85,7 @@ public class DeathDrops {
             }
         }
 
-        if(killer.hardMode()) {
+        if(killer.hardMode() && !player.isNewlyCreated()) {
             World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 50_000)));
         }
 

@@ -444,14 +444,14 @@ public class SpecialAttacks {
             if(delayedWeapon(weaponId)) {
 			World.getWorld().submit(new Event(delay, "combat") {
 				public void execute() {
-					if(oldEntity.getEntity() instanceof Player) {
-						Magic.vengeance(oldEntity.getPlayer(),
-								player.cE, hitDamage);
-					}
 					if(player.getPrayers().isEnabled(48))
 						Prayer.soulSplit(player, oldEntity, hitDamage);
                     if(oldEntity != null)
 					    oldEntity.hit(hitDamage, player, false, cbStyle + crit);
+                    if(oldEntity.getEntity() instanceof Player) {
+                        Magic.vengeance(oldEntity.getPlayer(),
+                                player.cE, hitDamage);
+                    }
 					this.stop();
 				}
 			});
@@ -676,8 +676,11 @@ public class SpecialAttacks {
 				Combat.addXP(player, damage, false);
 				break;
             case 11700:
-                player.cE.getOpponent().doGfx(369, 0);
-                player.cE.getOpponent().setFreezeTimer(20000);
+                if(hitDamage > 0) {
+                    player.cE.getOpponent().doGfx(369, 0);
+                    if(player.getCombat().canBeFrozen())
+                        player.cE.getOpponent().setFreezeTimer(20000);
+                }
                 break;
             case 11061:
                // if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {

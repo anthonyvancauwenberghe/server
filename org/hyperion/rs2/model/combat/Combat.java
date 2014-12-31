@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.shops.SlayerShop;
@@ -106,6 +107,8 @@ public class Combat {
 		 * Degrading
 		 */
 		PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
+
+        ItemDegrading.check(combatEntity.getPlayer());
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {

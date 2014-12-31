@@ -57,8 +57,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
 		if(World.getWorld().getContentManager()
 				.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;
-		if(SetHandler.handleSet(player, button))
-			return;
+        if(button >= 29174 && button <= 29179)
+		    if(SetHandler.handleSet(player, button))
+			    return;
 		switch(button) {
             case -29034:
                 final Player opp = player.getBountyHunter().getTarget();

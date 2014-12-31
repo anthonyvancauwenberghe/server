@@ -103,11 +103,12 @@ public class GlobalItemManager {
 		if(globalItem != null) {
 			synchronized(globalItems) {
 				globalItems.remove(globalItem);
-			}
-            player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));
-			player.getInventory().add(globalItem.getItem());
-			removeItem(globalItem);
-			globalItem.destroy();
+
+                player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));
+			    player.getInventory().add(globalItem.getItem());
+			    removeItem(globalItem);
+			    globalItem.destroy();
+            }
 		} else {
 			//just remove it and pretend it was null
 			player.getActionSender().removeGlobalItem(item, Location.create(x, y, 0));

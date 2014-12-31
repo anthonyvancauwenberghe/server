@@ -102,7 +102,7 @@ public class Levers implements ContentTemplate {
 		LEVERS.put(Location.create(2539, 4712, 0), new Lever(Location.create(3090, 3956, 0), 3, 3));
 		LEVERS.put(Location.create(3090, 3956, 0), new Lever(Location.create(2539, 4712, 0), 0, 0));
 
-        LEVERS.put(Location.create(3153, 3923, 0), new Lever(Edgeville.LOCATION, 3, 3));
+        LEVERS.put(Location.create(3153, 3923, 0), new Lever(Edgeville.LOCATION, 0, 0));
 		//edgville to magebank
 		//player.getActionAssistant().pullLever(player, x, y, 5961, 0, 3, 3153, 3923, 0);
 

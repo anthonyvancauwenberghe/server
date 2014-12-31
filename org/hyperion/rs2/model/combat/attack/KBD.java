@@ -1,10 +1,7 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.Attack;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -30,7 +27,7 @@ public class KBD implements Attack {
 			int attackId = Combat.random(9);
 
 
-            for(final Player p : attack.getEntity().getRegion().getPlayers()) {
+            for(final Player p : World.getWorld().getRegionManager().getLocalPlayers(attack.getEntity())) {
                 try {
 	        /*
 			 * 

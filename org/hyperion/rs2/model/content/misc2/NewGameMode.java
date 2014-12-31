@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.*;
@@ -59,7 +60,7 @@ public class NewGameMode implements ContentTemplate {
             {7462, 5}, {1275, 5}, {11732, 2}, {4151, 2}, {5698, 5} //other necessities
     };
 
-    private static final double SELL_REDUCTION = 0.8;
+    public static final double SELL_REDUCTION = 0.8;
 
 
     private static final Map<Integer, Integer> prices;
@@ -85,6 +86,9 @@ public class NewGameMode implements ContentTemplate {
     }
 
     public static int getUnitPrice(final int id, int amount)  {
+        int donorprice = DonatorShop.getPrice(id);
+        if(donorprice > 100)
+            return donorprice * 20_000 * amount;
         return prices.getOrDefault(id, 0) * amount;
     }
 
@@ -93,7 +97,7 @@ public class NewGameMode implements ContentTemplate {
     }
 
     public static int getUnitPrice(final Item item) {
-        return item == null ? 0 : prices.getOrDefault(item.getId(), 0) * item.getCount();
+        return item == null ? 0 : getUnitPrice(item.getId(), item.getCount());
     }
 
 

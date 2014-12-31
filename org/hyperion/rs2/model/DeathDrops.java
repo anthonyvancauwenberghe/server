@@ -291,8 +291,6 @@ public class DeathDrops {
 		return null;
 	}
 	public static int calculateAlchValue(final Player player ,int id) {
-        if(ItemSpawning.canSpawn(id))
-            return -5;
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
         if(player.hardMode())
@@ -300,7 +298,7 @@ public class DeathDrops {
 		else if(dpVal > 100)
 			inventoryItemValue = dpVal * 150000;
 		else
-			inventoryItemValue = (int) Math.floor(ItemDefinition.forId(id).getHighAlcValue());
+			inventoryItemValue = ItemSpawning.canSpawn(id) ? -1 :(int) Math.floor(ItemDefinition.forId(id).getHighAlcValue());
 		return inventoryItemValue;
 	}
 	public static Item keepItem(Player player, int keepItem, boolean deleteItem) {

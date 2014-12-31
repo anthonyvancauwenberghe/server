@@ -99,6 +99,7 @@ public class DeathDrops {
 				continue;
 			Item item = container.get(slot);
 			if(toDrop(item, player.getGameMode())) {
+                System.out.println("To drop: "+item.getId());
 				if(ItemsTradeable.isTradeable(item.getId()))
 					originalDrops.add(item);
 				container.remove(slot, item);

@@ -86,11 +86,12 @@ public class ItemSpawning {
             int price = NewGameMode.getUnitPrice(Item.create(id, amount));
             if(price < 2) {
                 player.getActionSender().sendMessage("This item doesn't have a proper price. If its important please contact an admin!");
+                return;
             }
             if(player.getInventory().getCount(995) >= price)
                player.getInventory().remove(Item.create(995, price));
             else {
-               player.sendf("You need %d coins to spawn %d of %s", price, amount, ItemDefinition.forId(id).getName());
+               player.sendf("You need %,d coins to spawn %d of %s", price, amount, ItemDefinition.forId(id).getName());
                return;
            }
         }

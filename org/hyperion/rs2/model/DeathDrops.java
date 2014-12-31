@@ -112,6 +112,7 @@ public class DeathDrops {
 		if(item == null)
 			return false;
 		if(ItemsTradeable.isTradeable(item.getId())) {
+            System.out.printf("Checking drop for %d and game mode is %d\n", item.getId(), gameMode);
 			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null && gameMode == 0)
 				return false;
 			return true;

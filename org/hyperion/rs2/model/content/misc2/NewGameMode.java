@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.*;
@@ -150,8 +151,8 @@ public class NewGameMode implements ContentTemplate {
         CommandHandler.submit(new Command("getprice", Rank.PLAYER) {
             @Override
             public boolean execute(final Player p, final String command) {
-                int id = Integer.parseInt(filterInput(command));
-                p.sendf("Price of %s is %d, it sells for %d. Incorrect? Please contact an admin", ItemDefinition.forId(id).getName(), getUnitPrice(id), (getUnitPrice(id) * SELL_REDUCTION));
+                int[] id = getIntArray(command);
+                p.sendf("Price of %s costs %,df coins, it sells for %,d coins. Incorrect? Please contact an admin", ItemDefinition.forId(id[0]).getName(), getUnitPrice(id[0]), (int)(getUnitPrice(id[0]) * SELL_REDUCTION));
                 return true;
             }
         });
@@ -160,6 +161,9 @@ public class NewGameMode implements ContentTemplate {
             @Override public boolean execute(final Player player, String input) {
                 int[] parts = getIntArray(input);
                 int id = parts[0];
+                if(!ItemSpawning.canSpawn(id)) {
+                    player.sendMessage("You cannot sell this for coins");
+                }
                 int amount = parts.length == 2 ? parts[1] : 1;
                 if(amount < 1)
                     return false;

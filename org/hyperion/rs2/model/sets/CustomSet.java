@@ -70,7 +70,7 @@ public class CustomSet {
         }
         for(int index = 0; index < inventoryIds.length; index++) {
             final Item item = Item.create(inventoryIds[index], inventoryStackSizes[index]);
-            if(!ItemSpawning.canSpawn(inventoryIds[index]))
+            if(!ItemSpawning.canSpawn(inventoryIds[index]) || player.hardMode())
                 player.getInventory().add(Item.create(inventoryIds[index], player.getBank().remove(item)));
             else
                 player.getInventory().add(item);

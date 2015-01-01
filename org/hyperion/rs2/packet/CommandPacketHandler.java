@@ -624,13 +624,17 @@ public class CommandPacketHandler implements PacketHandler {
             try (final BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./data/prices.txt")))) {
                 int count = 0;
                 for(int i = 0; i < ItemDefinition.MAX_ID; i++) {
+                    try {
                     long price = NewGameMode.getUnitPrice(i);
                     writer.write(i + " " + price);
                     if(price > 0)
                         count++;
                     else
-                        TextUtils.writeToFile("./data/nullprices.txt", ItemDefinition.forId(i).getName() + " is worth no coins and is noted is "+ItemDefinition.forId(i).isNoted());
+                        TextUtils.writeToFile("./data/nullprices.txt", i+": "+ItemDefinition.forId(i).getName() + " is worth no coins and is noted is "+ItemDefinition.forId(i).isNoted());
                     writer.newLine();
+                    }catch(final Exception e) {
+
+                    }
                 }
                 player.sendMessage("Saved "+count+" non-zero prices");
             } catch(Exception e) {

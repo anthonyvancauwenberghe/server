@@ -2017,7 +2017,8 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 			if (!FightPits.inPits(player)
 					&& !FightPits.inPitsFightArea(player.getLocation().getX(),
-							player.getLocation().getY())) {
+							player.getLocation().getY()) &&
+                    !player.hardMode()) {
 				if (commandStart.equals("vengrunes") && Server.SPAWN) {
 					ContentEntity.addItem(player, 557, 1000);
 					ContentEntity.addItem(player, 560, 1000);

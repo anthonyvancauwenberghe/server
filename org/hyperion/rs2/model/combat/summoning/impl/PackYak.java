@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.summoning.AbstractSummoningSpecial;
+import org.hyperion.rs2.model.content.misc2.SummoningBoBs;
 
 public final class PackYak extends AbstractSummoningSpecial {	
 	private final int usedWith, slot;
@@ -19,7 +20,7 @@ public final class PackYak extends AbstractSummoningSpecial {
 	}
 	@Override
 	public int requiredSpecial() {
-		return 0;
+		return 50;
 	}
 
 	@Override
@@ -29,17 +30,21 @@ public final class PackYak extends AbstractSummoningSpecial {
 	}
 
 	@Override
-	public int getScrollId() { return -1; }
+	public int getScrollId() { return 12435; }
 
 	@Override
 	public boolean checkRequirements(Player p) {
-        this.execute(p);
 		return true;
 	}
 
 	@Override
 	public void execute(Player player) {
-
+        Item item = player.getInventory().get(slot);
+        if(player.getInventory().remove(item = Item.create(item.getId())) == 1) {
+           player.getBank().add(item);
+        }
+        player.playAnimation(Animation.create(7660));
+        player.playGraphics(Graphic.create(1300));
 	}
 
 	@Override

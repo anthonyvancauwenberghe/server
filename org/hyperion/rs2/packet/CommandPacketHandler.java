@@ -39,6 +39,7 @@ import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
+import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
@@ -57,11 +58,6 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
-import org.hyperion.rs2.model.content.misc2.Afk;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.content.misc2.Jail;
-import org.hyperion.rs2.model.content.misc2.SpawnTab;
-import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
@@ -76,10 +72,7 @@ import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -626,6 +619,17 @@ public class CommandPacketHandler implements PacketHandler {
 
 		if (commandStart.equals("startminigame"))
 			World.getWorld().submit(new CountDownEvent());
+
+        if(commandStart.equalsIgnoreCase("savepricelist")) {
+            try (final BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./data/prices.txt")))) {
+                for(int i = 0; i < ItemDefinition.MAX_ID; i++) {
+                    writer.write(i + " " + NewGameMode.getUnitPrice(i));
+                    writer.newLine();
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         if(commandStart.equalsIgnoreCase("startshit")) {
             player.sendf("%s %s %s", as[0], as[1], as[2]);

@@ -39,8 +39,8 @@ public abstract class SpecialArea {
         Magic.teleport(player, "home");
     }
 
-    public Command command() {
-        return new Command(this.getClass().getName().toLowerCase(), Rank.PLAYER) {
+    public Command command(final String name) {
+        return new Command(name, Rank.PLAYER) {
             @Override
             public boolean execute(final Player player, final String input) {
                 enter(player);

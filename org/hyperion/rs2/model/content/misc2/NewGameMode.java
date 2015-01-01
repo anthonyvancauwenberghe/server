@@ -61,8 +61,8 @@ public class NewGameMode implements ContentTemplate {
 
     private static final int IRON_STARTER[][] = {
             {15332, 2},{6685, 100}, {3024, 75}, {2436, 50}, {2440, 50}, {2444, 50}, {3040, 50}, //pots
-            {4716, 5}, {4718, 5}, {4720, 5}, {4722, 5}, //dharoks
-            {7462, 5}, {1725, 5}, {11732, 2}, {4151, 2}, {5698, 5} //other necessities
+            {4716, 5}, {4718, 5}, {4720, 5}, {4722, 5}, {6524, 5},//dharoks
+            {7462, 5}, {1725, 5}, {11732, 2}, {4151, 2}, {5698, 5}, {2550, 5} //other necessities
             , {391, 500} //food
     };
 

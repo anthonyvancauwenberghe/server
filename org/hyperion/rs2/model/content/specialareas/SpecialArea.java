@@ -1,7 +1,9 @@
-package org.hyperion.rs2.model.combat.specialareas;
+package org.hyperion.rs2.model.content.specialareas;
 
+import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.combat.Magic;
 
 /**
@@ -12,6 +14,7 @@ import org.hyperion.rs2.model.combat.Magic;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class SpecialArea {
+
 
     public void check(final Player player) {
         final String enter = canEnter(player);
@@ -36,9 +39,20 @@ public abstract class SpecialArea {
         Magic.teleport(player, "home");
     }
 
-    public abstract boolean inArea(final Player player);
-    public abstract String canEnter(final Player player);
+    public Command command() {
+        return new Command(this.getClass().getName().toLowerCase(), Rank.PLAYER) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                enter(player);
+                return true;
+            }
+        };
+    }
+
+    public abstract boolean canSpawn();
     public abstract boolean isPkArea();
     public abstract Location getDefaultLocation();
-    public abstract boolean canSpawn();
+
+    public abstract boolean inArea(final Player player);
+    public abstract String canEnter(final Player player);
 }

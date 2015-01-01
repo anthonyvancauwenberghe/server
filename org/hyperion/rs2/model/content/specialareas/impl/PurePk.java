@@ -1,9 +1,15 @@
-package org.hyperion.rs2.model.combat.specialareas.impl;
+package org.hyperion.rs2.model.content.specialareas.impl;
 
+import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
+
+import java.util.Optional;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +19,8 @@ import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
  * To change this template use File | Settings | File Templates.
  */
 public class PurePk extends SpecialArea {
+
+
     public static final int HEIGHT = 444;
 
     @Override public String canEnter(final Player player) {

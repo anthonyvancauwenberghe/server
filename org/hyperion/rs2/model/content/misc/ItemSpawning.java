@@ -1,25 +1,20 @@
 package org.hyperion.rs2.model.content.misc;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
-import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.VotingBox;
-
-import java.math.BigInteger;
-import java.util.Map;
 
 public class ItemSpawning {
 

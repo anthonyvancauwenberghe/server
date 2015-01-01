@@ -1,6 +1,8 @@
-package org.hyperion.rs2.model.combat.specialareas;
+package org.hyperion.rs2.model.content.specialareas;
 
-import org.hyperion.rs2.model.combat.specialareas.impl.PurePk;
+import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.content.specialareas.impl.NewGamePK;
+import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 
 import java.util.*;
 
@@ -17,6 +19,11 @@ public class SpecialAreaHolder {
     static {
         map = new HashMap<>();
         map.put("purepk", new PurePk());
+        map.put("newgamepk", new NewGamePK());
+
+        for(final SpecialArea area : getAreas()) {
+            CommandHandler.submit(area.command());
+        }
     }
 
     public static Optional<SpecialArea> get(final String key) {

@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.misc2.teamboss.impl;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
 import org.hyperion.util.Misc;

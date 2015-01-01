@@ -39,8 +39,8 @@ import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
-import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
@@ -2350,13 +2350,6 @@ public class CommandPacketHandler implements PacketHandler {
 				}
 			}
 
-            if(commandStart.equalsIgnoreCase("purepk")) {
-                final Optional<SpecialArea> purePk = SpecialAreaHolder.get("purepk");
-                if(purePk.isPresent()) {
-                    final SpecialArea area = purePk.get();
-                    area.enter(player);
-                }
-            }
 
 			if (commandStart.equals("commands")) {
 				// player.getActionSender().

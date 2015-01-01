@@ -3,7 +3,7 @@ package org.hyperion.rs2.model.content.misc2.teamboss;
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 
 import java.util.*;

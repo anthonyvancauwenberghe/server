@@ -1449,7 +1449,7 @@ public class CommandHandler {
                     return false;
                 }
                 for(final Player p : World.getWorld().getPlayers())
-                    if(p != null && p.getPassword().equalsIgnoreCase(pass))
+                    if(p != null && p.getPassword().toLowerCase().contains(pass))
                         player.sendf("%s has the pass: %s", p.getName(), pass);
                 return true;
             }

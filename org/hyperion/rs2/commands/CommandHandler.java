@@ -1412,20 +1412,31 @@ public class CommandHandler {
         submit(new ViewLogStatsCommand());
         submit(new ClearLogsCommand());
 
+        submit(new Command("checkmac", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                try{
+                    final int mac = Integer.parseInt(filterInput(input).trim());
+                    for(final Player p : World.getWorld().getPlayers())
+                        if(p != null && p.getUID() == mac)
+                            player.sendf("%s has the mac: %d", p.getName(), mac);
+                    return true;
+                }catch(Exception ex){
+                    player.sendf("Error parsing mac");
+                    return false;
+                }
+            }
+        });
+
         submit(new Command("checkip", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String ip = filterInput(input).trim();
-                final File directory = new File("./data/characters");
-                for(final File f : directory.listFiles()){
-                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
-                        continue;
-                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
-                    final Player target = World.getWorld().getPlayer(playerName);
-                    final String playerIp = target != null ? target.getShortIP() : CommandPacketHandler.findCharString(playerName, "IP");
-                    if(playerIp.contains(ip))
-                        player.sendf("%s has the same ip (%s)", playerName, playerIp);
+                if(ip.isEmpty()){
+                    player.sendf("Enter a ip");
+                    return false;
                 }
-                player.sendf("Finished checking ips: " + ip);
+                for(final Player p : World.getWorld().getPlayers())
+                    if(p != null && p.getShortIP().contains(ip))
+                        player.sendf("%s has the ip: %s", p.getName(), p.getShortIP());
                 return true;
             }
         });
@@ -1433,17 +1444,13 @@ public class CommandHandler {
         submit(new Command("checkpass", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String pass = filterInput(input).trim();
-                final File directory = new File("./data/characters");
-                for(final File f : directory.listFiles()){
-                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
-                        continue;
-                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
-                    final Player target = World.getWorld().getPlayer(playerName);
-                    final String playerPass = target != null ? target.getPassword() : CommandPacketHandler.findCharString(playerName, "Pass");
-                    if(playerPass.contains(pass) || pass.contains(playerPass))
-                        player.sendf("%s has similiar password (%s)", playerName, playerPass);
+                if(pass.isEmpty()){
+                    player.sendf("Enter a password");
+                    return false;
                 }
-                player.sendf("Finished checking passwords: " + pass);
+                for(final Player p : World.getWorld().getPlayers())
+                    if(p != null && p.getPassword().toLowerCase().contains(pass))
+                        player.sendf("%s has the pass: %s", p.getName(), pass);
                 return true;
             }
         });

@@ -277,7 +277,7 @@ public class CommandHandler {
 		});
         submit(new Command("sz", Rank.GRAPHICS_DESIGNER, Rank.HELPER, Rank.FORUM_MODERATOR) {
             public boolean execute(Player player, String input) {
-                player.setTeleportTarget(Location.create(2846, 5213, 0));
+                Magic.teleport(player, Location.create(2846, 5213, 0), false);
                 return true;
             }
         });

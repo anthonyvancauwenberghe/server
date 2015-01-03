@@ -117,7 +117,9 @@ public class LogManager {
             if(!entry.getKey().save && entry.getKey() != LogEntry.Category.PRIVATE_CHAT)
                 continue;
             final File file = new File(dir, entry.getKey().path);
-            try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file, !loaded.containsKey(entry.getKey())))){
+            if(!loaded.containsKey(entry.getKey()))
+                load(entry.getKey());
+            try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
                 for(final LogEntry log : entry.getValue()){
                     writer.write(log.toString());
                     writer.newLine();

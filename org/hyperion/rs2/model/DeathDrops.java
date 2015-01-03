@@ -104,7 +104,7 @@ public class DeathDrops {
 				continue;
 			Item item = container.get(slot);
 			if(toDrop(item, player.getGameMode())) {
-				if(ItemsTradeable.isTradeable(item.getId()))
+				if(ItemsTradeable.isTradeable(item.getId()) || (item.getId() >= 13195 && item.getId() <= 13205))
 					originalDrops.add(item);
 				container.remove(slot, item);
 			}	

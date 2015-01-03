@@ -77,7 +77,7 @@ public class LogEntry implements Comparable<LogEntry>{
     }
 
     public int compareTo(final LogEntry log){
-        return getDateStamp().compareTo(log.getDateStamp());
+        return (int)(date.getTime() - log.date.getTime());
     }
 
     public String toString(){

@@ -5,6 +5,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 
 /**
@@ -71,7 +72,7 @@ public class BoB {
 		if(! Server.SPAWN) {
 			return;
 		}
-		if(player.duelAttackable > 0) {
+		if(!ItemSpawning.canSpawn(player)) {
 			player.getActionSender().sendMessage("I shouldn't be doing this here..");
 			return;
 		}

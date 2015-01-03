@@ -55,6 +55,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
@@ -236,6 +237,28 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+        submit(new Command("removejail", Rank.HELPER) {
+            public boolean execute(final Player player, String input) {
+                final Player target = World.getWorld().getPlayer(filterInput(input));
+                if(target != null && Jail.inJail(target)) {
+                    target.setTeleportTarget(Edgeville.LOCATION);
+                }
+                return true;
+            }
+        });
+
+        submit(new Command("hardmoders", Rank.DEVELOPER) {
+            public boolean execute(final Player player, final String input) {
+                int counter = 0;
+                for(final Player p : World.getWorld().getPlayers()) {
+                    if(p.hardMode())
+                        player.sendf("@red@#%d@bla@ %s", counter++, p.getName());
+                }
+                return true;
+            }
+        });
+
 		submit(new Command("getpass", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {

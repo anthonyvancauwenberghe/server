@@ -471,7 +471,7 @@ public class Container {
 	public int remove(int preferredSlot, Item item) {
 		int removed = 0;
 		if(item == null || item.getDefinition() == null) {
-			System.out.println("Container null , PLEASE FIX MARTIN!");
+			//System.out.println("Container null , PLEASE FIX MARTIN!");
 			return removed;
 		}
 		//if(item.getCount() == 0)

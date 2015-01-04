@@ -81,8 +81,8 @@ public class ChristmasEvent implements ContentTemplate {
         switch(dialogueId) {
             case 5000:
                 player.getActionSender().sendDialogue("Santa", ActionSender.DialogueType.NPC, 9400, Animation.FacialAnimation.DEFAULT,
-                        "I accidentaly lost my present in an area not far from here...", "Young warrior! Care to help me?");
-                player.getInterfaceState().setNextDialogueId(0, 5001);
+                        "Christmas and new years was saved young warrior!", "Maybe next year I will need your assistance");
+                player.getInterfaceState().setNextDialogueId(0, -1);
                 break;
             case 5001:
                 player.getActionSender().sendDialogue("Help santa?", ActionSender.DialogueType.OPTION, 9400, Animation.FacialAnimation.DEFAULT,

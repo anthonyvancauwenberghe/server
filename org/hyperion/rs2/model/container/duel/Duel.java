@@ -52,6 +52,10 @@ public class Duel {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
+        if(player.getUID() == opponent.getUID()){
+            player.sendf("You cannot duel yourself!");
+            return;
+        }
 		//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());
 		//World.getWorld().getAbuseHandler().cacheMessage(player1, (new StringBuilder()).append(player1.getName()).append(": opened a duel with: ").append(player.getName()).toString());
 		player.setBusy(true);

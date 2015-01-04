@@ -72,7 +72,7 @@ public class BoB {
 		if(! Server.SPAWN) {
 			return;
 		}
-		if(!ItemSpawning.canSpawn(player)) {
+		if(player.duelAttackable > 0 || FightPits.inPits(player)) {
 			player.getActionSender().sendMessage("I shouldn't be doing this here..");
 			return;
 		}

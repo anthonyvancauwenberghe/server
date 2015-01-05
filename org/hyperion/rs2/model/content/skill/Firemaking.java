@@ -39,7 +39,7 @@ public class Firemaking implements ContentTemplate {
             ContentEntity.sendMessage(player, "You cannot do this while in jail.");
             return;
         }
-        if(Duel.inDuelLocation(player) || player.duelAttackable > -1){
+        if(Duel.inDuelLocation(player) || player.duelAttackable > 0){
             ContentEntity.sendMessage(player, "You cannot do this in duel arena.");
             return;
         }

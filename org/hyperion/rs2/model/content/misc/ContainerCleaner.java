@@ -90,7 +90,7 @@ public class ContainerCleaner {
 				String query = "INSERT INTO cleanings(username, item_id, item_count, deleted_value) VALUES('" + name + "'," + item.getId() + "," + deleted_amount + "," + deleted_value + ")";
 				World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 			}
-			item.setCount(max_amount);
+		//	item.setCount(max_amount);
 		}
 	}
 

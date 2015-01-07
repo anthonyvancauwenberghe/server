@@ -181,7 +181,7 @@ public class Duel {
 	public static void deposit(Player player, int slot, int id, int amount) {
 		if(player.tradeAccept1 && player.getTrader() != null && player.getTrader().tradeAccept1)
 			return;
-        if(player.getGameMode() != player.getTrader().getGameMode()) {
+        if(player.getTrader() != null && player.getGameMode() != player.getTrader().getGameMode()) {
             player.sendMessage("You cannot stake when you are in separate game modes");
             return;
         }

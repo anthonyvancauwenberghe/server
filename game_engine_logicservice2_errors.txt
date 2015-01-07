@@ -8314,3 +8314,849 @@ Fri Dec 26 05:53:23 GMT+01:00 2014
 	class: class java.lang.NullPointerException
 
 ================================
+Mon Jan 05 03:27:06 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:09 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:10 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:10 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:11 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:12 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:13 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:13 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:14 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:15 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:15 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:16 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:16 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:17 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:18 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:18 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:19 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:20 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:20 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:21 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:21 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:22 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:23 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:23 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:24 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:25 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:26 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:27 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:27 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:28 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:29 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:29 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:30 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:30 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:31 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:32 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:32 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:33 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:33 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:34 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:35 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:35 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:36 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:37 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:37 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:39 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:40 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:41 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:41 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:42 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:43 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:43 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:44 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:44 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:45 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:46 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:46 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:49 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:49 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:50 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:50 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:51 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:52 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:52 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:53 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:53 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:54 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:55 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:55 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:56 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:56 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:57 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:58 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:58 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:59 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:27:59 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:00 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:01 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:01 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:02 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:02 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:03 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:04 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:04 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:05 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:05 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:06 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:07 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:07 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:08 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:09 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:10 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:10 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:11 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:11 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:12 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:13 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:13 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:14 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:14 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Mon Jan 05 03:28:15 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+
+================================
+Tue Jan 06 23:50:17 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -2430
+	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
+	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:826)
+	at org.hyperion.rs2.model.World.isWalkAble(World.java:502)
+	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1122)
+	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
+	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Jan 06 23:50:18 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -2430
+	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
+	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:826)
+	at org.hyperion.rs2.model.World.isWalkAble(World.java:502)
+	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1122)
+	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
+	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Jan 06 23:50:19 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:19 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:20 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:20 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:21 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:22 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:22 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:23 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:23 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:24 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:25 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:25 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:26 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:27 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:27 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:28 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:28 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:29 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:30 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:30 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:31 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:31 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:32 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:33 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:33 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:34 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:34 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:35 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:36 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:36 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:37 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:37 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:38 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:39 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:39 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:40 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:40 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:41 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:42 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:42 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:43 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:43 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:44 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:45 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:45 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:46 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:46 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:47 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:48 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:48 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:49 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:50 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:50 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:51 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:52 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:52 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:53 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:53 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:54 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:55 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:55 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:56 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:56 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:57 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:58 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:58 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:59 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:50:59 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:00 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:01 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:01 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:02 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:02 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:03 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:04 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:04 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:05 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:05 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:06 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:07 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:07 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:08 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:08 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:09 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:10 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:10 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:11 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:11 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:12 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:13 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:13 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:14 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:14 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:15 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:16 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:16 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:17 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:17 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jan 06 23:51:18 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================

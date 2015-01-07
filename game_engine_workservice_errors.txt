@@ -34,3 +34,11 @@ Tue Nov 18 22:54:10 GMT+01:00 2014
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sat Jan 03 20:21:30 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 03 20:27:10 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================

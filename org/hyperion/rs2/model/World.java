@@ -379,6 +379,7 @@ public class World {
 			}
 			donationsSQL.init();
 			logsSQL.init();
+            localServerSQL.init();
 			//playersSQL.init();
 			//banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);

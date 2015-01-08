@@ -97,8 +97,8 @@ public class PlayerCombatEvent extends Event {
 				}
 			}
             final long deltaTime = System.currentTimeMillis() - startTime;
-            if(deltaTime > 30)
-                System.out.println("\u001B[34m Player Combat event took: "+(deltaTime) + "ms \u001B[0m");
+            if(deltaTime > 40)
+                System.err.println("[PLAYER COMBAT EVENT]: took: "+(deltaTime) + "ms");
         }
 	}
 	

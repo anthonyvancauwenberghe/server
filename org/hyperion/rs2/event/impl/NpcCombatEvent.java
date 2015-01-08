@@ -46,7 +46,8 @@ public class NpcCombatEvent extends Event {
 		}
         long deltaMs = System.currentTimeMillis() - startTime;
 		NpcCombatEvent.corpHeal();
-        System.out.println("\u001B[34m NPC Combat event took: "+(deltaMs) + "ms and corp heal: "+ (System.currentTimeMillis() - deltaMs)+ "\u001B[0m");
+        if(deltaMs > 40)
+        System.err.println("[NPC COMBAT EVENT] took: "+(deltaMs) + "ms and corp heal: "+ (System.currentTimeMillis() - startTime - deltaMs)+ "");
 
 
     }

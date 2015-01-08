@@ -20,7 +20,7 @@ public class AccountValuesRequest extends SQLRequest{
                 player.getName().toLowerCase(), player.getAccountValue().getTotalValue()
         );
         try{
-            //sql.query(query);
+            sql.query(query);
             player.lastAccountValueTime = System.currentTimeMillis();
         }catch(Exception ex){
             ex.printStackTrace();

@@ -131,7 +131,7 @@ public class QuestTab {
 	}
 
 	public void sendEmptyString() {
-		player.getActionSender().sendString("@or2@Bounty Hunter: @gre@" + (player.getBountyHunter().isEnabled() ? "On" : "Off"), getId(15));
+		player.getActionSender().sendString("@or2@Bounty Hunter: @gre@" + (player.getPermExtraData().getBoolean("bhon") ? "On" : "Off"), getId(15));
 	}
 
 	public void sendPkPoints() {

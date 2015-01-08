@@ -41,15 +41,18 @@ public class PlayerCombatEvent extends Event {
 			//handle all combat first players first
 			for(Player player : clonedList) {
 				try {
-					if(player == null || player.cE == null)
+					/*if(player == null || player.cE == null)
 						continue;
 					//following for players
 					if(player.isFollowing != null) {
 						//System.out.println("Following");
 						player.cE.face(player.isFollowing.cE.getAbsX()
-		                        /*+ player.isFollowing.cE.getOffsetX()*/, player
+		                        //+ player.isFollowing.cE.getOffsetX()
+                                ,
+                                player
 								.isFollowing.cE.getAbsY()
-								/*+ player.cE.getOpponent().getOffsetY()*/);
+								//+ player.cE.getOpponent().getOffsetY()
+                        );
 
 						player.setInteractingEntity(player.isFollowing);
 						int dis = player.getLocation().distance(player.isFollowing.getLocation());
@@ -85,7 +88,7 @@ public class PlayerCombatEvent extends Event {
                                 e.printStackTrace();
 							}
 						}
-					}
+					} */
 				} catch(Exception e) {
                     e.printStackTrace();
 				} finally {
@@ -97,7 +100,7 @@ public class PlayerCombatEvent extends Event {
 				}
 			}
             final long deltaTime = System.currentTimeMillis() - startTime;
-            if(deltaTime > 40)
+            if(deltaTime > 20)
                 System.err.println("[PLAYER COMBAT EVENT]: took: "+(deltaTime) + "ms");
         }
 	}

@@ -15,13 +15,10 @@ public class ReloadRegion
 
 	@Override
 	public void handle(Player player, Packet packet) {
-        final long timeStart = System.currentTimeMillis();
 		DoorManager.refresh(player);
 		World.getWorld().getGlobalItemManager().displayItems(player);
 		Farming.farming.refreshFarmObjects(player);
 		World.getWorld().getObjectMap().load(player);
 		player.getWalkingQueue().reset();
-        if(Rank.hasAbility(player, Rank.HELPER))
-            System.out.printf("Reload region time for %s is %d\n", player.getName(), (int)(System.currentTimeMillis() - timeStart));
 	}
 }

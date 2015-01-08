@@ -192,7 +192,7 @@ public class Duel {
             return;
         }
 
-        if(player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
+        if(player.getTrader() != null && player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
             player.sendMessage("You or your partner is too new to stake");
             return;
         }

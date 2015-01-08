@@ -933,7 +933,7 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
-                getLocalServerConnection().offer(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d)", player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                getLocalServerConnection().offer(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = (%d)", player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");

@@ -31,6 +31,7 @@ public class NpcCombatEvent extends Event {
 
 	@Override
 	public void execute() {
+        final long startTime = System.currentTimeMillis();
 		NpcCombatEvent.agressiveNPCS();
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try {
@@ -43,9 +44,12 @@ public class NpcCombatEvent extends Event {
 				e.printStackTrace();
 			}
 		}
+        long deltaMs = System.currentTimeMillis() - startTime;
 		NpcCombatEvent.corpHeal();
+        System.out.println("\u001B[34m NPC Combat event took: "+(deltaMs) + "ms and corp heal: "+ (System.currentTimeMillis() - deltaMs)+ "\u001B[0m");
 
-	}
+
+    }
 
 	public static void corpHeal() {
 		boolean willHeal = true;

@@ -37,7 +37,6 @@ public class PlayerCombatEvent extends Event {
 		//move all combat events to this event, and npcs seperate, doesn't glitch both
         final long startTime = System.currentTimeMillis();
 		List<Player> clonedList = cloneEntityList();
-        System.out.println("Cloning list took: "+(System.currentTimeMillis() - startTime) + "ms");
 		synchronized(clonedList) {
 			//handle all combat first players first
 			for(Player player : clonedList) {
@@ -97,8 +96,9 @@ public class PlayerCombatEvent extends Event {
 					player.getWalkingQueue().walkingCheck();
 				}
 			}
-
-            System.out.println("Combat event took: "+(System.currentTimeMillis() - startTime) + "ms");
+            final long deltaTime = System.currentTimeMillis() - startTime;
+            if(deltaTime > 30)
+                System.out.println("\u001B[34m Player Combat event took: "+(deltaTime) + "ms \u001B[0m");
         }
 	}
 	

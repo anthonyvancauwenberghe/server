@@ -41,7 +41,7 @@ public class PlayerCombatEvent extends Event {
 			//handle all combat first players first
 			for(Player player : clonedList) {
 				try {
-					/*if(player == null || player.cE == null)
+					if(player == null || player.cE == null)
 						continue;
 					//following for players
 					if(player.isFollowing != null) {
@@ -88,7 +88,7 @@ public class PlayerCombatEvent extends Event {
                                 e.printStackTrace();
 							}
 						}
-					} */
+					}
 				} catch(Exception e) {
                     e.printStackTrace();
 				} finally {
@@ -100,7 +100,7 @@ public class PlayerCombatEvent extends Event {
 				}
 			}
             final long deltaTime = System.currentTimeMillis() - startTime;
-            if(deltaTime > 20)
+            if(deltaTime > 50)
                 System.err.println("[PLAYER COMBAT EVENT]: took: "+(deltaTime) + "ms");
         }
 	}

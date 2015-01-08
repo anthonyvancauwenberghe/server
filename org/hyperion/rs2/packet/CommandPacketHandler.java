@@ -6,14 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
+
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -763,6 +757,8 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
 
+
+
         if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
             String r = findCharString(s.substring(7).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
@@ -831,6 +827,23 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                 }
             }
+        }
+
+        if(commandStart.equalsIgnoreCase("turnbhon")) {
+            final Map<
+                    String, Map.Entry<Boolean, Boolean>> map = new HashMap<>();
+            for(final Player p : World.getWorld().getPlayers()) {
+                boolean old = p.getPermExtraData().getBoolean("bhon");
+                p.getPermExtraData().put("bhon", true);
+                boolean change = p.getPermExtraData().getBoolean("bhon");
+                map.put(p.getName(), new AbstractMap.SimpleEntry<Boolean, Boolean>(old, change));
+                p.sendf("Your bounty hunter has been set from @red@%s @bla@to @red@%s", old, change);
+            }
+
+            for(final Map.Entry<String, Map.Entry<Boolean, Boolean>> entry : map.entrySet()) {
+                player.sendf("@blu@%s @red@%s@bla@->@red@%s", entry.getKey(), entry.getValue().getKey(), entry.getValue().getKey());
+            }
+
         }
 
         if(commandStart.equalsIgnoreCase("reloadrevs")) {

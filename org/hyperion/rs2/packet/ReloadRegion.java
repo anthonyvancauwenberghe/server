@@ -22,6 +22,6 @@ public class ReloadRegion
 		World.getWorld().getObjectMap().load(player);
 		player.getWalkingQueue().reset();
         if(Rank.hasAbility(player, Rank.HELPER))
-            System.out.printf("Reload region time for %s is %d\n", player.getName(), System.currentTimeMillis() - timeStart);
+            System.out.printf("Reload region time for %s is %d\n", player.getName(), (int)(System.currentTimeMillis() - timeStart));
 	}
 }

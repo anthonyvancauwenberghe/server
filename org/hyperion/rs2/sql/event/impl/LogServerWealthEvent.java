@@ -11,6 +11,6 @@ public class LogServerWealthEvent extends SQLEvent{
     }
 
     public void execute(final SQLConnection con){
-        con.offer("INSERT INTO serverwealth (value) VALUES ((SELECT SUM(value) FROM accountvalues))");
+        //con.offer("INSERT INTO serverwealth (value) VALUES ((SELECT SUM(value) FROM accountvalues))");
     }
 }

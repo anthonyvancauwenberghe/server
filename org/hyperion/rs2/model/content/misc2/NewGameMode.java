@@ -129,7 +129,7 @@ public class NewGameMode implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(1, 10002);
                 return true;
             case 10001:
-                ClanManager.joinClanChat(player, "help2", false);
+               /* ClanManager.joinClanChat(player, "help2", false);
                 player.getInventory().add(Item.create(995, 15_000_000));
                 for(int i = 0; i < IRON_STARTER.length; i++) {
                     try {
@@ -140,12 +140,12 @@ public class NewGameMode implements ContentTemplate {
                 }
 
                 player.setGameMode(1);
-                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
-                player.sendMessage("@red@Beware: Your account will be switched to normal mode when beta is over!");
+                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE); */
+                player.sendMessage("@red@New game mode is changing from beta to full release!", "@red@You have been assigned to the normal game mode");
 
-                player.getActionSender().removeChatboxInterface();
+                //player.getActionSender().removeChatboxInterface();
 
-                return true;
+                //return true;
             case 10002:
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {

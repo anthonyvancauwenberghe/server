@@ -5,7 +5,7 @@ import org.hyperion.rs2.sql.event.impl.LogServerWealthEvent;
 public class LocalServerSQLConnection extends MySQLConnection {
 
     public LocalServerSQLConnection() {
-        super("LocalServerSQL", "jdbc:mysql://localhost/server", "root", "pjr9yGgw4Mjv", 30000, 10000, 100);
+        super("LocalServerSQL", "jdbc:mysql://localhost/server", "root", "pjr9yGgw4Mjv", 30000, 60000, 100);
     }
 
     public boolean init() {

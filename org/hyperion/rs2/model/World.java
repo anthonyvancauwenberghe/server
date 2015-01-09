@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -379,7 +380,7 @@ public class World {
 			}
 			donationsSQL.init();
 			logsSQL.init();
-            localServerSQL.init();
+			localServerSQL.init();
 			//playersSQL.init();
 			//banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);
@@ -933,7 +934,12 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
-                getLocalServerConnection().offer(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue() + "", player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                try{
+                    if(!Rank.hasAbility(player, Rank.DEVELOPER))
+                        getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");

@@ -935,7 +935,8 @@ public class World {
 		engine.submitWork(new Runnable() {
 			public void run() {
                 try{
-                    getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                    if(!Rank.hasAbility(player, Rank.DEVELOPER))
+                        getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
                 }catch(SQLException e){
                     e.printStackTrace();
                 }

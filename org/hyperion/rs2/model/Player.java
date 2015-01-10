@@ -41,6 +41,7 @@ import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
+import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
@@ -80,6 +81,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		Player clone = (Player)super.clone();
 		return clone;
 	}
+
 	
 	public NPCKillsLogger npckillLogger = new NPCKillsLogger();
 	
@@ -993,6 +995,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     private LogManager logManager;
 
+    private InterfaceManager itfManager;
 
 	/**
 	 * Creates a player based on the details object.
@@ -1038,10 +1041,15 @@ public class Player extends Entity implements Persistable, Cloneable{
 		friendList = new FriendList();
 
         logManager = new LogManager(this);
+        itfManager = new InterfaceManager(this);
 	}
 
     public LogManager getLogManager(){
         return logManager;
+    }
+
+    public InterfaceManager getInterfaceManager(){
+        return itfManager;
     }
 
 	private String IP;

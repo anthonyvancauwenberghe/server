@@ -58,6 +58,7 @@ import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -72,6 +73,7 @@ import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
 import org.hyperion.rs2.sql.DonationsSQLConnection;
 import org.hyperion.rs2.sql.DummyConnection;
+import org.hyperion.rs2.sql.LocalServerSQLConnection;
 import org.hyperion.rs2.sql.LogsSQLConnection;
 import org.hyperion.rs2.sql.MySQLConnection;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
@@ -185,6 +187,8 @@ public class World {
 	private MySQLConnection donationsSQL;
 
 	private MySQLConnection logsSQL;
+
+    private MySQLConnection localServerSQL;
 
 	//private PlayersSQLConnection playersSQL = new PlayersSQLConnection();
 
@@ -317,6 +321,10 @@ public class World {
 	public MySQLConnection getLogsConnection() {
 		return logsSQL;
 	}
+
+    public MySQLConnection getLocalServerConnection(){
+        return localServerSQL;
+    }
 	
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;
@@ -364,12 +372,15 @@ public class World {
 			if(Server.getConfig().getBoolean("sql")) {
 				logsSQL = new LogsSQLConnection(Server.getConfig());
 				donationsSQL = new DonationsSQLConnection(Server.getConfig());
+                localServerSQL = new LocalServerSQLConnection();
 			} else {
 				logsSQL = new DummyConnection();
 				donationsSQL = new DummyConnection();
+                localServerSQL = new DummyConnection();
 			}
 			donationsSQL.init();
 			logsSQL.init();
+            localServerSQL.init();
 			//playersSQL.init();
 			//banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);
@@ -923,6 +934,7 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
+                getLocalServerConnection().offer(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d)", player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");

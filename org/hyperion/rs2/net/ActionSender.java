@@ -19,6 +19,8 @@ import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
+import org.hyperion.rs2.model.itf.Interface;
+import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.util.NewcomersLogging;
@@ -294,6 +296,8 @@ public class ActionSender {
         if(player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
             sendMessage("script~x123");
         }
+
+        player.getInterfaceManager().show(RecoveryInterface.ID);
 		
 		return this;
 	}

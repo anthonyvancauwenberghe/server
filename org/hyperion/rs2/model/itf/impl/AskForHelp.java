@@ -15,10 +15,12 @@ public class AskForHelp extends Interface {
         super(ID);
     }
 
-    public void handle(final Player player, final Packet pkt){
+    public void handle(final Player player, final Packet pkt) {
 
         final String title = pkt.getRS2String();
         final String text = pkt.getRS2String();
 
+        
 
     }
+}

@@ -41,6 +41,7 @@ import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
+import org.hyperion.rs2.model.content.ticket.TicketHolder;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
@@ -75,6 +76,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player extends Entity implements Persistable, Cloneable{
 
 	public static final int MAX_NAME_LENGTH = 12;
+
+    private final TicketHolder ticketHolder = new TicketHolder();
+
+    public final TicketHolder getTicketHolder() {
+        return ticketHolder;
+    }
 	
 	@Override
 	public Object clone() throws CloneNotSupportedException{

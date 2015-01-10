@@ -81,8 +81,6 @@ public class DonationRequest extends SQLRequest {
 				player.getQuestTab().sendDonatePoints();
 			}
 			if(amount > 0) {
-                double multiplier = 1.25;
-                amount *= multiplier;
 				player.getPoints().increaseDonatorPoints(amount);
                 player.getActionSender().sendMessage("You have received a 25% donation bonus from santa!");
 			} else {

@@ -131,7 +131,7 @@ public class QuestTab {
 	}
 
 	public void sendEmptyString() {
-		player.getActionSender().sendString("@or2@Bounty Hunter: @gre@" + (player.getBountyHunter().isEnabled() ? "On" : "Off"), getId(15));
+		player.getActionSender().sendString("@or2@Bounty Hunter: @gre@" + (player.getPermExtraData().getBoolean("bhon") ? "On" : "Off"), getId(15));
 	}
 
 	public void sendPkPoints() {
@@ -272,8 +272,9 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(15), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.sendMessage("You just set your bounty hunter to @blu@"+(player.getBountyHunter().switchEnabled() ? "On" : "Off"));
-				player.getQuestTab().sendEmptyString();
+                player.getPermExtraData().put("bhon", player.getBountyHunter().switchEnabled());
+                player.sendMessage("You just set your bounty hunter to @blu@"+(player.getPermExtraData().getBoolean("bhon") ? "On" : "Off"));
+                player.getQuestTab().sendEmptyString();
 			}
 		});
 		

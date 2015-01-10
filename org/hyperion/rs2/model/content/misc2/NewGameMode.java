@@ -61,8 +61,8 @@ public class NewGameMode implements ContentTemplate {
 
     private static final int IRON_STARTER[][] = {
             {15332, 2},{6685, 100}, {3024, 75}, {2436, 50}, {2440, 50}, {2444, 50}, {3040, 50}, //pots
-            {4716, 5}, {4718, 5}, {4720, 5}, {4722, 5}, //dharoks
-            {7462, 5}, {1725, 5}, {11732, 2}, {4151, 2}, {5698, 5} //other necessities
+            {4716, 3}, {4718, 3}, {4720, 3}, {4722, 3}, {6524, 3},//dharoks
+            {7462, 1}, {1725, 10}, {11732, 2}, {4151, 2}, {5698, 5}, {2550, 5} //other necessities
             , {391, 500} //food
     };
 
@@ -124,12 +124,12 @@ public class NewGameMode implements ContentTemplate {
         switch(dialogueId) {
             case 10000:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Hard game mode", "Normal game mode (reccomended)");
+                        "Hard game mode (beta)", "Normal game mode (reccomended)");
                 player.getInterfaceState().setNextDialogueId(0, 10001);
                 player.getInterfaceState().setNextDialogueId(1, 10002);
                 return true;
             case 10001:
-                ClanManager.joinClanChat(player, "help2", false);
+               /* ClanManager.joinClanChat(player, "help2", false);
                 player.getInventory().add(Item.create(995, 15_000_000));
                 for(int i = 0; i < IRON_STARTER.length; i++) {
                     try {
@@ -140,11 +140,12 @@ public class NewGameMode implements ContentTemplate {
                 }
 
                 player.setGameMode(1);
-                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
+                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE); */
+                player.sendMessage("@red@New game mode is changing from beta to full release!", "@red@You have been assigned to the normal game mode");
 
-                player.getActionSender().removeChatboxInterface();
+                //player.getActionSender().removeChatboxInterface();
 
-                return true;
+                //return true;
             case 10002:
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {

@@ -122,8 +122,6 @@ public class ActionSender {
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
             sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
-            sendMessage("@blu@Christmas Boosts Active:");
-            player.sendMessage("     @red@25% Donator Point Boost 50% Honor point boost 25% EXP Boost");
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");

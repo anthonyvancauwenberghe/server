@@ -1080,7 +1080,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
     public boolean isNewlyCreated() {
-        return permExtraData.getLong("logintime") < Time.FIVE_MINUTES * 3;
+        return permExtraData.getLong("logintime") < Time.FIVE_MINUTES; //change to 15 min l8r
     }
 
 	/**

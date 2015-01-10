@@ -114,7 +114,7 @@ public class BountyHunter {
 	}
 	
 	public static boolean applicable(Player player) {
-		return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getBountyHunter().enabled;
+		return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getPermExtraData().getBoolean("bhon");
 	}
 	
 	public static void fireLogout(final Player player) {

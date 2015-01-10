@@ -90,6 +90,8 @@ public class Bank {
     public static void withdraw(Player player, int slot, int id, int amount) {
         if(player.getLocation().inPvPArea())
             return;
+        if(!ItemSpawning.canSpawn(player))
+            return;
         if(slot < 0 || slot > player.getBank().capacity() || id < 0 || id > ItemDefinition.MAX_ID)
             return;
         Item item = player.getBank().getById(id);

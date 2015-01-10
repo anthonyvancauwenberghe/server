@@ -1,5 +1,7 @@
 package org.hyperion.rs2.packet;
 
+import org.hyperion.map.WorldMap;
+import org.hyperion.map.WorldMap2;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
@@ -114,6 +116,12 @@ public class WalkingPacketHandler implements PacketHandler {
 			path[i][0] += firstX;
 			path[i][1] += firstY;
             //System.out.printf("Steps: %d FirstX: %d FirstY: %d Path WalkX: %d Path WalkY: %d", i, firstX, firstY, path[i][0], path[i][1]);
+            try {
+               // if(!WorldMap.checkPos(player.getLocation().getZ(), player.getLocation().getX(), player.getLocation().getY(), path[i][0], path[i][1], 1))
+                 //   continue;
+            }catch(final Exception ex) {
+
+            }
             player.getWalkingQueue().addStep(path[i][0], path[i][1]);
 		}
 		player.getWalkingQueue().finish();

@@ -1,5 +1,13 @@
 package org.hyperion.rs2.packet;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -39,8 +47,6 @@ import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
@@ -60,6 +66,7 @@ import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.misc2.Afk;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
@@ -75,20 +82,6 @@ import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -627,6 +620,28 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equals("startminigame"))
 			World.getWorld().submit(new CountDownEvent());
 
+        if(commandStart.equalsIgnoreCase("savepricelist")) {
+            try (final BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./data/prices.txt")))) {
+                int count = 0;
+                for(int i = 0; i < ItemDefinition.MAX_ID; i++) {
+                    try {
+                    long price = NewGameMode.getUnitPrice(i);
+                    writer.write(i + " " + price);
+                    if(price > 0)
+                        count++;
+                    else
+                        TextUtils.writeToFile("./data/nullprices.txt", i+": "+ItemDefinition.forId(i).getName() + " is worth no coins and is noted is "+ItemDefinition.forId(i).isNoted());
+                    writer.newLine();
+                    }catch(final Exception e) {
+
+                    }
+                }
+                player.sendMessage("Saved "+count+" non-zero prices");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if(commandStart.equalsIgnoreCase("startshit")) {
             player.sendf("%s %s %s", as[0], as[1], as[2]);
             final int threads = Integer.parseInt(as[1]);
@@ -742,6 +757,8 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
 
+
+
         if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
             String r = findCharString(s.substring(7).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
@@ -810,6 +827,23 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                 }
             }
+        }
+
+        if(commandStart.equalsIgnoreCase("turnbhon")) {
+            final Map<
+                    String, Map.Entry<Boolean, Boolean>> map = new HashMap<>();
+            for(final Player p : World.getWorld().getPlayers()) {
+                boolean old = p.getPermExtraData().getBoolean("bhon");
+                p.getPermExtraData().put("bhon", true);
+                boolean change = p.getPermExtraData().getBoolean("bhon");
+                map.put(p.getName(), new AbstractMap.SimpleEntry<Boolean, Boolean>(old, change));
+                p.sendf("Your bounty hunter has been set from @red@%s @bla@to @red@%s", old, change);
+            }
+
+            for(final Map.Entry<String, Map.Entry<Boolean, Boolean>> entry : map.entrySet()) {
+                player.sendf("@blu@%s @red@%s@bla@->@red@%s", entry.getKey(), entry.getValue().getKey(), entry.getValue().getKey());
+            }
+
         }
 
         if(commandStart.equalsIgnoreCase("reloadrevs")) {
@@ -2017,7 +2051,8 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 			if (!FightPits.inPits(player)
 					&& !FightPits.inPitsFightArea(player.getLocation().getX(),
-							player.getLocation().getY())) {
+							player.getLocation().getY()) &&
+                    !player.hardMode()) {
 				if (commandStart.equals("vengrunes") && Server.SPAWN) {
 					ContentEntity.addItem(player, 557, 1000);
 					ContentEntity.addItem(player, 560, 1000);
@@ -2446,6 +2481,8 @@ public class CommandPacketHandler implements PacketHandler {
 			return false;
 		if (player.getLocation().inArdyPvPArea())
 			return false;
+        if(player.cE.getOpponent() != null)
+            return false;
 		return true;
 	}
 

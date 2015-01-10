@@ -104,8 +104,7 @@ public class DeathDrops {
 				continue;
 			Item item = container.get(slot);
 			if(toDrop(item, player.getGameMode())) {
-                System.out.println("To drop: "+item.getId());
-				if(ItemsTradeable.isTradeable(item.getId()))
+				if(ItemsTradeable.isTradeable(item.getId()) || (item.getId() >= 13195 && item.getId() <= 13205))
 					originalDrops.add(item);
 				container.remove(slot, item);
 			}	
@@ -117,7 +116,6 @@ public class DeathDrops {
 		if(item == null)
 			return false;
 		if(ItemsTradeable.isTradeable(item.getId())) {
-            System.out.printf("Checking drop for %d and game mode is %d\n", item.getId(), gameMode);
 			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null && gameMode == 0)
 				return false;
 			return true;

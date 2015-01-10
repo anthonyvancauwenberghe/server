@@ -34,3 +34,866 @@ Tue Nov 18 22:54:10 GMT+01:00 2014
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sat Jan 03 20:21:30 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 03 20:27:10 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Jan 08 12:37:03 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:08 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:30 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:31 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:38 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:43 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:45 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:52 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:37:56 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:38:02 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:38:05 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:38:15 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:38:21 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:38:30 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:11 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:13 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:20 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:36 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:42 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:43 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:48 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:50 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:52 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:56 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:56 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:39:57 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:01 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:02 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:02 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:08 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:08 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:09 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:09 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:10 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:10 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:10 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:36 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:38 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:56 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:40:58 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:08 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:14 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:18 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:24 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:33 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:37 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:40 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:41:44 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%d'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:42:00 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:42:07 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:42:14 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:42:45 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:42:47 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:42:54 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:43:23 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:43:46 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Jan 08 12:44:30 GMT+01:00 2015
+	class: class java.util.MissingFormatArgumentException
+	message: Format specifier '%s'
+	at java.util.Formatter.format(Formatter.java:2519)
+	at java.util.Formatter.format(Formatter.java:2455)
+	at java.lang.String.format(String.java:2927)
+	at org.hyperion.rs2.model.World$5.run(World.java:936)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

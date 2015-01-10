@@ -869,21 +869,21 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(2, 139);
 				break;
 			case 137:
-				if(ModerationOverride.canModerate(player))
+				if(ModerationOverride.canModerate(player) && Rank.getPrimaryRank(player).ordinal() > Rank.getPrimaryRank(player.getModeration()).ordinal())
 					ModerationOverride.kickPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
 				PushMessage.pushGlobalMessage(player.getSafeDisplayName() + " has just kicked " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 138:
-				if(ModerationOverride.canModerate(player))
+				if(ModerationOverride.canModerate(player) && Rank.getPrimaryRank(player).ordinal() > Rank.getPrimaryRank(player.getModeration()).ordinal())
 					ModerationOverride.jailPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
 				PushMessage.pushGlobalMessage(player.getSafeDisplayName() + " has just jailed " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 139:
-				if(ModerationOverride.canModerate(player))
+				if(ModerationOverride.canModerate(player) && Rank.getPrimaryRank(player).ordinal() > Rank.getPrimaryRank(player.getModeration()).ordinal())
 					ModerationOverride.mutePlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
 				PushMessage.pushGlobalMessage(player.getSafeDisplayName() + " has just muted " + player.getModeration().getSafeDisplayName() + ".");

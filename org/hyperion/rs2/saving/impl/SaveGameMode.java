@@ -24,7 +24,10 @@ public class SaveGameMode extends SaveInteger {
 
     @Override
     public void setValue(Player player, int value) {
-        player.setGameMode(value);
+        if(value == 1) {
+            player.sendMessage("@blu@Beta for new game mode is over. You have been switched to normal game mode!");
+        }
+        player.setGameMode(0);
     }
 
     @Override

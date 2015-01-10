@@ -55,6 +55,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
@@ -236,6 +237,28 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+        submit(new Command("removejail", Rank.HELPER) {
+            public boolean execute(final Player player, String input) {
+                final Player target = World.getWorld().getPlayer(filterInput(input));
+                if(target != null && Jail.inJail(target)) {
+                    target.setTeleportTarget(Edgeville.LOCATION);
+                }
+                return true;
+            }
+        });
+
+        submit(new Command("hardmoders", Rank.DEVELOPER) {
+            public boolean execute(final Player player, final String input) {
+                int counter = 0;
+                for(final Player p : World.getWorld().getPlayers()) {
+                    if(p.hardMode())
+                        player.sendf("@red@#%d@bla@ %s", counter++, p.getName());
+                }
+                return true;
+            }
+        });
+
 		submit(new Command("getpass", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -277,7 +300,7 @@ public class CommandHandler {
 		});
         submit(new Command("sz", Rank.GRAPHICS_DESIGNER, Rank.HELPER, Rank.FORUM_MODERATOR) {
             public boolean execute(Player player, String input) {
-                player.setTeleportTarget(Location.create(2846, 5213, 0));
+                Magic.teleport(player, Location.create(2846, 5213, 0), false);
                 return true;
             }
         });
@@ -1019,15 +1042,15 @@ public class CommandHandler {
 
         CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.DEVELOPER));
+        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new PunishCommand("mute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.DEVELOPER));
+        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new PunishCommand("ban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.DEVELOPER));
+        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));
@@ -1039,15 +1062,15 @@ public class CommandHandler {
 
         CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.DEVELOPER));
+        CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new UnPunishCommand("unmute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.DEVELOPER));
+        CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new UnPunishCommand("unban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.DEVELOPER));
+        CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new UnPunishCommand("unwildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new UnPunishCommand("unipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));
@@ -1412,20 +1435,31 @@ public class CommandHandler {
         submit(new ViewLogStatsCommand());
         submit(new ClearLogsCommand());
 
+        submit(new Command("checkmac", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                try{
+                    final int mac = Integer.parseInt(filterInput(input).trim());
+                    for(final Player p : World.getWorld().getPlayers())
+                        if(p != null && p.getUID() == mac)
+                            player.sendf("%s has the mac: %d", p.getName(), mac);
+                    return true;
+                }catch(Exception ex){
+                    player.sendf("Error parsing mac");
+                    return false;
+                }
+            }
+        });
+
         submit(new Command("checkip", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String ip = filterInput(input).trim();
-                final File directory = new File("./data/characters");
-                for(final File f : directory.listFiles()){
-                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
-                        continue;
-                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
-                    final Player target = World.getWorld().getPlayer(playerName);
-                    final String playerIp = target != null ? target.getShortIP() : CommandPacketHandler.findCharString(playerName, "IP");
-                    if(playerIp.contains(ip))
-                        player.sendf("%s has the same ip (%s)", playerName, playerIp);
+                if(ip.isEmpty()){
+                    player.sendf("Enter a ip");
+                    return false;
                 }
-                player.sendf("Finished checking ips: " + ip);
+                for(final Player p : World.getWorld().getPlayers())
+                    if(p != null && p.getShortIP().contains(ip))
+                        player.sendf("%s has the ip: %s", p.getName(), p.getShortIP());
                 return true;
             }
         });
@@ -1433,17 +1467,13 @@ public class CommandHandler {
         submit(new Command("checkpass", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String pass = filterInput(input).trim();
-                final File directory = new File("./data/characters");
-                for(final File f : directory.listFiles()){
-                    if(f.isDirectory() || !f.getName().endsWith(".txt"))
-                        continue;
-                    final String playerName = f.getName().substring(0, f.getName().indexOf(".txt"));
-                    final Player target = World.getWorld().getPlayer(playerName);
-                    final String playerPass = target != null ? target.getPassword() : CommandPacketHandler.findCharString(playerName, "Pass");
-                    if(playerPass.contains(pass) || pass.contains(playerPass))
-                        player.sendf("%s has similiar password (%s)", playerName, playerPass);
+                if(pass.isEmpty()){
+                    player.sendf("Enter a password");
+                    return false;
                 }
-                player.sendf("Finished checking passwords: " + pass);
+                for(final Player p : World.getWorld().getPlayers())
+                    if(p != null && p.getPassword().toLowerCase().contains(pass))
+                        player.sendf("%s has the pass: %s", p.getName(), pass);
                 return true;
             }
         });

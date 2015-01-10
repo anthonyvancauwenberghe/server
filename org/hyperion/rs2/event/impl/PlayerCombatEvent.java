@@ -35,6 +35,7 @@ public class PlayerCombatEvent extends Event {
 	public void execute() {
 		cleanList();
 		//move all combat events to this event, and npcs seperate, doesn't glitch both
+        final long startTime = System.currentTimeMillis();
 		List<Player> clonedList = cloneEntityList();
 		synchronized(clonedList) {
 			//handle all combat first players first
@@ -46,9 +47,12 @@ public class PlayerCombatEvent extends Event {
 					if(player.isFollowing != null) {
 						//System.out.println("Following");
 						player.cE.face(player.isFollowing.cE.getAbsX()
-		                        /*+ player.isFollowing.cE.getOffsetX()*/, player
+		                        //+ player.isFollowing.cE.getOffsetX()
+                                ,
+                                player
 								.isFollowing.cE.getAbsY()
-								/*+ player.cE.getOpponent().getOffsetY()*/);
+								//+ player.cE.getOpponent().getOffsetY()
+                        );
 
 						player.setInteractingEntity(player.isFollowing);
 						int dis = player.getLocation().distance(player.isFollowing.getLocation());
@@ -95,7 +99,10 @@ public class PlayerCombatEvent extends Event {
 					player.getWalkingQueue().walkingCheck();
 				}
 			}
-		}
+            final long deltaTime = System.currentTimeMillis() - startTime;
+            if(deltaTime > 50)
+                System.err.println("[PLAYER COMBAT EVENT]: took: "+(deltaTime) + "ms");
+        }
 	}
 	
 	public synchronized static void cleanList() {

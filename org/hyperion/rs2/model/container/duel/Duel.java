@@ -52,6 +52,10 @@ public class Duel {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
+        if(player.getUID() == opponent.getUID()){
+            player.sendf("You cannot duel yourself!");
+            return;
+        }
 		//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());
 		//World.getWorld().getAbuseHandler().cacheMessage(player1, (new StringBuilder()).append(player1.getName()).append(": opened a duel with: ").append(player.getName()).toString());
 		player.setBusy(true);
@@ -177,7 +181,7 @@ public class Duel {
 	public static void deposit(Player player, int slot, int id, int amount) {
 		if(player.tradeAccept1 && player.getTrader() != null && player.getTrader().tradeAccept1)
 			return;
-        if(player.getGameMode() != player.getTrader().getGameMode()) {
+        if(player.getTrader() != null && player.getGameMode() != player.getTrader().getGameMode()) {
             player.sendMessage("You cannot stake when you are in separate game modes");
             return;
         }
@@ -188,7 +192,7 @@ public class Duel {
             return;
         }
 
-        if(player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
+        if(player.getTrader() != null && player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
             player.sendMessage("You or your partner is too new to stake");
             return;
         }

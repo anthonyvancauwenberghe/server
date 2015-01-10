@@ -31,6 +31,7 @@ public class ExtraData {
 	public ExtraData() {
 		extraData = new HashMap<String, Object>();
 		this.put("zombiewave", 0);
+        this.put("bhon", true);
 	}
 
 	/**

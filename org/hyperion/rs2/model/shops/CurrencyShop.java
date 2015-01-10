@@ -49,6 +49,10 @@ public class CurrencyShop extends Shop {
 							+ " to buy this item.");
 			return;
 		}
+        if(player.hardMode()) {
+            player.sendMessage("You cannot buy from this shop in this mode");
+            return;
+        }
 		int price = calculateUnitBuyPrice(item) * item.getCount();
 		if(coins.getCount() >= price) {
 			player.getInventory().remove(new Item(currency, price));

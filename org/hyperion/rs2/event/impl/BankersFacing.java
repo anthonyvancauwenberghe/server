@@ -1,9 +1,16 @@
 package org.hyperion.rs2.event.impl;
 
+import java.util.concurrent.TimeUnit;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.NPCFacing;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Time;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.util.Date;
@@ -35,7 +42,11 @@ public class BankersFacing extends Event {
 		for(Player player : World.getWorld().getPlayers()) {
 			String name = player.getName().replaceAll(" ", "_").toLowerCase();
 			if(map.containsKey(name)) {
-				System.out.println("DUPER WITH USERNAME: " + name);
+                final Punishment p = Punishment.create("Server", player, Combination.of(Target.IP, Type.BAN), Time.create(1, TimeUnit.HOURS), "Multilogging - Possible Dupe");
+				p.apply();
+                PunishmentManager.getInstance().add(p);
+                p.insert();
+                System.out.println("DUPER WITH USERNAME: " + name);
 				TextUtils.writeToFile("./data/multi_loggers.log", new Date().toString() + " : " + name);
 				//World.getWorld().unregister2(player);
 				//player.getSession().close(true);

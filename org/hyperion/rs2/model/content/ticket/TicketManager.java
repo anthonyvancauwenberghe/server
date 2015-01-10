@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class TicketManager {
 
-    private final Set<Ticket> tickets = new TreeSet<>((id_1, id_2) -> Integer.valueOf(id_1.id).compareTo(Integer.valueOf(id_2.id)));
+    private final Set<Ticket> tickets = new TreeSet<>((Ticket id_1, Ticket id_2) -> Integer.valueOf(id_1.id).compareTo(Integer.valueOf(id_2.id)));
 
     public synchronized void add(final Ticket ticket) {
         tickets.add(ticket);

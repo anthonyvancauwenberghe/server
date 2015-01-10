@@ -59,6 +59,7 @@ import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -96,6 +97,16 @@ import org.hyperion.util.BlockingExecutorService;
  * @author Graham Edgecombe
  */
 public class World {
+
+    /**
+     * Ticket Manager - no fuckin shit
+     */
+
+    private final TicketManager ticketManager = new TicketManager();
+
+    public final TicketManager getTicketManager() {
+        return ticketManager;
+    }
 
 	/**
 	 * Logging class.

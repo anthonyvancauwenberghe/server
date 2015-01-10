@@ -350,7 +350,8 @@ public class DeathDrops {
 				player.getEquipment().set(slotId, null);
 			}
 		}
-		player.itemKeptId[keepItem] = item;
+		if(keepItem < player.itemKeptId.length)
+            player.itemKeptId[keepItem] = item;
 		if(item == - 1)
 			return null;
 		else

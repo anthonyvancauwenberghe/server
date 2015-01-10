@@ -1,16 +1,11 @@
 package org.hyperion.rs2;
 
-import java.io.File;
-import java.net.SocketAddress;
-import java.util.HashMap;
-import java.util.LinkedList;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.BanManager;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -23,6 +18,11 @@ import org.hyperion.rs2.task.impl.SessionClosedTask;
 import org.hyperion.rs2.task.impl.SessionMessageTask;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
+
+import java.io.File;
+import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -89,9 +89,9 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					long expiration_time = System.currentTimeMillis() + Time.ONE_MINUTE;
 					World.getWorld().getBanManager().moderate("Server", p, 2, true, expiration_time, "Suspected layer 7 ddos.");
 				}
-				if(packetCount > 150) {
+				if(packetCount > 149) {
 					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
-                	session.close(false);
+                	//session.close(false);
 				}
                 return;
             }
@@ -162,7 +162,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	static {
 		CommandHandler
-				.submit(new Command("dumpconnlogs", Rank.DEVELOPER) {
+				.submit(new Command("dumpconnlogs", Rank.ADMINISTRATOR) {
 					@Override
 					public boolean execute(Player player, String input) {
 						debugger.dumpLogs();

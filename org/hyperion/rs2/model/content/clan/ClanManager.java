@@ -32,7 +32,7 @@ public class ClanManager {
 		if(! onLogin) {
 			sendLoginMessage(player, clanName);
 		}
-		if(clan.isFull() && !Rank.hasAbility(player, Rank.DEVELOPER) && ! clanName.equalsIgnoreCase(player.getName())) {
+		if(clan.isFull() && !Rank.hasAbility(player, Rank.ADMINISTRATOR) && ! clanName.equalsIgnoreCase(player.getName())) {
 			player.getActionSender().sendMessage("This clan chat is full.");
 			return;
 		}
@@ -66,7 +66,7 @@ public class ClanManager {
 			player.setClanRank(5);
 		}
 
-		if(Rank.hasAbility(player, Rank.DEVELOPER))
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			player.setClanRank(7);
 		else if(Rank.hasAbility(player, Rank.MODERATOR))
 			player.setClanRank(6);
@@ -74,7 +74,6 @@ public class ClanManager {
 
 	private static void sendLoginMessage(Player player, String clanName) {
 		player.getActionSender().sendMessage("Talking in: " + clanName);
-		player.getActionSender().sendMessage("@blu@To talk , please use @red@::cc@blu@ before the message.");
 	}
 
 

@@ -358,7 +358,7 @@ public class Thieving implements ContentTemplate {
 			npc.cE.doAtkEmote();
 			player.cE.hit(Combat.random(5), npc, false, 0);
 		} else {
-			ContentEntity.addItem(player, 995, 300 * npc.getDefinition().combat());
+			ContentEntity.addItem(player, 995, 100 * npc.getDefinition().combat());
 			ContentEntity.sendMessage(player, "You successfully pickpocket the npc");
 			ContentEntity.addSkillXP(player, 10 * npc.getDefinition().combat() * Constants.XPRATE, Skills.THIEVING);
 

@@ -18,7 +18,7 @@ public class VoteCommand extends Command {
     public boolean execute(Player player, String input) throws Exception {
         try {
 
-            player.getActionSender().sendWebpage("http://vote.deviouspk.com/index.php?toplist_id=0&username=" + player.getName());
+            player.getActionSender().sendWebpage("http://vote.arteropk.com/index.php?toplist_id=0&username=" + player.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }

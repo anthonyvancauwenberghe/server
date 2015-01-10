@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TradeChecker;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PushMessage;
@@ -42,6 +43,16 @@ public class Trade {
 	public static void open(Player player, Player player2) {
 		if(World.getWorld().updateInProgress())
 			return;
+        if(player.getGameMode() != player2.getGameMode()) {
+            player.sendMessage("You cannot trade players in different game modes");
+            return;
+        }
+
+        if(player.isNewlyCreated() && player.hardMode() || player2.isNewlyCreated() && player2.hardMode()) {
+            player.sendMessage("You or your partner is too new to trade");
+            return;
+        }
+
 		if(player.getName().equalsIgnoreCase(player2.getName())) {
 			System.out.println("Trading yourself is not good. 1");
 			return;
@@ -60,7 +71,7 @@ public class Trade {
 		}
 		//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": opened a trade with: "+player2.getName());
 		//World.getWorld().getAbuseHandler().cacheMessage(player2,player2.getName()+": opened a trade with: "+player.getName());
-		player.openingTrade = true;
+        player.openingTrade = true;
 		player2.openingTrade = true;
 		player.setTradeWith(player2);
 		player2.setTradeWith(player);
@@ -183,6 +194,13 @@ public class Trade {
 			player.getActionSender().sendMessage("You cannot trade this item.");
 			return;
 		}
+        if((player.hardMode()) && (player.getUID() == player.getTrader().getUID() || player.getShortIP().equalsIgnoreCase(player.getTrader().getShortIP())))
+        {
+            player.sendMessage("You cannot trade with this person");
+            return;
+        }
+
+
 		boolean inventoryFiringEvents = player.getInventory().isFiringEvents();
 		player.getInventory().setFiringEvents(false);
 		try {
@@ -309,8 +327,8 @@ public class Trade {
 		player.getActionSender().sendUpdateItems(3214, player.getInventory().toArray());
 		player.getTrader().getActionSender().sendInterfaceInventory(3443, 3213);
 		player.getTrader().getActionSender().sendUpdateItems(3214, player.getTrader().getInventory().toArray());
-		player.getTrader().getActionSender().sendString(3451, player.getName());
-		player.getActionSender().sendString(3451, player.getTrader().getName());
+		player.getTrader().getActionSender().sendString(3451, player.getSafeDisplayName());
+		player.getActionSender().sendString(3451, player.getTrader().getSafeDisplayName());
 		player.onConfirmScreen = true;
 		player.getTrader().onConfirmScreen = true;
 	}
@@ -369,6 +387,22 @@ public class Trade {
 	    }*/
 		//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": completed a trade with: "+player.getTrader().getName());
 		new TradeChecker(player, player.getTrader());
+            player.getLogManager().add(
+                    LogEntry.trade(
+                            player.getName(),
+                            player.getTrader().getName(),
+                            player.getTrade().toArray(),
+                            player.getTrader().getTrade().toArray()
+                    )
+            );
+            player.getTrader().getLogManager().add(
+                    LogEntry.trade(
+                            player.getName(),
+                            player.getTrader().getName(),
+                            player.getTrade().toArray(),
+                            player.getTrader().getTrade().toArray()
+                    )
+            );
 		Container.transfer(player.getTrader().getTrade(), player.getInventory());
 		Container.transfer(player.getTrade(), player.getTrader().getInventory());
 		//World.getWorld().getWorldLoader().savePlayer(player, "trade");

@@ -248,7 +248,7 @@ public class SQLite {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				if(Rank.hasAbility(player, Rank.DEVELOPER))
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					return false;
 				synchronized(SQLite.getDatabase()) {
 					//Get all ips for name

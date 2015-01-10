@@ -2,7 +2,6 @@ package org.hyperion.rs2.model.punishment.cmd;
 
 import java.util.concurrent.TimeUnit;
 import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
@@ -41,7 +40,7 @@ public class PunishCommand extends Command{
             player.sendf("Unable to find player: %s", victimName);
             return false;
         }
-        if(victim != null && Rank.isStaffMember(victim)){
+        if(victim != null && Rank.isStaffMember(victim) && !Rank.hasAbility(player, Rank.DEVELOPER)){
             player.sendf("You cannot punish other staff members");
             return false;
         }
@@ -65,7 +64,9 @@ public class PunishCommand extends Command{
             duration = Long.parseLong(durationParts[0].trim());
             if(durationParts.length == 2){
                 final String unitStr = durationParts[1].trim();
-                if(unitStr.contains("minute"))
+                if(unitStr.contains("second"))
+                    unit = TimeUnit.SECONDS;
+                else if(unitStr.contains("minute"))
                     unit = TimeUnit.MINUTES;
                 else if(unitStr.contains("hour"))
                     unit = TimeUnit.HOURS;

@@ -54,7 +54,7 @@ public class AccountLogger {
 			/*
 			 * oh god!
 			 */
-			if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+			if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 				//player.getActionSender().sendMessage("Acc value: " + value);
 			}
 			Status new_status = new Status(value, line);

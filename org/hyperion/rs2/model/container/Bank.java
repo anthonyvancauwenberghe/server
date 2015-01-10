@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 /**
  * Banking utility class.
@@ -43,6 +44,9 @@ public class Bank {
      */
     public static void open(Player player, boolean setPin) {
         if(player.getLocation().inPvPArea()) { //:(
+            return;
+        }
+        if(!ItemSpawning.canSpawn(player)) {
             return;
         }
         if(FightPits.inPits(player))
@@ -85,6 +89,8 @@ public class Bank {
      */
     public static void withdraw(Player player, int slot, int id, int amount) {
         if(player.getLocation().inPvPArea())
+            return;
+        if(!ItemSpawning.canSpawn(player))
             return;
         if(slot < 0 || slot > player.getBank().capacity() || id < 0 || id > ItemDefinition.MAX_ID)
             return;
@@ -175,6 +181,8 @@ public class Bank {
         if(slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
             return;
         if(Location.inAttackableArea(player))
+            return;
+        if(FightPits.inPits(player))
             return;
         boolean inventoryFiringEvents = container.isFiringEvents();
         container.setFiringEvents(false);

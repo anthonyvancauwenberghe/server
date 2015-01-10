@@ -2,7 +2,10 @@ package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.ChatMessage;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
@@ -41,6 +44,7 @@ public class ChatPacketHandler implements PacketHandler {
 		player.getSpam().checkSpam(chatData);
 		try {
 			String unpacked = TextUtils.textUnpack(chatData, size);
+            player.getLogManager().add(LogEntry.publicChat(unpacked));
 			/*if(unpacked.contains("pkgods")) {
 				System.out.println(unpacked);
 				if(System.currentTimeMillis() - player.getCreatedTime() < Time.ONE_HOUR) {
@@ -92,7 +96,7 @@ public class ChatPacketHandler implements PacketHandler {
 	}
 
 	static {
-		CommandHandler.submit(new Command("chatdebug", Rank.ADMINISTRATOR) {
+		CommandHandler.submit(new Command("chatdebug", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				debug = ! debug;

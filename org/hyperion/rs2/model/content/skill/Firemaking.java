@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Jail;
@@ -36,6 +37,10 @@ public class Firemaking implements ContentTemplate {
 		}
         if(Jail.inJail(player)){
             ContentEntity.sendMessage(player, "You cannot do this while in jail.");
+            return;
+        }
+        if(Duel.inDuelLocation(player) || player.duelAttackable > 0){
+            ContentEntity.sendMessage(player, "You cannot do this in duel arena.");
             return;
         }
 		ContentEntity.deleteItem(player, logId);

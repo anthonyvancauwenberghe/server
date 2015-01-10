@@ -28,7 +28,7 @@ public class KeywordCommand extends Command {
 		String keyword = parts[0];
 		if(SpawnCommand.getId(keyword) != null) {
 			player.getActionSender().sendMessage("Keyword was already set before..");
-			if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+			if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 				try {
 					int id = Integer.parseInt(parts[1]);
 					int oldId = SpawnCommand.getId(keyword);

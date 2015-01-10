@@ -2,9 +2,11 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.util.ClassUtils;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.ArrayUtils;
 import org.hyperion.util.Misc;
 
 import java.io.BufferedReader;
@@ -329,6 +331,9 @@ public class NPCManager {
 			case 6206:
 			case 6203:
 				return 20;
+
+            case 50:
+                return 15;
 			default:
 				return 0;
 		}

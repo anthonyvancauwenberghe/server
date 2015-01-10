@@ -10,12 +10,9 @@ import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.Container.Type;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
-import org.hyperion.rs2.model.sets.SetData;
 import org.hyperion.rs2.model.sets.SetHandler;
-import org.hyperion.rs2.model.sets.SetUtility;
 import org.hyperion.rs2.net.Packet;
 
 import java.util.LinkedList;
@@ -29,7 +26,7 @@ import java.util.LinkedList;
 public class ActionButtonPacketHandler implements PacketHandler {
 
 	static {
-		CommandHandler.submit(new Command("doaction", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("doaction", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -60,8 +57,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
 		if(World.getWorld().getContentManager()
 				.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;
-		if(SetHandler.handleSet(player, button))
-			return;
+        if(button >= 29174 && button <= 29179)
+		    if(SetHandler.handleSet(player, button))
+			    return;
 		switch(button) {
             case -29034:
                 final Player opp = player.getBountyHunter().getTarget();
@@ -717,11 +715,11 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
 			case 161:
 				player.emoteTabPlay(Animation.CRY);
-				break;
+                break;
 			case 19206:
 			case 162:
 				player.emoteTabPlay(Animation.THINKING);
-				break;
+                break;
 			case 19207:
 			case 163:
 				player.emoteTabPlay(Animation.WAVE);
@@ -856,12 +854,12 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			case 19136:
 			case 152:
 				// player.getWalkingQueue().setRunningToggled(false);
-				if(player.getWalkingQueue().isRunning() && !Rank.hasAbility(player, Rank.DEVELOPER))
+				if(player.getWalkingQueue().isRunning() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					player.getWalkingQueue().setRunningToggled(false);
 				else if(!player.getWalkingQueue().isRunning()){
 					player.getWalkingQueue().setRunningToggled(true);
 				}
-				if(Rank.hasAbility(player, Rank.DEVELOPER) && player.getCombat().getFamiliar() != null) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getCombat().getFamiliar() != null) {
 					SummoningSpecial.preformSpecial(player, 
 							SummoningSpecial.getCorrectSpecial(player.getCombat().getFamiliar().getDefinition().getId()));
 				}
@@ -879,6 +877,21 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.SummoningCounter = 0;
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
+            case 10137:
+                if(player.cE.summonedNpc == null) {
+                    player.sendMessage("You don't have a summoned familiar");
+                    break;
+                }
+                Location newlocation = player.getLocation().getCloseLocation();
+                player.cE.summonedNpc.setTeleportTarget(newlocation);
+                player.cE.summonedNpc.playGraphics(Graphic.create(1315));
+                player.cE.summonedNpc.ownerId = player.getIndex();
+                if(player.cE.getOpponent() != null) {
+                    Combat.follow(player.cE.summonedNpc.cE, player.cE);
+                    player.cE.summonedNpc.setInteractingEntity(player);
+                }
+                player.cE.summonedNpc.cE.setOpponent(player.cE.getOpponent());
+                break;
 		/* normal */
 			case 1830:
 			case 1831:
@@ -942,13 +955,13 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
 			case 151:
 				player.autoRetailate = ! player.autoRetailate;
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage("Auto retaliate if now: " + player.autoRetailate);
 				}
 				break;
 			case 150:
 				player.autoRetailate = ! player.autoRetailate;
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage("Auto retaliate if now: " + player.autoRetailate);
 				}
 				break;

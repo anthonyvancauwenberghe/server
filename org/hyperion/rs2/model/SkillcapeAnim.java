@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+
 public class SkillcapeAnim {
 
 	public static int skillIdForCape(int cape) {
@@ -399,6 +401,7 @@ public class SkillcapeAnim {
 			if(skill == - 1 || player.getSkills().getLevelForExp(skill) >= 99) {
 				player.playAnimation(Animation.create(skillcapeAnimation));
 				player.playGraphics(Graphic.create(skillcapeGraphic));
+                ClueScrollManager.trigger(player, skillcapeAnimation);
 			} else {
 				player.getActionSender().sendMessage(
 						"You need to be level 99 " + skillcapeName

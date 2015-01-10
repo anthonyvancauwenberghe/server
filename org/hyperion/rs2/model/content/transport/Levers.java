@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.transport;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -101,6 +102,7 @@ public class Levers implements ContentTemplate {
 		LEVERS.put(Location.create(2539, 4712, 0), new Lever(Location.create(3090, 3956, 0), 3, 3));
 		LEVERS.put(Location.create(3090, 3956, 0), new Lever(Location.create(2539, 4712, 0), 0, 0));
 
+        LEVERS.put(Location.create(3153, 3923, 0), new Lever(Edgeville.LOCATION, 0, 0));
 		//edgville to magebank
 		//player.getActionAssistant().pullLever(player, x, y, 5961, 0, 3, 3153, 3923, 0);
 
@@ -122,7 +124,7 @@ public class Levers implements ContentTemplate {
 	@Override
 	public int[] getValues(int type) {
 		if(type == 6) {
-			int[] levers = {5960, 1816, 1817, 5959};
+			int[] levers = {1815, 5960, 1816, 1817, 5959};
 			return levers;
 		}
 		return null;

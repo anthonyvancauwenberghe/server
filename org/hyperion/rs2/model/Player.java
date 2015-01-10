@@ -1,10 +1,5 @@
 package org.hyperion.rs2.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.Server;
@@ -16,6 +11,8 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
@@ -37,19 +34,17 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Mail;
 import org.hyperion.rs2.model.content.misc.SkillingData;
 import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
-import java.util.Date;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.sets.CustomSetHolder;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
 import org.hyperion.rs2.net.LoginDebugger;
@@ -62,6 +57,14 @@ import org.hyperion.rs2.util.AccountValue;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Represents a player-controller character.
@@ -91,6 +94,20 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
+
+    private int gameMode;
+
+    public boolean hardMode() {
+        return gameMode == 1;
+    }
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(int mode) {
+        this.gameMode = mode;
+    }
 
     private boolean completedTG;
 	private boolean hasMaxCape = false;
@@ -127,8 +144,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean checkMaxCapeRequirment() {
         if(hasMaxCape)
             return !getBank().contains(12744) && !getInventory().contains(12744) && !getEquipment().contains(12744);
-		for(int i = 0; i < this.getSkills().getLevels().length; i++) {
-			if(i >= 21)
+		for(int i = 6; i < this.getSkills().getLevels().length; i++) {
+			if(i >= 21 && i != Skills.SUMMONING)
 				continue;
 			if(this.getSkills().getLevels()[i] < 99)
 				return false;
@@ -141,7 +158,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean checkCompCapeReq() {
 		if(hasCompCape)
             return !getBank().contains(12747) && !getInventory().contains(12747) && !getEquipment().contains(12747);
-		for(int i = 0; i < this.getSkills().getXps().length; i++) {
+		for(int i = 6; i < this.getSkills().getXps().length; i++) {
 			if(i >= 21)
 				continue;
 			if(this.getSkills().getXps()[i] < 200000000)
@@ -191,6 +208,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return previousSessionTime;
 	}
 
+    public final long loginTime = System.currentTimeMillis();
+
 	private AccountValue accountValue = new AccountValue(this);
 
 	private AccountLogger logger = new AccountLogger(this);
@@ -207,6 +226,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private ExtraData extraData = new ExtraData();
 
+    private final ExtraData permExtraData = new ExtraData();
+
 	private QuestTab questtab = new QuestTab(this);
 
 	private ItemDropping itemDropping = new ItemDropping();
@@ -217,9 +238,21 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private SkillingData sd = new SkillingData();
 
+    private final CustomSetHolder customSetHolder = new CustomSetHolder(this);
+
+    public CustomSetHolder getCustomSetHolder() {
+        return customSetHolder;
+    }
+
 	public TriviaSettings getTrivia() {
 		return ts;
 	}
+
+    private final RecolorManager recolorManager = new RecolorManager(this);
+
+    public RecolorManager getRecolorManager(){
+        return recolorManager;
+    }
 	
 	public SummoningBar getSummBar() {
 		return summoningBar;
@@ -247,6 +280,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public ExtraData getExtraData() {
 		return extraData;
 	}
+
+    public ExtraData getPermExtraData() {
+        return permExtraData;
+    }
 
 	public Yelling getYelling() {
 		return yelling;
@@ -401,6 +438,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public long onlineTime() {
 		return System.currentTimeMillis() - logintime;
 	}
+
+    private final List<TeamBossSession> teamBossSessions = new ArrayList<>();
+
+    public final List<TeamBossSession> getTeamSessions() { ;
+        return teamBossSessions;
+    }
 
 	public boolean loggedOut = false;
 
@@ -719,7 +762,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return lastTicketRequest;
 	}
 
-    private final SlayerHolder slayTask = new SlayerHolder(this);
+    private final SlayerHolder slayTask = new SlayerHolder();
 
     public final SlayerHolder getSlayer() {
         return slayTask;
@@ -947,6 +990,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 */
 	private Packet cachedUpdateBlock;
 	public String display;
+
+    private LogManager logManager;
+
+
 	/**
 	 * Creates a player based on the details object.
 	 *
@@ -989,7 +1036,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();
+
+        logManager = new LogManager(this);
 	}
+
+    public LogManager getLogManager(){
+        return logManager;
+    }
 
 	private String IP;
 
@@ -1017,6 +1070,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean isNew() {
 		return newCharacter;
 	}
+
+    public boolean isNewlyCreated() {
+        return permExtraData.getLong("logintime") < Time.FIVE_MINUTES; //change to 15 min l8r
+    }
 
 	/**
 	 * Gets the request manager.
@@ -1298,12 +1355,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return playerRank;
 	}
 
-    private final RecolorManager recolorManager = new RecolorManager(this);
-
-    public RecolorManager getRecolorManager(){
-        return recolorManager;
-    }
-
 	/**
 	 * Checks if this player has a member's account.
 	 *
@@ -1384,7 +1435,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			actionSender.sendInteractionOption("Attack", 1, true);
 			// actionSender.sendOverlay(381);
 		} else {
-			if(Rank.hasAbility(getPlayerRank(), Rank.DEVELOPER))
+			if(Rank.hasAbility(getPlayerRank(), Rank.ADMINISTRATOR))
 				actionSender.sendInteractionOption("Moderate", 1, false);
 		}
 	}
@@ -1468,7 +1519,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		boolean npc = source instanceof NPC;
 		if(npc) {
 			NPC n = (NPC)source;
-			if(n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE))
+			if(n.getDefinition().getId() == 50 || ( n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE)))
 				npc = false;
 		}
         /** Ring of life */
@@ -1691,6 +1742,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 				}
 
 			});
+            ClueScrollManager.trigger(this, anim.getId());
 		}
 	}
 

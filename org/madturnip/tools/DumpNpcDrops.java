@@ -1,10 +1,8 @@
 package org.madturnip.tools;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
@@ -19,6 +17,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.util.TextUtils;
 
 public class DumpNpcDrops {
@@ -48,9 +47,73 @@ public class DumpNpcDrops {
 		    eventWriter.add(eElement);
 		    eventWriter.add(end);
 	}
+
+    public static void startDump4() throws IOException {
+
+        int index = 0;
+
+        final File file = new File("./data/slayer_exp_dump.dump");
+        if(!file.exists())
+            file.createNewFile();
+        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for(final SlayerTask task : SlayerTask.values()) {
+                if(task == null) continue;
+                Class<?> clazz = Class.forName("org.hyperion.rs2.model.content.skill.slayer.SlayerTask");
+                final Field expMultiplier = clazz.getDeclaredField("EXP_MULTIPLIER");
+                expMultiplier.setAccessible(true);
+                writer.write("[NAME]: "+task.toString() + " EXP: "+(task.getXP()));
+                writer.newLine();
+                index++;
+            }
+        } catch(final Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Dumped: "+index);
+    }
+
+    public static void startDump3() throws IOException {
+
+        int index = 0;
+
+        final File file = new File("./data/npc_info_dump.cfg");
+        if(!file.exists())
+            file.createNewFile();
+        try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for(NPCDefinition def : NPCDefinition.getDefinitions()) {
+                if(def == null) continue;
+                writer.write("[NAME]: "+ def.getName()+ " [ID]: "+ def.getId());
+                writer.newLine();
+                writer.write("\t[BONUSES]: "+ Arrays.toString(def.getBonus()));
+                writer.newLine();
+                writer.write("\t[MAX_HP]: "+ def.maxHp());
+                writer.newLine();
+                writer.write("\t[COMBAT LEVEL]: " + def.combat());
+                writer.newLine();
+                writer.write("\t[SPAWN TIME]: " + def.spawnTime() * 0.5 + " seconds");
+                writer.newLine();
+                writer.newLine();
+                index++;
+            }
+        } catch(final Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Dumped: "+index);
+
+    }
 	
 	public static void startDump2() {
-		int dumped = 0;
+        final File file = new File("./data/drop dump.cfg");
+        if(file.exists())
+            if(file.delete()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        int dumped = 0;
 		long startTime = System.currentTimeMillis();
 		for(NPCDefinition def : NPCDefinition.getDefinitions()) {
 			if(def == null)

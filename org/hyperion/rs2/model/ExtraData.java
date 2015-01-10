@@ -31,6 +31,7 @@ public class ExtraData {
 	public ExtraData() {
 		extraData = new HashMap<String, Object>();
 		this.put("zombiewave", 0);
+        this.put("bhon", true);
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class ExtraData {
 	public int getInt(String key) {
 		Object value = extraData.get(key);
 		if(value == null) return DEFAULT_INT_VALUE;
-		return (Integer) value;
+		return value instanceof String ? Integer.parseInt(value.toString()) : (Integer)value;
 	}
 
 
@@ -86,7 +87,7 @@ public class ExtraData {
 	public long getLong(String key) {
 		Object value = extraData.get(key);
 		if(value == null) return DEFAULT_INT_VALUE;
-		return (Long) value;
+		return value instanceof String ? Long.valueOf(value.toString()) :(Long) value;
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class ExtraData {
 	public boolean getBoolean(String key) {
 		Object value = extraData.get(key);
 		if(value == null) return DEFAULT_BOOL_VALUE;
-		return (Boolean) value;
+		return value instanceof String ? Boolean.valueOf(value.toString()) : (Boolean) value;
 	}
 
 	/**
@@ -110,5 +111,35 @@ public class ExtraData {
 	public Object get(String key) {
 		return extraData.get(key);
 	}
+
+    /**
+     * Enables saving of extradata inside the player file
+     */
+    public String getSaveableString() {
+        return extraData.toString().replace("=", "-");
+    }
+
+    public void parse(String saved) {
+        if(saved == null || saved.length() < 4)
+            return;
+        try {
+            saved = saved.replace('{', '\u0000').replace("}", "").trim();
+            final String parts[] = saved.split(", ");
+            for(final String s : parts) {
+                try {
+                    //{christmasevent=2, zombiewave=0}
+                    //System.out.println(s);
+                    final String p[] = s.split("-");
+                    extraData.put(p[0], p[1].trim());
+                }catch(Exception e) {
+                    //e.printStackTrace();
+                }
+            }
+        } catch(Exception e) {
+            //e.printStackTrace();
+        }
+    }
+
+
 
 }

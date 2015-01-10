@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Date;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.possiblehacks.IPChange;
+import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.saving.SaveString;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -21,7 +23,9 @@ public class SaveIP extends SaveString {
                 String shortenedValue = value.substring(0, value.indexOf(":"));
                 if(!smallIp.equalsIgnoreCase(shortenedValue)) {
                     final File file = new File("./data/possiblehacks.txt");
-                    TextUtils.writeToFile(file, String.format("Player: %s Old IP: %s New IP: %s Date: %s", player.getName(), shortenedValue,smallIp, new Date().toString()));
+                    final String date = new Date().toString();
+                    TextUtils.writeToFile(file, String.format("Player: %s Old IP: %s New IP: %s Date: %s", player.getName(), shortenedValue,smallIp, date));
+                    PossibleHacksHolder.add(new IPChange(player.getName(), shortenedValue, date, smallIp));
                 }
 			} catch(Exception e) {
 				e.printStackTrace();

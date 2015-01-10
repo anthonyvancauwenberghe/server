@@ -1,12 +1,7 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.BoB;
@@ -174,17 +169,18 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int i = packet.getShortA();
 		int invslot = packet.getLEShort();
 		Item item = player.getInventory().get(invslot);
-        if (item != null) {
+        final NPC npc = (NPC)World.getWorld().getNPCs().get(i);
+        if (item != null && npc != null) {
             if (player.getLocation().isWithinDistance(Edgeville.DICER.getLocation(), 4)) {
-                Dicing.diceNpc(player, Edgeville.DICER, item);
+                Dicing.diceNpc(player, npc, item);
             } else if (player.getLocation().isWithinDistance(RecklessDonatorsPlace.DICER.getLocation(), 4)) {
-                Dicing.diceNpc(player, RecklessDonatorsPlace.DICER, item);
+                Dicing.diceNpc(player, npc, item);
             } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER.getLocation(), 4)) {
-                Dicing.diceNpc(player, OtherDonatorsPlace.DICER, item);
+                Dicing.diceNpc(player, npc, item);
             } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER1.getLocation(), 4)) {
-                Dicing.diceNpc(player, OtherDonatorsPlace.DICER1, item);
+                Dicing.diceNpc(player, npc, item);
             } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER2.getLocation(), 4)) {
-                Dicing.diceNpc(player, OtherDonatorsPlace.DICER2, item);
+                Dicing.diceNpc(player, npc, item);
             }
         }
 	}

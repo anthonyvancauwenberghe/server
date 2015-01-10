@@ -200,6 +200,9 @@ public class PlayerSaving {
         saveList.add(new SaveEmblemPoints("emblemPoints"));
 
         saveList.add(new SaveRecolorManager());
+        saveList.add(new SaveCustomSet());
+        saveList.add(new SavePermExtraData());
+        saveList.add(new SaveGameMode());
 	}
 
 	/**
@@ -222,7 +225,7 @@ public class PlayerSaving {
 	public boolean save(Player player) {
 		//saveSQL(player);
 		//return true;
-		if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			player.getActionSender().sendMessage("Saving your account");
 		}
 		try {
@@ -235,6 +238,7 @@ public class PlayerSaving {
 				}
 			}
 			file.close();
+            player.getLogManager().save();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());
@@ -613,11 +617,11 @@ public class PlayerSaving {
 						if(value == 1)
 							rank = Rank.MODERATOR;
 						if(value == 2)
-							rank = Rank.ADMINISTRATOR;
+							rank = Rank.DEVELOPER;
 						if(value == 3)
 							rank = Rank.SUPER_DONATOR;
 						if(value == 4)
-							rank = Rank.DEVELOPER;
+							rank = Rank.ADMINISTRATOR;
 						if(rank != null) {
 							if(primary)
 								player.setPlayerRank(Rank.setPrimaryRank(player, rank));

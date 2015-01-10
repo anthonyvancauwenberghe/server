@@ -115,21 +115,26 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			}
 			if(player.getEquipment().get(Equipment.SLOT_WEAPON) != null) {
 				if(player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 11951) {
+                    if(System.currentTimeMillis() - player.getExtraData().getLong("snowball") < 5000) {
+                        player.sendMessage("Your hands are too frosty to be throwing again");
+                        return;
+                    }
+                    player.getExtraData().put("snowball", System.currentTimeMillis());
 					ContentEntity.startAnimation(player, 7530);
 					SnowItems.fireSnowBall(player, victim);
 					player.getWalkingQueue().reset();
-					World.getWorld().submit(new Event(1000) {
+					World.getWorld().submit(new Event(2000) {
 						public void execute() {
 							if(player.getInventory().getCount(SnowItems.SNOWBALL.getId()) > 0)
 								player.getInventory().remove(new Item(11951, 1));
 							else if(SnowItems.SNOWBALL.equals(player.getEquipment().get(Equipment.SLOT_WEAPON))) {
 								player.getEquipment().set(Equipment.SLOT_WEAPON, null);
-								victim.playGraphics(Graphic.create(1282));
-								victim.getActionSender().sendMessage("You just got snowballed by " + player.getName() + "!!!");
-								if(Math.random() > 0.90) {
-									player.forceMessage("BOOM HEADSHOT!!");
-									player.getPoints().inceasePkPoints(Misc.random(3));
-								}
+                            }
+							victim.playGraphics(Graphic.create(1282));
+							victim.getActionSender().sendMessage("You just got snowballed by " + player.getName() + "!!!");
+							if(Math.random() > 0.90) {
+								player.forceMessage("Owned idiot");
+								player.getPoints().inceasePkPoints(1);
 							}
 							this.stop();
 						}

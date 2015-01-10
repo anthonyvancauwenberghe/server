@@ -7,12 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.commands.impl.BanCommand;
-import org.hyperion.rs2.commands.impl.UnbanCommand;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.util.Time;
@@ -123,7 +120,7 @@ public class BanManager {
 	 * @param type
 	 */
 	private void applyPunishment(Player player, int type) {
-		if(Rank.hasAbility(player, Rank.DEVELOPER))
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			return;
 		if(type == BAN)
 			player.getSession().close(false);
@@ -146,7 +143,7 @@ public class BanManager {
 	 * @param expiration_time
 	 */
 	public void moderate(String modName, Player player, int type, boolean byIp, long expiration_time, String reason) {
-		if(Rank.hasAbility(player, Rank.DEVELOPER))
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			return;
 		String name = player.getName().toLowerCase();
 		String ip = player.getShortIP();

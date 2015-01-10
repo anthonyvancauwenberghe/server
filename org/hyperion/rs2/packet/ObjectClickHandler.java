@@ -21,7 +21,7 @@ public class ObjectClickHandler {
 			p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
 			return;
 		}
-		if(Rank.hasAbility(p, Rank.DEVELOPER) && p.debug)
+		if(Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
 			p.getActionSender().sendMessage("Clicked object: "+id);
 		if(World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, - 1))
 			return;
@@ -103,8 +103,11 @@ public class ObjectClickHandler {
 				player.setTeleportTarget(Location.create(2900, 4449, 0));
 				break;
 			case 1733:
-				player.setTeleportTarget(Location.create((player.getLocation().getX() - 3), (player.getLocation().getY() + 6400), 0));
+				player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() + 6396), 0));
 				break;
+            case 1734:
+                player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() - 6396), 0));
+                break;
 			case 26384:
 				if(player.godWarsKillCount[0] < 40) {
 					player.getActionSender().sendMessage("You need to slay 40 Bandos monsters to pass.");

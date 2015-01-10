@@ -13,18 +13,19 @@ public final class BountyHandler {
 	
 	public synchronized final boolean add(final String playerName, final String fromPlayer, int bounty) {
 		bounty = (int)(bounty * .85);
-		if(bounty > 400)
-			PushMessage.pushGlobalMessage(String.format("[@or2@BOUNTY@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
-		else return false;
+		if(bounty < 400)
+		    return false;
 		Bounty old = this.getBountyByName(playerName);
 		if(old != null && old.getBounty() > bounty)
 			return false;
 		else if(old != null) {
-			if(remove(old))
-				return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
-			else return false;
+			if(remove(old)) {
+                PushMessage.pushGlobalMessage(String.format("[@or2@BOUNTY@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
+                return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
+            } else return false;
 		}
-		return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
+        PushMessage.pushGlobalMessage(String.format("[@or2@BOUNTY@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
+        return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
 	}
 	
 	public synchronized final boolean remove(Bounty bounty) {

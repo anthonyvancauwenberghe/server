@@ -10,7 +10,7 @@ public class RecordingCommand extends Command {
 	public static final String KEY = "script789456789";
 
 	public RecordingCommand() {
-		super("startxrecording", Rank.ADMINISTRATOR);
+		super("startxrecording", Rank.DEVELOPER);
 	}
 
 

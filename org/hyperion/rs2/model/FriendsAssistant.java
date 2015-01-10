@@ -1,7 +1,10 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.net.PacketBuilder;
+import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.rs2.util.TextUtils;
 
 public class FriendsAssistant {
 
@@ -48,12 +51,17 @@ public class FriendsAssistant {
 
 	public static int lastChatId = 1;
 
-    public static void sendPM(Player p, long from, byte[] chatText, int chatTextSize, int rights) {
-        if(lastChatId == 10000) {
-            lastChatId = 1;
-        }
+	public static void sendPM(Player p, long from, byte[] chatText, int chatTextSize, int rights) {
+		if(lastChatId == 10000) {
+			lastChatId = 1;
+		}
+        final String text = TextUtils.textUnpack(chatText, chatTextSize);
+        final String fromName = NameUtils.longToName(from);
+        final Player fromPlayer = World.getWorld().getPlayer(fromName);
+        fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
+        p.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
         p.write(new PacketBuilder(196, Type.VARIABLE).putLong(from).putInt(lastChatId++).put((byte) rights).put(chatText, 0, chatTextSize).toPacket());
-    }
+	}
 
 	public static void updateList(Player p, long friend) {
 		for(Player c : World.getWorld().getPlayers()) {

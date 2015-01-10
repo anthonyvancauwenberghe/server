@@ -31,14 +31,6 @@ public class TormentedDemon implements Attack {
 	public static int getReduction(NPC npc, Player player,int originalDamg) {
 		if(npc == null || player == null || npc.getDefinition().getId() != 8349)
 			return originalDamg;
-		if(Misc.random(3) == 1) { //1/4 chance of soak
-			originalDamg = originalDamg/3;
-			player.sendMessage("The tormented demon soaks in your damage!");
-			npc.health += originalDamg;
-			if(npc.health > npc.maxHealth)
-				npc.health = npc.maxHealth;
-		} else if(Misc.random(3) == 1)
-			originalDamg = originalDamg/2;
 		return originalDamg;
 	}
 
@@ -56,6 +48,8 @@ public class TormentedDemon implements Attack {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;
 			}
+
+
 			int attackId = Combat.random(3);
 			if(attackId == 0 && distance - ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2) > 1)
 				attackId = 1 + Combat.random(1);

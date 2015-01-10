@@ -1,9 +1,11 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 
 /**
@@ -27,6 +29,13 @@ public class PlayerEvent1Second extends Event {
 	@Override
 	public void execute() {
 		for(Player p : World.getWorld().getPlayers()) {
+
+            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 13000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15426
+                    && System.currentTimeMillis() - p.getExtraData().getLong("lastcanespin") > 6000) {
+                p.playAnimation(Animation.create(12664));
+                p.getExtraData().put("lastcanespin", System.currentTimeMillis());
+            }
+
 			if(! p.active)
 				continue;
 
@@ -43,14 +52,15 @@ public class PlayerEvent1Second extends Event {
 					return;
 				}
 				p.prayerDrain += p.getDrainRate();
-				if(p.prayerDrain > 1) {
+				if(p.prayerDrain > 1 && !p.isDead()) {
 					p.getSkills().detractLevel(5, (int) p.prayerDrain);
 					p.prayerDrain = 0;
 				}
 				p.getActionSender().sendSkill(5);
 			}
 
-			for(int i = 0; i < Skills.SKILL_COUNT; i++) {
+
+            for(int i = 0; i < Skills.SKILL_COUNT; i++) {
 				p.skillRecoverTimer[i]++;
 				if(p.skillRecoverTimer[i] == 60 && i != 5 && i != 23) {
 					p.skillRecoverTimer[i] = 0;

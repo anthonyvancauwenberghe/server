@@ -64,7 +64,7 @@ public class ItemDropping {
 	}
 
 	static {
-		CommandHandler.submit(new Command("debugdropping", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("debugdropping", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage(player.getDropping().toString());

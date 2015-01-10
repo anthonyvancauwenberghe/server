@@ -190,9 +190,9 @@ public class Farming implements ContentTemplate {
 	}
 
 	public void serialize(IoBuffer buf, Player player) {//save method
-		buf.put((byte) 241);
-		buf.put((byte) 231);
-		buf.put((byte) 221);//farming signature, this indicates start of farming data
+		//buf.put((byte) 251);
+		//buf.put((byte) 231);
+		//buf.put((byte) 221);//farming signature, this indicates start of farming data
 		synchronized(player.getFarm().rakePatches) {
 			for(Object object : player.getFarm().rakePatches.values().toArray()) {
 				RakePatch rpatch = (RakePatch) object;

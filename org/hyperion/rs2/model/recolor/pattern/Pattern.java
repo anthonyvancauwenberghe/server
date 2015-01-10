@@ -1,22 +1,17 @@
 package org.hyperion.rs2.model.recolor.pattern;
 
 import org.hyperion.rs2.model.color.Color;
-import org.hyperion.rs2.net.PacketBuilder;
 
 public class Pattern {
 
     public enum Type{
-        FILL, REPLACE, CHECKERED, SOLID;
+        FILL, REPLACE, CHECKERED, SOLID
     }
 
     private final Type type;
 
     protected Pattern(final Type type){
         this.type = type;
-    }
-
-    public void append(final PacketBuilder bldr){
-        bldr.put((byte)type.ordinal());
     }
 
     public Type getType(){

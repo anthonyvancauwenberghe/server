@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.shops.SlayerShop;
@@ -107,13 +108,15 @@ public class Combat {
 		 */
 		PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
 
+        ItemDegrading.check(combatEntity.getPlayer());
+
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
-			if(distance > 10) {
+			if(distance > 8) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				return true;// Too far.
-			} else if(! WorldMap.projectileClear(attacker.getLocation(), attacker.getLocation())) {
+			} else if(! WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				else
@@ -318,7 +321,7 @@ public class Combat {
 				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 					combatEntity.getPlayer().getActionSender().sendMessage("Delta Range Bonus is : " + deltaRangeBonus); 
 				}*/
-				int toadd = Misc.random(deltaRangeBonus / 20);
+				int toadd = Misc.random(deltaRangeBonus / 5);
 				//System.out.println("Toadd is " + toadd);
 				damg += toadd;
 				if(damg < 0)
@@ -527,7 +530,7 @@ public class Combat {
 		/**
 		 * Spirit shield effects.
 		 */
-		if(combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.DEVELOPER)) {
+		if(combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
 			//combatEntity.getPlayer().getActionSender().sendMessage("Damg without divine would be: " + damg);
 			damg = SpiritShields.applyEffects(opponent.cE, damg);
 			//combatEntity.getPlayer().getActionSender().sendMessage("Damg with divine is: " + damg);
@@ -769,15 +772,13 @@ public class Combat {
 		World.getWorld().submit(new Event(delay, "npcatx") {
 			@Override
 			public void execute() {
-
                 if (combatEntity == null ||
                         combatEntity.getEntity() == null ||
-                        combatEntity.getOpponent() == null ||
                         npc == null) {
                     this.stop();
                     return;
                 }
-				int newDamg = SpiritShields.applyEffects(combatEntity, damg);;
+                int newDamg = SpiritShields.applyEffects(combatEntity, damg);;
 				if(combatEntity.getEntity() instanceof Player) {
 					//divine spirit shield
 					newDamg = combatEntity.getPlayer().getInflictDamage(newDamg, npc, false, type);
@@ -785,15 +786,16 @@ public class Combat {
 					if(! prayerBlock) {
 						//old prayers code
 					}
+
+                    if(type == 1
+                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
+                        newDamg = 0;
+                    }
+                    if(type == 2
+                            && Combat.random(npc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
+                        newDamg = 0;
+                    }
 					//defence
-					if(type == 1
-							&& Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
-						newDamg = 0;
-					}
-					if(type == 2
-							&& Combat.random(npc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
-						newDamg = 0;
-					}
 					if(npc.getDefinition().getId() == 9463) {
 						if(Misc.random(12) == 0) {
 							combatEntity.setFreezeTimer(20000);
@@ -820,7 +822,8 @@ public class Combat {
 					}
 
 				}
-				// combatEntity.doDefEmote();
+
+                // combatEntity.doDefEmote();
 				combatEntity.hit(newDamg, npc.cE.getEntity(), false, type >= 3 ? Constants.MAGE
 						: type);
 				this.stop();
@@ -907,14 +910,14 @@ public class Combat {
 				 * If opponent hasent been in combat for a while, u can attack him
 				 * If he hasent, you look if his last attacker = you
 				 */
-				if(opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 9000) {
+				if(opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 5000) {
 					if(! opponent.getPlayer().getLastAttack().getName().equalsIgnoreCase(combatEntity.getPlayer().getName()))
 						return "This player is already in combat.";
 				}
 				/**
 				 * If you are in combat, is the person who recently attacked you = person who u wanna atk?
 				 */
-				if(combatEntity.getPlayer().getLastAttack().timeSinceLastAttack() < 9000) {
+				if(combatEntity.getPlayer().getLastAttack().timeSinceLastAttack() < 5000) {
 					if(! combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
 						return "I am already in combat";
 				}
@@ -1008,6 +1011,8 @@ public class Combat {
 	public static int getWildLevel(int absX, int absY) {
 		if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
 			return (((absY - 3520) / 8) + 3);
+        else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
+            return 57;
 		else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
 			return 12;
 		else
@@ -1060,7 +1065,9 @@ public class Combat {
 				||
 				(combatEntity.getAbsX() >= 2343 && combatEntity.getAbsY() >= 9823 &&
 					combatEntity.getAbsX() <= 2354 && combatEntity.getAbsY() <= 9834)
-				)
+				||
+                (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
+                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711))
 			
 			return true;
 		if(combatEntity.getEntity() instanceof Player)
@@ -1207,7 +1214,7 @@ public class Combat {
 		int distance = combatEntity.getEntity().getLocation().distance(attack.getEntity().getLocation());
 		if(distance > 1) {
 			//System.out.println("Distance check can atk " + distance);
-			return ! WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
+			return WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
 		} else {
 			//System.out.println("Pos check can atk");
 			return WorldMap.checkPos(attack.getEntity().getLocation().getZ(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), attack.getEntity().getLocation().getX(), attack.getEntity().getLocation().getY(), 1);

@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.World;
 public class ScreenshotCommand extends Command {
 
 	public ScreenshotCommand() {
-		super("takexshot", Rank.DEVELOPER);
+		super("takexshot", Rank.ADMINISTRATOR);
 	}
 
 	@Override

@@ -144,6 +144,8 @@ public class FightPits implements ContentTemplate {
 	
 	
 	public static boolean canJoin(Player player) {
+        if(player.hardMode())
+            return false;
 		return !(ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 
 				|| ContentEntity.getTotalAmountOfItems(player) > 0);
 	}

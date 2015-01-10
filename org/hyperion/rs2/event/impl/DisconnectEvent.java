@@ -6,9 +6,6 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.content.ClickId;
-import org.hyperion.rs2.model.content.ClickType;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 
 public class DisconnectEvent extends Event {
 
@@ -45,7 +42,7 @@ public class DisconnectEvent extends Event {
 	}
 
 	static {
-		CommandHandler.submit(new Command("forcelogout", Rank.ADMINISTRATOR) {
+		CommandHandler.submit(new Command("forcelogout", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				String name = input.replaceAll("forcelogout ", "");

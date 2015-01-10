@@ -14,7 +14,7 @@ public class RemovePunishmentCommand extends Command {
     private static final String IP_REGEX = "\\d+\\.\\d+\\.\\d+\\.\\d+";
 
     public RemovePunishmentCommand(){
-        super("removepunishment", Rank.ADMINISTRATOR);
+        super("removepunishment", Rank.DEVELOPER);
     }
 
     public boolean execute(final Player player, final String input){

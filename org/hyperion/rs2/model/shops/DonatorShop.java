@@ -180,6 +180,12 @@ public class DonatorShop extends Shop {
 		case 15347: //ardougne cloak 2
 			return 3500;
 
+            case 18739:
+            case 18740:
+                return 2000;
+            case 17039:
+                return 5000;
+
 
 		case 17341:  //novite kiteshield
 		case 16339:  //novite boots
@@ -339,6 +345,12 @@ public class DonatorShop extends Shop {
 		if(FightPits.rewardItems.contains(itemId))
 			return 1000;
 		switch(itemId) {
+
+            case 18739:
+            case 18740:
+                return 2000;
+            case 17039:
+                return 5000;
 			case 16691:  //novite full helm
 			case 17239:  //novite platebody
 			case 16669:  //novite platelegs
@@ -401,7 +413,7 @@ public class DonatorShop extends Shop {
 				return 999;
 
 			case 1042:
-				return 949;
+				return 899;
 
 			case 1038:
 			case 1040:

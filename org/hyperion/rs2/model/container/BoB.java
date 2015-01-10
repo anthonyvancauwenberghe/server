@@ -4,6 +4,8 @@ package org.hyperion.rs2.model.container;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
+import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 
 /**
@@ -70,7 +72,7 @@ public class BoB {
 		if(! Server.SPAWN) {
 			return;
 		}
-		if(player.duelAttackable > 0) {
+		if(player.duelAttackable > 0 || FightPits.inPits(player)) {
 			player.getActionSender().sendMessage("I shouldn't be doing this here..");
 			return;
 		}
@@ -157,6 +159,8 @@ public class BoB {
 		if(! Server.SPAWN) {
 			return;
 		}
+        if(FightPits.inPits(player) || FightPits.inGame(player) || FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY()))
+            return;
 		if(slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
 			return;
 		if(ShopManager.isValuable(id)) {

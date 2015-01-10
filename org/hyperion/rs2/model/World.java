@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -12,7 +13,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
-
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
@@ -53,12 +53,14 @@ import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
-import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
+import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.content.ticket.TicketManager;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.event.PunishmentExpirationEvent;
@@ -72,8 +74,10 @@ import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
 import org.hyperion.rs2.sql.DonationsSQLConnection;
 import org.hyperion.rs2.sql.DummyConnection;
+import org.hyperion.rs2.sql.LocalServerSQLConnection;
 import org.hyperion.rs2.sql.LogsSQLConnection;
 import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.ConfigurationParser;
@@ -93,6 +97,16 @@ import org.hyperion.util.BlockingExecutorService;
  * @author Graham Edgecombe
  */
 public class World {
+
+    /**
+     * Ticket Manager - no fuckin shit
+     */
+
+    private final TicketManager ticketManager = new TicketManager();
+
+    public final TicketManager getTicketManager() {
+        return ticketManager;
+    }
 
 	/**
 	 * Logging class.
@@ -184,6 +198,8 @@ public class World {
 	private MySQLConnection donationsSQL;
 
 	private MySQLConnection logsSQL;
+
+    private MySQLConnection localServerSQL;
 
 	//private PlayersSQLConnection playersSQL = new PlayersSQLConnection();
 
@@ -316,6 +332,10 @@ public class World {
 	public MySQLConnection getLogsConnection() {
 		return logsSQL;
 	}
+
+    public MySQLConnection getLocalServerConnection(){
+        return localServerSQL;
+    }
 	
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;
@@ -363,12 +383,15 @@ public class World {
 			if(Server.getConfig().getBoolean("sql")) {
 				logsSQL = new LogsSQLConnection(Server.getConfig());
 				donationsSQL = new DonationsSQLConnection(Server.getConfig());
+                localServerSQL = new LocalServerSQLConnection();
 			} else {
 				logsSQL = new DummyConnection();
 				donationsSQL = new DummyConnection();
+                localServerSQL = new DummyConnection();
 			}
 			donationsSQL.init();
 			logsSQL.init();
+			localServerSQL.init();
 			//playersSQL.init();
 			//banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);
@@ -688,7 +711,7 @@ public class World {
 	/**
 	 * Registers a new npc.
 	 *
-	 * @param npc The npc to register.
+	 * @param n The npc to register.
 	 */
 	public void register(NPC n) {
 		npcs.add(n);
@@ -885,6 +908,8 @@ public class World {
 		player.setActive(false);
 		// Combat.resetAttack(player.cE);
 		resetPlayersNpcs(player);
+        resetSummoningNpcs(player);
+        player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.loginTime));
 
 		try {
 			ClanManager.leaveChat(player, false, false);
@@ -920,6 +945,14 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
+                try{
+                    if(!Rank.hasAbility(player, Rank.DEVELOPER))
+                        getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+                player.getLogManager().add(LogEntry.logout(player));
+                player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");
 				resetSummoningNpcs(player);
 				if(World.getWorld().getLoginServerConnector() != null) {
@@ -935,6 +968,8 @@ public class World {
 				// player.getSession().removeAttribute("player");
 			}
 		});
+        if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
+            getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 	}
 
 	/**

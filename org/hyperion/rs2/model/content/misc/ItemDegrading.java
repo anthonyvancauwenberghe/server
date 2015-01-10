@@ -9,9 +9,6 @@ import org.hyperion.util.Misc;
 public class ItemDegrading {
 
 	public static void check(Player player) {
-		if(Misc.random(1000) == 0) {// Degrading
-			ItemDegrading.checkPvpDegrades(player);
-		}
 		if(Misc.random(2000) == 0) {
 			ItemDegrading.checkChaoticDegrades(player);
 		}

@@ -19,14 +19,15 @@ import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
-import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.util.NewcomersLogging;
-import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -40,6 +41,12 @@ public class ActionSender {
 	 * The player.
 	 */
 	private Player player;
+
+    /**
+     * Map of stored frame strings
+     */
+
+    private final Map<Integer, String> sendStringStrings = new HashMap<>();
 
 	/**
 	 * Creates an action sender for the specified player.
@@ -94,51 +101,36 @@ public class ActionSender {
 			System.out.println("Unable to load announcements.");
 		}
 	}
-	/**
-	 * Bank starter
-	 */
-	private final int[][] MAIN_STARTER = new int[][] { //{id, amt},
-			  {2436, 500}, {2440, 500}, {2442, 500}, {2434, 500}, 
-			  {2444, 500}, {3040, 500}, {2446, 500}, {6685, 500}, 
-			  {3024, 500}, {15332, 5}, {145, 500}, {157, 500}, 
-			  {163, 500}, {139, 500}, {169, 500}, {3042, 500}, 
-			  {175, 500}, {6687, 500}, {3026, 500}, {15333, 5}, {147, 500}, 
-			  {159, 500}, {165, 500}, {141, 500}, {171, 500}, {3044, 500}, 
-			  {177, 500}, {6689, 500}, {3028, 500}, {15334, 5}, {149, 500}, 
-			  {161, 500}, {167, 500}, {143, 500}, {173, 500},
-			  {3046, 500}, {179, 500}, {6691, 500}, {3030, 500}, {15335, 5}, {562, 10000}, 
-			  {563, 10000}, {561, 10000}, {554, 10000}, {557, 10000}, {555, 10000}, {560, 10000}, 
-			  {9075, 10000}, {565, 10000}, {391, 10000}, {10828, 100}, {11283, 100}, {11732, 100}, 
-			  {7462, 100}, {2414, 100}, {10499, 100}, {6731, 100}, {6733, 100}, {6735, 100},
-			  {6737, 100}, {4151, 100}, {4587, 100}, {1305, 100}, {1434, 100}, {1215, 100}, 
-			  {4153, 100}, {11716, 100}, {6585, 100}, {1725, 100}, {1712, 100}, {4716, 100}, 
-			  {4753, 100}, {4745, 100}, {4724, 100}, {4708, 100}, {4732, 100}, {6128, 100}, 
-			  {9185, 100}, {2581, 100}, {4675, 100}, {4720, 100}, {4757, 100}, {4749, 100}, {4728, 100}, 
-			  {4712, 100}, {4736, 100}, {6129, 100}, {9245, 10000}, {2503, 100}, {6889, 100},  {4722, 100},
-			  {4759, 100}, {4751, 100}, {4730, 100}, {4714, 100}, {4738, 100}, {6130, 100}, {11235, 100}, 
-			  {2497, 100}, {6914, 100}, {4718, 100}, {4755, 100}, {4747, 100}, {4726, 100}, {4710, 100}, 
-			  {4734, 100}, {4131, 100}, {11212, 10000}, {2577, 100}, {6920, 100},
-	};
+
 	/**
 	 * Sends all the login packets.
 	 *
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
+        player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
 		player.setActive(true);
 		player.isHidden(false);
 		sendDetails();
-		sendMessage("@blu@Welcome To " + Server.NAME + "!");
-		sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
-        sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
+        if(player.isNew()){
+            sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
+            sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
+            sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
+        }else{
+            sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+        }
+        sendMessage("       ");
+		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
+		//sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
+        //sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
         //sendMessage("Alert##We removed Divines and Special restores from the economy##Anyone with them was refunded their shop value!");
 		// sendMessage("@blu@Please register on our forums!");
-		loadAnnouncements();
+		//loadAnnouncements();
 		writeQuestTab();
 		player.getPoints().loginCheck();
-		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.HEAD_MODERATOR)) {
+		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			String rank = Rank.getPrimaryRank(player).toString();
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}
@@ -219,16 +211,7 @@ public class ActionSender {
 		}
 		if(player.isNew()) {
 			sendSkills();
-			String helpcc = "help";
-			ClanManager.joinClanChat(player, helpcc, false);
-			for(int i = 0; i < MAIN_STARTER.length; i++) {
-				try {
-					player.getBank().add(new Item(MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-			player.getInventory().add(Item.create(1856));
+            DialogueManager.openDialogue(player, 10000);
 		}
 		NewcomersLogging.getLogging().loginCheck(player);
 		sendString(1300, "City Teleport");
@@ -305,6 +288,10 @@ public class ActionSender {
             sendMessage("Completionist cape added to your " + (freeSlots > 0 ? "inventory" : "bank"));
             player.setCompCape(true);
 		}
+
+        if(player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
+            sendMessage("script~x123");
+        }
 		
 		return this;
 	}
@@ -417,7 +404,7 @@ public class ActionSender {
 	}
 
     public ActionSender sendEP2() {
-        sendString(36504, "EP :"+getEPString());
+        sendString(36504, "EP :" + getEPString());
         return this;
     }
 
@@ -851,7 +838,7 @@ public class ActionSender {
 		if(ClanManager.clans.get(player.getClanName()) == null)
 			return this;
 		player.write(new PacketBuilder(213, Type.VARIABLE).putRS2String(
-				playerName).toPacket());
+                playerName).toPacket());
 		return this;
 	}
 
@@ -1017,7 +1004,7 @@ public class ActionSender {
 
 
     public enum DialogueType {
-		NPC, PLAYER, OPTION, MESSAGE, MESSAGE_MODEL_LEFT, AGILITY_LEVEL_UP, ATTACK_LEVEL_UP, COOKING_LEVEL_UP, CRAFTING_LEVEL_UP, DEFENCE_LEVEL_UP, FARMING_LEVEL_UP, FIREMAKING_LEVEL_UP, FISHING_LEVEL_UP, FLETCHING_LEVEL_UP, HERBLORE_LEVEL_UP, HITPOINT_LEVEL_UP, MAGIC_LEVEL_UP, MINING_LEVEL_UP, PRAYER_LEVEL_UP, RANGING_LEVEL_UP, RUNECRAFTING_LEVEL_UP, SLAYER_LEVEL_UP, SMITHING_LEVEL_UP, STRENGTH_LEVEL_UP, THIEVING_LEVEL_UP, WOODCUTTING_LEVEL_UP
+		ITEM, NPC, PLAYER, OPTION, MESSAGE, MESSAGE_MODEL_LEFT, AGILITY_LEVEL_UP, ATTACK_LEVEL_UP, COOKING_LEVEL_UP, CRAFTING_LEVEL_UP, DEFENCE_LEVEL_UP, FARMING_LEVEL_UP, FIREMAKING_LEVEL_UP, FISHING_LEVEL_UP, FLETCHING_LEVEL_UP, HERBLORE_LEVEL_UP, HITPOINT_LEVEL_UP, MAGIC_LEVEL_UP, MINING_LEVEL_UP, PRAYER_LEVEL_UP, RANGING_LEVEL_UP, RUNECRAFTING_LEVEL_UP, SLAYER_LEVEL_UP, SMITHING_LEVEL_UP, STRENGTH_LEVEL_UP, THIEVING_LEVEL_UP, WOODCUTTING_LEVEL_UP
 	}
 
 	public DialogueType getSkillInterface(int skill) {
@@ -1109,7 +1096,7 @@ public class ActionSender {
 
 	public ActionSender sendChatboxInterface(int interfaceId) {
 		player.getSession().write(
-				new PacketBuilder(164).putLEShort(interfaceId).toPacket());
+                new PacketBuilder(164).putLEShort(interfaceId).toPacket());
 		return this;
 	}
 
@@ -1192,6 +1179,16 @@ public class ActionSender {
 		int interfaceId = - 1;
 		int[] interfaceIds;
 		switch(dialogueType) {
+            case ITEM:
+                sendInterfaceModel(307, 200, entityId);
+                sendString(307, title);
+                player.getSession().write(
+                        new PacketBuilder(164).putLEShort(306).toPacket());
+                /**
+                 *      c.getPA().sendFrame126(text, 308);
+                 c.getPA().sendFrame246(307, 200, item);
+                 c.getPA().sendFrame164(306);
+                 */
 			case NPC:
 				interfaceId = 4883;
 				interfaceIds = new int[]{4883, 4888, 4894, 4901};
@@ -1430,11 +1427,11 @@ public class ActionSender {
 		player.logoutTries = 0;
 		if(System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
 			player.write((new PacketBuilder(109)).toPacket());
-			if(player.getHighscores().needsUpdate()) {
-                if (!Rank.hasAbility(player, Rank.DEVELOPER) || !Rank.hasAbility(player, Rank.ADMINISTRATOR)
+			/*if(player.getHighscores().needsUpdate()) {
+                if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) || !Rank.hasAbility(player, Rank.DEVELOPER)
                         || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
-			}
+			}*/
 			player.loggedOut = true;
 			World.getWorld().unregister(player);
 		} else {
@@ -1659,6 +1656,8 @@ public class ActionSender {
 	}
 
 	public ActionSender sendString(int id, String string) {
+        if(!sendFrame126String(string, id))
+            return this;
 		PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
 		bldr.putRS2String(string);
 		bldr.putShortA(id);
@@ -1667,12 +1666,26 @@ public class ActionSender {
 	}
 
 	public ActionSender sendString(String string, int id) {
+        if(!sendFrame126String(string, id))
+            return this;
 		PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
 		bldr.putRS2String(string);
 		bldr.putShortA(id);
 		player.write(bldr.toPacket());
 		return this;
 	}
+
+    private boolean sendFrame126String(final String string, final int id) {
+        if(!sendStringStrings.containsKey(id)) {
+            sendStringStrings.put(id, string);
+            return true;
+        }
+        final String old = sendStringStrings.get(id);
+        if(old.equals(string))
+            return false;
+        sendStringStrings.put(id, string);
+        return true;
+    }
 
 	public ActionSender sendString(int id, int offset, String string) {
 		PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);

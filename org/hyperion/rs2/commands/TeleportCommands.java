@@ -90,7 +90,7 @@ public class TeleportCommands {
 				return true;
 			}
 		});
-		CommandHandler.submit(new Command("randomteleevent", Rank.ADMINISTRATOR) {
+		CommandHandler.submit(new Command("randomteleevent", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				World.getWorld().submit(new RandomTeleportEvent(player));
@@ -100,18 +100,18 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("xteletome", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
-				if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+				if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
 				String name = filterInput(input);
 				Player target = World.getWorld().getPlayer(name);
 				if(target != null) {
-                    if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && target.duelAttackable > 0) {
+                    if(!Rank.hasAbility(player, Rank.DEVELOPER) && target.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
                         return false;
                     }
-                    if(Rank.isStaffMember(target) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                    if(Rank.isStaffMember(target) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                         player.getActionSender().sendMessage("You cannot teleport staff to you, It has been recommended they teleport to you.");
                         target.getActionSender().sendMessage(player.getName()+" tried teleporting you to them, you should ask them what they want.");
                         return false;
@@ -126,15 +126,15 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("xteleto", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER))
+				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					return false;
-                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+                if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
                     return false;
 
 				String name = filterInput(input);
 				Player x = World.getWorld().getPlayer(name);
 				if(x != null) {
-                    if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && x.duelAttackable > 0) {
+                    if(!Rank.hasAbility(player, Rank.DEVELOPER) && x.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
                         return false;
                     }

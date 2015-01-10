@@ -9,6 +9,14 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 public class SetHandler {
 	public static final boolean handleSet(Player player, int id) {
 		try {
+
+            if(player.hardMode())
+                throw new CantSpawnSetException() {
+                    @Override public String getMessage() {
+                        return "You cannot spawn a set in this game mode";
+                    }
+                };
+
 			if(FightPits.inPits(player))
 				throw new CantSpawnSetException();
 			switch(id) {

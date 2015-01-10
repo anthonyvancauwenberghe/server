@@ -47,32 +47,39 @@ public class Mail {
 		player.getActionSender().sendMessage("Please re-enter your e-mail.");
 	}
 
+    public void setMail(String mail, final boolean showMsg){
+        if(mail == null)
+            mail = "";
+        mail = mail.toLowerCase();
+        char[] charArray = mail.toCharArray();
+        for(int i = 0; i < charArray.length; i++) {
+            if(! Misc.contains(charArray[i], ALLOWEDCHARACTERS))
+                return;
+        }
+        if(mail.length() < 3) {
+            if(showMsg)
+                player.getActionSender().sendMessage("Entered e-mail is too short.");
+            return;
+        }
+        if(! mail.contains(".") || ! mail.contains("@")) {
+            if(showMsg)
+                player.getActionSender().sendMessage("Entered e-mail is invalid.");
+            return;
+        }
+        String host = mail.split("@")[1];
+        for(String s : ALLOWEDHOSTS) {
+            if(host.contains(s)) {
+                this.mail = mail;
+                World.getWorld().getDonationsConnection().offer(new MailRequest(player));
+                return;
+            }
+        }
+        if(showMsg)
+            player.getActionSender().sendMessage("Invalid host.");
+    }
+
 	public void setMail(String mail) {
-		if(mail == null)
-			mail = "";
-		mail = mail.toLowerCase();
-		char[] charArray = mail.toCharArray();
-		for(int i = 0; i < charArray.length; i++) {
-			if(! Misc.contains(charArray[i], ALLOWEDCHARACTERS))
-				return;
-		}
-		if(mail.length() < 3) {
-			player.getActionSender().sendMessage("Entered e-mail is too short.");
-			return;
-		}
-		if(! mail.contains(".") || ! mail.contains("@")) {
-			player.getActionSender().sendMessage("Entered e-mail is invalid.");
-			return;
-		}
-		String host = mail.split("@")[1];
-		for(String s : ALLOWEDHOSTS) {
-			if(host.contains(s)) {
-				this.mail = mail;
-				World.getWorld().getDonationsConnection().offer(new MailRequest(player));
-				return;
-			}
-		}
-		player.getActionSender().sendMessage("Invalid host.");
+		setMail(mail, true);
 	}
 
 	public String toString() {

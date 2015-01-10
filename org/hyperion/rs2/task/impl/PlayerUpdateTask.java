@@ -1,5 +1,6 @@
 package org.hyperion.rs2.task.impl;
 
+import java.util.List;
 import org.hyperion.rs2.GameEngine;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -24,7 +25,6 @@ import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * A task which creates and sends the player update block.
@@ -596,7 +596,7 @@ public class PlayerUpdateTask implements Task {
 			for(int i = 0; i < 4; i++) {
 				if(eq.isSlotUsed(i)) {
 					playerProps.putShort((short) 0x200 + eq.get(i).getId());
-					print((short) 0x200 + eq.get(i).getId());
+					print((short) 0x200 | eq.get(i).getId());
 				} else {
 					playerProps.put((byte) 0);
 					print((byte) 0);
@@ -604,14 +604,14 @@ public class PlayerUpdateTask implements Task {
 			}
 			if(eq.isSlotUsed(Equipment.SLOT_CHEST)) {
 				playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_CHEST).getId());
-				print((short) 0x200 + eq.get(Equipment.SLOT_CHEST).getId());
+				print((short) 0x200 | eq.get(Equipment.SLOT_CHEST).getId());
 			} else {
 				playerProps.putShort((short) 0x100 + app.getChest()); // chest
-				print((short) 0x100 + app.getChest());
+				print((short) 0x100 | app.getChest());
 			}
 			if(eq.isSlotUsed(Equipment.SLOT_SHIELD)) {
 				playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_SHIELD).getId());
-				print((short) 0x200 + eq.get(Equipment.SLOT_SHIELD).getId());
+				print((short) 0x200 | eq.get(Equipment.SLOT_SHIELD).getId());
 			} else {
 				playerProps.put((byte) 0);
 				print((byte) 0);
@@ -646,7 +646,7 @@ public class PlayerUpdateTask implements Task {
 					print((byte) 0);
 				}
 			} else {
-				playerProps.putShort((short) 0x100 + app.getHead()); //CHANGED HERE
+				playerProps.putShort((short) 0x100 +  app.getHead()); //CHANGED HERE
 				print((short) 0x100 + app.getHead());
 				//playerProps.put((byte) 0);
 			}
@@ -702,6 +702,7 @@ public class PlayerUpdateTask implements Task {
 		playerProps.putShort(0); // (skill-level instead of combat-level) otherPlayer.getSkills().getTotalLevel()); // total level
 		playerProps.putShort(otherPlayer.getKillCount());
         final int id = eq.getItemId(Equipment.SLOT_CAPE);
+        //commented out until client changes
         if(eq.isSlotUsed(Equipment.SLOT_CAPE) && (id == 12747 || id == 12744)){
             playerProps.put((byte) 1);
             if(id == 12747){
@@ -715,16 +716,20 @@ public class PlayerUpdateTask implements Task {
             playerProps.put((byte)0);
         }
 
-        final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
+        playerProps.put((byte)otherPlayer.getGameMode());
+
+
+        /*final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
         final Iterator<Recolor> itr = recolors.iterator();
         while(itr.hasNext())
             if(!eq.contains(itr.next().getId()))
                 itr.remove();
         playerProps.putShort(recolors.size());
         for(final Recolor recolor : recolors)
-                playerProps.putRS2String(recolor.toString());
+            playerProps.putRS2String(recolor.toString());
 
-        //System.out.println("player = otherPlayer: " + (player == otherPlayer));
+
+        //System.out.println("player = otherPlayer: " + (player == otherPlayer)); */
 
 		Packet propsPacket = playerProps.toPacket();
 

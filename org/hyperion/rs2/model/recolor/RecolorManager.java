@@ -30,7 +30,7 @@ public class RecolorManager {
     }
 
     public int getLimit(){
-        if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
+        if(Rank.hasAbility(player, Rank.DEVELOPER))
             return Integer.MAX_VALUE;
         return player.getPoints().getDonatorPointsBought() / DONATED_AMOUNT_REQUIRED;
     }
@@ -73,5 +73,10 @@ public class RecolorManager {
 
     public boolean contains(final int id){
         return map.containsKey(id);
+    }
+
+    public void clear(){
+        map.clear();
+        player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
     }
 }

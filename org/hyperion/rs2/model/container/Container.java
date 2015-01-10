@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.container;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Item;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -244,7 +245,8 @@ public class Container {
 			for(int i = 0; i < items.length; i++) {
 				if(items[i] != null && items[i].getId() == item.getId()) {
 					int totalCount = item.getCount() + items[i].getCount();
-					if(totalCount >= Constants.MAX_ITEMS || totalCount < 1) {
+                    long fuck_all_count = BigInteger.valueOf(item.getCount()).add(BigInteger.valueOf(items[i].getCount())).longValueExact();
+                    if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
 						return false;
 					}
 					set(i, new Item(items[i].getId(), items[i].getCount() + item.getCount()));
@@ -469,11 +471,11 @@ public class Container {
 	public int remove(int preferredSlot, Item item) {
 		int removed = 0;
 		if(item == null || item.getDefinition() == null) {
-			System.out.println("Container null , PLEASE FIX MARTIN!");
+			//System.out.println("Container null , PLEASE FIX MARTIN!");
 			return removed;
 		}
-		if(item.getCount() == 0)
-			return 0;
+		//if(item.getCount() == 0)
+		//	return 0;
 		if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
 			int slot = getSlotById(item.getId());
 			if(slot == - 1)

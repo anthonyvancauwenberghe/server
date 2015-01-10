@@ -1,5 +1,7 @@
 package org.hyperion.rs2.packet;
 
+import org.hyperion.map.WorldMap;
+import org.hyperion.map.WorldMap2;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
@@ -43,8 +45,8 @@ public class WalkingPacketHandler implements PacketHandler {
 		if(player.isDead())
 			return;
 		if(! player.cE.canMove()) {
-			if(player.isFollowing != null && packet.getOpcode() != 99)
-				player.getActionSender().sendMessage("You are currently frozen.");
+			if(player.isFollowing == null && packet.getOpcode() != 99)
+				player.getActionSender().sendMessage("A magical force stops you from moving!");
 			return;
 		}
 		if(player.cE.getAttackers().size() > 1 && System.currentTimeMillis() - player.cE.lastHit > 10000)
@@ -60,7 +62,7 @@ public class WalkingPacketHandler implements PacketHandler {
 		player.getWalkingQueue().reset();
 		player.getActionQueue().clearNonWalkableActions();
 		player.resetInteractingEntity();
-
+        player.getExtraData().put("lastwalk", System.currentTimeMillis());
 		final int steps = (size - 5) / 2;
 		if(steps < 0)
 			return;
@@ -113,7 +115,14 @@ public class WalkingPacketHandler implements PacketHandler {
 		for(int i = 0; i < steps; i++) {
 			path[i][0] += firstX;
 			path[i][1] += firstY;
-			player.getWalkingQueue().addStep(path[i][0], path[i][1]);
+            //System.out.printf("Steps: %d FirstX: %d FirstY: %d Path WalkX: %d Path WalkY: %d", i, firstX, firstY, path[i][0], path[i][1]);
+            try {
+               // if(!WorldMap.checkPos(player.getLocation().getZ(), player.getLocation().getX(), player.getLocation().getY(), path[i][0], path[i][1], 1))
+                 //   continue;
+            }catch(final Exception ex) {
+
+            }
+            player.getWalkingQueue().addStep(path[i][0], path[i][1]);
 		}
 		player.getWalkingQueue().finish();
 

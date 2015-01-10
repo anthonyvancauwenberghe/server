@@ -29,6 +29,8 @@ public class SpawnServerCommands {
 	}
 
 	private static void max(Player player) {
+        if(!ItemSpawning.canSpawn(player))
+            return;
 		if(player.getLocation().cannotMax()) {
 			player.sendMessage("You cannot max here!");
 			return;

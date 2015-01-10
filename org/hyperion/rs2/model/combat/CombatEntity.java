@@ -1,17 +1,12 @@
 package org.hyperion.rs2.model.combat;
 
-import debug.Debugger;
-
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.attack.CorporealBeast;
 import org.hyperion.rs2.model.combat.attack.TormentedDemon;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CombatEntity {
 
@@ -58,7 +53,7 @@ public class CombatEntity {
 	public boolean isFrozen() {
 		if(System.currentTimeMillis() < freezeTimer) {
             if(player != null) {
-                if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+                if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                    player.debugMessage("You are frozen for another: " + (freezeTimer - System.currentTimeMillis()) + "MS");
                 }
             }
@@ -127,6 +122,14 @@ public class CombatEntity {
 	public NPC getNPC() {
 		return n;
 	}
+
+    public Optional<NPC> _getNPC() {
+        return Optional.ofNullable(n);
+    }
+
+    public Optional<Player> _getPlayer() {
+        return Optional.ofNullable(player);
+    }
 
 	public boolean isPoisoned() {
 		return isPoisoned;

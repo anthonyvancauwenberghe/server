@@ -15,12 +15,9 @@ public class SlayerHolder {
 
     private int taskAmount, totalTasks, slayerPoints;
     /**
-     * SlayerHolder that they have, save the ordinal
+     * SlayerHolder that they have, save the index
      */
     private SlayerTask task;
-
-    public SlayerHolder(final Player player) {
-    }
 
     public boolean assignTask(final int slayerLevel) {
         if(taskAmount > 0)
@@ -35,7 +32,7 @@ public class SlayerHolder {
         if(isTask(npcid)) {
             if(--taskAmount == 0) {
                 totalTasks++;
-                slayerPoints += task.getDifficulty().getSlayerPoints() + handleTotalTasks();
+                slayerPoints += (task.getDifficulty().getSlayerPoints() + handleTotalTasks());
             }
             return task.getXP();
         }

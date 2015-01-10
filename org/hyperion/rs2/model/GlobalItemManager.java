@@ -2,6 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.log.LogEntry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -100,14 +101,18 @@ public class GlobalItemManager {
 			}
 		}
 		if(globalItem != null) {
-			if(globalItem.itemHidden && player != globalItem.owner)
-				return;//a security measure so people cant remove items that shouldnt be visable yet
 			synchronized(globalItems) {
+                if (globalItem.owner != null && globalItem.owner.getGameMode() != player.getGameMode()) {
+                    player.sendMessage("You cannot pick up this item as it belongs to another game mode");
+                    return;
+                }
 				globalItems.remove(globalItem);
-			}
-			player.getInventory().add(globalItem.getItem());
-			removeItem(globalItem);
-			globalItem.destroy();
+
+                player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));
+			    player.getInventory().add(globalItem.getItem());
+			    removeItem(globalItem);
+			    globalItem.destroy();
+            }
 		} else {
 			//just remove it and pretend it was null
 			player.getActionSender().removeGlobalItem(item, Location.create(x, y, 0));

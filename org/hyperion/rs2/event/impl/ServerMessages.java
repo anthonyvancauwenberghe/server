@@ -24,7 +24,7 @@ public class ServerMessages extends Event {
     static{
         load();
 
-        CommandHandler.submit(new Command("reloadmessages", Rank.DEVELOPER){
+        CommandHandler.submit(new Command("reloadmessages", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input) {
                 player.getActionSender().sendMessage("Reloading server messages...");
                 MESSAGES.clear();
@@ -36,7 +36,7 @@ public class ServerMessages extends Event {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("savemessages", Rank.DEVELOPER){
+        CommandHandler.submit(new Command("savemessages", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                 player.getActionSender().sendMessage("Saving server messages...");
                 if(!save()){
@@ -47,7 +47,7 @@ public class ServerMessages extends Event {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("removemessage", Rank.DEVELOPER){
+        CommandHandler.submit(new Command("removemessage", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                try{
                    final int index = Integer.parseInt(input.split(" +")[1].trim());
@@ -68,7 +68,7 @@ public class ServerMessages extends Event {
                }
             }
         });
-        CommandHandler.submit(new Command("listmessages", Rank.DEVELOPER){
+        CommandHandler.submit(new Command("listmessages", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                 player.getActionSender().sendMessage(String.format("@blu@%d@bla@ Server Messages", size()));
                 for(int i = 0; i < size(); i++)

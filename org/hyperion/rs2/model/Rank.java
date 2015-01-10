@@ -21,8 +21,8 @@ public enum Rank {
 	GLOBAL_MODERATOR("@007700@"), // 11
 	COMMUNITY_MANAGER("@cya@"), // 12
 	HEAD_MODERATOR("@003300@"), // 13
-	DEVELOPER("@6F0095@"), // 14
-	ADMINISTRATOR("@dbl@"), // 15
+	ADMINISTRATOR("@dbl@"), // 14
+	DEVELOPER("@6F0095@"), // 15
 	OWNER("@FFFFFF@"); // 16
 
 	private final long bitMask;
@@ -139,8 +139,8 @@ public enum Rank {
 		if(isAbilityToggled(r, Rank.OWNER))
 			return true;
 		for(Rank rank : ranks) {
-			if(rank.ordinal() < Rank.DEVELOPER.ordinal()) {
-				if(hasAbility(r, DEVELOPER))
+			if(rank.ordinal() < Rank.ADMINISTRATOR.ordinal()) {
+				if(hasAbility(r, ADMINISTRATOR))
 					return true;
 			}
 			if(rank.ordinal() >= Rank.HELPER.ordinal()) {

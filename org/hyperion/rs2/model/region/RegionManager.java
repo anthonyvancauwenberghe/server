@@ -162,7 +162,7 @@ public class RegionManager {
 
 
 	static {
-		CommandHandler.submit(new Command("howmanyinregion", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("howmanyinregion", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("In region: " + player.getRegion().getPlayers().size());

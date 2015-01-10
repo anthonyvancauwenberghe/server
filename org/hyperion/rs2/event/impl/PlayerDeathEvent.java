@@ -15,10 +15,8 @@ import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
-import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
-import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -89,7 +87,7 @@ public class PlayerDeathEvent extends Event {
                     PlayerSaving.getSaving().save(player);
 					break;
 				case 9:
-					resetPlayer();
+                    resetPlayer();
                     PlayerSaving.getSaving().save(player);
 					break;
 				case 11:
@@ -112,7 +110,13 @@ public class PlayerDeathEvent extends Event {
 		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
 			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
 		}
-		player.getSpecBar().setAmount(SpecialBar.FULL);
+        if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 120000) {
+		    player.getSpecBar().setAmount(SpecialBar.FULL);
+            player.getExtraData().put("lastdeath", System.currentTimeMillis());
+        } else {
+            player.sendMessage("You don't restore special energy as you have died too quickly");
+        }
+
 		player.specOn = false;
 		player.teleBlockTimer = System.currentTimeMillis();
 		player.getActionSender().resetFollow();
@@ -149,22 +153,21 @@ public class PlayerDeathEvent extends Event {
 					 * Increasing stupid points and stuff.
 					 */
 					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
-					killer.getBountyHunter().handleBHKill(player);
 					BountyPerkHandler.handleSpecialPerk(killer);
 					if(true || killer.getLocation().inPvPArea()) {
 						boolean isDev = false;
-						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal() 
-								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
+						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.ADMINISTRATOR.ordinal()
+								|| Rank.getPrimaryRank(player).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 							isDev = true;
 						if(!isDev) {
-						killer.increaseKillCount();
-						int oldKillerRating = killer.getPoints().getEloRating();
-						killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
-						player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
+						    killer.increaseKillCount();
+						    int oldKillerRating = killer.getPoints().getEloRating();
+						    killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
+						    player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
 						}
-						if(killer.killedRecently(player.getName())) {
-							killer.getActionSender().sendMessage("You don't receive Pk Points/KillStreak for killing the same enemy twice.");
-						} else {
+                        if(killer.killedRecently(player.getName()) || killer.getShortIP().equalsIgnoreCase(player.getShortIP())) {
+                            killer.getActionSender().sendMessage("You don't receive Pk Points/KillStreak for killing the same enemy twice.");
+                        } else {
 							try {
 								if(killer.getPvPTask() != null)
 									TaskHandler.checkTask(killer, player);
@@ -175,15 +178,20 @@ public class PlayerDeathEvent extends Event {
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
-							killer.addLastKill(player.getName());
+                            killer.getBountyHunter().handleBHKill(player);
+                            killer.addLastKill(player.getName());
 							int pointsToAdd = player.wildernessLevel / 4 + player.getBounty();
 							if(player.getKillStreak() >= 6) {
-								ActionSender.yellMessage("@blu@" + killer.getName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
 							killer.getPoints().inceasePkPoints(pointsToAdd > 0 ? pointsToAdd : 5);
                             if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
-                                killer.getSpecBar().increment(SpecialBar.FULL);
-						}
+                                killer.getSpecBar().increment(SpecialBar.FULL/5);
+                            if(Rank.hasAbility(killer, Rank.DONATOR))
+                                killer.getSpecBar().increment(SpecialBar.CYCLE_INCREMENT);
+                            killer.getSpecBar().sendSpecBar();
+
+                        }
 						if(!isDev) {
 						player.increaseDeathCount();
 						player.resetKillStreak();

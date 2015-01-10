@@ -6,6 +6,8 @@ import org.hyperion.rs2.model.content.EP.EPDrops;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
@@ -26,7 +28,7 @@ public class DeathDrops {
 		return dontDropRank(player.getPlayerRank()) || player.getLocation().inFunPk();
 	}
 	private static boolean dontDropRank(long l) {
-		return Rank.getPrimaryRank(l).ordinal() >= Rank.DEVELOPER.ordinal();
+		return Rank.getPrimaryRank(l).ordinal() >= Rank.ADMINISTRATOR.ordinal();
 	}
 	/**
 	 * Drops player's items on normal death
@@ -36,6 +38,7 @@ public class DeathDrops {
 			return;
 		if(dontDrop(player) || dontDrop(killer))
 			return;
+
 		/**
 		 * Resets death variables - which slots are being protected
 		 * Sets which items are being kept, deletes them 
@@ -68,10 +71,28 @@ public class DeathDrops {
 		 * Drops the items for the killer
 		 */
 		for(Item item : droppingItems) {
-			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
-		}
+            if(player.isNewlyCreated() && player.hardMode()) {
+                player.sendMessage("You don't get any loot from a new player");
+                break;
+            }
+            if(killer.getGameMode() <= player.getGameMode())
+			    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
+            else {
+                int price = (int)(NewGameMode.getUnitPrice(item) * NewGameMode.SELL_REDUCTION);
+                if(price > 1)
+                    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(),
+                        Item.create(995, price)));
+            }
+        }
 
-	}
+        if(killer.hardMode() && !player.isNewlyCreated()) {
+            World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 50_000)));
+        }
+
+        player.getLogManager().add(LogEntry.death(player, killer, droppingItems.toArray(new Item[droppingItems.size()])));;
+
+
+    }
 	/**
 	 * Adds unspawnables from equip/inv - only takes items that are unspawnable
 	 */
@@ -82,8 +103,8 @@ public class DeathDrops {
 			if((!inv && player.equipSlot[slot]))
 				continue;
 			Item item = container.get(slot);
-			if(toDrop(item)) {
-				if(ItemsTradeable.isTradeable(item.getId()))
+			if(toDrop(item, player.getGameMode())) {
+				if(ItemsTradeable.isTradeable(item.getId()) || (item.getId() >= 13195 && item.getId() <= 13205))
 					originalDrops.add(item);
 				container.remove(slot, item);
 			}	
@@ -91,11 +112,11 @@ public class DeathDrops {
 		return originalDrops;
 	}
 	
-	public static boolean toDrop(Item item) {
+	public static boolean toDrop(Item item, final int gameMode) {
 		if(item == null)
 			return false;
 		if(ItemsTradeable.isTradeable(item.getId())) {
-			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null)
+			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null && gameMode == 0)
 				return false;
 			return true;
 		} else {
@@ -120,9 +141,11 @@ public class DeathDrops {
 			case 18353:
 			case 18355:
 			case 18357:
-				return Misc.random(4) == 0;
+            case 17660:
+				return Misc.random(9) == 0;
 			case 19780: //krazi korazi!
 				return true;
+				//return Misc.random(2) == 0;
 			}
 		}
 		return false;
@@ -154,10 +177,10 @@ public class DeathDrops {
 		//System.out.println("Dropping items for player:" + player.getName());
 		if(killer == null || player == null)
 			return;
-		if(Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
+		if(Rank.getPrimaryRank(player).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 			return;
 
-		if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal())
+		if(Rank.getPrimaryRank(killer).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 			return;
 		if(killer.getLocation().inFunPk() || player.getLocation().inFunPk())
 			return;
@@ -272,15 +295,15 @@ public class DeathDrops {
 		}
 		return null;
 	}
-	public static int calculateAlchValue(int id) {
-        if(ItemSpawning.canSpawn(id))
-            return -5;
+	public static int calculateAlchValue(final Player player ,int id) {
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
-		if(dpVal > 100)
+        if(player.hardMode())
+            inventoryItemValue = (int)NewGameMode.getUnitPrice(id);
+		else if(dpVal > 100)
 			inventoryItemValue = dpVal * 150000;
 		else
-			inventoryItemValue = (int) Math.floor(ItemDefinition.forId(id).getHighAlcValue());
+			inventoryItemValue = ItemSpawning.canSpawn(id) ? -1 :(int) Math.floor(ItemDefinition.forId(id).getHighAlcValue());
 		return inventoryItemValue;
 	}
 	public static Item keepItem(Player player, int keepItem, boolean deleteItem) {
@@ -291,11 +314,7 @@ public class DeathDrops {
 		for(int i = 0; i < player.getInventory().capacity(); i++) {
 			if(player.getInventory().get(i) != null) {
 				int dpVal = DonatorShop.getPrice(player.getInventory().get(i).getId());
-				int inventoryItemValue = 0;
-				if(dpVal > 100)
-					inventoryItemValue = dpVal * 150000;
-				else
-					inventoryItemValue = (int) Math.floor(ItemDefinition.forId(player.getInventory().get(i).getId()).getHighAlcValue());
+				int inventoryItemValue = calculateAlchValue(player ,player.getInventory().get(i).getId());
 				if(inventoryItemValue > value && (! player.invSlot[i])) {
 					value = inventoryItemValue;
 					item = player.getInventory().get(i).getId();
@@ -307,11 +326,7 @@ public class DeathDrops {
 		for(int i1 = 0; i1 < player.getEquipment().capacity(); i1++) {
 			if(player.getEquipment().get(i1) != null) {
 				int dpValue = (int)Math.floor(DonatorShop.getPrice(player.getEquipment().get(i1).getId()));
-				int equipmentItemValue = 0;
-				if(dpValue > 100)
-					equipmentItemValue = dpValue * 150000; 
-				else 
-					equipmentItemValue = (int) Math.floor(ItemDefinition.forId(player.getEquipment().get(i1).getId()).getHighAlcValue());
+				int equipmentItemValue = calculateAlchValue(player ,player.getEquipment().get(i1).getId());
 
 				if(equipmentItemValue > value && (! player.equipSlot[i1])) {
 					value = equipmentItemValue;

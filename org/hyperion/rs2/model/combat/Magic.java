@@ -117,6 +117,7 @@ public class Magic {
 			attacker.getPlayer().getActionSender().sendMessage(message);
 			return 0;
 		}
+
         if (opp.getEntity() instanceof NPC) {
             String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
             for (String familiarName : FAMILIARS)
@@ -228,10 +229,10 @@ public class Magic {
 		}
 		switch(necklaceId) {
 			case 18333:
-				maxDamg *= 1.10;
+				maxDamg *= 1.05;
 				break;
 			case 18335:
-				maxDamg *= 1.15;
+				maxDamg *= 1.10;
 				break;
 		}
 		switch(weaponId) {
@@ -244,11 +245,11 @@ public class Magic {
                 }
                 break;
 			case 13867:
+            case 17017:
 				maxDamg *= 1.10;
 			case 15486:
 				maxDamg *= 1.15;
 				break;
-			case 17017:
 			case 18355:
 				maxDamg *= 1.20;
 				break;
@@ -282,7 +283,7 @@ public class Magic {
                 Damage = (int) (Damage * 0.75);
             }
 		} else /** NPC Part */ {
-			DefBonus = opponent.getNPC().combatLevel
+			DefBonus = opponent.getNPC().getDefinition().combat()
 					+ opponent.getNPC().getDefinition().getBonus()[8];
 			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
 					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
@@ -498,7 +499,7 @@ public class Magic {
 		}
 		if((ContentEntity.getItemAmount(player, 9075) < 4
 				|| ContentEntity.getItemAmount(player, 557) < 10
-				|| ContentEntity.getItemAmount(player, 560) < 2) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+				|| ContentEntity.getItemAmount(player, 560) < 2) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			ContentEntity.sendMessage(player,
 					"You need more runes to cast Vengeance.");
 			return;
@@ -508,7 +509,7 @@ public class Magic {
 					"You already have Vengeance casted!.");
 			return;
 		}
-		if(!(System.currentTimeMillis() > player.lastVeng + BountyPerkHandler.getVengTimer(player)) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+		if(!(System.currentTimeMillis() > player.lastVeng + BountyPerkHandler.getVengTimer(player)) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			player.getActionSender().sendMessage(
 					"You can only cast Vengeance every" + (BountyPerkHandler.getVengTimer(player)/1000)+" seconds.");
 			return;
@@ -693,7 +694,7 @@ public class Magic {
 	public static int hasRunes(CombatEntity c, Spell spell) {
         if(c.getEntity() instanceof Player) {
            Player player = (Player)c.getEntity();
-           if(Rank.hasAbility(player, Rank.DEVELOPER))
+           if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
                return -1;
         }
 		if(spell.getFirstRune() > 0 && spell.getFirstAmount() > 0)
@@ -1305,6 +1306,8 @@ public class Magic {
 		}
 		if(!player.getSpellBook().isAncient())
 			return false;
+        if(player.getSkills().getLevel(Skills.HITPOINTS) < 48)
+            return false;
 		return true;
 	}
 	
@@ -1312,7 +1315,7 @@ public class Magic {
 		if(canGoTo13s(player))
 			Magic.teleport(player, 2981, 3599, 0, false);
 		else
-			player.sendMessage("@red@You have to be on the Ancient Spellooks to go to 13s", "@red@You cannot bring Divine or Elysian Spirit Shields with you here");
+			player.sendMessage("@red@You have to be on the Ancient Spellooks to go to 13s", "@red@You cannot bring Divine or Elysian Spirit Shields with you here", "@red@You must be above half health to enter");
 	}
 	
 	

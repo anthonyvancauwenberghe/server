@@ -299,7 +299,7 @@ public class SpecialAttacks {
 			default:
 				return false;
 		}
-		
+
 		if(ranged && (player.getLocation().disabledRange() || player.duelRule[DuelRules.RANGE.ordinal()])) {
 			player.getActionSender().sendMessage("You cannot used ranged weapons here!");
 			return false;
@@ -321,6 +321,9 @@ public class SpecialAttacks {
 		if(player.getEquipment().get(Equipment.SLOT_RING) != null)
 			if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 19669)
 				specialDrain = (int)(specialDrain - (specialDrain * .1));
+        if(player.getEquipment().get(Equipment.SLOT_RING) != null)
+            if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 17660)
+                specialDrain = (int)(specialDrain - (specialDrain * .17));
 		/*
 		 * If you don't have enough special energy, reset.
 		 */
@@ -420,7 +423,7 @@ public class SpecialAttacks {
 		/**
 		 * Apply damage
 		 */
-		
+
 		ApplyHitBlock:{
             if(oldEntity.getEntity() instanceof Player)
                 oldEntity.getPlayer().getLastAttack().updateLastAttacker(player.getName());
@@ -441,14 +444,14 @@ public class SpecialAttacks {
             if(delayedWeapon(weaponId)) {
 			World.getWorld().submit(new Event(delay, "combat") {
 				public void execute() {
-					if(oldEntity.getEntity() instanceof Player) {
-						Magic.vengeance(oldEntity.getPlayer(),
-								player.cE, hitDamage);
-					}
 					if(player.getPrayers().isEnabled(48))
 						Prayer.soulSplit(player, oldEntity, hitDamage);
                     if(oldEntity != null)
 					    oldEntity.hit(hitDamage, player, false, cbStyle + crit);
+                    if(oldEntity.getEntity() instanceof Player) {
+                        Magic.vengeance(oldEntity.getPlayer(),
+                                player.cE, hitDamage);
+                    }
 					this.stop();
 				}
 			});
@@ -514,9 +517,9 @@ public class SpecialAttacks {
 				int deltaBonus2 = -5;
 				int deltaBonus3 = -5;
 				if(player.getCombat().getOpponent() != null && player.getCombat().getOpponent().getEntity() instanceof Player) {
-					deltaBonus2 = CombatAssistant.calculateRangeAttack(player) - 
+					deltaBonus2 = CombatAssistant.calculateRangeAttack(player) -
 						CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer());
-					deltaBonus3 = CombatAssistant.calculateRangeAttack(player) - 
+					deltaBonus3 = CombatAssistant.calculateRangeAttack(player) -
 							CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer());
 					player.debugMessage("ur range atk is: "+CombatAssistant.calculateRangeAttack(player));
 					player.debugMessage("opp range def is: "+CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer()));
@@ -639,10 +642,10 @@ public class SpecialAttacks {
 
 				} else {
 					deltaBonus = CombatAssistant.calculateMeleeAttack(player)
-							- player.cE.getOpponent().getNPC().combatLevel * 5;
+							- player.cE.getOpponent().getNPC().getDefinition().combat();
 				}
 				randomIncrease = Misc.random(deltaBonus / 3);
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
 				}
 				// System.out.println("RandomIncrease " + randomIncrease +
@@ -673,11 +676,14 @@ public class SpecialAttacks {
 				Combat.addXP(player, damage, false);
 				break;
             case 11700:
-                player.cE.getOpponent().doGfx(369, 0);
-                player.cE.getOpponent().setFreezeTimer(20000);
+                if(hitDamage > 0) {
+                    player.cE.getOpponent().doGfx(369, 0);
+                    if(player.getCombat().canBeFrozen())
+                        player.cE.getOpponent().setFreezeTimer(20000);
+                }
                 break;
             case 11061:
-               // if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+               // if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Damage: "+hitDamage);
                     try {
                         if(player.cE.getOpponent().getEntity() instanceof Player) {
@@ -845,6 +851,7 @@ public class SpecialAttacks {
 				break;**/
 			case 861:
 				// TODO
+
 				break;
 		}
 
@@ -886,7 +893,7 @@ public class SpecialAttacks {
 			case 5698:
 			case 13899:
 			case 15007:
-				specDamage = 1.15;
+				specDamage = 1.20;
 				break;
 			case 1305:
 			case 11694:

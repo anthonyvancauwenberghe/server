@@ -4,8 +4,8 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.combat.specialareas.SpecialArea;
-import org.hyperion.rs2.model.combat.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -835,9 +835,12 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, -1);
 				break;
 			case 132:
-				player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Hello Adventurer", "I have a challenge for you..");
-				player.getInterfaceState().setNextDialogueId(0, 133);
+				//player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+				//		"Hello Adventurer", "I have a challenge for you..");
+				/////player.getInterfaceState().setNextDialogueId(0, 133);
+                player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                        "Ho Ho Ho", "Visit me on Christmas for a special gift!");
+                player.getInterfaceState().setNextDialogueId(0, -1);
 				break;
 			case 133:
 				player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
@@ -866,21 +869,21 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(2, 139);
 				break;
 			case 137:
-				if(ModerationOverride.canModerate(player))
+				if(ModerationOverride.canModerate(player) && Rank.getPrimaryRank(player).ordinal() > Rank.getPrimaryRank(player.getModeration()).ordinal())
 					ModerationOverride.kickPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
 				PushMessage.pushGlobalMessage(player.getSafeDisplayName() + " has just kicked " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 138:
-				if(ModerationOverride.canModerate(player))
+				if(ModerationOverride.canModerate(player) && Rank.getPrimaryRank(player).ordinal() > Rank.getPrimaryRank(player.getModeration()).ordinal())
 					ModerationOverride.jailPlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
 				PushMessage.pushGlobalMessage(player.getSafeDisplayName() + " has just jailed " + player.getModeration().getSafeDisplayName() + ".");
 				player.setModeration(null);
 				break;
 			case 139:
-				if(ModerationOverride.canModerate(player))
+				if(ModerationOverride.canModerate(player) && Rank.getPrimaryRank(player).ordinal() > Rank.getPrimaryRank(player.getModeration()).ordinal())
 					ModerationOverride.mutePlayer(player.getModeration());
 				player.getActionSender().removeAllInterfaces();
 				PushMessage.pushGlobalMessage(player.getSafeDisplayName() + " has just muted " + player.getModeration().getSafeDisplayName() + ".");
@@ -956,7 +959,7 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(1, 150);
 				break;
 			case 150:
-				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
+				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 					player.getActionSender().sendInterfaceInventory(5292, 5063);
 					player.getActionSender().sendUpdateItems(5382, Dicing.getGambledItems());
 				} else {
@@ -1274,7 +1277,7 @@ public class DialogueManager {
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 190:
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+                player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT,
                         "Exchange my emblems for "+player.getBountyHunter().emblemExchagePrice()+ " emblem points",
                         "Nevermind");
                 player.getInterfaceState().setNextDialogueId(0, 192);
@@ -1288,6 +1291,7 @@ public class DialogueManager {
                 player.sendf("You now have @red@%d@bla@ emblem points", player.getBountyHunter().getEmblemPoints());
                 player.getActionSender().removeChatboxInterface();
                 break;
+
             case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;

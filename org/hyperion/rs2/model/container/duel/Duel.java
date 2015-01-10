@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.container.duel;
 
-import java.util.Date;
-
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.Item;
@@ -14,10 +12,14 @@ import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
+
+import java.util.Date;
 
 // Referenced classes of package org.hyperion.rs2.model.container:
 //            Container
@@ -50,6 +52,10 @@ public class Duel {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
+        if(player.getUID() == opponent.getUID()){
+            player.sendf("You cannot duel yourself!");
+            return;
+        }
 		//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());
 		//World.getWorld().getAbuseHandler().cacheMessage(player1, (new StringBuilder()).append(player1.getName()).append(": opened a duel with: ").append(player.getName()).toString());
 		player.setBusy(true);
@@ -175,6 +181,21 @@ public class Duel {
 	public static void deposit(Player player, int slot, int id, int amount) {
 		if(player.tradeAccept1 && player.getTrader() != null && player.getTrader().tradeAccept1)
 			return;
+        if(player.getTrader() != null && player.getGameMode() != player.getTrader().getGameMode()) {
+            player.sendMessage("You cannot stake when you are in separate game modes");
+            return;
+        }
+
+        if((player.getGameMode() == 1) && (player.getUID() == player.getTrader().getUID() || player.getShortIP().equalsIgnoreCase(player.getTrader().getShortIP())))
+        {
+            player.sendMessage("You cannot stake with this person");
+            return;
+        }
+
+        if(player.getTrader() != null && player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
+            player.sendMessage("You or your partner is too new to stake");
+            return;
+        }
 		if(!ItemsTradeable.isTradeable(id)) {
 			player.getActionSender().sendMessage("You cannot stake this item.");
 			return;
@@ -378,6 +399,10 @@ public class Duel {
 			player.getActionSender().sendMessage("The other player doesn't have enough space for this duel.");
 			return;
 		}
+        if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != player.getTrader().getEquipment().getItemId(Equipment.SLOT_WEAPON) && player.duelRule[DuelRules.SWITCH.ordinal()]) {
+            player.sendMessage("You cannot accept a duel with a different weapon than your opponent");
+            return;
+        }
 		if(player.tradeAccept1 && player.getTrader().tradeAccept1 && ! player.tradeAccept2 && ! player.getTrader().tradeAccept2) {
 			confirmScreen(player);
 		}
@@ -453,7 +478,24 @@ public class Duel {
 			return;
 		if(! player.onConfirmScreen)
 			return;
-
+        if(player.duelAttackable > 0)
+            return;
+        player.getLogManager().add(
+                LogEntry.duel(
+                        player.getName(),
+                        player.getTrader().getName(),
+                        player.getDuel().toArray(),
+                        player.getTrader().getDuel().toArray()
+                )
+        );
+        player.getTrader().getLogManager().add(
+                LogEntry.duel(
+                        player.getName(),
+                        player.getTrader().getName(),
+                        player.getDuel().toArray(),
+                        player.getTrader().getDuel().toArray()
+                )
+        );
 		player.setOverloaded(false);
 		player.getTrader().setOverloaded(false);
 		player.getExtraData().remove(OverloadStatsEvent.KEY);
@@ -479,7 +521,8 @@ public class Duel {
 		player.vengeance = false;
 		player.getTrader().vengeance = false;
 		teleportToArena(player);
-		player.getWalkingQueue().reset();
+        player.getWalkingQueue().finish();
+        player.getWalkingQueue().reset();
 		removeBanEquip(player);
 		removeBanEquip(player.getTrader());
 		World.getWorld().submit(new Event(1000, "duel") {
@@ -498,6 +541,10 @@ public class Duel {
 					return;
 				}
 				player.getTrader().forceMessage((new StringBuilder()).append("").append(timer).toString());
+                player.getWalkingQueue().finish();
+                player.getWalkingQueue().reset();
+                player.getTrader().getWalkingQueue().finish();
+                player.getTrader().getWalkingQueue().reset();
 				if(timer == 0) {
 					player.forceMessage("FIGHT!");
 					player.getTrader().forceMessage("FIGHT!");
@@ -530,7 +577,8 @@ public class Duel {
             player.getActionSender().sendString(6840, (new StringBuilder()).append("").append(player.getName()).toString());
 
             player.getInventory();
-            Container.transfer(player.getDuel(), player.getInventory());
+            Container.transfer(player.getDuel(), player.getInventory());//jet is a dumbass
+
             player.getInventory();
             Container.transfer(opponent.getDuel(), player.getInventory());
         }
@@ -539,11 +587,10 @@ public class Duel {
         player.getActionSender().sendMessage("You have "+(won ? "won" : "lost")+ " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);
         healup(player);
-
+        PlayerSaving.getSaving().saveLog("./logs/accounts/" + opponent.getName(), (new Date()) + " Duel "+(won ? "Won" : "Lost") +" against "+player.getName());
 		player.tradeAccept2 = false;
 		player.duelAttackable = 0;
         PlayerSaving.getSaving().save(player);
-		PlayerSaving.getSaving().saveLog("./logs/accounts/" + opponent.getName(), (new Date()) + " Duel "+(won ? "Won" : "Lost"));
 
         if(won)
             player.getActionSender().showInterface(6733);
@@ -555,6 +602,12 @@ public class Duel {
 		try {
 			Player player1 = player.getTrader();
 			if(player1 != null) {
+                player1.getLogManager().add(
+                        LogEntry.duelResult(player1.getName(), player.getName())
+                );
+                player.getLogManager().add(
+                        LogEntry.duelResult(player1.getName(), player.getName())
+                );
                 finishDuel(player1, player, true);
                 finishDuel(player, player1, false);
             } else {
@@ -567,11 +620,11 @@ public class Duel {
 	}
 
 	public static void selectRule(Player player, int i, boolean flag, int j) {
-		if(player.duelAttackable > 0)
-			return;
 		if(player == null || player.getTrader() == null)
 			return;
-		if(!player.equals(player.getTrader().getTrader())) {
+        if(player.duelAttackable > 0 || player.onConfirmScreen)
+            return;
+        if(!player.equals(player.getTrader().getTrader())) {
 			player.getActionSender().sendMessage("Anti-bug has stopped you!");
 			return;
 		}

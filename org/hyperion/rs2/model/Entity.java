@@ -496,7 +496,7 @@ public abstract class Entity {
 			if(cE.getAbsX() >= 2814 && cE.getAbsX() <= 2942 && cE.getAbsY() >= 5250 && cE.getAbsY() <= 5373) {
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
-			World.getWorld().resetPlayersNpcs(player);
+            World.getWorld().resetPlayersNpcs(player);
 		}
 	}
 
@@ -551,7 +551,7 @@ public abstract class Entity {
 	//}
 
 	static {
-		CommandHandler.submit(new Command("getlocalplayers", Rank.DEVELOPER) {
+		CommandHandler.submit(new Command("getlocalplayers", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Localplayers: " + player.getLocalPlayers().size());

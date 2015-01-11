@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.ticket;
 
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 
 import java.util.Optional;
@@ -20,11 +21,12 @@ public class TicketHolder {
         return Optional.ofNullable(ticket);
     }
 
-    public final void create(final String name, final String reason, final String title) {
+    public final void create(final String name, final String title, final String reason, final Rank min_rank) {
         if(ticket != null)
             World.getWorld().getTicketManager().remove(ticket);
-        this.ticket = new Ticket(name, reason, title);
+        this.ticket = new Ticket(name, reason, title, min_rank);
         lastTicket = System.currentTimeMillis();
+        System.out.println("HEREZ2");
         World.getWorld().getTicketManager().add(this.ticket);
     }
 
@@ -32,6 +34,11 @@ public class TicketHolder {
         if(System.currentTimeMillis() - lastTicket < 60000)
             return false;
         return true;
+    }
+
+    public final void fireOnLogout() {
+        if(ticket != null)
+            World.getWorld().getTicketManager().remove(ticket);
     }
 
 

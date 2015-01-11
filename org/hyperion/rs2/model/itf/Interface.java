@@ -70,4 +70,17 @@ public abstract class Interface {
     }
 
     public abstract void handle(final Player player, final Packet pkt);
+
+    public static PacketBuilder createStateBuilder(final int id) {
+        return createBuilder(InterfacePacketHandler.STATE_OPCODE, Packet.Type.FIXED, id);
+    }
+
+    private static PacketBuilder createBuilder(final int opcode, final Packet.Type type, final int id){
+        return new PacketBuilder(opcode, type).putShort(id);
+    }
+
+    public static Packet createStatePacket(final int states, final int id){
+        return createStateBuilder(id).put((byte)states).toPacket();
+    }
+
 }

@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.content.ticket;
 
+import org.hyperion.rs2.model.Rank;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay
@@ -13,12 +15,14 @@ public class Ticket {
 
     public final int id;
     public final String name, request, title;
+    public final Rank min_rank;
 
-    public Ticket(final String name, final String request, final String title) {
+    public Ticket(final String name, final String request, final String title, final Rank min_rank) {
         this.id = current_ticket++;
         this.name = name;
         this.request = request;
         this.title = title;
+        this.min_rank = min_rank;
     }
 
 }

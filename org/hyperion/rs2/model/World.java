@@ -910,6 +910,7 @@ public class World {
 		resetPlayersNpcs(player);
         resetSummoningNpcs(player);
         player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.loginTime));
+        player.getTicketHolder().fireOnLogout();
 
 		try {
 			ClanManager.leaveChat(player, false, false);

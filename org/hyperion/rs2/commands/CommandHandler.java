@@ -944,51 +944,6 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("changemaxcolors", Rank.PLAYER){
-            public boolean execute(final Player player, final String input){
-                final String line = filterInput(input).trim();
-                if(line.equals("none")){
-                    player.maxCapePrimaryColor = 0;
-                    player.maxCapeSecondaryColor = 0;
-                    player.sendf("Reset your max cape colors!");
-                    return true;
-                }
-                final String[] colors = line.split(" ");
-                if(colors.length != 2) {
-                    player.getActionSender().sendMessage("Invalid syntax");
-                    return false;
-                }
-                Color primary = null;
-                Color secondary = null;
-                for(final Color color : Color.values()){
-                    final String colorStr = color.toString();
-                    if(colors[0].equalsIgnoreCase(colorStr))
-                        primary = color;
-                    if(colors[1].equalsIgnoreCase(colorStr))
-                        secondary = color;
-                    if(primary != null && secondary != null)
-                        break;
-                }
-                if(primary == null || secondary == null){
-                    player.getActionSender().sendMessage("Invalid colors");
-                    return false;
-                }
-                if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary){
-                    player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
-                    return false;
-                }
-                player.maxCapePrimaryColor = primary.color;
-                player.maxCapeSecondaryColor = secondary.color;
-                player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
-                player.getActionSender().sendMessage(
-                        String.format(
-                                "Changed max cape colors: Primary: %s | Secondary: %s",
-                                primary, secondary
-                        )
-                );
-                return true;
-            }
-        });
 
         submit(new Command("changecompcolors", Rank.PLAYER){
             public boolean execute(final Player player, final String input){

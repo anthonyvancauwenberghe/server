@@ -27,9 +27,10 @@ public class AskForHelp extends Interface {
         final Rank rank = TicketManager.convert(pkt.getByte());
 
 
-        if(player.getTicketHolder().canMakeTicket())
+        if(player.getTicketHolder().canMakeTicket()) {
             player.getTicketHolder().create(player.getName(), title, text, rank);
-        else
+            player.sendMessage("You successfully submit your ticket");
+        } else
             player.sendMessage("You can only create a ticket once every 60 seconds");
 
     }

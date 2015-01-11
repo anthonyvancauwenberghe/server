@@ -1,7 +1,9 @@
 package org.hyperion.rs2.model.content.itfactivation;
 
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -26,15 +28,42 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
 
     @Override
     public void handle(Player player, Packet pkt) {
-        player.maxCapePrimaryColor = pkt.getInt();
-        player.maxCapeSecondaryColor = pkt.getInt();
-        player.sendMessage("You successfully changed your colors");
+        final int type = pkt.getByte();
+
+        final int oldColor_1 = player.maxCapePrimaryColor;
+        final int oldColor_2 = player.maxCapeSecondaryColor;
+        if(type == 0) {
+            if(player.getPoints().getPkPoints() >= 10000) {
+                player.maxCapePrimaryColor = pkt.getInt();
+                player.maxCapeSecondaryColor = pkt.getInt();
+                player.sendMessage("You successfully changed your colors");
+            } else {
+                player.sendMessage("You need 10K pk points to change your max cape colors");
+            }
+        } else {
+            player.maxCapePrimaryColor = pkt.getInt();
+            player.maxCapeSecondaryColor = pkt.getInt();
+            player.getLastAttack().updateLastAttacker(player.getLastAttack().getName());
+            World.getWorld().submit(new Event(5000) {
+                @Override
+                public void execute() {
+                    player.maxCapePrimaryColor = oldColor_1;
+                    player.maxCapeSecondaryColor = oldColor_1;
+                    player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
+
+                }
+            });
+        }
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
 
     }
 
     @Override
     public boolean clickObject(Player player, int type, int a, int b, int c, int d) {
+        if(System.currentTimeMillis() - player.getLastAttack().timeSinceLastAttack() < 10000) {
+            player.sendMessage("You can't do this right now");
+            return false;
+        }
         show(player);
         final PacketBuilder builder = createDataBuilder();
         final int indexOne = Stream.of(Color.values()).filter(x -> x.color == player.maxCapePrimaryColor).findFirst().get().ordinal();

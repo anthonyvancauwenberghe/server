@@ -44,6 +44,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
             player.maxCapePrimaryColor = pkt.getInt();
             player.maxCapeSecondaryColor = pkt.getInt();
             player.cE.lastHit = System.currentTimeMillis();
+            player.getLastAttack().updateLastAttacker(player.getLastAttack().getName());
             World.getWorld().submit(new Event(5000) {
                 @Override
                 public void execute() {

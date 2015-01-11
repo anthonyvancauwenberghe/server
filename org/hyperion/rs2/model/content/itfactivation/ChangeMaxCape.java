@@ -29,7 +29,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
     @Override
     public void handle(Player player, Packet pkt) {
         final int type = pkt.getByte();
-
+        System.out.println("HERE");
         final int oldColor_1 = player.maxCapePrimaryColor;
         final int oldColor_2 = player.maxCapeSecondaryColor;
         if(type == 0) {
@@ -37,6 +37,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
                 player.maxCapePrimaryColor = pkt.getInt();
                 player.maxCapeSecondaryColor = pkt.getInt();
                 player.sendMessage("You successfully changed your colors");
+                player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 10000);
             } else {
                 player.sendMessage("You need 10K pk points to change your max cape colors");
             }

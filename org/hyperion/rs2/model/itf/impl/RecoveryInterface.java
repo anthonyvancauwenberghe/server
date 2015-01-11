@@ -1,9 +1,15 @@
 package org.hyperion.rs2.model.itf.impl;
 
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.sql.SQLConnection;
+import org.hyperion.rs2.sql.requests.QueryRequest;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by Jet on 1/2/2015.
@@ -52,6 +58,19 @@ public class RecoveryInterface extends Interface {
             return;
         }
         //save recovery info
+        /*final String query = String.format("INSERT INTO recovery(name, mail, security_id1, security_id2, security_answer_1, security_answer_2) " +
+                "VALUES(%s, %s, %d, %d, %s, %s, %s)",
+                player.getName(), email, question1Idx, question2Idx, answer1, answer2);
+        World.getWorld().getLogsConnection().offer(new QueryRequest(query) {
+            @Override
+            public void process(SQLConnection sql) throws SQLException {
+                final String check = "SELECT * FROM recovery WHERE name="+player.getName();
+                final ResultSet set = sql.query(check);
+                if(set.next())
+                    return;
+                sql.query(query);
+            }
+        });   */
         hide(player);
     }
 

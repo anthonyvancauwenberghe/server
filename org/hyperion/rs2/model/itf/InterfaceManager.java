@@ -2,10 +2,7 @@ package org.hyperion.rs2.model.itf;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.itfactivation.ChangeMaxCape;
-import org.hyperion.rs2.model.itf.impl.AskForHelp;
-import org.hyperion.rs2.model.itf.impl.HelpInterface;
-import org.hyperion.rs2.model.itf.impl.PendingRequests;
-import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
+import org.hyperion.rs2.model.itf.impl.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,6 +21,7 @@ public final class InterfaceManager {
         addGlobal(new AskForHelp());
         addGlobal(new HelpInterface());
         addGlobal(new PendingRequests());
+        addGlobal(new ChangePassword());
     }
 
     private final Player player;

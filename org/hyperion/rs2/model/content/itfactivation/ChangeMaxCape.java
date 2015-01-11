@@ -61,15 +61,19 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
 
     @Override
     public boolean clickObject(Player player, int type, int a, int b, int c, int d) {
-        if(System.currentTimeMillis() - player.getLastAttack().timeSinceLastAttack() < 10000) {
+        if(System.currentTimeMillis() - player.cE.lastHit < 10000) {
             player.sendMessage("You can't do this right now");
             return false;
         }
         show(player);
         final PacketBuilder builder = createDataBuilder();
-        final int indexOne = Stream.of(Color.values()).filter(x -> x.color == player.maxCapePrimaryColor).findFirst().get().ordinal();
-        final int indexTwo = Stream.of(Color.values()).filter(x -> x.color == player.maxCapeSecondaryColor).findFirst().get().ordinal();
-        builder.put((byte)indexOne).put((byte)indexTwo);
+        try {
+            final int indexOne = Stream.of(Color.values()).filter(x -> x.color == player.maxCapePrimaryColor).findFirst().get().ordinal();
+            final int indexTwo = Stream.of(Color.values()).filter(x -> x.color == player.maxCapeSecondaryColor).findFirst().get().ordinal();
+            builder.put((byte)indexOne).put((byte)indexTwo);
+        }catch(final Exception e) {
+            builder.put((byte)0).put((byte)0);
+        }
         player.write(builder.toPacket());
         return true;
     }

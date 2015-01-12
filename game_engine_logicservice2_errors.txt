@@ -9160,3 +9160,445 @@ Tue Jan 06 23:51:18 GMT+01:00 2015
 	class: class java.lang.ArrayIndexOutOfBoundsException
 
 ================================
+Sat Jan 10 22:09:29 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -2430
+	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
+	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:828)
+	at org.hyperion.rs2.model.World.isWalkAble(World.java:504)
+	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1113)
+	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
+	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jan 10 22:09:29 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -2430
+	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
+	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:828)
+	at org.hyperion.rs2.model.World.isWalkAble(World.java:504)
+	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1113)
+	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
+	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jan 10 22:09:30 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:31 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:31 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:32 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:32 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:33 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:34 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:34 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:35 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:35 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:36 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:37 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:37 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:38 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:38 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:39 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:40 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:40 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:41 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:41 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:42 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:43 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:43 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:44 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:45 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:45 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:46 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:46 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:47 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:48 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:48 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:49 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:49 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:50 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:51 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:51 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:52 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:52 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:53 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:54 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:54 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:55 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:56 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:56 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:57 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:57 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:58 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:59 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:09:59 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:00 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:00 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:01 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:02 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:02 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:03 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:03 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:04 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:05 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:05 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:06 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:06 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:07 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:08 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:08 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:09 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:09 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:10 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:11 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:11 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:12 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:12 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:13 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:14 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:14 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:15 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:15 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:16 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:17 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:17 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:18 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:18 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:19 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:20 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:20 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:21 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:21 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:22 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:23 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:23 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:24 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:24 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:25 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:26 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:26 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:27 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:27 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:28 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:29 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Sat Jan 10 22:10:30 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================

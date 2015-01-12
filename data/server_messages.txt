@@ -1,4 +1,4 @@
 Contact Battery to Donate with RSGP
 Buy shards by doing ::buyshards <amount> (1 pkp = 2 shards)
 join our teamspeak now! arteropk.typefrag.com
-We are currently experiencing hosing issues. Pk & stake on your own
+We will be switching servers soon to stop the lag & disconnects

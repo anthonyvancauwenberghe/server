@@ -29,7 +29,6 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
     @Override
     public void handle(Player player, Packet pkt) {
         final int type = pkt.getByte();
-        System.out.println("HERE");
         final int oldColor_1 = player.maxCapePrimaryColor;
         final int oldColor_2 = player.maxCapeSecondaryColor;
         if(type == 0) {

@@ -330,7 +330,7 @@ public class NPCManager {
 			case 6204:
 			case 6206:
 			case 6203:
-				return 20;
+				return 10;
 
             case 50:
                 return 15;

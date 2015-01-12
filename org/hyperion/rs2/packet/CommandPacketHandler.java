@@ -70,6 +70,7 @@ import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
+import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
@@ -2431,35 +2432,7 @@ public class CommandPacketHandler implements PacketHandler {
 			if (commandStart.equals("changepass")
 					|| commandStart.equals("pass")
 					|| commandStart.equals("changepassword")) {
-				s = s.replace("changepassword ", "");
-				s = s.replace("changepass ", "");
-				s = s.replace("pass ", "");
-				if (s.length() > 15) {
-					player.getActionSender().sendMessage(
-							"Please choose a shorter password");
-					return;
-				}
-				if (!player.tempPass.equals(s)) {
-					player.tempPass = s;
-					player.getActionSender()
-							.sendMessage(
-									"Please enter the command again with the same password.");
-				} else {
-                    final String date = new Date().toString();
-					TextUtils
-							.writeToFile(
-									"./data/possiblehacks.txt",
-									String.format(
-											"Player: %s Old password: %s New password: %s By IP: %s Date: %s",
-											player.getName(),
-											player.getPassword(), s,
-											player.getShortIP(),
-											date));
-                    PossibleHacksHolder.add(new PasswordChange(player.getName(),player.getShortIP(), date, player.getPassword() , s));
-					player.setPassword(s);
-					player.getActionSender().sendMessage(
-							"Your password is now: " + s);
-				}
+				player.getInterfaceManager().show(ChangePassword.ID);
 			}
 
 		} catch (Exception e) {

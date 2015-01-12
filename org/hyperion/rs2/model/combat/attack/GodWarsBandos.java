@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.combat.attack;
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 
 public class GodWarsBandos implements Attack {
@@ -30,7 +31,8 @@ public class GodWarsBandos implements Attack {
 				//range
 				n.cE.doAnim(n.getDefinition().getAtkEmote(0));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(19), 700, 1);
+                final int damage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(19), 1, 19);
+				Combat.npcAttack(n, attack, damage, 700, 1);
 				Combat.npcRangeAttack(n, attack, 1206, 43, false);
 
 			} else if(n.getDefinition().getId() == 6263) {
@@ -39,7 +41,8 @@ public class GodWarsBandos implements Attack {
 				//mage
 				n.cE.doAnim(n.getDefinition().getAtkEmote(0));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(17), 700, 2);
+                final int damage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(17), 2, 17);
+                Combat.npcAttack(n, attack, damage, 700, 2);
 				Combat.npcRangeAttack(n, attack, 1203, 43, true);
 			} else if(n.getDefinition().getId() == 6261) {
 
@@ -47,7 +50,8 @@ public class GodWarsBandos implements Attack {
 				if(distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 					n.cE.doAnim(n.getDefinition().getAtkEmote(0));
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-					Combat.npcAttack(n, attack, Combat.random(25), 500, 0);
+                    final int damage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(25), 0, 25);
+                    Combat.npcAttack(n, attack, damage, 500, 0);
 				} else
 					return 0;
 			} else if(n.getDefinition().getId() == BANDOS_BOSS) {
@@ -57,7 +61,8 @@ public class GodWarsBandos implements Attack {
 					if(distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 						n.cE.doAnim(n.getDefinition().getAtkEmote(0));
 						n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-						Combat.npcAttack(n, attack, Combat.random(64), 500, 0);
+                        final int damage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(55), 0, 55);
+                        Combat.npcAttack(n, attack, damage, 500, 0);
 					} else
 						return 0;
 				} else {
@@ -68,9 +73,10 @@ public class GodWarsBandos implements Attack {
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
 					for(Player p : World.getWorld().getRegionManager().getLocalPlayers(n)) {
 						int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-						if(distance2 <= 10) {
+						if(distance2 <= 10 && WorldMap.projectileClear(n.getLocation().getZ(), n.getDefinition().sizeX() + n.getLocation().getX(), n.getDefinition().sizeY() + n.getLocation().getY(), p.cE.getAbsX(), p.cE.getAbsY())) {
 							p.cE.doGfx(1177, 0);
-							Combat.npcAttack(n, p.cE, Combat.random(37), 500, 1);
+                            final int damage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(37), 1, 37);
+                            Combat.npcAttack(n, p.cE, damage, 500, 1);
 						}
 					}
 				}
@@ -79,7 +85,7 @@ public class GodWarsBandos implements Attack {
 			}
 
 			return 5;
-		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 15)) {
+		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 10)) {
 			return 0;
 		} else {
 			return 1;

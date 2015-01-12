@@ -42,6 +42,8 @@ import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 //import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.content.ticket.TicketHolder;
+import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
@@ -81,6 +83,20 @@ public class Player extends Entity implements Persistable, Cloneable{
 		Player clone = (Player)super.clone();
 		return clone;
 	}
+
+    private final InterfaceManager interfaceManager = new InterfaceManager(this);
+
+    public final InterfaceManager getInterfaceManager() {
+        return interfaceManager;
+    }
+
+
+
+    private final TicketHolder ticketHolder = new TicketHolder();
+
+    public final TicketHolder getTicketHolder() {
+        return ticketHolder;
+    }
 
 	
 	public NPCKillsLogger npckillLogger = new NPCKillsLogger();

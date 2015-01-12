@@ -25,7 +25,7 @@ public interface ContentTemplate {
         return false;
     }//this will work for all items, objects , npcs etc, specify value -1 if the value is unused
 
-	public abstract void init() throws FileNotFoundException;
+	public default void init() throws FileNotFoundException { ; }
 
 	public abstract int[] getValues(int type);
 

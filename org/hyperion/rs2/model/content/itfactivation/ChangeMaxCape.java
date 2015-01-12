@@ -49,7 +49,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
                 @Override
                 public void execute() {
                     player.maxCapePrimaryColor = oldColor_1;
-                    player.maxCapeSecondaryColor = oldColor_1;
+                    player.maxCapeSecondaryColor = oldColor_2;
                     player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
                     this.stop();
 

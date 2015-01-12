@@ -291,7 +291,7 @@ public class NPCDefinition {
 								hp = 150;
 								break;
 							case GodWarsBandos.BANDOS_BOSS:
-								hp = 1000;
+								hp = 255;
 								break;
 						}
 

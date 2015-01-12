@@ -72,11 +72,7 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.sql.DonationsSQLConnection;
-import org.hyperion.rs2.sql.DummyConnection;
-import org.hyperion.rs2.sql.LocalServerSQLConnection;
-import org.hyperion.rs2.sql.LogsSQLConnection;
-import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
@@ -198,8 +194,6 @@ public class World {
 	private MySQLConnection donationsSQL;
 
 	private MySQLConnection logsSQL;
-
-    private MySQLConnection localServerSQL;
 
 	//private PlayersSQLConnection playersSQL = new PlayersSQLConnection();
 
@@ -332,10 +326,6 @@ public class World {
 	public MySQLConnection getLogsConnection() {
 		return logsSQL;
 	}
-
-    public MySQLConnection getLocalServerConnection(){
-        return localServerSQL;
-    }
 	
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;
@@ -383,15 +373,13 @@ public class World {
 			if(Server.getConfig().getBoolean("sql")) {
 				logsSQL = new LogsSQLConnection(Server.getConfig());
 				donationsSQL = new DonationsSQLConnection(Server.getConfig());
-                localServerSQL = new LocalServerSQLConnection();
 			} else {
 				logsSQL = new DummyConnection();
 				donationsSQL = new DummyConnection();
-                localServerSQL = new DummyConnection();
 			}
 			donationsSQL.init();
 			logsSQL.init();
-			localServerSQL.init();
+			//LocalServerSQLConnection.init();
 			//playersSQL.init();
 			//banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);
@@ -945,12 +933,14 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
+                /*
                 try{
                     if(!Rank.hasAbility(player, Rank.DEVELOPER))
-                        getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                      //  getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
                 }catch(SQLException e){
                     e.printStackTrace();
                 }
+                */
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");

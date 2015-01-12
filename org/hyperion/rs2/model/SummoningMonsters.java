@@ -64,7 +64,11 @@ public class SummoningMonsters {
 		} else if(/*distance > p.cE.summonedNpc.getDefinition().sizeX() && */distance >= 2) {
 			//if(p.cE.summonedNpc.cE.getOpponent() == null || p.cE.summonedNpc.cE.getOpponent().getEntity().isDead()) {
 				p.cE.summonedNpc.cE.setOpponent(null);
-				Combat.follow(p.cE.summonedNpc.cE, p.cE);
+             try {
+                 Combat.follow(p.cE.summonedNpc.cE, p.cE);
+             } catch(final Exception ex) {
+                 World.getWorld().resetSummoningNpcs(p);
+             }
 			//}
 		}
 		if(p.SummoningCounter <= 0) {

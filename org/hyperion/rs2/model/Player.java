@@ -41,8 +41,7 @@ import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
-import org.hyperion.rs2.model.content.ticket.TicketHolder;
-import org.hyperion.rs2.model.itf.InterfaceManager;
+//import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
@@ -76,12 +75,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player extends Entity implements Persistable, Cloneable{
 
 	public static final int MAX_NAME_LENGTH = 12;
-
-    private final TicketHolder ticketHolder = new TicketHolder();
-
-    public final TicketHolder getTicketHolder() {
-        return ticketHolder;
-    }
 	
 	@Override
 	public Object clone() throws CloneNotSupportedException{
@@ -1002,7 +995,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     private LogManager logManager;
 
-    private InterfaceManager itfManager;
+   // private InterfaceManager itfManager;
 
 	/**
 	 * Creates a player based on the details object.
@@ -1048,17 +1041,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 		friendList = new FriendList();
 
         logManager = new LogManager(this);
-        itfManager = new InterfaceManager(this);
+       // itfManager = new InterfaceManager(this);
 	}
 
     public LogManager getLogManager(){
         return logManager;
     }
 
-    public InterfaceManager getInterfaceManager(){
+/*  public InterfaceManager getInterfaceManager(){
         return itfManager;
     }
-
+*/
 	private String IP;
 
 	public String getFullIP() {
@@ -1087,7 +1080,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
     public boolean isNewlyCreated() {
-        return permExtraData.getLong("logintime") < Time.FIVE_MINUTES; //change to 15 min l8r
+        return permExtraData.getLong("logintime") < Time.FIVE_MINUTES * 3;
     }
 
 	/**

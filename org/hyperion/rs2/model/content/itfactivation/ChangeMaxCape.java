@@ -51,6 +51,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
                     player.maxCapePrimaryColor = oldColor_1;
                     player.maxCapeSecondaryColor = oldColor_2;
                     player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
+                    //s
                     this.stop();
 
                 }

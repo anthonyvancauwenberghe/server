@@ -76,8 +76,14 @@ public class TicketManager {
         if(tick != null) {
             final Player p = World.getWorld().getPlayer(tick.name);
             if(p != null) {
-                Magic.teleport(p, player.getLocation(), true);
-                remove(tick);
+                if(!p.getLocation().inDuel()) {
+                    Magic.teleport(p, player.getLocation(), true);
+                    remove(tick);
+                }
+                        else {
+                        player.sendMessage("You can't be assisted while you are in a duel or wilderness");
+                    }
+
             } else {
                 player.sendMessage("Player is offline");
                 remove(tick);

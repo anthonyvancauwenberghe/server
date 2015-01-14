@@ -142,6 +142,12 @@ public class Dicing implements ContentTemplate {
 			player.getActionSender().sendMessage("You can't gamble more than 1000 of an item!");
 			return;
 		}
+
+        if(item.getCount() > 20 && item.getId() == 13663) {
+            player.getActionSender().sendMessage("Exhanging over 20 of these poses a security risk");
+            return;
+        }
+
 		if(item.getCount() > 50 && item.getId() == 3062) {
 			player.getActionSender().sendMessage("These boxes are simply too large to take in bulk!");
 			return;

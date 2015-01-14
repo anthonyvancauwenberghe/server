@@ -135,7 +135,10 @@ public class DonatorShop extends Shop {
 	@Override
 	public void valueSellItem(Player player, Item item) {
 		int price = getPrice(item.getId());
-
+        if(item.getId() == LEGENDARY_TICKET) {
+            player.sendMessage("You cannot sell this back to the store");
+            return;
+        }
 		if(price <= 5) {
 			player.getActionSender().sendMessage("This item cannot be sold.");
 			return;

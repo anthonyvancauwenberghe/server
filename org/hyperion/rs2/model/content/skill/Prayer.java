@@ -460,6 +460,17 @@ public class Prayer implements ContentTemplate {
 			return true;
 		}
 
+        if((p2.getId() == Prayers.PRAYER_RIGOUR && !p.getPermExtraData().getBoolean("rigour"))
+                || (p2.getId() == Prayers.PRAYER_AUGURY && !p.getPermExtraData().getBoolean("augury"))) {
+            p.getActionSender().sendClientConfig(p2.getFrame(), 0);
+            p.getActionSender().sendMessage("You haven't unlocked "
+                    + p2.getName() + ".");
+            p.getActionSender().sendString(357, "You haven't unlocked "
+                    + p2.getName() + ".");
+            p.getActionSender().sendPacket164(356);
+            return true;
+        }
+
 		// Check if the prayer is already activated.
 		if(p.getPrayers().isEnabled(p2.getId())) {
 			p.getActionSender().sendClientConfig(p2.getFrame(), 0);
@@ -681,7 +692,7 @@ public class Prayer implements ContentTemplate {
 		 */
 		int ai[] = {5609, 5610, 5611, 18000, 18002, 5612, 5613, 5614, 5615, 5616, 5617,
 				18004, 18006, 5618, 5619, 5620, 5621, 5622, 5623, 18008, 18010, 683, 684,
-				685, 18012, 18014,
+				685, 18012, 18014, 18016, 18018,
                 /* curses */22503, 22505, 22507, 22509, 22511, 22513, 22515, 22517,
 				22519, 22521, 22523, 22525, 22527, 22529, 22531, 22533, 22535, 22537,
 				22539, 22541,};
@@ -728,7 +739,7 @@ public class Prayer implements ContentTemplate {
 	public int getPrayerForActionButton(int id) {
 		int[] j = {5609, 5610, 5611, 18000, 18002, 5612, 5613, 5614, 5615, 5616, 5617,
 				18004, 18006, 5618, 5619, 5620, 5621, 5622, 5623, 18008, 18010, 683, 684,
-				685, 18012, 18014};
+				685, 18012, 18014, 18016, 18018};
         /*
 		 * int j[] = { 25000, 25002, 25004, 25006, 25008, 25010, 25012, 25014,
 		 * 25016, 25018, 25020, 25022, 25024, 25026, 25028, 25030, 25032, 25034,

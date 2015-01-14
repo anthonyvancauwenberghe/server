@@ -32,6 +32,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -52,6 +54,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -75,6 +79,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -98,6 +104,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -132,6 +140,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -152,6 +162,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -211,6 +223,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -234,6 +248,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -268,6 +284,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -288,6 +306,8 @@
             <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -353,8 +373,11 @@
             <int>12</int>
             <int>14</int>
             <int>15</int>
+            <int>20</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -378,6 +401,8 @@
             <int>19</int>
             <int>24</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -449,6 +474,8 @@
             <int>19</int>
             <int>20</int>
             <int>25</int>
+            <int>26</int>
+            <int>27</int>
         </prayers>
     </icon>
     <icon>
@@ -475,6 +502,62 @@
             <int>19</int>
             <int>20</int>
             <int>24</int>
+        </prayers>
+    </icon>
+    <icon>
+        <name>Rigour</name>
+        <prayerId>26</prayerId>
+        <level>74</level>
+        <headicon>-1</headicon>
+        <frame>609</frame>
+        <drain>0.400</drain>
+        <prayers>
+            <int>0</int>
+            <int>1</int>
+            <int>2</int>
+            <int>3</int>
+            <int>4</int>
+            <int>5</int>
+            <int>6</int>
+            <int>7</int>
+            <int>11</int>
+            <int>12</int>
+            <int>13</int>
+            <int>14</int>
+            <int>15</int>
+            <int>19</int>
+            <int>20</int>
+            <int>24</int>
+            <int>25</int>
+            <int>27</int>
+        </prayers>
+    </icon>
+    <icon>
+        <name>Augury</name>
+        <prayerId>27</prayerId>
+        <level>74</level>
+        <headicon>-1</headicon>
+        <frame>610</frame>
+        <drain>0.400</drain>
+        <prayers>
+            <int>0</int>
+            <int>1</int>
+            <int>2</int>
+            <int>3</int>
+            <int>4</int>
+            <int>5</int>
+            <int>6</int>
+            <int>7</int>
+            <int>11</int>
+            <int>12</int>
+            <int>13</int>
+            <int>14</int>
+            <int>15</int>
+            <int>19</int>
+            <int>20</int>
+            <int>24</int>
+            <int>25</int>
+            <int>26</int>
         </prayers>
     </icon>
     <icon>

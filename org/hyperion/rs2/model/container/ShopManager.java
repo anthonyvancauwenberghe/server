@@ -657,6 +657,8 @@ public class ShopManager {
                 } else if(type.contains("emblem")) {
                     shop = new EmblemShop(shopId, shopName
                             , shopContainer);
+                } else if(type.contains("legendary")) {
+                    shop  = new LegendaryStore(shopId, shopName, shopContainer);
                 }
 				for(int i = 3; i < parts.length; i++) {
 					String part = parts[i];

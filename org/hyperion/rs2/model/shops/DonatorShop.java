@@ -60,6 +60,10 @@ public class DonatorShop extends Shop {
 			ActionSender.yellMessage("@blu@only " + item.getCount() + " of these items will ever be sold.");
 			return;
 		}
+        if(item.getId() == LEGENDARY_TICKET) {
+            player.sendMessage("You cannot sell this item back to the store");
+            return;
+        }
 		int price = getPrice(item.getId());
 		if(price <= 5) {
 			player.getActionSender().sendMessage("This item cannot be sold.");
@@ -124,12 +128,17 @@ public class DonatorShop extends Shop {
 		}
 
 		player.getActionSender().sendMessage(message);
+        if(item.getId() == LEGENDARY_TICKET)
+            player.sendMessage("@red@WARNING:@bla@ you cannot sell this item back to the shop");
 	}
 
 	@Override
 	public void valueSellItem(Player player, Item item) {
 		int price = getPrice(item.getId());
-
+        if(item.getId() == LEGENDARY_TICKET) {
+            player.sendMessage("You cannot sell this back to the store");
+            return;
+        }
 		if(price <= 5) {
 			player.getActionSender().sendMessage("This item cannot be sold.");
 			return;
@@ -361,6 +370,8 @@ public class DonatorShop extends Shop {
 			case 15349: //ardougne cloak 3
             case 19605:
 				return 5000;
+            case 13663:
+                return 1000;
 
 			case 15347: //ardougne cloak 2
 				return 3500;

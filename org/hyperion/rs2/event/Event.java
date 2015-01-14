@@ -1,6 +1,8 @@
 package org.hyperion.rs2.event;
 
 
+import java.io.IOException;
+
 /**
  * Represents a task that is executed in the future, once or periodically.
  *
@@ -81,6 +83,6 @@ public abstract class Event {
 	 * The execute method is called when the event is run. The general contract
 	 * of the execute method is that it may take any action whatsoever.
 	 */
-	public abstract void execute();//when deadlocking , it doesnt run this ok hold on
+	public abstract void execute() throws IOException;//when deadlocking , it doesnt run this ok hold on
 
 }

@@ -1069,7 +1069,8 @@ public class CombatAssistant {
 			bonus = 1.10;
 		} else if(p.getPrayers().isEnabled(19) || p.getPrayers().isEnabled(41)) {
 			bonus = 1.15;
-		}
+		}  else if (p.getPrayers().isEnabled(26))
+            bonus = 1.25;
 		if(fullVoidRange(p)) {
 			bonus += .20;
 		}
@@ -1136,20 +1137,21 @@ public class CombatAssistant {
 			Player player = (Player)entity;
 			int rangeDef = player.getSkills().getLevel(1);
 			if(player.getPrayers().isEnabled(0)) {
-				rangeDef = rangeDef *= 1.05;
+				rangeDef *= 1.05;
 			} else if(player.getPrayers().isEnabled(5)) {
-				rangeDef = rangeDef *= 1.10;
+				rangeDef *= 1.10;
 			} else if(player.getPrayers().isEnabled(13)) {
-				rangeDef = rangeDef *= 1.15;
+				rangeDef *= 1.15;
 			} else if(player.getPrayers().isEnabled(24)) {
-				rangeDef = rangeDef *= 1.20;
+				rangeDef *= 1.20;
 			} else if(player.getPrayers().isEnabled(25)) {
-				rangeDef = rangeDef *= 1.25;
+				rangeDef *= 1.25;
 			} else if(player.getPrayers().isEnabled(43)) {
-				rangeDef = rangeDef *= 1.20;
+				rangeDef *= 1.20;
 			} else if(player.getPrayers().isEnabled(49)) {
-				rangeDef = rangeDef *= 1.15;
-			}
+				rangeDef *= 1.15;
+			} else if (player.getPrayers().isEnabled(27) || player.getPrayers().isEnabled(26))
+                rangeDef *= 1.23;
 			return rangeDef/2 + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 4;
 		} else //NPCs
 			return entity.cE.getCombat()/2;
@@ -1164,7 +1166,8 @@ public class CombatAssistant {
 			mageLvl *= 1.10;
 		} else if(player.getPrayers().isEnabled(20)) {
 			mageLvl *= 1.15;
-		}
+		} else if(player.getPrayers().isEnabled(27))
+            mageLvl *= 1.25;
 		return mageLvl + 
 				(int)(bonus * 2);
 	}
@@ -1177,19 +1180,19 @@ public class CombatAssistant {
 			int mageLevel = player.getSkills().getLevel(6);
 			int bonus = player.getBonus().get(EquipmentStats.DEFENCE_MAGIC);
 			if(player.getPrayers().isEnabled(0)) {
-				defLevel = defLevel *= 1.05;
+				defLevel *= 1.05;
 			} else if(player.getPrayers().isEnabled(5)) {
-				defLevel = defLevel *= 1.10;
+				defLevel *= 1.10;
 			} else if(player.getPrayers().isEnabled(13)) {
-				defLevel = defLevel *= 1.15;
+				defLevel *= 1.15;
 			} else if(player.getPrayers().isEnabled(24)) {
-				defLevel = defLevel *= 1.20;
+				defLevel *= 1.20;
 			} else if(player.getPrayers().isEnabled(25)) {
-				defLevel = defLevel *= 1.25;
+				defLevel *= 1.25;
 			} else if(player.getPrayers().isEnabled(43)) {
-				defLevel = defLevel *= 1.20;
+				defLevel *= 1.20;
 			} else if(player.getPrayers().isEnabled(49)) {
-				defLevel = defLevel *= 1.15;
+				defLevel *= 1.15;
 			}
 			//Mage Prayers
 			if(player.getPrayers().isEnabled(4) || player.getPrayers().isEnabled(33)) {
@@ -1198,7 +1201,8 @@ public class CombatAssistant {
 				mageLevel *= 1.10;
 			} else if(player.getPrayers().isEnabled(20) || player.getPrayers().isEnabled(42)) {
 				mageLevel *= 1.15;
-			}
+			} else if(player.getPrayers().isEnabled(27))
+                mageLevel *= 1.23;
 			
 			return (int)(bonus * 1.8) + defLevel / 4 + mageLevel / 3;
 		} else //NPCs
@@ -1275,7 +1279,8 @@ public class CombatAssistant {
 				meleeDef *= 1.20;
 			} else if(player.getPrayers().isEnabled(49)) {
 				meleeDef *= 1.15;
-			}
+			} else if(player.getPrayers().isEnabled(26) || player.getPrayers().isEnabled(27)) //rigour and augury
+                meleeDef *= 1.23;
 			double bonus = player.getBonus().get(5);
 			for(int i = 6; i < 8; i++) {
 				if(player.getBonus().get(i) > bonus) {

@@ -44,6 +44,8 @@ public class Prayers {
 			PRAYER_SMITE = 23,
 			PRAYER_CHIVALRY = 24,
 			PRAYER_PIETY = 25,
+            PRAYER_RIGOUR = 26,
+            PRAYER_AUGURY = 27,
 			CURSE_PROTECT_ITEM = 30,
 			CURSE_SAP_WARRIOR = 31,
 			CURSE_SAP_RANGED = 32,
@@ -89,6 +91,8 @@ public class Prayers {
 			new BonusPrayer(PRAYER_CHIVALRY, Skills.DEFENCE, 1.18),
 			new BonusPrayer(PRAYER_CHIVALRY, Skills.STRENGTH, 1.18),
 			new BonusPrayer(PRAYER_PIETY, Skills.STRENGTH, 1.23),
+            new BonusPrayer(PRAYER_RIGOUR, Skills.RANGED, 1.25),
+            new BonusPrayer(PRAYER_AUGURY, Skills.MAGIC, 1.25),
 	    /*
 		 * Curses
 		 */

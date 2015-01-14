@@ -11,6 +11,8 @@ import org.hyperion.rs2.model.container.ShopManager;
  */
 public abstract class Shop {
 
+    public static final int LEGENDARY_TICKET = 13663;
+
 	public static final int COINS_ID = 995;
 
 	public static final int MAX_STATIC_ITEMS = 40;

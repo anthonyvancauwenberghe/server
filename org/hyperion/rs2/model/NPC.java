@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.shops.LegendaryStore;
 
 /**
  * <p>Represents a non-player character in the in-game world.</p>
@@ -77,6 +78,10 @@ public class NPC extends Entity {
 
 	public int inflictDamage(int damg, Entity source, boolean poison, int style) {
 		HitType h1 = HitType.NORMAL_DAMAGE;
+        if(source instanceof Player && LegendaryStore.ThirdAgeSet.setFor(style).has(((Player) source).getEquipment())) {
+            damg *= 1.20;
+            System.out.println(((Player)source).getName() + " full 3a for "+style);
+        }
 		if(damg > health) {
 			damg = health;
 		}

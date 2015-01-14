@@ -60,6 +60,10 @@ public class DonatorShop extends Shop {
 			ActionSender.yellMessage("@blu@only " + item.getCount() + " of these items will ever be sold.");
 			return;
 		}
+        if(item.getId() == LEGENDARY_TICKET) {
+            player.sendMessage("You cannot sell this item back to the store");
+            return;
+        }
 		int price = getPrice(item.getId());
 		if(price <= 5) {
 			player.getActionSender().sendMessage("This item cannot be sold.");
@@ -124,6 +128,8 @@ public class DonatorShop extends Shop {
 		}
 
 		player.getActionSender().sendMessage(message);
+        if(item.getId() == LEGENDARY_TICKET)
+            player.sendMessage("@red@WARNING:@bla@ you cannot sell this item back to the shop");
 	}
 
 	@Override

@@ -24,6 +24,12 @@ public class PkShop extends PointsShop {
 			player.getActionSender().sendMessage("Cannot buy this item! Please contact a staff member about this issue!");
 			return;
 		}
+
+        if(item.getId() == LEGENDARY_TICKET) {
+            player.sendMessage("You cannot sell this back to the shop");
+            return;
+        }
+
 		String message = "The shop will buy a "
 				+ item.getDefinition().getProperName() + " for " + price + " pk points.";
 		if(price == 1) {
@@ -35,6 +41,10 @@ public class PkShop extends PointsShop {
 
 	@Override
 	public void sellToShop(Player player, Item item) {
+        if(item.getId() == LEGENDARY_TICKET) {
+            player.sendMessage("You cannot sell this back to the shop");
+            return;
+        }
 		int payment = this.getPrice(item.getId());
 		player.getInventory().remove(item);
 		getContainer().add(item);

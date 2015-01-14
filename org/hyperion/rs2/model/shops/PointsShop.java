@@ -40,6 +40,8 @@ public abstract class PointsShop extends Shop {
 			message = message.replace("points", "point");
 		}
 		player.getActionSender().sendMessage(message);
+        if(item.getId() == LEGENDARY_TICKET)
+            player.sendMessage("@red@WARNING:@bla@ you cannot sell this item back to the shop");
 	}
 
 	@Override

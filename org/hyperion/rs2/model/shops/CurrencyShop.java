@@ -103,6 +103,7 @@ public class CurrencyShop extends Shop {
 				price *= 0.9;
 		} else {
 			price = getSpecialPrice(item);
+            price *= 0.5;
 		}
 		return Math.max(1, price);
 	}
@@ -115,12 +116,11 @@ public class CurrencyShop extends Shop {
 				price *= 0.9;
 		} else {
 			price = getSpecialPrice(item);
-			price *= 0.9;
 		}
 		return price;
 	}
 
-	private int getSpecialPrice(Item item) {
+	protected int getSpecialPrice(Item item) {
 		switch(item.getId()) {
 			case 6585:
 				return 20000;

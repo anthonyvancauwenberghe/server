@@ -52,7 +52,7 @@ public class SummoningBoBs implements ContentTemplate {
             if(player.getCombat().getFamiliar() != null && player.cE.getFamiliar().getDefinition().getId() == SummonType.PACKYAK.npcId && useItem == PACK_YAK_SCROLL) {
             	SummoningSpecial.preformSpecial(player, new PackYak(onItem, slot));
             }
-        } else if (type == ClickType.ITEM_OPTION1) {
+        } else if (type == ClickType.EAT) {
             if(useItem == 15262) {
                 if(player.getInventory().remove(Item.create(useItem)) >= 1) {
                     player.getInventory().add(Item.create(18016, 10000));

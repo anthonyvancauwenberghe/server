@@ -460,6 +460,17 @@ public class Prayer implements ContentTemplate {
 			return true;
 		}
 
+        if((p2.getId() == Prayers.PRAYER_RIGOUR && !p.getPermExtraData().getBoolean("rigour"))
+                || (p2.getId() == Prayers.PRAYER_AUGURY && !p.getPermExtraData().getBoolean("augury"))) {
+            p.getActionSender().sendClientConfig(p2.getFrame(), 0);
+            p.getActionSender().sendMessage("You haven't unlocked "
+                    + p2.getName() + ".");
+            p.getActionSender().sendString(357, "You haven't unlocked "
+                    + p2.getName() + ".");
+            p.getActionSender().sendPacket164(356);
+            return true;
+        }
+
 		// Check if the prayer is already activated.
 		if(p.getPrayers().isEnabled(p2.getId())) {
 			p.getActionSender().sendClientConfig(p2.getFrame(), 0);

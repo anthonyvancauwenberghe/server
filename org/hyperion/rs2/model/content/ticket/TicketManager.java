@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.packet.InterfacePacketHandler;
@@ -76,12 +77,12 @@ public class TicketManager {
         if(tick != null) {
             final Player p = World.getWorld().getPlayer(tick.name);
             if(p != null) {
-                if(!p.getLocation().inDuel()) {
+                if(!p.getLocation().inDuel() || !p.getLocation().inPvPArea() || !Jail.inJail(p)) {
                     Magic.teleport(p, player.getLocation(), true);
                     remove(tick);
                 }
                         else {
-                        player.sendMessage("You can't be assisted while you are in a duel or wilderness");
+                        player.sendMessage("You can't be assisted while you are in a duel, jail or wilderness");
                     }
 
             } else {

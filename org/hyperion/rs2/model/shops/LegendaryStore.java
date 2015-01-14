@@ -51,7 +51,7 @@ public class LegendaryStore extends CurrencyShop {
                         writer.newLine();
                     }
                 } catch(final Exception ex) {
-
+                    ex.printStackTrace();
                 }
                 this.stop();
             }

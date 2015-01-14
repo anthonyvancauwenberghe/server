@@ -32,7 +32,6 @@ public class CurrencyShop extends Shop {
 		int payment = calculateUnitSellPrice(item) * item.getCount();
 		player.getInventory().remove(item);
 		getContainer().add(item);
-		payment *= 0.9; // Cause Shops wanna scam u!
 		if(payment > 0)
 			player.getInventory().add(new Item(currency, payment));
 		player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());

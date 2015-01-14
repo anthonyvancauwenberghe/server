@@ -97,7 +97,9 @@ public class LegendaryStore extends CurrencyShop {
             return pieces.length == piececount;
         }
 
-        public static ThirdAgeSet setFor(final int type) {
+        public static ThirdAgeSet setFor(int type) {
+            if(type > 5)
+                type -= 5;
             for(final ThirdAgeSet set : values()) {
                 if(type == set.type)
                     return set;

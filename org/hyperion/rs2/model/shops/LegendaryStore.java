@@ -27,7 +27,7 @@ public class LegendaryStore extends CurrencyShop {
         super(id, name, container, 13663, false);
         for(final ThirdAgeSet set : ThirdAgeSet.values()) {
             for(final Integer piece : set.ids) {
-                container.add(Item.create(piece));
+                addStaticItem(Item.create(piece));
             }
         }
     }

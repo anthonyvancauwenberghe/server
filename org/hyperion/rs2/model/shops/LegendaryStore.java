@@ -1,11 +1,17 @@
 package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,8 +34,28 @@ public class LegendaryStore extends CurrencyShop {
         for(final ThirdAgeSet set : ThirdAgeSet.values()) {
             for(final Integer piece : set.ids) {
                 addStaticItem(Item.create(piece));
+                container.add(Item.create(piece));
             }
         }
+
+        World.getWorld().submit(new Event(2000) {
+            @Override
+            public void execute() {
+                final File file;
+                try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file = new File("./data/legendaryshop.txt")))) {
+                    if(!file.exists())
+                        file.createNewFile();
+                    for(final Item item : container.toArray()) {
+                        if(item == null) continue;
+                        int price = getSpecialPrice(item);
+                        writer.write(String.format("[%s]: PRICE: %d PKP: %,d DP: %,d", item.getDefinition().getName(), price, price * 100_000, price * 1000));
+                        writer.newLine();
+                    }
+                } catch(final Exception ex) {
+
+                }
+            }
+        });
     }
 
     @Override

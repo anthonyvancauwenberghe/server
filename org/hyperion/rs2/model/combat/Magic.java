@@ -232,6 +232,7 @@ public class Magic {
 				maxDamg *= 1.05;
 				break;
 			case 18335:
+            case 10344:
 				maxDamg *= 1.10;
 				break;
 		}
@@ -296,6 +297,8 @@ public class Magic {
 		attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
 		if(Damage > maxDamg)
 			Damage = maxDamg;
+        if(attacker.getPlayer().getPrayers().isEnabled(27))
+            Damage *= 1.08;
 		if(Misc.random(AtkBonus) < Misc.random(DefBonus)) {
 			splash = true;
 		}

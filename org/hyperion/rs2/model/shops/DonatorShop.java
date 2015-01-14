@@ -367,6 +367,8 @@ public class DonatorShop extends Shop {
 			case 15349: //ardougne cloak 3
             case 19605:
 				return 5000;
+            case 13663:
+                return 1000;
 
 			case 15347: //ardougne cloak 2
 				return 3500;

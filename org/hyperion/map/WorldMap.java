@@ -945,6 +945,9 @@ public class WorldMap {
 		}
 		if(World.getWorld().getObjectMap().getObjectAt(absX, absY, 0) != null)
 			return false;
+		if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
+			return true;
+		}
 		if(world.World_Objects[which] == null) {
 			return true;
 		}

@@ -2,6 +2,7 @@ package org.hyperion.rs2.sql;
 
 import org.hyperion.Configuration;
 import org.hyperion.rs2.sql.event.impl.LogPlayercountEvent;
+import org.hyperion.rs2.sql.event.impl.LogServerWealthEvent;
 
 public class LogsSQLConnection extends MySQLConnection {
 
@@ -22,6 +23,7 @@ public class LogsSQLConnection extends MySQLConnection {
 			return false;*/
         establishConnection();
         submit(new LogPlayercountEvent());
+        submit(new LogServerWealthEvent());
         start();
         return true;
     }

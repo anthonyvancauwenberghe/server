@@ -63,7 +63,7 @@ public class KeywordCommand extends Command {
 	 */
 	private void save(String keyword, int id) throws Exception {
 		SQLRequest request = new QueryRequest("INSERT INTO `keywords`(`keyword`, `id`) VALUES ('" + keyword + "'," + id + ")");
-		World.getWorld().getDonationsConnection().offer(request);
+		World.getWorld().getLogsConnection().offer(request);
 	}
 
 

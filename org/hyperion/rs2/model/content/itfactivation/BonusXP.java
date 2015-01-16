@@ -35,8 +35,12 @@ public class BonusXP extends Interface implements ContentTemplate {
         if(skill > Skills.SKILL_COUNT)
             return;
         if(player.getInventory().remove(Item.create(LAMP)) == 1) {
-            player.getSkills().getBonusXP().ifPresent(
-                s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended", Skills.SKILL_NAME[s.getSkill()]));
+            try {
+                player.getSkills().getBonusXP().ifPresent(
+                    s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended", Skills.SKILL_NAME[s.getSkill()]));
+            }catch(final Exception ex) {
+                ex.printStackTrace();
+            }
 
             player.getSkills().setBonusXP(new Skills.CurrentBonusXP(skill));
 
@@ -49,7 +53,7 @@ public class BonusXP extends Interface implements ContentTemplate {
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
         if(interfaceId == Inventory.INTERFACE) {
-            player.getInterfaceManager().show(ID);
+            show(player);
         }
         return true;
     }

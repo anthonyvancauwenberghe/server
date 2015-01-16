@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -8,6 +9,7 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 
 /**
@@ -16,6 +18,46 @@ import org.hyperion.util.Misc;
  * @author Graham Edgecombe
  */
 public class Skills {
+
+
+    public static final class CurrentBonusXP {
+        private final long time;
+        private final int skill;
+
+        public CurrentBonusXP(final int skill) {
+            this(System.currentTimeMillis() + Time.ONE_DAY, skill);
+        }
+
+        public CurrentBonusXP(final long time, final int skill) {
+            this.time = time;
+            this.skill = skill;
+        }
+
+        public int getSkill() {
+            if(!running())
+                return -1;
+            return skill;
+        }
+
+        public boolean running() {
+            return time < System.currentTimeMillis();
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s-%s", time, skill);
+        }
+
+        public static CurrentBonusXP load(final String s) {
+            if(s == null || s.length() < 1)
+                return new CurrentBonusXP(-1);
+            final String[] split = s.split("-");
+            return new CurrentBonusXP(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+
+        }
+
+
+    }
 
 
 	/**
@@ -54,6 +96,18 @@ public class Skills {
 			SMITHING = 13, MINING = 14, HERBLORE = 15,
 			AGILITY = 16, THIEVING = 17, SLAYER = 18,
 			FARMING = 19, RUNECRAFTING = 20, CONSTRUCTION = 21, HUNTER = 22, SUMMONING = 23, DUNGEONINEERING = 24;
+
+    private CurrentBonusXP currentBonusXP;
+
+    public final Optional<CurrentBonusXP> getBonusXP() {
+        return Optional.ofNullable(currentBonusXP);
+    }
+
+    public final void setBonusXP(final CurrentBonusXP currentBonusXP) {
+        this.currentBonusXP = currentBonusXP;
+    }
+
+
 
 	/**
 	 * The player object.
@@ -474,6 +528,8 @@ public class Skills {
         }
 		if(skill == BONUS_SKILL)
 			exp *= 2;
+        if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
+            exp *= 2;
 		int oldLevel = (int) getLevelForExp(skill);
 		exps[skill] += exp;
 		if(exps[skill] > MAXIMUM_EXP) {

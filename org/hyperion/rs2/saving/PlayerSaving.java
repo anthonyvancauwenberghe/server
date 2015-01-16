@@ -203,6 +203,7 @@ public class PlayerSaving {
         saveList.add(new SaveCustomSet());
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
+        saveList.add(new SaveBonusXP());
 	}
 
 	/**

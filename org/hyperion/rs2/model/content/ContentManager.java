@@ -6,6 +6,8 @@ import java.util.Map;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
+import org.hyperion.rs2.model.itf.Interface;
+import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.util.ClassUtils;
 
 public class ContentManager {
@@ -35,6 +37,9 @@ public class ContentManager {
 				if(ContentTemplate.class.isAssignableFrom(cls) && cls != ContentTemplate.class) {
 					try {
 						ContentTemplate content = (ContentTemplate) cls.newInstance();
+                        if(Interface.class.isAssignableFrom(cls)) {
+                            InterfaceManager.addGlobal((Interface)content);
+                        }
 						if(cls.getName().contains("prayer"))
 							prayer = content;
 						if(cls.getName().contains("zombieminigame"))

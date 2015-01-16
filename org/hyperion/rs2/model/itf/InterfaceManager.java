@@ -17,7 +17,6 @@ public final class InterfaceManager {
 
     static{
         addGlobal(new RecoveryInterface());
-        addGlobal(new ChangeMaxCape());
         addGlobal(new AskForHelp());
         addGlobal(new HelpInterface());
         addGlobal(new PendingRequests());
@@ -33,7 +32,7 @@ public final class InterfaceManager {
         activeMap = new HashMap<>();
     }
 
-    private static void addGlobal(final Interface itf){
+    public static void addGlobal(final Interface itf){
         MAP.put(itf.getId(), itf);
     }
 

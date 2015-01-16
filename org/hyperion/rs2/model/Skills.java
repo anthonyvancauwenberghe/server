@@ -45,7 +45,7 @@ public class Skills {
         }
 
         public String timeRemaining() {
-            return TimeUnit.HOURS.convert(time, TimeUnit.MILLISECONDS) +" hours";
+            return TimeUnit.HOURS.convert(time - System.currentTimeMillis(), TimeUnit.MILLISECONDS) +" hours";
         }
 
         @Override

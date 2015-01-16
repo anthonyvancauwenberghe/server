@@ -57,7 +57,7 @@ public class Skills {
             if(s == null || s.length() < 1)
                 return new CurrentBonusXP(-1);
             final String[] split = s.split("-");
-            return new CurrentBonusXP(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+            return new CurrentBonusXP(Long.parseLong(split[0]), Integer.parseInt(split[1]));
 
         }
 

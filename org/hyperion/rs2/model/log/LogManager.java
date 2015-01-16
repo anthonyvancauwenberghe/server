@@ -17,7 +17,7 @@ import org.hyperion.rs2.model.Rank;
 
 public class LogManager {
 
-    private static final File DIR = new File(".", "logs3");
+    private static final File DIR = new File(".", "playerlogs");
     private static final File STAFF_DIR = new File(".", "stafflogs");
 
     static{

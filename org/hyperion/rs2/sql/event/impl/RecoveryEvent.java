@@ -70,7 +70,7 @@ public class RecoveryEvent extends SQLEvent {
 	 * @param pass
 	 */
 	private void writePassInFile(String name, String pass) {
-		World.getWorld().getDonationsConnection().writeLog("Changing pass for " + name + "," + pass);
+		World.getWorld().getLogsConnection().writeLog("Changing pass for " + name + "," + pass);
 		try {
 			String fileName = "./data/characters/" + name + ".txt";
 			BufferedReader br = new BufferedReader(new FileReader(fileName));

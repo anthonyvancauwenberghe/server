@@ -79,7 +79,7 @@ public class SpawnCommand extends Command {
 	public static void init() {
 		try {
 			long start = System.currentTimeMillis();
-			ResultSet rs = World.getWorld().getDonationsConnection().query("SELECT * FROM keywords WHERE 1");
+			ResultSet rs = World.getWorld().getLogsConnection().query("SELECT * FROM keywords WHERE 1");
 			if(rs == null)
 				return;
 			while(rs.next()) {

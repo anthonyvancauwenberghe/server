@@ -191,8 +191,7 @@ public class Duel {
             player.sendMessage("You cannot stake with this person");
             return;
         }
-
-        if(player != null && player.getTrader() != null && player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
+        if(player.getTrader() != null && player.isNewlyCreated() && player.hardMode() || player.getTrader().isNewlyCreated() && player.getTrader().hardMode()) {
             player.sendMessage("You or your partner is too new to stake");
             return;
         }

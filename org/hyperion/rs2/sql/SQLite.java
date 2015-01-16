@@ -159,7 +159,7 @@ public class SQLite {
 
 	static {
 		LoginDebugger.getDebugger().log("Static sqlite");
-		CommandHandler.submit(new Command("alts", Rank.MODERATOR) {
+		CommandHandler.submit(new Command("alts", Rank.HELPER) {
 			
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public <K, V> LinkedHashMap<K, V> sortHashMapByValues(HashMap<K, V> passedMap, boolean ascending) {

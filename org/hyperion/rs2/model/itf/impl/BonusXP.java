@@ -28,7 +28,7 @@ public class BonusXP extends Interface {
             return;
 
         player.getSkills().getBonusXP().ifPresent(
-                s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended", Skills.SKILL_NAME[skill]));
+                s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended", Skills.SKILL_NAME[s.getSkill()]));
 
         player.getSkills().setBonusXP(new Skills.CurrentBonusXP(skill));
 

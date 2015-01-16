@@ -2,6 +2,7 @@ package org.hyperion.rs2.model;
 
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -41,6 +42,10 @@ public class Skills {
 
         public boolean running() {
             return time < System.currentTimeMillis();
+        }
+
+        public String timeRemaining() {
+            return TimeUnit.HOURS.convert(time, TimeUnit.MILLISECONDS) +" hours";
         }
 
         @Override

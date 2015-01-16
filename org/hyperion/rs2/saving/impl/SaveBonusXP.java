@@ -31,6 +31,6 @@ public class SaveBonusXP extends SaveString {
     public String getValue(Player player) {
         if(player.getSkills().getBonusXP().isPresent())
             return player.getSkills().getBonusXP().get().toString();
-        return "0-0";
+        return "";
     }
 }

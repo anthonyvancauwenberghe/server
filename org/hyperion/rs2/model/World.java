@@ -934,14 +934,14 @@ public class World {
 		// " [online=" + players.size() + "]");
 		engine.submitWork(new Runnable() {
 			public void run() {
-                /*
+
                 try{
                     if(!Rank.hasAbility(player, Rank.DEVELOPER))
-                      //  getLocalServerConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+                       getLogsConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
                 }catch(SQLException e){
                     e.printStackTrace();
                 }
-                */
+
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");

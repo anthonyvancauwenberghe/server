@@ -70,7 +70,7 @@ public class Mail {
         for(String s : ALLOWEDHOSTS) {
             if(host.contains(s)) {
                 this.mail = mail;
-                World.getWorld().getDonationsConnection().offer(new MailRequest(player));
+                World.getWorld().getLogsConnection().offer(new MailRequest(player));
                 return;
             }
         }

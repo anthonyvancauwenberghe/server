@@ -41,7 +41,7 @@ public class Skills {
         }
 
         public boolean running() {
-            return time < System.currentTimeMillis();
+            return time > System.currentTimeMillis();
         }
 
         public String timeRemaining() {

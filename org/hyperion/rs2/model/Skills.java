@@ -55,7 +55,7 @@ public class Skills {
 
         public static CurrentBonusXP load(final String s) {
             if(s == null || s.length() < 1)
-                return new CurrentBonusXP(-1);
+                return null;
             final String[] split = s.split("-");
             return new CurrentBonusXP(Long.parseLong(split[0]), Integer.parseInt(split[1]));
 
@@ -106,6 +106,11 @@ public class Skills {
 
     public final Optional<CurrentBonusXP> getBonusXP() {
         return Optional.ofNullable(currentBonusXP);
+    }
+
+    public final void resetBonuxXP() {
+        if(getBonusXP().isPresent() && !currentBonusXP.running())
+            setBonusXP(null);
     }
 
     public final void setBonusXP(final CurrentBonusXP currentBonusXP) {
@@ -535,6 +540,7 @@ public class Skills {
 			exp *= 2;
         if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;
+        resetBonuxXP();
 		int oldLevel = (int) getLevelForExp(skill);
 		exps[skill] += exp;
 		if(exps[skill] > MAXIMUM_EXP) {

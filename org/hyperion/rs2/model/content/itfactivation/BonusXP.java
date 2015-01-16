@@ -49,7 +49,7 @@ public class BonusXP extends Interface implements ContentTemplate {
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
         if(interfaceId == Inventory.INTERFACE) {
-            show(player);
+            player.getInterfaceManager().show(ID);
         }
         return true;
     }

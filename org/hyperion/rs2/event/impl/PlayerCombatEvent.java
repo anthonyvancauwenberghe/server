@@ -99,9 +99,9 @@ public class PlayerCombatEvent extends Event {
 					player.getWalkingQueue().walkingCheck();
 				}
 			}
-            final long deltaTime = System.currentTimeMillis() - startTime;
-            if(deltaTime > 50)
-                System.err.println("[PLAYER COMBAT EVENT]: took: "+(deltaTime) + "ms");
+            //final long deltaTime = System.currentTimeMillis() - startTime;
+            //if(deltaTime > 50)
+              //  System.err.println("[PLAYER COMBAT EVENT]: took: "+(deltaTime) + "ms");
         }
 	}
 	

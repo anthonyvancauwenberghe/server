@@ -37,7 +37,7 @@ public class BonusXP extends Interface implements ContentTemplate {
         if(player.getInventory().remove(Item.create(LAMP)) == 1) {
             try {
                 player.getSkills().getBonusXP().ifPresent(
-                    s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended", Skills.SKILL_NAME[s.getSkill()]));
+                    s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended with %s hours remaining", Skills.SKILL_NAME[s.getSkill()], s.timeRemaining()));
             }catch(final Exception ex) {
                 ex.printStackTrace();
             }

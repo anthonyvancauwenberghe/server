@@ -608,6 +608,7 @@ public class CommandPacketHandler implements PacketHandler {
             for(; counter < 100; counter++) {
                 Combat.processCombat(player.cE);
                 player.cE.predictedAtk = System.currentTimeMillis();
+                player.cE.getOpponent()._getPlayer().ifPresent(p -> p.getSkills().setLevel(Skills.HITPOINTS, 99));
             }
         }
 

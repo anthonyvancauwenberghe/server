@@ -34,13 +34,20 @@ public class BonusXP extends Interface implements ContentTemplate {
 
         if(skill > Skills.SKILL_COUNT)
             return;
-        if(player.getInventory().remove(Item.create(LAMP)) == 1) {
-            try {
+        try {
+            if(!player.getExtraData().getBoolean("confirmskill")) {
                 player.getSkills().getBonusXP().ifPresent(
-                    s -> player.sendf("Your current bonus skill of @red@%s@bla@ has ended with %s hours remaining", Skills.SKILL_NAME[s.getSkill()], s.timeRemaining()));
-            }catch(final Exception ex) {
-                ex.printStackTrace();
+                    s -> player.sendf("@red@WARNING@bla@: Your current bonus skill of @red@%s@bla@ with %s remaining will run out - please confirm",
+                            Skills.SKILL_NAME[s.getSkill()], s.timeRemaining()));
+                player.getExtraData().put("confirmskill", true);
+                return;
             }
+        }catch(final Exception ex) {
+            ex.printStackTrace();
+        }
+        if(player.getInventory().remove(Item.create(LAMP)) == 1) {
+
+            player.getExtraData().put("confirmskill", false);
 
             player.getSkills().setBonusXP(new Skills.CurrentBonusXP(skill));
 

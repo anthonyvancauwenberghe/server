@@ -603,6 +603,14 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
+        if(commandStart.equals("testhits")) {
+            int counter = 0;
+            for(; counter < 100; counter++) {
+                Combat.processCombat(player.cE);
+                player.cE.predictedAtk = System.currentTimeMillis();
+            }
+        }
+
         if(commandStart.equalsIgnoreCase("summonnpc")) {
             int id = Integer.parseInt(as[1]);
             final NPC monster = World

@@ -123,10 +123,6 @@ public class ActionSender {
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
             sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
-            player.getSkills().getBonusXP().ifPresent(bonus -> {
-                if(bonus.running())
-                    player.sendf("You have %d hours remaining on your bonus for %s", bonus.timeRemaining(), Skills.SKILL_NAME[bonus.getSkill()]);
-            });
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");

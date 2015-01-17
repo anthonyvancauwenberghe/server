@@ -109,7 +109,7 @@ public class Skills {
     }
 
     public final void resetBonuxXP() {
-        if(getBonusXP().isPresent() && !currentBonusXP.running())
+        if(currentBonusXP != null && !currentBonusXP.running())
             setBonusXP(null);
     }
 

@@ -484,7 +484,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-        submit(new Command("nexonsplace", Rank.SUPER_DONATOR) {
+        submit(new Command("mikeplace", Rank.ADMINISTRATOR) {
             @Override
             public boolean execute(Player player, String input) {
                 Magic.teleport(player, 2464,4782,0, false, false);
@@ -1541,5 +1541,12 @@ public class CommandHandler {
                 }
             }
         });
+		submit(new Command("marcusplace", Rank.MODERATOR) {
+			@Override
+			public boolean execute(Player player, String input) {
+				Magic.teleport(player, 1971,5001,0, false, false);
+				return true;
+			}
+		});
 	}
 }

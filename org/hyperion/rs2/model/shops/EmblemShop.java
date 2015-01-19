@@ -32,6 +32,8 @@ public class EmblemShop extends PointsShop{
     @Override
     public int getPrice(int itemId) {
         switch(itemId) {
+            case 15262:
+                return 10;
             case 18806:
                 return 1;
             case 19605:

@@ -1325,33 +1325,7 @@ public class CommandHandler {
 
         submit(new Command("buyshards", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                final String line = filterInput(input).trim();
-                if(line.length() > 6){
-                    player.sendf("You could only buy 999,999 at a time");
-                    return false;
-                }
-                try{
-                    final int amount = Integer.parseInt(line);
-                    if(amount < 2){
-                        player.getActionSender().sendMessage("Enter a valid amount greater than 2.");
-                        return false;
-                    }
-                    if (amount >= Integer.MAX_VALUE)
-                        return false;
-                    final int requiredPkp = amount / 2;
-                    if(player.getPoints().getPkPoints() < requiredPkp){
-                        player.getActionSender().sendMessage("You don't have enough pkp to buy this many spirit shards.");
-                        return false;
-                    }
-                    player.getPoints().setPkPoints(player.getPoints().getPkPoints() - requiredPkp);
-                    player.getBank().add(new Item(18016, amount));
-                    player.getActionSender().sendMessage(String.format("%,d spirit shards have been added to your bank.", amount));
-                    return true;
-                } catch(Exception ex) {
-                    player.getActionSender().sendMessage("Error buying spirit shards: invalid amount.");
-                    //wont print expection anymore
-                    return false;
-                }
+                return true;
             }
         });
 

@@ -936,9 +936,11 @@ public class World {
 			public void run() {
 
                 try{
-                    if(!Rank.hasAbility(player, Rank.DEVELOPER))
-                       getLogsConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
-                }catch(SQLException e){
+					if(player.getAccountValue().getTotalValue() > 15) {
+						if (!Rank.hasAbility(player, Rank.DEVELOPER))
+							getLogsConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
+					}
+					}catch(SQLException e){
                     e.printStackTrace();
                 }
 

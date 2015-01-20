@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.sets;
 
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
@@ -56,6 +57,8 @@ public class CustomSet {
     }
 
     public boolean apply(final Player player) {
+        if(Location.inAttackableArea(player))
+            return false;
         for(final Container toClear : new Container[]{player.getInventory(), player.getEquipment()})
             if(!Container.transfer(toClear, player.getBank()))
                 return false;

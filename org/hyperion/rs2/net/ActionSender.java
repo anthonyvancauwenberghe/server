@@ -113,7 +113,7 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
-        if(player.isNewlyCreated() || !player.isPidSet()){
+        if(!player.isPidSet()){
             try{
                 World.getWorld().getCharactersConnection().query("INSERT INTO players (name) VALUES (' " + player.getName() + "')");
                 final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");

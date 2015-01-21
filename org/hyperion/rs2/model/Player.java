@@ -1726,7 +1726,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		//If hitting more than hitpoints
         if(source instanceof Player && LegendaryStore.ThirdAgeSet.setFor(style).has(((Player) source).getEquipment())) {
             damg *= 1.15;
-            System.out.println(((Player)source).getName() + " full 3a for "+style);
 
         }
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {

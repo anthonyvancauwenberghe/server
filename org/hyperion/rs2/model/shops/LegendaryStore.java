@@ -99,7 +99,7 @@ public class LegendaryStore extends CurrencyShop {
     }
 
     public enum ThirdAgeSet {
-        DRUIDIC(Constants.MAGE,
+        DRUIDIC(Constants.DEFLECT,
         of(19308, 30), of(19311, 25), of(19314, 40),
                 of(19317, 35), of(19320, 30)),
         MELEE(Constants.MELEE, of(10350, 7), of(10352, 6), of(10348, 10), of(10346, 8)),

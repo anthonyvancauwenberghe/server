@@ -195,8 +195,7 @@ public class World {
 
 	private MySQLConnection logsSQL;
 
-	//private PlayersSQLConnection playersSQL = new PlayersSQLConnection();
-
+    private MySQLConnection charsSQL;
 	/**
 	 * The Ban Manager
 	 */
@@ -946,7 +945,8 @@ public class World {
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
-				loader.savePlayer(player, "world save");
+                player.getLogManager().save();
+                loader.savePlayer(player, "world save");
 				resetSummoningNpcs(player);
 				if(World.getWorld().getLoginServerConnector() != null) {
 					World.getWorld().getLoginServerConnector()

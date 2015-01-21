@@ -204,6 +204,8 @@ public class PlayerSaving {
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
         saveList.add(new SaveBonusXP());
+
+        saveList.add(new SavePid());
 	}
 
 	/**
@@ -239,7 +241,6 @@ public class PlayerSaving {
 				}
 			}
 			file.close();
-            player.getLogManager().save();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());

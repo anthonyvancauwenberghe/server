@@ -106,6 +106,20 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return npckillLogger;
 	}
 
+    private int pid = -1;
+
+    public boolean isPidSet(){
+        return pid != -1;
+    }
+
+    public void setPid(final int pid){
+        this.pid = pid;
+    }
+
+    public int getPid(){
+        return pid;
+    }
+
 
     public int maxCapePrimaryColor = 0;
     public int maxCapeSecondaryColor = 0;

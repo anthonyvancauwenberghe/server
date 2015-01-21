@@ -195,6 +195,8 @@ public class World {
 
 	private MySQLConnection logsSQL;
 
+    private MySQLConnection charsSQL;
+
 	//private PlayersSQLConnection playersSQL = new PlayersSQLConnection();
 
 	/**
@@ -326,6 +328,10 @@ public class World {
 	public MySQLConnection getLogsConnection() {
 		return logsSQL;
 	}
+
+    public MySQLConnection getCharactersConnection(){
+        return charsSQL;
+    }
 	
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;
@@ -373,12 +379,15 @@ public class World {
 			if(Server.getConfig().getBoolean("sql")) {
 				logsSQL = new LogsSQLConnection(Server.getConfig());
 				donationsSQL = new DonationsSQLConnection(Server.getConfig());
+                charsSQL = new CharactersSQLConnection(Server.getConfig());
 			} else {
 				logsSQL = new DummyConnection();
 				donationsSQL = new DummyConnection();
+                charsSQL = new DummyConnection();
 			}
 			donationsSQL.init();
 			logsSQL.init();
+            charsSQL.init();
 			//LocalServerSQLConnection.init();
 			//playersSQL.init();
 			//banManager = new BanManager(logsSQL);
@@ -946,7 +955,8 @@ public class World {
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
-				loader.savePlayer(player, "world save");
+                player.getLogManager().save();
+                loader.savePlayer(player, "world save");
 				resetSummoningNpcs(player);
 				if(World.getWorld().getLoginServerConnector() != null) {
 					World.getWorld().getLoginServerConnector()

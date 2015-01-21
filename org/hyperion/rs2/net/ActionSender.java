@@ -1,5 +1,7 @@
 package org.hyperion.rs2.net;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
@@ -111,6 +113,16 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
+        if(player.isNewlyCreated() || !player.isPidSet()){
+            try{
+                World.getWorld().getCharactersConnection().query("INSERT INTO players (name) VALUES (' " + player.getName() + "')");
+                final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
+                player.setPid(rs.getInt("pid"));
+                rs.close();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);

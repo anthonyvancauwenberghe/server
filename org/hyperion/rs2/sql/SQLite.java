@@ -160,7 +160,7 @@ public class SQLite {
 	static {
 		LoginDebugger.getDebugger().log("Static sqlite");
 		CommandHandler.submit(new Command("alts", Rank.HELPER) {
-			
+
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public <K, V> LinkedHashMap<K, V> sortHashMapByValues(HashMap<K, V> passedMap, boolean ascending) {
 			 	 List mapKeys = new ArrayList(passedMap.keySet());
@@ -192,7 +192,7 @@ public class SQLite {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 
-                String[] anonymousUsers = new String[]{"Graham", "Dat Dh Doe", "Skeptical"};
+                String[] anonymousUsers = new String[]{"Hotshot gg", "Ferry", "Arre"};
 
 				String name = filterInput(input);
                 for(String anonymous : anonymousUsers) {

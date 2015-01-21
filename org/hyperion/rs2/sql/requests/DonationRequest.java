@@ -82,7 +82,7 @@ public class DonationRequest extends SQLRequest {
 			}
 			if(amount > 0) {
 				player.getPoints().increaseDonatorPoints(amount);
-                player.getActionSender().sendMessage("You have received a 25% donation bonus from santa!");
+                //player.getActionSender().sendMessage("You have received a 25% donation bonus from santa!");
 			} else {
 				if(!didSurvey)
                     player.getActionSender().sendMessage("There are no points available. It can take up to 24h to receive your points!");

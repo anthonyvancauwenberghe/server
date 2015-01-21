@@ -947,8 +947,7 @@ public class World {
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
 				loader.savePlayer(player, "world save");
-                player.getLogManager().save();
-                resetSummoningNpcs(player);
+				resetSummoningNpcs(player);
 				if(World.getWorld().getLoginServerConnector() != null) {
 					World.getWorld().getLoginServerConnector()
 							.disconnected(player.getName());

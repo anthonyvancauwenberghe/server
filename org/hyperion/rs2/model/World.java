@@ -325,6 +325,10 @@ public class World {
 	public MySQLConnection getLogsConnection() {
 		return logsSQL;
 	}
+
+    public MySQLConnection getCharactersConnection(){
+        return charsSQL;
+    }
 	
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;

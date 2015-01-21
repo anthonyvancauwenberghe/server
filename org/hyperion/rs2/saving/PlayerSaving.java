@@ -239,7 +239,6 @@ public class PlayerSaving {
 				}
 			}
 			file.close();
-            player.getLogManager().save();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());

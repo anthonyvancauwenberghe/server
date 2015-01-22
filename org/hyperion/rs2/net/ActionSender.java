@@ -117,28 +117,9 @@ public class ActionSender {
         if(!player.isPidSet()){
             try{
                 World.getWorld().getCharactersConnection().query("INSERT IGNORE INTO players (name) VALUES (' " + player.getName() + "')");
-                World.getWorld().submit(
-                        new Event(2000){
-                            public void execute(){
-                                if(player.isPidSet()){
-                                    stop();
-                                    return;
-                                }
-                                try{
-                                    final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
-                                    if(!rs.next()){
-                                        rs.close();
-                                        return;
-                                    }
-                                    player.setPid(rs.getInt("pid"));
-                                    rs.close();
-                                }catch(Exception ex){
-                                    ex.printStackTrace();
-                                }
-                                stop();
-                            }
-                        }
-                );
+                final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT LAST_INSERT_ID()");
+                rs.next();
+                player.setPid(rs.getInt(1));
             }catch(SQLException e){
                 e.printStackTrace();
             }

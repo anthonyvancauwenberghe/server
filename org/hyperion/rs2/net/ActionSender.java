@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -116,9 +117,24 @@ public class ActionSender {
         if(!player.isPidSet()){
             try{
                 World.getWorld().getCharactersConnection().query("INSERT INTO players (name) VALUES (' " + player.getName() + "')");
-                final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
-                player.setPid(rs.getInt("pid"));
-                rs.close();
+                World.getWorld().submit(
+                        new Event(2000){
+                            public void execute(){
+                                try{
+                                    final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
+                                    if(!rs.next()){
+                                        rs.close();
+                                        return;
+                                    }
+                                    player.setPid(rs.getInt("pid"));
+                                    rs.close();
+                                }catch(Exception ex){
+                                    ex.printStackTrace();
+                                }
+                                stop();
+                            }
+                        }
+                );
             }catch(SQLException e){
                 e.printStackTrace();
             }

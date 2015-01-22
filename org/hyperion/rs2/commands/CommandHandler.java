@@ -633,7 +633,7 @@ public class CommandHandler {
 		submit(new Command("forums", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				player.getActionSender().sendWebpage("http://deviouspk.com/ipb");
+				player.getActionSender().sendWebpage("http://forums.arteropk.com");
 				return true;
 			}
 		});

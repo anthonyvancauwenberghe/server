@@ -114,35 +114,31 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
-        if(!player.isPidSet()){
             try{
                 World.getWorld().getCharactersConnection().query("INSERT IGNORE INTO players (name) VALUES (' " + player.getName() + "')");
                 World.getWorld().submit(
-                        new Event(2000){
-                            public void execute(){
-                                if(player.isPidSet()){
-                                    stop();
-                                    return;
-                                }
-                                try{
-                                    final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
-                                    if(!rs.next()){
-                                        rs.close();
-                                        return;
-                                    }
-                                    player.setPid(rs.getInt("pid"));
-                                    rs.close();
-                                }catch(Exception ex){
-                                    ex.printStackTrace();
-                                }
-                                stop();
-                            }
-                        }
+						new Event(2000) {
+							public void execute() {
+								try {
+									final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
+									if (!rs.next()) {
+										rs.close();
+										return;
+									}
+									player.setPid(rs.getInt("pid"));
+									System.out.println("pid set for player: " + player.getName());
+									rs.close();
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+								stop();
+							}
+						}
                 );
             }catch(SQLException e){
                 e.printStackTrace();
             }
-        }
+
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);

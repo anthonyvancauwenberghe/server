@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
@@ -733,6 +734,8 @@ public class ActionSender {
 		//System.out.println("Follow id : " + id);
 		if(GodWars.inGodwars(player))
 			return this;
+        if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player))
+            return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
 			// System.out.println("Follow method");

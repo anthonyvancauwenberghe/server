@@ -114,6 +114,7 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
+		/*
             try{
                 World.getWorld().getCharactersConnection().query("INSERT IGNORE INTO players (name) VALUES (' " + player.getName() + "')");
                 World.getWorld().submit(
@@ -138,7 +139,7 @@ public class ActionSender {
             }catch(SQLException e){
                 e.printStackTrace();
             }
-
+**/
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
@@ -160,6 +161,7 @@ public class ActionSender {
 		// sendMessage("@blu@Please register on our forums!");
 		//loadAnnouncements();
 		writeQuestTab();
+
 		player.getPoints().loginCheck();
 		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			String rank = Rank.getPrimaryRank(player).toString();

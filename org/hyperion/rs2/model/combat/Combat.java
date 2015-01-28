@@ -113,7 +113,7 @@ public class Combat {
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
-			if(distance > 8) {
+			if(distance > 10) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				return true;// Too far.
@@ -124,7 +124,9 @@ public class Combat {
 					follow(combatEntity, combatEntity.getOpponent());
 				return true;
 			} else {
-				combatEntity.getPlayer().getWalkingQueue().reset();
+                if(distance > 8)
+                    follow(combatEntity, combatEntity.getOpponent());
+				else combatEntity.getPlayer().getWalkingQueue().reset();
 			}
 			// cast the actual spell using magic code :), result was if
 			// its succesfuly or not (i.e no runes)

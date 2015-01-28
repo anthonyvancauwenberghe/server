@@ -740,6 +740,7 @@ public class ActionSender {
             return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
+            Combat.follow(player.cE, player.isFollowing.cE);
 			// System.out.println("Follow method");
 			/*
 			 * PacketBuilder bldr = new PacketBuilder(175); bldr.putShort(id);

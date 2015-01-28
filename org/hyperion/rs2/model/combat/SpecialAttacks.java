@@ -111,7 +111,7 @@ public class SpecialAttacks {
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.25;
+				specialAccuracy = 1.15;
 				break;
 			case 1215:
 				playerGfx = 252;
@@ -860,11 +860,7 @@ public class SpecialAttacks {
 
 	private static boolean delayedWeapon(int weaponId) {
 		switch(weaponId) {
-		case 5698:// dds
-		case 1231:
-		case 5680:
 		case 14484:
-		case 1215:
 		case 4153:
 			return false;
 		}

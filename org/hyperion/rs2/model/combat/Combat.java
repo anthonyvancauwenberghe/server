@@ -124,8 +124,12 @@ public class Combat {
 					follow(combatEntity, combatEntity.getOpponent());
 				return true;
 			} else {
-                if(distance > 8)
-                    follow(combatEntity, combatEntity.getOpponent());
+                if(distance > 8) {
+                    if(opponent instanceof Player) {
+                        combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
+                     }else
+                        follow(combatEntity, combatEntity.getOpponent());
+                }
 				else combatEntity.getPlayer().getWalkingQueue().reset();
 			}
 			// cast the actual spell using magic code :), result was if

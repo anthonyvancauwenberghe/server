@@ -505,7 +505,7 @@ public class Combat {
 						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
 					int deltaBonus = MeleeAtk - MeleeDef;
-					int toAdd = Misc.random(deltaBonus / 15);
+					int toAdd = Misc.random(deltaBonus / 10);
 					damg += toAdd;
 					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 						combatEntity.getPlayer().getActionSender().sendMessage("ToAdd: " + toAdd);
@@ -514,8 +514,6 @@ public class Combat {
 						damg = 0;
 					if(damg > maxHit)
 						damg = maxHit;
-					if(2 * random(MeleeAtk) < random(MeleeDef))
-						damg = 0;
 					
 					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 						combatEntity.getPlayer().getActionSender().sendMessage("Damg : " + damg);

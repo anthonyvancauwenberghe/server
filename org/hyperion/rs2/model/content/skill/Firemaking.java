@@ -111,7 +111,8 @@ public class Firemaking implements ContentTemplate {
 
 	private void removeObject(Location loc) {
 		for(Player player : World.getWorld().getPlayers()) {
-			player.getActionSender().sendDestroyObject(10, 0, loc);
+			if(player != null)
+                player.getActionSender().sendDestroyObject(10, 0, loc);
 		}
 	}
 

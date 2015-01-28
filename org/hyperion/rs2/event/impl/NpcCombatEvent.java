@@ -107,7 +107,7 @@ public class NpcCombatEvent extends Event {
 					int dis = 1000;
 					Player player2 = null;
 					for(Player player4 : World.getWorld().getPlayers()) {
-						if(player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agreesiveDis) {
+						if(player4 != null && player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agreesiveDis) {
 							dis = player4.getLocation().distance(npc.getLocation());
 							player2 = player4;
 						}

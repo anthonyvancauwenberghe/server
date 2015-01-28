@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.itf.impl;
 
+import java.sql.PreparedStatement;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.Player;
@@ -10,6 +11,7 @@ import org.hyperion.rs2.sql.requests.QueryRequest;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.hyperion.util.Time;
 
 /**
  * Created by Jet on 1/2/2015.
@@ -58,20 +60,49 @@ public class RecoveryInterface extends Interface {
             return;
         }
         //save recovery info
-        /*final String query = String.format("INSERT INTO recovery(name, mail, security_id1, security_id2, security_answer_1, security_answer_2) " +
-                "VALUES(%s, %s, %d, %d, %s, %s, %s)",
-                player.getName(), email, question1Idx, question2Idx, answer1, answer2);
-        World.getWorld().getLogsConnection().offer(new QueryRequest(query) {
-            @Override
-            public void process(SQLConnection sql) throws SQLException {
-                final String check = "SELECT * FROM recovery WHERE name="+player.getName();
-                final ResultSet set = sql.query(check);
-                if(set.next())
-                    return;
-                sql.query(query);
+        /*World.getWorld().getCharactersConnection().offer(new QueryRequest(""){
+            public void process(SQLConnection sql) throws SQLException{
+                PreparedStatement stmt = null;
+                try{
+                    if(player.lastRecoverySetTime == -1){
+                        stmt = sql.prepare("INSERT INTO recovery(" +
+                                "name, mail, security_id1, security_id2, security_answer_1, security_answer_2) " +
+                                "VALUES(?, ?, ?, ?, ?, ?, ?)");
+                        stmt.setString(1, player.getName());
+                        stmt.setString(2, email);
+                        stmt.setInt(3, question1Idx);
+                        stmt.setInt(4, question2Idx);
+                        stmt.setString(5, answer1);
+                        stmt.setString(6, answer2);
+                    }else if(System.currentTimeMillis() - player.lastRecoverySetTime > Time.ONE_WEEK){
+                        stmt = sql.prepare("UPDATE recovery SET " +
+                                "mail = ?, security_id1 = ?, security_id2 = ?, " +
+                                "security_answer_1 = ?, security_answer_2 = ? WHERE name = ?");
+                        stmt.setString(1, email);
+                        stmt.setInt(2, question1Idx);
+                        stmt.setInt(3, question2Idx);
+                        stmt.setString(4, answer1);
+                        stmt.setString(5, answer2);
+                        stmt.setString(6, player.getName());
+                    }else{
+                        player.sendf("You must wait at least 1 week before doing this again!");
+                        return;
+                    }
+                    if(stmt.executeUpdate() > 0){
+                        player.lastRecoverySetTime = System.currentTimeMillis();
+                        hide(player);
+                        player.sendf("Successfully saved your recovery info");
+                    }else{
+                        sendResponse(player, ERROR);
+                    }
+                }catch(Exception ex){
+                    sendResponse(player, ERROR);
+                }finally{
+                    if(stmt != null)
+                        stmt.close();
+                }
             }
-        });   */
-        hide(player);
+        });*/
     }
 
     private boolean isValidIndex(final int idx){

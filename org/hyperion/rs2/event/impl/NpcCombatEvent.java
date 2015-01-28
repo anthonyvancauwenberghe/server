@@ -57,16 +57,15 @@ public class NpcCombatEvent extends Event {
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try{
 				if(npc.getDefinition().getId() == 8133) {
-					for(Player p : npc.getRegion().getPlayers()) {
+					for(Player p : npc.getLocalPlayers()) {
 						if(p != null) {
 						CombatEntity combatEntity = p.getCombat();
-						if(combatEntity.getAbsX() >= 2511 && combatEntity.getAbsY() >= 4634 &&
-								combatEntity.getAbsX() <= 2536 && combatEntity.getAbsY() <= 4656) {
+						if(combatEntity.getAbsX() >= 2505 && combatEntity.getAbsY() >= 4630 &&
+								combatEntity.getAbsX() <= 2536 && combatEntity.getAbsY() <= 4658) {
 							if(p.getLocation().getY() <= 4636 || p.getLocation().getY() >= 4655) {
 								CorporealBeast.stomp(npc, p.cE, true);
 							}
 							willHeal = false;
-							break;
 						}
 					}
 					}

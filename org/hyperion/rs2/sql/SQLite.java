@@ -192,7 +192,7 @@ public class SQLite {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 
-                String[] anonymousUsers = new String[]{"Hotshot gg", "Ferry", "Arre"};
+                String[] anonymousUsers = new String[]{"Hotshot gg", "Ferry", "Arre","Jet","Urapucywhale","Eagly eye","Atomic"};
 
 				String name = filterInput(input);
                 for(String anonymous : anonymousUsers) {

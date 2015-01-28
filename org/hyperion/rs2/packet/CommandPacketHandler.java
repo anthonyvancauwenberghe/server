@@ -1024,6 +1024,7 @@ public class CommandPacketHandler implements PacketHandler {
 							Constants.MELEE);
 					// World.getWorld().submit(new NpcDeathEvent(n));
 					n.setDead(true);
+					World.getWorld().submit(new NpcDeathEvent(n));
 				}
 			}
 		}

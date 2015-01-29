@@ -66,7 +66,7 @@ public class PkShop extends PointsShop {
 		}
 		switch(itemId) {
             case 13663:
-                return 80_000;
+                return 100_000;
 			case 15486:
 				return 50;
 			case 15272:

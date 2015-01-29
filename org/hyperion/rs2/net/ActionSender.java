@@ -1,7 +1,10 @@
 package org.hyperion.rs2.net;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -10,6 +13,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
@@ -20,6 +24,8 @@ import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.itf.Interface;
+import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
@@ -113,6 +119,32 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
+		/*
+            try{
+                World.getWorld().getCharactersConnection().query("INSERT IGNORE INTO players (name) VALUES (' " + player.getName() + "')");
+                World.getWorld().submit(
+						new Event(2000) {
+							public void execute() {
+								try {
+									final ResultSet rs = World.getWorld().getCharactersConnection().query("SELECT pid FROM players WHERE name = '" + player.getName() + "'");
+									if (!rs.next()) {
+										rs.close();
+										return;
+									}
+									player.setPid(rs.getInt("pid"));
+									System.out.println("pid set for player: " + player.getName());
+									rs.close();
+								} catch (Exception ex) {
+									ex.printStackTrace();
+								}
+								stop();
+							}
+						}
+                );
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+**/
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
@@ -134,6 +166,7 @@ public class ActionSender {
 		// sendMessage("@blu@Please register on our forums!");
 		//loadAnnouncements();
 		writeQuestTab();
+
 		player.getPoints().loginCheck();
 		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			String rank = Rank.getPrimaryRank(player).toString();
@@ -163,6 +196,7 @@ public class ActionSender {
 		}
 		sendPlayerOption("Trade", 4, 0);
 		sendPlayerOption("Follow", 3, 0);
+        sendPlayerOption("View profile", 6, 0);
 		if(player.getLocation().getX() >= 3353
 				&& player.getLocation().getY() >= 3264
 				&& player.getLocation().getX() <= 3385
@@ -321,6 +355,24 @@ public class ActionSender {
 	private static final int[][] CONFIGS = {{166, 4}, {505, 0},
 			{506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
 			{503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
+
+
+    public ActionSender showItemInterface(final Item... items) {
+        return showItemInterface("Items", items);
+    }
+
+    public ActionSender showItemInterface(final String name, final Item... items) {
+        player.getInterfaceManager().show(10);
+        final Interface i = InterfaceManager.<ItemContainer>get(10);
+        final PacketBuilder builder = i.createDataBuilder();
+        builder.putRS2String(name);
+        builder.put((byte)items.length);
+        for(final Item item : items) {
+            builder.putShort(item.getId());
+            builder.putInt(item.getCount());
+        }
+        return this;
+    }
 
 	/**
 	 * Sends the client configurations such as brightness.
@@ -717,8 +769,11 @@ public class ActionSender {
 		//System.out.println("Follow id : " + id);
 		if(GodWars.inGodwars(player))
 			return this;
+        if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player))
+            return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
+            Combat.follow(player.cE, player.isFollowing.cE);
 			// System.out.println("Follow method");
 			/*
 			 * PacketBuilder bldr = new PacketBuilder(175); bldr.putShort(id);

@@ -108,6 +108,20 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return npckillLogger;
 	}
 
+    private int pid = -1;
+
+    public boolean isPidSet(){
+        return pid != -1;
+    }
+
+    public void setPid(final int pid){
+        this.pid = pid;
+    }
+
+    public int getPid(){
+        return pid;
+    }
+
 
     public int maxCapePrimaryColor = 0;
     public int maxCapeSecondaryColor = 0;
@@ -1714,7 +1728,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		//If hitting more than hitpoints
         if(source instanceof Player && LegendaryStore.ThirdAgeSet.setFor(style).has(((Player) source).getEquipment())) {
             damg *= 1.15;
-            System.out.println(((Player)source).getName() + " full 3a for "+style);
 
         }
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {

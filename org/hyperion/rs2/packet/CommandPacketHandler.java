@@ -603,6 +603,14 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
+		if (commandStart.equalsIgnoreCase("hide")) {
+			player.isHidden(!player.isHidden());
+			player.setPNpc(player.isHidden() ? 942 : -1);
+			player.sendMessage("Hidden: " + player.isHidden());
+			FriendsAssistant.refreshGlobalList(player,
+					player.isHidden());
+		}
+
         if(commandStart.equals("testhits")) {
             int counter = 0;
             for(; counter < 100; counter++) {
@@ -797,13 +805,7 @@ public class CommandPacketHandler implements PacketHandler {
             player.display = display;
         }
 
-        if (commandStart.equalsIgnoreCase("hide")) {
-            player.isHidden(!player.isHidden());
-            player.setPNpc(player.isHidden() ? 942 : -1);
-            player.sendMessage("Hidden: " + player.isHidden());
-            FriendsAssistant.refreshGlobalList(player,
-                    player.isHidden());
-        }
+
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
             String r = findCharString(s.substring(8).trim(), "Rank")
@@ -1022,6 +1024,7 @@ public class CommandPacketHandler implements PacketHandler {
 							Constants.MELEE);
 					// World.getWorld().submit(new NpcDeathEvent(n));
 					n.setDead(true);
+					World.getWorld().submit(new NpcDeathEvent(n));
 				}
 			}
 		}

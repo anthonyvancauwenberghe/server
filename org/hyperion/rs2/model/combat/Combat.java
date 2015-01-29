@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.map.WorldMap;
+import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
@@ -112,7 +113,7 @@ public class Combat {
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
-			if(distance > 8) {
+			if(distance > 10) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
 				return true;// Too far.
@@ -123,7 +124,13 @@ public class Combat {
 					follow(combatEntity, combatEntity.getOpponent());
 				return true;
 			} else {
-				combatEntity.getPlayer().getWalkingQueue().reset();
+                if(distance > 8) {
+                    if(opponent instanceof Player) {
+                        combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
+                     }else
+                        follow(combatEntity, combatEntity.getOpponent());
+                }
+				else combatEntity.getPlayer().getWalkingQueue().reset();
 			}
 			// cast the actual spell using magic code :), result was if
 			// its succesfuly or not (i.e no runes)
@@ -502,7 +509,7 @@ public class Combat {
 						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
 					int deltaBonus = MeleeAtk - MeleeDef;
-					int toAdd = Misc.random(deltaBonus / 15);
+					int toAdd = Misc.random(deltaBonus / 10);
 					damg += toAdd;
 					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 						combatEntity.getPlayer().getActionSender().sendMessage("ToAdd: " + toAdd);
@@ -511,8 +518,6 @@ public class Combat {
 						damg = 0;
 					if(damg > maxHit)
 						damg = maxHit;
-					if(2 * random(MeleeAtk) < random(MeleeDef))
-						damg = 0;
 					
 					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 						combatEntity.getPlayer().getActionSender().sendMessage("Damg : " + damg);
@@ -1084,13 +1089,44 @@ public class Combat {
 		// System.out.println("Running this Method");
 		if(combatEntity.isFrozen())
 			return;
-		combatEntity.getEntity().getWalkingQueue().reset();
+
+        try {
+            //Combat.follow(player.cE, player.isFollowing.cE);
+            //int startx = player.getLocation().getX();
+            //int starty = player.getLocation().getY();
+
+            int toX = opponent.getAbsX();
+            int toY = opponent.getAbsY();
+            //System.out.println("X : " + startx + " Y : " + starty);
+            if(opponent.getEntity().getWalkingQueue().getPublicPoint() != null) {
+                toX = opponent.getEntity().getWalkingQueue().getPublicPoint().getX();
+                toY = opponent.getEntity().getWalkingQueue().getPublicPoint().getY();
+            }
+            int baseX = combatEntity.getAbsX() - 25;
+            int baseY = combatEntity.getAbsY() - 25;
+            combatEntity.getEntity().getWalkingQueue().reset();
+            combatEntity.getEntity().getWalkingQueue().setRunningQueue(true);
+            Path p = World.getWorld().pathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
+            if(p != null) {
+                for(int i = 1; i < p.getLength(); i++) {
+                    //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
+                    if((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
+                        combatEntity.getEntity().getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
+                }
+                combatEntity.getEntity().getWalkingQueue().finish();
+            } else {
+                //System.out.println("Derp");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+		/*combatEntity.getEntity().getWalkingQueue().reset();
 		if(combatEntity.getEntity() instanceof Player) {
 			follow2(combatEntity, combatEntity.getAbsX(), combatEntity.getAbsY(), opponent.getAbsX(), opponent.getAbsY(), opponent.getAbsZ());
 			// follow2(combatEntity,combatEntity.getEntity().getWalkingQueue().getPublicPoint().getX(),combatEntity.getEntity().getWalkingQueue().getPublicPoint().getY(),opponent.getAbsX(),opponent.getAbsY(),opponent.getAbsZ());
 		} else
 			follow2(combatEntity, combatEntity.getAbsX(), combatEntity.getAbsY(), opponent.getAbsX(), opponent.getAbsY(), opponent.getAbsZ());
-		combatEntity.getEntity().getWalkingQueue().finish();
+		combatEntity.getEntity().getWalkingQueue().finish();   */
 	}
 
 	public static void follow2(final CombatEntity combatEntity, int x, int y, int toX, int toY, int height) {

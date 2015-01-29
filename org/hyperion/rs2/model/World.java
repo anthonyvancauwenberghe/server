@@ -944,8 +944,7 @@ public class World {
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
-				if(player.verified)
-                    loader.savePlayer(player, "world save");
+				loader.savePlayer(player, "world save");
 				resetSummoningNpcs(player);
 				if(World.getWorld().getLoginServerConnector() != null) {
 					World.getWorld().getLoginServerConnector()

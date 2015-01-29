@@ -830,9 +830,11 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, 131);
 				break;
 			case 131:
-				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"To play , simply give", "the item to me", "-use item with gambler-");
-				player.getInterfaceState().setNextDialogueId(0, -1);
+				if(npc.getDefinition() != null) {
+					player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+							"To play , simply give", "the item to me", "-use item with gambler-");
+					player.getInterfaceState().setNextDialogueId(0, -1);
+				}
 				break;
 			case 132:
 				//player.getActionSender().sendDialogue("Santa Claus", DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,

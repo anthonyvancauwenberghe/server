@@ -1,5 +1,6 @@
 package org.hyperion.rs2.sql;
 
+import java.sql.PreparedStatement;
 import org.hyperion.rs2.sql.event.SQLEvent;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.RestarterThread;
@@ -320,6 +321,15 @@ public abstract class SQLConnection extends Thread {
 			}
 		}
 	}
+
+    public PreparedStatement prepare(final String sql){
+        try{
+            return connection.prepareStatement(sql);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
 	static {
 		try {

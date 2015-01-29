@@ -296,6 +296,8 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 	private void option6(Player player, Packet packet) {
 		int id = packet.getLEShort() & 0xFFFF;
+
+        System.out.println("YARRRR");
 		if(id <= 0 || id >= Constants.MAX_PLAYERS) {
 			return;
 		}

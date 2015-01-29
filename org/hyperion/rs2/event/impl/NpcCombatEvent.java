@@ -45,6 +45,7 @@ public class NpcCombatEvent extends Event {
 			}
 		}
         long deltaMs = System.currentTimeMillis() - startTime;
+        corpHeal();
         if(deltaMs > 20)
             System.err.println("[NPC COMBAT EVENT] took: "+(deltaMs) + "ms");
 
@@ -56,16 +57,15 @@ public class NpcCombatEvent extends Event {
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try{
 				if(npc.getDefinition().getId() == 8133) {
-					for(Player p : npc.getRegion().getPlayers()) {
+					for(Player p : npc.getLocalPlayers()) {
 						if(p != null) {
 						CombatEntity combatEntity = p.getCombat();
-						if(combatEntity.getAbsX() >= 2511 && combatEntity.getAbsY() >= 4634 &&
-								combatEntity.getAbsX() <= 2536 && combatEntity.getAbsY() <= 4656) {
+						if(combatEntity.getAbsX() >= 2505 && combatEntity.getAbsY() >= 4630 &&
+								combatEntity.getAbsX() <= 2536 && combatEntity.getAbsY() <= 4658) {
 							if(p.getLocation().getY() <= 4636 || p.getLocation().getY() >= 4655) {
 								CorporealBeast.stomp(npc, p.cE, true);
 							}
 							willHeal = false;
-							break;
 						}
 					}
 					}
@@ -106,7 +106,7 @@ public class NpcCombatEvent extends Event {
 					int dis = 1000;
 					Player player2 = null;
 					for(Player player4 : World.getWorld().getPlayers()) {
-						if(player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agreesiveDis) {
+						if(player4 != null && player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agreesiveDis) {
 							dis = player4.getLocation().distance(npc.getLocation());
 							player2 = player4;
 						}

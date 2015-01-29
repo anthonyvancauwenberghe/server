@@ -4,10 +4,7 @@ import java.io.FileNotFoundException;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
@@ -41,8 +38,12 @@ public class GnomeStronghold implements ContentTemplate{
 	 */
 	public static boolean objectClicking(Player p, int objectId) {
 		switch(objectId) {
+            case 9293:
+                if(p.getSkills().getLevel(Skills.AGILITY) >= 70)
+                    Agility.walkAcross(p, Location.create(2892, 9799, 0), 844, 0, 10, -1);
+                break;
 		case 2295://log
-			Agility.walkAcross(p, Location.create(2474, 3429, 0), 762, 0, 10, COURSE_TYPE, 7, 15);
+			Agility.walkAcross(p, Location.create(2474, 3429, 0), 762, 0, 10, COURSE_TYPE, /*ticks*/8, 15);
 		return true;
 		case 2313://branch up
 			Agility.obstacle(p, Location.create(2473, 3419, 2), 828, 2, 30, COURSE_TYPE);
@@ -107,7 +108,7 @@ public class GnomeStronghold implements ContentTemplate{
 					this.stop();
 				}
 			});
-			Agility.reset(p, 6, xp);
+			Agility.reset(p, 7, xp);
 			for (int i = 0; i < p.getAgility().getGnome().getCompleted().length; i++) {
 				p.getAgility().getGnome().getCompleted()[i] = false;
 			}
@@ -146,7 +147,7 @@ public class GnomeStronghold implements ContentTemplate{
 	public int[] getValues(int type) {
 		if(type == ContentManager.OBJECT_CLICK1){
 			//System.out.println("INITALIZING AGAILITY STUFF");
-			return new int[]{2295,2285,2314,2312,2313,154,104, 4058, 2286, 2315};
+			return new int[]{2295,2285,2314,2312,2313,154,104, 4058, 2286, 2315, 9293};
 		} else if(type == ContentManager.OBJECT_CLICK2){
 			//return new int[]{111,112,113,114};
 		}

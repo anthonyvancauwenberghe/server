@@ -24,7 +24,7 @@ public class SaveBonusXP extends SaveString {
             player.getSkills().setBonusXP(Skills.CurrentBonusXP.load(value));
             player.getSkills().getBonusXP().ifPresent(bonus -> {
                     if(bonus.running())
-                        player.sendf("You have @red@%s@bla@ remaining for your bonus in @red@", bonus.timeRemaining(), Skills.SKILL_NAME[bonus.getSkill()]);
+                        player.sendf("You have @red@%s@bla@ remaining for your bonus in @red@%s", bonus.timeRemaining(), Skills.SKILL_NAME[bonus.getSkill()]);
             });
         }catch(final Exception ex) {
             ex.printStackTrace();

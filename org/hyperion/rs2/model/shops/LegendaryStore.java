@@ -47,7 +47,7 @@ public class LegendaryStore extends CurrencyShop {
                     for(final Item item : container.toArray()) {
                         if(item == null) continue;
                         int price = getSpecialPrice(item);
-                        writer.write(String.format("[%s]: PRICE: %d PKP: %,d DP: %,d", item.getDefinition().getName(), price, price * 80_000, price * 1000));
+                        writer.write(String.format("[%s]: PRICE: %d PKP: %,d DP: %,d", item.getDefinition().getName(), price, price * 100_000, price * 1000));
                         writer.newLine();
                     }
                 } catch(final Exception ex) {
@@ -99,7 +99,7 @@ public class LegendaryStore extends CurrencyShop {
     }
 
     public enum ThirdAgeSet {
-        DRUIDIC(Constants.MAGE,
+        DRUIDIC(Constants.DEFLECT,
         of(19308, 30), of(19311, 25), of(19314, 40),
                 of(19317, 35), of(19320, 30)),
         MELEE(Constants.MELEE, of(10350, 7), of(10352, 6), of(10348, 10), of(10346, 8)),

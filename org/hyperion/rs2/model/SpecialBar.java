@@ -141,6 +141,7 @@ public class SpecialBar {
 				break;
 
 			case 4153: // gmaul
+			case 17646:
 			case 13902:
 				player.getActionSender().sendFrame171(0, 7474);
 				sendColouredBar(7486);

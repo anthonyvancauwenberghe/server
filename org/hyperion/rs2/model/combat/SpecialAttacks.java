@@ -23,6 +23,7 @@ public class SpecialAttacks {
 		int weaponId = player.getEquipment().get(3).getId();
 		switch(weaponId) {
 			case 4153:
+			case 17646:
 				// maul
 				if(player.cE.getOpponent() != null) {
 					String message = Combat.canAtk(player.cE, player.cE.getOpponent());

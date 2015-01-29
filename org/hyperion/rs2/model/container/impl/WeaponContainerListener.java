@@ -128,6 +128,7 @@ public class WeaponContainerListener implements ContainerListener {
 				player.getActionSender().sendFrame171(0, 7499);
 				break;
 			case 4153:// gmaul
+			case 17646:
 			case 13902:
 				player.getActionSender().sendFrame171(0, 7474);
 				break;

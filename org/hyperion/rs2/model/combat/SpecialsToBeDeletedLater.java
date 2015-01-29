@@ -192,6 +192,7 @@ public class SpecialsToBeDeletedLater {
 			break;
 			
 			case 4153: // maul
+			case 17646:
 			c.startAnimation(1667);
 			c.hitDelay = getHitDelay(c.getItems().getItemName(c.playerEquipment[c.playerWeapon]).toLowerCase());
 	

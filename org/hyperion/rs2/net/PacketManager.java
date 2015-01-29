@@ -4,7 +4,9 @@ import org.apache.mina.core.session.IoSession;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.packet.DefaultPacketHandler;
+import org.hyperion.rs2.packet.InterfacePacketHandler;
 import org.hyperion.rs2.packet.PacketHandler;
+import org.hyperion.rs2.packet.QuietPacketHandler;
 
 import java.nio.BufferUnderflowException;
 import java.util.logging.Logger;
@@ -74,7 +76,8 @@ public class PacketManager {
 	public void handle(IoSession session, Packet packet) {
 		Player player = (Player) session.getAttribute("player");
         try {
-            packetHandlers[packet.getOpcode()].handle(player, packet);
+            if(player.verified || (!player.verified && packet.getOpcode() == InterfacePacketHandler.DATA_OPCODE) || packetHandlers[packet.getOpcode()] instanceof QuietPacketHandler)
+                packetHandlers[packet.getOpcode()].handle(player, packet);
 		} catch(BufferUnderflowException nio) {
 			if(!World.getWorld().gracefullyExitSession(session))
 				session.close(false);

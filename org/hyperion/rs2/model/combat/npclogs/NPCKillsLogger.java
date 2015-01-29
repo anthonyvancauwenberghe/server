@@ -46,6 +46,10 @@ public final class NPCKillsLogger {
 		}
 		return strings;
 	}
+
+    public Map<Integer, Integer> map(){
+        return wrapped;
+    }
 	
 	public String toString() {
 		final StringBuilder builder = new StringBuilder();

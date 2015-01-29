@@ -91,7 +91,9 @@ public class Player extends Entity implements Persistable, Cloneable{
         return interfaceManager;
     }
 
-
+    public int pin = -1;
+    public String lastIp;
+    public boolean verified;
 
     private final TicketHolder ticketHolder = new TicketHolder();
 

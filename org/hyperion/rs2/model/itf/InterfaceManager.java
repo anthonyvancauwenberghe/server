@@ -21,6 +21,8 @@ public final class InterfaceManager {
         addGlobal(new HelpInterface());
         addGlobal(new PendingRequests());
         addGlobal(new ChangePassword());
+        addGlobal(new PlayerProfileInterface());
+        addGlobal(new PinInterface());
     }
 
     private final Player player;

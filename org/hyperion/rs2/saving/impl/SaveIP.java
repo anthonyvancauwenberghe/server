@@ -21,6 +21,7 @@ public class SaveIP extends SaveString {
 			try {
                 String smallIp = player.getFullIP().substring(0, player.getFullIP().indexOf(":"));
                 String shortenedValue = value.substring(0, value.indexOf(":"));
+                player.lastIp = shortenedValue.replace("/", "");
                 if(!smallIp.equalsIgnoreCase(shortenedValue)) {
                     final File file = new File("./data/possiblehacks.txt");
                     final String date = new Date().toString();

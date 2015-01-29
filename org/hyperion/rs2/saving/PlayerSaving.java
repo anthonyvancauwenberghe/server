@@ -204,6 +204,7 @@ public class PlayerSaving {
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
         saveList.add(new SaveBonusXP());
+        saveList.add(new SavePin());
 	}
 
 	/**

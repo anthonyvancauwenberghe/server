@@ -21,9 +21,11 @@ import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
+import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
+import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.NewcomersLogging;
 
 import java.io.FileInputStream;
@@ -299,8 +301,18 @@ public class ActionSender {
        // player.getInterfaceManager().show(RecoveryInterface.ID);
         if(Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
-		
-		return this;
+
+        if(player.pin == -1) {
+            player.verified = false;
+            PinInterface.get().set(player);
+        }else if(!player.getShortIP().equals(player.lastIp)) {
+            player.verified = false;
+            PinInterface.get().enter(player);
+        }else{
+            player.verified = true;
+        }
+
+        return this;
 	}
 
 	/**

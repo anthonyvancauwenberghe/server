@@ -303,6 +303,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		}
 		Player tradeWith = (Player) World.getWorld().getPlayers().get(id);
 		if(tradeWith != null) {
+
 			player.tradeWith2 = tradeWith;
 			if(tradeWith.tradeWith2 == player)
 				Trade.open(player, tradeWith);

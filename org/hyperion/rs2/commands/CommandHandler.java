@@ -57,6 +57,8 @@ import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
+import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
@@ -891,6 +893,18 @@ public class CommandHandler {
         });
 
         submit(new ViewPacketActivityCommand());
+
+        submit(new Command("viewprofile", Rank.PLAYER){
+            public boolean execute(final Player player, final String input){
+                final String targetName = filterInput(input).trim();
+                try{
+                    return InterfaceManager.<PlayerProfileInterface>get(PlayerProfileInterface.ID).view(player, targetName);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                    return false;
+                }
+            }
+        });
 
         submit(new Command("dumpcommands", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){

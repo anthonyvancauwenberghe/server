@@ -580,7 +580,7 @@ public class WeaponAnimManager2 {
             return 4200;
 
             //sara sword, 2400ms
-        else if(s.equals("granite maul"))
+        else if(s.startsWith("granite maul"))
             return 4200;
         else if(s.equals("toktz-xil-ak"))//sword
             return 2400;

@@ -199,6 +199,7 @@ public class SpecialAttacks {
 				specialDrain = 75;
 				break;
 			case 4153:
+			case 17646:
 				playerGfx = 340;
 				specialAnimation = 1667;
 				specialDis = 1;
@@ -863,6 +864,7 @@ public class SpecialAttacks {
 		switch(weaponId) {
 		case 14484:
 		case 4153:
+		case 17646:
 			return false;
 		}
 		return true;

@@ -142,6 +142,7 @@ public class WeaponContainerListener implements ContainerListener {
 			case 1305:
             case 1434:
             case 11061:
+	    case 17640:
 			case 10887:
 			case 3204:
 			case 5698:

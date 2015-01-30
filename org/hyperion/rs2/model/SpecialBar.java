@@ -177,6 +177,7 @@ public class SpecialBar {
 
             case 1434: // dragon mace
             case 11061: // dragon mace
+	    case 17640:
 			case 10887:
 				player.getActionSender().sendFrame171(0, 7624);
 				sendColouredBar(7636);

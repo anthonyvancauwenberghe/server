@@ -163,6 +163,7 @@ public class SpecialAttacks {
                 specialDrain = 25;
                 break;
             case 11061:
+	    case 17640:
                 specialAnimation = 6147;
                 specialDis = 1;
                 specialDrain = 100;

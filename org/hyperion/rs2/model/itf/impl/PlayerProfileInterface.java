@@ -37,6 +37,10 @@ public class PlayerProfileInterface extends Interface{
             player.sendf("This player is offline");
             return false;
         }
+        if(target.getPermExtraData().getBoolean("disableprofile")) {
+            player.sendMessage("Player has disabled his public profile");
+            return false;
+        }
         lastKnownName = targetName;
         player.write(
                 createDataBuilder()

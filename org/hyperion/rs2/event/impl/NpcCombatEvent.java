@@ -57,7 +57,7 @@ public class NpcCombatEvent extends Event {
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try{
 				if(npc.getDefinition().getId() == 8133) {
-					for(Player p : npc.getLocalPlayers()) {
+					for(Player p : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
 						if(p != null) {
 						CombatEntity combatEntity = p.getCombat();
 						if(combatEntity.getAbsX() >= 2505 && combatEntity.getAbsY() >= 4630 &&

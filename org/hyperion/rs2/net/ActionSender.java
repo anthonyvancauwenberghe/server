@@ -337,14 +337,15 @@ public class ActionSender {
             player.getInterfaceManager().show(PendingRequests.ID);
 
         if(player.pin == -1) {
-            player.verified = false;
+            player.verified = true;
             PinInterface.get().set(player);
         }else if(!player.getShortIP().equals(player.lastIp)) {
-            player.verified = false;
+            player.verified = true;
             PinInterface.get().enter(player);
         }else{
             player.verified = true;
         }
+
 
         return this;
 	}

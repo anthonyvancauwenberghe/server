@@ -141,7 +141,7 @@ public class NewGameMode implements ContentTemplate {
 
                 player.setGameMode(1);
                 player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
-                player.sendMessage("@red@New game mode is changing from beta to full release!", "@red@You have been assigned to the normal game mode");
+                player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
 
                 player.getActionSender().removeChatboxInterface();
 

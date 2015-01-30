@@ -23,6 +23,7 @@ public final class InterfaceManager {
         addGlobal(new ChangePassword());
         addGlobal(new PlayerProfileInterface());
         addGlobal(new PinInterface());
+        addGlobal(new ItemContainer());
     }
 
     private final Player player;

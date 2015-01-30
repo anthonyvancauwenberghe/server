@@ -59,9 +59,8 @@ public class AvatarOfDestruction implements Attack {
         }
         n.cE.predictedAtk = System.currentTimeMillis() + 3000;
         int distance = attack.getEntity().getLocation().distance(n.getLocation());
-        if(distance < 5) {
-        } else  if (distance < 10){
-            return 0; //follow player
+        if(distance <= 10) {
+            return 5;
         }
         return 0;
     }

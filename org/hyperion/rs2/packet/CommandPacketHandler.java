@@ -877,28 +877,13 @@ public class CommandPacketHandler implements PacketHandler {
             DumpNpcDrops.startDump2();
         }
 
-        if(commandStart.equalsIgnoreCase("removeinfpkt")) {
-            final boolean bool = Boolean.valueOf(s.substring("removeinfpkt".length()).trim());
-            if(bool) {
-                for(final Player p : World.getWorld().getPlayers()) {
-
-                    p.getBank().remove(Item.create(5020, 0));
-                    p.getInventory().remove(Item.create(5020, 0));
-
-                }
-            }
-            else {
-                player.getBank().remove(Item.create(5020, 0));
-                player.getInventory().remove(Item.create(5020, 0));
-            }
-        }
 
         if(commandStart.equals("imitatedeaths")) {
             final int id = Integer.parseInt(as[1]);
             for(int i = 0; i < 100; i++) {
 
                 NPC npc = World.getWorld().getNPCManager().addNPC(player.getLocation(), id, -1);
-                npc.cE.hit(npc.health * 5, player, false, Constants.MELEE);
+                npc.cE.hit(npc.health * 5, player, false, Constants.DEFLECT);
 
             }
         }
@@ -1020,8 +1005,8 @@ public class CommandPacketHandler implements PacketHandler {
 					/**
 					 * >255 hits still null!?!
 					 */
-					n.getCombat().hit(n.health, player, false,
-							Constants.MELEE);
+					n.getCombat().hit(n.health * 5, player, false,
+                            Constants.DEFLECT);
 					// World.getWorld().submit(new NpcDeathEvent(n));
 					n.setDead(true);
 					World.getWorld().submit(new NpcDeathEvent(n));
@@ -1918,6 +1903,15 @@ public class CommandPacketHandler implements PacketHandler {
 			if (commandStart.equalsIgnoreCase("checkbounties")) {
 				World.getWorld().getBountyHandler().listBounties(player);
 			}
+
+            if(commandStart.equalsIgnoreCase("givewikireward") && (Rank.hasAbility(player, Rank.DEVELOPER) || player.getName().equalsIgnoreCase("boomwiki"))) {
+                final String name = s.replace("givewikireward", "");
+                final Player target = World.getWorld().getPlayer(name.trim());
+                if(target != null) {
+                    target.getInventory().add(Item.create(17650, 1));
+                    target.sendMessage("You receive a reward for being part of the ArteroPk wiki!");
+                }
+            }
 
 			/**
 			 * I had this based on names for a reason...

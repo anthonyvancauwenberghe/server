@@ -110,9 +110,16 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 //bones
+
+                int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
+                if(unreacheablenpc(npc.getDefinition().getId())) {
+                    x = killer.getLocation().getX();
+                    y = killer.getLocation().getY();
+                    z = killer.getLocation().getZ();
+                }
                 if(npc.bones > 0) {
                     GlobalItem globalItem5 = new GlobalItem(
-                            player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
+                            player, x, y, z,
                             new Item(npc.bones, 1));
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
@@ -120,7 +127,7 @@ public class NpcDeathEvent extends Event {
                 //charms
                 if(npc.charm > 0) {
                     GlobalItem globalItem5 = new GlobalItem(
-                            player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
+                            player, x, y, z,
                             new Item(npc.charm, 1));
                     if (player.getInventory().contains(16639))
                         ContentEntity.addItem(player, npc.charm, 1);
@@ -131,7 +138,7 @@ public class NpcDeathEvent extends Event {
                 int tali = NPCManager.getTalismine(npc.getDefinition());
                 if(tali > 0) {
                     GlobalItem globalItem5 = new GlobalItem(
-                            player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(),
+                            player, x, y, z,
                             new Item(tali, 1)
                     );
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
@@ -139,6 +146,7 @@ public class NpcDeathEvent extends Event {
                 player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
                 final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                 //normal drops
+
                 if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                     final int chance =  isTask ? 750 : 1000;
                     for(NPCDrop drop : npc.getDefinition().getDrops()) {
@@ -151,8 +159,7 @@ public class NpcDeathEvent extends Event {
                                 ContentEntity.addItem(player, drop.getId() == 12162 ? 12163 : drop.getId(), amt);
                             else
                             {
-                                 GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                                    npc.getLocation().getY(), npc.getLocation().getZ(),
+                                 GlobalItem globalItem = new GlobalItem(player, x, y, z,
                                     Item.create(drop.getId(), amt));
                                 if (DonatorShop.getPrice(drop.getId()) > 50) {
                                     for (Player p : player.getRegion().getPlayers())
@@ -193,6 +200,11 @@ public class NpcDeathEvent extends Event {
             this.stop();
         }
         timer--;
+    }
+
+
+    private static final boolean unreacheablenpc(final int id) {
+        return id == 8596;
     }
 
 

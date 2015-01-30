@@ -124,7 +124,7 @@ public class NewGameMode implements ContentTemplate {
         switch(dialogueId) {
             case 10000:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Hard game mode (beta)", "Normal game mode (reccomended)");
+                        "Hard game mode", "Normal game mode (reccomended)");
                 player.getInterfaceState().setNextDialogueId(0, 10001);
                 player.getInterfaceState().setNextDialogueId(1, 10002);
                 return true;
@@ -141,7 +141,7 @@ public class NewGameMode implements ContentTemplate {
 
                 player.setGameMode(1);
                 player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
-                player.sendMessage("@red@New game mode is changing from beta to full release!", "@red@You have been assigned to the normal game mode");
+                player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
 
                 player.getActionSender().removeChatboxInterface();
 

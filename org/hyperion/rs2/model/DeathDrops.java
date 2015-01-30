@@ -296,6 +296,9 @@ public class DeathDrops {
 		return null;
 	}
 	public static int calculateAlchValue(final Player player ,int id) {
+        final ItemDefinition def;
+        if((def = ItemDefinition.forId(id)) != null && def.isNoted())
+            id = def.getParentId();
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
         if(player.hardMode())

@@ -1039,12 +1039,8 @@ public class ActionSender {
 	}
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
-		for(int QUEST_MENU_ID : QUEST_MENU_IDS)
-			sendString(QUEST_MENU_ID, "");
-		sendString(8144, "Items kept on death");
-
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
-		return showItemInterface("Items kept on death", itemList.toArray(new Item[itemList.size()]));
+		return showItemInterface("Death Items", itemList.toArray(new Item[itemList.size()]));
 	}
 
 	public ActionSender openQuestInterface(String title, String[] messages) {

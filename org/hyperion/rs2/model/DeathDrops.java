@@ -86,7 +86,7 @@ public class DeathDrops {
         }
 
         if(killer.hardMode() && !player.isNewlyCreated()) {
-            World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 50_000)));
+            World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 200_000)));
         }
 
         player.getLogManager().add(LogEntry.death(player, killer, droppingItems.toArray(new Item[droppingItems.size()])));;

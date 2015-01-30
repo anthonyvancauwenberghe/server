@@ -371,6 +371,7 @@ public class ActionSender {
             builder.putShort(item.getId());
             builder.putInt(item.getCount());
         }
+        player.write(builder.toPacket());
         return this;
     }
 
@@ -1043,9 +1044,7 @@ public class ActionSender {
 		sendString(8144, "Items kept on death");
 
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
-		for(int i = 0; i < itemList.size(); i++)
-			sendString(QUEST_MENU_IDS[i], itemList.get(i).getDefinition().getName());
-		return showInterface(8134);
+		return showItemInterface("Items kept on death", itemList.toArray(new Item[itemList.size()]));
 	}
 
 	public ActionSender openQuestInterface(String title, String[] messages) {

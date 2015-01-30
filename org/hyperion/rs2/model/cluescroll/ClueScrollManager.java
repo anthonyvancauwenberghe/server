@@ -2,8 +2,10 @@ package org.hyperion.rs2.model.cluescroll;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,6 +25,7 @@ public final class ClueScrollManager {
 
     private static final File FILE = new File("./data/cluescrolls.xml");
     private static final Map<Integer, ClueScroll> MAP = new HashMap<>();
+    private static final Map<ClueScroll.Difficulty, List<ClueScroll>> DIFFICULTY_MAP = new HashMap<>();
 
     static{
         try{
@@ -98,6 +101,10 @@ public final class ClueScrollManager {
         return MAP.values();
     }
 
+    public static Collection<ClueScroll> getAll(final ClueScroll.Difficulty difficulty){
+        return DIFFICULTY_MAP.get(difficulty);
+    }
+
     public static int size(){
         return MAP.size();
     }
@@ -132,6 +139,9 @@ public final class ClueScrollManager {
                 continue;
             final Element element = (Element) node;
             final ClueScroll clueScroll = ClueScroll.parse(element);
+            if(!DIFFICULTY_MAP.containsKey(clueScroll.getDifficulty()))
+                DIFFICULTY_MAP.put(clueScroll.getDifficulty(), new ArrayList<>());
+            DIFFICULTY_MAP.get(clueScroll.getDifficulty()).add(clueScroll);
             MAP.put(clueScroll.getId(), clueScroll);
         }
     }

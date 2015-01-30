@@ -343,7 +343,7 @@ public class ActionSender {
             player.verified = false;
             PinInterface.get().enter(player);
         }else{
-            player.verified = false;
+            player.verified = true;
         }
 
 

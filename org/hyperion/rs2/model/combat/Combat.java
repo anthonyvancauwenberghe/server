@@ -322,7 +322,7 @@ public class Combat {
 				if(combatEntity.getOpponent().getEntity() instanceof Player)
 					rangeDef = CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer());
 				else
-					rangeDef = combatEntity.getOpponent().getCombat() / 2;
+					rangeDef = combatEntity.getOpponent().getNPC().getDefinition().getBonus()[9];
 
 				int deltaRangeBonus = rangeAtk - rangeDef;
 				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){

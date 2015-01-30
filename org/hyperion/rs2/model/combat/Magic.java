@@ -284,8 +284,7 @@ public class Magic {
                 Damage = (int) (Damage * 0.75);
             }
 		} else /** NPC Part */ {
-			DefBonus = opponent.getNPC().getDefinition().combat()
-					+ opponent.getNPC().getDefinition().getBonus()[8];
+			DefBonus = opponent.getNPC().getDefinition().getBonus()[8];
 			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
 					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
 				splash = true;

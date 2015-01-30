@@ -82,7 +82,7 @@ public class PlayerProfileInterface extends Interface{
                 final PacketBuilder skills = createDataBuilder();
                 skills.put((byte)SKILLS);
                 for(int i = 0; i < 24; i++){
-                    skills.put((byte) viewing.getSkills().getLevels()[i])
+                    skills.put((byte) viewing.getSkills().getRealLevels()[i])
                         .putInt(viewing.getSkills().getXps()[i]);
                 }
                 player.write(skills.toPacket());

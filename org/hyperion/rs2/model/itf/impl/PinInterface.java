@@ -52,10 +52,6 @@ public class PinInterface extends Interface{
                     player.write(createDataBuilder().put((byte)INVALID_PIN).toPacket());
                     return;
                 }
-                if(player.pin != -1){
-                    player.sendf("You have already set your pin");
-                    return;
-                }
                 player.pin = pin;
                 player.verified = true;
                 hide(player);

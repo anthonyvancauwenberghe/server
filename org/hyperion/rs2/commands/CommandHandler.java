@@ -58,6 +58,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
@@ -1563,6 +1564,18 @@ public class CommandHandler {
                     player.sendf("Enter a valid amount");
                     return false;
                 }
+            }
+        });
+
+        submit(new Command("setpin", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                final Player target = input.equals("setpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
+                if(target == null){
+                    player.sendf("Target is null");
+                    return false;
+                }
+                PinInterface.get().set(target);
+                return true;
             }
         });
 	}

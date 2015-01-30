@@ -55,7 +55,6 @@ public class AvatarOfDestruction implements Attack {
                 tempDamage = 80;
             Combat.npcAttack(n, player.getCombat(), tempDamage, 300, hitType);
             player.getSkills().detractLevel(Skills.PRAYER, tempDamage);
-            player.sendMessage("The avatar drains your prayer");
 
         }
         n.cE.predictedAtk = System.currentTimeMillis() + 3000;

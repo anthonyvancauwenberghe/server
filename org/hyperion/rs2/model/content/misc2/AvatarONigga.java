@@ -27,7 +27,7 @@ public class AvatarONigga implements ContentTemplate {
         if(type == ClickType.NPC_OPTION1)
             return new int[]{NPC_ID};  //To change body of implemented methods use File | Settings | File Templates.
         else if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{1889, 1890, 1891, 1892};
+            return new int[]{1889, 1890, 1891};
         return new int[0];
     }
 
@@ -68,6 +68,6 @@ public class AvatarONigga implements ContentTemplate {
                 break;
         }
 
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

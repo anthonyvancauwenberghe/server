@@ -33,7 +33,6 @@ public class SpecialAttacks {
 					player.specOn = false;
 					// int maxHit = 0;
 					int maxHit = CombatAssistant.calculateMaxHit(player);
-					maxHit *= 0.9;
 					special(player, maxHit, weaponId, 0, Constants.MELEE);
 				}
 				break;
@@ -198,13 +197,18 @@ public class SpecialAttacks {
 				specialDis = 1;
 				specialDrain = 75;
 				break;
-			case 4153:
-			case 17646:
+			case 4153:  //gmauls
 				playerGfx = 340;
 				specialAnimation = 1667;
 				specialDis = 1;
 				specialDrain = 50;
-				break;
+                break;
+            case 17646:
+                playerGfx = 340;
+                specialAnimation = 1667;
+                specialDis = 1;
+                specialDrain = 33;
+                break;
 			case 7158:
 				playerGfx = 559;
 				specialAnimation = 3157;

@@ -195,7 +195,7 @@ public class ActionSender {
 			sendPlayerOption("null", 2, 1);
 		}
 		sendPlayerOption("Trade", 4, 0);
-		sendPlayerOption("Follow2", 3, 0);
+		sendPlayerOption("Follow", 3, 0);
         sendPlayerOption("View profile", 6, 0);
 		if(player.getLocation().getX() >= 3353
 				&& player.getLocation().getY() >= 3264
@@ -358,21 +358,12 @@ public class ActionSender {
 			{503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
 
 
-    public ActionSender showItemInterface(final Item... items) {
-        return showItemInterface("Items", items);
+    public ActionSender showItemInterface(final int width, final int height, final Item... items) {
+        return showItemInterface("Items", width, height, items);
     }
 
-    public ActionSender showItemInterface(final String name, final Item... items) {
-        player.getInterfaceManager().show(10);
-        final Interface i = InterfaceManager.<ItemContainer>get(10);
-        final PacketBuilder builder = i.createDataBuilder();
-        builder.putRS2String(name);
-        builder.put((byte)items.length);
-        for(final Item item : items) {
-            builder.putShort(item.getId());
-            builder.putInt(item.getCount());
-        }
-        player.write(builder.toPacket());
+    public ActionSender showItemInterface(final String name, final int width, final int height, final Item... items) {
+        InterfaceManager.<ItemContainer>get(10).sendItems(player, name, width, height, items);
         return this;
     }
 
@@ -1040,12 +1031,8 @@ public class ActionSender {
 	}
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
-		for(int QUEST_MENU_ID : QUEST_MENU_IDS)
-			sendString(QUEST_MENU_ID, "");
-		sendString(8144, "Items kept on death");
-
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
-		return showItemInterface("Items kept on death", itemList.toArray(new Item[itemList.size()]));
+		return showItemInterface("Items kept on death", 2, 2, itemList.toArray(new Item[itemList.size()]));
 	}
 
 	public ActionSender openQuestInterface(String title, String[] messages) {

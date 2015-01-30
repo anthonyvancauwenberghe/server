@@ -105,6 +105,8 @@ public class WieldPacketHandler implements PacketHandler {
 						//System.out.println("Stackable " + stackable);
 						if(type.getSlot() == Equipment.SLOT_WEAPON)
 							player.specOn = false;
+                        if(!player.autoRetailate)
+                            player.getCombat().setOpponent(null);
 						player.getSpecBar().sendSpecAmount();
 
 						int shieldId = - 1;

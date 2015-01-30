@@ -1072,7 +1072,8 @@ public class Combat {
 					combatEntity.getAbsX() <= 2354 && combatEntity.getAbsY() <= 9834)
 				||
                 (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
-                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711))
+                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711)
+                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()))
 			
 			return true;
 		if(combatEntity.getEntity() instanceof Player)
@@ -1080,6 +1081,10 @@ public class Combat {
 					return true;
 		return false;
 	}
+
+    public static boolean inNonSpawnMulti(final int x, final int y) {
+        return x > 2644 && y > 9629 && x < 2658 && y < 9650;
+    }
 
 	public static int random(int range) {
 		return (int) (java.lang.Math.random() * (range + 1));

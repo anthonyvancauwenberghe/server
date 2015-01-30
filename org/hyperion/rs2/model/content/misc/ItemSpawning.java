@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.ClickId;
@@ -133,6 +134,9 @@ public class ItemSpawning {
             player.sendMessage("It's too hot in here to do that!");
             return false;
         }
+
+        if(Combat.inNonSpawnMulti(player.getLocation().getX(), player.getLocation().getY()))
+            return false;
         if(player.getLastAttack().timeSinceLastAttack() < 5000) {
             player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
             return false;

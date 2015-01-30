@@ -277,17 +277,17 @@ public class CombatEntity {
 				}
 				return player.inflictDamage(damage, attacker, poison, style);
 			} else {
-				if(n.getDefinition().getId() == 8133) {
+                final int id = n.getDefinition().getId();
+				if(id == 8133) {
 					if(attacker instanceof Player) {
 						Player atk = (Player)attacker;
 						damage = CorporealBeast.reduceDamage(atk, damage, style);
 					}
 				}
-				if(n.getDefinition().getId() == 8349) {
-					if(attacker instanceof Player) {
-						damage = TormentedDemon.getReduction(n, (Player)attacker, damage);
-					}
-				}
+                if(id == 8596) {
+                    if(style == Constants.MELEE)
+                        damage = 0;
+                }
 				return n.inflictDamage(damage, attacker, poison, style);
 			}
 		} catch(Exception e) {

@@ -1152,7 +1152,7 @@ public class CombatAssistant {
 				rangeDef *= 1.15;
 			} else if (player.getPrayers().isEnabled(27) || player.getPrayers().isEnabled(26))
                 rangeDef *= 1.23;
-			return rangeDef/2 + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 4;
+			return rangeDef/2 + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 3;
 		} else //NPCs
 			return entity.cE.getCombat()/2;
 	}

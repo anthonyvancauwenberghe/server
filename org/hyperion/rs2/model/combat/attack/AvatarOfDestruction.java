@@ -2,10 +2,7 @@ package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.model.Attack;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -23,7 +20,9 @@ public class AvatarOfDestruction implements Attack {
 
     public static void loadDefinitions() {
         final int[] bonus = new int[10];
-        Arrays.fill(bonus, 487);
+        Arrays.fill(bonus, 300);
+        bonus[8] = 187;
+        bonus[7] = 200;
         NPCDefinition.getDefinitions()[8596] =
                 NPCDefinition.create(8596, 5000, 525, bonus, 11199, 11198, new int[]{11197}, 3, "Avatar of Destruction", 120);
     }
@@ -47,17 +46,20 @@ public class AvatarOfDestruction implements Attack {
         if(n.cE.predictedAtk > System.currentTimeMillis()) {
             return 6;
         }
+        n.getCombat().doAtkEmote();
+        for(final Player player : n.getLocalPlayers()) {
+            int hitType = Combat.random(1);
+            int tempDamage = CombatCalculation.getCalculatedDamage(n, player, hitType, Constants.MELEE, MAX_DAMAGE);
+            if(player.getLocation().distance(n.getLocation()) == 1)
+                tempDamage = 80;
+            Combat.npcAttack(n, player.getCombat(), tempDamage, 300, hitType);
+            player.getSkills().detractLevel(Skills.PRAYER, tempDamage);
+            player.sendMessage("The avatar drains your prayer");
+
+        }
         n.cE.predictedAtk = System.currentTimeMillis() + 3000;
         int distance = attack.getEntity().getLocation().distance(n.getLocation());
         if(distance < 5) {
-            n.getCombat().doAtkEmote();
-            int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_DAMAGE), Constants.MELEE, MAX_DAMAGE);
-            Combat.npcAttack(n, attack, tempDamage, 300, Constants.MELEE + Combat.random(1));
-            final int dmg = tempDamage;
-            attack._getPlayer().ifPresent(p -> {
-                p.getSkills().detractLevel(Skills.PRAYER, dmg);
-                p.sendMessage("The avatar drains your prayer");
-            });
         } else  if (distance < 10){
             return 0; //follow player
         }

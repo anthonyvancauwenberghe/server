@@ -355,6 +355,6 @@ public class DeathDrops {
 		if(item == - 1)
 			return null;
 		else
-			return new Item(item, 1);
+			return itemInInventory ? player.getInventory().get(slotId) : player.getEquipment().get(slotId);
 	}
 }

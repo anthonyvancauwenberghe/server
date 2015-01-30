@@ -103,10 +103,8 @@ public class WieldPacketHandler implements PacketHandler {
 							}
 						}
 						//System.out.println("Stackable " + stackable);
-						if(slot == Equipment.SLOT_WEAPON)
+						if(type.getSlot() == Equipment.SLOT_WEAPON)
 							player.specOn = false;
-						if(id != 4153 && id != 17646)
-							player.cE.setOpponent(null);
 						player.getSpecBar().sendSpecAmount();
 
 						int shieldId = - 1;
@@ -212,7 +210,8 @@ public class WieldPacketHandler implements PacketHandler {
 						return;
 					}
 				}
-				player.specOn = false;
+                if(type.getSlot() == Equipment.SLOT_WEAPON)
+				    player.specOn = false;
 				if(id != 4153 && id != 17646)
 					player.cE.setOpponent(null);
 				player.getSpecBar().sendSpecAmount();

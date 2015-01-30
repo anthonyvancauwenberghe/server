@@ -211,7 +211,7 @@ public class CommandHandler {
             public boolean execute(final Player player, final String input) {
                 final boolean set;
                 player.getPermExtraData().put("disableprofile", set = !player.getPermExtraData().getBoolean("disableprofile"));
-                player.sendf("Your public profile is currently @red@%s", set ? "not viewable" : "viewable");
+                player.sendf("Your public profile is currently @red%s", set ? "not viewable" : "viewable");
                 return true;
             }
         });

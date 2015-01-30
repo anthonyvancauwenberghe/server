@@ -357,16 +357,15 @@ public class ActionSender {
 			{503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
 
 
-    public ActionSender showItemInterface(final int width, final int height, final Item... items) {
-        return showItemInterface("Items", width, height, items);
+    public ActionSender showItemInterface(final Item... items) {
+        return showItemInterface("Items", items);
     }
 
-    public ActionSender showItemInterface(final String name, final int width, final int height, final Item... items) {
+    public ActionSender showItemInterface(final String name, final Item... items) {
         player.getInterfaceManager().show(10);
         final Interface i = InterfaceManager.<ItemContainer>get(10);
         final PacketBuilder builder = i.createDataBuilder();
         builder.putRS2String(name);
-        builder.put((byte)width).put((byte)height);
         builder.put((byte)items.length);
         for(final Item item : items) {
             builder.putShort(item.getId());
@@ -1041,7 +1040,7 @@ public class ActionSender {
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
-		return showItemInterface("Death Items", 2, 2, itemList.toArray(new Item[itemList.size()]));
+		return showItemInterface("Death Items", itemList.toArray(new Item[itemList.size()]));
 	}
 
 	public ActionSender openQuestInterface(String title, String[] messages) {

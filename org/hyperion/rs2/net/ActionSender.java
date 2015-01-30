@@ -195,7 +195,7 @@ public class ActionSender {
 			sendPlayerOption("null", 2, 1);
 		}
 		sendPlayerOption("Trade", 4, 0);
-		sendPlayerOption("Follow2", 3, 0);
+		sendPlayerOption("Follow", 3, 0);
         sendPlayerOption("View profile", 6, 0);
 		if(player.getLocation().getX() >= 3353
 				&& player.getLocation().getY() >= 3264
@@ -1030,10 +1030,6 @@ public class ActionSender {
 	}
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
-		for(int QUEST_MENU_ID : QUEST_MENU_IDS)
-			sendString(QUEST_MENU_ID, "");
-		sendString(8144, "Items kept on death");
-
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
 		return showItemInterface("Items kept on death", 2, 2, itemList.toArray(new Item[itemList.size()]));
 	}

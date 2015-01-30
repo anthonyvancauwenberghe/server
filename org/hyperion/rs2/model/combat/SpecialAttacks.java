@@ -163,12 +163,16 @@ public class SpecialAttacks {
                 specialDrain = 25;
                 break;
             case 11061:
-	    case 17640:
                 specialAnimation = 6147;
                 specialDis = 1;
                 specialDrain = 100;
                 break;
-			case 10887:
+            case 17640:
+                specialAnimation = 6147;
+                specialDis = 1;
+                specialDrain = 50;
+                break;
+            case 10887:
 				specialAnimation = 5870;
 				playerGfx = 1027;
 				specialDis = 1;
@@ -232,7 +236,7 @@ public class SpecialAttacks {
 			case 11694:
 				playerGfx = 1222;
 				specialAnimation = 7074;
-				specialDis = 1;
+				specialDis = 2;
 				specialDrain = 50;
 				specialAccuracy = 1.05;
 				break;
@@ -690,6 +694,7 @@ public class SpecialAttacks {
                 }
                 break;
             case 11061:
+            case 17640:
                // if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Damage: "+hitDamage);
                     try {

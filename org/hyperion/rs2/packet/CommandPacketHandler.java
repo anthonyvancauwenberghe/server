@@ -70,9 +70,7 @@ import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
-import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
-import org.hyperion.rs2.model.itf.impl.NameItemInterface;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
@@ -2024,15 +2022,14 @@ public class CommandPacketHandler implements PacketHandler {
 				}
 			}
 			if (commandStart.equals("nameitem")) {
-                InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(9).toLowerCase());
-				/*ArrayList<Item> itemsList = new ArrayList<Item>();
+				ArrayList<Item> itemsList = new ArrayList<Item>();
 				if (as.length == 1)
 					return;
 				int counter = 0;
 				s = s.substring(9).toLowerCase();
 				int maxId = Rank.hasAbility(player, Rank.DEVELOPER) ? 20000
 						: ItemSpawning.MAX_ID;
-				for (int i = maxId; i > 0; i--) {
+				for (int i = 0; i < maxId; i++) {
 					if (ItemDefinition.forId(i) == null)
 						continue;
 					if (ItemDefinition.forId(i).getName().toLowerCase()
@@ -2041,7 +2038,7 @@ public class CommandPacketHandler implements PacketHandler {
 						// player.getActionSender().sendMessage(
 						// i + "	" + ItemDefinition.forId(i).getName());
 						counter++;
-						if (counter == 99)
+						if (counter == 20)
 							break;
 					}
 				}
@@ -2049,7 +2046,7 @@ public class CommandPacketHandler implements PacketHandler {
 				for (Item i : itemsList) {
 					items[--counter] = i;
 				}
-				player.getActionSender().displayItems(items);*/
+				player.getActionSender().displayItems(items);
 				return;
 			}
 

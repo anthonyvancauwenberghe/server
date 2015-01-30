@@ -1512,13 +1512,13 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 			if (viewed != null) {
 				player.getChecking().setInvListener(
-						new InterfaceContainerListener(player, 5064));
+						new InterfaceContainerListener(player, 3214));
 				player.getChecking().setInv(viewed.getInventory());
-				player.getActionSender().sendInterfaceInventory(5292, 5063);
+				//player.getActionSender().sendInterfaceInventory(5292, 5063);
 				player.getInterfaceState().addListener(
 						player.getChecking().getInv(),
 						player.getChecking().getInvListener());
-				player.getActionSender().sendUpdateItems(5064,player.getChecking().getInv().toArray());
+				player.getActionSender().sendUpdateItems(3214,player.getChecking().getInv().toArray());
 			}
         }
 

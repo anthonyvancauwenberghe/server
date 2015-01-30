@@ -48,6 +48,7 @@ public class AvatarOfDestruction implements Attack {
         }
         n.getCombat().doAtkEmote();
         for(final Player player : n.getLocalPlayers()) {
+            System.out.println(player.getName());
             int hitType = Combat.random(1);
             int tempDamage = CombatCalculation.getCalculatedDamage(n, player, hitType, Constants.MELEE, MAX_DAMAGE);
             if(player.getLocation().distance(n.getLocation()) == 1)

@@ -195,7 +195,7 @@ public class ActionSender {
 			sendPlayerOption("null", 2, 1);
 		}
 		sendPlayerOption("Trade", 4, 0);
-		sendPlayerOption("Follow", 3, 0);
+		sendPlayerOption("Follow2", 3, 0);
         sendPlayerOption("View profile", 6, 0);
 		if(player.getLocation().getX() >= 3353
 				&& player.getLocation().getY() >= 3264

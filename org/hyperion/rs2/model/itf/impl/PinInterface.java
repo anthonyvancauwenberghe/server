@@ -25,6 +25,7 @@ public class PinInterface extends Interface{
     private static final int SET_PIN = 1;
     private static final int ENTER_PIN = 2;
     private static final int INVALID_PIN = 3;
+    private static final int ENTER_LATER = 4;
 
     public static final int ID = 9;
 
@@ -49,6 +50,10 @@ public class PinInterface extends Interface{
                 final int pin = pkt.getInt();
                 if(pin < 1){
                     player.write(createDataBuilder().put((byte)INVALID_PIN).toPacket());
+                    return;
+                }
+                if(player.pin != -1){
+                    player.sendf("You have already set your pin");
                     return;
                 }
                 player.pin = pin;
@@ -82,6 +87,13 @@ public class PinInterface extends Interface{
                 player.verified = true;
                 hide(player);
                 player.sendf("Confirmed identity.");
+                break;
+            case ENTER_LATER:
+                if(player.pin != -1)
+                    return;
+                player.verified = true;
+                hide(player);
+                player.sendf("You should consider setting a PIN to ensure account safety");
                 break;
             default:
                 System.out.println("invalid id");

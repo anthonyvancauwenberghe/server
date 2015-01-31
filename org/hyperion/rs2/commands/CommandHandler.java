@@ -1018,19 +1018,19 @@ public class CommandHandler {
 
         CommandHandler.submit(new PunishCommand("jail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new PunishCommand("ipjail", Target.IP, Type.JAIL, Rank.HELPER));
-        CommandHandler.submit(new PunishCommand("macjail", Target.MAC, Type.JAIL, Rank.HEAD_MODERATOR));
+        CommandHandler.submit(new PunishCommand("macjail", Target.MAC, Type.JAIL, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("mute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("ban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));

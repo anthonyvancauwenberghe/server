@@ -1578,5 +1578,17 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        submit(new Command("getpin", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                final Player target = input.equals("setpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
+                if(target == null){
+                    player.sendf("Target is null");
+                    return false;
+                }
+                player.sendf("%s's pin: %d", target.getName(), target.pin);
+                return true;
+            }
+        });
 	}
 }

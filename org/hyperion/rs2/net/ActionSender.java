@@ -156,7 +156,7 @@ public class ActionSender {
             sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
-            sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "  @blu@@Due to downtime and bugs, please enjoy these bonuses:", "      @red@1.5X exp, 1.5X drop rates and 2X vote points");
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");

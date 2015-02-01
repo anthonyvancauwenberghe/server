@@ -338,11 +338,11 @@ public class ActionSender {
 
         if(player.pin == -1) {
             player.verified = true;
-            PinInterface.get().set(player);
+            //PinInterface.get().set(player);
             sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/11966-updates-1302015/");
         }else if(!player.getShortIP().equals(player.lastIp)) {
-            player.verified = false;
-            PinInterface.get().enter(player);
+            player.verified = true;
+            //PinInterface.get().enter(player);
         }else{
             player.verified = true;
         }

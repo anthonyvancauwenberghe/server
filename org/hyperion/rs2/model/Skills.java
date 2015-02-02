@@ -188,7 +188,8 @@ public class Skills {
 	public int getTotalLevel() {
 		int total = 0;
 		for(int i = 0; i < levels.length; i++) {
-			total += getLevelForExp(i);
+            if(i != CONSTRUCTION)
+			    total += getLevelForExp(i);
 		}
 		return total;
 	}
@@ -201,7 +202,8 @@ public class Skills {
 	public long getTotalExp() {
 		long totalexp = 0L;
 		for(int exp : exps) {
-			totalexp += exp;
+            if(exp != exps[CONSTRUCTION])
+			    totalexp += exp;
 		}
 		return totalexp;
 	}

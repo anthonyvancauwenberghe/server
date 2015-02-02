@@ -1851,6 +1851,14 @@ public class CommandPacketHandler implements PacketHandler {
 				this.handleModCommands(player, commandStart, s, withCaps, as);
 			if (Rank.isStaffMember(player))
 				this.handleStaffCommands(player, commandStart, s, withCaps, as);
+            if(commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
+                try {
+                    InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(6));
+                }catch(Exception ex) {
+                    InterfaceManager.<NameItemInterface>get(11).send(player, "");
+                }
+                return;
+            }
 			if (CommandHandler.processed(commandStart, player, s))
 				return;
 
@@ -2040,9 +2048,10 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 				}
 			}
-			if (commandStart.equals("nameitem")) {
-                InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(9));
 
+
+
+			if (commandStart.equals("nameitem")) {
 				ArrayList<Item> itemsList = new ArrayList<Item>();
 				if (as.length == 1)
 					return;

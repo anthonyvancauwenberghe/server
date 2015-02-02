@@ -31,6 +31,7 @@ public class VoteRequest extends SQLRequest {
     }
 
     public void process(final SQLConnection sql) {
+        player.sendMessage("Attempting to retrieve vote points...");
         if (!sql.isConnected()) {
             player.getActionSender().sendMessage("Your request could not be processed. Try again later.");
             return;

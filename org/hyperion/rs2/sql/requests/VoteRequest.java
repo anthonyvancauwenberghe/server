@@ -31,6 +31,7 @@ public class VoteRequest extends SQLRequest {
     }
 
     public void process(final SQLConnection sql) {
+        player.sendMessage("Attempting to retrieve vote points...");
         if (!sql.isConnected()) {
             player.getActionSender().sendMessage("Your request could not be processed. Try again later.");
             return;
@@ -58,6 +59,7 @@ public class VoteRequest extends SQLRequest {
                     thisClaim += 1;
                 if (topg)
                     thisClaim++;
+                thisClaim *= 2;
                 final int freeSlots = player.getInventory().freeSlots();
                 (freeSlots >= thisClaim ? player.getInventory() : player.getBank()).add(new Item(3062, thisClaim));
                 player.getActionSender().sendMessage(

@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import org.hyperion.Server;
@@ -78,6 +80,7 @@ import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.util.EventBuilder;
 import org.hyperion.rs2.util.MassEvent;
 import org.hyperion.rs2.util.PlayerFiles;
@@ -604,6 +607,20 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("getname")) {
+            final String ip = s.substring("getname".length()).trim();
+            player.sendMessage(ip);
+            try {
+                ResultSet rs = SQLite.getDatabase().query("SELECT * FROM playerips WHERE ip = '" + ip + "'");
+                while(rs.next()) {
+                    player.sendMessage("IP: "+ip+"Name: "+rs.getString("name")+" time: "+new Date(rs.getLong("time")).toString());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+        }
 
 		if (commandStart.equalsIgnoreCase("hide")) {
 			player.isHidden(!player.isHidden());
@@ -1834,6 +1851,14 @@ public class CommandPacketHandler implements PacketHandler {
 				this.handleModCommands(player, commandStart, s, withCaps, as);
 			if (Rank.isStaffMember(player))
 				this.handleStaffCommands(player, commandStart, s, withCaps, as);
+            if(commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
+                try {
+                    InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(6));
+                }catch(Exception ex) {
+                    InterfaceManager.<NameItemInterface>get(11).send(player, "");
+                }
+                return;
+            }
 			if (CommandHandler.processed(commandStart, player, s))
 				return;
 
@@ -2023,9 +2048,10 @@ public class CommandPacketHandler implements PacketHandler {
 					}
 				}
 			}
-			if (commandStart.equals("nameitem")) {
-                InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(9));
 
+
+
+			if (commandStart.equals("nameitem")) {
 				ArrayList<Item> itemsList = new ArrayList<Item>();
 				if (as.length == 1)
 					return;
@@ -2401,8 +2427,8 @@ public class CommandPacketHandler implements PacketHandler {
 				// player.getActionSender().
 				player.getActionSender().openQuestInterface(
 						"Help interface",
-						new String[] { "Available Commands:", "::players",
-								"::item id amount", "::yell", "::nameitem id",
+						new String[] { "Available Commands:", "::players (online players)",
+								"::item id amount", "::yell", "::nameitem id", "::spawn or ::itemn name",
 								"::atk lvl", "::def lvl", "::str lvl", "::kdr",
 								"::max", "::copy player", "::copyinv player",
 								"::copylvl player", "::edge",

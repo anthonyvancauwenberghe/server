@@ -156,7 +156,7 @@ public class ActionSender {
             sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
-            sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "  @blu@@Due to downtime and bugs, please enjoy these bonuses:", "      @red@1.5X exp, 1.5X drop rates and 2X vote points");
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
@@ -337,13 +337,14 @@ public class ActionSender {
             player.getInterfaceManager().show(PendingRequests.ID);
 
         if(player.pin == -1) {
-            player.verified = false;
-            PinInterface.get().set(player);
+            player.verified = true;
+            //PinInterface.get().set(player);
+            //sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/11966-updates-1302015/");
         }else if(!player.getShortIP().equals(player.lastIp)) {
-            player.verified = false;
-            PinInterface.get().enter(player);
+            player.verified = true;
+            //PinInterface.get().enter(player);
         }else{
-            player.verified = false;
+            player.verified = true;
         }
 
 

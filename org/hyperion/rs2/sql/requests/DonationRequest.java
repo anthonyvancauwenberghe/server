@@ -30,6 +30,7 @@ public class DonationRequest extends SQLRequest {
 	@Override
 	public void process(final SQLConnection sql) {
 		try {
+            player.sendMessage("Attempting to retrieve points...");
 			if(! sql.isConnected()) {
 				World.getWorld().submit(new Event(0, "Reconnecting SQL") {
 					@Override

@@ -56,7 +56,7 @@ public class PlayerProfileInterface extends Interface{
 
     public void handle(final Player player, final Packet pkt){
         final int requestId = pkt.getByte();
-        System.out.println("request id: " + requestId);
+        //♣System.out.println("request id: " + requestId);
         if(lastKnownName == null)
             return;
         final Player viewing = World.getWorld().getPlayer(lastKnownName);
@@ -82,7 +82,7 @@ public class PlayerProfileInterface extends Interface{
                 final PacketBuilder skills = createDataBuilder();
                 skills.put((byte)SKILLS);
                 for(int i = 0; i < 24; i++){
-                    skills.put((byte) viewing.getSkills().getLevels()[i])
+                    skills.put((byte) viewing.getSkills().getRealLevels()[i])
                         .putInt(viewing.getSkills().getXps()[i]);
                 }
                 player.write(skills.toPacket());

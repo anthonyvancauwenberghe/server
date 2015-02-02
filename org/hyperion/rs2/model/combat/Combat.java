@@ -499,7 +499,7 @@ public class Combat {
 					&& random(2) == 1)
 				verac = true;
 			if(combatEntity.getOpponent().getEntity() instanceof Player) {
-				if(! verac) {
+				if(! verac || Misc.random(6) > 0) {
 					/**
 					 * Here is the Hit determine stuff, Includes Overhead Prayers.
 					 */

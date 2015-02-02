@@ -58,6 +58,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
@@ -1017,19 +1018,19 @@ public class CommandHandler {
 
         CommandHandler.submit(new PunishCommand("jail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new PunishCommand("ipjail", Target.IP, Type.JAIL, Rank.HELPER));
-        CommandHandler.submit(new PunishCommand("macjail", Target.MAC, Type.JAIL, Rank.HEAD_MODERATOR));
+        CommandHandler.submit(new PunishCommand("macjail", Target.MAC, Type.JAIL, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("mute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("ban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
-        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
+        CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.COMMUNITY_MANAGER));
 
         CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));
@@ -1563,6 +1564,30 @@ public class CommandHandler {
                     player.sendf("Enter a valid amount");
                     return false;
                 }
+            }
+        });
+
+        submit(new Command("setpin", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                final Player target = input.equals("setpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
+                if(target == null){
+                    player.sendf("Target is null");
+                    return false;
+                }
+                PinInterface.get().set(target);
+                return true;
+            }
+        });
+
+        submit(new Command("getpin", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                final Player target = input.equals("getpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
+                if(target == null){
+                    player.sendf("Target is null");
+                    return false;
+                }
+                player.sendf("%s's pin: %d", target.getName(), target.pin);
+                return true;
             }
         });
 	}

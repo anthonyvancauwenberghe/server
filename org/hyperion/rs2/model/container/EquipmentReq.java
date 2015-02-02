@@ -286,6 +286,8 @@ public class EquipmentReq {
 		}
 		if(s.contains("maul")) {
 			equipReqData[0] = equipReqData[2] = 50;
+            if(s.contains("(i)"))
+                equipReqData[0] = equipReqData[2] = 80;
 			return equipReqData;
 		}
 		if(s.contains("granite")) {

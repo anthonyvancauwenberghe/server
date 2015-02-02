@@ -231,10 +231,10 @@ public class PlayerPoints {
 			}
 		} else if(delta > (Time.ONE_DAY * 1.5)) {
 			int days = (int) (delta / Time.ONE_DAY);
-			honorPoints -= days * 10;
+			//honorPoints -= days * 10;
 			if(honorPoints < 0)
 				honorPoints = 0;
-			player.getActionSender().sendMessage("@blu@You've lost Honor Points due to inactivity!");
+			//player.getActionSender().sendMessage("@blu@You've lost Honor Points due to inactivity!");
 			player.getQuestTab().sendHonorPoints();
 			player.setLastHonorPointsReward(System.currentTimeMillis());
 		}

@@ -610,6 +610,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if(commandStart.equalsIgnoreCase("getname")) {
             final String ip = s.substring("getname".length()).trim();
+            player.sendMessage(ip);
             try {
                 ResultSet rs = SQLite.getDatabase().query("SELECT * FROM playerips WHERE ip = '" + ip + "'");
                 while(rs.next()) {

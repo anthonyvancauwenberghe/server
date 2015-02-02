@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import org.hyperion.Server;
@@ -78,6 +80,7 @@ import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.util.EventBuilder;
 import org.hyperion.rs2.util.MassEvent;
 import org.hyperion.rs2.util.PlayerFiles;
@@ -604,6 +607,19 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("getname")) {
+            final String ip = s.substring("getname".length()).trim();
+            try {
+                ResultSet rs = SQLite.getDatabase().query("SELECT * FROM playerips WHERE ip = '" + ip + "'");
+                while(rs.next()) {
+                    player.sendMessage("IP: "+ip+"Name: "+rs.getString("name")+" time: "+new Date(rs.getLong("time")).toString());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+        }
 
 		if (commandStart.equalsIgnoreCase("hide")) {
 			player.isHidden(!player.isHidden());

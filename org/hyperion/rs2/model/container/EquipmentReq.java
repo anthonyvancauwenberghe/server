@@ -95,10 +95,10 @@ public class EquipmentReq {
 		if(itemLevels.get(Integer.valueOf(id)) != null) {
 			abyte0 = (byte[]) itemLevels.get(Integer.valueOf(id));
 		}
-		if(abyte0 == null) {
+		//if(abyte0 == null) {
 			abyte0 = getRequirements(ItemDefinition.forId(id).getName(), id);
 			itemLevels.put(Integer.valueOf(id), abyte0);
-        }
+        //}
 		for(int j = 0; j < 21; j++) {
 			if(player.getSkills().getLevelForExp(j) < abyte0[j]) {
 				player.getSkills();
@@ -286,6 +286,8 @@ public class EquipmentReq {
 		}
 		if(s.contains("maul")) {
 			equipReqData[0] = equipReqData[2] = 50;
+            if(s.contains("(i)"))
+                equipReqData[0] = equipReqData[2] = 80;
 			return equipReqData;
 		}
 		if(s.contains("granite")) {

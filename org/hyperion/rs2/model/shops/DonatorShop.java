@@ -377,6 +377,7 @@ public class DonatorShop extends Shop {
 				return 3500;
 
             case 17646:
+                return 500;
             case 17640:
                 return 1000;
 

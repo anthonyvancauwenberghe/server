@@ -2427,8 +2427,8 @@ public class CommandPacketHandler implements PacketHandler {
 				// player.getActionSender().
 				player.getActionSender().openQuestInterface(
 						"Help interface",
-						new String[] { "Available Commands:", "::players",
-								"::item id amount", "::yell", "::nameitem id",
+						new String[] { "Available Commands:", "::players (online players)",
+								"::item id amount", "::yell", "::nameitem id", "::spawn or ::itemn name",
 								"::atk lvl", "::def lvl", "::str lvl", "::kdr",
 								"::max", "::copy player", "::copyinv player",
 								"::copylvl player", "::edge",

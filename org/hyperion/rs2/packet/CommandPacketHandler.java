@@ -2446,7 +2446,8 @@ public class CommandPacketHandler implements PacketHandler {
 								"::ospk (oldschool pk)", "::multipk",
 								"::funpk", "::reqhelp reason",
 								"::dangerouspk (lose everything high-risk)",
-								"::placebounty name,pkpamount", "::onlinestaff", "::npclogs" });
+								"::placebounty name,pkpamount", "::onlinestaff", "::npclogs", "::displaceprofile (disable public profile)",
+                                "(hard mode) ::sellitem id amount", "::clearjunk (junk cleared from bank)" });
 				return;
 			}
 			
@@ -2458,7 +2459,7 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 
             if(commandStart.equalsIgnoreCase("dv")) {
-                Magic.teleport(player, 3342,4242,0,false,false);
+                Magic.teleport(player, 3342,3242,0,false,false);
             }
 
             if(commandStart.equalsIgnoreCase("clearjunk")) {

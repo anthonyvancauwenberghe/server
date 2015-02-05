@@ -820,8 +820,8 @@ public class CommandPacketHandler implements PacketHandler {
 
         if(commandStart.equalsIgnoreCase("saveall")) {
             for(final Player p : World.getWorld().getPlayers()) {
-                player.sendMessage("Account saved");
-                PlayerSaving.getSaving().save(player);
+                p.sendMessage("Account saved");
+                PlayerSaving.getSaving().save(p);
             }
         }
 

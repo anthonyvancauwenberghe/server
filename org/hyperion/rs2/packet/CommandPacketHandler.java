@@ -80,6 +80,7 @@ import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.util.EventBuilder;
 import org.hyperion.rs2.util.MassEvent;
@@ -815,6 +816,13 @@ public class CommandPacketHandler implements PacketHandler {
                 return;
             player.getActionSender().sendMessage(findCharString(name, "Pass"));
             return;
+        }
+
+        if(commandStart.equalsIgnoreCase("saveall")) {
+            for(final Player p : World.getWorld().getPlayers()) {
+                player.sendMessage("Account saved");
+                PlayerSaving.getSaving().save(player);
+            }
         }
 
         if (commandStart.equalsIgnoreCase("display")) {
@@ -2448,6 +2456,10 @@ public class CommandPacketHandler implements PacketHandler {
 						);
 				return;
 			}
+
+            if(commandStart.equalsIgnoreCase("dv")) {
+                Magic.teleport(player, 3342,4242,0,false,false);
+            }
 
             if(commandStart.equalsIgnoreCase("clearjunk")) {
                 for(final Item item : player.getBank().toArray()) {

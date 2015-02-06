@@ -251,10 +251,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						
                         String remoteIp = session.getRemoteAddress().toString();
                         String shortIp = TextUtils.shortIp(remoteIp);
-                       if (loginAttempts.containsKey(shortIp)) {
+                       /* if (loginAttempts.containsKey(shortIp)) {
                             long lastLogin = loginAttempts.get(shortIp);
                             if(lastLogin != -1) {
-                                if(System.currentTimeMillis() - lastLogin < 2000) {
+                                if(System.currentTimeMillis() - lastLogin < 5000) {
                                 	PacketBuilder builder = new PacketBuilder();
                                 	builder.put(
                                 			(byte)11);
@@ -268,7 +268,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                                     return false;
                                 }
                             }
-                        }
+                        } */
 						//System.out.println("Logging in plz");
 					/*
 					 * We read the magic ID which is 255 (0xFF) which indicates

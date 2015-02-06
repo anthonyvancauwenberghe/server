@@ -165,7 +165,7 @@ public class PlayerDeathEvent extends Event {
 						    killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
 						    player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
 						}
-                        if(false || killer.killedRecently(player.getName()) || killer.getShortIP().equalsIgnoreCase(player.getShortIP())) {
+                        if(false && (killer.killedRecently(player.getName()) || killer.getShortIP().equalsIgnoreCase(player.getShortIP()))) {
                             killer.getActionSender().sendMessage("You don't receive Pk Points/KillStreak for killing the same enemy twice.");
                         } else {
 							try {

@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.saving.PlayerSaving;
 
 public class PickupItemPacketHandler implements PacketHandler {
 
@@ -39,7 +40,8 @@ public class PickupItemPacketHandler implements PacketHandler {
 				if(loc.distance(player.getLocation()) == 0) {
 					//player.getLogging().log("Picked up item : " + itemID);
 					World.getWorld().getGlobalItemManager().pickupItem(player, itemID, itemX, itemY);
-					this.stop();
+                    PlayerSaving.getSaving().save(player);
+                    this.stop();
 				} else if(++ timeout >= 10) {
 					this.stop();
 				}

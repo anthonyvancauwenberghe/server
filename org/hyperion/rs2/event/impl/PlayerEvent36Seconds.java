@@ -45,7 +45,7 @@ public class PlayerEvent36Seconds extends Event {
 	@Override
 	public void execute() {
         for(Player player : World.getWorld().getPlayers()) {
-        	if(player == null || ! player.isActive()) {
+        	if(player == null) {
         		continue;
         	}
         	player.getSummBar().cycle();

@@ -140,10 +140,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		String remoteIp = remoteAddress.toString();
 		String ip = remoteIp.split(":")[0];
 		String shortIp = TextUtils.shortIp(remoteIp);
-		if(PunishmentManager.getInstance().isBanned(null, shortIp, -1, null)) {
-			session.close(true);
-			return;
-		}
 		if(! HostGateway.canEnter(shortIp)) {
 			System.out.println("Cant enter hostgateway: " + shortIp);
 			session.close(true);

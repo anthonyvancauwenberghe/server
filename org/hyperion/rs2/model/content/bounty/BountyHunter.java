@@ -139,7 +139,12 @@ public class BountyHunter {
 			p.getBountyHunter().target = null;
 			p.getActionSender().createArrow(10, -1);
 			p.getQuestTab().sendAllInfo();
-		}		
+		}
+        final List<Item> emblems = Emblem.getEmblems(opp.getInventory());
+        for(final Item item : emblems) {
+            player.getBank().add(Item.create(item.getId(), opp.getInventory().remove(item)));
+            player.sendf("@red@%s@bla@ was added to your bank", item.getDefinition().getName());
+        }
 	}
 	
 	public void handleBHDrops(final Player opp) {

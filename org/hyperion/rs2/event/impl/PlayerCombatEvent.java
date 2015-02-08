@@ -116,7 +116,7 @@ public class PlayerCombatEvent extends Event {
 
     public static boolean stakeReset(final Player player) {
         final Player opp = player.getTrader();
-        if(opp != null && !opp.getSession().isConnected() && !player.getSession().isConnected() && player.duelAttackable > 0 && opp.duelAttackable > 0) {
+        if(opp != null && !opp.isDead() && !player.isDead() && !opp.getSession().isConnected() && !player.getSession().isConnected() && player.duelAttackable > 0 && opp.duelAttackable > 0) {
             PlayerSaving.getSaving().saveLog("./logs/accounts/" + opp.getName(), (new Date()) + " Duel TIE against "+player.getName());
             PlayerSaving.getSaving().saveLog("./logs/accounts/" + player.getName(), (new Date()) + " Duel TIE against " + opp.getName());
             Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie

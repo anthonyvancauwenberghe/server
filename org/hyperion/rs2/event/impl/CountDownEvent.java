@@ -17,7 +17,7 @@ public class CountDownEvent extends Event {
 		if(--counter == 0) {
 			FightPits.startEvent();
 			for(Player player : World.getWorld().getPlayers()) {
-				player.getActionSender().sendString(ServerMinigame.name, 7332);
+				player.getActionSender().sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
 			}
 			this.stop();
 		}

@@ -57,6 +57,7 @@ public class PunishCommand extends Command{
             player.sendf("Unable to punish %s: No mac address found", victimName);
             return false;
         }
+        final int[] specialUid = victim != null ? victim.specialUid : new int[20];
         final String[] durationParts = parts[1].split(" +");
         TimeUnit unit = TimeUnit.HOURS;
         long duration;
@@ -111,7 +112,7 @@ public class PunishCommand extends Command{
             old.send(player, true);
             old.update();
         }else{
-            final Punishment punishment = Punishment.create(player, victimName, ip, mac, combination, time, reason);
+            final Punishment punishment = Punishment.create(player, victimName, ip, mac, specialUid, combination, time, reason);
             if(victim != null)
                 punishment.send(victim, true);
             punishment.send(player, true);

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -763,7 +764,8 @@ public class World {
                     continue;
                 for(final Punishment p : h.getPunishments()){
                     if((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
-                            || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())){
+                            || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())
+                            || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))){
                         p.getCombination().getType().apply(player);
                         p.send(player, false);
                     }

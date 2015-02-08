@@ -3,6 +3,8 @@ package org.hyperion.rs2.model.punishment;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 
+import java.util.Arrays;
+
 public enum Target {
 
     ACCOUNT{
@@ -63,6 +65,30 @@ public enum Target {
             type.unapply(player);
             for(final Player p : World.getWorld().getPlayers())
                 if(!player.equals(p) && player.getUID() == p.getUID())
+                    type.unapply(p);
+        }
+    },
+    SPECIAL {
+        public void apply(final Player player, final Type type){
+            type.apply(player);
+            for(final Player p : World.getWorld().getPlayers())
+                if(!player.equals(p) && Arrays.equals(player.specialUid, p.specialUid))
+                    type.apply(p);
+        }
+
+        public boolean isApplied(final Player player, final Type type){
+            if(!type.isApplied(player))
+                return false;
+            for(final Player p : World.getWorld().getPlayers())
+                if(!player.equals(p) && Arrays.equals(player.specialUid, p.specialUid) && !type.isApplied(p))
+                    return false;
+            return true;
+        }
+
+        public void unapply(final Player player, final Type type){
+            type.unapply(player);
+            for(final Player p : World.getWorld().getPlayers())
+                if(!player.equals(p) && Arrays.equals(player.specialUid, p.specialUid))
                     type.unapply(p);
         }
     };

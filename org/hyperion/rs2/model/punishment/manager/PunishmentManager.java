@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.punishment.manager;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,11 @@ public final class PunishmentManager {
                 final String victim = rs.getString("victim");
                 final String ip = rs.getString("ip");
                 final int mac = rs.getInt("mac");
+                final String specialUidText = rs.getString("specialUid");
+                final String[] specialUidParts = specialUidText.split(",");
+                final int[] specialUid = new int[specialUidParts.length];
+                for(int i = 0; i < specialUid.length; i++)
+                    specialUid[i] = Integer.parseInt(specialUidParts[i]);
                 final Target target = Target.valueOf(rs.getString("target"));
                 final Type type = Type.valueOf(rs.getString("type"));
                 final long startTime = rs.getLong("time");
@@ -48,7 +54,7 @@ public final class PunishmentManager {
                 final TimeUnit unit = TimeUnit.valueOf(rs.getString("unit"));
                 final String reason = rs.getString("reason");
                 final Punishment p = Punishment.create(
-                        issuer, victim, ip, mac,
+                        issuer, victim, ip, mac, specialUid,
                         Combination.of(target, type),
                         Time.create(startTime, duration, unit),
                         reason
@@ -103,7 +109,7 @@ public final class PunishmentManager {
         return list;
     }
 
-    public boolean isBanned(final String name, final String ip, final int mac){
+    public boolean isBanned(final String name, final String ip, final int mac, final int[] specialUid){
         if(name != null){
             final PunishmentHolder holder = get(name);
             if(holder != null){
@@ -121,6 +127,8 @@ public final class PunishmentManager {
                 if(ip != null && p.getCombination().getTarget() == Target.IP && ip.equalsIgnoreCase(p.getVictimIp()))
                     return true;
                 if(mac != -1 && p.getCombination().getTarget() == Target.MAC && mac == p.getVictimMac())
+                    return true;
+                if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid()))
                     return true;
             }
         }

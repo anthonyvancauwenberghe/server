@@ -44,6 +44,8 @@ public class PlayerDetails {
 
 	public String IP;
 
+    public int[] specialUid;
+
 	/**
 	 * Creates the player details class.
 	 *

@@ -365,6 +365,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						if(macId == 0) {
 							macId = Misc.random(Integer.MAX_VALUE);
 						}
+
+                        final int[] specialUid = new int[20];
+                        for(int i = 0; i < specialUid.length; i++)
+                            specialUid[i] = in.getInt();
 					/*
 					 * We read and format the name and passwords.
 					 */
@@ -382,7 +386,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						//	returnCode = 4;
 						//}
 
-                        if(PunishmentManager.getInstance().isBanned(name, shortIp, macId))
+                        if(PunishmentManager.getInstance().isBanned(name, shortIp, macId, specialUid))
                             returnCode = 4;
 
 						String pass = IoBufferUtils.getRS2String(in);
@@ -432,6 +436,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                         }
 
 						PlayerDetails pd = new PlayerDetails(session, name, pass, macId, inCipher, outCipher, remoteIp, "Id1");
+                        pd.specialUid = specialUid;
 						//System.out.println("loading guy");
 						World.getWorld().load(pd, returnCode);
                         loginAttempts.put(shortIp, System.currentTimeMillis());

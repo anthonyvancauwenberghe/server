@@ -1030,6 +1030,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 
    // private InterfaceManager itfManager;
 
+    public int[] specialUid;
+
 	/**
 	 * Creates a player based on the details object.
 	 *
@@ -1044,6 +1046,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.outCipher = details.getOutCipher();
 
 		this.name = details.getName();
+        this.specialUid = details.specialUid;
 		this.display = this.name;
 		if(! NameUtils.isValidName(name)) {
 			System.out.println("Invalid name!!!!!" + name);

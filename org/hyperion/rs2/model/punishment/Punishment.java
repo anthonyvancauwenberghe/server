@@ -7,32 +7,37 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.sql.MySQLConnection;
 import org.hyperion.rs2.util.TextUtils;
 
+import java.util.Arrays;
+import java.util.StringJoiner;
+
 public class Punishment {
 
     private String issuer;
     private final String victim;
     private final String victimIp;
     private final int victimMac;
+    private final int[] victimSpecialUid;
     private final Combination combination;
     private final Time time;
     private String reason;
 
-    public Punishment(final String issuer, final String victim, final String victimIp, final int victimMac, final Combination combination, final Time time, final String reason){
+    public Punishment(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] victimSpecialUid, final Combination combination, final Time time, final String reason){
         this.issuer = issuer;
         this.victim = victim;
         this.victimIp = victimIp;
         this.victimMac = victimMac;
+        this.victimSpecialUid = victimSpecialUid;
         this.combination = combination;
         this.time = time;
         this.reason = reason;
     }
 
-    public Punishment(final Player issuer, final String victim, final String victimIp, final int victimMac, final Combination combination, final Time time, final String reason){
-        this(issuer.getName(), victim, victimIp, victimMac, combination, time, reason);
+    public Punishment(final Player issuer, final String victim, final String victimIp, final int victimMac, final int[] victimSpecialUid, final Combination combination, final Time time, final String reason){
+        this(issuer.getName(), victim, victimIp, victimMac, victimSpecialUid, combination, time, reason);
     }
 
     public Punishment(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason){
-        this(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), combination, time, reason);
+        this(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
     }
 
     public PunishmentHolder getHolder(){
@@ -89,6 +94,12 @@ public class Punishment {
                     break;
                 case MAC:
                     if(p.getUID() != getVictimMac())
+                        break;
+                    getCombination().getType().apply(p);
+                    applied = true;
+                    break;
+                case SPECIAL:
+                    if(!Arrays.equals(p.specialUid, getVictimSpecialUid()))
                         break;
                     getCombination().getType().apply(p);
                     applied = true;
@@ -183,6 +194,17 @@ public class Punishment {
         return victimMac;
     }
 
+    public int[] getVictimSpecialUid(){
+        return victimSpecialUid;
+    }
+
+    public String getVictimSpecialUidAsString(){
+        final StringJoiner joiner = new StringJoiner(",");
+        for(final int n : getVictimSpecialUid())
+            joiner.add(Integer.toString(n));
+        return joiner.toString();
+    }
+
     public Combination getCombination(){
         return combination;
     }
@@ -201,12 +223,13 @@ public class Punishment {
 
     public void insert(final MySQLConnection connection){
         final String query = String.format(
-                "INSERT INTO punishments (issuer, victim, ip, mac, target, type, time, duration, unit, reason, active)" +
-                        " VALUES ('%s', '%s', '%s', %d, '%s', '%s', %d, %d, '%s', '%s', 1)",
+                "INSERT INTO punishments (issuer, victim, ip, mac, specialUid, target, type, time, duration, unit, reason, active)" +
+                        " VALUES ('%s', '%s', '%s', %d, '%s', '%s', '%s', %d, %d, '%s', '%s', 1)",
                 getIssuerName(),
                 getVictimName(),
                 getVictimIp(),
                 getVictimMac(),
+                getVictimSpecialUidAsString(),
                 getCombination().getTarget().name(),
                 getCombination().getType().name(),
                 getTime().getStartTime(),
@@ -269,16 +292,16 @@ public class Punishment {
         delete(PunishmentManager.getInstance().getConnection());
     }
 
-    public static Punishment create(final String issuer, final String victim, final String victimIp, final int victimMac, final Combination combination, final Time time, final String reason){
-        return new Punishment(issuer, victim, victimIp, victimMac, combination, time, reason);
+    public static Punishment create(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason){
+        return new Punishment(issuer, victim, victimIp, victimMac, specialUid, combination, time, reason);
     }
 
     public static Punishment create(final String issuer, final Player victim, final Combination combination, final Time time, final String reason){
-        return create(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), combination, time, reason);
+        return create(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
     }
 
-    public static Punishment create(final Player issuer, final String victim, final String victimIp, final int victimMac, final Combination combination, final Time time, final String reason){
-        return new Punishment(issuer.getName(), victim, victimIp, victimMac, combination, time, reason);
+    public static Punishment create(final Player issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason){
+        return new Punishment(issuer.getName(), victim, victimIp, victimMac, specialUid, combination, time, reason);
     }
 
     public static Punishment create(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason){

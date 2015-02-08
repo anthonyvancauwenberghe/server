@@ -144,7 +144,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 			return;
 		}
 		String shortIp = TextUtils.shortIp(remoteIp);
-		if(PunishmentManager.getInstance().isBanned(null, shortIp, -1)) {
+		if(PunishmentManager.getInstance().isBanned(null, shortIp, -1, null)) {
 			session.close(true);
 			return;
 		}

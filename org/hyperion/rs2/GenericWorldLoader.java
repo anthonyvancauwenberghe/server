@@ -32,7 +32,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(World.getWorld().updateInProgress()) {
 			code = LoginResult.UPDATE_IN_PROGRESS;
 			LoginDebugger.getDebugger().log("Update progress in  Genericworldloader");
-		} else if(PunishmentManager.getInstance().isBanned(pd.getName(), pd.IP.split(":")[0], pd.getUID())) {
+		} else if(PunishmentManager.getInstance().isBanned(pd.getName(), pd.IP.split(":")[0], pd.getUID(), pd.specialUid)) {
 			code = 4;
 			LoginDebugger.getDebugger().log("Code 4 ban in Genericworldloader");
 		} else if(PlayerFiles.exists(pd.getName())) {

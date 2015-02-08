@@ -149,8 +149,6 @@ public class NpcDeathEvent extends Event {
 
                 if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                     int chance =  isTask ? 750 : 750;
-                    if(npc.getLocation().inPvPArea())
-                        chance *= .9;
                     for(NPCDrop drop : npc.getDefinition().getDrops()) {
                         if(drop == null) continue;
                         if(Combat.random(chance) <= drop.getChance()) {

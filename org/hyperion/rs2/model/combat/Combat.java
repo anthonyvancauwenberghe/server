@@ -85,15 +85,6 @@ public class Combat {
                     final Player player = combatEntity.getPlayer();
                     final Player opp = combatEntity.getOpponent().getPlayer();
                     if(!player.getSession().isConnected() && !opp.getSession().isConnected())  {
-                        if(player.duelAttackable > 0 && opp.duelAttackable > 0) {
-                            PlayerSaving.getSaving().saveLog("./logs/accounts/" + opp.getName(), (new Date()) + " Duel TIE against "+player.getName());
-                            PlayerSaving.getSaving().saveLog("./logs/accounts/" + player.getName(), (new Date()) + " Duel TIE against " + opp.getName());
-                            Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie
-                            Container.transfer(opp.getDuel(), opp.getInventory());
-                            opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
-                            player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
-
-                        }
                         return false;
                     }
                 }

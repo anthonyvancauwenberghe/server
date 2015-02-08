@@ -139,10 +139,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		SocketAddress remoteAddress = session.getRemoteAddress();
 		String remoteIp = remoteAddress.toString();
 		String ip = remoteIp.split(":")[0];
-		if(blackList.containsKey(ip)) {
-			session.close(true);
-			return;
-		}
 		String shortIp = TextUtils.shortIp(remoteIp);
 		if(PunishmentManager.getInstance().isBanned(null, shortIp, -1, null)) {
 			session.close(true);

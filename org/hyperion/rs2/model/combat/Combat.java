@@ -509,7 +509,7 @@ public class Combat {
 						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
 					int deltaBonus = MeleeAtk - MeleeDef;
-					int toAdd = Misc.random(deltaBonus / 10);
+					int toAdd = Misc.random(deltaBonus / 5);
 					damg += toAdd;
 					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 						combatEntity.getPlayer().getActionSender().sendMessage("ToAdd: " + toAdd);

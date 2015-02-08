@@ -22,10 +22,12 @@ public enum Target {
     },
     IP{
         public void apply(final Player player, final Type type){
+
             type.apply(player);
             for(final Player p : World.getWorld().getPlayers())
                 if(!player.equals(p) && player.getShortIP().equals(p.getShortIP()))
                     type.apply(p);
+
         }
 
         public boolean isApplied(final Player player, final Type type){

@@ -972,7 +972,7 @@ public class World {
             }
         });
         if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
+            getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**

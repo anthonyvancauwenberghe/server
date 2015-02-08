@@ -300,7 +300,7 @@ public class ActionSender {
 		sendString(29177, "@or1@Pure Set");
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
-		sendString(ServerMinigame.name, 7332);
+		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
 
 /**
  * OVL BUG

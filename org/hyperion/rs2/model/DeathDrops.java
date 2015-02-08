@@ -104,7 +104,7 @@ public class DeathDrops {
 				continue;
 			Item item = container.get(slot);
 			if(toDrop(item, player.getGameMode())) {
-				if(ItemsTradeable.isTradeable(item.getId()) || (item.getId() >= 13195 && item.getId() <= 13205))
+				if(ItemsTradeable.isTradeable(item.getId()))
 					originalDrops.add(item);
 				container.remove(slot, item);
 			}	
@@ -112,7 +112,7 @@ public class DeathDrops {
 		return originalDrops;
 	}
 	
-	public static boolean toDrop(Item item, final int gameMode) {
+	private static boolean toDrop(Item item, final int gameMode) {
 		if(item == null)
 			return false;
 		if(ItemsTradeable.isTradeable(item.getId())) {
@@ -120,8 +120,6 @@ public class DeathDrops {
 				return false;
 			return true;
 		} else {
-            if(item.getId() >= 13195 && item.getId() <= 13205)
-                return true;
 			switch(item.getId()) {
 			case 20000:
 			case 19713://nex helms

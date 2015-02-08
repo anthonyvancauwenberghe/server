@@ -792,13 +792,14 @@ public class Combat {
 		World.getWorld().submit(new Event(delay, "npcatx") {
 			@Override
 			public void execute() {
-                if (combatEntity == null ||
+                if ((combatEntity == null ||
                         combatEntity.getEntity() == null ||
-                        npc == null) {
+                        npc == null) || (combatEntity._getPlayer().isPresent() && !combatEntity.getPlayer().getSession().isConnected())) {
                     this.stop();
                     return;
                 }
-                int newDamg = SpiritShields.applyEffects(combatEntity, damg);;
+                int newDamg = SpiritShields.applyEffects(combatEntity, damg);
+
 				if(combatEntity.getEntity() instanceof Player) {
 					//divine spirit shield
 					newDamg = combatEntity.getPlayer().getInflictDamage(newDamg, npc, false, type);

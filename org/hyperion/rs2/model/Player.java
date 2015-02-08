@@ -450,7 +450,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private long disconnectedTimer = System.currentTimeMillis();
 
 	public boolean isDisconnected() {
-		return System.currentTimeMillis() - disconnectedTimer > 5000;
+		return System.currentTimeMillis() - disconnectedTimer > 15000;
 	}
 
 	public void updateDisconnectedTimer() {

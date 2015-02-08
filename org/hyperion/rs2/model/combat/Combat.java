@@ -55,6 +55,8 @@ public class Combat {
 			if(! combatEntity.getOpponent().getAttackers().contains(combatEntity)) {
 				combatEntity.getOpponent().getAttackers().add(combatEntity);
 			}
+
+
 			/**
 			 * Distance and freezetimer check.
 			 */
@@ -75,6 +77,8 @@ public class Combat {
 			 * Run seperate code depending on whether the combatEntity is an NPC or a Player.
 			 */
 			if(combatEntity.getEntity() instanceof Player) {
+                if(combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected() && !combatEntity.getPlayer().getSession().isConnected())
+                    return false;
 				return processPlayerCombat(combatEntity, distance);
 			} else {
 				return processNpcCombat(combatEntity, distance);

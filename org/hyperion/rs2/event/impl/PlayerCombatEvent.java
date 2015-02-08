@@ -96,6 +96,7 @@ public class PlayerCombatEvent extends Event {
 						if(! Combat.processCombat(player.cE))
 							Combat.resetAttack(player.cE);
 					}
+
 					player.getWalkingQueue().walkingCheck();
 				}
 			}

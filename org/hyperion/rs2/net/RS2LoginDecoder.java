@@ -248,7 +248,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					int size = (Integer) session.getAttribute("size");
 					int encryptSize = (Integer) session.getAttribute("encryptSize");
 					if(in.remaining() >= size) {
-						
                         String remoteIp = session.getRemoteAddress().toString();
                         String shortIp = TextUtils.shortIp(remoteIp);
                        /* if (loginAttempts.containsKey(shortIp)) {
@@ -369,6 +368,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                         final int[] specialUid = new int[20];
                         for(int i = 0; i < specialUid.length; i++)
                             specialUid[i] = in.getInt();
+
 					/*
 					 * We read and format the name and passwords.
 					 */

@@ -111,10 +111,8 @@ public class QuestTab {
 	public void sendUptime() {
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			player.getActionSender().sendString("@or2@Uptime: @gre@" + Server.getUptime(), getId(0));
-        else if(ServerMinigame.name != null)
-            player.getActionSender().sendString("@or2@"+ServerMinigame.name, getId(0));
         else
-            player.getActionSender().sendString("@red@ Event Dormant", getId(0));
+            player.getActionSender().sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, getId(0));
 
     }
 

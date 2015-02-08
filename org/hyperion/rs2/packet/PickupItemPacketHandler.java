@@ -40,7 +40,6 @@ public class PickupItemPacketHandler implements PacketHandler {
 				if(loc.distance(player.getLocation()) == 0) {
 					//player.getLogging().log("Picked up item : " + itemID);
 					World.getWorld().getGlobalItemManager().pickupItem(player, itemID, itemX, itemY);
-                    PlayerSaving.getSaving().save(player);
                     this.stop();
 				} else if(++ timeout >= 10) {
 					this.stop();

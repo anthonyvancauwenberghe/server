@@ -3,6 +3,8 @@ package org.hyperion.rs2.model;
 import java.io.BufferedReader;
 
 import org.hyperion.Server;
+import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
@@ -109,8 +111,12 @@ public class QuestTab {
 	public void sendUptime() {
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			player.getActionSender().sendString("@or2@Uptime: @gre@" + Server.getUptime(), getId(0));
+        else if(ServerMinigame.name != null)
+            player.getActionSender().sendString("@or2@"+ServerMinigame.name, getId(0));
+        else
+            player.getActionSender().sendString("@red@ Event Dormant", getId(0));
 
-	}
+    }
 
 	public void sendRank() {
 		player.getActionSender().sendString("@or2@Rank: @gre@" + player.getQuestTabRank(), getId(1));
@@ -309,13 +315,12 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(0), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				if(player.lastScoreCheck > System.currentTimeMillis()) {
-					player.sendMessage("@red@You can only check the score every 30 sconds!");
-					return;
-				}
-				player.lastScoreCheck = System.currentTimeMillis() + 30000;
-				player.getActionSender().sendMessage("@blu@Featured Score: @bla@"+getWorldCupScores()+"");
-			}
+                if(ServerMinigame.name != null && ServerMinigame.x != 0)
+                    Magic.teleport(player, Location.create(ServerMinigame.x, ServerMinigame.y, ServerMinigame.z), false, false);
+                else {
+                    player.sendMessage("There is no active event");
+                }
+            }
 
 		});
 		ActionsManager.getManager().submit(getId(3), new ButtonAction() {

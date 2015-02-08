@@ -24,6 +24,7 @@ import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
+import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Ban;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.GameObject;
@@ -46,6 +47,7 @@ import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Bank;
 import org.hyperion.rs2.model.container.Container;
@@ -87,6 +89,7 @@ import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLUtils;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
+import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.io.BufferedWriter;
@@ -1014,6 +1017,53 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        CommandHandler.submit(new Command("createevent", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                input = filterInput(input);
+                String[] split = input.split(",");
+                try {
+                    if(ServerMinigame.name != null) {
+                        player.sendMessage("There is already an active event, remove it via ::removeevent");
+                        return false;
+                    }
+
+                    final int x = Integer.valueOf(split[0]);
+                    final int y = Integer.valueOf(split[1]);
+                    final int z = Integer.valueOf(split[2]);
+                    if(Combat.getWildLevel(x, y) > 0) {
+                        player.sendMessage("Not in wild!");
+                        return false;
+                    }
+                    final String name = split[3];
+                    ServerMinigame.x = x;
+                    ServerMinigame.y = y;
+                    ServerMinigame.z = z;
+                    ServerMinigame.name = name;
+                    PushMessage.pushGlobalMessage(String.format("[@whi@%s@bla@]: %s has just created this event. View in quest tab", name, player.getName()));
+                    for(final Player p : World.getWorld().getPlayers()) {
+                        p.getQuestTab().sendUptime();
+                    }
+                } catch(Exception ex) {
+                    player.sendMessage("Please use the command as such: ::createevent x,y,z,name");
+                }
+                return false;
+            }
+        },
+            new Command("removeevent", Rank.MODERATOR) {
+                @Override
+                public boolean execute(Player player, String input) throws Exception {
+                    ServerMinigame.name = null;
+
+                    for(final Player p : World.getWorld().getPlayers())
+                        p.getQuestTab().sendUptime();
+                    player.sendMessage("Event removed");
+                    return true;
+                }
+            });
+
+
 
         CommandHandler.submit(new PunishCommand("jail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new PunishCommand("ipjail", Target.IP, Type.JAIL, Rank.HELPER));

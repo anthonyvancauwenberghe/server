@@ -8,6 +8,9 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Time;
 
 public class ServerMinigame extends Event {
+
+    public static int x, y, z;
+    public static String name = "@red@Event Dormant";
 	
 	public ServerMinigame() {
 		super(Time.TEN_HOURS);

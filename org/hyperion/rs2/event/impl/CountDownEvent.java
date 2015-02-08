@@ -17,12 +17,12 @@ public class CountDownEvent extends Event {
 		if(--counter == 0) {
 			FightPits.startEvent();
 			for(Player player : World.getWorld().getPlayers()) {
-				player.getActionSender().sendString("@red@Event Dormant", 7332);
+				player.getActionSender().sendString(ServerMinigame.name, 7332);
 			}
 			this.stop();
 		}
 		for(Player player : World.getWorld().getPlayers()) {
-			player.getActionSender().sendString("@gre@Event in @red@"+counter+" @gre@seconds!", 7332);
+			player.getActionSender().sendString("@gre@Event in @red@"+counter+" @gre@secs!", 7332);
 		}
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)

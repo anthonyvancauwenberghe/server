@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -299,7 +300,7 @@ public class ActionSender {
 		sendString(29177, "@or1@Pure Set");
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
-		sendString("@red@Event Dormant", 7332);
+		sendString(ServerMinigame.name, 7332);
 
 /**
  * OVL BUG

@@ -5,6 +5,7 @@ import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ClickId;
@@ -17,8 +18,11 @@ import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.shops.SlayerShop;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
+
+import java.util.Date;
 
 /**
  * @authors Martin and Arsen
@@ -77,8 +81,22 @@ public class Combat {
 			 * Run seperate code depending on whether the combatEntity is an NPC or a Player.
 			 */
 			if(combatEntity.getEntity() instanceof Player) {
-                if(combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected() && !combatEntity.getPlayer().getSession().isConnected())
-                    return false;
+                if(combatEntity.getOpponent()._getPlayer().isPresent()) {
+                    final Player player = combatEntity.getPlayer();
+                    final Player opp = combatEntity.getOpponent().getPlayer();
+                    if(!player.getSession().isConnected() && !opp.getSession().isConnected())  {
+                        if(player.duelAttackable > 0 && opp.duelAttackable > 0) {
+                            PlayerSaving.getSaving().saveLog("./logs/accounts/" + opp.getName(), (new Date()) + " Duel TIE against "+player.getName());
+                            PlayerSaving.getSaving().saveLog("./logs/accounts/" + player.getName(), (new Date()) + " Duel TIE against " + opp.getName());
+                            Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie
+                            Container.transfer(opp.getDuel(), opp.getInventory());
+                            opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+                            player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+
+                        }
+                        return false;
+                    }
+                }
 				return processPlayerCombat(combatEntity, distance);
 			} else {
                 if(combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected())

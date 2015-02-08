@@ -81,6 +81,8 @@ public class Combat {
                     return false;
 				return processPlayerCombat(combatEntity, distance);
 			} else {
+                if(combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected())
+                    return false;
 				return processNpcCombat(combatEntity, distance);
 			}
 

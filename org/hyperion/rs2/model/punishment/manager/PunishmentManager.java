@@ -45,8 +45,13 @@ public final class PunishmentManager {
                 final String specialUidText = rs.getString("specialUid");
                 final String[] specialUidParts = specialUidText.split(",");
                 final int[] specialUid = new int[specialUidParts.length];
-                for(int i = 0; i < specialUid.length; i++)
-                    specialUid[i] = Integer.parseInt(specialUidParts[i]);
+                for(int i = 0; i < specialUid.length; i++) {
+                    try {
+                        specialUid[i] = Integer.parseInt(specialUidParts[i]);
+                    }catch(final Exception e) {
+
+                    }
+                }
                 final Target target = Target.valueOf(rs.getString("target"));
                 final Type type = Type.valueOf(rs.getString("type"));
                 final long startTime = rs.getLong("time");

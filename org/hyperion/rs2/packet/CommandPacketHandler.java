@@ -2206,6 +2206,7 @@ public class CommandPacketHandler implements PacketHandler {
 				if (commandStart.equalsIgnoreCase("copylvl")) {
 					if (!copyCheck(player))
 						return;
+                    player.resetPrayers();
 					if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
 						player.getActionSender().sendMessage(
 								"You can't copy with armour on!");

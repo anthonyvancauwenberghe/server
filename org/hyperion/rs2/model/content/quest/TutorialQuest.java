@@ -65,13 +65,13 @@ public class TutorialQuest implements ContentTemplate {
 			}
 		} else if(type == 1) {
             player.getActionSender().openQuestInterface("DeviousPK Guidebook", new String[]{
-                    "Welcome newcomer to ArteroPK,", "created by Arre ", "Please be updated with all the latest news on the website", " https://deviouspk.com",
+                    "Welcome newcomer to ArteroPK,", "created by Arre ", "Please be updated with all the latest news on the website", " https://arteropk.com",
                     "Your bank has been loaded with a starter pack!",
                     "",
                     "-Master combat stats ::master",
                     "-Spawn Instant Sets in achievement (green) tab",
-                    "-Make cash by pking (::edge), voting (::vote) and donating (::donate) (donate RSGP to Talon)",
-                    "-Ask \"Not a bot\" for price checks and information",
+                    "-Make cash by pking (::edge), voting (::vote) and donating (::donate) (donate RSGP to Seven)",
+                    "-Ask \"Nab\" for price checks and information",
                     "",
                     "-Skill through skill teleports in magic spells",
                     "-Tormented Demons can be found above the KBD",

@@ -1169,7 +1169,7 @@ public class CombatAssistant {
 		} else if(player.getPrayers().isEnabled(27))
             mageLvl *= 1.25;
 		return mageLvl/2 +
-				(int)(bonus);
+				(int)(bonus * 1.5);
 	}
 
 	public static int calculateMageDef(Entity entity) {
@@ -1204,7 +1204,7 @@ public class CombatAssistant {
 			} else if(player.getPrayers().isEnabled(27))
                 mageLevel *= 1.23;
 			
-			return (int)(bonus) + defLevel / 8 + mageLevel / 6;
+			return (int)(bonus * 1.5) + defLevel / 8 + mageLevel / 6;
 		} else //NPCs
 			return (int)(entity.cE.getCombat()/2);
 	}

@@ -25,6 +25,7 @@ public final class InterfaceManager {
         addGlobal(new PinInterface());
         addGlobal(new ItemContainer());
         addGlobal(new NameItemInterface());
+        addGlobal(new ModerationInterface());
     }
 
     private final Player player;

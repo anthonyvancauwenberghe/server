@@ -21,6 +21,7 @@ public class CommonMagicAttack implements Attack {
 			if(Misc.random(3) == 0 && attack.getEntity() instanceof Player) {
 				handleEffect(attack.getPlayer());
 			}
+            n.cE.predictedAtk = System.currentTimeMillis() + 2400;
 			return 5;
 		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 14)) {
 			return 0;

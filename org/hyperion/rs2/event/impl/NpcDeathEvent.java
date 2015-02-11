@@ -77,6 +77,9 @@ public class NpcDeathEvent extends Event {
                     final int pkp = (int)(reward.get().pkp * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
+                    if(jet != null) {
+                        jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId());
+                    }
 
                 }
 
@@ -217,9 +220,9 @@ public class NpcDeathEvent extends Event {
     public static Optional<NPCKillReward> getReward(final int id) {
         switch(id) {
             case 8133:
-                return Optional.of(new NPCKillReward(150, 500));
+                return Optional.of(new NPCKillReward(50, 500));
             case 8596:
-                return Optional.of(new NPCKillReward(100, 300));
+                return Optional.of(new NPCKillReward(40, 300));
         }
         return Optional.empty();
     }

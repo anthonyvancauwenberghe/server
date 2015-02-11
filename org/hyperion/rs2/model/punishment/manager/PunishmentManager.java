@@ -44,9 +44,12 @@ public final class PunishmentManager {
                 final int mac = rs.getInt("mac");
                 final String specialUidText = rs.getString("specialUid");
                 final String[] specialUidParts = specialUidText.split(",");
-                final int[] specialUid = new int[specialUidParts.length];
-                for(int i = 0; i < specialUid.length; i++)
+                int[] specialUid = null;
+                if(specialUidParts.length == 20){
+                    specialUid = new int[20];
+                    for(int i = 0; i < specialUid.length; i++)
                     specialUid[i] = Integer.parseInt(specialUidParts[i]);
+                }
                 final Target target = Target.valueOf(rs.getString("target"));
                 final Type type = Type.valueOf(rs.getString("type"));
                 final long startTime = rs.getLong("time");

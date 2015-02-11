@@ -174,7 +174,7 @@ public class BoB {
 			if(item == null) {
 				return; // invalid packet, or client out of sync
 			}
-			if(item.getId() != id) {
+			if(item.getId() != id || item.getDefinition().isNoted()) {
 				return; // invalid packet, or client out of sync
 			}
 			int transferAmount = container.getCount(id);

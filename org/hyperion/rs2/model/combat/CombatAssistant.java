@@ -1129,7 +1129,7 @@ public class CombatAssistant {
 		}
 		if(fullVoidRange(p))
 			rangeAtk *= 1.15;
-		return (int) (0.55 * (rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)));
+		return (int) ((rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)));
 	}
 
 	public static int calculateRangeDefence(Entity entity) {

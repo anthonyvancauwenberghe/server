@@ -63,7 +63,7 @@ public class NewGameMode implements ContentTemplate {
             {15332, 2},{6685, 100}, {3024, 75}, {2436, 50}, {2440, 50}, {2444, 50}, {3040, 50}, //pots
             {4716, 3}, {4718, 3}, {4720, 3}, {4722, 3}, {6524, 3},//dharoks
             {7462, 1}, {1725, 10}, {11732, 2}, {4151, 2}, {5698, 5}, {2550, 5} //other necessities
-            , {391, 500} //food
+            , {391, 500}, {557, 10000}, {9075, 4000}, {560, 2000} //food
     };
 
     public static final double SELL_REDUCTION = 0.8;

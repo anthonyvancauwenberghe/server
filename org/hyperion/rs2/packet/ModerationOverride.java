@@ -16,7 +16,9 @@ public class ModerationOverride {
 	 */
 	public static final void sendModerationOptions(final Player player, final Player other) {
 		player.setModeration(other);
-        player.write(InterfaceManager.<ModerationInterface>get(12).show(other.getName()));
+        final ModerationInterface itf = InterfaceManager.<ModerationInterface>get(12);
+        player.write(itf.show(other.getName()));
+        itf.show(player);
 		DialogueManager.openDialogue(player, 136);
 	}
 

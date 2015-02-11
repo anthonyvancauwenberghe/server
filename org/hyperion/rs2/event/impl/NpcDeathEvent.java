@@ -78,7 +78,7 @@ public class NpcDeathEvent extends Event {
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
                     if(jet != null) {
-                        jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId());
+                        jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d, %1.2f percent", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId(), percent);
                     }
 
                 }

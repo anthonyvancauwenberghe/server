@@ -1099,7 +1099,7 @@ public class Combat {
 	}
 
     public static boolean inNonSpawnMulti(final int x, final int y) {
-        return x > 2644 && y > 9629 && x < 2670 && y < 9660;
+        return x > 2642 && y > 9625 && x < 2673 && y < 9665;
     }
 
 	public static int random(int range) {

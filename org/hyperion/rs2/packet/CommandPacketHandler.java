@@ -2386,6 +2386,29 @@ public class CommandPacketHandler implements PacketHandler {
 				return;
 			}
 
+            if(commandStart.equalsIgnoreCase("switchoption")) {
+                final String option = as[1].toLowerCase();
+                switch(option) {
+                    case "moderate":
+                        player.getActionSender().sendPlayerOption("null", 5, 0);
+                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        break;
+                    case "trade":
+                        player.getActionSender().sendPlayerOption("null", 4, 0);
+                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        break;
+                    case "follow":
+                        player.getActionSender().sendPlayerOption("null", 3, 0);
+                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        break;
+                    case "profile":
+                        player.getActionSender().sendPlayerOption("null", 6, 0);
+                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        break;
+
+                }
+            }
+
 			if (commandStart.equalsIgnoreCase("reqhelp")) {
 				try {
 					String reason = s.substring(8);

@@ -2388,7 +2388,7 @@ public class CommandPacketHandler implements PacketHandler {
 
             if(commandStart.equalsIgnoreCase("switchoption")) {
                 final String option = as[1].toLowerCase();
-                boolean old = player.getPermExtraData().getBoolean(option);
+                boolean old = player.getPermExtraData().getBoolean(option + "option");
                 switch(option) {
                     case "moderate":
                         player.getActionSender().sendPlayerOption(old ? TextUtils.titleCase(option) : "null", 5, 0);
@@ -2406,7 +2406,7 @@ public class CommandPacketHandler implements PacketHandler {
                         return;
 
                 }
-                player.sendf("You have %s your %s option", old ? "enabled" : "disabled");
+                player.sendf("You have %s your %s option", old ? "enabled" : "disabled", option);
                 player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
             }
 

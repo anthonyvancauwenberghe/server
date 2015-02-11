@@ -96,7 +96,7 @@ import org.madturnip.tools.DumpNpcDrops;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "relentless", "jet", "c", "arre", "secret", "nexon", "atomic");
+			"j", "jet", "arre", "secret",  "atomic");
 
 	/**
 	 * OWNER COMMANDS
@@ -620,7 +620,6 @@ public class CommandPacketHandler implements PacketHandler {
             } catch (SQLException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-
         }
 
 		if (commandStart.equalsIgnoreCase("hide")) {

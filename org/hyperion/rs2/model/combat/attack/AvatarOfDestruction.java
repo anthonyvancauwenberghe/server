@@ -51,7 +51,7 @@ public class AvatarOfDestruction implements Attack {
             if(player.getLocation().distance(n.getLocation()) == 1)
                 tempDamage = 80;
             Combat.npcAttack(n, player.getCombat(), tempDamage, 300, hitType);
-            player.getSkills().detractLevel(Skills.PRAYER, tempDamage);
+            player.getSkills().detractLevel(Skills.PRAYER, tempDamage/5);
 
         }
         n.cE.predictedAtk = System.currentTimeMillis() + 3000;

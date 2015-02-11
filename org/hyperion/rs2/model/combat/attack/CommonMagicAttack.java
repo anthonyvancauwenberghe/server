@@ -31,7 +31,7 @@ public class CommonMagicAttack implements Attack {
 
 	@Override
 	public int[] npcIds() {
-		int[] j = {,};
+		int[] j = {3200,};
 		return j;
 	}
 	

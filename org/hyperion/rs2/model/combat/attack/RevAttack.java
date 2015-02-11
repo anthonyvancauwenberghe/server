@@ -89,7 +89,7 @@ public class RevAttack implements Attack {
                 return 1;
             }
         }
-        if(Misc.random(3) == 1 && n.health < n.maxHealth/2) {
+        if(Misc.random(7) == 1 && n.health < n.maxHealth/3) {
             n.health += 15;
             return 5;
         }

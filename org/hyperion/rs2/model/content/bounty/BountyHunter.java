@@ -132,7 +132,6 @@ public class BountyHunter {
             return;
         if(player.getLocation().getZ() > 0)
             return;
-        incrementAndGet();  //2x
 		player.sendMessage("@blu@You now have @red@"+incrementAndGet()+" @blu@bh points!");
 		handleBHDrops(opp);
 		for(Player p : new Player[]{player, opp}) {

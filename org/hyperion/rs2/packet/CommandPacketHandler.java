@@ -2406,6 +2406,7 @@ public class CommandPacketHandler implements PacketHandler {
                         return;
 
                 }
+                player.sendf("You have %s your %s option", old ? "enabled" : "disabled");
                 player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
             }
 
@@ -2469,7 +2470,7 @@ public class CommandPacketHandler implements PacketHandler {
 								"::funpk", "::reqhelp reason",
 								"::dangerouspk (lose everything high-risk)",
 								"::placebounty name,pkpamount", "::onlinestaff", "::npclogs", "::displaceprofile (disable public profile)",
-                                "::clearjunk (junk cleared from bank)", "", "HARD MODE", "::sellitem id amount", "::getprice id" });
+                                "::clearjunk (junk cleared from bank)", "::switchoption trade/follow/profile",  "", "HARD MODE", "::sellitem id amount", "::getprice id" });
 				return;
 			}
 			

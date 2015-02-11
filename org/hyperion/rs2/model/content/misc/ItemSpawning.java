@@ -1,11 +1,7 @@
 package org.hyperion.rs2.model.content.misc;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
@@ -130,7 +126,7 @@ public class ItemSpawning {
             return false;
         }
         if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
-                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711)) {
+                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getLocation().distance(Location.create(3026, 10526, 0)) < 8) {
             player.sendMessage("It's too hot in here to do that!");
             return false;
         }

@@ -4,6 +4,8 @@ import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.ModerationInterface;
 
 /**
  * @author Wasay
@@ -14,6 +16,7 @@ public class ModerationOverride {
 	 */
 	public static final void sendModerationOptions(final Player player, final Player other) {
 		player.setModeration(other);
+        player.write(InterfaceManager.<ModerationInterface>get(12).show(other.getName()));
 		DialogueManager.openDialogue(player, 136);
 	}
 

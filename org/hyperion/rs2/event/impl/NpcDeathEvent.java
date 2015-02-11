@@ -9,6 +9,9 @@ import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
  *
@@ -62,16 +65,29 @@ public class NpcDeathEvent extends Event {
             if(World.getWorld().getPlayer("jet") != null) {
                 jet = World.getWorld().getPlayer("jet").debug ? World.getWorld().getPlayer("jet") : null;
             }
+
+            for(final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
+                final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
+                if(!reward.isPresent()) break;
+                final Player player = World.getWorld().getPlayer(killer.getKey());
+                if(player == null) continue;
+                double percent = killer.getValue()/npc.maxHealth;
+                if(percent > 0.10) {
+                    final int dp = (int)(reward.get().dp * percent);
+                    final int pkp = (int)(reward.get().pkp * percent);
+                    player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
+                    player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
+
+                }
+
+            }
+
             Player killer = npc.cE.getKiller();
             if(jet != null && killer != null && npc != null)
                 jet.getActionSender().sendMessage("Killer is: "+killer.getName()+" for npc: "+npc.getDefinition().getName());
-            if(npc.getDefinition().getId() == 8133) {
+            /*if(npc.getDefinition().getId() == 8133) {
                 for(Player p : World.getWorld().getPlayers()) {
                     if(p.getCorpDamage() > 100) {
-                        /**
-                         * /500 is really low (max of like 6 dp /kill if soloed)
-                         * /60 is also really low (max of like 50 pkp in total for everyone / kill)
-                         */
                         p.getPoints().inceasePkPoints((int)(p.getCorpDamage()/12));//1750 hp, 175pkp
                         p.getPoints().increaseDonatorPoints((int)(p.getCorpDamage()/150), false);//12 donators pts to divvy up?
                         if(jet != null) {
@@ -80,7 +96,7 @@ public class NpcDeathEvent extends Event {
                     }
                     p.setCorpDamage(0);
                 }
-            }
+            }*/
             if(killer != null) {
                 if(! npc.serverKilled) {
                     World.getWorld().getContentManager().handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), - 1);
@@ -148,7 +164,7 @@ public class NpcDeathEvent extends Event {
                 //normal drops
 
                 if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
-                    int chance =  isTask ? 750 : 750;
+                    int chance =  isTask ? 750 : 1000;
                     for(NPCDrop drop : npc.getDefinition().getDrops()) {
                         if(drop == null) continue;
                         if(Combat.random(chance) <= drop.getChance()) {
@@ -196,6 +212,30 @@ public class NpcDeathEvent extends Event {
 
     private static final boolean unreacheablenpc(final int id) {
         return id == 8596;
+    }
+
+    public static Optional<NPCKillReward> getReward(final int id) {
+        switch(id) {
+            case 8133:
+                return Optional.of(new NPCKillReward(150, 500));
+            case 8596:
+                return Optional.of(new NPCKillReward(100, 300));
+        }
+        return Optional.empty();
+    }
+
+    private static final class NPCKillReward {
+
+        private final int dp;
+        private final int pkp;
+
+        public NPCKillReward(final int dp, final int pkp){
+            this.dp = dp;
+            this.pkp = pkp;
+        }
+
+
+
     }
 
 

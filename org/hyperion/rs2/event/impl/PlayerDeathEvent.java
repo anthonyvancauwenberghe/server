@@ -165,7 +165,7 @@ public class PlayerDeathEvent extends Event {
 						    killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
 						    player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
 						}
-                        if(false && (killer.killedRecently(player.getName()) || killer.getShortIP().equalsIgnoreCase(player.getShortIP()))) {
+                        if((killer.killedRecently(player.getName()) || killer.getShortIP().equalsIgnoreCase(player.getShortIP()))) {
                             killer.getActionSender().sendMessage("You don't receive Pk Points/KillStreak for killing the same enemy twice.");
                         } else {
 							try {
@@ -180,7 +180,7 @@ public class PlayerDeathEvent extends Event {
 							}
                             killer.getBountyHunter().handleBHKill(player);
                             killer.addLastKill(player.getName());
-							int pointsToAdd = (int)((player.wildernessLevel / 4 + player.getBounty()) * 1.5);
+							int pointsToAdd = (int)((player.wildernessLevel / 4 + player.getBounty()));
 							if(player.getKillStreak() >= 6) {
 								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}

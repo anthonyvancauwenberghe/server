@@ -2388,25 +2388,25 @@ public class CommandPacketHandler implements PacketHandler {
 
             if(commandStart.equalsIgnoreCase("switchoption")) {
                 final String option = as[1].toLowerCase();
+                boolean old = player.getPermExtraData().getBoolean(option);
                 switch(option) {
                     case "moderate":
-                        player.getActionSender().sendPlayerOption("null", 5, 0);
-                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
-                        break;
+                        player.getActionSender().sendPlayerOption(old ? TextUtils.titleCase(option) : "null", 5, 0);
+                        return;
                     case "trade":
-                        player.getActionSender().sendPlayerOption("null", 4, 0);
-                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        player.getActionSender().sendPlayerOption(old ? TextUtils.titleCase(option) : "null", 4, 0);
                         break;
                     case "follow":
-                        player.getActionSender().sendPlayerOption("null", 3, 0);
-                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        player.getActionSender().sendPlayerOption(old ? TextUtils.titleCase(option) : "null", 3, 0);
                         break;
                     case "profile":
-                        player.getActionSender().sendPlayerOption("null", 6, 0);
-                        player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
+                        player.getActionSender().sendPlayerOption(old ? TextUtils.titleCase(option) : "null", 6, 0);
                         break;
+                    default:
+                        return;
 
                 }
+                player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
             }
 
 			if (commandStart.equalsIgnoreCase("reqhelp")) {

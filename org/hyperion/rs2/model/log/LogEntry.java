@@ -6,6 +6,7 @@ import java.util.List;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.log.util.LogUtils;
 
 public class LogEntry implements Comparable<LogEntry>{
@@ -110,25 +111,40 @@ public class LogEntry implements Comparable<LogEntry>{
         );
     }
 
-    public static LogEntry duel(final String player1, final String player2, final Item[] player1Stake, final Item[] player2Stake){
+    public static LogEntry duel(final Player player1, final Player player2){
+        final Item player1Weapon = player1.getEquipment().get(Equipment.SLOT_WEAPON);
+        final Item player2Weapon = player2.getEquipment().get(Equipment.SLOT_WEAPON);
+        final Item[] player1Stake = player1.getDuel().toArray();
+        final Item[] player2Stake = player2.getDuel().toArray();
         return new LogEntry(Category.DUEL,
                 String.format(
-                        "@red@%s@blu@ vs @red@%s@blu@%s@red@%s@blu@ Stake: @bla@%s@blu@%s@red@%s@blu@ Stake: @bla@%s",
-                        player1,
-                        player2,
+                        "@red@%s (%s)@blu@ vs @red@%s (%s)@blu@%s@red@%s@blu@ Stake: @bla@%s@blu@%s@red@%s@blu@ Stake: @bla@%s",
+                        player1.getName(),
+                        player1Weapon != null ? player1Weapon.getDefinition().getName() : "UNARMED",
+                        player2.getName(),
+                        player2Weapon != null ? player2Weapon.getDefinition().getName() : "UNARMED",
                         LogUtils.NEW_LINE,
-                        player1,
+                        player1.getName(),
                         LogUtils.toString(player1Stake),
                         LogUtils.NEW_LINE,
-                        player2,
+                        player2.getName(),
                         LogUtils.toString(player2Stake)
                 )
         );
     }
 
-    public static LogEntry duelResult(final String winner, final String loser){
+    public static LogEntry duelResult(final Player winner, final Player loser){
+        final Item winnerWeapon = winner.getEquipment().get(Equipment.SLOT_WEAPON);
+        final Item loserWeapon = loser.getEquipment().get(Equipment.SLOT_WEAPON);
         return new LogEntry(Category.DUEL,
-                String.format("@red@%s@blu@ vs @red@%s@blu@: Winner: @red@%s", winner, loser, winner)
+                String.format(
+                        "@red@%s (%s)@blu@ vs @red@%s (%s)@blu@: Winner: @red@%s",
+                        winner.getName(),
+                        winnerWeapon != null ? winnerWeapon.getDefinition().getName() : "UNARMED",
+                        loser.getName(),
+                        loserWeapon != null ? loserWeapon.getDefinition().getName() : "UNARMED",
+                        winner.getName()
+                )
         );
     }
 

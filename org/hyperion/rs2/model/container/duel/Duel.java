@@ -482,18 +482,14 @@ public class Duel {
             return;
         player.getLogManager().add(
                 LogEntry.duel(
-                        player.getName(),
-                        player.getTrader().getName(),
-                        player.getDuel().toArray(),
-                        player.getTrader().getDuel().toArray()
+                        player,
+                        player.getTrader()
                 )
         );
         player.getTrader().getLogManager().add(
                 LogEntry.duel(
-                        player.getName(),
-                        player.getTrader().getName(),
-                        player.getDuel().toArray(),
-                        player.getTrader().getDuel().toArray()
+                        player,
+                        player.getTrader()
                 )
         );
 		player.setOverloaded(false);
@@ -603,10 +599,10 @@ public class Duel {
 			Player player1 = player.getTrader();
 			if(player1 != null) {
                 player1.getLogManager().add(
-                        LogEntry.duelResult(player1.getName(), player.getName())
+                        LogEntry.duelResult(player1, player)
                 );
                 player.getLogManager().add(
-                        LogEntry.duelResult(player1.getName(), player.getName())
+                        LogEntry.duelResult(player1, player)
                 );
                 finishDuel(player1, player, true);
                 finishDuel(player, player1, false);

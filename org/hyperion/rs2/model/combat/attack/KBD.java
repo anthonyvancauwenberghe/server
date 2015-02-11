@@ -18,7 +18,7 @@ public class KBD implements Attack {
 
 	public int handleAttack(NPC n, CombatEntity attack) {
 		int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-		if(distance < (7 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
+		if(distance < (12 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
 			}

@@ -47,7 +47,7 @@ public final class PunishmentManager {
                 int[] specialUid = null;
                 if(specialUidParts.length == 20){
                     specialUid = new int[20];
-                    for(int i = 0; i < specialUid.length; i++)
+                    for(int i = 0; i < 20; i++)
                         specialUid[i] = Integer.parseInt(specialUidParts[i]);
                 }
                 final Target target = Target.valueOf(rs.getString("target"));

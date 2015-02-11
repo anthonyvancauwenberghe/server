@@ -44,6 +44,10 @@ public class PunishCommand extends Command{
             player.sendf("You cannot punish other staff members");
             return false;
         }
+        if(combination.getTarget() == Target.SPECIAL && victim == null){
+            player.sendf("You could only special punish people if they're online");
+            return false;
+        }
         String ip = victim != null ? victim.getShortIP() : CommandPacketHandler.findCharString(victimName, "IP");
         if(ip.contains("="))//
             ip = ip.substring(ip.indexOf('/')+1, ip.indexOf(':'));//

@@ -223,6 +223,8 @@ public class NpcDeathEvent extends Event {
                 return Optional.of(new NPCKillReward(50, 500));
             case 8596:
                 return Optional.of(new NPCKillReward(40, 300));
+            case 50:
+                return Optional.of(new NPCKillReward(25, 200));
         }
         return Optional.empty();
     }

@@ -2447,7 +2447,7 @@ public class CommandPacketHandler implements PacketHandler {
 								"::funpk", "::reqhelp reason",
 								"::dangerouspk (lose everything high-risk)",
 								"::placebounty name,pkpamount", "::onlinestaff", "::npclogs", "::displaceprofile (disable public profile)",
-                                "(hard mode) ::sellitem id amount", "::clearjunk (junk cleared from bank)" });
+                                "::clearjunk (junk cleared from bank)", "", "HARD MODE", "::sellitem id amount", "::getprice id" });
 				return;
 			}
 			

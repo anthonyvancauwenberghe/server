@@ -72,7 +72,6 @@ public class NpcDeathEvent extends Event {
                 if(killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
                 if(!reward.isPresent()) break;
-                System.out.println(npc.getCombat().getDamageDealt());
                 final Player player = World.getWorld().getPlayer(killer.getKey().toLowerCase().trim());
                 if(player == null) continue;
                 double percent = killer.getValue()/((double)npc.maxHealth);
@@ -82,8 +81,13 @@ public class NpcDeathEvent extends Event {
                     final int pkp = (int)(reward.get().pkp * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
-                    double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.2 : 0.3;
-                    for(double d  = 0.3; d < percent; d += increment) {
+                    double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.02 : 0.03;
+                    for(double d  = 0.03; d < percent; d += increment) {
+                        if(unreacheablenpc(npc.getDefinition().getId())) {
+                            x = player.getLocation().getX();
+                            y = player.getLocation().getY();
+                            z = player.getLocation().getZ();
+                        }
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
                                 new Item(391, 1));

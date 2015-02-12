@@ -80,7 +80,6 @@ public class NPC extends Entity {
 		HitType h1 = HitType.NORMAL_DAMAGE;
         if(source instanceof Player && LegendaryStore.ThirdAgeSet.setFor(style).has(((Player) source).getEquipment())) {
             damg *= 1.20;
-            System.out.println(((Player)source).getName() + " full 3a for "+style);
         }
 		if(damg > health) {
 			damg = health;

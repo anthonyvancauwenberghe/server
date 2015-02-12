@@ -126,7 +126,7 @@ public class ItemSpawning {
             return false;
         }
         if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
-                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711)) {
+                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getLocation().distance(Location.create(3068, 10256, 0)) < 8) {
             player.sendMessage("It's too hot in here to do that!");
             return false;
         }

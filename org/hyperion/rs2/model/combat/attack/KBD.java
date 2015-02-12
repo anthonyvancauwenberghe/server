@@ -45,7 +45,7 @@ public class KBD implements Attack {
 				    //posison
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(42), Constants.RANGE, 42), 1000, Constants.RANGE);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(32), Constants.RANGE, 42), 1000, Constants.RANGE);
 				    if(n.getDefinition().getId() == 50)
 					    Combat.poisonEntity(p.cE);
 				    Combat.npcRangeAttack(n, p.cE, 394, 40, false);
@@ -53,7 +53,7 @@ public class KBD implements Attack {
 				//ice freeze
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(47), Constants.MAGE, 47), 1000, Constants.MAGE);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(35), Constants.MAGE, 47), 1000, Constants.MAGE);
 				    if(n.getDefinition().getId() == 50 && Combat.random(2) == 1) {
                         if(p.cE.canBeFrozen())
 					        p.cE.setFreezeTimer(10000);

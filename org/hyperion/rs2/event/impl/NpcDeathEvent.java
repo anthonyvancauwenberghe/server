@@ -66,6 +66,8 @@ public class NpcDeathEvent extends Event {
                 jet = World.getWorld().getPlayer("jet").debug ? World.getWorld().getPlayer("jet") : null;
             }
 
+            int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
+
             for(final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
                 if(killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
@@ -78,6 +80,14 @@ public class NpcDeathEvent extends Event {
                     final int pkp = (int)(reward.get().pkp * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
+                    int manta = 0;
+                    for(double d  = 0.3; d < percent; d += 0.3) {
+                        manta++;
+                    }
+                    GlobalItem globalItem5 = new GlobalItem(
+                            player, x, y, z,
+                            new Item(391, manta));
+                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                     if(jet != null) {
                         jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d, %1.2f percent", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId(), percent);
                     }
@@ -130,8 +140,6 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 //bones
-
-                int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
                 if(unreacheablenpc(npc.getDefinition().getId())) {
                     x = killer.getLocation().getX();
                     y = killer.getLocation().getY();

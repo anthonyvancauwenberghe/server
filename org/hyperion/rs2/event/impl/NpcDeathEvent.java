@@ -72,6 +72,7 @@ public class NpcDeathEvent extends Event {
                 if(killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
                 if(!reward.isPresent()) break;
+                System.out.println(npc.getCombat().getDamageDealt());
                 final Player player = World.getWorld().getPlayer(killer.getKey());
                 if(player == null) continue;
                 double percent = killer.getValue()/npc.maxHealth;
@@ -80,14 +81,13 @@ public class NpcDeathEvent extends Event {
                     final int pkp = (int)(reward.get().pkp * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
-                    int manta = 0;
-                    for(double d  = 0.3; d < percent; d += 0.3) {
-                        manta++;
+                    double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.2 : 0.3;
+                    for(double d  = 0.3; d < percent; d += increment) {
+                        GlobalItem globalItem5 = new GlobalItem(
+                                player, x, y, z,
+                                new Item(391, 1));
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                     }
-                    GlobalItem globalItem5 = new GlobalItem(
-                            player, x, y, z,
-                            new Item(391, manta));
-                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                     if(jet != null) {
                         jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d, %1.2f percent", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId(), percent);
                     }

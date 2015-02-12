@@ -219,8 +219,6 @@ public class CombatEntity {
 		int max = 0;
 		for(Map.Entry<String, Integer> entry : damageDealt.entrySet()) {
 			int damage = entry.getValue();
-            if(entity instanceof NPC)
-                System.out.println("Winner: "+entry.getKey() + " Value: "+entry.getValue() + " For npc "+ getNPC().getDefinition().getId());
 			if(damage > max) {
 				winner = entry.getKey();
 				max = damage;

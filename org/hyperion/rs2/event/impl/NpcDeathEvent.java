@@ -67,6 +67,7 @@ public class NpcDeathEvent extends Event {
             }
 
             for(final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
+                if(killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
                 if(!reward.isPresent()) break;
                 final Player player = World.getWorld().getPlayer(killer.getKey());

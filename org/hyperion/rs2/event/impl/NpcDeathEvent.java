@@ -73,9 +73,10 @@ public class NpcDeathEvent extends Event {
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
                 if(!reward.isPresent()) break;
                 System.out.println(npc.getCombat().getDamageDealt());
-                final Player player = World.getWorld().getPlayer(killer.getKey());
+                final Player player = World.getWorld().getPlayer(killer.getKey().toLowerCase().trim());
                 if(player == null) continue;
                 double percent = killer.getValue()/npc.maxHealth;
+                if(jet != null) jet.sendf("Percent was: "+percent);
                 if(percent > 0.10) {
                     final int dp = (int)(reward.get().dp * percent);
                     final int pkp = (int)(reward.get().pkp * percent);

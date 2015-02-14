@@ -44,7 +44,7 @@ public final class PunishmentManager {
                     final String ip = rs.getString("ip");
                     final int mac = rs.getInt("mac");
                     final String specialUidText = rs.getString("specialUid");
-                    final String[] specialUidParts = specialUidText.split(",");
+                    final String[] specialUidParts = specialUidText == null ? new String[0] : specialUidText.split(",");
                     int[] specialUid = null;
                     if(specialUidParts.length == 20){
                         specialUid = new int[20];

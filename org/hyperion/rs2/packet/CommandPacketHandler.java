@@ -2554,7 +2554,7 @@ public class CommandPacketHandler implements PacketHandler {
                 while ((s = in.readLine()) != null) {
                     if (s.toLowerCase()
                             .startsWith(string.toLowerCase())) {
-                        return s.split("=")[0].trim();
+                        return s.split("=")[1].trim();
                     }
                 }
             } catch (Exception e) {

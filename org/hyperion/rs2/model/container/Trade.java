@@ -190,7 +190,7 @@ public class Trade {
 		}
 		if(player.tradeAccept1 && trader.tradeAccept1)
 			return;
-		if(! ItemsTradeable.isTradeable(id)) {
+		if(! ItemsTradeable.isTradeable2(id, player.getGameMode())) {
 			player.getActionSender().sendMessage("You cannot trade this item.");
 			return;
 		}

@@ -196,7 +196,7 @@ public class Duel {
 				player.sendMessage("You or your partner is too new to stake");
 				return;
 		}
-		if(!ItemsTradeable.isTradeable(id)) {
+		if(!ItemsTradeable.isTradeable2(id, player.getGameMode())) {
 			player.getActionSender().sendMessage("You cannot stake this item.");
 			return;
 		}

@@ -25,6 +25,12 @@ public class ItemsTradeable {
 		return !ArrayUtils.contains(id, untradeables());
 	}
 
+    public static boolean isTradeable2(int id, int gameMode) {
+        if(ItemSpawning.canSpawn(id) && gameMode == 0 && Food.get(id) == null)
+            return false;
+        return isTradeable(id);
+    }
+
     private static int[] untradeables() {
         return new int[]{2412, 2413, 2414, 2570, 2571, 2560, 2561,
                 11056, 11057, 11051, 11052, 11055, 11053, 2558, 11337, 11338, 2556,

@@ -73,7 +73,7 @@ public class ShopManager {
 	public static void sellItem(Player player, int itemId, int slot, int amount) {
 		if(player.getShopId() < 0 || itemId == Shop.COINS_ID)
 			return;
-		if(! ItemsTradeable.isTradeable(itemId)) {
+		if(! ItemsTradeable.isTradeable2(itemId, player.getGameMode())) {
 			player.getActionSender().sendMessage(
 					"You cannot sell this item in any shop.");
 			return;

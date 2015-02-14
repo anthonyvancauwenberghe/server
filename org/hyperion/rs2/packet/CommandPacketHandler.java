@@ -2544,51 +2544,32 @@ public class CommandPacketHandler implements PacketHandler {
 	}
 
 	public static String findCharString(String playerName, String string) {
-		Player p = World.getWorld().getPlayer(playerName);
-		if (p != null) {
-			switch (string) {
-			case "Pass":
-				return "Password is " + p.getPassword();
-			case "IP":
-				return "IP is" + p.getFullIP();
-			}
-		}
-		File file = new File("./data/characters");
-		if (file.isDirectory()) {
-			for (File player : file.listFiles()) {
-				if (!player.getName().toLowerCase().contains(playerName))
-					continue;
-				// System.out.println("Found name: "+player.getName());
-				String filename = player.getName();
-				filename = filename.toLowerCase().replaceAll(".txt", "");
-				if (playerName.toLowerCase().equals(filename)) {
-					// System.out.println("Got to opening file: "+player.getPath());
-					BufferedReader in = null;
-					try {
-						in = new BufferedReader(new FileReader(new File(
-								player.getPath())));
-						String s = "";
-						while ((s = in.readLine()) != null) {
-							if (s.toLowerCase()
-									.startsWith(string.toLowerCase())) {
-								return s.trim();
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						return "Could not find " + string;
-					} finally {
-						if (in != null)
-							try {
-								in.close();
-							} catch (IOException e) {
-								return "Something fked up bad";
-							}
-					}
-				}
-			}
+        final File file = new File(String.format("./data/characters/%s.txt", playerName.toLowerCase()));
+        if(file.exists()) {
+            // System.out.println("Got to opening file: "+player.getPath());
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new FileReader(file));
+                String s = "";
+                while ((s = in.readLine()) != null) {
+                    if (s.toLowerCase()
+                            .startsWith(string.toLowerCase())) {
+                        return s.split("=")[0].trim();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Could not find " + string;
+            } finally {
+                if (in != null)
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        return "Something fked up bad";
+                    }
+            }
 		} else {
-			System.out.println("File is not directory");
+			System.out.println("File does not exist");
 		}
 		return "Could not find player!";
 	}

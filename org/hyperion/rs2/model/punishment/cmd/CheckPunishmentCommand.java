@@ -11,6 +11,8 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.util.TextUtils;
 
 public class CheckPunishmentCommand extends Command {
 
@@ -26,16 +28,21 @@ public class CheckPunishmentCommand extends Command {
             for(final Punishment p : h.getPunishments()){
                 if(p.getTime().isExpired())
                     continue;
+                final String ip = TextUtils.shortIp(CommandPacketHandler.findCharString(targetName, "IP"));
+                final int uid = Integer.parseInt(CommandPacketHandler.findCharString(targetName, "Mac"));
                 if(p.getVictimName().equalsIgnoreCase(targetName)){
                     punishments.add(p);
                     continue;
                 }
-                if(target == null)
-                    continue;
-                if(Objects.equals(target.getShortIP(), p.getVictimIp())
-                        || target.getUID() == p.getVictimMac()
-                        || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
-                    punishments.add(p);
+                if(target != null) {
+                    if(Objects.equals(target.getShortIP(), p.getVictimIp())
+                            || target.getUID() == p.getVictimMac()
+                            || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
+                        punishments.add(p);
+                } else {
+                    if(Objects.equals(ip, p.getVictimIp()) || uid == p.getVictimMac())
+                        punishments.add(p);
+                }
             }
         }
         if(punishments.isEmpty()){

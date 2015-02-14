@@ -15,7 +15,6 @@ public class KeepConnectionAliveEvent extends SQLEvent {
 
 	@Override
 	public void execute(SQLConnection sql) throws SQLException {
-        System.out.println("KEEPIN CONNECTION ALIVE");
 		sql.query("SELECT * FROM donator WHERE row = 1");
 		super.updateStartTime();
 	}

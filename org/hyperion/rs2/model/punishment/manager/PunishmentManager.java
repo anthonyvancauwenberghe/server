@@ -38,31 +38,35 @@ public final class PunishmentManager {
         try{
             rs = connection.query("SELECT * FROM punishments WHERE active = 1");
             while(rs.next()){
-                final String issuer = rs.getString("issuer");
-                final String victim = rs.getString("victim");
-                final String ip = rs.getString("ip");
-                final int mac = rs.getInt("mac");
-                final String specialUidText = rs.getString("specialUid");
-                final String[] specialUidParts = specialUidText.split(",");
-                int[] specialUid = null;
-                if(specialUidParts.length == 20){
-                    specialUid = new int[20];
-                    for(int i = 0; i < 20; i++)
-                        specialUid[i] = Integer.parseInt(specialUidParts[i]);
+                try {
+                    final String issuer = rs.getString("issuer");
+                    final String victim = rs.getString("victim");
+                    final String ip = rs.getString("ip");
+                    final int mac = rs.getInt("mac");
+                    final String specialUidText = rs.getString("specialUid");
+                    final String[] specialUidParts = specialUidText.split(",");
+                    int[] specialUid = null;
+                    if(specialUidParts.length == 20){
+                        specialUid = new int[20];
+                        for(int i = 0; i < 20; i++)
+                            specialUid[i] = Integer.parseInt(specialUidParts[i]);
+                    }
+                    final Target target = Target.valueOf(rs.getString("target"));
+                    final Type type = Type.valueOf(rs.getString("type"));
+                    final long startTime = rs.getLong("time");
+                    final long duration = rs.getLong("duration");
+                    final TimeUnit unit = TimeUnit.valueOf(rs.getString("unit"));
+                    final String reason = rs.getString("reason");
+                    final Punishment p = Punishment.create(
+                            issuer, victim, ip, mac, specialUid,
+                            Combination.of(target, type),
+                            Time.create(startTime, duration, unit),
+                            reason
+                    );
+                    add(p);
+                }catch(final Exception ex) {
+                    ex.printStackTrace();
                 }
-                final Target target = Target.valueOf(rs.getString("target"));
-                final Type type = Type.valueOf(rs.getString("type"));
-                final long startTime = rs.getLong("time");
-                final long duration = rs.getLong("duration");
-                final TimeUnit unit = TimeUnit.valueOf(rs.getString("unit"));
-                final String reason = rs.getString("reason");
-                final Punishment p = Punishment.create(
-                        issuer, victim, ip, mac, specialUid,
-                        Combination.of(target, type),
-                        Time.create(startTime, duration, unit),
-                        reason
-                );
-                add(p);
             }
             return true;
         }catch(Exception ex){

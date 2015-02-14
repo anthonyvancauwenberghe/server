@@ -79,6 +79,7 @@ import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLite;
@@ -608,6 +609,11 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("reloadpunish")) {
+            boolean loaded = PunishmentManager.getInstance().load();
+            player.sendMessage("Loaded punishments" + loaded);
+        }
 
         if(commandStart.equalsIgnoreCase("getname")) {
             final String ip = s.substring("getname".length()).trim();

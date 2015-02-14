@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import org.hyperion.rs2.commands.Command;
@@ -31,7 +32,9 @@ public class CheckPunishmentCommand extends Command {
                 }
                 if(target == null)
                     continue;
-                if(Objects.equals(target.getShortIP(), p.getVictimIp()) || target.getUID() == p.getVictimMac())
+                if(Objects.equals(target.getShortIP(), p.getVictimIp())
+                        || target.getUID() == p.getVictimMac()
+                        || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
                     punishments.add(p);
             }
         }

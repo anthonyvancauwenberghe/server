@@ -246,8 +246,9 @@ public class Magic {
                 }
                 break;
 			case 13867:
-            case 17017:
+            		case 17017:
 				maxDamg *= 1.10;
+				break;
 			case 15486:
 				maxDamg *= 1.15;
 				break;

@@ -138,6 +138,7 @@ public final class PunishmentManager {
                     return true;
                 if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid()))  {
                     TextUtils.writeToFile("./data/specialUidStops.txt", "Special UID ban stopped: " + name);
+                    return true;
                 }
             }
         }

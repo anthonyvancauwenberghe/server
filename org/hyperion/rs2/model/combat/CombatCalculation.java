@@ -18,7 +18,7 @@ public enum CombatCalculation {
         int magicAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
-            final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateMageDef(def);
+            final int deltaBonus = attack.getDefinition().getBonus()[3] - CombatAssistant.calculateMageDef(def);
             randomDamage += Misc.random(deltaBonus/5);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
@@ -26,7 +26,7 @@ public enum CombatCalculation {
         int rangeAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
-            final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateRangeDefence(def);
+            final int deltaBonus = attack.getDefinition().getBonus()[4] - CombatAssistant.calculateRangeDefence(def);
             randomDamage += Misc.random(deltaBonus/5);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
@@ -73,7 +73,7 @@ public enum CombatCalculation {
         int magicAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = CombatAssistant.calculateMageAtk(attack) - def.getDefinition().getBonus()[8];
+            final int deltaBonus = CombatAssistant.calculateMageAtk(attack) - (int)(def.getDefinition().getBonus()[8] * .85);
             randomDamage += Misc.random(deltaBonus/5);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
@@ -81,7 +81,7 @@ public enum CombatCalculation {
         int rangeAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = CombatAssistant.calculateRangeAttack(attack) - def.getDefinition().getBonus()[9];
+            final int deltaBonus = CombatAssistant.calculateRangeAttack(attack) - (int)(def.getDefinition().getBonus()[9] * .85);
             randomDamage += Misc.random(deltaBonus/5);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }

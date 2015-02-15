@@ -909,6 +909,13 @@ public class CommandPacketHandler implements PacketHandler {
             DumpNpcDrops.startDump2();
         }
 
+        if(commandStart.equalsIgnoreCase("reloadaod")) {
+            final int[] bonus = new int[10];
+            Arrays.fill(bonus, 350);
+            NPCDefinition.getDefinitions()[8596] =
+                    NPCDefinition.create(8596, 1200, 525, bonus, 11199, 11198, new int[]{11197}, 3, "Avatar of Destruction", 120);
+        }
+
 
         if(commandStart.equals("imitatedeaths")) {
             final int id = Integer.parseInt(as[1]);

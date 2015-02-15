@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.util.TextUtils;
 
 public final class PunishmentManager {
 
@@ -135,8 +136,9 @@ public final class PunishmentManager {
                     return true;
                 if(mac != -1 && p.getCombination().getTarget() == Target.MAC && mac == p.getVictimMac())
                     return true;
-                if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid()))
-                    return true;
+                if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid()))  {
+                    TextUtils.writeToFile("./data/specialUidStops.txt", "Special UID ban stopped: " + name);
+                }
             }
         }
         return false;

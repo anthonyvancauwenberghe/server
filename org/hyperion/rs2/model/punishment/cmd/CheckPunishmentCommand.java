@@ -40,7 +40,6 @@ public class CheckPunishmentCommand extends Command {
                             || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
                         punishments.add(p);
                 } else {
-                    player.sendf("Search: %s - Result: %s", uid, p.getVictimMac());
                     if(Objects.equals(ip, p.getVictimIp()) || uid == p.getVictimMac())
                         punishments.add(p);
                 }

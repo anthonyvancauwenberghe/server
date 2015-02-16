@@ -40,7 +40,7 @@ public class GnomeStronghold implements ContentTemplate{
 		switch(objectId) {
             case 9293:
                 if(p.getSkills().getLevel(Skills.AGILITY) >= 70)
-                    Agility.walkAcross(p, Location.create(2892, 9799, 0), 844, 0, 10, -1);
+                    Agility.walkAcross(p, Location.create(2892, 9799, 0), 844, 0, 0, -1);
                 break;
 		case 2295://log
 			Agility.walkAcross(p, Location.create(2474, 3429, 0), 762, 0, 10, COURSE_TYPE, /*ticks*/8, 15);

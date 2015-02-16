@@ -226,7 +226,7 @@ public class SQLite {
                     int size = map.keySet().size();
                     final String[] alts = map.keySet().toArray(new String[size]);
 					int idx = 1;
-					for(int i = size; i > size - 20; i--) {
+					for(int i = size - 1; i > size - 20; i--) {
                         String alt = alts[i];
 						if(map.get(alt) == null)
 							continue;

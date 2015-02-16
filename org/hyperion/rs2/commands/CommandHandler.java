@@ -641,14 +641,14 @@ public class CommandHandler {
 		submit(new Command("rules", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				player.getActionSender().sendWebpage("http://deviouspk.com/ipb/index.php/topic/1381-in-game-rules/");
+				player.getActionSender().sendWebpage("http://forums.arteropk.com/index.php/forum/28-in-game-rules/");
 				return true;
 			}
 		});
 		submit(new Command("forums", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				player.getActionSender().sendWebpage("http://deviouspk.com/ipb");
+				player.getActionSender().sendWebpage("http://forums.arteropk.com/index.php/portal/");
 				return true;
 			}
 		});

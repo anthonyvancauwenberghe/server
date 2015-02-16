@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -67,7 +68,7 @@ public class NpcDeathEvent extends Event {
             }
 
             int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
-
+            final Map<Player, Double> killers = new HashMap<>();
             for(final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
                 if(killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
@@ -77,6 +78,7 @@ public class NpcDeathEvent extends Event {
                 double percent = killer.getValue()/((double)npc.maxHealth);
                 if(jet != null) jet.sendf("Percent was: "+percent);
                 if(percent > 0.10) {
+                    killers.put(player, percent);
                     final int dp = (int)(reward.get().dp * percent);
                     final int pkp = (int)(reward.get().pkp * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
@@ -119,6 +121,11 @@ public class NpcDeathEvent extends Event {
             if(killer != null) {
                 if(! npc.serverKilled) {
                     World.getWorld().getContentManager().handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), - 1);
+                    for(final Map.Entry<Player, Double> kill : killers.entrySet()) {
+                        if(kill.getValue() > 0.20)
+                            World.getWorld().getContentManager().handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), - 1);
+
+                    }
                 }
             }
             npc.setTeleportTarget(npc.getSpawnLocation(), false);

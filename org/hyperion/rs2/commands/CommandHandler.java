@@ -1613,9 +1613,8 @@ public class CommandHandler {
                     }
                     if(amount == 1)
                         amount = 2;
-                    for(int n = 0; n < amount; n++)
-                        for(int id = ClueScrollManager.MIN_ID; id <= ClueScrollManager.MAX_ID; id++)
-                            player.getBank().add(new Item(id, n));
+                    for(int id = ClueScrollManager.MIN_ID; id <= ClueScrollManager.MAX_ID; id++)
+                        player.getBank().add(new Item(id, amount));
                     return true;
                 }catch(Exception ex){
                     player.sendf("Enter a valid amount");
@@ -1644,6 +1643,13 @@ public class CommandHandler {
                     return false;
                 }
                 player.sendf("%s's pin: %d", target.getName(), target.pin);
+                return true;
+            }
+        });
+
+        submit(new Command("yaks", Rank.PLAYER){
+            public boolean execute(final Player player, final String input){
+                Magic.teleport(player, 3051, 3515, 0, false);
                 return true;
             }
         });

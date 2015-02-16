@@ -223,8 +223,11 @@ public class SQLite {
 					}
 					names.remove(name.toLowerCase());
 					LinkedHashMap<String, Long> map = sortHashMapByValues(names, true);
+                    int size = map.keySet().size();
+                    final String[] alts = map.keySet().toArray(new String[size]);
 					int idx = 1;
-					for(String alt : map.keySet()) {
+					for(int i = size; i > size - 20; i--) {
+                        String alt = alts[i];
 						if(map.get(alt) == null)
 							continue;
                         boolean skip = false;

@@ -1578,10 +1578,10 @@ public class Player extends Entity implements Persistable, Cloneable{
                 if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp
                     if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
                         getEquipment().set(Equipment.SLOT_RING, null);
-                        heal((int) getSkills().calculateMaxLifePoints());
                         getWalkingQueue().reset();
                         ContentEntity.playerGfx(this, 1684);
                         ContentEntity.startAnimation(this, 9603);
+                        extraData.put("combatimmunity", System.currentTimeMillis() + 3000);
                         World.getWorld().submit(new Event(0x258) {
                             int loop = 0;
 
@@ -1591,7 +1591,6 @@ public class Player extends Entity implements Persistable, Cloneable{
                                     sendMessage("Your ring of life saves you, but is destroyed in the process.");
                                     this.stop();
                                 }
-                                heal((int) getSkills().calculateMaxLifePoints());
                                 loop++;
                                 return;
                             }
@@ -1605,10 +1604,12 @@ public class Player extends Entity implements Persistable, Cloneable{
         if (Combat.usingPhoenixNecklace(this)) {
             if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 3)) {
                 getEquipment().set(Equipment.SLOT_AMULET, null);
-                heal((int) Math.floor(this.getSkills().calculateMaxLifePoints() / 5.5));
+                heal(damg);
                 ContentEntity.playerGfx(this, 436);
+                extraData.put("combatimmunity", System.currentTimeMillis() + 500);
                 sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
             }
+            return 0;
         }
 		//getActionSender().sendMessage("Generated damg: " + damg + ", npc: " + npc + ", style = " + style);
 		int trueStyle = style;
@@ -1736,6 +1737,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {
 			damg = skills.getLevel(Skills.HITPOINTS);
 		}
+        if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
+            damg = 0;
 		if(poison)
 			hitType = HitType.POISON_DAMAGE;
 		else if(damg <= 0)

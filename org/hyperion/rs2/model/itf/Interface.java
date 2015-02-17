@@ -58,7 +58,7 @@ public abstract class Interface {
     }
 
     public PacketBuilder createDataBuilder(){
-        return createBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE);
+        return createBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT);
     }
 
     public PacketBuilder createStateBuilder(){

@@ -5,6 +5,7 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.Packet;
 
@@ -22,10 +23,15 @@ public class HelpInterface extends Interface {
     public void handle(final Player player, final Packet pkt) {
 
         final int id = pkt.getInt();
+        final int state = pkt.getByte();
+
+        final TicketManager manager = World.getWorld().getTicketManager();
 
         System.out.println("ID is: "+id);
-
-        World.getWorld().getTicketManager().assist(player, id);
+        if(state == 0)
+            manager.assist(player, id);
+        else
+            manager.remove(manager.forId(id));
 
     }
 

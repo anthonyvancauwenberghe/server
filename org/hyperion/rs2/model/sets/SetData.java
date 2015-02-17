@@ -34,7 +34,8 @@ public class SetData {
 		new Item(4131),
 		new Item(6685, 2),
 		new Item(3024, 3),
-        new Item(3144, 2)
+        new Item(3144, 2),
+        new Item(11090, 1)
 	};
 	
 	public static final Item[] getWelfSet() {
@@ -68,7 +69,8 @@ public class SetData {
 		new Item(9075, 1000),
 		new Item(5698),
 		new Item(11694),
-        new Item(3144, 2)
+        new Item(3144, 2),
+        new Item(11090, 1)
 	};
 	
 	public static final Item[] getZerkSet() {
@@ -108,7 +110,8 @@ public class SetData {
 		new Item(2444),
 		new Item(2436),
 		new Item(2440),
-        new Item(3144, 2)
+        new Item(3144, 2),
+        new Item(11090, 1)
 	};
 	
 	public static final Item[] getPureSet() {
@@ -181,7 +184,8 @@ public class SetData {
 			new Item(557, 1000),
 			new Item(560, 1000),
 			new Item(9075, 1000),
-			new Item(11694, 1)
+			new Item(11694, 1),
+            new Item(11090, 1)
 	};
 
 	public static final Item[] getRangeSet() {
@@ -215,7 +219,8 @@ public class SetData {
 			new Item(557, 1000),
 			new Item(560, 1000),
 			new Item(9075, 1000),
-            new Item(3144, 2)
+            new Item(3144, 2),
+            new Item(11090, 1)
 	};
 
 	public static final Item[] getMeleeSet() {

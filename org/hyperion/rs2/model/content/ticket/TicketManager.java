@@ -52,7 +52,7 @@ public class TicketManager {
         for(final Player player : World.getWorld().getPlayers()) {
             final int size = getSizeForPlayer(player);
             if (size != -1) {
-                final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE).putShort(5);
+                final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT).putShort(5);
                 builder.putTriByte(size);
                 player.write(builder.toPacket());
             }
@@ -65,15 +65,20 @@ public class TicketManager {
         refreshSizeForStaff();
     }
 
+    public Ticket forId(final int id) {
+        Ticket tick = null;
+        for(final Ticket ticket : tickets)
+            if(ticket.id == id)
+                tick = ticket;
+        return tick;
+    }
+
     public void assist(final Player player, final int id) {
         if(!Rank.isStaffMember(player))
             return;
         if(!ItemSpawning.canSpawn(player))
             return;
-        Ticket tick = null;
-        for(final Ticket ticket : tickets)
-            if(ticket.id == id)
-                tick = ticket;
+        Ticket tick = forId(id);
         if(tick != null) {
             final Player p = World.getWorld().getPlayer(tick.name);
             if(p != null) {
@@ -95,7 +100,7 @@ public class TicketManager {
     }
 
     public void display(final Player player) {
-        final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE).putShort(3);
+        final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT).putShort(3);
         builder.putShort((short) getSizeForPlayer(player));
         for(final Ticket ticket : tickets) {
             if(Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()) {

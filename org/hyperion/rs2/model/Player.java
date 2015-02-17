@@ -1608,8 +1608,8 @@ public class Player extends Entity implements Persistable, Cloneable{
                 ContentEntity.playerGfx(this, 436);
                 extraData.put("combatimmunity", System.currentTimeMillis() + 500);
                 sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
+                return 0;
             }
-            return 0;
         }
 		//getActionSender().sendMessage("Generated damg: " + damg + ", npc: " + npc + ", style = " + style);
 		int trueStyle = style;
@@ -1737,8 +1737,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {
 			damg = skills.getLevel(Skills.HITPOINTS);
 		}
-       // if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
-           // damg = 0;
+       if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
+            damg = 0;
 		if(poison)
 			hitType = HitType.POISON_DAMAGE;
 		else if(damg <= 0)

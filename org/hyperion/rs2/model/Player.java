@@ -1581,7 +1581,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                         getWalkingQueue().reset();
                         ContentEntity.playerGfx(this, 1684);
                         ContentEntity.startAnimation(this, 9603);
-                        extraData.put("combatimmunity", System.currentTimeMillis() + 3000);
+                        extraData.put("combatimmunity", System.currentTimeMillis() + 3000L);
                         World.getWorld().submit(new Event(0x258) {
                             int loop = 0;
 
@@ -1606,7 +1606,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 getEquipment().set(Equipment.SLOT_AMULET, null);
                 heal(damg);
                 ContentEntity.playerGfx(this, 436);
-                extraData.put("combatimmunity", System.currentTimeMillis() + 500);
+                extraData.put("combatimmunity", System.currentTimeMillis() + 500L);
                 sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
                 return 0;
             }

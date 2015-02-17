@@ -1572,17 +1572,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 			if(n.getDefinition().getId() == 50 || ( n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE)))
 				npc = false;
 		}
-        /** The phoenix necklace effect. */
-        if (Combat.usingPhoenixNecklace(this)) {
-            if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 3)) {
-                getEquipment().set(Equipment.SLOT_AMULET, null);
-                heal(damg);
-                ContentEntity.playerGfx(this, 436);
-                extraData.put("combatimmunity", System.currentTimeMillis() + 300L);
-                sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
-                return 0;
-            }
-        }
 		//getActionSender().sendMessage("Generated damg: " + damg + ", npc: " + npc + ", style = " + style);
 		int trueStyle = style;
 		if(trueStyle >= 5)
@@ -1663,6 +1652,19 @@ public class Player extends Entity implements Persistable, Cloneable{
                         return 0;
                     }
                 }
+            }
+        }
+
+        /** The phoenix necklace effect. */
+        if (Combat.usingPhoenixNecklace(this)) {
+            int newhp = getSkills().getLevel(3) - damg;
+            if (newhp < Math.floor(getSkills().calculateMaxLifePoints() / 3.5) && newhp > 0) {
+                getEquipment().set(Equipment.SLOT_AMULET, null);
+                heal(damg);
+                ContentEntity.playerGfx(this, 436);
+                extraData.put("combatimmunity", System.currentTimeMillis() + 300L);
+                sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
+                return 0;
             }
         }
 

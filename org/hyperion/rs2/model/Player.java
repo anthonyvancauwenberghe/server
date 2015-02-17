@@ -1572,34 +1572,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 			if(n.getDefinition().getId() == 50 || ( n.getDefinition().getId() == 8133 && (style == Constants.MAGE || style == Constants.RANGE)))
 				npc = false;
 		}
-        /** Ring of life */
-        if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
-            if (duelAttackable < 1 && !Duel.inDuelLocation(this)) {
-                if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp
-                    if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
-                        getEquipment().set(Equipment.SLOT_RING, null);
-                        getWalkingQueue().reset();
-                        ContentEntity.playerGfx(this, 1684);
-                        ContentEntity.startAnimation(this, 9603);
-                        extraData.put("combatimmunity", System.currentTimeMillis() + 3000L);
-                        World.getWorld().submit(new Event(0x258) {
-                            int loop = 0;
-
-                            public void execute() {
-                                if (loop == 5) {
-                                    setTeleportTarget(Location.create(3225, 3218, 0));
-                                    sendMessage("Your ring of life saves you, but is destroyed in the process.");
-                                    this.stop();
-                                }
-                                loop++;
-                                return;
-                            }
-                        });
-                        return 0;
-                    }
-                }
-            }
-        }
         /** The phoenix necklace effect. */
         if (Combat.usingPhoenixNecklace(this)) {
             if (getSkills().getLevel(3) < Math.floor(getSkills().calculateMaxLifePoints() / 3)) {
@@ -1663,6 +1635,36 @@ public class Player extends Entity implements Persistable, Cloneable{
                 }
             }
         }
+
+        /** Ring of life */
+        if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
+            if (duelAttackable < 1 && !Duel.inDuelLocation(this)) {
+                if (getSkills().getLevel(3) - damg < Math.floor(getSkills().calculateMaxLifePoints() * .1)) {  //10% of hp
+                    if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
+                        getEquipment().set(Equipment.SLOT_RING, null);
+                        getWalkingQueue().reset();
+                        ContentEntity.playerGfx(this, 1684);
+                        ContentEntity.startAnimation(this, 9603);
+                        extraData.put("combatimmunity", System.currentTimeMillis() + 3000L);
+                        World.getWorld().submit(new Event(0x258) {
+                            int loop = 0;
+
+                            public void execute() {
+                                if (loop == 5) {
+                                    setTeleportTarget(Location.create(3225, 3218, 0));
+                                    sendMessage("Your ring of life saves you, but is destroyed in the process.");
+                                    this.stop();
+                                }
+                                loop++;
+                                return;
+                            }
+                        });
+                        return 0;
+                    }
+                }
+            }
+        }
+
 		return damg;
 	}
 

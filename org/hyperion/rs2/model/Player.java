@@ -1606,7 +1606,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 getEquipment().set(Equipment.SLOT_AMULET, null);
                 heal(damg);
                 ContentEntity.playerGfx(this, 436);
-                extraData.put("combatimmunity", System.currentTimeMillis() + 500L);
+                extraData.put("combatimmunity", System.currentTimeMillis() + 300L);
                 sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
                 return 0;
             }
@@ -1737,7 +1737,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {
 			damg = skills.getLevel(Skills.HITPOINTS);
 		}
-        if(Rank.hasAbility(getPlayerRank(), Rank.ADMINISTRATOR)) {
+        if(Rank.hasAbility(this, Rank.ADMINISTRATOR)) {
             if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
                 damg = 0;
         }

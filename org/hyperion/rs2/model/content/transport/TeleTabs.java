@@ -64,7 +64,7 @@ public class TeleTabs implements ContentTemplate {
 		player.playAnimation(Animation.create(4069, 0));
 		player.playGraphics(Graphic.create(678, 0));//perfect !
 
-        player.getExtraData().put("combatimmunity", Long.valueOf(delay) - 100L + 2400L);
+        player.getExtraData().put("combatimmunity", System.currentTimeMillis() + Long.valueOf(delay) - 100L + 2400L);
 
 		World.getWorld().submit(new Event(delay) {
 			@Override

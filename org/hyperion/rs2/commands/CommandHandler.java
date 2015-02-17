@@ -909,7 +909,7 @@ public class CommandHandler {
 
         submit(new Command("viewprofile", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+                if(!Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.sendMessage("This feature is temporarily disabled");
                     return false;
                 }

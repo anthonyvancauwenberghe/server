@@ -1737,8 +1737,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {
 			damg = skills.getLevel(Skills.HITPOINTS);
 		}
-       if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
-            damg = 0;
+       //if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
+         //   damg = 0;
 		if(poison)
 			hitType = HitType.POISON_DAMAGE;
 		else if(damg <= 0)

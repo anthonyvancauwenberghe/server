@@ -42,6 +42,7 @@ public class PlayerProfileInterface extends Interface{
             return false;
         }
         lastKnownName = targetName;
+        player.sendMessage("Last known name: "+ lastKnownName);
         player.write(
                 createDataBuilder()
                 .put((byte)INIT)

@@ -31,7 +31,7 @@ public class NPCDefinition {
 		else return definition[id];
 	}
 
-	private static NPCDefinition[] definition = new NPCDefinition[10000];
+	private static NPCDefinition[] definition = new NPCDefinition[12000];
 	public static NPCDefinition[] getDefinitions() {
 		return definition;
 	}

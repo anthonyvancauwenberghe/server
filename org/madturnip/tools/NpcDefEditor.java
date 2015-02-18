@@ -192,16 +192,17 @@ public class NpcDefEditor {
 		frame.setLayout(new BorderLayout());
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        loader();
 
 
-		//npcs
+        //npcs
 
 		npcListPanel = new JPanel();
 		npcListPanel.setLayout(new GridLayout(1, 1));
 		npcListModel = new DefaultListModel();
 		npcList = new JList(npcListModel);
 		for(int i = 0; i < maxId; i++) {
-			npcListModel.addElement("id: " + i);
+			npcListModel.addElement("id: " + i + " " + names3[i]);
 		}
 		npcListPane = new JScrollPane(npcList);
 		npcListPanel.add(npcListPane);
@@ -241,7 +242,6 @@ public class NpcDefEditor {
 		}
 		frame.pack();
 		frame.setVisible(true);
-		loader();
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);

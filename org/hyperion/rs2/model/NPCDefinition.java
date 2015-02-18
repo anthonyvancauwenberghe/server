@@ -233,7 +233,7 @@ public class NPCDefinition {
 		os.close();
 		} catch(Exception e){e.printStackTrace();}*/
 		try {
-			File f = new File("./data/npcdump2.bin");
+			File f = new File("./data/npcdump.bin");
 			InputStream is = new FileInputStream(f);
 			IoBuffer buf = IoBuffer.allocate(1024);
 			buf.setAutoExpand(true);

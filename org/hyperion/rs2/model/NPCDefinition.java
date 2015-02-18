@@ -311,7 +311,7 @@ public class NPCDefinition {
 							definition[n] = SummoningMonsters.loadDefinition(n);
 						}
                         for(int n : RevAttack.getRevs()) {
-                            if((definition[n] = RevAttack.loadDefinition(n)) != null);
+                            if((definition[n] = RevAttack.loadDefinition(n)) != null)
                                 System.out.println("Rev monster: "+n+" added, name: "+definition[n].getName());
                         }
                         AvatarOfDestruction.loadDefinitions();

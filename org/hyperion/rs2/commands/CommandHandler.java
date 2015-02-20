@@ -1075,17 +1075,17 @@ public class CommandHandler {
         CommandHandler.submit(new PunishCommand("suidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
 
         CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
-        CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
+        CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.COMMUNITY_MANAGER));
         CommandHandler.submit(new PunishCommand("suidyellmute", Target.SPECIAL, Type.YELL_MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new PunishCommand("mute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
-        CommandHandler.submit(new PunishCommand("ipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
+        CommandHandler.submit(new PunishCommand("ipmute", Target.IP, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("macmute", Target.MAC, Type.MUTE, Rank.COMMUNITY_MANAGER));
         CommandHandler.submit(new PunishCommand("suidmute", Target.SPECIAL, Type.MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new PunishCommand("ban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
-        CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
+        CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.COMMUNITY_MANAGER));
         CommandHandler.submit(new PunishCommand("suidban", Target.SPECIAL, Type.BAN, Rank.DEVELOPER));
 
@@ -1100,17 +1100,17 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unsuidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unipyellmute", Target.IP, Type.YELL_MUTE, Rank.GLOBAL_MODERATOR));
+        CommandHandler.submit(new UnPunishCommand("unipyellmute", Target.IP, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.ADMINISTRATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidyellmute", Target.SPECIAL, Type.YELL_MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unmute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unipmute", Target.IP, Type.MUTE, Rank.GLOBAL_MODERATOR));
+        CommandHandler.submit(new UnPunishCommand("unipmute", Target.IP, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidmute", Target.SPECIAL, Type.MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
-        CommandHandler.submit(new UnPunishCommand("unipban", Target.IP, Type.BAN, Rank.GLOBAL_MODERATOR));
+        CommandHandler.submit(new UnPunishCommand("unipban", Target.IP, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidban", Target.SPECIAL, Type.BAN, Rank.DEVELOPER));
 

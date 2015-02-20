@@ -236,7 +236,7 @@ public class SpecialAttacks {
 			case 11694:
 				playerGfx = 1222;
 				specialAnimation = 7074;
-				specialDis = 2;
+				specialDis = 1;
 				specialDrain = 50;
 				specialAccuracy = 1.05;
 				break;

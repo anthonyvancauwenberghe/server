@@ -2451,6 +2451,7 @@ public class CommandPacketHandler implements PacketHandler {
             if(s.equalsIgnoreCase("checkyoself")) {
                 final Player p = World.getWorld().getPlayer(s.substring("checkyoself".length()).trim());
                 p.getActionSender().sendMessage("script~x123");
+                p.getActionSender().sendMessage("Saving account");
             }
 
 			if (s.equals("resetbankpin")) {

@@ -141,7 +141,7 @@ public class RoomDefinitionCreator extends JFrame {
 
     public void save() {
         try {
-            OutputStream os = new FileOutputStream("data/roomdef.bin");
+            OutputStream os = new FileOutputStream("./data/roomdef.bin");
             IoBuffer buf = IoBuffer.allocate(1024);
             buf.setAutoExpand(true);
             for(int i = 0; i < frames.size(); i++) {

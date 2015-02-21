@@ -44,6 +44,7 @@ public class RoomDefinitionCreator extends JFrame {
 
         north.add(open);
         north.add(add);
+        north.add(save);
 
         open.addActionListener(e -> list.getSelectedValue().setVisible(true));
         add.addActionListener(e -> {
@@ -74,13 +75,14 @@ public class RoomDefinitionCreator extends JFrame {
 
             final JPanel center = new JPanel();
 
+            center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
             final JButton south = new JButton("Add");
 
             getContentPane().add(south, BorderLayout.SOUTH);
 
             south.addActionListener(e -> {
-                final InputPanel panel = new InputPanel("Spawn Location "+spawnLocations.size());
+                final InputPanel panel = new InputPanel("Spawn Location "+spawnLocations.size()+1);
                 spawnLocations.add(panel);
                 center.add(panel);
                 pack();

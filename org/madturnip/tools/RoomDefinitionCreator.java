@@ -45,7 +45,10 @@ public class RoomDefinitionCreator extends JFrame {
         north.add(add);
 
         open.addActionListener(e -> list.getSelectedValue().setVisible(true));
-        add.addActionListener(e -> frames.addElement(new DefinitionFrame()));
+        add.addActionListener(e -> {
+            frames.addElement(new DefinitionFrame());
+            pack();
+        });
 
 
         panel.add(north, BorderLayout.NORTH);
@@ -79,6 +82,8 @@ public class RoomDefinitionCreator extends JFrame {
                 center.add(panel);
                 pack();
             });
+
+            getContentPane().add(center);
 
             pack();
 

@@ -115,6 +115,9 @@ public class RoomDefinitionCreator extends JFrame {
             final JLabel label = new JLabel(name + ": ");
             final JLabel x = new JLabel("X: "), y = new JLabel("Y: ");
 
+            x_field.setPreferredSize(new Dimension(50, 20));
+            y_field.setPreferredSize(new Dimension(50, 20));
+
             add(label);
             add(x); add(x_field);
             add(y); add(y_field);

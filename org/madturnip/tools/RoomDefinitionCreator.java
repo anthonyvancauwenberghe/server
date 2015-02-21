@@ -82,7 +82,7 @@ public class RoomDefinitionCreator extends JFrame {
             getContentPane().add(south, BorderLayout.SOUTH);
 
             south.addActionListener(e -> {
-                final InputPanel panel = new InputPanel("Spawn Location "+spawnLocations.size()+1);
+                final InputPanel panel = new InputPanel("Spawn Location "+(spawnLocations.size()+1));
                 spawnLocations.add(panel);
                 center.add(panel);
                 pack();

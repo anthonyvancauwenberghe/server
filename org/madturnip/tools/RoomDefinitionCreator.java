@@ -40,6 +40,7 @@ public class RoomDefinitionCreator extends JFrame {
 
         final JButton open = new JButton("Open");
         final JButton add = new JButton("Add");
+        final JButton save = new JButton("Save");
 
         north.add(open);
         north.add(add);
@@ -49,6 +50,8 @@ public class RoomDefinitionCreator extends JFrame {
             frames.addElement(new DefinitionFrame());
             pack();
         });
+
+        save.addActionListener(e -> save());
 
 
         panel.add(north, BorderLayout.NORTH);

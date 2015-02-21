@@ -1,9 +1,10 @@
-package org.hyperion.rs2.model.content.skill.dungoneering;
+package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * Time: 9:05 AM
  * To change this template use File | Settings | File Templates.
  */
+
 public enum DungeonDifficulty {
     EASY(2, 0, null),
     MEDIUM(3, 35, null),

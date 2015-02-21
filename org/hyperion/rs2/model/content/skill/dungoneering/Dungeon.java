@@ -1,11 +1,8 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
-import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.DungeonDifficulty;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.util.Misc;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

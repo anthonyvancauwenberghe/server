@@ -90,6 +90,9 @@ import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
+import org.madturnip.tools.RoomDefinitionCreator;
+
+import javax.swing.*;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -609,6 +612,12 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("opendef")) {
+            final JFrame frame = new RoomDefinitionCreator(player);
+            frame.pack();
+            frame.setVisible(true);
+        }
 
         if(commandStart.equalsIgnoreCase("reloadpunish")) {
             boolean loaded = PunishmentManager.getInstance().load();

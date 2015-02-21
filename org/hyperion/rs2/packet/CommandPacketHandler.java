@@ -2010,9 +2010,6 @@ public class CommandPacketHandler implements PacketHandler {
 			if (commandStart.equalsIgnoreCase("rest")) {
 				player.playAnimation(Animation.create(11786));
 			}
-			if (commandStart.equalsIgnoreCase("sit")) {
-				player.playAnimation(Animation.create(2339));
-			}
 
 			if (commandStart.equalsIgnoreCase("search")) {
 				String name = s.substring(6).trim();

@@ -35,6 +35,10 @@ public class RoomDefinition {
         return new Room(dungeon, this);
     }
 
+    public String toString() {
+        return String.format("LocX: %d LocY: %d Size: %d", x, y, spawnLocations.size());
+    }
+
     public void save(final IoBuffer buffer) {
         buffer.putShort((short) x);
         buffer.putShort((short) y);

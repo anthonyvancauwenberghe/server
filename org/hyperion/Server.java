@@ -2,6 +2,7 @@ package org.hyperion;
 
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
@@ -106,6 +107,7 @@ public class Server {
 			new RS2Server().start();
 			DumpNpcDrops.startDump2();
             PossibleHacksHolder.init();
+            RoomDefinition.load();
 			System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
 		} catch(Exception ex) {
 			ex.printStackTrace();

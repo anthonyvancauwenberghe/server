@@ -50,6 +50,8 @@ public class RoomDefinitionCreator extends JFrame {
 
         panel.add(north, BorderLayout.NORTH);
 
+        setContentPane(panel);
+
     }
 
 

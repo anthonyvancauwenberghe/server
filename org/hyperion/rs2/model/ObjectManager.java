@@ -61,7 +61,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 			String s;
 			while((s = br.readLine()) != null){
 				try {
-					String parts[] = s.replace("spawn = ","").split("");
+					String parts[] = s.replace("spawn = ","").split("\t");
 					globalObjects.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Location.create(Integer.parseInt(parts[1]),Integer.parseInt(parts[2]),Integer.parseInt(parts[3])), Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
 				} catch(Exception e){
 					e.printStackTrace();

@@ -119,7 +119,7 @@ public class RoomDefinitionCreator extends JFrame {
 
         @Override
         public String toString() {
-            return "Room Definition";
+            return "Room Definition "+loc.loc().x + ","+loc.loc().y;
         }
 
     }

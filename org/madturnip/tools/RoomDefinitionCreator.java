@@ -1,6 +1,7 @@
 package org.madturnip.tools;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 
@@ -61,6 +62,12 @@ public class RoomDefinitionCreator extends JFrame {
 
         setContentPane(panel);
 
+        for(final RoomDefinition def : RoomDefinition.ROOM_DEFINITIONS_LIST) {
+            final DefinitionFrame frame = new DefinitionFrame();
+            frames.addElement(frame);
+            frame.load(def);
+        }
+
     }
 
 
@@ -68,12 +75,12 @@ public class RoomDefinitionCreator extends JFrame {
 
         final InputPanel loc = new InputPanel("Location: ");
         final List<InputPanel> spawnLocations = new ArrayList<InputPanel>();
+        final JPanel center = new JPanel();
+
 
         public DefinitionFrame() {
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(loc, BorderLayout.NORTH);
-
-            final JPanel center = new JPanel();
 
             center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
@@ -81,17 +88,27 @@ public class RoomDefinitionCreator extends JFrame {
 
             getContentPane().add(south, BorderLayout.SOUTH);
 
-            south.addActionListener(e -> {
-                final InputPanel panel = new InputPanel("Spawn Location "+(spawnLocations.size()+1));
-                spawnLocations.add(panel);
-                center.add(panel);
-                pack();
-            });
+            south.addActionListener(e -> this.addInput(null));
 
             getContentPane().add(center);
 
             pack();
 
+        }
+
+        public void load(final RoomDefinition def) {
+            loc.load(new Point(def.x, def.y));
+            for(final Point point : def.spawnLocations)
+                addInput(point);
+        }
+
+        public final void addInput(final Point point) {
+            final InputPanel panel = new InputPanel("Spawn Location "+(spawnLocations.size()+1));
+            spawnLocations.add(panel);
+            center.add(panel);
+            if(point != null)
+                panel.load(point);
+            pack();
         }
 
         public RoomDefinition toDefinition() {
@@ -131,10 +148,19 @@ public class RoomDefinitionCreator extends JFrame {
                 x_field.setText(player.getLocation().getX()+"");
                 y_field.setText(player.getLocation().getY()+"");
             });
+
+            final JButton tele = new JButton("Tele");
+            add(tele);
+            tele.addActionListener(e -> player.setTeleportTarget(Location.create(loc().x, loc().y, player.getLocation().getZ())));
         }
 
         public final Point loc() {
             return new Point(Integer.parseInt(x_field.getText()), Integer.parseInt(y_field.getText()));
+        }
+
+        public final void load(final Point point) {
+            x_field.setText(point.x + "");
+            y_field.setText(point.y + "");
         }
 
     }

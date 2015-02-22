@@ -3,6 +3,8 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.util.List;
 
 /**
@@ -14,11 +16,40 @@ import java.util.List;
  */
 public class DungoneeringHolder {
 
+
     private int dungoneeringPoints;
-    private int prestige;
 
     private Dungeon currentDungeon;
 
-    private List<Item> bound;
+    private Item[] bound = new Item[3];
+
+    public String save() {
+        final StringBuilder builder = new StringBuilder(dungoneeringPoints+"-");
+        for(final Item item : bound) {
+            if(item != null)
+                builder.append(item.getId()).append(",").append(item.getCount()).append(" ");
+            else
+                builder.append("-1").append(",").append("0").append(" ");
+        }
+        return builder.toString();
+    }
+
+    public void load(final String read) {
+        if(read.length() < 2) {
+            return;
+        }
+        final String[] split = read.split("-");
+        this.dungoneeringPoints = Integer.parseInt(split[0]);
+        final String[] items = split[1].split(" ");
+        try {
+            for(int i = 0; i < items.length - 1; i++) {
+                final String[] id_count = items[i].split(",");
+                bound[i] = Item.create(Integer.parseInt(id_count[0], Integer.parseInt(id_count[1])));
+            }
+        } catch(final Exception ex) {
+
+        }
+
+    }
 
 }

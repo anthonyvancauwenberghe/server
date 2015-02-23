@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.DungeonDifficulty;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 
 import java.util.List;
 
@@ -28,13 +29,17 @@ public class Dungeon {
 
 
     public final void remove(final Player player) {
-        //send home
-        //give xp
+        player.setTeleportTarget(Edgeville.LOCATION);
+
+
+
         players.remove(player);
     }
 
     public void complete() {
-
+        for(final Player player : players) {
+            complete();
+        }
     }
 
     public void assignChildren() {

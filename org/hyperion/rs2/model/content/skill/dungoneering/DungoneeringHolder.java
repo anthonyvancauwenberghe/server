@@ -1,10 +1,12 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
+import org.hyperion.rs2.model.DungeonDifficulty;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +19,32 @@ import java.util.List;
 public class DungoneeringHolder {
 
 
+    private final Item[] bound = new Item[3];
     private int dungoneeringPoints;
-
     private Dungeon currentDungeon;
+    private DungeonDifficulty chosen;
 
-    private Item[] bound = new Item[3];
+    public boolean inDungeon() {
+        return currentDungeon != null;
+    }
+
+    public void fireOnLogout(final Player player) {
+        if(inDungeon()) {
+            currentDungeon.remove(player);
+        }
+    }
+
+    public void start(final List<Player> players) {
+        final Dungeon dungeon = new Dungeon(players, chosen);
+    }
+
+    public void setChosen(final DungeonDifficulty difficulty) {
+        this.chosen = difficulty;
+    }
+
+    public DungeonDifficulty getChosen() {
+        return chosen == null ? DungeonDifficulty.EASY : chosen;
+    }
 
     public String save() {
         final StringBuilder builder = new StringBuilder(dungoneeringPoints+"-");

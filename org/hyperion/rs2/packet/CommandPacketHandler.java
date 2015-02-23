@@ -392,39 +392,7 @@ public class CommandPacketHandler implements PacketHandler {
 			return;
 		}
 
-		if (commandStart.equals("spawnobject")) {
-			int id = Integer.parseInt(as[1]);
-			int face = Integer.parseInt(as[2]);
-			int type = 10;
-			player.getActionSender().sendMessage(
-					"Spawning " + GameObjectDefinition.forId(id).getName()
-							+ "[" + id + "].");
-			player.getActionSender().sendCreateObject(id, type, face,
-					player.getLocation());
-			return;
-		}
 
-		if (commandStart.equals("removeobject")) {
-			for (int i = 0; i < 15; i++) {
-				player.getActionSender().sendDestroyObject(i, 0,
-						player.getLocation());
-			}
-			return;
-		}
-
-		if (commandStart.startsWith("removeobjects")) {
-			int id = Integer.parseInt(as[1]);
-			Location loc = player.getLocation();
-			for (int x = loc.getX() - id; x < loc.getX() + id; x++) {
-				for (int y = loc.getY() - id; y < loc.getY() + id; y++) {
-					for (int i = 0; i < 15; i++) {
-						player.getActionSender().sendDestroyObject(i, 0,
-								Location.create(x, y, loc.getZ()));
-					}
-				}
-			}
-			return;
-		}
 		/*
 		 * if(s1.equals("jad")) { int k = Integer.parseInt(as[1]);
 		 * World.getWorld().getContentManager().handlePacket(6, player, 9358, k,
@@ -810,7 +778,39 @@ public class CommandPacketHandler implements PacketHandler {
 			String commandStart, String s, String withCaps, String[] as) {
 
 
+        if (commandStart.equals("spawnobject")) {
+            int id = Integer.parseInt(as[1]);
+            int face = Integer.parseInt(as[2]);
+            int type = 10;
+            player.getActionSender().sendMessage(
+                    "Spawning " + GameObjectDefinition.forId(id).getName()
+                            + "[" + id + "].");
+            player.getActionSender().sendCreateObject(id, type, face,
+                    player.getLocation());
+            return;
+        }
 
+        if (commandStart.equals("removeobject")) {
+            for (int i = 0; i < 15; i++) {
+                player.getActionSender().sendDestroyObject(i, 0,
+                        player.getLocation());
+            }
+            return;
+        }
+
+        if (commandStart.startsWith("removeobjects")) {
+            int id = Integer.parseInt(as[1]);
+            Location loc = player.getLocation();
+            for (int x = loc.getX() - id; x < loc.getX() + id; x++) {
+                for (int y = loc.getY() - id; y < loc.getY() + id; y++) {
+                    for (int i = 0; i < 15; i++) {
+                        player.getActionSender().sendDestroyObject(i, 0,
+                                Location.create(x, y, loc.getZ()));
+                    }
+                }
+            }
+            return;
+        }
         if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
             String r = findCharString(s.substring(7).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();

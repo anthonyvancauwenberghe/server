@@ -353,6 +353,10 @@ public class Location {
 		return inPvPArea() ||
 				(x <= 2382 && y >= 4940 && y <= 4980 && x >= 2347);
 	}
+
+    public boolean inDungeonLobby() {
+        return false;
+    }
 	
 	public boolean inDuel() {
 		return x >= 3353

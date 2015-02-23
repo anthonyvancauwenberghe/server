@@ -120,10 +120,10 @@ public class NpcDeathEvent extends Event {
             }*/
             if(killer != null) {
                 if(! npc.serverKilled) {
-                    World.getWorld().getContentManager().handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), - 1);
+                    World.getWorld().getContentManager().handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
                     for(final Map.Entry<Player, Double> kill : killers.entrySet()) {
                         if(kill.getValue() > 0.20 && killer != kill.getKey())
-                            World.getWorld().getContentManager().handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), - 1);
+                            World.getWorld().getContentManager().handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
 
                     }
                 }

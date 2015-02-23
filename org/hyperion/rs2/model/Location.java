@@ -355,7 +355,7 @@ public class Location {
 	}
 
     public boolean inDungeonLobby() {
-        return false;
+        return y <= 9645 && x <= 2996 && x >= 2979 && y >= 9628;
     }
 	
 	public boolean inDuel() {

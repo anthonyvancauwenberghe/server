@@ -3,10 +3,13 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 import org.hyperion.rs2.model.DungeonDifficulty;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,7 +38,14 @@ public class DungoneeringHolder {
     }
 
     public void start(final List<Player> players) {
+        final Iterator<Player> it = players.iterator();
+        while(it.hasNext()) {
+            final Player player = it.next();
+            if(!ItemSpawning.canSpawn(player) || ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || ContentEntity.getTotalAmountOfItems(player) > 0)
+                it.remove();
+        }
         final Dungeon dungeon = new Dungeon(players, chosen);
+        //dungeon.start();
     }
 
     public void setChosen(final DungeonDifficulty difficulty) {

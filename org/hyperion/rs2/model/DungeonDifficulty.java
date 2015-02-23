@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
+import org.hyperion.util.Misc;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,30 +19,31 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(2, 0, null),
-    MEDIUM(3, 35, null),
-    HARD(4, 70, null);
+    EASY(2, 0, null, null),
+    MEDIUM(3, 35,null,  null),
+    HARD(4, 70, null, null);
 
 
-    private final int min_level, spawns;
-    private final LinkedList<Integer> npcs;
+    public final int min_level, spawns;
+    private final int[] monsters, bosses;
 
-    private DungeonDifficulty(final int spawns, final int min_level, final int... monsters) {
+    private DungeonDifficulty(final int spawns, final int min_level, final int[] bosses, final int... monsters) {
         this.min_level = min_level;
         this.spawns = spawns;
-        final LinkedList<Integer> npcs = new LinkedList<>();
-        for(int i : monsters)
-            npcs.add(i);
-        this.npcs = npcs;
-
+        this.monsters = monsters;
+        this.bosses = bosses;
 
     }
 
-    public List<Integer> getNpcs() {
-        return npcs;
+    public int[] getMonsters() {
+        return monsters.clone();
+    }
+
+    public int[] getBosses() {
+        return monsters.clone();
     }
 
     public void getBoss(final Room room) {
-        World.getWorld().getNPCManager().addNPC(room.definition.x, room.definition.y, room.dungeon.heightLevel, -1, npcs.getLast()).agreesiveDis = 20;
+        World.getWorld().getNPCManager().addNPC(room.definition.x, room.definition.y, room.dungeon.heightLevel, -1, bosses[Misc.random(bosses.length-1)]).agreesiveDis = 20;
     }
 }

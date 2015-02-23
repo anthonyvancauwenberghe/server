@@ -1,10 +1,7 @@
 package org.hyperion.rs2.model.itf.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.ActionSender;
@@ -50,7 +47,10 @@ public class DungoneeringParty extends Interface {
                 for(final String s : playerStrings) {
                     final Player p = World.getWorld().getPlayer(s);
                     if(p == null || !ItemSpawning.canSpawn(player)) {
+                        player.sendMessage("%s cannot join party, removed from group", s);
                     } else {
+                        if(p.getSkills().getLevel(Skills.DUNGEONINEERING) < player.getDungoneering().getChosen().min_level)
+                            player.sendMessage("%s does not meet difficulty level requirements, removed from group", s);
                         players.add(p);
                     }
 
@@ -72,8 +72,8 @@ public class DungoneeringParty extends Interface {
                             player.getDungoneering().start(players);
                             this.stop();
                         }
-                        if(count++ < 10) {
-                            newList.stream().forEach(p -> p.sendMessage("Starting in: " + (10 - count) + " seconds"));
+                        if(count++ < 8) {
+                            newList.stream().forEach(p -> p.sendMessage("Starting in: " + (8 - count) + " seconds"));
                         } else {
                             players.add(player);
                             player.getDungoneering().start(players);

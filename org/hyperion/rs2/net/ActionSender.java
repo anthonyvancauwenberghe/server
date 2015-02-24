@@ -824,7 +824,7 @@ public class ActionSender {
 
 	public void writeQuestTab() {
 		player.getQuestTab().sendAllInfo();
-		sendString("East Dragons", 45614);
+		sendString("Revenants (Multi)", 45614);
 	}
 
 

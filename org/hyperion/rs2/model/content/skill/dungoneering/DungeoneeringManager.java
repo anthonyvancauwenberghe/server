@@ -31,7 +31,6 @@ public class DungeoneeringManager implements ContentTemplate {
         }
         Magic.teleport(player, Location.create(2987, 9637, 0), false);
         player.SummoningCounter = 0;
-
         return true;
     }
 
@@ -42,7 +41,13 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
-        switch(id) {
+
+        return true;
+    }
+
+    @Override
+    public boolean dialogueAction(Player player, int dialogueId) {
+        switch(dialogueId) {
             case 7000:
                 player.getActionSender().sendDialogue("Join "+player.getName()+ "?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
                         "Easy", "Medium", "Hard");
@@ -54,17 +59,12 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7001:
             case 7002:
             case 7003:
-                final DungeonDifficulty difficulty = DungeonDifficulty.values()[id - 7001];
+                final DungeonDifficulty difficulty = DungeonDifficulty.values()[dialogueId - 7001];
                 player.getDungoneering().setChosen(difficulty);
                 break;
 
         }
         return true;
-    }
-
-    @Override
-    public boolean dialogueAction(Player player, int dialogueId) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

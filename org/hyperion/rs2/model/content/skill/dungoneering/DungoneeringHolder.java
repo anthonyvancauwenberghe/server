@@ -56,6 +56,10 @@ public class DungoneeringHolder {
         return chosen == null ? DungeonDifficulty.EASY : chosen;
     }
 
+    public Dungeon getCurrentDungeon() {
+        return currentDungeon;
+    }
+
     public String save() {
         final StringBuilder builder = new StringBuilder(dungoneeringPoints+"-");
         for(final Item item : bound) {

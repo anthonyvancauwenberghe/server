@@ -1,15 +1,13 @@
 package org.madturnip.tools;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.rs2.model.DeathDrops;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.ItemsTradeable;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.skill.Farming;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.zip.GZIPInputStream;
 
 public class AccountChecker {
@@ -17,7 +15,20 @@ public class AccountChecker {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+        ItemDefinition.init();
+        final File file = new File("./data/AlchPrices.txt");
+        file.createNewFile();
+        try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for(int i = 0; i < ItemDefinition.MAX_ID; i++) {
+                if(ItemDefinition.forId(i) == null)
+                    continue;
+                writer.write(i + " | " + ItemDefinition.forId(i).getName() + " - "+DeathDrops.calculateAlchValue(0,i));
+                writer.newLine();
+            }
+        }
+        if(true)
+            return;
 		accCheckerMode = true;
 		File dir = new File("data/savedGames/");
 		int count = 0;

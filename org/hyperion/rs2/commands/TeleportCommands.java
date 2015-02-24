@@ -28,6 +28,17 @@ public class TeleportCommands {
 			}
 		});
 
+        CommandHandler.submit(new Command("moveloc", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                input = filterInput(input);
+                final int offX = Integer.parseInt(input.split(" ")[0]);
+                final int offY = Integer.parseInt(input.split(" ")[1]);
+                player.setTeleportTarget(Location.create(player.getLocation().getX() + offX, player.getLocation().getY() + offY, player.getLocation().getZ()));
+                return true;
+            }
+        });
+
         CommandHandler.submit(new Command("nathanplace", Rank.MODERATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {

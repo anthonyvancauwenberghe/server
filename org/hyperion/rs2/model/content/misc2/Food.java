@@ -170,6 +170,10 @@ public class Food implements ContentTemplate {
 					ContentEntity.sendMessage(player, "You can only drink special restore potions every 20 seconds!");
 					return true;
 				}
+                if(System.currentTimeMillis() - player.getExtraData().getLong("lastspecialatk") < 2000) {
+                    player.sendMessage("You are too exhasuted to use the potion!");
+                    return true;
+                }
 				ContentEntity.startAnimation(player, ANIMATION_DRINK_ID);
 				//client.getActionSender().sendMessage("You drink a Special restore potion.");
 

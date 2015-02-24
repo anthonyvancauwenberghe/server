@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.combat;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -431,6 +432,8 @@ public class SpecialAttacks {
 				player.cE.getOpponent().setOpponent(player.cE);
 			}
 		}
+
+        player.getExtraData().put("lastspecialatk", System.currentTimeMillis());
 		/**
 		 * Apply damage
 		 */
@@ -645,40 +648,42 @@ public class SpecialAttacks {
 				/**
 				 * Determine Hit Damage
 				 */
-				tempDamage = Misc.random(maxDamg);
-				if(player.cE.getOpponent().getEntity() instanceof Player) {
-					deltaBonus = CombatAssistant.calculateMeleeAttack(player)
-							- CombatAssistant.calculateMeleeDefence(player.cE
-							.getOpponent().getPlayer());
 
-				} else {
-					deltaBonus = CombatAssistant.calculateMeleeAttack(player)
-							- player.cE.getOpponent().getNPC().getDefinition().combat();
-				}
-				randomIncrease = Misc.random(deltaBonus / 3);
-				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-					player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
-				}
-				// System.out.println("RandomIncrease " + randomIncrease +
-				// " Deltabonus : " + deltaBonus);
-				tempDamage += randomIncrease;
-				if(tempDamage < 0)
-					tempDamage = 0;
-				else if(tempDamage > maxDamg)
-					tempDamage = maxDamg;
-				tempDamage = SpiritShields.applyEffects(player.cE.getOpponent(), tempDamage);
-                if(oldEntity.getEntity() instanceof Player) {
-                    tempDamage = oldEntity.getPlayer().getInflictDamage(tempDamage, player, false, combatStyle);
-                }
-				/**
-				 * Determine if damage is critical..
-				 */
+                        tempDamage = Misc.random(maxDamg);
+                        if(player.cE.getOpponent().getEntity() instanceof Player) {
+                            deltaBonus = CombatAssistant.calculateMeleeAttack(player)
+                                    - CombatAssistant.calculateMeleeDefence(player.cE
+                                    .getOpponent().getPlayer());
 
-				final int damg5 = tempDamage;
-				int crit = damg5 > 0.85 * maxDamg ? 5 : 0;
-				player.cE.getOpponent().hit(damg5, player,
-						false, crit);
-				Combat.addXP(player, damg5, false);
+                        } else {
+                            deltaBonus = CombatAssistant.calculateMeleeAttack(player)
+                                    - player.cE.getOpponent().getNPC().getDefinition().combat();
+                        }
+                        randomIncrease = Misc.random(deltaBonus / 3);
+                        if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+                            player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
+                        }
+                        // System.out.println("RandomIncrease " + randomIncrease +
+                        // " Deltabonus : " + deltaBonus);
+                        tempDamage += randomIncrease;
+                        if(tempDamage < 0)
+                            tempDamage = 0;
+                        else if(tempDamage > maxDamg)
+                            tempDamage = maxDamg;
+                        tempDamage = SpiritShields.applyEffects(player.cE.getOpponent(), tempDamage);
+                        if(oldEntity.getEntity() instanceof Player) {
+                            tempDamage = oldEntity.getPlayer().getInflictDamage(tempDamage, player, false, combatStyle);
+                        }
+                        /**
+                         * Determine if damage is critical..
+                         */
+
+                        final int damg5 = tempDamage;
+                        int crit = damg5 > 0.85 * maxDamg ? 5 : 0;
+                        player.cE.getOpponent().hit(damg5, player,
+                                false, crit);
+                        Combat.addXP(player, damg5, false);
+
 				break;
 			case 11730:
 				int damage = Misc.random(16);
@@ -875,6 +880,8 @@ public class SpecialAttacks {
 		case 14484:
 		case 4153:
 		case 17646:
+            case 5698:
+            case 1215:
 			return false;
 		}
 		return true;

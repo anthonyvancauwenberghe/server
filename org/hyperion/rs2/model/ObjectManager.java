@@ -59,14 +59,14 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 			System.out.println("Loaded " + definitionCount + " object definitions.");
 			BufferedReader br = new BufferedReader(new FileReader("./data/objspawns.cfg"));
 			String s;
-			/*while((s = br.readLine()) != null){
+			while((s = br.readLine()) != null){
 				try {
-					String parts[] = s.replace("spawn = ","").split("");
-					globalObjects.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Location.create(Integer.parseInt(parts[1]),Integer.parseInt(parts[2]),Integer.parseInt(parts[3])), Integer.parseInt(parts[4]), Integer.parseInt(parts[5])));
+					String parts[] = s.replace("spawn = ","").split("\t");
+					globalObjects.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Location.create(Integer.parseInt(parts[1]),Integer.parseInt(parts[2]),Integer.parseInt(parts[3])), Integer.parseInt(parts[5]), Integer.parseInt(parts[4])));
 				} catch(Exception e){
 					e.printStackTrace();
 				}
-			}*/
+			}
 			br.close();
 
             //globalObjects.add(new GameObject(GameObjectDefinition.forId(6552), Location.create(3256,3484,0), 10, 2));//ancient altar
@@ -191,7 +191,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public void update(GameObject obj) {
 		for(Player p : World.getWorld().getPlayers()) {
-			if(p.getLocation().isWithinDistance(obj.getLocation(), 64)) {
+			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
 			}
 		}
@@ -199,7 +199,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public void load(Player p) {
 		for(GameObject obj : globalObjects) {
-			if(p.getLocation().isWithinDistance(obj.getLocation(), 64)) {
+			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
 			}
 		}

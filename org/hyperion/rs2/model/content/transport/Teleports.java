@@ -138,7 +138,7 @@ public class Teleports implements ContentTemplate {
 					break;
 				case 178053: // Mid Wilderness
 				case - 19915:
-					Magic.teleport(player, 3358, 3673, 0, false);
+					Magic.teleport(player, 3315, 3665, 0, false);
 					break;
 				case 178056://Edgeville
 				case - 19912:

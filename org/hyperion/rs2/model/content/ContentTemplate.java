@@ -36,4 +36,5 @@ public interface ContentTemplate {
     public default boolean actionButton(Player player, int buttonId) { return false; }
     public default boolean dialogueAction(Player player, int dialogueId) { return false; }
     public default boolean handleDeath(Player player) { return false; }
+    public default boolean npcDeath(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) { return false; }
 }

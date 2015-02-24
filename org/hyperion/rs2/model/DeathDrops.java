@@ -293,13 +293,13 @@ public class DeathDrops {
 		}
 		return null;
 	}
-	public static int calculateAlchValue(final Player player ,int id) {
+	public static int calculateAlchValue(final int gameMode ,int id) {
         final ItemDefinition def;
         if((def = ItemDefinition.forId(id)) != null && def.isNoted())
             id = def.getParentId();
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
-        if(player.hardMode())
+        if(gameMode == 1)
             inventoryItemValue = (int)NewGameMode.getUnitPrice(id);
 		else if(dpVal > 100)
 			inventoryItemValue = dpVal * 150000;
@@ -315,7 +315,7 @@ public class DeathDrops {
 		for(int i = 0; i < player.getInventory().capacity(); i++) {
 			if(player.getInventory().get(i) != null) {
 				int dpVal = DonatorShop.getPrice(player.getInventory().get(i).getId());
-				int inventoryItemValue = calculateAlchValue(player ,player.getInventory().get(i).getId());
+				int inventoryItemValue = calculateAlchValue(player.getGameMode() ,player.getInventory().get(i).getId());
 				if(inventoryItemValue > value && (! player.invSlot[i])) {
 					value = inventoryItemValue;
 					item = player.getInventory().get(i).getId();
@@ -327,7 +327,7 @@ public class DeathDrops {
 		for(int i1 = 0; i1 < player.getEquipment().capacity(); i1++) {
 			if(player.getEquipment().get(i1) != null) {
 				int dpValue = (int)Math.floor(DonatorShop.getPrice(player.getEquipment().get(i1).getId()));
-				int equipmentItemValue = calculateAlchValue(player ,player.getEquipment().get(i1).getId());
+				int equipmentItemValue = calculateAlchValue(player.getGameMode() ,player.getEquipment().get(i1).getId());
 
 				if(equipmentItemValue > value && (! player.equipSlot[i1])) {
 					value = equipmentItemValue;

@@ -2337,6 +2337,10 @@ public class CommandPacketHandler implements PacketHandler {
 				}
 			}
 			if (commandStart.equalsIgnoreCase("selltickets")) {
+                if(Location.inAttackableArea(player)) {
+                    player.getActionSender().sendMessage("No one wants to come here to get your tickets!");
+                    return;
+                }
 				int tickets = Integer.parseInt(as[1]);
 				int removed;
 				if ((removed = player.getInventory().remove(

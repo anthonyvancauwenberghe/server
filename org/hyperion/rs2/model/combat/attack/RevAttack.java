@@ -91,6 +91,7 @@ public class RevAttack implements Attack {
         }
         if(Misc.random(7) == 1 && n.health < n.maxHealth/3) {
             n.health += 15;
+            n.cE.predictedAtk = System.currentTimeMillis() + 2400;
             return 5;
         }
         final Player player = n.cE.getOpponent() == null ? null : n.cE.getOpponent().getPlayer();
@@ -182,7 +183,7 @@ public class RevAttack implements Attack {
                 this.stop();
             }
         });
-        n.cE.predictedAtk = System.currentTimeMillis() + 1800;
+        n.cE.predictedAtk = System.currentTimeMillis() + 2400;
 
     }
     public void handleRangeAttack(NPC n, Player attack) {
@@ -238,6 +239,6 @@ public class RevAttack implements Attack {
         if(damage <= 0)
             damage = 0;
         attack.cE.hit(Combat.random(maxHit), n, false, Constants.MELEE);
-        n.cE.predictedAtk = System.currentTimeMillis() + 1200;
+        n.cE.predictedAtk = System.currentTimeMillis() + 1800;
     }
 }

@@ -310,6 +310,8 @@ public class NPCManager {
 
 	public static final int getAgreDis(int npcId) {
 		switch(npcId) {
+            case 5399:
+                return 8;
 			case 2881:
 			case 2882:
 			case 2883:

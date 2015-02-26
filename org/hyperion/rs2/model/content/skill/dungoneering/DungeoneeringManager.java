@@ -49,9 +49,6 @@ public class DungeoneeringManager implements ContentTemplate {
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
         if(cantJoin(player))  {
             player.sendMessage("You can only bring the ring of kinship - no summoning allowed!");
-            player.sendMessage(ContentEntity.getTotalAmountOfItems(player), player.getInventory().contains(15707), player.getBoB());
-            if(player.getBoB() != null)
-                player.sendMessage(player.getBoB().freeSlots(), player.getBoB().capacity());
             return false;
         }
         Magic.teleport(player, Location.create(2987, 9637, 0), false);
@@ -126,7 +123,7 @@ public class DungeoneeringManager implements ContentTemplate {
     }
 
     public static final boolean cantJoin(final Player player) {
-        return !player.getLocation().inDungeonLobby() || ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707)) ||  player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
+        return ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707)) ||  player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
     }
 
 

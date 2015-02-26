@@ -39,8 +39,11 @@ public class DungoneeringHolder {
     public void start(final List<Player> players, final DungeonDifficulty chosen) {
         final Iterator<Player> it = players.iterator();
         while(it.hasNext()) {
-            if(DungeoneeringManager.cantJoin(it.next()))
+            final Player p = it.next();
+            if(DungeoneeringManager.cantJoin(p) || !p.getDungoneering().inDungeon() || p.getSkills().getLevel(Skills.DUNGEONINEERING) < chosen.min_level) {
+                p.sendMessage("You didn't meet the requirements to join and have been kicked out!");
                 it.remove();
+            }
         }
         final Dungeon dungeon = new Dungeon(players, chosen);
         dungeon.start();

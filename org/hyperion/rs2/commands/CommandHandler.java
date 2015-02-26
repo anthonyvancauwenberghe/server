@@ -909,10 +909,6 @@ public class CommandHandler {
 
         submit(new Command("viewprofile", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                if(!Rank.hasAbility(player, Rank.HELPER)) {
-                    player.sendMessage("This feature is temporarily disabled");
-                    return false;
-                }
                 final String targetName = filterInput(input).trim();
                 try{
                     return InterfaceManager.<PlayerProfileInterface>get(PlayerProfileInterface.ID).view(player, targetName);

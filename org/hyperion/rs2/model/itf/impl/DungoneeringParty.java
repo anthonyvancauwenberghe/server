@@ -64,12 +64,14 @@ public class DungoneeringParty extends Interface {
                     public void execute() throws IOException {
                         players.add(player);
                         player.getDungoneering().start(players, difficulty);
+                        this.stop();
                     }
                 });
                 break;
             case INVITE:
                 final String name = pkt.getRS2String();
                 final Player p = World.getWorld().getPlayer(name);
+                System.out.println("HERE");
                 if(p == null || p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
                     player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
                     break;

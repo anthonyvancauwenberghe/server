@@ -26,6 +26,7 @@ public final class InterfaceManager {
         addGlobal(new ItemContainer());
         addGlobal(new NameItemInterface());
         addGlobal(new ModerationInterface());
+        addGlobal(new DungoneeringParty());
     }
 
     private final Player player;

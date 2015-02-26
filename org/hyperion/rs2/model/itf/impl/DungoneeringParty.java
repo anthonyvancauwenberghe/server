@@ -91,7 +91,7 @@ public class DungoneeringParty extends Interface {
 
     public void respond(final Player player, int response) {
         final Player holder = (Player)player.getExtraData().get("dungoffer");
-        player.write(createDataBuilder().put((byte) response).putRS2String(player.getName()).toPacket());
+        holder.write(createDataBuilder().put((byte) response).putRS2String(player.getName()).toPacket());
     }
 
 

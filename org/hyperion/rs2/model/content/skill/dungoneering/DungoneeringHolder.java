@@ -61,7 +61,7 @@ public class DungoneeringHolder {
         return location;
     }
 
-    private void setCurrentRoom(final Room room) { this.room = room; }
+    public void setCurrentRoom(final Room room) { this.room = room; }
 
     public boolean inDungeon() { return currentDungeon != null; }
 

@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.DungeonDifficulty;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class Dungeon {
 
-    private List<Room> rooms;
+    private List<Room> rooms = new ArrayList<>();
 
     private final List<Player> players;
     public final int heightLevel;
@@ -31,7 +32,11 @@ public class Dungeon {
     public void start() {
         addRooms();
         assignChildren();
-
+        final Room start = rooms.get(0);
+        for(final Player player : players) {
+            player.setTeleportTarget(start.getSpawnLocation());
+            player.getDungoneering().setCurrentRoom(start);
+        }
     }
 
 

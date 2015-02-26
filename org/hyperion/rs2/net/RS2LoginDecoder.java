@@ -394,7 +394,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                             bldr.putRS2String(punishment.getCombination().getTarget().name());
                             bldr.putRS2String(punishment.getIssuerName());
                             bldr.putRS2String(punishment.getReason());
-                            bldr.putRS2String(punishment.getTime().getExpirationDateStamp());
+                            bldr.putRS2String(punishment.getTime().getRemainingTimeStamp());
                             session.write(bldr.toPacket())
                                     .addListener(new IoFutureListener<IoFuture>() {
                                         @Override

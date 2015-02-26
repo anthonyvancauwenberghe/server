@@ -44,6 +44,7 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 //import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.content.ticket.TicketHolder;
+import org.hyperion.rs2.model.ge.GrandExchangeTracker;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
@@ -90,6 +91,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     public final InterfaceManager getInterfaceManager() {
         return interfaceManager;
+    }
+
+    private final GrandExchangeTracker geTracker = new GrandExchangeTracker(this);
+
+    public GrandExchangeTracker getGrandExchangeTracker(){
+        return geTracker;
     }
 
     public int pin = -1;

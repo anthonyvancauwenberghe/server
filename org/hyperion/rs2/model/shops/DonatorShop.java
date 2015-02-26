@@ -641,7 +641,7 @@ public class DonatorShop extends Shop {
 				return 3;
 				
 			case 2430:    //spec restore potion
-				return 5;
+				return 3;
 
 			case 13883: //morrigans throwing axe
 			case 13879: // morrigans javelin

@@ -389,7 +389,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                         if(punishment != null) {
                             returnCode = 4;
                             LoginDebugger.getDebugger().log("Packetbuilder code");
-                            PacketBuilder bldr = new PacketBuilder();
+                            PacketBuilder bldr = new PacketBuilder(1 , Packet.Type.VARIABLE);
                             bldr.put((byte) returnCode);
                             bldr.putRS2String(punishment.getCombination().getTarget().name());
                             bldr.putRS2String(punishment.getIssuerName());

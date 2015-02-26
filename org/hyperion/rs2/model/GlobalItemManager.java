@@ -143,13 +143,13 @@ public class GlobalItemManager {
 		}
 		for(Object object : items) {
 			GlobalItem gItem = (GlobalItem) object;
-			if(System.currentTimeMillis() - gItem.createdTime >= 30000 && gItem.itemHidden) {
+			if(System.currentTimeMillis() - gItem.createdTime >= 52000 && gItem.itemHidden) {
 				if(! ItemsTradeable.isTradeable(gItem.getItem().getId())) {
 					continue;
 				}
 				createItem(gItem);
 				gItem.itemHidden = false;
-			} else if(System.currentTimeMillis() - gItem.createdTime >= 60000) {
+			} else if(System.currentTimeMillis() - gItem.createdTime >= 120000) {
 				removeItem(gItem);
 				synchronized(globalItems) {
 					globalItems.remove(gItem);

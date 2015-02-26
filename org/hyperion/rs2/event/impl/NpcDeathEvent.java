@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.skill.Summoning;
+import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
@@ -184,38 +185,49 @@ public class NpcDeathEvent extends Event {
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
                 player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
-                final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                 //normal drops
-
-                if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
-                    int chance =  isTask ? 750 : 1000;
-                    for(NPCDrop drop : npc.getDefinition().getDrops()) {
-                        if(drop == null) continue;
-                        if(Combat.random(chance) <= drop.getChance()) {
-                            int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
-                            if (amt < 0)
-                                amt = 1;
-                            if (player.getInventory().contains(16639) && drop.getId() >= 12158 && drop.getId() <= 12163)
-                                ContentEntity.addItem(player, drop.getId() == 12162 ? 12163 : drop.getId(), amt);
-                            else
-                            {
-                                 GlobalItem globalItem = new GlobalItem(player, x, y, z,
-                                    Item.create(drop.getId(), amt));
-                                if (DonatorShop.getPrice(drop.getId()) > 50) {
-                                    for (Player p : player.getRegion().getPlayers())
-                                        p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                if(!player.getDungoneering().inDungeon()) {
+                    final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
+                    if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
+                        int chance =  isTask ? 750 : 1000;
+                        for(NPCDrop drop : npc.getDefinition().getDrops()) {
+                            if(drop == null) continue;
+                            if(Combat.random(chance) <= drop.getChance()) {
+                                int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
+                                if (amt < 0)
+                                    amt = 1;
+                                if (player.getInventory().contains(16639) && drop.getId() >= 12158 && drop.getId() <= 12163)
+                                    ContentEntity.addItem(player, drop.getId() == 12162 ? 12163 : drop.getId(), amt);
+                                else
+                                {
+                                    GlobalItem globalItem = new GlobalItem(player, x, y, z,
+                                            Item.create(drop.getId(), amt));
+                                    if (DonatorShop.getPrice(drop.getId()) > 50) {
+                                        for (Player p : player.getRegion().getPlayers())
+                                            p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                                    }
+                                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                                 }
-                                World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                             }
                         }
-                    }
 
-                }
-                if(isTask && Misc.random(1000) < 1) {
-                    GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                    }
+                    if(isTask && Misc.random(1000) < 1) {
+                        GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                                npc.getLocation().getY(), npc.getLocation().getZ(),
+                                Item.create(18768, 1));
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+
+                    }
+                } else {
+                    for(int i = 0; i < (npc.getDefinition().combat()/30 +1); i++) {
+                        final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
+                        GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                             npc.getLocation().getY(), npc.getLocation().getZ(),
-                            Item.create(18768, 1));
-                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                            Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                        globalItem.createdTime = System.currentTimeMillis() + 30000L;
+                    }
 
                 }
             }

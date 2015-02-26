@@ -707,7 +707,6 @@ public class SpecialAttacks {
                             Player opponent = player.cE.getOpponent().getPlayer();
                             opponent.getSkills().detractLevel(Skills.PRAYER, hitDamage);
                         }
-                        player.getSkills().incrementLevel(Skills.PRAYER, hitDamage);
                     } catch (Exception e){
                         e.printStackTrace();
                     }

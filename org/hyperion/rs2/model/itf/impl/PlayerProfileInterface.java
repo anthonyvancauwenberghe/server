@@ -43,6 +43,7 @@ public class PlayerProfileInterface extends Interface{
         }
         lastKnownName = targetName;
         player.sendMessage("Last known name: "+ lastKnownName);
+        show(player);
         player.write(
                 createDataBuilder()
                 .put((byte)INIT)
@@ -51,13 +52,12 @@ public class PlayerProfileInterface extends Interface{
                 .putLong(target.getPermExtraData().getLong("logintime"))
                 .toPacket()
         );
-        show(player);
         return true;
     }
 
     public void handle(final Player player, final Packet pkt){
         final int requestId = pkt.getByte();
-        //♣System.out.println("request id: " + requestId);
+        System.out.println("request id: " + requestId);
         if(lastKnownName == null)
             return;
         final Player viewing = World.getWorld().getPlayer(lastKnownName);

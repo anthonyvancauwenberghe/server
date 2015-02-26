@@ -39,7 +39,7 @@ public class DungeoneeringManager implements ContentTemplate {
         if(type == ClickType.EAT)
             return new int[]{15707};
         else if(type == ClickType.OBJECT_CLICK1)
-            return new int[]{2447, 2804};
+            return new int[]{2477, 2804};
         else if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
@@ -68,7 +68,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
                 itf.show(player);
                 break;
-            case 2447:
+            case 2477:
                 final Location loc = player.getDungoneering().clickPortal();
                 if(loc == null) {
                     player.sendMessage("You need to clear the room before progressing");

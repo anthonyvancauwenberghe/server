@@ -64,6 +64,10 @@ public class DungeoneeringManager implements ContentTemplate {
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
         switch(id) {
+            case 2804:
+                final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
+                itf.show(player);
+                break;
             case 2447:
                 final Location loc = player.getDungoneering().clickPortal();
                 if(loc == null) {
@@ -83,7 +87,7 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7000:
             case 7001:
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
-                itf.sendResponse(player, dialogueId - 7000);
+                itf.respond(player, dialogueId - 7000);
                 break;
         }
         return true;

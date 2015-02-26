@@ -79,9 +79,17 @@ public class DungoneeringParty extends Interface {
 
                 p.getActionSender().sendDialogue("Join "+player.getName()+"?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
                         "Yes, I want to join this dungeon", "No");
+                player.getExtraData().put("dungoffer", player);
+                player.getInterfaceState().setNextDialogueId(0, 7000);
+                player.getInterfaceState().setNextDialogueId(1, 7001);
                 break;
         }
 
+    }
+
+    public void respond(final Player player, int response) {
+        final Player holder = (Player)player.getExtraData().get("dungoffer");
+        player.write(createDataBuilder().put((byte) response).putRS2String(player.getName()).toPacket());
     }
 
 

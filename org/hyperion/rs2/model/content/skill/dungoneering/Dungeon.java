@@ -37,6 +37,7 @@ public class Dungeon {
             player.setTeleportTarget(start.getSpawnLocation());
             player.getDungoneering().setCurrentRoom(start);
         }
+        start.initialize();
     }
 
 

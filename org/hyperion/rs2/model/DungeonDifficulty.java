@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(2, 5, 0, new int[]{2883, 2881, 2882}, 1, 5338),
+    EASY(2, 5, 0, new int[]{2883, 2881, 2882}, 1, 5338, 299, 255, 32, 449),
     MEDIUM(3, 8, 35,null,  null),
     HARD(4, 10, 70, null, null);
 

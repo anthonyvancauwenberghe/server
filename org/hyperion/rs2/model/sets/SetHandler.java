@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 public class SetHandler {
 	public static final boolean handleSet(Player player, int id) {
@@ -17,7 +18,7 @@ public class SetHandler {
                     }
                 };
 
-			if(FightPits.inPits(player))
+			if(!ItemSpawning.canSpawn(player))
 				throw new CantSpawnSetException();
 			switch(id) {
 			case 29174:

@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
 import org.hyperion.rs2.net.ActionSender;
@@ -38,20 +39,10 @@ public class DungeoneeringManager implements ContentTemplate {
         if(type == ClickType.EAT)
             return new int[]{15707};
         else if(type == ClickType.OBJECT_CLICK1)
-            return new int[]{2447, 2803};
+            return new int[]{2447, 2804};
         else if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean clickObject2(final Player player, final int type, int id, int b, int c, int d) {
-        if(type == 6) {
-            if(id == ClickId.CAN_TELEPORT) {
-                return player.getDungoneering().inDungeon();
-            }
-        }
-        return false;
     }
 
     @Override
@@ -110,7 +101,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 continue;
             final ItemDefinition def = ItemDefinition.forId(i);
             if(def == null) continue;
-            if(nonviable(def) && !(def.getName().contains("(4)") && def.getId() < 3041))
+            if(nonviable(def) && Food.get(i) == null)
                 continue;
             if(def.isNoted())
                 continue;

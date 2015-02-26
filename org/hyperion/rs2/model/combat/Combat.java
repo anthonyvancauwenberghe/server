@@ -1092,9 +1092,10 @@ public class Combat {
                 || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()))
 			
 			return true;
-		if(combatEntity.getEntity() instanceof Player)
+		if(combatEntity.getEntity() instanceof Player) {
 			if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))
 					return true;
+        }
 		return false;
 	}
 

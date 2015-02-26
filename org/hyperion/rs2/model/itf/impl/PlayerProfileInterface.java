@@ -41,8 +41,7 @@ public class PlayerProfileInterface extends Interface{
             player.sendMessage("Player has disabled his public profile");
             return false;
         }
-        lastKnownName = targetName;
-        player.sendMessage("Last known name: "+ lastKnownName);
+        player.getExtraData().put("lastKnownName", targetName);
         show(player);
         player.write(
                 createDataBuilder()
@@ -58,9 +57,9 @@ public class PlayerProfileInterface extends Interface{
     public void handle(final Player player, final Packet pkt){
         final int requestId = pkt.getByte();
         System.out.println("request id: " + requestId);
-        if(lastKnownName == null)
+        if(player.getExtraData().get("lastKnownName") == null)
             return;
-        final Player viewing = World.getWorld().getPlayer(lastKnownName);
+        final Player viewing = World.getWorld().getPlayer(player.getExtraData().getString("lastKnownName"));
         if(viewing == null){
             player.sendf("Cannot request data of an offline player's profile (yet)");
             return;

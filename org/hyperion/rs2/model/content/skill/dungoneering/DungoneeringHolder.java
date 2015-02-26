@@ -40,7 +40,7 @@ public class DungoneeringHolder {
         final Iterator<Player> it = players.iterator();
         while(it.hasNext()) {
             final Player p = it.next();
-            if(DungeoneeringManager.cantJoin(p) || !p.getDungoneering().inDungeon() || p.getSkills().getLevel(Skills.DUNGEONINEERING) < chosen.min_level) {
+            if(DungeoneeringManager.cantJoin(p) || !p.getLocation().inDungeonLobby() || p.getSkills().getLevel(Skills.DUNGEONINEERING) < chosen.min_level) {
                 p.sendMessage("You didn't meet the requirements to join and have been kicked out!");
                 it.remove();
             }

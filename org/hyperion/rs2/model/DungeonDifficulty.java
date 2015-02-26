@@ -19,31 +19,29 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(2, 0, null, null),
-    MEDIUM(3, 35,null,  null),
-    HARD(4, 70, null, null);
+    EASY(2, 5, 0, new int[]{2883, 2881, 2882}, null),
+    MEDIUM(3, 8, 35,null,  null),
+    HARD(4, 10, 70, null, null);
 
 
-    public final int min_level, spawns;
+    public final int min_level, spawns, rooms;
     private final int[] monsters, bosses;
 
-    private DungeonDifficulty(final int spawns, final int min_level, final int[] bosses, final int... monsters) {
+    private DungeonDifficulty(final int spawns, final int rooms,  final int min_level, final int[] bosses, final int... monsters) {
         this.min_level = min_level;
         this.spawns = spawns;
         this.monsters = monsters;
         this.bosses = bosses;
+        this.rooms = rooms;
 
     }
 
-    public int[] getMonsters() {
-        return monsters.clone();
+    public int getRandomMonster() {
+        return monsters[Misc.random(monsters.length - 1)];
     }
 
-    public int[] getBosses() {
-        return monsters.clone();
+    public int getBoss() {
+        return bosses[Misc.random(bosses.length - 1)];
     }
 
-    public void getBoss(final Room room) {
-        World.getWorld().getNPCManager().addNPC(room.definition.x, room.definition.y, room.dungeon.heightLevel, -1, bosses[Misc.random(bosses.length-1)]).agreesiveDis = 20;
-    }
 }

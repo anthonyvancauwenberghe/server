@@ -250,7 +250,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					if(in.remaining() >= size) {
                         String remoteIp = session.getRemoteAddress().toString();
                         String shortIp = TextUtils.shortIp(remoteIp);
-                       /* if (loginAttempts.containsKey(shortIp)) {
+                       if (loginAttempts.containsKey(shortIp)) {
                             long lastLogin = loginAttempts.get(shortIp);
                             if(lastLogin != -1) {
                                 if(System.currentTimeMillis() - lastLogin < 5000) {
@@ -267,7 +267,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                                     return false;
                                 }
                             }
-                        } */
+                        }
 						//System.out.println("Logging in plz");
 					/*
 					 * We read the magic ID which is 255 (0xFF) which indicates
@@ -385,9 +385,26 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						//if(banmanager.getStatus(name) == BanManager.BAN || banmanager.getStatus(shortIp) == BanManager.BAN) {
 						//	returnCode = 4;
 						//}
-
-                        if(PunishmentManager.getInstance().isBanned(name, shortIp, macId, specialUid))
+                        final Punishment punishment = PunishmentManager.getInstance().findBan(name, shortIp, macId, specialUid);
+                        if(punishment != null) {
                             returnCode = 4;
+                            LoginDebugger.getDebugger().log("Packetbuilder code");
+                            PacketBuilder bldr = new PacketBuilder();
+                            bldr.put((byte) returnCode);
+                            bldr.putRS2String(punishment.getCombination().getTarget().name());
+                            bldr.putRS2String(punishment.getIssuerName());
+                            bldr.putRS2String(punishment.getReason());
+                            bldr.putRS2String(punishment.getTime().getExpirationDateStamp());
+                            session.write(bldr.toPacket())
+                                    .addListener(new IoFutureListener<IoFuture>() {
+                                        @Override
+                                        public void operationComplete(IoFuture future) {
+                                            future.getSession().close(false);
+                                        }
+                                    });
+                            in.rewind();
+                            return false;
+                        }
 
 						String pass = IoBufferUtils.getRS2String(in);
 						LoginDebugger.getDebugger().log("3. Login packet: " + name + "," + pass + "," + remoteIp);

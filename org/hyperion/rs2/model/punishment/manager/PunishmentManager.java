@@ -118,12 +118,16 @@ public final class PunishmentManager {
     }
 
     public boolean isBanned(final String name, final String ip, final int mac, final int[] specialUid){
+        return findBan(name, ip, mac, specialUid) != null;
+    }
+
+    public Punishment findBan(final String name, final String ip, final int mac, final int[] specialUid){
         if(name != null){
             final PunishmentHolder holder = get(name);
             if(holder != null){
                 for(final Punishment p : holder.getPunishments()){
                     if(p.getCombination().getType() == Type.BAN){
-                        return true;
+                        return p;
                     }
                 }
             }
@@ -133,16 +137,16 @@ public final class PunishmentManager {
                 if(p.getCombination().getType() != Type.BAN)
                     continue;
                 if(ip != null && p.getCombination().getTarget() == Target.IP && ip.equalsIgnoreCase(p.getVictimIp()))
-                    return true;
+                    return p;
                 if(mac != -1 && p.getCombination().getTarget() == Target.MAC && mac == p.getVictimMac())
-                    return true;
+                    return p;
                 if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid()))  {
                     TextUtils.writeToFile("./data/specialUidStops.txt", "Special UID ban stopped: " + name);
-                    return true;
+                    return p;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     public boolean contains(final String victim){

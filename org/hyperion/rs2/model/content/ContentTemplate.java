@@ -22,8 +22,12 @@ public interface ContentTemplate {
                 return handleDeath(player);
             return objectClickOne(player, a, b, c);
         }
-        return false;
+        return clickObject2(player, type, a, b, c, d);
     }//this will work for all items, objects , npcs etc, specify value -1 if the value is unused
+
+    public default boolean clickObject2(Player player, int type, int a, int b, int c, int d) {
+        return false;
+    }
 
 	public default void init() throws FileNotFoundException { ; }
 

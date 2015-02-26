@@ -2,6 +2,7 @@ package org.hyperion;
 
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.skill.dungoneering.DungoneeringHolder;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.util.CharFilesCleaner;

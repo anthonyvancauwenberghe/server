@@ -19,7 +19,7 @@ public class Dungeon {
 
     private final List<Player> players;
     public final int heightLevel;
-    private final DungeonDifficulty difficulty;
+    public final DungeonDifficulty difficulty;
 
     public Dungeon(final List<Player> players, final DungeonDifficulty difficulty) {
         this.players = players;
@@ -28,17 +28,33 @@ public class Dungeon {
     }
 
 
-    public final void remove(final Player player) {
+    public void start() {
+        addRooms();
+        assignChildren();
+
+    }
+
+
+    public final void remove(final Player player, boolean complete) {
         player.setTeleportTarget(Edgeville.LOCATION);
 
-
-
         players.remove(player);
+        if(players.size() == 0)
+            destroy();
+        if(complete) {
+            player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@");
+        }
+    }
+
+    public void addRooms() {
+        for(int i =0 ; i < difficulty.rooms; i++) {
+            rooms.add(RoomDefinition.rand().getRoom(this));
+        }
     }
 
     public void complete() {
         for(final Player player : players) {
-            complete();
+            remove(player, true);
         }
     }
 
@@ -48,6 +64,15 @@ public class Dungeon {
         }
         final Room boss = rooms.get(rooms.size() - 1);
         boss.boss = true;
+
+    }
+
+
+    public void destroy() {
+        for(final Room room : rooms)
+            room.destroy();
+        rooms.clear();
+        players.clear();
 
     }
 

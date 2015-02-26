@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.util.IoBufferUtils;
+import org.hyperion.util.Misc;
 
 import java.awt.*;
 import java.io.File;
@@ -33,6 +34,10 @@ public class RoomDefinition {
 
     public final Room getRoom(final Dungeon dungeon) {
         return new Room(dungeon, this);
+    }
+
+    public Point randomLoc() {
+        return spawnLocations.get(Misc.random(spawnLocations.size() - 1));
     }
 
     public String toString() {
@@ -92,6 +97,11 @@ public class RoomDefinition {
         }catch(final Exception ex) {
 
         }
+    }
+
+
+    public static RoomDefinition rand() {
+        return ROOM_DEFINITIONS_LIST.get(Misc.random(ROOM_DEFINITIONS_LIST.size() - 1));
     }
 
 

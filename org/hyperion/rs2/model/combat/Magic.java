@@ -1239,7 +1239,7 @@ public class Magic {
 					|| World.getWorld().getContentManager()
 					.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 				player.getActionSender().sendMessage(
-						"You cannot teleport from fight pits.");
+						"You cannot teleport here.");
 				return;
 			}
 			if(player.getTimeSinceLastTeleport() < 1600)

@@ -1,8 +1,11 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
+import org.hyperion.rs2.model.Damage;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +21,11 @@ public class Room {
     private final List<NPC> npcs = new ArrayList<>();
 
     private Room child;
+    private boolean initialized;
+    public boolean boss;
 
     public final Dungeon dungeon;
-
     public final RoomDefinition definition;
-
-    public boolean boss;
 
     public Room(final Dungeon dungeon, final RoomDefinition def) {
         this.dungeon = dungeon;
@@ -35,7 +37,7 @@ public class Room {
             if(!npc.isDead())
                 return false;
         }
-        return true;
+        return initialized;
     }
 
     public Room getChild(){
@@ -46,9 +48,33 @@ public class Room {
         this.child = child;
     }
 
-    public Room addNPC(final NPC npc) {
-        npcs.add(npc);
-        return this;
+    public void initialize() {
+        if(initialized)
+            return;
+        initialized = true;
+        int npcCount = boss ? 1 : dungeon.difficulty.spawns;
+        for(int i = 0; i < npcCount; i++) {
+            final Point loc = definition.randomLoc();
+            final NPC npc = World.getWorld().getNPCManager().addNPC(Location.create(loc.x, loc.y, dungeon.heightLevel), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
+            npc.agreesiveDis = 10;
+            npcs.add(npc);
+        }
+    }
+
+    public Location getSpawnLocation() {
+        return Location.create(definition.x, definition.y, dungeon.heightLevel);
+    }
+
+    public void destroy() {
+        initialized = false;
+        boss = false;
+        for(NPC npc : npcs) {
+            if(!npc.isDead()) {
+                npc.serverKilled = true;
+                npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
+            }
+        }
+        npcs.clear();
     }
 
 }

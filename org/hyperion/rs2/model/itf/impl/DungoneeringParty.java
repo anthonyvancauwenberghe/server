@@ -30,11 +30,13 @@ public class DungoneeringParty extends Interface {
 
 
     private static final int START = 0;
+    private static final int INVITE = 1;
 
 
     @Override
     public void handle(Player player, Packet pkt) {
         final int id = pkt.getByte();
+        final DungeonDifficulty difficulty = DungeonDifficulty.values()[pkt.getByte()];
 
         switch(id) {
             case START:
@@ -42,14 +44,14 @@ public class DungoneeringParty extends Interface {
                 for(int i = 0; i < playerStrings.length; i++) {
                     playerStrings[i] = pkt.getRS2String();
                 }
-                final List<Player> players = new ArrayList<Player>();
+                final List<Player> players = new ArrayList<>();
 
                 for(final String s : playerStrings) {
                     final Player p = World.getWorld().getPlayer(s);
-                    if(p == null || !ItemSpawning.canSpawn(player)) {
+                    if(p == null || !p.getLocation().inDungeonLobby()) {
                         player.sendMessage("%s cannot join party, removed from group", s);
                     } else {
-                        if(p.getSkills().getLevel(Skills.DUNGEONINEERING) < player.getDungoneering().getChosen().min_level)
+                        if(p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level)
                             player.sendMessage("%s does not meet difficulty level requirements, removed from group", s);
                         players.add(p);
                     }
@@ -57,34 +59,31 @@ public class DungoneeringParty extends Interface {
 
                 }
 
-                for(final Player p : players) {
-                    p.getActionSender().sendDialogue("Join "+player.getName()+ "?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
-                            "Yes, I want to start a "+player.getDungoneering().getChosen().toString() + " dungeon", "No");
-                }
-
                 World.getWorld().submit(new Event(1000) {
-                    int count = 0;
                     @Override
                     public void execute() throws IOException {
-                        final List<Player> newList = players.stream().filter(p -> p.getExtraData().getBoolean("checkdungeon")).collect(Collectors.toList());
-                        if(newList.size() == players.size()) {
-                            players.add(player);
-                            player.getDungoneering().start(players);
-                            this.stop();
-                        }
-                        if(count++ < 8) {
-                            newList.stream().forEach(p -> p.sendMessage("Starting in: " + (8 - count) + " seconds"));
-                        } else {
-                            players.add(player);
-                            player.getDungoneering().start(players);
-                            this.stop();
-                        }
+                        players.add(player);
+                        player.getDungoneering().start(players, difficulty);
                     }
                 });
+                break;
+            case INVITE:
+                final String name = pkt.getRS2String();
+                final Player p = World.getWorld().getPlayer(name);
+                if(p == null || p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
+                    player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
+                    break;
+                }
+
+
+
+                p.getActionSender().sendDialogue("Join "+player.getName()+"?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
+                        "Yes, I want to join this dungeon", "No");
                 break;
         }
 
     }
+
 
 
 }

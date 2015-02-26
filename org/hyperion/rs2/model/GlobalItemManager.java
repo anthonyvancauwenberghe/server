@@ -122,7 +122,7 @@ public class GlobalItemManager {
 
 	public void removeItem(GlobalItem globalItem) {
 		for(Player p2 : World.getWorld().getPlayers()) {
-			if(p2.getLocation().distance(globalItem.getLocation()) <= 64)
+			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
 				p2.getActionSender().removeGlobalItem(globalItem.getItem(), globalItem.getLocation());
 		}
 	}
@@ -131,7 +131,7 @@ public class GlobalItemManager {
 		for(Player p2 : World.getWorld().getPlayers()) {
 			if(p2 == globalItem.owner)
 				continue;
-			if(p2.getLocation().distance(globalItem.getLocation()) <= 64)
+			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
 				p2.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
 		}
 	}

@@ -82,9 +82,9 @@ public class RoomDefinitionCreator extends JFrame {
         public DefinitionFrame() {
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(loc, BorderLayout.NORTH);
-
-            getContentPane().add(end, BorderLayout.SOUTH);
             center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+
+            center.add(end);
 
             final JButton south = new JButton("Add");
 

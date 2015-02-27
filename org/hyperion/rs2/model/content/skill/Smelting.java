@@ -90,8 +90,7 @@ public class Smelting implements ContentTemplate {
 			ContentEntity.sendMessage(client, "Your Smithing level is not high enough to do this.");
 			return;
 		}
-		if(ContentEntity.getItemAmount(client, smeltingItem.getOreId()) <= 0 ||
-				(smeltingItem.getSecondOreId() > 5 && ContentEntity.getItemAmount(client, smeltingItem.getSecondOreId()) < smeltingItem.getSecondOreAmount())) {
+		if(ContentEntity.getItemAmount(client, smeltingItem.getOreId()) <= 0) {
 			ContentEntity.sendMessage(client, "you need more ore to make this bar");
 			return;
 		}

@@ -90,7 +90,7 @@ public class Dungeon {
     }
 
     public void addRooms() {
-        int loopAround = 0;
+        int loopAround = 1;
         int size = difficulty.rooms;
         while(size > 0) {
             final List<RoomDefinition> list = new ArrayList<>();

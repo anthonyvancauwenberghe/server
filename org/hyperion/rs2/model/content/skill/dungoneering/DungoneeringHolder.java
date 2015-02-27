@@ -10,10 +10,7 @@ import org.madturnip.tools.ItemDefEditor;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -54,7 +51,7 @@ public class DungoneeringHolder {
     }
 
     public void bind(final Item item, final int slot) {
-
+        bound[slot] = item;
     }
 
     public void showBindDialogue(final ActionSender actionSender, final InterfaceState state) {
@@ -93,6 +90,8 @@ public class DungoneeringHolder {
     public Dungeon getCurrentDungeon() { return currentDungeon; }
 
     public Room getRoom() { return room; }
+
+    public Item[] getBinds() { return Arrays.stream(bound).filter(Objects::nonNull).toArray(Item[]::new); }
 
     /** ************************
      * START OF SAVING

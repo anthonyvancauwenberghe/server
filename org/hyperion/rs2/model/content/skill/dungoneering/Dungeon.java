@@ -45,6 +45,9 @@ public class Dungeon {
         for(final Player player : players) {
             player.setTeleportTarget(start.getSpawnLocation());
             player.getDungoneering().setCurrentRoom(start);
+            for(final Item bound : player.getDungoneering().getBinds())
+                player.getInventory().add(bound);
+
         }
         start.initialized = true;
         final Point loc = start.definition.randomLoc();
@@ -64,8 +67,12 @@ public class Dungeon {
             long delta_time = difficulty.time - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
             double multiplier = (time/10D) + 1.0;
-            final int xp = (int)(difficulty.xp * multiplier);
-            player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@");
+            int death = deaths.getOrDefault(player, 0);
+            double death_penalty = Math.pow(0.85, death);
+            final int xp = (int)((difficulty.xp * multiplier) * death_penalty);
+
+            player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
+            player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@ "+xp, "@blu@Time: @bla@" + elapsed_time/1000 +" seconds");
         }
     }
 
@@ -105,6 +112,11 @@ public class Dungeon {
 
     public Room getStartRoom() {
         return rooms.get(0);
+    }
+
+    public void kill(final Player player) {
+        int old = deaths.getOrDefault(player, 0);
+        deaths.put(player, old + 1);
     }
 
 }

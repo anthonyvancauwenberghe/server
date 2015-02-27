@@ -218,6 +218,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     public static final void handleDying(final Player player) {
         player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
+        player.getDungoneering().getCurrentDungeon().kill(player);
     }
 
 }

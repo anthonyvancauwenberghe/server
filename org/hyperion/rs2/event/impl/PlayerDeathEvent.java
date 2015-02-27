@@ -17,6 +17,7 @@ import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
+import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -128,7 +129,9 @@ public class PlayerDeathEvent extends Event {
 
 		player.cE.setFreezeTimer(0);
 		Player killer = player.cE.getKiller();
-		if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
+        if(player.getDungoneering().inDungeon()) {
+            DungeoneeringManager.handleDying(player);
+        } else if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
 				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer())    //If dying in duel arena
 			Duel.finishFullyDuel(player);
 		else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
@@ -140,7 +143,7 @@ public class PlayerDeathEvent extends Event {
 		} else if(player.fightCavesWave > 0 && !player.getLocation().inPvPArea()) { //If dying in fight caves
 			player.fightCavesWave = 0;
 			player.getActionSender().showInterfaceWalkable(- 1);
-			player.setTeleportTarget(Location.create(2439, 5171, 0), true);
+			player.setTeleportTarget(Location.create(2439, 5171, 0), false);
 			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
 ;
 		} else {

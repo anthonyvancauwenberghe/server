@@ -1,11 +1,14 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
-import org.hyperion.rs2.model.DungeonDifficulty;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,16 +19,22 @@ import java.util.List;
  */
 public class Dungeon {
 
+    private static final int TRADER_ID = 1;
+
+    private final Map<Player, Integer> deaths = new HashMap<>();
+
     private List<Room> rooms = new ArrayList<>();
 
     private final List<Player> players;
     public final int heightLevel;
     public final DungeonDifficulty difficulty;
+    private final long start_time;
 
     public Dungeon(final List<Player> players, final DungeonDifficulty difficulty) {
         this.players = players;
         this.heightLevel = players.get(0).getIndex() * 4;
         this.difficulty = difficulty;
+        this.start_time = System.currentTimeMillis();
     }
 
 
@@ -37,7 +46,10 @@ public class Dungeon {
             player.setTeleportTarget(start.getSpawnLocation());
             player.getDungoneering().setCurrentRoom(start);
         }
-        start.initialize();
+        start.initialized = true;
+        final Point loc = start.definition.randomLoc();
+        final NPC trader = World.getWorld().getNPCManager().addNPC(Location.create(loc.x, loc.y, heightLevel), TRADER_ID, -1);
+
     }
 
 
@@ -48,6 +60,11 @@ public class Dungeon {
         if(players.size() == 0)
             destroy();
         if(complete) {
+            long elapsed_time = System.currentTimeMillis() - start_time;
+            long delta_time = difficulty.time - elapsed_time;
+            long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
+            double multiplier = (time/10D) + 1.0;
+            final int xp = (int)(difficulty.xp * multiplier);
             player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@");
         }
     }
@@ -65,11 +82,15 @@ public class Dungeon {
     }
 
     public void assignChildren() {
-        for(int i = 0; i < rooms.size() - 2; i++) {
+        for(int i = 0; i < rooms.size() - 1; i++) {
             rooms.get(i).setChild(rooms.get(i+1));
         }
         final Room boss = rooms.get(rooms.size() - 1);
         boss.boss = true;
+
+        for(int i = 1; i < rooms.size(); i++) {
+            rooms.get(i).setParent(rooms.get(i-1));
+        }
 
     }
 
@@ -80,6 +101,10 @@ public class Dungeon {
         rooms.clear();
         players.clear();
 
+    }
+
+    public Room getStartRoom() {
+        return rooms.get(0);
     }
 
 }

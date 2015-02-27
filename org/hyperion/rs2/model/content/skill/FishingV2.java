@@ -212,14 +212,15 @@ public class FishingV2 implements ContentTemplate {
 		}
 	}
 
+    public static final int[] FISHING_SPOTS = {316, 320, 319, 323,
+            325, 327, 326, 332, 330, 309, 310, 311, 314,
+            315, 317, 318, 328, 329, 331, 334, 312, 324,
+            309, 314, 301, 311,};
+
 	@Override
 	public int[] getValues(int type) {
 		if(type == 11 || type == 10) {
-			int[] j = {316, 320, 319, 323,
-					325, 327, 326, 332, 330, 309, 310, 311, 314,
-					315, 317, 318, 328, 329, 331, 334, 312, 324,
-					309, 314, 301, 311,};
-			return j;
+			return FISHING_SPOTS;
 		}
 		return null;
 	}

@@ -1,6 +1,10 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.util.Misc;
 
@@ -30,6 +34,7 @@ public class RoomDefinition {
         this.y = y;
         this.spawnLocations = spawnLocations;
         ROOM_DEFINITIONS_LIST.add(this);
+        World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2476), Location.create(x, y, 0), 10, 0));
     }
 
     public final Room getRoom(final Dungeon dungeon) {

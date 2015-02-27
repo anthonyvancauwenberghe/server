@@ -34,14 +34,18 @@ public class DungeoneeringManager implements ContentTemplate {
 
     private static List<Integer> items;
 
+    private static final Location LOBBY = Location.create(2987, 9637, 0);
+
     @Override
     public int[] getValues(int type) {
         if(type == ClickType.EAT)
             return new int[]{15707};
         else if(type == ClickType.OBJECT_CLICK1)
-            return new int[]{2477, 2804};
+            return new int[]{2477, 2476, 2804};
         else if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1};
+            return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3};
+        else if (type == ClickType.NPC_OPTION1)
+            return new int[]{8827, 8824};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -51,13 +55,40 @@ public class DungeoneeringManager implements ContentTemplate {
             player.sendMessage("You can only bring the ring of kinship - no summoning allowed!");
             return false;
         }
-        Magic.teleport(player, Location.create(2987, 9637, 0), false);
+        Magic.teleport(player, LOBBY, false);
         player.SummoningCounter = 0;
         return true;
     }
 
     @Override
     public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+        try {
+            final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
+            if(npc == null)
+                return false;
+            if(npc.isDead())
+                return false;
+            final int min_level = npcId == 8824 ? 50 : 80;
+            if(player.getSkills().getLevel(Skills.THIEVING) < min_level) {
+                player.sendMessage("You need " + min_level +" thieving level to loot from this npc!");
+                return false;
+            }
+
+            if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
+                return false;
+
+            player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000L);
+            for(int i =0; i < min_level/25; i++) {
+                player.getInventory().add(Item.create(DungeoneeringManager.randomItem(), 1));
+            }
+            player.playAnimation(Animation.create(881));
+
+            npc.serverKilled = true;
+            npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
+
+        }catch(Exception e) {
+
+        }
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -77,6 +108,14 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.setTeleportTarget(loc);
                 player.getDungoneering().getRoom().initialize();
                 return true;
+            case 2476:
+                final Location location = player.getDungoneering().clickBackPortal();
+                if(location == null) {
+                    DialogueManager.openDialogue(player, 7002);
+                    return true;
+                }
+
+                break;
         }
         return false;
     }
@@ -89,14 +128,38 @@ public class DungeoneeringManager implements ContentTemplate {
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
                 itf.respond(player, dialogueId - 7000);
                 break;
+            case 7002:
+                player.getActionSender().sendDialogue("Leave?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
+                        "Yes, I want to leave this dungeon", "No, I don't want to lose my progress");
+                final InterfaceState state = player.getInterfaceState();
+                state.setNextDialogueId(0, 7003);
+                state.setNextDialogueId(1, 7004);
+                break;
+            case 7003:
+                if(player.getDungoneering().inDungeon())
+                    player.getDungoneering().getCurrentDungeon().remove(player, false);
+                break;
+            case 7005:
+                player.getDungoneering().showBindDialogue(player.getActionSender(), player.getInterfaceState());
+                break;
+            case 7006:
+            case 7007:
+            case 7008:
+            case 7009:
+            case 7010:
+                final int slots = 1 + (player.getSkills().getLevel(Skills.DUNGEONINEERING) +1)/4;
+                final int slot = dialogueId - 7006;
+                if(slot > slots) {
+                    player.sendMessage("This slot is not available for you");
+                    break;
+                }
+                player.getDungoneering().bind((Item)player.getExtraData().get("binditem"), slot);
+                break;
         }
+        player.getActionSender().removeChatboxInterface();
         return true;
     }
 
-    @Override
-    public boolean handleDeath(Player player) {
-        return true;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     public static final List<Integer> parse() {
         final List<ItemDefinition> items = new ArrayList<>();
@@ -105,7 +168,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 continue;
             final ItemDefinition def = ItemDefinition.forId(i);
             if(def == null) continue;
-            if(nonviable(def) && Food.get(i) == null)
+            if(nonviable(def) && Food.get(i) == null && !def.getName().toLowerCase().endsWith(" rune"))
                 continue;
             if(def.isNoted())
                 continue;
@@ -138,7 +201,7 @@ public class DungeoneeringManager implements ContentTemplate {
     }
     private static final boolean full(final int[] bonus) {
         for(int i : bonus)
-            if(i > 15)
+            if(i > 10)
                 return true;
         return false;
     }
@@ -151,6 +214,10 @@ public class DungeoneeringManager implements ContentTemplate {
 
     public static int randomItem() {
         return getItems().get(Misc.random(getItems().size() - 1));
+    }
+
+    public static final void handleDying(final Player player) {
+        player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
     }
 
 }

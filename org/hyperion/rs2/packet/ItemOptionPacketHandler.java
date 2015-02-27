@@ -135,6 +135,10 @@ public class ItemOptionPacketHandler implements PacketHandler {
 
 		int onItem = player.getInventory().get(usedWithSlot).getId();
 		int useItem = player.getInventory().get(itemUsedSlot).getId();
+        if(onItem == 15707) {
+            DialogueManager.openDialogue(player, 7005);
+            player.getExtraData().put("binditem", player.getInventory().get(itemUsedSlot));
+        }
 		if(World.getWorld().getContentManager().handlePacket(13, player, useItem, itemUsedSlot, onItem, usedWithSlot))
 			return;
 		//random stuff

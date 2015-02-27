@@ -901,6 +901,7 @@ public class World {
         if(player.getLogging() != null)
             //player.getLogging().log("Logging out");
             Combat.logoutReset(player.cE);
+        player.getDungoneering().fireOnLogout(player);
         player.setActive(false);
         // Combat.resetAttack(player.cE);
         resetPlayersNpcs(player);

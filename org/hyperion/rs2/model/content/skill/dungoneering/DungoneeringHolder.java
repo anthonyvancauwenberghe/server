@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.net.ActionSender;
 import org.madturnip.tools.ItemDefEditor;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 public class DungoneeringHolder {
 
 
-    private final Item[] bound = new Item[3];
+    private final Item[] bound = new Item[5];
     private int dungoneeringPoints;
     private Dungeon currentDungeon;
     private Room room;
@@ -45,8 +47,23 @@ public class DungoneeringHolder {
                 it.remove();
             }
         }
+        if(players.size() == 0)
+            return;
         final Dungeon dungeon = new Dungeon(players, chosen);
         dungeon.start();
+    }
+
+    public void bind(final Item item, final int slot) {
+
+    }
+
+    public void showBindDialogue(final ActionSender actionSender, final InterfaceState state) {
+        final String[] strings = Stream.of(bound).map(item -> (item == null ? "Free Slot" : item.getDefinition().getName())).toArray(String[]::new);
+        actionSender.sendDialogue("Bind", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
+                strings);
+        for(int i = 0; i < 5; i++) {
+            state.setNextDialogueId(i, 7006 + i);
+        }
     }
 
     public Location clickPortal() {
@@ -58,6 +75,14 @@ public class DungoneeringHolder {
         }
         final Location location = room.getChild().getSpawnLocation();
         setCurrentRoom(room.getChild());
+        return location;
+    }
+
+    public Location clickBackPortal() {
+        if(room.getParent() == null)
+            return null;
+        final Location location = room.getParent().getSpawnLocation();
+        setCurrentRoom(room.getParent());
         return location;
     }
 

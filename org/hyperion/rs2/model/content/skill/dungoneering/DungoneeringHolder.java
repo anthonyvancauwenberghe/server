@@ -48,7 +48,7 @@ public class DungoneeringHolder {
             return;
         final Dungeon dungeon = new Dungeon(players, chosen);
         dungeon.start();
-        this.currentDungeon = dungeon;
+        setCurrentDungeon(dungeon);
     }
 
     public void bind(final Item item, final int slot) {
@@ -91,6 +91,8 @@ public class DungoneeringHolder {
     public boolean inDungeon() { return currentDungeon != null; }
 
     public Dungeon getCurrentDungeon() { return currentDungeon; }
+
+    public void setCurrentDungeon(final Dungeon dungeon) { this.currentDungeon = dungeon; }
 
     public Room getRoom() { return room; }
 

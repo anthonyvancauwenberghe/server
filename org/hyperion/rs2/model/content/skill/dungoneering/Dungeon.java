@@ -58,7 +58,7 @@ public class Dungeon {
 
     public final void remove(final Player player, boolean complete) {
         player.setTeleportTarget(DungeoneeringManager.LOBBY);
-
+        player.getDungoneering().setCurrentDungeon(null);
         players.remove(player);
         if(players.size() == 0)
             destroy();
@@ -73,6 +73,11 @@ public class Dungeon {
 
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@ "+xp, "@blu@Time: @bla@" + elapsed_time/1000 +" seconds");
+        }
+
+        for(final Item item : player.getInventory().toArray()) {
+            if(item.getId() != 15707)
+                player.getInventory().remove(item);
         }
     }
 

@@ -39,7 +39,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        if(type == ClickType.EAT || type == ClickType.ITEM_OPTION1)
+        if(type == ClickType.EAT || type == ClickType.ITEM_OPTION7)
             return new int[]{15707};
         else if(type == ClickType.OBJECT_CLICK1)
             return new int[]{2477, 2476, 2804};
@@ -90,7 +90,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
                 e.printStackTrace();
             }
-        } else if(type == ClickType.ITEM_OPTION1) {
+        } else if(type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungoneering().getTokens()));
             return true;
         }

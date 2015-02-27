@@ -138,6 +138,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
         if(onItem == 15707) {
             DialogueManager.openDialogue(player, 7005);
             player.getExtraData().put("binditem", player.getInventory().get(itemUsedSlot));
+            return;
         }
 		if(World.getWorld().getContentManager().handlePacket(13, player, useItem, itemUsedSlot, onItem, usedWithSlot))
 			return;

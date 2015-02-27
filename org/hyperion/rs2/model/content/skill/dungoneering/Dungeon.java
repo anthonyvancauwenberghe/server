@@ -56,7 +56,7 @@ public class Dungeon {
 
 
     public final void remove(final Player player, boolean complete) {
-        player.setTeleportTarget(Edgeville.LOCATION);
+        player.setTeleportTarget(DungeoneeringManager.LOBBY);
 
         players.remove(player);
         if(players.size() == 0)

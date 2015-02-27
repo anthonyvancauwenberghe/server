@@ -51,6 +51,7 @@ public class Dungeon {
         start.initialized = true;
         final Point loc = start.definition.randomLoc();
         final NPC trader = World.getWorld().getNPCManager().addNPC(Location.create(loc.x, loc.y, heightLevel), DungeoneeringManager.TRADER_ID, -1);
+        start.events.add(trader);
 
     }
 

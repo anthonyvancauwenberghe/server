@@ -49,66 +49,68 @@ public class Room {
 
     public void setChild(final Room child) {
                 this.child = child;
-            }
+    }
 
-        public Room getParent() {
-            return parent;
+    public Room getParent() {
+        return parent;
+    }
+
+    public void setParent(final Room parent) {
+        this.parent = parent;
+    }
+
+    public void initialize() {
+        for(final NPC npc : events)
+            npc.isHidden(false);
+        if(initialized)
+            return;
+        initialized = true;
+        int npcCount = boss ? 1 : dungeon.difficulty.spawns;
+        for(int i = 0; i < npcCount; i++) {
+            final Point loc = definition.randomLoc();
+            final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
+            npc.agreesiveDis = 10;
+            npcs.add(npc);
         }
 
-        public void setParent(final Room parent) {
-            this.parent = parent;
-        }
-
-        public void initialize() {
-            for(final NPC npc : events)
-                npc.isHidden(false);
-            if(initialized)
-                return;
-            initialized = true;
-            int npcCount = boss ? 1 : dungeon.difficulty.spawns;
-            for(int i = 0; i < npcCount; i++) {
-                final Point loc = definition.randomLoc();
-                final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
-                npc.agreesiveDis = 10;
-                npcs.add(npc);
-            }
-
-            if(Misc.random(8) == 0) {
-                switch(Misc.random(1)) {
-                    case 0:
-                        final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), FishingV2.FISHING_SPOTS[Misc.random(FishingV2.FISHING_SPOTS.length - 1)], -1);
-                        break;
-                    case 1:
-                        final NPC npc2 = World.getWorld().getNPCManager().addNPC(randomLocation(), Misc.random(1) == 0 ? 8824 : 8827, -1);
-                        break;
-                }
+        if(Misc.random(8) == 0) {
+            switch(Misc.random(1)) {
+                case 0:
+                    final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), FishingV2.FISHING_SPOTS[Misc.random(FishingV2.FISHING_SPOTS.length - 1)], -1);
+                    events.add(npc);
+                    break;
+                case 1:
+                    final NPC npc2 = World.getWorld().getNPCManager().addNPC(randomLocation(), Misc.random(1) == 0 ? 8824 : 8827, -1);
+                    events.add(npc2);
+                    break;
             }
         }
+    }
 
-        public Location getSpawnLocation() {
-            return Location.create(definition.x, definition.y, dungeon.heightLevel);
-        }
+    public Location getSpawnLocation() {
+        return Location.create(definition.x, definition.y, dungeon.heightLevel);
+    }
 
-        public Location randomLocation() {
-            final Point point = definition.randomLoc();
-            return Location.create(point.x, point.y, dungeon.heightLevel);
-        }
+    public Location randomLocation() {
+        final Point point = definition.randomLoc();
+        return Location.create(point.x, point.y, dungeon.heightLevel);
+    }
 
-        public void destroy() {
-            initialized = false;
-            boss = false;
-            for(NPC npc : npcs) {
-                if(!npc.isDead()) {
-                    npc.serverKilled = true;
-                    npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
-                }
+    public void destroy() {
+        initialized = false;
+        boss = false;
+        for(NPC npc : npcs) {
+            if(!npc.isDead()) {
+                npc.serverKilled = true;
+                npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
             }
-            for(NPC npc : events) {
-                if(!npc.isDead()) {
-                    npc.serverKilled = true;
-                    npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
-                }
+        }
+        for(NPC npc : events) {
+            if(!npc.isDead()) {
+                npc.serverKilled = true;
+                npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
             }
+        }
         npcs.clear();
     }
 

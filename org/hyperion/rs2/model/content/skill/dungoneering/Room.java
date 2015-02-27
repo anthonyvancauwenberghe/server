@@ -29,10 +29,12 @@ public class Room {
 
     public final Dungeon dungeon;
     public final RoomDefinition definition;
+    public final int heightLevel;
 
-    public Room(final Dungeon dungeon, final RoomDefinition def) {
+    public Room(final Dungeon dungeon, final RoomDefinition def, final int heightLevel) {
         this.dungeon = dungeon;
         this.definition = def;
+        this.heightLevel = heightLevel;
     }
 
     public boolean cleared() {
@@ -60,8 +62,6 @@ public class Room {
     }
 
     public void initialize() {
-        for(final NPC npc : events)
-            npc.isHidden(false);
         if(initialized)
             return;
         initialized = true;
@@ -87,13 +87,17 @@ public class Room {
         }
     }
 
+    public void hide() {
+
+    }
+
     public Location getSpawnLocation() {
-        return Location.create(definition.x, definition.y, dungeon.heightLevel);
+        return Location.create(definition.x, definition.y, heightLevel);
     }
 
     public Location randomLocation() {
         final Point point = definition.randomLoc();
-        return Location.create(point.x, point.y, dungeon.heightLevel);
+        return Location.create(point.x, point.y, heightLevel);
     }
 
     public void destroy() {

@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Dungeon {
 
-
+    private final Map<Player, Integer> damage = new HashMap<>();
     private final Map<Player, Integer> deaths = new HashMap<>();
 
     private List<Room> rooms = new ArrayList<>();
@@ -31,7 +31,7 @@ public class Dungeon {
 
     public Dungeon(final List<Player> players, final DungeonDifficulty difficulty) {
         this.players = players;
-        this.heightLevel = players.get(0).getIndex() * 4;
+        this.heightLevel = players.get(0).getIndex();
         this.difficulty = difficulty;
         this.start_time = System.currentTimeMillis();
     }
@@ -50,7 +50,7 @@ public class Dungeon {
         }
         start.initialized = true;
         final Point loc = start.definition.randomLoc();
-        final NPC trader = World.getWorld().getNPCManager().addNPC(Location.create(loc.x, loc.y, heightLevel), DungeoneeringManager.TRADER_ID, -1);
+        final NPC trader = World.getWorld().getNPCManager().addNPC(Location.create(loc.x, loc.y, start.heightLevel), DungeoneeringManager.TRADER_ID, -1);
         start.events.add(trader);
 
     }

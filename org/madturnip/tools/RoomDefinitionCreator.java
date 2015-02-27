@@ -74,6 +74,7 @@ public class RoomDefinitionCreator extends JFrame {
     class DefinitionFrame extends JFrame {
 
         final InputPanel loc = new InputPanel("Location: ");
+        final InputPanel end = new InputPanel("End: ");
         final List<InputPanel> spawnLocations = new ArrayList<InputPanel>();
         final JPanel center = new JPanel();
 
@@ -82,6 +83,7 @@ public class RoomDefinitionCreator extends JFrame {
             getContentPane().setLayout(new BorderLayout());
             getContentPane().add(loc, BorderLayout.NORTH);
 
+            getContentPane().add(end, BorderLayout.SOUTH);
             center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
 
             final JButton south = new JButton("Add");
@@ -98,6 +100,7 @@ public class RoomDefinitionCreator extends JFrame {
 
         public void load(final RoomDefinition def) {
             loc.load(new Point(def.x, def.y));
+            end.load(new Point(def.x_end, def.y_end));
             for(final Point point : def.spawnLocations)
                 addInput(point);
         }
@@ -114,7 +117,9 @@ public class RoomDefinitionCreator extends JFrame {
         public RoomDefinition toDefinition() {
             final List<Point> points = new ArrayList<>();
             spawnLocations.stream().map(InputPanel::loc).forEach(points::add);
-            return new RoomDefinition(loc.loc().x, loc.loc().y, points);
+            final RoomDefinition def = new RoomDefinition(loc.loc().x, loc.loc().y, points);
+            def.x_end = end.loc().x; def.y_end = end.loc().y;
+            return def;
         }
 
         @Override

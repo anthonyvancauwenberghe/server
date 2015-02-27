@@ -5,7 +5,6 @@ import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.util.Misc;
 
 import java.awt.*;
@@ -27,6 +26,7 @@ public class RoomDefinition {
     public static final List<RoomDefinition> ROOM_DEFINITIONS_LIST = new ArrayList<>();
 
     public final int x, y;
+    public int x_end, y_end;
     public final List<Point> spawnLocations;
 
     public RoomDefinition(final int x, final int y, List<Point> spawnLocations) {
@@ -38,7 +38,7 @@ public class RoomDefinition {
     }
 
     public final Room getRoom(final Dungeon dungeon) {
-        return new Room(dungeon, this);
+        return new Room(dungeon, this, dungeon.heightLevel * (int)Math.pow(4, 1 + Misc.random(1)));
     }
 
     public Point randomLoc() {
@@ -52,6 +52,8 @@ public class RoomDefinition {
     public void save(final IoBuffer buffer) {
         buffer.putShort((short) x);
         buffer.putShort((short) y);
+        buffer.putShort((short) x_end);
+        buffer.putShort((short) y_end);
 
         buffer.put((byte)spawnLocations.size());
 

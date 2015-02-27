@@ -63,11 +63,16 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+        player.debugMessage("Yo1");
         if(npcId == TRADER_ID) {
             ShopManager.open(player, 80);
             return true;
         }
+        player.debugMessage("Yo2");
+
         try {
+            player.debugMessage("Yo3");
+
             final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
             if(npc == null) {
                 player.sendMessage("Null NPC");
@@ -80,6 +85,8 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.sendMessage("You need " + min_level +" thieving level to loot from this npc!");
                 return false;
             }
+            player.debugMessage("Yo");
+
 
             if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
                 return false;
@@ -88,12 +95,15 @@ public class DungeoneeringManager implements ContentTemplate {
             for(int i =0; i < min_level/25; i++) {
                 player.getInventory().add(Item.create(DungeoneeringManager.randomItem(), 1));
             }
+            player.debugMessage("Yo5");
             player.playAnimation(Animation.create(881));
 
             npc.serverKilled = true;
             npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
 
         }catch(Exception e) {
+            player.debugMessage("Yo4");
+
             e.printStackTrace();
         }
         return false;  //To change body of implemented methods use File | Settings | File Templates.

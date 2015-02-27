@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ClickId;
@@ -110,12 +111,10 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
-        player.debugMessage("Yo1");
         if(npcId == TRADER_ID) {
             ShopManager.open(player, 80);
             return true;
         }
-        player.debugMessage("Yo2");
 
 
         return false;  //To change body of implemented methods use File | Settings | File Templates.
@@ -134,6 +133,7 @@ public class DungeoneeringManager implements ContentTemplate {
                     player.sendMessage("You need to clear the room before progressing");
                     return true;
                 }
+                Combat.resetAttack(player.getCombat().getOpponent());
                 player.setTeleportTarget(loc);
                 player.getDungoneering().getRoom().initialize();
                 return true;
@@ -143,6 +143,7 @@ public class DungeoneeringManager implements ContentTemplate {
                     DialogueManager.openDialogue(player, 7002);
                     return true;
                 }
+                Combat.resetAttack(player.getCombat().getOpponent());
                 player.setTeleportTarget(location);
                 player.getDungoneering().getRoom().initialize();
                 break;

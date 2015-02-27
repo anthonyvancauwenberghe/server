@@ -69,8 +69,10 @@ public class DungeoneeringManager implements ContentTemplate {
         }
         try {
             final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
-            if(npc == null)
+            if(npc == null) {
+                player.sendMessage("Null NPC");
                 return false;
+            }
             if(npc.isDead())
                 return false;
             final int min_level = npcId == 8824 ? 50 : 80;
@@ -92,7 +94,7 @@ public class DungeoneeringManager implements ContentTemplate {
             npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
 
         }catch(Exception e) {
-
+            e.printStackTrace();
         }
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }

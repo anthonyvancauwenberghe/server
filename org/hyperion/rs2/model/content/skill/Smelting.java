@@ -106,8 +106,7 @@ public class Smelting implements ContentTemplate {
 					stop2();
 					return;
 				}
-				if(ContentEntity.getItemAmount(client, smeltingItem.getOreId()) <= 0 ||
-						(smeltingItem.getSecondOreId() > 5 && ContentEntity.getItemAmount(client, smeltingItem.getSecondOreId()) < smeltingItem.getSecondOreAmount())) {
+				if(ContentEntity.getItemAmount(client, smeltingItem.getOreId()) <= 0) {
 					ContentEntity.sendMessage(client, "you need more ore to make this bar");
 					stop2();
 					return;

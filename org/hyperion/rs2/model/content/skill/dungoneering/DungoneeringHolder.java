@@ -23,7 +23,24 @@ import java.util.stream.Stream;
  */
 public class DungoneeringHolder {
 
+    public static void main(final String[] strings) {
+        final DungoneeringHolder holder = new DungoneeringHolder();
+        holder.bind(Item.create(4151, 1), 0);
+        holder.bind(Item.create(8856, 1), 0);
 
+        holder.combatXPs[0] = 1300000;
+        holder.combatXPs[6] = 1300500;
+
+        System.out.println(holder.save());
+
+        final DungoneeringHolder h2 = new DungoneeringHolder();
+
+        h2.load(holder.save());
+
+        System.out.println(h2.save());
+    }
+
+    private final int[] combatXPs = new int[7];
     private final Item[] bound = new Item[5];
     private int dungoneeringPoints;
     private Dungeon currentDungeon;
@@ -32,7 +49,11 @@ public class DungoneeringHolder {
     public void fireOnLogout(final Player player) {
         if(inDungeon()) {
             currentDungeon.remove(player, false);
-        }
+       }
+    }
+
+    public DungoneeringHolder() {
+        Arrays.fill(combatXPs, Skills.EXPERIENCE_PER_LEVEL[50] + 5);
     }
 
     public void start(final List<Player> players, final DungeonDifficulty chosen) {
@@ -46,6 +67,7 @@ public class DungoneeringHolder {
         }
         if(players.size() == 0)
             return;
+        players.forEach(p -> p.getDungoneering().loadXP(p.getSkills(), true));
         final Dungeon dungeon = new Dungeon(players, chosen);
         dungeon.start();
         setCurrentDungeon(dungeon);
@@ -85,6 +107,16 @@ public class DungoneeringHolder {
         return location;
     }
 
+    public void loadXP(final Skills skills, boolean toSkill) {
+        for(int i = 0; i < combatXPs.length; i++) {
+            if(toSkill) {
+                skills.setExperience(i, combatXPs[i]);
+                skills.setLevel(i, skills.getLevelForExp(i));
+            } else combatXPs[i] = skills.getExperience(i);
+
+        }
+    }
+
     public void setCurrentRoom(final Room room) { this.room = room; }
 
     public boolean inDungeon() { return currentDungeon != null; }
@@ -97,17 +129,26 @@ public class DungoneeringHolder {
 
     public Item[] getBinds() { return Arrays.stream(bound).filter(Objects::nonNull).toArray(Item[]::new); }
 
+    public int getTokens() { return dungoneeringPoints; }
+
+    public void setTokens(int tokens) { this.dungoneeringPoints = tokens;}
+
+
     /** ************************
      * START OF SAVING
      * *************************/
 
     public String save() {
-        final StringBuilder builder = new StringBuilder(dungoneeringPoints+"-");
+        final StringBuilder builder = new StringBuilder(dungoneeringPoints+"%");
         for(final Item item : bound) {
             if(item != null)
                 builder.append(item.getId()).append(",").append(item.getCount()).append(" ");
             else
                 builder.append("-1").append(",").append("0").append(" ");
+        }
+       builder.append("%");
+        for(int i = 0; i < combatXPs.length; i++) {
+            builder.append(combatXPs[i]).append(",");
         }
         return builder.toString();
     }
@@ -116,16 +157,24 @@ public class DungoneeringHolder {
         if(read.length() < 2) {
             return;
         }
-        final String[] split = read.split("-");
+        final String[] split = read.split("%");
         this.dungoneeringPoints = Integer.parseInt(split[0]);
         final String[] items = split[1].split(" ");
         try {
-            for(int i = 0; i < items.length - 1; i++) {
+            for(int i = 0; i < items.length; i++) {
                 final String[] id_count = items[i].split(",");
-                bound[i] = Item.create(Integer.parseInt(id_count[0], Integer.parseInt(id_count[1])));
+                bind(Item.create(Integer.valueOf(id_count[0]), Integer.valueOf(id_count[1].trim())), i);
             }
         } catch(final Exception ex) {
-
+            ex.printStackTrace();
+        }
+        final String[] xps = split[2].split(",");
+        try {
+            for(int i = 0; i < xps.length; i++) {
+                combatXPs[i] = Integer.parseInt(xps[i]);
+            }
+        } catch(final Exception ex) {
+            ex.printStackTrace();
         }
 
     }

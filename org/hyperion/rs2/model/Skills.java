@@ -368,7 +368,7 @@ public class Skills {
 	 * Where Xps[n] is the minimum experience for level n.
 	 * e.g. Minimum xp for level 10 is Xps[10].
 	 */
-	private static int[] EXPERIENCE_PER_LEVEL = {- 1, 0, 83, 174, 276, 388, 512, 650, 801, 969, 1154,
+	public static int[] EXPERIENCE_PER_LEVEL = {- 1, 0, 83, 174, 276, 388, 512, 650, 801, 969, 1154,
 			1358, 1584, 1833, 2107, 2411, 2746, 3115, 3523, 3973, 4470, 5018,
 			5624, 6291, 7028, 7842, 8740, 9730, 10824, 12031, 13363, 14833,
 			16456, 18247, 20224, 22406, 24815, 27473, 30408, 33648, 37224,
@@ -465,7 +465,7 @@ public class Skills {
 	 * @param level The level.
 	 * @return The experience.
 	 */
-	public int getXPForLevel(int level) {
+	public static int getXPForLevel(int level) {
 		int points = 0;
 		int output = 0;
 		for(int lvl = 1; lvl <= level; lvl++) {

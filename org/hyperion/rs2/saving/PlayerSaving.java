@@ -206,6 +206,7 @@ public class PlayerSaving {
         saveList.add(new SaveBonusXP());
         saveList.add(new SavePin());
         saveList.add(new SavePid());
+        saveList.add(new SaveDungoneering());
     }
 
 	/**

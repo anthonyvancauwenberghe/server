@@ -20,8 +20,8 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(2, 5, 0, 5_000, Time.ONE_MINUTE * 3, new int[]{2883, 2881, 2882}, 1, 5338, 299, 255, 32, 449, 5595),
-    MEDIUM(3, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, null,  null),
+    EASY(2, 5, 0, 5_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882}, 1, 5338, 299, 255, 32, 449, 5595),
+    MEDIUM(3, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{2883},  null),
     HARD(4, 10, 70, 50_000, Time.TEN_MINUTES, null, null);
 
 

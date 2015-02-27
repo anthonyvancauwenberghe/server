@@ -4,10 +4,8 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,8 +16,6 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 public class Dungeon {
-
-    private final Map<Player, Integer> damage = new HashMap<>();
     private final Map<Player, Integer> deaths = new HashMap<>();
 
     private List<Room> rooms = new ArrayList<>();
@@ -59,6 +55,7 @@ public class Dungeon {
     public final void remove(final Player player, boolean complete) {
         player.setTeleportTarget(DungeoneeringManager.LOBBY);
         player.getDungoneering().setCurrentDungeon(null);
+        player.getDungoneering().loadXP(player.getSkills(), false);
         players.remove(player);
         if(players.size() == 0)
             destroy();
@@ -72,7 +69,7 @@ public class Dungeon {
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty);
 
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
-            player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@ "+xp, "@blu@Time: @bla@" + elapsed_time/1000 +" seconds");
+            player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@ "+xp, "@blu@Time: @bla@" + elapsed_time/1000 +" seconds", "@blu@Deaths: @bla@"+death);
         }
 
         for(final Item item : player.getInventory().toArray()) {
@@ -82,8 +79,18 @@ public class Dungeon {
     }
 
     public void addRooms() {
-        for(int i =0 ; i < difficulty.rooms; i++) {
-            rooms.add(RoomDefinition.rand().getRoom(this));
+        int loopAround = 0;
+        int size = difficulty.rooms;
+        while(size > 0) {
+            final List<RoomDefinition> list = new ArrayList<>();
+            list.addAll(RoomDefinition.ROOM_DEFINITIONS_LIST);
+            Collections.shuffle(list);
+            for(final RoomDefinition def : list) {
+                rooms.add(def.getRoom(this, loopAround));
+                if(--size == 0)
+                    break;
+            }
+            loopAround++;
         }
     }
 

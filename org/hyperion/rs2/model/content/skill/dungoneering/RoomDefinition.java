@@ -40,8 +40,8 @@ public class RoomDefinition {
         World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2477), Location.create(x_end, y_end, 0), 10, 0));
     }
 
-    public final Room getRoom(final Dungeon dungeon) {
-        return new Room(dungeon, this, dungeon.heightLevel * (int)Math.pow(4, 1 + Misc.random(1)));
+    public final Room getRoom(final Dungeon dungeon, final int loop_around) {
+        return new Room(dungeon, this, dungeon.heightLevel * (int)Math.pow(4, loop_around));
     }
 
     public Point randomLoc() {

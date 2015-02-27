@@ -6,6 +6,7 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.skill.Prayer;
 
 /**
@@ -51,6 +52,8 @@ public class SkillSetCommand extends Command {
 	public boolean execute(Player player, String input) {
 		if(player.getLocation().cannotMax())
 			return false;
+        if(!ItemSpawning.canSpawn(player))
+            return false;
 		if(! Server.SPAWN)
 			return false;
 		if(! canChangeLevel(player))

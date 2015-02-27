@@ -91,7 +91,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 e.printStackTrace();
             }
         } else if(type == ClickType.ITEM_OPTION1) {
-            player.getDungoneering().getTokens();
+            player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungoneering().getTokens()));
             return true;
         }
         return false;

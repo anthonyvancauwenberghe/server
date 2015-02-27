@@ -40,6 +40,7 @@ public class Dungeon {
         for(final Player player : players) {
             player.setTeleportTarget(start.getSpawnLocation());
             player.getDungoneering().setCurrentRoom(start);
+            player.getInventory().add(Item.create(995, 500));
             for(final Item bound : player.getDungoneering().getBinds())
                 player.getInventory().add(bound);
 
@@ -64,15 +65,25 @@ public class Dungeon {
             long delta_time = difficulty.time - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
             double multiplier = (time/10D) + 1.0;
+            if(multiplier < 0.4) multiplier = 0.4;
             int death = deaths.getOrDefault(player, 0);
             double death_penalty = Math.pow(0.85, death);
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty);
-
+            int tokens = xp/100;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
-            player.sendMessage("@red@DUNGEON COMPLETE", "@blu@Exp: @bla@ "+xp, "@blu@Time: @bla@" + elapsed_time/1000 +" seconds", "@blu@Deaths: @bla@"+death);
+            player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
+            player.sendMessage
+                    ("@red@----------------------DUNGEON COMPLETE----------------------",
+                            "@blu@Exp: @bla@ "+xp,
+                            "@blu@Time: @bla@" + TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS) +" seconds",
+                            "@blu@Deaths: @bla@"+death, "@blu@Tokens: @bla@" +tokens);
         }
 
         for(final Item item : player.getInventory().toArray()) {
+            if(item.getId() != 15707)
+                player.getInventory().remove(item);
+        }
+        for(final Item item : player.getEquipment().toArray()) {
             if(item.getId() != 15707)
                 player.getInventory().remove(item);
         }

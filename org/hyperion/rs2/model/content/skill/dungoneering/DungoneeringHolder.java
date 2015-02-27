@@ -48,6 +48,7 @@ public class DungoneeringHolder {
             return;
         final Dungeon dungeon = new Dungeon(players, chosen);
         dungeon.start();
+        this.currentDungeon = dungeon;
     }
 
     public void bind(final Item item, final int slot) {

@@ -21,7 +21,7 @@ import java.util.List;
 public class Room {
 
     private final List<NPC> npcs = new ArrayList<>();
-    private final List<NPC> events = new ArrayList<>();
+    public final List<NPC> events = new ArrayList<>();
 
     private Room child, parent;
     boolean initialized;
@@ -60,6 +60,8 @@ public class Room {
         }
 
         public void initialize() {
+            for(final NPC npc : events)
+                npc.isHidden(false);
             if(initialized)
                 return;
             initialized = true;
@@ -99,8 +101,14 @@ public class Room {
                 if(!npc.isDead()) {
                     npc.serverKilled = true;
                     npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
+                }
             }
-        }
+            for(NPC npc : events) {
+                if(!npc.isDead()) {
+                    npc.serverKilled = true;
+                    npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
+                }
+            }
         npcs.clear();
     }
 

@@ -119,7 +119,8 @@ public class DungeoneeringManager implements ContentTemplate {
                     DialogueManager.openDialogue(player, 7002);
                     return true;
                 }
-
+                player.setTeleportTarget(location);
+                player.getDungoneering().getRoom().initialize();
                 break;
         }
         return false;
@@ -139,14 +140,14 @@ public class DungeoneeringManager implements ContentTemplate {
                 final InterfaceState state = player.getInterfaceState();
                 state.setNextDialogueId(0, 7003);
                 state.setNextDialogueId(1, 7004);
-                break;
+                return true;
             case 7003:
                 if(player.getDungoneering().inDungeon())
                     player.getDungoneering().getCurrentDungeon().remove(player, false);
                 break;
             case 7005:
                 player.getDungoneering().showBindDialogue(player.getActionSender(), player.getInterfaceState());
-                break;
+                return true;
             case 7006:
             case 7007:
             case 7008:

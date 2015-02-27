@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  * To change this template use File | Settings | File Templates.
  */
 public class DungeoneeringManager implements ContentTemplate {
-
+    public static final int TRADER_ID = 539;
     private static final int DIALOGUE_ID = 7000;
 
     private static List<Integer> items;
@@ -45,7 +46,7 @@ public class DungeoneeringManager implements ContentTemplate {
         else if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3};
         else if (type == ClickType.NPC_OPTION1)
-            return new int[]{8827, 8824};
+            return new int[]{8827, 8824, TRADER_ID};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -62,6 +63,10 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+        if(npcId == TRADER_ID) {
+            ShopManager.open(player, 80);
+            return true;
+        }
         try {
             final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
             if(npc == null)

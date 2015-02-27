@@ -80,7 +80,7 @@ public class DungoneeringHolder {
     public Location clickBackPortal() {
         if(room.getParent() == null)
             return null;
-        final Location location = room.getParent().getSpawnLocation();
+        final Location location = room.getParent().getEndLocation();
         setCurrentRoom(room.getParent());
         return location;
     }

@@ -29,7 +29,7 @@ public class Room {
 
     public final Dungeon dungeon;
     public final RoomDefinition definition;
-    public final int heightLevel;
+    public int heightLevel;
 
     public Room(final Dungeon dungeon, final RoomDefinition def, final int heightLevel) {
         this.dungeon = dungeon;
@@ -92,6 +92,10 @@ public class Room {
     }
 
     public Location getSpawnLocation() {
+        return Location.create(definition.x, definition.y, heightLevel);
+    }
+
+    public Location getEndLocation() {
         return Location.create(definition.x, definition.y, heightLevel);
     }
 

@@ -99,6 +99,7 @@ public class Dungeon {
         }
         final Room boss = rooms.get(rooms.size() - 1);
         boss.boss = true;
+        boss.heightLevel = (int)(heightLevel * Math.pow(4, 3));
 
         for(int i = 1; i < rooms.size(); i++) {
             rooms.get(i).setParent(rooms.get(i-1));

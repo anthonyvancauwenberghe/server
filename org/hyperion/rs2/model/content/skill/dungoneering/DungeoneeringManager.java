@@ -46,8 +46,52 @@ public class DungeoneeringManager implements ContentTemplate {
         else if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3, DIALOGUE_ID + 4, DIALOGUE_ID + 5, DIALOGUE_ID + 6, DIALOGUE_ID + 7, DIALOGUE_ID + 8, DIALOGUE_ID + 9, DIALOGUE_ID + 10};
         else if (type == ClickType.NPC_OPTION1)
-            return new int[]{8827, 8824, TRADER_ID};
+            return new int[]{TRADER_ID};
+        else if (type == ClickType.NPC_OPTION2)
+            return new int[]{8827, 8824};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    @Override
+    public boolean clickObject2(Player player, int type, int npcId, int x, int y, int npcSlot) {
+        if(type == ClickType.NPC_OPTION2) {
+            try {
+                player.debugMessage("Yo3");
+
+                final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
+                if(npc == null) {
+                    player.sendMessage("Null NPC");
+                    return false;
+                }
+                if(npc.isDead())
+                    return false;
+                final int min_level = npcId == 8824 ? 50 : 80;
+                if(player.getSkills().getLevel(Skills.THIEVING) < min_level) {
+                    player.sendMessage("You need " + min_level +" thieving level to loot from this npc!");
+                    return false;
+                }
+                player.debugMessage("Yo");
+
+
+                if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
+                    return false;
+
+                player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000L);
+                for(int i =0; i < min_level/25; i++) {
+                    player.getInventory().add(Item.create(DungeoneeringManager.randomItem(), 1));
+                }
+                player.debugMessage("Yo5");
+                player.playAnimation(Animation.create(881));
+
+                npc.serverKilled = true;
+                npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
+
+            }catch(Exception e) {
+                player.debugMessage("Yo4");
+
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 
     @Override
@@ -70,42 +114,7 @@ public class DungeoneeringManager implements ContentTemplate {
         }
         player.debugMessage("Yo2");
 
-        try {
-            player.debugMessage("Yo3");
 
-            final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
-            if(npc == null) {
-                player.sendMessage("Null NPC");
-                return false;
-            }
-            if(npc.isDead())
-                return false;
-            final int min_level = npcId == 8824 ? 50 : 80;
-            if(player.getSkills().getLevel(Skills.THIEVING) < min_level) {
-                player.sendMessage("You need " + min_level +" thieving level to loot from this npc!");
-                return false;
-            }
-            player.debugMessage("Yo");
-
-
-            if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
-                return false;
-
-            player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000L);
-            for(int i =0; i < min_level/25; i++) {
-                player.getInventory().add(Item.create(DungeoneeringManager.randomItem(), 1));
-            }
-            player.debugMessage("Yo5");
-            player.playAnimation(Animation.create(881));
-
-            npc.serverKilled = true;
-            npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
-
-        }catch(Exception e) {
-            player.debugMessage("Yo4");
-
-            e.printStackTrace();
-        }
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

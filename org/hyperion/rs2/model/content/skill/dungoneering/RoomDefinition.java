@@ -26,15 +26,18 @@ public class RoomDefinition {
     public static final List<RoomDefinition> ROOM_DEFINITIONS_LIST = new ArrayList<>();
 
     public final int x, y;
-    public int x_end, y_end;
+    public final int x_end, y_end;
     public final List<Point> spawnLocations;
 
-    public RoomDefinition(final int x, final int y, List<Point> spawnLocations) {
+    public RoomDefinition(final int x, final int y, int x_end, int y_end, List<Point> spawnLocations) {
         this.x = x;
         this.y = y;
+        this.x_end = x_end;
+        this.y_end = y_end;
         this.spawnLocations = spawnLocations;
         ROOM_DEFINITIONS_LIST.add(this);
         World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2476), Location.create(x, y, 0), 10, 0));
+        World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2477), Location.create(x_end, y_end, 0), 10, 0));
     }
 
     public final Room getRoom(final Dungeon dungeon) {
@@ -46,7 +49,7 @@ public class RoomDefinition {
     }
 
     public String toString() {
-        return String.format("LocX: %d LocY: %d Size: %d", x, y, spawnLocations.size());
+        return String.format("LocX: %d LocY: %d EnxX : %d EndY: %d Size: %d", x, y, x_end, y_end, spawnLocations.size());
     }
 
     public void save(final IoBuffer buffer) {
@@ -85,6 +88,8 @@ public class RoomDefinition {
                 try {
                     int x = buf.getUnsignedShort();
                     int y = buf.getUnsignedShort();
+                    int x_end = buf.getUnsignedShort();
+                    int y_end = buf.getUnsignedShort();
 
                     int locs = buf.getUnsigned();
 
@@ -93,7 +98,7 @@ public class RoomDefinition {
                         points.add(new Point(buf.getUnsignedShort(), buf.getUnsignedShort()));
                     }
 
-                    System.out.println(new RoomDefinition(x, y, points));
+                    System.out.println(new RoomDefinition(x, y, x_end, y_end, points));
                     defs++;
                 } catch(Exception ex) {
 

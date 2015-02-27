@@ -117,8 +117,7 @@ public class RoomDefinitionCreator extends JFrame {
         public RoomDefinition toDefinition() {
             final List<Point> points = new ArrayList<>();
             spawnLocations.stream().map(InputPanel::loc).forEach(points::add);
-            final RoomDefinition def = new RoomDefinition(loc.loc().x, loc.loc().y, points);
-            def.x_end = end.loc().x; def.y_end = end.loc().y;
+            final RoomDefinition def = new RoomDefinition(loc.loc().x, loc.loc().y, end.loc().x,end.loc().y, points);
             return def;
         }
 

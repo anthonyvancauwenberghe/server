@@ -268,7 +268,7 @@ public class RuneCrafting implements ContentTemplate {
                     for(int i = 0; i < 5; i++) {
                         client.getInterfaceState().setNextDialogueId(i, 1021 + i);
                     }
-                    break;
+                    return true;
                 case 1021:
                     return isRunecraftable(client, AIR_ALTAR, 560, 2897, 9909);
                 case 1022:

@@ -162,14 +162,13 @@ public class DoorManager {
 				case DOUBLE:
 					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
-                            player.getActionSender().sendMessage("DUH");
                             if(p.getLocation().distance(door.getOpenLocation()) < 15) {
-                                p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), Location.create(door.getOpenLocation().getX(), door.getOpenLocation().getY(), p.getLocation().getZ()));
-                                p.getActionSender().sendDestroyObject(door.getSecondaryOpenType(), door.getSecondaryOpenFace(), Location.create(door.getSecondOpenLocation().getX(), door.getSecondOpenLocation().getY(), p.getLocation().getZ()));
+                                p.getActionSender().sendCreateObject(door.getClosedId(), door.getClosedType(), door.getClosedFace(),Location.create(door.getClosedLocation().getX(), door.getClosedLocation().getY(), player.getLocation().getZ()));
+                                p.getActionSender().sendCreateObject(door.getSecondaryClosedId(), door.getSecondaryClosedType(), door.getSecondaryClosedFace(), Location.create(door.getSecondClosedLocation().getX(), door.getSecondClosedLocation().getY(), player.getLocation().getZ()));
                             }
                             if(p.getLocation().distance(door.getClosedLocation()) < 15) {
-                                p.getActionSender().sendCreateObject(door.getClosedId(), door.getClosedType(), door.getClosedFace(),Location.create(door.getClosedLocation().getX(), door.getClosedLocation().getY(), p.getLocation().getZ()));
-                                p.getActionSender().sendCreateObject(door.getSecondaryClosedId(), door.getSecondaryClosedType(), door.getSecondaryClosedFace(), Location.create(door.getSecondClosedLocation().getX(), door.getSecondClosedLocation().getY(), p.getLocation().getZ()));
+                                p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), Location.create(door.getOpenLocation().getX(), door.getOpenLocation().getY(), player.getLocation().getZ()));
+                                p.getActionSender().sendDestroyObject(door.getSecondaryOpenType(), door.getSecondaryOpenFace(), Location.create(door.getSecondOpenLocation().getX(), door.getSecondOpenLocation().getY(), player.getLocation().getZ()));
                             }
 						}
 					}

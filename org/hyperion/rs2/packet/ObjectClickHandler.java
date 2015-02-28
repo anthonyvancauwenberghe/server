@@ -21,11 +21,6 @@ public class ObjectClickHandler {
 			p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
 			return;
 		}
-
-        if(!World.getWorld().isWalkAble(p.getLocation().getZ()%4, p.getLocation().getX(), p.getLocation().getY(), x, y, 1)) {
-            p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
-            return;
-        }
 		if(Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
 			p.getActionSender().sendMessage("Clicked object: "+id);
 		if(World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, - 1))

@@ -37,10 +37,10 @@ public class DungoneeringParty extends Interface {
     public void handle(Player player, Packet pkt) {
         final int id = pkt.getByte();
         final DungeonDifficulty difficulty = DungeonDifficulty.values()[pkt.getByte()];
-        final DungeonDifficulty.DungeonSize size = DungeonDifficulty.DungeonSize.values()[pkt.getByte()];
 
         switch(id) {
             case START:
+                final DungeonDifficulty.DungeonSize size = DungeonDifficulty.DungeonSize.values()[pkt.getByte()];
                 final String[] playerStrings = new String[pkt.getByte()];
                 for(int i = 0; i < playerStrings.length; i++) {
                     playerStrings[i] = pkt.getRS2String();

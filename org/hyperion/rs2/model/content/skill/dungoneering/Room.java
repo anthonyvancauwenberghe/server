@@ -65,7 +65,7 @@ public class Room {
         if(initialized)
             return;
         initialized = true;
-        int npcCount = boss ? 1 : dungeon.difficulty.spawns;
+        int npcCount = boss ? 1 : 1 + Misc.random(dungeon.difficulty.spawns);
         for(int i = 0; i < npcCount; i++) {
             final Point loc = definition.randomLoc();
             final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);

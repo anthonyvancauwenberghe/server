@@ -94,7 +94,6 @@ public class DungoneeringHolder {
             return null;
         }
         final Location location = room.getChild().getSpawnLocation();
-        room.events.forEach(n -> n.isHidden(true));
         setCurrentRoom(room.getChild());
         return location;
     }

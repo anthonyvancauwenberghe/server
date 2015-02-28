@@ -270,7 +270,7 @@ public class RuneCrafting implements ContentTemplate {
                     }
                     return true;
                 case 1021:
-                    return isRunecraftable(client, AIR_ALTAR, 560, 2897, 9909);
+                    return isRunecraftable(client, AIR_ALTAR, 556, 2897, 9909);
                 case 1022:
                     return isRunecraftable(client, WATER_ALTAR, 555, 2897, 9909);
                 case 1023:

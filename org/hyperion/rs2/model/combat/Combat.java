@@ -524,7 +524,7 @@ public class Combat {
 						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
 					int deltaBonus = MeleeAtk - MeleeDef;
-					int toAdd = Misc.random(deltaBonus / 5);
+					int toAdd = Misc.random(deltaBonus / 3);
 					damg += toAdd;
 					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
 						combatEntity.getPlayer().getActionSender().sendMessage("ToAdd: " + toAdd);
@@ -539,9 +539,10 @@ public class Combat {
 					}*/
 				}
 			} else {
-				if(! verac
-						&& random(CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer())) < random(combatEntity.getOpponent().getNPC().getDefinition().getBonus()[(combatEntity.getAtkType() + 2)]))
-					damg = 0;
+				if( verac && Misc.random(6) == 0) {
+                     ;
+                } else
+					damg = CombatCalculation.getCalculatedDamage(combatEntity.getEntity(), combatEntity.getOpponent().getEntity(), damg, combatStyle, maxHit);
 				if(SlayerTask.getLevelById(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
 					damg = 0;
 			}

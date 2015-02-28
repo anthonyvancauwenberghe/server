@@ -37,6 +37,7 @@ public class DungoneeringParty extends Interface {
     public void handle(Player player, Packet pkt) {
         final int id = pkt.getByte();
         final DungeonDifficulty difficulty = DungeonDifficulty.values()[pkt.getByte()];
+        final DungeonDifficulty.DungeonSize size = DungeonDifficulty.DungeonSize.values()[pkt.getByte()];
 
         switch(id) {
             case START:
@@ -63,7 +64,7 @@ public class DungoneeringParty extends Interface {
                     @Override
                     public void execute() throws IOException {
                         players.add(player);
-                        player.getDungoneering().start(players, difficulty);
+                        player.getDungoneering().start(players, difficulty, size);
                         this.stop();
                     }
                 });

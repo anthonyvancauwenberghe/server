@@ -96,7 +96,7 @@ public class Room {
     }
 
     public Location getEndLocation() {
-        return Location.create(definition.x, definition.y, heightLevel);
+        return Location.create(definition.x_end, definition.y_end, heightLevel);
     }
 
     public Location randomLocation() {

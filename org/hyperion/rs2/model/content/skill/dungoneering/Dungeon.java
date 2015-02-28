@@ -24,12 +24,16 @@ public class Dungeon {
     public final int heightLevel;
     public final DungeonDifficulty difficulty;
     private final long start_time;
+    private final DungeonDifficulty.DungeonSize size;
+    private final int teamSize;
 
-    public Dungeon(final List<Player> players, final DungeonDifficulty difficulty) {
+    public Dungeon(final List<Player> players, final DungeonDifficulty difficulty, final DungeonDifficulty.DungeonSize size) {
         this.players = players;
         this.heightLevel = players.get(0).getIndex();
         this.difficulty = difficulty;
         this.start_time = System.currentTimeMillis();
+        this.size = size;
+        this.teamSize = players.size();
     }
 
 
@@ -68,7 +72,8 @@ public class Dungeon {
             if(multiplier < 0.4) multiplier = 0.4;
             int death = deaths.getOrDefault(player, 0);
             double death_penalty = Math.pow(0.85, death);
-            final int xp = (int)((difficulty.xp * multiplier) * death_penalty);
+            double team_penalty = Math.pow(0.9, teamSize - 1);
+            final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size.multiplier * team_penalty);
             int tokens = xp/100;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
@@ -91,7 +96,7 @@ public class Dungeon {
 
     public void addRooms() {
         int loopAround = 1;
-        int size = difficulty.rooms;
+        int size = this.size.size;
         while(size > 0) {
             final List<RoomDefinition> list = new ArrayList<>();
             list.addAll(RoomDefinition.ROOM_DEFINITIONS_LIST);

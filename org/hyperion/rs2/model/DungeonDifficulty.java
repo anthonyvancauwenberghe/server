@@ -21,8 +21,8 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(2, 5, 0, 5_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882, 2883}, 1, 5338, 299, 255, 32, 449, 5595),
-    MEDIUM(3, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, RevAttack.getRevs(),  null),
+    EASY(2, 5, 0, 5_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882, 2883}, 1, 5338, 299, 255, 32, 449, 5595, 196),
+    MEDIUM(3, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, RevAttack.getRevs(),  53, 54, 55, 941),
     HARD(4, 10, 70, 50_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 6222);
 
 
@@ -47,6 +47,19 @@ public enum DungeonDifficulty {
 
     public int getBoss() {
         return bosses[Misc.random(bosses.length - 1)];
+    }
+
+    public enum DungeonSize {
+        SMALL(5, 0.9),
+        MEDIUM(15, 2.0),
+        LARGE(30, 4.5);
+
+        public final int size;
+        public final double multiplier;
+        private DungeonSize(final int size, final double multiplier) {
+            this.size = size;
+            this.multiplier = multiplier;
+        }
     }
 
 }

@@ -56,7 +56,7 @@ public class DungoneeringHolder {
         Arrays.fill(combatXPs, Skills.EXPERIENCE_PER_LEVEL[50] + 5);
     }
 
-    public void start(final List<Player> players, final DungeonDifficulty chosen) {
+    public void start(final List<Player> players, final DungeonDifficulty chosen, final DungeonDifficulty.DungeonSize size) {
         final Iterator<Player> it = players.iterator();
         while(it.hasNext()) {
             final Player p = it.next();
@@ -68,7 +68,7 @@ public class DungoneeringHolder {
         if(players.size() == 0)
             return;
         players.forEach(p -> p.getDungoneering().loadXP(p.getSkills(), true));
-        final Dungeon dungeon = new Dungeon(players, chosen);
+        final Dungeon dungeon = new Dungeon(players, chosen, size);
         dungeon.start();
         setCurrentDungeon(dungeon);
     }
@@ -87,6 +87,7 @@ public class DungoneeringHolder {
     }
 
     public Location clickPortal() {
+        if(room == null) return null;
         if(!room.cleared())
             return null;
         if(room.boss) {
@@ -99,6 +100,7 @@ public class DungoneeringHolder {
     }
 
     public Location clickBackPortal() {
+        if(room == null) return null;
         if(room.getParent() == null)
             return null;
         final Location location = room.getParent().getEndLocation();

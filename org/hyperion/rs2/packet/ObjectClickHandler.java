@@ -22,7 +22,7 @@ public class ObjectClickHandler {
 			return;
 		}
 
-        if(!World.getWorld().isWalkAble(p.getLocation().getZ()%4, p.getLocation().getX(), p.getLocation().getY(), x, y, 0)) {
+        if(!World.getWorld().isWalkAble(p.getLocation().getZ()%4, p.getLocation().getX(), p.getLocation().getY(), x, y, 1)) {
             p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
             return;
         }

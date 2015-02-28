@@ -50,7 +50,7 @@ public class DoorManager {
 	 * @return True if the map contains the location, false if not.
 	 */
 	public static boolean handleDoor(final Player player, final Location loc, int objectId) {
-		final Door door = doors.get(Location.create(loc.getX(), loc.getY(), 0));
+		final Door door = doors.get(Location.create(loc.getX(), loc.getY(), loc.getZ()%4));
 		if(door == null) {
 			GameObjectDefinition def = GameObjectDefinition.forId(objectId);
 			if(def.getName() != null) {

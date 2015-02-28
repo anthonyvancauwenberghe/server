@@ -259,7 +259,7 @@ public class DungeoneeringManager implements ContentTemplate {
     }
     private static final boolean full(final int[] bonus) {
         for(int i : bonus)
-            if(i > 10)
+            if(i > 5)
                 return true;
         return false;
     }

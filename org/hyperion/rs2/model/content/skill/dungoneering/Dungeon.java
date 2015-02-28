@@ -61,7 +61,6 @@ public class Dungeon {
 
 
     public final void remove(final Player player, boolean complete) {
-        player.setTeleportTarget(DungeoneeringManager.LOBBY);
         player.getDungoneering().loadXP(player.getSkills(), false);
         players.remove(player);
         if(complete) {
@@ -97,6 +96,8 @@ public class Dungeon {
 
         player.getDungoneering().setCurrentRoom(null);
         player.getDungoneering().setCurrentDungeon(null);
+
+        player.setTeleportTarget(DungeoneeringManager.LOBBY);
 
         if(players.size() == 0)
             destroy();

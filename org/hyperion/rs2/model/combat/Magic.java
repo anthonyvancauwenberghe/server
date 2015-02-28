@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
@@ -1097,8 +1098,8 @@ public class Magic {
 	public static void homeTeleport(final Player player) {
 		player.getWalkingQueue().reset();
 		player.isFollowing = null;
-		final int x = player.getDungoneering().inDungeon() ? player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation().getX() : (3085 + Misc.random(2));
-		final int y = player.getDungoneering().inDungeon() ? player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation().getY() : (3491 + Misc.random(2));
+		final int x = (3085 + Misc.random(2));
+		final int y = (3491 + Misc.random(2));
 		if(player.isTeleBlocked()) {
 			player.getActionSender().sendMessage(
 					"You are currently teleblocked.");
@@ -1160,8 +1161,13 @@ public class Magic {
 					return;
 				}
 				if(index >= 17) {
-					player.setTeleportTarget(Location.create(x, y, 0));
-					this.stop();
+                    if(player.getDungoneering().inDungeon()) {
+                        final Room room = player.getDungoneering().getCurrentDungeon().getStartRoom();
+                        player.setTeleportTarget(room.getSpawnLocation());
+                        player.getDungoneering().setCurrentRoom(room);
+                    } else player.setTeleportTarget(Location.create(x, y, 0));
+
+                    this.stop();
 					player.inAction = false;
 					return;
 				}

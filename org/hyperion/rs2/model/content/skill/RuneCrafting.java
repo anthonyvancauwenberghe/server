@@ -3,12 +3,16 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.Rune;
+import org.hyperion.rs2.net.ActionSender;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -95,7 +99,6 @@ public class RuneCrafting implements ContentTemplate {
 			return false;
 		} else if(ContentEntity.getLevelForXP(client, 20) >=
 				r.getLevel()) {
-			client.getExtraData().put("runecraftingtimer", 0);
 			int useItemId = 1436;
 			if(! ContentEntity.isItemInBag(client, 1436) && ContentEntity.isItemInBag(client, 7936))
 				useItemId = 7936;
@@ -145,7 +148,8 @@ public class RuneCrafting implements ContentTemplate {
 			//Start the runecrafting emote.
 			client.setCanWalk(false);
 			client.setBusy(true);
-			ContentEntity.startAnimation(client, 791);
+            client.getExtraData().put("runecraftingtimer", 0);
+            ContentEntity.startAnimation(client, 791);
 			ContentEntity.playerGfx(client, 186);
 			ContentEntity.sendMessage(client, "You bind the temple's power into " + ContentEntity.getItemName(item) + "s.");
 			//The runecrafting event.
@@ -192,6 +196,9 @@ public class RuneCrafting implements ContentTemplate {
 	public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int itemSlot2) {
 		if(type == 6) {
 			if(id == AIR_ALTAR) {
+                if(client.getDungoneering().inDungeon()) {
+                    DialogueManager.openDialogue(client, 1020);
+                } else
 				if(isRunecraftable(client, id, 556, slot, itemId2)) {
 				}
 			} else if(id == MIND_ALTAR) {
@@ -251,8 +258,30 @@ public class RuneCrafting implements ContentTemplate {
 				Magic.teleport(client, 2208, 4830, 0, false);
 			}
 		}
+        if(type == ClickType.DIALOGUE_MANAGER) {
+            switch(id) {
+                case 1020:
+                    client.getActionSender().sendDialogue("Crafting", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
+                            "Air", "Water", "Earth", "Fire", "Death");
+                    for(int i = 0; i < 5; i++) {
+                        client.getInterfaceState().setNextDialogueId(i, 1021 + i);
+                    }
+                    break;
+                case 1021:
+                    return isRunecraftable(client, AIR_ALTAR, 560, 2897, 9909);
+                case 1022:
+                    return isRunecraftable(client, WATER_ALTAR, 555, 2897, 9909);
+                case 1023:
+                    return isRunecraftable(client, EARTH_ALTAR, 555, 2897, 9909);
+                case 1024:
+                    isRunecraftable(client, FIRE_ALTAR, 554, 2897, 9909);
+                case 1025:
+                    return isRunecraftable(client, DEATH_ALTAR, 560, 2897, 9909);
+            }
+        }
 		return false;
 	}
+
 
 	@SuppressWarnings("unused")
 	private static final int AIR_ALTAR = 2478, MIND_ALTAR = 2479, WATER_ALTAR = 2480, EARTH_ALTAR = 2481,

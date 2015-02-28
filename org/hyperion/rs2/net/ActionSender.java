@@ -1795,7 +1795,6 @@ public class ActionSender {
 
     public ActionSender createPlayersObjectAnim(int casterX, int casterY, int animationID, int tileObjectType, int orientation) {
         try{
-            System.out.println("Sending animation");
             final PacketBuilder builder = new PacketBuilder(85);
             builder.putByteC((casterY - (player.getLastKnownRegion()
                     .getRegionY() * 8)));

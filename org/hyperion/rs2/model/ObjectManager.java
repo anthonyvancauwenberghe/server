@@ -218,8 +218,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
                 for(GameObject obj : globalObjects) {
                     if(obj.getDefinition().animation == -1) continue;
                     for(final Player player : World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getPlayers()) {
-                        if(player != null);
-                            //player.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
+                        if(player != null)
+                            player.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
                     }
                 }
             }

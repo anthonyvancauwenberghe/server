@@ -97,7 +97,8 @@ public class Dungeon {
         player.getDungoneering().setCurrentRoom(null);
         player.getDungoneering().setCurrentDungeon(null);
 
-        player.setTeleportTarget(DungeoneeringManager.LOBBY);
+
+        player.setLocation(DungeoneeringManager.LOBBY);
 
         if(players.size() == 0)
             destroy();

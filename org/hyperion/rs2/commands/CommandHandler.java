@@ -1654,7 +1654,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("checkitem", Rank.DEVELOPER){
+        submit(new Command("searchitem", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String idString = filterInput(input).trim();
                 int id;

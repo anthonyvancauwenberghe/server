@@ -45,7 +45,7 @@ public class DungeoneeringManager implements ContentTemplate {
         else if(type == ClickType.OBJECT_CLICK1)
             return new int[]{2477, 2476, 2804};
         else if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3, DIALOGUE_ID + 4, DIALOGUE_ID + 5, DIALOGUE_ID + 6, DIALOGUE_ID + 7, DIALOGUE_ID + 8, DIALOGUE_ID + 9, DIALOGUE_ID + 10};
+            return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3, DIALOGUE_ID + 4, DIALOGUE_ID + 5, DIALOGUE_ID + 6, DIALOGUE_ID + 7, DIALOGUE_ID + 8, DIALOGUE_ID + 9, DIALOGUE_ID + 10, DIALOGUE_ID + 11, DIALOGUE_ID + 12, DIALOGUE_ID + 13};
         else if (type == ClickType.NPC_OPTION1)
             return new int[]{TRADER_ID};
         else if (type == ClickType.NPC_OPTION2)
@@ -94,6 +94,9 @@ public class DungeoneeringManager implements ContentTemplate {
         } else if(type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungoneering().getTokens()));
             return true;
+        } else if (type == ClickType.NPC_OPTION2)
+        {
+            ShopManager.open(player, 81);
         }
         return false;
     }
@@ -116,6 +119,10 @@ public class DungeoneeringManager implements ContentTemplate {
             return true;
         }
 
+        if(npcId == 9711) {
+            DialogueManager.openDialogue(player, 7011);
+            return true;
+        }
 
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -188,7 +195,25 @@ public class DungeoneeringManager implements ContentTemplate {
                 }
                 player.getDungoneering().bind((Item)player.getExtraData().get("binditem"), slot);
                 break;
+            case 7011:
+                player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
+                        "Open Full Dungoneering Guide", "How to start dungoneering?");
+                player.getInterfaceState().setNextDialogueId(0, 7012);
+                player.getInterfaceState().setNextDialogueId(1, 7013);
+                player.getInterfaceState().setNextDialogueId(2, -1);
+
+                return true;
+            case 7012:
+                player.sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/13907-dungeoneering-guide/");
+                break;
+            case 7013:
+                player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.NPC, 9711, Animation.FacialAnimation.DEFAULT,
+                        "To start dungoneering click your ring of kinship", "To create a team, click the entrance portal", "to join a team, when someone invites you accept their invite");
+                player.getInterfaceState().setNextDialogueId(0, -1);
+
+                return true;
         }
+
         player.getActionSender().removeChatboxInterface();
         return true;
     }

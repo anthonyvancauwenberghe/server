@@ -66,7 +66,7 @@ public class Dungeon {
             destroy();
         if(complete) {
             long elapsed_time = System.currentTimeMillis() - start_time;
-            long delta_time = difficulty.time - elapsed_time;
+            long delta_time = (long)(difficulty.time * size.multi_time) - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
             double multiplier = (time/10D) + 1.0;
             if(multiplier < 0.4) multiplier = 0.4;

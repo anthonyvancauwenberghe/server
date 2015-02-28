@@ -50,15 +50,17 @@ public enum DungeonDifficulty {
     }
 
     public enum DungeonSize {
-        SMALL(5, 0.9),
-        MEDIUM(15, 2.0),
-        LARGE(30, 4.5);
+        SMALL(5, 0.9, .5),
+        MEDIUM(15, 2.0, 1.5),
+        LARGE(30, 4.5, 3);
 
         public final int size;
         public final double multiplier;
-        private DungeonSize(final int size, final double multiplier) {
+        public final double multi_time;
+        private DungeonSize(final int size, final double multiplier, final double multi) {
             this.size = size;
             this.multiplier = multiplier;
+            this.multi_time = multi;
         }
     }
 

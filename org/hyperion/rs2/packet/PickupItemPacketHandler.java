@@ -33,19 +33,20 @@ public class PickupItemPacketHandler implements PacketHandler {
 		final int itemID = packet.getShort();
 		final int itemX = packet.getLEShort();
 		final Location loc = Location.create(itemX, itemY, 0);
-		World.getWorld().submit(new Event(1000, "checked") {
+		World.getWorld().submit(new Event(600, "checked") {
 			int timeout = 0;
 
 			@Override
 			public void execute() {
-                if(loc.distance(player.getLocation()) == 1 && !World.getWorld().isWalkAble(player.getLocation().getZ(), player.getLocation().getX(), player.getLocation().getY(), itemX, itemY, 0)) {
+                if(loc.distance(player.getLocation()) == 1 && timeout > 0) {
                     World.getWorld().getGlobalItemManager().pickupItem(player, itemID, itemX, itemY);
                     player.playAnimation(Animation.create(7270));
                     this.stop();
                 } else if(loc.distance(player.getLocation()) == 0) {
 					//player.getLogging().log("Picked up item : " + itemID);
-
-				} else if(++ timeout >= 10) {
+                    World.getWorld().getGlobalItemManager().pickupItem(player, itemID, itemX, itemY);
+                    this.stop();
+                } else if(++ timeout >= 10) {
 					this.stop();
 				}
 			}

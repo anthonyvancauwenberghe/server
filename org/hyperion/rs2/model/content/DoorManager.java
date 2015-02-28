@@ -159,14 +159,14 @@ public class DoorManager {
 				case DOUBLE:
 					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
-							if(p.getLocation().isWithinDistance(door.getClosedLocation())) {
-								p.getActionSender().sendDestroyObject(door.getClosedType(), door.getClosedFace(), door.getClosedLocation());
-								p.getActionSender().sendDestroyObject(door.getSecondaryClosedType(), door.getSecondaryClosedFace(), door.getSecondClosedLocation());
-							}
-							if(p.getLocation().isWithinDistance(door.getOpenLocation())) {
-								p.getActionSender().sendCreateObject(door.getOpenId(), door.getOpenType(), door.getOpenFace(), door.getOpenLocation());
-								p.getActionSender().sendCreateObject(door.getSecondaryOpenId(), door.getSecondaryOpenType(), door.getSecondaryOpenFace(), door.getSecondOpenLocation());
-							}
+                            if(p.getLocation().distance(door.getOpenLocation()) < 15) {
+                                p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), Location.create(door.getOpenLocation().getX(), door.getOpenLocation().getY(), p.getLocation().getZ()));
+                                p.getActionSender().sendDestroyObject(door.getSecondaryOpenType(), door.getSecondaryOpenFace(), Location.create(door.getSecondOpenLocation().getX(), door.getSecondOpenLocation().getY(), p.getLocation().getZ()));
+                            }
+                            if(p.getLocation().distance(door.getClosedLocation()) < 15) {
+                                p.getActionSender().sendCreateObject(door.getClosedId(), door.getClosedType(), door.getClosedFace(),Location.create(door.getClosedLocation().getX(), door.getClosedLocation().getY(), p.getLocation().getZ()));
+                                p.getActionSender().sendCreateObject(door.getSecondaryClosedId(), door.getSecondaryClosedType(), door.getSecondaryClosedFace(), Location.create(door.getSecondClosedLocation().getX(), door.getSecondClosedLocation().getY(), p.getLocation().getZ()));
+                            }
 						}
 					}
 					door.redoOpenState();

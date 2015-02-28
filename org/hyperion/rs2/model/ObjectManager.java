@@ -212,7 +212,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 	}
 
     public void submitEvent() {
-        World.getWorld().submit(new Event(600) {
+        World.getWorld().submit(new Event(3000) {
             @Override
             public void execute() throws IOException {
                 for(GameObject obj : globalObjects) {

@@ -67,6 +67,7 @@ public class DungoneeringParty extends Interface {
                         this.stop();
                     }
                 });
+                hide(player);
                 break;
             case INVITE:
                 final String name = pkt.getRS2String();

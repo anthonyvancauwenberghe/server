@@ -122,6 +122,8 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
+        if(player.getLocation().distance(Location.create(x, y, 0)) > 2)
+            return false;
         switch(id) {
             case 2804:
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);

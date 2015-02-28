@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,6 +25,12 @@ import java.util.List;
 public class RoomDefinition {
 
     public static final List<RoomDefinition> ROOM_DEFINITIONS_LIST = new ArrayList<>();
+    public static final RoomDefinition START_ROOM;
+
+    static {
+        START_ROOM = new RoomDefinition(2908, 9913, 2917, 9912, Arrays.asList(new Point[]{new Point(2910, 9907)}));
+        ROOM_DEFINITIONS_LIST.remove(START_ROOM);
+    }
 
     public final int x, y;
     public final int x_end, y_end;
@@ -114,6 +121,10 @@ public class RoomDefinition {
 
     public static RoomDefinition rand() {
         return ROOM_DEFINITIONS_LIST.get(Misc.random(ROOM_DEFINITIONS_LIST.size() - 1));
+    }
+
+    public static RoomDefinition getStartRoom() {
+        return START_ROOM;
     }
 
 

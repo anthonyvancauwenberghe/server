@@ -37,8 +37,6 @@ public class CommonMagicAttack implements Attack {
 	}
 	
 	public void handleEffect(final Player player) {
-		final int playerX = player.getLocation().getX()-4;
-		final int playerY = player.getLocation().getY()-4;
-		player.setTeleportTarget(Location.create(playerX + Misc.random(10), playerY + Misc.random(10), 0));
+
 	}
 }

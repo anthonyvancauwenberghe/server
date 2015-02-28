@@ -35,7 +35,7 @@ public class GameObjectDefinition {
 	 */
 	public static GameObjectDefinition forId(int id) {
 		if(definitions[id] == null)
-			definitions[id] = new GameObjectDefinition(id, "", "", 1, 1, true, false, true, 1);
+			definitions[id] = new GameObjectDefinition(id, "", "", 1, 1, true, false, true, 1, -1);
 		return definitions[id];
 	}
 
@@ -93,7 +93,7 @@ public class GameObjectDefinition {
 	 * @param isWalkable Walkable flag.
 	 * @param hasActions Flag which indicates if this object has any actions.
 	 */
-	public GameObjectDefinition(int id, String name, String desc, int sizeX, int sizeY, boolean isSolid, boolean isWalkable, boolean hasActions, int actionCount) {
+	public GameObjectDefinition(int id, String name, String desc, int sizeX, int sizeY, boolean isSolid, boolean isWalkable, boolean hasActions, int actionCount, int animation) {
 		this.id = id;
 		this.name = name;
 		this.desc = desc;
@@ -103,7 +103,10 @@ public class GameObjectDefinition {
 		this.walkable = isWalkable;
 		this.hasActions = hasActions;
 		this.actionCount = actionCount;
+        this.animation = animation;
 	}
+
+    public final int animation;
 
 	/**
 	 * Gets the id.

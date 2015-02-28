@@ -126,7 +126,7 @@ public class YellCommand extends Command {
 		final boolean hasTag = !player.getYelling().getTag().isEmpty();
 		final boolean aboveDonator = Rank.getPrimaryRank(player).ordinal() > Rank.DONATOR.ordinal();
 		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
-		final String suffix = "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: ";
+		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: ";
 		input = input.replaceFirst("yell ", "");
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}

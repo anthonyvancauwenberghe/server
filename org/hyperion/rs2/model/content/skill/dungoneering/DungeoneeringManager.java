@@ -226,7 +226,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 continue;
             final ItemDefinition def = ItemDefinition.forId(i);
             if(def == null) continue;
-            if(nonviable(def) && Food.get(i) == null && !def.getName().toLowerCase().endsWith(" rune"))
+            if(nonviable(def) && Food.get(i) == null)
                 continue;
             if(def.isNoted())
                 continue;

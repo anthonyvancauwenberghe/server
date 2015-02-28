@@ -185,10 +185,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public boolean checkMaxCapeRequirment() {
-        if(hasMaxCape)
-            return !getBank().contains(12744) && !getInventory().contains(12744) && !getEquipment().contains(12744);
 		for(int i = 6; i < this.getSkills().getLevels().length; i++) {
-			if(i >= 21 && i != Skills.SUMMONING)
+			if(i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONINEERING)
 				continue;
 			if(this.getSkills().getLevels()[i] < 99)
 				return false;
@@ -211,6 +209,26 @@ public class Player extends Entity implements Persistable, Cloneable{
 			return false;
 		return true;
 	}
+
+    public void checkCapes() {
+        checkContainers(12747, checkCompCapeReq());
+        checkContainers(12744, checkMaxCapeRequirment());
+    }
+
+    private void checkContainers(final int id, final boolean add) {
+        final Container[] containers = new Container[]{bank, equipment, inventory};
+        boolean contains = false;
+        for(final Container container : containers) {
+            if(container.contains(id)) {
+                contains = true;
+                if(!add)
+                    container.remove(Item.create(id));
+            }
+        }
+
+        if(!contains && add)
+            bank.add(Item.create(id));
+    }
 	
 	/**
 	 * Amount of charges on your shadow silk hood

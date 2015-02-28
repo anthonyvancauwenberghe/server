@@ -68,6 +68,7 @@ public class ObjectDefinitionParser {
 			boolean isSolid = true;
 			boolean isWalkable = true;
 			boolean hasActions = false;
+            int animation = 0;
 
 			outer_loop:
 			do {
@@ -125,7 +126,9 @@ public class ObjectDefinitionParser {
 							// some boolean
 							break;
 						case 24:
-							buf.getShort();
+							animation = buf.getShort();
+                            if(animation == 65535)
+                                animation = -1;
 							break;
 						case 28:
 							buf.get();
@@ -207,7 +210,7 @@ public class ObjectDefinitionParser {
 				}
 			} while(true);
 
-			listener.objectDefinitionParsed(new GameObjectDefinition(id, name, desc, sizeX, sizeY, isSolid, isWalkable, hasActions, actionCount));
+			listener.objectDefinitionParsed(new GameObjectDefinition(id, name, desc, sizeX, sizeY, isSolid, isWalkable, hasActions, actionCount, animation));
 		}
 	}
 

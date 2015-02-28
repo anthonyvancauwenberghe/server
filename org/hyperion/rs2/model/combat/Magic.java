@@ -1097,8 +1097,8 @@ public class Magic {
 	public static void homeTeleport(final Player player) {
 		player.getWalkingQueue().reset();
 		player.isFollowing = null;
-		final int x = 3085 + Misc.random(2);
-		final int y = 3491 + Misc.random(2);
+		final int x = player.getDungoneering().inDungeon() ? player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation().getX() : (3085 + Misc.random(2));
+		final int y = player.getDungoneering().inDungeon() ? player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation().getY() : (3491 + Misc.random(2));
 		if(player.isTeleBlocked()) {
 			player.getActionSender().sendMessage(
 					"You are currently teleblocked.");
@@ -1123,10 +1123,11 @@ public class Magic {
             player.getActionSender().sendMessage("You cannot teleport from duel arena.");
             return;
         }
-		if(World.getWorld().getContentManager()
+
+		if(!player.getDungoneering().inDungeon() && (World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()
-				.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
+				.handlePacket(6, player, 30001, - 1, - 1, - 1))) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport from fight pits.");
 			return;

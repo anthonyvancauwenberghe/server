@@ -25,7 +25,7 @@ public class Room {
 
     private Room child, parent;
     boolean initialized;
-    public boolean boss;
+    public boolean boss, must_clear;
 
     public final Dungeon dungeon;
     public final RoomDefinition definition;
@@ -38,6 +38,8 @@ public class Room {
     }
 
     public boolean cleared() {
+        if(!must_clear && !boss)
+            return initialized;
         for(final NPC npc : npcs) {
             if(!npc.isDead())
                 return false;
@@ -66,6 +68,7 @@ public class Room {
             return;
         initialized = true;
         int npcCount = boss ? 1 : 1 + Misc.random(dungeon.difficulty.spawns);
+        must_clear = Misc.random(10) < 7;
         for(int i = 0; i < npcCount; i++) {
             final Point loc = definition.randomLoc();
             final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
@@ -73,9 +76,9 @@ public class Room {
             npcs.add(npc);
         }
 
-        if(Misc.random(8) == 0) {
-            switch(Misc.random(1)) {
-                case 0:
+        if(Misc.random(7) == 0) {
+            switch(Misc.random(2)) {
+                default:
                     final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), FishingV2.FISHING_SPOTS[Misc.random(FishingV2.FISHING_SPOTS.length - 1)], -1);
                     events.add(npc);
                     break;
@@ -87,9 +90,6 @@ public class Room {
         }
     }
 
-    public void hide() {
-
-    }
 
     public Location getSpawnLocation() {
         return Location.create(definition.x, definition.y, heightLevel);

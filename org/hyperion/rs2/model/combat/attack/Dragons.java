@@ -1,11 +1,14 @@
 package org.hyperion.rs2.model.combat.attack;
 
+import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Attack;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.util.Misc;
 
 public class Dragons implements Attack {
 
@@ -31,14 +34,8 @@ public class Dragons implements Attack {
 				//melee
 				n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(20), 500, 0);
-			} else if(attackId == 0) {
-				//range
-				n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-				Combat.npcAttack(n, attack, Combat.random(8), 1000, 2);
-				//Combat.poisonEntity(attack);
-				Combat.npcRangeAttack(n, attack, 394, 30, false);
+                final int hit = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Misc.random(20), Constants.MELEE, 20);
+				Combat.npcAttack(n, attack, hit, 500, 0);
 			} else {
 				//firebreath
 				n.cE.doAnim(n.getDefinition().getAtkEmote(2));

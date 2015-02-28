@@ -72,7 +72,9 @@ public class Dungeon {
             if(multiplier < 0.4) multiplier = 0.4;
             int death = deaths.getOrDefault(player, 0);
             double death_penalty = Math.pow(0.85, death);
-            double team_penalty = Math.pow(0.9, teamSize - 1);
+            if(death_penalty < 0.4)
+                death_penalty = 0.4;
+            double team_penalty = Math.pow(0.91, teamSize - 1);
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size.multiplier * team_penalty);
             int tokens = xp/100;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
@@ -104,6 +106,8 @@ public class Dungeon {
     public void addRooms() {
         int loopAround = 1;
         int size = this.size.size;
+        rooms.add(RoomDefinition.getStartRoom().getRoom(this, loopAround));
+        size--;
         while(size > 0) {
             final List<RoomDefinition> list = new ArrayList<>();
             list.addAll(RoomDefinition.ROOM_DEFINITIONS_LIST);
@@ -154,6 +158,7 @@ public class Dungeon {
     public void kill(final Player player) {
         int old = deaths.getOrDefault(player, 0);
         deaths.put(player, old + 1);
+        player.getDungoneering().setCurrentRoom(getStartRoom());
     }
 
 }

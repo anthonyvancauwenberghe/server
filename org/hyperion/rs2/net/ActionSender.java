@@ -319,21 +319,7 @@ public class ActionSender {
 		 * Last movement event - simple for autoclickers
 		 */
 
-		if(player.checkMaxCapeRequirment()) {
-			player.getActionSender().sendMessage("You've been awarded with a max cape!");
-            final int freeSlots = player.getInventory().freeSlots();
-            (freeSlots > 0 ? player.getInventory() : player.getBank()).add(new Item(12744));
-            sendMessage("Max cape added to your " + (freeSlots > 0 ? "inventory" : "bank"));
-			player.setMaxCape(true);
-		}
-
-		if(player.checkCompCapeReq()) {
-			player.getActionSender().sendMessage("You've been awarded with a completionist cape!");
-            final int freeSlots = player.getInventory().freeSlots();
-            (freeSlots > 0 ? player.getInventory() : player.getBank()).add(new Item(12747));
-            sendMessage("Completionist cape added to your " + (freeSlots > 0 ? "inventory" : "bank"));
-            player.setCompCape(true);
-		}
+        player.checkCapes();
 
         if(player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
             sendMessage("script~x123");
@@ -726,6 +712,11 @@ public class ActionSender {
 			sendString(687, player.getSkills().getLevel(i) + "/"
 					+ player.getSkills().getLevelForExp(i));
 		}
+        if(i >= Skills.CONSTRUCTION) {
+            final int offset = i - Skills.CONSTRUCTION + 18165;
+            sendString(offset, player.getSkills().getLevel(i) + "");
+            sendString(offset+4, player.getSkills().getLevelForExp(i) + "");
+        }
 		PacketBuilder packetbuilder = new PacketBuilder(134);
 		packetbuilder.put((byte) i);
 		packetbuilder.putInt1((int) player.getSkills().getExperience(i));
@@ -1801,6 +1792,28 @@ public class ActionSender {
 		createProjectile(casterY, casterX, offsetY, offsetX, angle, speed,
 				gfxMoving, startHeight, endHeight, lockon, slope);
 	}
+
+    public ActionSender createPlayersObjectAnim(int casterX, int casterY, int animationID, int tileObjectType, int orientation) {
+        try{
+            final PacketBuilder builder = new PacketBuilder(85);
+            builder.putByteC((casterY - (player.getLastKnownRegion()
+                    .getRegionY() * 8)));
+            builder.putByteC((casterX - (player.getLastKnownRegion()
+                    .getRegionX() * 8)));
+            int x = 0;
+            int y = 0;
+            final PacketBuilder objectAnim = new PacketBuilder(160);
+            objectAnim.putByteS((byte)(((x&7) << 4) + (y&7)));
+            objectAnim.putByteS((byte)((tileObjectType<<2) +(orientation&3)));
+            objectAnim.putShortA(animationID);// animation id
+
+            player.write(builder.toPacket());
+            player.write(objectAnim.toPacket());
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return this;
+    }
 
 	public void createProjectile(int casterY, int casterX, int offsetY,
 	                             int offsetX, int angle, int speed, int gfxMoving, int startHeight,

@@ -536,6 +536,7 @@ public class World {
         submit(new ServerMessages());
         submit(new BountyHunterEvent());
         TriviaBot.getBot().init();
+        objectManager.submitEvent();
         //FFARandom.initialize();
         // new SQL();
     }

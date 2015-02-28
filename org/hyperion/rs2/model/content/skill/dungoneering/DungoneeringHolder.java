@@ -70,7 +70,7 @@ public class DungoneeringHolder {
         players.forEach(p -> p.getDungoneering().loadXP(p.getSkills(), true));
         final Dungeon dungeon = new Dungeon(players, chosen, size);
         dungeon.start();
-        setCurrentDungeon(dungeon);
+        players.forEach(p -> p.getDungoneering().setCurrentDungeon(dungeon));
     }
 
     public void bind(final Item item, final int slot) {

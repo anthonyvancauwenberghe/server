@@ -47,7 +47,7 @@ public class DungeoneeringManager implements ContentTemplate {
         else if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3, DIALOGUE_ID + 4, DIALOGUE_ID + 5, DIALOGUE_ID + 6, DIALOGUE_ID + 7, DIALOGUE_ID + 8, DIALOGUE_ID + 9, DIALOGUE_ID + 10, DIALOGUE_ID + 11, DIALOGUE_ID + 12, DIALOGUE_ID + 13};
         else if (type == ClickType.NPC_OPTION1)
-            return new int[]{TRADER_ID};
+            return new int[]{TRADER_ID, 9711};
         else if (type == ClickType.NPC_OPTION2)
             return new int[]{8827, 8824};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.

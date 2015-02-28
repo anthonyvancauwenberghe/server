@@ -100,7 +100,9 @@ public class DoorManager {
 					break;
 			}
 		} else {
+            player.sendMessage("DUH", door.getType());
 			switch(door.getType()) {
+
 				case NORMAL:
 					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
@@ -118,6 +120,7 @@ public class DoorManager {
 					double distance1 = player.getLocation().distance(door.getWalkTo());
 					double distance2 = player.getLocation().distance(door.getSecondaryWalkTo());
 					player.getWalkingQueue().reset();
+                    player.getActionSender().sendMessage("DUH");
 	            /*
                  * We want to walk to the location which is farthest away.
 				 */
@@ -159,6 +162,7 @@ public class DoorManager {
 				case DOUBLE:
 					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
+                            player.getActionSender().sendMessage("DUH");
                             if(p.getLocation().distance(door.getOpenLocation()) < 15) {
                                 p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), Location.create(door.getOpenLocation().getX(), door.getOpenLocation().getY(), p.getLocation().getZ()));
                                 p.getActionSender().sendDestroyObject(door.getSecondaryOpenType(), door.getSecondaryOpenFace(), Location.create(door.getSecondOpenLocation().getX(), door.getSecondOpenLocation().getY(), p.getLocation().getZ()));

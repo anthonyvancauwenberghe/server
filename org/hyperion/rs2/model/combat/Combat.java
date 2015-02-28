@@ -511,10 +511,10 @@ public class Combat {
 			RestarterThread.getRestarter().updateCombatTimer();
 			boolean verac = false;
 			if(CombatAssistant.isVeracEquiped(combatEntity.getPlayer())
-					&& random(2) == 1)
+					&& random(6) == 1)
 				verac = true;
 			if(combatEntity.getOpponent().getEntity() instanceof Player) {
-				if(! verac || Misc.random(6) > 0) {
+				if(! verac ) {
 					/**
 					 * Here is the Hit determine stuff, Includes Overhead Prayers.
 					 */
@@ -539,7 +539,7 @@ public class Combat {
 					}*/
 				}
 			} else {
-				if( verac && Misc.random(6) == 0) {
+				if( verac ) {
                      ;
                 } else
 					damg = CombatCalculation.getCalculatedDamage(combatEntity.getEntity(), combatEntity.getOpponent().getEntity(), damg, combatStyle, maxHit);

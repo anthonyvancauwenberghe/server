@@ -194,8 +194,9 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 		for(Player p : World.getWorld().getPlayers()) {
 			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
-                if(obj.getDefinition().animation != -1)
+                if(obj.getDefinition().animation != -1) {
                     p.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
+                }
 			}
 		}
 	}

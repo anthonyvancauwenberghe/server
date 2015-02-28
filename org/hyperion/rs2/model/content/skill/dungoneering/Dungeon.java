@@ -90,7 +90,7 @@ public class Dungeon {
         }
         for(final Item item : player.getEquipment().toArray()) {
             if(item.getId() != 15707)
-                player.getInventory().remove(item);
+                player.getEquipment().remove(item);
         }
     }
 

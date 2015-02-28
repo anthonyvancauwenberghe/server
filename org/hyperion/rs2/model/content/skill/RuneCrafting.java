@@ -188,6 +188,8 @@ public class RuneCrafting implements ContentTemplate {
 			int[] j = {1438, 1448, 1444, 1440, 1442, 1446, 1458, 1462, 1452, 1454, 1456,};
 			return j;
 		}
+        if(type == ClickType.DIALOGUE_MANAGER)
+            return new int[]{1020, 1021, 1022, 1023, 1024, 1025};
 		return null;
 	}
 

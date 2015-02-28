@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -20,9 +21,9 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(2, 5, 0, 5_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882}, 1, 5338, 299, 255, 32, 449, 5595),
-    MEDIUM(3, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{2883},  null),
-    HARD(4, 10, 70, 50_000, Time.TEN_MINUTES, null, null);
+    EASY(2, 5, 0, 5_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882, 2883}, 1, 5338, 299, 255, 32, 449, 5595),
+    MEDIUM(3, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, RevAttack.getRevs(),  null),
+    HARD(4, 10, 70, 50_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 6222);
 
 
     public final int min_level, spawns, rooms, xp;

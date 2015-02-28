@@ -1653,5 +1653,32 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        submit(new Command("checkitem", Rank.DEVELOPER){
+            public boolean execute(final Player player, final String input){
+                final String idString = filterInput(input).trim();
+                int id;
+                ItemDefinition def;
+                try{
+                    id = Integer.parseInt(idString);
+                    def = ItemDefinition.forId(id);
+                    if(def == null)
+                        throw new Exception();
+                }catch(Exception ex){
+                    player.sendf("Enter a valid item id");
+                    return false;
+                }
+                for(final Player p : World.getWorld().getPlayers()){
+                    if(p == null)
+                        continue;
+                    final int count = p.getBank().getCount(id) + p.getInventory().getCount(id);
+                    if(count < 1)
+                        continue;
+                    player.sendf("%s has %,d %s", p.getName(), count, def.getName());
+                }
+                player.sendf("Search completed");
+                return true;
+            }
+        });
 	}
 }

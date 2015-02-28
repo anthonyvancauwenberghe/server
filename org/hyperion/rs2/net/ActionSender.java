@@ -153,10 +153,13 @@ public class ActionSender {
 		player.isHidden(false);
 		sendDetails();
         if(player.isNew()){
+            player.getInventory().add(Item.create(15707));
             sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
             sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
+            if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
+                player.getBank().add(Item.create(15707));
             player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
         }
         sendMessage("       ");

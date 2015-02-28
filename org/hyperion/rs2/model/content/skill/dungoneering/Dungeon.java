@@ -16,6 +16,8 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 public class Dungeon {
+    public static final List<Dungeon> activeDungeons = new ArrayList<>();
+
     private final Map<Player, Integer> deaths = new HashMap<>();
 
     private List<Room> rooms = new ArrayList<>();
@@ -34,6 +36,7 @@ public class Dungeon {
         this.start_time = System.currentTimeMillis();
         this.size = size;
         this.teamSize = players.size();
+        activeDungeons.add(this);
     }
 
 
@@ -59,11 +62,8 @@ public class Dungeon {
 
     public final void remove(final Player player, boolean complete) {
         player.setTeleportTarget(DungeoneeringManager.LOBBY);
-        player.getDungoneering().setCurrentDungeon(null);
         player.getDungoneering().loadXP(player.getSkills(), false);
         players.remove(player);
-        if(players.size() == 0)
-            destroy();
         if(complete) {
             long elapsed_time = System.currentTimeMillis() - start_time;
             long delta_time = (long)(difficulty.time * size.multi_time) - elapsed_time;
@@ -85,13 +85,20 @@ public class Dungeon {
         }
 
         for(final Item item : player.getInventory().toArray()) {
-            if(item.getId() != 15707)
+            if(item != null && item.getId() != 15707)
                 player.getInventory().remove(item);
         }
         for(final Item item : player.getEquipment().toArray()) {
-            if(item.getId() != 15707)
+            if(item != null && item.getId() != 15707)
                 player.getEquipment().remove(item);
         }
+
+        player.getDungoneering().setCurrentRoom(null);
+        player.getDungoneering().setCurrentDungeon(null);
+
+        if(players.size() == 0)
+            destroy();
+
     }
 
     public void addRooms() {
@@ -136,6 +143,7 @@ public class Dungeon {
             room.destroy();
         rooms.clear();
         players.clear();
+        activeDungeons.remove(this);
 
     }
 

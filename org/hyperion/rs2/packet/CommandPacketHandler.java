@@ -72,6 +72,7 @@ import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
+import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.itf.impl.NameItemInterface;
@@ -580,6 +581,10 @@ public class CommandPacketHandler implements PacketHandler {
 	 **/
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("dungeons")) {
+            player.sendMessage(Dungeon.activeDungeons.size());
+        }
 
         if(commandStart.equalsIgnoreCase("opendef")) {
             final JFrame frame = new RoomDefinitionCreator(player);
@@ -1691,9 +1696,9 @@ public class CommandPacketHandler implements PacketHandler {
 		}
 		if (commandStart.equals("mypos")) {
 			player.getActionSender().sendMessage(
-					(new StringBuilder()).append(player.getLocation().getX())
-							.append(", ").append(player.getLocation().getY()).append(player.getLocation().getZ())
-							.toString());
+                    (new StringBuilder()).append(player.getLocation().getX())
+                            .append(", ").append(player.getLocation().getY()).append(player.getLocation().getZ())
+                            .toString());
 			return;
 		}
 

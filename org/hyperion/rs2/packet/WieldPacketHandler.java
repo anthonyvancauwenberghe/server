@@ -39,22 +39,6 @@ public class WieldPacketHandler implements PacketHandler {
 			case 15098:
 				Dicing.rollClanDice(player, Misc.random(100));
 				return;
-			case 2669:
-				player.getActionSender().sendMessage("You will be banned in...");
-				World.getWorld().submit(new Event(1000) {
-					int counter = 10;
-
-					public void execute() {
-						if(counter > 0) {
-							player.getActionSender().sendMessage("" + counter);
-							counter--;
-						} else {
-							player.getActionSender().sendMessage("TR0LL!!!!!!!!!!!");
-							this.stop();
-						}
-					}
-				});
-				return;
 		}
 		if(slot < 0 || slot > 28 || id < 0 || id > ItemDefinition.MAX_ID)
 			return;

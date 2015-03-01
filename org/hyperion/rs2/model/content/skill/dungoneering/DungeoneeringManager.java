@@ -276,6 +276,7 @@ public class DungeoneeringManager implements ContentTemplate {
             //ret.add(i);
         for(final ItemDefinition def : items)
             ret.add(def.getId());
+        ret.forEach(System.out::println);
         return ret;
     }
 

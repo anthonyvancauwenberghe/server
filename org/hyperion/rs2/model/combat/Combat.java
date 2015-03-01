@@ -1129,7 +1129,6 @@ public class Combat {
             int baseX = combatEntity.getAbsX() - 25;
             int baseY = combatEntity.getAbsY() - 25;
             combatEntity.getEntity().getWalkingQueue().reset();
-            combatEntity.getEntity().getWalkingQueue().setRunningQueue(true);
             Path p = World.getWorld().pathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
             if(p != null) {
                 for(int i = 1; i < p.getLength(); i++) {

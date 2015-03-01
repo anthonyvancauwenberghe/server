@@ -262,13 +262,6 @@ public class DungeoneeringManager implements ContentTemplate {
         }
 
         final Iterator<ItemDefinition> defs = items.iterator();
-        while(defs.hasNext()) {
-            final ItemDefinition current = defs.next();
-            if(defs.hasNext()) {
-                if(current.getName().equalsIgnoreCase(defs.next().getName()))
-                    defs.remove();
-            }
-        }
 
         System.out.println(items.size());
         final List<Integer> ret = new ArrayList<>();

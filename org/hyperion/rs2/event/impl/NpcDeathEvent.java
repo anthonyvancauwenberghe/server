@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.DonatorShop;
@@ -220,19 +221,30 @@ public class NpcDeathEvent extends Event {
 
                     }
                 } else {
-                    for(int i = 0; i < (npc.getDefinition().combat()/30 +1); i++) {
-                        final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
+                    if(player.getDungoneering().getRoom().boss) {
+                        for(int i = 0; i < player.getDungoneering().getCurrentDungeon().difficulty.ordinal() + 1; i++) {
+                            final ItemDefinition def = ItemDefinition.forId(FightPits.scItems.get(Misc.random(FightPits.scItems.size()-1)));
+                            GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                                    npc.getLocation().getY(), npc.getLocation().getZ(),
+                                    Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
+                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                        }
+
+                    } else {
+                        for(int i = 0; i < (npc.getDefinition().combat()/30 +1); i++) {
+                            final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
+                            GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                                    npc.getLocation().getY(), npc.getLocation().getZ(),
+                                    Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
+                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                            globalItem.createdTime = System.currentTimeMillis() + 47000L;
+                        }
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                            npc.getLocation().getY(), npc.getLocation().getZ(),
-                            Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
+                                npc.getLocation().getY(), npc.getLocation().getZ(),
+                                Item.create(995, npc.getDefinition().combat() * 2));
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }
-                    GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
-                            npc.getLocation().getY(), npc.getLocation().getZ(),
-                            Item.create(995, npc.getDefinition().combat() * 2));
-                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
-                    globalItem.createdTime = System.currentTimeMillis() + 30000L;
 
 
                 }

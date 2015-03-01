@@ -267,8 +267,9 @@ public class DungeoneeringManager implements ContentTemplate {
         }
 
         System.out.println(items.size());
-        final List<Integer> ret = items.stream().map(d -> d.getId()).collect(Collectors.toList());
-        ret.addAll(FightPits.scItems);
+        final List<Integer> ret = new ArrayList<>();
+        items.stream().mapToInt(ItemDefinition::getId).forEach(ret::add);
+        FightPits.scItems.forEach(ret::add);
         return ret;
     }
 

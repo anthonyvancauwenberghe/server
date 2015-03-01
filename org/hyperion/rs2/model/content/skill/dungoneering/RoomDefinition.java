@@ -105,7 +105,7 @@ public class RoomDefinition {
                         points.add(new Point(buf.getUnsignedShort(), buf.getUnsignedShort()));
                     }
 
-                    System.out.println(new RoomDefinition(x, y, x_end, y_end, points));
+                    new RoomDefinition(x, y, x_end, y_end, points);
                     defs++;
                 } catch(Exception ex) {
 

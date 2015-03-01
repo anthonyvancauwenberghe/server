@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.DonatorShop;
@@ -232,6 +233,7 @@ public class NpcDeathEvent extends Event {
                         }
 
                     } else {
+
                         for(int i = 0; i < (npc.getDefinition().combat()/50 +1); i++) {
                             final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
@@ -239,6 +241,11 @@ public class NpcDeathEvent extends Event {
                                     Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
                             World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                             globalItem.createdTime = System.currentTimeMillis() + 47000L;
+                            globalItem = new GlobalItem(player, npc.getLocation().getX(),
+                                    npc.getLocation().getY(), npc.getLocation().getZ(),
+                                    Item.create(Food.randomFood(), 1));
+                            globalItem.createdTime = System.currentTimeMillis() + 47000L;
+                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         }
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),

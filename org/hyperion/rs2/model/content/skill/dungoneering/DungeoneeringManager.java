@@ -253,7 +253,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 continue;
             final ItemDefinition def = ItemDefinition.forId(i);
             if(def == null) continue;
-            if(nonviable(def) && Food.get(i) == null)
+            if(nonviable(def))
                 continue;
             if(def.isNoted())
                 continue;
@@ -296,6 +296,7 @@ public class DungeoneeringManager implements ContentTemplate {
     public static int randomItem() {
         return getItems().get(Misc.random(getItems().size() - 1));
     }
+
 
     public static final void handleDying(final Player player) {
         player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);

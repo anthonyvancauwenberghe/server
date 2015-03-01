@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.container.duel.DuelRule;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.FoodItem;
+import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -302,6 +303,10 @@ public class Food implements ContentTemplate {
 		ContentEntity.decreaseSkill(client, 4, newRange);
 		ContentEntity.decreaseSkill(client, 6, newMagic);
 	}
+
+    public static final int randomFood() {
+        return foods.get(Misc.random(foods.size() - 1)).getId();
+    }
 
 	
 	/*

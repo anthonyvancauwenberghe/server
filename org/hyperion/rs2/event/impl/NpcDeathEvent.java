@@ -231,7 +231,7 @@ public class NpcDeathEvent extends Event {
                         }
 
                     } else {
-                        for(int i = 0; i < (npc.getDefinition().combat()/30 +1); i++) {
+                        for(int i = 0; i < (npc.getDefinition().combat()/50 +1); i++) {
                             final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                     npc.getLocation().getY(), npc.getLocation().getZ(),

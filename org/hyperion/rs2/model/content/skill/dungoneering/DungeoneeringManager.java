@@ -58,12 +58,16 @@ public class DungeoneeringManager implements ContentTemplate {
         } else if (type == ClickType.NPC_OPTION1)
             return new int[]{TRADER_ID, 9711};
         else if (type == ClickType.NPC_OPTION2)
-            return new int[]{8827, 8824};
+            return new int[]{8827, 8824, 9711};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
     @Override
     public boolean clickObject2(Player player, int type, int npcId, int x, int y, int npcSlot) {
         if(type == ClickType.NPC_OPTION2) {
+            if(npcId == 9711) {
+                ShopManager.open(player, 81);
+                return true;
+            }
             try {
                 player.debugMessage("Yo3");
 
@@ -111,9 +115,6 @@ public class DungeoneeringManager implements ContentTemplate {
         } else if(type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungoneering().getTokens()));
             return true;
-        } else if (type == ClickType.NPC_OPTION2)
-        {
-            ShopManager.open(player, 81);
         }
         return false;
     }

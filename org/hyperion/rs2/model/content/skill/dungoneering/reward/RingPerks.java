@@ -156,11 +156,11 @@ public class RingPerks {
 
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        for (final Perk perk : getPerks()) {
-            final int perkLevel = hasPerk(perk);
+        for (final Perk perk : Perk.values()) {
+            final int perkLevel = hasPerk(perk) + 1;
             builder.append(perk.name()).append(" - ").append("Hit Boost: ").
-                    append(perk.getBonusPercent(perkLevel+1)).append("%").append("Accuracy Boost: ").
-                    append(perk.getAccuracyPercent(perkLevel+1)).append("%").append("_B_");
+                    append(perk.getBonusPercent(perkLevel)).append("%").append("Accuracy Boost: ").
+                    append(perk.getAccuracyPercent(perkLevel)).append("%").append("_B_");
         }
         return builder.toString();
     }

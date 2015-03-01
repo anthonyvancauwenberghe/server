@@ -192,8 +192,10 @@ public class Trade {
 			return;
         if((player.getDungoneering().inDungeon() && trader.getDungoneering().inDungeon())) {
             for(final Item item : player.getDungoneering().getBinds()) {
-                if(item.getId() == id)
+                if(item.getId() == id) {
                     player.sendMessage("You cannot trade a binded-type item");
+                    return;
+                }
             }
         }
         else if(! ItemsTradeable.isTradeable2(id, player.getGameMode())) {

@@ -312,7 +312,7 @@ public class DungeoneeringManager implements ContentTemplate {
         player.getDungoneering().getCurrentDungeon().kill(player);
     }
     static {
-        CommandHandler.submit(new Command("resetparse") {
+        CommandHandler.submit(new Command("resetparse", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 items = parse();

@@ -41,7 +41,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        if(type == ClickType.EAT || type == ClickType.ITEM_OPTION7)
+        if(type == ClickType.EAT || type == ClickType.ITEM_OPTION7 || type == ClickType.ITEM_OPTOION6)
             return new int[]{15707};
         else if(type == ClickType.OBJECT_CLICK1)
             return new int[]{2477, 2476, 2804};
@@ -268,8 +268,10 @@ public class DungeoneeringManager implements ContentTemplate {
 
         System.out.println(items.size());
         final List<Integer> ret = new ArrayList<>();
-        items.stream().mapToInt(ItemDefinition::getId).forEach(ret::add);
-        FightPits.scItems.forEach(ret::add);
+        for(final int i : FightPits.scItems)
+            ret.add(i);
+        for(final ItemDefinition def : items)
+            ret.add(def.getId());
         return ret;
     }
 

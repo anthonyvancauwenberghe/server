@@ -60,6 +60,7 @@ import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -1015,6 +1016,8 @@ public class World {
                     for(Player p : getPlayers()) {
                         Trade.declineTrade(p);
                     }
+                    for(final Dungeon dungeon : Dungeon.activeDungeons)
+                        dungeon.complete();
                     new Restart(reason).execute();
                 }
             }

@@ -305,6 +305,9 @@ public class DungeoneeringManager implements ContentTemplate {
 
     public static int randomItem() {
         final int size = getItems().size();
+        System.out.println(size);
+        System.out.println("------------------------------------------------");
+        getItems().stream().forEach(System.err::println);
         return getItems().get(Misc.random(getItems().size() - 1));
     }
 

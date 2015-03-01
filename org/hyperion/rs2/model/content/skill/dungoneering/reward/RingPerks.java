@@ -22,7 +22,7 @@ public class RingPerks {
     }
 
     public static enum Perk {
-        MELEE(0, 4) {
+        MELEE(0, 3) {
             @Override double getBonusPercent(final int level) {
                 return (((double)level * 1.5) / 10D);
             }
@@ -30,7 +30,7 @@ public class RingPerks {
                 return ((level) * 2 / 10D);
             }
         },
-        RANGE(1, 4) {
+        RANGE(1, 3) {
             @Override double getBonusPercent(final int level) {
                 return ((level * 2) / 10D);
             }
@@ -39,7 +39,7 @@ public class RingPerks {
             }
 
         },
-        MAGIC(2, 4) {
+        MAGIC(2, 3) {
             @Override double getBonusPercent(final int level) {
                 return (((double)level * 1.5) / 10D);
             }

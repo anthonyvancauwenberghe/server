@@ -122,9 +122,11 @@ public class DungoneeringHolder {
     }
 
     public boolean buyPerk(final int style) {
-        if(dungoneeringPoints < perks.calcNextPerkCost(style))
+        final int price = perks.calcNextPerkCost(style);
+        if(dungoneeringPoints < price)
             return false;
         perks.upgradePerk(RingPerks.Perk.forStyle(style));
+        dungoneeringPoints -= price;
         return true;
     }
 

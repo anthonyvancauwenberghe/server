@@ -31,7 +31,7 @@ public class DungeoneeringStore extends PointsShop {
             case 17987:
             case 17988:
             case 17989:
-                return 10_000 + (itemId - 17984) * 2;
+                return 10_000 + (itemId - 17984) * 2000;
         }
         return 50_000;  //To change body of implemented methods use File | Settings | File Templates.
     }

@@ -165,25 +165,26 @@ public class NpcDeathEvent extends Event {
                             new Item(npc.bones, 1));
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
-
+                if(!player.getDungoneering().inDungeon()) {
                 //charms
-                if(npc.charm > 0) {
-                    GlobalItem globalItem5 = new GlobalItem(
-                            player, x, y, z,
-                            new Item(npc.charm, 1));
-                    if (player.getInventory().contains(16639))
-                        ContentEntity.addItem(player, npc.charm, 1);
-                     else
+                    if(npc.charm > 0) {
+                        GlobalItem globalItem5 = new GlobalItem(
+                                player, x, y, z,
+                                new Item(npc.charm, 1));
+                        if (player.getInventory().contains(16639))
+                            ContentEntity.addItem(player, npc.charm, 1);
+                        else
+                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                    }
+                    //talismines
+                    int tali = NPCManager.getTalismine(npc.getDefinition());
+                    if(tali > 0) {
+                        GlobalItem globalItem5 = new GlobalItem(
+                                player, x, y, z,
+                                new Item(tali, 1)
+                        );
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
-                }
-                //talismines
-                int tali = NPCManager.getTalismine(npc.getDefinition());
-                if(tali > 0) {
-                    GlobalItem globalItem5 = new GlobalItem(
-                            player, x, y, z,
-                            new Item(tali, 1)
-                    );
-                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                    }
                 }
                 player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
                 //normal drops

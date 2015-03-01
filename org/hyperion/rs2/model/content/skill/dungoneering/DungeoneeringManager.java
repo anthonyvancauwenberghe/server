@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
@@ -230,7 +232,9 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7017:
             case 7018:
                 try {
-                    player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014).getLocation());
+                    final Player to = player.getDungoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014);
+                    player.setTeleportTarget(to.getLocation());
+                    player.getDungoneering().setCurrentRoom(to.getDungoneering().getRoom());
                 } catch(final Exception ex) {
                     ex.printStackTrace();
                 }
@@ -268,8 +272,8 @@ public class DungeoneeringManager implements ContentTemplate {
 
         System.out.println(items.size());
         final List<Integer> ret = new ArrayList<>();
-        for(final int i : FightPits.scItems)
-            ret.add(i);
+       // for(final int i : FightPits.scItems)
+            //ret.add(i);
         for(final ItemDefinition def : items)
             ret.add(def.getId());
         return ret;
@@ -305,6 +309,15 @@ public class DungeoneeringManager implements ContentTemplate {
     public static final void handleDying(final Player player) {
         player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
         player.getDungoneering().getCurrentDungeon().kill(player);
+    }
+    static {
+        CommandHandler.submit(new Command("resetparse") {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                items = parse();
+                return true;
+            }
+        });
     }
 
 }

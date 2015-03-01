@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
 import org.hyperion.rs2.net.ActionSender;
 import org.madturnip.tools.ItemDefEditor;
 
@@ -39,6 +40,8 @@ public class DungoneeringHolder {
 
         System.out.println(h2.save());
     }
+
+    public final RingPerks perks = new RingPerks();
 
     private final int[] combatXPs = new int[7];
     private final Item[] bound = new Item[5];
@@ -118,6 +121,13 @@ public class DungoneeringHolder {
         }
     }
 
+    public boolean buyPerk(final int style) {
+        if(dungoneeringPoints < perks.calcNextPerkCost(style))
+            return false;
+        perks.upgradePerk(RingPerks.Perk.forStyle(style));
+        return true;
+    }
+
     public void setCurrentRoom(final Room room) { this.room = room; }
 
     public boolean inDungeon() { return currentDungeon != null; }
@@ -151,6 +161,7 @@ public class DungoneeringHolder {
         for(int i = 0; i < combatXPs.length; i++) {
             builder.append(combatXPs[i]).append(",");
         }
+        builder.append("%").append(perks.perkLevel());
         return builder.toString();
     }
 
@@ -177,6 +188,7 @@ public class DungoneeringHolder {
         } catch(final Exception ex) {
             ex.printStackTrace();
         }
+        perks.setPerk(Integer.parseInt(split[3]));
 
     }
 

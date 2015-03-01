@@ -10,9 +10,11 @@ import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
+import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
 import org.hyperion.rs2.net.ActionSender;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,7 +51,7 @@ public class DungeoneeringManager implements ContentTemplate {
         else if(type == ClickType.OBJECT_CLICK1)
             return new int[]{2477, 2476, 2804};
         else if(type == ClickType.DIALOGUE_MANAGER) {
-            int[] ret = new int[19];
+            int[] ret = new int[25];
             for(int i = 0; i < ret.length; i++)
                 ret[i] = DIALOGUE_ID + i;
             return ret;
@@ -211,10 +214,10 @@ public class DungeoneeringManager implements ContentTemplate {
                 break;
             case 7011:
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
-                        "Open Full Dungoneering Guide", "How to start dungoneering?");
+                        "Dungeoneering Guide", "What are perks?", "Upgrade ring perks");
                 player.getInterfaceState().setNextDialogueId(0, 7012);
                 player.getInterfaceState().setNextDialogueId(1, 7013);
-                player.getInterfaceState().setNextDialogueId(2, -1);
+                player.getInterfaceState().setNextDialogueId(2, 7019);
 
                 return true;
             case 7012:
@@ -222,7 +225,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 break;
             case 7013:
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.NPC, 9711, Animation.FacialAnimation.DEFAULT,
-                        "To start dungoneering click your ring of kinship", "To create a team, click the entrance portal", "to join a team, when someone invites you accept their invite");
+                        "Perks are bonuses that your ring of kinship possesses (when worn)", "They work both inside and outside dungeoneering", "They cost dungeoneering tokens to upgrade");
                 player.getInterfaceState().setNextDialogueId(0, -1);
 
                 return true;
@@ -237,6 +240,23 @@ public class DungeoneeringManager implements ContentTemplate {
                     player.getDungoneering().setCurrentRoom(to.getDungoneering().getRoom());
                 } catch(final Exception ex) {
                     ex.printStackTrace();
+                }
+                break;
+            case 7019:
+                final String[] perk_pricse = Stream.of(RingPerks.Perk.values()).
+                        map(perk -> String.format("%s %d tokens",perk.name(), player.getDungoneering().perks.calcNextPerkCost(perk.index))).toArray(String[]::new);
+                player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
+                        perk_pricse);
+                for(int i = 0; i < 3; i++)
+                    player.getInterfaceState().setNextDialogueId(i, 7020 + i);
+                break;
+            case 7020:
+            case 7021:
+            case 7022:
+                if(player.getDungoneering().buyPerk(dialogueId - 7020)) {
+                    player.sendMessage("You successfully upgrade your perk. Check perk bonuses by right clicking your ring");
+                } else {
+                    player.sendMessage("You need more tokens to do that!");
                 }
                 break;
         }

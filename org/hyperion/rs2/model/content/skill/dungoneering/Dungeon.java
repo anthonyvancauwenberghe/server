@@ -78,7 +78,7 @@ public class Dungeon {
                 death_penalty = 0.4;
             double team_penalty = Math.pow(0.91, teamSize - 1);
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size.multiplier * team_penalty);
-            int tokens = xp/30;
+            int tokens = xp/10;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             player.sendMessage

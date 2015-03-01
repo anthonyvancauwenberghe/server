@@ -27,6 +27,7 @@ public class DropItemPacketHandler implements PacketHandler {
 			return;
         if(itemId == 15707) {
             player.sendMessage("Perks: ");
+            player.sendMessage(player.getDungoneering().perks.boosts());
             return;
         }
 		if(! player.getDropping().canDrop(toRemove.getId())) {

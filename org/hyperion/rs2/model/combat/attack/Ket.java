@@ -25,7 +25,7 @@ public class Ket implements Attack {
 					Combat.npcAttack(n, attack, hit, 500, 0);
 					if(attack.getPlayer().getSkills().getLevel(5) > 0)
 						attack.getPlayer().getSkills().detractLevel(5, (1 + hit));
-					n.cE.doAtkEmote();
+					n.cE.doAnim(9232);
 				} else
 					return 0;
 			} else if(n.getDefinition().getId() == 2630) {
@@ -33,7 +33,7 @@ public class Ket implements Attack {
 				if(distance <= (1 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
 					Combat.npcAttack(n, attack, 8, 500, 0);
-					n.cE.doAtkEmote();
+                    n.cE.doAnim(9233);
 				} else
 					return 0;
 			} else if(n.getDefinition().getId() == 2738) {
@@ -49,12 +49,12 @@ public class Ket implements Attack {
 				int attackId = Combat.random(1);
 				if(attackId == 0 && distance <= (1 + (n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2)) {
 					//melee
-					n.cE.doAnim(n.getDefinition().getAtkEmote(0));
+					n.cE.doAnim(9265);
 					n.cE.predictedAtk = (System.currentTimeMillis() + 2000);
 					Combat.npcAttack(n, attack, Combat.random(40), 500, 0);
 				} else {
 					//magic
-					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
+					n.cE.doAnim(9266);
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
 
 					//offset values for the projectile

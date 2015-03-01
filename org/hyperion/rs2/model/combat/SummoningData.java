@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
+import org.hyperion.util.Time;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +101,13 @@ public class SummoningData {
 		ABBYTITAN(7349, 12796, 93, 3200, ATTACK),//abyssal titan
 		IRONTITAN(7375, 12822, 95, 6000, DEFENCE),//iron titan
 		PACKYAK(6873, 12093, 96, 5800, STRENGTH),//pack yak
-		STELLTITAN(7343, 12790, 99, 6400, RANGE);//Steel titan
+		STELLTITAN(7343, 12790, 99, 6400, RANGE),//Steel titan
+        REV_KNIGHT(6962, 17989, 99, (int)Time.TEN_MINUTES, MAGIC),
+        REV_BEAST(6961, 17988, 90,(int) Time.TEN_MINUTES, MAGIC),
+        REV_ORK(6960, 17987, 80, (int)Time.TEN_MINUTES, MAGIC),
+        REV_DEMON(6959, 17986, 75, (int)Time.TEN_MINUTES, MAGIC),
+        REV_HELLHOUND(6958, 17985, 70, (int)Time.TEN_MINUTES, MAGIC)
+        ; //rev knight
 
 		/* Npc id, Pouch id, Name, Level required, Time living */
 		SummonType(int npcId, int pouchId, int level, int timeLiving, int skillId) {

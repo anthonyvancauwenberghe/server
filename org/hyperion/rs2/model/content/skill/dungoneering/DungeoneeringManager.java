@@ -274,7 +274,6 @@ public class DungeoneeringManager implements ContentTemplate {
         final List<Integer> ret = new ArrayList<>();
         for(final ItemDefinition def : items)
             ret.add(def.getId());
-        ret.forEach(System.out::println);
         return ret;
     }
 
@@ -302,10 +301,6 @@ public class DungeoneeringManager implements ContentTemplate {
     }
 
     public static int randomItem() {
-        final int size = getItems().size();
-        System.out.println(size);
-        System.out.println("------------------------------------------------");
-        getItems().stream().forEach(System.err::println);
         return getItems().get(Misc.random(getItems().size() - 1));
     }
 

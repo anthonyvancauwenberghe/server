@@ -249,7 +249,7 @@ public class DungeoneeringManager implements ContentTemplate {
                         perk_pricse);
                 for(int i = 0; i < 3; i++)
                     player.getInterfaceState().setNextDialogueId(i, 7020 + i);
-                break;
+                return true;
             case 7020:
             case 7021:
             case 7022:

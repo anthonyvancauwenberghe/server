@@ -25,6 +25,10 @@ public class DropItemPacketHandler implements PacketHandler {
 		Item toRemove = player.getInventory().get(itemSlot);
 		if(toRemove == null)
 			return;
+        if(itemId == 15707) {
+            player.sendMessage("Perks: ");
+            return;
+        }
 		if(! player.getDropping().canDrop(toRemove.getId())) {
 			player.getActionSender().sendMessage("Please confirm you want to drop this item by dropping it again.");
 			return;

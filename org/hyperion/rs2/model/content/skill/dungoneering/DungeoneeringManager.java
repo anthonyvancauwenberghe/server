@@ -45,9 +45,12 @@ public class DungeoneeringManager implements ContentTemplate {
             return new int[]{15707};
         else if(type == ClickType.OBJECT_CLICK1)
             return new int[]{2477, 2476, 2804};
-        else if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{DIALOGUE_ID, DIALOGUE_ID + 1, DIALOGUE_ID + 2, DIALOGUE_ID + 3, DIALOGUE_ID + 4, DIALOGUE_ID + 5, DIALOGUE_ID + 6, DIALOGUE_ID + 7, DIALOGUE_ID + 8, DIALOGUE_ID + 9, DIALOGUE_ID + 10, DIALOGUE_ID + 11, DIALOGUE_ID + 12, DIALOGUE_ID + 13};
-        else if (type == ClickType.NPC_OPTION1)
+        else if(type == ClickType.DIALOGUE_MANAGER) {
+            int[] ret = new int[19];
+            for(int i = 0; i < ret.length; i++)
+                ret[i] = DIALOGUE_ID + i;
+            return ret;
+        } else if (type == ClickType.NPC_OPTION1)
             return new int[]{TRADER_ID, 9711};
         else if (type == ClickType.NPC_OPTION2)
             return new int[]{8827, 8824};
@@ -91,6 +94,14 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.debugMessage("Yo4");
 
                 e.printStackTrace();
+            }
+        } else if (type == ClickType.ITEM_OPTOION6) {
+            if(player.getDungoneering().inDungeon()) {
+                final String[] names = player.getDungoneering().getCurrentDungeon().getPlayers().stream().toArray(String[]::new);
+                player.getActionSender().sendDialogue("Teleport", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, names);
+                for(int i = 0 ; i < names.length ; i++) {
+                    player.getInterfaceState().setNextDialogueId(i, 7014 + i);
+                }
             }
         } else if(type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungoneering().getTokens()));
@@ -213,6 +224,17 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, -1);
 
                 return true;
+            case 7014:
+            case 7015:
+            case 7016:
+            case 7017:
+            case 7018:
+                try {
+                    player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014).getLocation());
+                } catch(final Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
         }
 
         player.getActionSender().removeChatboxInterface();

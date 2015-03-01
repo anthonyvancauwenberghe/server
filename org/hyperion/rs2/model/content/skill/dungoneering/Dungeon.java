@@ -73,12 +73,12 @@ public class Dungeon {
             double multiplier = (time/10D) + 1.0;
             if(multiplier < 0.7) multiplier = 0.7;
             int death = deaths.getOrDefault(player, 0);
-            double death_penalty = Math.pow(0.85, death);
+            double death_penalty = Math.pow(0.9, death);
             if(death_penalty < 0.4)
                 death_penalty = 0.4;
             double team_penalty = Math.pow(0.91, teamSize - 1);
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size.multiplier * team_penalty);
-            int tokens = xp/100;
+            int tokens = xp/30;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             player.sendMessage
@@ -100,7 +100,7 @@ public class Dungeon {
         player.getDungoneering().setCurrentRoom(null);
         player.getDungoneering().setCurrentDungeon(null);
 
-
+        ClanManager.leaveChat(player, true, false);
         player.setLocation(DungeoneeringManager.LOBBY);
 
         if(players.size() == 0)
@@ -158,6 +158,10 @@ public class Dungeon {
 
     public Room getStartRoom() {
         return rooms.get(0);
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public void kill(final Player player) {

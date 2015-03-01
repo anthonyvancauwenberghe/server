@@ -109,7 +109,7 @@ public class ClanManager {
 		return true;
 	}
 
-	public static void leaveChat(Player player, boolean resetClanName, boolean keepRank) {
+	/*public static void leaveChat(Player player, boolean resetClanName, boolean keepRank) {
 		Clan c = clans.get(player.getClanName());
 		if(c != null) {
 			c.remove(player);
@@ -124,9 +124,9 @@ public class ClanManager {
 			player.setClanRank(0);
 		if(resetClanName)
 			player.resetClanName();
-	}
+	} */
 
-	/*public static void leaveChat(Player player, boolean resetClanName, boolean keepRank) {
+	public static void leaveChat(Player player, boolean resetClanName, boolean keepRank) {
 		Clan c = clans.get(player.getClanName());
 		if(c != null) {
 			for(Player p : c.getPlayers()) {
@@ -150,7 +150,7 @@ public class ClanManager {
 			player.setClanRank(0);
 		if(resetClanName)
 			player.resetClanName();
-	}*/
+	}
 
 	public static void sendClanMessage(Player player, String message, boolean toMe) {
 		// message = message+":clan:";

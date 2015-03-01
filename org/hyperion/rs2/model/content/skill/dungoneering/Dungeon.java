@@ -1,7 +1,9 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.util.NameUtils;
 
 import java.awt.*;
 import java.util.*;
@@ -50,6 +52,7 @@ public class Dungeon {
             player.getInventory().add(Item.create(995, 500));
             for(final Item bound : player.getDungoneering().getBinds())
                 player.getInventory().add(bound);
+            ClanManager.joinClanChat(player, NameUtils.nameToLong("Dungeon"+activeDungeons.size()));
 
         }
         start.initialized = true;
@@ -68,7 +71,7 @@ public class Dungeon {
             long delta_time = (long)(difficulty.time * size.multi_time) - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
             double multiplier = (time/10D) + 1.0;
-            if(multiplier < 0.4) multiplier = 0.4;
+            if(multiplier < 0.7) multiplier = 0.7;
             int death = deaths.getOrDefault(player, 0);
             double death_penalty = Math.pow(0.85, death);
             if(death_penalty < 0.4)

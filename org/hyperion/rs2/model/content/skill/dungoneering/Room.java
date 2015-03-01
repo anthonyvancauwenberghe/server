@@ -67,7 +67,7 @@ public class Room {
         if(initialized)
             return;
         initialized = true;
-        int npcCount = boss ? 1 : 1 + Misc.random(dungeon.difficulty.spawns);
+        int npcCount = boss ? 1 : (1 + Misc.random(dungeon.difficulty.spawns));
         must_clear = Misc.random(10) < 7;
         for(int i = 0; i < npcCount; i++) {
             final Point loc = definition.randomLoc();

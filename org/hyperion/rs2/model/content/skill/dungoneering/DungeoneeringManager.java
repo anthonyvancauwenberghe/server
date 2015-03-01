@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -244,7 +245,9 @@ public class DungeoneeringManager implements ContentTemplate {
         }
 
         System.out.println(items.size());
-        return items.stream().map(d -> d.getId()).collect(Collectors.toList());
+        final List<Integer> ret = items.stream().map(d -> d.getId()).collect(Collectors.toList());
+        ret.addAll(FightPits.scItems);
+        return ret;
     }
 
     public static final boolean cantJoin(final Player player) {

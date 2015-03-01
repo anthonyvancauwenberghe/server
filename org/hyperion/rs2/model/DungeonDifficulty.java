@@ -21,9 +21,9 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(3, 5, 0, 5_000, Time.ONE_MINUTE * 3, RevAttack.getRevs(), 1, 5338, 299, 255, 32, 449, 5595, 196),
-    MEDIUM(2, 8, 35, 20_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{2881, 2882, 2883, 3200, 8349},  53, 54, 55, 82, 83, 84),
-    HARD(2, 10, 70, 50_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203, 6222}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 941);
+    EASY(3, 5, 0, 10_000, Time.ONE_MINUTE * 3, RevAttack.getRevs(), 1, 5338, 299, 255, 32, 449, 5595, 196),
+    MEDIUM(2, 8, 35, 40_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{2881, 2882, 2883, 3200, 8349},  51,52,53, 54, 55, 82, 83, 84,941),
+    HARD(2, 10, 70, 100_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203, 6222}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 1592, 1591, 1590);
 
 
     public final int min_level, spawns, rooms, xp;

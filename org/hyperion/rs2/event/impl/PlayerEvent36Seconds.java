@@ -54,7 +54,7 @@ public class PlayerEvent36Seconds extends Event {
         	player.getQuestTab().sendPlayercount();
         	player.getQuestTab().sendUptime();
             Afk.procesPlayer(player);
-    		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE)) {
+    		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE) && !player.getDungoneering().inDungeon()) {
 				try {
 					FightPits.dissapate(player);
 				}catch(StackOverflowError|Exception e) {

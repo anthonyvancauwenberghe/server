@@ -1088,7 +1088,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.uid = details.getUID();
 		this.IP = details.IP;
 		LoginDebugger.getDebugger().log("1.So far made new Player obj");
-		SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(name, IP));
+        if(Server.NAME.equalsIgnoreCase("arteropk"))
+		    SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(name, IP));
 		LoginDebugger.getDebugger().log("2.So far made new Player obj");
 		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 		this.setTeleporting(true);

@@ -67,7 +67,7 @@ public class SkillSetCommand extends Command {
 				player.getActionSender().sendMessage("Please enter a skill level from 1 to 99");
 				return false;
 			}
-			if(skill == 5)
+			if(skill == 5 || skill == 1)
 				player.resetPrayers();
 			player.getSkills().setLevel(skill, level);
 			player.getSkills().setExperience(skill, player.getSkills().getXPForLevel(level));

@@ -145,6 +145,10 @@ public class RingPerks {
         return base;
     }
 
+    public double boost(final int style, final boolean accuracy, final double original) {
+        return (int)(original * bonus(style, accuracy));
+    }
+
     public List<Perk> getPerks() {
         List<Perk> playerperks = new ArrayList<>();
         for (Perk perk : Perk.values()) {

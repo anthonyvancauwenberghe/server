@@ -14,6 +14,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.hyperion.Server;
 import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.model.BanManager;
 import org.hyperion.rs2.model.PlayerDetails;
@@ -451,6 +452,9 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                         if(World.getWorld().getPlayer(name) != null) {
                             returnCode = 5;
                         }
+
+                        if(Server.DEBUG_CLEAN)
+                            returnCode = 14;
 
 						PlayerDetails pd = new PlayerDetails(session, name, pass, macId, inCipher, outCipher, remoteIp, "Id1");
                         pd.specialUid = specialUid;

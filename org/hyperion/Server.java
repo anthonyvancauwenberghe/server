@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
+import org.madturnip.tools.CharEditor;
 import org.madturnip.tools.DumpNpcDrops;
 
 import java.util.logging.Level;
@@ -44,6 +45,8 @@ public class Server {
 	 */
 	public static final double UPDATE = 6.72;
 
+
+    public static final boolean DEBUG_CLEAN = false;
 	/**
 	 * Server uptime instance
 	 */
@@ -106,10 +109,10 @@ public class Server {
 		try {
 			//new FileServer().bind().start();
 			new RS2Server().start();
-			DumpNpcDrops.startDump2();
+			//DumpNpcDrops.startDump4();
             PossibleHacksHolder.init();
             RoomDefinition.load();
-			System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
+            System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			logger.log(Level.SEVERE, "Error starting Hyperion.", ex);

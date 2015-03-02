@@ -2,7 +2,7 @@ package org.madturnip.tools;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.*;
 
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
@@ -14,6 +14,7 @@ import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.hyperion.rs2.model.DeathDrops;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.NPCDrop;
@@ -181,4 +182,60 @@ public class DumpNpcDrops {
 				file.close();
 		}
 	}
+
+    public static void startDumpAlchs() {
+        Map<Integer ,Integer> list = new HashMap<>(ItemDefinition.MAX_ID);
+        for(int i = 0; i < ItemDefinition.MAX_ID; i++) {
+            final ItemDefinition def = ItemDefinition.forId(i);
+            if(def == null) continue;
+            list.put(i, DeathDrops.calculateAlchValue(0, i));
+            if(i%1000 == 0)
+                System.out.println("Loaded: "+i);
+        }
+
+        System.out.println("Sorting Map");
+        list = sortHashMapByValues(list, false);
+        System.out.println("Sorted Map");
+        final File file = new File("./data/alchprices.txt");
+        try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file)))  {
+            file.createNewFile();
+            for(final Map.Entry<Integer, Integer> entry : list.entrySet()) {
+                final int id = entry.getKey();
+                final ItemDefinition def = ItemDefinition.forId(id);
+                writer.write(String.format("[NAME]: %s [ID]: %d [ALCH]: %,d",  def.getName(), id, entry.getValue()));
+                writer.newLine();
+            }
+        } catch (Exception ex) {
+
+        }
+
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <K, V> LinkedHashMap<K, V> sortHashMapByValues(Map<K, V> passedMap, boolean ascending) {
+        List mapKeys = new ArrayList(passedMap.keySet());
+        List mapValues = new ArrayList(passedMap.values());
+        Collections.sort(mapValues);
+        Collections.sort(mapKeys);
+
+        if (!ascending)
+            Collections.reverse(mapValues);
+
+        LinkedHashMap someMap = new LinkedHashMap();
+        Iterator valueIt = mapValues.iterator();
+        while (valueIt.hasNext()) {
+            Object val = valueIt.next();
+            Iterator keyIt = mapKeys.iterator();
+            while (keyIt.hasNext()) {
+                Object key = keyIt.next();
+                if (passedMap.get(key).toString().equals(val.toString())) {
+                    passedMap.remove(key);
+                    mapKeys.remove(key);
+                    someMap.put(key, val);
+                    break;
+                }
+            }
+        }
+        return someMap;
+    }
 }

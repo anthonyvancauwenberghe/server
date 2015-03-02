@@ -65,6 +65,7 @@ public class TeleTabs implements ContentTemplate {
 		player.playGraphics(Graphic.create(678, 0));//perfect !
 
         player.getExtraData().put("combatimmunity", System.currentTimeMillis() + Long.valueOf(delay) - 100L + 2400L);
+        Combat.resetAttack(player.cE);
 
 		World.getWorld().submit(new Event(delay) {
 			@Override

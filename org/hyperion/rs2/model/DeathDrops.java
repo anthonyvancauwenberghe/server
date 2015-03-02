@@ -294,17 +294,19 @@ public class DeathDrops {
 		return null;
 	}
 	public static int calculateAlchValue(final int gameMode ,int id) {
-        final ItemDefinition def;
+        ItemDefinition def;
         if((def = ItemDefinition.forId(id)) != null && def.isNoted())
             id = def.getParentId();
+        def = ItemDefinition.forId(id);
 		int dpVal = DonatorShop.getPrice(id);
 		int inventoryItemValue = 0;
         if(gameMode == 1)
             inventoryItemValue = (int)NewGameMode.getUnitPrice(id);
 		else if(dpVal > 100)
 			inventoryItemValue = dpVal * 150000;
-		else
-			inventoryItemValue = ItemSpawning.canSpawn(id) ? -1 :(int) Math.floor(ItemDefinition.forId(id).getHighAlcValue());
+		else {
+			inventoryItemValue = ItemSpawning.canSpawn(id) ? -1 :(int) Math.floor(def == null ? -1 : def.getHighAlcValue());
+        }
 		return inventoryItemValue;
 	}
 	public static Item keepItem(Player player, int keepItem, boolean deleteItem) {

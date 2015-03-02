@@ -105,8 +105,6 @@ public class Room {
     }
 
     public void destroy() {
-        initialized = false;
-        boss = false;
         for(NPC npc : npcs) {
             if(!npc.isDead()) {
                 npc.serverKilled = true;
@@ -120,6 +118,7 @@ public class Room {
             }
         }
         npcs.clear();
+        events.clear();
     }
 
 }

@@ -241,7 +241,7 @@ public class DonatorShop extends Shop {
 	 * @return
 	 */
 	public static int getPrice(int itemId) {
-		itemId = new Item(itemId).getDefinition().getNormalId();
+		//itemId = new Item(itemId).getDefinition().getNormalId();
 		for(int[] veblen_good : VEBLEN_GOODS) {
 			if(veblen_good[0] == itemId) {
 				return veblen_good[1];
@@ -442,21 +442,21 @@ public class DonatorShop extends Shop {
 				return 1199;
 
 			case SpiritShields.DIVINE_SPIRIT_SHIELD_ID:
-				//return 1999;
-				return 699;
+				return 1999;
+				//return 699;
 				//divine old - 699
 			case 13742:
-				//return 1499;
-				return 199;
+				return 1499;
+				//return 199;
 				// ely old - 199
 			case 15060:
 			case 13744:
-				//return 399;
-				return 199;
+				return 399;
+				//return 199;
 				
 			case 13738:
-				//return 599;
-				return 199;
+				return 699;
+				//return 199;
 				//arcane & spec old - 199
 
 			case 13352:

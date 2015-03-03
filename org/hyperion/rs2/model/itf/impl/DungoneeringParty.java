@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.itf.impl;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.ActionSender;
@@ -71,15 +72,23 @@ public class DungoneeringParty extends Interface {
                 hide(player);
                 break;
             case INVITE:
+                ClanManager.joinClanChat(player, "Party "+player.getName(), false);
                 final String name = pkt.getRS2String();
                 final Player p = World.getWorld().getPlayer(name);
+                if(name.equalsIgnoreCase(player.getName())) {
+                    player.sendMessage("You cannot invite yourself!");
+                    return;
+                }
                 System.out.println("HERE");
                 if(p == null || p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
                     player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
                     break;
                 }
 
-
+                /*if(p.getExtraData().get("dungoffer") != null) {
+                    player.sendMessage("This player is already being invited");
+                    return;
+                }   */
 
                 p.getActionSender().sendDialogue("Join "+player.getName()+"?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
                         "Yes, I want to join this dungeon", "No");
@@ -94,6 +103,8 @@ public class DungoneeringParty extends Interface {
     public void respond(final Player player, int response) {
         final Player holder = (Player)player.getExtraData().get("dungoffer");
         holder.write(createDataBuilder().put((byte) response).putRS2String(player.getName()).toPacket());
+        ClanManager.joinClanChat(player, "Party "+holder.getName(), false);
+        player.getExtraData().put("dungoffer", null);
     }
 
 

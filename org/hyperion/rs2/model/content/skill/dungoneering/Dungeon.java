@@ -52,8 +52,6 @@ public class Dungeon {
             player.getInventory().add(Item.create(995, 500));
             for(final Item bound : player.getDungoneering().getBinds())
                 player.getInventory().add(bound);
-            ClanManager.joinClanChat(player, NameUtils.nameToLong("Dungeon"+activeDungeons.size()));
-
         }
         start.initialized = true;
         final Point loc = start.definition.randomLoc();
@@ -101,6 +99,8 @@ public class Dungeon {
         player.getDungoneering().setCurrentRoom(null);
         player.getDungoneering().setCurrentDungeon(null);
 
+
+        player.getExtraData().put("dungoffer", null);
         ClanManager.leaveChat(player, true, false);
         player.setLocation(DungeoneeringManager.LOBBY);
 

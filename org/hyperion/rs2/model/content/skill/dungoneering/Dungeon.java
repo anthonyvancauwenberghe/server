@@ -29,7 +29,7 @@ public class Dungeon {
     public final DungeonDifficulty difficulty;
     private final long start_time;
     private final DungeonDifficulty.DungeonSize size;
-    private final int teamSize;
+    public final int teamSize;
 
     public Dungeon(final List<Player> players, final DungeonDifficulty difficulty, final DungeonDifficulty.DungeonSize size) {
         this.players = players;
@@ -76,16 +76,17 @@ public class Dungeon {
             double death_penalty = Math.pow(0.9, death);
             if(death_penalty < 0.4)
                 death_penalty = 0.4;
-            double team_penalty = Math.pow(0.91, teamSize - 1);
+            double team_penalty = Math.pow(1.05, teamSize - 1);
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size.multiplier * team_penalty);
             int tokens = xp/10;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             player.sendMessage
                     ("@red@----------------------DUNGEON COMPLETE----------------------",
-                            "@blu@Exp: @bla@ "+xp,
-                            "@blu@Time: @bla@" + TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS) +" seconds",
-                            "@blu@Deaths: @bla@"+death, "@blu@Tokens: @bla@" +tokens);
+                            String.format("BaseXP: %d Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
+                                    difficulty.xp, toPercent(this.size.multiplier), toPercent(death_penalty), toPercent(team_penalty)),
+                            "@blu@Final Exp: @bla@ "+xp,
+                            "@blu@Time: @bla@" + TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS) +" seconds");
         }
 
         for(final Item item : player.getInventory().toArray()) {
@@ -168,6 +169,10 @@ public class Dungeon {
         int old = deaths.getOrDefault(player, 0);
         deaths.put(player, old + 1);
         player.getDungoneering().setCurrentRoom(getStartRoom());
+    }
+
+    private static final String toPercent(final double d) {
+        return String.format("%.1f%%", d * 100D);
     }
 
 }

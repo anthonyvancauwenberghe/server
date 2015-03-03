@@ -1090,7 +1090,7 @@ public class Combat {
 				||
                 (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
                         combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711)
-                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()))
+                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Location.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk())
 			
 			return true;
 		if(combatEntity.getEntity() instanceof Player) {

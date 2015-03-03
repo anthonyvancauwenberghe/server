@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.OtherDonatorsPlace;
@@ -136,9 +137,13 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int onItem = player.getInventory().get(usedWithSlot).getId();
 		int useItem = player.getInventory().get(itemUsedSlot).getId();
         if(onItem == 15707 && player.getDungoneering().inDungeon()) {
-
+            final Item item = player.getInventory().get(itemUsedSlot);
+            if(item == null || (!FightPits.scItems.contains(item.getId()) && !ItemSpawning.canSpawn(item.getId()))) {
+                player.sendMessage("You cannot bind this item");
+                return;
+            }
             DialogueManager.openDialogue(player, 7005);
-            player.getExtraData().put("binditem", player.getInventory().get(itemUsedSlot));
+            player.getExtraData().put("binditem", item);
             return;
         }
 		if(World.getWorld().getContentManager().handlePacket(13, player, useItem, itemUsedSlot, onItem, usedWithSlot))

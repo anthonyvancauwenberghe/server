@@ -1176,6 +1176,13 @@ public class CommandHandler {
             }
         });
 
+        submit(new GiveIntCommand("givedt", Rank.DEVELOPER){
+            public void process(final Player player, final Player target, final int value){
+                target.getDungoneering().setTokens(target.getDungoneering().getTokens() + value);
+                player.sendf("%s now has %,d dung tokens", target.getName(), target.getDungoneering().getTokens());
+            }
+        });
+
         submit(new Command("getmac", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();

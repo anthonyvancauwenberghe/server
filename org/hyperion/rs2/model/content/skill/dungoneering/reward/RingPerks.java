@@ -134,7 +134,7 @@ public class RingPerks {
     }
 
     public int calcNextPerkCost(int style) {
-        return (int)(25_000 * Math.pow(1.5, hasPerk(Perk.forStyle(style)) + 1));
+        return (int)(35_000 * Math.pow(1.5, hasPerk(Perk.forStyle(style)) + 1));
     }
 
     public double bonus(final int style, boolean accuracy) {

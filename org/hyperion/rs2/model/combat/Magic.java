@@ -1298,6 +1298,8 @@ public class Magic {
 					player.playAnimation(Animation.create(8941, 0));
 				else
 					player.playAnimation(Animation.create(- 1, 0));
+                if(player.getDungoneering().inDungeon())
+                    player.getDungoneering().getCurrentDungeon().remove(player, false);
 				this.stop();
 			}
 		});

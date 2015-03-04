@@ -355,6 +355,23 @@ public class DonatorShop extends Shop {
 			return 1000;
 		switch(itemId) {
 
+            case 16401:
+                return 5_000;
+            case 16953:
+                return 4_000;
+            case 17135:
+                return 3_000;
+            case 16687:
+                return 2_000;
+            case 17257:
+                return 3_000;
+            case 16709:
+                return 1_000;
+            case 17359:
+                return 1_500;
+            case 16357:
+                return 2_000;
+
             case 18739:
             case 18740:
                 return 2000;

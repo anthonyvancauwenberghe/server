@@ -8,6 +8,7 @@ import org.hyperion.rs2.util.NameUtils;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * To change this template use File | Settings | File Templates.
  */
 public class Dungeon {
-    public static final List<Dungeon> activeDungeons = new ArrayList<>();
+    public static final List<Dungeon> activeDungeons = new CopyOnWriteArrayList<>();
 
     private final Map<Player, Integer> deaths = new HashMap<>();
 
@@ -32,6 +33,7 @@ public class Dungeon {
     public final int teamSize;
 
     public Dungeon(final List<Player> players, final DungeonDifficulty difficulty, final DungeonDifficulty.DungeonSize size) {
+
         this.players = players;
         this.heightLevel = players.get(0).getIndex();
         this.difficulty = difficulty;
@@ -131,8 +133,10 @@ public class Dungeon {
     }
 
     public void complete() {
-        for(final Player player : players) {
-            remove(player, true);
+        synchronized (this) {
+            for(final Player player : players) {
+                remove(player, true);
+            }
         }
 
     }
@@ -153,11 +157,13 @@ public class Dungeon {
 
 
     public void destroy() {
-        for(final Room room : rooms)
-            room.destroy();
-        rooms.clear();
-        players.clear();
-        activeDungeons.remove(this);
+        synchronized (this) {
+            for(final Room room : rooms)
+                room.destroy();
+            rooms.clear();
+            players.clear();
+            activeDungeons.remove(this);
+        }
 
     }
 

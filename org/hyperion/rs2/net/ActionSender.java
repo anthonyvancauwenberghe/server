@@ -160,7 +160,8 @@ public class ActionSender {
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getBank().add(Item.create(15707));
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@blu@@Boosts Active: Release of Dugeoneering - @red@2x Dungeoneering Tokens!");
+
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");

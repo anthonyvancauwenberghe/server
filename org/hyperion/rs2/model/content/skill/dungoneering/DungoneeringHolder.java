@@ -61,13 +61,16 @@ public class DungoneeringHolder {
 
     public void start(final List<Player> players, final DungeonDifficulty chosen, final DungeonDifficulty.DungeonSize size) {
         final Iterator<Player> it = players.iterator();
+        final List<Player> copy = new ArrayList<>();
         while(it.hasNext()) {
             final Player p = it.next();
             if(DungeoneeringManager.cantJoin(p) || !p.getLocation().inDungeonLobby() || p.getSkills().getLevel(Skills.DUNGEONINEERING) < chosen.min_level) {
                 p.sendMessage("You didn't meet the requirements to join and have been kicked out!");
-                it.remove();
+                copy.add(p);
             }
         }
+
+        players.removeAll(copy);
         if(players.size() == 0)
             return;
         players.forEach(p -> p.getDungoneering().loadXP(p.getSkills(), true));

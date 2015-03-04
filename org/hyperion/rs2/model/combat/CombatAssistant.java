@@ -866,7 +866,8 @@ public class CombatAssistant {
 		if(base <= 0) {
 			base = 1;
 		}
-        base = p.getDungoneering().perks.boost(Constants.MELEE, false, base);
+        if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+            base = p.getDungoneering().perks.boost(Constants.MELEE, false, base);
 		// p.getActionSender().sendMessage("Your max is " + Math.floor(base));
 		return (int) Math.floor(base);
 
@@ -1116,7 +1117,8 @@ public class CombatAssistant {
 		double max = (1.3 + e / 8 + rangedStr / 80 + e * rangedStr / 640);
 		//p.getActionSender().sendMessage("Range max : " + max);
 		max *= specialBonus;
-        max *= p.getDungoneering().perks.boost(Constants.RANGE, false, max);
+        if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+            max *= p.getDungoneering().perks.boost(Constants.RANGE, false, max);
 		return (int) max;
 	}
 
@@ -1131,7 +1133,8 @@ public class CombatAssistant {
 		}
 		if(fullVoidRange(p))
 			rangeAtk *= 1.15;
-        rangeAtk = p.getDungoneering().perks.boost(Constants.RANGE, true, rangeAtk);
+        if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+            rangeAtk = p.getDungoneering().perks.boost(Constants.RANGE, true, rangeAtk);
 		return (int) ((rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)/2));
 	}
 
@@ -1171,7 +1174,8 @@ public class CombatAssistant {
 			mageLvl *= 1.15;
 		} else if(player.getPrayers().isEnabled(27))
             mageLvl *= 1.25;
-        bonus = (int)player.getDungoneering().perks.boost(Constants.MAGE, true, bonus);
+        if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+            bonus = (int)player.getDungoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl/2 +
 				(int)(bonus * 1.9);
 	}
@@ -1253,7 +1257,8 @@ public class CombatAssistant {
 		} else if(player.getPrayers().isEnabled(49)) {
 			meleeAtk *= 1.25;
 		}
-        meleeAtk = player.getDungoneering().perks.boost(Constants.MELEE, true, meleeAtk);
+        if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+            meleeAtk = player.getDungoneering().perks.boost(Constants.MELEE, true, meleeAtk);
 		double bonus = player.getBonus().get(0);
 		for(int i = 1; i < 3; i++) {
 			if(player.getBonus().get(i) > bonus) {

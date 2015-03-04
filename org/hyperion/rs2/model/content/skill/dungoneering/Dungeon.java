@@ -129,6 +129,7 @@ public class Dungeon {
 
     public void complete() {
         for(final Player player : players) {
+            System.out.println(player.getName());
             remove(player, true);
         }
     }

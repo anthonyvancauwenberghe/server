@@ -164,8 +164,8 @@ public class RingPerks {
         for (final Perk perk : Perk.values()) {
             final int perkLevel = hasPerk(perk) + 1;
             builder.append(perk.name()).append(" - ").append("Hit Boost: ").
-                    append(String.format("%.1f%%", perk.getBonusPercent(perkLevel))).append("Accuracy Boost: ").
-                    append(String.format("%.1f%%", perk.getAccuracyPercent(perkLevel))).append("_B_");
+                    append(String.format("%.1f%%", perk.getBonusPercent(perkLevel) * 100D)).append("Accuracy Boost: ").
+                    append(String.format("%.1f%%", perk.getAccuracyPercent(perkLevel) * 100D)).append("_B_");
         }
         return builder.toString();
     }

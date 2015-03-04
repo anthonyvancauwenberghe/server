@@ -79,7 +79,6 @@ public class DungoneeringParty extends Interface {
                     player.sendMessage("You cannot invite yourself!");
                     return;
                 }
-                System.out.println("HERE");
                 if(p == null || p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
                     player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
                     break;
@@ -99,7 +98,8 @@ public class DungoneeringParty extends Interface {
     public void respond(final Player player, int response) {
         final Player holder = (Player)player.getExtraData().get("dungoffer");
         holder.write(createDataBuilder().put((byte) response).putRS2String(player.getName()).toPacket());
-        ClanManager.joinClanChat(player, "Party "+holder.getName(), false);
+        if(response == 0)
+            ClanManager.joinClanChat(player, "Party "+holder.getName(), false);
         player.getExtraData().put("dungoffer", null);
     }
 

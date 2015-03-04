@@ -146,7 +146,7 @@ public class RingPerks {
     }
 
     public double boost(final int style, final boolean accuracy, final double original) {
-        return (int)(original * bonus(style, accuracy));
+        return (int)(original * bonus(style, accuracy));       //
         //return 1;
     }
 

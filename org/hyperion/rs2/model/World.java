@@ -1016,8 +1016,13 @@ public class World {
                     for(Player p : getPlayers()) {
                         Trade.declineTrade(p);
                     }
-                    for(final Dungeon dungeon : Dungeon.activeDungeons)
-                        dungeon.complete();
+                    for(final Dungeon dungeon : Dungeon.activeDungeons) {
+                        try {
+                            dungeon.complete();
+                        }catch(final Exception ex) {
+
+                        }
+                    }
                     new Restart(reason).execute();
                 }
             }

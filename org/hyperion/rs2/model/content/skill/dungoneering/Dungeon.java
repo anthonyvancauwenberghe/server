@@ -133,6 +133,11 @@ public class Dungeon {
             System.out.println(player.getName());
             remove(player, true);
         }
+
+        for(final Player p : World.getWorld().getPlayers()) {
+            if(equals(p.getDungoneering().getCurrentDungeon()))
+                remove(p, true);
+        }
     }
 
     public void assignChildren() {

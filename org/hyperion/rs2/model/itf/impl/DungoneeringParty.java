@@ -85,10 +85,10 @@ public class DungoneeringParty extends Interface {
                     break;
                 }
 
-                /*if(p.getExtraData().get("dungoffer") != null) {
+                if(p.getExtraData().get("dungoffer") != null) {
                     player.sendMessage("This player is already being invited");
                     return;
-                }   */
+                }
 
                 p.getActionSender().sendDialogue("Join "+player.getName()+"?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
                         "Yes, I want to join this dungeon", "No");

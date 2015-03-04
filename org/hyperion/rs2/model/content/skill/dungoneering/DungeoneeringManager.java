@@ -106,7 +106,14 @@ public class DungeoneeringManager implements ContentTemplate {
             }
         } else if (type == ClickType.ITEM_OPTOION6) {
             if(player.getDungoneering().inDungeon()) {
-                final String[] names = player.getDungoneering().getCurrentDungeon().getPlayers().stream().map(Player::getName).toArray(String[]::new);
+                String[] names = player.getDungoneering().getCurrentDungeon().getPlayers().stream().map(Player::getName).toArray(String[]::new);
+                if(names.length > 5) {
+                    final String[] old = names.clone();
+                    names = new String[5];
+                    for(int i = 0; i < names.length; i++) {
+                        names[i] = old[i];
+                    }
+                }
                 player.getActionSender().sendDialogue("Teleport", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, names);
                 for(int i = 0 ; i < names.length ; i++) {
                     player.getInterfaceState().setNextDialogueId(i, 7014 + i);

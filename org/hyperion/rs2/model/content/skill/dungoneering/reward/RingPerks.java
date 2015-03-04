@@ -24,28 +24,28 @@ public class RingPerks {
     public static enum Perk {
         MELEE(0, 3) {
             @Override double getBonusPercent(final int level) {
-                return (((double)level * 1.5) / 10D);
+                return (((double)level * 1.5) / 100D);
             }
             @Override double getAccuracyPercent(final int level) {
-                return ((level) * 2 / 10D);
+                return ((level) * 2 / 100D);
             }
         },
         RANGE(1, 3) {
             @Override double getBonusPercent(final int level) {
-                return ((level * 2) / 10D);
+                return ((level * 2) / 100D);
             }
             @Override double getAccuracyPercent(final int level) {
-                return ((level) * 2 / 10D);
+                return ((level) * 2 / 100D);
             }
 
         },
         MAGIC(2, 3) {
             @Override double getBonusPercent(final int level) {
-                return (((double)level * 1.5) / 10D);
+                return (((double)level * 1.5) / 100D);
             }
 
             @Override double getAccuracyPercent(final int level) {
-                return ((level) * 2 / 10D);
+                return ((level) * 2 / 100D);
             }
         };
 
@@ -146,8 +146,8 @@ public class RingPerks {
     }
 
     public double boost(final int style, final boolean accuracy, final double original) {
-        //return (int)(original * bonus(style, accuracy));
-        return 1;
+        return (int)(original * bonus(style, accuracy));
+        //return 1;
     }
 
     public List<Perk> getPerks() {
@@ -164,8 +164,8 @@ public class RingPerks {
         for (final Perk perk : Perk.values()) {
             final int perkLevel = hasPerk(perk) + 1;
             builder.append(perk.name()).append(" - ").append("Hit Boost: ").
-                    append(perk.getBonusPercent(perkLevel)).append("%").append("Accuracy Boost: ").
-                    append(perk.getAccuracyPercent(perkLevel)).append("%").append("_B_");
+                    append(String.format("%.1f%%", perk.getBonusPercent(perkLevel))).append("Accuracy Boost: ").
+                    append(String.format("%.1f%%", perk.getAccuracyPercent(perkLevel))).append("_B_");
         }
         return builder.toString();
     }

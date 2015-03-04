@@ -71,19 +71,20 @@ public class Dungeon {
             long delta_time = (long)(difficulty.time * size.multi_time) - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
             double multiplier = (time/10D) + 1.0;
-            if(multiplier < 0.7) multiplier = 0.7;
+            if(multiplier < 0.5) multiplier = 0.5;
             int death = deaths.getOrDefault(player, 0);
-            double death_penalty = Math.pow(0.9, death);
+            double death_penalty = Math.pow(0.85, death);
             if(death_penalty < 0.4)
                 death_penalty = 0.4;
-            double team_penalty = Math.pow(1.05, teamSize - 1);
-            final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size.multiplier * team_penalty);
-            int tokens = xp/10;
+            double team_penalty = Math.pow(1.04, teamSize - 1);
+            final double size_multi = size.multiplier * 0.8;
+            final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
+            int tokens = xp/15;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             final String s =
                     String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
-                            toPercent(this.size.multiplier), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
+                            toPercent(size_multi), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
             player.sendMessage
                     ("@red@----------------------DUNGEON COMPLETE----------------------",
                             "@blu@BaseXP: @bla@"+difficulty.xp,

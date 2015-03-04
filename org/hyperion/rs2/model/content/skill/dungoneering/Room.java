@@ -38,6 +38,7 @@ public class Room {
     }
 
     public boolean cleared() {
+        System.out.println(initialized);
         if(!must_clear && !boss)
             return initialized;
         for(final NPC npc : npcs) {

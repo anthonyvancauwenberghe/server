@@ -90,9 +90,12 @@ public class DungoneeringHolder {
     }
 
     public Location clickPortal() {
+        System.out.println(room);
         if(room == null) return null;
+        System.out.println(room.cleared());
         if(!room.cleared())
             return null;
+        System.out.println(room.boss);
         if(room.boss) {
             currentDungeon.complete();
             return null;

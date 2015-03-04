@@ -80,10 +80,11 @@ public class Dungeon {
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             final String s =
-                    String.format("BaseXP: %d Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
-                            difficulty.xp, toPercent(this.size.multiplier), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
+                    String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
+                            toPercent(this.size.multiplier), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
             player.sendMessage
                     ("@red@----------------------DUNGEON COMPLETE----------------------",
+                            "@blu@BaseXP: @bla@"+difficulty.xp,
                             s,
                             "@blu@Final Exp: @bla@ "+xp,
                             "@blu@Time: @bla@" + TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS) +" seconds");
@@ -175,7 +176,7 @@ public class Dungeon {
     }
 
     private static final String toPercent(final double d) {
-        return String.format("%.1f%%", d * 100D);
+        return String.format("%1.0f%%", d * 100D);
     }
 
 }

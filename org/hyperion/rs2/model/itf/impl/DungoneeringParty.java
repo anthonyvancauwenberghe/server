@@ -11,6 +11,7 @@ import org.hyperion.rs2.net.Packet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +47,7 @@ public class DungoneeringParty extends Interface {
                 for(int i = 0; i < playerStrings.length; i++) {
                     playerStrings[i] = pkt.getRS2String();
                 }
-                final List<Player> players = new ArrayList<>();
+                final List<Player> players = new CopyOnWriteArrayList<>();
 
                 for(final String s : playerStrings) {
                     final Player p = World.getWorld().getPlayer(s);

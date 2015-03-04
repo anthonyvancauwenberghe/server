@@ -1118,7 +1118,7 @@ public class CombatAssistant {
 		//p.getActionSender().sendMessage("Range max : " + max);
 		max *= specialBonus;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-            max *= p.getDungoneering().perks.boost(Constants.RANGE, false, max);
+            max = p.getDungoneering().perks.boost(Constants.RANGE, false, max);
 		return (int) max;
 	}
 

@@ -566,7 +566,8 @@ public class Prayer implements ContentTemplate {
 
 	private void changeCurses(Player player) {
 		player.playAnimation(Animation.create(645, 0));
-		player.getSkills().setLevel(5, player.getSkills().getLevelForExp(5));
+        if(!player.getDungoneering().inDungeon())
+		    player.getSkills().setLevel(5, player.getSkills().getLevelForExp(5));
 		player.getActionSender().sendSkill(5);
 		player.getActionSender().sendMessage("You succesfully change your Prayer book.");
 		boolean current_book = player.getPrayers().isDefaultPrayerbook();

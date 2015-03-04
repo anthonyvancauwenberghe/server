@@ -128,6 +128,7 @@ public class Dungeon {
     }
 
     public void complete() {
+        System.out.println(players.size());
         for(final Player player : players) {
             System.out.println(player.getName());
             remove(player, true);

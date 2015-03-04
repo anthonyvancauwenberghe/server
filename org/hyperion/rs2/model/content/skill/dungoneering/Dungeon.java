@@ -23,7 +23,7 @@ public class Dungeon {
 
     private final Map<Player, Integer> deaths = new HashMap<>();
 
-    private List<Room> rooms = new ArrayList<>();
+    private List<Room> rooms = new CopyOnWriteArrayList<>();
 
     private final List<Player> players;
     public final int heightLevel;

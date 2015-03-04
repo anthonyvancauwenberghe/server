@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 import java.io.FileNotFoundException;
 
@@ -160,6 +161,8 @@ public class SpawnTab implements ContentTemplate {
 	                           int d) {
 		if(!Server.SPAWN)
 			return false;
+        if(!ItemSpawning.canSpawn(player))
+            return false;
         if(player.hardMode())
             return false;
 		if(type == 0) {

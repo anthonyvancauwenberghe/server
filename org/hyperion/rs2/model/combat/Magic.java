@@ -303,6 +303,8 @@ public class Magic {
 		if(Misc.random(AtkBonus) < Misc.random(DefBonus)) {
 			splash = true;
 		}
+            if(attacker.getPlayer().getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+                Damage = (int)attacker.getPlayer().getDungoneering().perks.boost(Constants.MAGE, false, Damage);
 
        if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
                 if(SlayerShop.hasHex(attacker.getPlayer()))
@@ -1296,6 +1298,8 @@ public class Magic {
 					player.playAnimation(Animation.create(8941, 0));
 				else
 					player.playAnimation(Animation.create(- 1, 0));
+                if(player.getDungoneering().inDungeon())
+                    player.getDungoneering().getCurrentDungeon().remove(player, false);
 				this.stop();
 			}
 		});

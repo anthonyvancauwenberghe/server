@@ -142,6 +142,12 @@ public class ItemOptionPacketHandler implements PacketHandler {
                 player.sendMessage("You cannot bind this item");
                 return;
             }
+            for(final Item item1 : player.getDungoneering().getBinds()) {
+                if(item1 != null && item1.getId() == item.getId()) {
+                    player.sendMessage("You already have this item binded!");
+                    return;
+                }
+            }
             DialogueManager.openDialogue(player, 7005);
             player.getExtraData().put("binditem", item);
             return;

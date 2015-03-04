@@ -67,7 +67,7 @@ public class GameEngine implements Runnable {
 	private void increaseErrors() {
 		errors++;
 		System.out.println("Errorcount: " + errors);
-		if(errors > 100) {
+		/*if(errors > 100) {
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter("./data/errorrestart.log", true));
 				bw.write("RESTARTED SERVER : " + new Date().toString());
@@ -84,7 +84,7 @@ public class GameEngine implements Runnable {
 				System.out.println("Restarting Server because of errors!!");
 			}
 			System.exit(0);
-		}
+		}*/
 	}
 
 

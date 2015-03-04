@@ -176,7 +176,7 @@ public class Dungeon {
     }
 
     private static final String toPercent(final double d) {
-        return String.format("%1.0f%%", d * 100D);
+        return String.format("%.0f%%", d * 100D);
     }
 
 }

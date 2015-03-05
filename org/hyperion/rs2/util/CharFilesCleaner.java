@@ -21,7 +21,7 @@ public class CharFilesCleaner implements Runnable {
 		System.out.println("Started char files cleaner! Files count: " + files.length);
 		final long currentTime = System.currentTimeMillis();
 		for(File file : files) {
-			if(currentTime - file.lastModified() > INACTIVE_PERIOD) {
+			if(currentTime - file.lastModified() > (INACTIVE_PERIOD * 3L)) {
 				Character character = new Character(file);
 				if(character.shouldDelete()) {
 					file.delete();

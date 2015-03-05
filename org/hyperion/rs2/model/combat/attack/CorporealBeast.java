@@ -103,7 +103,7 @@ public class CorporealBeast implements Attack {
 	}
 	@Override
 	public int handleAttack(final NPC n, final CombatEntity attack) {
-		int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+		int distance = attack.getEntity().getLocation().distance(n.getLocation());
 		if(distance < (3 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;

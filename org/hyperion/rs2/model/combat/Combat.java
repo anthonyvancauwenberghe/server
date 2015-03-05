@@ -526,9 +526,7 @@ public class Combat {
 					int deltaBonus = MeleeAtk - MeleeDef;
 					int toAdd = Misc.random(deltaBonus / 3);
 					damg += toAdd;
-					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayer().getActionSender().sendMessage("ToAdd: " + toAdd);
-					}*/
+					combatEntity.getPlayer().debugMessage("Toadd: "+toAdd);
 					if(damg < 0)
 						damg = 0;
 					if(damg > maxHit)

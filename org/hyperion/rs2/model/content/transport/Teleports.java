@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.transport;
 import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -122,7 +123,8 @@ public class Teleports implements ContentTemplate {
 					break;
 				case 177209: //Dag Kings
 				case - 20015:
-					Magic.teleport(player, 1910, 4367, 0, false);
+                    DialogueManager.openDialogue(player, 1889);
+                    ;
 					break;
 				case 177212: //Chaos Elemental
 				case - 20012:

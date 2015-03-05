@@ -2371,7 +2371,7 @@ public class CommandPacketHandler implements PacketHandler {
 			if (commandStart.equals("players")) {
 				player.getActionSender().sendMessage(
 						"@blu@There are currently "
-								+ World.getWorld().getPlayers().size()
+								+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI)
 								+ " players online!");
 				player.getActionSender().openPlayersInterface();
 				return;

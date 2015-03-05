@@ -51,7 +51,7 @@ public class Dungeon {
         for(final Player player : players) {
             player.setTeleportTarget(start.getSpawnLocation());
             player.getDungoneering().setCurrentRoom(start);
-            player.getInventory().add(Item.create(995, 500));
+            player.getInventory().add(Item.create(995, (int)(difficulty.coins * size.multiplier)));
             for(final Item bound : player.getDungoneering().getBinds())
                 player.getInventory().add(bound);
         }
@@ -77,9 +77,9 @@ public class Dungeon {
             if(death_penalty < 0.4)
                 death_penalty = 0.4;
             double team_penalty = Math.pow(1.04, teamSize - 1);
-            final double size_multi = size.multiplier * 0.8;
+            final double size_multi = size.multiplier;
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
-            int tokens = xp/15;
+            int tokens = xp/35;
             player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             final String s =

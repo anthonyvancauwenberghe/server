@@ -160,7 +160,7 @@ public class ActionSender {
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getBank().add(Item.create(15707));
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@blu@@Boosts Active: Release of Dugeoneering - @red@2x Dungeoneering Tokens!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
 
         }
         sendMessage("       ");
@@ -985,7 +985,7 @@ public class ActionSender {
 
 	public ActionSender openPlayersInterface() {
 		sendString(8144, "Players Online: "
-				+ World.getWorld().getPlayers().size());
+				+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
 		int i = 0;
 		Player p3 = null;
 

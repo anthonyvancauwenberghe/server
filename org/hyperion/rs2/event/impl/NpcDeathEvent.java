@@ -238,7 +238,7 @@ public class NpcDeathEvent extends Event {
                             final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                     npc.getLocation().getY(), npc.getLocation().getZ(),
-                                    Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
+                                    Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(100)) : 1));
                             World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                             globalItem.createdTime = System.currentTimeMillis() + 47000L;
                             globalItem = new GlobalItem(player, npc.getLocation().getX(),

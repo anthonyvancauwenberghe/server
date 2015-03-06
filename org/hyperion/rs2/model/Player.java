@@ -197,8 +197,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public boolean checkCompCapeReq() {
-		if(hasCompCape)
-            return !getBank().contains(12747) && !getInventory().contains(12747) && !getEquipment().contains(12747);
 		for(int i = 6; i < this.getSkills().getXps().length; i++) {
 			if(i >= 21)
 				continue;

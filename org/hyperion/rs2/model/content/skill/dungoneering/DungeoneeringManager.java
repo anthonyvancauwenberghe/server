@@ -252,7 +252,10 @@ public class DungeoneeringManager implements ContentTemplate {
                 break;
             case 7019:
                 final String[] perk_pricse = Stream.of(RingPerks.Perk.values()).
-                        map(perk -> String.format("%s %d tokens",perk.name(), player.getDungoneering().perks.calcNextPerkCost(perk.index))).toArray(String[]::new);
+                        map(perk ->
+                                perk.maxLevel != player.getDungoneering().perks.hasPerk(perk) ?
+                                        String.format("%s %d tokens",perk.name(), player.getDungoneering().perks.calcNextPerkCost(perk.index)) :
+                                        String.format("%s MAXED", perk.name())).toArray(String[]::new);
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
                         perk_pricse);
                 for(int i = 0; i < 3; i++)
@@ -261,6 +264,11 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7020:
             case 7021:
             case 7022:
+                final RingPerks.Perk perk = RingPerks.Perk.forStyle(dialogueId - 7020);
+                if(player.getDungoneering().perks.hasPerk(perk) == perk.maxLevel) {
+                    player.sendMessage("This perk is maxed");
+                    break;
+                }
                 if(player.getDungoneering().buyPerk(dialogueId - 7020)) {
                     player.sendMessage("You successfully upgrade your perk. Check perk bonuses by right clicking your ring");
                 } else {

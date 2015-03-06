@@ -211,6 +211,8 @@ public class Player extends Entity implements Persistable, Cloneable{
     public void checkCapes() {
         checkContainers(12747, checkCompCapeReq());
         checkContainers(12744, checkMaxCapeRequirment());
+        checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONINEERING]== 99);
+        checkContainers(19709, skills.getExperience(Skills.DUNGEONINEERING) == Skills.MAXIMUM_EXP);
     }
 
     private void checkContainers(final int id, final boolean add) {

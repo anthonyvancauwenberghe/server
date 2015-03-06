@@ -535,6 +535,8 @@ public class Skills {
 
         if(player.xpLock && skill <= MAGIC)
             return;
+        if(skill <= MAGIC && player.getDungoneering().inDungeon())
+            exp *= 1.75;
         if(player.getEquipment().getItemId(Equipment.SLOT_HELM) == 17279) {
         	exp *= 1.02;
         }

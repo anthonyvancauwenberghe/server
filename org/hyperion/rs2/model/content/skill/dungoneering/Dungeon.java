@@ -71,6 +71,8 @@ public class Dungeon {
             long delta_time = (long)(difficulty.time * size.multi_time) - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
             double multiplier = (time/10D) + 1.0;
+            if(multiplier > 1.5)
+                multiplier = 1.5;
             if(multiplier < 0.5) multiplier = 0.5;
             int death = deaths.getOrDefault(player, 0);
             double death_penalty = Math.pow(0.85, death);

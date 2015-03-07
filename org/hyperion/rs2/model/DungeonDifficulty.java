@@ -21,9 +21,9 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(1000, 2, 5, 0, 13_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882, 2883}, 1, 5338, 299, 255, 32, 449, 5595, 196, 119, 1677, 2627, 4940, 4693, 112, 78, 2630),
-    MEDIUM(5000,2, 8, 45, 45_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{6692, 6691, 6690, 6689, 6688, 3200},  51,52,53, 55, 82, 83,941, 1582, 1583, 49, 2741),
-    HARD(15000,1, 10, 80, 110_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203, 6222, 8349}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 1592, 1591, 1590, 54, 84, 2743, 5253);
+    EASY(500, 2, 5, 0, 13_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882, 2883}, 1, 5338, 299, 255, 32, 449, 5595, 196, 119, 1677, 2627, 4940, 4693, 112, 78, 2630),
+    MEDIUM(1000,2, 8, 45, 45_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{6692, 6691, 6690, 6689, 6688, 3200},  51,52,53, 55, 82, 83,941, 1582, 1583, 49, 2741),
+    HARD(5000,2, 10, 80, 100_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203, 6222, 8349}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 1592, 1591, 1590, 54, 84, 2743, 5253);
 
 
     public final int min_level, spawns, rooms, xp, coins;
@@ -51,9 +51,9 @@ public enum DungeonDifficulty {
     }
 
     public enum DungeonSize {
-        SMALL(5, 0.75, .65),
-        MEDIUM(15, 2.0, 2.1),
-        LARGE(30, 3.8, 4.5);
+        SMALL(5, 0.75, .45),
+        MEDIUM(15, 2.0, 1.7),
+        LARGE(30, 3.8, 3.5);
 
         public final int size;
         public final double multiplier;

@@ -33,10 +33,10 @@ public class SteelTitan implements Attack {
 		n.cE.predictedAtk = System.currentTimeMillis() + 2000;
 		if(distance > 2 && distance < 8) {
             int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_RANGE_DAMG), Constants.RANGE, MAX_RANGE_DAMG);
-            Combat.npcAttack(n, attack, Combat.random(22), 1700, Constants.RANGE);
+            Combat.npcAttack(n, attack, tempDamage, 1700, Constants.RANGE);
 		} else if (distance < 8) {
             int tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MELEE_DAMG), Constants.MELEE, MAX_MELEE_DAMG);
-            Combat.npcAttack(n, attack, Combat.random(17), 700, Constants.MELEE);
+            Combat.npcAttack(n, attack, tempDamage, 700, Constants.MELEE);
 		} else if (distance < 11) {
             return 0;
         } else if (distance >= 11) {

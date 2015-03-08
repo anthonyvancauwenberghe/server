@@ -31,6 +31,11 @@ public class TormentedDemon implements Attack {
 	public static int getReduction(NPC npc, Player player,int originalDamg) {
 		if(npc == null || player == null || npc.getDefinition().getId() != 8349)
 			return originalDamg;
+        if(Misc.random(2) == 0) {
+            npc.health += originalDamg/2;
+            originalDamg = originalDamg/3;
+            player.sendMessage("The tormented demon soaks some of your damage!");
+        }
 		return originalDamg;
 	}
 

@@ -278,6 +278,8 @@ public class CombatEntity {
 				return player.inflictDamage(damage, attacker, poison, style);
 			} else {
                 final int id = n.getDefinition().getId();
+                if(attacker instanceof Player)
+                    damage = TormentedDemon.getReduction(n, (Player)attacker, damage);
 				if(id == 8133) {
 					if(attacker instanceof Player) {
 						Player atk = (Player)attacker;

@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -73,6 +74,7 @@ public class DungoneeringHolder {
         players.removeAll(copy);
         if(players.size() == 0)
             return;
+        players.forEach(Trade::declineTrade);
         players.forEach(p -> p.getDungoneering().loadXP(p.getSkills(), true));
         final Dungeon dungeon = new Dungeon(players, chosen, size);
         dungeon.start();

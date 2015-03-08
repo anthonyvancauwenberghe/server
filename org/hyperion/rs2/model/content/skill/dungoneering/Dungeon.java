@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.util.NameUtils;

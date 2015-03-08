@@ -158,6 +158,10 @@ public class DungeoneeringManager implements ContentTemplate {
             return false;
         switch(id) {
             case 2804:
+                if(World.getWorld().updateInProgress()) {
+                    player.sendMessage("You cannot start a dungeon right now");
+                    return true;
+                }
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
                 itf.show(player);
                 break;

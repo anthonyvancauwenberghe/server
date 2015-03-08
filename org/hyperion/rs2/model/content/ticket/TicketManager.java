@@ -82,12 +82,12 @@ public class TicketManager {
         if(tick != null) {
             final Player p = World.getWorld().getPlayer(tick.name);
             if(p != null) {
-                if(!p.getLocation().inDuel() && !p.getLocation().inPvPArea()  && !Jail.inJail(p)) {
+                if(!p.getLocation().inDuel() && !p.getLocation().inPvPArea()  && !Jail.inJail(p) && !p.getDungoneering().inDungeon()) {
                     Magic.teleport(p, player.getLocation(), true);
                     remove(tick);
                 }
                         else {
-                        player.sendMessage("You can't be assisted while you are in a duel, jail or wilderness");
+                        player.sendMessage("You can't be assisted while you are in a duel, jail, dung, or wilderness");
                     }
 
             } else {

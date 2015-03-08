@@ -201,7 +201,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			if(i >= 21)
 				continue;
 			if(this.getSkills().getXps()[i] < 200000000)
-				return false;
+				return hasCompCape;
 		}
 		if(this.getPoints().getEloPeak() < 2200)
 			return false;

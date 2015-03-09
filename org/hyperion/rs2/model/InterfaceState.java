@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.container.*;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange;

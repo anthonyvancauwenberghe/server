@@ -10,7 +10,7 @@ import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.DoorManager;
 
 public class ObjectClickHandler {

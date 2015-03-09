@@ -160,8 +160,7 @@ public class ActionSender {
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getBank().add(Item.create(15707));
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
-                    "@blu@Bonuses Active: @red@1.5X drop rates, 2x slayer points, 2x vote points");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
 
         }
         sendMessage("       ");

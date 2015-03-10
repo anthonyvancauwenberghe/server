@@ -1155,6 +1155,13 @@ public class CommandHandler {
             }
         });
 
+        submit(new GiveIntCommand("givepkp", Rank.OWNER){
+            public void process(final Player player, final Player target, final int value){
+                target.getPoints().setPkPoints(target.getPoints().getPkPoints() + value);
+                player.sendf("%s now has %,d pk points", target.getName(), target.getPoints().getPkPoints());
+            }
+        });
+
         submit(new GiveIntCommand("givebhp", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
                 target.getBountyHunter().setKills(target.getBountyHunter().getKills() + value);

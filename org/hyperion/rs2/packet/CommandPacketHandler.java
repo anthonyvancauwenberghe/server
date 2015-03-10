@@ -184,9 +184,6 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage(
 						"Trying to give: " + theplay + " rank id: " + rValue);
 				if (promoted != null) {
-					if (rank.ordinal() >= Rank.DEVELOPER.ordinal()
-							&& !player.isServerOwner())
-						return;
 					promoted.setPlayerRank(Rank.addAbility(promoted, rank));
 					promoted.getActionSender().sendMessage(
 							"You've been given: " + rank.toString());

@@ -204,7 +204,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 				return hasCompCape;
 		}
 		if(this.getPoints().getEloPeak() < 2200)
-			return false;
+			return hasCompCape;
 		return true;
 	}
 

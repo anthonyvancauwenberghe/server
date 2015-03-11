@@ -1,7 +1,7 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Inventory;
 import org.hyperion.rs2.model.content.checkers.GameHandler;
 import org.hyperion.rs2.net.Packet;

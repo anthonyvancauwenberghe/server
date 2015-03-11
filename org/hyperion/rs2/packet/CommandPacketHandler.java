@@ -52,7 +52,7 @@ import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.EquipmentReq;
@@ -77,7 +77,6 @@ import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.itf.impl.NameItemInterface;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
@@ -113,11 +112,20 @@ public class CommandPacketHandler implements PacketHandler {
 		 * Same thing as promote commands, added for those inbetween ranks
 		 */
 		if (commandStart.equalsIgnoreCase("givefmod")) {
-			Player p = World.getWorld().getPlayer(s.substring(9).trim());
-			if (p != null) {
-				p.setPlayerRank(Rank.addAbility(p, Rank.FORUM_MODERATOR));
-			}
-		}
+            Player p = World.getWorld().getPlayer(s.substring(9).trim());
+            if (p != null) {
+                p.setPlayerRank(Rank.addAbility(p, Rank.FORUM_MODERATOR));
+            }
+        }
+        if (commandStart.equalsIgnoreCase("givepkp")) {
+            String name = s.substring(s.indexOf(" "), s.indexOf(",")).trim().toLowerCase();
+            int amount = Integer.parseInt(s.substring(s.indexOf(",") + 1).trim());
+            Player p = World.getWorld().getPlayer(name);
+            if (p != null && amount > 0) {
+                p.getPoints().setPkPoints(amount);
+                p.sendMessage("You have just received " + amount + "Pk points");
+            }
+        }
 		if (commandStart.equalsIgnoreCase("givevet")) {
 			Player p = World.getWorld().getPlayer(s.substring(8).trim());
 			if (p != null) {
@@ -145,7 +153,6 @@ public class CommandPacketHandler implements PacketHandler {
 					player.getActionSender().sendMessage(p.getName());
 			}
 		}
-
         if(commandStart.equalsIgnoreCase("removerank")){ //
             try{
                 final String name = s.substring(s.indexOf(" "), s.indexOf(",")).trim().toLowerCase();
@@ -185,9 +192,6 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage(
 						"Trying to give: " + theplay + " rank id: " + rValue);
 				if (promoted != null) {
-					if (rank.ordinal() >= Rank.DEVELOPER.ordinal()
-							&& !player.isServerOwner())
-						return;
 					promoted.setPlayerRank(Rank.addAbility(promoted, rank));
 					promoted.getActionSender().sendMessage(
 							"You've been given: " + rank.toString());

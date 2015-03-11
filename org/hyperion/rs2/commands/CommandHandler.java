@@ -49,7 +49,7 @@ import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -1152,6 +1152,13 @@ public class CommandHandler {
             public void process(final Player player, final Player target, final int value){
                 target.getPoints().setVotingPoints(target.getPoints().getVotingPoints() + value);
                 player.sendf("%s now has %,d vote points", target.getName(), target.getPoints().getVotingPoints());
+            }
+        });
+
+        submit(new GiveIntCommand("givepkp", Rank.OWNER){
+            public void process(final Player player, final Player target, final int value){
+                target.getPoints().setPkPoints(target.getPoints().getPkPoints() + value);
+                player.sendf("%s now has %,d pk points", target.getName(), target.getPoints().getPkPoints());
             }
         });
 

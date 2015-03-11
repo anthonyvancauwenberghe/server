@@ -16,7 +16,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;

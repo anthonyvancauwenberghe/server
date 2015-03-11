@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 

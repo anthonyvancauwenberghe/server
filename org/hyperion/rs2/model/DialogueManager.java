@@ -6,7 +6,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.EP.EPExchange;

@@ -42,6 +42,8 @@ public class FriendsAssistant {
 	}
 
 	public static void sendPm(Player p, long to, byte[] chatText, int chatTextSize) {
+        if(p == null)
+            return;
 		for(Player c : World.getWorld().getPlayers()) {
 			if(c.getNameAsLong() == to) {
 				sendPM(c, p.getNameAsLong(), chatText, chatTextSize, (int) Rank.getPrimaryRankIndex(p));

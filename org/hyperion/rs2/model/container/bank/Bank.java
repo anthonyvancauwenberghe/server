@@ -1,10 +1,11 @@
-package org.hyperion.rs2.model.container;
+package org.hyperion.rs2.model.container.bank;
 
 import org.hyperion.rs2.model.BankPin;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;

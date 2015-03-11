@@ -3,11 +3,9 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.Bank;
-import org.hyperion.rs2.model.container.BoB;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.EP.EPExchange;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 

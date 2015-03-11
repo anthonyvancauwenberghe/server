@@ -180,8 +180,9 @@ public class DeathDrops {
 
 		if(Rank.getPrimaryRank(killer).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 			return;
-		if(killer.getLocation().inFunPk() || player.getLocation().inFunPk())
-			return;
+		if(killer.getLocation().inFunPk() || player.getLocation().inFunPk() || (player.getLocation().getX() == 3221 && player.getLocation().getY() == 3218)) {
+            return;
+        }
 		player.resetDeathItemsVariables();
 		List<Item> keepItems = itemsKeptOnDeath(player, true, false);
 		/**

@@ -2,7 +2,7 @@ package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.Bank;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;

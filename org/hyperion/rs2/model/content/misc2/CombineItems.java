@@ -55,9 +55,9 @@ public class CombineItems implements ContentTemplate {
 			for(int i = 0; i < combineItems.length; i++) {
 				if(id == combineItems[i][2] && player.getInventory().getCount(id) > 0) {
 					player.splitDelay = System.currentTimeMillis();
+                    ContentEntity.deleteItem(player, id, slot, 1);
 					ContentEntity.addItem(player, combineItems[i][0]);
 					ContentEntity.addItem(player, combineItems[i][1]);
-                    ContentEntity.deleteItem(player, id, slot, 1);
 					return true;
 				}
 			}

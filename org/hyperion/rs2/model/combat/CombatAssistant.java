@@ -1135,7 +1135,7 @@ public class CombatAssistant {
 			rangeAtk *= 1.15;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             rangeAtk = p.getDungoneering().perks.boost(Constants.RANGE, true, rangeAtk);
-		return (int) ((rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)/2));
+		return (int) ((rangeAtk + p.getBonus().get(EquipmentStats.ATTACK_RANGED)/2) * 0.89);
 	}
 
 	public static int calculateRangeDefence(Entity entity) {
@@ -1158,7 +1158,7 @@ public class CombatAssistant {
 				rangeDef *= 1.15;
 			} else if (player.getPrayers().isEnabled(27) || player.getPrayers().isEnabled(26))
                 rangeDef *= 1.23;
-			return rangeDef + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 3;
+			return rangeDef + player.getBonus().get(EquipmentStats.DEFENCE_RANGED) / 2;
 		} else //NPCs
 			return entity.cE.getCombat()/2;
 	}

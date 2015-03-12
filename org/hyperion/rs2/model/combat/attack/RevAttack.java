@@ -3,10 +3,7 @@ package org.hyperion.rs2.model.combat.attack;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.CombatAssistant;
-import org.hyperion.rs2.model.combat.CombatEntity;
-import org.hyperion.rs2.model.combat.SpiritShields;
+import org.hyperion.rs2.model.combat.*;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.util.ArrayUtils;
@@ -79,30 +76,32 @@ public class RevAttack implements Attack {
             return 6;//we dont want to reset attack but just wait another 500ms or so...
         }
         final int distance = n.getLocation().distance(attack.getEntity().getLocation());
-
-        if(attack.getEntity() instanceof NPC) {
-            final Player plr = (attack.getNPC().ownerId <= -1) ? null : (Player)World.getWorld().getPlayers().get(attack.getNPC().ownerId);
-            if(plr != null)
-                attack.setOpponent(plr.cE);
-            else {
-                attack.setOpponent(null);
-                return 1;
-            }
-        }
         if(Misc.random(7) == 1 && n.health < n.maxHealth/3) {
             n.health += 15;
             n.cE.predictedAtk = System.currentTimeMillis() + 2400;
             return 5;
         }
-        final Player player = n.cE.getOpponent() == null ? null : n.cE.getOpponent().getPlayer();
-        if(player == null)
-            return 1;
-        if(!player.isSkulled() && player.cE.getOpponent() != null && player.cE.getOpponent().equals(n.cE)) {
-            player.setSkulled(true);
+
+        boolean hasPrayMagic = false;
+        boolean hasPrayMelee = false;
+        boolean hasPrayRange = false;
+
+        final Entity entity = attack.getEntity();
+
+        if(attack.getEntity() instanceof Player) {
+
+            final Player player = n.cE.getOpponent() == null ? null : n.cE.getOpponent().getPlayer();
+            if(player == null)
+                return 1;
+            hasPrayMagic = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE);
+            hasPrayMelee = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE);
+            hasPrayRange = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE);
+
+            if(!player.isSkulled() && player.cE.getOpponent() != null && player.cE.getOpponent().equals(n.cE)) {
+                player.setSkulled(true);
+            }
         }
-        final boolean hasPrayMagic = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE);
-        final boolean hasPrayMelee = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE);
-        final boolean hasPrayRange = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE);
+
         if(distance > 10) {
             n.cE.setOpponent(null);
             return 1;
@@ -112,133 +111,81 @@ public class RevAttack implements Attack {
         else if(distance > 2)
         {
             if(hasPrayMagic)
-                handleRangeAttack(n, player);
+                handleRangeAttack(n, entity);
             else if(hasPrayRange)
-                handleMagicAttack(n, player);
+                handleMagicAttack(n, entity);
             else {
                 if(Misc.random(1) == 0)
-                    handleRangeAttack(n, player);
+                    handleRangeAttack(n, entity);
                 else
-                    handleMagicAttack(n, player);
+                    handleMagicAttack(n, entity);
 
             }
         } else {
-        if(hasPrayMelee) {
-            if(Misc.random(1) == 0) {
-                handleRangeAttack(n, player);
+            if(hasPrayMelee) {
+                if(Misc.random(1) == 0) {
+                    handleRangeAttack(n, entity);
+                } else {
+                    handleMagicAttack(n, entity);
+                }
+            } else if(hasPrayMagic) {
+                if(Misc.random(1) == 0) {
+                    handleRangeAttack(n, entity);
+                } else {
+                    handleMeleeAttack(n, entity);
+                }
             } else {
-                handleMagicAttack(n, player);
+                switch(Misc.random(2)) {
+                    case Constants.MELEE:
+                        handleMeleeAttack(n, entity);
+                    case Constants.RANGE:
+                        handleRangeAttack(n, entity);
+                    case Constants.MAGE:
+                        handleMagicAttack(n, entity);
+                }
             }
-        } else if(hasPrayMagic) {
-            if(Misc.random(1) == 0) {
-                handleRangeAttack(n, player);
-            } else {
-                handleMeleeAttack(n, player);
-            }
-        } else handleMeleeAttack(n, player);
         }
         return 5;
     }
 
-    public void handleMagicAttack(NPC n, Player attack) {
+    public void handleMagicAttack(NPC n, Entity attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
         final int maxHit = n.getDefinition().combat()/4;
-        int damage = Combat.random(maxHit) - Math.round(Misc.random(CombatAssistant.calculateMageDef(attack) - n.getDefinition().combat())/5F);
-        if(damage <= 0)
-            damage = 0;
+        int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MAGE, maxHit);
        //attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
         if(Misc.random(8) == 1 && attack.cE.canBeFrozen()) {
             attack.cE.doGfx(1279);
             attack.cE.setFreezeTimer(10000);
-            attack.sendMessage("You have been frozen!");
+            if(attack instanceof Player)
+                ((Player)attack).sendMessage("You have been frozen!");
         }
-        final int realDamage = damage;
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-        World.getWorld().submit(new Event(150) {
-            @Override
-            public void execute() {
-                //offset values for the projectile
-                int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.cE.getAbsX()) * - 1;
-                int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.cE.getAbsY()) * - 1;
-                //find our lockon target
-                int hitId = attack.cE.getSlotId((Entity) n);
-                //extra variables - not for release
-                int timer = 1;
-                int min = 16;
-                if(distance > 8) {
-                    timer += 2;
-                } else if(distance >= 4) {
-                    timer++;
-                }
-                min -= (distance - 1) * 2;
-                int speed = 115 - min;
-                int slope = 7 + distance;
-                //create the projectile
-                if(attack != null){
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), 0, 0, 90, speed, 1276, 35, 35, hitId, slope);
-                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
-                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
-                    Combat.npcAttack(n, attack.cE, realDamage, 300 + distance * 300, 2);
-                }
-                this.stop();
-            }
-        });
+
+        Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.MAGE);
+        Combat.npcRangeAttack(n, attack.getCombat(), 1276, 35, false);
+
         n.cE.predictedAtk = System.currentTimeMillis() + 2400;
 
     }
-    public void handleRangeAttack(NPC n, Player attack) {
+    public void handleRangeAttack(NPC n, Entity attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
         final int maxHit = (int)(n.getDefinition().combat()/3.5);
-        int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.RANGE);
-        damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
-        damage = SpiritShields.applyEffects(attack.cE, damage);
-        if(damage <= 0)
-            damage = 0;
+        int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.RANGE, maxHit);
 
-        final int realDamage = damage;
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
-        World.getWorld().submit(new Event(150) {
-            @Override
-            public void execute() {
-                //offset values for the projectile
-                int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.cE.getAbsX()) * - 1;
-                int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.cE.getAbsY()) * - 1;
-                //find our lockon target
-                int hitId = attack.cE.getSlotId((Entity) n);
-                //extra variables - not for release
-                int timer = 1;
-                int min = 16;
-                if(distance > 8) {
-                    timer += 2;
-                } else if(distance >= 4) {
-                    timer++;
-                }
-                min -= (distance - 1) * 2;
-                int speed = 115 - min;
-                int slope = 7 + distance;
-                //create the projectile
-                if(attack != null){
-                    attack.getActionSender().createGlobalProjectile(n.cE.getAbsY(), n.cE.getAbsX(), offsetY, offsetX, 90, speed, 1278, 35, 35, hitId, slope);
-                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1276, 50, 35, hitId, slope);
-                    //attack.getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 30, speed + 20, 1276, 99, 35, hitId, slope);
-                    Combat.npcAttack(n, attack.cE, realDamage, 300 + 300 * distance, 1);
-                }
-                this.stop();
-            }
-        });
+
+        Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.MAGE);
+        Combat.npcRangeAttack(n, attack.getCombat(), 1278, 35, false);
+
         n.cE.predictedAtk = System.currentTimeMillis() + 2400;
 
     }
-    public void handleMeleeAttack(NPC n, Player attack) {
+    public void handleMeleeAttack(NPC n, Entity attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(0));
         final int maxHit = n.getDefinition().combat()/5;
-        int damage = attack.getInflictDamage(Combat.random(maxHit), n, false, Constants.MELEE);
-        damage -= Math.round(Misc.random(CombatAssistant.calculateMeleeDefence(attack) - n.getDefinition().combat())/10F);
-        damage = SpiritShields.applyEffects(attack.cE, damage);
-        if(damage <= 0)
-            damage = 0;
-        attack.cE.hit(Combat.random(maxHit), n, false, Constants.MELEE);
+        int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MELEE, maxHit);
+        Combat.npcAttack(n, attack.getCombat(), damage, 300, Constants.MELEE);
         n.cE.predictedAtk = System.currentTimeMillis() + 1800;
     }
 }

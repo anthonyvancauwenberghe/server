@@ -112,13 +112,17 @@ public class EquipmentReq {
 
 	public static byte[] getRequirements(String s, int ItemId) {
 
-		byte equipReqData[] = new byte[22];
+		byte equipReqData[] = new byte[Skills.SKILL_COUNT];
 		int type = 3;
 		if(Equipment.equipmentTypes.get(ItemId) != null)
 			type = Equipment.equipmentTypes.get(ItemId).getSlot();
 		boolean isWep = type == 3;
 		equipReqData[0] = equipReqData[1] = equipReqData[2] = equipReqData[4] = equipReqData[6] = 0;
 		switch(ItemId) { //Dump Here All Item Reqs for common used Items!
+            case 5730:
+                equipReqData[0] = 60;
+                equipReqData[Skills.DUNGEONINEERING] = 80;
+                break;
 			/**
 			 * Torva, Pernix and Virtus
 			 */

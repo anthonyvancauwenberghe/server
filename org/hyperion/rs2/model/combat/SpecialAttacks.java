@@ -368,7 +368,7 @@ public class SpecialAttacks {
 			deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
 					- player.cE.getOpponent().getCombat() * 5;
 		}
-		int randomIncrease = Misc.random(deltaBonus / 5);
+		int randomIncrease = Misc.random(deltaBonus / 3);
 
 		// System.out.println("RandomIncrease " + randomIncrease +
 		// " Deltabonus : " + deltaBonus);
@@ -377,10 +377,6 @@ public class SpecialAttacks {
 			tempDamage = 0;
 		else if(tempDamage > maxDamg)
 			tempDamage = maxDamg;
-		if(ranged) {
-			if(tempDamage * 2 < maxDamg && Misc.random(1) == 1)
-				tempDamage += Misc.random(tempDamage);
-		}
 
 		tempDamage = SpiritShields.applyEffects(player.cE.getOpponent(), tempDamage);
 
@@ -481,8 +477,14 @@ public class SpecialAttacks {
 		// });
 		switch(weaponId) {
 		case 5730:
-			if(player.cE.getOpponent().getEntity() instanceof Player)
-				player.cE.getOpponent().getPlayer().vacateSquare();
+			if(player.cE.getOpponent().getEntity() instanceof Player)  {
+                final Player opp = player.cE.getOpponent().getPlayer();
+                player.vacateSquare();
+				opp.vacateSquare();
+                opp.playGraphics(Graphic.create(245, 6553600));
+                opp.cE.setFreezeTimer(1000);
+                opp.foodTimer = System.currentTimeMillis();
+            }
 		break;
 			// dark bows
 			case 13879:

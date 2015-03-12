@@ -482,9 +482,9 @@ public class SpecialAttacks {
                 player.vacateSquare();
 				opp.vacateSquare();
                 opp.playGraphics(Graphic.create(245, 6553600));
-                opp.cE.setFreezeTimer(1000);
+                opp.cE.setFreezeTimer(2000);
                 opp.foodTimer = System.currentTimeMillis();
-                opp.getExtraData().put("stuntimez", System.currentTimeMillis() + 1000L);
+                opp.getExtraData().put("stuntimez", System.currentTimeMillis() + 2000L);
             }
 		break;
 			// dark bows

@@ -223,7 +223,7 @@ public class PlayerPoints {
 				} else {
 					reward = (0.22 * eloRating + 14) / 7;
 				}
-				honorPoints += (int) reward;
+				honorPoints += (int) (reward * 2);
 
 				player.getActionSender().sendMessage("@blu@You have been awarded " + (int) reward + " honor points!");
 				player.getQuestTab().sendHonorPoints();

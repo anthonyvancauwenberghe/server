@@ -536,12 +536,17 @@ public class Skills {
         if(player.xpLock && skill <= MAGIC)
             return;
         if(skill <= MAGIC && player.getDungoneering().inDungeon())
-            exp *= 1.75;
+            exp *= 3.5;
+
+
         if(player.getEquipment().getItemId(Equipment.SLOT_HELM) == 17279) {
         	exp *= 1.02;
         }
+
 		if(skill == BONUS_SKILL)
 			exp *= 2;
+        else
+            exp *= 2;
         if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;
         resetBonuxXP();

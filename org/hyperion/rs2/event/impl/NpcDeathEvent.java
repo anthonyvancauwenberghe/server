@@ -82,8 +82,8 @@ public class NpcDeathEvent extends Event {
                 if(jet != null) jet.sendf("Percent was: "+percent);
                 if(percent > 0.10) {
                     killers.put(player, percent);
-                    final int dp = (int)(reward.get().dp * percent);
-                    final int pkp = (int)(reward.get().pkp * percent);
+                    final int dp = (int)(reward.get().dp * percent) * 2;
+                    final int pkp = (int)(reward.get().pkp * percent) * 2;
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
                     double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.02 : 0.03;
@@ -192,7 +192,7 @@ public class NpcDeathEvent extends Event {
                 if(!player.getDungoneering().inDungeon()) {
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                     if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
-                        int chance =  isTask ? 750 : 1000;
+                        int chance =  isTask ? 750 : 750;
                         for(NPCDrop drop : npc.getDefinition().getDrops()) {
                             if(drop == null) continue;
                             if(Combat.random(chance) <= drop.getChance()) {

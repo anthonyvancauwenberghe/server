@@ -89,15 +89,15 @@ public class SpecialAttacks {
 				ranged = true;
 				specialAnimation = 10504;
 				playerGfx = 1836;
-				specialAccuracy = 3.5;
-				specialDrain = 35;
+				specialAccuracy = 2.2;
+				specialDrain = 50;
 				specialDis = 6;
 				break;
 			case 13879:
 				ranged = true;
 				specialAnimation = 10501;
 				playerGfx = 1838;
-				specialAccuracy = 2.0;
+				specialAccuracy = 1.75;
 				specialDrain = 50;
 				specialDis = 6;
 				break;
@@ -201,7 +201,7 @@ public class SpecialAttacks {
 				playerGfx = 253;
 				specialAnimation = 1667;
 				specialDis = 1;
-				specialDrain = 75;
+				specialDrain = 50;
 				break;
 			case 4153:  //gmauls
 				playerGfx = 340;
@@ -484,6 +484,7 @@ public class SpecialAttacks {
                 opp.playGraphics(Graphic.create(245, 6553600));
                 opp.cE.setFreezeTimer(1000);
                 opp.foodTimer = System.currentTimeMillis();
+                opp.getExtraData().put("stuntimez", System.currentTimeMillis() + 1000L);
             }
 		break;
 			// dark bows

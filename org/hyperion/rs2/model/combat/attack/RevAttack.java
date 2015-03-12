@@ -90,7 +90,7 @@ public class RevAttack implements Attack {
 
         if(attack.getEntity() instanceof Player) {
 
-            final Player player = n.cE.getOpponent() == null ? null : n.cE.getOpponent().getPlayer();
+            final Player player = attack.getPlayer();
             if(player == null)
                 return 1;
             hasPrayMagic = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE);

@@ -99,7 +99,7 @@ public class EquipmentReq {
 			abyte0 = getRequirements(ItemDefinition.forId(id).getName(), id);
 			itemLevels.put(Integer.valueOf(id), abyte0);
         }
-		for(int j = 0; j < 21; j++) {
+		for(int j = 0; j < Skills.SKILL_COUNT; j++) {
 			if(player.getSkills().getLevelForExp(j) < abyte0[j]) {
 				player.getSkills();
 				player.getActionSender().sendMessage((new StringBuilder()).append("You need ").append(abyte0[j]).append(" ").append(Skills.SKILL_NAME[j]).append(" to equip this item.").toString());

@@ -87,6 +87,8 @@ public class Combat {
                     if(!player.getSession().isConnected() && !opp.getSession().isConnected())  {
                         return false;
                     }
+                    if(player.getExtraData().getLong("stuntimez") > System.currentTimeMillis())
+                        return false;
                 }
 				return processPlayerCombat(combatEntity, distance);
 			} else {

@@ -35,7 +35,7 @@ public class CombineItems implements ContentTemplate {
 			if(index != - 1) {
                 if (!player.getInventory().contains(id))
 	                return false;
-							ContentEntity.deleteItem(player, id, slot, 1);
+                ContentEntity.deleteItem(player, id, slot, 1);
 				ContentEntity.deleteItem(player, itemId2, itemSlot2, 1);
 				ContentEntity.addItem(player, combineItems[index][2]);
 				return true;
@@ -46,16 +46,18 @@ public class CombineItems implements ContentTemplate {
 		if(type == 22) {
 			if(System.currentTimeMillis() - player.splitDelay < 2000) {
 				player.getActionSender().sendMessage("You can't split that fast!");
+                return false;
 			}
 			if(ContentEntity.freeSlots(player) < 1) {
 				ContentEntity.sendMessage(player, "You don't have enough space for this");
+                return false;
 			}
 			for(int i = 0; i < combineItems.length; i++) {
 				if(id == combineItems[i][2] && player.getInventory().getCount(id) > 0) {
 					player.splitDelay = System.currentTimeMillis();
-					ContentEntity.deleteItem(player, id, slot, 1);
 					ContentEntity.addItem(player, combineItems[i][0]);
 					ContentEntity.addItem(player, combineItems[i][1]);
+                    ContentEntity.deleteItem(player, id, slot, 1);
 					return true;
 				}
 			}

@@ -1926,6 +1926,18 @@ public class CommandPacketHandler implements PacketHandler {
             	Magic.teleport(player, Location.create(2607, 9672, 0), false);
             }
 
+            if(commandStart.equalsIgnoreCase("zombies")) {
+                final boolean acc = player.getExtraData().getBoolean("zombietele");
+                if(!acc) {
+                    player.sendMessage("@red@This zone is in deep wilderness and leads into multi combat",
+                            "@blu@Type ::zombies again if you wish to proceed");
+                    player.getExtraData().put("zombietele", true);
+                } else
+                    Magic.teleport(player, Location.create(3028, 3851, 0), false, false);
+
+
+            }
+
             if(commandStart.equalsIgnoreCase("clearnulls")) {
                 for(Player p : World.getWorld().getPlayers()) {
                     if(p == null) {
@@ -2492,7 +2504,7 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getActionSender().openQuestInterface(
 						"Help interface",
 						new String[] { "Available Commands:", "::players (online players)",
-								"::item id amount", "::yell", "::nameitem id", "::spawn or ::itemn name",
+								"::item id amount", "::yell", "::nameitem id", "::spawn or ::itemn name", "::zombies (money-making & pk area)",
 								"::atk lvl", "::def lvl", "::str lvl", "::kdr",
 								"::max", "::copy player", "::copyinv player",
 								"::copylvl player", "::edge",

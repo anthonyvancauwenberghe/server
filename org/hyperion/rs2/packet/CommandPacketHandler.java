@@ -1701,7 +1701,7 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equals("mypos")) {
 			player.getActionSender().sendMessage(
                     (new StringBuilder()).append(player.getLocation().getX())
-                            .append(", ").append(player.getLocation().getY()).append(player.getLocation().getZ())
+                            .append(", ").append(player.getLocation().getY()).append(", ").append(player.getLocation().getZ())
                             .toString());
 			return;
 		}

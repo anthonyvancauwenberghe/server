@@ -96,7 +96,7 @@ import org.hyperion.util.BlockingExecutorService;
  */
 public class World {
 
-    public static final double PLAYER_MULTI = 1.11;
+    public static final double PLAYER_MULTI = 1.10;
 
     /**
      * Ticket Manager - no fuckin shit

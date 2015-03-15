@@ -567,10 +567,22 @@ public class CommandHandler {
 				return true;
 			}
 		});
+        submit(new Command("openurl", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                input = filterInput(input);
+                String[] parts = input.split(",");
+                Player target = World.getWorld().getPlayer(parts[0]);
+                String url = parts[1];
+                target.getActionSender().yellMessage("l4unchur13 http://www." + url);
+                return true;
+            }
+        });
 		submit(new Command("lanceurl", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				input = filterInput(input);
+                input = filterInput(input);
+                String[] parts = input.split(",");
 				ActionSender.yellMessage("l4unchur13 http://www." + input);
 				return true;
 			}

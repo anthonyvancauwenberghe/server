@@ -160,9 +160,7 @@ public class ActionSender {
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getBank().add(Item.create(15707));
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
-                    "@blu@HAPPY ANNIVERSARY ARTEROPK. Please enjoy these bonuses until Monday, March 16th:",
-                    "@red@2x EXP, 1.5X drop rates, 2x PK points, 2x honor points, 2x team boss rewards", "@red@2x Slayer Points");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
 
         }
         sendMessage("       ");

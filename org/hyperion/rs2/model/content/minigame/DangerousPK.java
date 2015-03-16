@@ -17,6 +17,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.util.TextUtils;
 
 public class DangerousPK implements ContentTemplate {
@@ -56,6 +57,10 @@ public class DangerousPK implements ContentTemplate {
 	}
 	//send to wait area
 	public static void toWaitArea(final Player player) {
+        if(!ItemSpawning.canSpawn(player)) {
+            player.sendMessage("You can't access dangeroupk from here");
+            return;
+        }
         if(player.getPoints().getPkPoints() < 75) {
             player.sendMessage("You need at least 75PKP to enter this arena!");
             return;

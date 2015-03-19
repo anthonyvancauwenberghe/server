@@ -2,6 +2,7 @@ package org.hyperion;
 
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungoneeringHolder;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
@@ -112,6 +113,7 @@ public class Server {
 			//DumpNpcDrops.startDump4();
             PossibleHacksHolder.init();
             RoomDefinition.load();
+            ClanManager.load();
             System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
 		} catch(Exception ex) {
 			ex.printStackTrace();

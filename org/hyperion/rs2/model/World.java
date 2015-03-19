@@ -1025,6 +1025,7 @@ public class World {
 
                         }
                     }
+                    ClanManager.save();
                     new Restart(reason).execute();
                 }
             }

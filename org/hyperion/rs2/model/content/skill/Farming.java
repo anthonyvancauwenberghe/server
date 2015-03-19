@@ -91,7 +91,7 @@ public class Farming implements ContentTemplate {
 		}
 	}
 
-	public int ticksExecuted(int day, int hour, int minute) {
+	public static int ticksExecuted(int day, int hour, int minute) {
 		int dayNow = calendar.get(Calendar.DAY_OF_YEAR);//2880 ticks a day
 		int hourNow = calendar.get(Calendar.HOUR_OF_DAY);//120 ticks in an hour
 		int minuteNow = calendar.get(Calendar.MINUTE);//2 ticks in a minute
@@ -146,7 +146,7 @@ public class Farming implements ContentTemplate {
 		}
 	}
 
-	public void deserialize(IoBuffer buf, Player player) {//load method
+	public static void deserialize(IoBuffer buf, Player player) {//load method
 		while(buf.hasRemaining()) {
 			try {
 				int type = buf.getUnsigned();
@@ -189,7 +189,7 @@ public class Farming implements ContentTemplate {
 		}
 	}
 
-	public void serialize(IoBuffer buf, Player player) {//save method
+	public  static void serialize(IoBuffer buf, Player player) {//save method
 		//buf.put((byte) 251);
 		//buf.put((byte) 231);
 		//buf.put((byte) 221);//farming signature, this indicates start of farming data
@@ -218,9 +218,9 @@ public class Farming implements ContentTemplate {
 				buf.put((byte) plant.minute);
 			}
 		}
-		buf.put((byte) 241);
-		buf.put((byte) 231);
-		buf.put((byte) 221);//farming signature, this indicates end of farming data
+		//buf.put((byte) 241);
+		//buf.put((byte) 231);
+		//buf.put((byte) 221);//farming signature, this indicates end of farming data
 	}
 
 	public void plantSeed(final Player player, final int seedId, final int objId, final int x, final int y) {
@@ -376,7 +376,7 @@ public class Farming implements ContentTemplate {
 		return farming;
 	}
 
-	Calendar calendar = new GregorianCalendar();
+	static Calendar calendar = new GregorianCalendar();
 
 	public static int offset(int type) {
 		switch(type) {

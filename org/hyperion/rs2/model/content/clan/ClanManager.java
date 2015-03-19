@@ -1,13 +1,16 @@
 package org.hyperion.rs2.model.content.clan;
 
+import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +24,7 @@ public class ClanManager {
 			return;
 		Clan clan = clans.get(clanName);
 		if(clan == null) {
-			clan = new Clan(clanName, clanName);
+			clan = new Clan(player.getName(), clanName);
 			clans.put(clanName, clan);
 		}
 		if(clan.isKicked(player.getName())) {
@@ -154,6 +157,66 @@ public class ClanManager {
 
 	public static void sendClanMessage(Player player, String message, boolean toMe) {
 		// message = message+":clan:";
+        if(message.startsWith("promote"))  {
+            String name = message.replace("promote ", "");
+            player.getActionSender().sendMessage("Promoting " + name);
+            Clan clan = ClanManager.clans.get(player.getClanName());
+            if(! clan.getOwner().equalsIgnoreCase(player.getName())
+                    && !Rank.hasAbility(player, Rank.MODERATOR)) {
+                player.getActionSender().sendMessage("Only clan chat owners are able to give ranks.");
+                return;
+            }
+            Player p = World.getWorld().getPlayer(name);
+            if(p == null) {
+                player.getActionSender().sendMessage("This player is offline");
+                return;
+            }
+            if(! player.getClanName().equals(p.getClanName())) {
+                player.getActionSender().sendMessage("This player is not in your clan chat");
+                return;
+            }
+            String clanName = p.getClanName();
+            ClanManager.leaveChat(p, true, true);
+            if(p.getClanRank() < 4) {
+                p.setClanRank(p.getClanRank() + 1);
+                clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
+            } else {
+                player.getActionSender().sendMessage("This player already has the highest rank possible");
+                return;
+            }
+            ClanManager.joinClanChat(p, clanName, false);
+            player.getActionSender().sendMessage("Player has been succesfully promoted.");
+            sendClanMessage(player, "@bla@ "+name+ " has been promoted to ["+ p.getClanName()+ "]", true);
+            return;
+        }
+
+        if(message.startsWith("ban")) {
+            String name = message.replace("kick ", "");
+            Clan clan = ClanManager.clans.get(player.getClanName());
+            if(player.getClanRank() > 2) {
+                player.getActionSender().sendMessage("You are not a high enough rank to ban members");
+                return;
+            }
+            if(clan.kick(name)) {
+                player.getActionSender().sendMessage("Player has been kicked succesfully");
+                sendClanMessage(player, "@bla@ "+name+ " has been KICKED from the channel", true);
+            }
+            return;
+        }
+
+
+        if(message.startsWith("unban")) {
+            String name = message.replace("unban ", "");
+            Clan clan = ClanManager.clans.get(player.getClanName());
+            if(player.getClanRank() > 3) {
+                player.getActionSender().sendMessage("Only clan chat owners are able to kick");
+                sendClanMessage(player, "@bla@ "+name+ " has been UN-BANNED from the channel", true);
+                return;
+            }
+            if(clan.kick(name))
+                player.getActionSender().sendMessage("Player has been kicked succesfully");
+            return;
+        }
 		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@] " + player.getName() + ": @bla@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {
@@ -256,5 +319,55 @@ public class ClanManager {
 	}
 
 	public static Map<String, Clan> clans = new HashMap<String, Clan>();
+
+    public static void save() {
+        try {
+            OutputStream os = new FileOutputStream("data/clanData.bin");
+            IoBuffer buf = IoBuffer.allocate(1024);
+            buf.setAutoExpand(true);
+            for(final Clan clan : clans.values())
+                clan.save(buf);
+            buf.flip();
+            byte[] data = new byte[buf.limit()];
+            buf.get(data);
+            os.write(data);
+            os.flush();
+            os.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void load() {
+
+        try {
+            File f = new File("./data/clanData.bin");
+            InputStream is = new FileInputStream(f);
+            IoBuffer buf = IoBuffer.allocate(1024);
+            buf.setAutoExpand(true);
+            while(true) {
+                byte[] temp = new byte[1024];
+                int read = is.read(temp, 0, temp.length);
+                if(read == - 1) {
+                    break;
+                } else {
+                    buf.put(temp, 0, read);
+                }
+            }
+            buf.flip();
+            while(buf.hasRemaining()) {
+                try {
+                    final Clan clan = Clan.read(buf);
+                    clans.put(clan.getName(), clan);
+                } catch(Exception ex) {
+
+                }
+            }
+        }catch(final Exception ex) {
+
+        }
+
+        System.out.println("Loaded "+clans.size() +" clans");
+    }
 
 }

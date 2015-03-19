@@ -1,8 +1,11 @@
 package org.hyperion.rs2.model.content.clan;
 
+import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.util.IoBufferUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Clan {
@@ -89,6 +92,28 @@ public class Clan {
 		if(! rankedMembers.contains(cm))
 			rankedMembers.add(cm);
 	}
+
+    public void save(final IoBuffer buffer) {
+        IoBufferUtils.putRS2String(buffer, owner);
+        IoBufferUtils.putRS2String(buffer, clanName);
+        buffer.put((byte) rankedMembers.size()); // size of rankedMembers
+        rankedMembers.stream().filter(Objects::nonNull).forEach(m -> m.save(buffer));
+        buffer.put((byte)peopleKicked.size());
+        peopleKicked.stream().forEach(s -> IoBufferUtils.putRS2String(buffer, s));
+    }
+
+    public static Clan read(final IoBuffer buffer) {
+        final Clan clan = new Clan(IoBufferUtils.getRS2String(buffer), IoBufferUtils.getRS2String(buffer));
+        int ranked = buffer.get();
+        for(int i = 0 ; i < ranked; i++)
+            clan.rankedMembers.add(new ClanMember(IoBufferUtils.getRS2String(buffer), buffer.get()));
+        int banned = buffer.getUnsigned();
+        for(int i = 0; i < ranked; i++) {
+            clan.peopleKicked.add(IoBufferUtils.getRS2String(buffer));
+        }
+        return clan;
+    }
+
 
 
 }

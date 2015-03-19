@@ -1,5 +1,8 @@
 package org.hyperion.rs2.model.content.clan;
 
+import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.rs2.util.IoBufferUtils;
+
 public class ClanMember {
 	private String name;
 	private int rank;
@@ -24,4 +27,8 @@ public class ClanMember {
 	public int getRank() {
 		return rank;
 	}
+
+    public void save(final IoBuffer buffer) {
+        IoBufferUtils.putRS2String(buffer, name);
+    }
 }

@@ -1,11 +1,6 @@
 package org.hyperion.rs2.saving;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Appearance;
@@ -28,6 +24,8 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.content.clan.Clan;
+import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
 import org.hyperion.rs2.saving.impl.*;
 import org.hyperion.rs2.sql.SQLConnection;
@@ -242,12 +240,15 @@ public class PlayerSaving {
 				}
 			}
 			file.close();
+
+            player.serialize();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());
 			e.printStackTrace();
 			return false;
 		}
+
 	}
 
 	/**

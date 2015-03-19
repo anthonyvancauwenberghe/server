@@ -27,6 +27,7 @@ import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
+import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.misc.ItemDropping;
@@ -65,6 +66,7 @@ import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -387,7 +389,47 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public void init() {
+
+
+        try {
+            File f = new File("./data/charfarm/"+getName()+".bin");
+            InputStream is = new FileInputStream(f);
+            IoBuffer buf = IoBuffer.allocate(1024);
+            buf.setAutoExpand(true);
+            while(true) {
+                byte[] temp = new byte[1024];
+                int read = is.read(temp, 0, temp.length);
+                if(read == - 1) {
+                    break;
+                } else {
+                    buf.put(temp, 0, read);
+                }
+            }
+            buf.flip();
+            Farming.deserialize(buf, this);
+        }catch(final Exception ex) {
+
+        }
+
+
 	}
+
+    public void serialize() {
+        try {
+            OutputStream os = new FileOutputStream("data/charfarm/"+this.getName()+".bin");
+            IoBuffer buf = IoBuffer.allocate(1024);
+            buf.setAutoExpand(true);
+            Farming.serialize(buf,this);
+            buf.flip();
+            byte[] data = new byte[buf.limit()];
+            buf.get(data);
+            os.write(data);
+            os.flush();
+            os.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	private boolean hasTarget = false;
 

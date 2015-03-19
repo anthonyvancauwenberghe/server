@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Afk;
 import org.hyperion.rs2.util.PushMessage;
@@ -62,6 +63,8 @@ public class PlayerEvent36Seconds extends Event {
 				}
 			}
         }
+
+        ClanManager.save();
         //worldCupCycles();
 	}
 

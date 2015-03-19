@@ -158,6 +158,11 @@ public class ClanManager {
 	public static void sendClanMessage(Player player, String message, boolean toMe) {
 		// message = message+":clan:";
 
+        if(handleInternalCommands(message, player))
+            return;
+
+        message = message.replace("req:", "req");
+
 		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@] " + player.getName() + ": @bla@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {
@@ -200,18 +205,6 @@ public class ClanManager {
 			ClanManager.sendClanMessage(player, s.replace("cc ", ""), true);
 			return true;
 		}
-		if(s1.equals("kick") && ! player.getClanName().equals("")) {
-			String name = s.replace("kick ", "");
-			Clan clan = ClanManager.clans.get(player.getClanName());
-			if(! clan.getOwner().equalsIgnoreCase(player.getName())
-					&& !Rank.hasAbility(player, Rank.MODERATOR)) {
-				player.getActionSender().sendMessage("Only clan chat owners are able to kick");
-				return true;
-			}
-			if(clan.kick(name, false))
-				player.getActionSender().sendMessage("Player has been kicked succesfully");
-			return true;
-		}
 		if(s1.equals("changeclanname") && ! player.getClanName().equals("")) {
 			String name = s.replace("changeclanname ", "");
 			Clan clan = ClanManager.clans.get(player.getClanName());
@@ -223,41 +216,10 @@ public class ClanManager {
 			clan.setName(name);
 			return true;
 		}
-		if(s1.equals("promote") && ! player.getClanName().equals("")) {
-			String name = s.replace("promote ", "");
-			player.getActionSender().sendMessage("Promoting " + name);
-			Clan clan = ClanManager.clans.get(player.getClanName());
-			if(! clan.getOwner().equalsIgnoreCase(player.getName())
-					&& !Rank.hasAbility(player, Rank.MODERATOR)) {
-				player.getActionSender().sendMessage("Only clan chat owners are able to give ranks.");
-				return true;
-			}
-			Player p = World.getWorld().getPlayer(name);
-			if(p == null) {
-				player.getActionSender().sendMessage("This player is offline");
-				return true;
-			}
-			if(! player.getClanName().equals(p.getClanName())) {
-				player.getActionSender().sendMessage("This player is not in your clan chat");
-				return true;
-			}
-			String clanName = p.getClanName();
-			ClanManager.leaveChat(p, true, true);
-			if(p.getClanRank() < 4) {
-				p.setClanRank(p.getClanRank() + 1);
-				clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
-			} else {
-				player.getActionSender().sendMessage("This player already has the highest rank possible");
-				return true;
-			}
-			ClanManager.joinClanChat(p, clanName, false);
-			player.getActionSender().sendMessage("Player has been succesfully promoted.");
-			return true;
-		}
 		return false;
 	}
 
-    public boolean handleInternalCommands(final String message, Player player) {
+    public static boolean handleInternalCommands(final String message, Player player) {
         if(message.startsWith("promote"))  {
             String name = message.replace("promote ", "");
             player.getActionSender().sendMessage("Promoting " + name);

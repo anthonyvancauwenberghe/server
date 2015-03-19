@@ -787,17 +787,7 @@ public class CommandPacketHandler implements PacketHandler {
 			String commandStart, String s, String withCaps, String[] as) {
 
 
-        if (commandStart.equals("spawnobject")) {
-            int id = Integer.parseInt(as[1]);
-            int face = Integer.parseInt(as[2]);
-            int type = 10;
-            player.getActionSender().sendMessage(
-                    "Spawning " + GameObjectDefinition.forId(id).getName()
-                            + "[" + id + "].");
-            player.getActionSender().sendCreateObject(id, type, face,
-                    player.getLocation());
-            return;
-        }
+
 
         if (commandStart.equals("removeobject")) {
             for (int i = 0; i < 15; i++) {
@@ -1770,6 +1760,18 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+        if (commandStart.equals("spawnobject")) {
+            int id = Integer.parseInt(as[1]);
+            int face = Integer.parseInt(as[2]);
+            int type = 10;
+            player.getActionSender().sendMessage(
+                    "Spawning " + GameObjectDefinition.forId(id).getName()
+                            + "[" + id + "].");
+            player.getActionSender().sendCreateObject(id, type, face,
+                    player.getLocation());
+            return;
+        }
 
         if (commandStart.equalsIgnoreCase("givekorasi")) {
             Player p = World.getWorld().getPlayer(s.substring(11).trim());

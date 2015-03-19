@@ -2144,7 +2144,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private String clanName = "";
 
 	public String getClanName() {
-		return clanName;
+		return clanName.toLowerCase();
 	}
 
 	public void setClanName(String clanName) {

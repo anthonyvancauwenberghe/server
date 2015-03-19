@@ -22,10 +22,10 @@ public class ClanManager {
 		clanName = clanName.replace("_", " ");
 		if(! canEnter(player, clanName))
 			return;
-		Clan clan = clans.get(clanName);
+		Clan clan = clans.get(clanName.toLowerCase());
 		if(clan == null) {
 			clan = new Clan(player.getName(), clanName);
-			clans.put(clanName, clan);
+			clans.put(clanName.toLowerCase(), clan);
 		}
 		if(clan.isKicked(player.getName())) {
 			player.getActionSender().sendMessage("You are currently kicked from this Clan Chat.");
@@ -81,7 +81,7 @@ public class ClanManager {
 
 
 	public static boolean existsClan(String name) {
-		if(clans.get(name) != null)
+		if(clans.get(name.toLowerCase()) != null)
 			return true;
 		return false;
 	}
@@ -335,7 +335,7 @@ public class ClanManager {
             while(buf.hasRemaining()) {
                 try {
                     final Clan clan = Clan.read(buf);
-                    clans.put(clan.getName(), clan);
+                    clans.put(clan.getName().toLowerCase(), clan);
                     System.out.println(clan.getName() + " - "+clan.getOwner());
                 } catch(Exception ex) {
 

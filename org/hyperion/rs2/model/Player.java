@@ -2103,7 +2103,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
 
-		return "[" + getClanRankName() + "]" + getName();
+		return  getClanRankName() + getName();
 	}
 
 	public void setClanRank(int r) {
@@ -2115,27 +2115,27 @@ public class Player extends Entity implements Persistable, Cloneable{
         String rank = "";
         switch(clanRank) {
             case 0:
-                return getName();
+                return "";
             case 1:
-                rank = "Recruit";
+                rank = "[Recruit]";
                 break;
             case 2:
-                rank = "Corporal";
+                rank = "[Corporal]";
                 break;
             case 3:
-                rank = "Sergeant";
+                rank = "[Sergeant]";
                 break;
             case 4:
-                rank = "Lieutenant";
+                rank = "[Lieutenant]";
                 break;
             case 5:
-                rank = "Owner";
+                rank = "[Owner]";
                 break;
             case 6:
-                rank = "Mod";
+                rank = "[Mod]";
                 break;
             case 7:
-                rank = "Admin";
+                rank = "[Admin]";
                 break;
         }
         return rank;

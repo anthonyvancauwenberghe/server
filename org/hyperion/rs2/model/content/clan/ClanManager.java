@@ -48,7 +48,7 @@ public class ClanManager {
 
 	private static void updateClanInfo(Player player, Clan clan) {
 		player.getActionSender().sendString(18139, "Talking in: "
-				+ clan.getName());
+				+ TextUtils.titleCase(clan.getName()));
 		player.getActionSender().sendString(18140, "Owner: " + clan.getOwner());
 		for(Player p : clan.getPlayers()) {
 			player.getActionSender().addClanMember(p.getPlayersNameInClan());

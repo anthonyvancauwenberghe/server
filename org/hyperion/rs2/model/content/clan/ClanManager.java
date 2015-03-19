@@ -320,7 +320,7 @@ public class ClanManager {
         if(message.startsWith("ipban")) {
             String name = message.replace("ipban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
-            if(player.getClanRank() == 4) {
+            if(player.getClanRank() < 4) {
                 player.getActionSender().sendMessage("You are not a high enough rank to ipban members");
                 return true;
             }
@@ -336,8 +336,8 @@ public class ClanManager {
         if(message.startsWith("unban")) {
             String name = message.replace("unban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
-            if(player.getClanRank() > 3) {
-                player.getActionSender().sendMessage("Only clan chat owners are able to kick");
+            if(player.getClanRank() < 3) {
+                player.getActionSender().sendMessage("You need to be a higher rank to unban");
                 return true;
             }
             sendClanMessage(player, "@bla@ "+name+ " has been UN-BANNED from the channel", true);

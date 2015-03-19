@@ -93,12 +93,9 @@ public class Clan {
 	}
 
     public boolean unban(final String name) {
-        System.out.println(name);
-        for(final String s : peopleKicked)
-            System.out.println(s);
-        if(!peopleKicked.contains(name))
+        if(!peopleKicked.contains(TextUtils.titleCase(name)))
             return false;
-        peopleKicked.remove(name.toLowerCase());
+        peopleKicked.remove(TextUtils.titleCase(name));
         final Player player = World.getWorld().getPlayer(name);
         if(player != null)
             peopleKicked.remove(player.getShortIP());

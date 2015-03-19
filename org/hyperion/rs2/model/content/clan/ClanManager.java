@@ -346,6 +346,7 @@ public class ClanManager {
                 return true;
             }
             sendClanMessage(player, "@bla@ "+name+ " has been UN-BANNED from the channel", true);
+            clan.unban(name);
             return true;
         }
         return false;

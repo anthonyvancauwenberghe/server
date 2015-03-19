@@ -1761,7 +1761,8 @@ public class CommandPacketHandler implements PacketHandler {
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
 
-        if (commandStart.equals("spawnobject")) {
+        if (commandStart.equals(
+                "spawnobject")) {
             int id = Integer.parseInt(as[1]);
             int face = Integer.parseInt(as[2]);
             int type = 10;

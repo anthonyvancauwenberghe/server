@@ -105,6 +105,10 @@ public class Clan {
 	}
 
 	public void addRankedMember(ClanMember cm) {
+        for(final ClanMember mem : rankedMembers) {
+            if(mem.getName().equalsIgnoreCase(cm.getName()))
+                rankedMembers.remove(mem);
+        }
 		if(! rankedMembers.contains(cm))
 			rankedMembers.add(cm);
 	}
@@ -122,7 +126,7 @@ public class Clan {
         final Clan clan = new Clan(IoBufferUtils.getRS2String(buffer), IoBufferUtils.getRS2String(buffer));
         int ranked = buffer.get();
         for(int i = 0 ; i < ranked; i++)
-            clan.rankedMembers.add(new ClanMember(IoBufferUtils.getRS2String(buffer), buffer.get()));
+            clan.addRankedMember(new ClanMember(IoBufferUtils.getRS2String(buffer), buffer.get()));
         int banned = buffer.getUnsigned();
         for(int i = 0; i < banned; i++) {
             clan.peopleKicked.add(IoBufferUtils.getRS2String(buffer));

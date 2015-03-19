@@ -259,7 +259,7 @@ public class ClanManager {
             String clanName = p.getClanName();
             ClanManager.leaveChat(p, true, true);
             if(p.getClanRank() > 0) {
-                p.setClanRank(p.getClanRank() + 1);
+                p.setClanRank(0);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
                 sendClanMessage(player, "@bla@ "+name+ " has been demoted", true);
             } else {
@@ -293,7 +293,7 @@ public class ClanManager {
             if(p.getClanRank() < 5) {
                 p.setClanRank(p.getClanRank() + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
-                sendClanMessage(player, "@bla@ "+name+ " has been promoted to ["+player.getClanRankName()+ "]", true);
+                sendClanMessage(player, "@bla@ "+name+ " has been promoted to "+p.getClanRankName(), true);
             } else {
                 player.getActionSender().sendMessage("This player already has the highest rank possible");
                 return true;

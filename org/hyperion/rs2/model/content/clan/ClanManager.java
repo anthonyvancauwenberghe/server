@@ -292,6 +292,10 @@ public class ClanManager {
             final int old = p.getClanRank();
             ClanManager.leaveChat(p, true, true);
             if(old < 5) {
+                if(old == 4 && !player.getName().equalsIgnoreCase(clan.getOwner())) {
+                    player.sendMessage("Only the MAIN owner can make others owners");
+                    return true;
+                }
                 p.setClanRank(old + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
                 sendClanMessage(player, "@bla@ "+name+ " has been promoted to "+p.getClanRankName(), true);

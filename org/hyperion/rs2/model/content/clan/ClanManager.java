@@ -64,8 +64,7 @@ public class ClanManager {
 				break;
 			}
 		}
-		if(player.getName().equalsIgnoreCase(clan.getName())) {
-			clan.setOwner(player.getName());
+		if(player.getName().equalsIgnoreCase(clan.getOwner())) {
 			player.setClanRank(5);
 		}
 

@@ -262,8 +262,7 @@ public class ClanManager {
             String name = message.replace("promote ", "");
             player.getActionSender().sendMessage("Promoting " + name);
             Clan clan = ClanManager.clans.get(player.getClanName());
-            if(! clan.getOwner().equalsIgnoreCase(player.getName())
-                    && !Rank.hasAbility(player, Rank.MODERATOR)) {
+            if(! clan.getOwner().equalsIgnoreCase(player.getName())) {
                 player.getActionSender().sendMessage("Only clan chat owners are able to give ranks.");
                 return true;
             }
@@ -294,7 +293,7 @@ public class ClanManager {
         if(message.startsWith("ban")) {
             String name = message.replace("ban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
-            if(player.getClanRank() > 2) {
+            if(player.getClanRank() < 2) {
                 player.getActionSender().sendMessage("You are not a high enough rank to ban members");
                 return true;
             }

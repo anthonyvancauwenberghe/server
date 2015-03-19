@@ -53,7 +53,7 @@ public class KBD implements Attack {
 				//ice freeze
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(45), Constants.MAGE, 345), 1000, Constants.MAGE);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(45), Constants.MAGE, 45), 1000, Constants.MAGE);
 				    if(n.getDefinition().getId() == 50 && Combat.random(2) == 1) {
                         if(p.cE.canBeFrozen())
 					        p.cE.setFreezeTimer(10000);

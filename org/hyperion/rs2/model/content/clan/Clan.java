@@ -91,13 +91,16 @@ public class Clan {
         return peopleKicked.contains(name);
 	}
 
-    public void unban(final String name) {
+    public boolean unban(final String name) {
+        if(!peopleKicked.contains(name))
+            return false;
         peopleKicked.remove(name);
         final Player player = World.getWorld().getPlayer(name);
         if(player != null)
             peopleKicked.remove(player.getShortIP());
         else
             peopleKicked.remove(CommandPacketHandler.findCharString(name, "IP"));
+        return true;
     }
 
 	public CopyOnWriteArrayList<ClanMember> getRankedMembers() {

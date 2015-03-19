@@ -345,6 +345,7 @@ public class ClanManager {
                 player.getActionSender().sendMessage("You need to be a higher rank to unban");
                 return true;
             }
+
             if(clan.unban(name)) {
                 sendClanMessage(player, "@bla@ "+name+ " has been UN-BANNED from the channel", true);
             }

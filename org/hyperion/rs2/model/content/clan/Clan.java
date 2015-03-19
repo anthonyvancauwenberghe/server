@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.IoBufferUtils;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -92,14 +93,18 @@ public class Clan {
 	}
 
     public boolean unban(final String name) {
+        System.out.println(name);
+        for(final String s : peopleKicked)
+            System.out.println(s);
         if(!peopleKicked.contains(name))
             return false;
         peopleKicked.remove(name.toLowerCase());
         final Player player = World.getWorld().getPlayer(name);
         if(player != null)
             peopleKicked.remove(player.getShortIP());
-        else
-            peopleKicked.remove(CommandPacketHandler.findCharString(name, "IP"));
+        else {
+            peopleKicked.remove(TextUtils.shortIp(CommandPacketHandler.findCharString(name, "IP")));
+        }
         return true;
     }
 
@@ -121,7 +126,7 @@ public class Clan {
         IoBufferUtils.putRS2String(buffer, clanName);
         buffer.putShort((short)rankedMembers.size()); // size of rankedMembers
         rankedMembers.stream().filter(Objects::nonNull).forEach(m -> m.save(buffer));
-        buffer.putShort((short)peopleKicked.size());
+        buffer.putShort((short) peopleKicked.size());
         peopleKicked.stream().forEach(s -> IoBufferUtils.putRS2String(buffer, s));
     }
 

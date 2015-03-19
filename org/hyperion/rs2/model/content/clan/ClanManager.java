@@ -64,14 +64,14 @@ public class ClanManager {
 				break;
 			}
 		}
-		if(player.getName().equalsIgnoreCase(clan.getOwner())) {
-			player.setClanRank(5);
-		}
 
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			player.setClanRank(7);
 		else if(Rank.hasAbility(player, Rank.MODERATOR))
 			player.setClanRank(6);
+        if(player.getName().equalsIgnoreCase(clan.getOwner())) {
+            player.setClanRank(5);
+        }
 	}
 
 	private static void sendLoginMessage(Player player, String clanName) {
@@ -388,7 +388,6 @@ public class ClanManager {
                 try {
                     final Clan clan = Clan.read(buf);
                     clans.put(clan.getName().toLowerCase(), clan);
-                    System.out.println(clan.getName() + " - "+clan.getOwner());
                 } catch(Exception ex) {
 
                 }

@@ -205,7 +205,7 @@ public class ClanManager {
 			return true;
 		}
 
-        if(s1.equalsIgnoreCase("changeclanowner")) {
+        if(s1.equalsIgnoreCase("changeclanowner") && Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
             try {
                 s = s.replace("changeclanowner ", "");
                 final String clanName = s.substring(0, s.indexOf(":"));
@@ -291,7 +291,7 @@ public class ClanManager {
             String clanName = p.getClanName();
             final int old = p.getClanRank();
             ClanManager.leaveChat(p, true, true);
-            if(p.getClanRank() < 5) {
+            if(old < 5) {
                 p.setClanRank(old + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
                 sendClanMessage(player, "@bla@ "+name+ " has been promoted to "+p.getClanRankName(), true);

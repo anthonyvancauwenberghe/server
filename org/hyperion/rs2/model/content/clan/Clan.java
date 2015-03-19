@@ -116,18 +116,18 @@ public class Clan {
     public void save(final IoBuffer buffer) {
         IoBufferUtils.putRS2String(buffer, owner);
         IoBufferUtils.putRS2String(buffer, clanName);
-        buffer.put((byte) rankedMembers.size()); // size of rankedMembers
+        buffer.putShort((short)rankedMembers.size()); // size of rankedMembers
         rankedMembers.stream().filter(Objects::nonNull).forEach(m -> m.save(buffer));
-        buffer.put((byte)peopleKicked.size());
+        buffer.putShort((short)peopleKicked.size());
         peopleKicked.stream().forEach(s -> IoBufferUtils.putRS2String(buffer, s));
     }
 
     public static Clan read(final IoBuffer buffer) {
         final Clan clan = new Clan(IoBufferUtils.getRS2String(buffer), IoBufferUtils.getRS2String(buffer));
-        int ranked = buffer.get();
+        int ranked = buffer.getUnsignedShort();
         for(int i = 0 ; i < ranked; i++)
             clan.addRankedMember(new ClanMember(IoBufferUtils.getRS2String(buffer), buffer.get()));
-        int banned = buffer.getUnsigned();
+        int banned = buffer.getUnsignedShort();
         for(int i = 0; i < banned; i++) {
             clan.peopleKicked.add(IoBufferUtils.getRS2String(buffer));
         }

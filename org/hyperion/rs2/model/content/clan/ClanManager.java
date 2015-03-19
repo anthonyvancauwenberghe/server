@@ -223,17 +223,6 @@ public class ClanManager {
 
         }
 
-		if(s1.equals("changeclanname") && ! player.getClanName().equals("")) {
-			String name = s.replace("changeclanname ", "");
-			Clan clan = ClanManager.clans.get(player.getClanName());
-			if(! clan.getOwner().equalsIgnoreCase(player.getName())
-					&& !Rank.hasAbility(player, Rank.MODERATOR)) {
-				player.getActionSender().sendMessage("Only clan chat owners are able to change name");
-				return true;
-			}
-			clan.setName(name);
-			return true;
-		}
 		return false;
 	}
 
@@ -263,11 +252,12 @@ public class ClanManager {
                 clan.addRankedMember(new ClanMember(p.getName(), 0));
                 sendClanMessage(player, "@bla@ "+name+ " has been demoted", true);
             } else {
-                player.getActionSender().sendMessage("This player already has the highest rank possible");
+                player.getActionSender().sendMessage("This player already has the lowest");
+                ClanManager.joinClanChat(p, clanName, false);
                 return true;
             }
             ClanManager.joinClanChat(p, clanName, false);
-            player.getActionSender().sendMessage("Player has been succesfully promoted.");
+            player.getActionSender().sendMessage("Player has been succesfully demoted.");
             return true;
         }
 
@@ -301,6 +291,7 @@ public class ClanManager {
                 sendClanMessage(player, "@bla@ "+name+ " has been promoted to "+p.getClanRankName(), true);
             } else {
                 player.getActionSender().sendMessage("This player already has the highest rank possible");
+                ClanManager.joinClanChat(p, clanName, false);
                 return true;
             }
             ClanManager.joinClanChat(p, clanName, false);
@@ -311,8 +302,13 @@ public class ClanManager {
         if(message.startsWith("ban")) {
             String name = message.replace("ban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
+            final Player other = World.getWorld().getPlayer(name);
             if(player.getClanRank() < 2) {
                 player.getActionSender().sendMessage("You are not a high enough rank to ban members");
+                return true;
+            }
+            if(other != null && other.getClanRank() > player.getClanRank()) {
+                player.sendMessage("You cannot do this with someone of a higher rank");
                 return true;
             }
             if(clan.kick(name, false)) {
@@ -325,8 +321,13 @@ public class ClanManager {
         if(message.startsWith("ipban")) {
             String name = message.replace("ipban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
+            final Player other = World.getWorld().getPlayer(name);
             if(player.getClanRank() < 4) {
                 player.getActionSender().sendMessage("You are not a high enough rank to ipban members");
+                return true;
+            }
+            if(other != null && other.getClanRank() > player.getClanRank()) {
+                player.sendMessage("You cannot do this with someone of a higher rank");
                 return true;
             }
             if(clan.kick(name, true)) {

@@ -22,8 +22,8 @@ public class KBD implements Attack {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
 			}
-            n.getDefinition().getBonus()[4] = 500;
-            n.getDefinition().getBonus()[3] = 500;
+            n.getDefinition().getBonus()[4] = 400;
+            n.getDefinition().getBonus()[3] = 400;
 			int attackId = Combat.random(9);
 
 
@@ -40,12 +40,12 @@ public class KBD implements Attack {
 				//melee
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 				    n.cE.predictedAtk = (System.currentTimeMillis() + 1800);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(35), Constants.MELEE, 35), 500, Constants.MELEE);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(31), Constants.MELEE, 31), 500, Constants.MELEE);
 			    } else if(attackId <= 2) {
 				    //posison
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(40), Constants.RANGE, 50), 1000, Constants.RANGE);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(25), Constants.RANGE, 25), 1000, Constants.RANGE);
 				    if(n.getDefinition().getId() == 50)
 					    Combat.poisonEntity(p.cE);
 				    Combat.npcRangeAttack(n, p.cE, 394, 40, false);
@@ -53,7 +53,7 @@ public class KBD implements Attack {
 				//ice freeze
 				    n.cE.doAnim(n.getDefinition().getAtkEmote(2));
 				    n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(40), Constants.MAGE, 53), 1000, Constants.MAGE);
+				    Combat.npcAttack(n, p.cE, CombatCalculation.getCalculatedDamage(n, p, Combat.random(45), Constants.MAGE, 345), 1000, Constants.MAGE);
 				    if(n.getDefinition().getId() == 50 && Combat.random(2) == 1) {
                         if(p.cE.canBeFrozen())
 					        p.cE.setFreezeTimer(10000);

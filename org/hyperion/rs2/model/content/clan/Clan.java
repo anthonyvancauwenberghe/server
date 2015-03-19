@@ -2,6 +2,8 @@ package org.hyperion.rs2.model.content.clan;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.IoBufferUtils;
 
 import java.util.ArrayList;
@@ -68,12 +70,14 @@ public class Clan {
 		this.owner = owner;
 	}
 
-	public boolean kick(String name) {
+	public boolean kick(String name, boolean ip) {
 		for(Player p : players) {
 			if(p.getName().equalsIgnoreCase(name)) {
 				p.getActionSender().sendMessage("You have been kicked.");
 				ClanManager.leaveChat(p, true, false);
 				peopleKicked.add(p.getName());
+                if(ip)
+                    peopleKicked.add(p.getShortIP());
 				return true;
 			}
 		}
@@ -81,8 +85,20 @@ public class Clan {
 	}
 
 	public boolean isKicked(String name) {
-		return peopleKicked.contains(name);
+        final Player player = World.getWorld().getPlayer(name);
+        if(player != null && peopleKicked.contains(player.getShortIP()))
+            return true;
+        return peopleKicked.contains(name);
 	}
+
+    public void unban(final String name) {
+        peopleKicked.remove(name);
+        final Player player = World.getWorld().getPlayer(name);
+        if(player != null)
+            peopleKicked.remove(player.getShortIP());
+        else
+            peopleKicked.remove(CommandPacketHandler.findCharString(name, "IP"));
+    }
 
 	public CopyOnWriteArrayList<ClanMember> getRankedMembers() {
 		return rankedMembers;

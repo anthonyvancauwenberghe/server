@@ -30,5 +30,6 @@ public class ClanMember {
 
     public void save(final IoBuffer buffer) {
         IoBufferUtils.putRS2String(buffer, name);
+        buffer.put((byte)rank);
     }
 }

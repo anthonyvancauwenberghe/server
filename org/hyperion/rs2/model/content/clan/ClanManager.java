@@ -336,6 +336,7 @@ public class ClanManager {
                 try {
                     final Clan clan = Clan.read(buf);
                     clans.put(clan.getName(), clan);
+                    System.out.println(clan.getName() + " - "+clan.getOwner());
                 } catch(Exception ex) {
 
                 }

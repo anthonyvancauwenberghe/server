@@ -124,7 +124,7 @@ public class Clan {
         for(int i = 0 ; i < ranked; i++)
             clan.rankedMembers.add(new ClanMember(IoBufferUtils.getRS2String(buffer), buffer.get()));
         int banned = buffer.getUnsigned();
-        for(int i = 0; i < ranked; i++) {
+        for(int i = 0; i < banned; i++) {
             clan.peopleKicked.add(IoBufferUtils.getRS2String(buffer));
         }
         return clan;

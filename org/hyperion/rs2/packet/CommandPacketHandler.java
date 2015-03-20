@@ -60,6 +60,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -1760,6 +1761,13 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+        if(commandStart.equals("checkclans")) {
+            for(final Clan clan : ClanManager.clans.values()) {
+                if(clan.getPlayers().size() > 0)
+                    player.sendf("Clan: %s, Owner: %s, Members: %d", clan.getName(), clan.getOwner(), clan.getPlayers().size());
+            }
+        }
 
         if (commandStart.equals(
                 "spawnobject")) {

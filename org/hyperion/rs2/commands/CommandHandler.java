@@ -52,6 +52,7 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
@@ -797,7 +798,7 @@ public class CommandHandler {
                         return false;
                     }
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - amount);
-                    player.getBank().add(new Item(15272, amount));
+                    Bank.addToBank(player, new BankItem(0, 15272, amount));
                     player.getActionSender().sendMessage(String.format("%d rocktails have been added to your bank.", amount));
                     return true;
                 } catch(Exception ex) {
@@ -1253,7 +1254,7 @@ public class CommandHandler {
                         player.getInventory().add(new Item(id, amount));
                         player.sendf("Added to your inventory");
                     }else{
-                        player.getBank().add(new Item(id, amount));
+                        Bank.addToBank(player, new BankItem(0, id, amount));
                         player.sendf("Added to your bank");
                     }
                     return true;
@@ -1452,7 +1453,7 @@ public class CommandHandler {
                         return false;
                     }
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - requiredPkp);
-                    player.getBank().add(new Item(18016, amount));
+                    Bank.addToBank(player, new BankItem(0, 18016, amount));
                     player.getActionSender().sendMessage(String.format("%,d spirit shards have been added to your bank.", amount));
                     return true;
                 } catch(Exception ex) {
@@ -1640,7 +1641,7 @@ public class CommandHandler {
                     if(amount == 1)
                         amount = 2;
                     for(int id = ClueScrollManager.MIN_ID; id <= ClueScrollManager.MAX_ID; id++)
-                        player.getBank().add(new Item(id, amount));
+                        Bank.addToBank(player, new BankItem(0, id, amount));
                     return true;
                 }catch(Exception ex){
                     player.sendf("Enter a valid amount");

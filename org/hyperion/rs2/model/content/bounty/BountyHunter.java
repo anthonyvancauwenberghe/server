@@ -11,6 +11,8 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.util.Misc;
@@ -141,7 +143,7 @@ public class BountyHunter {
 		}
         final List<Item> emblems = Emblem.getEmblems(opp.getInventory());
         for(final Item item : emblems) {
-            player.getBank().add(Item.create(item.getId(), opp.getInventory().remove(item)));
+            Bank.addToBank(player, new BankItem(0, item.getId(), opp.getInventory().remove(item)));
             player.sendf("A @red@%s EMBLEM@bla@ was added to your bank", Emblem.forId(item.getId()).toString());
         }
 	}

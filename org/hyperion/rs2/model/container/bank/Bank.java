@@ -10,6 +10,8 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
+import java.util.Arrays;
+
 /**
  * Banking utility class.
  *
@@ -30,12 +32,12 @@ public class Bank {
     /**
      * The bank inventory interface.
      */
-    public static final int BANK_INVENTORY_INTERFACE = 5382;
+    public static final int BANK_INVENTORY_INTERFACE = 50088;
 
     /**
      * The Deposit Box interface.
      */
-    public static final int DEPOSIT_INVENTORY_INTERFACE = 7433;//7423
+    public static final int DEPOSIT_INVENTORY_INTERFACE = 7433;
 
 
     /**
@@ -44,7 +46,7 @@ public class Bank {
      * @param player The player to open the bank for.
      */
     public static void open(Player player, boolean setPin) {
-        if(player.getLocation().inPvPArea()) { //:(
+        if(player.getLocation().inPvPArea()) {
             return;
         }
         if(!ItemSpawning.canSpawn(player)) {
@@ -59,13 +61,14 @@ public class Bank {
             BankPin.loadUpPinInterface(player);
             return;
         }
-        player.openedBoB = false;
-        player.getBank().shift();
-        player.getActionSender().sendInterfaceInventory(5292, 5063);
-        player.getInterfaceState().addListener(player.getBank(),
-                new InterfaceContainerListener(player, 5382));
+        player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
+        player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));
         player.getInterfaceState().addListener(player.getInventory(),
-                new InterfaceContainerListener(player, 5064));
+                new InterfaceContainerListener(player, PLAYER_INVENTORY_INTERFACE));
+        player.getBank().shift();
+        player.getBankField().setBanking(true);
+        player.openedBoB = false;
+        player.getBank().setFiringEvents(true);
     }
 
     /**
@@ -84,82 +87,68 @@ public class Bank {
      * Withdraws an item.
      *
      * @param player The player.
-     * @param slot   The slot in the player's inventory.
      * @param id     The item id.
      * @param amount The amount of the item to deposit.
      */
-    public static void withdraw(Player player, int slot, int id, int amount) {
-        if(player.getLocation().inPvPArea())
+    public static void withdraw(Player player, int id, int amount) {
+        if (!player.getBankField().isBanking()) {
             return;
-        if(!ItemSpawning.canSpawn(player))
-            return;
-        if(slot < 0 || slot > player.getBank().capacity() || id < 0 || id > ItemDefinition.MAX_ID)
-            return;
-        Item item = player.getBank().getById(id);
-        if(item == null)
-            return;
-        if(!player.getBank().contains(id)) {
-            return; // invalid packet, or client out of sync
         }
-        if(item.getId() != id) {
-            return; // invalid packet, or client out of sync
-        }
-        if(FightPits.inPits(player)) //trying to smuggle
+        int slot = player.getBank().getSlotById(id);
+        if(slot < 0) {
             return;
-        int transferAmount = item.getCount();
-        if(transferAmount >= amount) {
+        }
+        BankItem bankItem = (BankItem) player.getBank().get(slot);
+        if ((bankItem == null) || (bankItem.getId() != id)) {
+            return;
+        }
+        int tab = bankItem.getTabIndex();
+        int transferAmount = player.getBank().getCount(bankItem.getId());
+        if (transferAmount >= amount) {
             transferAmount = amount;
-        } else if(transferAmount == 0) {
-            return; // invalid packet, or client out of sync
+        } else if (transferAmount == 0) {
+            return;
         }
-        int newId = item.getId(); // TODO deal with withdraw as notes!
-        if(player.getSettings().isWithdrawingAsNotes()) {
-            if(item.getDefinition().isNoteable()) {
-                newId = item.getDefinition().getNotedId();
+        int newId = bankItem.getId();
+        if (player.getBankField().isWithdrawAsNote()) {
+            int noteId = bankItem.getDefinition().getNotedId();
+            if (noteId != -1) {
+                newId = noteId;
+            } else {
+                player.getActionSender().sendMessage("This item cannot be witdrawn as a note.");
             }
         }
         ItemDefinition def = ItemDefinition.forId(newId);
-        if(def.isStackable()) {
-            if(player.getInventory().freeSlots() <= 0
-                    && player.getInventory().getById(newId) == null) {
-                player.getActionSender()
-                        .sendMessage(
-                                "You don't have enough inventory space to withdraw that many."); // this
-                // is
-                // the
-                // real
-                // message
+        if (def.isStackable()) {
+            if ((player.getInventory().freeSlots() <= 0)
+                    && (player.getInventory().getById(newId) == null)) {
+                player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many.");
             }
         } else {
             int free = player.getInventory().freeSlots();
-            if(transferAmount > free) {
-                player.getActionSender()
-                        .sendMessage(
-                                "You don't have enough inventory space to withdraw that many."); // this
-                // is
-                // the
-                // real
-                // message
+            if (transferAmount > free) {
+                player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many.");
                 transferAmount = free;
             }
         }
-        // now add it to inv
-        if(player.getInventory().add(new Item(newId, transferAmount))) {
-            // all items in the bank are stacked, makes it very easy!
-            int newAmount = item.getCount() - transferAmount;
-            if(newAmount <= 0) {
-                player.getBank().remove(Item.create(id, transferAmount));
+        if (player.getInventory().add(new Item(newId, transferAmount))) {
+            int newAmount = bankItem.getCount() - transferAmount;
+            if (newAmount <= 0) {
+                player.getBankField().getTabAmounts()[tab]--;
+                player.getBank().setBank(slot, null);
+                player.getBank().shift();
+                if (player.getBankField().getTabAmounts()[tab] <= 0) {
+                    Bank.collapse(player, tab + 1, tab);
+                    player.getBank().fireItemsChanged();
+                    Bank.viewTab(player, 0);
+                }
             } else {
-                player.getBank().remove(Item.create(id, transferAmount));
+                bankItem.setCount(newAmount);
+                player.getBank().setBank(slot, bankItem);
+                player.getBank().fireItemChanged(slot);
             }
         } else {
-            player.getActionSender()
-                    .sendMessage(
-                            "You don't have enough inventory space to withdraw that many."); // this
-            // is
-            // the
-            // real
-            // message
+            player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many.");
         }
     }
 
@@ -171,12 +160,12 @@ public class Bank {
      * @param id     The item id.
      * @param amount The amount of the item to deposit.
      */
-    public static void deposit(Player player, int slot, int id, int amount) {
-        deposit(player, slot, id, amount, player.getInventory());
+    public static void deposit(Player player, int slot, int id, int amount, boolean inventory) {
+        deposit(player, slot, id, amount, player.getInventory(), inventory, true);
     }
 
     public static void deposit(Player player, int slot, int id, int amount,
-                               Container container) {
+                               Container container, boolean inventory, boolean refresh) {
         if(player.getLocation().inPvPArea())
             return;
         if(slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
@@ -185,92 +174,312 @@ public class Bank {
             return;
         if(FightPits.inPits(player))
             return;
-        boolean inventoryFiringEvents = container.isFiringEvents();
-        container.setFiringEvents(false);
+        if (!player.getBankField().isBanking()) {
+            return;
+        }
+        if (player.getBankField().isSearching()) {
+            viewTab(player, 0);
+        }
+        boolean inventoryFiringEvents = inventory ? player.getInventory().isFiringEvents() : player.getEquipment().isFiringEvents();
+        boolean bankFiringEvents = player.getBank().isFiringEvents();
+        if (inventory) {
+            player.getInventory().setFiringEvents(false);
+        } else {
+            player.getEquipment().setFiringEvents(false);
+        }
+        player.getBank().setFiringEvents(refresh);
         try {
-            Item item = container.get(slot);
-            if(item == null) {
-                return; // invalid packet, or client out of sync
+            Item item2 = inventory ? player.getInventory().get(slot) : player.getEquipment()
+                    .get(slot);
+            BankItem item = new BankItem(player.getBankField().getTabIndex(), item2.getId(), item2.getCount());
+            if (item == null) {
+                return;
             }
-            if(item.getId() != id) {
-                return; // invalid packet, or client out of sync
+            if (item.getId() != id) {
+                return;
+            }
+            if (item.getDefinition() == null) {
+                player.sendMessage("Some items were unable to deposit.");
+                return;
             }
             int transferAmount = container.getCount(id);
             if(transferAmount >= amount) {
                 transferAmount = amount;
             } else if(transferAmount == 0) {
-                return; // invalid packet, or client out of sync
+                return;
             }
-            boolean noted = item.getDefinition().isNoted();
-            if(item.getDefinition().isStackable() || noted) {
-                int bankedId = noted ? item.getDefinition().getNormalId()
-                        : item.getId();
-                if(player.getBank().freeSlots() < 1
-                        && player.getBank().getById(bankedId) == null) {
-                    player.getActionSender()
-                            .sendMessage(
-                                    "You don't have enough space in your bank account."); // this
-                    // is
-                    // the
-                    // real
-                    // message
+            if (item.getDefinition().isStackable() || item.getDefinition().isNoted())
+            {
+                int bankedId = item.getDefinition().isNoted() ? item.getDefinition().getNormalId() : item.getId();
+                if ((player.getBank().freeSlots() < 1) && (player.getBank().getById(bankedId) == null)) {
+                    player.getActionSender().sendMessage("You don't have enough space in your bank account.");
+                    return;
                 }
-                // we only need to remove from one stack
                 int newInventoryAmount = item.getCount() - transferAmount;
                 Item newItem;
-                if(newInventoryAmount <= 0) {
+                if (newInventoryAmount <= 0) {
                     newItem = null;
                 } else {
                     newItem = new Item(item.getId(), newInventoryAmount);
                 }
-                if(! player.getBank().add(new Item(bankedId, transferAmount))) {
-                    player.getActionSender()
-                            .sendMessage(
-                                    "You don't have enough space in your bank account."); // this
-                    // is
-                    // the
-                    // real
-                    // message
+                boolean contains = player.getBank().contains(bankedId);
+                BankItem bankItem = (BankItem) player.getBank().getById(bankedId);
+                int toTab = contains ? bankItem.getTabIndex() : player
+                        .getBankField().getTabIndex();
+                BankItem toAdd = new BankItem(toTab, bankedId, transferAmount);
+                player.getBank().setFiringEvents(false);
+                if (!player.getBank().addBank(toAdd)) {
+                    player.getActionSender().sendMessage("You don't have enough space in your bank account.");
                 } else {
-                    container.set(slot, newItem);
-                    container.fireItemsChanged();
-                    player.getBank().fireItemsChanged();
-                }
-            } else {
-                if(player.getBank().freeSlots() < transferAmount) {
-                    player.getActionSender()
-                            .sendMessage(
-                                    "You don't have enough space in your bank account."); // this
-                    // is
-                    // the
-                    // real
-                    // message
-                }
-                if(! player.getBank().add(
-                        new Item(item.getId(), transferAmount))) {
-                    player.getActionSender()
-                            .sendMessage(
-                                    "You don't have enough space in your bank account."); // this
-                    // is
-                    // the
-                    // real
-                    // message
-                } else {
-                    // we need to remove multiple items
-                    for(int i = 0; i < transferAmount; i++) {
-                        if(i == 0) {
-                            container.set(slot, null);
-                        } else {
-                            container.set(container.getSlotById(item.getId()),
-                                    null);
+                    if (inventory) {
+                        player.getInventory().set(slot, newItem);
+                        if (refresh) {
+                            player.getInventory().fireItemsChanged();
+                        }
+                    } else {
+                        player.getEquipment().set(slot, newItem);
+                        if (refresh) {
+                            player.getEquipment().fireItemsChanged();
                         }
                     }
-                    container.fireItemsChanged();
+                    if (!contains) {
+                        if (player.getBankField().getUsedTabs() > 1) {
+                            int to = player.getBankField().getOffset(toTab)
+                                    + player.getBankField().getTabAmounts()[toTab];
+                            int from = player.getBank().size() - 1;
+                            ((BankItem) player.getBank().get(from)).setTabSlot(toTab);
+                            insert(player, from, to);
+                        }
+                        player.getBankField().getTabAmounts()[toTab]++;
+                    }
+                    player.getBank().fireItemChanged(player.getBank().getSlotById(bankedId));
                 }
+                player.getBank().setFiringEvents(refresh);
+            } else {
+                if (player.getBank().freeSlots() < transferAmount) {
+                    player.getActionSender().sendMessage("You don't have enough space in your bank account.");
+                }
+                item.setCount(transferAmount);
+                boolean contains = player.getBank().contains(item.getId());
+                int itemTab = player.getBankField().getTabIndex();
+                BankItem toAdd = new BankItem(itemTab, item.getId(), transferAmount);
+                boolean bankRefresh = player.getBank().isFiringEvents();
+                player.getBank().setFiringEvents(false);
+                if (!player.getBank().addBank(toAdd)) {
+                    player.getActionSender().sendMessage("You don't have enough space in your bank account.");
+                } else {
+                    for (int i = 0; i < transferAmount; i++) {
+                        if (inventory) {
+                            player.getInventory().set(player.getInventory().getSlotById(id), null);
+                            if (refresh) {
+                                player.getInventory().fireItemsChanged();
+                            }
+                        } else {
+                            player.getEquipment().set(slot, null);
+                            if (refresh) {
+                                player.getEquipment().fireItemsChanged();
+                            }
+                        }
+                    }
+                    int toTab = player.getBankField().getTabIndex();
+                    int to = player.getBankField().getOffset(toTab) + player.getBankField().getTabAmounts()[toTab];
+                    if (!contains) {
+                        if (player.getBankField().getUsedTabs() > 1) {
+                            int from = player.getBank().size() - 1;
+                            ((BankItem) player.getBank().get(from)).setTabSlot(toTab);
+                            insert(player, from, to);
+                        }
+                        player.getBankField().getTabAmounts()[toTab]++;
+                    } else {
+                        to = player.getBank().getSlotById(item.getId());
+                    }
+                    if (refresh) {
+                        player.getBank().fireItemChanged(to);
+                    }
+                }
+                player.getBank().setFiringEvents(bankRefresh);
             }
         } finally {
-            container.setFiringEvents(inventoryFiringEvents);
+            if (inventory) {
+                player.getInventory().setFiringEvents(inventoryFiringEvents);
+            } else {
+                player.getEquipment().setFiringEvents(inventoryFiringEvents);
+            }
+            player.getBank().setFiringEvents(bankFiringEvents);
         }
+    }
+
+    public static void sortItems(Player player) {
+        Item[] bankList = player.getBank().toArray();
+        BankItem[] bankItems = new BankItem[player.getBank().size()];
+        for (int i = 0, c = 0; i < bankList.length; i++) {
+            if (bankList[i] != null)
+            {
+                bankItems[c++] = (BankItem) bankList[i];
+            }
+        }
+        Arrays.sort(bankItems, (first, second) -> first.getTabIndex() - second.getTabIndex());
+        player.getBank().setItems(Arrays.copyOf(bankItems, SIZE));
+    }
+
+    public static void initializeBankConfigs(Player player) {
+        player.getBankField().setTabIndex(0);
+        if (player.getBankField().isLoadError()) {
+            Bank.sortItems(player);
+        }
+        player.getBankField().setSearching(false);
+        player.getActionSender().sendClientConfig(1011, 1);
+        player.getActionSender().sendClientConfig(1009, 1);
+        player.getActionSender().sendClientConfig(1010, 0);
+        player.getBank().fireItemsChanged();
+    }
+
+    public static boolean addToBank(Player player, BankItem item) {
+        if (item == null) {
+            return false;
+        }
+        boolean contains = player.getBank().contains(item.getId());
+        int here = item instanceof BankItem ? ((BankItem) item).getTabIndex() : 0;
+        int toTab = contains ? ((BankItem) player.getBank().getById(item.getId())).getTabIndex() : here;
+        if (!player.getBank().addBank(new BankItem(toTab, item.getId(), item.getCount()))) {
+            return false;
+        }
+        if (!contains) {
+            player.getBankField().getTabAmounts()[toTab]++;
+        }
+        return true;
+    }
+
+    public static boolean bankButton(Player player, int buttonId) {
+        if ((buttonId >= -15502) && (buttonId <= -15486)) {
+            int tab = (buttonId + 15502) / 2;
+            viewTab(player, tab);
+            return true;
+        }
+        if ((buttonId >= -15300) && (buttonId <= -15286)) {
+            int tab = ((buttonId + 15300) / 2) + 1;
+            collapse(player, tab, 0);
+            player.getBank().fireItemsChanged();
+            viewTab(player, 0);
+            return true;
+        }
+        if (buttonId == 21004) {
+            player.getBankField().setSearching(!player.getBankField().isSearching());
+            return true;
+        }
+        if (buttonId == 21008) {
+            player.getBankField().setWithdrawAsNote(!player.getBankField().isWithdrawAsNote());
+            player.getActionSender().sendClientConfig(1011, player.getBankField().isWithdrawAsNote() ? 0 : 1);
+            return true;
+        }
+        if(buttonId == 21000) {
+            player.getBankField().setInserting(!player.getBankField().isInserting());
+            player.getActionSender().sendClientConfig(1009, player.getBankField().isInserting() ? 0 : 1);
+            return true;
+        }
+        if(buttonId == 5294) {
+            BankPin.loadUpPinInterface(player);
+            return true;
+        }
+        return false;
+    }
+
+    public static void viewTab(Player player, int tab) {
+        if (player.getBankField().isSearching()) {
+            player.getBankField().setSearching(false);
+        }
+        if (tab == player.getBankField().getTabIndex()) {
+            return;
+        }
+        if ((player.getBankField().getTabAmounts()[tab] <= 0) && (tab > 0)) {
+            player.sendMessage("Drag an item here to create a new tab.");
+            return;
+        }
+        player.getBankField().setTabIndex(tab);
+    }
+
+    public static void collapse(Player player, int tab, int toTab) {
+        if ((tab <= 0) || (toTab == tab) || (tab >= 9)) {
+            return;
+        }
+        int itemSlot = player.getBankField().getOffset(tab);
+        int initialTabAmount = player.getBankField().getTabAmounts()[tab];
+        for (int fromSlot = 0; fromSlot < initialTabAmount; fromSlot++) {
+            if (player.getBank().get(itemSlot) != null) {
+                toTab(player, tab, toTab, 0);
+            }
+        }
+        if (tab != player.getBankField().getUsedTabs()) {
+            collapse(player, tab + 1, tab);
+        }
+    }
+
+    public static boolean toTab(Player player, int fromTab, int toTab, int slot)
+    {
+        if (toTab == fromTab) {
+            return false;
+        }
+        if (toTab > player.getBankField().getUsedTabs()) {
+            return false;
+        }
+        int from = slot + player.getBankField().getOffset(fromTab);
+        int to = (player.getBankField().getOffset(toTab) + player.getBankField().getTabAmounts()[toTab])
+                - (fromTab > toTab ? 0 : 1);
+        if (player.getBank().get(from) == null) {
+            return false;
+        }
+        ((BankItem) player.getBank().get(from)).setTabSlot(toTab);
+        insert(player, from, to);
+        player.getBankField().getTabAmounts()[toTab]++;
+        player.getBankField().getTabAmounts()[fromTab]--;
+        return true;
+    }
+
+    public static void swapTabs(Player player, int currentSlot, int destinationSlot)
+    {
+        BankItem current = ((BankItem) player.getBank().get(currentSlot)).copy();
+        BankItem destination = ((BankItem) player.getBank().get(destinationSlot)).copy();
+        int temp = destination.getTabIndex();
+        destination.setTabSlot(current.getTabIndex());
+        current.setTabSlot(temp);
+        player.getBank().toArray()[destinationSlot] = current;
+        player.getBank().toArray()[currentSlot] = destination;
+    }
+
+    public static void moveToTab(Player player, int slot, int fromTab, int toTab)
+    {
+        boolean bankFiringEvents = player.getBank().isFiringEvents();
+        player.getBank().setFiringEvents(false);
+        if (toTab(player, fromTab, toTab, slot)) {
+            if (player.getBankField().getTabAmounts()[fromTab] <= 0) {
+                collapse(player, fromTab + 1, fromTab);
+                viewTab(player, 0);
+            }
+            player.getBank().shift();
+            player.getBank().fireItemsChanged();
+        }
+        player.getBank().setFiringEvents(bankFiringEvents);
+    }
+
+    public static void insert(Player player, int currentSlot, int destinationSlot) {
+        int index = currentSlot;
+        if (currentSlot > destinationSlot) {
+            while (index != destinationSlot) {
+                swap(player, index, --index);
+            }
+        } else if (currentSlot < destinationSlot) {
+            while (index != destinationSlot) {
+                swap(player, index, ++index);
+            }
+        }
+    }
+
+    public static void swap(Player player, int currentSlot, int destinationSlot) {
+        player.getBank().copy();
+        BankItem current = player.getBank().getBankItem(currentSlot);
+        BankItem destination = player.getBank().getBankItem(destinationSlot);
+        player.getBank().toArray()[destinationSlot] = current;
+        player.getBank().toArray()[currentSlot] = destination;
     }
 
 }

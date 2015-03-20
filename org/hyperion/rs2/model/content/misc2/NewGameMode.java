@@ -3,6 +3,8 @@ package org.hyperion.rs2.model.content.misc2;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.ClanManager;
@@ -133,7 +135,7 @@ public class NewGameMode implements ContentTemplate {
                 player.getInventory().add(Item.create(995, 15_000_000));
                 for(int i = 0; i < IRON_STARTER.length; i++) {
                     try {
-                        player.getBank().add(new Item(IRON_STARTER[i][0], IRON_STARTER[i][1]));
+                        Bank.addToBank(player, new BankItem(0, IRON_STARTER[i][0], IRON_STARTER[i][1]));
                     }catch(Exception e) {
                         e.printStackTrace();
                     }
@@ -150,7 +152,7 @@ public class NewGameMode implements ContentTemplate {
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {
                     try {
-                        player.getBank().add(new Item(MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
+                        Bank.addToBank(player, new BankItem(0, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
                     }catch(Exception e) {
                         e.printStackTrace();
                     }

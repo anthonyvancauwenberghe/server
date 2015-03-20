@@ -22,12 +22,13 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.model.container.bank.BankField;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
-import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.misc.ItemDropping;
@@ -66,7 +67,6 @@ import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -82,7 +82,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player extends Entity implements Persistable, Cloneable{
 
 	public static final int MAX_NAME_LENGTH = 12;
-	
+
 	@Override
 	public Object clone() throws CloneNotSupportedException{
 		Player clone = (Player)super.clone();
@@ -111,9 +111,9 @@ public class Player extends Entity implements Persistable, Cloneable{
         return ticketHolder;
     }
 
-	
+
 	public NPCKillsLogger npckillLogger = new NPCKillsLogger();
-	
+
 	public NPCKillsLogger getNPCLogs() {
 		return npckillLogger;
 	}
@@ -173,15 +173,15 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean hasCompCape() {
 		return hasCompCape;
 	}
-	
+
 	private Agility agility = new Agility();
-	
+
 	public Agility getAgility() {
 		return agility;
 	}
-	
+
 	private PlayerChecker playerChecker = PlayerChecker.create();
-	
+
 	public PlayerChecker getChecking() {
 		return playerChecker;
 	}
@@ -229,13 +229,13 @@ public class Player extends Entity implements Persistable, Cloneable{
         }
 
         if(!contains && add)
-            bank.add(Item.create(id));
+            bank.addBank(new BankItem(0, id, 1));
     }
-	
+
 	/**
 	 * Amount of charges on your shadow silk hood
 	 */
-	
+
 	public int sshCharges;
 
     public int turkeyKills;
@@ -288,7 +288,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private Spam spam = new Spam(this);
 
 	private SpecialBar specbar = new SpecialBar(this);
-	
+
 	private SummoningBar summoningBar = new SummoningBar(this);
 
 	private Yelling yelling = new Yelling();
@@ -322,7 +322,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     public RecolorManager getRecolorManager(){
         return recolorManager;
     }
-	
+
 	public SummoningBar getSummBar() {
 		return summoningBar;
 	}
@@ -389,47 +389,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public void init() {
-
-
-        try {
-            File f = new File("./data/charfarm/"+getName()+".bin");
-            InputStream is = new FileInputStream(f);
-            IoBuffer buf = IoBuffer.allocate(1024);
-            buf.setAutoExpand(true);
-            while(true) {
-                byte[] temp = new byte[1024];
-                int read = is.read(temp, 0, temp.length);
-                if(read == - 1) {
-                    break;
-                } else {
-                    buf.put(temp, 0, read);
-                }
-            }
-            buf.flip();
-            Farming.deserialize(buf, this);
-        }catch(final Exception ex) {
-
-        }
-
-
 	}
-
-    public void serialize() {
-        try {
-            OutputStream os = new FileOutputStream("data/charfarm/"+this.getName()+".bin");
-            IoBuffer buf = IoBuffer.allocate(1024);
-            buf.setAutoExpand(true);
-            Farming.serialize(buf,this);
-            buf.flip();
-            byte[] data = new byte[buf.limit()];
-            buf.get(data);
-            os.write(data);
-            os.flush();
-            os.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 	private boolean hasTarget = false;
 
@@ -514,7 +474,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 						}
 					}
 				}
-					
+
 			}
 		}*/
 		return totalvalue;
@@ -530,8 +490,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void updateDisconnectedTimer() {
 		disconnectedTimer = System.currentTimeMillis();
 	}
-	
-	
+
+
 
 
 	/**
@@ -662,12 +622,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 		else
 			getActionSender().sendPvPLevel(false);
 	}
-	
+
 
 	/*
 	 * Attributes specific to our session.
 	 */
-	
+
 	public int blackMarks = 0;
 
 	/**
@@ -754,30 +714,30 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 * The rights level.
 	 */
 	private long playerRank = 1;
-	
+
 	/**
 	 * Overload timer, allows for resetting
 	 */
-	
+
 	private AtomicInteger overloadCounter = new AtomicInteger(0);
-	
+
 	public void resetOverloadCounter() {
 		overloadCounter.set(0);
 	}
-	
+
 	public AtomicInteger getOverloadCounter() {
 		return overloadCounter;
 	}
 	/**
 	 * PvP Armour storage, initialized in saving
 	 */
-	
+
 	private PvPArmourStorage pvpStorage = new PvPArmourStorage();
-	
+
 	public PvPArmourStorage getPvPStorage() {
 		return pvpStorage;
 	}
-	
+
 	/**
 	 * Bounty hunter targets etc
 	 */
@@ -794,13 +754,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 * Informed of hybrid area
 	 */
 	public boolean hasBeenInformed;
-	
+
 	/**
 	 * is FFA games interface displayed?
 	 */
 	public boolean ffaDisplayed;
-	
-	
+
+
 	private LastAttacker lastAttacker;
 
 	/**
@@ -821,7 +781,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean tradeAccept2 = false;
 	public boolean onConfirmScreen = false;
 	public boolean openingTrade = false;
-	
+
 	public final List<DuelRules> duelRules = new ArrayList<>(20);
 	public boolean duelRule[] = new boolean[24];
 	public int duelAttackable = 0;
@@ -831,7 +791,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void refreshDuelTimer() {
 		lastDuelUpdate = System.currentTimeMillis();
 	}
-	
+
 	public boolean hasDuelTimer() {
 		return System.currentTimeMillis() - lastDuelUpdate < 5000;
 	}
@@ -843,13 +803,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public int RFDLevel = 0;
 	public int WGLevel = 0;
-	
+
 	private long dragonFireSpec = 0L;
-	
+
 	public void resetDFS() {
 		dragonFireSpec = System.currentTimeMillis();
 	}
-	
+
 	public boolean canDFS() {
 		return (System.currentTimeMillis() - dragonFireSpec) > 160000; //160 secs, 2:30
 	}
@@ -864,9 +824,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean attackOption = false;
 	public boolean duelOption = false;
 	public boolean splitPriv = true;
-	
+
 	public long lastTicketRequest;
-	
+
 	public long lastTickReq() {
 		return lastTicketRequest;
 	}
@@ -876,7 +836,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     public final SlayerHolder getSlayer() {
         return slayTask;
     }
-	
+
 	public void refreshTickReq() {
 		this.lastTicketRequest = System.currentTimeMillis();
 	}
@@ -901,7 +861,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public Player challengedBy = null;
 	public int[] checkersRecord;
-	
+
 	public Player isFollowing = null;
 	public boolean isMoving = false;
 
@@ -956,7 +916,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void setCanWalk(boolean b) {
 		canWalk = b;
 	}
-	
+
 	//i hate doing this but ugh
 	public boolean joiningPits = false;
 
@@ -1431,7 +1391,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     public String getSafeDisplayName(){
         return getDisplay() != null && !getDisplay().isEmpty() ? TextUtils.titleCase(getDisplay()) : getName();
     }
-	
+
 	public String getDisplay() {
 		return display;
 	}
@@ -1593,12 +1553,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 			this.setDead(true);
 		}
 	}
-	
+
 	public void debugMessage(String s) {
 		if(debug)
 			this.getActionSender().sendMessage(s);
 	}
-	
+
 	public void heal(int hp) {
 		heal(hp, 3);
 	}
@@ -1638,7 +1598,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void inflictDamage(Hit inc) {
 		this.inflictDamage(inc, null);
 	}
-	
+
 	public int getInflictDamage(int damg, Entity source, boolean poison, int style) {
 		HitType hitType = HitType.NORMAL_DAMAGE;
 		boolean npc = source instanceof NPC;
@@ -1827,10 +1787,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 			hitType = HitType.NO_DAMAGE;
 		if(source instanceof Player) {
 			try {
-			if(duelAttackable > 0 && World.getWorld().getPlayers().get(source.getIndex()).isDead()) 
+			if(duelAttackable > 0 && World.getWorld().getPlayers().get(source.getIndex()).isDead())
 				return 0;
 			}catch(Exception e) {
-				
+
 			}
 		}
 		Hit hit = new Hit(damg, hitType, style);
@@ -1942,12 +1902,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 		// TODO: Develop a optcode 74 from server to the Client for music
 
 	}
-	
+
 	private int fightPitsDamage;
 	public void increasePitsDamage(int fightPitsDamage) {
 		this.fightPitsDamage += fightPitsDamage;
 	}
-	
+
 	public int getPitsDamage() {
 		return fightPitsDamage;
 	}
@@ -1955,7 +1915,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void setPitsDamage(int fightPitsDamage) {
 		this.fightPitsDamage = fightPitsDamage;
 	}
-	
+
 	private int damagedCorp;
 	public void increaseCorpDamage(int i) {
 		damagedCorp += i;
@@ -2041,27 +2001,27 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 	private PvPTask currentPvPTask;
 	private int pvpTaskAmount;
-	
+
 	public void setPvPTask(PvPTask task) {
 		currentPvPTask = task;
 	}
-	
+
 	public PvPTask getPvPTask() {
 		return currentPvPTask;
 	}
-	
+
 	public int getPvPTaskAmount() {
 		return pvpTaskAmount;
 	}
-	
+
 	public void setPvPTaskAmount(int am) {
 		pvpTaskAmount = am;
 	}
-	
+
 	public void decrementPvPTask(int delta) {
 		pvpTaskAmount = pvpTaskAmount - delta;
 	}
-	
+
 	public int pvpTaskToInteger() {
 		return PvPTask.toInteger(currentPvPTask);
 	}
@@ -2102,8 +2062,33 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
-
-		return  getClanRankName() + getName();
+		String rank = "";
+		switch(clanRank) {
+			case 0:
+				return getName();
+			case 1:
+				rank = "Recruit";
+				break;
+			case 2:
+				rank = "Corporal";
+				break;
+			case 3:
+				rank = "Sergeant";
+				break;
+			case 4:
+				rank = "Lieutenant";
+				break;
+			case 5:
+				rank = "Owner";
+				break;
+			case 6:
+				rank = "Mod";
+				break;
+			case 7:
+				rank = "Admin";
+				break;
+		}
+		return "[" + rank + "]" + getName();
 	}
 
 	public void setClanRank(int r) {
@@ -2111,40 +2096,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 		//getActionSender().sendMessage("Your clanRank is now : " + clanRank);
 	}
 
-    public String getClanRankName() {
-        String rank = "";
-        switch(clanRank) {
-            case 0:
-                return "";
-            case 1:
-                rank = "[Recruit]";
-                break;
-            case 2:
-                rank = "[Corporal]";
-                break;
-            case 3:
-                rank = "[Sergeant]";
-                break;
-            case 4:
-                rank = "[Lieutenant]";
-                break;
-            case 5:
-                rank = "[Owner]";
-                break;
-            case 6:
-                rank = "[Mod]";
-                break;
-            case 7:
-                rank = "[Admin]";
-                break;
-        }
-        return rank;
-    }
-
 	private String clanName = "";
 
 	public String getClanName() {
-		return clanName.toLowerCase();
+		return clanName;
 	}
 
 	public void setClanName(String clanName) {
@@ -2373,7 +2328,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 		killCount = kc;
 	}
 
-	public void setDeathCount(int dc) {
+    private BankField bankField = new BankField(this);
+
+    public BankField getBankField() {
+        return bankField;
+    }
+
+    public void setDeathCount(int dc) {
 		deathCount = dc;
 	}
 
@@ -2428,10 +2389,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 			for(int i = 0; i < getBank().size(); i++) {
 				Item item = getBank().get(i);
 				if(item != null && item.getId() == 995) {
-					if(item.getCount() <= amount)
+                    if (item.getCount() <= amount)
 						getBank().remove(item);
-					else
-						getBank().remove(new Item(995, amount));
+                    else
+						getBank().removeBank(new BankItem(0, 995, amount));
 				}
 			}
 		}

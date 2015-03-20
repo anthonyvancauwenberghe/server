@@ -60,7 +60,7 @@ public class DonatorShop extends Shop {
 			ActionSender.yellMessage("@blu@only " + item.getCount() + " of these items will ever be sold.");
 			return;
 		}
-        if(item.getId() == LEGENDARY_TICKET) {
+        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603) {
             player.sendMessage("You cannot sell this item back to the store");
             return;
         }
@@ -87,6 +87,8 @@ public class DonatorShop extends Shop {
 	@Override
 	public void buyFromShop(Player player, Item item) {
 		int price = item.getCount() * getPrice(item.getId());
+        System.out.println(item.getId());
+        System.out.println(getPrice(6603));
 		if(price <= 0) {
 			player.getActionSender().sendMessage("Cannot buy this item! Please contact a staff member about this issue!");
 			return;
@@ -128,7 +130,7 @@ public class DonatorShop extends Shop {
 		}
 
 		player.getActionSender().sendMessage(message);
-        if(item.getId() == LEGENDARY_TICKET)
+        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603)
             player.sendMessage("@red@WARNING:@bla@ you cannot sell this item back to the shop");
 	}
 
@@ -229,6 +231,9 @@ public class DonatorShop extends Shop {
 		case 16935:  //novite rapier
 		case 18363:  //farseer kiteshield
 			return 1199;
+
+            case 6603:
+                return 6000;
 			
 		}
 		return 0;
@@ -671,6 +676,9 @@ public class DonatorShop extends Shop {
 
 			case 15015: //lunar ring (i)
 				return 1;
+
+            case 6603:
+                return 6000;
 		}
 		return 0;
 

@@ -9,6 +9,8 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.summoning.AbstractSummoningSpecial;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.misc2.SummoningBoBs;
 
 public final class PackYak extends AbstractSummoningSpecial {	
@@ -40,8 +42,9 @@ public final class PackYak extends AbstractSummoningSpecial {
 	@Override
 	public void execute(Player player) {
         Item item = player.getInventory().get(slot);
+        BankItem bankItem = new BankItem(0, item.getId(), item.getCount());
         if(player.getInventory().remove(item = Item.create(item.getId())) == 1) {
-           player.getBank().add(item);
+            Bank.addToBank(player, bankItem);
         }
         player.playAnimation(Animation.create(7660));
         player.playGraphics(Graphic.create(1300));

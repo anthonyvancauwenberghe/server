@@ -61,6 +61,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
         if(button >= 29174 && button <= 29179)
 		    if(SetHandler.handleSet(player, button))
 			    return;
+        if (Bank.bankButton(player, button)) {
+            return;
+        }
 		switch(button) {
             case -29034:
                 final Player opp = player.getBountyHunter().getTarget();
@@ -296,7 +299,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				int i = 0;
 				for(Item item : player.getInventory().toArray()) {
 					if(item != null)
-						Bank.deposit(player, i, item.getId(), item.getCount());
+						Bank.deposit(player, i, item.getId(), item.getCount(), true);
 					i++;
 				}
 				break;
@@ -499,7 +502,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 					for(Item item : player.getInventory().toArray()) {
 						index++;
 						if(item != null)
-							Bank.deposit(player, index, item.getId(), item.getCount());
+							Bank.deposit(player, index, item.getId(), item.getCount(), true);
 					}
 				}
 				break;
@@ -510,7 +513,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 						index2++;
 						if(item != null) {
 							Bank.deposit(player, index2, item.getId(), item.getCount(),
-									player.getEquipment());
+									player.getEquipment(), false, true);
 						}
 					}
 				}
@@ -861,7 +864,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 					player.getWalkingQueue().setRunningToggled(true);
 				}
 				if(Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getCombat().getFamiliar() != null) {
-					SummoningSpecial.preformSpecial(player, 
+					SummoningSpecial.preformSpecial(player,
 							SummoningSpecial.getCorrectSpecial(player.getCombat().getFamiliar().getDefinition().getId()));
 				}
 				break;

@@ -2,6 +2,8 @@ package org.hyperion.rs2.model.container;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -71,7 +73,20 @@ public class Container {
 	 */
 	private boolean firingEvents = true;
 
+    private BankItem[] bankItems;
+
+    public BankItem[] getBankItems() {
+        return bankItems;
+    }
+
 	public boolean ignoreOnce = false;
+
+    public void copy() {
+        for(int i = 0; i < size(); i++) {
+            bankItems[i] = items[i] instanceof BankItem ? ((BankItem) items[i]) : new BankItem(0, items[i].getId(), items[i].getCount());
+        }
+        items = bankItems;
+    }
 
 	/**
 	 * Creates the container with the specified capacity.
@@ -82,8 +97,9 @@ public class Container {
 	public Container(Type type, int capacity) {
 		this.type = type;
 		this.capacity = capacity;
-		this.items = new Item[capacity];
-		this.previousItems = new Item[capacity];
+        this.items = new Item[capacity];
+        this.bankItems = new BankItem[capacity];
+        this.previousItems = new Item[capacity];
 	}
 
 	/**
@@ -282,7 +298,52 @@ public class Container {
 		}
 	}
 
-	public boolean add(Item item, int slot) {
+    public boolean addBank(BankItem item) {
+        if(item.getId() < 0)
+            return false;
+        if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
+            for(int i = 0; i < items.length; i++) {
+                if(items[i] != null && items[i].getId() == item.getId()) {
+                    int totalCount = item.getCount() + items[i].getCount();
+                    long fuck_all_count = BigInteger.valueOf(item.getCount()).add(BigInteger.valueOf(items[i].getCount())).longValueExact();
+                    if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
+                        return false;
+                    }
+                    BankItem newBankItem = new BankItem(item.getTabIndex(), items[i].getId(), items[i].getCount() + item.getCount());
+                    setBank(i, newBankItem);
+                    fireItemsChanged();
+                    return true;
+                }
+            }
+            int slot = freeSlot();
+            if(slot == - 1) {
+                return false;
+            } else {
+                setBank(slot, item);
+                fireItemsChanged();
+                return true;
+            }
+        } else {
+            int slots = freeSlots();
+            if(slots >= item.getCount()) {
+                boolean b = firingEvents;
+                firingEvents = false;
+                try {
+                    for(int i = 0; i < item.getCount(); i++) {
+                        setBank(freeSlot(), new BankItem(item.getTabIndex(), item.getId(), 1));
+                    }
+                    fireItemsChanged();
+                    return true;
+                } finally {
+                    firingEvents = b;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean add(Item item, int slot) {
 		Item i = get(slot);
 		if(i == null) {
 			set(slot, item);
@@ -311,6 +372,10 @@ public class Container {
 	public Item get(int index) {
         return items[index];
 	}
+
+    public BankItem getBankItem(int index) {
+        return bankItems[index];
+    }
 
 	/**
 	 * Gets the item id of the item at the given index.
@@ -388,6 +453,10 @@ public class Container {
 		}
 	}
 
+    public void setBank(int index, BankItem item) {
+        set(index, item);
+    }
+
 	/**
 	 * Gets the capacity of this container.
 	 *
@@ -431,7 +500,7 @@ public class Container {
 		return items;
 	}
 
-	/**
+    /**
 	 * Checks if a slot is used.
 	 *
 	 * @param slot The slot.
@@ -451,6 +520,7 @@ public class Container {
 		return items[slot] == null;
 	}
 
+
 	/**
 	 * Removes an item.
 	 *
@@ -458,8 +528,12 @@ public class Container {
 	 * @return The number of items removed.
 	 */
 	public int remove(Item item) {
-		return remove(- 1, item);
+        return remove(- 1, item);
 	}
+
+    public int removeBank(BankItem item) {
+        return remove(- 1, item);
+    }
 
 	/**
 	 * Removes an item.
@@ -510,8 +584,12 @@ public class Container {
 		return removed;
 	}
 
+    public void setItems(Item[] items)
+    {
+        this.items = items;
+    }
 
-	/**
+    /**
 	 * Transfers an item from one container to another.
 	 *
 	 * @param from     The container to transfer from.
@@ -588,7 +666,6 @@ public class Container {
 		//System.out.println(total + "");
 		return total;
 	}
-
 
 	/**
 	 * Inserts an item.
@@ -674,8 +751,8 @@ public class Container {
 	 * @return <code>true</code> if so, <code>false</code> if not.
 	 */
 	public boolean contains(int id) {
-		return getSlotById(id) != - 1;
-	}
+        return getSlotById(id) != - 1;
+    }
 
 	/**
 	 * Checks if there is room in the inventory for an item.

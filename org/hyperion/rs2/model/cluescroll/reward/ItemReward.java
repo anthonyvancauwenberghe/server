@@ -3,6 +3,8 @@ package org.hyperion.rs2.model.cluescroll.reward;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -25,11 +27,12 @@ public class ItemReward extends Reward{
 
     protected boolean give(final Player player, final int amount){
         final Item item = Item.create(id, amount);
+        final BankItem bankItem = new BankItem(0, id, amount);
         if(player.getInventory().hasRoomFor(item)){
             player.getInventory().add(item);
             player.sendf("@red@%s x%,d@blu@ has been added to your inventory", item.getDefinition().getName(), amount);
         }else{
-            player.getBank().add(item);
+            Bank.addToBank(player, bankItem);
             player.sendf("@red@%s x%,d@blu@ has been added to your inventory", item.getDefinition().getName(), amount);
         }
         return true;

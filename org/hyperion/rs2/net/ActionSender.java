@@ -14,6 +14,8 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
@@ -159,7 +161,7 @@ public class ActionSender {
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
-                player.getBank().add(Item.create(15707));
+                player.getInventory().add(Item.create(15707));
             player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
 
         }

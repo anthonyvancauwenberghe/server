@@ -130,6 +130,7 @@ public class PlayerSaving {
 		saveList.add(new SavePass("Pass"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
+        saveList.add(new SaveBankPin("BankPin"));
         saveList.add(new SaveTurkeyKills("TurkeyKills"));
 		saveList.add(new SaveRank("Rank"));
 		saveList.add(new SaveCreatedString("CreatedStr"));
@@ -234,14 +235,12 @@ public class PlayerSaving {
 			BufferedWriter file = new BufferedWriter(new FileWriter(
 					getFileName(player)), BUFFER_SIZE);
 			for(SaveObject so : saveList) {
-				boolean saved = so.save(player, file);
+				boolean saved = so instanceof SaveBank ? ((SaveBank) so).saveBank(player, file) : so.save(player, file);
 				if(saved) {
 					file.newLine();
 				}
 			}
 			file.close();
-
-            player.serialize();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());
@@ -663,7 +662,10 @@ public class PlayerSaving {
 					copyFile(player.getName());
 					return;
 				}
-				so.load(player, values, in);
+                if(so instanceof SaveBank)
+				    ((SaveBank) so).loadBank(player, values, in);
+                else
+                    so.load(player, values, in);
 			}
 			in.close();
 			player.getHighscores();

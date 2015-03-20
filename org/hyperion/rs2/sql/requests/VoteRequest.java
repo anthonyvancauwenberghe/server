@@ -3,6 +3,8 @@ package org.hyperion.rs2.sql.requests;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
 
@@ -60,7 +62,11 @@ public class VoteRequest extends SQLRequest {
                 if (topg)
                     thisClaim++;
                 final int freeSlots = player.getInventory().freeSlots();
-                (freeSlots >= thisClaim ? player.getInventory() : player.getBank()).add(new Item(3062, thisClaim));
+                if(freeSlots >= thisClaim) {
+                    player.getInventory().add(new Item(3062, thisClaim));
+                } else {
+                    Bank.addToBank(player, new BankItem(0, 3062, thisClaim));
+                }
                 player.getActionSender().sendMessage(
                         String.format("@blu@Thanks for voting! @red@%d@blu@ Vote box have been added to your %s",
                                 thisClaim, (freeSlots >= thisClaim ? "inventory" : "bank"

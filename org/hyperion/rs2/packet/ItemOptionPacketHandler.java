@@ -282,21 +282,29 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, 1);
 				else if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, 1);
+					Bank.deposit(player, slot, id, 1, true);
 				}
 				break;
 			case Bank.BANK_INVENTORY_INTERFACE:
+            case Bank.BANK_INVENTORY_INTERFACE + 1:
+            case Bank.BANK_INVENTORY_INTERFACE + 2:
+            case Bank.BANK_INVENTORY_INTERFACE + 3:
+            case Bank.BANK_INVENTORY_INTERFACE + 4:
+            case Bank.BANK_INVENTORY_INTERFACE + 5:
+            case Bank.BANK_INVENTORY_INTERFACE + 6:
+            case Bank.BANK_INVENTORY_INTERFACE + 7:
+            case Bank.BANK_INVENTORY_INTERFACE + 8:
 				//player.getLogging().log("Option 1 Bank Withdraw: " + def.getName());
 				if(player.openedBoB)
 					BoB.withdraw(player, slot, id, 1);
 				else if(slot >= 0 && slot < Bank.SIZE) {
-					Bank.withdraw(player, slot, id, 1);
+					Bank.withdraw(player, id, 1);
 				}
 				break;
 			case Bank.DEPOSIT_INVENTORY_INTERFACE:
 				if(slot >= 0 && slot < Inventory.SIZE) {
 					//player.getLogging().log("Option 1 Bank Deposit : " + def.getName());
-					Bank.deposit(player, slot, id, 1);
+					Bank.deposit(player, slot, id, 1, true);
 				}
 				break;
 			case BoB.BOB_INVENTORY_INTERFACE:
@@ -416,19 +424,27 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, 5);
 				else if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, 5);
+					Bank.deposit(player, slot, id, 5, true);
 				}
 				break;
-			case Bank.BANK_INVENTORY_INTERFACE:
+            case -15448:
+            case -15447:
+            case -15446:
+            case -15445:
+            case -15444:
+            case -15443:
+            case -15442:
+            case -15441:
+            case -15440:
 				if(player.openedBoB)
 					BoB.withdraw(player, slot, id, 5);
 				else if(slot >= 0 && slot < Bank.SIZE) {
-					Bank.withdraw(player, slot, id, 5);
+					Bank.withdraw(player, id, 5);
 				}
 				break;
 			case Bank.DEPOSIT_INVENTORY_INTERFACE:
 				if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, 5);
+					Bank.deposit(player, slot, id, 5, true);
 				}
 				break;
 			case BoB.BOB_INVENTORY_INTERFACE:
@@ -520,19 +536,27 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, 10);
 				else if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, 10);
+					Bank.deposit(player, slot, id, 10, true);
 				}
 				break;
-			case Bank.BANK_INVENTORY_INTERFACE:
+            case -15448:
+            case -15447:
+            case -15446:
+            case -15445:
+            case -15444:
+            case -15443:
+            case -15442:
+            case -15441:
+            case -15440:
 				if(player.openedBoB)
 					BoB.withdraw(player, slot, id, 10);
 				else if(slot >= 0 && slot < Bank.SIZE) {
-					Bank.withdraw(player, slot, id, 10);
+					Bank.withdraw(player, id, 10);
 				}
 				break;
 			case Bank.DEPOSIT_INVENTORY_INTERFACE:
 				if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, 10);
+					Bank.deposit(player, slot, id, 10, true);
 				}
 				break;
 			case BoB.BOB_INVENTORY_INTERFACE:
@@ -616,19 +640,27 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, player.getInventory().getCount(id));
 				else if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, player.getInventory().getCount(id));
+					Bank.deposit(player, slot, id, player.getInventory().getCount(id), true);
 				}
 				break;
 			case Bank.DEPOSIT_INVENTORY_INTERFACE:
 				if(slot >= 0 && slot < Inventory.SIZE) {
-					Bank.deposit(player, slot, id, player.getInventory().getCount(id));
+					Bank.deposit(player, slot, id, player.getInventory().getCount(id), true);
 				}
 				break;
-			case Bank.BANK_INVENTORY_INTERFACE:
+            case Bank.BANK_INVENTORY_INTERFACE:
+            case Bank.BANK_INVENTORY_INTERFACE + 1:
+            case Bank.BANK_INVENTORY_INTERFACE + 2:
+            case Bank.BANK_INVENTORY_INTERFACE + 3:
+            case Bank.BANK_INVENTORY_INTERFACE + 4:
+            case Bank.BANK_INVENTORY_INTERFACE + 5:
+            case Bank.BANK_INVENTORY_INTERFACE + 6:
+            case Bank.BANK_INVENTORY_INTERFACE + 7:
+            case Bank.BANK_INVENTORY_INTERFACE + 8:
 				if(player.openedBoB)
 					BoB.withdraw(player, slot, id, player.getBoB().getCount(id));
 				else if(slot >= 0 && slot < Bank.SIZE) {
-					Bank.withdraw(player, slot, id, player.getBank().getCount(id));
+					Bank.withdraw(player, id, player.getBank().getCount(id));
 				}
 				break;
 			case BoB.BOB_INVENTORY_INTERFACE:
@@ -704,9 +736,17 @@ public class ItemOptionPacketHandler implements PacketHandler {
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
 				}
 				break;
-			case Bank.BANK_INVENTORY_INTERFACE:
+            case Bank.BANK_INVENTORY_INTERFACE:
+            case Bank.BANK_INVENTORY_INTERFACE + 1:
+            case Bank.BANK_INVENTORY_INTERFACE + 2:
+            case Bank.BANK_INVENTORY_INTERFACE + 3:
+            case Bank.BANK_INVENTORY_INTERFACE + 4:
+            case Bank.BANK_INVENTORY_INTERFACE + 5:
+            case Bank.BANK_INVENTORY_INTERFACE + 6:
+            case Bank.BANK_INVENTORY_INTERFACE + 7:
+            case Bank.BANK_INVENTORY_INTERFACE + 8:
 				if(slot >= 0 && slot < Bank.SIZE) {
-					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
+					player.getInterfaceState().openEnterAmountInterface(interfaceId, id);
 				}
 				break;
 			case Bank.DEPOSIT_INVENTORY_INTERFACE:

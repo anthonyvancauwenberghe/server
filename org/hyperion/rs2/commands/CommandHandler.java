@@ -1095,7 +1095,7 @@ public class CommandHandler {
         CommandHandler.submit(new PunishCommand("ban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("ipban", Target.IP, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("macban", Target.MAC, Type.BAN, Rank.COMMUNITY_MANAGER));
-        CommandHandler.submit(new PunishCommand("suidban", Target.SPECIAL, Type.BAN, Rank.DEVELOPER));
+        CommandHandler.submit(new PunishCommand("suidban", Target.SPECIAL, Type.BAN, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new PunishCommand("wildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new PunishCommand("ipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));
@@ -1120,7 +1120,7 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unban", Target.ACCOUNT, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipban", Target.IP, Type.BAN, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacban", Target.MAC, Type.BAN, Rank.ADMINISTRATOR));
-        CommandHandler.submit(new UnPunishCommand("unsuidban", Target.SPECIAL, Type.BAN, Rank.DEVELOPER));
+        CommandHandler.submit(new UnPunishCommand("unsuidban", Target.SPECIAL, Type.BAN, Rank.ADMINISTRATOR));
 
         CommandHandler.submit(new UnPunishCommand("unwildyforbid", Target.ACCOUNT, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new UnPunishCommand("unipwildyforbid", Target.IP, Type.WILDY_FORBID, Rank.DEVELOPER));

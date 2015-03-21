@@ -89,6 +89,14 @@ public class TabbedContainer extends Container {
         }
     }
 
+    @Override
+    public int remove(int preferredSlot, Item item) {
+        int remove = super.remove(preferredSlot, item);
+        if(remove != 0)
+            shift();
+        return remove;
+    }
+
     /**
      * Sets an item.
      *
@@ -112,7 +120,6 @@ public class TabbedContainer extends Container {
         for(int i = 0; i < items.length; i++) {
             if(old[i] != null) {
                 items[newIndex] = old[i];
-                player.getBankField().getTabAmounts()[((BankItem)items[newIndex]).getTabIndex()]++;
                 newIndex++;
             }
         }

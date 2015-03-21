@@ -58,11 +58,12 @@ public class BankField {
 
     public int getTabForSlot(int slot) {
         int offset = 0;
-        for (int index = 0; index < getTabAmounts().length; index++) {
-            if (slot >= offset && slot < offset + getTabAmounts()[index]) {
+        int[] sizes = getTabAmounts();
+        for (int index = 0; index < sizes.length; index++) {
+            if (slot >= offset && slot < offset + sizes[index]) {
                 return index;
             } else if (getTabAmounts()[index] > 0) {
-                offset += getTabAmounts()[index];
+                offset += sizes[index];
             }
         }
         return 0;

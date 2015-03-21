@@ -63,6 +63,7 @@ public class Bank {
                 return;
             }
         }       */
+        System.out.println("Opening bank: "+player.getName() + " set pin: "+false);
         player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
         player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));
         player.getInterfaceState().addListener(player.getInventory(),

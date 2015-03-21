@@ -140,11 +140,7 @@ public class Bank {
                 player.getBank().setFiringEvents(true);
                 player.getBank().set(slot, null);
                 player.getBank().shift();
-                if (player.getBankField().getTabAmounts()[tab] <= 0) {
-                    Bank.collapse(player, tab + 1, tab);
-                    player.getBank().fireItemsChanged();
-                    Bank.viewTab(player, 0);
-                }
+
             } else {
                 bankItem.setCount(newAmount);
                 player.getBank().set(slot, bankItem);

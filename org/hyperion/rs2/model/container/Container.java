@@ -39,12 +39,12 @@ public class Container {
 	/**
 	 * The capacity of this container.
 	 */
-	private int capacity;
+	protected int capacity;
 
 	/**
 	 * The items in this container.
 	 */
-	private Item[] items;
+	protected Item[] items;
 
 	/**
 	 * The items that were initially in this container.

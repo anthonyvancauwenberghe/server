@@ -136,7 +136,6 @@ public class Bank {
         if (player.getInventory().add(new Item(newId, transferAmount))) {
             int newAmount = bankItem.getCount() - transferAmount;
             if (newAmount <= 0) {
-                player.getBankField().getTabAmounts()[tab]--;
                 player.getBank().setFiringEvents(false);
                 player.getBank().set(slot, null);
                 player.getBank().shift();
@@ -225,9 +224,9 @@ public class Bank {
                 } else {
                     newItem = new Item(item.getId(), newInventoryAmount);
                 }
-                boolean contains = player.getBank().contains(bankedId);
-                BankItem t = (BankItem) player.getBank().getById(bankedId);
-                int toTab = contains ? t.getTabIndex() : player
+                //boolean contains = player.getBank().contains(bankedId);
+                Item t = player.getBank().getById(bankedId);
+                int toTab = t != null ? ((BankItem)t).getTabIndex() : player
                         .getBankField().getTabIndex();
                 BankItem toAdd = new BankItem(toTab, bankedId, transferAmount);
                 player.getBank().setFiringEvents(false);
@@ -265,11 +264,8 @@ public class Bank {
                 }
                 player.getBank().setFiringEvents(refresh);
             } else {
-                if (player.getBank().freeSlots() < transferAmount) {
-                    player.getActionSender().sendMessage("You don't have enough space in your bank account.");
-                }
                 item.setCount(transferAmount);
-                boolean contains = player.getBank().contains(item.getId());
+               // boolean contains = player.getBank().contains(item.getId());
                 int itemTab = player.getBankField().getTabIndex();
                 BankItem toAdd = new BankItem(itemTab, item.getId(), transferAmount);
                 boolean bankRefresh = player.getBank().isFiringEvents();
@@ -425,8 +421,8 @@ public class Bank {
         }
         ((BankItem) player.getBank().get(from)).setTabSlot(toTab);
         insert(player, from, to);
-        player.getBankField().getTabAmounts()[toTab]++;
-        player.getBankField().getTabAmounts()[fromTab]--;
+        //player.getBankField().getTabAmounts()[toTab]++;
+        //player.getBankField().getTabAmounts()[fromTab]--;
         return true;
     }
 
@@ -472,8 +468,8 @@ public class Bank {
     public static void swap(Player player, int currentSlot, int destinationSlot) {
         BankItem current = (BankItem) player.getBank().get(currentSlot);
         BankItem destination = (BankItem)  player.getBank().get(destinationSlot);
-        player.getBank().toArray()[destinationSlot] = current;
-        player.getBank().toArray()[currentSlot] = destination;
+        player.getBank().set(destinationSlot, current);
+        player.getBank().set(currentSlot, destination);
     }
 
 }

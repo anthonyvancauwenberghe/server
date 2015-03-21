@@ -51,7 +51,7 @@ public class TabbedContainer extends Container {
                     return true;
                 }
             }
-            int slot = player.getBankField().getOffset(bankItem.getTabIndex()) + player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
+            int slot = player.getBankField().getOffset(bankItem.getTabIndex()) + player.getBankField().getTabAmounts()[bankItem.getTabIndex()] - 1;
             if (slot == -1 || slot >= Bank.SIZE) {
                 return false;
             } else {

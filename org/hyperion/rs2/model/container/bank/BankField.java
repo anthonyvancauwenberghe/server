@@ -37,7 +37,8 @@ public class BankField {
         int[] sizes = new int[9];
         for(int i = 0; i < player.getBank().capacity(); i++) {
             final BankItem item = (BankItem)player.getBank().get(i);
-            sizes[item.getTabIndex()]++;
+            if(item != null)
+                sizes[item.getTabIndex()]++;
 
         }
         return sizes.clone();

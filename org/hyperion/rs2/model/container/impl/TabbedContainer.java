@@ -99,7 +99,7 @@ public class TabbedContainer extends Container {
 
      @Override
      public void set(int slot, Item item) {
-         if(!(item instanceof BankItem))
+         if(!(item instanceof BankItem) && item != null)
              item = item.toBankItem(player.getBankField().getTabForSlot(slot));
          super.set(slot, item);
 

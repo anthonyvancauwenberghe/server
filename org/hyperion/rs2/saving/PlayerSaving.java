@@ -665,16 +665,6 @@ public class PlayerSaving {
 				}
                 if(so instanceof SaveBank) {
                     ((SaveBank) so).loadBank(player, values, in);
-                    for(Item item : player.getBank().getItems()) {
-                        if(item instanceof BankItem && item != null) {
-                            System.out.println("BankItem: " + player.getBank().getSlotById(item.getId()));
-                        } else {
-                            if(item == null) {
-                                System.out.println("FUCK");
-                            } else
-                                System.out.println("Item: " + player.getBank().getSlotById(item.getId()));
-                        }
-                    }
                 } else {
                     try {
                         so.load(player, values, in);

@@ -51,7 +51,7 @@ public class TabbedContainer extends Container {
                     return true;
                 }
             }
-            int slot = player.getBankField().getOffset(bankItem.getTabIndex()) + player.getBankField().getTabAmounts()[bankItem.getTabIndex()] - 1;
+            int slot = player.getBankField().getOffset(bankItem.getTabIndex()) + player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
             if (slot == -1 || slot >= Bank.SIZE) {
                 return false;
             } else {
@@ -143,12 +143,14 @@ public class TabbedContainer extends Container {
      */
     @Override
     public void set(int index, Item item) {
-        if(item == null && items[index] != null) {
-            player.getBankField().getTabAmounts()[((BankItem)items[index]).getTabIndex()]--;
-        } else if(items[index] == null && item != null) {
-            player.getBankField().getTabAmounts()[((BankItem)item).getTabIndex()]++;
+        final Item old = items[index];
+        if(item == null && old != null) {
+            player.getBankField().getTabAmounts()[((BankItem)old).getTabIndex()]--;
         }
         items[index] = item;
+        if(old == null && item != null) {
+            player.getBankField().getTabAmounts()[((BankItem)item).getTabIndex()]++;
+        }
         if(isFiringEvents()) {
             fireItemChanged(index);
         }

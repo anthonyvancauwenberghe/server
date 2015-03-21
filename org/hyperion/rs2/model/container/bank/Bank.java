@@ -245,7 +245,7 @@ public class Bank {
                             player.getEquipment().fireItemsChanged();
                         }
                     }
-                    if (!contains) {
+                    /*if (!contains) {
                         if (player.getBankField().getUsedTabs() > 1) {
                             player.getBankField().getTabAmounts()[toTab]--;
                             int to = player.getBankField().getOffset(toTab)
@@ -260,7 +260,7 @@ public class Bank {
                             player.getBankField().getTabAmounts()[toTab]++;
                         }
 
-                    }
+                    } */
                     player.getBank().fireItemChanged(player.getBank().getSlotById(bankedId));
                 }
                 player.getBank().setFiringEvents(refresh);

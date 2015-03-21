@@ -97,35 +97,6 @@ public class TabbedContainer extends Container {
         return remove;
     }
 
-    /**
-     * Sets an item.
-     *
-     * @param index The position in the container.
-     * @param item  The item.
-     */
-    @Override
-    public void set(int index, Item item) {
-        items[index] = item;
-        if(isFiringEvents()) {
-            fireItemChanged(index);
-        }
-    }
-
-    @Override
-    public void shift() {
-        Item[] old = items.clone();
-        items = new Item[capacity];
-        int newIndex = 0;
-        for(int i = 0; i < items.length; i++) {
-            if(old[i] != null) {
-                set(newIndex, old[i]);
-                newIndex++;
-            }
-        }
-        if(isFiringEvents()) {
-            fireItemsChanged();
-        }
-    }
 
     @Override
     public Item get(int slot) {

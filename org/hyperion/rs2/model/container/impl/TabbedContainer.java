@@ -57,7 +57,7 @@ public class TabbedContainer extends Container {
             } else {
                 set(slot, bankItem);
                 if (!contains) {
-                    player.getBankField().getTabAmounts()[toTab]++;
+                    //player.getBankField().getTabAmounts()[toTab]++;
                 }
                 return true;
             }
@@ -71,7 +71,7 @@ public class TabbedContainer extends Container {
                         set(freeSlot(), new BankItem(bankItem.getTabIndex(), bankItem.getId(), 1));
                     }
                     if (!contains) {
-                        player.getBankField().getTabAmounts()[toTab]++;
+                        //player.getBankField().getTabAmounts()[toTab]++;
                     }
                     return true;
                 } finally {

@@ -63,7 +63,7 @@ public class CustomSet {
         for(final Container toClear : new Container[]{player.getInventory(), player.getEquipment()})
             if(!Container.transfer(toClear, player.getBank()))
                 return false;
-        for(final int id : equipmentIds) {
+        /*for(final int id : equipmentIds) {
             final Item item = Item.create(id);
             if(!EquipmentReq.canEquipItem(player, id))
                 continue;
@@ -78,7 +78,7 @@ public class CustomSet {
                 player.getInventory().add(Item.create(inventoryIds[index], player.getBank().remove(item)));
             else
                 player.getInventory().add(item);
-        }
+        } */
         return true;
     }
 

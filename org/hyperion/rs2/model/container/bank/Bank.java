@@ -291,7 +291,7 @@ public class Bank {
                         }
                     }
                     int toTab = player.getBankField().getTabIndex();
-                    int to = 0;
+                    /*int to = 0;
                     if (!contains) {
                         if (player.getBankField().getUsedTabs() > 1) {
                             player.getBankField().getTabAmounts()[toTab]--;
@@ -303,9 +303,9 @@ public class Bank {
                         }
                     } else {
                         to = player.getBank().getSlotById(item.getId());
-                    }
+                    } */
                     if (refresh) {
-                        player.getBank().fireItemChanged(to);
+                        player.getBank().fireItemChanged(player.getBank().getSlotById(id));
                     }
                 }
                 player.getBank().setFiringEvents(bankRefresh);

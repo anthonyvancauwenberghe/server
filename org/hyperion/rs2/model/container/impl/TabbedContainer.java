@@ -132,12 +132,12 @@ public class TabbedContainer extends Container {
                 if(slot != - 1) {
                     removed++;
                     set(slot, null);
+                    shift();
                 } else {
                     break;
                 }
             }
         }
-        shift();
         return removed;
     }
 
@@ -146,10 +146,12 @@ public class TabbedContainer extends Container {
          if(!(item instanceof BankItem) && item != null)
              item = item.toBankItem(player.getBankField().getTabForSlot(slot));
          items[slot] = item;
-         BankItem i = (BankItem)item;
-         if (player.getBankField().getTabAmounts()[i.getTabIndex()] <= 0) {
-             Bank.collapse(player,  i.getTabIndex() + 1, i.getTabIndex());
-             Bank.viewTab(player, 0);
+         if(item != null) {
+             BankItem i = (BankItem)item;
+             if (player.getBankField().getTabAmounts()[i.getTabIndex()] <= 0) {
+                 Bank.collapse(player,  i.getTabIndex() + 1, i.getTabIndex());
+                 Bank.viewTab(player, 0);
+             }
          }
          fireItemsChanged();
 

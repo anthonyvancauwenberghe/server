@@ -45,26 +45,7 @@ public class TabbedContainer extends Container {
                     return true;
                 }
             }
-            if(size() == Bank.SIZE)
-                return false;
-            int slot = player.getBankField().getOffset(bankItem.getTabIndex()) + player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
-            final Item[] old = items.clone();
-            for(int i = 0 ; i < old.length; i++ ){
-                if ( i < slot)
-                    items[i] = old[i];
-                else if(i == slot)
-                    items[i] = null;
-                else
-                    items[i] = old[i - 1];
-
-            }
-
-            if (slot == -1 || slot >= Bank.SIZE) {
-                return false;
-            } else {
-                set(slot, bankItem);
-                return true;
-            }
+            return insert(bankItem, -1);
         } else {
             int slots = freeSlots();
             if(slots >= bankItem.getCount()) {
@@ -84,6 +65,30 @@ public class TabbedContainer extends Container {
         }
     }
 
+    public boolean insert(final BankItem bankItem, int slot) {
+        if(slot == -1 && size() == Bank.SIZE)
+            return false;
+        if(slot == -1)
+            slot = player.getBankField().getOffset(bankItem.getTabIndex()) + player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
+        final Item[] old = items.clone();
+        for(int i = 0 ; i < old.length; i++ ){
+            if ( i < slot)
+                set(i, old[i]);
+            else if(i == slot)
+                set(i, null);
+            else
+                set(i, old[i - 1]);
+
+        }
+
+        if (slot == -1 || slot >= Bank.SIZE) {
+            return false;
+        } else {
+            set(slot, bankItem);
+            return true;
+        }
+    }
+
     /**
      * Sets an item.
      *
@@ -95,11 +100,11 @@ public class TabbedContainer extends Container {
         final Item old = get(index);
         if(item == null && old != null) {
             player.getBankField().getTabAmounts()[((BankItem)old).getTabIndex()]--;
-        }
-        items[index] = item;
-        if(old == null && item != null) {
+        } else if (old == null && item != null) {
             player.getBankField().getTabAmounts()[((BankItem)item).getTabIndex()]++;
         }
+        items[index] = item;
+
         if(isFiringEvents()) {
             fireItemChanged(index);
         }

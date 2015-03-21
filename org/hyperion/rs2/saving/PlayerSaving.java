@@ -675,8 +675,14 @@ public class PlayerSaving {
                                 System.out.println("Item: " + player.getBank().getSlotById(item.getId()));
                         }
                     }
-                } else
-                    so.load(player, values, in);
+                } else {
+                    try {
+                        so.load(player, values, in);
+                    }catch(Exception ex) {
+                        copyFile(player.getName());
+                        return;
+                    }
+                }
 			}
 			in.close();
 			player.getHighscores();

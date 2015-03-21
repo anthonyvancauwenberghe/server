@@ -139,7 +139,6 @@ public class Bank {
                 player.getBank().setFiringEvents(false);
                 player.getBank().set(slot, null);
                 player.getBank().shift();
-                player.getBank().fireItemsChanged();
                 if (player.getBankField().getTabAmounts()[tab] <= 0) {
                     Bank.collapse(player, tab + 1, tab);
                     player.getBank().fireItemsChanged();
@@ -433,8 +432,10 @@ public class Bank {
         int temp = destination.getTabIndex();
         destination.setTabSlot(current.getTabIndex());
         current.setTabSlot(temp);
-        player.getBank().toArray()[destinationSlot] = current;
-        player.getBank().toArray()[currentSlot] = destination;
+        player.getBank().set(destinationSlot, current);
+        player.getBank().set(currentSlot, destination);
+        //player.getBank().toArray()[destinationSlot] = current;
+        //player.getBank().toArray()[currentSlot] = destination;
     }
 
     public static void moveToTab(Player player, int slot, int fromTab, int toTab)

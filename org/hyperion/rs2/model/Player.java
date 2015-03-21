@@ -2063,34 +2063,38 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
-		String rank = "";
-		switch(clanRank) {
-			case 0:
-				return getName();
-			case 1:
-				rank = "Recruit";
-				break;
-			case 2:
-				rank = "Corporal";
-				break;
-			case 3:
-				rank = "Sergeant";
-				break;
-			case 4:
-				rank = "Lieutenant";
-				break;
-			case 5:
-				rank = "Owner";
-				break;
-			case 6:
-				rank = "Mod";
-				break;
-			case 7:
-				rank = "Admin";
-				break;
-		}
-		return "[" + rank + "]" + getName();
+        return getClanRankName() + getName();
 	}
+
+    public String getClanRankName() {
+        String rank = "";
+        switch(clanRank) {
+            case 0:
+                return "";
+            case 1:
+                rank = "Recruit";
+                break;
+            case 2:
+                rank = "Corporal";
+                break;
+            case 3:
+                rank = "Sergeant";
+                break;
+            case 4:
+                rank = "Lieutenant";
+                break;
+            case 5:
+                rank = "Owner";
+                break;
+            case 6:
+                rank = "Mod";
+                break;
+            case 7:
+                rank = "Admin";
+                break;
+        }
+        return "[" + rank + "]";
+    }
 
 	public void setClanRank(int r) {
 		clanRank = r;

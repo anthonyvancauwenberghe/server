@@ -232,16 +232,15 @@ public class PlayerSaving {
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			player.getActionSender().sendMessage("Saving your account");
 		}
-		try {
-			BufferedWriter file = new BufferedWriter(new FileWriter(
-					getFileName(player)), BUFFER_SIZE);
+		try (BufferedWriter file = new BufferedWriter(new FileWriter(
+                getFileName(player)), BUFFER_SIZE)){
+
 			for(SaveObject so : saveList) {
 				boolean saved = so instanceof SaveBank ? ((SaveBank) so).saveBank(player, file) : so.save(player, file);
 				if(saved) {
 					file.newLine();
 				}
 			}
-			file.close();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());

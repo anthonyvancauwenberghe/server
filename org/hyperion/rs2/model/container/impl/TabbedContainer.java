@@ -116,7 +116,6 @@ public class TabbedContainer extends Container {
         Item[] old = items;
         items = new Item[capacity];
         int newIndex = 0;
-        Arrays.fill(player.getBankField().getTabAmounts(), 0);
         for(int i = 0; i < items.length; i++) {
             if(old[i] != null) {
                 items[newIndex] = old[i];

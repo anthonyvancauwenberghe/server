@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.shops.DonatorShop;
 
 /**
@@ -98,6 +99,11 @@ public class Item {
 		int item2Value = itemDef == null ? - 1 : itemDef.getHighAlcValue();
 		return item1Value > item2Value ? getId() : itemId;
 	}
+
+
+    public BankItem toBankItem(int tab) {
+        return new BankItem(tab, this.id, this.count);
+    }
 
 	/**
 	 * Gets the definition of this item.

@@ -69,7 +69,7 @@ public class CustomSet {
             if(!EquipmentReq.canEquipItem(player, id))
                 continue;
             if(!ItemSpawning.canSpawn(id) || player.hardMode())
-                if(player.getBank().removeBank(item2) < 1)
+                if(player.getBank().remove(item2) < 1)
                     continue;
             player.getEquipment().set(Equipment.getType(Item.create(id)).getSlot(), Item.create(id));
         }
@@ -77,7 +77,7 @@ public class CustomSet {
             final Item item = Item.create(inventoryIds[index], inventoryStackSizes[index]);
             final BankItem item2 = new BankItem(0, item.getId(), item.getCount());
             if(!ItemSpawning.canSpawn(inventoryIds[index]) || player.hardMode())
-                player.getInventory().add(Item.create(inventoryIds[index], player.getBank().removeBank(item2)));
+                player.getInventory().add(Item.create(inventoryIds[index], player.getBank().remove(item2)));
             else
                 player.getInventory().add(item);
         }

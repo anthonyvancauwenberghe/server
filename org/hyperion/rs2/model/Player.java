@@ -26,6 +26,7 @@ import org.hyperion.rs2.model.container.bank.BankField;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
+import org.hyperion.rs2.model.container.impl.TabbedContainer;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
@@ -229,7 +230,7 @@ public class Player extends Entity implements Persistable, Cloneable{
         }
 
         if(!contains && add)
-            bank.addBank(new BankItem(0, id, 1));
+            bank.add(new BankItem(0, id, 1));
     }
 
 	/**
@@ -1037,7 +1038,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	/**
 	 * The player's bank.
 	 */
-	private final Container bank = new Container(Container.Type.ALWAYS_STACK, Bank.SIZE);
+	private final TabbedContainer bank = new TabbedContainer(Container.Type.ALWAYS_STACK, Bank.SIZE, this);
 
 	/**
 	 * The player's BoB.
@@ -2392,7 +2393,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                     if (item.getCount() <= amount)
 						getBank().remove(item);
                     else
-						getBank().removeBank(new BankItem(0, 995, amount));
+						getBank().remove(new BankItem(0, 995, amount));
 				}
 			}
 		}

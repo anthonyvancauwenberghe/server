@@ -2,8 +2,6 @@ package org.hyperion.rs2.model.container;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -68,25 +66,20 @@ public class Container {
 	 */
 	private Type type;
 
+    public Type getType() {
+        return type;
+    }
+
 	/**
 	 * Firing events flag.
 	 */
 	private boolean firingEvents = true;
 
-    private BankItem[] bankItems;
-
-    public BankItem[] getBankItems() {
-        return bankItems;
+    public Item[] getItems() {
+        return items;
     }
 
 	public boolean ignoreOnce = false;
-
-    public void copy() {
-        for(int i = 0; i < size(); i++) {
-            bankItems[i] = items[i] instanceof BankItem ? ((BankItem) items[i]) : new BankItem(0, items[i].getId(), items[i].getCount());
-        }
-        items = bankItems;
-    }
 
 	/**
 	 * Creates the container with the specified capacity.
@@ -98,7 +91,6 @@ public class Container {
 		this.type = type;
 		this.capacity = capacity;
         this.items = new Item[capacity];
-        this.bankItems = new BankItem[capacity];
         this.previousItems = new Item[capacity];
 	}
 
@@ -253,54 +245,10 @@ public class Container {
 	 * @return <code>true</code> if the item was added,
 	 * <code>false</code> if not.
 	 */
-	public boolean add(Item item) {
-		if(item.getId() < 0)
-			return false;
-		//System.out.println(item.getDefinition());
-		if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
-			for(int i = 0; i < items.length; i++) {
-				if(items[i] != null && items[i].getId() == item.getId()) {
-					int totalCount = item.getCount() + items[i].getCount();
-                    long fuck_all_count = BigInteger.valueOf(item.getCount()).add(BigInteger.valueOf(items[i].getCount())).longValueExact();
-                    if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
-						return false;
-					}
-					set(i, new Item(items[i].getId(), items[i].getCount() + item.getCount()));
-					return true;
-				}
-			}
-			int slot = freeSlot();
-			if(slot == - 1) {
-				return false;
-			} else {
-				set(slot, item);
-				return true;
-			}
-		} else {
-			int slots = freeSlots();
-			if(slots >= item.getCount()) {
-				boolean b = firingEvents;
-				firingEvents = false;
-				try {
-					for(int i = 0; i < item.getCount(); i++) {
-						set(freeSlot(), new Item(item.getId()));
-					}
-					if(b) {
-						fireItemsChanged();
-					}
-					return true;
-				} finally {
-					firingEvents = b;
-				}
-			} else {
-				return false;
-			}
-		}
-	}
-
-    public boolean addBank(BankItem item) {
+    public boolean add(Item item) {
         if(item.getId() < 0)
             return false;
+        //System.out.println(item.getDefinition());
         if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
             for(int i = 0; i < items.length; i++) {
                 if(items[i] != null && items[i].getId() == item.getId()) {
@@ -309,9 +257,7 @@ public class Container {
                     if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
                         return false;
                     }
-                    BankItem newBankItem = new BankItem(item.getTabIndex(), items[i].getId(), items[i].getCount() + item.getCount());
-                    setBank(i, newBankItem);
-                    fireItemsChanged();
+                    set(i, new Item(items[i].getId(), items[i].getCount() + item.getCount()));
                     return true;
                 }
             }
@@ -319,8 +265,7 @@ public class Container {
             if(slot == - 1) {
                 return false;
             } else {
-                setBank(slot, item);
-                fireItemsChanged();
+                set(slot, item);
                 return true;
             }
         } else {
@@ -330,9 +275,11 @@ public class Container {
                 firingEvents = false;
                 try {
                     for(int i = 0; i < item.getCount(); i++) {
-                        setBank(freeSlot(), new BankItem(item.getTabIndex(), item.getId(), 1));
+                        set(freeSlot(), new Item(item.getId()));
                     }
-                    fireItemsChanged();
+                    if(b) {
+                        fireItemsChanged();
+                    }
                     return true;
                 } finally {
                     firingEvents = b;
@@ -372,10 +319,6 @@ public class Container {
 	public Item get(int index) {
         return items[index];
 	}
-
-    public BankItem getBankItem(int index) {
-        return bankItems[index];
-    }
 
 	/**
 	 * Gets the item id of the item at the given index.
@@ -453,10 +396,6 @@ public class Container {
 		}
 	}
 
-    public void setBank(int index, BankItem item) {
-        set(index, item);
-    }
-
 	/**
 	 * Gets the capacity of this container.
 	 *
@@ -530,10 +469,6 @@ public class Container {
 	public int remove(Item item) {
         return remove(- 1, item);
 	}
-
-    public int removeBank(BankItem item) {
-        return remove(- 1, item);
-    }
 
 	/**
 	 * Removes an item.
@@ -621,7 +556,7 @@ public class Container {
 			if(to.add(fromItem)) {
 				from.set(i, null);
 			} else {
-				return false;//if this happens there is something seriously wrong....
+                return false;//if this happens there is something seriously wrong....
 			}
 		}
 		return true;

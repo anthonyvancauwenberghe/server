@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.shops.DonatorShop;
 
@@ -47,7 +48,7 @@ public class AccountValue {
 	}
 
 	public int getBankValue() {
-		return getContainerBankValue(player.getBank());
+		return getContainerValue(player.getBank());
 	}
 
 	public int getBobValue() {
@@ -66,22 +67,11 @@ public class AccountValue {
 		int counter = 0;
 		if(container == null)
 			return counter;
-		for(Item item : container.toArray()) {
-			counter += getItemValue(item);
-		}
-		return counter;
-	}
-
-    public static int getContainerBankValue(Container container) {
-        int counter = 0;
-        if(container == null)
-            return counter;
-        for(Item item : container.toArray()) {
+        for (Item item : container.toArray()) {
             counter += getItemValue(item);
         }
-        return counter;
-    }
-
+		return counter;
+	}
 	/**
 	 * Gets the account value of the item, not forgetting about the item amount/items being noted.
 	 *

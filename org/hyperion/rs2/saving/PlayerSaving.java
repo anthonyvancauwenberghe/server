@@ -24,6 +24,7 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
@@ -662,9 +663,19 @@ public class PlayerSaving {
 					copyFile(player.getName());
 					return;
 				}
-                if(so instanceof SaveBank)
-				    ((SaveBank) so).loadBank(player, values, in);
-                else
+                if(so instanceof SaveBank) {
+                    ((SaveBank) so).loadBank(player, values, in);
+                    for(Item item : player.getBank().getItems()) {
+                        if(item instanceof BankItem && item != null) {
+                            System.out.println("BankItem: " + player.getBank().getSlotById(item.getId()));
+                        } else {
+                            if(item == null) {
+                                System.out.println("FUCK");
+                            } else
+                                System.out.println("Item: " + player.getBank().getSlotById(item.getId()));
+                        }
+                    }
+                } else
                     so.load(player, values, in);
 			}
 			in.close();

@@ -1234,7 +1234,7 @@ public class DialogueManager {
                 player.sendMessage("DeviousPK wishes you happy thanks-giving!");
                 player.getActionSender().removeChatboxInterface();
                 player.sendMessage("@red@You have received x1 Web cloak to your bank account!");
-                Bank.addToBank(player, new BankItem(0, 15352, 1));
+                player.getBank().add(new BankItem(0, 15352, 1));
                 break;
 
             case 184: //gala

@@ -643,7 +643,7 @@ public class FightPits implements ContentTemplate {
 				if(timeStood > 6)
 					timeStood = 6;
 				if(getReward) {
-                    Bank.addToBank(player, new BankItem(0, 5020, timeStood));
+                    player.getBank().add(new BankItem(0, 5020, timeStood));
 					player.sendMessage(String.format("%d PK Tickets were sent to your bank for your efforts!", timeStood));
 				} else {
 					player.sendMessage("You don't get any reward due to lack of participation");

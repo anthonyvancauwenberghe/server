@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ContainerListener;
+import org.hyperion.rs2.model.container.impl.TabbedContainer;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -18,8 +19,10 @@ public class BankContainerListener implements ContainerListener {
     }
 
     @Override
-    public void itemChanged(Container container, int slot) {
+    public void itemChanged(Container c, int slot) {
+        TabbedContainer container = (TabbedContainer) c;
         int tab = player.getBankField().getTabForSlot(slot);
+        System.out.println(slot);
         if (slot > Byte.MAX_VALUE) {
             itemsChanged(container);
         } else {

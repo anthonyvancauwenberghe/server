@@ -15,7 +15,7 @@ public class BankPin {
 	 *  14883, 14884, 14885, 14886, 14887, 14888, 14889, 14890, 14891, 14892
 	 */
 	public static void loadUpPinInterface(Player player) {
-		if(player.bankPin.length() < 4) {
+		if(player.bankPin.length() < 4 || player.bankPin.equals("null")) {
 			//ok were setting the pin here
 			player.bankPin = "";
 			player.getActionSender().sendString(14923, "Please enter the FIRST digit of your NEW Pin.");

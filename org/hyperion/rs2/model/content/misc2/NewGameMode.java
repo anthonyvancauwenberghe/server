@@ -135,7 +135,7 @@ public class NewGameMode implements ContentTemplate {
                 player.getInventory().add(Item.create(995, 15_000_000));
                 for(int i = 0; i < IRON_STARTER.length; i++) {
                     try {
-                        Bank.addToBank(player, new BankItem(0, IRON_STARTER[i][0], IRON_STARTER[i][1]));
+                        player.getBank().add(new BankItem(0, IRON_STARTER[i][0], IRON_STARTER[i][1]));
                     }catch(Exception e) {
                         e.printStackTrace();
                     }
@@ -152,7 +152,7 @@ public class NewGameMode implements ContentTemplate {
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {
                     try {
-                        Bank.addToBank(player, new BankItem(0, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
+                        player.getBank().add(new BankItem(0, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
                     }catch(Exception e) {
                         e.printStackTrace();
                     }

@@ -44,7 +44,7 @@ public final class PackYak extends AbstractSummoningSpecial {
         Item item = player.getInventory().get(slot);
         BankItem bankItem = new BankItem(0, item.getId(), item.getCount());
         if(player.getInventory().remove(item = Item.create(item.getId())) == 1) {
-            Bank.addToBank(player, bankItem);
+            player.getBank().add(bankItem);
         }
         player.playAnimation(Animation.create(7660));
         player.playGraphics(Graphic.create(1300));

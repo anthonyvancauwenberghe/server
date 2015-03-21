@@ -120,9 +120,9 @@ public abstract class SaveContainer extends SaveObject {
 
     public BankItem[] getBankContainer(Player player) {
         BankItem[] items = new BankItem[Bank.SIZE];
-        player.getBank().copy();
         for(int i = 0; i < player.getBank().size(); i++) {
-            items[i] = player.getBank().getBankItems()[i];
+            items[i] = (BankItem) player.getBank().get(i);
+            System.out.println("Slot: " + i);
         }
         return items;
     };

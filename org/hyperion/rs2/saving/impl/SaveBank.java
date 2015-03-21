@@ -24,7 +24,10 @@ public class SaveBank extends SaveContainer {
 
 	@Override
 	public void loadItem(Player player, Item item) {
-        Bank.addToBank(player,(BankItem) item);
+        BankItem bankItem = (BankItem) item;
+        if(!player.getBank().add(new BankItem(bankItem.getTabIndex(), bankItem.getId(), bankItem.getCount()))) {
+            return;
+        }
 	}
 
 }

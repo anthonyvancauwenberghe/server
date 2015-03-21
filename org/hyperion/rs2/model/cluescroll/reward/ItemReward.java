@@ -32,7 +32,7 @@ public class ItemReward extends Reward{
             player.getInventory().add(item);
             player.sendf("@red@%s x%,d@blu@ has been added to your inventory", item.getDefinition().getName(), amount);
         }else{
-            Bank.addToBank(player, bankItem);
+            player.getBank().add(bankItem);
             player.sendf("@red@%s x%,d@blu@ has been added to your inventory", item.getDefinition().getName(), amount);
         }
         return true;

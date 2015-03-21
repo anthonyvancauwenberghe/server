@@ -80,6 +80,9 @@ public class ActionSender {
 	 */
 	public ActionSender sendInterfaceInventory(int interfaceId,
 	                                           int inventoryInterfaceId) {
+        if(interfaceId == 5292) {
+            System.out.println("Player opened bank: "+player.getName());
+        }
 		player.getInterfaceState().interfaceOpened(interfaceId);
 		player.write(new PacketBuilder(248).putShortA(interfaceId)
 				.putShort(inventoryInterfaceId).toPacket());

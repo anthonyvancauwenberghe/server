@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.container.bank;
 
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.net.PacketBuilder;
 
@@ -33,7 +34,13 @@ public class BankField {
     }
 
     public int[] getTabAmounts() {
-        return tabAmounts;
+        int[] sizes = new int[9];
+        for(int i = 0; i < player.getBank().capacity(); i++) {
+            final BankItem item = (BankItem)player.getBank().get(i);
+            sizes[item.getTabIndex()]++;
+
+        }
+        return sizes.clone();
     }
 
     public void setLoadError(boolean loadError) {

@@ -97,14 +97,7 @@ public class TabbedContainer extends Container {
      */
     @Override
     public void set(int index, Item item) {
-        final Item old = get(index);
-        if(item == null && old != null) {
-            player.getBankField().getTabAmounts()[((BankItem)old).getTabIndex()]--;
-        } else if (old == null && item != null) {
-            player.getBankField().getTabAmounts()[((BankItem)item).getTabIndex()]++;
-        }
         items[index] = item;
-
         if(isFiringEvents()) {
             fireItemChanged(index);
         }
@@ -115,14 +108,6 @@ public class TabbedContainer extends Container {
         Item[] old = items;
         items = new Item[capacity];
         int newIndex = 0;
-        Arrays.fill(player.getBankField().getTabAmounts(), 0);
-        for(int i = 0; i < items.length; i++) {
-            if(old[i] != null) {
-                items[newIndex] = old[i];
-                player.getBankField().getTabAmounts()[((BankItem)items[newIndex]).getTabIndex()]++;
-                newIndex++;
-            }
-        }
         if(isFiringEvents()) {
             fireItemsChanged();
         }

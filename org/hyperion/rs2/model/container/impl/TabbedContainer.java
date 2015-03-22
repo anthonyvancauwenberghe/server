@@ -115,9 +115,18 @@ public class TabbedContainer extends Container {
                 removed = item.getCount();
                 set(slot, new Item(stack.getId(), stack.getCount() - item.getCount()));
             } else {
+                int tab = stack.getTabIndex();
                 removed = stack.getCount();
                 set(slot, null);
-                shift();
+                if (player.getBankField().getTabAmounts()[stack.getTabIndex()] <= 0) {
+                    setFiringEvents(false);
+                    Bank.collapse(player, tab + 1, tab);
+                    Bank.viewTab(player, 0);
+                    shift();
+                    fireItemsChanged();
+                    setFiringEvents(true);
+                } else
+                    shift();
             }
         } else {
             for(int i = 0; i < item.getCount(); i++) {

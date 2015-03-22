@@ -63,7 +63,6 @@ public class Bank {
                 return;
             }
         }
-        System.out.println("Opening bank: "+player.getName() + " set pin: "+false);
         player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
         player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));
         player.getInterfaceState().addListener(player.getInventory(),
@@ -396,8 +395,6 @@ public class Bank {
         }
         int itemSlot = player.getBankField().getOffset(tab);
         int initialTabAmount = player.getBankField().getTabAmounts()[tab];
-        System.out.println("Item Slot: " + player.getBankField().getOffset(tab));
-        System.out.println("Tab Amount: " + player.getBankField().getTabAmounts()[tab]);
         for (int fromSlot = 0; fromSlot < initialTabAmount; fromSlot++) {
             if (player.getBank().get(itemSlot) != null) {
                 toTab(player, tab, toTab, 0);

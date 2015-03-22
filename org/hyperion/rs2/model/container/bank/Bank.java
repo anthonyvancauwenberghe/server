@@ -405,16 +405,19 @@ public class Bank {
         player.sendMessage("This may take a while!");
         boolean b = player.getBank().isFiringEvents();
         player.getBank().setFiringEvents(false);
-
-
-        for(final BankItem item : player.getBankField().itemsForTab(tab)) {
-            item.setTabSlot(toTab);
-            if(player.getBank().remove(item) > 0) {
-                player.getBank().add(item);
+        int start = tab + 1;
+        if(player.getBankField().getTabAmounts()[toTab] > 0) {
+            for(final BankItem item : player.getBankField().itemsForTab(tab)) {
+                item.setTabSlot(toTab);
+                if(player.getBank().remove(item) > 0) {
+                    player.getBank().add(item);
+                }
             }
+        } else {
+            start = tab;
         }
 
-        for(int i = tab + 1; i <= player.getBankField().getUsedTabs(); i++) {
+        for(int i = start; i <= player.getBankField().getUsedTabs(); i++) {
             for(final BankItem item : player.getBankField().itemsForTab(i)) {
                 item.setTabSlot(item.getTabIndex() - 1);
             }

@@ -298,7 +298,7 @@ public class CommandHandler {
 			}
 
 		});
-		submit(new Command("tmask", Rank.ADMINISTRATOR) {
+        submit(new Command("tmask", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int l2 = 0;

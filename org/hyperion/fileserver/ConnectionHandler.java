@@ -16,39 +16,39 @@ import java.util.logging.Logger;
  */
 public class ConnectionHandler extends IoHandlerAdapter {
 
-	/**
-	 * Logger instance.
-	 */
-	private static final Logger logger = Logger.getLogger(ConnectionHandler.class.getName());
+    /**
+     * Logger instance.
+     */
+    private static final Logger logger = Logger.getLogger(ConnectionHandler.class.getName());
 
-	/**
-	 * The type of handler we are.
-	 */
-	private Type type;
+    /**
+     * The type of handler we are.
+     */
+    private Type type;
 
-	/**
-	 * Creates the handler.
-	 *
-	 * @param type The type of handler.
-	 */
-	public ConnectionHandler(Type type) {
-		this.type = type;
-	}
+    /**
+     * Creates the handler.
+     *
+     * @param type The type of handler.
+     */
+    public ConnectionHandler(Type type) {
+        this.type = type;
+    }
 
-	@Override
-	public void exceptionCaught(IoSession session, Throwable throwable) throws Exception {
-		logger.log(Level.SEVERE, "Error while handling request.", throwable);
-	}
+    @Override
+    public void exceptionCaught(IoSession session, Throwable throwable) throws Exception {
+        logger.log(Level.SEVERE, "Error while handling request.", throwable);
+    }
 
-	@Override
-	public void messageReceived(IoSession session, Object in) throws Exception {
-		((UpdateSession) session.getAttribute("session")).readLine((String) in);
-	}
+    @Override
+    public void messageReceived(IoSession session, Object in) throws Exception {
+        ((UpdateSession) session.getAttribute("session")).readLine((String) in);
+    }
 
-	@Override
-	public void sessionOpened(IoSession session) throws Exception {
-		session.getFilterChain().addFirst("textFilter", new ProtocolCodecFilter(new TextLineCodecFactory()));
-		session.setAttribute("session", new UpdateSession(type, session));
-	}
+    @Override
+    public void sessionOpened(IoSession session) throws Exception {
+        session.getFilterChain().addFirst("textFilter", new ProtocolCodecFilter(new TextLineCodecFactory()));
+        session.setAttribute("session", new UpdateSession(type, session));
+    }
 
 }

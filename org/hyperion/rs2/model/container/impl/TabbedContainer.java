@@ -118,7 +118,7 @@ public class TabbedContainer extends Container {
                 int tab = stack.getTabIndex();
                 removed = stack.getCount();
                 set(slot, null);
-                if (player.getBankField().getTabAmounts()[stack.getTabIndex()] <= 0) {
+                if (player.getBankField().getTabAmounts()[tab] <= 0) {
                     setFiringEvents(false);
                     Bank.collapse(player, tab + 1, tab);
                     Bank.viewTab(player, 0);

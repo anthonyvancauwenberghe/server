@@ -76,6 +76,17 @@ public class BankField {
         return 0;
     }
 
+    public BankItem[] itemsForTab(int tab) {
+        int itemSlot = player.getBankField().getOffset(tab);
+        int initialTabAmount = player.getBankField().getTabAmounts()[tab];
+        final BankItem[] items = new BankItem[initialTabAmount];
+
+        for(int i = itemSlot; i < initialTabAmount + itemSlot; i++) {
+            items[i - itemSlot] = (BankItem)player.getBank().get(i);
+        }
+        return items;
+    }
+
     public int getUsedTabs() {
         int tabs = 0;
         for (int amount : getTabAmounts()) {

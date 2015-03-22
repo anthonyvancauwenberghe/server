@@ -400,19 +400,34 @@ public class Bank {
         if ((tab <= 0) || (toTab == tab) || (tab >= player.getBankField().getTabAmount())) {
             return;
         }
-        int itemSlot = player.getBankField().getOffset(tab);
-        int initialTabAmount = player.getBankField().getTabAmounts()[tab];
+
+
         player.sendMessage("This may take a while!");
         boolean b = player.getBank().isFiringEvents();
         player.getBank().setFiringEvents(false);
-        for (int fromSlot = 0; fromSlot < initialTabAmount; fromSlot++) {
+
+
+        for(final BankItem item : player.getBankField().itemsForTab(tab)) {
+            item.setTabSlot(toTab);
+            if(player.getBank().remove(item) > 0) {
+                player.getBank().add(item);
+            }
+        }
+
+        for(int i = tab + 1; i < player.getBankField().getUsedTabs(); i++) {
+            for(final BankItem item : player.getBankField().itemsForTab(i)) {
+                item.setTabSlot(item.getTabIndex() - 1);
+            }
+        }
+
+       /* for (int fromSlot = 0; fromSlot < initialTabAmount; fromSlot++) {
             if (player.getBank().get(itemSlot) != null) {
                 toTab(player, tab, toTab, 0);
             }
         }
         if (tab != player.getBankField().getUsedTabs()) {
             collapse(player, tab + 1, tab);
-        }
+        }  */
         player.getBank().fireItemsChanged();
         player.getBank().setFiringEvents(b);
         player.getActionSender().sendClientConfig(1009, player.getBankField().isInserting() ? 0 : 1);

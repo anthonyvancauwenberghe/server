@@ -35,6 +35,7 @@ public class SwitchItemPacketHandler implements PacketHandler {
                 return;
             }
             int tab = (interfaceId + 15448);
+            System.out.println("From tab: "+fromTab + " To tab: "+tab);
             if(tab >= player.getBankField().getTabAmount()) {
                 player.getActionSender().removeAllInterfaces();
                 DialogueManager.openDialogue(player, 6500);

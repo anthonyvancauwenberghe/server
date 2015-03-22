@@ -47,7 +47,7 @@ public class BankContainerListener implements ContainerListener {
                 player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, items);
             }
             for(; tab < 9; tab++) {
-                player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, new Item[0]);
+                player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, new Item[Bank.SIZE]);
             }
         }
     }

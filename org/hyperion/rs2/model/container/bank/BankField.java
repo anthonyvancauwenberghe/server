@@ -37,14 +37,15 @@ public class BankField {
         int[] sizes = new int[tabAmount];
         for(int i = 0; i < player.getBank().capacity(); i++) {
             final BankItem item = (BankItem)player.getBank().get(i);
-            if(item.getTabIndex() >= tabAmount) {
-                item.setTabSlot(0);
-                player.getBank().remove(item);
-                player.getBank().add(item);
-                System.err.println("BANK TAB OVERFLOW SIZE FOR "+player.getName() + " BY ITEM: "+item.getDefinition().getName());
-            }
-            if(item != null)
+            if(item != null) {
+                if(item.getTabIndex() >= tabAmount) {
+                    item.setTabSlot(0);
+                    player.getBank().remove(item);
+                    player.getBank().add(item);
+                    System.err.println("BANK TAB OVERFLOW SIZE FOR "+player.getName() + " BY ITEM: "+item.getDefinition().getName());
+                }
                 sizes[item.getTabIndex()]++;
+            }
 
         }
         return sizes.clone();

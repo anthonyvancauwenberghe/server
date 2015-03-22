@@ -385,7 +385,7 @@ public class Bank {
         if (tab == player.getBankField().getTabIndex()) {
             return;
         }
-        if ((player.getBankField().getTabAmounts()[tab] <= 0) && (tab > 0)) {
+        if ((player.getBankField().getTabAmounts()[tab] <= 1) && (tab > 0)) {
             player.sendMessage("Drag an item here to create a new tab.");
             return;
         }

@@ -393,16 +393,29 @@ public class Bank {
     }
 
     public static void collapse(Player player, int tab, int toTab) {
-        if ((tab <= 0) || (toTab == tab) || (tab >= 9)) {
+        if ((tab <= 0) || (toTab == tab) || (tab >= player.getBankField().getTabAmount())) {
             return;
         }
         int itemSlot = player.getBankField().getOffset(tab);
         int initialTabAmount = player.getBankField().getTabAmounts()[tab];
-        for (int fromSlot = 0; fromSlot < initialTabAmount; fromSlot++) {
+        for(int i = itemSlot; i < itemSlot + initialTabAmount; i++) {
+            boolean firing = player.getBank().isFiringEvents();
+            player.getBank().setFiringEvents(false);
+            final BankItem item = (BankItem)player.getBank().get(i);
+            if(item != null) {
+                player.getBank().set(i, null);
+                item.setTabSlot(toTab);
+                player.getBank().add(item);
+            }
+            player.getBank().fireItemsChanged();
+            player.getBank().setFiringEvents(firing);
+
+        }
+       /* for (int fromSlot = 0; fromSlot < initialTabAmount; fromSlot++) {
             if (player.getBank().get(itemSlot) != null) {
                 toTab(player, tab, toTab, 0);
             }
-        }
+        }  */
         if (tab != player.getBankField().getUsedTabs()) {
             collapse(player, tab + 1, tab);
         }

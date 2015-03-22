@@ -645,6 +645,7 @@ public class CommandPacketHandler implements PacketHandler {
             monster.summoned = true;
             player.cE.summonedNpc = monster;
             monster.playGraphics(Graphic.create(1315));
+            SummoningMonsters.openSummonTab(player,monster);
         }
 
 		if (commandStart.equals("startminigame"))

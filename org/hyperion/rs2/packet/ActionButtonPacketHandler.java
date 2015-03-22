@@ -872,6 +872,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			case 153:// run
 				player.getWalkingQueue().setRunningToggled(!player.getWalkingQueue().isRunningToggled());
 				break;
+            case 17015:
 			case 10135: //summoning special
 				if(player.getCombat().getFamiliar() != null)
 				SummoningSpecial.preformSpecial(player,
@@ -879,9 +880,12 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
 				break;
 			case 10136: //dismiss
+            case 17023:
 				player.SummoningCounter = 0;
+                player.getActionSender().sendSidebarInterface(15, -1);
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
+            case 17022:
             case 10137:
                 if(player.cE.summonedNpc == null) {
                     player.sendMessage("You don't have a summoned familiar");

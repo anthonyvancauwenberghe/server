@@ -414,7 +414,7 @@ public class Bank {
             }
         }
 
-        for(int i = tab + 1; i < player.getBankField().getUsedTabs(); i++) {
+        for(int i = tab + 1; i <= player.getBankField().getUsedTabs(); i++) {
             for(final BankItem item : player.getBankField().itemsForTab(i)) {
                 item.setTabSlot(item.getTabIndex() - 1);
             }

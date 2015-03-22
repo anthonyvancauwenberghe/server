@@ -162,7 +162,8 @@ public class ClanManager {
 
         message = message.replace("req:", "req");
 
-		message = "[@red@"+TextUtils.titleCase(player.getClanName())+"@bla@] " + player.getName() + ": @bla@" + message;
+        final String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRankName().substring(0, 1) + "] ";
+		message = "[@blu@"+TextUtils.titleCase(player.getClanName())+"@bla@]" + displayRank + player.getName() + ": @dre@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {
 			player.getActionSender().sendMessage("You need to join a clan chat before you can send messages.");

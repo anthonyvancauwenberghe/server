@@ -67,7 +67,7 @@ public class TabbedContainer extends Container {
         }
     }
 
-    public boolean insert(final BankItem bankItem, int slot) {
+    public synchronized boolean insert(final BankItem bankItem, int slot) {
         if(slot == -1 && size() == Bank.SIZE)
             return false;
         if(slot == -1)

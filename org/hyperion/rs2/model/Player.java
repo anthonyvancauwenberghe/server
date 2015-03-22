@@ -2093,7 +2093,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 rank = "Admin";
                 break;
         }
-        return "[" + rank + "]";
+        return "" + rank + "";
     }
 
 	public void setClanRank(int r) {

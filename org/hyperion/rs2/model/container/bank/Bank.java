@@ -135,17 +135,18 @@ public class Bank {
         }
         if (player.getInventory().add(new Item(newId, transferAmount))) {
             int newAmount = bankItem.getCount() - transferAmount;
+            boolean b = player.getBank().isFiringEvents();
             if (newAmount <= 0) {
+                player.getBank().setFiringEvents(false);
                 player.getBank().set(slot, null);
                 player.getBank().shift();
-                player.getBank().setFiringEvents(false);
                 if(player.getBankField().getTabAmounts()[tab] <= 0) {
                     Bank.collapse(player, tab + 1, tab);
                     player.getBank().fireItemsChanged();
                     Bank.viewTab(player, 0);
                 }
-
-                player.getBank().setFiringEvents(true);
+                player.getBank().fireItemChanged(slot);
+                player.getBank().setFiringEvents(b);
 
             } else {
                 bankItem.setCount(newAmount);

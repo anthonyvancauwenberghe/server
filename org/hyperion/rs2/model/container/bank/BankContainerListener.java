@@ -46,9 +46,6 @@ public class BankContainerListener implements ContainerListener {
                 Item[] items = Arrays.copyOf(Arrays.copyOfRange(player.getBank().toArray(), from, to), Bank.SIZE);
                 player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, items);
             }
-            for(; tab < 9; tab++) {
-                player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, new Item[1]);
-            }
         }
     }
 

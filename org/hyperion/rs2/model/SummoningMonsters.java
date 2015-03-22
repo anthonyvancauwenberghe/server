@@ -45,6 +45,7 @@ public class SummoningMonsters {
 		}
 
 		p.SummoningCounter--;
+        refreshSummonTab(p, p.cE.summonedNpc);
 	        /*if(p.cE.summonedNpc.cE.getOpponent() == null)
 				p.cE.summonedNpc.cE.face(p.getLocation().getX(), p.getLocation().getY());*/
 		int distance = Misc.distance(p.getLocation().getX(), p
@@ -125,8 +126,30 @@ public class SummoningMonsters {
 		monster.summoned = true;
 		p.cE.summonedNpc = monster;
 		monster.playGraphics(Graphic.create(1315));
-
+        openSummonTab(p, monster);
 	}
+
+    public static void openSummonTab(Player player, NPC npc) {
+        player.getActionSender().sendSidebarInterface(15, 17011);
+        player.getActionSender().sendNPCHead(npc.getDefinition().getId(),17027,0);
+        refreshSummonTab(player,npc);
+    }
+
+    public static void refreshSummonTab(Player player, NPC npc) {
+        player.getActionSender().sendString(17017, npc.getDefinition().getName());
+        player.getActionSender().sendString(17021, getTimeForTick(player.SummoningCounter));
+        player.getActionSender().sendString(17025, player.getSkills().getLevel(Skills.SUMMONING) + "/" + player.getSkills().getLevelForExp(Skills.SUMMONING));
+    }
+
+    public static String getTimeForTick(int tick) {
+        long ms = tick * 600;
+        int totalMinutes = (int)(ms / 1000);
+        int hourLeft = (totalMinutes) / 60;
+        int minutesLeft = totalMinutes % 60;
+        String hour = (hourLeft > 10) ? ("" + hourLeft) : ("0" + hourLeft);
+        String minute = (minutesLeft > 10) ? ("" + minutesLeft) : ("0" + minutesLeft);
+        return hour + ":" + minute;
+    }
 
 	public static final int[][] BOB_NPCS = {
 			//id,space,specific item

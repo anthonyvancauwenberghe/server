@@ -153,7 +153,8 @@ public class TabbedContainer extends Container {
                  Bank.viewTab(player, 0);
              }
          }
-         fireItemsChanged();
+         if(isFiringEvents())
+            fireItemsChanged();
 
      }
 

@@ -153,6 +153,7 @@ public class TabbedContainer extends Container {
              if (player.getBankField().getTabAmounts()[tab] <= 0) {
                  Bank.collapse(player,  tab + 1, tab);
                  Bank.viewTab(player, 0);
+                 fireItemsChanged();
              }
          }
          if(fire)

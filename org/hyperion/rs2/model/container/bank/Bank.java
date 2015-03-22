@@ -382,6 +382,10 @@ public class Bank {
         if (player.getBankField().isSearching()) {
             player.getBankField().setSearching(false);
         }
+        if(tab > player.getBankField().getTabAmounts().length - 1){
+            player.sendMessage("Drag an item here to create a new tab.");
+            return;
+        }
         if (tab == player.getBankField().getTabIndex()) {
             return;
         }

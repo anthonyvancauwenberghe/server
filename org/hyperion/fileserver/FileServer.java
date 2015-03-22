@@ -17,62 +17,62 @@ import java.net.InetSocketAddress;
  */
 public class FileServer {
 
-	/**
-	 * The HTTP port to listen on.
-	 */
-	public static final int HTTP_PORT = 8080;
+    /**
+     * The HTTP port to listen on.
+     */
+    public static final int HTTP_PORT = 8080;
 
-	/**
-	 * The JAGGRAB port to listen on.
-	 */
-	public static final int JAGGRAB_PORT = getJaggrabPort();
+    /**
+     * The JAGGRAB port to listen on.
+     */
+    public static final int JAGGRAB_PORT = getJaggrabPort();
 
-	public static int getJaggrabPort() {
-		return 43595;
-	}
+    public static int getJaggrabPort() {
+        return 43595;
+    }
 
-	/**
-	 * Logger instance.
-	 */
-	//private static final Logger logger = Logger.getLogger(FileServer.class.getName());
+    /**
+     * Logger instance.
+     */
+    //private static final Logger logger = Logger.getLogger(FileServer.class.getName());
 
-	/**
-	 * The <code>IoAcceptor</code> instance.
-	 */
-	private final IoAcceptor jaggrabAcceptor = new NioSocketAcceptor();
+    /**
+     * The <code>IoAcceptor</code> instance.
+     */
+    private final IoAcceptor jaggrabAcceptor = new NioSocketAcceptor();
 
-	/**
-	 * The <code>IoAcceptor</code> instance.
-	 */
-	private final IoAcceptor httpAcceptor = new NioSocketAcceptor();
+    /**
+     * The <code>IoAcceptor</code> instance.
+     */
+    private final IoAcceptor httpAcceptor = new NioSocketAcceptor();
 
-	/**
-	 * Creates the jaggrab server.
-	 */
-	public FileServer() {
-		jaggrabAcceptor.setHandler(new ConnectionHandler(Type.JAGGRAB));
-		httpAcceptor.setHandler(new ConnectionHandler(Type.HTTP));
-	}
+    /**
+     * Creates the jaggrab server.
+     */
+    public FileServer() {
+        jaggrabAcceptor.setHandler(new ConnectionHandler(Type.JAGGRAB));
+        httpAcceptor.setHandler(new ConnectionHandler(Type.HTTP));
+    }
 
-	/**
-	 * Binds the server to the ports.
-	 *
-	 * @return The server instance, for chaining.
-	 * @throws IOException
-	 */
-	public FileServer bind() throws IOException {
-		//logger.info("Binding to port : " + JAGGRAB_PORT + "...");
-		jaggrabAcceptor.bind(new InetSocketAddress(JAGGRAB_PORT));
-		//logger.info("Binding to port : " + HTTP_PORT + "...");
-		httpAcceptor.bind(new InetSocketAddress(HTTP_PORT));
-		return this;
-	}
+    /**
+     * Binds the server to the ports.
+     *
+     * @return The server instance, for chaining.
+     * @throws IOException
+     */
+    public FileServer bind() throws IOException {
+        //logger.info("Binding to port : " + JAGGRAB_PORT + "...");
+        jaggrabAcceptor.bind(new InetSocketAddress(JAGGRAB_PORT));
+        //logger.info("Binding to port : " + HTTP_PORT + "...");
+        httpAcceptor.bind(new InetSocketAddress(HTTP_PORT));
+        return this;
+    }
 
-	/**
-	 * Starts the jaggrab server.
-	 */
-	public void start() {
-		//logger.info("Ready");
-	}
+    /**
+     * Starts the jaggrab server.
+     */
+    public void start() {
+        //logger.info("Ready");
+    }
 
 }

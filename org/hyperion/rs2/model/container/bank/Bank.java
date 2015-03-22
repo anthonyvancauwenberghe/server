@@ -147,7 +147,6 @@ public class Bank {
                     Bank.viewTab(player, 0);
                     player.getBank().setFiringEvents(b);
                 }
-                player.getBank().fireItemChanged(slot);
 
             } else {
                 bankItem.setCount(newAmount);

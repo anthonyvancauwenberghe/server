@@ -143,13 +143,14 @@ public class TabbedContainer extends Container {
 
      @Override
      public void set(int slot, Item item) {
+         int tab = player.getBankField().getTabForSlot(slot);
          if(!(item instanceof BankItem) && item != null)
              item = item.toBankItem(player.getBankField().getTabForSlot(slot));
          items[slot] = item;
-         if(item != null) {
+         if(item == null) {
              BankItem i = (BankItem)item;
-             if (player.getBankField().getTabAmounts()[i.getTabIndex()] <= 0) {
-                 Bank.collapse(player,  i.getTabIndex() + 1, i.getTabIndex());
+             if (player.getBankField().getTabAmounts()[tab] <= 0) {
+                 Bank.collapse(player,  tab + 1, tab);
                  Bank.viewTab(player, 0);
              }
          }

@@ -39,7 +39,7 @@ public class BankContainerListener implements ContainerListener {
     @Override
     public void itemsChanged(Container container) {
         if (!player.getBankField().isSearching()) {
-            for (int tab = 0; tab < 9; tab++) {
+            for (int tab = 0; tab < player.getBankField().getTabAmount(); tab++) {
                 int from = player.getBankField().getOffset(tab);
                 int to = from + player.getBankField().getTabAmounts()[tab];
                 Item[] items = Arrays.copyOf(Arrays.copyOfRange(player.getBank().toArray(), from, to), Bank.SIZE);

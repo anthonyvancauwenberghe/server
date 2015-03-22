@@ -117,6 +117,7 @@ public class TabbedContainer extends Container {
             } else {
                 removed = stack.getCount();
                 set(slot, null);
+                shift();
             }
         } else {
             for(int i = 0; i < item.getCount(); i++) {

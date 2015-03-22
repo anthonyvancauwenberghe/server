@@ -132,6 +132,7 @@ public class PlayerSaving {
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
         saveList.add(new SaveBankPin("BankPin"));
+        saveList.add(new SaveTabAmount());
         saveList.add(new SaveTurkeyKills("TurkeyKills"));
 		saveList.add(new SaveRank("Rank"));
 		saveList.add(new SaveCreatedString("CreatedStr"));
@@ -207,7 +208,6 @@ public class PlayerSaving {
         saveList.add(new SavePin());
         saveList.add(new SavePid());
         saveList.add(new SaveDungoneering());
-        saveList.add(new SaveTabAmount());
     }
 
 	/**
@@ -663,15 +663,15 @@ public class PlayerSaving {
 					copyFile(player.getName());
 					return;
 				}
-                if(so instanceof SaveBank) {
-                    ((SaveBank) so).loadBank(player, values, in);
-                } else {
-                    try {
+                try {
+                    if(so instanceof SaveBank) {
+                        ((SaveBank) so).loadBank(player, values, in);
+                    } else {
                         so.load(player, values, in);
-                    }catch(Exception ex) {
-                        copyFile(player.getName());
-                        return;
                     }
+                }catch(Exception ex) {
+                    copyFile(player.getName());
+                    return;
                 }
 			}
 			in.close();

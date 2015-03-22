@@ -137,6 +137,7 @@ public class Bank {
             int newAmount = bankItem.getCount() - transferAmount;
             boolean b = player.getBank().isFiringEvents();
             if (newAmount <= 0) {
+                player.getBank().setFiringEvents(true);
                 player.getBank().set(slot, null);
                 player.getBank().shift();
                 if(player.getBankField().getTabAmounts()[tab] <= 0) {

@@ -55,14 +55,14 @@ public class Bank {
         if(FightPits.inPits(player))
             return;
         player.resetingPin = false;
-        /*if(player.bankPin != null && !player.bankPin.equals("null")) {
+        if(player.bankPin != null && !player.bankPin.equals("null")) {
             if ((player.bankPin.length() < 4 && setPin)
                     || (player.bankPin.length() >= 4 && !player.bankPin
                     .equals(player.enterPin))) {
                 BankPin.loadUpPinInterface(player);
                 return;
             }
-        }       */
+        }
         System.out.println("Opening bank: "+player.getName() + " set pin: "+false);
         player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
         player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));

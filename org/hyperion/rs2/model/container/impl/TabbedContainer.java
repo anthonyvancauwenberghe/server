@@ -146,15 +146,15 @@ public class TabbedContainer extends Container {
          int tab = player.getBankField().getTabForSlot(slot);
          if(!(item instanceof BankItem) && item != null)
              item = item.toBankItem(player.getBankField().getTabForSlot(slot));
+         boolean fire = items[slot] == null || isFiringEvents();
          items[slot] = item;
          if(item == null) {
-             BankItem i = (BankItem)item;
              if (player.getBankField().getTabAmounts()[tab] <= 0) {
                  Bank.collapse(player,  tab + 1, tab);
                  Bank.viewTab(player, 0);
              }
          }
-         if(isFiringEvents())
+         if(fire)
             fireItemsChanged();
 
      }

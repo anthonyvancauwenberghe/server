@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class BankField {
 
-    private int[] tabAmounts = new int[9];
+    private int tabAmount = 2;
     private boolean loadError;
     private boolean isBanking;
     private String searchText = null;
@@ -34,9 +34,15 @@ public class BankField {
     }
 
     public int[] getTabAmounts() {
-        int[] sizes = new int[9];
+        int[] sizes = new int[tabAmount];
         for(int i = 0; i < player.getBank().capacity(); i++) {
             final BankItem item = (BankItem)player.getBank().get(i);
+            if(item.getTabIndex() >= tabAmount) {
+                item.setTabSlot(0);
+                player.getBank().remove(item);
+                player.getBank().add(item);
+                System.err.println("BANK TAB OVERFLOW SIZE FOR "+player.getName() + " BY ITEM: "+item.getDefinition().getName());
+            }
             if(item != null)
                 sizes[item.getTabIndex()]++;
 
@@ -149,5 +155,15 @@ public class BankField {
     public void setLoadTab(int loadTab) {
         this.loadTab = loadTab;
     }
+
+    public void setTabAmount(int tabAmount) {
+        this.tabAmount = tabAmount;
+    }
+
+    public int getTabAmount() {
+        return tabAmount;
+    }
+
+
 
 }

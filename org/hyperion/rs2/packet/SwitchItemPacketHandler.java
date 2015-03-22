@@ -1,5 +1,6 @@
 package org.hyperion.rs2.packet;
 
+import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.bank.Bank;
@@ -34,7 +35,13 @@ public class SwitchItemPacketHandler implements PacketHandler {
                 return;
             }
             int tab = (interfaceId + 15448);
-            System.out.println(tab);
+            if(tab >= player.getBankField().getTabAmount()) {
+                player.getActionSender().removeAllInterfaces();
+                DialogueManager.openDialogue(player, 6500);
+                return;
+            }
+
+
             int currentOffset = player.getBankField().getOffset(fromTab);
             int destinationOffset = player.getBankField().getOffset(tab);
             if (tab != fromTab) {
@@ -43,7 +50,7 @@ public class SwitchItemPacketHandler implements PacketHandler {
                     return;
                 }
                 if (player.getBankField().isInserting()) {
-                    player.sendMessage("<col=369>Inserting function to be implemented...");
+                    player.sendMessage("@blu@Inserting function to be implemented...");
                 } else {
                     Bank.swapTabs(player, fromSlot + currentOffset, toSlot + destinationOffset);
                 }

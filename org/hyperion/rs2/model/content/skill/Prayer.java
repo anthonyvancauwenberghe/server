@@ -160,7 +160,7 @@ public class Prayer implements ContentTemplate {
 			for(Player player : p.getLocalPlayers()) {
 				if(player.cE != null && ! player.isDead()
 						&& Combat.canAtk(p.cE, player.cE).length() <= 2) {
-                    if(player.cE.equals(p.getCombat()))
+                    if(player.cE.equals(p.getCombat().getOpponent()))
                         continue;
 					player.cE.doGfx(2260, 0);
                     int damage = Misc.random(25);

@@ -713,8 +713,17 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				}
 				player.resetDeathItemsVariables();
 				break;
+            case 14921:
+                if (player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin)) {
+                    player.resetingPin = true;
+                    player.getActionSender().sendMessage("You need to first input your bank pin.");
+                    BankPin.loadUpPinInterface(player);
+                    return;
+                } else {
+                    player.getActionSender().sendMessage("Bank Pin successfully reset.");
+                }
+                break;
 			case 14922:// close pin interface
-			case 14921:// forgot pin
 			case 15110:
 				player.getActionSender().removeAllInterfaces();
 				break;

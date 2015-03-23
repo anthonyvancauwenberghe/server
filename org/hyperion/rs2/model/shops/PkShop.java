@@ -105,6 +105,8 @@ public class PkShop extends PointsShop {
 			case 13879:
 			case 13883:
 				return 10;
+            case 18950:
+                 return 50_000;
 
 		}
 		return 5000;

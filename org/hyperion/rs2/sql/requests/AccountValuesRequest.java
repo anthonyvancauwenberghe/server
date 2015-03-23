@@ -15,9 +15,14 @@ public class AccountValuesRequest extends SQLRequest{
     public void process(final SQLConnection sql){
         if(System.currentTimeMillis() - player.lastAccountValueTime < Time.ONE_MINUTE)
             return;
+        final int value = player.getAccountValue().getTotalValue();
+        final long pkpValue = player.getAccountValue().getPkPointValue();
         final String query = String.format(
-                "INSERT INTO accountValues (name, accountValue) VALUES ('%s', %d)",
-                player.getName().toLowerCase(), player.getAccountValue().getTotalValue()
+                "INSERT INTO accountvalues (name, value, pkvalue) VALUES ('%s', %d, %d) ON DUPLICATE KEY UPDATE value = %d",
+                player.getName().toLowerCase(),
+                value,
+                pkpValue,
+                value
         );
         try{
             sql.query(query);

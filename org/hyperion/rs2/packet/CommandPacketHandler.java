@@ -1547,8 +1547,16 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getInterfaceState().addListener(
 						player.getChecking().getBank(),
 						player.getChecking().getBankListener());
-				player.getActionSender().sendUpdateItems(5382,
-						player.getChecking().getBank().toArray());
+                int tab = 0;
+                for (; tab < viewed.getBankField().getTabAmount(); tab++) {
+                    int from = viewed.getBankField().getOffset(tab);
+                    int to = from + viewed.getBankField().getTabAmounts()[tab];
+                    Item[] items = Arrays.copyOf(Arrays.copyOfRange(viewed.getBank().toArray(), from, to), Bank.SIZE);
+                    player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, items);
+                }
+                for(; tab < 9; tab++) {
+                    player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, new Item[Bank.SIZE]);
+                }
 			}
 		}
 		if (commandStart.equalsIgnoreCase("viewinv")) {

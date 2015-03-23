@@ -446,8 +446,7 @@ public class Prayer implements ContentTemplate {
 			return true;
 		}
 
-        if((p2.getId() == Prayers.PRAYER_RIGOUR && !p.getPermExtraData().getBoolean("rigour"))
-                || (p2.getId() == Prayers.PRAYER_AUGURY && !p.getPermExtraData().getBoolean("augury"))) {
+        if(!hasUnlocked(p, p2.getId())) {
             p.getActionSender().sendClientConfig(p2.getFrame(), 0);
             p.getActionSender().sendMessage("You haven't unlocked "
                     + p2.getName() + ".");
@@ -536,6 +535,19 @@ public class Prayer implements ContentTemplate {
 		}
 		player.getActionSender().sendMessage("You have the feeling that your spellbook has just been changed..");
 	}
+
+    public static boolean hasUnlocked(final Player player, final int prayer) {
+        switch(prayer) {
+            case Prayers.PRAYER_RIGOUR:
+                return player.getPermExtraData().getBoolean("rigour");
+            case Prayers.PRAYER_AUGURY:
+                return player.getPermExtraData().getBoolean("augury");
+            case Prayers.CURSE_WRATH:
+            case Prayers.PRAYER_RETRIBUTION:
+                return player.getPermExtraData().getBoolean("wrath");
+        }
+        return true;
+    }
 
 	public void changeLunars(Player player) {
 		player.cE.setAutoCastId(- 1);

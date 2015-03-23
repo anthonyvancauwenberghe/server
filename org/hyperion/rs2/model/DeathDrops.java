@@ -308,6 +308,8 @@ public class DeathDrops {
 		else {
 			inventoryItemValue = ItemSpawning.canSpawn(id) ? -1 :(int) Math.floor(def == null ? -1 : def.getHighAlcValue());
         }
+        if(id == 5020)
+            inventoryItemValue = -5;
 		return inventoryItemValue;
 	}
 	public static Item keepItem(Player player, int keepItem, boolean deleteItem) {

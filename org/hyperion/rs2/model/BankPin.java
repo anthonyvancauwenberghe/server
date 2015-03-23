@@ -15,11 +15,12 @@ public class BankPin {
 	 *  14883, 14884, 14885, 14886, 14887, 14888, 14889, 14890, 14891, 14892
 	 */
 	public static void loadUpPinInterface(Player player) {
-		if(player.bankPin.length() < 4 || player.bankPin.equals("null")) {
+		if(player.bankPin == null || player.bankPin.length() < 4 || player.bankPin.equals("null")) {
 			//ok were setting the pin here
 			player.bankPin = "";
 			player.getActionSender().sendString(14923, "Please enter the FIRST digit of your NEW Pin.");
 			player.getActionSender().sendString(14920, "Please enter the FIRST digit of your NEW Pin.");
+            player.getActionSender().sendString(14921, "Disable Pin");
 			player.getActionSender().sendString(15313, "Please click the 1st digit.");
 			randomizeButtons(player);
 			player.getActionSender().showInterface(7424);
@@ -29,6 +30,7 @@ public class BankPin {
 			setStars(player);
 			player.getActionSender().sendString(14923, "Please enter the first digit of your Pin.");
 			player.getActionSender().sendString(14920, "Please enter the first digit of your Pin.");
+            player.getActionSender().sendString(14921, "Disable Pin");
 			player.getActionSender().sendString(15313, "Please click the 1st digit.");
 			randomizeButtons(player);
 			player.getActionSender().showInterface(7424);
@@ -65,12 +67,16 @@ public class BankPin {
 			player.enterPin += "" + index;
 			setStars(player);
 			if(player.enterPin.length() >= 4 && player.enterPin.equals(player.bankPin)) {
-				player.getActionSender().sendMessage("Pin entered correctly.");
 				if(! player.resetingPin) {
+                    player.getActionSender().sendMessage("Pin entered correctly.");
 					player.resetingPin = false;
 					Bank.open(player, false);
-				} else
-					player.getActionSender().removeAllInterfaces();
+				} else {
+                    player.getActionSender().sendMessage("You have disabled your bank pin.");
+                    player.bankPin = "";
+                    player.resetingPin = false;
+                    player.getActionSender().removeAllInterfaces();
+                }
 			} else if(player.enterPin.length() >= 4) {
 				player.getActionSender().sendMessage("Pin entered incorrectly, Please try again.");
 				Bank.open(player, false);

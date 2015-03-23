@@ -18,11 +18,12 @@ public class AccountValuesRequest extends SQLRequest{
         final int value = player.getAccountValue().getTotalValue();
         final long pkpValue = player.getAccountValue().getPkPointValue();
         final String query = String.format(
-                "INSERT INTO accountvalues (name, value, pkvalue) VALUES ('%s', %d, %d) ON DUPLICATE KEY UPDATE value = %d",
+                "INSERT INTO accountvalues (name, value, pkvalue) VALUES ('%s', %d, %d) ON DUPLICATE KEY UPDATE value = %d, pkvalue = %d",
                 player.getName().toLowerCase(),
                 value,
                 pkpValue,
-                value
+                value,
+                pkpValue
         );
         try{
             sql.query(query);

@@ -75,6 +75,7 @@ import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
 import org.hyperion.rs2.sql.*;
+import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
@@ -948,14 +949,8 @@ public class World {
         engine.submitWork(new Runnable() {
             public void run() {
 
-                try{
-
-                    if (!Rank.hasAbility(player, Rank.DEVELOPER))
-                        getLogsConnection().query(String.format("INSERT INTO accountvalues (name, value) VALUES ('%s', %d) ON DUPLICATE KEY UPDATE value = " + player.getAccountValue().getTotalValue(), player.getName().toLowerCase(), player.getAccountValue().getTotalValue()));
-
-                }catch(SQLException e){
-                    e.printStackTrace();
-                }
+                if (!Rank.hasAbility(player, Rank.DEVELOPER))
+                    getLogsConnection().offer(new AccountValuesRequest(player));
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();

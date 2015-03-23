@@ -21,6 +21,12 @@ public class AccountValue {
 		this.player = player;
 	}
 
+    public long getPkPointValue(){
+        return player.getInventory().getCount(5020)
+                + player.getBank().getCount(5020)
+                + (player.getPoints().getPkPoints() / 10);
+    }
+
 	/**
 	 * Gets the total account value in donator points.
 	 *

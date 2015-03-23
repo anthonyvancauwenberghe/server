@@ -10,6 +10,7 @@ import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.Container.Type;
 import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
@@ -61,6 +62,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
         if(button >= 29174 && button <= 29179)
 		    if(SetHandler.handleSet(player, button))
 			    return;
+        if (Bank.bankButton(player, button)) {
+            return;
+        }
 		switch(button) {
             case -29034:
                 final Player opp = player.getBountyHunter().getTarget();
@@ -296,7 +300,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				int i = 0;
 				for(Item item : player.getInventory().toArray()) {
 					if(item != null)
-						Bank.deposit(player, i, item.getId(), item.getCount());
+						Bank.deposit(player, i, item.getId(), item.getCount(), true);
 					i++;
 				}
 				break;
@@ -499,7 +503,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 					for(Item item : player.getInventory().toArray()) {
 						index++;
 						if(item != null)
-							Bank.deposit(player, index, item.getId(), item.getCount());
+							Bank.deposit(player, index, item.getId(), item.getCount(), true);
 					}
 				}
 				break;
@@ -510,7 +514,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 						index2++;
 						if(item != null) {
 							Bank.deposit(player, index2, item.getId(), item.getCount(),
-									player.getEquipment());
+									player.getEquipment(), false, true);
 						}
 					}
 				}
@@ -709,8 +713,17 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				}
 				player.resetDeathItemsVariables();
 				break;
+            case 14921:
+                if (player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin)) {
+                    player.resetingPin = true;
+                    player.getActionSender().sendMessage("You need to first input your bank pin.");
+                    BankPin.loadUpPinInterface(player);
+                    return;
+                } else {
+                    player.getActionSender().sendMessage("Bank Pin successfully reset.");
+                }
+                break;
 			case 14922:// close pin interface
-			case 14921:// forgot pin
 			case 15110:
 				player.getActionSender().removeAllInterfaces();
 				break;
@@ -861,13 +874,14 @@ public class ActionButtonPacketHandler implements PacketHandler {
 					player.getWalkingQueue().setRunningToggled(true);
 				}
 				if(Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getCombat().getFamiliar() != null) {
-					SummoningSpecial.preformSpecial(player, 
+					SummoningSpecial.preformSpecial(player,
 							SummoningSpecial.getCorrectSpecial(player.getCombat().getFamiliar().getDefinition().getId()));
 				}
 				break;
 			case 153:// run
 				player.getWalkingQueue().setRunningToggled(!player.getWalkingQueue().isRunningToggled());
 				break;
+            case 17015:
 			case 10135: //summoning special
 				if(player.getCombat().getFamiliar() != null)
 				SummoningSpecial.preformSpecial(player,
@@ -875,9 +889,12 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
 				break;
 			case 10136: //dismiss
+            case 17023:
 				player.SummoningCounter = 0;
+                player.getActionSender().sendSidebarInterface(15, -1);
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
+            case 17022:
             case 10137:
                 if(player.cE.summonedNpc == null) {
                     player.sendMessage("You don't have a summoned familiar");

@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.misc2;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Time;
 

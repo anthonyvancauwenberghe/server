@@ -32,6 +32,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.misc.PrayerIcon;
+import org.hyperion.util.Misc;
 
 /**
  * Prayer skill handler
@@ -139,44 +140,29 @@ public class Prayer implements ContentTemplate {
 	public static void retribution(Player p) {
 		if(p.getPrayers().isEnabled(21)) {
 			p.cE.doGfx(437, 0);
-			/*if(p.getCombat().getOpponent() != null) {
-				if(p.getCombat().getOpponent().getEntity().getLocation().distance(p.getLocation()) <= 1) {
-					int damage = Combat.random((p.getSkills().getRealLevels()[5] / 5));
-					if(p.getCombat().getOpponent().getEntity() instanceof Player)
-						if(p.getCombat().getOpponent().getPlayer().getLocation().inPvPArea());
-							if(!p.cE.getOpponent().getPlayer().isDead());
-								//p.getCombat().getOpponent().hit(damage, p, false, org.hyperion.rs2.Constants.EMPTY);
-				}
-			}*/
-			// for(Player player : p.getLocalPlayers()){
-			// f(player.cE != null && !player.isDead() &&
-			// Combat.canAtk(p.cE,player.cE).length() <= 1 ){
-			// int damage =
-			// Combat.random((p.getSkills().getLevelForExperience(3) / 10));
-			// player.cE.hit(damage,p,false);
-			// }
-			// }
+            //synchronized(p.getLocalPlayers()){
+            if(p.getCombat().getOpponent() != null) {
+                p.getCombat().getOpponent()._getPlayer().ifPresent(player -> {
+                    if(!player.isDead())
+                        player.inflictDamage(new Damage.Hit(Misc.random(22), Damage.HitType.NORMAL_DAMAGE, Constants.EMPTY));
+                });
+            }
 		}
 		if(p.getPrayers().isEnabled(47)) {
 			p.cE.doGfx(2259, 0);
 			//synchronized(p.getLocalPlayers()){
-			/*if(p.getCombat().getOpponent() != null) {
-				if(p.getCombat().getOpponent().getEntity().getLocation().distance(p.getLocation()) <= 1) {
-					int damage = Combat.random((p.getSkills().getRealLevels()[5] / 4));
-					if(p.getCombat().getOpponent().getEntity() instanceof Player)
-						if(p.getCombat().getOpponent().getPlayer().getLocation().inPvPArea());
-							if(!p.getCombat().getOpponent().getPlayer().isDead());
-								//p.getCombat().getOpponent().hit(damage, p, false, Constants.MAGE);
-				}
-			}*/
+			if(p.getCombat().getOpponent() != null) {
+                p.getCombat().getOpponent()._getPlayer().ifPresent(player -> {
+                    if(!player.isDead())
+                      player.inflictDamage(new Damage.Hit(Misc.random(28), Damage.HitType.NORMAL_DAMAGE, Constants.EMPTY));
+                });
+            }
 			for(Player player : p.getLocalPlayers()) {
-				if(player.cE != null && player.isDead() && ! p.isDead()
+				if(player.cE != null && ! player.isDead()
 						&& Combat.canAtk(p.cE, player.cE).length() <= 2) {
 					player.cE.doGfx(2260, 0);
-					// TextUtils.writeToFile("./logs/cmds/"+"BUGGEDPRAYER","PlayerIsDead  "
-					// + player.isDead() + "PDead " + p.isDead());
-					// player.cE.hit((int)(Combat.random(25)*p.getSkills().getLevelForExperience(5)*0.01),(Entity)
-					// p,false);
+                    int damage = Misc.random(25);
+                    player.inflictDamage(new Damage.Hit(damage, Damage.HitType.NORMAL_DAMAGE, Constants.EMPTY));
 				}
 			}
 			//}
@@ -460,8 +446,7 @@ public class Prayer implements ContentTemplate {
 			return true;
 		}
 
-        if((p2.getId() == Prayers.PRAYER_RIGOUR && !p.getPermExtraData().getBoolean("rigour"))
-                || (p2.getId() == Prayers.PRAYER_AUGURY && !p.getPermExtraData().getBoolean("augury"))) {
+        if(!hasUnlocked(p, p2.getId())) {
             p.getActionSender().sendClientConfig(p2.getFrame(), 0);
             p.getActionSender().sendMessage("You haven't unlocked "
                     + p2.getName() + ".");
@@ -550,6 +535,19 @@ public class Prayer implements ContentTemplate {
 		}
 		player.getActionSender().sendMessage("You have the feeling that your spellbook has just been changed..");
 	}
+
+    public static boolean hasUnlocked(final Player player, final int prayer) {
+        switch(prayer) {
+            case Prayers.PRAYER_RIGOUR:
+                return player.getPermExtraData().getBoolean("rigour");
+            case Prayers.PRAYER_AUGURY:
+                return player.getPermExtraData().getBoolean("augury");
+            case Prayers.CURSE_WRATH:
+            case Prayers.PRAYER_RETRIBUTION:
+                return player.getPermExtraData().getBoolean("wrath");
+        }
+        return true;
+    }
 
 	public void changeLunars(Player player) {
 		player.cE.setAutoCastId(- 1);

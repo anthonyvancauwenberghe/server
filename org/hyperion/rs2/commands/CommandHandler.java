@@ -52,6 +52,7 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
@@ -297,7 +298,7 @@ public class CommandHandler {
 			}
 
 		});
-		submit(new Command("tmask", Rank.ADMINISTRATOR) {
+        submit(new Command("tmask", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int l2 = 0;
@@ -797,7 +798,7 @@ public class CommandHandler {
                         return false;
                     }
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - amount);
-                    player.getBank().add(new Item(15272, amount));
+                    player.getBank().add(new BankItem(0, 15272, amount));
                     player.getActionSender().sendMessage(String.format("%d rocktails have been added to your bank.", amount));
                     return true;
                 } catch(Exception ex) {
@@ -1253,7 +1254,7 @@ public class CommandHandler {
                         player.getInventory().add(new Item(id, amount));
                         player.sendf("Added to your inventory");
                     }else{
-                        player.getBank().add(new Item(id, amount));
+                        player.getBank().add(new BankItem(0, id, amount));
                         player.sendf("Added to your bank");
                     }
                     return true;
@@ -1452,7 +1453,7 @@ public class CommandHandler {
                         return false;
                     }
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - requiredPkp);
-                    player.getBank().add(new Item(18016, amount));
+                    player.getBank().add(new BankItem(0, 18016, amount));
                     player.getActionSender().sendMessage(String.format("%,d spirit shards have been added to your bank.", amount));
                     return true;
                 } catch(Exception ex) {
@@ -1510,6 +1511,19 @@ public class CommandHandler {
                     player.sendf("Error parsing mac");
                     return false;
                 }
+            }
+        });
+
+        submit(new Command("testbank", Rank.PLAYER) {
+            public boolean execute(final Player player, final String input){
+                for(int i = 0; i < player.getBank().size(); i++) {
+                    BankItem item = (BankItem) player.getBank().get(i);
+                    System.out.println("Tab Index: " + item.getTabIndex() + "\tTab Item: " + item.getId() + "\tTab Count: " + item.getCount());
+                }
+                for(int i = 0; i < 9; i++) {
+                    System.out.println("Tab Amount: " + player.getBankField().getTabAmounts()[i]);
+                }
+                return true;
             }
         });
 
@@ -1640,7 +1654,7 @@ public class CommandHandler {
                     if(amount == 1)
                         amount = 2;
                     for(int id = ClueScrollManager.MIN_ID; id <= ClueScrollManager.MAX_ID; id++)
-                        player.getBank().add(new Item(id, amount));
+                        player.getBank().add(new BankItem(0, id, amount));
                     return true;
                 }catch(Exception ex){
                     player.sendf("Enter a valid amount");

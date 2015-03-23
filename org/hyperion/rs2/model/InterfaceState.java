@@ -154,6 +154,13 @@ public class InterfaceState {
 		player.getActionSender().sendEnterAmountInterface();
 	}
 
+    public void openEnterAmountInterface(int interfaceId, int id) {
+        enterAmountInterfaceId = interfaceId;
+        enterAmountSlot = player.getBank().getSlotById(id);
+        enterAmountId = id;
+        player.getActionSender().sendEnterAmountInterface();
+    }
+
 	/**
 	 * Checks if the enter amount interface is open.
 	 *
@@ -184,16 +191,23 @@ public class InterfaceState {
 					if(player.openedBoB)
 						BoB.deposit(player, enterAmountSlot, enterAmountId, amount);
 					else if(enterAmountSlot >= 0 && enterAmountSlot < Inventory.SIZE) {
-						Bank.deposit(player, enterAmountSlot, enterAmountId, amount);
+						Bank.deposit(player, enterAmountSlot, enterAmountId, amount, true);
 					}
 					break;
-				case Bank.BANK_INVENTORY_INTERFACE:
-					if(player.openedBoB)
-						BoB.withdraw(player, enterAmountSlot, enterAmountId, amount);
-					else if(enterAmountSlot >= 0 && enterAmountSlot < Bank.SIZE) {
-						Bank.withdraw(player, enterAmountSlot, enterAmountId, amount);
-					}
-					break;
+                case Bank.BANK_INVENTORY_INTERFACE:
+                case Bank.BANK_INVENTORY_INTERFACE + 1:
+                case Bank.BANK_INVENTORY_INTERFACE + 2:
+                case Bank.BANK_INVENTORY_INTERFACE + 3:
+                case Bank.BANK_INVENTORY_INTERFACE + 4:
+                case Bank.BANK_INVENTORY_INTERFACE + 5:
+                case Bank.BANK_INVENTORY_INTERFACE + 6:
+                case Bank.BANK_INVENTORY_INTERFACE + 7:
+                case Bank.BANK_INVENTORY_INTERFACE + 8:
+                    if(player.openedBoB)
+                        BoB.withdraw(player, enterAmountSlot, enterAmountId, amount);
+                    else if(enterAmountSlot >= 0 && enterAmountSlot < Bank.SIZE)
+                        Bank.withdraw(player, enterAmountId, amount);
+                    break;
 				case BoB.BOB_INVENTORY_INTERFACE:
 					if(enterAmountSlot >= 0 && enterAmountSlot < BoB.SIZE) {
 						BoB.withdraw(player, enterAmountSlot, enterAmountId, amount);
@@ -219,7 +233,7 @@ public class InterfaceState {
 					Duel.withdraw(player, enterAmountSlot, enterAmountId, amount);
 					break;
 				case Bank.DEPOSIT_INVENTORY_INTERFACE:
-					Bank.deposit(player, enterAmountSlot, enterAmountId, amount);
+					Bank.deposit(player, enterAmountSlot, enterAmountId, amount, true);
 					break;
 				case 28000://GEIntergace
 					GrandExchangeV2.buyItem(player, enterAmountId, enterAmountSlot, amount);

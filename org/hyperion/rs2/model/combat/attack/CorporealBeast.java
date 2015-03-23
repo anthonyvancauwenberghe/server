@@ -48,12 +48,6 @@ public class CorporealBeast implements Attack {
 		else if(style == Constants.RANGE) {
 			if(damage > 50)
 				damage = 50;
-			int randie;
-			if((randie = Combat.random(5)) > 2) {
-				damage = (int)(damage * .1);
-				if(randie == 5)
-				atk.getActionSender().sendMessage("The beast's tough skin and spikes defend well against your arrows!");
-			}
 				
 		}
 		/**
@@ -78,7 +72,7 @@ public class CorporealBeast implements Attack {
 	
 	private static final int MAGE_EMOTE = 10410;
 	
-	private static final int maxMelee = 51, maxRange = 54, maxMage = 50;
+	private static final int maxMelee = 42, maxRange = 45, maxMage = 50;
 	
 	/**
 	 * 

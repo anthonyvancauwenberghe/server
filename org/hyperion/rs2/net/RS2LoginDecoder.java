@@ -357,7 +357,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 * making it useless in the private server scene.
 					 */
 						int uid = in.getInt();
-						 if(uid < 15466) {
+						 if(uid < 15467) {
 							returnCode = 6;
 						}
 

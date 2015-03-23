@@ -3,6 +3,8 @@ package org.hyperion.rs2.saving;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.SpiritShields;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,6 +44,18 @@ public abstract class SaveContainer extends SaveObject {
 		return true;
 	}
 
+    public boolean saveBank(Player player, BufferedWriter writer) throws IOException {
+        writer.write(getName());
+        writer.newLine();
+        for(BankItem bankItem : getBankContainer(player)) {
+            if(bankItem == null)
+                continue;
+            writer.write(bankItem.getId() + " " + bankItem.getCount() + " " + bankItem.getTabIndex() + " " + player.getBank().getSlotById(bankItem.getId()));
+            writer.newLine();
+        }
+        return true;
+    }
+
 	public void load(Player player, String values, BufferedReader reader) throws IOException {
 		String line;
 		while((line = reader.readLine()).length() > 0) {
@@ -57,6 +71,28 @@ public abstract class SaveContainer extends SaveObject {
 			loadItem(player, nextItem);
 		}
 	}
+
+    public void loadBank(Player player, String values, BufferedReader reader) throws IOException {
+        String line;
+        int slot = 0;
+        while((line = reader.readLine()).length() > 0) {
+            BankItem nextItem = lineToBankItem(line, slot);
+            loadItem(player, nextItem);
+            slot++;
+        }
+    }
+
+    public static BankItem lineToBankItem(String line, int slot) {
+        String[] parts = line.split(" ");
+        int id = Integer.parseInt(parts[0]);
+        int amount = Integer.parseInt(parts[1]);
+        int tab = 0;
+        if(parts.length > 2) {
+            tab = Integer.parseInt(parts[2]);
+            slot = Integer.parseInt(parts[3]);
+        }
+        return new BankItem(tab, id, amount);
+    }
 
 	public static Item lineToItem(String line) {
 		String[] parts = line.split(" ");
@@ -81,6 +117,14 @@ public abstract class SaveContainer extends SaveObject {
 			amount = 20;
 		return new Item(id, amount);
 	}
+
+    public BankItem[] getBankContainer(Player player) {
+        BankItem[] items = new BankItem[Bank.SIZE];
+        for(int i = 0; i < player.getBank().size(); i++) {
+            items[i] = (BankItem) player.getBank().get(i);
+        }
+        return items;
+    };
 
 	public abstract Item[] getContainer(Player player);
 

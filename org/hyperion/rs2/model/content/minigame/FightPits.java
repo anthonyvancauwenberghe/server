@@ -21,6 +21,8 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
@@ -641,7 +643,7 @@ public class FightPits implements ContentTemplate {
 				if(timeStood > 6)
 					timeStood = 6;
 				if(getReward) {
-					player.getBank().add(new Item(5020, timeStood));
+                    player.getBank().add(new BankItem(0, 5020, timeStood));
 					player.sendMessage(String.format("%d PK Tickets were sent to your bank for your efforts!", timeStood));
 				} else {
 					player.sendMessage("You don't get any reward due to lack of participation");

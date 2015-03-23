@@ -39,12 +39,12 @@ public class Container {
 	/**
 	 * The capacity of this container.
 	 */
-	private int capacity;
+	protected int capacity;
 
 	/**
 	 * The items in this container.
 	 */
-	private Item[] items;
+	protected Item[] items;
 
 	/**
 	 * The items that were initially in this container.
@@ -66,10 +66,18 @@ public class Container {
 	 */
 	private Type type;
 
+    public Type getType() {
+        return type;
+    }
+
 	/**
 	 * Firing events flag.
 	 */
 	private boolean firingEvents = true;
+
+    public Item[] getItems() {
+        return items;
+    }
 
 	public boolean ignoreOnce = false;
 
@@ -82,8 +90,8 @@ public class Container {
 	public Container(Type type, int capacity) {
 		this.type = type;
 		this.capacity = capacity;
-		this.items = new Item[capacity];
-		this.previousItems = new Item[capacity];
+        this.items = new Item[capacity];
+        this.previousItems = new Item[capacity];
 	}
 
 	/**
@@ -237,52 +245,52 @@ public class Container {
 	 * @return <code>true</code> if the item was added,
 	 * <code>false</code> if not.
 	 */
-	public boolean add(Item item) {
-		if(item.getId() < 0)
-			return false;
-		//System.out.println(item.getDefinition());
-		if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
-			for(int i = 0; i < items.length; i++) {
-				if(items[i] != null && items[i].getId() == item.getId()) {
-					int totalCount = item.getCount() + items[i].getCount();
+    public boolean add(Item item) {
+        if(item.getId() < 0)
+            return false;
+        //System.out.println(item.getDefinition());
+        if(item.getDefinition().isStackable() || type.equals(Type.ALWAYS_STACK)) {
+            for(int i = 0; i < items.length; i++) {
+                if(items[i] != null && items[i].getId() == item.getId()) {
+                    int totalCount = item.getCount() + items[i].getCount();
                     long fuck_all_count = BigInteger.valueOf(item.getCount()).add(BigInteger.valueOf(items[i].getCount())).longValueExact();
                     if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
-						return false;
-					}
-					set(i, new Item(items[i].getId(), items[i].getCount() + item.getCount()));
-					return true;
-				}
-			}
-			int slot = freeSlot();
-			if(slot == - 1) {
-				return false;
-			} else {
-				set(slot, item);
-				return true;
-			}
-		} else {
-			int slots = freeSlots();
-			if(slots >= item.getCount()) {
-				boolean b = firingEvents;
-				firingEvents = false;
-				try {
-					for(int i = 0; i < item.getCount(); i++) {
-						set(freeSlot(), new Item(item.getId()));
-					}
-					if(b) {
-						fireItemsChanged();
-					}
-					return true;
-				} finally {
-					firingEvents = b;
-				}
-			} else {
-				return false;
-			}
-		}
-	}
+                        return false;
+                    }
+                    set(i, new Item(items[i].getId(), items[i].getCount() + item.getCount()));
+                    return true;
+                }
+            }
+            int slot = freeSlot();
+            if(slot == - 1) {
+                return false;
+            } else {
+                set(slot, item);
+                return true;
+            }
+        } else {
+            int slots = freeSlots();
+            if(slots >= item.getCount()) {
+                boolean b = firingEvents;
+                firingEvents = false;
+                try {
+                    for(int i = 0; i < item.getCount(); i++) {
+                        set(freeSlot(), new Item(item.getId()));
+                    }
+                    if(b) {
+                        fireItemsChanged();
+                    }
+                    return true;
+                } finally {
+                    firingEvents = b;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
 
-	public boolean add(Item item, int slot) {
+    public boolean add(Item item, int slot) {
 		Item i = get(slot);
 		if(i == null) {
 			set(slot, item);
@@ -431,7 +439,7 @@ public class Container {
 		return items;
 	}
 
-	/**
+    /**
 	 * Checks if a slot is used.
 	 *
 	 * @param slot The slot.
@@ -451,6 +459,7 @@ public class Container {
 		return items[slot] == null;
 	}
 
+
 	/**
 	 * Removes an item.
 	 *
@@ -458,7 +467,7 @@ public class Container {
 	 * @return The number of items removed.
 	 */
 	public int remove(Item item) {
-		return remove(- 1, item);
+        return remove(- 1, item);
 	}
 
 	/**
@@ -510,8 +519,12 @@ public class Container {
 		return removed;
 	}
 
+    public void setItems(Item[] items)
+    {
+        this.items = items;
+    }
 
-	/**
+    /**
 	 * Transfers an item from one container to another.
 	 *
 	 * @param from     The container to transfer from.
@@ -543,7 +556,7 @@ public class Container {
 			if(to.add(fromItem)) {
 				from.set(i, null);
 			} else {
-				return false;//if this happens there is something seriously wrong....
+                return false;//if this happens there is something seriously wrong....
 			}
 		}
 		return true;
@@ -588,7 +601,6 @@ public class Container {
 		//System.out.println(total + "");
 		return total;
 	}
-
 
 	/**
 	 * Inserts an item.
@@ -674,8 +686,8 @@ public class Container {
 	 * @return <code>true</code> if so, <code>false</code> if not.
 	 */
 	public boolean contains(int id) {
-		return getSlotById(id) != - 1;
-	}
+        return getSlotById(id) != - 1;
+    }
 
 	/**
 	 * Checks if there is room in the inventory for an item.

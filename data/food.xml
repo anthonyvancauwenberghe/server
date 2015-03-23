@@ -154,7 +154,7 @@
     </foodItem>
     <foodItem>
         <id>1891</id>
-        <heal>3</heal>
+        <heal>4</heal>
         <newId>1893</newId>
         <skillId>-1</skillId>
         <skillAdd>-1</skillAdd>
@@ -162,7 +162,7 @@
     </foodItem>
     <foodItem>
         <id>1893</id>
-        <heal>3</heal>
+        <heal>4</heal>
         <newId>1895</newId>
         <skillId>-1</skillId>
         <skillAdd>-1</skillAdd>
@@ -170,7 +170,7 @@
     </foodItem>
     <foodItem>
         <id>1895</id>
-        <heal>3</heal>
+        <heal>4</heal>
         <newId>-1</newId>
         <skillId>-1</skillId>
         <skillAdd>-1</skillAdd>

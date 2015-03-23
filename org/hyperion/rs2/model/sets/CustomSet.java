@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.EquipmentReq;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Misc;
 
@@ -69,7 +70,7 @@ public class CustomSet {
             if(!ItemSpawning.canSpawn(id) || player.hardMode())
                 if(player.getBank().remove(item) < 1)
                     continue;
-            player.getEquipment().set(Equipment.getType(Item.create(id)).getSlot(), Item.create(id));
+            player.getEquipment().set(Equipment.getType(item).getSlot(), item);
         }
         for(int index = 0; index < inventoryIds.length; index++) {
             final Item item = Item.create(inventoryIds[index], inventoryStackSizes[index]);

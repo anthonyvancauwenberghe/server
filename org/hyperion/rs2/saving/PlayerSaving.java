@@ -24,6 +24,7 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
@@ -130,6 +131,8 @@ public class PlayerSaving {
 		saveList.add(new SavePass("Pass"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
+        saveList.add(new SaveBankPin("BankPin"));
+        saveList.add(new SaveTabAmount());
         saveList.add(new SaveTurkeyKills("TurkeyKills"));
 		saveList.add(new SaveRank("Rank"));
 		saveList.add(new SaveCreatedString("CreatedStr"));
@@ -230,18 +233,15 @@ public class PlayerSaving {
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 			player.getActionSender().sendMessage("Saving your account");
 		}
-		try {
-			BufferedWriter file = new BufferedWriter(new FileWriter(
-					getFileName(player)), BUFFER_SIZE);
+		try (BufferedWriter file = new BufferedWriter(new FileWriter(
+                getFileName(player)), BUFFER_SIZE)){
+
 			for(SaveObject so : saveList) {
-				boolean saved = so.save(player, file);
+				boolean saved = so instanceof SaveBank ? ((SaveBank) so).saveBank(player, file) : so.save(player, file);
 				if(saved) {
 					file.newLine();
 				}
 			}
-			file.close();
-
-            player.serialize();
 			return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());
@@ -663,7 +663,16 @@ public class PlayerSaving {
 					copyFile(player.getName());
 					return;
 				}
-				so.load(player, values, in);
+                try {
+                    if(so instanceof SaveBank) {
+                        ((SaveBank) so).loadBank(player, values, in);
+                    } else {
+                        so.load(player, values, in);
+                    }
+                }catch(Exception ex) {
+                    copyFile(player.getName());
+                    return;
+                }
 			}
 			in.close();
 			player.getHighscores();

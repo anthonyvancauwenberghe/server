@@ -6,6 +6,8 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.shops.DonatorShop;
 
 /**
@@ -18,6 +20,12 @@ public class AccountValue {
 	public AccountValue(Player player) {
 		this.player = player;
 	}
+
+    public long getPkPointValue(){
+        return player.getInventory().getCount(5020)
+                + player.getBank().getCount(5020)
+                + (player.getPoints().getPkPoints() / 10);
+    }
 
 	/**
 	 * Gets the total account value in donator points.
@@ -65,12 +73,11 @@ public class AccountValue {
 		int counter = 0;
 		if(container == null)
 			return counter;
-		for(Item item : container.toArray()) {
-			counter += getItemValue(item);
-		}
+        for (Item item : container.toArray()) {
+            counter += getItemValue(item);
+        }
 		return counter;
 	}
-
 	/**
 	 * Gets the account value of the item, not forgetting about the item amount/items being noted.
 	 *

@@ -57,6 +57,7 @@ public class CustomSetHolder {
         try {
             return sets[slot].apply(player);
         } catch(final Exception exception) {
+            exception.printStackTrace();
             return false;
         }
     }

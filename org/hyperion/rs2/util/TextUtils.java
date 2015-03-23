@@ -42,6 +42,34 @@ public class TextUtils {
 		return parts[0].replace("/", "");
 	}
 
+    private static final char[] USERNAME_TRANSLATE_TABLE = { ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4',
+            '5', '6', '7', '8', '9' };
+
+    public static String hashToUsername(long value) {
+        int length = 0;
+        char[] chars = new char[12];
+        boolean capitalize = true;
+        while (value != 0L) {
+            long current = value;
+            value /= 37L;
+            chars[11 - length++] = USERNAME_TRANSLATE_TABLE[(int) (current - (value * 37L))];
+        }
+        for (int i = 12 - length; i < 12; i++) {
+            if (capitalize) {
+                if ((chars[i] >= 'a') && (chars[i] <= 'z')) {
+                    chars[i] += '\uFFE0';
+                }
+                if (chars[i] != ' ') {
+                    capitalize = false;
+                }
+            } else if (chars[i] == ' ') {
+                capitalize = true;
+            }
+        }
+        return new String(chars, 12 - length, length);
+    }
+
 /*	public static String textUnpack(byte[] stream, int i) {
 		int j = 0;
 		int k = -1;
@@ -127,49 +155,6 @@ public class TextUtils {
 		return tag.substring(0, 1).toUpperCase()+tag.substring(1);
 	}
 
-	/**
-	 * Packs text.
-	 *
-	 * @param packedData The destination of the packed text.
-	 * @param text       The unpacked text.
-	 */
-	/*public static void textPack(byte packedData[], String text) {
-		if(text.length() > 80) {
-			text = text.substring(0, 80);
-		}
-		text = text.toLowerCase();
-		int carryOverNibble = -1;
-		int ofs = 0;
-		for(int idx = 0; idx < text.length(); idx++) {
-			char c = text.charAt(idx);
-			int tableIdx = 0;
-			for(int i = 0; i < Constants.XLATE_TABLE.length; i++) {
-				if(c == (byte) Constants.XLATE_TABLE[i]) {
-					tableIdx = i;
-					break;
-				}
-			}
-			if(tableIdx > 12) {
-				tableIdx += 195;
-			}
-			if(carryOverNibble == -1) {
-				if(tableIdx < 13) {
-					carryOverNibble = tableIdx;
-				} else {
-					packedData[ofs++] = (byte) (tableIdx);
-				}
-			} else if (tableIdx < 13) {
-				packedData[ofs++] = (byte) ((carryOverNibble << 4) + tableIdx);
-				carryOverNibble = -1;
-			} else {
-				packedData[ofs++] = (byte) ((carryOverNibble << 4) + (tableIdx >> 4));
-				carryOverNibble = tableIdx & 0xf;
-			}
-		}
-		if(carryOverNibble != -1) {
-			packedData[ofs++] = (byte) (carryOverNibble << 4);
-		}
-	}*/
 	public static void textPack(byte[] stream, String s) {
 		if(s.length() > 80)
 			s = s.substring(0, 80);

@@ -1543,6 +1543,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 				getDamage().setHit3(inc);
 				getUpdateFlags().flag(UpdateFlag.HIT_3);
 			}
+
 		}
 		skills.detractLevel(Skills.HITPOINTS, inc.getDamage());
 		if(skills.getLevel(Skills.HITPOINTS) <= 0) {

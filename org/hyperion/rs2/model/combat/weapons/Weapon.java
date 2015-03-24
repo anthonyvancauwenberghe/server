@@ -17,6 +17,12 @@ public class Weapon extends Item {
 	 */
 	public static final Weapon DEFAULT_WEAPON = new Weapon(- 1, Constants.MELEE);
 
+    /**
+     * Unarmed
+     */
+
+    private static final Weapon UNARMED = Weapon.create(-1, Constants.MELEE, DEFAULT_WEAPON.getSpeed(), DEFAULT_WEAPON.isTwohanded(), DEFAULT_WEAPON.isControlled(), new WeaponAnimations(808, 819, 824, 422, 1156));
+
 	/**
 	 * The default weapon speed.
 	 */
@@ -91,6 +97,8 @@ public class Weapon extends Item {
 			return new Bow(id, 900);
         //if (name.contains("maul") && !name.contains("granite"))
         //    return new DungeoneeringMaul(id);
+        if(id == -1 || name.startsWith("unarmed"))
+            return UNARMED;
 		if(name.contains("ahrim") && name.contains("staff"))
 			return new AhrimsStaff(id);
 		if(name.contains("dharok") && name.contains("greataxe"))

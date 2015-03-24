@@ -22,7 +22,6 @@ public class BankContainerListener implements ContainerListener {
     public void itemChanged(Container c, int slot) {
         TabbedContainer container = (TabbedContainer) c;
         int tab = player.getBankField().getTabForSlot(slot);
-        System.out.println(slot);
         if (slot > Byte.MAX_VALUE) {
             itemsChanged(container);
         } else {

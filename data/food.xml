@@ -1058,7 +1058,7 @@
     </foodItem>
     <foodItem>
         <id>7198</id>
-        <heal>16</heal>
+        <heal>12</heal>
         <newId>7200</newId>
         <skillId>10</skillId>
         <skillAdd>5</skillAdd>
@@ -1066,7 +1066,7 @@
     </foodItem>
     <foodItem>
         <id>7200</id>
-        <heal>16</heal>
+        <heal>14</heal>
         <newId>2313</newId>
         <skillId>10</skillId>
         <skillAdd>5</skillAdd>
@@ -1074,7 +1074,7 @@
     </foodItem>
     <foodItem>
         <id>7208</id>
-        <heal>12</heal>
+        <heal>14</heal>
         <newId>7210</newId>
         <skillId>18</skillId>
         <skillAdd>5</skillAdd>
@@ -1082,7 +1082,7 @@
     </foodItem>
     <foodItem>
         <id>7210</id>
-        <heal>22</heal>
+        <heal>12</heal>
         <newId>2313</newId>
         <skillId>18</skillId>
         <skillAdd>5</skillAdd>

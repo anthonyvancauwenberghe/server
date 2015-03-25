@@ -267,8 +267,6 @@ public class Bank {
                 }
                 player.getBank().setFiringEvents(refresh);
             } else {
-                item.setCount(transferAmount);
-               // boolean contains = player.getBank().contains(item.getId());
                 int itemTab = player.getBankField().getTabIndex();
                 BankItem toAdd = new BankItem(itemTab, item.getId(), transferAmount);
                 boolean bankRefresh = player.getBank().isFiringEvents();

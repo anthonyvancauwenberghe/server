@@ -1434,7 +1434,7 @@ public class CommandHandler {
 
         submit(new Command("buyshards", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                final String line = filterInput(input).trim();
+                /*final String line = filterInput(input).trim();
                 if(line.length() > 6){
                     player.sendf("You could only buy 999,999 at a time");
                     return false;
@@ -1460,7 +1460,8 @@ public class CommandHandler {
                     player.getActionSender().sendMessage("Error buying spirit shards: invalid amount.");
                     //wont print expection anymore
                     return false;
-                }
+                }    */
+                return false;
             }
         });
 

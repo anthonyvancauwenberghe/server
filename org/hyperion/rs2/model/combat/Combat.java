@@ -227,7 +227,7 @@ public class Combat {
 					if(weaponId != 15241) {
 					combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
 					}else {
-						if(Misc.random(100) == 0) { // 1/101 chance of exploding when specing
+						if(Misc.random(150) == 0) { // 1/101 chance of exploding when specing
 							combatEntity.getPlayer().getEquipment().set(Equipment.SLOT_WEAPON, null);
 							combatEntity.getPlayer().getActionSender().sendMessage("@red@Your handcannon exploded!");
 						}

@@ -185,6 +185,9 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int itemId = packet.getShortA();
 		int i = packet.getShortA();
 		int invslot = packet.getLEShort();
+        if(invslot >= player.getInventory().capacity()) {
+            return;
+        }
 		Item item = player.getInventory().get(invslot);
         final NPC npc = (NPC)World.getWorld().getNPCs().get(i);
         if (item != null && npc != null) {

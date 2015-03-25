@@ -212,10 +212,10 @@ public class PlayerDeathEvent extends Event {
 							}
                             killer.getBountyHunter().handleBHKill(player);
                             killer.addLastKill(player.getName());
-                            int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.5);
+                            int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)
                                 pkpIncrease = 40;
-							int pointsToAdd = (int)((player.wildernessLevel/2 + player.getBounty()));
+							int pointsToAdd = (int)((player.wildernessLevel/2 + player.getBounty())) + pkpIncrease;
 							if(player.getKillStreak() >= 6) {
 								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}

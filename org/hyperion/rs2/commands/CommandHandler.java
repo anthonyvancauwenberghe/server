@@ -1461,7 +1461,8 @@ public class CommandHandler {
                     //wont print expection anymore
                     return false;
                 }    */
-                return false;
+                player.sendMessage("Spirit shard packs are available inside the emblem pt store");
+                return true;
             }
         });
 

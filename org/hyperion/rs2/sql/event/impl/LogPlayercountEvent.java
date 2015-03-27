@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class LogPlayercountEvent extends SQLEvent {
 
-	public static final long DELAY = Time.FIVE_MINUTES;
+	public static final long DELAY = Time.ONE_MINUTE;
 
 	public LogPlayercountEvent() {
 		super(DELAY);

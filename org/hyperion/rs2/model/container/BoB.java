@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.content.misc2.Food;
 
 
 /**
@@ -163,7 +164,7 @@ public class BoB {
             return;
 		if(slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
 			return;
-		if(ShopManager.isValuable(id)) {
+		if(Food.get(id) == null && !ItemSpawning.canSpawn(id)) {
 			player.getActionSender().sendMessage("You cannot store this item.");
 			return;
 		}

@@ -725,6 +725,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
                 break;
 			case 14922:// close pin interface
 			case 15110:
+            case 28997:
 				player.getActionSender().removeAllInterfaces();
 				break;
 			case 161:

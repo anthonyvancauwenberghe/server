@@ -16,7 +16,7 @@ public class PkShop extends PointsShop {
 
 	@Override
 	public void valueSellItem(Player player, Item item) {
-		int price = (int) Math.round(getPrice(item.getId()) * .55);
+		int price = (int) Math.round(getPrice(item.getId()) * .51);
 		if(item.getId() == 5020) {
 			price = 10;
 		}
@@ -48,7 +48,7 @@ public class PkShop extends PointsShop {
 		int payment = this.getPrice(item.getId());
 		player.getInventory().remove(item);
 		getContainer().add(item);
-		payment = (int) Math.round(payment * .55); // Cause Shops wanna scam u!
+		payment = (int) Math.round(payment * .51); // Cause Shops wanna scam u!
 		if(item.getId() == 5020) {
 			payment = 10;
 		}
@@ -80,12 +80,12 @@ public class PkShop extends PointsShop {
 			case 10548:
 			case 10549:
 			case 10550:
-				return 750;
+				return 1250;
 			case 11663:
 			case 11664:
 			case 11665:
 			case 10551:
-				return 1000;
+				return 1500;
 			case 18333:
 			case 18335:
 				return 1500;
@@ -94,13 +94,13 @@ public class PkShop extends PointsShop {
 			case 13902:
 			case 19111:
 			case 13899:
-				return 5000;
+				return 9000;
 			case 13887:
 			case 13893:
 			case 13884:
 			case 13890:
 			case 13896:
-				return 2500;
+				return 3500;
 			case 5020:
 			case 13879:
 			case 13883:

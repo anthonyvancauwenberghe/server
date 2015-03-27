@@ -54,6 +54,9 @@ public class CustomSetHolder {
     }
 
     public boolean apply(int slot) {
+        if(player == null || sets[slot] == null) {
+            return false;
+        }
         try {
             return sets[slot].apply(player);
         } catch(final Exception exception) {

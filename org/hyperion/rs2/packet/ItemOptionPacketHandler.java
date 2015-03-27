@@ -16,10 +16,8 @@ import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc2.Dicing;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.content.misc2.OtherDonatorsPlace;
-import org.hyperion.rs2.model.content.misc2.RecklessDonatorsPlace;
+import org.hyperion.rs2.model.content.misc.Rune;
+import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.net.Packet;
 
 /**
@@ -185,6 +183,9 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int itemId = packet.getShortA();
 		int i = packet.getShortA();
 		int invslot = packet.getLEShort();
+        if(invslot >= player.getInventory().capacity()) {
+            return;
+        }
 		Item item = player.getInventory().get(invslot);
         final NPC npc = (NPC)World.getWorld().getNPCs().get(i);
         if (item != null && npc != null) {
@@ -264,7 +265,6 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				return;
 		switch(interfaceId) {
 			case Equipment.INTERFACE:
-
 				if(slot >= 0 && slot < Equipment.SIZE) {
 					//player.getLogging().log("Option 1 Unequiping: " + def.getName());
 					if((FightPits.teamBlue.contains(player) && id == FightPits.BLUE_CAPE) || 
@@ -277,6 +277,20 @@ public class ItemOptionPacketHandler implements PacketHandler {
 					}
 				}
 				break;
+            case RunePouch.INVENTORY_INTERFACE:
+                if(player.openedBoB)
+                    BoB.deposit(player, slot, id, 1);
+                else if(slot >= 0 && slot < Inventory.SIZE) {
+                    RunePouch.deposit(player, slot, id, 1);
+                }
+                break;
+            case RunePouch.RUNE_INTERFACE:
+                if(player.openedBoB)
+                    BoB.withdraw(player, slot, id, 1);
+                else if(slot >= 0 && slot < RunePouch.SIZE) {
+                    RunePouch.withdraw(player, id, 1);
+                }
+                break;
 			case Bank.PLAYER_INVENTORY_INTERFACE:
 				//player.getLogging().log("Option 1 Bank deposit: " + def.getName());
 				if(player.openedBoB)
@@ -420,6 +434,20 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			if(World.getWorld().getContentManager().handlePacket(3, player, id, slot, interfaceId, - 1))
 				return;
 		switch(interfaceId) {
+            case RunePouch.INVENTORY_INTERFACE:
+            if(player.openedBoB)
+                BoB.deposit(player, slot, id, 5);
+            else if(slot >= 0 && slot < Inventory.SIZE) {
+                RunePouch.deposit(player, slot, id, 5);
+            }
+                break;
+            case RunePouch.RUNE_INTERFACE:
+                if(player.openedBoB)
+                    BoB.withdraw(player, slot, id, 5);
+                else if(slot >= 0 && slot < RunePouch.SIZE) {
+                    RunePouch.withdraw(player, id, 5);
+                }
+                break;
 			case Bank.PLAYER_INVENTORY_INTERFACE:
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, 5);
@@ -532,6 +560,20 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 		}
 		switch(interfaceId) {
+            case RunePouch.INVENTORY_INTERFACE:
+            if(player.openedBoB)
+                BoB.deposit(player, slot, id, 10);
+            else if(slot >= 0 && slot < Inventory.SIZE) {
+                RunePouch.deposit(player, slot, id, 10);
+            }
+            break;
+            case RunePouch.RUNE_INTERFACE:
+                if(player.openedBoB)
+                    BoB.withdraw(player, slot, id, 10);
+                else if(slot >= 0 && slot < RunePouch.SIZE) {
+                    RunePouch.withdraw(player, id, 10);
+                }
+                break;
 			case Bank.PLAYER_INVENTORY_INTERFACE:
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, 10);
@@ -636,6 +678,20 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			}*/
 			break;
+            case RunePouch.INVENTORY_INTERFACE:
+            if(player.openedBoB)
+                BoB.deposit(player, slot, id,  player.getInventory().getCount(id));
+            else if(slot >= 0 && slot < Inventory.SIZE) {
+                RunePouch.deposit(player, slot, id,  player.getInventory().getCount(id));
+            }
+                break;
+            case RunePouch.RUNE_INTERFACE:
+                if(player.openedBoB)
+                    BoB.withdraw(player, slot, id, player.getBoB().getCount(id));
+                else if(slot >= 0 && slot < RunePouch.SIZE) {
+                    RunePouch.withdraw(player, id, player.getRunePouch().getCount(id));
+                }
+                break;
 			case Bank.PLAYER_INVENTORY_INTERFACE:
 				if(player.openedBoB)
 					BoB.deposit(player, slot, id, player.getInventory().getCount(id));
@@ -731,6 +787,16 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			if(World.getWorld().getContentManager().handlePacket(21, player, id, slot, interfaceId, - 1))
 				return;
 		switch(interfaceId) {
+            case RunePouch.INVENTORY_INTERFACE:
+                if(slot >= 0 && slot < Inventory.SIZE) {
+                    player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
+                }
+                break;
+            case RunePouch.RUNE_INTERFACE:
+                if(slot >= 0 && slot < RunePouch.SIZE) {
+                    player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
+                }
+                break;
 			case Bank.PLAYER_INVENTORY_INTERFACE:
 				if(slot >= 0 && slot < Inventory.SIZE) {
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);

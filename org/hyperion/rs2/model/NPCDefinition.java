@@ -288,10 +288,11 @@ public class NPCDefinition {
 							case 2025:
 							case 2028:
 							case 2030:
-								hp = 150;
+								hp = 120;
 								break;
                             case 5399:
                                 hp = 70;
+                                combat = 180;
                                 break;
 							case GodWarsBandos.BANDOS_BOSS:
 								hp = 255;

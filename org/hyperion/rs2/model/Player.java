@@ -37,6 +37,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Mail;
 import org.hyperion.rs2.model.content.misc.SkillingData;
 import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.Farming;
@@ -1035,7 +1036,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private final Container duel = new Container(Container.Type.STANDARD, Duel.SIZE);
 
-	/**
+    private final Container runePouch = new Container(Container.Type.ALWAYS_STACK, RunePouch.SIZE);
+
+    public Container getRunePouch() {
+        return runePouch;
+    }
+
+    /**
 	 * The player's bank.
 	 */
 	private final TabbedContainer bank = new TabbedContainer(Container.Type.ALWAYS_STACK, Bank.SIZE, this);
@@ -2198,7 +2205,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public void resetBounty() {
-		bounty = 5;
+		bounty = 10;
 	}
 
 	public void resetKillStreak() {
@@ -2212,9 +2219,11 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void increaseKillStreak() {
 		killStreak++;
         actionSender.sendString(36505, "Killstreak: @red@"+killStreak);
-		bounty = 5 * killStreak * killStreak;
-		if(bounty < 5)
-			bounty = 5;
+		bounty = (int)(4 * Math.pow(killStreak, 1.87));
+        if(bounty > 40_000)
+            bounty = 40_000;
+		if(bounty < 10)
+			bounty = 10;
 		switch(killStreak) {
 			case 5:
 				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " is on a "
@@ -2241,11 +2250,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 						+ bounty + " Pk Points!");
 			}
 		}
-        if(killStreak >= 120) {
-            ActionSender.yellMessage("@blu@" + getSafeDisplayName() + "s kill streak has internally malfunctioned, it is now 0.");
-            resetKillStreak();
-            bounty = 5;
-        }
 	}
 
 	private static String getPeopleString() {

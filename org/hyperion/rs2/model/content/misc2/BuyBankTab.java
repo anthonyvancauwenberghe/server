@@ -47,7 +47,8 @@ public class BuyBankTab implements ContentTemplate {
 
     @Override
     public boolean dialogueAction(Player player, int dialogueId) {
-        final TabPrice price = TabPrice.values()[player.getBankField().getTabAmount() - 2];
+        int offset = dialogueId == 6503 ? 0 : player.getBankField().getTabAmount() - 2;
+        final TabPrice price = TabPrice.values()[offset];
         switch(dialogueId) {
             case 6500:
                 player.getActionSender().sendDialogue("Banker", ActionSender.DialogueType.NPC, 449, Animation.FacialAnimation.HAPPY,

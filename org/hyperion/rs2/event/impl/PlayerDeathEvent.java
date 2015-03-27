@@ -23,8 +23,33 @@ import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
 
 public class PlayerDeathEvent extends Event {
+
+    public static final Map<String, Queue<String>> kills = new HashMap<String, Queue<String>>();
+
+    public static boolean isRecentKill(final Player killer, final Player player) {
+        if(killer.equals(player))
+            return true;
+        if(kills.containsKey(killer.getShortIP())) {
+            final Queue<String> recent = kills.get(killer.getShortIP());
+            if(recent.size() == 3)
+                recent.poll();
+            if(recent.contains(player.getShortIP()))
+                return true;
+            recent.offer(player.getShortIP());
+        } else {
+            final Queue<String> queue = new ArrayBlockingQueue<>(3);
+            queue.add(player.getShortIP());
+            kills.put(killer.getShortIP(), queue);
+        }
+        return false;
+    }
 	
 	private static final String[] KILLER_MESSAGES = new String[] {
 		"You have wiped the floor with %s",
@@ -121,6 +146,8 @@ public class PlayerDeathEvent extends Event {
 		player.specOn = false;
 		player.teleBlockTimer = System.currentTimeMillis();
 		player.getActionSender().resetFollow();
+        if(player.getRunePouch().size() > 0)
+            player.getRunePouch().clear();
 		player.getSpecBar().sendSpecAmount();
 		player.getSpecBar().sendSpecBar();
 		//CombatEntility ddd = entity.cE.getKiller();
@@ -167,23 +194,30 @@ public class PlayerDeathEvent extends Event {
 						    int oldKillerRating = killer.getPoints().getEloRating();
 						    killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
 						    player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
+
+
 						}
-                        if((killer.killedRecently(player.getName()) || killer.getShortIP().equalsIgnoreCase(player.getShortIP()))) {
-                            killer.getActionSender().sendMessage("You don't receive Pk Points/KillStreak for killing the same enemy twice.");
+
+                        try {
+                            if(killer.getPvPTask() != null)
+                                TaskHandler.checkTask(killer, player);
+                        } catch(Exception e) {
+                            System.err.println("PvP tasks error!");
+                            e.printStackTrace();
+                        }
+                        if(isRecentKill(killer, player)) {
+                            killer.getActionSender().sendMessage("You have recently killed this player and do not receive pk points.");
                         } else {
-							try {
-								if(killer.getPvPTask() != null)
-									TaskHandler.checkTask(killer, player);
-							} catch(Exception e) {
-								System.err.println("PvP tasks error!");
-								e.printStackTrace();
-							}
+
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
                             killer.getBountyHunter().handleBHKill(player);
                             killer.addLastKill(player.getName());
-							int pointsToAdd = (int)((player.wildernessLevel / 4 + player.getBounty()));
+                            int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
+                            if(pkpIncrease > 40)
+                                pkpIncrease = 40;
+							int pointsToAdd = (int)((player.wildernessLevel/2 + player.getBounty())) + pkpIncrease;
 							if(player.getKillStreak() >= 6) {
 								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}

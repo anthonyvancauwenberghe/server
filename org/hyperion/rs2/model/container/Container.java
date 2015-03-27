@@ -390,6 +390,9 @@ public class Container {
 	 * @param item  The item.
 	 */
 	public void set(int index, Item item) {
+        if(index < 0) {
+            return;
+        }
 		items[index] = item;
 		if(firingEvents) {
 			fireItemChanged(index);

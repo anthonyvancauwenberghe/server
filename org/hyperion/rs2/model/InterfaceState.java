@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
+import org.hyperion.rs2.model.content.misc2.RunePouch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +187,19 @@ public class InterfaceState {
 				case BoB.PLAYER_INVENTORY_INTERFACE:
 					BoB.deposit(player, enterAmountSlot, enterAmountId, amount);
 					break;
-
+                case RunePouch.INVENTORY_INTERFACE:
+                    if(player.openedBoB)
+                        BoB.deposit(player, enterAmountSlot, enterAmountId, amount);
+                    else if(enterAmountSlot >= 0 && enterAmountSlot < Inventory.SIZE) {
+                        RunePouch.deposit(player, enterAmountSlot, enterAmountId, amount);
+                    }
+                    break;
+                case RunePouch.RUNE_INTERFACE:
+                    if(player.openedBoB)
+                        BoB.withdraw(player, enterAmountSlot, enterAmountId, amount);
+                    else if(enterAmountSlot >= 0 && enterAmountSlot < RunePouch.SIZE)
+                        RunePouch.withdraw(player, enterAmountId, amount);
+                    break;
 				case Bank.PLAYER_INVENTORY_INTERFACE:
 					if(player.openedBoB)
 						BoB.deposit(player, enterAmountSlot, enterAmountId, amount);

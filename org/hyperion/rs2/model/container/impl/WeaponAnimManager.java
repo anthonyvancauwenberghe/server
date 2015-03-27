@@ -173,7 +173,7 @@ public class WeaponAnimManager {
             return 2400;//2400
         else if(s.contains("dart"))
             return 1100;
-        else if(s.contains("knife"))
+        else if(s.contains("knife") && weaponId < 870)
             return 1100;
         else if(s.contains("javelin"))
             return 3600;

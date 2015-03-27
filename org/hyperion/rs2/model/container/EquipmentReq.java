@@ -236,6 +236,13 @@ public class EquipmentReq {
 			else
 				equipReqData[1] = 99;
 		}
+
+        if(s.contains("promethium")) {
+            if(isWep)
+                equipReqData[0] = 90;
+            else
+                equipReqData[1] = 90;
+        }
         if(s.contains("saradomin") || s.contains("guthix") || s.contains("zamorak")) {
             if(s.contains("chap") || s.toLowerCase().endsWith(" body"))
                 equipReqData[4] = 70;

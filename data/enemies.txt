@@ -16,3 +16,4 @@ seven
 alacrity
 some nooby
 ruby
+rare

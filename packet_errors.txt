@@ -44272,3 +44272,878 @@ Mon Mar 23 00:08:46 CET 2015
 	class: class java.lang.NullPointerException
 
 ================================
+Tue Mar 24 01:32:03 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.model.container.Container.set(Container.java:393)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:281)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:170)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption2(ItemOptionPacketHandler.java:427)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:97)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Mar 24 02:27:22 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.net.ActionSender.follow(ActionSender.java:774)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.option2(PlayerOptionPacketHandler.java:205)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.handle(PlayerOptionPacketHandler.java:43)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Mar 24 07:03:09 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 11:39:27 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.model.container.Container.set(Container.java:393)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:281)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:170)
+	at org.hyperion.rs2.model.InterfaceState.closeEnterAmountInterface(InterfaceState.java:194)
+	at org.hyperion.rs2.packet.EnterAmountPacketHandler.handle(EnterAmountPacketHandler.java:18)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Mar 24 14:23:24 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -10073
+	at org.hyperion.rs2.model.container.Container.get(Container.java:320)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:188)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:124)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Mar 24 15:46:02 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 16:30:27 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 17:13:31 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 17:16:43 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 17:50:48 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.util.TextUtils.hashToUsername(TextUtils.java:56)
+	at org.hyperion.rs2.packet.BankSearchPacketHandler.handle(BankSearchPacketHandler.java:21)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Mar 24 18:44:40 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.net.ActionSender.follow(ActionSender.java:771)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.option2(PlayerOptionPacketHandler.java:205)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.handle(PlayerOptionPacketHandler.java:43)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Mar 24 19:40:20 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 19:47:41 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 20:05:40 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 20:35:22 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 20:56:55 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 21:01:59 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 21:03:15 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Mar 24 22:37:35 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:834)
+	at org.hyperion.rs2.packet.DialoguePacketHandler.handle(DialoguePacketHandler.java:13)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 00:12:16 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 01:09:30 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 01:12:20 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 01:38:06 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 01:44:38 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 03:02:45 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -26107
+	at org.hyperion.rs2.model.container.Container.get(Container.java:320)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:188)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:124)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 03:19:26 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 03:21:15 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 04:16:38 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 04:30:25 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 05:03:56 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 06:17:53 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 06:35:49 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 08:06:38 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 08:14:58 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 09:10:09 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 09:40:33 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 09:42:08 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 10:17:53 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 10:29:47 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 10:43:52 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 10:49:00 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.model.container.Container.set(Container.java:393)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:281)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:170)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption4(ItemOptionPacketHandler.java:643)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:103)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 11:42:53 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.model.container.Container.set(Container.java:393)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:281)
+	at org.hyperion.rs2.model.container.bank.Bank.deposit(Bank.java:170)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOption3(ItemOptionPacketHandler.java:539)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:100)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 12:01:54 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 12:29:43 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 14:39:02 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 3140
+	at org.hyperion.rs2.model.container.Container.get(Container.java:320)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:188)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:124)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 15:46:35 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:52:06 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:52:44 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:53:22 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:54:03 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:54:33 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:55:04 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:55:29 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:56:04 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:57:10 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:58:33 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 15:59:51 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:00:17 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:00:38 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:00:57 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:01:19 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:01:48 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:02:13 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:04:37 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:04:59 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:08:06 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:10:00 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.net.ActionSender.follow(ActionSender.java:771)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.option2(PlayerOptionPacketHandler.java:205)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.handle(PlayerOptionPacketHandler.java:43)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 16:10:00 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:10:22 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:13:12 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:13:30 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:13:46 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:14:05 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:14:24 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:14:42 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:15:03 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:15:24 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:17:41 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:18:03 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:18:26 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:18:46 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:19:03 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:20:12 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:20:30 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:20:48 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:21:09 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:21:30 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:23:32 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:24:01 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:26:01 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:26:27 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:27:09 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:27:36 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:31:48 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 16:55:09 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 17:31:04 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 17:31:27 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:05:57 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:06:21 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:08:11 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:08:31 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:08:53 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:09:30 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:13:28 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:17:09 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:23:22 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:26:40 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:30:42 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:33:26 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:34:16 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:35:18 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:36:31 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:37:01 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:39:01 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:39:37 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:39:58 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:42:18 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:42:55 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:44:16 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:47:40 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:49:41 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:51:00 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 18:51:15 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Mar 25 20:42:48 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.content.ticket.TicketManager.lambda$new$1(TicketManager.java:24)
+	at org.hyperion.rs2.model.content.ticket.TicketManager$$Lambda$1/455659002.compare(null:-1)
+	at java.util.TreeMap.getEntryUsingComparator(TreeMap.java:376)
+	at java.util.TreeMap.getEntry(TreeMap.java:345)
+	at java.util.TreeMap.remove(TreeMap.java:603)
+	at java.util.TreeSet.remove(TreeSet.java:276)
+	at org.hyperion.rs2.model.content.ticket.TicketManager.remove(TicketManager.java:64)
+	at org.hyperion.rs2.model.itf.impl.HelpInterface.handle(HelpInterface.java:34)
+	at org.hyperion.rs2.packet.InterfacePacketHandler.handleData(InterfacePacketHandler.java:39)
+	at org.hyperion.rs2.packet.InterfacePacketHandler.handle(InterfacePacketHandler.java:23)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Mar 25 20:50:04 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:834)
+	at org.hyperion.rs2.packet.DialoguePacketHandler.handle(DialoguePacketHandler.java:13)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Mar 26 03:20:26 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:915)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:245)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:53)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Mar 26 04:07:09 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.net.ActionSender.follow(ActionSender.java:771)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.option2(PlayerOptionPacketHandler.java:205)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.handle(PlayerOptionPacketHandler.java:43)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Mar 26 14:55:41 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.net.ActionSender.follow(ActionSender.java:771)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.option2(PlayerOptionPacketHandler.java:205)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.handle(PlayerOptionPacketHandler.java:43)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Mar 26 14:57:55 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.net.ActionSender.follow(ActionSender.java:771)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.option2(PlayerOptionPacketHandler.java:205)
+	at org.hyperion.rs2.packet.PlayerOptionPacketHandler.handle(PlayerOptionPacketHandler.java:43)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Mar 26 19:13:44 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:915)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:245)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:53)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Mar 26 20:51:11 CET 2015
+	class: class java.lang.NullPointerException
+
+================================
+Thu Mar 26 21:37:16 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:535)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:53)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Fri Mar 27 00:36:36 CET 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPM(FriendsAssistant.java:64)
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:49)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Fri Mar 27 01:25:34 CET 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.util.TextUtils.hashToUsername(TextUtils.java:56)
+	at org.hyperion.rs2.packet.BankSearchPacketHandler.handle(BankSearchPacketHandler.java:21)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Fri Mar 27 04:00:13 CET 2015
+	class: class java.lang.NullPointerException
+
+================================
+Fri Mar 27 06:39:36 CET 2015
+	class: class java.lang.NullPointerException
+
+================================
+Fri Mar 27 10:25:14 CET 2015
+	class: class java.lang.NullPointerException
+
+================================

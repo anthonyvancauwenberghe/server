@@ -2198,7 +2198,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 */
 	private int killStreak = 0;
 	private String[] lastKills = {"", "", "", "", ""};
-	private int bounty = 5;
+	private int bounty = 10;
 
 	public int getBounty() {
 		return bounty;

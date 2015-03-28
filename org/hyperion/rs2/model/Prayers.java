@@ -11,7 +11,7 @@ import java.util.*;
 public class Prayers {
 	
 	public static final int[] OVERHEADS =  {
-		16, 17, 18, 21, 22, 23, 37, 38, 39, 47, 48
+		16, 17, 18, 21, 22, 23, 37, 38, 39
 	};
 
 	/**

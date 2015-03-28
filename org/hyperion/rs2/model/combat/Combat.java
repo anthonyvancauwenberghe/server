@@ -640,6 +640,12 @@ public class Combat {
 						Prayer.smite(combatEntity.getPlayer(), damage);
 					}
 				}
+
+                /**
+                 * Zanik's crossbow prayer take-off
+                 */
+
+                Prayer.zaniksEffect(combatEntity.getPlayer(), damage);
 				
 				/**
 				 * Applies Damage.

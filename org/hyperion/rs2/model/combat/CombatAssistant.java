@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.PrayerIcon;
 import org.hyperion.rs2.model.content.skill.Prayer;
 
 
@@ -1346,4 +1347,5 @@ public class CombatAssistant {
 		Combat.removeArrow(combatEntity.getPlayer(), bowType, combatEntity
 				.getOpponent().getEntity().getLocation());
 	}
+
 }

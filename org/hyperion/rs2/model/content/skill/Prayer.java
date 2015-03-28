@@ -244,6 +244,7 @@ public class Prayer implements ContentTemplate {
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684)
             return;
+        final int time = 400 + damage * 50;
         player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
 
 
@@ -281,8 +282,8 @@ public class Prayer implements ContentTemplate {
                 }
             }
 
-            opp.getPrayers().disableFor(damage * 60, Prayers.OVERHEADS);
-            player.getPrayers().disableFor(damage * 60, Prayers.OVERHEADS);
+            opp.getPrayers().disableFor(time, Prayers.OVERHEADS);
+            player.getPrayers().disableFor(time, Prayers.OVERHEADS);
 
 
         });

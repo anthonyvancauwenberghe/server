@@ -8,8 +8,6 @@ import org.hyperion.rs2.model.Rank;
 public final class PvPDegradeHandler {
 	
 	public static void checkDegrade(final Player player) {
-        if(Rank.hasAbility(player, Rank.DEVELOPER))
-            return;
 		for(Item item : player.getEquipment().toArray()) {
 			if(item == null) continue;
 			final int id = item.getId();

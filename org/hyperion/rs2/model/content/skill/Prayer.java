@@ -244,6 +244,8 @@ public class Prayer implements ContentTemplate {
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684)
             return;
+        if(Combat.isInMulti(player.getCombat().getOpponent()))
+            return;
         final int time = 400 + damage * 60;
         player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
 

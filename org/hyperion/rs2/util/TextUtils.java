@@ -53,6 +53,8 @@ public class TextUtils {
         while (value != 0L) {
             long current = value;
             value /= 37L;
+            if(length > 12)
+                continue;
             chars[11 - length++] = USERNAME_TRANSLATE_TABLE[(int) (current - (value * 37L))];
         }
         for (int i = 12 - length; i < 12; i++) {

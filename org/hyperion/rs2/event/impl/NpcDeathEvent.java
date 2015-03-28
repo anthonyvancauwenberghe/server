@@ -86,7 +86,7 @@ public class NpcDeathEvent extends Event {
                     final int pkp = (int)(reward.get().pkp * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
-                    double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.02 : 0.03;
+                    double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.035 : 0.04;
                     for(double d  = 0.03; d < percent; d += increment) {
                         if(unreacheablenpc(npc.getDefinition().getId())) {
                             x = player.getLocation().getX();

@@ -17,7 +17,9 @@ public class ObjectClickHandler {
 
 	public static void clickObject(Player p, int id, int x, int y, int type) {
 		//System.out.println("Id " + id);
-		if(! p.getLocation().isWithinDistance(Location.create(x, y, p.getLocation().getZ()), 3)) {
+        final GameObjectDefinition def = GameObjectDefinition.forId(id);
+        int offset = def != null ? 1 + def.getSizeX() + def.getSizeY() : 3;
+		if(! p.getLocation().isWithinDistance(Location.create(x, y, p.getLocation().getZ()), offset)) {
 			p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
 			return;
 		}

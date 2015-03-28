@@ -288,7 +288,7 @@ public class CombatAssistant {
 
 	public static final int[][] UNIQUERANGEWEPS = {
 			// Wep Id, Wep Ammo
-			{15241, 15243}, {4734, 4740}, {14864, 8882}};
+			{15241, 15243}, {4734, 4740}, {14684, 8882}};
 
 	public static final int[] BOWS = {839, 841, 843, 845, 847, 849, 851, 853,
 			855, 857, 859, 861, 4212, 4214, 4827, 11235, 15701, 15702, 15703,

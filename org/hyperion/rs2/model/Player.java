@@ -37,6 +37,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Mail;
 import org.hyperion.rs2.model.content.misc.SkillingData;
 import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.Farming;
@@ -1035,7 +1036,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private final Container duel = new Container(Container.Type.STANDARD, Duel.SIZE);
 
-	/**
+    private final Container runePouch = new Container(Container.Type.ALWAYS_STACK, RunePouch.SIZE);
+
+    public Container getRunePouch() {
+        return runePouch;
+    }
+
+    /**
 	 * The player's bank.
 	 */
 	private final TabbedContainer bank = new TabbedContainer(Container.Type.ALWAYS_STACK, Bank.SIZE, this);
@@ -2191,7 +2198,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 */
 	private int killStreak = 0;
 	private String[] lastKills = {"", "", "", "", ""};
-	private int bounty = 5;
+	private int bounty = 10;
 
 	public int getBounty() {
 		return bounty;

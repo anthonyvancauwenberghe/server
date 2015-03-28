@@ -50,6 +50,10 @@ public class Web implements ContentTemplate {
 	                           int d) {
 		if(type == 6) {
             if(objectId == 1765) {
+                if(player.getLocation().distance(Location.create(x, y, player.getLocation().getZ())) > 3) {
+                    player.sendMessage("You cannot use the ladder from here");
+                    return false;
+                }
                 if(player.getLastAttack().timeSinceLastAttack() > 5000 && !player.isTeleBlocked()) {
                     Magic.teleport(player, Location.create(2272, 4682, 0), true);
                 } else {

@@ -237,20 +237,72 @@ public class Prayer implements ContentTemplate {
 	}
 
 	private static List<PrayerIcon> prayers;
-	
-	public static void dragonScimitar(Player player) {
-		for(int i : Prayers.OVERHEADS) {
 
-            int time = 6000;
-            if(player.cE.getOpponent() != null && player.cE.getOpponent().getEntity() instanceof Player) {
-                Player opponent = player.cE.getOpponent().getPlayer();
-                if(opponent != null) {
-                    if(Rank.isAbilityToggled(opponent, Rank.DONATOR))
-                        time+= 2000;
-                    if(Rank.isAbilityToggled(opponent, Rank.SUPER_DONATOR))
-                        time+= 2000;
+
+    public static void zaniksEffect(final Player player, int damage) {
+        if(player == null || player.getCombat().getOpponent() == null)
+            return;
+        if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684)
+            return;
+        final int time = 400 + damage * 60;
+        player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
+
+
+
+            for(int i : Prayers.OVERHEADS) {
+
+
+                if(player.getPrayers().isEnabled(i)) {
+                    final int idx = Prayer.getIndex(i);
+                    if(i == -1)
+                        continue;
+                    PrayerIcon p2 = prayers.get(idx);
+                    player.getActionSender().sendClientConfig(p2.getFrame(), 0);
+                    player.getPrayers().setEnabled(p2.getId(), false);
+                    player.setDrainRate(getPryDrain(player));
+                    setHeadIcon(player, p2);
+                    player.sendMessage("The gods do not appreciate hypocrisy");
                 }
             }
+
+
+            for(int i : Prayers.OVERHEADS) {
+
+
+                if(opp.getPrayers().isEnabled(i)) {
+                    final int idx = Prayer.getIndex(i);
+                    if(i == -1)
+                        continue;
+                    PrayerIcon p2 = prayers.get(idx);
+                    opp.getActionSender().sendClientConfig(p2.getFrame(), 0);
+                    opp.getPrayers().setEnabled(p2.getId(), false);
+                    opp.setDrainRate(getPryDrain(opp));
+                    setHeadIcon(opp, p2);
+                    player.forceMessage("The Gods cannot save you now!");
+                }
+            }
+
+            opp.getPrayers().disableFor(time, Prayers.OVERHEADS);
+            player.getPrayers().disableFor(time, Prayers.OVERHEADS);
+
+
+        });
+    }
+	
+	public static void dragonScimitar(Player player) {
+
+        int time = 6000;
+        if(player.cE.getOpponent() != null && player.cE.getOpponent().getEntity() instanceof Player) {
+            Player opponent = player.cE.getOpponent().getPlayer();
+            if(opponent != null) {
+                if(Rank.isAbilityToggled(opponent, Rank.DONATOR))
+                    time+= 2000;
+                if(Rank.isAbilityToggled(opponent, Rank.SUPER_DONATOR))
+                    time+= 2000;
+            }
+        }
+
+		for(int i : Prayers.OVERHEADS) {
 
 			if(player.getPrayers().isEnabled(i)) {
                 final int idx = getIndex(i);
@@ -259,12 +311,13 @@ public class Prayer implements ContentTemplate {
 				PrayerIcon p2 = prayers.get(idx);
 				player.getActionSender().sendClientConfig(p2.getFrame(), 0);
 				player.getPrayers().setEnabled(p2.getId(), false);
-				player.getPrayers().disableFor(time, Prayers.OVERHEADS);
 				player.setDrainRate(getPryDrain(player));
 				setHeadIcon(player, p2);
 			}
 		}
-	}
+        player.getPrayers().disableFor(time, Prayers.OVERHEADS);
+
+    }
 
 	public static void resetInterface(Player player) {
 		if(prayers == null)

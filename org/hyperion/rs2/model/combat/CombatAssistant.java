@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.PrayerIcon;
 import org.hyperion.rs2.model.content.skill.Prayer;
 
 
@@ -287,7 +288,7 @@ public class CombatAssistant {
 
 	public static final int[][] UNIQUERANGEWEPS = {
 			// Wep Id, Wep Ammo
-			{15241, 15243}, {4734, 4740}};
+			{15241, 15243}, {4734, 4740}, {14684, 8882}};
 
 	public static final int[] BOWS = {839, 841, 843, 845, 847, 849, 851, 853,
 			855, 857, 859, 861, 4212, 4214, 4827, 11235, 15701, 15702, 15703,
@@ -571,6 +572,8 @@ public class CombatAssistant {
 				return 1839;
 			case 13879:
 				return 1837;
+            case 14684:
+                return 2001;
 		}
 
 		if(bowType == Constants.RANGEDBOLTS) {
@@ -1033,7 +1036,7 @@ public class CombatAssistant {
 			{4222, 70}, {4223, 70}, {6522, 49}, {10034, 15},
 			{15015, 130}, {15016, 110}, {4734, 49}, {4740, 49},
 			{19157, 80}, {19162, 80}, {19152, 80}, {15243, 150},
-			{13883, 130}, {13879, 135}
+			{13883, 130}, {13879, 135}, {8882, 145}
 	};
 
 
@@ -1044,11 +1047,6 @@ public class CombatAssistant {
 				str = RANGEDDATA[l][1];
 			}
 		}
-        if(str < 40) {
-            ItemDefinition def = ItemDefinition.forId(i);
-            if(def != null && def.getName().toLowerCase().contains("knife") || def.getName().toLowerCase().contains("dart"))
-                str *= .7;
-        }
 		return str;
 	}
 
@@ -1064,6 +1062,8 @@ public class CombatAssistant {
 			if(p.getEquipment().get(Equipment.SLOT_ARROWS) != null)
 			rangedStr = getRangeStr(p.getEquipment().get(Equipment.SLOT_ARROWS)
 					.getId());
+        if(p.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684 && p.getEquipment().getItemId(Equipment.SLOT_ARROWS) == 8882)
+            rangedStr = 80;
 		double bonus = 1.00;
 		if(p.getPrayers().isEnabled(3) || p.getPrayers().isEnabled(32)) {
 			bonus = 1.05;
@@ -1347,4 +1347,5 @@ public class CombatAssistant {
 		Combat.removeArrow(combatEntity.getPlayer(), bowType, combatEntity
 				.getOpponent().getEntity().getLocation());
 	}
+
 }

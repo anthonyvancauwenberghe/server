@@ -22,7 +22,7 @@ public class PvPArmourStorage {
 	public static final int DEFAULT_CHARGE = 1000;
 	
 	private static final int STATIUS_BODY = 13884, STATIUS_LEGS = 13890, STATIUS_HELM = 13896, STATIUS_WARHAMMER = 13902;
-	private static final int VESTA_BODY = 13887, VESTA_LEGS = 13893, VESTA_SWORD = 13900;
+	private static final int VESTA_BODY = 13887, VESTA_LEGS = 13893, VESTA_SWORD = 13899;
 	private static final int MORRIGANS_TOP = 13870, MORRIGANS_CHAPS = 13873, MORRIGANS_COIF = 13876;
     private static final int ZURIELS_TOP = 13858, ZURIELS_BOTTOMS = 13861, ZURIELS_HAT = 13864, ZURIELS_STAFF = 13867;
 	
@@ -34,7 +34,7 @@ public class PvPArmourStorage {
 	}
 	
 	private final Map<Integer, Integer> wrappedMap;
-	
+
 	public PvPArmourStorage() {
 		wrappedMap = new HashMap<>();
 		for(int i = 0; i < armours.length; i++)

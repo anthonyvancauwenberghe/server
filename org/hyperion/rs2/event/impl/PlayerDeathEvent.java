@@ -146,6 +146,8 @@ public class PlayerDeathEvent extends Event {
 		player.specOn = false;
 		player.teleBlockTimer = System.currentTimeMillis();
 		player.getActionSender().resetFollow();
+        if(player.getRunePouch().size() > 0)
+            player.getRunePouch().clear();
 		player.getSpecBar().sendSpecAmount();
 		player.getSpecBar().sendSpecBar();
 		//CombatEntility ddd = entity.cE.getKiller();

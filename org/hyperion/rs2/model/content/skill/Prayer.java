@@ -287,6 +287,8 @@ public class Prayer implements ContentTemplate {
 
 
         });
+
+        System.out.println("Time: "+time);
     }
 	
 	public static void dragonScimitar(Player player) {

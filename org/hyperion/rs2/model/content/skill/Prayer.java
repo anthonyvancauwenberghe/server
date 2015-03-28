@@ -244,7 +244,7 @@ public class Prayer implements ContentTemplate {
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684)
             return;
-        final int time = 400 + damage * 50;
+        final int time = 400 + damage * 60;
         player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
 
 
@@ -287,8 +287,6 @@ public class Prayer implements ContentTemplate {
 
 
         });
-
-        System.out.println("Time: "+time);
     }
 	
 	public static void dragonScimitar(Player player) {

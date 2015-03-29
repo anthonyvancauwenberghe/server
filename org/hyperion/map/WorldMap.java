@@ -977,7 +977,7 @@ public class WorldMap {
 		}
 		if(dirs.get(0) == - 5) {
 			//System.out.println("godwars wall active.");
-			//return false;
+			return false;
 		}
 
 

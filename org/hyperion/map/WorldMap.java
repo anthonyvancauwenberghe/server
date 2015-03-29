@@ -946,7 +946,9 @@ public class WorldMap {
 		}
 
         final GameObject object = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0);
-		if(object != null && object.getDefinition().getId() != 6951) {
+		if(object != null) {
+            if(object.getDefinition().getId() == 6951)
+                return true;
 			return false;
         }
 		if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
@@ -1014,7 +1016,7 @@ public class WorldMap {
 				} else if(check == 0 && world.World_Objects[which].containsKey(f2) && i == dir) {
 					return false;
 				} else if(check == 0 && world.World_Objects[which].containsKey(f) && i == dir) {
-					//return false;
+					return false;
 				}
 			} else {
 				if(check == 1 && world.World_Objects[which].containsKey(f2)) {
@@ -1022,7 +1024,7 @@ public class WorldMap {
 				} else if(check == 0 && world.World_Objects[which].containsKey(f2)) {
 					return false;
 				} else if(check == 0 && world.World_Objects[which].containsKey(f)) {
-					//return false;
+					return false;
 				}
 			}
 		}

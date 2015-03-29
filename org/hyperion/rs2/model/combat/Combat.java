@@ -484,9 +484,11 @@ public class Combat {
 			 * ().getEntity().getLocation().getY() +
 			 * combatEntity.getOpponent().getOffsetY())) return true;
 			 */
+
+            System.out.println("DIS PART OF COMBAT");
 			if(! WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation()))
 				return true;
-
+            System.out.println("NEVER HIT DIS PART?");
 			if(combatEntity.predictedAtk > System.currentTimeMillis()) {
 				return true;// we dont want to reset attack but just
 				// wait another 500ms or so...

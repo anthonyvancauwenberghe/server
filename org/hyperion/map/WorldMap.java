@@ -1,6 +1,7 @@
 package org.hyperion.map;
 
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.World;
@@ -943,7 +944,9 @@ public class WorldMap {
 			System.out.println("error in WorldMap X: " + absX + " Y: " + absY);
 			return false;
 		}
-		if(World.getWorld().getObjectMap().getObjectAt(absX, absY, 0) != null)
+
+        final GameObject object = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0);
+		if(object != null && object.getDefinition().getId() != 6951)
 			return false;
 		if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
 			return true;

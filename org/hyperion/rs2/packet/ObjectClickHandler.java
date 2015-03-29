@@ -18,8 +18,9 @@ public class ObjectClickHandler {
 	public static void clickObject(Player p, int id, int x, int y, int type) {
 		//System.out.println("Id " + id);
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
-        int offset = def != null ? 1 + def.getSizeX() + def.getSizeY() : 3;
-		if(! p.getLocation().isWithinDistance(Location.create(x, y, p.getLocation().getZ()), offset)) {
+        int offX = def != null ? 1 + def.getSizeX() : 3;
+        int offY = def != null ? 1 + def.getSizeY() : 3;
+		if(!canClick(offX, offY, x, y, p.getLocation().getX(), p.getLocation().getY())) {
 			p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
 			return;
 		}
@@ -226,6 +227,15 @@ public class ObjectClickHandler {
 				Bank.open(player, false);
 				break;
 		}
+
+
 	}
+
+
+    public static boolean canClick(int offsetX, int offsetY, int toLocX, int toLocY, int fromLocX, int fromLocY) {
+        int deltaX = Math.abs(toLocX - fromLocX);
+        int deltaY = Math.abs(toLocY - fromLocY);
+        return  (deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX);
+    }
 
 }

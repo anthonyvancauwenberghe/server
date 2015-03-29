@@ -3,8 +3,10 @@ package org.hyperion.rs2.model;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
 import org.hyperion.cache.InvalidCacheException;
+import org.hyperion.cache.index.impl.MapIndex;
 import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.map.LandscapeListener;
+import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
 import org.hyperion.rs2.event.Event;
@@ -143,9 +145,9 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 			/*MapIndex[] mapIndices = cache.getIndexTable().getMapIndices();
 			for(MapIndex index : mapIndices) {
 				new LandscapeParser(cache, index.getIdentifier(), this).parse();
-			}*/
+			}
 			//logger.info("Loaded " + objectCount + " objects.");
-			//System.out.println("Loaded Object Definitions for " + objectCount + " objects.");
+			System.out.println("Loaded Objects for " + objectCount + " objects."); */
 			
 			/*buf.flip();
 			byte[] data = new byte[buf.limit()];
@@ -170,7 +172,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 		buf.put((byte) obj.getLocation().getZ());
 		buf.put((byte) obj.getType());
 		buf.put((byte) obj.getRotation());*/
-		//World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getGameObjects().add(obj);
+		World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getGameObjects().add(obj);
 	}
 
 	@Override
@@ -234,7 +236,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public GameObject getObjectAt(int x, int y, int z) {
 		for(GameObject object : globalObjects) {
-			if(object.getLocation().getX() == x && object.getLocation().getY() == y)
+			if(object.getLocation().getX() == x && object.getLocation().getY() == y && object.getLocation().getZ()%4 == z%4)
 				return object;
 		}
 		return null;

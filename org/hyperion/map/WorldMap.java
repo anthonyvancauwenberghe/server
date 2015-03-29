@@ -944,7 +944,7 @@ public class WorldMap {
             System.out.println("error in WorldMap X: " + absX + " Y: " + absY);
             return false;
         }
-        final GameObject obj = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0)
+        final GameObject obj = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0) ;
         if(obj != null)
             if(obj.getDefinition().getId() == 6951)
                 return true;

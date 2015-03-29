@@ -235,10 +235,7 @@ public class ObjectClickHandler {
     public static boolean canClick(int offsetX, int offsetY, int toLocX, int toLocY, int fromLocX, int fromLocY, int height) {
         int deltaX = Math.abs(toLocX - fromLocX);
         int deltaY = Math.abs(toLocY - fromLocY);
-        boolean isWalkable = World.getWorld().isWalkAble(height, fromLocX, fromLocY, toLocX, toLocY, 0);
-        System.out.println("NOT WALKABLE");
-        return  ((deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX))
-                && World.getWorld().isWalkAble(height, fromLocX, fromLocY, toLocX, toLocY, 0);
+        return  ((deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX));
     }
 
 }

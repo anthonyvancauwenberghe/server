@@ -946,8 +946,10 @@ public class WorldMap {
 		}
 
         final GameObject object = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0);
-		if(object != null && object.getDefinition().getId() != 6951)
+		if(object != null && object.getDefinition().getId() != 6951) {
+            System.out.println("false HURR");
 			return false;
+        }
 		if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
 			return true;
 		}
@@ -973,7 +975,7 @@ public class WorldMap {
 			dirs = dc2.directions;
 		}
 		if(dirs.get(0) == - 5) {
-			//System.out.println("godwars wall active.");
+			System.out.println("godwars wall active.");
 			return false;
 		}
 

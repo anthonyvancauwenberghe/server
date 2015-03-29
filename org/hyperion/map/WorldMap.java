@@ -947,8 +947,8 @@ public class WorldMap {
 
         final GameObject object = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0);
 		if(object != null) {
-            if(object.getDefinition().getId() == 6951)
-                return true;
+           // if(object.getDefinition().getId() == 6951)
+               // return true;
 			return false;
         }
 		if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {

@@ -162,7 +162,7 @@ public class ClanManager {
 
         message = message.replace("req:", "req");
 
-        final String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRankName().substring(0, 1) + "] ";
+        final String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRankName().substring(1, 2) + "] ";
 		message = "[@blu@"+TextUtils.titleCase(player.getClanName())+"@bla@]" + displayRank + player.getName() + ": @dre@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {

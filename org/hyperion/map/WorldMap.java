@@ -1,6 +1,7 @@
 package org.hyperion.map;
 
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.World;
@@ -919,11 +920,11 @@ public class WorldMap {
 		return - 1;
 	}
 
-	public static boolean isWalkAble2(int height, int absX, int absY, int toAbsX, int toAbsY, int check) {
-		//if(world == null) return true;
-		if(absX == toAbsX && absY == toAbsY) {
-			return true;
-		}
+    public static boolean isWalkAble2(int height, int absX, int absY, int toAbsX, int toAbsY, int check) {
+        //if(world == null) return true;
+        if(absX == toAbsX && absY == toAbsY) {
+            return true;
+        }
 		/*if(absX != toAbsX && absY != toAbsY){
 			if(isWalkAble(height,absX,absY,toAbsX,absY,check) &&
 				isWalkAble(height,absX,absY,absX,toAbsY,check) &&
@@ -931,73 +932,77 @@ public class WorldMap {
 				isWalkAble(height,absX,toAbsY,toAbsX,toAbsY,check))
 					return true;
 		}*/
-		BlockPoint f = new BlockPoint(toAbsX, toAbsY, height, 0);
-		BlockPoint f2 = new BlockPoint(toAbsX, toAbsY, height, 1);
-		int which = getArea(toAbsX, toAbsY);
+        BlockPoint f = new BlockPoint(toAbsX, toAbsY, height, 0);
+        BlockPoint f2 = new BlockPoint(toAbsX, toAbsY, height, 1);
+        int which = getArea(toAbsX, toAbsY);
 
-		//int dir = DirectionUtils.direction(toAbsX-absX,toAbsY-absY);
-		int dir = direction(absX, absY, toAbsX, toAbsY);
-		DirectionCollection dc = null;
-		DirectionCollection dc2 = null;
-		if(which > world.World_Objects.length) {
-			System.out.println("error in WorldMap X: " + absX + " Y: " + absY);
-			return false;
-		}
-		if(World.getWorld().getObjectMap().getObjectAt(absX, absY, 0) != null)
-			return false;
-		if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
-			return true;
-		}
-		if(world.World_Objects[which] == null) {
-			return true;
-		}
+        //int dir = DirectionUtils.direction(toAbsX-absX,toAbsY-absY);
+        int dir = direction(absX, absY, toAbsX, toAbsY);
+        DirectionCollection dc = null;
+        DirectionCollection dc2 = null;
+        if(which > world.World_Objects.length) {
+            System.out.println("error in WorldMap X: " + absX + " Y: " + absY);
+            return false;
+        }
+        final GameObject obj = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0) ;
+        if(obj != null) {
+            if(obj.getDefinition().getId() == 6951)
+                return true;
+            return false;
+        }
+        if(world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
+            return true;
+        }
+        if(world.World_Objects[which] == null) {
+            return true;
+        }
 
-		if(world.World_Objects[which].containsKey(f)) {
-			dc = world.World_Objects[which].get(f);
-		} else if(world.World_Objects[which].containsKey(f2)) {
-			dc2 = world.World_Objects[which].get(f2);
-		}
+        if(world.World_Objects[which].containsKey(f)) {
+            dc = world.World_Objects[which].get(f);
+        } else if(world.World_Objects[which].containsKey(f2)) {
+            dc2 = world.World_Objects[which].get(f2);
+        }
 
-		if(dc == null && dc2 == null) {
-			return true;
-		}
+        if(dc == null && dc2 == null) {
+            return true;
+        }
 
-		ArrayList<Integer> dirs = null;
+        ArrayList<Integer> dirs = null;
 
-		if(dc != null) {
-			dirs = dc.directions;
-		} else if(dc2 != null) {
-			dirs = dc2.directions;
-		}
-		if(dirs.get(0) == - 5) {
-			//System.out.println("godwars wall active.");
-			return false;
-		}
+        if(dc != null) {
+            dirs = dc.directions;
+        } else if(dc2 != null) {
+            dirs = dc2.directions;
+        }
+        if(dirs.get(0) == - 5) {
+            //System.out.println("godwars wall active.");
+            return false;
+        }
 
 
-		for(int i : dirs) {
-			//System.out.print("   "+i);
-			if(dir == 2) {
-				if(isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
-					return true;
-				}
-				return false;
-			} else if(dir == 14) {
-				if(isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
-					return true;
-				}
-				return false;
-			} else if(dir == 10) {
-				if(isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
-					return true;
-				}
-				return false;
-			} else if(dir == 6) {
-				if(isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
-					return true;
-				}
-				return false;
-			} else if(i != - 1) {
+        for(int i : dirs) {
+            //System.out.print("   "+i);
+            if(dir == 2) {
+                if(isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
+                    return true;
+                }
+                return false;
+            } else if(dir == 14) {
+                if(isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
+                    return true;
+                }
+                return false;
+            } else if(dir == 10) {
+                if(isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
+                    return true;
+                }
+                return false;
+            } else if(dir == 6) {
+                if(isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
+                    return true;
+                }
+                return false;
+            } else if(i != - 1) {
 				/*if(check == 1 && world.World_Objects[which].containsKey(f2) && i == dir) {
 					return false;
 				} else if(check == 0 && world.World_Objects[which].containsKey(f2) && i == dir) {
@@ -1005,27 +1010,26 @@ public class WorldMap {
 				} else if(world.World_Objects[which].containsKey(f) && i == dir) {
 					return false;
 				}*/
-				if(check == 1 && world.World_Objects[which].containsKey(f2)) {
-					return true;
-				} else if(check == 0 && world.World_Objects[which].containsKey(f2) && i == dir) {
-					return false;
-				} else if(world.World_Objects[which].containsKey(f) && i == dir) {
-					return false;
-				}
-			} else {
-				if(check == 1 && world.World_Objects[which].containsKey(f2)) {
-					return true;
-				} else if(check == 0 && world.World_Objects[which].containsKey(f2)) {
-					return false;
-				} else if(world.World_Objects[which].containsKey(f)) {
-					return false;
-				}
-			}
-		}
-		return true;
+                if(check == 1 && world.World_Objects[which].containsKey(f2)) {
+                    return true;
+                } else if(check == 0 && world.World_Objects[which].containsKey(f2) && i == dir) {
+                    return false;
+                } else if(world.World_Objects[which].containsKey(f) && i == dir) {
+                    return false;
+                }
+            } else {
+                if(check == 1 && world.World_Objects[which].containsKey(f2)) {
+                    return true;
+                } else if(check == 0 && world.World_Objects[which].containsKey(f2)) {
+                    return false;
+                } else if(world.World_Objects[which].containsKey(f)) {
+                    return false;
+                }
+            }
+        }
+        return true;
 
-	}
-
+    }
 
 	public static int direction(int srcX, int srcY, int destX, int destY) {
 		int dx = destX - srcX, dy = destY - srcY;

@@ -307,7 +307,7 @@ public class WalkingQueue {
 				reset();
 			}
 
-            player.getActionSender().sendDestroyObject(10, 0, Location.create(3795, 2844, 0));
+            //player.getActionSender().sendDestroyObject(10, 0, Location.create(3795, 2844, 0));
 
             if(player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
                 if(player.duelAttackable <= 0) {

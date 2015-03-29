@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.content;
 
+import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.World;
 
 /**
  * Represents a door.
@@ -229,6 +231,7 @@ public class Door {
 	private boolean isOpen;
 
 	private DoorType type;
+
 
 	public static enum DoorType {
 		NORMAL,

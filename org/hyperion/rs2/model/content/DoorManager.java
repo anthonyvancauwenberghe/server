@@ -100,7 +100,6 @@ public class DoorManager {
 					break;
 			}
 		} else {
-            player.sendMessage("DUH", door.getType());
 			switch(door.getType()) {
 
 				case NORMAL:
@@ -120,7 +119,6 @@ public class DoorManager {
 					double distance1 = player.getLocation().distance(door.getWalkTo());
 					double distance2 = player.getLocation().distance(door.getSecondaryWalkTo());
 					player.getWalkingQueue().reset();
-                    player.getActionSender().sendMessage("DUH");
 	            /*
                  * We want to walk to the location which is farthest away.
 				 */

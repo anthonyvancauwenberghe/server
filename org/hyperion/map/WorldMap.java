@@ -1014,7 +1014,7 @@ public class WorldMap {
 				} else if(check == 0 && world.World_Objects[which].containsKey(f2) && i == dir) {
 					return false;
 				} else if(check == 0 && world.World_Objects[which].containsKey(f) && i == dir) {
-					return false;
+					//return false;
 				}
 			} else {
 				if(check == 1 && world.World_Objects[which].containsKey(f2)) {
@@ -1022,7 +1022,7 @@ public class WorldMap {
 				} else if(check == 0 && world.World_Objects[which].containsKey(f2)) {
 					return false;
 				} else if(check == 0 && world.World_Objects[which].containsKey(f)) {
-					return false;
+					//return false;
 				}
 			}
 		}

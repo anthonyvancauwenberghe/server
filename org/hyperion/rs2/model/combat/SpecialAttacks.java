@@ -623,6 +623,21 @@ public class SpecialAttacks {
                                             6553600 + clientSpeed));
                 }
 				break;
+
+            case 11696:
+            case 13902:
+
+                if(player.getCombat().getOpponent() != null) {
+                    player.getCombat().getOpponent()._getPlayer().ifPresent(p -> {
+                        int lvl = p.getSkills().getLevel(1);
+                        int remove = weaponId == 13902 ? hitDamage/2 : hitDamage;
+                        int toRemove = lvl - remove < 1 ? lvl - 1 : remove;
+                        p.getSkills().setLevel(1, lvl - toRemove);
+                    });
+                }
+
+                break;
+
 			case 19780:
 				maxDamg = (int)(maxDamg * 1.5);
 				int dmg = Misc.random(maxDamg);

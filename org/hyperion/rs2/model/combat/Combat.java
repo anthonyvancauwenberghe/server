@@ -334,20 +334,7 @@ public class Combat {
 				/**
 				 * Checks Range bonus etc
 				 */
-				int rangeAtk = CombatAssistant.calculateRangeAttack(combatEntity.getPlayer());
-				int rangeDef;
-				if(combatEntity.getOpponent().getEntity() instanceof Player)
-					rangeDef = CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer());
-				else
-					rangeDef = combatEntity.getOpponent().getNPC().getDefinition().getBonus()[9];
-
-				int deltaRangeBonus = rangeAtk - rangeDef;
-				/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-					combatEntity.getPlayer().getActionSender().sendMessage("Delta Range Bonus is : " + deltaRangeBonus); 
-				}*/
-				int toadd = Misc.random(deltaRangeBonus / 5);
-				//System.out.println("Toadd is " + toadd);
-				damg += toadd;
+				damg = CombatCalculation.getCalculatedDamage(combatEntity.getPlayer(), combatEntity.getOpponent().getEntity(), damg, Constants.RANGE, maxHit);
 				if(damg < 0)
 					damg = 0;
 				else if(damg > maxHit)

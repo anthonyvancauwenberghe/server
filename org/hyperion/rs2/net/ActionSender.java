@@ -2055,7 +2055,6 @@ public class ActionSender {
 	}
 
 	public void sendDestroyObject(int type, int face, Location location) {
-        System.out.println("Sending destory object at: Type: "+ type + " Face: "+ face + " X: " +location.getX() + " Y: "+location.getY());
 		sendReplaceObject(location, 6951, face, type);
 	}
 

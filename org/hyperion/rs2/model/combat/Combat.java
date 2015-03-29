@@ -331,14 +331,18 @@ public class Combat {
 				 * Get random Damage Hit
 				 */
 				damg = random(maxHit);
-				/**
-				 * Checks Range bonus etc
-				 */
-				damg = CombatCalculation.getCalculatedDamage(combatEntity.getPlayer(), combatEntity.getOpponent().getEntity(), damg, Constants.RANGE, maxHit);
-				if(damg < 0)
-					damg = 0;
-				else if(damg > maxHit)
-					damg = maxHit;
+
+                /**
+                 * Checks Range bonus etc
+                 */
+                damg = CombatCalculation.getCalculatedDamage(combatEntity.getPlayer(), combatEntity.getOpponent().getEntity(), damg, Constants.RANGE, maxHit);
+
+                if(CombatAssistant.darkBow(weaponId) || weaponId == 16337 || weaponId == 16887) {
+                    damgDouble = random(maxHit);
+                    doubleHit = true;
+                    damgDouble = CombatCalculation.getCalculatedDamage(combatEntity.getPlayer(), combatEntity.getOpponent().getEntity(), damgDouble, Constants.RANGE, maxHit);
+                }
+
 				/**
 				 * Enchanted Bolts Effects
 				 */
@@ -386,10 +390,7 @@ public class Combat {
 					}
 					damg *= boltBonus;
 				}
-				if(CombatAssistant.darkBow(weaponId) || weaponId == 16337 || weaponId == 16887) {
-					damgDouble = random(maxHit);
-					doubleHit = true;
-				}
+
 				if(weaponId == 16887 && Misc.random(10) == 1) {
 					combatEntity.doGfx(855);
 					if(combatEntity.getEntity() instanceof Player) {
@@ -413,22 +414,12 @@ public class Combat {
 				if(combatEntity.getOpponent().getEntity() instanceof Player) {
 					//divine spirit shield
 
-					if(random(CombatAssistant.calculateRangeAttack(combatEntity.getPlayer())) < random(CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer())))
-						damg = 0;
+
 					/**
 					 * Prayer Checking
 					 */
 
-					if(doubleHit) {
-						if(random(CombatAssistant.calculateRangeAttack(combatEntity.getPlayer())) < random(CombatAssistant.calculateRangeDefence(combatEntity.getOpponent().getPlayer())))
-							damgDouble = 0;
-						else if(combatEntity.getOpponent().getPlayer().getPrayers().isEnabled(13)
-								&& random(3) == 1)
-							damgDouble = (int) (damgDouble * 0.4);
-					}
 				} else {
-					if(random(CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer())) < random(combatEntity.getOpponent().getNPC().getDefinition().getBonus()[9]))
-						damg = 0;
 					if(SlayerTask.getLevelById(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
 						damg = 0;
 				}

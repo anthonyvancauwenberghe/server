@@ -20,7 +20,7 @@ public class ObjectClickHandler {
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
         int offX = def != null ? 1 + def.getSizeX() : 3;
         int offY = def != null ? 1 + def.getSizeY() : 3;
-		if(!canClick(offX, offY, x, y, p.getLocation().getX(), p.getLocation().getY())) {
+		if(!canClick(offX, offY, x, y, p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ())) {
 			p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
 			return;
 		}
@@ -232,10 +232,11 @@ public class ObjectClickHandler {
 	}
 
 
-    public static boolean canClick(int offsetX, int offsetY, int toLocX, int toLocY, int fromLocX, int fromLocY) {
+    public static boolean canClick(int offsetX, int offsetY, int toLocX, int toLocY, int fromLocX, int fromLocY, int height) {
         int deltaX = Math.abs(toLocX - fromLocX);
         int deltaY = Math.abs(toLocY - fromLocY);
-        return  (deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX);
+        return  ((deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX))
+                && World.getWorld().isWalkAble(height, fromLocX, fromLocY, toLocX, toLocY, 0);
     }
 
 }

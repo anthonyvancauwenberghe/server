@@ -274,6 +274,7 @@ public class NPCDefinition {
 						switch(id) { //To Hardcode HP etc
                             case 50:
                                 hp = 950;
+                                combat = 350;
                                 break;
 							case 9463:
 								hp = 450;

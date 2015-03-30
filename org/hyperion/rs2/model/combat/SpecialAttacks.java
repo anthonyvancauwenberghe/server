@@ -473,7 +473,8 @@ public class SpecialAttacks {
 			} else {
 				player.cE.getOpponent().hit(hitDamage, player,
 						false, cbStyle + crit);
-                Magic.vengeance(oldEntity.getPlayer(),
+                if(oldEntity.getEntity() instanceof Player)
+                    Magic.vengeance(oldEntity.getPlayer(),
                         player.cE, hitDamage);
 			}
 
@@ -771,7 +772,7 @@ public class SpecialAttacks {
 					player.cE.getOpponent().hit(maxDamg3,
 							player, false, 0);
                     final int newMaxDamage = (int)(maxDamg * 1.5);
-					World.getWorld().submit(new Event(500) {
+					World.getWorld().submit(new Event(1000) {
 						@Override
 						public void execute() {
 							if(player.cE.getOpponent() == null) {

@@ -362,12 +362,16 @@ public class SpecialAttacks {
 						.getOpponent().getPlayer());
 			else
 				deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
-						- CombatAssistant.calculateMeleeDefence(player.cE
+						- CombatAssistant.calculateRangeDefence(player.cE
 						.getOpponent().getPlayer());
 
 		} else {
-			deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
-					- player.cE.getOpponent().getCombat() * 5;
+            if(!ranged)
+			    deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
+					- player.cE.getOpponent().getCombat();
+            else
+                deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
+                        - (int)(player.cE.getOpponent().getCombat()/2.5);
 		}
 		int randomIncrease = Misc.random(deltaBonus / 3);
 
@@ -469,6 +473,8 @@ public class SpecialAttacks {
 			} else {
 				player.cE.getOpponent().hit(hitDamage, player,
 						false, cbStyle + crit);
+                Magic.vengeance(oldEntity.getPlayer(),
+                        player.cE, hitDamage);
 			}
 
 		}
@@ -610,6 +616,9 @@ public class SpecialAttacks {
                         public void execute() {
                             entity.hit(hit1, player, false, 1);
                             entity.hit(hit2, player, false, 1);
+                            if(entity.getEntity() instanceof Player)
+                                Magic.vengeance(oldEntity.getPlayer(),
+                                    player.cE, hit1);
                             this.stop();
                         }
                     });
@@ -733,8 +742,8 @@ public class SpecialAttacks {
                 break;
 			case 14484:
 				player.cE.doGfx(1950, 0);
-				//if(hitDamage > 0) {
-					player.cE.getOpponent().hit((int) (hitDamage / 2),
+				if(hitDamage > 0) {
+					player.cE.getOpponent().hit((int) hitDamage/2,
 							player, false, 0);
 					World.getWorld().submit(new Event(1000) {
 						@Override
@@ -757,12 +766,11 @@ public class SpecialAttacks {
 							this.stop();
 						}
 					});
-				/*} else {
-					final int maxDamg3 = defence(player.cE, maxDamg, atkBonus);
-					final int atkBonus2 = atkBonus;
-					final int maxDamg5 = maxDamg;
+				} else {
+					final int maxDamg3 = SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random(maxDamg), 0, maxDamg));
 					player.cE.getOpponent().hit(maxDamg3,
 							player, false, 0);
+                    final int newMaxDamage = (int)(maxDamg * 1.5);
 					World.getWorld().submit(new Event(500) {
 						@Override
 						public void execute() {
@@ -776,13 +784,13 @@ public class SpecialAttacks {
 								return;
 							}
 							if(maxDamg3 <= 0) {
-								int maxDamg4 = defence(player.cE,
-										maxDamg5, atkBonus2);
+								int maxDamg4 = CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random(newMaxDamage), 0,newMaxDamage);
 								maxDamg4 = SpiritShields.applyEffects(player.cE.getOpponent(), maxDamg4);
 								player.cE.getOpponent().hit((int) maxDamg4,
 										player, false, 0);
 								if(maxDamg4 == 0)
-									player.cE.getOpponent().hit(maxDamg5,
+									player.cE.getOpponent().hit(
+                                            SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random((int)(newMaxDamage * 1.4)), 0,(int)(newMaxDamage * 1.4))),
 											player, false, 0);
 								else
 									player.cE.getOpponent().hit(
@@ -798,8 +806,8 @@ public class SpecialAttacks {
 							}
 							this.stop();
 						}
-					});*/
-				//}
+					});
+				}
 				break;
 			case 4587:
 				if(hitDamage > 0 && player != null && player.cE != null &&  player.cE.getOpponent() != null) {

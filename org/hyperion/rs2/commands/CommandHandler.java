@@ -54,6 +54,7 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.misc.PotionDecanting;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -199,6 +200,13 @@ public class CommandHandler {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 DialogueManager.openDialogue(player, 158);
+                return true;
+            }
+        });
+        submit(new Command("combine", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                PotionDecanting.decantPotions(player);
                 return true;
             }
         });

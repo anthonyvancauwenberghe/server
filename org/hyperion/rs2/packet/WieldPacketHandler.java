@@ -47,6 +47,8 @@ public class WieldPacketHandler implements PacketHandler {
 			return;
 		if(CombatAssistant.is2H(id))
 			removeShield = true;
+        if(id == 2422)
+            player.getInventory().set(slot, null);
 		switch(interfaceId) {
 			case Inventory.INTERFACE:
 				if((player.cannotSwitch || player.duelRule[DuelRules.SWITCH.ordinal()]) && (player.duelAttackable > 0 || Duel.inDuelLocation(player))) {

@@ -344,6 +344,8 @@ public class ActionSender {
             player.verified = true;
         }
 
+        World.getWorld().getGlobalItemManager().newDropItem(player, new GlobalItem(player, player.getLocation().getCloseLocation(), Item.create(2422)));
+
 
         return this;
 	}

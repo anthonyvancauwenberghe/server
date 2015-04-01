@@ -107,9 +107,10 @@ public class GlobalItemManager {
                     return;
                 }
 				globalItems.remove(globalItem);
-
-                player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));
-			    player.getInventory().add(globalItem.getItem());
+                if(item != 2422) {
+                    player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));
+			        player.getInventory().add(globalItem.getItem());
+                }
 			    removeItem(globalItem);
 			    globalItem.destroy();
             }

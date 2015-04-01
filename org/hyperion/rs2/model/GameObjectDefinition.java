@@ -34,6 +34,8 @@ public class GameObjectDefinition {
 	 * @return The definition.
 	 */
 	public static GameObjectDefinition forId(int id) {
+        if(id >= definitions.length)
+            return null;
 		if(definitions[id] == null)
 			definitions[id] = new GameObjectDefinition(id, "", "", 1, 1, true, false, true, 1, -1);
 		return definitions[id];

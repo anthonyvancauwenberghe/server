@@ -749,37 +749,32 @@ public class SpecialAttacks {
 					World.getWorld().submit(new Event(1000) {
 						@Override
 						public void execute() {
-							if(player.cE.getOpponent() == null) {
-								this.stop();
-								return;
-							}
-							String message = Combat.canAtk(player.cE, player.cE.getOpponent());
+							String message = Combat.canAtk(player.cE, oldEntity);
 							if(message.length() > 1) {
 								this.stop();
 								return;
 							}
 
-							player.cE.getOpponent().hit((int) (hitDamage / 4),
+						    oldEntity.hit((int) (hitDamage / 4),
 									player, false, 0);
-							player.cE.getOpponent().hit(
+							oldEntity.hit(
 									(int) (hitDamage / 4) + 1,
 									player, false, 0);
 							this.stop();
 						}
 					});
 				} else {
-					final int maxDamg3 = SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random(maxDamg), 0, maxDamg));
-					player.cE.getOpponent().hit(maxDamg3,
+					int notPrayDamg = SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random(maxDamg), 0, maxDamg));
+                    if(oldEntity.getEntity() instanceof Player)
+                        notPrayDamg = oldEntity.getPlayer().getInflictDamage(notPrayDamg, player, false, Constants.MELEE);
+                    final int maxDamg3 = notPrayDamg;
+					oldEntity.hit(maxDamg3,
 							player, false, 0);
                     final int newMaxDamage = (int)(maxDamg * 1.5);
 					World.getWorld().submit(new Event(1000) {
 						@Override
 						public void execute() {
-							if(player.cE.getOpponent() == null) {
-								this.stop();
-								return;
-							}
-							String message = Combat.canAtk(player.cE, player.cE.getOpponent());
+							String message = Combat.canAtk(player.cE, oldEntity);
 							if(message.length() > 1) {
 								this.stop();
 								return;
@@ -787,21 +782,23 @@ public class SpecialAttacks {
 							if(maxDamg3 <= 0) {
 								int maxDamg4 = CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random(newMaxDamage), 0,newMaxDamage);
 								maxDamg4 = SpiritShields.applyEffects(player.cE.getOpponent(), maxDamg4);
-								player.cE.getOpponent().hit((int) maxDamg4,
+                                if(oldEntity.getEntity() instanceof Player)
+                                    maxDamg4 = oldEntity.getPlayer().getInflictDamage(maxDamg4, player, false, Constants.MELEE);
+								oldEntity.hit((int) maxDamg4,
 										player, false, 0);
 								if(maxDamg4 == 0)
-									player.cE.getOpponent().hit(
+									oldEntity.hit(
                                             SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, player.cE.getOpponent().getEntity(), Combat.random((int)(newMaxDamage * 1.4)), 0,(int)(newMaxDamage * 1.4))),
 											player, false, 0);
 								else
-									player.cE.getOpponent().hit(
+									oldEntity.hit(
 											(int) (maxDamg4 / 2),
 											player, false, 0);
 							} else {
-								player.cE.getOpponent().hit(
+								oldEntity.hit(
 										(int) (maxDamg3 / 2),
 										player, false, 0);
-								player.cE.getOpponent().hit(
+								oldEntity.hit(
 										(int) (maxDamg3 / 2),
 										player, false, 0);
 							}

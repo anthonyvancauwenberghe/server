@@ -246,6 +246,8 @@ public class Container {
 	 * <code>false</code> if not.
 	 */
     public boolean add(Item item) {
+        if(item == null)
+            return false;
         if(item.getId() < 0)
             return false;
         //System.out.println(item.getDefinition());

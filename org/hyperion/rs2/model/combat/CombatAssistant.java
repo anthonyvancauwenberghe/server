@@ -1265,7 +1265,7 @@ public class CombatAssistant {
 				bonus = player.getBonus().get(i);
 			}
 		}
-		return (int) ((meleeAtk/1.2 + (bonus)));
+		return (int) ((meleeAtk/1.3 + (bonus)));
 	}
 
 	/**
@@ -1297,7 +1297,7 @@ public class CombatAssistant {
 					bonus = player.getBonus().get(i);
 				}
 			}
-			return (int) (meleeDef + bonus);
+			return (int) (meleeDef/1.2 + bonus);
 		} else {
 			return (int)(entity.cE.getCombat()/1.2);
 		}

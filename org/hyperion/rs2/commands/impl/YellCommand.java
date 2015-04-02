@@ -42,7 +42,8 @@ public class YellCommand extends Command {
 	}
 
 	public static final int NORMAL_YELL_DELAY = 30000;
-	public static final int DONATOR_YELL_DELAY = 10000;
+	public static final int DONATOR_YELL_DELAY = 12000;
+    public static final int SUPER_YELL_DELAY = 7000;
 	public static final int SKILLER_YELL_DELAY = 15000;
 	
 	public static int minYellRank = 0;
@@ -56,6 +57,10 @@ public class YellCommand extends Command {
 	}
 	
 	private int getYellDelay(Player player) {
+        if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
+            return SUPER_YELL_DELAY;
+        else if (Rank.hasAbility(player, Rank.DONATOR))
+            return DONATOR_YELL_DELAY;
 		int timer = 60000;
 		int deltaElo = player.getPoints().getEloRating() - 1200;
 		if(deltaElo <= 0)
@@ -104,21 +109,15 @@ public class YellCommand extends Command {
 		input = input.replaceAll("Arsen", "Graham");
 
 		long yellMilliseconds = (long) (System.currentTimeMillis() - player.getYelling().getYellTimer());
-		if(!Rank.isStaffMember(player) && !Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
-			if(Rank.hasAbility(player, Rank.DONATOR)) {
-				if(yellMilliseconds < DONATOR_YELL_DELAY) {
-					player.getActionSender().sendMessage("Please wait " + (int) ((DONATOR_YELL_DELAY - yellMilliseconds) / 1000) + " seconds before yelling.");
-					return false;
-				}
-				player.getYelling().updateYellTimer();
-			} else if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 2000)) {
+		if(!Rank.isStaffMember(player)) {
+			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
 					player.getActionSender().sendMessage("Please wait " + (int) ((getYellDelay(player) - yellMilliseconds) / 1000) + " seconds before yelling.");
 					return false;
 				}
 				player.getYelling().updateYellTimer();
 			} else {
-               player.sendMessage("Use the @red@help@bla@ clan chat for help", "Use the @red@::market@bla@ or the @red@market@bla@ cc for selling/buying", "Use the @red@duel@bla@ cc for staking");
+               player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level, or purchase donator to start yelling");
                return false;
 			}
 		}

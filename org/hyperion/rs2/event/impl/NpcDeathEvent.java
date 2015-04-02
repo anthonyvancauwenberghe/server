@@ -3,6 +3,7 @@ package org.hyperion.rs2.event.impl;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.attack.TormentedDemon;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -193,6 +194,8 @@ public class NpcDeathEvent extends Event {
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                     if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                         int chance =  isTask ? 750 : 1000;
+                        if(npc.getDefinition().getId() == 8349 && player.getLocation().inPvPArea())
+                            chance = 500;
                         for(NPCDrop drop : npc.getDefinition().getDrops()) {
                             if(drop == null) continue;
                             if(Combat.random(chance) <= drop.getChance()) {

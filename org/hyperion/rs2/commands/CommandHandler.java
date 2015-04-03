@@ -57,6 +57,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.PotionDecanting;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
+import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
@@ -248,6 +249,15 @@ public class CommandHandler {
 				return true;
 			}
 		});
+        submit(new Command("tutorial", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                if(player.getTutorialProgress() == 0)
+                    player.setTutorialProgress(1);
+                Tutorial.getProgress(player);
+                return true;
+            }
+        });
 		submit(new Command("rhsu", Rank.MODERATOR) { // request highscores update
 			@Override
 			public boolean execute(Player player, String input) throws Exception {

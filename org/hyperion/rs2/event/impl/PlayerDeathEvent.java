@@ -142,7 +142,6 @@ public class PlayerDeathEvent extends Event {
         } else {
             player.sendMessage("You don't restore special energy as you have died too quickly");
         }
-
 		player.specOn = false;
 		player.teleBlockTimer = System.currentTimeMillis();
 		player.getActionSender().resetFollow();

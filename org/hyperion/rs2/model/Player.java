@@ -107,6 +107,16 @@ public class Player extends Entity implements Persistable, Cloneable{
     public String lastIp;
     public boolean verified;
 
+    public int tutorialProgress = 0;
+
+    public int getTutorialProgress() {
+        return tutorialProgress;
+    }
+
+    public void setTutorialProgress(int step) {
+        tutorialProgress = step;
+    }
+
     private final TicketHolder ticketHolder = new TicketHolder();
 
     public final TicketHolder getTicketHolder() {
@@ -788,6 +798,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean duelRule[] = new boolean[24];
 	public int duelAttackable = 0;
 	public int duelRuleOption = 0;
+
 	public boolean banEquip[] = new boolean[14];
 	private long lastDuelUpdate = 0L;
 	public void refreshDuelTimer() {

@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.net.ActionSender;
 
@@ -143,6 +144,7 @@ public class NewGameMode implements ContentTemplate {
 
                 player.setGameMode(1);
                 player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
+                Tutorial.getProgress(player);
                 player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
 
                 player.getActionSender().removeChatboxInterface();
@@ -158,6 +160,7 @@ public class NewGameMode implements ContentTemplate {
                     }
                 }
                 player.getInventory().add(Item.create(1856));
+                Tutorial.getProgress(player);
                 player.sendMessage("A starter has been added to your bank!");
                 player.sendMessage("l4unchur13 "+NORMAL_GAME_GUIDE);
                 player.getActionSender().removeChatboxInterface();

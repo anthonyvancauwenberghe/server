@@ -35,7 +35,7 @@ public class Configuration {
 		configs.put("voting", "false");
 		configs.put("mail", "false");
 		configs.put("highscores", "false");
-		configs.put("spawn", "false");
+		configs.put("spawn", "true");
 	}
 
 	/**

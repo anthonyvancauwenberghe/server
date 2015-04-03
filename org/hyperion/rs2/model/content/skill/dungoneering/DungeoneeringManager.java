@@ -133,6 +133,9 @@ public class DungeoneeringManager implements ContentTemplate {
             return false;
         }
         Magic.teleport(player, LOBBY, false);
+        if(player.getTutorialProgress() == 3) {
+            player.setTutorialProgress(4);
+        }
         player.SummoningCounter = 0;
         return true;
     }

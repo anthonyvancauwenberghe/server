@@ -142,7 +142,22 @@ public class PlayerDeathEvent extends Event {
         } else {
             player.sendMessage("You don't restore special energy as you have died too quickly");
         }
-
+        if(player.getEquipment().contains(13889) || player.getInventory().contains(13889)) {
+            player.increaseBodyDeaths(1);
+            if(player.getBodyDeaths() == 5) {
+                player.getEquipment().remove(new Item(13889));
+                player.getInventory().remove(new Item(13889));
+                player.getActionSender().sendMessage("Your vesta body has been destroyed.");
+            }
+        }
+        if(player.getEquipment().contains(13895) || player.getInventory().contains(13895)) {
+            player.increaseLegDeaths(1);
+            if(player.getLegDeaths() == 5) {
+                player.getEquipment().remove(new Item(13895));
+                player.getInventory().remove(new Item(13895));
+                player.getActionSender().sendMessage("Your vesta legs has been destroyed.");
+            }
+        }
 		player.specOn = false;
 		player.teleBlockTimer = System.currentTimeMillis();
 		player.getActionSender().resetFollow();

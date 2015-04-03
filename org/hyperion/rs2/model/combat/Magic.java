@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
@@ -1167,8 +1168,13 @@ public class Magic {
                         final Room room = player.getDungoneering().getCurrentDungeon().getStartRoom();
                         player.setTeleportTarget(room.getSpawnLocation());
                         player.getDungoneering().setCurrentRoom(room);
-                    } else player.setTeleportTarget(Location.create(x, y, 0));
-
+                    } else {
+                        player.setTeleportTarget(Location.create(x, y, 0));
+                        if(player.getTutorialProgress() == 4) {
+                            player.setTutorialProgress(5);
+                            Tutorial.giveReward(player);
+                        }
+                    }
                     this.stop();
 					player.inAction = false;
 					return;

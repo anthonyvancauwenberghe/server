@@ -94,9 +94,9 @@ public class AStarPathFinder implements PathFinder {
 		closed.clear();
 		open.clear();
 		open.add(nodes[sx][sy]);
-
-		nodes[tx][ty].parent = null;
-
+        if(tx < map.getWidthInTiles() && ty < map.getHeightInTiles()) {
+            nodes[tx][ty].parent = null;
+        }
 		// while we haven'n't exceeded our max search depth
 		int maxDepth = 0;
 		while((maxDepth < maxSearchDistance) && (open.size() != 0)) {

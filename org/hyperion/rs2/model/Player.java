@@ -799,34 +799,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public int duelAttackable = 0;
 	public int duelRuleOption = 0;
 
-    public int bodyDeaths = 0;
-
-    public int getBodyDeaths() {
-        return bodyDeaths;
-    }
-
-    public void increaseBodyDeaths(int amount) {
-        bodyDeaths += amount;
-    }
-
-    public void setBodyDeaths(int set) {
-        bodyDeaths = set;
-    }
-
-    public int legDeaths = 0;
-
-    public int getLegDeaths() {
-        return legDeaths;
-    }
-
-    public void increaseLegDeaths(int amount) {
-        legDeaths += amount;
-    }
-
-    public void setLegDeaths(int set) {
-        legDeaths = set;
-    }
-
 	public boolean banEquip[] = new boolean[14];
 	private long lastDuelUpdate = 0L;
 	public void refreshDuelTimer() {

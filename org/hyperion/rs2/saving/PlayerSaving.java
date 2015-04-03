@@ -210,8 +210,6 @@ public class PlayerSaving {
         saveList.add(new SaveDungoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));
         saveList.add(new SaveTutorialProgress("tutorial"));
-        saveList.add(new SaveBodyDeaths("bodydeaths"));
-        saveList.add(new SaveLegDeaths("legdeaths"));
     }
 
 	/**

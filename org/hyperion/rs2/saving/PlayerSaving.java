@@ -658,12 +658,7 @@ public class PlayerSaving {
 						}
 						continue;
 					}
-					System.out.println("Nulled so for " + player.getName()
-							+ " line: " + line);
-					System.out.println("Name:" + name);
-					player.getSession().close(true);
-					copyFile(player.getName());
-					return;
+					continue;
 				}
                 try {
                     if(so instanceof SaveBank) {

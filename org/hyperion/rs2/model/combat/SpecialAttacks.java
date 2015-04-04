@@ -172,6 +172,7 @@ public class SpecialAttacks {
                 specialAnimation = 6147;
                 specialDis = 1;
                 specialDrain = 50;
+                specialAccuracy = 1.8;
                 break;
             case 10887:
 				specialAnimation = 5870;
@@ -920,6 +921,8 @@ public class SpecialAttacks {
 		if(weapon == null)
 			return specDamage;
 		switch(weapon.getId()) {
+            case 17640:
+                specDamage = 1.25;
 			case 13883:
 				specDamage = 1.15;
 			case 11730:

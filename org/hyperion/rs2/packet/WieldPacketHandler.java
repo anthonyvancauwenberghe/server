@@ -39,6 +39,8 @@ public class WieldPacketHandler implements PacketHandler {
 			case 15098:
 				Dicing.rollClanDice(player, Misc.random(100));
 				return;
+            case 2669:
+                return;
 		}
 		if(slot < 0 || slot > 28 || id < 0 || id > ItemDefinition.MAX_ID)
 			return;

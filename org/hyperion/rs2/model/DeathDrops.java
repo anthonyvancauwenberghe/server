@@ -121,6 +121,9 @@ public class DeathDrops {
 			return true;
 		} else {
 			switch(item.getId()) {
+                case 13889:
+                case 13895:
+                    return Misc.random(4) == 0;
 			case 20000:
 			case 19713://nex helms
 			case 19716:

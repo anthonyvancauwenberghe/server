@@ -210,8 +210,6 @@ public class PlayerSaving {
         saveList.add(new SaveDungoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));
         saveList.add(new SaveTutorialProgress("tutorial"));
-        saveList.add(new SaveBodyDeaths("bodydeaths"));
-        saveList.add(new SaveLegDeaths("legdeaths"));
     }
 
 	/**
@@ -660,12 +658,7 @@ public class PlayerSaving {
 						}
 						continue;
 					}
-					System.out.println("Nulled so for " + player.getName()
-							+ " line: " + line);
-					System.out.println("Name:" + name);
-					player.getSession().close(true);
-					copyFile(player.getName());
-					return;
+					continue;
 				}
                 try {
                     if(so instanceof SaveBank) {

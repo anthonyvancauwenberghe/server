@@ -23,6 +23,10 @@ public class WalkingPacketHandler implements PacketHandler {
 			player.getActionSender().sendMessage("You cannot move in this game.");
 			return;
 		}
+        if(player.getTutorialProgress() == 6) {
+            player.getActionSender().sendMessage("Please use ::tutorial to continue this part of the tutorial!");
+            return;
+        }
 		if(player.getAgility().isRunning()) {
 			player.getActionSender().sendMessage("You're a bit busy to be walking around!");
 			return;

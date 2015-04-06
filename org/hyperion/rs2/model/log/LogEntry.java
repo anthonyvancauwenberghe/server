@@ -22,7 +22,8 @@ public class LogEntry implements Comparable<LogEntry>{
         PICKUP_ITEM("pickup-items.log", "pickup item"),
         COMMAND("command.log", "command"),
         GAMBLE("gamble.log", "gamble", "gambling", "stake"),
-        YELL("yell.log", "yell");
+        YELL("yell.log", "yell"),
+        BOB("bobdrops.log", "bob drops");
 
         public final String path;
         public final boolean save;
@@ -160,6 +161,16 @@ public class LogEntry implements Comparable<LogEntry>{
                         LogUtils.NEW_LINE,
                         player2,
                         LogUtils.toString(player2Trade)
+                )
+        );
+    }
+
+    public static LogEntry bob(final String player1, final Item[] bobItems){
+        return new LogEntry(Category.BOB,
+                String.format(
+                        "@red@%s@blu@ Bob Drops: @bla@%s",
+                        player1,
+                        LogUtils.toString(bobItems)
                 )
         );
     }

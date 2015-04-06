@@ -2048,6 +2048,24 @@ public class CommandPacketHandler implements PacketHandler {
 				return;
 			}
 
+            if(commandStart.equals("setlvl")) {
+                try {
+                    String[] args = s.substring(6).trim().split(" ");
+                    int skill = Integer.parseInt(args[0]);
+                    int level = Integer.parseInt(args[1]);
+                    if(skill > 6) {
+                        player.sendMessage("You can only set combat skills.");
+                        return;
+                    }
+                    if(level > 99)
+                        level = 99;
+                    player.getSkills().setLevel(skill, level);
+                    player.getSkills().setExperience(skill, player.getSkills().getXPForLevel(level) + 5);
+                } catch (Exception e) {
+                    player.sendMessage("Please use ::setlvl skill id");
+                }
+            }
+
 			if (commandStart.equalsIgnoreCase("rest")) {
 				player.playAnimation(Animation.create(11786));
 			}

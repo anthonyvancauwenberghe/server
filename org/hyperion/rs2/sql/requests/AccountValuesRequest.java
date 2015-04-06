@@ -26,8 +26,10 @@ public class AccountValuesRequest extends SQLRequest{
                 pkpValue
         );
         try{
+            if (player.getName().toLowerCase() != "thomas" || player.getName().toLowerCase() != "rwt bank"){
             sql.query(query);
             player.lastAccountValueTime = System.currentTimeMillis();
+            }
         }catch(Exception ex){
             ex.printStackTrace();
         }

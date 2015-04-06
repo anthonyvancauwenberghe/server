@@ -1698,13 +1698,7 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 			return;
 		}
-		if (commandStart.equals("mypos")) {
-			player.getActionSender().sendMessage(
-                    (new StringBuilder()).append(player.getLocation().getX())
-                            .append(", ").append(player.getLocation().getY()).append(", ").append(player.getLocation().getZ())
-                            .toString());
-			return;
-		}
+
 
 		if (commandStart.startsWith("staff")) {
 			try {
@@ -2490,7 +2484,13 @@ public class CommandPacketHandler implements PacketHandler {
                 player.sendf("You have %s your %s option", old ? "enabled" : "disabled", option);
                 player.getPermExtraData().put(option+"option", !player.getPermExtraData().getBoolean(option+"option"));
             }
-
+            if (commandStart.equals("mypos")) {
+                player.getActionSender().sendMessage(
+                        (new StringBuilder()).append(player.getLocation().getX())
+                                .append(", ").append(player.getLocation().getY()).append(", ").append(player.getLocation().getZ())
+                                .toString());
+                return;
+            }
 			if (commandStart.equalsIgnoreCase("reqhelp")) {
 				try {
 					String reason = s.substring(8);

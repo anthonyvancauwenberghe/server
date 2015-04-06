@@ -47,7 +47,7 @@ public class Tutorial implements ContentTemplate {
         player.getInventory().add(new Item(15273, 100));
         player.getInventory().add(new Item(13889, 1));
         player.getInventory().add(new Item(13895, 1));
-        player.getActionSender().sendMessage("The vesta gear will be destroyed after dieing five times with them on you!");
+        player.getActionSender().sendMessage("The vesta gear has a 20% chance of being destroyed on death!");
     }
 
     @Override

@@ -87,7 +87,7 @@ public class SkillGuideManager implements ContentTemplate {
 				client.skillMenuId = 20;
 				break;
 		}
-		openSkillInterface(client, client.skillMenuId, 0, false);
+		//openSkillInterface(client, client.skillMenuId, 0, false);
 		return true;
 	}
 

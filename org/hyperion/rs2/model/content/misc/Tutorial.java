@@ -1,11 +1,10 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.net.ActionSender;
 
 public class Tutorial implements ContentTemplate {
@@ -16,7 +15,9 @@ public class Tutorial implements ContentTemplate {
             "To look up the rules, use the ::rules command.",
             "Use the ::tutorial command to continue",
             "Teleport home in order to complete the tutorial",
-            "You finished the tutorial! Welcome to ArteroPK!"
+            "Use the ::tutorial command to continue",
+            "Use the ::tutorial command to continue",
+            "You have completed the tutorial!"
     };
 
     public static void getProgress(Player player) {
@@ -33,6 +34,9 @@ public class Tutorial implements ContentTemplate {
             case 4:
                 DialogueManager.openDialogue(player, 2109);
                 return;
+            case 6:
+                DialogueManager.openDialogue(player, 2111);
+                return;
             default:
                 player.getActionSender().sendMessage(STEP_DESCRIPTION[player.getTutorialProgress()]);
                 return;
@@ -43,14 +47,14 @@ public class Tutorial implements ContentTemplate {
         player.getInventory().add(new Item(15273, 100));
         player.getInventory().add(new Item(13889, 1));
         player.getInventory().add(new Item(13895, 1));
-        player.getActionSender().sendMessage("The vesta gear will be destroyed after dieing five times with them on you!");
+        player.getActionSender().sendMessage("The vesta gear has a 20% chance of being destroyed on death!");
     }
 
     @Override
     public int[] getValues(int type) {
         if(type == ClickType.DIALOGUE_MANAGER) {
-            int[] values = new int[10];
-            for (int i = 2100; i < 2110; i++) {
+            int[] values = new int[21];
+            for (int i = 2100; i < 2121; i++) {
                 values[i - 2100] = i;
             }
             return values;
@@ -109,7 +113,65 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2109:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "There are also various monster teleports and other", "minigames that are available. Teleport back home and start", "your journey here at ArteroPK!");
+                        "There are also various monster teleports and other", "minigames that are available. ");
+                player.getInterfaceState().setNextDialogueId(0, 2110);
+                return true;
+            case 2110:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "For this next part, we will now show you some ", "cool locations throughout the server!");
+                player.getInterfaceState().setNextDialogueId(0, 2111);
+                return true;
+            case 2111:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Edgeville.LOCATION, true);
+                player.setTutorialProgress(6);
+                DialogueManager.openDialogue(player, 2112);
+                return true;
+            case 2112:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "This is the home of the server and the main place people PK. ");
+                player.getInterfaceState().setNextDialogueId(0, 2113);
+                return true;
+            case 2113:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Location.create(2539, 4717, 0), true);
+                DialogueManager.openDialogue(player, 2114);
+                return true;
+            case 2114:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "This is the mage bank. Another popular place where people", " pk! Just click on the lever and you are good to go.");
+                player.getInterfaceState().setNextDialogueId(0, 2115);
+                return true;
+            case 2115:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Location.create(2480, 5174, 0), true);
+                DialogueManager.openDialogue(player, 2116);
+                return true;
+            case 2116:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "Inside the cave is a high risk PK zone. ", "You will not protect any items beyond that point!");
+                player.getInterfaceState().setNextDialogueId(0, 2117);
+                return true;
+            case 2117:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Location.create(2313, 9809, 0), true);
+                DialogueManager.openDialogue(player, 2118);
+                return true;
+            case 2118:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "This is the donator zone. In order to become a regular ", "donator you must donate for 2000 donator points.", " Super donator requires 10000 donator points.");
+                player.getInterfaceState().setNextDialogueId(0, 2119);
+                return true;
+            case 2119:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Edgeville.LOCATION, true);
+                DialogueManager.openDialogue(player, 2120);
+                giveReward(player);
+                player.setTutorialProgress(7);
+                return true;
+            case 2120:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "Congratulations, you have completed the tutorial.", " Enjoy your stay here at ArteroPK!");
                 player.getInterfaceState().setNextDialogueId(0, 2108);
                 return true;
         }

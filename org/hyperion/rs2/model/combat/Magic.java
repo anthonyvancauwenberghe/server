@@ -1170,10 +1170,6 @@ public class Magic {
                         player.getDungoneering().setCurrentRoom(room);
                     } else {
                         player.setTeleportTarget(Location.create(x, y, 0));
-                        if(player.getTutorialProgress() == 4) {
-                            player.setTutorialProgress(5);
-                            Tutorial.giveReward(player);
-                        }
                     }
                     this.stop();
 					player.inAction = false;

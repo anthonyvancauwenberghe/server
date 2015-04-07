@@ -106,7 +106,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2107:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Click on your ring to teleport to the lobby now.", "Then use the ::tutorial command to continue.");
+                        "Click on your ring to teleport to the lobby now.", "You will be teleported to the Team Dungeoneering Lobby.");
                 player.getInterfaceState().setNextDialogueId(0, 2108);
                 return true;
             case 2108:
@@ -130,7 +130,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2112:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the home of the server and the main place people PK. ");
+                        "This is the home of the server. All the shops are here.", "You can use the ::home command te teleport here in the future.");
                 player.getInterfaceState().setNextDialogueId(0, 2113);
                 return true;
             case 2113:
@@ -140,7 +140,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2114:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the mage bank. Another popular place where people", " pk! Just click on the lever and you are good to go.");
+                        "This is the mage bank (::mb command)", " It's a popular pking Place!", "Just click on the lever and you are good to go.");
                 player.getInterfaceState().setNextDialogueId(0, 2115);
                 return true;
             case 2115:
@@ -160,12 +160,12 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2118:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the donator zone. In order to become a regular ", "donator you must donate for 2000 donator points.", " Super donator requires 10000 donator points.");
+                        "This is the donator zone (::dp command). You must buy ", "2000 donator points to become a donator.", " and 10,000 donator points to become a Super donator.");
                 player.getInterfaceState().setNextDialogueId(0, 2119);
                 return true;
             case 2119:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This donator zone is where you can PvM for good gear. ", "Now we'll take you to the other donator zone for PvP!");
+                        "You can donate by typing ::donate in the chatbox","This donator zone is where you can PvM for good gear. ", "Now we'll take you to the other donator zone for PvP!");
                 player.getInterfaceState().setNextDialogueId(0, 2120);
                 return true;
             case 2120:
@@ -185,7 +185,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2123:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the main place people PK. If you want gear", " fast, go to the achievements tab and click on an instant set.", "This will automatically gear you up so you can PK!");
+                        "This is the main place people PK. If you want gear", " fast, go to the achievements tab (green tab) and click on an instant set.", "This will automatically gear you up so you can PK!");
                 player.getInterfaceState().setNextDialogueId(0, 2124);
                 return true;
             case 2124:
@@ -195,7 +195,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2125:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Congratulations, you have completed the tutorial.", " Enjoy your stay here at ArteroPK!");
+                        "Congratulations, you have completed the tutorial.", " Enjoy your stay here at ArteroPK!", "Try out your new armor that we placed in your bag it's very powerful");
                 player.getInterfaceState().setNextDialogueId(0, 10001);
                 if(player.getTutorialProgress() == 6) {
                     player.setTutorialProgress(7);

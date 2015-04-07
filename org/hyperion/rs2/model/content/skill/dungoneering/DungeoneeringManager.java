@@ -135,6 +135,7 @@ public class DungeoneeringManager implements ContentTemplate {
         Magic.teleport(player, LOBBY, false);
         if(player.getTutorialProgress() == 3) {
             player.setTutorialProgress(4);
+            DialogueManager.openDialogue(player, 2109);
         }
         player.SummoningCounter = 0;
         return true;
@@ -315,7 +316,7 @@ public class DungeoneeringManager implements ContentTemplate {
     }
 
     public static final boolean cantJoin(final Player player) {
-        return ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707)) ||  player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
+        return ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707) || (ContentEntity.getTotalAmountOfItems(player) == 2 && player.getInventory().contains(15707) && player.getInventory().contains(1856))) ||  player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
     }
 
 

@@ -10,14 +10,15 @@ import org.hyperion.rs2.net.ActionSender;
 public class Tutorial implements ContentTemplate {
 
     private static final String[] STEP_DESCRIPTION = {
-            "Welcome to ArteroPK! use the command ::tutorial to start your tutorial!",
+            "Welcome to ArteroPK! Completing this Tutorial gives you Vesta (deg) very powerful armor on this server",
             "To request for help, use the [::reqhelp reason] command anytime.",
             "To look up the rules, use the ::rules command.",
-            "Use the ::tutorial command to continue",
+            "Use the ::tutorial command to continue if the dialogue does not continue automatically",
             "Teleport home in order to complete the tutorial",
             "Use the ::tutorial command to continue",
             "Use the ::tutorial command to continue",
-            "You have completed the tutorial!"
+            "You have completed the tutorial!",
+            "You choose to skip the tutorial, sorry..."
     };
 
     public static void getProgress(Player player) {
@@ -53,8 +54,8 @@ public class Tutorial implements ContentTemplate {
     @Override
     public int[] getValues(int type) {
         if(type == ClickType.DIALOGUE_MANAGER) {
-            int[] values = new int[21];
-            for (int i = 2100; i < 2121; i++) {
+            int[] values = new int[26];
+            for (int i = 2100; i < 2126; i++) {
                 values[i - 2100] = i;
             }
             return values;
@@ -154,7 +155,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2117:
                 player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Location.create(2313, 9809, 0), true);
+                Magic.teleport(player, Location.create(2373, 4972, 0), true);
                 DialogueManager.openDialogue(player, 2118);
                 return true;
             case 2118:
@@ -163,16 +164,43 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2119);
                 return true;
             case 2119:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Edgeville.LOCATION, true);
-                DialogueManager.openDialogue(player, 2120);
-                giveReward(player);
-                player.setTutorialProgress(7);
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "This donator zone is where you can PvM for good gear. ", "Now we'll take you to the other donator zone for PvP!");
+                player.getInterfaceState().setNextDialogueId(0, 2120);
                 return true;
             case 2120:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Location.create(3793, 2851, 0), true);
+                DialogueManager.openDialogue(player, 2121);
+                return true;
+            case 2121:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "This is the other donator zone where you can skill!", "Now we'll show you where most players PK!");
+                player.getInterfaceState().setNextDialogueId(0, 2122);
+                return true;
+            case 2122:
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Location.create(3088, 3517, 0), true);
+                DialogueManager.openDialogue(player, 2123);
+                return true;
+            case 2123:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "This is the main place people PK. If you want gear", " fast, go to the achievements tab and click on an instant set.", "This will automatically gear you up so you can PK!");
+                player.getInterfaceState().setNextDialogueId(0, 2124);
+                return true;
+            case 2124:
+                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
+                        "If you have any other questions, use the ::reqhelp command", "and remember to have fun on ArteroPK!");
+                player.getInterfaceState().setNextDialogueId(0, 2125);
+                return true;
+            case 2125:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
                         "Congratulations, you have completed the tutorial.", " Enjoy your stay here at ArteroPK!");
-                player.getInterfaceState().setNextDialogueId(0, 2108);
+                player.getInterfaceState().setNextDialogueId(0, 10001);
+                if(player.getTutorialProgress() == 6) {
+                    player.setTutorialProgress(7);
+                    giveReward(player);
+                }
                 return true;
         }
         return false;

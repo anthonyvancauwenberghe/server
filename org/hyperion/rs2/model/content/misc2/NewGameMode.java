@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.misc2;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ClickType;
@@ -127,30 +128,11 @@ public class NewGameMode implements ContentTemplate {
         switch(dialogueId) {
             case 10000:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Hard game mode", "Normal game mode (reccomended)");
-                player.getInterfaceState().setNextDialogueId(0, 10001);
-                player.getInterfaceState().setNextDialogueId(1, 10002);
+                        "Begin Tutorial. You will receive vesta (deg) upon completion", "Skip Tutorial. (WARNING: You will not receive the tutorial reward)");
+                player.getInterfaceState().setNextDialogueId(0, 10002);
+                player.getInterfaceState().setNextDialogueId(1, 10001);
                 return true;
             case 10001:
-               ClanManager.joinClanChat(player, "help2", false);
-                player.getInventory().add(Item.create(995, 15_000_000));
-                for(int i = 0; i < IRON_STARTER.length; i++) {
-                    try {
-                        player.getBank().add(new BankItem(0, IRON_STARTER[i][0], IRON_STARTER[i][1]));
-                    }catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                player.setGameMode(1);
-                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
-                Tutorial.getProgress(player);
-                player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
-
-                player.getActionSender().removeChatboxInterface();
-
-                return true;
-            case 10002:
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {
                     try {
@@ -160,10 +142,18 @@ public class NewGameMode implements ContentTemplate {
                     }
                 }
                 player.getInventory().add(Item.create(1856));
-                Tutorial.getProgress(player);
                 player.sendMessage("A starter has been added to your bank!");
-                player.sendMessage("l4unchur13 "+NORMAL_GAME_GUIDE);
+                player.sendMessage("l4unchur13 " + NORMAL_GAME_GUIDE);
                 player.getActionSender().removeChatboxInterface();
+                player.setTutorialProgress(8);
+                for(int i = 0; i <= 6; i++) {
+                    player.getSkills().setLevel(i, 99);
+                    player.getSkills().setExperience(i, Math.max(13100000, player.getSkills().getExperience(i)));
+                }
+                Magic.teleport(player, Edgeville.LOCATION, true);
+                return true;
+            case 10002:
+                DialogueManager.openDialogue(player, 2100);
                 return true;
         }
         return false;

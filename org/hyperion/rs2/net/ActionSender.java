@@ -156,6 +156,7 @@ public class ActionSender {
 		sendDetails();
         if(player.isNew()){
             player.getInventory().add(Item.create(15707));
+            Magic.teleport(player, Location.create(2795, 3321, 0), true);
             sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
             sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");

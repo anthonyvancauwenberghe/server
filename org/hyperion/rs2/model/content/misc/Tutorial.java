@@ -140,7 +140,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2114:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the mage bank (use the ::mb command to teleport here in the future)", " It's a popular pking Place! Just click on the lever and you are good to go.");
+                        "This is the mage bank (::mb command)", " It's a popular pking Place!", "Just click on the lever and you are good to go.");
                 player.getInterfaceState().setNextDialogueId(0, 2115);
                 return true;
             case 2115:
@@ -160,12 +160,12 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2118:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the donator zone (::dp command). In order to become a regular ", "donator you must donate for 2000 donator points.", " Super donator requires 10000 donator points.");
+                        "This is the donator zone (::dp command). You must buy ", "2000 donator points to become a donator.", " and 10,000 donator points to become a Super donator.");
                 player.getInterfaceState().setNextDialogueId(0, 2119);
                 return true;
             case 2119:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This donator zone is where you can PvM for good gear. ", "Now we'll take you to the other donator zone for PvP!");
+                        "You can donate by typing ::donate in the chatbox","This donator zone is where you can PvM for good gear. ", "Now we'll take you to the other donator zone for PvP!");
                 player.getInterfaceState().setNextDialogueId(0, 2120);
                 return true;
             case 2120:

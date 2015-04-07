@@ -10,10 +10,10 @@ import org.hyperion.rs2.net.ActionSender;
 public class Tutorial implements ContentTemplate {
 
     private static final String[] STEP_DESCRIPTION = {
-            "Welcome to ArteroPK! use the command ::tutorial to start your tutorial!",
+            "Welcome to ArteroPK! Completing this Tutorial gives you Vesta (deg) very powerful armor on this server",
             "To request for help, use the [::reqhelp reason] command anytime.",
             "To look up the rules, use the ::rules command.",
-            "Use the ::tutorial command to continue",
+            "Use the ::tutorial command to continue if the dialogue does not continue automatically",
             "Teleport home in order to complete the tutorial",
             "Use the ::tutorial command to continue",
             "Use the ::tutorial command to continue",

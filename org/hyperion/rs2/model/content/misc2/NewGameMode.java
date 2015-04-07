@@ -128,7 +128,7 @@ public class NewGameMode implements ContentTemplate {
         switch(dialogueId) {
             case 10000:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Begin Tutorial, you will receive vesta (deg) upon completion", "Skip Tutorial (You will not receive the tutorial reward)");
+                        "Begin Tutorial. You will receive vesta (deg) upon completion", "Skip Tutorial. (WARNING: You will not receive the tutorial reward)");
                 player.getInterfaceState().setNextDialogueId(0, 10002);
                 player.getInterfaceState().setNextDialogueId(1, 10001);
                 return true;

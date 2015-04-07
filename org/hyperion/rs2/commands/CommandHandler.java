@@ -1133,6 +1133,7 @@ public class CommandHandler {
 
         CommandHandler.submit(new UnPunishCommand("unmute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipmute", Target.IP, Type.MUTE, Rank.MODERATOR));
+
         CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.ADMINISTRATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidmute", Target.SPECIAL, Type.MUTE, Rank.DEVELOPER));
 

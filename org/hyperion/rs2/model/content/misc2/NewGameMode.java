@@ -179,6 +179,7 @@ public class NewGameMode implements ContentTemplate {
                 player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
                 player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
                 player.getActionSender().removeChatboxInterface();
+                player.setTutorialProgress(8);
                 Magic.teleport(player, Edgeville.LOCATION, true);
                 return true;
         }

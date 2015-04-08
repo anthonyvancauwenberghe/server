@@ -319,6 +319,9 @@ public class Container {
 	 * @return The item.
 	 */
 	public Item get(int index) {
+        if(index >= items.length) {
+            return null;
+        }
         return items[index];
 	}
 

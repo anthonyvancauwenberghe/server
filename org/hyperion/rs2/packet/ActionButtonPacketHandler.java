@@ -532,6 +532,8 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			case 21308:
 				synchronized(player) {
 					int index2 = - 1;
+                    if(player.getBoB() == null)
+                        return;
 					for(Item item : player.getBoB().toArray()) {
 						index2++;
 						if(item != null)

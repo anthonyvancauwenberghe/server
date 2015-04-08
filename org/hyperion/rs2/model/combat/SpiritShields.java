@@ -16,6 +16,9 @@ public class SpiritShields {
 	 * Doesn't seem to work on players? I'll check into that - lower prayer for divine?
 	 */
 	public static int applyEffects(CombatEntity defender, int damg) {
+        if(defender == null) {
+            return 0;
+        }
 		if(! (defender.getEntity() instanceof Player))
 			return damg;
 		int shieldId = CombatAssistant.getShieldId(defender.getPlayer().getEquipment());

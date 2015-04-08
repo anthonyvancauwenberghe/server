@@ -110,6 +110,7 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2108);
                 return true;
             case 2108:
+                player.getActionSender().sendMessage("Click your ring of kinship and then use ::tutorial to continue.");
                 player.getActionSender().removeChatboxInterface();
                 return true;
             case 2109:

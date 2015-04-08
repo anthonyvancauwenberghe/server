@@ -41,15 +41,7 @@ public class NewGameMode implements ContentTemplate {
      * Bank starter
      */
     private static final int[][] MAIN_STARTER = new int[][] { //{id, amt},
-            {2436, 500}, {2440, 500}, {2442, 500}, {2434, 500},
-            {2444, 500}, {3040, 500}, {2446, 500}, {6685, 500},
-            {3024, 500}, {15332, 5}, {145, 500}, {157, 500},
-            {163, 500}, {139, 500}, {169, 500}, {3042, 500},
-            {175, 500}, {6687, 500}, {3026, 500}, {15333, 5}, {147, 500},
-            {159, 500}, {165, 500}, {141, 500}, {171, 500}, {3044, 500},
-            {177, 500}, {6689, 500}, {3028, 500}, {15334, 5}, {149, 500},
-            {161, 500}, {167, 500}, {143, 500}, {173, 500},
-            {3046, 500}, {179, 500}, {6691, 500}, {3030, 500}, {15335, 5}, {562, 10000},
+            {562, 10000},
             {563, 10000}, {561, 10000}, {554, 10000}, {557, 10000}, {555, 10000}, {560, 10000},
             {9075, 10000}, {565, 10000}, {391, 10000}, {10828, 100}, {11283, 100}, {11732, 100},
             {7462, 100}, {2414, 100}, {10499, 100}, {6731, 100}, {6733, 100}, {6735, 100},
@@ -60,7 +52,15 @@ public class NewGameMode implements ContentTemplate {
             {4712, 100}, {4736, 100}, {6129, 100}, {9245, 10000}, {2503, 100}, {6889, 100},  {4722, 100},
             {4759, 100}, {4751, 100}, {4730, 100}, {4714, 100}, {4738, 100}, {6130, 100}, {11235, 100},
             {2497, 100}, {6914, 100}, {4718, 100}, {4755, 100}, {4747, 100}, {4726, 100}, {4710, 100},
-            {4734, 100}, {4131, 100}, {11212, 10000}, {2577, 100}, {6920, 100},
+            {4734, 100}, {4131, 100}, {11212, 10000}, {2577, 100}, {6920, 100}, {2436, 500}, {2440, 500}, {2442, 500}, {2434, 500},
+            {2444, 500}, {3040, 500}, {2446, 500}, {6685, 500},
+            {3024, 500}, {15332, 5}, {145, 500}, {157, 500},
+            {163, 500}, {139, 500}, {169, 500}, {3042, 500},
+            {175, 500}, {6687, 500}, {3026, 500}, {15333, 5}, {147, 500},
+            {159, 500}, {165, 500}, {141, 500}, {171, 500}, {3044, 500},
+            {177, 500}, {6689, 500}, {3028, 500}, {15334, 5}, {149, 500},
+            {161, 500}, {167, 500}, {143, 500}, {173, 500},
+            {3046, 500}, {179, 500}, {6691, 500}, {3030, 500}, {15335, 5},
     };
 
     private static final int IRON_STARTER[][] = {
@@ -119,7 +119,7 @@ public class NewGameMode implements ContentTemplate {
     @Override
     public int[] getValues(int type) {
         if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{10000, 10001, 10002};
+            return new int[]{10000, 10001, 10002, 10003, 10004};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -130,13 +130,17 @@ public class NewGameMode implements ContentTemplate {
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
                         "Begin Tutorial. You will receive vesta (deg) upon completion", "Skip Tutorial. (WARNING: You will not receive the tutorial reward)");
                 player.getInterfaceState().setNextDialogueId(0, 10002);
-                player.getInterfaceState().setNextDialogueId(1, 10001);
+                player.getInterfaceState().setNextDialogueId(1, 10003);
                 return true;
             case 10001:
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {
                     try {
-                        player.getBank().add(new BankItem(0, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
+                        if( i >= MAIN_STARTER.length - 40) {
+                            player.getBank().add(new BankItem(1, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
+                        } else {
+                            player.getBank().add(new BankItem(0, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
+                        }
                     }catch(Exception e) {
                         e.printStackTrace();
                     }
@@ -154,6 +158,28 @@ public class NewGameMode implements ContentTemplate {
                 return true;
             case 10002:
                 DialogueManager.openDialogue(player, 2100);
+                return true;
+            case 10003:
+                player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
+                        "Hard game mode", "Normal game mode (reccomended)");
+                player.getInterfaceState().setNextDialogueId(0, 10004);
+                player.getInterfaceState().setNextDialogueId(1, 10001);
+                return true;
+            case 10004:
+                ClanManager.joinClanChat(player, "help2", false);
+                player.getInventory().add(Item.create(995, 15_000_000));
+                for(int i = 0; i < IRON_STARTER.length; i++) {
+                    try {
+                        player.getBank().add(new BankItem(0, IRON_STARTER[i][0], IRON_STARTER[i][1]));
+                    }catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                player.setGameMode(1);
+                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
+                player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
+                player.getActionSender().removeChatboxInterface();
+                Magic.teleport(player, Edgeville.LOCATION, true);
                 return true;
         }
         return false;

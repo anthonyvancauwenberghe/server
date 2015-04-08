@@ -42,13 +42,16 @@ public class TabbedContainer extends Container {
                     if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
                         return false;
                     }
+
                     BankItem newBankItem = new BankItem(((BankItem)get(i)).getTabIndex(), getItems()[i].getId(), getItems()[i].getCount() + bankItem.getCount());
                     set(i, newBankItem);
                     return true;
                 }
             }
+            System.out.println("check");
             return insert(bankItem, -1);
         } else {
+            System.out.println("check2");
             int slots = freeSlots();
             if(slots >= bankItem.getCount()) {
                 boolean b = isFiringEvents();

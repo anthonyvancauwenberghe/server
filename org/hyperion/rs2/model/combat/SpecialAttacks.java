@@ -950,7 +950,7 @@ public class SpecialAttacks {
                 break;
 			case 15020:
 			case 1434:
-				specDamage = 1.35;
+				specDamage = 1.3;
 				break;
 			case 14484:
 				specDamage = 1.15;

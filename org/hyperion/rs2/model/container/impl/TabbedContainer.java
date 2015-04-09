@@ -48,7 +48,6 @@ public class TabbedContainer extends Container {
                     return true;
                 }
             }
-            System.out.println("check");
             return insert(bankItem, -1);
         } else {
             System.out.println("check2");

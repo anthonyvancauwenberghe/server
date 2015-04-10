@@ -1,15 +1,7 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DeathDrops;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SpecialBar;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -49,6 +41,39 @@ public class PlayerDeathEvent extends Event {
             kills.put(killer.getShortIP(), queue);
         }
         return false;
+    }
+
+    public static int pkpToTransfer(final Player killer) {
+        int base = 8;
+        base += killer.wildernessLevel/2;
+
+        base += (int)Math.pow(killer.getKillCount(), 0.6);
+
+        if(base > 150)
+            base = 150;
+        return base;
+    }
+
+    private static void handlePkpTransfer(final Player killer, final Player player, int original) {
+        int toTransfer = pkpToTransfer(killer);
+        final PlayerPoints kP = player.getPoints();
+        if(kP.getPkPoints() < toTransfer) {
+            int deltaRemove = (toTransfer - kP.getPkPoints() + 10)/9;
+            int remove = killer.getBank().remove(Item.create(5020, deltaRemove));
+            kP.increasePkPoints(kP.getPkPoints() + (remove * 10), false);
+        }
+
+        if(kP.getPkPoints() < toTransfer)
+            toTransfer = kP.getPkPoints();
+
+        kP.setPkPoints(kP.getPkPoints() - toTransfer);
+        player.sendf("You lose @red@%d@bla@ pkp for this death", toTransfer);
+        toTransfer *= 0.9D;
+        killer.getPoints().increasePkPoints((int)(toTransfer) + original, false);
+
+        killer.sendf("You have received @red@%d@blu@ pkp for this kill", toTransfer + original);
+
+
     }
 	
 	private static final String[] KILLER_MESSAGES = new String[] {
@@ -216,11 +241,11 @@ public class PlayerDeathEvent extends Event {
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)
                                 pkpIncrease = 40;
-							int pointsToAdd = (int)((player.wildernessLevel/2 + player.getBounty())) + pkpIncrease;
+							int pointsToAdd = (int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease;
 							if(player.getKillStreak() >= 6) {
 								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
-							killer.getPoints().inceasePkPoints(pointsToAdd > 0 ? pointsToAdd : 5);
+							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
                             if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
                                 killer.getSpecBar().increment(SpecialBar.FULL/5);
                             if(Rank.hasAbility(killer, Rank.DONATOR))

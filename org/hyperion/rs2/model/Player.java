@@ -199,7 +199,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public boolean checkMaxCapeRequirment() {
-		for(int i = 6; i < this.getSkills().getLevels().length; i++) {
+		for(int i = 7; i < this.getSkills().getLevels().length; i++) {
 			if(i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONINEERING)
 				continue;
 			if(this.getSkills().getLevels()[i] < 99)

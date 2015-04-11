@@ -43,24 +43,26 @@ public class PlayerDeathEvent extends Event {
         return false;
     }
 
-    public static int pkpToTransfer(final Player killer) {
+    public static int pkpToTransfer(final Player victim) {
         int base = 8;
-        base += killer.wildernessLevel/2;
+        base += (int)(victim.wildernessLevel/1.5D);
 
-        base += (int)Math.pow(killer.getKillCount(), 0.6);
+        base += (int)(Math.pow(victim.getKillCount(), 0.78) - Math.pow(victim.getDeathCount(), 0.65));
 
         if(base > 150)
             base = 150;
+        if(base < 8)
+            base = 8;
         return base;
     }
 
     private static void handlePkpTransfer(final Player killer, final Player player, int original) {
-        int toTransfer = pkpToTransfer(killer);
+        int toTransfer = pkpToTransfer(player);
         final PlayerPoints kP = player.getPoints();
         if(kP.getPkPoints() < toTransfer) {
             int deltaRemove = (toTransfer - kP.getPkPoints() + 10)/9;
-            int remove = killer.getBank().remove(Item.create(5020, deltaRemove));
-            kP.increasePkPoints(kP.getPkPoints() + (remove * 10), false);
+            int remove = player.getBank().remove(Item.create(5020, deltaRemove));
+            kP.increasePkPoints((remove * 10), false);
         }
 
         if(kP.getPkPoints() < toTransfer)
@@ -71,7 +73,7 @@ public class PlayerDeathEvent extends Event {
         toTransfer *= 0.9D;
         killer.getPoints().increasePkPoints((int)(toTransfer) + original, false);
 
-        killer.sendf("You have received @red@%d@blu@ pkp for this kill", toTransfer + original);
+        killer.sendf("You have received @red@%d@bla@ pkp for this kill", toTransfer + original);
 
 
     }

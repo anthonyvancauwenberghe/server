@@ -112,7 +112,7 @@ public class SpecialAttacks {
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.25;
+				specialAccuracy = 1.15;
 				break;
 			case 1215:
 				playerGfx = 252;
@@ -689,7 +689,7 @@ public class SpecialAttacks {
                             deltaBonus = CombatAssistant.calculateMeleeAttack(player)
                                     - player.cE.getOpponent().getNPC().getDefinition().combat();
                         }
-                        randomIncrease = Misc.random(deltaBonus / 3);
+                        randomIncrease = Misc.random(deltaBonus / 2);
                         if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                             player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
                         }

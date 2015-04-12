@@ -47,7 +47,7 @@ public class PlayerDeathEvent extends Event {
         int base = 8;
         base += (int)(victim.wildernessLevel/1.5D);
 
-        base += (int)(Math.pow(victim.getKillCount(), 0.78) - Math.pow(victim.getDeathCount(), 0.67));
+        base += (int)(Math.pow(victim.getKillCount(), 0.765) - Math.pow(victim.getDeathCount(), 0.67));
 
         if(base > 150)
             base = 150;
@@ -233,7 +233,8 @@ public class PlayerDeathEvent extends Event {
                         }
                         if(isRecentKill(killer, player)) {
                             killer.getActionSender().sendMessage("You have recently killed this player and do not receive pk points.");
-                            handlePkpTransfer(killer, player, 0);
+                            if(killer.getGameMode() <= player.getGameMode())
+                                handlePkpTransfer(killer, player, 0);
                         } else {
 
 							if(player.getKillCount() >= 10) {

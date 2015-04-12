@@ -271,7 +271,7 @@ public class SpecialAttacks {
 				specialAnimation = 10502;
 				specialDis = 1;
 				specialDrain = 25;
-                specialAccuracy = 1.25;
+                specialAccuracy = 1.22;
 				break;
 			case 13902:
 				playerGfx = 1840;
@@ -369,10 +369,10 @@ public class SpecialAttacks {
 		} else {
             if(!ranged)
 			    deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
-					- player.cE.getOpponent().getCombat();
+					- player.cE.getOpponent().getCombat()/2;
             else
                 deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
-                        - (int)(player.cE.getOpponent().getCombat()/2.5);
+                        - (int)(player.cE.getOpponent().getCombat()/3.0);
 		}
 		int randomIncrease = Misc.random(deltaBonus / 3);
 
@@ -936,13 +936,13 @@ public class SpecialAttacks {
 			case 1231:
 			case 5680:
 			case 5698:
-			case 13899:
 			case 15007:
 				specDamage = 1.20;
 
 				break;
 			case 1305:
-			case 11694:
+            case 13899:
+            case 11694:
 				specDamage = 1.11;
 				break;
             case 19605:

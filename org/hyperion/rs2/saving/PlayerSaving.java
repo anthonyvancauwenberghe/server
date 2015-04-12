@@ -244,7 +244,8 @@ public class PlayerSaving {
 					file.newLine();
 				}
 			}
-			return true;
+            player.serialize();
+            return true;
 		} catch(IOException e) {
 			System.out.println("Player's name: " + player.getName());
 			e.printStackTrace();

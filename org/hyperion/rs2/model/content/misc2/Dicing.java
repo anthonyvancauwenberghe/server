@@ -178,14 +178,20 @@ public class Dicing implements ContentTemplate {
 					}
 				}
 
-                player.getActionSender().sendMessage("The npc rolled @red@" + r + "@bla@ on the percentile dice.");
-				dicer.forceMessage(r + "!");
 				//don't need since it'll remov before
 				/*if(player.getInventory().getCount(item.getId()) < item.getCount()) {
 					this.stop(); //Incase player would store item in BoB in these 2 seconds of wait.
 					return;
 				}*/
 				int itemvalue = DonatorShop.getPrice(id) * count;
+
+                if(itemvalue > 20_000)
+                    r = Misc.random(54);
+                if(itemvalue > 10_000)
+                    r = Misc.random(75);
+
+                player.getActionSender().sendMessage("The npc rolled @red@" + r + "@bla@ on the percentile dice.");
+                dicer.forceMessage(r + "!");
 				String query = null;
                 player.getLogManager().add(LogEntry.gamble(dicer, item, r));
 				if(r >= 55) {

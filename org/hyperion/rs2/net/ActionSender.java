@@ -166,8 +166,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
-                    "@blu@Boosts Enabled: @red@2x vote rewards");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
 
         }
         sendMessage("       ");

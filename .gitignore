@@ -216,6 +216,7 @@ pip-log.txt
 data/attack.txt
 data/debug.txt
 data/donate.txt
+data/clandata.bin
 /bin
 config.cfg
 .cache

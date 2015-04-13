@@ -56,7 +56,6 @@ public class ActionButtonPacketHandler implements PacketHandler {
 
 	public static void handle(Player player, int button) {
 
-		System.out.println("Button : " + button);
 		if(World.getWorld().getContentManager()
 				.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;

@@ -772,6 +772,8 @@ public class ActionSender {
             return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
+            if(player.isFollowing == null) // if the player index returns null player, shouldn't be following
+                return this;
             Combat.follow(player.cE, player.isFollowing.cE);
 			// System.out.println("Follow method");
 			/*

@@ -95,10 +95,10 @@ public class EquipmentReq {
 		if(itemLevels.get(Integer.valueOf(id)) != null) {
 			abyte0 = (byte[]) itemLevels.get(Integer.valueOf(id));
 		}
-		if(abyte0 == null) {
+		//if(abyte0 == null) {
 			abyte0 = getRequirements(ItemDefinition.forId(id).getName(), id);
 			itemLevels.put(Integer.valueOf(id), abyte0);
-        }
+        //}
 		for(int j = 0; j < Skills.SKILL_COUNT; j++) {
 			if(player.getSkills().getLevelForExp(j) < abyte0[j]) {
 				player.getSkills();
@@ -195,6 +195,12 @@ public class EquipmentReq {
 				equipReqData[1] = 78;
 			return equipReqData;
 		}
+        if(s.contains("sagittarian")) {
+            equipReqData[4] = 99;
+            equipReqData[1] = 99;
+            if(s.contains("bow"))
+                equipReqData[1] = 70;
+        }
 		if(s.contains("mystic") || s.contains("nchanted")) {
 			if(s.contains("staff")) {
 				equipReqData[6] = 20;
@@ -274,7 +280,7 @@ public class EquipmentReq {
 			}
 			return equipReqData;
 		}
-		if(s.contains("blue") && s.contains("hide")) {
+		if((s.contains("blue") || s.contains("(") ) && s.contains("hide")) {
 			equipReqData[4] = 50;
 			if(s.contains("body")) {
 				equipReqData[1] = 40;
@@ -508,6 +514,7 @@ public class EquipmentReq {
 			case 3755:
             case 12673:
             case 12672:
+            case 12675:
 				equipReqData[1] = 45;
 				break;
 

@@ -375,7 +375,7 @@ public class EquipmentReq {
 			return equipReqData;
 		}
 		if(s.contains("dragon") && ! s.contains("nti-") && ! s.contains("fire")) {
-			if(s.contains("dagger") || s.contains("sword") || s.contains("scimitar") || s.contains("spear") || s.contains("axe") || s.contains("mace") || s.contains("claws")) {
+			if(s.contains("dagger") || s.contains("sword") || s.contains("scimitar") || s.contains("spear") || s.contains("axe") || s.contains("mace") || s.contains("claws") || s.contains("halberd")) {
 				equipReqData[0] = 60;
 			} else if(s.contains("bow") || s.contains("knife") || s.contains("dart") || s.contains("javelin") || s.contains("thrownaxe") || s.contains("arrow") || s.contains("bolts")) {
 				equipReqData[4] = 60;

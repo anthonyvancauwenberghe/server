@@ -182,12 +182,12 @@ public class PlayerDeathEvent extends Event {
 
 		player.cE.setFreezeTimer(0);
 		Player killer = player.cE.getKiller();
-        if(player.getDungoneering().inDungeon()) {
-            DungeoneeringManager.handleDying(player);
-        } else if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
-				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer())    //If dying in duel arena
+        if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
+				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
 			Duel.finishFullyDuel(player);
-		else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
+        } else if (player.getDungoneering().inDungeon()) {
+            DungeoneeringManager.handleDying(player);
+        } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
 			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
 			if(killer != null) //in fight pits death, reward player
 				killer.getInventory().add(Item.create(391, 2));

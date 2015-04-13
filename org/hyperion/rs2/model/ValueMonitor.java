@@ -7,8 +7,8 @@ import org.hyperion.rs2.model.Player;
  */
 public class ValueMonitor {
 
-    private int startValue;
-    private int startPKValue;
+    private long startValue;
+    private long startPKValue;
 
     private Player player;
 
@@ -21,19 +21,19 @@ public class ValueMonitor {
         this.startPKValue = startPKValue;
     }
 
-    public int getStartValue() {
+    public long getStartValue() {
         return startValue;
     }
 
-    public int getStartPKValue() {
+    public long getStartPKValue() {
         return startPKValue;
     }
 
-    public int getValueDelta(int endValue) {
+    public long getValueDelta(long endValue) {
         return endValue - startValue;
     }
 
-    public int getPKValueDelta(int endPKValue) {
+    public long getPKValueDelta(long endPKValue) {
         return endPKValue - startPKValue;
     }
 

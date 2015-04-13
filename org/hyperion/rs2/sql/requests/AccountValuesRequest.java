@@ -21,7 +21,7 @@ public class AccountValuesRequest extends SQLRequest{
         final long pkpValue = player.getAccountValue().getPkPointValue();
         final String ip = player.getShortIP(), specialUid = Arrays.toString(player.specialUid);
         final String query = String.format(
-                "INSERT INTO accountvalues (name, value, pkvalue,ip,mac,suid) VALUES ('%s', %d, %d, '%s', %d, '%s') ON DUPLICATE KEY UPDATE value = %d, pkvalue = %d ip='%s' mac=%d suid='%s'",
+                "INSERT INTO accountvalues (name, value, pkvalue,ip,mac,suid) VALUES ('%s', %d, %d, '%s', %d, '%s') ON DUPLICATE KEY UPDATE value = %d, pkvalue = %d, ip='%s', mac=%d, suid='%s'",
                 player.getName().toLowerCase(),
                 value,
                 pkpValue,

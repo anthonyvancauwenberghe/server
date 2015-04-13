@@ -955,8 +955,8 @@ public class World {
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
-                int dp = player.getPoints().getDonatorPoints();
-                int pkp = player.getPoints().getPkPoints();
+                long dp = player.getAccountValue().getTotalValue();
+                long pkp = player.getAccountValue().getPkPointValue();
                 if(player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
                     World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) "  +
                              "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(),player.getValueMonitor().getStartValue(),player.getValueMonitor().getStartPKValue(),

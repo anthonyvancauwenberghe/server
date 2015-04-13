@@ -957,9 +957,10 @@ public class World {
                 player.getLogManager().save();
                 int dp = player.getPoints().getDonatorPoints();
                 int pkp = player.getPoints().getPkPoints();
-                World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) "  +
-                         "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(),player.getValueMonitor().getStartValue(),player.getValueMonitor().getStartPKValue(),
-                        dp,pkp,player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
+                if(player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
+                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) "  +
+                             "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(),player.getValueMonitor().getStartValue(),player.getValueMonitor().getStartPKValue(),
+                            dp,pkp,player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
                 if(player.verified)
                     loader.savePlayer(player, "world save");
                 resetSummoningNpcs(player);

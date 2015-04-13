@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.container.Container.Type;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.sets.SetHandler;
@@ -55,7 +56,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 
 	public static void handle(Player player, int button) {
 
-		//System.out.println("Button : " + button);
+		System.out.println("Button : " + button);
 		if(World.getWorld().getContentManager()
 				.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;
@@ -184,6 +185,11 @@ public class ActionButtonPacketHandler implements PacketHandler {
 						(Integer) player.getExtraData().get("geitemslot"),
 						(Integer) player.getExtraData().get("geitemprice"));
 				break;
+
+            case 24589:
+                player.sendMessage("Attempting to join event...");
+                Events.joinEvent(player);
+                break;
 			case 28504:
 				//player.getActionSender().showInterface(29000);
 				GrandExchangeV2.resetSellInterface(player);

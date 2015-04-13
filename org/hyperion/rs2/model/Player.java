@@ -103,6 +103,10 @@ public class Player extends Entity implements Persistable, Cloneable{
         return geTracker;
     }
 
+    private final ValueMonitor valueMonitor = new ValueMonitor(this);
+
+    public ValueMonitor getValueMonitor() {return valueMonitor;}
+
     public int pin = -1;
     public String lastIp;
     public boolean verified;

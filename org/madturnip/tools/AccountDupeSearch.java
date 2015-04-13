@@ -20,9 +20,9 @@ public class AccountDupeSearch {
             HashMap<String,String> players = new HashMap<String,String>();
 
             /**
-             * List of found players to prevent duplicate prints
+             * Map of found players to prevent duplicate prints
              */
-            ArrayList<String> foundPlayers = new ArrayList<String>();
+            HashMap<String,ArrayList<String>> foundPlayers = new HashMap<String,ArrayList<String>>();
             /**
              * Load all longs, pair with username.
              */
@@ -54,18 +54,24 @@ public class AccountDupeSearch {
              * Compare createdlong's between players.
              */
             for(String key : players.keySet()) {
-                if(foundPlayers.contains(key))
-                    continue;
                 String createdLong = players.get(key);
                 for(String comparedKey : players.keySet()) {
                     if(comparedKey.equals(key))
                         continue;
                     String comparedCreatedLong = players.get(comparedKey);
                     if(createdLong.equalsIgnoreCase(comparedCreatedLong)) {
-                        if(foundPlayers.contains(createdLong))
+                        if((foundPlayers.containsKey(key) && foundPlayers.get(key).contains(comparedKey)) || (foundPlayers.containsKey(comparedKey) && foundPlayers.get(comparedKey).contains(key)))
                             continue;
-                        foundPlayers.add(key);
-                        foundPlayers.add(comparedKey);
+                        ArrayList<String> keys = foundPlayers.get(key);
+                        if(keys == null)
+                            keys = new ArrayList<String>();
+                        keys.add(comparedKey);
+                        ArrayList compareds = foundPlayers.get(comparedKey);
+                        if(compareds == null)
+                            compareds = new ArrayList<String>();
+                        compareds.add(key);
+                        foundPlayers.put(key,keys);
+                        foundPlayers.put(comparedKey,compareds);
                         System.out.println(key + " = " + comparedKey + " ; " + createdLong + " = " + comparedCreatedLong);
                     }
                 }

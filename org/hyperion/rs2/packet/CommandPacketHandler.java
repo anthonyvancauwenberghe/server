@@ -60,6 +60,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -600,6 +601,24 @@ public class CommandPacketHandler implements PacketHandler {
         if(commandStart.equalsIgnoreCase("reloadpunish")) {
             boolean loaded = PunishmentManager.getInstance().load();
             player.sendMessage("Loaded punishments" + loaded);
+        }
+
+        if(commandStart.equalsIgnoreCase("startevent")) {
+            try {
+                String name = as[1].replaceAll("_", " ");
+                Location eventLoc = player.getLocation();
+                int timeTillStart = Integer.valueOf(as[2]);
+                boolean eventSafe = Boolean.valueOf(as[3]);
+                Events.fireNewEvent(name,eventSafe,timeTillStart,eventLoc);
+                player.sendMessage("New Event: " + name + " Safe: " + eventSafe + " Start: " + timeTillStart + " seconds");
+            } catch (Exception e) {
+                player.sendMessage("Use ::newevent name,time,safe i.e ::newevent Fight_Pits 120 true");
+            }
+        }
+
+        if(commandStart.equalsIgnoreCase("stopevent")) {
+            player.sendMessage("You have reset the current event.");
+            Events.resetEvent();
         }
 
         if(commandStart.equalsIgnoreCase("getname")) {

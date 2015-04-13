@@ -955,12 +955,15 @@ public class World {
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
+                int dp = player.getPoints().getDonatorPoints();
+                int pkp = player.getPoints().getPkPoints();
+                        "VALUES (%s,%d,%d,%d,%d,%d,%d)", player.getName(),player.getValueMonitor().getStartValue(),player.getValueMonitor().getStartPKValue(),
+                        dp,pkp,player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
                 if(player.verified)
                     loader.savePlayer(player, "world save");
                 resetSummoningNpcs(player);
                 if(World.getWorld().getLoginServerConnector() != null) {
-                    World.getWorld().getLoginServerConnector()
-                            .disconnected(player.getName());
+                    World.getWorld().getLoginServerConnector().disconnected(player.getName());
                 }
                 player.destroy();
 				/*

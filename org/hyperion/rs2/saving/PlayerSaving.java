@@ -603,8 +603,7 @@ public class PlayerSaving {
 		//loadSQL(player);
 
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					getFileName(player)), BUFFER_SIZE);
+			BufferedReader in = new BufferedReader(new FileReader(getFileName(player)), BUFFER_SIZE);
 			String line;
 			while((line = in.readLine()) != null) {
 				if(line.length() <= 1)

@@ -16,7 +16,7 @@ public class ValueMonitor {
         this.player = player;
     }
 
-    public void setStartValues(int startValue, int startPKValue) {
+    public void setStartValues(long startValue, long startPKValue) {
         this.startValue = startValue;
         this.startPKValue = startPKValue;
     }

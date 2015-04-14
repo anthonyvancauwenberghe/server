@@ -1158,7 +1158,7 @@ public class CombatAssistant {
 				rangeDef *= 1.15;
 			} else if (player.getPrayers().isEnabled(27) || player.getPrayers().isEnabled(26))
                 rangeDef *= 1.23;
-			return (int)(rangeDef * 0.50) + (player.getBonus().get(EquipmentStats.DEFENCE_RANGED) + 64) / 2;
+			return (int)(rangeDef * 0.50) + (player.getBonus().get(EquipmentStats.DEFENCE_RANGED)) / 2 + 64;
 		} else //NPCs
 			return (int)(entity.cE.getCombat()/3.0);
 	}
@@ -1265,7 +1265,7 @@ public class CombatAssistant {
 				bonus = player.getBonus().get(i);
 			}
 		}
-		return (int) ((meleeAtk * .5 + (bonus * .8)));
+		return (int) ((meleeAtk * .6 + (bonus * .83)));
 
 	}
 
@@ -1298,8 +1298,7 @@ public class CombatAssistant {
 					bonus = player.getBonus().get(i);
 				}
 			}
-            bonus += 64;
-			return (int) (meleeDef * .5 + bonus * .65);
+			return (int) (meleeDef * .5 + bonus * .65) + 64;
 		} else {
 			return (int)(entity.cE.getCombat() * .65);
 		}

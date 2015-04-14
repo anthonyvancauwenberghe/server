@@ -216,6 +216,8 @@ public class SpecialAttacks {
                 playerGfx = 340;
                 specialAnimation = 1667;
                 specialDis = 1;
+                if(combatEntity.getOpponent() != null)
+                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.152) - 1.0;
                 specialDrain = 34;
                 break;
 			case 7158:

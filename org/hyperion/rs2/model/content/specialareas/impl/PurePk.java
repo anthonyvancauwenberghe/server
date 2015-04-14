@@ -24,8 +24,8 @@ public class PurePk extends SpecialArea {
     public static final int HEIGHT = 444;
 
     @Override public String canEnter(final Player player) {
-        if(player.getSkills().getRealLevels()[Skills.DEFENCE] > 1)
-            return "You need 1 def to enter this area";
+        if(player.getSkills().getRealLevels()[Skills.DEFENCE] > 20)
+            return "You need 20 def or less to enter this area";
         return "";
     }
 

@@ -13,7 +13,7 @@ public class LogServerWealthEvent extends SQLEvent {
     }
 
     public void execute(SQLConnection con) throws SQLException {
-        con.query("INSERT INTO serverwealth (value,pkvalue) VALUES ((SELECT SUM(value) FROM accountvalues WHERE value>100),(SELECT SUM(pkvalue) FROM accountvalues))");
+        con.query("INSERT INTO serverwealth (value,pkvalue) VALUES ((SELECT SUM(value) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank' ),(SELECT SUM(pkvalue) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank'))");
         super.updateStartTime();
     }
 }

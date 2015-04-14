@@ -238,7 +238,7 @@ public class PlayerPoints {
 			player.getQuestTab().sendHonorPoints();
 			player.setLastHonorPointsReward(System.currentTimeMillis());
 		}
-        player.getValueMonitor().setStartValues(donatorPoints,pkPoints);
+        player.getValueMonitor().setStartValues(player.getAccountValue().getTotalValue(),player.getAccountValue().getPkPointValue());
 	}
 
 	public void setEloPeak(int elo) {

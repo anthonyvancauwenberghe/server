@@ -172,7 +172,7 @@ public class SpecialAttacks {
                 specialAnimation = 6147;
                 specialDis = 1;
                 specialDrain = 50;
-                specialAccuracy = 1.3;
+                specialAccuracy = 1.45;
                 break;
             case 10887:
 				specialAnimation = 5870;
@@ -735,7 +735,7 @@ public class SpecialAttacks {
             case 11061:
             case 17640:
                // if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-                    player.getActionSender().sendMessage("Damage: "+hitDamage);
+                    //player.getActionSender().sendMessage("Damage: "+hitDamage);
                     try {
                         if(player.cE.getOpponent().getEntity() instanceof Player) {
                             Player opponent = player.cE.getOpponent().getPlayer();

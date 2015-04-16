@@ -45,6 +45,17 @@ public class CastMagicPacketHandler implements PacketHandler {
 		int spell = packet.getLEShort();
 		//System.out.println("spell: " + spell);
 		if(victim != null) {
+
+            if(victim.getLocation().inDuel() || Duel.inDuelLocation(victim))
+            {
+                if(id != player.duelAttackable)
+                {
+                    player.sendMessage("You cannot do this to this player");
+                    return;
+                }
+
+            }
+
 			if(victim.getName().equalsIgnoreCase(player.getName())) {
 				System.out.println("Abusing..." + player.getName());
 				World.getWorld().getBanManager().moderate("serbar", player, BanManager.BAN, true, Long.MAX_VALUE, "abuse");
@@ -58,15 +69,6 @@ public class CastMagicPacketHandler implements PacketHandler {
 				player.cE.addSpellAttack(spell);
 			}
 			if(victim.getLastAttack().timeSinceLastAttack() > 10000) {
-                if(victim.getLocation().inDuel() || Duel.inDuelLocation(victim))
-                {
-                    if(id != player.duelAttackable)
-                    {
-                        player.sendMessage("You cannot do this to this player");
-                        return;
-                    }
-
-                }
                 victim.getLastAttack().updateLastAttacker(player.getName());
             }
 			player.cE.setOpponent(victim.cE);

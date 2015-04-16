@@ -10,6 +10,7 @@ import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
+import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -218,8 +219,10 @@ public class PlayerDeathEvent extends Event {
 						if(!isDev) {
 						    killer.increaseKillCount();
 						    int oldKillerRating = killer.getPoints().getEloRating();
-						    killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
-						    player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
+                            if(killer.getLocation().getZ() != PurePk.HEIGHT) {
+						        killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
+						        player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
+                            }
 
 
 						}

@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.net.Packet;
 
 public class CastMagicPacketHandler implements PacketHandler {
@@ -57,8 +58,17 @@ public class CastMagicPacketHandler implements PacketHandler {
 				player.cE.addSpellAttack(spell);
 			}
 			if(victim.getLastAttack().timeSinceLastAttack() > 10000) {
-				victim.getLastAttack().updateLastAttacker(player.getName());
-			}
+                if(victim.getLocation().inDuel() || Duel.inDuelLocation(victim))
+                {
+                    if(id != player.duelAttackable)
+                    {
+                        player.sendMessage("You cannot do this to this player");
+                        return;
+                    }
+
+                }
+                victim.getLastAttack().updateLastAttacker(player.getName());
+            }
 			player.cE.setOpponent(victim.cE);
 			Combat.processCombat(player.cE);
 		}

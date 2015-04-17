@@ -91,7 +91,8 @@ public class PlayerDeathEvent extends Event {
 		"The mysteries of life can no longer be discovered by %s",
 		"The sword is obviously mightier than %s",
 		"The death of %s is a burden you must bear",
-		"%s must of dissapointed the gods..."
+		"%s must of dissapointed the gods...",
+         "I think %s said square root, not square up - either way, he died"
 	};
 	
 	private static final String[] DEATH_MESSAGES = new String[] {

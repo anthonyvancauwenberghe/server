@@ -364,7 +364,8 @@ public class ClanManager {
             IoBuffer buf = IoBuffer.allocate(1024);
             buf.setAutoExpand(true);
             for(final Clan clan : clans.values())
-                clan.save(buf);
+                if(!clan.getName().toLowerCase().startsWith("party "))
+                    clan.save(buf);
             buf.flip();
             byte[] data = new byte[buf.limit()];
             buf.get(data);

@@ -713,7 +713,7 @@ public class SpecialAttacks {
                 World.getWorld().submit(new Event(delay, "combat") {
                     @Override
                     public void execute() throws IOException {
-                        player.cE.getOpponent().hit(damg5, player,
+                        oldEntity.hit(damg5, player,
                                 false, crit);
                         Combat.addXP(player, damg5, false);
                         this.stop();

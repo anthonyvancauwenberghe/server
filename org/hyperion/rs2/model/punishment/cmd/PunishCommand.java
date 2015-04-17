@@ -98,6 +98,7 @@ public class PunishCommand extends Command{
             player.sendf("Error parsing duration. Syntax: duration [minute(s)|hour(s)|day(s)]");
             return false;
         }
+        duration = getMaxDuration(player, unit, duration);
         final Time time = Time.create(duration, unit);
         final String reason = parts[2].trim();
         if(reason.isEmpty()){
@@ -126,4 +127,32 @@ public class PunishCommand extends Command{
         }
         return true;
     }
+
+    public static long getMaxDuration(Player player, TimeUnit unit, long original) {
+        long duration = 2;
+        switch(Rank.getPrimaryRank(player)) {
+            case HELPER:
+                duration = 1;
+                break;
+            case MODERATOR:
+                duration = 2;
+                break;
+            case GLOBAL_MODERATOR:
+                duration = 3;
+                break;
+            case HEAD_MODERATOR:
+                duration = 7;
+                break;
+            case ADMINISTRATOR:
+                duration = 14;
+                break;
+            case DEVELOPER:
+            case OWNER:
+                duration = 100;
+                break;
+        }
+        duration = TimeUnit.DAYS.convert(duration, unit);
+        return original > duration ? duration : original;
+    }
+
 }

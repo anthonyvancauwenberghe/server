@@ -716,6 +716,7 @@ public class SpecialAttacks {
                         player.cE.getOpponent().hit(damg5, player,
                                 false, crit);
                         Combat.addXP(player, damg5, false);
+                        this.stop();
                     }
                 });
 

@@ -1017,7 +1017,8 @@ public class DialogueManager {
 					player.getSkills().setLevel(skillData[i][0], skillData[i][1]);
 					player.getSkills().setExperience(skillData[i][0], player.getSkills().getXPForLevel(skillData[i][1]));
 				}
-				SetUtility.getInstantSet(player, SetData.getPureSet());
+                player.resetPrayers();
+                SetUtility.getInstantSet(player, SetData.getPureSet());
 				SetUtility.addSetOfItems(player, SetData.getPureItems());
 				player.getActionSender().removeChatboxInterface();
 				break;

@@ -716,8 +716,10 @@ public class PlayerUpdateTask implements Task {
             playerProps.put((byte)0);
         }
 
+
         playerProps.put((byte)otherPlayer.getGameMode());
 
+        //playerProps.putLong(NameUtils.nameToLong(clanName));
 
         /*final List<Recolor> recolors = otherPlayer.getRecolorManager().getAll();
         final Iterator<Recolor> itr = recolors.iterator();

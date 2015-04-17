@@ -240,13 +240,15 @@ public class Prayer implements ContentTemplate {
 
 
     public static void zaniksEffect(final Player player, int damage) {
+        if(damage < 7)
+            return;
         if(player == null || player.getCombat().getOpponent() == null)
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684)
             return;
         if(Combat.isInMulti(player.getCombat().getOpponent()))
             return;
-        final int time = 400 + damage * 60;
+        final int time = damage * 80;
         player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
 
 

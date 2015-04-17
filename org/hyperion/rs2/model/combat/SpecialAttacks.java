@@ -684,15 +684,9 @@ public class SpecialAttacks {
                  */
 
                 tempDamage = Misc.random(maxDamg);
-                if(player.cE.getOpponent().getEntity() instanceof Player) {
-                    deltaBonus = CombatAssistant.calculateMeleeAttack(player)
-                            - CombatAssistant.calculateMeleeDefence(player.cE
-                            .getOpponent().getPlayer());
+                deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
+                            - CombatAssistant.calculateMeleeDefence(oldEntity.getEntity());
 
-                } else {
-                    deltaBonus = CombatAssistant.calculateMeleeAttack(player)
-                            - player.cE.getOpponent().getNPC().getDefinition().combat();
-                }
                 randomIncrease = Misc.random(deltaBonus / 2);
                 if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
@@ -946,7 +940,7 @@ public class SpecialAttacks {
 			case 5680:
 			case 5698:
 			case 15007:
-				specDamage = 1.20;
+				specDamage = 1.18;
 
 				break;
 			case 1305:

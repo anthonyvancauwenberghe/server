@@ -151,7 +151,7 @@ public class PunishCommand extends Command{
                 duration = 100;
                 break;
         }
-        duration = TimeUnit.DAYS.convert(duration, unit);
+        duration = unit.convert(duration, TimeUnit.DAYS);
         return original > duration ? duration : original;
     }
 

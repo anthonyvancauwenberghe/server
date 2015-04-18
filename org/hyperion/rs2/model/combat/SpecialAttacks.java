@@ -209,7 +209,7 @@ public class SpecialAttacks {
 				specialAnimation = 1667;
 				specialDis = 1;
                 if(combatEntity.getOpponent() != null)
-                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.132) - 1.0;
+                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.122) - 1.0;
 				specialDrain = 50;
                 break;
             case 17646:
@@ -217,7 +217,7 @@ public class SpecialAttacks {
                 specialAnimation = 1667;
                 specialDis = 1;
                 if(combatEntity.getOpponent() != null)
-                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.132) - 1.0;
+                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.122) - 1.0;
                 specialDrain = 34;
                 break;
 			case 7158:

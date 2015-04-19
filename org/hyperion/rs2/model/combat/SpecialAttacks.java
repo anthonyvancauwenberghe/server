@@ -711,6 +711,7 @@ public class SpecialAttacks {
 
                 int delay = 300 + distance * 200;
                 Combat.addXP(player, damg5, false);
+
                 World.getWorld().submit(new Event(delay, "combat") {
                     @Override
                     public void execute() throws IOException {

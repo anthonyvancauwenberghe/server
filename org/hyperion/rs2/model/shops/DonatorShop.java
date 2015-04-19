@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.SpiritShields;
@@ -241,7 +242,13 @@ public class DonatorShop extends Shop {
 	 * @return
 	 */
 	public static int getPrice(int itemId) {
-		//itemId = new Item(itemId).getDefinition().getNormalId();
+        try {
+            final ItemDefinition def = ItemDefinition.forId(itemId);
+            if(def.isNoted())
+		        itemId = def.getNormalId();
+        }catch (Exception e) {
+
+        }
 		for(int[] veblen_good : VEBLEN_GOODS) {
 			if(veblen_good[0] == itemId) {
 				return veblen_good[1];

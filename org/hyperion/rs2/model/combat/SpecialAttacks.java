@@ -710,12 +710,12 @@ public class SpecialAttacks {
                 final int crit = damg5 > 0.85 * maxDamg ? 5 : 0;
 
                 int delay = 300 + distance * 200;
+                Combat.addXP(player, damg5, false);
                 World.getWorld().submit(new Event(delay, "combat") {
                     @Override
                     public void execute() throws IOException {
                         oldEntity.hit(damg5, player,
                                 false, crit);
-                        Combat.addXP(player, damg5, false);
                         this.stop();
                     }
                 });

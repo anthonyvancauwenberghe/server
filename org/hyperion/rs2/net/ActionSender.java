@@ -166,7 +166,8 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
+                    "Please vote on this months @red@VOTM@bla@ (Video of the Month): @blu@http://j.mp/aprilvotm#url#");
 
         }
         sendMessage("       ");

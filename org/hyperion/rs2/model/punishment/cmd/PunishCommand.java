@@ -132,23 +132,23 @@ public class PunishCommand extends Command{
         long duration = 2;
         switch(Rank.getPrimaryRank(player)) {
             case HELPER:
-                duration = 1;
-                break;
-            case MODERATOR:
-                duration = 2;
-                break;
-            case GLOBAL_MODERATOR:
-                duration = 3;
-                break;
-            case HEAD_MODERATOR:
                 duration = 7;
                 break;
-            case ADMINISTRATOR:
+            case MODERATOR:
                 duration = 14;
+                break;
+            case GLOBAL_MODERATOR:
+                duration = 21;
+                break;
+            case HEAD_MODERATOR:
+                duration = 28;
+                break;
+            case ADMINISTRATOR:
+                duration = 56;
                 break;
             case DEVELOPER:
             case OWNER:
-                duration = 100;
+                duration = 1000;
                 break;
         }
         duration = unit.convert(duration, TimeUnit.DAYS);

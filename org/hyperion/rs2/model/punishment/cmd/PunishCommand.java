@@ -140,6 +140,7 @@ public class PunishCommand extends Command{
             case GLOBAL_MODERATOR:
                 duration = 21;
                 break;
+            case COMMUNITY_MANAGER:
             case HEAD_MODERATOR:
                 duration = 28;
                 break;

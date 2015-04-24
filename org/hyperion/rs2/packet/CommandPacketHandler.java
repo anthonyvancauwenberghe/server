@@ -1009,25 +1009,7 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 
-		/**
-		 * Made the system already pshh, it'll just sit there
-		 */
-		if (commandStart.equalsIgnoreCase("settag")) {
-			try {
-				String tag = withCaps.substring(7); // how else can i
-													// have "Rich Homie"
-				if (Yelling.isValidTitle(tag).length() > 1) {
-					player.getActionSender().sendMessage(
-							Yelling.isValidTitle(tag));
-					return;
-				}
-				player.getYelling().setYellTitle(tag);
-			} catch (NullPointerException
-					| StringIndexOutOfBoundsException e) {
-				player.getActionSender().sendMessage("Invalid tag");
-				return;
-			}
-		}
+
 
 		if (commandStart.startsWith("closelistener")) {
 			player.getInterfaceState().resetContainers();
@@ -1922,6 +1904,26 @@ public class CommandPacketHandler implements PacketHandler {
 				this.handleModCommands(player, commandStart, s, withCaps, as);
 			if (Rank.isStaffMember(player))
 				this.handleStaffCommands(player, commandStart, s, withCaps, as);
+
+            /**
+             * Made the system already pshh, it'll just sit there
+             */
+            if (Rank.hasAbility(player, Rank.SUPER_DONATOR) && commandStart.equalsIgnoreCase("settag")) {
+                try {
+                    String tag = withCaps.substring(7); // how else can i
+                    // have "Rich Homie"
+                    if (Yelling.isValidTitle(tag).length() > 1) {
+                        player.getActionSender().sendMessage(
+                                Yelling.isValidTitle(tag));
+                        return;
+                    }
+                    player.getYelling().setYellTitle(tag);
+                } catch (NullPointerException
+                        | StringIndexOutOfBoundsException e) {
+                    player.getActionSender().sendMessage("Invalid tag");
+                    return;
+                }
+            }
             if(commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
                 try {
                     InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(6));

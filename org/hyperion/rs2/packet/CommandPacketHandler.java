@@ -1768,7 +1768,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if(commandStart.equals("checkclans")) {
             for(final Clan clan : ClanManager.clans.values()) {
-                if(clan.getPlayers().size() > 0)
+                if(clan.getPlayers().size() > 0 && !clan.getName().toLowerCase().startsWith("party"))
                     player.sendf("Clan: %s, Owner: %s, Members: %d", clan.getName(), clan.getOwner(), clan.getPlayers().size());
             }
         }

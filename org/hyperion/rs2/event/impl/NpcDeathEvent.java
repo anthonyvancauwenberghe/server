@@ -193,7 +193,7 @@ public class NpcDeathEvent extends Event {
                 if(!player.getDungoneering().inDungeon()) {
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                     if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
-                        int chance =  isTask ? 750 : 1000;
+                        int chance =  isTask ? 750 : 750;
                         if(npc.getDefinition().getId() == 8349 && player.getLocation().inPvPArea())
                             chance = 500;
                         for(NPCDrop drop : npc.getDefinition().getDrops()) {

@@ -167,7 +167,7 @@ public class ActionSender {
                 player.setTutorialProgress(7);
             }
             player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
-                    "Please vote on this months @red@VOTM@bla@ (Video of the Month): @blu@http://j.mp/aprilvotm#url#");
+                    "@blu@BOOSTS Active Until Monday, April 27th:", "@red@1.5X Drop Rates, 2X Slayer Points, 2X Dung Tokens, 2X PKT from ::zombies");
 
         }
         sendMessage("       ");

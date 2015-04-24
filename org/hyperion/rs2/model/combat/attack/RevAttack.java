@@ -138,10 +138,13 @@ public class RevAttack implements Attack {
                 switch(Misc.random(2)) {
                     case Constants.MELEE:
                         handleMeleeAttack(n, entity);
+                        break;
                     case Constants.RANGE:
                         handleRangeAttack(n, entity);
+                        break;
                     case Constants.MAGE:
                         handleMagicAttack(n, entity);
+                        break;
                 }
             }
         }
@@ -164,7 +167,7 @@ public class RevAttack implements Attack {
         Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.MAGE);
         Combat.npcRangeAttack(n, attack.getCombat(), 1276, 35, false);
 
-        n.cE.predictedAtk = System.currentTimeMillis() + 2400;
+        n.cE.predictedAtk = System.currentTimeMillis() + 2400L;
 
     }
     public void handleRangeAttack(NPC n, Entity attack) {
@@ -175,10 +178,10 @@ public class RevAttack implements Attack {
 
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 
-        Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.MAGE);
+        Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.RANGE);
         Combat.npcRangeAttack(n, attack.getCombat(), 1278, 35, false);
 
-        n.cE.predictedAtk = System.currentTimeMillis() + 2400;
+        n.cE.predictedAtk = System.currentTimeMillis() + 2400L;
 
     }
     public void handleMeleeAttack(NPC n, Entity attack) {
@@ -186,6 +189,6 @@ public class RevAttack implements Attack {
         final int maxHit = n.getDefinition().combat()/5;
         int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MELEE, maxHit);
         Combat.npcAttack(n, attack.getCombat(), damage, 300, Constants.MELEE);
-        n.cE.predictedAtk = System.currentTimeMillis() + 1800;
+        n.cE.predictedAtk = System.currentTimeMillis() + 1800L;
     }
 }

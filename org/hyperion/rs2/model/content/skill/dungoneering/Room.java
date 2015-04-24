@@ -38,8 +38,6 @@ public class Room {
     }
 
     public boolean cleared() {
-        if(!must_clear && !boss)
-            return initialized;
         for(final NPC npc : npcs) {
             if(!npc.isDead())
                 return false;

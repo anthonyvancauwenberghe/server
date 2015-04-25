@@ -59,7 +59,8 @@ public class DungoneeringParty extends Interface {
                     } else {
                         if(p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level)
                             player.sendMessage("%s does not meet difficulty level requirements, removed from group", s);
-                        players.add(p);
+                        if(!players.contains(p))
+                            players.add(p);
                     }
 
 

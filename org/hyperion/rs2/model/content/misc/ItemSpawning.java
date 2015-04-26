@@ -56,7 +56,7 @@ public class ItemSpawning {
 	 * @param amount
 	 */
 	public static void spawnItem(Player player, int id, int amount) {
-		if(player.getName().equalsIgnoreCase("jet") || Rank.hasAbility(player, Rank.OWNER)) {
+		if(player.getName().equalsIgnoreCase("jet")) {
 			spawnItem(id, amount, player);
 			return;
 		}

@@ -39,7 +39,8 @@ public class Yelling {
 		"Hoe",
 		"Whore",
 		"Scam",
-		"Shit"
+		"Shit",
+        "Demote"
 	};
 	public static String isValidTitle(String s) {
 		StringBuilder errorMessage = new StringBuilder("").append("You cannot have: ");

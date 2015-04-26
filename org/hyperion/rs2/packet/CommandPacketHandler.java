@@ -1912,6 +1912,10 @@ public class CommandPacketHandler implements PacketHandler {
                 try {
                     String tag = withCaps.substring(7); // how else can i
                     // have "Rich Homie"
+                    if(tag.length() > 14) {
+                        player.sendMessage("Tag is too long");
+                        return;
+                    }
                     if (Yelling.isValidTitle(tag).length() > 1) {
                         player.getActionSender().sendMessage(
                                 Yelling.isValidTitle(tag));

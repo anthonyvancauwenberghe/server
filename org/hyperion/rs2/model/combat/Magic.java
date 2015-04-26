@@ -349,7 +349,7 @@ public class Magic {
 		if(attacker.getPlayer().getPrayers().isEnabled(48))
 			Prayer.soulSplit(attacker.getPlayer(), opponent, Damage);
 
-		attacker.predictedAtk = (System.currentTimeMillis() + 1700);
+		attacker.predictedAtk = (System.currentTimeMillis() + 2400);
 
 		/**
 		 * Freezing.
@@ -383,12 +383,12 @@ public class Magic {
 		} else if(distance >= 3) {
 			timer = 4;
 		}
-
 		int min = 40;
 		min -= (distance - 1) * 8;
 		speed -= min;
 		int slope = 12 + distance;
-		timer = timer * 600;
+
+		timer = 1600 + (distance * 200);
 		attacker.getPlayer().getActionSender()
 				.createGlobalProjectile(attacker.getAbsY(), attacker.getAbsX(), offsetY,
 						offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,

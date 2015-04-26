@@ -1,11 +1,18 @@
 package org.hyperion.rs2.sql.requests;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
 import org.hyperion.util.Time;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class AccountValuesRequest extends SQLRequest{
 
@@ -34,6 +41,8 @@ public class AccountValuesRequest extends SQLRequest{
                 mac,
                 specialUid
         );
+        if(value > 1_500_000 || value < 0)
+            PunishmentManager.getInstance().add(Punishment.create("server", player, new Combination(Target.ACCOUNT, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.DAYS),"too much dp"));
         try{
             sql.query(query);
             player.lastAccountValueTime = System.currentTimeMillis();

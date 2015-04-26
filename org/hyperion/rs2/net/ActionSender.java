@@ -166,8 +166,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
-                    "@blu@BOOSTS Active Until Monday, April 27th:", "@red@1.5X Drop Rates, 2X Slayer Points, 2X Dung Tokens, 2X PKT from ::zombies");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
 
         }
         sendMessage("       ");

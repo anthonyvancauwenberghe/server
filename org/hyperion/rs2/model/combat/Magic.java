@@ -349,7 +349,7 @@ public class Magic {
 		if(attacker.getPlayer().getPrayers().isEnabled(48))
 			Prayer.soulSplit(attacker.getPlayer(), opponent, Damage);
 
-		attacker.predictedAtk = (System.currentTimeMillis() + 2400);
+		attacker.predictedAtk = (System.currentTimeMillis() + 1800);
 
 		/**
 		 * Freezing.

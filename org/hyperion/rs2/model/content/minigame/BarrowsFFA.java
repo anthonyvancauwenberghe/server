@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * Time: 3:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BarrowsFFA extends SpecialArea implements ContentTemplate{
+public class BarrowsFFA extends SpecialArea{
 
     private static final int HEIGHT_LEVEL = 0;
     public static final Location PORTAL = Location.create(0, 0, 0);
@@ -157,19 +157,19 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     }
 
 
-    @Override
+   // @Override
     public int[] getValues(int type) {
         return new int[0];
     }
 
     //used to enter lobby
-    @Override
+    //@Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
         return false;
     }
 
     //used to pick your barrows set
-    @Override
+    //@Override
     public boolean actionButton(Player player, int buttonId) {
         final BarrowSet set = BarrowSet.values()[buttonId - /*some number*/0];
         player.getExtraData().put("barrowset", set);

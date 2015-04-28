@@ -55,8 +55,8 @@ public class BarrowsFFA extends SpecialArea{
         private final Item[] items;
 
         private BarrowSet(final Integer... ids) {
-            if(ids.length != 4)
-                throw new IllegalArgumentException("Length of ids is invalid");
+//            if(ids.length != 4)
+//                throw new IllegalArgumentException("Length of ids is invalid");
             this.items = Stream.of(ids).map(Item::create).toArray(Item[]::new);
         }
 

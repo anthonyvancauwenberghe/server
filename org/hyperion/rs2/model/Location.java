@@ -224,6 +224,10 @@ public class Location {
 		return loc.x == x && loc.y == y && loc.z == z;
 	}
 
+    public boolean equalsIgnoreHeight(Location other) {
+        return other.x == x && other.y == y && other.z%4 == z%4;
+    }
+
 	@Override
 	public String toString() {
 		return x + "	" + y + "	" + z;

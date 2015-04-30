@@ -377,6 +377,11 @@ public class WalkingQueue {
             for(final Map.Entry<String, SpecialArea> area : SpecialAreaHolder.getAll()) {
                 area.getValue().check(player);
 
+                if(area.getValue().isPkArea() && area.getValue().inArea(player)) {
+                    player.wildernessLevel = area.getValue().getPkLevel();
+                    player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+
             }
 			
 			if(DangerousPK.inDangerousPK(player)) {

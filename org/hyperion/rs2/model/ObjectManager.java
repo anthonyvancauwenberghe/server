@@ -194,7 +194,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public void update(GameObject obj) {
 		for(Player p : World.getWorld().getPlayers()) {
-			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
+			if(obj.isVisible(p.getLocation())) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
                 if(obj.getDefinition().animation != -1) {
                     p.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
@@ -205,7 +205,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public void load(Player p) {
 		for(GameObject obj : globalObjects) {
-			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
+			if(obj.isVisible(p.getLocation())) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
                 if(obj.getDefinition().animation != -1)
                     p.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
@@ -235,8 +235,9 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 	}
 
 	public GameObject getObjectAt(int x, int y, int z) {
+        final Location loc = Location.create(x, y, z);
 		for(GameObject object : globalObjects) {
-			if(object.getLocation().getX() == x && object.getLocation().getY() == y && object.getLocation().getZ()%4 == z%4)
+			if(object.isAt(loc))
 				return object;
 		}
 		return null;
@@ -244,7 +245,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public GameObject getObjectAt(Location loc) {
 		for(GameObject object : globalObjects) {
-			if(object.getLocation().getX() == loc.getX() && object.getLocation().getY() == loc.getY())
+			if(object.isAt(loc))
 				return object;
 		}
 		return null;

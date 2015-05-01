@@ -23,6 +23,11 @@ public class WalkingPacketHandler implements PacketHandler {
 			player.getActionSender().sendMessage("You cannot move in this game.");
 			return;
 		}
+        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
+            player.sendMessage("Please reset your password before continuing to play.");
+            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
+            return;
+        }
         if(player.getTutorialProgress() == 6) {
             player.getActionSender().sendMessage("Please use ::tutorial to continue this part of the tutorial!");
             return;

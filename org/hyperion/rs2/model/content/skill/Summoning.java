@@ -905,8 +905,7 @@ public class Summoning implements ContentTemplate {
 			ItemonItem(player, a, c);
 		}
 		if(type == 17) {
-			SummoningMonsters.SummonNewNPC(player,
-					SummoningData.getNpcbyPouchId(a), a);
+			SummoningMonsters.SummonNewNPC(player, SummoningData.getNpcbyPouchId(a), a);
 			//ContentEntity.deleteItem(player, a); // double delete
 		}
 		if(type == 11) {

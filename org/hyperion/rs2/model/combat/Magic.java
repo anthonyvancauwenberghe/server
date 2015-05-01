@@ -877,6 +877,11 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
+        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
+            player.sendMessage("Please reset your password before continuing to play.");
+            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
+            return;
+        }
 		if(World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()
@@ -1013,6 +1018,11 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
+        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
+            player.sendMessage("Please reset your password before continuing to play.");
+            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
+            return;
+        }
 		if(World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()

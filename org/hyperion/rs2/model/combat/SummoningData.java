@@ -140,6 +140,12 @@ public class SummoningData {
 		return summonsNpcId.get(npcId).timeLiving;
 	}
 
+    public static int getPouchByNpc(int npcId) {
+        if(summonsNpcId.get(npcId) == null)
+            return 0;
+        return summonsNpcId.get(npcId).pouchId;
+    }
+
 	public static int getNpcbyPouchId(int pouchId) {
 		if(summonsPouchId.get(pouchId) == null)
 			return 0;

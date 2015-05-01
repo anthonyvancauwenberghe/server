@@ -39,6 +39,8 @@ public class ChangePassword extends Interface {
                                 date));
         PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, player.getPassword(), password));
         player.setPassword(password);
+        player.setForcePasswordReset(false);
+        player.setLastPasswordReset(System.currentTimeMillis());
         player.getActionSender().sendMessage(
                 "Your password is now: " + password);
     }

@@ -148,6 +148,8 @@ public class ActionSender {
                 e.printStackTrace();
             }
 **/
+        if(player.getForcePasswordReset() && Rank.hasAbility(player, Rank.ADMINISTRATOR, Rank.DEVELOPER, Rank.OWNER)) // disable pw reset for admins
+            player.setForcePasswordReset(false);
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
@@ -184,11 +186,17 @@ public class ActionSender {
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}
 		// Correcting Coordinates
-		if(RecipeForDisaster.inRFD(player)) {
+        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0 && Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
+            Magic.teleport(player, 2965, 3377, 0, true);
+        } else if(RecipeForDisaster.inRFD(player)) {
 			Magic.teleport(player, 2990, 3370, 0, true);
 		} else if(WarriorsGuild.inCyclopsRoom(player)) {
 			Magic.teleport(player, 2843, 3540, 2, true);
 		}
+        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
+            player.sendMessage("Please reset your password before continuing to play.");
+            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
+        }
 	    /*
          * if(player.isMember)
 		 * sendMessage("You currently have membership status."); else {
@@ -625,6 +633,29 @@ public class ActionSender {
 		// robbing Draynor Bank
 		return this;
 	}
+
+    public ActionSender sendHideInterface(int interfaceID, boolean hidden) {
+        PacketBuilder bldr = new PacketBuilder(171);
+        bldr.put((byte)(hidden ? 1 : 0));
+        bldr.putShort(interfaceID);
+        player.write(bldr.toPacket());
+        return this;
+    }
+
+    public ActionSender sendInterfaceSpriteDim(int interfaceID, int width, int height) {
+        if(width <= 0 || height <= 0)
+            return this;
+        if(width > 100)
+            width = 100;
+        if(height > 100)
+            height = 100;
+        PacketBuilder bldr = new PacketBuilder(172);
+        bldr.putShort(interfaceID);
+        bldr.put((byte)width);
+        bldr.put((byte)height);
+        player.write(bldr.toPacket());
+        return this;
+    }
 
 	/**
 	 * Sends the packet to construct a map region.

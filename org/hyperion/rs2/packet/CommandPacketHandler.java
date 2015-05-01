@@ -63,6 +63,8 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.ge.GrandExchange;
+import org.hyperion.rs2.model.content.ge.Offer;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
@@ -603,6 +605,20 @@ public class CommandPacketHandler implements PacketHandler {
             player.sendMessage("Loaded punishments" + loaded);
         }
 
+        if(commandStart.equalsIgnoreCase("openge")) {
+            //player.getGrandExchange().openOffers();
+            player.getGrandExchange().openOffers();
+        }
+
+        if(commandStart.equalsIgnoreCase("selectitem")) {
+            try {
+                int itemID = Integer.valueOf(as[1]);
+                System.out.println("Selecting item: " + itemID);
+                player.getGrandExchange().setNewOffer(new Offer(itemID, 1, 1337, player.getGrandExchange().getNewOffer().getType()));
+                player.getGrandExchange().refreshNewOffer();
+            } catch (Exception e) {}
+        }
+
         if(commandStart.equalsIgnoreCase("startevent")) {
             try {
                 String name = as[1].replaceAll("_", " ");
@@ -612,7 +628,26 @@ public class CommandPacketHandler implements PacketHandler {
                 Events.fireNewEvent(name,eventSafe,timeTillStart,eventLoc);
                 player.sendMessage("New Event: " + name + " Safe: " + eventSafe + " Start: " + timeTillStart + " seconds");
             } catch (Exception e) {
-                player.sendMessage("Use ::newevent name,time,safe i.e ::newevent Fight_Pits 120 true");
+                player.sendMessage("Use '::startevent name time safe' i.e ::newevent Fight_Pits 120 true");
+            }
+        }
+
+        if(commandStart.equalsIgnoreCase("fpr")) {
+            try {
+                String name = as[1].replaceAll("_", " ");
+                Player fprP = World.getWorld().getPlayer(name);
+                if(fprP != null) {
+                    if(fprP.isInCombat()) {
+                        player.sendMessage("This player is in combat, try again later.");
+                        return;
+                    }
+                    player.sendMessage("You have forced a password reset for " + fprP.getName());
+                    fprP.sendMessage("A password reset has been issued for your account. Type '::changepass' ");
+                    fprP.setLastPasswordReset(0);
+                    fprP.setForcePasswordReset(true);
+                }
+            } catch (Exception e) {
+                player.sendMessage("Please use '::fps name'");
             }
         }
 

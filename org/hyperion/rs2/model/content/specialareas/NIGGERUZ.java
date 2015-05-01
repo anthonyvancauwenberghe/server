@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.content.specialareas;
 
-import jdk.nashorn.internal.runtime.GlobalObject;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 

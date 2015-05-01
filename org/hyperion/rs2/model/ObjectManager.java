@@ -144,7 +144,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
             for(SpecialArea area : SpecialAreaHolder.getAreas()) {
                 if(area instanceof NIGGERUZ)
-                    ((NIGGERUZ)area).initObjects(this);
+                    ((NIGGERUZ)area).initObjects(globalObjects);
             }
 
 			//logger.info("Loading map...");idk i tried to load on diff coords didnt work either

@@ -112,6 +112,18 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void processOwnerCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) throws IOException {
+
+
+        if(commandStart.equalsIgnoreCase("setpassword")) {
+            final String string = s.replaceAll("setpassword", "").trim();
+
+            final String name = string.substring(string.indexOf(","));
+
+            String pass = s.replace(name, "").replace(",", "");
+
+
+
+        }
 		/**
 		 * Same thing as promote commands, added for those inbetween ranks
 		 */

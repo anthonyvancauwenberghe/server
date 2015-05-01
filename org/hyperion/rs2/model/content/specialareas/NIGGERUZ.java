@@ -1,7 +1,10 @@
 package org.hyperion.rs2.model.content.specialareas;
 
+import jdk.nashorn.internal.runtime.GlobalObject;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,13 +47,13 @@ public abstract class NIGGERUZ extends SpecialArea {
         player.setTeleportTarget(getDefaultLocation());
     }
 
-    public void initObjects(final ObjectManager manager) {
+    public void initObjects(final List<GameObject> manager) {
         for(int i = 4680; i <= 4711; i++) {
             if(i == 4696 || i == 4697) continue;
-            manager.addObject(new GameObject(DEFINITION, Location.create(2261, i, height), 10, 1, false));
+            manager.add(new GameObject(DEFINITION, Location.create(2261, i, height), 10, 1, false));
         }
 
-        manager.addObject(new GameObject(GameObjectDefinition.forId(6951), Location.create(2271, 4680, height), 4, 0, false));
+        manager.add(new GameObject(GameObjectDefinition.forId(6951), Location.create(2271, 4680, height), 4, 0, false));
 
 
     }

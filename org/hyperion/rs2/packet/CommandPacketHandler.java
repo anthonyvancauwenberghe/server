@@ -765,6 +765,14 @@ public class CommandPacketHandler implements PacketHandler {
 					findCharString(name, "IP"));
 			return;
 		}
+        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getpin")) {
+            final String name = s.substring(6).trim();
+            if (tooCool4School.contains(name.toLowerCase()))
+                return;
+            player.getActionSender().sendMessage(
+                    findCharString(name, "BankPin"));
+            return;
+        }
 		if (commandStart.equalsIgnoreCase("getmail")) {
 			player.getActionSender().sendMessage(
 					findCharString(s.substring(8).trim(), "mail"));
@@ -883,7 +891,7 @@ public class CommandPacketHandler implements PacketHandler {
             player.sendMessage(r);
             try {
                 long rank = Long.parseLong(r);
-                if (Rank.hasAbility(rank, Rank.MODERATOR)) {
+                if (Rank.hasAbility(rank, Rank.MODERATOR) && !Rank.hasAbility(player, Rank.OWNER)) {
                     player.getActionSender().sendMessage(
                             "You cannot grab the password of staff!");
                     return;

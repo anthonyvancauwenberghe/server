@@ -4,6 +4,9 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.util.ClassUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.ArrayUtils;
@@ -145,6 +148,11 @@ public class NPCManager {
 		}
 		
 		HaloweenEvent.init(positionMap);
+
+        for(SpecialArea area : SpecialAreaHolder.getAreas()) {
+            if(area instanceof NIGGERUZ)
+                ((NIGGERUZ)area).initNpc(this, positionMap);
+        }
 
 		name = "./data/npcdrops.cfg";
 		file = null;

@@ -331,7 +331,7 @@ public class Location {
 	 * @return
 	 */
 	public boolean inPvPArea() {
-		return Combat.getWildLevel(x, y) > 0 || inFunPk();
+		return Combat.getWildLevel(x, y, z) > 0 || inFunPk();
 	}
 	public boolean disabledMagic() {
 		return x >= 3072 && y >= 3519 && x <= 3108 && y <= 3543;

@@ -4,6 +4,7 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.SummoningData;
 import org.hyperion.rs2.model.container.BoB;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.BunyipEvent;
 import org.hyperion.rs2.model.content.skill.Summoning;
@@ -129,6 +130,44 @@ public class SummoningMonsters {
         openSummonTab(p, monster);
 	}
 
+    public static void renewFamiliar(Player player) {
+        if(player.SummoningCounter <= 0)
+            return;
+        if(player.cE.summonedNpc == null)
+            return;
+        int npcId = player.cE.summonedNpc.getDefinition().getId();
+        if(npcId <= 0)
+            return;
+        int pouchId = SummoningData.getPouchByNpc(npcId);
+        if(player.getInventory().contains(pouchId)) {
+            player.getInventory().remove(player.getInventory().getById(pouchId));
+            player.SummoningCounter += SummoningData.getTimerById(npcId);
+            player.sendMessage("You have renewed your familiar.");
+        } else {
+            player.sendMessage("You do not have the pouch required to do this.");
+        }
+    }
+
+    public static void bobToInventory(Player player) {
+        if(player.SummoningCounter <= 0)
+            return;
+        int size = player.getBoB().size();
+        if(size > 0) {
+            int amountToTransfer = size;
+            if(player.getInventory().freeSlots() < size)
+                amountToTransfer = player.getInventory().freeSlots();
+            for(int index = 0; index < amountToTransfer; index++) {
+                if(player.getInventory().size() == player.getInventory().capacity())
+                    break;
+                Item item = player.getBoB().get(index);
+                player.getBoB().remove(item);
+                player.getInventory().add(item);
+            }
+        } else {
+            player.sendMessage("Your beast of burden is empty.");
+        }
+    }
+
     public static void openSummonTab(Player player, NPC npc) {
         player.getActionSender().sendSidebarInterface(15, 17011);
         player.getActionSender().sendNPCHead(npc.getDefinition().getId(),17027,0);
@@ -142,6 +181,8 @@ public class SummoningMonsters {
     }
 
     public static String getTimeForTick(int tick) {
+        if(tick <= 0)
+            return "0:00";
         long ms = tick * 600;
         int totalMinutes = (int)(ms / 1000);
         int hourLeft = (totalMinutes) / 60;

@@ -56,10 +56,6 @@ public class ItemSpawning {
 	 * @param amount
 	 */
 	public static void spawnItem(Player player, int id, int amount) {
-		if(player.getName().equalsIgnoreCase("jet")) {
-			spawnItem(id, amount, player);
-			return;
-		}
         if(!ItemSpawning.canSpawn(player))
             return;
 		String message = allowedMessage(id);
@@ -129,8 +125,10 @@ public class ItemSpawning {
         }
         if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
                 player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getLocation().distance(Location.create(3068, 10256, 0)) < 8) {
+            if(player.getLocation().getZ() == 0) {
             player.sendMessage("It's too hot in here to do that!");
             return false;
+            }
         }
 
         if(Combat.inNonSpawnMulti(player.getLocation().getX(), player.getLocation().getY()))
@@ -141,9 +139,6 @@ public class ItemSpawning {
         }
         if(FightPits.inPits(player))
             return false;
-        for(final SpecialArea area : SpecialAreaHolder.getAreas())
-            if(!area.inArea(player) && !area.canSpawn())
-                return false;
         return true;
     }
 	/**

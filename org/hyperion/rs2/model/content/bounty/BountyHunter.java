@@ -104,8 +104,8 @@ public class BountyHunter {
 	}
 	
 	public boolean wildLevelCheck(final Player opp) {
-		final int oppLevel = Combat.getWildLevel(opp.cE.getAbsX(), opp.cE.getAbsY());
-		final int playerLevel = Combat.getWildLevel(player.cE.getAbsX(), player.cE.getAbsY());
+		final int oppLevel = Combat.getWildLevel(opp.cE.getAbsX(), opp.cE.getAbsY(), opp.cE.getAbsZ());
+		final int playerLevel = Combat.getWildLevel(player.cE.getAbsX(), player.cE.getAbsY(), player.cE.getAbsZ());
 		return (oppLevel < 10 && playerLevel < 10) || (oppLevel >= 10 && playerLevel >= 10);
 	}
 	

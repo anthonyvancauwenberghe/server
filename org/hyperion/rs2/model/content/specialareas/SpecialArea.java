@@ -53,6 +53,7 @@ public abstract class SpecialArea {
     public abstract boolean isPkArea();
     public abstract Location getDefaultLocation();
 
-    public abstract boolean inArea(final Player player);
+    public boolean inArea(final Player player) { return inArea(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());}
+    public abstract boolean inArea(final int x, final int y, final int z);
     public abstract String canEnter(final Player player);
 }

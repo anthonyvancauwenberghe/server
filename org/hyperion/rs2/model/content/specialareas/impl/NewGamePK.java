@@ -20,8 +20,8 @@ public class NewGamePK extends SpecialArea {
 
 
     @Override
-    public boolean inArea(Player player) {
-        return player.getLocation().getZ() == HEIGHT;  //To change body of implemented methods use File | Settings | File Templates.
+    public boolean inArea(final int x, final int y, final int z) {
+        return z == HEIGHT;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

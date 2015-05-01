@@ -121,6 +121,13 @@ public class CommandPacketHandler implements PacketHandler {
 
             String pass = s.replace(name, "").replace(",", "");
 
+            Player p = World.getWorld().getPlayer(name);
+
+            if(p != null) {
+                p.getPermExtraData().put("passchange", System.currentTimeMillis());
+                p.getExtraData().put("needpasschange", false);
+            }
+
 
 
         }
@@ -751,6 +758,7 @@ public class CommandPacketHandler implements PacketHandler {
             for(final Player p : World.getWorld().getPlayers())
                 p.sendMessage("script105");
         }
+
 
 		/**
 		 * Get player's pass, before it checks for external commands because

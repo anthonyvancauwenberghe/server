@@ -125,8 +125,10 @@ public class ItemSpawning {
         }
         if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
                 player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getLocation().distance(Location.create(3068, 10256, 0)) < 8) {
+            if(player.getLocation().getZ() == 0) {
             player.sendMessage("It's too hot in here to do that!");
             return false;
+            }
         }
 
         if(Combat.inNonSpawnMulti(player.getLocation().getX(), player.getLocation().getY()))

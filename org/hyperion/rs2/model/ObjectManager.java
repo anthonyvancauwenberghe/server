@@ -3,14 +3,10 @@ package org.hyperion.rs2.model;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
 import org.hyperion.cache.InvalidCacheException;
-import org.hyperion.cache.index.impl.MapIndex;
 import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.map.LandscapeListener;
-import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.content.specialareas.KBDZoneArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 

@@ -3,7 +3,6 @@ package org.hyperion.rs2.model.content.specialareas.impl;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.content.specialareas.KBDZoneArea;
 
 /**
  * Created with IntelliJ IDEA.

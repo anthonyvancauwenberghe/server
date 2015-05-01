@@ -1013,8 +1013,8 @@ public class Combat {
 	}
 
 	public static int getRealLevel(CombatEntity combatEntity, CombatEntity b) {
-		int a = getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY());
-		int d = getWildLevel(b.getAbsX(), b.getAbsY());
+		int a = getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY(), combatEntity.getAbsZ());
+		int d = getWildLevel(b.getAbsX(), b.getAbsY(), b.getAbsZ());
 		return Math.min(a, d);
 	}
 

@@ -38,7 +38,7 @@ public abstract class NIGGERUZ extends SpecialArea {
     @Override
     public boolean inArea(int x, int y, int z) {
         return z == height &&
-                x > 2271 && y >= 4680 && x <= 2287 && y <= 4711 ;  //To change body of implemented methods use File | Settings | File Templates.
+                x > 2261 && y >= 4680 && x <= 2287 && y <= 4711 ;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.specialareas.impl;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,7 @@ import org.hyperion.rs2.model.container.Equipment;
  * Time: 4:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public class HybridZone extends KBDZoneArea {
+public class HybridZone extends NIGGERUZ {
 
     public HybridZone() {
         super(4);

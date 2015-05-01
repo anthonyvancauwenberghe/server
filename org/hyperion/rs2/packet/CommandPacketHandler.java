@@ -643,8 +643,7 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                     player.sendMessage("You have forced a password reset for " + fprP.getName());
                     fprP.sendMessage("A password reset has been issued for your account. Type '::changepass' ");
-                    fprP.setLastPasswordReset(0);
-                    fprP.setForcePasswordReset(true);
+
                 }
             } catch (Exception e) {
                 player.sendMessage("Please use '::fps name'");

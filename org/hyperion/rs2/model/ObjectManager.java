@@ -7,6 +7,7 @@ import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.map.LandscapeListener;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
+import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 
@@ -142,8 +143,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 
             for(SpecialArea area : SpecialAreaHolder.getAreas()) {
-                if(area instanceof KBDZoneArea)
-                    ((KBDZoneArea)area).initObjects(this);
+                if(area instanceof NIGGERUZ)
+                    ((NIGGERUZ)area).initObjects(this);
             }
 
 			//logger.info("Loading map...");idk i tried to load on diff coords didnt work either

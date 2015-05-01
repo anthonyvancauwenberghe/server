@@ -128,7 +128,12 @@ public class BarrowsFFA extends SpecialArea{
         final int x = player.getLocation().getX();
         final int y = player.getLocation().getY();
         final int z = player.getLocation().getZ();
-        return z == HEIGHT_LEVEL && (x > y);  //borders, not implemented
+        return inArea(x, y, z);  //borders, not implemented
+    }
+
+    @Override
+    public boolean inArea(int x, int y, int z) {
+        return z == HEIGHT_LEVEL && (x > y);
     }
 
     @Override

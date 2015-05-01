@@ -51,7 +51,7 @@ public class SkeletalTrioSession extends TeamBossSession {
     private static class SkeletalTrioArea extends SpecialArea {
 
         @Override
-        public boolean inArea(Player player) {
+        public boolean inArea(int x, int y, int z) {
             return false;
         }
 

@@ -1084,7 +1084,7 @@ public class Combat {
 					combatEntity.getAbsX() <= 2354 && combatEntity.getAbsY() <= 9834)
 				||
                 (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
-                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711)
+                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711 && combatEntity.getAbsZ() == 0)
                 || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Location.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk())
 			
 			return true;

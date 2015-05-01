@@ -20,12 +20,24 @@ import java.util.List;
 public class GoodIPs extends Event {
 
     public static final List<String> GOODS = new ArrayList<>();
+    private static final File FILE = new File("./data/goodips.txt");
+
+
+    static {
+        try(final BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
+            for(String s = ""; (s = reader.readLine()) != null;) {
+                if(!GOODS.contains(s))
+                    GOODS.add(s);
+            }
+        } catch(Exception e) {
+
+        }
+    }
 
     public GoodIPs(){
         super(Time.FIVE_MINUTES);
     }
 
-    private static final File FILE = new File("./data/goodips.txt");
 
     public void execute() {
         try(final BufferedReader reader = new BufferedReader(new FileReader(FILE))) {

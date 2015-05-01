@@ -29,8 +29,8 @@ public class PurePk extends SpecialArea {
         return "";
     }
 
-    @Override public boolean inArea(final Player player) {
-        return player.getLocation().getZ() == HEIGHT;
+    @Override public boolean inArea(final int x, final int y, final int z) {
+        return z == HEIGHT;
     }
 
     @Override public boolean isPkArea() {

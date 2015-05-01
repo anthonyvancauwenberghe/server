@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.specialareas;
 
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.rs2.model.content.specialareas.impl.NewGamePK;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 
@@ -20,6 +21,7 @@ public class SpecialAreaHolder {
         map = new HashMap<>();
         map.put("purepk", new PurePk());
         map.put("newgamepk", new NewGamePK());
+        map.put("hybrid", new HybridZone());
 
         for(final Map.Entry<String, SpecialArea> area : map.entrySet()) {
             CommandHandler.submit(area.getValue().command(area.getKey()));

@@ -56,10 +56,6 @@ public class ItemSpawning {
 	 * @param amount
 	 */
 	public static void spawnItem(Player player, int id, int amount) {
-		if(player.getName().equalsIgnoreCase("jet")) {
-			spawnItem(id, amount, player);
-			return;
-		}
         if(!ItemSpawning.canSpawn(player))
             return;
 		String message = allowedMessage(id);

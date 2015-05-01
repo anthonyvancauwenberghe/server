@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
@@ -877,11 +878,6 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
-        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
-            player.sendMessage("Please reset your password before continuing to play.");
-            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
-            return;
-        }
 		if(World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()
@@ -1018,11 +1014,6 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
-        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
-            player.sendMessage("Please reset your password before continuing to play.");
-            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
-            return;
-        }
 		if(World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()
@@ -1339,7 +1330,7 @@ public class Magic {
 	
 	public static void goTo13s(final Player player) {
 		if(canGoTo13s(player))
-			Magic.teleport(player, 2981, 3599, 0, false);
+            SpecialAreaHolder.get("hybrid").ifPresent(area -> area.enter(player));
 		else
 			player.sendMessage("@red@You have to be on the Ancient Spellooks to go to 13s", "@red@You cannot bring Divine or Elysian Spirit Shields with you here", "@red@You must be above half health to enter");
 	}

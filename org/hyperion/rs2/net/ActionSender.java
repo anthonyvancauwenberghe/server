@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -26,6 +27,7 @@ import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
 import org.hyperion.rs2.model.content.misc.Starter;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
@@ -40,6 +42,9 @@ import org.hyperion.rs2.util.NewcomersLogging;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -51,7 +56,20 @@ import java.util.Properties;
  */
 public class ActionSender {
 
-	/**
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
+    private static Date LAST_PASS_RESET;
+
+    static {
+        try {
+            LAST_PASS_RESET = dateFormat.parse("31-April-2015");
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+
+    /**
 	 * The player.
 	 */
 	private Player player;
@@ -148,8 +166,11 @@ public class ActionSender {
                 e.printStackTrace();
             }
 **/
-        if(player.getForcePasswordReset() && Rank.hasAbility(player, Rank.ADMINISTRATOR, Rank.DEVELOPER, Rank.OWNER)) // disable pw reset for admins
-            player.setForcePasswordReset(false);
+
+        if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+            if(!GoodIPs.GOODS.contains(player.getShortIP()))
+                player.getSession().close(false);
+        }
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
@@ -185,17 +206,11 @@ public class ActionSender {
 			String rank = Rank.getPrimaryRank(player).toString();
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}
-		// Correcting Coordinates
-        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0 && Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
-            Magic.teleport(player, 2965, 3377, 0, true);
-        } else if(RecipeForDisaster.inRFD(player)) {
-			Magic.teleport(player, 2990, 3370, 0, true);
-		} else if(WarriorsGuild.inCyclopsRoom(player)) {
-			Magic.teleport(player, 2843, 3540, 2, true);
-		}
-        if(player.getForcePasswordReset() && player.getLastPasswordReset() == 0) {
-            player.sendMessage("Please reset your password before continuing to play.");
-            player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
+		if(player.getPermExtraData().getLong("passreset") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+            player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
+            player.setTeleportTarget(Edgeville.LOCATION);
+            player.getExtraData().put("needpasschange", true);
+            InterfaceManager.get(6).show(player);
         }
 	    /*
          * if(player.isMember)
@@ -651,8 +666,8 @@ public class ActionSender {
             height = 100;
         PacketBuilder bldr = new PacketBuilder(172);
         bldr.putShort(interfaceID);
-        bldr.put((byte)width);
-        bldr.put((byte)height);
+        bldr.put((byte) width);
+        bldr.put((byte) height);
         player.write(bldr.toPacket());
         return this;
     }

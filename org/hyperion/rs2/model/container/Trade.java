@@ -180,6 +180,8 @@ public class Trade {
 		Player trader = player.getTrader();
 		if(trader == null)
 			return;
+        if(player.getExtraData().getBoolean("needpasschange"))
+            return;
 		if(FightPits.inPits(player) || FightPits.inPits(player.getTrader())) //trying to smuggle
 			return;
 		if(player.getTrader().getTrader() != null)

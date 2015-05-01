@@ -17,6 +17,8 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.RestarterThread;
@@ -1017,15 +1019,22 @@ public class Combat {
 	}
 
 	public static int getWildLevel(int absX, int absY) {
-		if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-			return (((absY - 3520) / 8) + 3);
+        return getWildLevel(absX, absY, 0);
+	}
+
+    public static int getWildLevel(int absX, int absY, int z) {
+        for(SpecialArea a : SpecialAreaHolder.getAreas())
+            if(a.isPkArea() && a.inArea(absX, absY, z))
+                return a.getPkLevel();
+        if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+            return (((absY - 3520) / 8) + 3);
         else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
             return 57;
-		else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
-			return 12;
-		else
-			return -1;
-	}
+        else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
+            return 12;
+        else
+            return -1;
+    }
 
 	public static boolean isInMulti(CombatEntity combatEntity) {
 		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327

@@ -180,16 +180,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private boolean hasMaxCape = false;
 	private boolean hasCompCape = false;
 
-    private boolean forcePasswordReset = true;
-    private long lastPasswordReset = 0;
-
-    public void setForcePasswordReset(boolean reset) { forcePasswordReset = reset;}
-
-    public boolean getForcePasswordReset() { return forcePasswordReset;}
-
-    public long getLastPasswordReset() {return lastPasswordReset;}
-
-    public void setLastPasswordReset(long reset) {lastPasswordReset = reset;}
 
 	public void setMaxCape(boolean b) {
 		hasMaxCape = b;
@@ -1187,8 +1177,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		active = false;
 		if(newCharacter) {
 			this.created = System.currentTimeMillis();
-            this.lastPasswordReset = System.currentTimeMillis();
-            this.forcePasswordReset = false;
 		}
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();

@@ -10,6 +10,9 @@ import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.content.specialareas.KBDZoneArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -139,6 +142,12 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
                 for(int i = 0; i < 4; i++) {
                     globalObjects.add(new GameObject(GameObjectDefinition.forId(4875 + i), create(3084, 3496 + i, 0), 10, 0));
                 }
+            }
+
+
+            for(SpecialArea area : SpecialAreaHolder.getAreas()) {
+                if(area instanceof KBDZoneArea)
+                    ((KBDZoneArea)area).initObjects(this);
             }
 
 			//logger.info("Loading map...");idk i tried to load on diff coords didnt work either

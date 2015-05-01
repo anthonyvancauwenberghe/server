@@ -137,9 +137,6 @@ public class ItemSpawning {
         }
         if(FightPits.inPits(player))
             return false;
-        for(final SpecialArea area : SpecialAreaHolder.getAreas())
-            if(!area.inArea(player) && !area.canSpawn())
-                return false;
         return true;
     }
 	/**

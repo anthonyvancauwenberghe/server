@@ -1029,8 +1029,10 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
             case 17038:
+                //SummoningMonsters.renewFamiliar(player);
                 break;
             case 17018:
+                //SummoningMonsters.bobToInventory(player);
                 break;
             case 17022:
             case 10137:

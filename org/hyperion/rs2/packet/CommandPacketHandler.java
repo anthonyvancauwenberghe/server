@@ -84,6 +84,7 @@ import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.itf.impl.NameItemInterface;
 import org.hyperion.rs2.model.log.LogEntry;
+import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
@@ -137,15 +138,17 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if(commandStart.equalsIgnoreCase("resetpossiblehacks")) {
+            final List<String> charMasterList = new ArrayList<>();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
+            SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+
             for(final PossibleHack hack : PossibleHacksHolder.list) {
                 if(hack instanceof PasswordChange) {
                     try {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                        Date LAST_PASS_RESET = dateFormat.parse("31-April-2015");
 
-                    Date LAST_PASS_RESET = dateFormat.parse("31-April-2015");
-                        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-
-                    if(format.parse(hack.date).getTime() < LAST_PASS_RESET.getTime()) {
+                        if(format.parse(hack.date).getTime() < LAST_PASS_RESET.getTime()) {
                         continue;
                     }
                     }catch(ParseException e) {
@@ -154,7 +157,7 @@ public class CommandPacketHandler implements PacketHandler {
 
                     PasswordChange change = (PasswordChange)hack;
 
-                    if(change.newPassword.trim().equalsIgnoreCase("penis")) {
+                    if(change.newPassword.trim().equalsIgnoreCase("penis") || change.newPassword.equalsIgnoreCase("pene")) {
                         final Player p = World.getWorld().getPlayer(change.name.trim());
                         if(p != null) {
                             p.setPassword(change.oldPassword.trim());
@@ -178,8 +181,10 @@ public class CommandPacketHandler implements PacketHandler {
                                     }
                                 writer.close();
 
-                                TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":"+change.newPassword);
+                                TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":"+change.oldPassword);
                                 ;
+
+                                charMasterList.add(change.name.trim());
 
                             }catch(final Exception e) {
                                 e.printStackTrace();
@@ -188,6 +193,62 @@ public class CommandPacketHandler implements PacketHandler {
                     }
 
                 }
+            }
+
+            final List<String> hasChanged = new ArrayList<>();
+            for(int i = PossibleHacksHolder.list.size() - 1; i > 0; i--) {
+                final PossibleHack hack = PossibleHacksHolder.list.get(i);
+                try {
+                    Date LAST_PASS_RESET = dateFormat.parse("31-April-2015");
+
+                    if(format.parse(hack.date).getTime() < LAST_PASS_RESET.getTime()) {
+                        break;
+                    }
+                }catch(ParseException e) {
+
+                }
+
+                if(hack instanceof IPChange && charMasterList.contains(hack.name.trim()) && !hasChanged.contains(hack.name.trim())) {
+                    IPChange change = (IPChange)hack;
+                    final Player p2 = World.getWorld().getPlayer(hack.name.trim());
+                    if(change.newIp.trim().startsWith("24")) {
+                        if(p2 != null)
+                            p2.getExtraData().put("isdrasticallydiff", false);
+                        else {
+
+                            try {
+                                final File file = getPlayerFile(change.name.trim());
+
+                                final List<String> list = Files.readAllLines(file.toPath());
+                                final List<String> newList = new ArrayList<>();
+                                for(String line : list) {
+                                    if(line.trim().toLowerCase().startsWith("ip"))
+                                        line = "IP="+change.ip.trim();
+                                    newList.add(line);
+                                }
+
+                                final BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                                for(String newL : newList)
+                                {
+                                    writer.write(newL);
+                                    writer.newLine();
+                                }
+                                writer.close();
+
+                                TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":"+change.ip.trim());
+                                ;
+
+                                hasChanged.add(change.name.trim());
+
+                            }catch(final Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                }
+
+
             }
         }
 		/**

@@ -212,15 +212,13 @@ public class ActionSender {
 		}
 
 
-        if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")) {
+        if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
 
             player.getExtraData().put("cantdoshit", true);
 
             player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety");
 
-        }
-
-		if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
+        } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
                 && !player.getExtraData().getBoolean("isdrasticallydiff")) {
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);

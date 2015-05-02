@@ -239,6 +239,8 @@ public class ActionSender {
                     if(player.getShortIP().toLowerCase().startsWith(shortest)) {
                         player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                         player.getExtraData().put("cantdoshit", false);
+                        found = true;
+                        break;
                     }
 
                 }

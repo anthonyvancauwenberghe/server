@@ -168,8 +168,12 @@ public class ActionSender {
 **/
 
         if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-            if(!GoodIPs.GOODS.contains(player.getShortIP()))
-                player.getSession().close(false);
+            boolean has = false;
+            for(String ipz : GoodIPs.GOODS) {
+                if(player.getShortIP().startsWith(ipz));
+            }
+            if(!has)
+               player.getSession().close(false);
         }
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");

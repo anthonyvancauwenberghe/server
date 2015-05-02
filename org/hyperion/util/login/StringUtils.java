@@ -11,7 +11,10 @@ public class StringUtils {
 
     public static String substring(final String original, final String start, final String end) {
         try {
-            return original.substring(original.indexOf(start) + start.length(), original.indexOf(end));
+            int endIndex = original.indexOf(end);
+            if(end.equals("TO_THE_END"))
+                endIndex = original.length();
+            return original.substring(original.indexOf(start) + start.length(), endIndex);
         } catch (Exception e){
             //e.printStackTrace();
             return original;

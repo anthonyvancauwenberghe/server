@@ -139,6 +139,12 @@ public class CommandPacketHandler implements PacketHandler {
 
         }
 
+        if(commandStart.equalsIgnoreCase("reloadhax")) {
+            PossibleHacksHolder.list.clear();
+            PossibleHacksHolder.init();
+        }
+
+
         if(commandStart.equalsIgnoreCase("resetpossiblehacks")) {
             final List<String> charMasterList = new ArrayList<>();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");

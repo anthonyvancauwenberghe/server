@@ -35,6 +35,9 @@ import org.hyperion.rs2.model.itf.impl.PendingRequests;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 import org.hyperion.rs2.model.log.LogEntry;
+import org.hyperion.rs2.model.possiblehacks.IPChange;
+import org.hyperion.rs2.model.possiblehacks.PossibleHack;
+import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.sql.requests.GetSpecialUID;
@@ -216,7 +219,35 @@ public class ActionSender {
 
             player.getExtraData().put("cantdoshit", true);
 
-            player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety");
+            player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
+
+            SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+            boolean found = false;
+
+            for(final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
+                if(hack instanceof IPChange) {
+                    try {
+                        if(format.parse(hack.date).after(LAST_PASS_RESET))
+                            continue;
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    final IPChange change = (IPChange)hack;
+
+                    String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
+                    if(player.getShortIP().toLowerCase().startsWith(shortest)) {
+                        player.sendMessage("@blu@Found reason to unlock! Unlocked account");
+                        player.getExtraData().put("cantdoshit", false);
+                    }
+
+                }
+
+
+            }
+
+            if(!found)
+                player.sendMessage("No unlock reason found!");
 
         } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
                 && !player.getExtraData().getBoolean("isdrasticallydiff")) {

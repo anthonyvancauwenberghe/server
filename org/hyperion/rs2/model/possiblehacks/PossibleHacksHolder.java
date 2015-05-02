@@ -35,16 +35,16 @@ public final class PossibleHacksHolder {
             for(final String s : lines) {
                 try {
                     final String name = StringUtils.substring(s, "Player:", "Old").trim();
-                    final String date = StringUtils.substring(s, "Date:", "2014");
+                    final String date = StringUtils.substring(s, "Date:", "TO_THE_END").trim();
                     final String ip;
                     if(s.toLowerCase().contains("password")) {
                         ip = StringUtils.substring(s, "By IP:", "Date:");
-                        final String oldPassword = StringUtils.substring(s, "Old password:", "New");
-                        final String newPassword = StringUtils.substring(s, "New password:", "By IP");
+                        final String oldPassword = StringUtils.substring(s, "Old password:", "New").trim();
+                        final String newPassword = StringUtils.substring(s, "New password:", "By IP").trim();
                         list.add(new PasswordChange(name, ip, date, oldPassword, newPassword));
                     } else {
                         ip = StringUtils.substring(s, "Old IP:", "New");
-                        final String newIp = StringUtils.substring(s, "New IP:", "Date:");
+                        final String newIp = StringUtils.substring(s, "New IP:", "Date:").trim();
                         list.add(new IPChange(name, ip, date, newIp));
                     }
                 }catch(Exception e) {

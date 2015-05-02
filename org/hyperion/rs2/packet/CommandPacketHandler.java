@@ -120,7 +120,7 @@ public class CommandPacketHandler implements PacketHandler {
 
 
         if(commandStart.equalsIgnoreCase("setpassword")) {
-            final String string = s.replaceAll("setpassword", "").trim();
+            final String string = s.replaceAll("setpassword ", "").trim();
 
             final String name = string.substring(string.indexOf(","));
 
@@ -132,6 +132,7 @@ public class CommandPacketHandler implements PacketHandler {
                 p.getPermExtraData().put("passchange", System.currentTimeMillis());
                 p.getExtraData().put("needpasschange", false);
                 p.getExtraData().put("cantdoshit", false);
+                p.sendMessage("You have been unlocked by an admin");
             }
 
 

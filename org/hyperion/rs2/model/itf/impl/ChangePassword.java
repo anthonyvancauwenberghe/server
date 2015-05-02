@@ -33,7 +33,8 @@ public class ChangePassword extends Interface {
         }
 
         if(player.getPassword().equalsIgnoreCase(password)) {
-            player.sendMessage("Don't be foolish, use a different password!", "Write it down somewhere (WE MEAN IT)!");
+            player.sendMessage("@red@Don't be foolish, use a different password!", "Write it down somewhere (WE MEAN IT)!");
+            return;
         }
 
 

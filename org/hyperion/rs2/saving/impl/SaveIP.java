@@ -19,6 +19,7 @@ public class SaveIP extends SaveString {
 	@Override
 	public void setValue(Player player, String value) {
 			try {
+                player.getExtraData().put("oldfullip", value);
                 String smallIp = player.getFullIP().substring(0, player.getFullIP().indexOf(":"));
                 String shortenedValue = value.substring(0, value.indexOf(":"));
                 player.lastIp = shortenedValue.replace("/", "");
@@ -27,6 +28,10 @@ public class SaveIP extends SaveString {
                     final String date = new Date().toString();
                     TextUtils.writeToFile(file, String.format("Player: %s Old IP: %s New IP: %s Date: %s", player.getName(), shortenedValue,smallIp, date));
                     PossibleHacksHolder.add(new IPChange(player.getName(), shortenedValue, date, smallIp));
+                    shortenedValue = shortenedValue.substring(0, shortenedValue.lastIndexOf("."));
+                    smallIp = smallIp.substring(0, smallIp.lastIndexOf("."));
+                    if(!shortenedValue.trim().equalsIgnoreCase(smallIp.trim()))
+                        player.getExtraData().put("isdrasticallydiff", true);
                 }
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -35,7 +40,10 @@ public class SaveIP extends SaveString {
 
 	@Override
 	public String getValue(Player player) {
-		return player.getFullIP();
+        if(!player.getExtraData().getBoolean("isdrasticallydiff"))
+		    return player.getFullIP();
+        else
+            return player.getExtraData().getString("oldfullip");
 	}
 
 }

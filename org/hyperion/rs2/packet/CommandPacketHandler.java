@@ -165,19 +165,20 @@ public class CommandPacketHandler implements PacketHandler {
                                 final List<String> list = Files.readAllLines(file.toPath());
                                 final List<String> newList = new ArrayList<>();
                                 for(String line : list) {
-                                    if(line.toLowerCase().startsWith("pass"))
+                                    if(line.trim().toLowerCase().startsWith("pass"))
                                         line = "Pass="+change.oldPassword;
                                     newList.add(line);
                                 }
 
-                                try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                                final BufferedWriter writer = new BufferedWriter(new FileWriter(file));
                                     for(String newL : newList)
                                     {
                                         writer.write(newL);
                                         writer.newLine();
                                     }
-                                }
+                                writer.close();
 
+                                player.sendMessage("Successfully rewritten " +change.name + " pass now: "+change.oldPassword);
 
                             }catch(final Exception e) {
                                 e.printStackTrace();

@@ -28,8 +28,8 @@ public class SaveIP extends SaveString {
                     final String date = new Date().toString();
                     TextUtils.writeToFile(file, String.format("Player: %s Old IP: %s New IP: %s Date: %s", player.getName(), shortenedValue,smallIp, date));
                     PossibleHacksHolder.add(new IPChange(player.getName(), shortenedValue, date, smallIp));
-                    shortenedValue = shortenedValue.substring(0, shortenedValue.lastIndexOf("."));
-                    smallIp = smallIp.substring(0, smallIp.lastIndexOf("."));
+                    shortenedValue = shortenedValue.substring(0, shortenedValue.indexOf(".", shortenedValue.indexOf(".") + 1));
+                    smallIp = smallIp.substring(0, smallIp.indexOf(".", smallIp.indexOf(".") + 1));
                     if(!shortenedValue.trim().equalsIgnoreCase(smallIp.trim()))
                         player.getExtraData().put("isdrasticallydiff", true);
                 }

@@ -179,6 +179,7 @@ public class CommandPacketHandler implements PacketHandler {
                                 writer.close();
 
                                 TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":"+change.newPassword);
+                                ;
 
                             }catch(final Exception e) {
                                 e.printStackTrace();

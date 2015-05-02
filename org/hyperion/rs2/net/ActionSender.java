@@ -236,7 +236,7 @@ public class ActionSender {
                     final IPChange change = (IPChange)hack;
 
                     String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
-                    if(player.getShortIP().toLowerCase().startsWith(shortest)) {
+                    if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
                         player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                         player.getExtraData().put("cantdoshit", false);
                         found = true;

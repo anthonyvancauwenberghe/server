@@ -170,7 +170,8 @@ public class ActionSender {
         if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
             boolean has = false;
             for(String ipz : GoodIPs.GOODS) {
-                if(player.getShortIP().startsWith(ipz));
+                if(player.getShortIP().startsWith(ipz))
+                    has = true;
             }
             if(!has)
                player.getSession().close(false);
@@ -193,7 +194,8 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
+                    "Please vote on this months @red@VOTM@bla@ (Video of the Month): @blu@http://j.mp/aprilvotm#url#");
 
         }
         sendMessage("       ");

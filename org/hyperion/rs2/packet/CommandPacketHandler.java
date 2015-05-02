@@ -211,7 +211,7 @@ public class CommandPacketHandler implements PacketHandler {
                 if(hack instanceof IPChange && charMasterList.contains(hack.name.trim()) && !hasChanged.contains(hack.name.trim())) {
                     IPChange change = (IPChange)hack;
                     final Player p2 = World.getWorld().getPlayer(hack.name.trim());
-                    if(change.newIp.trim().startsWith("24")) {
+                    if(true) {
                         if(p2 != null)
                             p2.getExtraData().put("isdrasticallydiff", false);
                         else {

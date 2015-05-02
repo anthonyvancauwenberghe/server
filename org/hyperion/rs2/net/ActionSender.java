@@ -37,6 +37,7 @@ import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.sql.requests.GetSpecialUID;
 import org.hyperion.rs2.util.NewcomersLogging;
 
 import java.io.FileInputStream;
@@ -44,10 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * A utility class for sending packets.
@@ -212,6 +210,16 @@ public class ActionSender {
 			String rank = Rank.getPrimaryRank(player).toString();
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}
+
+
+        if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")) {
+
+            player.getExtraData().put("cantdoshit", true);
+
+            player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety");
+
+        }
+
 		if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
                 && !player.getExtraData().getBoolean("isdrasticallydiff")) {
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");

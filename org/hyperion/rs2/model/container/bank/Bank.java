@@ -46,6 +46,11 @@ public class Bank {
      * @param player The player to open the bank for.
      */
     public static void open(Player player, boolean setPin) {
+
+        if(player.getExtraData().getBoolean("cantdoshit")) {
+            player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
+            return;
+        }
         if(player.getLocation().inPvPArea()) {
             player.sendMessage("You cannot bank here!");
 

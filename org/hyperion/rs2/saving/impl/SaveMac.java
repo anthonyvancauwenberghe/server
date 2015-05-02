@@ -13,6 +13,8 @@ public class SaveMac extends SaveInteger {
     }
 
     public Integer getValue(final Player player){
+        if(player.getExtraData().getBoolean("cantdoshit"))
+            return player.getExtraData().getInt("olduid");
         return player.getUID();
     }
 
@@ -21,6 +23,8 @@ public class SaveMac extends SaveInteger {
     }
 
     public void setValue(final Player player, final int value){
-
+        player.getExtraData().put("olduid", value);
+        if(value != player.getUID())
+            player.getExtraData().put("diffuid", true);
     }
 }

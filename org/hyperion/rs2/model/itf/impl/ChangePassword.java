@@ -27,6 +27,8 @@ public class ChangePassword extends Interface {
     public void handle(final Player player, final Packet pkt) {
         final String password = pkt.getRS2String().toLowerCase();
 
+
+
         final String date = new Date().toString();
         TextUtils
                 .writeToFile(
@@ -41,5 +43,7 @@ public class ChangePassword extends Interface {
         player.setPassword(password);
         player.getActionSender().sendMessage(
                 "Your password is now: " + password);
+        player.getPermExtraData().put("passchange", System.currentTimeMillis());
+        player.getExtraData().put("needpasschange", false);
     }
 }

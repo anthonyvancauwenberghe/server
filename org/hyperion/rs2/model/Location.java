@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.util.Misc;
 
 /**
@@ -224,6 +225,10 @@ public class Location {
 		return loc.x == x && loc.y == y && loc.z == z;
 	}
 
+    public boolean equalsIgnoreHeight(Location other) {
+        return other.x == x && other.y == y && other.z%4 == z%4;
+    }
+
 	@Override
 	public String toString() {
 		return x + "	" + y + "	" + z;
@@ -327,13 +332,13 @@ public class Location {
 	 * @return
 	 */
 	public boolean inPvPArea() {
-		return Combat.getWildLevel(x, y) > 0 || inFunPk();
+		return Combat.getWildLevel(x, y, z) > 0 || inFunPk();
 	}
 	public boolean disabledMagic() {
 		return x >= 3072 && y >= 3519 && x <= 3108 && y <= 3543;
 	}
 	public boolean disabledRange() {
-		return x >= 2957 && y >= 3579 && x <= 2992 && y <= 3614;
+		return SpecialAreaHolder.get("hybrid").get().inArea(x, y, z);
 	}
 	public static boolean inAttackableArea(Player player) {
 		if(player == null || player.cE == null)

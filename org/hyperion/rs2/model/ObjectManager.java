@@ -3,13 +3,13 @@ package org.hyperion.rs2.model;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
 import org.hyperion.cache.InvalidCacheException;
-import org.hyperion.cache.index.impl.MapIndex;
 import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.map.LandscapeListener;
-import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
-import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -141,6 +141,12 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
                 }
             }
 
+
+            for(SpecialArea area : SpecialAreaHolder.getAreas()) {
+                if(area instanceof NIGGERUZ)
+                    ((NIGGERUZ)area).initObjects(globalObjects);
+            }
+
 			//logger.info("Loading map...");idk i tried to load on diff coords didnt work either
 			/*MapIndex[] mapIndices = cache.getIndexTable().getMapIndices();
 			for(MapIndex index : mapIndices) {
@@ -194,7 +200,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public void update(GameObject obj) {
 		for(Player p : World.getWorld().getPlayers()) {
-			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
+			if(obj.isVisible(p.getLocation())) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
                 if(obj.getDefinition().animation != -1) {
                     p.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
@@ -205,7 +211,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public void load(Player p) {
 		for(GameObject obj : globalObjects) {
-			if(p.getLocation().distance(obj.getLocation()) < 64 && p.getLocation().getZ()%4 == obj.getLocation().getZ()%4) {
+			if(obj.isVisible(p.getLocation())) {
 				p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
                 if(obj.getDefinition().animation != -1)
                     p.getActionSender().createPlayersObjectAnim(obj.getLocation().getX(), obj.getLocation().getY(), obj.getDefinition().animation, obj.getType(), obj.getRotation());
@@ -235,8 +241,9 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 	}
 
 	public GameObject getObjectAt(int x, int y, int z) {
+        final Location loc = Location.create(x, y, z);
 		for(GameObject object : globalObjects) {
-			if(object.getLocation().getX() == x && object.getLocation().getY() == y && object.getLocation().getZ()%4 == z%4)
+			if(object.isAt(loc))
 				return object;
 		}
 		return null;
@@ -244,7 +251,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
 	public GameObject getObjectAt(Location loc) {
 		for(GameObject object : globalObjects) {
-			if(object.getLocation().getX() == loc.getX() && object.getLocation().getY() == loc.getY())
+			if(object.isAt(loc))
 				return object;
 		}
 		return null;

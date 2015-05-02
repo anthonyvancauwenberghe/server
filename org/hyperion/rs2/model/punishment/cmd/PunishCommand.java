@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.sql.requests.GetSpecialUID;
 import org.hyperion.rs2.util.PlayerFiles;
 
 public class PunishCommand extends Command{
@@ -44,10 +45,6 @@ public class PunishCommand extends Command{
             player.sendf("You cannot punish other staff members");
             return false;
         }
-        if(combination.getTarget() == Target.SPECIAL && victim == null){
-            player.sendf("You could only special punish people if they're online");
-            return false;
-        }
         String ip = victim != null ? victim.getShortIP() : CommandPacketHandler.findCharString(victimName, "IP");
         if(ip.contains("="))//
             ip = ip.substring(ip.indexOf('/')+1, ip.indexOf(':'));//
@@ -62,7 +59,11 @@ public class PunishCommand extends Command{
             return false;
         }
         final int[] specialUid = victim != null ? victim.specialUid : new int[20];
+        if(combination.getTarget() == Target.SPECIAL && victim == null) {
+            World.getWorld().getLogsConnection().offer(new GetSpecialUID(victimName, specialUid));
+        }
         final String[] durationParts = parts[1].split(" +");
+
         TimeUnit unit = TimeUnit.HOURS;
         long duration;
         try{

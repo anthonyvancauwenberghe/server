@@ -59,7 +59,7 @@ public class Events {
         eventStartTime = System.currentTimeMillis();
         eventLocation = location;
         for(Player player : World.getWorld().getPlayers()) {
-            player.getActionSender().sendString(eventName + "," + (eventSafe ? 1 : 0) + "," + eventTimeTillStart, 32456);
+            player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }
 

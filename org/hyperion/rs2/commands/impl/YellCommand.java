@@ -122,7 +122,7 @@ public class YellCommand extends Command {
 			}
 		}
 		final String colors = Rank.getPrimaryRank(player).getYellColor();
-		final boolean hasTag = !player.getYelling().getTag().isEmpty();
+		final boolean hasTag = !player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player);
 		final boolean aboveDonator = Rank.getPrimaryRank(player).ordinal() > Rank.DONATOR.ordinal();
 		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
 		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: ";

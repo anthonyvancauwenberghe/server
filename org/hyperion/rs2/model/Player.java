@@ -30,6 +30,7 @@ import org.hyperion.rs2.model.container.impl.TabbedContainer;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
+import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.misc.ItemDropping;
@@ -108,6 +109,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     public ValueMonitor getValueMonitor() {return valueMonitor;}
 
+    private final GrandExchange grandExchange = new GrandExchange(this);
+
+    public GrandExchange getGrandExchange() {return grandExchange;}
+
     public int pin = -1;
     public String lastIp;
     public boolean verified;
@@ -174,6 +179,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     private boolean completedTG;
 	private boolean hasMaxCape = false;
 	private boolean hasCompCape = false;
+
 
 	public void setMaxCape(boolean b) {
 		hasMaxCape = b;

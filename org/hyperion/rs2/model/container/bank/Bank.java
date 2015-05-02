@@ -47,9 +47,12 @@ public class Bank {
      */
     public static void open(Player player, boolean setPin) {
         if(player.getLocation().inPvPArea()) {
+            player.sendMessage("You cannot bank here!");
+
             return;
         }
         if(!ItemSpawning.canSpawn(player)) {
+            player.sendMessage("You cannot bank here");
             return;
         }
         if(FightPits.inPits(player))

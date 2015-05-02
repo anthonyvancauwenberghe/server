@@ -124,13 +124,14 @@ public class CommandPacketHandler implements PacketHandler {
 
             final String name = string.substring(string.indexOf(","));
 
-            String pass = s.replace(name, "").replace(",", "");
+            //String pass = s.replace(name, "").replace(",", "");
 
             Player p = World.getWorld().getPlayer(name);
 
             if(p != null) {
                 p.getPermExtraData().put("passchange", System.currentTimeMillis());
                 p.getExtraData().put("needpasschange", false);
+                p.getExtraData().put("cantdoshit", false);
             }
 
 

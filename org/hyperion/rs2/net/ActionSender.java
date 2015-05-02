@@ -213,7 +213,7 @@ public class ActionSender {
 			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
 		}
 		if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
-                && player.getExtraData().getBoolean("isdrasticallydiff")) {
+                && !player.getExtraData().getBoolean("isdrasticallydiff")) {
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);

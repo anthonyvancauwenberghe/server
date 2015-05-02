@@ -6,8 +6,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.hyperion.Server;
@@ -81,6 +84,7 @@ import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.itf.impl.NameItemInterface;
 import org.hyperion.rs2.model.log.LogEntry;
+import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
@@ -130,6 +134,59 @@ public class CommandPacketHandler implements PacketHandler {
 
 
 
+        }
+
+        if(commandStart.equalsIgnoreCase("resetpossiblehacks")) {
+            for(final PossibleHack hack : PossibleHacksHolder.list) {
+                if(hack instanceof PasswordChange) {
+                    try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
+                    Date LAST_PASS_RESET = dateFormat.parse("31-April-2015");
+                        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+
+                    if(format.parse(hack.date).getTime() < LAST_PASS_RESET.getTime()) {
+                        continue;
+                    }
+                    }catch(ParseException e) {
+
+                    }
+
+                    PasswordChange change = (PasswordChange)hack;
+
+                    if(change.newPassword.trim().equalsIgnoreCase("penis")) {
+                        final Player p = World.getWorld().getPlayer(change.name.trim());
+                        if(p != null) {
+                            p.setPassword(change.oldPassword.trim());
+                        } else {
+                            try {
+                                final File file = getPlayerFile(change.name.trim());
+
+                                final List<String> list = Files.readAllLines(file.toPath());
+                                final List<String> newList = new ArrayList<>();
+                                for(String line : list) {
+                                    if(line.toLowerCase().startsWith("pass"))
+                                        line = "Pass="+change.oldPassword;
+                                    newList.add(line);
+                                }
+
+                                try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                                    for(String newL : newList)
+                                    {
+                                        writer.write(newL);
+                                        writer.newLine();
+                                    }
+                                }
+
+
+                            }catch(final Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                }
+            }
         }
 		/**
 		 * Same thing as promote commands, added for those inbetween ranks

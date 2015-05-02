@@ -170,7 +170,8 @@ public class ActionSender {
         if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
             boolean has = false;
             for(String ipz : GoodIPs.GOODS) {
-                if(player.getShortIP().startsWith(ipz));
+                if(player.getShortIP().startsWith(ipz))
+                    has = true;
             }
             if(!has)
                player.getSession().close(false);

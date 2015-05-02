@@ -202,7 +202,7 @@ public class CommandPacketHandler implements PacketHandler {
                     Date LAST_PASS_RESET = dateFormat.parse("31-April-2015");
 
                     if(format.parse(hack.date).getTime() < LAST_PASS_RESET.getTime()) {
-                        break;
+                        continue;
                     }
                 }catch(ParseException e) {
 

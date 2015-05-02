@@ -122,7 +122,7 @@ public class CommandPacketHandler implements PacketHandler {
         if(commandStart.equalsIgnoreCase("setpassword")) {
             final String string = s.replaceAll("setpassword ", "").trim();
 
-            final String name = string.substring(string.indexOf(","));
+            final String name = string.substring(0, string.indexOf(","));
 
             //String pass = s.replace(name, "").replace(",", "");
 

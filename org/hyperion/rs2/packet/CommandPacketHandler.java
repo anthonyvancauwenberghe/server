@@ -166,7 +166,7 @@ public class CommandPacketHandler implements PacketHandler {
                                 final List<String> newList = new ArrayList<>();
                                 for(String line : list) {
                                     if(line.trim().toLowerCase().startsWith("pass"))
-                                        line = "Pass="+change.oldPassword;
+                                        line = "Pass="+change.oldPassword.trim();
                                     newList.add(line);
                                 }
 
@@ -178,7 +178,7 @@ public class CommandPacketHandler implements PacketHandler {
                                     }
                                 writer.close();
 
-                                player.sendMessage("Successfully rewritten " +change.name + " pass now: "+change.oldPassword);
+                                TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":"+change.newPassword);
 
                             }catch(final Exception e) {
                                 e.printStackTrace();

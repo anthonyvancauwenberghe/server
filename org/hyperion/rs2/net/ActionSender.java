@@ -226,6 +226,15 @@ public class ActionSender {
                             break;
                         }
 
+                        shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
+
+                        if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+                            player.sendMessage("@blu@Found reason to unlock! Unlocked account");
+                            player.getExtraData().put("cantdoshit", false);
+                            found = true;
+                            break;
+                        }
+
                     }
 
 

@@ -198,6 +198,50 @@ public class ActionSender {
             player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
                     "Please vote on this months @red@VOTM@bla@ (Video of the Month): @blu@http://j.mp/aprilvotm#url#");
 
+            if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
+
+                player.getExtraData().put("cantdoshit", true);
+
+                player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
+
+                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+                boolean found = false;
+
+                for(final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
+                    if(hack instanceof IPChange) {
+                        try {
+                            if(format.parse(hack.date).after(LAST_PASS_RESET))
+                                continue;
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        final IPChange change = (IPChange)hack;
+
+                        String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
+                        if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+                            player.sendMessage("@blu@Found reason to unlock! Unlocked account");
+                            player.getExtraData().put("cantdoshit", false);
+                            found = true;
+                            break;
+                        }
+
+                    }
+
+
+                }
+
+                if(!found)
+                    player.sendMessage("No unlock reason found!");
+
+            } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
+                    && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+                player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
+                player.setTeleportTarget(Edgeville.LOCATION);
+                player.getExtraData().put("needpasschange", true);
+                InterfaceManager.get(6).show(player);
+            }
+
         }
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
@@ -215,49 +259,7 @@ public class ActionSender {
 		}
 
 
-        if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
 
-            player.getExtraData().put("cantdoshit", true);
-
-            player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
-
-            SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-            boolean found = false;
-
-            for(final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
-                if(hack instanceof IPChange) {
-                    try {
-                        if(format.parse(hack.date).after(LAST_PASS_RESET))
-                            continue;
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    final IPChange change = (IPChange)hack;
-
-                    String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
-                    if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-                        player.sendMessage("@blu@Found reason to unlock! Unlocked account");
-                        player.getExtraData().put("cantdoshit", false);
-                        found = true;
-                        break;
-                    }
-
-                }
-
-
-            }
-
-            if(!found)
-                player.sendMessage("No unlock reason found!");
-
-        } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
-                && !player.getExtraData().getBoolean("isdrasticallydiff")) {
-            player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
-            player.setTeleportTarget(Edgeville.LOCATION);
-            player.getExtraData().put("needpasschange", true);
-            InterfaceManager.get(6).show(player);
-        }
 	    /*
          * if(player.isMember)
 		 * sendMessage("You currently have membership status."); else {

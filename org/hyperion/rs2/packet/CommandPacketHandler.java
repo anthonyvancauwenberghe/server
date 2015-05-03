@@ -119,25 +119,6 @@ public class CommandPacketHandler implements PacketHandler {
 			String s, String withCaps, String[] as) throws IOException {
 
 
-        if(commandStart.equalsIgnoreCase("setpassword")) {
-            final String string = s.replaceAll("setpassword ", "").trim();
-
-            final String name = string.substring(0, string.indexOf(","));
-
-            //String pass = s.replace(name, "").replace(",", "");
-
-            Player p = World.getWorld().getPlayer(name);
-
-            if(p != null) {
-                p.getPermExtraData().put("passchange", System.currentTimeMillis());
-                p.getExtraData().put("needpasschange", false);
-                p.getExtraData().put("cantdoshit", false);
-                p.sendMessage("You have been unlocked by an admin");
-            }
-
-
-
-        }
 
         if(commandStart.equalsIgnoreCase("reloadhax")) {
             PossibleHacksHolder.list.clear();
@@ -1696,6 +1677,26 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleModCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("unlock")) {
+            final String string = s.replaceAll("unlock ", "").trim();
+
+            final String name = string;
+
+            //String pass = s.replace(name, "").replace(",", "");
+
+            Player p = World.getWorld().getPlayer(name);
+
+            if(p != null) {
+                p.getPermExtraData().put("passchange", System.currentTimeMillis());
+                p.getExtraData().put("needpasschange", false);
+                p.getExtraData().put("cantdoshit", false);
+                p.sendMessage("You have been unlocked by an admin");
+            }
+
+
+
+        }
 
 		if (commandStart.equalsIgnoreCase("sendhome")) {
 			Player target = World.getWorld().getPlayer(s.substring(9).trim());

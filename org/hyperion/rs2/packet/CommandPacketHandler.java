@@ -1691,6 +1691,7 @@ public class CommandPacketHandler implements PacketHandler {
             if(p != null) {
                 p.getPermExtraData().put("passchange", System.currentTimeMillis());
                 p.getExtraData().put("needpasschange", false);
+                p.getExtraData().put("cantchangepass", false);
                 p.getExtraData().put("cantdoshit", false);
                 p.sendMessage("You have been unlocked by an admin");
             }

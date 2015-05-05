@@ -198,51 +198,54 @@ public class ActionSender {
             player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
                     "Please vote on this months @red@VOTM@bla@ (Video of the Month): @blu@http://j.mp/aprilvotm#url#");
 
-            if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()
+            if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")
                     && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+                player.getExtraData().put("cantchangepass", true);
 
-                player.getExtraData().put("cantdoshit", true);
+                if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
+                    player.getExtraData().put("cantdoshit", true);
 
-                player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
+                    player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
 
-                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-                boolean found = false;
+                    SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+                    boolean found = false;
 
-                for(final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
-                    if(hack instanceof IPChange) {
-                        try {
-                            if(format.parse(hack.date).after(LAST_PASS_RESET))
-                                continue;
-                        } catch(Exception e) {
-                            e.printStackTrace();
+                    for(final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
+                        if(hack instanceof IPChange) {
+                            try {
+                                if(format.parse(hack.date).after(LAST_PASS_RESET))
+                                    continue;
+                            } catch(Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            final IPChange change = (IPChange)hack;
+
+                            String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
+                            if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+                                player.sendMessage("@blu@Found reason to unlock! Unlocked account");
+                                player.getExtraData().put("cantdoshit", false);
+                                found = true;
+                                break;
+                            }
+
+                            shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
+
+                            if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+                                player.sendMessage("@blu@Found reason to unlock! Unlocked account");
+                                player.getExtraData().put("cantdoshit", false);
+                                found = true;
+                                break;
+                            }
+
                         }
 
-                        final IPChange change = (IPChange)hack;
-
-                        String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
-                        if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-                            player.sendMessage("@blu@Found reason to unlock! Unlocked account");
-                            player.getExtraData().put("cantdoshit", false);
-                            found = true;
-                            break;
-                        }
-
-                        shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
-
-                        if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-                            player.sendMessage("@blu@Found reason to unlock! Unlocked account");
-                            player.getExtraData().put("cantdoshit", false);
-                            found = true;
-                            break;
-                        }
 
                     }
 
-
+                    if(!found)
+                        player.sendMessage("No unlock reason found!");
                 }
-
-                if(!found)
-                    player.sendMessage("No unlock reason found!");
 
             } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
                     && !player.getExtraData().getBoolean("isdrasticallydiff")) {

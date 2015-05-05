@@ -198,7 +198,8 @@ public class ActionSender {
             player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!",
                     "Please vote on this months @red@VOTM@bla@ (Video of the Month): @blu@http://j.mp/aprilvotm#url#");
 
-            if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
+            if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()
+                    && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
 
                 player.getExtraData().put("cantdoshit", true);
 

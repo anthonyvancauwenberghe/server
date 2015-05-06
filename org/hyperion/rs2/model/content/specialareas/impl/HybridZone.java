@@ -59,7 +59,7 @@ public class HybridZone extends NIGGERUZ {
 
     @Override
     public Location getDefaultLocation() {
-        return Location.create(2974, 3607, height);
+        return Location.create(2975, 3610, height);
     }
 
     @Override

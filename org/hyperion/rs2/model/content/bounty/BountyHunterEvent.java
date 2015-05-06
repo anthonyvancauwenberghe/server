@@ -36,7 +36,7 @@ public class BountyHunterEvent extends Event{
 			counter = 11;
 		for(final Player p : World.getWorld().getPlayers()) {
 			p.getQuestTab().sendBHTarget();
-			p.getActionSender().sendString("@or1@Target: @gre@"+counter+" @or1@(@gre@"+(counter%2 + 1)+"@or1@min)", 36503);
+			p.getActionSender().sendString("@or1@Target: @gre@"+counter+" @or1@(@gre@"+((counter+1)%2)+1+"@or1@min)", 36503);
 		}
 	}
 	

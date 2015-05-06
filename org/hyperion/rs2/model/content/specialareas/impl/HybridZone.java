@@ -41,8 +41,8 @@ public class HybridZone extends NIGGERUZ {
     @Override
     public void initObjects(final List<GameObject> list) {
 
-        for(int x = cornerSW.getX() ;x < cornerNE.getX(); x++) {
-            if(x != 2978 && x != 2979 )
+        for(int x = cornerSW.getX() ;x <= cornerNE.getX(); x++) {
+            if(x != 2976 && x != 2977 )
                 list.add(new GameObject(DEFINITION, Location.create(x, cornerSW.getY(), height), 10, 2, false));
             list.add(new GameObject(DEFINITION, Location.create(x, cornerNE.getY(), height), 10, 0, false));
         }
@@ -59,7 +59,7 @@ public class HybridZone extends NIGGERUZ {
 
     @Override
     public Location getDefaultLocation() {
-        return Location.create(2978, 3615, height);
+        return Location.create(2975, 3608, height);
     }
 
     @Override

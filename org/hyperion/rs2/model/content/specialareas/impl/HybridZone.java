@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class HybridZone extends NIGGERUZ {
 
-    private final Point cornerSW = new Point(2973, 3611),
-    cornerNE = new Point(2980, 3620);
+    private final Point cornerSW = new Point(2970, 3605),
+    cornerNE = new Point(2983, 3618);
 
 
     public HybridZone() {
@@ -42,13 +42,13 @@ public class HybridZone extends NIGGERUZ {
     public void initObjects(final List<GameObject> list) {
 
         for(int x = cornerSW.getX() ;x < cornerNE.getX(); x++) {
-            if(x != 2982 && x != 2983 )
+            if(x != 2978 && x != 2979 )
                 list.add(new GameObject(DEFINITION, Location.create(x, cornerSW.getY(), height), 10, 2, false));
-            list.add(new GameObject(DEFINITION, Location.create(x, cornerNE.getY(), height), 10, 1, false));
+            list.add(new GameObject(DEFINITION, Location.create(x, cornerNE.getY(), height), 10, 0, false));
         }
 
         for(int y = cornerSW.getY(); y < cornerNE.getY(); y++) {
-            list.add(new GameObject(DEFINITION, Location.create(cornerNE.getX(), y, height), 10, 0, false));
+            list.add(new GameObject(DEFINITION, Location.create(cornerNE.getX(), y, height), 10, 1, false));
             list.add(new GameObject(DEFINITION, Location.create(cornerSW.getX(), y, height), 10, 3, false));
 
         }

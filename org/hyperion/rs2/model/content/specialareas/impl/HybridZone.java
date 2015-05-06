@@ -29,12 +29,22 @@ public class HybridZone extends NIGGERUZ {
         return -1;
     }
 
+
+    public void check(final Player player) {
+        final String enter = canEnter(player);
+        if(inTheWild(player.getLocation()) && enter.length() > 1) {
+            exit(player);
+            player.sendMessage(enter);
+        }
+    }
+
+
     public String canEnter(Player player) {
-        final Item shield = player.getEquipment().get(Equipment.SLOT_SHIELD);
-        if(shield != null && (shield.getId() == 13740 || shield.getId() == 13744))
-            return "You cannot bring divines to this area";
-        if(!player.getSpellBook().isAncient())
-            return "You must be on ancients to be here";
+            final Item shield = player.getEquipment().get(Equipment.SLOT_SHIELD);
+            if(shield != null && (shield.getId() == 13740 || shield.getId() == 13744))
+                return "You cannot bring divines to this area";
+            if(!player.getSpellBook().isAncient())
+                return "You must be on ancients to be here";
         return "";
     }
 
@@ -66,5 +76,9 @@ public class HybridZone extends NIGGERUZ {
     public boolean inArea(int x, int y, int z) {
         return z == height &&
                 (x > cornerSW.getX() && y >= cornerSW.getY() && x <= cornerNE.getX() && y <= cornerNE.getY()) ;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean inTheWild(Location l) {
+        return l.getZ() == height && l.inPvPArea();
     }
 }

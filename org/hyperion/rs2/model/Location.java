@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.util.Misc;
 
 /**
@@ -335,7 +336,7 @@ public class Location {
 		return Combat.getWildLevel(x, y, z) > 0 || inFunPk();
 	}
 	public boolean disabledMagic() {
-		return x >= 3072 && y >= 3519 && x <= 3108 && y <= 3543;
+		return ((HybridZone)SpecialAreaHolder.get("hybrid").get()).inTheWild(this);
 	}
 	public boolean disabledRange() {
 		return SpecialAreaHolder.get("hybrid").get().inArea(x, y, z);

@@ -1,9 +1,6 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -40,6 +37,14 @@ public class CustomSetDialogueHandler implements ContentTemplate {
         if(!ItemSpawning.canSpawn(player)) {
             player.getActionSender().sendMessage("You cannot spawn Items in the wilderness.");
             return false;
+        }
+
+        if(player.bankPin != null && !player.bankPin.equals("null")) {
+            if ((player.bankPin.length() >= 4 && !player.bankPin
+                    .equals(player.enterPin))) {
+                player.sendMessage("You must enter your bank pin before spawning a custom set");
+                return false;
+            }
         }
         switch(actionButton) {
             case 29162:

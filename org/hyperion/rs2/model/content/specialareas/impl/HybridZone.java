@@ -1,9 +1,11 @@
 package org.hyperion.rs2.model.content.specialareas.impl;
 
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
+import org.hyperion.rs2.pf.Point;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +16,17 @@ import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
  */
 public class HybridZone extends NIGGERUZ {
 
+    private final Point cornerSW = new Point(2973, 3611),
+    cornerNE = new Point(2980, 3620);
+
+
     public HybridZone() {
         super(4);
+    }
+
+    @Override
+    public int getPkLevel() {
+        return -1;
     }
 
     public String canEnter(Player player) {
@@ -25,5 +36,35 @@ public class HybridZone extends NIGGERUZ {
         if(!player.getSpellBook().isAncient())
             return "You must be on ancients to be here";
         return "";
+    }
+
+    @Override
+    public void initObjects(final List<GameObject> list) {
+
+        for(int x = cornerSW.getX() ;x < cornerNE.getX(); x++) {
+            if(x != 2982 && x != 2983 )
+                list.add(new GameObject(DEFINITION, Location.create(x, cornerSW.getY(), height), 10, 2, false));
+            list.add(new GameObject(DEFINITION, Location.create(x, cornerNE.getY(), height), 10, 1, false));
+        }
+
+        for(int y = cornerSW.getY(); y < cornerNE.getY(); y++) {
+            list.add(new GameObject(DEFINITION, Location.create(cornerNE.getX(), y, height), 10, 0, false));
+            list.add(new GameObject(DEFINITION, Location.create(cornerSW.getX(), y, height), 10, 3, false));
+
+        }
+
+
+
+    }
+
+    @Override
+    public Location getDefaultLocation() {
+        return Location.create(2978, 3615, height);
+    }
+
+    @Override
+    public boolean inArea(int x, int y, int z) {
+        return z == height &&
+                (x > cornerSW.getX() && y >= cornerSW.getY() && x <= cornerNE.getX() && y <= cornerNE.getY()) ;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

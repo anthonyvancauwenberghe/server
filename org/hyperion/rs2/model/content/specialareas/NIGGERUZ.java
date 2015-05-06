@@ -18,7 +18,7 @@ public abstract class NIGGERUZ extends SpecialArea {
     public static final int OBJECT_ID = 6856;
     protected static final GameObjectDefinition DEFINITION = GameObjectDefinition.forId(OBJECT_ID);
 
-    private final int height;
+    protected final int height;
 
     public NIGGERUZ(int height) {
 

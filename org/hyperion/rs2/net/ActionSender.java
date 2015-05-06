@@ -195,7 +195,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@blu@BOOSTS ACTIVE: @red@2X Vote");
 
             passChangeShit();
 

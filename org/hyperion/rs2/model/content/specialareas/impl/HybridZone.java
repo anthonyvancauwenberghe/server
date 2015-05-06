@@ -21,7 +21,7 @@ public class HybridZone extends NIGGERUZ {
 
 
     public HybridZone() {
-        super(4);
+        super(24);
     }
 
     @Override

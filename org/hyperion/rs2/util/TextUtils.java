@@ -25,12 +25,12 @@ public class TextUtils {
 			int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
 			if(highNibble == - 1) {
 				if(val < 13) {
-					decodeBuf[idx++] = (byte) Constants.XLATE_TABLE[val];
+					decodeBuf[idx++] = (byte) Constants.VALID_CHARS[val];
 				} else {
 					highNibble = val;
 				}
 			} else {
-				decodeBuf[idx++] = (byte) Constants.XLATE_TABLE[((highNibble << 4) + val) - 195];
+				decodeBuf[idx++] = (byte) Constants.VALID_CHARS[((highNibble << 4) + val) - 195];
 				highNibble = - 1;
 			}
 		}

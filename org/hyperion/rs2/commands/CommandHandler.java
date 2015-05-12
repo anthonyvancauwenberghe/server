@@ -142,7 +142,7 @@ public class CommandHandler {
 	 * @param input
 	 * @returns true if the command was found in the commands hashmap and had the rights to execute.
 	 */
-	public static boolean processed(String key, Player player, String input) {
+	    public static boolean processed(String key, Player player, String input) {
 		Command command = commands.get(key);
 		if(command != null) {
 			if(!Rank.hasAbility(player.getPlayerRank(), command.getRanks())) {

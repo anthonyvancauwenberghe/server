@@ -40,6 +40,11 @@ public class PlayerPoints {
 	 */
 	private int donatorPoints = 0;
 
+    /**
+     * The minigame points at the moment
+     */
+    private int minigamePoints = 0;
+
 	/**
 	 * The Elo Rating.
 	 */
@@ -188,6 +193,18 @@ public class PlayerPoints {
 	}
 
 
+    public int increaseMinigamePoints(int times) {
+        minigamePoints += times;
+        return minigamePoints;
+    }
+
+    public int setMinigamePoints(int amount) {
+        return minigamePoints = amount;
+    }
+
+
+
+
 	/**
 	 * Sets the amount of Pk Points, updating the quest tab.
 	 *
@@ -293,5 +310,10 @@ public class PlayerPoints {
 	public int getDonatorPoints() {
 		return donatorPoints;
 	}
+
+
+    public int getMinigamePoints() {
+        return minigamePoints;
+    }
 
 }

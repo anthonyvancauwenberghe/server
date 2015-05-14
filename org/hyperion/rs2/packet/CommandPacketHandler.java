@@ -2272,6 +2272,7 @@ public class CommandPacketHandler implements PacketHandler {
                     String[] args = s.substring(7).trim().split(",");
                     int skill = Integer.parseInt(args[0]);
                     int level = Integer.parseInt(args[1]);
+                    if(skill > 6) {
                         player.sendMessage("Invalid skill id.");
                         return;
                     }

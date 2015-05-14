@@ -16,6 +16,7 @@ import java.util.*;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.*;
@@ -2260,7 +2261,26 @@ public class CommandPacketHandler implements PacketHandler {
 				return;
 			}
 
-
+            if(commandStart.equalsIgnoreCase("setlvl5")) { // remove the 5 to activate command
+                if(!SkillSetCommand.canChangeLevel(player))
+                    return;
+                if(player.isInCombat()) {
+                    player.getActionSender().sendMessage("You cannot do this in combat.");
+                    return;
+                }
+                try {
+                    String[] args = s.substring(7).trim().split(",");
+                    int skill = Integer.parseInt(args[0]);
+                    int level = Integer.parseInt(args[1]);
+                        player.sendMessage("Invalid skill id.");
+                        return;
+                    }
+                    player.getSkills().setLevel(skill, level);
+                    if (level <= 99) {
+                        player.getSkills().setExperience(skill,player.getSkills().getXPForLevel(level) + 5);
+                    }
+                } catch(Exception e) {}
+            }
 
 			if (commandStart.equalsIgnoreCase("rest")) {
 				player.playAnimation(Animation.create(11786));

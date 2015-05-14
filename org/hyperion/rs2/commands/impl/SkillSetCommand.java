@@ -84,7 +84,7 @@ public class SkillSetCommand extends Command {
 	 * @param player
 	 * @return
 	 */
-	private static boolean canChangeLevel(Player player) {
+	public static boolean canChangeLevel(Player player) {
 		if(player.getLocation().inPvPArea()) {
 			player.getActionSender().sendMessage(
 					"You cannot use this command in PvP zones.");

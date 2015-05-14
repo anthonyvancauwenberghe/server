@@ -11,6 +11,7 @@ public class SpiritShields {
 
 	public static final int DIVINE_SPIRIT_SHIELD_ID = 13740;
 	public static final int ELYSIAN_SPIRIT_SHIELD_ID = 13742;
+    public static final int RED_DRAGON_KITE = 18739;
 
 	/**
 	 * Doesn't seem to work on players? I'll check into that - lower prayer for divine?
@@ -31,6 +32,8 @@ public class SpiritShields {
 			case ELYSIAN_SPIRIT_SHIELD_ID:
 				if(Misc.random(9) <= 6)
 					return (int) (damg * 0.75);
+            case RED_DRAGON_KITE:
+                return (int)(damg * 0.92);
 		}
 
 		return damg;

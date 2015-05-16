@@ -1,19 +1,26 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import jdk.internal.dynalink.linker.GuardedInvocation;
+import jdk.internal.dynalink.linker.LinkRequest;
+import jdk.nashorn.internal.runtime.*;
+import jdk.nashorn.internal.runtime.linker.InvokeByName;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.net.ActionSender;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
 /**
@@ -25,17 +32,22 @@ import java.util.stream.Stream;
  */
 public class BarrowsFFA extends SpecialArea{
 
-    private static final int HEIGHT_LEVEL = 0;
-    public static final Location PORTAL = Location.create(0, 0, 0);
-    private static final Location GAME = Location.create(0, 0, HEIGHT_LEVEL);
-    private static final Location LOBBY = Location.create(0, 0 , 0);
+    private static final int HEIGHT_LEVEL = 1600;
+    public static final Location PORTAL_DEFAULT_LOCATION = Location.create(0, 0, 0); //where the portal will spawn
+    private static final Location GAME_DEFAULT_LOCATION = Location.create(0, 0, HEIGHT_LEVEL); //default location for the game
+    private static final Location LOBBY = Location.create(0, 0, 0); // default location to enter lobby
+    private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(0); // portal to enter lobby definition
+
+
+    private static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
+
 
     private final List<Player> lobby = new ArrayList<>(), game = new ArrayList<>();
 
     private int gameTime, nextGameTime;
 
     {
-        World.getWorld().submit(new Event(100) {
+        World.getWorld().submit(new Event(1000) {
             @Override
             public void execute() throws IOException {
                 process();
@@ -44,48 +56,76 @@ public class BarrowsFFA extends SpecialArea{
     }
 
     public enum BarrowSet {
-        DHAROK(),
-        KARIL(),
-        AHRIM(),
-        GUTHAN(),
-        TORAGS(),
-        VERACS();
+        DHAROK(DIALOGUE_ID + 1),
+        KARIL(DIALOGUE_ID + 2),
+        AHRIM(DIALOGUE_ID + 3),
+        GUTHAN(DIALOGUE_ID + 5),
+        TORAGS(DIALOGUE_ID + 6),
+        VERACS(DIALOGUE_ID + 7);
+
+        public static final BarrowSet[] SETS = values().clone();
 
 
         private final Item[] items;
+        private final int dialogueId; //dialogue id for picking the set
 
-        private BarrowSet(final Integer... ids) {
+        private BarrowSet(int dialogueAction ,final Integer... ids) {
 //            if(ids.length != 4)
 //                throw new IllegalArgumentException("Length of ids is invalid");
             this.items = Stream.of(ids).map(Item::create).toArray(Item[]::new);
+            this.dialogueId = dialogueAction;
         }
 
 
         public void equip(final Player player) {
             int i = 0;
             for(; i < 4; i++) {
-                player.getEquipment().set(Equipment.getType(items[i]).getSlot(), items[i]);
+                player.getEquipment().set(Equipment.getType(items[i]).getSlot(), Item.create(items[i].getId()));
             }
             for(; i < items.length; i++)
-                player.getInventory().add(items[i]);
+                player.getInventory().add(Item.create(items[i].getId()));
+        }
+
+        public static BarrowSet forDialogue(final int id) {
+            for(final BarrowSet set : SETS)
+                if(set.dialogueId == id)
+                    return set;
+            return null;
         }
 
 
     }
     //handles timers, interfaces & shit
     public void process() {
-        if(gameTime > 0) {
-            //update # of players, and game time left, tell people in lobby that a game is currently in progress!
+        if(gameTime-- > 0) {
+            for(Player player : game) {
+                sendInterfaceString(player, 0,"Players Left: "+game.size());
+                sendInterfaceString(player, 1, "Time left: "+toMinutes(gameTime));
+                sendInterfaceString(player, 2, "");
+            }
+            for(Player player : lobby) {
+                sendInterfaceString(player, 0, "Game in progress");
+                sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
+            }
+            if(gameTime == 0)
+                endGame();
         } else if(--nextGameTime == 0) {
-            //update the interface, inform people of the jank
+            startGame();
         }
     }
 
     public void startGame() {
         game.addAll(lobby);
         lobby.clear();
-        for(final Player player : game)
+        for(final Player player : game) {
             enter(player);
+            final Object set = player.getExtraData().get("barrowset");
+            if(set instanceof BarrowSet)
+                ((BarrowSet)set).equip(player);
+        }
+
+        gameTime = 200 + game.size() * 10;
+        nextGameTime = 50;
     }
 
     public void endGame() {
@@ -120,7 +160,7 @@ public class BarrowsFFA extends SpecialArea{
 
     @Override
     public Location getDefaultLocation() {
-        return GAME;  //To change body of implemented methods use File | Settings | File Templates.
+        return GAME_DEFAULT_LOCATION;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -155,30 +195,92 @@ public class BarrowsFFA extends SpecialArea{
     @Override
     public void exit(final Player player) {
         if ((lobby.contains(player) && lobby.remove(player)) || (game.contains(player) && game.remove(player))) {
-            player.setTeleportTarget(PORTAL);
+            player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
             player.getEquipment().clear();
             player.getInventory().clear();
         }
     }
 
 
-   // @Override
+   // @Override  Override commented as it doesn't implement contentTemplate for safety reasons
     public int[] getValues(int type) {
+        if(type == ClickType.OBJECT_CLICK1)
+           return new int[]{PORTAL_ENTER_OBJECT.getId()};
+        if(type == ClickType.DIALOGUE_MANAGER) {
+            int[] ret = new int[9];
+            for(int i = 0 ; i < ret.length; i++)
+                ret[i] = DIALOGUE_ID + i;
+            return ret;
+        }
         return new int[0];
     }
 
     //used to enter lobby
-    //@Override
+    //@Override  Override commented as it doesn't implement contentTemplate for safety reasons
     public boolean objectClickOne(Player player, int id, int x, int y) {
+        if(id == PORTAL_ENTER_OBJECT.getId()) {
+            DialogueManager.openDialogue(player, DIALOGUE_ID); // open set selection
+        }
+
         return false;
     }
 
     //used to pick your barrows set
+
+    /**
+     * Here's the logic, you have 6 barrows sets, but 5 dialogues, so you will have 3 on one interface and a "next" option. Then 3 more and a "back" option.
+     */
     //@Override
-    public boolean actionButton(Player player, int buttonId) {
-        final BarrowSet set = BarrowSet.values()[buttonId - /*some number*/0];
-        player.getExtraData().put("barrowset", set);
+    public boolean dialogueAction(Player player, int dialogueId) {
+        final BarrowSet[] sets = BarrowSet.SETS;
+        final int size = (sets.length)/2 + sets.length%2;
+        final String[] strings;
+        switch(dialogueId) {
+            case DIALOGUE_ID:
+                strings = new String[size + 1];
+                for(int i = 0; i < strings.length; i++)
+                    strings[i] = sets[i].toString();
+                strings[strings.length - 1] = "Next";
+                player.getActionSender().sendDialogue("Select a set", ActionSender.DialogueType.OPTION, - 1, Animation.FacialAnimation.DEFAULT,
+                        strings);
+                for(int i = 0; i < strings.length; i++)
+                    player.getInterfaceState().setNextDialogueId(i, DIALOGUE_ID + i + 1);
+                return true;
+            case (DIALOGUE_ID + 4):
+                strings = new String[size + 1 - sets.length%2];
+                for(int i = size; i < sets.length; i++)
+                    strings[i - size] = sets[i].toString();
+                strings[strings.length - 1] = "Back";
+                player.getActionSender().sendDialogue("Select a set", ActionSender.DialogueType.OPTION, - 1, Animation.FacialAnimation.DEFAULT,
+                        strings);
+                for(int i = 0; i < strings.length; i++)
+                    player.getInterfaceState().setNextDialogueId(i, DIALOGUE_ID + 5 + i);
+                return true;
+            case (DIALOGUE_ID + 8):
+                DialogueManager.openDialogue(player, DIALOGUE_ID);
+                return true;
+            default:
+                final BarrowSet set = BarrowSet.forDialogue(dialogueId);
+                player.getExtraData().put("barrowset", set); //to select their barrows set
+
+                lobby.add(player);
+                player.setTeleportTarget(LOBBY); // teleport to default lobby location and add them to lobby - after they pick their barrows set
+                break;
+        }
         return false;
+    }
+
+    public void sendInterfaceString(Player player, int i, String s) {
+
+    }
+
+    public static String toMinutes(int i) {
+        return String.format("%d:%s%d", i/60, i%60 > 10 ? "" : "0", i%60);
+    }
+
+    public static void spawnObject(final List manager) {
+        manager.add(
+                new GameObject(PORTAL_ENTER_OBJECT, PORTAL_DEFAULT_LOCATION.transform(0, -1, 0), 10, /*rotation*/ 0, false)); //make a portal 1 space away from people will teleport
     }
 
 }

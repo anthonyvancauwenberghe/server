@@ -377,6 +377,7 @@ public class FightPits implements ContentTemplate {
                     player.getInventory().clear();
                     player.getEquipment().clear();
                     spawnItems(player);
+                    player.setTeleportTarget(getSpawnLoc());
                 }
 			}
 		}
@@ -416,7 +417,6 @@ public class FightPits implements ContentTemplate {
 			final Player p2 = player;
 			World.getWorld().submit(new Event(600) {
 				public void execute() {
-                    player.getInventory().add(new Item(391, Misc.random(6) + 1));
                     spawnItems(p2);
 					this.stop();
 				}
@@ -427,7 +427,8 @@ public class FightPits implements ContentTemplate {
 	
 	
 	public static void spawnItems(Player player) {
-		getClass(player);
+        player.getInventory().add(new Item(391, Misc.random(2) + 1));
+        getClass(player);
 		switch(player.pickedClass) {
 		case MAGE:
 			for(int i = 0; i < 4; i++) {
@@ -652,7 +653,7 @@ public class FightPits implements ContentTemplate {
 					timeStood = 12;
 				if(getReward) {
                     player.getBank().add(new BankItem(0, 5020, timeStood));
-					player.sendMessage(String.format("%d PK Tickets were sent to your bank and you gained 1 minigame point for your efforts", timeStood));
+					player.sendMessage(String.format("%d PK Tickets were sent to your bank", timeStood));
                     //player.getPoints().increaseMinigamePoints(1);
 				} else {
 					player.sendMessage("You don't get any reward due to lack of participation");
@@ -710,7 +711,7 @@ public class FightPits implements ContentTemplate {
 				player1.getActionSender().showInterfaceWalkable(- 1);
 				if(getReward) {
 					player1.getBank().add(new Item(5020, rewardCount));
-					player1.getActionSender().sendMessage(String.format("@red@ %d @bla@PKT have been sent to your bank, and you have gained @blu@2@bla@ Minigame Points", rewardCount));
+					player1.getActionSender().sendMessage(String.format("@red@ %d @bla@PKT have been sent to your bank", rewardCount));
                     //player1.getPoints().increaseMinigamePoints(2);
                 } else {
 					player1.getActionSender().sendMessage("You get no reward due to lack of participation");

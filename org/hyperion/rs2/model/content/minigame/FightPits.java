@@ -376,6 +376,7 @@ public class FightPits implements ContentTemplate {
                     player.getExtraData().put("pitdeaths", player.getExtraData().getInt("pitdeaths") + 1);
                     player.getInventory().clear();
                     player.getEquipment().clear();
+                    System.out.println("Check 1");
                     spawnItems(player);
                     player.setTeleportTarget(getSpawnLoc());
                 }
@@ -417,6 +418,7 @@ public class FightPits implements ContentTemplate {
 			final Player p2 = player;
 			World.getWorld().submit(new Event(600) {
 				public void execute() {
+                    System.out.println("Jank check");
                     spawnItems(p2);
 					this.stop();
 				}

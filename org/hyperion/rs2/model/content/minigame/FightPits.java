@@ -179,16 +179,16 @@ public class FightPits implements ContentTemplate {
 	
 	@SuppressWarnings("deprecation")
 	public static void getClass(Player player) {
-		int r = Misc.random(2);
+		int r = player.getExtraData().getInt("pitdeaths");
 		switch(r) {
 		case 0:
-			player.pickedClass = ArmourClass.MAGE;
-			break;
-		case 1:
 			player.pickedClass = ArmourClass.MELEE;
 			break;
-		default:
+		case 1:
 			player.pickedClass = ArmourClass.RANGE;
+			break;
+		default:
+			player.pickedClass = ArmourClass.MAGE;
 			break;
 		}
 	}
@@ -370,7 +370,14 @@ public class FightPits implements ContentTemplate {
 				return waitingRoom.contains(player) || inGame(player) || player.getDungoneering().inDungeon();
 			}
 			if(clickId == ClickId.FIGHT_PITS_DEATH) {
-				removePlayerFromGame(player, true);
+                if(player.getExtraData().getInt("pitdeaths") >= 2)
+				    removePlayerFromGame(player, true);
+                else {
+                    player.getExtraData().put("pitdeaths", player.getExtraData().getInt("pitdeaths") + 1);
+                    player.getInventory().clear();
+                    player.getEquipment().clear();
+                    spawnItems(player);
+                }
 			}
 		}
 		if(clickType != ClickType.NPC_DEATH) ;
@@ -409,7 +416,8 @@ public class FightPits implements ContentTemplate {
 			final Player p2 = player;
 			World.getWorld().submit(new Event(600) {
 				public void execute() {
-					spawnItems(p2);
+                    player.getInventory().add(new Item(391, Misc.random(6) + 1));
+                    spawnItems(p2);
 					this.stop();
 				}
 			});
@@ -419,7 +427,6 @@ public class FightPits implements ContentTemplate {
 	
 	
 	public static void spawnItems(Player player) {
-		player.getInventory().add(new Item(391, Misc.random(6) + 1));
 		getClass(player);
 		switch(player.pickedClass) {
 		case MAGE:
@@ -542,7 +549,7 @@ public class FightPits implements ContentTemplate {
 		} else if(waitingRoom.size() >= 2) {
 			if(timeLeft == 0) {
 				playersInGame.clear();
-				gameTimeLeft = 180;
+				gameTimeLeft = 180 + waitingRoom.size() * 15;
 				if(EVENT)
 					gameTimeLeft += 160;
 				timeLeft = gameTimeLeft + 15 + World.getWorld().getPlayers().size()/3;
@@ -561,7 +568,7 @@ public class FightPits implements ContentTemplate {
 		}
 		if(--timeLeft == -1) {
 			for(Player player : waitingRoom) {
-				player.getActionSender().sendMessage("You need 5 players to start a game!");
+				player.getActionSender().sendMessage("You need 3 players to start a game!");
 			}
 			timeLeft = 15 + World.getWorld().getPlayers().size()/3;
 		}
@@ -626,6 +633,7 @@ public class FightPits implements ContentTemplate {
 	
 	public static void removePlayerFromGame(Player player, boolean flag) {
 		player.getActionSender().showInterfaceWalkable(- 1);
+        player.getExtraData().put("pitdeaths", 0);
 		boolean getReward = player.getPitsDamage() > 50;
 		if(waitingRoom.contains(player)) {
 			waitingRoom.remove(player);
@@ -639,12 +647,13 @@ public class FightPits implements ContentTemplate {
 				teamBlue.remove(player);
 			if(flag) {
 				player.setTeleportTarget(Location.create(2399, 5177, 0), false);
-				int timeStood = (300 - gameTimeLeft)/50;
-				if(timeStood > 6)
-					timeStood = 6;
+				int timeStood = ((400 + startPlayersAmount * 15) - gameTimeLeft)/50;
+				if(timeStood > 12)
+					timeStood = 12;
 				if(getReward) {
                     player.getBank().add(new BankItem(0, 5020, timeStood));
-					player.sendMessage(String.format("%d PK Tickets were sent to your bank for your efforts!", timeStood));
+					player.sendMessage(String.format("%d PK Tickets were sent to your bank and you gained 1 minigame point for your efforts", timeStood));
+                    //player.getPoints().increaseMinigamePoints(1);
 				} else {
 					player.sendMessage("You don't get any reward due to lack of participation");
 				}
@@ -691,7 +700,7 @@ public class FightPits implements ContentTemplate {
 					startPlayersAmount = 50;
 				if(startPlayersAmount <= 0)
 					startPlayersAmount = 1;
-				int rewardCount =  3 + (startPlayersAmount/size);
+				int rewardCount =  5 + (startPlayersAmount/size);
 				if(EVENT)
 					rewardCount *= 3;
 				lastChamp = winningTeam;
@@ -701,16 +710,17 @@ public class FightPits implements ContentTemplate {
 				player1.getActionSender().showInterfaceWalkable(- 1);
 				if(getReward) {
 					player1.getBank().add(new Item(5020, rewardCount));
-					player1.getActionSender().sendMessage(String.format("Your team won the fight pits,@red@ %d @bla@PKT have been sent to your bank", rewardCount));
-				} else {
+					player1.getActionSender().sendMessage(String.format("@red@ %d @bla@PKT have been sent to your bank, and you have gained @blu@2@bla@ Minigame Points", rewardCount));
+                    //player1.getPoints().increaseMinigamePoints(2);
+                } else {
 					player1.getActionSender().sendMessage("You get no reward due to lack of participation");
 				}
-				player.setPitsDamage(0);
+				player1.setPitsDamage(0);
 				if(startPlayersAmount > 5 && getReward) {
 					int dpAmt = startPlayersAmount/size;
 					player1.sendMessage("@red@For winning a large game, you gain @gre@"+dpAmt+"@red@ donator points!");
 					player1.getPoints().increaseDonatorPoints(dpAmt, false);
-					if(Misc.random(70 * size) == 1) { //if 10 chance is 1/80 in total (half players each have chance of 1/400)
+					if(Misc.random(60 * size) == 1) { //if 10 chance is 1/80 in total (half players each have chance of 1/400)
 						Item reward = Item.create(random(rewardItems));
 						player1.sendMessage("You receive one @red@"+reward.getDefinition().getName());
 						PushMessage.pushGlobalMessage(player1.getName()+ " has just received a @red@"+reward.getDefinition().getName()+"@bla@ from fight pits!");

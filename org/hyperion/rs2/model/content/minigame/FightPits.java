@@ -370,13 +370,15 @@ public class FightPits implements ContentTemplate {
 				return waitingRoom.contains(player) || inGame(player) || player.getDungoneering().inDungeon();
 			}
 			if(clickId == ClickId.FIGHT_PITS_DEATH) {
+
+                if(!FightPits.inGame(player))
+                    return false;
                 if(player.getExtraData().getInt("pitdeaths") >= 2)
 				    removePlayerFromGame(player, true);
                 else {
                     player.getExtraData().put("pitdeaths", player.getExtraData().getInt("pitdeaths") + 1);
                     player.getInventory().clear();
                     player.getEquipment().clear();
-                    System.out.println("Check 1");
                     spawnItems(player);
                     player.setTeleportTarget(getSpawnLoc());
                 }

@@ -44,6 +44,7 @@ import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
@@ -917,8 +918,7 @@ public class World {
                     3274 + Combat.random(3), 0));
         }
         Trade.declineTrade(player);
-        World.getWorld().getContentManager()
-                .handlePacket(6, player, 31000, - 1, - 1, - 1);
+        FightPits.removePlayerFromGame(player, false);
         BountyHunter.fireLogout(player);
         FriendsAssistant.refreshGlobalList(player, true);
 

@@ -380,7 +380,7 @@ public class FightPits implements ContentTemplate {
                     player.getInventory().clear();
                     player.getEquipment().clear();
                     spawnItems(player);
-                    player.setTeleportTarget(getSpawnLoc());
+                    player.setTeleportTarget(getSpawnLoc(), false);
                 }
 			}
 		}

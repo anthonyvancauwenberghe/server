@@ -380,6 +380,10 @@ public class FightPits implements ContentTemplate {
                     player.getInventory().clear();
                     player.getEquipment().clear();
                     spawnItems(player);
+                    if(teamRed.contains(player))
+                        player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(RED_CAPE));
+                    else
+                        player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(BLUE_CAPE));
                     player.setTeleportTarget(getSpawnLoc(), false);
                 }
 			}
@@ -431,7 +435,7 @@ public class FightPits implements ContentTemplate {
 	
 	
 	public static void spawnItems(Player player) {
-        player.getInventory().add(new Item(391, Misc.random(2) + 1));
+        player.getInventory().add(new Item(391, Misc.random(1) + 1));
         getClass(player);
 		switch(player.pickedClass) {
 		case MAGE:

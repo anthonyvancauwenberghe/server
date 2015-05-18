@@ -192,7 +192,7 @@ public class PlayerDeathEvent extends Event {
         } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
 			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
 			if(killer != null) //in fight pits death, reward player
-				killer.getInventory().add(Item.create(391, 2));
+				killer.getInventory().add(Item.create(391, 1));
 		} else if(World.getWorld().getContentManager().handlePacket(6, player, 32000, - 1, - 1, - 1)) {
 			World.getWorld().getContentManager().handlePacket(6, player, 32001, - 1, - 1, - 1);
 		} else if(player.fightCavesWave > 0 && !player.getLocation().inPvPArea()) { //If dying in fight caves

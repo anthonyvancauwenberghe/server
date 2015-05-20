@@ -33,14 +33,12 @@ import java.util.stream.Stream;
 public class BarrowsFFA extends SpecialArea{
 
     private static final int HEIGHT_LEVEL = 1600;
-    public static final Location PORTAL_DEFAULT_LOCATION = Location.create(0, 0, 0); //where the portal will spawn
-    private static final Location GAME_DEFAULT_LOCATION = Location.create(0, 0, HEIGHT_LEVEL); //default location for the game
-    private static final Location LOBBY = Location.create(0, 0, 0); // default location to enter lobby
-    private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(0); // portal to enter lobby definition
-
+    public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
+    private static final Location GAME_DEFAULT_LOCATION = Location.create(1889, 4958, HEIGHT_LEVEL + 2); //default location for the game
+    private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
+    private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
 
     private static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
-
 
     private final List<Player> lobby = new ArrayList<>(), game = new ArrayList<>();
 
@@ -56,15 +54,14 @@ public class BarrowsFFA extends SpecialArea{
     }
 
     public enum BarrowSet {
-        DHAROK(DIALOGUE_ID + 1),
-        KARIL(DIALOGUE_ID + 2),
-        AHRIM(DIALOGUE_ID + 3),
-        GUTHAN(DIALOGUE_ID + 5),
-        TORAGS(DIALOGUE_ID + 6),
-        VERACS(DIALOGUE_ID + 7);
+        DHAROK(DIALOGUE_ID + 1, new Integer(4716), new Integer(4718), new Integer(4720), new Integer(4722)),
+        KARIL(DIALOGUE_ID + 2, new Integer(4732), new Integer(4734), new Integer(4736), new Integer(4738)),
+        AHRIM(DIALOGUE_ID + 3, new Integer(4714), new Integer(4712), new Integer(4710), new Integer(4708)),
+        GUTHAN(DIALOGUE_ID + 5, new Integer(4724), new Integer(4726), new Integer(4728), new Integer(4730)),
+        TORAGS(DIALOGUE_ID + 6, new Integer(4745), new Integer(4747), new Integer(4749), new Integer(4751)),
+        VERACS(DIALOGUE_ID + 7, new Integer(4753), new Integer(4755), new Integer(4757), new Integer(4759));
 
         public static final BarrowSet[] SETS = values().clone();
-
 
         private final Item[] items;
         private final int dialogueId; //dialogue id for picking the set
@@ -75,7 +72,6 @@ public class BarrowsFFA extends SpecialArea{
             this.items = Stream.of(ids).map(Item::create).toArray(Item[]::new);
             this.dialogueId = dialogueAction;
         }
-
 
         public void equip(final Player player) {
             int i = 0;

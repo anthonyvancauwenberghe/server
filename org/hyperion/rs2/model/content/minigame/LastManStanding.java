@@ -32,6 +32,33 @@ public class LastManStanding implements ContentTemplate {
         return x <= 3274 && y <= 2809 && y >= 2752 && x >= 3205;
     }
 
+    public void startCountdown() {
+        World.getWorld().submit(new Event(1000) {
+            int counter = 300;
+            @Override
+            public void execute() {
+                if(!canJoin) {
+                    super.stop();
+                    return;
+                }
+                if(counter == 0) {
+                    stop();
+                    return;
+                }
+                for(NPC npc : World.getWorld().getNPCs()) {
+                    if(npc != null)
+                        npc.forceMessage("Last Man Standing event starts in "+counter+" seconds! Go to ::lms");
+                }
+                counter--;
+            }
+
+            public void stop() {
+                startGame();
+                super.stop();
+            }
+        });
+    }
+
     @Override
     public int[] getValues(int type) {
         if (type == 6 || type == 7) {
@@ -84,11 +111,21 @@ public class LastManStanding implements ContentTemplate {
         }
     }
 
-    public void leaveGame(Player player) {
+    public void leaveGame(Player player, boolean loseItems) {
         participants.remove(player.getName());
         Magic.teleport(player, Edgeville.LOCATION, true);
         if (gameStarted) {
-            player.getPoints().inceasePkPoints(500);
+            if (loseItems) {
+                player.getPoints().inceasePkPoints(500);
+                List<Item> keepItems = DeathDrops.itemsKeptOnDeath(player, true, false);
+                PkShop pkshop = new PkShop(-1, null, null);
+                player.getInventory().clear();
+                player.getEquipment().clear();
+                for (Item keepItem : keepItems) {
+                    if (keepItem != null)
+                        player.getInventory().add(keepItem);
+                }
+            }
         }
         if (participants.size() <= 1) {
             endGame();
@@ -125,14 +162,8 @@ public class LastManStanding implements ContentTemplate {
                     reward = 0;
                 killerParticipant.increaseBountyReward(reward / 4);
             }
-            player.getInventory().clear();
-            player.getEquipment().clear();
-            for (Item keepItem : keepItems) {
-                if (keepItem != null)
-                    player.getInventory().add(keepItem);
-            }
             finishedPlayers.add(participant);
-            leaveGame(player);
+            leaveGame(player, true);
             if (participants.size() <= 1) {
                 endGame();
             } else if (participants.size() == 2 || participants.size() == 3) {
@@ -148,7 +179,7 @@ public class LastManStanding implements ContentTemplate {
     public void startGame() {
         if (participants.size() < 2) {
             for (Participant participant : participants.values()) {
-                participant.getPlayer().getActionSender().sendMessage("There must be at least 5 participants in order for this event to start!");
+                participant.getPlayer().getActionSender().sendMessage("There must be at least 2 participants in order for this event to start!");
             }
             return;
         }
@@ -183,6 +214,7 @@ public class LastManStanding implements ContentTemplate {
             if(player == null)
                 continue;
             if(!player.isInCombat() && !player.getLocation().inPvPArea() && !player.openingTrade) {
+                player.getActionSender().sendString(28672, "Top Killers");
                 int size = 10;
                 if(finishedPlayers.size() < 10)
                     size = finishedPlayers.size();

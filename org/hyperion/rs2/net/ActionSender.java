@@ -23,9 +23,7 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange.GEItem;
-import org.hyperion.rs2.model.content.minigame.GodWars;
-import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
-import org.hyperion.rs2.model.content.minigame.WarriorsGuild;
+import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.Interface;
@@ -118,6 +116,24 @@ public class ActionSender {
 		}
 	}
 
+    public ActionSender sendLastManStandingStatus(boolean status) {
+        if(status) {
+            Participant p = LastManStanding.getLastManStanding().participants.get(player.getName());
+            if (p == null)
+                return null;
+            int j = 36500;
+            player.write(new PacketBuilder(208).putLEShort(j).toPacket());
+            sendString(36502, "Total Kills: " + p.getKills());
+            sendString(36503, "Lives Left: " + (3 - p.getDeaths()));
+            sendString(36504, "Bounty Reward: " + p.getBountyReward());
+            sendString(36505, "Players Left: " + LastManStanding.getLastManStanding().participants.size());
+            return this;
+        } else {
+            player.write(new PacketBuilder(208).putLEShort(-1).toPacket());
+            return this;
+        }
+    }
+
 	public void loadAnnouncements() {
 		try {
 			loadIni();
@@ -183,6 +199,9 @@ public class ActionSender {
 		player.setActive(true);
 		player.isHidden(false);
 		sendDetails();
+        if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+            Magic.teleport(player, Edgeville.LOCATION, true);
+        }
         if(player.isNew()){
             player.getInventory().add(Item.create(15707));
             Magic.teleport(player, Location.create(2795, 3321, 0), true);
@@ -1619,6 +1638,9 @@ public class ActionSender {
                         || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 			}*/
+            if(LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                LastManStanding.getLastManStanding().leaveGame(player, true);
+            }
 			player.loggedOut = true;
 			World.getWorld().unregister(player);
 		} else {

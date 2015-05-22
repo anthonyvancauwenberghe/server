@@ -11,14 +11,10 @@ import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.minigame.CastleWars;
-import org.hyperion.rs2.model.content.minigame.DangerousPK;
-import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.RestarterThread;
@@ -960,6 +956,20 @@ public class Combat {
 					World.getWorld().getContentManager().handlePacket(
 							6, combatEntity.getPlayer(), ClickId.ATTACKABLE))
 				return "1";
+            if(LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())) {
+                Participant player = LastManStanding.getLastManStanding().participants.get(combatEntity.getPlayer().getName());
+                Participant opp = LastManStanding.getLastManStanding().participants.get(opponent.getPlayer().getName());
+                if(player == null || opp == null) {
+                    return "Something went wrong!";
+                }
+                if(opp.isInvincible()) {
+                    return "This opponent is currently invincible";
+                }
+                if(player.isInvincible()) {
+                    player.setInvincible(false);
+                }
+                return "1";
+            }
 			//ardy pvp code below.
 			/*if(combatEntity.getEntity().getLocation().inArdyPvPArea() && opponent.getEntity().getLocation().inArdyPvPArea()) {
 				if(Math.abs(cb1 - cb2) <= 6) {
@@ -1013,28 +1023,21 @@ public class Combat {
 	}
 
 	public static int getRealLevel(CombatEntity combatEntity, CombatEntity b) {
-		int a = getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY(), combatEntity.getAbsZ());
-		int d = getWildLevel(b.getAbsX(), b.getAbsY(), b.getAbsZ());
+		int a = getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY());
+		int d = getWildLevel(b.getAbsX(), b.getAbsY());
 		return Math.min(a, d);
 	}
 
 	public static int getWildLevel(int absX, int absY) {
-        return getWildLevel(absX, absY, 0);
-	}
-
-    public static int getWildLevel(int absX, int absY, int z) {
-        for(SpecialArea a : SpecialAreaHolder.getAreas())
-            if(a.isPkArea() && a.inArea(absX, absY, z))
-                return a.getPkLevel();
-        if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-            return (((absY - 3520) / 8) + 3);
+		if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+			return (((absY - 3520) / 8) + 3);
         else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
             return 57;
-        else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
-            return 12;
-        else
-            return -1;
-    }
+		else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
+			return 12;
+		else
+			return -1;
+	}
 
 	public static boolean isInMulti(CombatEntity combatEntity) {
 		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
@@ -1084,9 +1087,9 @@ public class Combat {
 					combatEntity.getAbsX() <= 2354 && combatEntity.getAbsY() <= 9834)
 				||
                 (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
-                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711 && combatEntity.getAbsZ() == 0)
-                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Location.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk())
-			
+                        combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711)
+                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Location.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk()
+                || (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())))
 			return true;
 		if(combatEntity.getEntity() instanceof Player) {
 			if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))

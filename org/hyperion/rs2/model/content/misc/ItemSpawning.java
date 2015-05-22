@@ -4,6 +4,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.ClickId;
@@ -101,6 +102,10 @@ public class ItemSpawning {
 	}
 
     public static boolean canSpawn(final Player player) {
+        if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+            player.getActionSender().sendMessage("You cannot spawn items here.");
+            return false;
+        }
         if(player.getLocation().inPvPArea()) {
             player.getActionSender().sendMessage(
                     "You cannot do that in a PvP area.");

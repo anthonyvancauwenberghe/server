@@ -522,8 +522,10 @@ public class ActionSender {
     }
 
 	public ActionSender showInterfaceWalkable(int i) {
-		player.write(new PacketBuilder(208).putLEShort(i).toPacket());
-		return this;
+        if(player.getExtraData().getInt("walkableint") != i)
+		    player.write(new PacketBuilder(208).putLEShort(i).toPacket());
+        player.getExtraData().put("walkableint", i);
+        return this;
 	}
 
 	public ActionSender setViewingSidebar(int sideIcon) {

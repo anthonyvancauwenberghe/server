@@ -5,6 +5,7 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent.OverloadFactory;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Equipment;
@@ -358,13 +359,15 @@ public class WalkingQueue {
 				player.getActionSender().sendMultiZone(0);
 			}
 			if((player.wildernessLevel != Combat.getWildLevel(player
-					.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ())) && !OSPK.inArea(player) && !DangerousPK.inDangerousPK(player)) {
+					.getLocation().getX(), player.getLocation().getY())) && !OSPK.inArea(player) && !DangerousPK.inDangerousPK(player)) {
 					player.wildernessLevel = Combat.getWildLevel(player
-						.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+						.getLocation().getX(), player.getLocation().getY());
 				player.getActionSender().sendWildLevel(player.wildernessLevel);
 
 			} 
-			
+			if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                player.getActionSender().sendLastManStandingStatus(true);
+            }
 			if(OSPK.inArea(player)) {
 				if(player.isOverloaded())
 					player.setOverloaded(false);

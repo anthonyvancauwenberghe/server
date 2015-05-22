@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
@@ -1104,6 +1105,10 @@ public class Magic {
 		player.isFollowing = null;
 		final int x = (3085 + Misc.random(2));
 		final int y = (3491 + Misc.random(2));
+        if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {
+            player.getActionSender().sendMessage("You cannot teleport in this minigame.");
+            return;
+        }
 		if(player.isTeleBlocked()) {
 			player.getActionSender().sendMessage(
 					"You are currently teleblocked.");
@@ -1200,6 +1205,10 @@ public class Magic {
 	public static void teleport(final Player player, int x, int y, int z,
 	                            boolean force, boolean random) {
 		if(! force) {
+            if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {
+                player.getActionSender().sendMessage("You cannot teleport in this minigame.");
+                return;
+            }
 			if(DangerousPK.inDangerousPK(player)) {
                 if(player.getPoints().getPkPoints() > 75) {
                     player.sendMessage("You loose 75 PKT upon teleporting!");
@@ -1233,6 +1242,10 @@ public class Magic {
 						"You cannot teleport out of jail.");
 				return;
 			}
+            if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                player.getActionSender().sendMessage("You cannot teleport out of this event!");
+                return;
+            }
 			if(player.isDead())
 				return;
 			if(Combat.getWildLevel(player.getLocation().getX(), player

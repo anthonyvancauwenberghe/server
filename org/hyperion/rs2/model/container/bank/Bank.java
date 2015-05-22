@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 import java.util.Arrays;
@@ -46,19 +47,17 @@ public class Bank {
      * @param player The player to open the bank for.
      */
     public static void open(Player player, boolean setPin) {
-
-        if(player.getExtraData().getBoolean("cantdoshit")) {
-            player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
-            return;
-        }
-        if(player.getLocation().inPvPArea()) {
-            player.sendMessage("You cannot bank here!");
-
+        if(player.getLocation().inPvPArea() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
             return;
         }
         if(!ItemSpawning.canSpawn(player)) {
-            player.sendMessage("You cannot bank here");
             return;
+        }
+        if(LastManStanding.getLastManStanding().gameStarted) {
+            if(!LastManStanding.getLastManStanding().participants.get(player.getName()).isInvincible()) {
+                player.getActionSender().sendMessage("You can only bank while you are invincible!");
+                return;
+            }
         }
         if(FightPits.inPits(player))
             return;

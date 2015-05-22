@@ -53,12 +53,6 @@ public class Bank {
         if(!ItemSpawning.canSpawn(player)) {
             return;
         }
-        if(LastManStanding.getLastManStanding().gameStarted) {
-            if(!LastManStanding.getLastManStanding().participants.get(player.getName()).isInvincible()) {
-                player.getActionSender().sendMessage("You can only bank while you are invincible!");
-                return;
-            }
-        }
         if(FightPits.inPits(player))
             return;
         player.resetingPin = false;

@@ -1638,9 +1638,6 @@ public class ActionSender {
                         || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 			}*/
-            if(LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                LastManStanding.getLastManStanding().leaveGame(player, true);
-            }
 			player.loggedOut = true;
 			World.getWorld().unregister(player);
 		} else {

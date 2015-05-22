@@ -45,6 +45,7 @@ import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
@@ -916,6 +917,9 @@ public class World {
             Duel.finishFullyDuel(player);
             player.setLocation(Location.create(3360 + Combat.random(17),
                     3274 + Combat.random(3), 0));
+        }
+        if(LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+            LastManStanding.getLastManStanding().leaveGame(player, true);
         }
         Trade.declineTrade(player);
         FightPits.removePlayerFromGame(player, false);

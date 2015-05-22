@@ -962,12 +962,6 @@ public class Combat {
                 if(player == null || opp == null) {
                     return "Something went wrong!";
                 }
-                if(opp.isInvincible()) {
-                    return "This opponent is currently invincible";
-                }
-                if(player.isInvincible()) {
-                    player.setInvincible(false);
-                }
                 return "1";
             }
 			//ardy pvp code below.

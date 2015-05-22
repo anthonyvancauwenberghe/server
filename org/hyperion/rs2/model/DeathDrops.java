@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,26 +41,6 @@ public class DeathDrops {
 			return;
 
 		/**
-		 * Resets death variables - which slots are being protected
-		 * Sets which items are being kept, deletes them 
-		 */
-		player.resetDeathItemsVariables();
-		List<Item> keepItems = itemsKeptOnDeath(player, false, false);
-		
-		//If in dangerous pk set shit to null again
-		if(DangerousPK.inDangerousPK(player))
-			player.resetDeathItemsVariables();
-		/**
-		 * List that stores items to be dropped later
-		 */
-		List<Item> droppingItems = new LinkedList<>();
-		
-		/**
-		 * {@link #processContainer(Container container, List<Item> original, boolean inv, Player player)}
-		 */
-		droppingItems = processContainer(player.getInventory(), droppingItems, true, player);
-		droppingItems = processContainer(player.getEquipment(), droppingItems, false, player);
-		/**
 		 * Adds EP Drop.
 		 */
 		Item epItems = EPDrops.getEPItem(killer.EP);
@@ -67,6 +48,8 @@ public class DeathDrops {
 			killer.removeEP();
 			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), epItems));
 		}
+
+        List<Item> droppingItems = dropItems(player);
 		/**
 		 * Drops the items for the killer
 		 */
@@ -92,6 +75,30 @@ public class DeathDrops {
         player.getLogManager().add(LogEntry.death(player, killer, droppingItems.toArray(new Item[droppingItems.size()])));;
 
 
+    }
+
+    public static final List<Item> dropItems(Player player) {
+        /**
+         * Resets death variables - which slots are being protected
+         * Sets which items are being kept, deletes them
+         */
+        player.resetDeathItemsVariables();
+        List<Item> keepItems = itemsKeptOnDeath(player, false, false);
+
+        //If in dangerous pk set shit to null again
+        if(DangerousPK.inDangerousPK(player))
+            player.resetDeathItemsVariables();
+        /**
+         * List that stores items to be dropped later
+         */
+        List<Item> droppingItems = new LinkedList<>();
+
+        /**
+         * {@link #processContainer(Container container, List<Item> original, boolean inv, Player player)}
+         */
+        droppingItems = processContainer(player.getInventory(), droppingItems, true, player);
+        droppingItems = processContainer(player.getEquipment(), droppingItems, false, player);
+        return droppingItems;
     }
 	/**
 	 * Adds unspawnables from equip/inv - only takes items that are unspawnable

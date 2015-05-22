@@ -112,25 +112,25 @@ public class LastManStanding implements ContentTemplate {
     }
 
     public void leaveGame(Player player, boolean loseItems) {
-        participants.remove(player.getName());
-        Magic.teleport(player, Edgeville.LOCATION, true);
-        if (gameStarted) {
-            if (loseItems) {
-                player.getPoints().inceasePkPoints(500);
-                List<Item> keepItems = DeathDrops.itemsKeptOnDeath(player, true, false);
-                PkShop pkshop = new PkShop(-1, null, null);
-                player.getInventory().clear();
-                player.getEquipment().clear();
-                for (Item keepItem : keepItems) {
-                    if (keepItem != null)
-                        player.getInventory().add(keepItem);
+        if(participants.remove(player.getName()) != null) {
+            Magic.teleport(player, Edgeville.LOCATION, true);
+            if (gameStarted) {
+                if (loseItems) {
+                    player.getPoints().inceasePkPoints(500);
+                    List<Item> keepItems = DeathDrops.itemsKeptOnDeath(player, true, false);
+                    player.getInventory().clear();
+                    player.getEquipment().clear();
+                    for (Item keepItem : keepItems) {
+                        if (keepItem != null)
+                            player.getInventory().add(keepItem);
+                    }
                 }
             }
+            if (participants.size() <= 1) {
+                endGame();
+            }
+            player.getActionSender().sendLastManStandingStatus(false);
         }
-        if (participants.size() <= 1) {
-            endGame();
-        }
-        player.getActionSender().sendLastManStandingStatus(false);
     }
 
     public void deathCheck(Player player, Player killer) {

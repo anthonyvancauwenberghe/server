@@ -49,7 +49,7 @@ public class DeathDrops {
 			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), epItems));
 		}
 
-        List<Item> droppingItems = dropItems(player);
+        List<Item> droppingItems = dropItems(player, DangerousPK.inDangerousPK(player));
 		/**
 		 * Drops the items for the killer
 		 */
@@ -77,7 +77,7 @@ public class DeathDrops {
 
     }
 
-    public static final List<Item> dropItems(Player player) {
+    public static final List<Item> dropItems(Player player, boolean loseAll) {
         /**
          * Resets death variables - which slots are being protected
          * Sets which items are being kept, deletes them
@@ -86,7 +86,7 @@ public class DeathDrops {
         List<Item> keepItems = itemsKeptOnDeath(player, false, false);
 
         //If in dangerous pk set shit to null again
-        if(DangerousPK.inDangerousPK(player))
+        if(loseAll)
             player.resetDeathItemsVariables();
         /**
          * List that stores items to be dropped later

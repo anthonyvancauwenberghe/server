@@ -61,56 +61,60 @@ public class PkShop extends PointsShop {
 
 	@Override
 	public int getPrice(int itemId) {
-		if(itemId >= 8845 && itemId <= 8850) {
-			return (itemId - 8844) * 100;
-		}
-		switch(itemId) {
+        return getValue(itemId);
+	}
+
+    public static int getValue(int itemId) {
+        if(itemId >= 8845 && itemId <= 8850) {
+            return (itemId - 8844) * 100;
+        }
+        switch(itemId) {
             case 13663:
                 return 100_000;
-			case 15486:
-				return 50;
-			case 15272:
-				return 1;
-			case 6570:
-			case 8842:
-				return 500;
-			case 8839:
-			case 8840:
-			case 10547:
-			case 10548:
-			case 10549:
-			case 10550:
-				return 1250;
-			case 11663:
-			case 11664:
-			case 11665:
-			case 10551:
-				return 1500;
-			case 18333:
-			case 18335:
-				return 1500;
-			case 15243:
-				return 1;
-			case 13902:
-			case 19111:
-			case 13899:
-				return 9000;
-			case 13887:
-			case 13893:
-			case 13884:
-			case 13890:
-			case 13896:
-				return 3500;
-			case 5020:
-			case 13879:
-			case 13883:
-				return 10;
+            case 15486:
+                return 50;
+            case 15272:
+                return 1;
+            case 6570:
+            case 8842:
+                return 500;
+            case 8839:
+            case 8840:
+            case 10547:
+            case 10548:
+            case 10549:
+            case 10550:
+                return 1250;
+            case 11663:
+            case 11664:
+            case 11665:
+            case 10551:
+                return 1500;
+            case 18333:
+            case 18335:
+                return 1500;
+            case 15243:
+                return 1;
+            case 13902:
+            case 19111:
+            case 13899:
+                return 9000;
+            case 13887:
+            case 13893:
+            case 13884:
+            case 13890:
+            case 13896:
+                return 3500;
+            case 5020:
+            case 13879:
+            case 13883:
+                return 10;
             case 18950:
-                 return 50_000;
+                return 50_000;
 
-		}
-		return 5000;
-	}
+        }
+        return 5000;
+    }
 
 
 	@Override

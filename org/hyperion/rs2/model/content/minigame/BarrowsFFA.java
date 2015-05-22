@@ -40,6 +40,10 @@ public class BarrowsFFA extends SpecialArea{
 
     private static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
 
+    private static final int INTERFACE_ID = 21119;
+
+    private static final int[] INTERFACE_CHILD_IDS = new int[] { 21120, 21121, 21122, 21123};
+
     private final List<Player> lobby = new ArrayList<>(), game = new ArrayList<>();
 
     private int gameTime, nextGameTime;
@@ -93,7 +97,12 @@ public class BarrowsFFA extends SpecialArea{
     }
     //handles timers, interfaces & shit
     public void process() {
-        if(gameTime-- > 0) {
+        if(gameTime > 0) {
+            gameTime--;
+            if(game.size() == 1) {
+                endGame();
+                return;
+            }
             for(Player player : game) {
                 sendInterfaceString(player, 0,"Players Left: "+game.size());
                 sendInterfaceString(player, 1, "Time left: "+toMinutes(gameTime));
@@ -129,7 +138,7 @@ public class BarrowsFFA extends SpecialArea{
         if(game.size() == 1) {
             final Player winner = game.get(0);
             exit(winner);
-            // reward(winner); - give the reward
+            winner.getPoints().increaseMinigamePoints(2);
         } else {
             for(final Player player : game)
                 exit(player);
@@ -190,10 +199,13 @@ public class BarrowsFFA extends SpecialArea{
 
     @Override
     public void exit(final Player player) {
-        if ((lobby.contains(player) && lobby.remove(player)) || (game.contains(player) && game.remove(player))) {
-            player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
+        if (lobby.contains(player) || (game.contains(player))) {
             player.getEquipment().clear();
             player.getInventory().clear();
+            if(lobby.remove(player))
+                player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
+            else if(game.remove(player) && lobby.add(player))
+                player.setTeleportTarget(LOBBY);
         }
     }
 
@@ -267,6 +279,8 @@ public class BarrowsFFA extends SpecialArea{
     }
 
     public void sendInterfaceString(Player player, int i, String s) {
+        player.getActionSender().showInterfaceWalkable(INTERFACE_ID);
+        player.getActionSender().sendString(INTERFACE_CHILD_IDS[i], s);
 
     }
 

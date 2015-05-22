@@ -58,6 +58,7 @@ public class Combat {
 				combatEntity.getOpponent().getAttackers().add(combatEntity);
 			}
 
+            combatEntity._getPlayer().ifPresent(p -> p.getExtraData().put("combatimmunity", System.currentTimeMillis()));
 
 			/**
 			 * Distance and freezetimer check.

@@ -897,6 +897,7 @@ public class World {
             Combat.logoutReset(player.cE);
         player.getDungoneering().fireOnLogout(player);
         player.setActive(false);
+        LastManStanding.getLastManStanding().leaveGame(player, true);
         // Combat.resetAttack(player.cE);
         resetPlayersNpcs(player);
         resetSummoningNpcs(player);

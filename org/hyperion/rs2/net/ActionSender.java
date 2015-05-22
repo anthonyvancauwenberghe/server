@@ -1640,6 +1640,7 @@ public class ActionSender {
                         || !Rank.hasAbility(player, Rank.OWNER))
 				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
 			}*/
+
 			player.loggedOut = true;
 			World.getWorld().unregister(player);
 		} else {

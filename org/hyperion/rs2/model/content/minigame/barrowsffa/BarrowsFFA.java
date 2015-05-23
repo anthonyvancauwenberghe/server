@@ -32,6 +32,8 @@ import java.util.stream.Stream;
  */
 public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
+    public static BarrowsFFA barrowsFFA;
+
     private static final int HEIGHT_LEVEL = 1600;
     public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
     private static final Location GAME_DEFAULT_LOCATION = Location.create(1867, 4941, HEIGHT_LEVEL + 2); //default location for the game
@@ -56,6 +58,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     @Override
     public void init() throws FileNotFoundException {
+        barrowsFFA = this;
         World.getWorld().submit(new Event(1000) {
             @Override
             public void execute() throws IOException {
@@ -106,6 +109,8 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             final Object set = player.getBarrowsFFA().getBarrowSet();
             if(set instanceof BarrowSet)
                 ((BarrowSet)set).equip(player);
+
+            player.getBarrowsFFA().initialize();
         }
 
         gameTime = 200 + game.size() * 10;
@@ -162,7 +167,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     @Override
     public boolean inArea(int x, int y, int z) {
-        return z == HEIGHT_LEVEL && (x < 1905 && y < 4965 && y > 4940 && x < 1855);
+        return z == HEIGHT_LEVEL && (x < 1905 && y < 4965 && y > 4940 && x > 1855);
     }
 
     @Override
@@ -190,6 +195,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
             else if(game.remove(player) && lobby.add(player)) {
                 player.setTeleportTarget(LOBBY, false);
+                player.getBarrowsFFA().destroy();
             }
         }
     }

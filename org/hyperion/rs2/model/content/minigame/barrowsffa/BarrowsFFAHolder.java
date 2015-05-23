@@ -24,6 +24,7 @@ public class BarrowsFFAHolder {
         killStreak = 0;
         lives = 0;
         kills = 0;
+        set = null;
     }
 
     public void initialize() {

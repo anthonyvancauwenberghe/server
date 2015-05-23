@@ -102,7 +102,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     }
 
     public void startGame() {
-        game.addAll(lobby);
+        lobby.forEach(game::add);
         lobby.clear();
         for(final Player player : game) {
             enter(player);
@@ -193,9 +193,10 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             player.getInventory().clear();
             if(lobby.remove(player))
                 player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
-            else if(game.remove(player) && lobby.add(player)) {
+            if(game.remove(player)) {
                 player.setTeleportTarget(LOBBY, false);
                 player.getBarrowsFFA().destroy();
+                lobby.add(player);
             }
 
             player.getActionSender().showInterfaceWalkable(-1);

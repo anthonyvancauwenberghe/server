@@ -32,7 +32,7 @@ public enum BarrowSet {
             player.getEquipment().set(Equipment.getType(items[i]).getSlot(), Item.create(items[i].getId()));
         }
         for(; i < items.length; i++)
-            player.getInventory().add(Item.create(items[i].getId()));
+            player.getInventory().add(Item.create(items[i].getId(), items[i].getCount()));
     }
 
     public static BarrowSet forDialogue(final int id) {

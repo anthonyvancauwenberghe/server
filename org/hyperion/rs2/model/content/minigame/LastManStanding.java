@@ -85,15 +85,8 @@ public class LastManStanding implements ContentTemplate {
     public void invincibleEvent(Participant participant) {
         if (participant == null)
             return;
-        participant.setInvincible(true);
-        World.getWorld().submit(new Event(20000) {
-            @Override
-            public void execute() {
-                participant.getPlayer().getActionSender().sendMessage("You are no longer invincible!");
-                participant.setInvincible(false);
-                stop();
-            }
-        });
+        participant.getPlayer().getExtraData().put("combatimmunity", System.currentTimeMillis() + 5000L);
+        participant.getPlayer().getActionSender().sendMessage("You are now invincible for a short period of time!");
     }
 
     public static LastManStanding lastManStanding = null;
@@ -117,13 +110,7 @@ public class LastManStanding implements ContentTemplate {
             if (gameStarted) {
                 if (loseItems) {
                     player.getPoints().inceasePkPoints(500);
-                    List<Item> keepItems = DeathDrops.itemsKeptOnDeath(player, true, false);
-                    player.getInventory().clear();
-                    player.getEquipment().clear();
-                    for (Item keepItem : keepItems) {
-                        if (keepItem != null)
-                            player.getInventory().add(keepItem);
-                    }
+                    DeathDrops.dropItems(player, false);
                 }
             }
             if (participants.size() <= 1) {
@@ -142,22 +129,12 @@ public class LastManStanding implements ContentTemplate {
         participant.addDeaths(1);
         killerParticipant.addKills(1);
         if (participant.getDeaths() == 3) {
-            List<Item> keepItems = DeathDrops.itemsKeptOnDeath(player, true, false);
-            PkShop pkshop = new PkShop(-1, null, null);
-            for (Item item : player.getInventory().toArray()) {
+            List<Item> items = DeathDrops.dropItems(participant.getPlayer(), false);
+            for (Item item : items) {
                 if (item == null) {
                     continue;
                 }
-                int reward = pkshop.getPrice(item.getId());
-                if (reward == 5000)
-                    reward = 0;
-                killerParticipant.increaseBountyReward(reward / 4);
-            }
-            for (Item item : player.getEquipment().toArray()) {
-                if (item == null) {
-                    continue;
-                }
-                int reward = pkshop.getPrice(item.getId());
+                int reward = PkShop.getValue(item.getId());
                 if (reward == 5000)
                     reward = 0;
                 killerParticipant.increaseBountyReward(reward / 4);

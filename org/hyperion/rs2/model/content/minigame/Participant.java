@@ -15,15 +15,12 @@ public class Participant implements Comparator<Object> {
 
     private int kills;
 
-    private boolean invincible;
-
     private int bountyReward;
 
     public Participant(Player player, int deaths, int kills) {
         this.player = player;
         this.deaths = deaths;
         this.kills = kills;
-        invincible = false;
         bountyReward = 0;
     }
 
@@ -37,14 +34,6 @@ public class Participant implements Comparator<Object> {
 
     public void addDeaths(int amount) {
         deaths += amount;
-    }
-
-    public boolean isInvincible() {
-        return invincible;
-    }
-
-    public void setInvincible(boolean invincible) {
-        this.invincible = invincible;
     }
 
     public int getKills() {

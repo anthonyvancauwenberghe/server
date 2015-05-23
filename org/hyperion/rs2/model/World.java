@@ -919,6 +919,9 @@ public class World {
             player.setLocation(Location.create(3360 + Combat.random(17),
                     3274 + Combat.random(3), 0));
         }
+        if(LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+            LastManStanding.getLastManStanding().leaveGame(player, true);
+        }
         Trade.declineTrade(player);
         FightPits.removePlayerFromGame(player, false);
         BountyHunter.fireLogout(player);

@@ -54,6 +54,9 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.minigame.BarrowsFFA;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
+import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.content.misc.PotionDecanting;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
@@ -127,7 +130,7 @@ public class CommandHandler {
 	 *
 	 * @param cmds
 	 */
-	
+
 	public static void submit(Command... cmds) {
 		for(Command cmd : cmds) {
 			commands.put(cmd.getKey(), cmd);
@@ -142,7 +145,7 @@ public class CommandHandler {
 	 * @param input
 	 * @returns true if the command was found in the commands hashmap and had the rights to execute.
 	 */
-	    public static boolean processed(String key, Player player, String input) {
+	public static boolean processed(String key, Player player, String input) {
 		Command command = commands.get(key);
 		if(command != null) {
 			if(!Rank.hasAbility(player.getPlayerRank(), command.getRanks())) {
@@ -218,6 +221,49 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+        submit(new Command("lms", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                LastManStanding.getLastManStanding().enterLobby(player);
+                player.getActionSender().sendMessage("WARNING: ON YOUR THIRD DEATH, YOU WILL LOSE ALL NON-PROTECTED ITEMS!");
+                player.getActionSender().sendMessage("To leave the lobby, use the ::leavelms command.");
+                return true;
+            }
+        });
+
+        submit(new Command("leavelms", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                if(LastManStanding.getLastManStanding().gameStarted) {
+                    player.getActionSender().sendMessage("You cannot leave until you have died three times!");
+                    return true;
+                }
+                LastManStanding.getLastManStanding().leaveGame(player, false);
+                return true;
+            }
+        });
+
+        submit(new Command("startlms", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                if(LastManStanding.getLastManStanding().canJoin)
+                    return true;
+                LastManStanding.getLastManStanding().canJoin = true;
+                LastManStanding.getLastManStanding().startCountdown();
+                return true;
+            }
+        });
+
+        submit(new Command("stoplms", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                LastManStanding.getLastManStanding().canJoin = false;
+                return true;
+            }
+        });
+
+    /* End of deleting commands */
 
         submit(new Command("disableprofile", Rank.PLAYER) {
             @Override

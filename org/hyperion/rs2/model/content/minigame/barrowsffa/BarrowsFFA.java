@@ -195,8 +195,10 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     @Override
     public void exit(final Player player) {
         if (lobby.contains(player) || (game.contains(player))) {
-            player.getEquipment().clear();
-            player.getInventory().clear();
+            if(inArea(player)) {
+                player.getEquipment().clear();
+                player.getInventory().clear();
+            }
             if(lobby.remove(player))
                 player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
             if(game.remove(player)) {

@@ -79,7 +79,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
             if(gameTime == 0)
                 endGame();
-        } else if(--nextGameTime == 0) {
+        } else if(--nextGameTime <= 0) {
             if(lobby.size() < 3) {
                 lobby.forEach(p -> p.sendMessage("You need at least 4 players to start a game"));
                 nextGameTime = 30;

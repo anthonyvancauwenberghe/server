@@ -367,7 +367,7 @@ public class WalkingQueue {
                     if(!area.wildInterface() && area.inArea(player))
                         special = true;
                 }
-                if(!special)
+                if(!special && wildLevel != -1)
 				    player.getActionSender().sendWildLevel(player.wildernessLevel);
 
 			} 

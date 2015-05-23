@@ -34,9 +34,9 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     public static BarrowsFFA barrowsFFA;
 
-    private static final int HEIGHT_LEVEL = 1600;
+    private static final int HEIGHT_LEVEL = 1602;
     public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
-    private static final Location GAME_DEFAULT_LOCATION = Location.create(1867, 4941, HEIGHT_LEVEL + 2); //default location for the game
+    private static final Location GAME_DEFAULT_LOCATION = Location.create(1867, 4941, HEIGHT_LEVEL); //default location for the game
     private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
 
@@ -94,9 +94,9 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
 
         for(Player player : lobby) {
-            sendInterfaceString(player, 0, "@blu@Players Waiting: @gre@"+game.size());
-            sendInterfaceString(player, 1, "@blu@Estimated Time Left: @red@" + toMinutes(gameTime + nextGameTime));
-            sendInterfaceString(player, 2, "@blu@Set: @or2@"+player.getBarrowsFFA().getBarrowSet().toString());
+            sendInterfaceString(player, 0, "@cya@Players Waiting: @gre@"+game.size());
+            sendInterfaceString(player, 1, "@cya@Estimated Time Left: @red@" + toMinutes(gameTime + nextGameTime));
+            sendInterfaceString(player, 2, "@cya@Set: @or2@"+player.getBarrowsFFA().getBarrowSet().toString());
             sendInterfaceString(player, 3, ""+player.getPoints().getMinigamePoints());
         }
     }

@@ -15,6 +15,8 @@ import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.RestarterThread;
@@ -1024,21 +1026,29 @@ public class Combat {
 	}
 
 	public static int getRealLevel(CombatEntity combatEntity, CombatEntity b) {
-		int a = getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY());
-		int d = getWildLevel(b.getAbsX(), b.getAbsY());
+		int a = getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY(), combatEntity.getAbsZ());
+		int d = getWildLevel(b.getAbsX(), b.getAbsY(), b.getAbsZ());
 		return Math.min(a, d);
 	}
 
 	public static int getWildLevel(int absX, int absY) {
-		if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-			return (((absY - 3520) / 8) + 3);
+        return getWildLevel(absX, absY, 0);
+    }
+
+    public static int getWildLevel(int absX, int absY, int absZ) {
+        for(SpecialArea area : SpecialAreaHolder.getAreas())
+            if(area.isPkArea() && area.inArea(absX, absY, absZ))
+                return area.getPkLevel();
+
+        if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+            return (((absY - 3520) / 8) + 3);
         else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
             return 57;
-		else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
-			return 12;
-		else
-			return -1;
-	}
+        else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
+            return 12;
+        else
+            return -1;
+    }
 
 	public static boolean isInMulti(CombatEntity combatEntity) {
 		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327

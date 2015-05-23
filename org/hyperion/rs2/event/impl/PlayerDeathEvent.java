@@ -187,6 +187,8 @@ public class PlayerDeathEvent extends Event {
         if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
 				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
 			Duel.finishFullyDuel(player);
+        } else if (World.getWorld().getContentManager().handlePacket(6, player, killer.getIndex())) {
+
         } else if (player.getDungoneering().inDungeon()) {
             DungeoneeringManager.handleDying(player);
         } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
@@ -249,7 +251,7 @@ public class PlayerDeathEvent extends Event {
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)
                                 pkpIncrease = 40;
-							int pointsToAdd = (int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease;
+							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease) * 2;
 							if(player.getKillStreak() >= 6) {
 								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}

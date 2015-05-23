@@ -61,11 +61,11 @@ public class LastManStanding implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        if (type == 6 || type == 7) {
+       /* if (type == 6 || type == 7) {
             int[] j = {2213};
             return j;
-        }
-        return null;
+        }    */
+        return new int[0];
     }
 
     @Override

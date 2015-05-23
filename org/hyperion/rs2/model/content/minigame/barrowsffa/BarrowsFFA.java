@@ -1,9 +1,5 @@
-package org.hyperion.rs2.model.content.minigame;
+package org.hyperion.rs2.model.content.minigame.barrowsffa;
 
-import jdk.internal.dynalink.linker.GuardedInvocation;
-import jdk.internal.dynalink.linker.LinkRequest;
-import jdk.nashorn.internal.runtime.*;
-import jdk.nashorn.internal.runtime.linker.InvokeByName;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
@@ -12,6 +8,7 @@ import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.IOException;
@@ -30,15 +27,16 @@ import java.util.stream.Stream;
  * Time: 3:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BarrowsFFA extends SpecialArea{
+public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     private static final int HEIGHT_LEVEL = 1600;
     public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
     private static final Location GAME_DEFAULT_LOCATION = Location.create(1889, 4958, HEIGHT_LEVEL + 2); //default location for the game
     private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
+    public static final int DEATH_CHECK_ID = 40000;
 
-    private static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
+    public static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
 
     private static final int INTERFACE_ID = 21119;
 
@@ -55,46 +53,11 @@ public class BarrowsFFA extends SpecialArea{
                 process();
             }
         });
-    }
-
-    public enum BarrowSet {
-        DHAROK(DIALOGUE_ID + 1, new Integer(4716), new Integer(4718), new Integer(4720), new Integer(4722)),
-        KARIL(DIALOGUE_ID + 2, new Integer(4732), new Integer(4734), new Integer(4736), new Integer(4738)),
-        AHRIM(DIALOGUE_ID + 3, new Integer(4714), new Integer(4712), new Integer(4710), new Integer(4708)),
-        GUTHAN(DIALOGUE_ID + 5, new Integer(4724), new Integer(4726), new Integer(4728), new Integer(4730)),
-        TORAGS(DIALOGUE_ID + 6, new Integer(4745), new Integer(4747), new Integer(4749), new Integer(4751)),
-        VERACS(DIALOGUE_ID + 7, new Integer(4753), new Integer(4755), new Integer(4757), new Integer(4759));
-
-        public static final BarrowSet[] SETS = values().clone();
-
-        private final Item[] items;
-        private final int dialogueId; //dialogue id for picking the set
-
-        private BarrowSet(int dialogueAction ,final Integer... ids) {
-//            if(ids.length != 4)
-//                throw new IllegalArgumentException("Length of ids is invalid");
-            this.items = Stream.of(ids).map(Item::create).toArray(Item[]::new);
-            this.dialogueId = dialogueAction;
-        }
-
-        public void equip(final Player player) {
-            int i = 0;
-            for(; i < 4; i++) {
-                player.getEquipment().set(Equipment.getType(items[i]).getSlot(), Item.create(items[i].getId()));
-            }
-            for(; i < items.length; i++)
-                player.getInventory().add(Item.create(items[i].getId()));
-        }
-
-        public static BarrowSet forDialogue(final int id) {
-            for(final BarrowSet set : SETS)
-                if(set.dialogueId == id)
-                    return set;
-            return null;
-        }
 
 
     }
+
+
     //handles timers, interfaces & shit
     public void process() {
         if(gameTime > 0) {
@@ -106,7 +69,8 @@ public class BarrowsFFA extends SpecialArea{
             for(Player player : game) {
                 sendInterfaceString(player, 0,"Players Left: "+game.size());
                 sendInterfaceString(player, 1, "Time left: "+toMinutes(gameTime));
-                sendInterfaceString(player, 2, "");
+                sendInterfaceString(player, 2, "Kills: "+player.getBarrowsFFA().getKills());
+                sendInterfaceString(player, 3, "Lives: "+player.getBarrowsFFA().getLives());
             }
             for(Player player : lobby) {
                 sendInterfaceString(player, 0, "Game in progress");
@@ -115,7 +79,11 @@ public class BarrowsFFA extends SpecialArea{
             if(gameTime == 0)
                 endGame();
         } else if(--nextGameTime == 0) {
-            startGame();
+            if(lobby.size() < 3) {
+                lobby.forEach(p -> p.sendMessage("You need at least 4 players to start a game"));
+                nextGameTime = 30;
+            } else
+                startGame();
         }
     }
 
@@ -124,7 +92,7 @@ public class BarrowsFFA extends SpecialArea{
         lobby.clear();
         for(final Player player : game) {
             enter(player);
-            final Object set = player.getExtraData().get("barrowset");
+            final Object set = player.getBarrowsFFA().getBarrowSet();
             if(set instanceof BarrowSet)
                 ((BarrowSet)set).equip(player);
         }
@@ -204,8 +172,9 @@ public class BarrowsFFA extends SpecialArea{
             player.getInventory().clear();
             if(lobby.remove(player))
                 player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
-            else if(game.remove(player) && lobby.add(player))
-                player.setTeleportTarget(LOBBY);
+            else if(game.remove(player) && lobby.add(player)) {
+                player.setTeleportTarget(LOBBY, false);
+            }
         }
     }
 
@@ -226,6 +195,15 @@ public class BarrowsFFA extends SpecialArea{
     //used to enter lobby
     //@Override  Override commented as it doesn't implement contentTemplate for safety reasons
     public boolean objectClickOne(Player player, int id, int x, int y) {
+
+        if(id == DEATH_CHECK_ID) {
+
+            final Player killer = (Player) World.getWorld().getPlayers().get(x);
+
+            deathCheck(player, killer);
+            return true;
+
+        }
         if(id == PORTAL_ENTER_OBJECT.getId()) {
             DialogueManager.openDialogue(player, DIALOGUE_ID); // open set selection
         }
@@ -269,7 +247,7 @@ public class BarrowsFFA extends SpecialArea{
                 return true;
             default:
                 final BarrowSet set = BarrowSet.forDialogue(dialogueId);
-                player.getExtraData().put("barrowset", set); //to select their barrows set
+                player.getBarrowsFFA().setBarrowsSet(set); //to select their barrows set
 
                 lobby.add(player);
                 player.setTeleportTarget(LOBBY); // teleport to default lobby location and add them to lobby - after they pick their barrows set
@@ -291,6 +269,19 @@ public class BarrowsFFA extends SpecialArea{
     public static void spawnObject(final List manager) {
         manager.add(
                 new GameObject(PORTAL_ENTER_OBJECT, PORTAL_DEFAULT_LOCATION.transform(0, -1, 0), 10, /*rotation*/ 0, false)); //make a portal 1 space away from people will teleport
+    }
+
+
+    public void deathCheck(final Player player, final Player killer) {
+        boolean rampage = killer.getBarrowsFFA().kill(player);
+        boolean die = player.getBarrowsFFA().die(killer);
+
+        if(die)
+            exit(player);
+        if(rampage) {
+            game.forEach(p -> p.sendf("%s is on a rampage of %d kills", killer.getName(), killer.getBarrowsFFA().getKillStreak()));
+        }
+
     }
 
 }

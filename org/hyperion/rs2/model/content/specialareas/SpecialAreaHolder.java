@@ -40,4 +40,10 @@ public class SpecialAreaHolder {
         return map.values();
     }
 
+    public static void put(final String command, final SpecialArea area, boolean cmd) {
+        map.put(command, area);
+        if(cmd)
+            CommandHandler.submit(area.command(command));
+    }
+
 }

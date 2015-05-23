@@ -7,6 +7,7 @@ import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.map.LandscapeListener;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
+import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
@@ -135,6 +136,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
             }
 
             //globalObjects.add(new GameObject(GameObjectDefinition.forId(-1), create(3795, 2844, 0), 10, 0));
+
+            BarrowsFFA.spawnObject(globalObjects);
 
             globalObjects.add(OSPK.loadObjects());
             OSPK.loadObjects(); // portal

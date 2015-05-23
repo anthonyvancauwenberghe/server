@@ -33,6 +33,7 @@ import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
+import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
 import org.hyperion.rs2.model.content.misc.ItemDropping;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Mail;
@@ -112,6 +113,10 @@ public class Player extends Entity implements Persistable, Cloneable{
     private final GrandExchange grandExchange = new GrandExchange(this);
 
     public GrandExchange getGrandExchange() {return grandExchange;}
+
+    private final BarrowsFFAHolder barrowsFFA = new BarrowsFFAHolder();
+
+    public BarrowsFFAHolder getBarrowsFFA() { return barrowsFFA; }
 
     public int pin = -1;
     public String lastIp;

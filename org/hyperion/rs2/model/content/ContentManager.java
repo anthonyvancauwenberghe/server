@@ -6,6 +6,8 @@ import java.util.Map;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.util.ClassUtils;
@@ -34,16 +36,19 @@ public class ContentManager {
 		try {
 			Class[] classes = ClassUtils.getClasses("org.hyperion.rs2.model.content");
 			for(Class cls : classes) {
-				if(ContentTemplate.class.isAssignableFrom(cls) && cls != ContentTemplate.class) {
+				if(ContentTemplate.class.isAssignableFrom(cls) && cls != ContentTemplate.class && !cls.isEnum()) {
 					try {
 						ContentTemplate content = (ContentTemplate) cls.newInstance();
                         if(Interface.class.isAssignableFrom(cls)) {
                             InterfaceManager.addGlobal((Interface)content);
                         }
+                        if(SpecialArea.class.isAssignableFrom(cls))
+                            SpecialAreaHolder.put(cls.getSimpleName(), (SpecialArea)content, false);
 						if(cls.getName().contains("prayer"))
 							prayer = content;
 						if(cls.getName().contains("zombieminigame"))
 							zombieMinigame = (ZombieMinigame)content;
+
 						content.init();
 						for(int i = 0; i < packetHandlers; i++) {
 							int[] j = content.getValues(i);

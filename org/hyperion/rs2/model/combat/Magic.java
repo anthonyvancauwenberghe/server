@@ -303,9 +303,6 @@ public class Magic {
 			Damage = maxDamg;
         if(attacker.getPlayer().getPrayers().isEnabled(27))
             Damage *= 1.08;
-		if(Misc.random(AtkBonus) < Misc.random(DefBonus)) {
-			splash = true;
-		}
             if(attacker.getPlayer().getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
                 Damage = (int)attacker.getPlayer().getDungoneering().perks.boost(Constants.MAGE, false, Damage);
 

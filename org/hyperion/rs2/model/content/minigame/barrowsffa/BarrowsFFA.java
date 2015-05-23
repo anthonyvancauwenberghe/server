@@ -231,6 +231,11 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         if(id == DEATH_CHECK_ID) {
 
             final Player killer = (Player) World.getWorld().getPlayers().get(x);
+            System.out.println("Killer: "+killer.getName());
+            boolean one = game.contains(killer);
+            boolean two = game.contains(player);
+
+            System.out.println(one + " | "+two);
             if(game.contains(killer) && game.contains(player)) {
                 deathCheck(player, killer);
                 return true;

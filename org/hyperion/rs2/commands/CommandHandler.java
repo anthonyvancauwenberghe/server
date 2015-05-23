@@ -54,7 +54,6 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.minigame.BarrowsFFA;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.content.misc.PotionDecanting;

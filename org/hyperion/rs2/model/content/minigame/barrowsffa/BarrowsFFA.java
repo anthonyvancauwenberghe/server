@@ -36,6 +36,8 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     private static final Location GAME_DEFAULT_LOCATION = Location.create(1889, 4958, HEIGHT_LEVEL + 2); //default location for the game
     private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
+
+    private static final int EXIT_LOBBY_ID = 8883;
     public static final int DEATH_CHECK_ID = 40000;
 
     public static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
@@ -74,23 +76,21 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 sendInterfaceString(player, 2, "Kills: "+player.getBarrowsFFA().getKills());
                 sendInterfaceString(player, 3, "Lives: "+player.getBarrowsFFA().getLives());
             }
-            for(Player player : lobby) {
-                sendInterfaceString(player, 0, "Game in progress");
-                sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
-            }
+
             if(gameTime == 0)
                 endGame();
         } else if(--nextGameTime == 0) {
-            for(Player player : lobby) {
-                sendInterfaceString(player, 0, "Game in progress");
-                sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
-                sendInterfaceString(player, 2, "Set: "+player.getBarrowsFFA().getBarrowSet().toString());
-            }
             if(lobby.size() < 3) {
                 lobby.forEach(p -> p.sendMessage("You need at least 4 players to start a game"));
                 nextGameTime = 30;
             } else
                 startGame();
+        }
+
+        for(Player player : lobby) {
+            sendInterfaceString(player, 0, "Game in progress");
+            sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
+            sendInterfaceString(player, 2, "Set: "+player.getBarrowsFFA().getBarrowSet().toString());
         }
     }
 
@@ -204,7 +204,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     public boolean objectClickOne(Player player, int id, int x, int y) {
 
 
-        if(ContentEntity.getTotalAmountOfEquipmentItems(player) != 0 && ContentEntity.getTotalAmountOfItems(player) != 0) {
+        if(ContentEntity.getTotalAmountOfEquipmentItems(player) != 0 || ContentEntity.getTotalAmountOfItems(player) != 0) {
             player.sendMessage("Please bank all items to join!");
             return false;
         }
@@ -219,6 +219,17 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
         if(id == PORTAL_ENTER_OBJECT.getId()) {
             DialogueManager.openDialogue(player, DIALOGUE_ID); // open set selection
+        }
+
+        if(id == EXIT_LOBBY_ID) {
+            player.face(Location.create(x, y, HEIGHT_LEVEL));
+            player.playAnimation(Animation.create(7376));
+            World.getWorld().submit(new Event(1000) {
+                public void execute() {
+                    exit(player);
+                    this.stop();
+                }
+            });
         }
 
         return false;
@@ -261,7 +272,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             default:
 
 
-                if(ContentEntity.getTotalAmountOfEquipmentItems(player) != 0 && ContentEntity.getTotalAmountOfItems(player) != 0) {
+                if(ContentEntity.getTotalAmountOfEquipmentItems(player) != 0 || ContentEntity.getTotalAmountOfItems(player) != 0) {
                     player.sendMessage("Please bank all items to join!");
                     return false;
                 }

@@ -87,7 +87,11 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             if(gameTime == 0)
                 endGame();
         } else if(--nextGameTime <= 0) {
-            if(lobby.size() < 2) {
+            if(true) {
+                lobby.forEach(p -> p.sendMessage("This game is in the ALPHA stage. It is not yet available, sorry!"));
+                nextGameTime = 30;
+
+            } else if(lobby.size() < 2) {
                 lobby.forEach(p -> p.sendMessage("You need at least 4 players to start a game"));
                 nextGameTime = 30;
             } else
@@ -98,7 +102,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             sendInterfaceString(player, 0, "@cya@Players Waiting: @gre@"+game.size());
             sendInterfaceString(player, 1, "@cya@Estimated Time Left: @red@" + toMinutes(gameTime + nextGameTime));
             sendInterfaceString(player, 2, "@cya@Set: @or2@"+player.getBarrowsFFA().getBarrowSet().toString());
-            sendInterfaceString(player, 3, ""+player.getPoints().getMinigamePoints());
+            sendInterfaceString(player, 3, "");
         }
     }
 
@@ -124,6 +128,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             final Player winner = game.get(0);
             exit(winner);
             winner.getPoints().increaseMinigamePoints(2);
+            gameTime = 0;
         } else {
             for(final Player player : game)
                 exit(player);

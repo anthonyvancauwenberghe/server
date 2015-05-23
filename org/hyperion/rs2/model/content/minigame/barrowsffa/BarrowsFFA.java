@@ -94,10 +94,10 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
 
         for(Player player : lobby) {
-            sendInterfaceString(player, 0, "Players Waiting: "+game.size());
-            sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
-            sendInterfaceString(player, 2, "Set: "+player.getBarrowsFFA().getBarrowSet().toString());
-            sendInterfaceString(player, 3, "Minigame Points: "+player.getPoints().getMinigamePoints());
+            sendInterfaceString(player, 0, "@blu@Players Waiting: @gre@"+game.size());
+            sendInterfaceString(player, 1, "@blu@Estimated Time Left: @red@" + toMinutes(gameTime + nextGameTime));
+            sendInterfaceString(player, 2, "@blu@Set: @or2@"+player.getBarrowsFFA().getBarrowSet().toString());
+            sendInterfaceString(player, 3, ""+player.getPoints().getMinigamePoints());
         }
     }
 

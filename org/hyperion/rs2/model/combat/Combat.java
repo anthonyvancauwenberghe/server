@@ -1044,17 +1044,6 @@ public class Combat {
             return -1;
     }
 
-    public static int getWildLevel2(int absX, int absY, int absZ) {
-        if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-            return (((absY - 3520) / 8) + 3);
-        else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
-            return 57;
-        else if(OSPK.inArea(absX, absY) || DangerousPK.inDangerousPK(absX, absY))
-            return 12;
-        else
-            return -1;
-    }
-
 	public static boolean isInMulti(CombatEntity combatEntity) {
 		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
 				&& combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607)

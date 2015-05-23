@@ -319,6 +319,8 @@ public class WalkingQueue {
 			/*if(FFARandom.inFFA(player)){
 				FFARandom.check(player);
 			}*/
+            final int wildLevel = Combat.getWildLevel(player
+                    .getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
             if(! player.duelOption) {
 				if(player.getLocation().inDuel()) {
 					player.getActionSender()
@@ -336,7 +338,7 @@ public class WalkingQueue {
 			}
 			if(! player.attackOption) {
 
-				if(Location.inAttackableArea(player)) {
+				if(wildLevel > 0 || Location.inAttackableArea(player)) {
 					player.getActionSender().sendPlayerOption("Attack", 2, 0);
 					player.setCanSpawnSet(false);
 					debug("Sending attk cuz !atkop");
@@ -358,19 +360,15 @@ public class WalkingQueue {
 				player.isInMutli = false;
 				player.getActionSender().sendMultiZone(0);
 			}
-            for(final SpecialArea area : SpecialAreaHolder.getAreas()) {
-                if(area.isPkArea() && area.inArea(player)) {
-                    player.wildernessLevel = area.getPkLevel();
-                    if(area.wildInterface())
-                        player.getActionSender().sendWildLevel(player.wildernessLevel);
-                }
-
-            }
-            final int wildLevel = Combat.getWildLevel2(player
-                    .getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 			if(player.wildernessLevel != wildLevel && !OSPK.inArea(player) && !DangerousPK.inDangerousPK(player)) {
 					player.wildernessLevel = wildLevel;
-				player.getActionSender().sendWildLevel(player.wildernessLevel);
+                boolean special = false;
+                for(SpecialArea area : SpecialAreaHolder.getAreas()) {
+                    if(!area.wildInterface() && area.inArea(player))
+                        special = true;
+                }
+                if(!special)
+				    player.getActionSender().sendWildLevel(player.wildernessLevel);
 
 			} 
 			if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {

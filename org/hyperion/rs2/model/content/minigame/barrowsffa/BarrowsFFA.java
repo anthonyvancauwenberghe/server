@@ -70,6 +70,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     //handles timers, interfaces & shit
     public void process() {
+
         if(gameTime > 0) {
             gameTime--;
             if(game.size() == 1) {

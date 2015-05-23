@@ -34,12 +34,13 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     private static final int HEIGHT_LEVEL = 1600;
     public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
-    private static final Location GAME_DEFAULT_LOCATION = Location.create(1895, 4930, HEIGHT_LEVEL + 2); //default location for the game
-    private static final Location LOBBY = Location.create(1867, 4941, 2); // default location to enter lobby
+    private static final Location GAME_DEFAULT_LOCATION = Location.create(1867, 4941, HEIGHT_LEVEL + 2); //default location for the game
+    private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
 
     private static final int EXIT_LOBBY_ID = 8883;
     public static final int DEATH_CHECK_ID = 40000;
+
     public static final int LOGOUT_CHECK_ID = 40001;
 
     public static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
@@ -197,7 +198,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
    // @Override  Override commented as it doesn't implement contentTemplate for safety reasons
     public int[] getValues(int type) {
         if(type == ClickType.OBJECT_CLICK1)
-           return new int[]{PORTAL_ENTER_OBJECT.getId(), EXIT_LOBBY_ID, DEATH_CHECK_ID};
+           return new int[]{PORTAL_ENTER_OBJECT.getId(), EXIT_LOBBY_ID, DEATH_CHECK_ID, LOGOUT_CHECK_ID};
         if(type == ClickType.DIALOGUE_MANAGER) {
             int[] ret = new int[9];
             for(int i = 0 ; i < ret.length; i++)

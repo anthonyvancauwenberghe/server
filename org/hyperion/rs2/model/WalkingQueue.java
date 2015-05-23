@@ -358,7 +358,15 @@ public class WalkingQueue {
 				player.isInMutli = false;
 				player.getActionSender().sendMultiZone(0);
 			}
-            final int wildLevel = Combat.getWildLevel(player
+            for(final SpecialArea area : SpecialAreaHolder.getAreas()) {
+                if(area.isPkArea() && area.inArea(player)) {
+                    player.wildernessLevel = area.getPkLevel();
+                    if(area.wildInterface())
+                        player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+
+            }
+            final int wildLevel = Combat.getWildLevel2(player
                     .getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 			if(player.wildernessLevel != wildLevel && !OSPK.inArea(player) && !DangerousPK.inDangerousPK(player)) {
 					player.wildernessLevel = wildLevel;

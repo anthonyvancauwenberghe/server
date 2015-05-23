@@ -42,7 +42,7 @@ public class ContentManager {
                         if(Interface.class.isAssignableFrom(cls)) {
                             InterfaceManager.addGlobal((Interface)content);
                         }
-                        if(SpecialArea.class.isAssignableFrom(cls))
+                        if(content instanceof SpecialArea)
                             SpecialAreaHolder.put(cls.getSimpleName(), (SpecialArea)content, false);
 						if(cls.getName().contains("prayer"))
 							prayer = content;

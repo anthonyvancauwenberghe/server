@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,12 +34,13 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     private static final int HEIGHT_LEVEL = 1600;
     public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
-    private static final Location GAME_DEFAULT_LOCATION = Location.create(1889, 4958, HEIGHT_LEVEL + 2); //default location for the game
-    private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
+    private static final Location GAME_DEFAULT_LOCATION = Location.create(1895, 4930, HEIGHT_LEVEL + 2); //default location for the game
+    private static final Location LOBBY = Location.create(1867, 4941, 2); // default location to enter lobby
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
 
     private static final int EXIT_LOBBY_ID = 8883;
     public static final int DEATH_CHECK_ID = 40000;
+    public static final int LOGOUT_CHECK_ID = 40001;
 
     public static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
 
@@ -140,8 +142,13 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     }
 
     @Override
+    public boolean wildInterface() {
+        return false;
+    }
+
+    @Override
     public Location getDefaultLocation() {
-        return GAME_DEFAULT_LOCATION;  //To change body of implemented methods use File | Settings | File Templates.
+        return GAME_DEFAULT_LOCATION.transform(Misc.random(10), Misc.random(10), 0);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -149,12 +156,12 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         final int x = player.getLocation().getX();
         final int y = player.getLocation().getY();
         final int z = player.getLocation().getZ();
-        return inArea(x, y, z);  //borders, not implemented
+        return inArea(x, y, z) && game.contains(player);  //borders, not implemented
     }
 
     @Override
     public boolean inArea(int x, int y, int z) {
-        return z == HEIGHT_LEVEL && (x > y);
+        return z == HEIGHT_LEVEL && (x < 1905 && y < 4965 && y > 4940 && x < 1855);
     }
 
     @Override
@@ -190,7 +197,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
    // @Override  Override commented as it doesn't implement contentTemplate for safety reasons
     public int[] getValues(int type) {
         if(type == ClickType.OBJECT_CLICK1)
-           return new int[]{PORTAL_ENTER_OBJECT.getId()};
+           return new int[]{PORTAL_ENTER_OBJECT.getId(), EXIT_LOBBY_ID, DEATH_CHECK_ID};
         if(type == ClickType.DIALOGUE_MANAGER) {
             int[] ret = new int[9];
             for(int i = 0 ; i < ret.length; i++)
@@ -232,6 +239,9 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 }
             });
         }
+
+        if(id == LOGOUT_CHECK_ID)
+            exit(player);
 
         return false;
     }

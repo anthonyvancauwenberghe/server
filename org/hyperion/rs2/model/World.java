@@ -46,6 +46,7 @@ import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
+import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
@@ -933,6 +934,8 @@ public class World {
         players.remove(player);
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
+
+        contentManager.handlePacket(6, player, BarrowsFFA.LOGOUT_CHECK_ID);
 
         // logger.info("Unregistered player : " + player + " [online=" +
         // players.size() + "]");

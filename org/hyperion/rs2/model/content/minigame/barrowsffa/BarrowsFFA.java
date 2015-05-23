@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.net.ActionSender;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
@@ -46,15 +47,15 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     private int gameTime, nextGameTime;
 
-    {
+
+    @Override
+    public void init() throws FileNotFoundException {
         World.getWorld().submit(new Event(1000) {
             @Override
             public void execute() throws IOException {
                 process();
             }
         });
-
-
     }
 
 

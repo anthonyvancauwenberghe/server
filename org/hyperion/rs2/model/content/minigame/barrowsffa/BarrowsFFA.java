@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
@@ -80,6 +81,11 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             if(gameTime == 0)
                 endGame();
         } else if(--nextGameTime == 0) {
+            for(Player player : lobby) {
+                sendInterfaceString(player, 0, "Game in progress");
+                sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
+                sendInterfaceString(player, 2, "Set: "+player.getBarrowsFFA().getBarrowSet().toString());
+            }
             if(lobby.size() < 3) {
                 lobby.forEach(p -> p.sendMessage("You need at least 4 players to start a game"));
                 nextGameTime = 30;
@@ -197,6 +203,12 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     //@Override  Override commented as it doesn't implement contentTemplate for safety reasons
     public boolean objectClickOne(Player player, int id, int x, int y) {
 
+
+        if(ContentEntity.getTotalAmountOfEquipmentItems(player) != 0 && ContentEntity.getTotalAmountOfItems(player) != 0) {
+            player.sendMessage("Please bank all items to join!");
+            return false;
+        }
+
         if(id == DEATH_CHECK_ID) {
 
             final Player killer = (Player) World.getWorld().getPlayers().get(x);
@@ -247,6 +259,13 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 DialogueManager.openDialogue(player, DIALOGUE_ID);
                 return true;
             default:
+
+
+                if(ContentEntity.getTotalAmountOfEquipmentItems(player) != 0 && ContentEntity.getTotalAmountOfItems(player) != 0) {
+                    player.sendMessage("Please bank all items to join!");
+                    return false;
+                }
+
                 final BarrowSet set = BarrowSet.forDialogue(dialogueId);
                 player.getBarrowsFFA().setBarrowsSet(set); //to select their barrows set
 

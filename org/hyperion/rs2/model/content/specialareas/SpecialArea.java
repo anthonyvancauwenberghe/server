@@ -54,7 +54,7 @@ public abstract class SpecialArea {
     public abstract Location getDefaultLocation();
 
     public boolean inArea(final Player player) { return inArea(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());}
-    public boolean wildInterface() { return true; }
+    public boolean wildInterface() { return false; }
     public abstract boolean inArea(final int x, final int y, final int z);
     public abstract String canEnter(final Player player);
 }

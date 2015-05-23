@@ -94,7 +94,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
 
         for(Player player : lobby) {
-            sendInterfaceString(player, 0, gameTime > 0 ? "Game In Progress..." : "Empty Room");
+            sendInterfaceString(player, 0, "Players Waiting: "+game.size());
             sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
             sendInterfaceString(player, 2, "Set: "+player.getBarrowsFFA().getBarrowSet().toString());
             sendInterfaceString(player, 3, "Minigame Points: "+player.getPoints().getMinigamePoints());
@@ -197,6 +197,8 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 player.setTeleportTarget(LOBBY, false);
                 player.getBarrowsFFA().destroy();
             }
+
+            player.getActionSender().showInterfaceWalkable(-1);
         }
     }
 
@@ -313,7 +315,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     }
 
     public static String toMinutes(int i) {
-        return String.format("%d:%s%d", i/60, i%60 > 10 ? "" : "0", i%60);
+        return String.format("%d:%s%d", i/60, i%60 >= 10 ? "" : "0", i%60);
     }
 
     public static void spawnObject(final List manager) {

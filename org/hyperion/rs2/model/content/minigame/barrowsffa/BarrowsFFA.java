@@ -80,7 +80,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
             if(gameTime == 0)
                 endGame();
         } else if(--nextGameTime <= 0) {
-            if(lobby.size() < 3) {
+            if(lobby.size() < 2) {
                 lobby.forEach(p -> p.sendMessage("You need at least 4 players to start a game"));
                 nextGameTime = 30;
             } else
@@ -88,9 +88,10 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
 
         for(Player player : lobby) {
-            sendInterfaceString(player, 0, "Game in progress");
+            sendInterfaceString(player, 0, gameTime > 0 ? "Game In Progress..." : "Empty Room");
             sendInterfaceString(player, 1, "Estimated Time Left: " + toMinutes(gameTime + nextGameTime));
             sendInterfaceString(player, 2, "Set: "+player.getBarrowsFFA().getBarrowSet().toString());
+            sendInterfaceString(player, 3, "Minigame Points: "+player.getPoints().getMinigamePoints());
         }
     }
 
@@ -282,9 +283,9 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
                 lobby.add(player);
                 player.setTeleportTarget(LOBBY); // teleport to default lobby location and add them to lobby - after they pick their barrows set
-                break;
+                player.getActionSender().removeChatboxInterface();
+                return true;
         }
-        return false;
     }
 
     public void sendInterfaceString(Player player, int i, String s) {

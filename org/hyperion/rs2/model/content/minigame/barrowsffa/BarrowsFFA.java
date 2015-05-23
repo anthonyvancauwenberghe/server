@@ -45,7 +45,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     public static final int LOGOUT_CHECK_ID = 40001;
 
-    public static final int DIALOGUE_ID = 0; // dialogue ids for barrows jank
+    public static final int DIALOGUE_ID = 4500; // dialogue ids for barrows jank
 
     private static final int INTERFACE_ID = 21119;
 

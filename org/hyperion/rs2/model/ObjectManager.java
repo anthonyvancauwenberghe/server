@@ -137,7 +137,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
             //globalObjects.add(new GameObject(GameObjectDefinition.forId(-1), create(3795, 2844, 0), 10, 0));
 
-            BarrowsFFA.spawnObject(globalObjects);
+            //BarrowsFFA.spawnObject(globalObjects);
 
             globalObjects.add(OSPK.loadObjects());
             OSPK.loadObjects(); // portal

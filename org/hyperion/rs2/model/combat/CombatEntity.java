@@ -62,7 +62,7 @@ public class CombatEntity {
         return false;
 	}
 	public boolean canBeFrozen() {
-		return !(System.currentTimeMillis() < (freezeTimer + 3000));
+		return !(System.currentTimeMillis() < (freezeTimer + 3000L));
 	}
 	public void setFreezeTimer(long time) {
 		freezeTimer = System.currentTimeMillis() + time;

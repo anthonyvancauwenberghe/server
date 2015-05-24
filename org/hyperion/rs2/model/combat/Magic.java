@@ -201,7 +201,7 @@ public class Magic {
 		}
             if(attacker.getEntity() instanceof Player) {
             if (CombatAssistant.wearingFarseer(attacker.getPlayer())) {
-                AtkBonus *= 1.33;
+                AtkBonus *= 1.13;
                 maxDamg *= 1.03;
             }
         }
@@ -296,7 +296,7 @@ public class Magic {
 			}
 		}
 		int deltaBonus = AtkBonus - DefBonus;
-		int toAdd = Misc.random(deltaBonus / 10);
+		int toAdd = Misc.random(deltaBonus / 3);
 		Damage += toAdd;
 		attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
 		if(Damage > maxDamg)

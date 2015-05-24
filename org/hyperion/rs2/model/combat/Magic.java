@@ -296,7 +296,7 @@ public class Magic {
 			}
 		}
 		int deltaBonus = AtkBonus - DefBonus;
-		int toAdd = Misc.random(deltaBonus / 3);
+		int toAdd = Misc.random(deltaBonus / 2);
 		Damage += toAdd;
 		attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
 		if(Damage > maxDamg)

@@ -296,7 +296,7 @@ public class Magic {
 			}
 		}
 		int deltaBonus = AtkBonus - DefBonus;
-		int toAdd = Misc.random(deltaBonus / 2);
+		int toAdd = Misc.random(deltaBonus / 3);
 		Damage += toAdd;
 		attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
 		if(Damage > maxDamg)
@@ -324,7 +324,7 @@ public class Magic {
 
 		}
 
-        if(Misc.random(AtkBonus) < Misc.random(DefBonus) && Damage < spell.getMaxHit()/4)
+        if(Misc.random(AtkBonus) < Misc.random(DefBonus) && Damage < spell.getMaxHit()/3)
             splash = true;
 		if(spell.getMaxHit() > 0 && Damage <= 0) {
 			splash = true;

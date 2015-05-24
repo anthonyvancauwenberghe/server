@@ -131,10 +131,10 @@ public class Combat {
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
-			if(distance > 10) {
+			if(distance > 11) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
-				return true;// Too far.
+                return true;
 			} else if(! WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
 				if(opponent instanceof Player)
 					combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
@@ -251,15 +251,19 @@ public class Combat {
 					combatEntity.setAutoCastId(0);
 					return false;
 				}
-				if(distance > 10) {
+				if(distance > 11 || ! WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
 					if(opponent instanceof Player)
 						combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(), 1);
 					return true;// too far away
 				} else {
+                    if(distance > 8) {
+                            if(opponent instanceof Player) {
+                                combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
+                            }else
+                                follow(combatEntity, combatEntity.getOpponent());
+                    }
 					combatEntity.getPlayer().getWalkingQueue().reset();
 				}
-				if(! WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation()))
-					return true;
 				// timer
 				if(combatEntity.predictedAtk > System.currentTimeMillis()) {
 					return true;

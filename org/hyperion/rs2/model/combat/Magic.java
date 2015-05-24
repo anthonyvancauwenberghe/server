@@ -323,6 +323,9 @@ public class Magic {
 			}
 
 		}
+
+        if(Misc.random(AtkBonus) < Misc.random(DefBonus) && Damage < spell.getMaxHit()/4)
+            splash = true;
 		if(spell.getMaxHit() > 0 && Damage <= 0) {
 			splash = true;
 			Damage = 0;

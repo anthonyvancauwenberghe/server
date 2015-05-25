@@ -40,7 +40,7 @@ public class SaveIP extends SaveString {
 
 	@Override
 	public String getValue(Player player) {
-        if(!player.getExtraData().getBoolean("isdrasticallydiff"))
+        if(!player.getExtraData().getBoolean("cantdoshit"))
 		    return player.getFullIP();
         else
             return player.getExtraData().getString("oldfullip");

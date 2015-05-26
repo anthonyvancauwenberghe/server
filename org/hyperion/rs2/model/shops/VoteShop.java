@@ -16,30 +16,40 @@ public class VoteShop extends PointsShop {
 	@Override
 	public int getPrice(int itemId) {
 		switch(itemId) {
+            case 2431:
+                return 3;
+            case 11724:
+            case 11726:
+                return 20;
+            case 13867:
+                return 15;
 			case MysteryBox.ID:
 			case 10025:
-				return 25;
+				return 20;
+            case 19669:
+                return 18;
 			case 17237:
-			case 17017:
 			case 16755:
 			case 18747:
 			case 16865:
 				return 20;
 			case 16931:
+            case 15020:
+            case 15019:
+            case 15018:
 				return 20;
-			case 17171:
 			case 19780:
-				return 50;
+            case 17017:
+                return 50;
 			case 15220: // Imbued rings
-			case 15020:
-			case 15019:
-			case 15018:
+
 			case 19747:
 			case 13101:
 				return 30;
 			case 15600:
 			case 15606:
-			case 15612:
+            case 17171:
+            case 15612:
 			case 15618:
 			case 15602:
 			case 15608:
@@ -76,6 +86,7 @@ public class VoteShop extends PointsShop {
 			case 15044:
 				return 10;
 			case 14876:
+                return 3;
 			case 2890:
 				return 8;
 		}

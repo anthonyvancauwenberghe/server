@@ -130,30 +130,31 @@ public class DeathDrops {
 			switch(item.getId()) {
                 case 13889:
                 case 13895:
-                    return Misc.random(4) == 0;
-			case 20000:
-			case 19713://nex helms
-			case 19716:
-			case 19719:
-			case 19817:
-			case 19816: //Glacor boots
-			case 19815:
-			case 16887: // sagittarian shortbow
-			case 16337: // sagittarian longbow
-			case 17193: //sagittarian gear
-			case 17339:
-			case 17215:
-			case 17317:
-			case 18349: //chaotic weapons
-			case 18351:
-			case 18353:
-			case 18355:
-			case 18357:
-            case 17660:
-				return Misc.random(9) == 0;
-			case 19780: //krazi korazi!
-				return true;
-				//return Misc.random(2) == 0;
+                case 19669:
+                    return Misc.random(3) == 0;
+                case 20000:
+                case 19713://nex helms
+                case 19716:
+                case 19719:
+                case 19817:
+                case 19816: //Glacor boots
+                case 19815:
+                case 16887: // sagittarian shortbow
+                case 16337: // sagittarian longbow
+                case 17193: //sagittarian gear
+                case 17339:
+                case 17215:
+                case 17317:
+                case 18349: //chaotic weapons
+                case 18351:
+                case 18353:
+                case 18355:
+                case 18357:
+                case 17660:
+                    return Misc.random(9) == 0;
+                case 19780: //krazi korazi!
+                    return true;
+                //return Misc.random(2) == 0;
 			}
 		}
 		return false;

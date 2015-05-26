@@ -240,7 +240,6 @@ public class PlayerPoints {
 				} else {
 					reward = (0.22 * eloRating + 14) / 7;
 				}
-                reward *= 2;
 				honorPoints += (int) (reward);
 
 				player.getActionSender().sendMessage("@blu@You have been awarded " + (int) reward + " honor points!");

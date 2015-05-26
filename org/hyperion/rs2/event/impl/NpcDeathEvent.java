@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.DonatorShop;
+import org.hyperion.rs2.model.shops.PvMStore;
 import org.hyperion.util.Misc;
 
 import java.util.HashMap;
@@ -71,6 +72,8 @@ public class NpcDeathEvent extends Event {
                 jet = World.getWorld().getPlayer("jet").debug ? World.getWorld().getPlayer("jet") : null;
             }
 
+            int tokens = 0;
+
             int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
             final Map<Player, Double> killers = new HashMap<>();
             for(final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
@@ -80,11 +83,11 @@ public class NpcDeathEvent extends Event {
                 final Player player = World.getWorld().getPlayer(killer.getKey().toLowerCase().trim());
                 if(player == null) continue;
                 double percent = killer.getValue()/((double)npc.maxHealth);
-                if(jet != null) jet.sendf("Percent was: "+percent);
                 if(percent > 0.10) {
                     killers.put(player, percent);
                     final int dp = (int)(reward.get().dp * percent);
                     final int pkp = (int)(reward.get().pkp * percent);
+                    tokens = (int)(reward.get().tokens * percent);
                     player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
                     double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.035 : 0.04;
@@ -187,8 +190,26 @@ public class NpcDeathEvent extends Event {
                         );
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                     }
+
+                    if(tokens <= 0)
+                        tokens = Misc.random(10) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
+                    if(tokens > 0) {
+                        GlobalItem globalItem5 = new GlobalItem(
+                                player, x, y, z,
+                                new Item(tokens, 1)
+                        );
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                    }
                 }
-                player.sendf("You now have @red@%d@bla@ %s kills", player.getNPCLogs().log(npc), npc.getDefinition().getName());
+                final int kills = player.getNPCLogs().log(npc);
+                player.sendf("You now have @red@%d@bla@ %s kills", kills, npc.getDefinition().getName());
+
+                if(kills%1000 == 0) {
+                    player.sendf("For this milestone, you recieve @blu@%d@bla@ PvM Tokens", kills);
+                    final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
+                    if(!player.getInventory().add(add))
+                        player.getBank().add(add);
+                }
                 //normal drops
                 if(!player.getDungoneering().inDungeon()) {
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
@@ -282,11 +303,11 @@ public class NpcDeathEvent extends Event {
     public static Optional<NPCKillReward> getReward(final int id) {
         switch(id) {
             case 8133:
-                return Optional.of(new NPCKillReward(50, 500));
+                return Optional.of(new NPCKillReward(50, 500, 10));
             case 8596:
-                return Optional.of(new NPCKillReward(40, 300));
+                return Optional.of(new NPCKillReward(40, 300, 8));
             case 50:
-                return Optional.of(new NPCKillReward(25, 200));
+                return Optional.of(new NPCKillReward(25, 200, 7));
         }
         return Optional.empty();
     }
@@ -295,10 +316,12 @@ public class NpcDeathEvent extends Event {
 
         private final int dp;
         private final int pkp;
+        private final int tokens;
 
-        public NPCKillReward(final int dp, final int pkp){
+        public NPCKillReward(final int dp, final int pkp, final int tokens){
             this.dp = dp;
             this.pkp = pkp;
+            this.tokens = tokens;
         }
 
 

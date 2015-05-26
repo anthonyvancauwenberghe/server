@@ -23,7 +23,7 @@ public class Bank {
     /**
      * The bank size.
      */
-    public static final int SIZE = 352;
+    public static final int SIZE = 452;
 
     /**
      * The player inventory interface.

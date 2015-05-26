@@ -657,9 +657,9 @@ public class ShopManager {
                 } else if(type.contains("emblem")) {
                     shop = new EmblemShop(shopId, shopName
                             , shopContainer);
-                } else if(type.contains("legendary")) {
-                    shop  = new PvMStore(shopId, shopName, shopContainer);
                 } else if(type.contains("pvm")) {
+                    shop  = new PvMStore(shopId, shopName, shopContainer);
+                } else if(type.contains("legendary")) {
                     shop  = new LegendaryStore(shopId, shopName, shopContainer);
                 } else if (type.contains("dungeon")) {
                     shop = new DungeoneeringStore(shopId, shopName, shopContainer);

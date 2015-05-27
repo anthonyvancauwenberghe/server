@@ -239,6 +239,7 @@ public class ItemSpawning {
 			case 11727:
 			case 12747:
 			case 12744:
+            case 12852:
 			case 1391:
             case 8195:
             case 5068:

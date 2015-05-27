@@ -73,10 +73,9 @@ public class TabbedContainer extends Container {
         if(slot == -1 && size() == Bank.SIZE)
             return false;
         int tabAmount = player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
-        if(tabAmount >= 348)
+        if(tabAmount >= 350)
             return false;
         if(slot == -1) {
-
             slot = player.getBankField().getOffset(bankItem.getTabIndex()) + tabAmount;
         }
         final Item[] old = items.clone();

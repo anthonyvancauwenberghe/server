@@ -196,7 +196,7 @@ public class NpcDeathEvent extends Event {
                     if(tokens > 0) {
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
-                                new Item(tokens, 1)
+                                new Item(PvMStore.TOKEN, tokens)
                         );
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                     }

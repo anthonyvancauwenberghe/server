@@ -97,6 +97,10 @@ public class Bank {
         if (!player.getBankField().isBanking()) {
             return;
         }
+        if(player.isInCombat() || player.getLocation().inPvPArea()) {
+            player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
+            return;
+        }
         int slot = player.getBank().getSlotById(id);
         if(slot < 0) {
             return;

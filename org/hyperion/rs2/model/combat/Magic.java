@@ -1109,6 +1109,10 @@ public class Magic {
             player.getActionSender().sendMessage("You cannot teleport in this minigame.");
             return;
         }
+        if(in13sArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+            player.getActionSender().sendMessage("You cannot teleport in this area.");
+            return;
+        }
 		if(player.isTeleBlocked()) {
 			player.getActionSender().sendMessage(
 					"You are currently teleblocked.");
@@ -1207,6 +1211,10 @@ public class Magic {
 		if(! force) {
             if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {
                 player.getActionSender().sendMessage("You cannot teleport in this minigame.");
+                return;
+            }
+            if(in13sArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                player.getActionSender().sendMessage("You cannot teleport in this area.");
                 return;
             }
 			if(DangerousPK.inDangerousPK(player)) {
@@ -1373,4 +1381,9 @@ public class Magic {
 		DialogueManager.openDialogue(p, 121);
 
 	}
+
+    public static final boolean in13sArea(int x, int y) {
+        return x <= 2983 && y <= 3615 && y >= 3605 && x >= 2970;
+    }
+
 }

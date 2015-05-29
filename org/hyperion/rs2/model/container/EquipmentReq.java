@@ -234,6 +234,12 @@ public class EquipmentReq {
 				equipReqData[1] = 78;
 			return equipReqData;
 		}
+
+        if(s.contains("celestial")) {
+            equipReqData[6] = 99;
+            if(!s.contains("staff"))
+                equipReqData[1] = 99;
+        }
         if(s.contains("sagittarian")) {
             equipReqData[4] = 99;
             equipReqData[1] = 99;

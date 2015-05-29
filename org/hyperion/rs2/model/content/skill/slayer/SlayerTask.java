@@ -102,9 +102,7 @@ public enum SlayerTask {
     CHAOS_DRUID(19,Difficulty.EASY, 1, 60,
             181),
     GIANT_BAT(20,Difficulty.EASY, 1, 35,
-            78),
-    GHOST(21, Difficulty.EASY, 1, 50,
-            103);
+            78);
 
     private final Difficulty difficulty;
     private final int slayerLevel, slayerXP, index;

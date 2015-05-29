@@ -52,6 +52,15 @@ public class ObjectClickHandler {
 			player.getActionQueue().addAction(new MiningAction(player, loc, node));
 		}
 		switch(id) {
+            case 2471:
+                if(player.isInCombat()) {
+                    player.getActionSender().sendMessage("You cannot enter while in combat!");
+                    break;
+                }
+                int absY = 3605;
+                absY += player.cE.getAbsY() > absY ? -1 : 1;
+                player.setTeleportTarget(Location.create(player.cE.getAbsX(), absY, player.cE.getAbsZ()));
+                break;
 		case 2470:
 			DialogueManager.openDialogue(player, 151);
 			break;

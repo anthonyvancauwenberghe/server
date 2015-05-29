@@ -402,10 +402,6 @@ public class Prayer implements ContentTemplate {
 		if(type == 6)
 			switch(id) {
 				case 61:
-					if(p.getKillCount() < 12) {
-						p.getActionSender().sendMessage("You need 12 kills to change your Prayerbook.");
-						return false;
-					}
 					changeCurses(p);
 					break;
 				case 410:

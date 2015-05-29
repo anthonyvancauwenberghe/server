@@ -19,6 +19,20 @@ public class TeleportCommands {
 				return true;
 			}
 		});
+        CommandHandler.submit(new Command("graves", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                Magic.teleport(player, Location.create(2975, 3745, 0), false);
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("wests", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                Magic.teleport(player, Location.create(2979, 3613, 0), false);
+                return true;
+            }
+        });
 		//arre's chillspot
 		CommandHandler.submit(new Command("arreplace", Rank.OWNER) {
 			@Override

@@ -119,6 +119,45 @@ public class EquipmentReq {
 		boolean isWep = type == 3;
 		equipReqData[0] = equipReqData[1] = equipReqData[2] = equipReqData[4] = equipReqData[6] = 0;
 		switch(ItemId) { //Dump Here All Item Reqs for common used Items!
+            case 16865: // This
+            case 16866: // is
+            case 16931: // all
+            case 16932: // a
+            case 17171: // bunch
+            case 17172: // of
+            case 17237: // celesital
+            case 17238: // gear
+            case 15796: // that
+            case 15807: // needs
+            case 15847: // 99
+            case 15902: // magic
+            case 16195: // and
+            case 16755: // 99
+            case 16756: // defense
+                equipReqData[1] = 99;
+                equipReqData[6] = 99;
+                break;
+            case 17017: //celestial staff
+            case 17018:
+            case 16173:
+                equipReqData[6] = 99;
+                break;
+            case 10550: // Ranger hat
+                equipReqData[1] = 40;
+                break;
+            case 19817: // Glaiven boots
+                equipReqData[1] = 85;
+                equipReqData[4] = 75;
+            case 19816: // Steadfast boots
+                equipReqData[1] = 85;
+                equipReqData[0] = 75;
+            case 19815: // Ragefire boots
+                equipReqData[1] = 85;
+                equipReqData[6] = 75;
+                break;
+            case 15486: // Staff of light
+                equipReqData[6] = 75;
+                break;
             case 5730:
                 equipReqData[0] = 60;
                 equipReqData[Skills.DUNGEONINEERING] = 80;

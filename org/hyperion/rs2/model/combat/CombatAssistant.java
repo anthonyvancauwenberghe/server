@@ -42,7 +42,7 @@ public class CombatAssistant {
 			return;
 		if(System.currentTimeMillis() - combatEntity.lastHit < 10000)
 			return;
-        if(combatEntity.getPlayer().getLastAttack().contains(combatEntity.getPlayer().getName()))
+        if(combatEntity.getPlayer().getLastAttack().contains(combatEntity.getOpponent().getPlayer().getName()))
             return;
 		if(! combatEntity.getPlayer().isSkulled()) {
 			combatEntity.getPlayer().setSkulled(true);

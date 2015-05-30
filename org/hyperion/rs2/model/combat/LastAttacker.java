@@ -35,11 +35,13 @@ public class LastAttacker {
 			return;
 		lastAttack = System.currentTimeMillis();
         latest = name;
-        lastAttackers.put(name, lastAttack + MIN_TIME);
+        lastAttackers.put(name.toLowerCase(), lastAttack + MIN_TIME);
     }
 
 	public boolean contains(final String name) {
-        return lastAttackers.getOrDefault(name.toLowerCase(), 0L) > System.currentTimeMillis();
+        final long time = lastAttackers.getOrDefault(name.toLowerCase(), 0L) - System.currentTimeMillis();
+        //System.out.println("Time: "+time);
+        return time > 0;
     }
 
 	public long timeSinceLastAttack() {

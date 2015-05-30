@@ -1228,10 +1228,6 @@ public class Magic {
                 player.getActionSender().sendMessage("You cannot teleport in this minigame.");
                 return;
             }
-            if(in13sArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                player.getActionSender().sendMessage("You cannot teleport in this area.");
-                return;
-            }
 			if(DangerousPK.inDangerousPK(player)) {
                 if(player.getPoints().getPkPoints() > 75) {
                     player.sendMessage("You loose 75 PKT upon teleporting!");

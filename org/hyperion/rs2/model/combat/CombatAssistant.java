@@ -40,7 +40,7 @@ public class CombatAssistant {
 			return;
 		if(Combat.getWildLevel(combatEntity.getAbsX(), combatEntity.getAbsY(), combatEntity.getAbsZ()) == - 1)
 			return;
-		if(System.currentTimeMillis() - combatEntity.lastHit < 20000)
+		if(System.currentTimeMillis() - combatEntity.lastHit < 10000)
 			return;
         if(combatEntity.getPlayer().getLastAttack().contains(combatEntity.getPlayer().getName()))
             return;

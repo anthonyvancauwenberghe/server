@@ -58,5 +58,6 @@ public class PrayerRenwalEvent extends Event {
     public void stop() {
         super.stop();
         player.getExtraData().remove(KEY);
+        player.sendMessage("@red@Your prayer renewal has run out!");
     }
 }

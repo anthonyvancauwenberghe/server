@@ -1156,7 +1156,7 @@ public class DialogueManager {
                 player.getInterfaceState().setNextDialogueId(1, 176);
                 player.getInterfaceState().setNextDialogueId(2, 177);
                 player.getInterfaceState().setNextDialogueId(3, 178);
-                player.getInterfaceState().setNextDialogueId(4, 192);
+                player.getInterfaceState().setNextDialogueId(4, 193);
                 break;
             case 175:
                 final String toDisplay;

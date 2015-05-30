@@ -14,6 +14,8 @@ import org.hyperion.rs2.model.container.Container;
  */
 public class PvMStore extends CurrencyShop{
 
+    private static final int DEFAULT_PRICE = 5000;
+
     public static final int TOKEN = 17564;
 
 
@@ -33,6 +35,47 @@ public class PvMStore extends CurrencyShop{
     @Override
     public void sellToShop(Player player, Item item) {
         player.sendMessage("You cannot sell to this shop!");
+    }
+
+    @Override
+    public int getSpecialPrice(Item item) {
+        if(item == null) throw new IllegalArgumentException("Null item");
+        final int id = item.getId();
+        switch(id) {
+            case 13870: //morrigan body
+            case 13858: //zuriel's body
+                return 80;
+            case 13861: //zuriel's bottom
+            case 13873: //morrigans chaps
+                return 60;
+            case 13864: //zuriel's hood
+            case 13876: //morrigan coif
+                return 30;
+            case 13884: //stat body
+                return 400;
+            case 13890: //stat legs
+                return 350;
+            case 13896: //stat helm
+                return 150;
+            case 13902: //stat hammer
+                return 800;
+            case 13887: //vesta chain
+            case 13893: //vesta legs
+            case 13905: //vesta spear
+                return 500;
+            case 17652:
+                return 3;
+            case 13115:
+                return 2000;
+            case 13109:
+                return 1000;
+            case 19325:
+                return 20000;
+            case 19323:
+                return 25000;
+
+        }
+        return DEFAULT_PRICE;
     }
 }
 

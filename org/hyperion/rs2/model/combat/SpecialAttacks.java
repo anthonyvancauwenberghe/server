@@ -89,7 +89,7 @@ public class SpecialAttacks {
 				ranged = true;
 				specialAnimation = 10504;
 				playerGfx = 1836;
-				specialAccuracy = 2.2;
+				specialAccuracy = 1.9;
 				specialDrain = 50;
 				specialDis = 6;
 				break;
@@ -97,7 +97,7 @@ public class SpecialAttacks {
 				ranged = true;
 				specialAnimation = 10501;
 				playerGfx = 1838;
-				specialAccuracy = 1.75;
+				specialAccuracy = 1.5;
 				specialDrain = 50;
 				specialDis = 6;
 				break;
@@ -105,7 +105,7 @@ public class SpecialAttacks {
 				specialAnimation = 10961;
 				specialDis = 1;
 				specialDrain = 50;
-				specialAccuracy = 1.7;
+				specialAccuracy = 1.5;
 				break;
 			case 5698:
 				playerGfx = 252;
@@ -256,7 +256,7 @@ public class SpecialAttacks {
 				playerGfx = 1223;
 				specialAnimation = 7073;
 				specialDis = 1;
-				specialDrain = 100;
+				specialDrain = 65;
 				break;
 			case 11700:
 				playerGfx = 1221;
@@ -288,7 +288,7 @@ public class SpecialAttacks {
 				specialAnimation = 12153;
 				specialDis = 9;
 				specialDrain = 50;
-				specialAccuracy = 1.5;
+				specialAccuracy = 1.35;
 				player.getCombat().predictedAtk = System.currentTimeMillis() + 700;
 				ranged = true;
 				break;
@@ -648,6 +648,7 @@ public class SpecialAttacks {
                         int remove = weaponId == 13902 ? hitDamage/2 : hitDamage;
                         int toRemove = lvl - remove < 1 ? lvl - 1 : remove;
                         p.getSkills().setLevel(1, lvl - toRemove);
+                        p.getExtraData().put("ovlreset1", System.currentTimeMillis());
                     });
                 }
 
@@ -958,7 +959,7 @@ public class SpecialAttacks {
 				specDamage = 1.3;
 				break;
 			case 14484:
-				specDamage = 1.15;
+				specDamage = 1.07;
 				break;
 		}
 		return specDamage;

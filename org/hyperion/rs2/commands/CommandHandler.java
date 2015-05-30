@@ -231,6 +231,15 @@ public class CommandHandler {
             }
         });
 
+        submit(new Command("wiki", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                final String site = filterInput(input).replace(" ", "%20");
+                player.sendf("l4unchur13 http://www.arteropk.wiki.com/%s", site);
+                return true;
+            }
+        });
+
         submit(new Command("leavelms", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {

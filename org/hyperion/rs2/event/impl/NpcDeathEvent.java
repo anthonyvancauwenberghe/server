@@ -192,7 +192,7 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if(tokens <= 0)
-                        tokens = Misc.random(10) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
+                        tokens = Misc.random(20) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
                     if(tokens > 0) {
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,

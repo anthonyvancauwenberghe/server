@@ -235,7 +235,7 @@ public class CommandHandler {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 final String site = filterInput(input).replace(" ", "%20");
-                player.sendf("l4unchur13 http://www.arteropk.wiki.com/%s", site);
+                player.sendf("l4unchur13 http://www.arteropk.wiki.com/wiki/%s", site);
                 return true;
             }
         });

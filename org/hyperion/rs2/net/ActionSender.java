@@ -214,7 +214,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Current Poll, @red@Remove Spawnables: @blu@ http://j.mp/apkspawnables#url#");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Recent Update, @red@PvM Store: @blu@ http://j.mp/apkmay30#url#");
 
             passChangeShit();
 

@@ -65,7 +65,7 @@ public class OverloadStatsEvent extends Event {
 		 */
 		public static void applyBoosts(Player player) {
 			ContentEntity.setOvlSkill(player, Skills.ATTACK, getBoost(player, Skills.ATTACK));
-            if(System.currentTimeMillis() - player.getExtraData().getLong("ovlreset1") < 10000)
+            if(System.currentTimeMillis() - player.getExtraData().getLong("ovlreset1") > 10000)
 			    ContentEntity.setOvlSkill(player, Skills.DEFENCE, getBoost(player, Skills.DEFENCE));
 			ContentEntity.setOvlSkill(player, Skills.STRENGTH, getBoost(player, Skills.STRENGTH));
 			ContentEntity.increaseSkill(player, Skills.RANGED, getBoost(player, Skills.RANGED));

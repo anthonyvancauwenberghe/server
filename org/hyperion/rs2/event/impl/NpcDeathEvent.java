@@ -273,7 +273,7 @@ public class NpcDeathEvent extends Event {
                         }
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),
-                                Item.create(995, npc.getDefinition().combat() * 15));
+                                Item.create(995, npc.getDefinition().combat() * 15 + 1));
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }

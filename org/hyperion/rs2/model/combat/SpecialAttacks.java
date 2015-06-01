@@ -649,6 +649,7 @@ public class SpecialAttacks {
                         int toRemove = lvl - remove < 1 ? lvl - 1 : remove;
                         p.getSkills().setLevel(1, lvl - toRemove);
                         p.getExtraData().put("ovlreset1", System.currentTimeMillis());
+                        p.sendMessage("@red@Your defence has been lowered and divine effects disabled for the next 10 seconds!");
                     });
                 }
 

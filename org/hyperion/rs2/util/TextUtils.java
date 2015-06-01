@@ -25,15 +25,13 @@ public class TextUtils {
 			int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
 			if(highNibble == - 1) {
 				if(val < 13) {
-					byte b = decodeBuf[idx++] = (byte) Constants.VALID_CHARS[val];
-                    System.out.println("val less 13: "+(Constants.VALID_CHARS[val]));
+					decodeBuf[idx++] = (byte) Constants.XLATE_TABLE[val];
 				} else {
 					highNibble = val;
 				}
 			} else {
-				byte b = decodeBuf[idx++] = (byte) Constants.VALID_CHARS[((highNibble << 4) + val) - 195];
-                System.out.println("val high nibble: "+(Constants.VALID_CHARS[val]));
-                highNibble = - 1;
+				decodeBuf[idx++] = (byte) Constants.XLATE_TABLE[((highNibble << 4) + val) - 195];
+				highNibble = - 1;
 			}
 		}
 		return new String(decodeBuf, 0, idx);

@@ -56,38 +56,38 @@ public class GrandExchange {
                 offer = null;
             }
             if(offer != null) {
-                player.getActionSender().sendHideInterface(23672 + (7 * index), true);
+                player.getActionSender().sendHideComponent(23672 + (7 * index), true);
                 int offerComponent = 23714 + (9 * index);
-                player.getActionSender().sendHideInterface(offerComponent, false);
+                player.getActionSender().sendHideComponent(offerComponent, false);
                 player.getActionSender().sendUpdateItems(offerComponent + 2, new Item[]{new Item(offer.getItemId())});
                 if (offer.isCancelled()) {
-                    player.getActionSender().sendHideInterface(offerComponent + 3, false);
-                    player.getActionSender().sendHideInterface(offerComponent + 5, true);
-                    player.getActionSender().sendHideInterface(offerComponent + 4, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 3, false);
+                    player.getActionSender().sendHideComponent(offerComponent + 5, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 4, true);
                 } else if (offer.isComplete()) {
-                    player.getActionSender().sendHideInterface(offerComponent + 4, false);
-                    player.getActionSender().sendHideInterface(offerComponent + 3, true);
-                    player.getActionSender().sendHideInterface(offerComponent + 5, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 4, false);
+                    player.getActionSender().sendHideComponent(offerComponent + 3, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 5, true);
                 } else if (offer.getAmountProcessed() == 0){
-                    player.getActionSender().sendHideInterface(offerComponent + 5, true);
-                    player.getActionSender().sendHideInterface(offerComponent + 4, true);
-                    player.getActionSender().sendHideInterface(offerComponent + 3, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 5, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 4, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 3, true);
                 } else {
-                    player.getActionSender().sendHideInterface(offerComponent + 5, false);
+                    player.getActionSender().sendHideComponent(offerComponent + 5, false);
                     player.getActionSender().sendInterfaceSpriteDim(offerComponent + 5, (int)(((double)offer.getAmountProcessed() / (double)offer.getQuantity()) * 100.0), 100);
-                    player.getActionSender().sendHideInterface(offerComponent + 4, true);
-                    player.getActionSender().sendHideInterface(offerComponent + 3, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 4, true);
+                    player.getActionSender().sendHideComponent(offerComponent + 3, true);
                 }
                 player.getActionSender().sendString(ItemDefinition.forId(offer.getItemId()).getName(), offerComponent + 6);
                 player.getActionSender().sendString(formatter.format(offer.getPrice()) + " pkt", offerComponent + 7);
                 player.getActionSender().sendString(offer.getType() == 0 ? "Buy" : "Sell", offerComponent + 8);
             } else {
                 int offerComponent = 23714 + (9 * index);
-                player.getActionSender().sendHideInterface(offerComponent, true);
-                player.getActionSender().sendHideInterface(23672 + (7 * index), false);
-                player.getActionSender().sendHideInterface(offerComponent + 3, true);
-                player.getActionSender().sendHideInterface(offerComponent + 5, true);
-                player.getActionSender().sendHideInterface(offerComponent + 4, true);
+                player.getActionSender().sendHideComponent(offerComponent, true);
+                player.getActionSender().sendHideComponent(23672 + (7 * index), false);
+                player.getActionSender().sendHideComponent(offerComponent + 3, true);
+                player.getActionSender().sendHideComponent(offerComponent + 5, true);
+                player.getActionSender().sendHideComponent(offerComponent + 4, true);
                 player.getActionSender().sendString("", offerComponent + 6);
                 player.getActionSender().sendString("", offerComponent + 7);
                 player.getActionSender().sendString("", offerComponent + 8);
@@ -117,25 +117,25 @@ public class GrandExchange {
             player.getActionSender().sendString(formatter.format(offer.getCost()) + " pkt", 22178);
             player.getActionSender().sendString("You have " + (offer.getType() == 0 ? "bought" : "sold") + " a total of " + formatter.format(offer.getAmountProcessed()) + " so far", 22190);
             player.getActionSender().sendString("for a total price of " + formatter.format(offer.getAccumulatedCost()) + " pkt.", 22191);
-            player.getActionSender().sendHideInterface(22179, offer.getType() == 1);
-            player.getActionSender().sendHideInterface(22180, offer.getType() == 0);
+            player.getActionSender().sendHideComponent(22179, offer.getType() == 1);
+            player.getActionSender().sendHideComponent(22180, offer.getType() == 0);
             if(offer.isCancelled()) {
-                player.getActionSender().sendHideInterface(22184, false);
-                player.getActionSender().sendHideInterface(22186, true);
-                player.getActionSender().sendHideInterface(22185, true);
+                player.getActionSender().sendHideComponent(22184, false);
+                player.getActionSender().sendHideComponent(22186, true);
+                player.getActionSender().sendHideComponent(22185, true);
             } else if(offer.isComplete()) {
-                player.getActionSender().sendHideInterface(22185, false);
-                player.getActionSender().sendHideInterface(22184, true);
-                player.getActionSender().sendHideInterface(22186, true);
+                player.getActionSender().sendHideComponent(22185, false);
+                player.getActionSender().sendHideComponent(22184, true);
+                player.getActionSender().sendHideComponent(22186, true);
             } else if(offer.getAmountProcessed() == 0) {
-                player.getActionSender().sendHideInterface(22186, true);
-                player.getActionSender().sendHideInterface(22184, true);
-                player.getActionSender().sendHideInterface(22185, true);
+                player.getActionSender().sendHideComponent(22186, true);
+                player.getActionSender().sendHideComponent(22184, true);
+                player.getActionSender().sendHideComponent(22185, true);
             } else {
-                player.getActionSender().sendHideInterface(22186, false);
+                player.getActionSender().sendHideComponent(22186, false);
                 player.getActionSender().sendInterfaceSpriteDim(22186, (int) (((double) offer.getAmountProcessed() / (double) offer.getQuantity()) * 100.0), 100);
-                player.getActionSender().sendHideInterface(22184, true);
-                player.getActionSender().sendHideInterface(22185, true);
+                player.getActionSender().sendHideComponent(22184, true);
+                player.getActionSender().sendHideComponent(22185, true);
             }
             player.getActionSender().showInterface(22170);
         }
@@ -153,9 +153,9 @@ public class GrandExchange {
         for(int i = 22673; i <= 22677; i++)
             player.getActionSender().sendString("", i);
         player.getActionSender().sendString("",22683);
-        player.getActionSender().sendHideInterface(22684, !buy);
-        player.getActionSender().sendHideInterface(22685, buy);
-        player.getActionSender().sendHideInterface(22725, !buy);
+        player.getActionSender().sendHideComponent(22684, !buy);
+        player.getActionSender().sendHideComponent(22685, buy);
+        player.getActionSender().sendHideComponent(22725, !buy);
         player.getActionSender().showInterface(22670);
         if(!buy) {
             player.getActionSender().sendUpdateItems(26571, player.getInventory().getItems());
@@ -169,9 +169,9 @@ public class GrandExchange {
     public void refreshNewOffer() {
         boolean buy = newOffer.getType() == 0;
         player.getActionSender().sendString((buy ? "Buy" : "Sell") + " Offer", 22662);
-        player.getActionSender().sendHideInterface(22684, !buy);
-        player.getActionSender().sendHideInterface(22685, buy);
-        player.getActionSender().sendHideInterface(22725, !buy);
+        player.getActionSender().sendHideComponent(22684, !buy);
+        player.getActionSender().sendHideComponent(22685, buy);
+        player.getActionSender().sendHideComponent(22725, !buy);
         if(newOffer.getCollection() != null) {
             ItemDefinition def = ItemDefinition.forId(newOffer.getItemId());
             player.getActionSender().sendUpdateItems(22717, new Item[]{new Item(newOffer.getItemId())});
@@ -189,6 +189,13 @@ public class GrandExchange {
                 player.getActionSender().sendString("", i);
             player.getActionSender().sendString("", 22683);
         }
+    }
+
+    /**
+     * Finalize a new offer.
+     */
+    public void submitNewOffer() {
+
     }
 
     /**

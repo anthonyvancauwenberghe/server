@@ -3,6 +3,8 @@ package org.hyperion.rs2.model;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import org.hyperion.Server;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.util.Misc;
@@ -314,6 +316,17 @@ public class PlayerPoints {
 
     public int getMinigamePoints() {
         return minigamePoints;
+    }
+
+    public int pkpBonus(int originalPkp) {
+        long minutes = TimeUnit.MINUTES.convert(player.getTotalOnlineTime(), TimeUnit.MILLISECONDS);
+        if(minutes <= 10) minutes = 10;
+        if(minutes > 100)
+            return originalPkp;
+        double max_increase = 10.0;
+        double modifier = max_increase/(minutes/10D);
+        player.sendf("You get @red@%0.1f%%@bla@ pkp bonus for being new", modifier);
+        return (int)(originalPkp * modifier);
     }
 
 }

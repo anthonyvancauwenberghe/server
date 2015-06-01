@@ -208,13 +208,14 @@ public class ActionSender {
             sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
             sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
+            sendMessage("@red@10X @blu@decaying PKP BOOST active for the first 100 minutes of gameplay");
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getInventory().add(Item.create(15707));
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Current Poll, @red@Remove Spawnables: @blu@ http://j.mp/apkspawnables#url#");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Recent Update, @red@PvM Store: @blu@ http://j.mp/apkmay30#url#");
 
             passChangeShit();
 
@@ -676,8 +677,8 @@ public class ActionSender {
 		return this;
 	}
 
-    public ActionSender sendHideInterface(int interfaceID, boolean hidden) {
-        PacketBuilder bldr = new PacketBuilder(171);
+    public ActionSender sendHideComponent(int interfaceID, boolean hidden) {
+        PacketBuilder bldr = new PacketBuilder(170);
         bldr.put((byte)(hidden ? 1 : 0));
         bldr.putShort(interfaceID);
         player.write(bldr.toPacket());

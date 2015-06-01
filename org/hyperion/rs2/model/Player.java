@@ -1226,7 +1226,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
     public boolean isNewlyCreated() {
-		if (permExtraData.getLong("logintime") < Time.FIVE_MINUTES * 3) {
+		if (getTotalOnlineTime() < Time.FIVE_MINUTES * 3) {
 			return Boolean.TRUE;
 					}
 		else {
@@ -1234,6 +1234,11 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 
     }
+
+    public long getTotalOnlineTime() {
+        return getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - loginTime);
+    }
+
 
 	/**
 	 * Gets the request manager.

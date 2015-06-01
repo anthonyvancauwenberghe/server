@@ -22,6 +22,8 @@ public class SpiritShields {
         }
 		if(! (defender.getEntity() instanceof Player))
 			return damg;
+        if(System.currentTimeMillis() - defender.getPlayer().getExtraData().getLong("ovlreset1") < 10000L)
+            return damg;
 		int shieldId = CombatAssistant.getShieldId(defender.getPlayer().getEquipment());
 		switch(shieldId) {
 			case DIVINE_SPIRIT_SHIELD_ID:

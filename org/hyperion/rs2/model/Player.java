@@ -1226,13 +1226,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
     public boolean isNewlyCreated() {
-		if (getTotalOnlineTime() < Time.FIVE_MINUTES * 3) {
-			return Boolean.TRUE;
-					}
-		else {
-			return Boolean.FALSE;
-		}
-
+		return getTotalOnlineTime() < Time.FIVE_MINUTES * 3;
     }
 
     public long getTotalOnlineTime() {

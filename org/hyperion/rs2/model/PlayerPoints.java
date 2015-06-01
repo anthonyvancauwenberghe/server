@@ -326,7 +326,7 @@ public class PlayerPoints {
             return originalPkp;
         double max_increase = 10.0;
         double modifier = max_increase/(minutes/10D);
-        player.sendf("You get @red@%.1f %%@bla@ pkp bonus for being new", modifier);
+        player.sendf("You get @red@%.1f X@bla@ pkp bonus for being new", modifier);
         return (int)(originalPkp * modifier);
     }
 

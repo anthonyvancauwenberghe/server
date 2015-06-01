@@ -192,8 +192,8 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if(tokens <= 0)
-                        tokens = Misc.random(10) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
-                    if(tokens > 0) {
+                        tokens = Misc.random(20) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
+                    if(tokens > 0 && npc.getDefinition().getId() != 5399) {
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
                                 new Item(PvMStore.TOKEN, tokens)
@@ -205,8 +205,8 @@ public class NpcDeathEvent extends Event {
                 player.sendf("You now have @red@%d@bla@ %s kills", kills, npc.getDefinition().getName());
 
                 if(kills%1000 == 0) {
-                    player.sendf("For this milestone, you recieve @blu@%d@bla@ PvM Tokens", kills);
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
+                    player.sendf("For this milestone, you recieve @blu@%d@bla@ PvM Tokens", add.getCount());
                     if(!player.getInventory().add(add))
                         player.getBank().add(add);
                 }
@@ -273,7 +273,7 @@ public class NpcDeathEvent extends Event {
                         }
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),
-                                Item.create(995, npc.getDefinition().combat() * 15));
+                                Item.create(995, npc.getDefinition().combat() * 15 + 1));
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }

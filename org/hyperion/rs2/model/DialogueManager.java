@@ -1148,13 +1148,15 @@ public class DialogueManager {
                         "I would like to have a new assignment.",
                         "Remove current slayer task (20 pts).",
                         "I would like to view the slayer store.",
-                        "I would like to reset my task progress (lose total task streak + 1 pt)."
+                        "I would like to reset my task progress (lose total task streak + 1 pt)." ,
+                        "I would like to view the PvM Store"
                 );
 
                 player.getInterfaceState().setNextDialogueId(0, 175);
                 player.getInterfaceState().setNextDialogueId(1, 176);
                 player.getInterfaceState().setNextDialogueId(2, 177);
                 player.getInterfaceState().setNextDialogueId(3, 178);
+                player.getInterfaceState().setNextDialogueId(4, 193);
                 break;
             case 175:
                 final String toDisplay;
@@ -1294,6 +1296,9 @@ public class DialogueManager {
                 player.getBountyHunter().exchangeEmblems();
                 player.sendf("You now have @red@%d@bla@ emblem points", player.getBountyHunter().getEmblemPoints());
                 player.getActionSender().removeChatboxInterface();
+                break;
+            case 193:
+                ShopManager.open(player, 82);
                 break;
 
             case 6000:

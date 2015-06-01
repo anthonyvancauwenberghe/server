@@ -1913,6 +1913,14 @@
         <skillAdd>0</skillAdd>
         <drink>true</drink>
     </foodItem>
+    <foodItem>
+        <id>17652</id>
+        <heal>0</heal>
+        <newId>-1</newId>
+        <skillId>-1</skillId>
+        <skillAdd>0</skillAdd>
+        <drink>true</drink>
+    </foodItem>
 
     <foodItem>
         <id>6685</id>

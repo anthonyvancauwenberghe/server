@@ -17,7 +17,7 @@ public class VoteShop extends PointsShop {
 	public int getPrice(int itemId) {
 		switch(itemId) {
             case 2431:
-                return 3;
+                return 2;
             case 11724:
             case 11726:
                 return 20;

@@ -118,16 +118,7 @@ public class Combat {
 		int damg = 0;
 		Entity attacker = combatEntity.getEntity();
 		final Entity opponent = combatEntity.getOpponent().getEntity();
-		/**
-		 * Skull Adding
-		 */
-		CombatAssistant.checkSkull(combatEntity);
-		/**
-		 * Degrading
-		 */
-		PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
 
-        ItemDegrading.check(combatEntity.getPlayer());
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
@@ -352,7 +343,7 @@ public class Combat {
 				 * Enchanted Bolts Effects
 				 */
 				double boltBonus = 1;
-				if(Misc.random(4) == 0 && damg > 0.6 * maxHit && bowType == Constants.RANGEDBOLTS) {
+				if(Misc.random(4) == 0 && damg > 0.3 * maxHit && bowType == Constants.RANGEDBOLTS) {
 					switch(arrowId) {
 						case 9242:
 							if(combatEntity.getOpponent().getEntity() instanceof Player)
@@ -548,8 +539,21 @@ public class Combat {
         }
 
 		if(finishOff) {
+
 			finishOff(combatEntity, damg, hit, bowType, damgDouble, doubleHit, distance, possibleMaxHit, combatStyle);
 		}
+        if(hit) {
+            /**
+             * Skull Adding
+             */
+            CombatAssistant.checkSkull(combatEntity);
+            /**
+             * Degrading
+             */
+            PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
+
+            ItemDegrading.check(combatEntity.getPlayer());
+        }
 		Curses.applyLeeches(combatEntity.getPlayer());
 		return true;
 	}

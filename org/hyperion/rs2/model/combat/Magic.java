@@ -231,6 +231,47 @@ public class Magic {
 				}
 			}
 		}
+
+            int freeze = spell.getFreeze();
+            switch(weaponId) {
+                case 2415:
+                case 2416:
+                case 2417:
+                    if (((Player) attacker.getEntity()).hasCharge()) {
+                        if (spellId == 1190 || spellId == 1191 || spellId == 1192)
+                            maxDamg *= 1.4;
+                    }
+                    break;
+                case 13867:
+                case 17017:
+                    maxDamg *= 1.10;
+                    break;
+                case 15486:
+                    maxDamg *= 1.15;
+                    break;
+                case 18355:
+                    maxDamg *= 1.20;
+                    break;
+                case 14117:
+                    maxDamg *= 1.25;
+                    break;
+                case 19325:
+                    if(opponent.getEntity() instanceof NPC && freeze > 0)   {
+                        maxDamg *= 1.4;
+                        AtkBonus *= 1.4;
+                    } else
+                        maxDamg *= 1.24;
+                    freeze *= 1.3;
+                    break;
+                case 19323:
+                    if(opponent.getEntity() instanceof NPC && spellId == 1189) {
+                        maxDamg = 70;
+                        AtkBonus *= 1.4;
+                    } else {
+                        maxDamg *= 1.24;
+                    }
+                    break;
+            }
 		switch(necklaceId) {
 			case 18333:
 				maxDamg *= 1.05;
@@ -240,29 +281,7 @@ public class Magic {
 				maxDamg *= 1.10;
 				break;
 		}
-		switch(weaponId) {
-            case 2415:
-            case 2416:
-            case 2417:
-                if (((Player) attacker.getEntity()).hasCharge()) {
-                    if (spellId == 1190 || spellId == 1191 || spellId == 1192)
-                    maxDamg *= 1.4;
-                }
-                break;
-			case 13867:
-            		case 17017:
-				maxDamg *= 1.10;
-				break;
-			case 15486:
-				maxDamg *= 1.15;
-				break;
-			case 18355:
-				maxDamg *= 1.20;
-				break;
-			case 14117:
-				maxDamg *= 1.25;
-				break;
-		}
+
 		int Damage = Misc.random(maxDamg);
 		attacker.getPlayer().debugMessage("Damage stage1: "+Damage);
 		if(opponent.getEntity() instanceof Player) {
@@ -356,8 +375,8 @@ public class Magic {
 		/**
 		 * Freezing.
 		 */
-		if(spell.getFreeze() > 0 && opponent.canMove() && ! splash && opponent.canBeFrozen()) {
-			opponent.setFreezeTimer(spell.getFreeze() * 1000);
+		if(freeze > 0 && opponent.canMove() && ! splash && opponent.canBeFrozen()) {
+			opponent.setFreezeTimer(freeze * 1000);
 			if(opponent.getEntity() instanceof Player)
 				opponent.getPlayer().getActionSender()
 						.sendMessage("You have been frozen.");
@@ -1109,10 +1128,6 @@ public class Magic {
             player.getActionSender().sendMessage("You cannot teleport in this minigame.");
             return;
         }
-        if(in13sArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            player.getActionSender().sendMessage("You cannot teleport in this area.");
-            return;
-        }
 		if(player.isTeleBlocked()) {
 			player.getActionSender().sendMessage(
 					"You are currently teleblocked.");
@@ -1211,10 +1226,6 @@ public class Magic {
 		if(! force) {
             if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {
                 player.getActionSender().sendMessage("You cannot teleport in this minigame.");
-                return;
-            }
-            if(in13sArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                player.getActionSender().sendMessage("You cannot teleport in this area.");
                 return;
             }
 			if(DangerousPK.inDangerousPK(player)) {

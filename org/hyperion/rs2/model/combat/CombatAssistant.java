@@ -42,6 +42,8 @@ public class CombatAssistant {
 			return;
 		if(System.currentTimeMillis() - combatEntity.lastHit < 10000)
 			return;
+        if(combatEntity.getPlayer().getLastAttack().contains(combatEntity.getOpponent().getPlayer().getName()))
+            return;
 		if(! combatEntity.getPlayer().isSkulled()) {
 			combatEntity.getPlayer().setSkulled(true);
 			;
@@ -1265,7 +1267,7 @@ public class CombatAssistant {
 				bonus = player.getBonus().get(i);
 			}
 		}
-		return (int) ((meleeAtk * .6 + (bonus * .83)));
+		return (int) ((meleeAtk * .55 + (bonus * .77)));
 
 	}
 
@@ -1298,7 +1300,7 @@ public class CombatAssistant {
 					bonus = player.getBonus().get(i);
 				}
 			}
-			return (int) (meleeDef * .5 + bonus * .65) + 64;
+			return (int) (meleeDef * .5 + bonus * .68) + 68;
 		} else {
 			return (int)(entity.cE.getCombat() * .7);
 		}

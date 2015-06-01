@@ -4,6 +4,7 @@ import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadDrinkingEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.rs2.event.impl.PrayerRenwalEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.duel.DuelRule;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -182,6 +183,14 @@ public class Food implements ContentTemplate {
 				player.getSpecBar().sendSpecAmount();
 				player.specPotionTimer = System.currentTimeMillis();
 				break;
+            case 17652:
+                if(player.getExtraData().get(PrayerRenwalEvent.KEY) != null) {
+                    ((PrayerRenwalEvent)player.getExtraData().get(PrayerRenwalEvent.KEY)).totalRenewal = 300;
+                    player.sendMessage("Your prayer renewal has been refreshed!");
+                } else {
+                    World.getWorld().submit(new PrayerRenwalEvent(player));
+                }
+                break;
 			case 15332:
 			case 15333:
 			case 15334:

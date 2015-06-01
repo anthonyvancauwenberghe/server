@@ -1,13 +1,27 @@
 package org.hyperion.rs2.model.combat;
 
+import org.hyperion.util.Time;
+
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+
 public class LastAttacker {
 
+    private static final long MIN_TIME = Time.FIVE_MINUTES;
+
+    //private final Queue<String> lastAttackers = new ArrayBlockingQueue<>(MAX_SIZE);
+
+    private final Map<String, Long> lastAttackers = new HashMap<>();
+
+    private String latest;
 	private String clientName;
-	private String userName;
 	private long lastAttack;
 
 	public LastAttacker(String clientName) {
-		this.userName = "";
+        latest = "";
 		this.clientName = clientName;
 		lastAttack = System.currentTimeMillis() - 9000;
 	}
@@ -19,16 +33,23 @@ public class LastAttacker {
 	public void updateLastAttacker(String name, boolean first) {
 		if(name.equals(clientName))
 			return;
-		this.userName = name;
 		lastAttack = System.currentTimeMillis();
-	}
+        latest = name;
+        lastAttackers.put(name.toLowerCase(), lastAttack + MIN_TIME);
+    }
 
-	public String getName() {
-		return userName;
-	}
+	public boolean contains(final String name) {
+        final long time = lastAttackers.getOrDefault(name.toLowerCase(), 0L) - System.currentTimeMillis();
+        //System.out.println("Time: "+time);
+        return time > 0;
+    }
 
 	public long timeSinceLastAttack() {
 		return (System.currentTimeMillis() - lastAttack);
 	}
+
+    public String getName() {
+        return latest;
+    }
 
 }

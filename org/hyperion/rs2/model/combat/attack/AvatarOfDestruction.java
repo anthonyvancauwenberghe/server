@@ -21,7 +21,6 @@ public class AvatarOfDestruction implements Attack {
     public static void loadDefinitions() {
         final int[] bonus = new int[10];
         Arrays.fill(bonus, 420);
-        bonus[3] = bonus[4] = 505;
         NPCDefinition.getDefinitions()[8596] =
                 NPCDefinition.create(8596, 1200, 625, bonus, 11199, 11198, new int[]{11197}, 3, "Avatar of Destruction", 120);
     }
@@ -48,7 +47,7 @@ public class AvatarOfDestruction implements Attack {
         n.getCombat().doAtkEmote();
         for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(n)) {
             int hitType = Combat.random(1);
-            int tempDamage = CombatCalculation.getCalculatedDamage(n, player, hitType, Constants.MELEE, MAX_DAMAGE);
+            int tempDamage = CombatCalculation.getCalculatedDamage(n, player, Combat.random(MAX_DAMAGE), hitType, MAX_DAMAGE);
             if(player.getLocation().distance(n.getLocation()) == 1)
                 tempDamage = 80;
             Combat.npcAttack(n, player.getCombat(), tempDamage, 300, hitType);

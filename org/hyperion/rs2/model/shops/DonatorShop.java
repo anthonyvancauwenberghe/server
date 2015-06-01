@@ -379,6 +379,11 @@ public class DonatorShop extends Shop {
             case 16357:
                 return 2_000;
 
+            case 19325:
+                return 2000;
+            case 19323:
+                return 2500;
+
             case 18739:
             case 18740:
                 return 2000;

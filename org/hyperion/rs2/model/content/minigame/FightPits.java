@@ -709,7 +709,7 @@ public class FightPits implements ContentTemplate {
 					startPlayersAmount = 50;
 				if(startPlayersAmount <= 0)
 					startPlayersAmount = 1;
-				int rewardCount =  5 + (startPlayersAmount/size);
+				int rewardCount =  8 + (startPlayersAmount/size);
 				if(EVENT)
 					rewardCount *= 3;
 				lastChamp = winningTeam;

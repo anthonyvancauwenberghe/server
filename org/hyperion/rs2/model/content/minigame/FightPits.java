@@ -558,7 +558,7 @@ public class FightPits implements ContentTemplate {
 		} else if(waitingRoom.size() >= 2) {
 			if(timeLeft == 0) {
 				playersInGame.clear();
-				gameTimeLeft = 180 + waitingRoom.size() * 15;
+				gameTimeLeft = 240 + waitingRoom.size() * 15;
 				if(EVENT)
 					gameTimeLeft += 160;
 				timeLeft = gameTimeLeft + 15 + World.getWorld().getPlayers().size()/3;

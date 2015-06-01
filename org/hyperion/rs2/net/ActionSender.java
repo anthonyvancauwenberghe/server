@@ -676,8 +676,8 @@ public class ActionSender {
 		return this;
 	}
 
-    public ActionSender sendHideInterface(int interfaceID, boolean hidden) {
-        PacketBuilder bldr = new PacketBuilder(171);
+    public ActionSender sendHideComponent(int interfaceID, boolean hidden) {
+        PacketBuilder bldr = new PacketBuilder(170);
         bldr.put((byte)(hidden ? 1 : 0));
         bldr.putShort(interfaceID);
         player.write(bldr.toPacket());

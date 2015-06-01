@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.EquipmentReq;
 import org.hyperion.rs2.model.container.bank.BankItem;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Misc;
 
@@ -59,6 +60,8 @@ public class CustomSet {
 
     public boolean apply(final Player player) {
         if(Location.inAttackableArea(player))
+            return false;
+        if(FightPits.inGame(player) || FightPits.inPits(player))
             return false;
         for(final Container toClear : new Container[]{player.getInventory(), player.getEquipment()})
             if(!Container.transfer(toClear, player.getBank()))

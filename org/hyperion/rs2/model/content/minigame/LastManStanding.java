@@ -26,6 +26,12 @@ public class LastManStanding implements ContentTemplate {
     public boolean gameStarted = false;
     public boolean canJoin = false;
 
+    public int counter;
+
+    public int getCounter() {
+        return counter;
+    }
+
     public int totalParticipants = 0;
 
     public static final boolean inLMSArea(int x, int y) {
@@ -33,8 +39,8 @@ public class LastManStanding implements ContentTemplate {
     }
 
     public void startCountdown() {
+        counter = 300;
         World.getWorld().submit(new Event(1000) {
-            int counter = 300;
             @Override
             public void execute() {
                 if(!canJoin) {
@@ -54,6 +60,7 @@ public class LastManStanding implements ContentTemplate {
 
             public void stop() {
                 startGame();
+                counter = 0;
                 super.stop();
             }
         });

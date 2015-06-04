@@ -320,7 +320,7 @@ public class PlayerPoints {
 
     public int pkpBonus(int originalPkp) {
         long minutes = TimeUnit.MINUTES.convert(player.getTotalOnlineTime(), TimeUnit.MILLISECONDS);
-        System.out.println("Minutes: "+minutes);
+        //System.out.println("Minutes: "+minutes);
         if(minutes <= 10) minutes = 10;
         if(minutes > 100)
             return originalPkp;

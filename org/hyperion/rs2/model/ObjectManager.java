@@ -129,6 +129,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2471), create(2977, 3605, 0), 10, 0));
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2471), create(2976, 3605, 0), 10, 0));
 
+            globalObjects.add(new GameObject(GameObjectDefinition.forId(16000), create(3266, 3913, 0), 10, 0));
+
             for(int i = 0; i < 4; i++) {
                 globalObjects.add(new GameObject(GameObjectDefinition.forId(2090), create(3793-(i*2), 2838, 0), 10, 0));
                 globalObjects.add(new GameObject(GameObjectDefinition.forId(2092), create(3793-(i*2), 2837, 0), 10, 0));

@@ -1471,6 +1471,14 @@ public class CommandHandler {
             }
         });
 
+        submit(new Command("lmstimer", Rank.PLAYER){
+            public boolean execute(final Player player, final String input){
+                if(LastManStanding.getLastManStanding().participants.get(player.getName()) != null)
+                    player.getActionSender().sendMessage("The game will begin in " + LastManStanding.getLastManStanding().getCounter() + " seconds.");
+                return true;
+            }
+        });
+
         submit(new Command("getinfo", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();

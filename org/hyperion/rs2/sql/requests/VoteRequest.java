@@ -61,6 +61,7 @@ public class VoteRequest extends SQLRequest {
                     thisClaim += 1;
                 if (topg)
                     thisClaim++;
+                thisClaim *= 2;
                 final int freeSlots = player.getInventory().freeSlots();
                 if(freeSlots >= thisClaim) {
                     player.getInventory().add(new Item(3062, thisClaim));

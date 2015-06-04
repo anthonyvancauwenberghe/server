@@ -215,7 +215,8 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Recent Update, @red@PvM Store: @blu@ http://j.mp/apkmay30#url#");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Recent Update, @red@PvM Store: @blu@ http://j.mp/apkmay30#url#",
+                    "@blu@BOMUS ACTIVE: @red@2X Vote @bla@ until next sunday night, EST");
 
             passChangeShit();
 

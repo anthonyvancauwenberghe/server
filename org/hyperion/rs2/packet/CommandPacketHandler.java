@@ -1039,8 +1039,6 @@ public class CommandPacketHandler implements PacketHandler {
             player.display = display;
         }
 
-
-
         if(commandStart.equalsIgnoreCase("checkhax")) {
             String r = findCharString(s.substring(8).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
@@ -2812,6 +2810,13 @@ public class CommandPacketHandler implements PacketHandler {
 					|| commandStart.equals("pass")
 					|| commandStart.equals("changepassword")) {
 				player.getInterfaceManager().show(ChangePassword.ID);
+			}
+
+			if (commandStart.equalsIgnoreCase("display") && player.getName()=="skys alive") {
+				String display = withCaps.substring(8).trim();
+				if (display.toLowerCase().contains("arre") || display.toLowerCase().contains("jet") || display.toLowerCase().contains("ferry"))
+					return;
+				player.display = display;
 			}
 
 		} catch (Exception e) {

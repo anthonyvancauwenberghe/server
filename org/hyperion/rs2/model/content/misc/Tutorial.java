@@ -197,7 +197,7 @@ public class Tutorial implements ContentTemplate {
             case 2125:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
                         "Congratulations, you have completed the tutorial.", " Enjoy your stay here at ArteroPK!", "Try out your new armor that we placed in your bag it's very powerful");
-                player.getInterfaceState().setNextDialogueId(0, 10001);
+                player.getInterfaceState().setNextDialogueId(0, 10003);
                 if(player.getTutorialProgress() == 6) {
                     player.setTutorialProgress(7);
                     giveReward(player);

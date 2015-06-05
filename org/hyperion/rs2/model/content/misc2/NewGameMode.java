@@ -161,9 +161,9 @@ public class NewGameMode implements ContentTemplate {
                 return true;
             case 10003:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Hard game mode", "Normal game mode (reccomended)");
-                player.getInterfaceState().setNextDialogueId(0, 10004);
-                player.getInterfaceState().setNextDialogueId(1, 10001);
+                        "Normal Game Mode (highly reccomended)", "Hard Mode");
+                player.getInterfaceState().setNextDialogueId(0, 10001);
+                player.getInterfaceState().setNextDialogueId(1, 10004);
                 return true;
             case 10004:
                 ClanManager.joinClanChat(player, "help2", false);

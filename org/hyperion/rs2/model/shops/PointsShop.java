@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.shops;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 public abstract class PointsShop extends Shop {
 
@@ -17,6 +18,9 @@ public abstract class PointsShop extends Shop {
 
 	@Override
 	public void buyFromShop(Player player, Item item) {
+        if(!ItemSpawning.canSpawn(player)) {
+            return;
+        }
 		int price = item.getCount() * getPrice(item.getId());
 		if(getPointsAmount(player) >= price) {
 			setPointsAmount(player, getPointsAmount(player) - price);

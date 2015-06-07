@@ -3,10 +3,7 @@ package org.hyperion.rs2.model.combat.attack;
 import org.hyperion.rs2.event.Event;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.CombatAssistant;
-import org.hyperion.rs2.model.combat.CombatEntity;
-import org.hyperion.rs2.model.combat.Constants;
+import org.hyperion.rs2.model.combat.*;
 import org.hyperion.rs2.model.container.Equipment;
 
 
@@ -110,7 +107,7 @@ public class CorporealBeast implements Attack {
 				n.cE.doAnim(Combat.random(1) == 1 ? MELEE_EMOTE : MELEE_EMOTE2);
 				//n.cE.doGfx(1886);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2200);
-				Combat.npcAttack(n, attack, Combat.random(maxMelee), 1200, 0);
+				Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxMelee),1 , maxMelee), 1200, 0);
 			} else if(attackId == 1) {
 				n.cE.doAnim(RANGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2200);
@@ -118,7 +115,7 @@ public class CorporealBeast implements Attack {
 					@Override
 					public void execute() {
 						//range attack
-						Combat.npcAttack(n, attack, Combat.random(maxRange), 1100, 1);
+						Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxRange),1 , maxRange), 1100, 1);
 						this.stop();
 					}
 				});
@@ -157,7 +154,7 @@ public class CorporealBeast implements Attack {
 								CombatEntity atk = players.getCombat();
 								atk.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed - 15, 1824, 99, 35, hitId, slope);
 								//atk.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed, 1824, 99, 35, hitId, slope);
-								Combat.npcAttack(n, atk, Combat.random(maxMage), 2000, 2);
+								Combat.npcAttack(n, atk, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxMage), 2, maxMage), 1800, 2);
 							//}
 						}
 						//attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed, 1824, 99, 35, hitId, slope);

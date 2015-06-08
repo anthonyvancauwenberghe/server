@@ -24,8 +24,9 @@ public class BorkAndMinions implements Attack {
         Arrays.fill(bonus, 330);
         NPCDefinition.getDefinitions()[BORK_ID] =
                 NPCDefinition.create(BORK_ID, 600, 425, bonus, 8756, 8755, new int[]{8754}, 3, "Bork", 120);
+        Arrays.fill(bonus, 175);
         NPCDefinition.getDefinitions()[7135] =
-                NPCDefinition.create(7135, 125, 425, bonus, 8762, 8761, new int[]{8760}, 3, "Borklets", 120);
+                NPCDefinition.create(7135, 125, 425, bonus, 8762, 8761, new int[]{8760}, 2, "Borklets", 120);
     }
     @Override
     public String getName() {

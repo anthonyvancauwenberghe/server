@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.model.combat.attack.AvatarOfDestruction;
+import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
 import org.hyperion.rs2.model.combat.attack.GodWarsBandos;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.util.IoBufferUtils;
@@ -320,6 +321,7 @@ public class NPCDefinition {
                                 System.out.println("Rev monster: "+n+" added, name: "+definition[n].getName());
                         }
                         AvatarOfDestruction.loadDefinitions();
+                        BorkAndMinions.init();
 						//int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime
 						System.out.println("Loaded " + j + " NPC Definitions.");
 						return;

@@ -69,7 +69,7 @@ public class CorporealBeast implements Attack {
 	
 	private static final int MAGE_EMOTE = 10410;
 	
-	private static final int maxMelee = 42, maxRange = 45, maxMage = 50;
+	private static final int maxMelee = 42, maxRange = 38, maxMage = 45;
 	
 	/**
 	 * 

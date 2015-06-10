@@ -74,6 +74,7 @@ public class SpecialBar {
 			player.getActionSender().sendString(IDS[i],
 					color + "Special Attack (" + amount + "%)");
 		}
+        player.getActionSender().sendString(26567, amount + "");
 	}
 
 	private static int IDS[] = {7812, 12335, 7586, 7611, 7561, 8505,

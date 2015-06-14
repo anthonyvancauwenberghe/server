@@ -68,7 +68,7 @@ public class Bork  {
 
 
     private static final class BorkEvent extends Event {
-        private static final double PKP_MULTIPLIER = 3;
+        private static final double PKP_MULTIPLIER = 5;
         private static final double TOKEN_MULTIPLIER = 1;
         /**
          * This represents the percent which is covered by time, rest is given
@@ -117,7 +117,7 @@ public class Bork  {
         }
 
         public void updateInterface() {
-            player.getActionSender().sendString(CHILD_IDS[2], String.format("%.1f", percentIncrease()));
+            player.getActionSender().sendString(CHILD_IDS[2], String.format("%.1f %%", percentIncrease()));
 
         }
 
@@ -150,7 +150,7 @@ public class Bork  {
     }
 
     public static boolean handleBorkDeath(final Player player, final NPC npc) {
-        if(player.getExtraData().get(KEY) == null && npc.getDefinition().getId() != BorkAndMinions.BORK_ID) {
+        if(player.getExtraData().get(KEY) == null || npc.getDefinition().getId() != BorkAndMinions.BORK_ID) {
             return false;
         }
         ((BorkEvent)player.getExtraData().get(KEY)).giveReward(true);

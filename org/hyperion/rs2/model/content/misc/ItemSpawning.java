@@ -118,6 +118,8 @@ public class ItemSpawning {
             player.getActionSender().sendMessage("You cannot do this while trading");
             return false;
         }
+        if(player.getExtraData().getBoolean("cantteleport"))
+            return false;
         if(player.getLocation().inDungeonLobby())
             return false;
         if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1

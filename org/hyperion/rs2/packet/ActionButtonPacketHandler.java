@@ -674,6 +674,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
                     player.getGrandExchange().confirmOffer();
                 break;
 
+            case 24595:
 			case 12311:
 			case 7587:
 			case 8481:

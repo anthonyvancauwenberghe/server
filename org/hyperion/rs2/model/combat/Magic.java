@@ -1161,6 +1161,10 @@ public class Magic {
 					"You cannot teleport from fight pits.");
 			return;
 		}
+        if(player.getExtraData().getBoolean("cantteleport")) {
+            player.sendMessage("You can't teleport in this event");
+            return;
+        }
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return;
 		player.updateTeleportTimer();
@@ -1296,6 +1300,11 @@ public class Magic {
 				player.removeEP();
 			}
 		}
+
+        if(player.getExtraData().getBoolean("cantteleport")) {
+            player.sendMessage("You can't teleport in this event");
+            return;
+        }
 
         Duel.declineTrade(player);
 

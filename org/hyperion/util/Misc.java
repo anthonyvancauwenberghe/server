@@ -226,4 +226,17 @@ public class Misc {
 		return " ";
 	}
 
+    public static final double getPercentage(final double remaining, final double original) {
+        return remaining/original * 100.0D;
+    }
+
+    public static final String getPercentString(final double remaining, final double total) {
+        return getPercentString(remaining, total, 1);
+    }
+
+    public static final String getPercentString(final double remaining, final double original,final int places) {
+        final String format = new StringBuilder("%.").append(places).append("f").toString();
+        return String.format(format, getPercentage(remaining, original));
+    }
+
 }

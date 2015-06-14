@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.util.Misc;
 
@@ -62,7 +63,7 @@ public class TormentedDemon implements Attack {
 				n.cE.doAnim(MELEE_EMOTE);
 				n.cE.doGfx(1886);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2200);
-				Combat.npcAttack(n, attack, maxMelee, 500, 0);
+				Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxMelee), 0, maxMelee), 500, 0);
 			} else if(attackId == 1) {
 				n.cE.doAnim(RANGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
@@ -71,7 +72,7 @@ public class TormentedDemon implements Attack {
 					public void execute() {
 						//range attack
 						n.getCombat().doGfx(1885, 0);
-						Combat.npcAttack(n, attack, Combat.random(maxRange), 1200, 1);
+						Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxRange), 1, maxRange), 1200, 1);
 						this.stop();
 					}
 				});
@@ -104,7 +105,7 @@ public class TormentedDemon implements Attack {
                             attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 1883, 99, 35, hitId, slope);
                             attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1884, 99, 35, hitId, slope);
                             attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 20, 1884, 99, 35, hitId, slope);
-                            Combat.npcAttack(n, attack, Combat.random(maxMage), 500, 2);
+                            Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxMage), 2, maxMage), 500, 2);
                         }
 						this.stop();
 					}

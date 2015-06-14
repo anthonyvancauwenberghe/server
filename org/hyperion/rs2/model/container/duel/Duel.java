@@ -471,6 +471,7 @@ public class Duel {
 			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
 		player.getSpecBar().setAmount(SpecialBar.FULL);
 		player.specOn = false;
+        player.getCombat().morrigansLeft = 0;
 		player.getActionSender().resetFollow();
 		player.getSpecBar().sendSpecAmount();
 		player.getSpecBar().sendSpecBar();
@@ -570,6 +571,7 @@ public class Duel {
 	public static void finishDuel(Player player, Player opponent, boolean won) {
 		player.setDead(false);
 		player.cannotSwitch = false;
+        player.getCombat().morrigansLeft = 0;
 
         if(won) {
             player.getActionSender().sendUpdateItems(6822, player.getDuel().toArray());

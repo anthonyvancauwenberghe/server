@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
+import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
@@ -194,6 +195,8 @@ public class PlayerDeathEvent extends Event {
 
         } else if (player.getDungoneering().inDungeon()) {
             DungeoneeringManager.handleDying(player);
+        } else if (Bork.doDeath(player)) {
+
         } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
 			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
 			if(killer != null) //in fight pits death, reward player

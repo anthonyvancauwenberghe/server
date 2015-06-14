@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.model.combat.attack.AvatarOfDestruction;
+import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
 import org.hyperion.rs2.model.combat.attack.GodWarsBandos;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.util.IoBufferUtils;
@@ -306,12 +307,12 @@ public class NPCDefinition {
 					} else {
 						int[] bonus = new int[10];
 						for(int i2 = 0; i2 < 10; i2++) {
-							bonus[i2] = 400;
+							bonus[i2] = 340;
 						}
 						int[] atks = {12791};
 						definition[9463] = new NPCDefinition(9463, 450, 220, bonus, 12793, 12791, atks, 2, "Ice_Skry", 30);
 						definition[8349] = new NPCDefinition(8349, 800, 450, bonus, 10924, 10923, atks, 2, "Tormented_Demons", 30);
-						definition[8133] = NPCDefinition.create(8133, 1200, 785, bonus, 10059, 10053, new int[]{10057, 10058}, 4, "Corporeal_Beast", 184);
+						definition[8133] = NPCDefinition.create(8133, 1200, 650, bonus, 10059, 10053, new int[]{10057, 10058}, 4, "Corporeal_Beast", 184);
 						for(int n : SummoningMonsters.SUMMONING_MONSTERS) {
 							definition[n] = SummoningMonsters.loadDefinition(n);
 						}
@@ -320,6 +321,7 @@ public class NPCDefinition {
                                 System.out.println("Rev monster: "+n+" added, name: "+definition[n].getName());
                         }
                         AvatarOfDestruction.loadDefinitions();
+                        BorkAndMinions.init();
 						//int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime
 						System.out.println("Loaded " + j + " NPC Definitions.");
 						return;

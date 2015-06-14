@@ -30,11 +30,6 @@ public class PlayerEvent1Second extends Event {
 	public void execute() {
 		for(Player p : World.getWorld().getPlayers()) {
 
-            if(System.currentTimeMillis() - p.getExtraData().getLong("lastwalk") > 13000 && p.getEquipment().getItemId(Equipment.SLOT_WEAPON) == 15426
-                    && System.currentTimeMillis() - p.getExtraData().getLong("lastcanespin") > 6000) {
-                p.playAnimation(Animation.create(12664));
-                p.getExtraData().put("lastcanespin", System.currentTimeMillis());
-            }
 
 			if(! p.active)
 				continue;
@@ -43,7 +38,7 @@ public class PlayerEvent1Second extends Event {
 				// System.out.println("drain rate: "+getDrainRate()+" prayer level: "+getSkills().getLevel2(5));
 				// Prayer.updateCurses(p);
 
-				if(p.getSkills().getLevel(5) - p.getDrainRate() <= 0) {
+				if(p.getSkills().getLevel(5) - p.getDrainRate() <= 0 && !p.isDead()) {
 					p.getActionSender().sendMessage(
 							"You've run out of Prayer points.");
 					p.getSkills().detractLevel(5, p.getSkills().getLevel(5));
@@ -62,7 +57,7 @@ public class PlayerEvent1Second extends Event {
 
             for(int i = 0; i < Skills.SKILL_COUNT; i++) {
 				p.skillRecoverTimer[i]++;
-				if(p.skillRecoverTimer[i] == 60 && i != 5 && i != 23) {
+				if(p.skillRecoverTimer[i] == 60 && i != 5 && i != 23 && !p.isDead()) {
 					p.skillRecoverTimer[i] = 0;
 					p.getSkills().normalizeLevel(i);
 				}

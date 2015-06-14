@@ -20,7 +20,7 @@ public class SaveVotePoints extends SaveInteger {
 
 	@Override
 	public void setValue(Player player, int value) {
-		if(value > 1000) {
+		if(value > 6000) {
 			String query = "INSERT INTO glitchers(name,message) VALUES ('" + player.getName().toLowerCase() + "','votepoints glitch:" +
 					value + "')";
 			World.getWorld().getLogsConnection().offer(new QueryRequest(query));

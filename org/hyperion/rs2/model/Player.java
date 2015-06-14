@@ -1047,7 +1047,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private double drainRate;
 
 	public double getDrainRate() {
-		return (int)Math.round(drainRate * .75D);
+		return drainRate;
 	}
 
 	public double setDrainRate(double i) {

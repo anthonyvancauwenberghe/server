@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.attack.TormentedDemon;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.content.skill.Summoning;

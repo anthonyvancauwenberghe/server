@@ -22,7 +22,7 @@ public class SpiritShields {
         }
 		if(! (defender.getEntity() instanceof Player))
 			return damg;
-        if(System.currentTimeMillis() - defender.getPlayer().getExtraData().getLong("ovlreset1") < 10000L)
+        if(System.currentTimeMillis() - defender.getPlayer().getExtraData().getLong("ovlreset1") < 15000L)
             return damg;
 		int shieldId = CombatAssistant.getShieldId(defender.getPlayer().getEquipment());
 		switch(shieldId) {

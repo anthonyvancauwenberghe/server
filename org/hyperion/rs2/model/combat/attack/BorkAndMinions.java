@@ -17,7 +17,8 @@ import java.util.Arrays;
  */
 public class BorkAndMinions implements Attack {
 
-    private static final int BORK_ID = 7134;
+    public static final int BORK_ID = 7134;
+    public static final int MINION_ID = 7135;
 
     public static void init() {
         final int[] bonus = new int[10];
@@ -25,8 +26,8 @@ public class BorkAndMinions implements Attack {
         NPCDefinition.getDefinitions()[BORK_ID] =
                 NPCDefinition.create(BORK_ID, 600, 425, bonus, 8756, 8755, new int[]{8754}, 3, "Bork", 120);
         Arrays.fill(bonus, 175);
-        NPCDefinition.getDefinitions()[7135] =
-                NPCDefinition.create(7135, 125, 425, bonus, 8761, 8762, new int[]{8760}, 2, "Borklets", 120);
+        NPCDefinition.getDefinitions()[MINION_ID] =
+                NPCDefinition.create(MINION_ID, 125, 425, bonus, 8761, 8762, new int[]{8760}, 2, "Borklets", 120);
     }
     @Override
     public String getName() {
@@ -35,7 +36,7 @@ public class BorkAndMinions implements Attack {
 
     @Override
     public int[] npcIds() {
-        return new int[]{BORK_ID,7135};  //To change body of implemented methods use File | Settings | File Templates.
+        return new int[]{BORK_ID,MINION_ID};  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private static int MAX_BORK_DAMAGE = 53;

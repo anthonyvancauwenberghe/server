@@ -307,7 +307,7 @@ public class NPCDefinition {
 					} else {
 						int[] bonus = new int[10];
 						for(int i2 = 0; i2 < 10; i2++) {
-							bonus[i2] = 400;
+							bonus[i2] = 340;
 						}
 						int[] atks = {12791};
 						definition[9463] = new NPCDefinition(9463, 450, 220, bonus, 12793, 12791, atks, 2, "Ice_Skry", 30);

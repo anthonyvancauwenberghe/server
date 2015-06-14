@@ -50,6 +50,11 @@ public class TeleTabs implements ContentTemplate {
 			player.removeEP();
 		}
 
+        if(player.getExtraData().getBoolean("cantteleport")) {
+            player.sendMessage("You can't teleport in this event");
+            return;
+        }
+
 		ContentEntity.deleteItem(player, id);
 		final int x1 = x;
 		final int y1 = y;

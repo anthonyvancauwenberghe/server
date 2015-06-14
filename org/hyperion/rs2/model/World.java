@@ -44,6 +44,7 @@ import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
@@ -899,6 +900,7 @@ public class World {
         player.getDungoneering().fireOnLogout(player);
         player.setActive(false);
         LastManStanding.getLastManStanding().leaveGame(player, true);
+        Bork.doDeath(player);
         // Combat.resetAttack(player.cE);
         resetPlayersNpcs(player);
         resetSummoningNpcs(player);

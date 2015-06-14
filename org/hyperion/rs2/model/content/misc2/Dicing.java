@@ -1,13 +1,18 @@
 package org.hyperion.rs2.model.content.misc2;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.Clan;
@@ -15,9 +20,11 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
+import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 /**
  * @author Arsen Maxyutov.
@@ -26,6 +33,7 @@ import org.hyperion.util.Misc;
 public class Dicing implements ContentTemplate {
 
 	public static HashMap<Entity, SecureRandom> dicingRandoms = new HashMap<Entity, SecureRandom>();
+    private static Map<Integer, Integer> pkpValues = new HashMap<>();
 	
 	public static final HashMap<Integer, Integer> gambled = new HashMap<Integer, Integer>();
 
@@ -114,15 +122,32 @@ public class Dicing implements ContentTemplate {
 		return r;
 	}*/
 
+
+    public static void diceNpc(final Player player, final NPC dicer, final Item item) {
+        if(item == null)
+            return;
+        if(pkpValues.containsKey(item.getId())) {
+            player.getActionSender().sendDialogue("Would you like", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
+                    "Gamble for " + pkpValues.get(item.getId()) * 2 + " PKT", "Gamble for 2X the item");
+            player.getInterfaceState().setNextDialogueId(0, 8500);
+            player.getInterfaceState().setNextDialogueId(1, 8501);
+            player.getExtraData().put("npcdiceitem", item);
+            player.getExtraData().put("npcdice", dicer);
+            return;
+        }
+
+        diceNpc(player, dicer, item, player.getExtraData().getBoolean("diceforpkp"));
+    }
 	/**
 	 * Dices an item.
 	 *
 	 * @param player
 	 * @param item
 	 */
-	public static void diceNpc(final Player player, final NPC dicer, final Item item) {
-		if(item == null)
+	public static void diceNpc(final Player player, final NPC dicer, final Item item, boolean toPkp) {
+		if(item == null || dicer == null)
 			return;
+        player.getExtraData().put("diceforpkp", false);
 		if(player.isDead()) {
 			player.getActionSender().sendMessage("The gambler doesn't have a very strong stomache!");
 		}
@@ -200,7 +225,10 @@ public class Dicing implements ContentTemplate {
 						amount *= .9;
 						player.getActionSender().sendMessage("@red@The gambler feels greedy and takes a 10% cut!");
 					}
-					player.getInventory().add(new Item(id, amount*2));
+                    if(toPkp)
+                        player.getInventory().add(Item.create(5020, pkpValues.get(id) * 2));
+                    else
+                        player.getInventory().add(new Item(id, amount*2));
 					player.getActionSender().sendMessage("You have won the item!");
 					player.setDiced(player.getDiced() + itemvalue);
 					query = "INSERT INTO dicing(username,item_id,item_count,win_value) "
@@ -265,8 +293,20 @@ public class Dicing implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
-
-	}
+        World.getWorld().submit(new Event(Time.FIVE_MINUTES) {
+            public void execute() {
+                try {
+                    final List<String> lines = Files.readAllLines(new File("./data/dontopkp.txt").toPath());
+                    for(String s : lines) {
+                        final String[] split = s.split(":");
+                        pkpValues.put(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+        });
+    }
 
 	@Override
 	public int[] getValues(int type) {
@@ -275,7 +315,22 @@ public class Dicing implements ContentTemplate {
 			int[] diceIds = {DICE_ID};
 			return diceIds;
 		}
+        if(type == ClickType.DIALOGUE_MANAGER)
+            return new int[]{8500, 8501};
 		return null;
 	}
+
+    @Override
+    public boolean dialogueAction(final Player player, int id) {
+        switch(id) {
+            case 8500:
+                diceNpc(player, (NPC)player.getExtraData().get("npcdice"), (Item)player.getExtraData().get("npcdiceitem"), true);
+                break;
+            case 8501:
+                diceNpc(player, (NPC)player.getExtraData().get("npcdice"), (Item)player.getExtraData().get("npcdiceitem"), false);
+                break;
+        }
+        return true;
+    }
 
 }

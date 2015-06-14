@@ -1101,7 +1101,8 @@ public class Combat {
                 (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
                         combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711)
                 || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Location.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk()
-                || (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())))
+                || (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY()))
+                || (combatEntity.getAbsZ() > 0 && combatEntity.getAbsX() > 3540 && combatEntity.getAbsX() < 3585 && combatEntity.getAbsY() > 9935 && combatEntity.getAbsY() < 9975))
 			return true;
 		if(combatEntity.getEntity() instanceof Player) {
 			if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))

@@ -215,7 +215,7 @@ public class Dicing implements ContentTemplate {
 						player.getActionSender().sendMessage("@red@The gambler feels greedy and takes a 10% cut!");
 					}
                     if(toPkp)
-                        player.getInventory().add(Item.create(5020, pkpValues.get(id) * 2));
+                        player.getInventory().add(Item.create(5020, pkpValues.get(id) * 2 * amount));
                     else
                         player.getInventory().add(new Item(id, amount*2));
 					player.getActionSender().sendMessage("You have won the item!");
@@ -282,6 +282,15 @@ public class Dicing implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
+        try {
+            final List<String> lines = Files.readAllLines(new File("./data/dontopkp.txt").toPath());
+            for(String s : lines) {
+                final String[] split = s.split(":");
+                pkpValues.put(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         World.getWorld().submit(new Event(Time.FIVE_MINUTES) {
             public void execute() {
                 try {

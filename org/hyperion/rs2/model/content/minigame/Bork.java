@@ -108,11 +108,18 @@ public class Bork implements ContentTemplate {
             updateInterface();
         }
 
-        public void giveReward() {
+        public void giveReward(boolean kill) {
             int percentIncrease = (int)percentIncrease();
-            player.getBank().add(Item.create(PvMStore.TOKEN, (int)(percentIncrease * TOKEN_MULTIPLIER)));
-            player.getBank().add(Item.create(5020, (int)(percentIncrease * PKP_MULTIPLIER)));
-            player.sendf("@red@ %d @bla@ PvM Tokens and @red@ %d @bla@ Pk Tickets have been added to your bank", percentIncrease, percentIncrease * 3);
+            int tokens = (int)(percentIncrease * TOKEN_MULTIPLIER);
+            int pkt = (int)(percentIncrease * PKP_MULTIPLIER);
+            if(!kill)
+            {
+                pkt = pkt/3;
+                tokens = tokens/3;
+            }
+            player.getBank().add(Item.create(PvMStore.TOKEN, tokens));
+            player.getBank().add(Item.create(5020, pkt));
+            player.sendf("@red@ %d @bla@ PvM Tokens and @red@ %d @bla@ Pk Tickets have been added to your bank", tokens, pkt);
         }
 
         public void updateInterface() {
@@ -141,6 +148,7 @@ public class Bork implements ContentTemplate {
         if(player.getExtraData().get(KEY) == null) {
             return false;
         }
+        ((BorkEvent)player.getExtraData().get(KEY)).giveReward(false);
         ((BorkEvent)player.getExtraData().get(KEY)).stop();
         player.setTeleportTarget(Edgeville.LOCATION, false);
         return true;
@@ -152,7 +160,7 @@ public class Bork implements ContentTemplate {
         if(player.getExtraData().get(KEY) == null || npcId != BorkAndMinions.BORK_ID) {
             return false;
         }
-        ((BorkEvent)player.getExtraData().get(KEY)).giveReward();
+        ((BorkEvent)player.getExtraData().get(KEY)).giveReward(true);
         ((BorkEvent)player.getExtraData().get(KEY)).stop();
         player.setTeleportTarget(Edgeville.LOCATION, false);
         return true;

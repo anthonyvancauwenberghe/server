@@ -27,7 +27,7 @@ public class BorkAndMinions implements Attack {
                 NPCDefinition.create(BORK_ID, 600, 425, bonus, 8756, 8755, new int[]{8754}, 3, "Bork", 120);
         Arrays.fill(bonus, 175);
         NPCDefinition.getDefinitions()[MINION_ID] =
-                NPCDefinition.create(MINION_ID, 125, 425, bonus, 8761, 8762, new int[]{8760}, 2, "Borklets", 120);
+                NPCDefinition.create(MINION_ID, 155, 125, bonus, 8761, 8762, new int[]{8760}, 2, "Borklets", 120);
     }
     @Override
     public String getName() {
@@ -39,7 +39,7 @@ public class BorkAndMinions implements Attack {
         return new int[]{BORK_ID,MINION_ID};  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    private static int MAX_BORK_DAMAGE = 53;
+    private static int MAX_BORK_DAMAGE = 45;
 
     private static int MAX_MINION_DAMAGE = 27;
 
@@ -52,17 +52,22 @@ public class BorkAndMinions implements Attack {
         }
         n.getCombat().doAtkEmote();
         int tempDamage;
+
+        int distance = attack.getEntity().getLocation().distance(n.getLocation());
         if(n.getDefinition().getId() == BORK_ID) {
+            if(distance > 2)
+                return 0;
             tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_BORK_DAMAGE), Constants.MELEE, MAX_BORK_DAMAGE);
             Combat.npcAttack(n, attack, tempDamage, 300, Constants.MELEE);
             n.cE.predictedAtk = System.currentTimeMillis() + 3000;
         } else {
+            if(distance > 5)
+                return 0;
             tempDamage = CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MINION_DAMAGE), Constants.RANGE, MAX_MINION_DAMAGE);
-            Combat.npcAttack(n, attack, tempDamage, 300, Constants.RANGE);
-            n.cE.predictedAtk = System.currentTimeMillis() + 1800;
+            Combat.npcAttack(n, attack, tempDamage, 1200, Constants.RANGE);
+            n.cE.predictedAtk = System.currentTimeMillis() + 2500;
         }
 
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
         if(distance <= 10) {
             return 5;
         }

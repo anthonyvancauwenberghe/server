@@ -33,7 +33,7 @@ import org.hyperion.util.Time;
 public class Dicing implements ContentTemplate {
 
 	public static HashMap<Entity, SecureRandom> dicingRandoms = new HashMap<Entity, SecureRandom>();
-    private static Map<Integer, Integer> pkpValues = new HashMap<>();
+    public static Map<Integer, Integer> pkpValues = new HashMap<>();
 	
 	public static final HashMap<Integer, Integer> gambled = new HashMap<Integer, Integer>();
 
@@ -124,17 +124,6 @@ public class Dicing implements ContentTemplate {
 
 
     public static void diceNpc(final Player player, final NPC dicer, final Item item) {
-        if(item == null)
-            return;
-        if(pkpValues.containsKey(item.getId())) {
-            player.getActionSender().sendDialogue("Would you like", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
-                    "Gamble for " + pkpValues.get(item.getId()) * 2 + " PKT", "Gamble for 2X the item");
-            player.getInterfaceState().setNextDialogueId(0, 8500);
-            player.getInterfaceState().setNextDialogueId(1, 8501);
-            player.getExtraData().put("npcdiceitem", item);
-            player.getExtraData().put("npcdice", dicer);
-            return;
-        }
 
         diceNpc(player, dicer, item, player.getExtraData().getBoolean("diceforpkp"));
     }
@@ -317,6 +306,9 @@ public class Dicing implements ContentTemplate {
 		}
         if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{8500, 8501};
+        if(type == ClickType.NPC_OPTION1) {
+            return new int[]{2998};
+        }
 		return null;
 	}
 
@@ -333,5 +325,6 @@ public class Dicing implements ContentTemplate {
         }
         return true;
     }
+
 
 }

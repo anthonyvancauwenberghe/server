@@ -189,16 +189,16 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		Item item = player.getInventory().get(invslot);
         final NPC npc = (NPC)World.getWorld().getNPCs().get(i);
         if (item != null && npc != null) {
-            if (player.getLocation().isWithinDistance(Edgeville.DICER.getLocation(), 4)) {
+            if(npc.getDefinition().getId() == 2999)
                 Dicing.diceNpc(player, npc, item);
-            } else if (player.getLocation().isWithinDistance(RecklessDonatorsPlace.DICER.getLocation(), 4)) {
-                Dicing.diceNpc(player, npc, item);
-            } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER.getLocation(), 4)) {
-                Dicing.diceNpc(player, npc, item);
-            } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER1.getLocation(), 4)) {
-                Dicing.diceNpc(player, npc, item);
-            } else if (player.getLocation().isWithinDistance(OtherDonatorsPlace.DICER2.getLocation(), 4)) {
-                Dicing.diceNpc(player, npc, item);
+            else if(npc.getDefinition().getId() == 2998) {
+                if(Dicing.pkpValues.containsKey(item.getId()) && player.getExtraData().getInt("dicewarn") == item.getId()) {
+                    Dicing.diceNpc(player, npc, item, true);
+                }else if(Dicing.pkpValues.containsKey(item.getId())) {
+                    player.sendf("This item will gamble for %,d PKT", Dicing.pkpValues.get(item.getId()));
+                } else {
+                    player.sendf("This item cannot be gambled for PKT");
+                }
             }
         }
 	}

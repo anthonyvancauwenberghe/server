@@ -196,6 +196,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
                     Dicing.diceNpc(player, npc, item, true);
                 }else if(Dicing.pkpValues.containsKey(item.getId())) {
                     player.sendf("This item will gamble for %,d PKT", Dicing.pkpValues.get(item.getId()));
+                    player.getExtraData().put("dicewarn", item.getId());
                 } else {
                     player.sendf("This item cannot be gambled for PKT");
                 }

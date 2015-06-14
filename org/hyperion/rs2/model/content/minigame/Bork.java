@@ -157,7 +157,7 @@ public class Bork implements ContentTemplate {
 
     @Override
     public boolean npcDeath(final Player player, int npcId, int x, int y, int slot) {
-        if(player.getExtraData().get(KEY) == null || npcId != BorkAndMinions.BORK_ID) {
+        if(player.getExtraData().get(KEY) == null) {
             return false;
         }
         ((BorkEvent)player.getExtraData().get(KEY)).giveReward(true);

@@ -48,7 +48,7 @@ public class Bork implements ContentTemplate {
             public boolean execute(final Player player, final String input) {
                 long delay;
                 if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
-                    player.sendf("You must wait@red@ %d @bla@more minutes to kill Bork", TimeUnit.MINUTES.convert(delay, TimeUnit.MILLISECONDS));
+                    player.sendf("You must wait@red@ %d @bla@more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
                     return true;
                 } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 3)  {
                     player.sendf("You need at least 3 hours of online time to attempt Bork");
@@ -130,6 +130,7 @@ public class Bork implements ContentTemplate {
         public void stop() {
             super.stop();
             player.getActionSender().removeAllInterfaces();
+            player.getActionSender().showInterfaceWalkable(-1);
             player.getExtraData().put("cantteleport", false);
             player.getExtraData().remove(KEY);
         }

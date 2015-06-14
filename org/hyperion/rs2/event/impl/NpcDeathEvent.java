@@ -135,6 +135,8 @@ public class NpcDeathEvent extends Event {
 
                     }
                 }
+                if(Bork.handleBorkDeath(killer, npc))
+                    return;
             }
             npc.setTeleportTarget(npc.getSpawnLocation(), false);
             if(npc.npcDeathTimer != - 1) {

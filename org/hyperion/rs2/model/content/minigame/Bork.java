@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * Time: 8:15 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Bork implements ContentTemplate {
+public class Bork  {
 
     private static final String KEY = "borkevent";
     private static final String TIME_KEY = "borktime";
@@ -66,12 +66,6 @@ public class Bork implements ContentTemplate {
         });
     }
 
-    @Override
-    public int[] getValues(int type) {
-        if(type == ClickType.NPC_DEATH)
-            return new int[]{BorkAndMinions.BORK_ID};
-        return new int[0];
-    }
 
     private static final class BorkEvent extends Event {
         private static final double PKP_MULTIPLIER = 3;
@@ -155,9 +149,8 @@ public class Bork implements ContentTemplate {
 
     }
 
-    @Override
-    public boolean npcDeath(final Player player, int npcId, int x, int y, int slot) {
-        if(player.getExtraData().get(KEY) == null) {
+    public static boolean handleBorkDeath(final Player player, final NPC npc) {
+        if(player.getExtraData().get(KEY) == null && npc.getDefinition().getId() != BorkAndMinions.BORK_ID) {
             return false;
         }
         ((BorkEvent)player.getExtraData().get(KEY)).giveReward(true);

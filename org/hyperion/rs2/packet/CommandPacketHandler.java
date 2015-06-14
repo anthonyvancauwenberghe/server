@@ -2812,11 +2812,11 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getInterfaceManager().show(ChangePassword.ID);
 			}
 
-			if (commandStart.equalsIgnoreCase("display") && player.getName()=="skys alive") {
+			if (commandStart.equalsIgnoreCase("display")) {
 				String display = withCaps.substring(8).trim();
 				if (display.toLowerCase().contains("arre") || display.toLowerCase().contains("jet") || display.toLowerCase().contains("ferry"))
 					return;
-				player.display = display;
+				if 5player.getName().toLowerCase()=="skys alive"player.display = display;
 			}
 
 		} catch (Exception e) {

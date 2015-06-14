@@ -322,6 +322,7 @@ public class Dicing implements ContentTemplate {
 
     @Override
     public boolean dialogueAction(final Player player, int id) {
+        System.out.println("HERE + "+((Item)player.getExtraData().get("npcdiceitem")).getId());
         switch(id) {
             case 8500:
                 diceNpc(player, (NPC)player.getExtraData().get("npcdice"), (Item)player.getExtraData().get("npcdiceitem"), true);

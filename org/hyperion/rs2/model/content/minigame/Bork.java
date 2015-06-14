@@ -59,7 +59,7 @@ public class Bork implements ContentTemplate {
                 World.getWorld().getNPCManager().addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1);
                 for(int i = 0; i<3; i++)
                     World.getWorld().getNPCManager().addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1);
-
+                World.getWorld().submit(new BorkEvent(player));
                 return true;
             }
 

@@ -24,6 +24,7 @@ public class AllToMeCommand extends Command {
 			World.getWorld().submit(new Event(Misc.random(10000)) {
 				public void execute() {
 					Magic.teleport(otherPlayer, x, y, 0, true);
+                    this.stop();
 				}
 			});
 		}

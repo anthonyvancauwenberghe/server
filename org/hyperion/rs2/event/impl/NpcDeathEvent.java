@@ -134,9 +134,10 @@ public class NpcDeathEvent extends Event {
                             World.getWorld().getContentManager().handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
 
                     }
+                    if(Bork.handleBorkDeath(killer, npc))
+                        return;
                 }
-                if(Bork.handleBorkDeath(killer, npc))
-                    return;
+
             }
             npc.setTeleportTarget(npc.getSpawnLocation(), false);
             if(npc.npcDeathTimer != - 1) {

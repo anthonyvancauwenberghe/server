@@ -10,6 +10,7 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Percentage;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.shops.PvMStore;
@@ -18,6 +19,7 @@ import org.hyperion.util.Time;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,16 +52,30 @@ public class Bork  {
                 if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
                     player.sendf("You must wait@red@ %d @bla@more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
                     return true;
-                } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 3)  {
-                    player.sendf("You need at least 3 hours of online time to attempt Bork");
+                } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 4)  {
+                    player.sendf("You need at least 4 hours of online time to attempt Bork");
                     return true;
                 }
+
+                if(!ItemSpawning.canSpawn(player)) {
+                    player.sendMessage("You can't start bork here");
+                    return false;
+
+                }
+
                 final int height = player.getIndex() * 4;
                 Magic.teleport(player, TELEPORT_LOCATION.transform(0, 0, height), false);
-                World.getWorld().getNPCManager().addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1);
-                for(int i = 0; i<3; i++)
-                    World.getWorld().getNPCManager().addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1);
+
                 World.getWorld().submit(new BorkEvent(player));
+                return true;
+            }
+
+        });
+
+        CommandHandler.submit(new Command("resetbork", Rank.DEVELOPER) {
+
+            public boolean execute(final Player player, final String input) {
+                player.getPermExtraData().put(TIME_KEY, 0L);
                 return true;
             }
 
@@ -75,6 +91,7 @@ public class Bork  {
          */
         private static final double MOD = 50.0;
         private static final int ORIGINAL_TIME = 500;
+        private final java.util.List<NPC> npcs = new ArrayList<>();
 
         private final Player player;
         private int time;
@@ -87,10 +104,13 @@ public class Bork  {
             player.getActionSender().showInterfaceWalkable(INTERFACE_ID);
             player.getExtraData().put("cantteleport", true);
             player.getExtraData().put(KEY, this);
-            int i = 0;
-            player.getActionSender().sendString(CHILD_IDS[i++], "Kill BORK");
+            player.getActionSender().sendString(CHILD_IDS[0], "Kill BORK");
             //for(; i < CHILD_IDS.length; i++)
                 //player.getActionSender().sendString(CHILD_IDS[i], "");
+            final int height = player.getIndex() * 4;
+            npcs.add(World.getWorld().getNPCManager().addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1));
+            for(int i = 0; i<3; i++)
+                npcs.add(World.getWorld().getNPCManager().addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1));
 
 
         }
@@ -134,6 +154,16 @@ public class Bork  {
             player.getActionSender().showInterfaceWalkable(-1);
             player.getExtraData().put("cantteleport", false);
             player.getExtraData().remove(KEY);
+
+            for(NPC npc : npcs) {
+                if(!npc.isDead()) {
+                    npc.serverKilled = true;
+                    npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
+                }
+            }
+
+
+
         }
 
     }

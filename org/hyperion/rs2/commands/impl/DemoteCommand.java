@@ -15,7 +15,12 @@ public class DemoteCommand extends Command {
 	public boolean execute(Player player, String input) {
 		input = filterInput(input);
 		Player beingDemoted = World.getWorld().getPlayer(input);
+
 		if(beingDemoted != null) {
+            if(Rank.getPrimaryRankIndex(beingDemoted) > Rank.getPrimaryRankIndex(player)) {
+                player.sendMessage("You cannot demote this user");
+                return false;
+            }
 			for(Rank rank : Rank.values()) {
 				if(rank.ordinal() < Rank.EVENT_MANAGER.ordinal())
 					continue;

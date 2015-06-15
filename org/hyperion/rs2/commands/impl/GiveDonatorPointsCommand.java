@@ -14,12 +14,14 @@ public class GiveDonatorPointsCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
 		String name = filterInput(input);
-		Player donator = World.getWorld().getPlayer(name);
+        String[] split = name.split(",");
+		Player donator = World.getWorld().getPlayer(split[0]);
+        int amount = Integer.parseInt(split[1]);
 		if(donator != null) {
-			donator.getPoints().increaseDonatorPoints(100);
+			donator.getPoints().increaseDonatorPoints(amount);
 			player.getActionSender().sendMessage("Gave 100 dp!");
 		} else {
-			player.getActionSender().sendMessage("Player is offline..");
+			player.getActionSender().sendMessage("Please use the format: ::givedp name,amount");
 		}
 		return true;
 

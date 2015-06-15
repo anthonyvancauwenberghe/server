@@ -149,18 +149,22 @@ public class Bork  {
 
         @Override
         public void stop() {
+            //stop event
             super.stop();
+            //remove all variables
             player.getActionSender().removeAllInterfaces();
             player.getActionSender().showInterfaceWalkable(-1);
             player.getExtraData().put("cantteleport", false);
             player.getExtraData().remove(KEY);
-
+            //kill all npcs
             for(NPC npc : npcs) {
                 if(!npc.isDead()) {
                     npc.serverKilled = true;
                     npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
                 }
             }
+            //destroy reference to npcs, mem leak
+            npcs.clear();
 
 
 

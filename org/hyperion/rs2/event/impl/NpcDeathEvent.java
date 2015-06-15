@@ -196,13 +196,17 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if(tokens <= 0)
-                        tokens = Misc.random(20) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
+                        tokens = Misc.random(12) == 0 ? Misc.random(npc.getDefinition().combat()/10 + 1) : 0;
                     if(tokens > 0 && npc.getDefinition().getId() != 5399) {
-                        GlobalItem globalItem5 = new GlobalItem(
-                                player, x, y, z,
-                                new Item(PvMStore.TOKEN, tokens)
-                        );
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+
+                        {
+                            GlobalItem globalItem5 = new GlobalItem(
+                                    player, x, y, z,
+                                    new Item(PvMStore.TOKEN, tokens)
+                            );
+                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                        }
+
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);

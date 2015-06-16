@@ -19,7 +19,7 @@ public class GiveDonatorPointsCommand extends Command {
         int amount = Integer.parseInt(split[1]);
 		if(donator != null) {
 			donator.getPoints().increaseDonatorPoints(amount);
-			player.getActionSender().sendMessage("Gave 100 dp!");
+			player.getActionSender().sendMessage("Gave"+amount+" dp!");
 		} else {
 			player.getActionSender().sendMessage("Please use the format: ::givedp name,amount");
 		}

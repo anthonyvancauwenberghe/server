@@ -24,9 +24,9 @@ public class SummoningMonsters {
 		case 7343:
 			bonus = new int[10];
 			for(int i = 0; i < bonus.length; i++)
-				bonus[i] = 500;
+				bonus[i] = 320;
 			int[] atk = {8183};
-			return NPCDefinition.create(7343, 300, 20, bonus, 8184, 8185, atk, 2, "Steel Titan", 0);
+			return NPCDefinition.create(7343, 300, 240, bonus, 8184, 8185, atk, 2, "Steel Titan", 0);
 		case 6823:
 			bonus = new int[10];
 			for(int i = 0; i < bonus.length; i++)

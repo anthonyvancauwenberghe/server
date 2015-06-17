@@ -237,7 +237,7 @@ public class NpcDeathEvent extends Event {
                                 {
                                     GlobalItem globalItem = new GlobalItem(player, x, y, z,
                                             Item.create(drop.getId(), amt));
-                                    if (DonatorShop.getPrice(drop.getId()) > 50) {
+                                    if (drop.getChance() < 30) {
                                         for (Player p : player.getRegion().getPlayers())
                                             p.sendf("@gre@%s has just gotten a %d of %s", player.getName(), amt, ItemDefinition.forId(drop.getId()).getName());
                                     }

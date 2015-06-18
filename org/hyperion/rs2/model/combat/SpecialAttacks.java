@@ -231,6 +231,7 @@ public class SpecialAttacks {
 				specialAnimation = 12033;
 				specialDis = 1;
 				specialDrain = 25;
+                specialAccuracy = 1.35;
 				break;
             case 19605:
                 playerGfx = 1222;
@@ -676,7 +677,6 @@ public class SpecialAttacks {
 				dmg = SpiritShields.applyEffects(player.cE.getOpponent(), dmg);
 				player.cE.getOpponent().hit(dmg, player, false, Constants.MAGE + crit1);
 				break;
-			case 3204:
 			case 5698:// dds
 			case 1215:
 			case 1231:
@@ -950,7 +950,7 @@ public class SpecialAttacks {
 			case 1305:
             case 13899:
             case 11694:
-				specDamage = 1.11;
+				specDamage = 1.25;
 				break;
             case 19605:
                 specDamage = 1.15;

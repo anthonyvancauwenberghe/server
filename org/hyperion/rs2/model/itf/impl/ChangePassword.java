@@ -27,7 +27,7 @@ public class ChangePassword extends Interface {
     public void handle(final Player player, final Packet pkt) {
         final String password = pkt.getRS2String().toLowerCase();
 
-        if(player.getExtraData().getBoolean("cantchangepass")) {
+        if(player.getExtraData().getBoolean("cantdoshit")) {
             player.sendMessage("Your IP has changed too much from your last login, please contact an admin to change your pass");
             return;
         }

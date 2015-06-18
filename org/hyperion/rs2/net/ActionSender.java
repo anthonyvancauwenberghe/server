@@ -215,7 +215,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "Recent Update, @red@PvM Store: @blu@ http://j.mp/apkmay30#url#");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url# ", "@red@Runelocus TEMPORARILY gives 3 vote boxes per vote!");
 
             passChangeShit();
 

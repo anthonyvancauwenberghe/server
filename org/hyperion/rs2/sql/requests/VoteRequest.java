@@ -56,7 +56,7 @@ public class VoteRequest extends SQLRequest {
                 }
                 int thisClaim = 0;
                 if (runelocus)
-                    thisClaim += 2;
+                    thisClaim += 3;
                 if (top100)
                     thisClaim += 1;
                 if (topg)

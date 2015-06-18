@@ -234,8 +234,8 @@ public class CommandHandler {
         submit(new Command("wiki", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                final String site = filterInput(input).replace(" ", "%20");
-                player.sendf("l4unchur13 http://www.arteropk.wikia.com/wiki/%s", TextUtils.titleCase(site));
+                final String site = TextUtils.titleCase(filterInput(input)).replace(" ", "%20");
+                player.sendf("l4unchur13 http://www.arteropk.wikia.com/wiki/%s", site);
                 return true;
             }
         });

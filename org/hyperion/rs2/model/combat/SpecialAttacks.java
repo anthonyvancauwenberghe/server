@@ -162,6 +162,7 @@ public class SpecialAttacks {
                 specialAnimation = 1060;
                 specialDis = 1;
                 specialDrain = 25;
+                specialAccuracy = 1.4;
                 break;
             case 11061:
                 specialAnimation = 6147;

@@ -1267,7 +1267,7 @@ public class CombatAssistant {
 				bonus = player.getBonus().get(i);
 			}
 		}
-        if(player.getKillCount() < 5)
+        if(player.getKillCount() < 5 && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
             bonus *= 1.25;
 		return (int) ((meleeAtk * .6 + (bonus * .77)));
 

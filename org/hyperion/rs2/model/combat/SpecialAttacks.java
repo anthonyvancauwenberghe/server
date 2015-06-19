@@ -112,7 +112,7 @@ public class SpecialAttacks {
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.12;
+				specialAccuracy = 1.25;
 				break;
 			case 1215:
 				playerGfx = 252;
@@ -239,14 +239,14 @@ public class SpecialAttacks {
                 specialAnimation = 7074;
                 specialDis = 1;
                 specialDrain = 50;
-                specialAccuracy = 1.25;
+                specialAccuracy = 1.28;
                 break;
 			case 11694:
 				playerGfx = 1222;
 				specialAnimation = 7074;
 				specialDis = 1;
 				specialDrain = 50;
-				specialAccuracy = 1.12;
+				specialAccuracy = 1.25;
 				break;
 			case 11698:
 				playerGfx = 1220;
@@ -951,7 +951,7 @@ public class SpecialAttacks {
 			case 1305:
             case 13899:
             case 11694:
-				specDamage = 1.25;
+				specDamage = 1.12;
 				break;
             case 19605:
                 specDamage = 1.15;

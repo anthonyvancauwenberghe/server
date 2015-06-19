@@ -119,6 +119,15 @@ public class Combat {
 		Entity attacker = combatEntity.getEntity();
 		final Entity opponent = combatEntity.getOpponent().getEntity();
 
+        /**
+         * Skull Adding
+         */
+        CombatAssistant.checkSkull(combatEntity);
+        /**
+         * Degrading
+         */
+        PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
+
 
 		int magicAtk = combatEntity.getNextMagicAtk();
 		if(combatEntity.getNextMagicAtk() > 0) {
@@ -543,14 +552,7 @@ public class Combat {
 			finishOff(combatEntity, damg, hit, bowType, damgDouble, doubleHit, distance, possibleMaxHit, combatStyle);
 		}
         if(hit) {
-            /**
-             * Skull Adding
-             */
-            CombatAssistant.checkSkull(combatEntity);
-            /**
-             * Degrading
-             */
-            PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
+
 
             ItemDegrading.check(combatEntity.getPlayer());
         }

@@ -35,7 +35,7 @@ public class Item {
 	 * @return
 	 */
 	public static Item create(int id, int count) {
-		return count == 0 ? null : new Item(id, count);
+		return count <= 0 ? null : new Item(id, count);
 	}
 	/**
 	 * Creates a single item.

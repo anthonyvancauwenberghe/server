@@ -504,7 +504,7 @@ public class SpecialAttacks {
 		break;
 			// dark bows
 			case 13879:
-                final int amount = player.getEquipment().getCount(Equipment.SLOT_WEAPON);
+                final int amount = player.getEquipment().getCount(13879);
                 player.getEquipment().set(Equipment.SLOT_WEAPON, Item.create(player.getEquipment().getItemId(Equipment.SLOT_WEAPON), amount - 1));
 				final CombatEntity opp = player.cE.getOpponent();
 				if(opp == null)

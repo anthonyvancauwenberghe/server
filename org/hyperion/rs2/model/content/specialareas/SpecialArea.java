@@ -27,7 +27,10 @@ public abstract class SpecialArea {
     public void enter(final Player player) {
         final String enter = canEnter(player);
         if(enter.length() > 2)  player.sendMessage(enter);
-        else Magic.teleport(player, getDefaultLocation(), false);
+        else {
+            player.sendMessage("For better switching use the lite client: @blu@ http://play.arteropk.com#url#");
+            Magic.teleport(player, getDefaultLocation(), false);
+        }
 
     }
 

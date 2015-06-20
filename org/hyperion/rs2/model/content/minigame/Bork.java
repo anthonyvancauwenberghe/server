@@ -39,7 +39,7 @@ public class Bork  {
     private static final Point[] MINION_LOCATIONS = {
             new Point(3551, 9938), new Point(3563, 9941), new Point(3547, 9957)
     };
-    private static final long DELAY = Time.TEN_HOURS/2L;
+    private static final long DELAY = Time.TEN_HOURS/4L;
 
     private static final int INTERFACE_ID = 6568;
     private static final int[] CHILD_IDS = {6569, 6570, 6572, 6664};

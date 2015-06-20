@@ -40,6 +40,8 @@ public class SlayerShop extends PointsShop {
                 return 250;
             case 16639:
                 return 40;
+            case 16638:
+                return 100;
         }
         return 5000;  //To change body of implemented methods use File | Settings | File Templates.
     }

@@ -204,7 +204,10 @@ public class NpcDeathEvent extends Event {
                                     player, x, y, z,
                                     new Item(PvMStore.TOKEN, tokens)
                             );
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                            if(player.getInventory().freeSlots() > 0 && !player.getInventory().contains(16638))
+                                World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                            else
+                                player.getInventory().add(globalItem5.getItem());
                         }
 
                     }

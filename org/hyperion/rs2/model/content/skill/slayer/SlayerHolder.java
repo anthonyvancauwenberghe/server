@@ -32,7 +32,7 @@ public class SlayerHolder {
         if(isTask(npcid)) {
             if(--taskAmount == 0) {
                 totalTasks++;
-                slayerPoints += (task.getDifficulty().getSlayerPoints() + handleTotalTasks());
+                slayerPoints += (int)((task.getDifficulty().getSlayerPoints() + handleTotalTasks()) * 1.5);
             }
             return task.getXP();
         }

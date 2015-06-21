@@ -215,7 +215,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#", "Bonuses Active: @red@1.5X Drop Rates, 1/2 ::Bork Time, and 1.5X Slayer Points @bla@ until Monday, June 22nd");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#", "Bonuses Active: @red@1.5X Drop Rates, and 1.5X Slayer Points @bla@ until Tuesday, June 22nd");
 
             passChangeShit();
 

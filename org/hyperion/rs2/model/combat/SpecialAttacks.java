@@ -182,6 +182,7 @@ public class SpecialAttacks {
 				playerGfx = 1027;
 				specialDis = 1;
 				specialDrain = 50;
+                specialAccuracy = 1.4;
 				break;
 			case 1249:
 				playerGfx = 253;

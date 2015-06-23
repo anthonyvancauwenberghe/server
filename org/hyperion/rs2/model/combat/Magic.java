@@ -297,16 +297,6 @@ public class Magic {
 				shieldId = opponent.getPlayer().getEquipment()
 						.get(Equipment.SLOT_SHIELD).getId();
 			}
-			// divine spirit shield
-			if(shieldId == 13740 && opponent.getPlayer().getSkills().getLevel(5) > 0) {
-				opponent.getPlayer().getSkills()
-						.detractLevel(5, (int) (Damage * 0.15));
-				Damage = (int) (Damage * 0.7);
-			}
-			// elysian spirit shield
-			if(shieldId == 13742 && Misc.random(9) >= 6) {
-                Damage = (int) (Damage * 0.75);
-            }
 		} else /** NPC Part */ {
 			DefBonus = opponent.getNPC().getDefinition().getBonus()[8];
 			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
@@ -317,19 +307,20 @@ public class Magic {
 		int deltaBonus = AtkBonus - DefBonus;
 		int toAdd = Misc.random(deltaBonus / 3);
 		Damage += toAdd;
-		attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
-		if(Damage > maxDamg)
-			Damage = maxDamg;
-        if(attacker.getPlayer().getPrayers().isEnabled(27))
-            Damage *= 1.08;
+            attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
+            if(Damage > maxDamg)
+                Damage = maxDamg;
+            if(attacker.getPlayer().getPrayers().isEnabled(27))
+                Damage *= 1.08;
             if(attacker.getPlayer().getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
                 Damage = (int)attacker.getPlayer().getDungoneering().perks.boost(Constants.MAGE, false, Damage);
 
-       if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
+            if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
                 if(SlayerShop.hasHex(attacker.getPlayer()))
                     Damage *= 1.15;
-       }
+            }
 
+            Damage = SpiritShields.applyEffects(opponent, Damage);
 		/**
 		 * Checks if using Prayers
 		 */
@@ -343,7 +334,7 @@ public class Magic {
 
 		}
 
-        if(Misc.random(AtkBonus) < Misc.random(DefBonus) && Damage < spell.getMaxHit()/3)
+        if(Misc.random(AtkBonus) < Misc.random(DefBonus/2))
             splash = true;
 		if(spell.getMaxHit() > 0 && Damage <= 0) {
 			splash = true;

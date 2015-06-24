@@ -658,6 +658,7 @@ public class SpecialAttacks {
                         p.getExtraData().put("ovlreset1", System.currentTimeMillis());
                         p.sendMessage("@red@Your defence has been lowered and divine effects disabled for the next 10 seconds!");
                     });
+                    player.sendMessage("@red@Your opponent's overload and divine have been disabled for 15 seconds!");
                 }
 
                 break;

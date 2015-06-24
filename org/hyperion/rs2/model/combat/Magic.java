@@ -448,9 +448,9 @@ public class Magic {
 		}
 		if(! player.getSpellBook().isLunars())
 			return;
-		if(player.vengeance && hit >= 2 && ! player.isDead()) {
+		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-			victim.hit((int) (hit * 0.75), player, false, 2);
+			victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
 			player.vengeance = false;
 		}
 	}

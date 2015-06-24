@@ -400,7 +400,7 @@ public class Magic {
 		speed -= min;
 		int slope = 12 + distance;
 
-		timer = 1600 + (distance * 200);
+		timer = 1800 + (distance * 200);
 		attacker.getPlayer().getActionSender()
 				.createGlobalProjectile(attacker.getAbsY(), attacker.getAbsX(), offsetY,
 						offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,

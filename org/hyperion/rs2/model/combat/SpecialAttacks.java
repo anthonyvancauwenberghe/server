@@ -119,7 +119,7 @@ public class SpecialAttacks {
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.4;
+				specialAccuracy = 1.39;
 				break;
 			case 1231:
 				playerGfx = 252;
@@ -383,7 +383,7 @@ public class SpecialAttacks {
                 deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
                         - (int)(player.cE.getOpponent().getCombat()/3.0);
 		}
-		int randomIncrease = Misc.random(deltaBonus / 3);
+		int randomIncrease = Misc.random(deltaBonus / 2);
 
 		// System.out.println("RandomIncrease " + randomIncrease +
 		// " Deltabonus : " + deltaBonus);

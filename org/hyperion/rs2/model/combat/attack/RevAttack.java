@@ -153,7 +153,7 @@ public class RevAttack implements Attack {
 
     public void handleMagicAttack(NPC n, Entity attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
-        final int maxHit = n.getDefinition().combat()/4;
+        final int maxHit = n.getDefinition().combat()/5;
         int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MAGE, maxHit);
        //attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
         if(Misc.random(8) == 1 && attack.cE.canBeFrozen()) {
@@ -173,7 +173,7 @@ public class RevAttack implements Attack {
     public void handleRangeAttack(NPC n, Entity attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-        final int maxHit = (int)(n.getDefinition().combat()/3.5);
+        final int maxHit = (int)(n.getDefinition().combat()/4);
         int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.RANGE, maxHit);
 
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
@@ -186,7 +186,7 @@ public class RevAttack implements Attack {
     }
     public void handleMeleeAttack(NPC n, Entity attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(0));
-        final int maxHit = n.getDefinition().combat()/5;
+        final int maxHit = n.getDefinition().combat()/6;
         int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MELEE, maxHit);
         Combat.npcAttack(n, attack.getCombat(), damage, 300, Constants.MELEE);
         n.cE.predictedAtk = System.currentTimeMillis() + 1800L;

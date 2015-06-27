@@ -50,9 +50,11 @@ public class Bank {
         if(player.getLocation().inPvPArea() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
             return;
         }
+
         if(!ItemSpawning.canSpawn(player)) {
             return;
         }
+
         if(FightPits.inPits(player))
             return;
         player.resetingPin = false;
@@ -95,6 +97,10 @@ public class Bank {
      */
     public static void withdraw(Player player, int id, int amount) {
         if (!player.getBankField().isBanking()) {
+            return;
+        }
+
+        if(!ItemSpawning.canSpawn(player)) {
             return;
         }
         if(player.isInCombat() || player.getLocation().inPvPArea()) {
@@ -186,6 +192,10 @@ public class Bank {
         if(FightPits.inPits(player))
             return;
         if (!player.getBankField().isBanking()) {
+            return;
+        }
+
+        if(!ItemSpawning.canSpawn(player)) {
             return;
         }
         if (player.getBankField().isSearching()) {

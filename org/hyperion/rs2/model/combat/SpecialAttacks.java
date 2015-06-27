@@ -311,12 +311,12 @@ public class SpecialAttacks {
 				specialAnimation = 426;
 				specialDis = 9;
 				specialDrain = 60;
-				specialAccuracy = 0.4;
 				minimum = 5;
 				if(player.getEquipment()
 						.get(Equipment.SLOT_ARROWS).getId() == 11212) {
 					maxDamg += maxDamg * 0.05;// 50% for d arrows
 					minimum += 3;
+                    specialAccuracy = 1.2;
 				}
 				break;
 			default:

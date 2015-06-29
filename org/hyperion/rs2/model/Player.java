@@ -2158,7 +2158,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "Owner";
+                rank = "Trusted";
                 break;
             case 6:
                 rank = "Mod";

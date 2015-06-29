@@ -11,6 +11,9 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.achievements.Achievement;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
+import org.hyperion.rs2.model.achievements.Difficulty;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
@@ -30,6 +33,8 @@ import org.hyperion.rs2.model.container.impl.TabbedContainer;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
+import org.hyperion.rs2.model.content.clan.Clan;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
@@ -213,6 +218,40 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public PlayerChecker getChecking() {
 		return playerChecker;
 	}
+
+    private Achievement[] achievements = new Achievement[AchievementHandler.TOTAL_ACHIEVEMENTS];
+
+    public Achievement[] getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(int index, Achievement achievement) {
+        achievements[index] = achievement;
+    }
+
+    private int[] achievementProgress = new int[AchievementHandler.TOTAL_ACHIEVEMENTS];
+
+    public void setAchievementProgress(int[] achievementProgress) {
+        this.achievementProgress = achievementProgress;
+    }
+
+    public int[] getAchievementProgress() {
+        return achievementProgress;
+    }
+
+    public void setAchievementProgress(int index, int progress) {
+        achievementProgress[index] = progress;
+    }
+
+    private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
+
+    public Difficulty getViewingDifficulty() {
+        return viewingDifficulty;
+    }
+
+    public void setViewingDifficulty(Difficulty viewingDifficulty) {
+        this.viewingDifficulty = viewingDifficulty;
+    }
 
 	public boolean checkMaxCapeRequirment() {
 		for(int i = 7; i < this.getSkills().getLevels().length; i++) {
@@ -2135,8 +2174,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return clanRank;
 	}
 
+    public boolean isClanMainOwner() {
+        if(clanName == null || clanName.isEmpty())
+            return false;
+        Clan clan = ClanManager.clans.get(clanName);
+        return clan != null && clan.getOwner().equalsIgnoreCase(getName());
+    }
+
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
+        if(isClanMainOwner())
+                return "[Owner]"+getName();
         return getClanRankName() + getName();
 	}
 
@@ -2158,7 +2206,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "Owner";
+                rank = "Trusted";
                 break;
             case 6:
                 rank = "Mod";

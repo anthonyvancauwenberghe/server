@@ -2,6 +2,7 @@ package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -252,6 +253,14 @@ public class PlayerDeathEvent extends Event {
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
+
+                            AchievementHandler.progressAchievement(killer, "Kill 5 Players");
+                            AchievementHandler.progressAchievement(killer, "Kill 25 Players");
+                            AchievementHandler.progressAchievement(killer, "Kill 50 Players");
+                            AchievementHandler.progressAchievement(killer, "Kill 100 Players");
+                            AchievementHandler.progressAchievement(killer, "Kill 250 Players");
+                            AchievementHandler.progressAchievement(killer, "Kill 500 Players");
+
                             killer.getBountyHunter().handleBHKill(player);
                             killer.addLastKill(player.getName());
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
@@ -259,7 +268,9 @@ public class PlayerDeathEvent extends Event {
                                 pkpIncrease = 40;
 							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease);
 							if(player.getKillStreak() >= 6) {
-								ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+                                AchievementHandler.progressAchievement(player, "Streak of 6");
+                                AchievementHandler.progressAchievement(player, "Streak of 10");
+                                ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
 							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
                             if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))

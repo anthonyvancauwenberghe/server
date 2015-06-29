@@ -43,6 +43,8 @@ import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.SpellBook;
 import org.hyperion.rs2.model.UpdateFlags;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
+import org.hyperion.rs2.model.achievements.Difficulty;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
@@ -220,6 +222,24 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+        submit(new Command("achievements", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                AchievementHandler.openInterface(player, player.getViewingDifficulty(), false);
+                return true;
+            }
+        });
+
+        submit(new Command("progress", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                player.increaseKillCount();
+                AchievementHandler.progressAchievement(player, "Streak of 6");
+                AchievementHandler.progressAchievement(player, "Streak of 10");
+                return true;
+            }
+        });
 
         submit(new Command("lms", Rank.PLAYER) {
             @Override

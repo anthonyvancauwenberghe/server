@@ -11,6 +11,9 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.achievements.Achievement;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
+import org.hyperion.rs2.model.achievements.Difficulty;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
@@ -213,6 +216,40 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public PlayerChecker getChecking() {
 		return playerChecker;
 	}
+
+    private Achievement[] achievements = new Achievement[AchievementHandler.TOTAL_ACHIEVEMENTS];
+
+    public Achievement[] getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(int index, Achievement achievement) {
+        achievements[index] = achievement;
+    }
+
+    private int[] achievementProgress = new int[AchievementHandler.TOTAL_ACHIEVEMENTS];
+
+    public void setAchievementProgress(int[] achievementProgress) {
+        this.achievementProgress = achievementProgress;
+    }
+
+    public int[] getAchievementProgress() {
+        return achievementProgress;
+    }
+
+    public void setAchievementProgress(int index, int progress) {
+        achievementProgress[index] = progress;
+    }
+
+    private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
+
+    public Difficulty getViewingDifficulty() {
+        return viewingDifficulty;
+    }
+
+    public void setViewingDifficulty(Difficulty viewingDifficulty) {
+        this.viewingDifficulty = viewingDifficulty;
+    }
 
 	public boolean checkMaxCapeRequirment() {
 		for(int i = 7; i < this.getSkills().getLevels().length; i++) {

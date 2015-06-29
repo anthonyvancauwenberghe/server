@@ -3,6 +3,7 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.SpecialAttacks;
@@ -63,6 +64,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
 		    if(SetHandler.handleSet(player, button))
 			    return;
         if (Bank.bankButton(player, button)) {
+            return;
+        }
+        if(AchievementHandler.achievementButton(player, button)) {
             return;
         }
 		switch(button) {

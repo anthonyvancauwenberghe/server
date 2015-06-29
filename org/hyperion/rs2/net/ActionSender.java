@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
@@ -363,6 +364,7 @@ public class ActionSender {
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
 		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
+        AchievementHandler.initAchievements(player, player.getAchievementProgress());
 
 /**
  * OVL BUG

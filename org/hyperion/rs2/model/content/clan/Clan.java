@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.clan;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.TextUtils;
@@ -70,6 +71,15 @@ public class Clan {
 		this.clanName = name;
 		this.owner = owner;
 	}
+
+    public void makeDiceClan() {
+        if(!Dicing.diceClans.remove(clanName))
+            Dicing.diceClans.add(clanName);
+    }
+
+    public boolean isDiceClan() {
+        return Dicing.diceClans.contains(clanName);
+    }
 
 	public boolean kick(String name, boolean ip) {
 		for(Player p : players) {

@@ -33,6 +33,8 @@ import org.hyperion.rs2.model.container.impl.TabbedContainer;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
+import org.hyperion.rs2.model.content.clan.Clan;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
@@ -2172,8 +2174,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return clanRank;
 	}
 
+    public boolean isClanMainOwner() {
+        if(clanName == null || clanName.isEmpty())
+            return false;
+        Clan clan = ClanManager.clans.get(clanName);
+        return clan != null && clan.getOwner().equalsIgnoreCase(getName());
+    }
+
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
+        if(isClanMainOwner())
+                return "[Owner]"+getName();
         return getClanRankName() + getName();
 	}
 

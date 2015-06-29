@@ -13,18 +13,16 @@ import java.io.IOException;
 /**
  * Created by User on 6/25/2015.
  */
-public class SaveAchievements extends SaveObject {
+
+public class SaveAchievements {
 
     /**
      * Constructs a new SaveObject with the specified name.
      *
-     * @param name
+     * @param
      */
-    public SaveAchievements(String name) {
-        super(name);
-    }
 
-    @Override
+
     public boolean save(Player player, BufferedWriter writer) throws IOException {
         /* Updates all of the states to the array */
         for(int i = 0; i < player.getAchievements().length; i++) {
@@ -37,7 +35,7 @@ public class SaveAchievements extends SaveObject {
                 }
             }
         }
-        writer.write(getName());
+       // writer.write(getName());
         writer.newLine();
         for(int i = 0; i < player.getAchievementProgress().length; i++) {
             writer.write(player.getAchievementProgress()[i] + "");
@@ -46,7 +44,6 @@ public class SaveAchievements extends SaveObject {
         return false;
     }
 
-    @Override
     public void load(Player player, String values, BufferedReader reader) throws IOException {
         String line;
         int index = 0;

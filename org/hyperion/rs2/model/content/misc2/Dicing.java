@@ -5,10 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
@@ -32,6 +29,10 @@ import org.hyperion.util.Time;
 
 public class Dicing implements ContentTemplate {
 
+    public static boolean canDice = true;
+
+    public static final List<String> diceClans = new ArrayList<String>();
+
 	public static HashMap<Entity, SecureRandom> dicingRandoms = new HashMap<Entity, SecureRandom>();
     public static Map<Integer, Integer> pkpValues = new HashMap<>();
 	
@@ -52,32 +53,22 @@ public class Dicing implements ContentTemplate {
 	}
 
 	public static void rollClanDice(final Player player, int value) {
-		player.getActionSender().sendMessage("Clan dicing has been disabled.");
-		if(true)
-			return;
+        if(!canDice) {
+            player.sendMessage("Dicing has been disabled by an admin");
+            return;
+        }
 		if(player.getClanName().equals("")) {
 			player.getActionSender().sendMessage("You must be in a clan chat channel to do that.");
 			return;
 		}
-		if(player.getClanRank() <= 0) {
-			player.getActionSender().sendMessage("You need to be a clan mod to do that, in a moderators channel.");
-			return;
-		}
-		if(! player.getClanName().equals("monsterman") && ! player.getClanName().equals("z") && ! player.getClanName().equals("agent pk") && ! player.getClanName().equals("deranker")
-				&& ! player.getClanName().equals("kaiba") && ! player.getClanName().equals("dj house")) {
-			player.getActionSender().sendMessage("You need to be a clan mod to do that, in a moderators channel.");
+
+		if(player.getClanRank() < 5 || !diceClans.contains(player.getClanName())) {
+			player.getActionSender().sendMessage("You must be a trusted rank in a dicing clan chat to do this");
 			return;
 		}
 		final Clan clan = ClanManager.clans.get(player.getClanName());
 		if(clan == null)
 			return;
-		if(player.getName().equalsIgnoreCase(badLuckDicer)) {
-			int temp = getRandomNumber(player, 100);
-			System.out.println(temp + "      " + value);
-			if(temp > value)
-				value = temp;
-			badLuckDicer = "";
-		}
 		final int thrown = value;
 		startRollingDice(player);
 		World.getWorld().submit(new Event(3000) {
@@ -291,6 +282,15 @@ public class Dicing implements ContentTemplate {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        try {
+            final List<String> lines = Files.readAllLines(new File("./data/diceclans.txt").toPath());
+            for(String s : lines) {
+                if(!diceClans.contains(s))
+                    diceClans.add(s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         World.getWorld().submit(new Event(Time.FIVE_MINUTES) {
             public void execute() {
                 try {
@@ -302,9 +302,20 @@ public class Dicing implements ContentTemplate {
                 } catch (IOException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
+
+                try {
+                    final List<String> lines = Files.readAllLines(new File("./data/diceclans.txt").toPath());
+                    for(String s : lines) {
+                        if(!diceClans.contains(s))
+                            diceClans.add(s);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
         });
     }
+
 
 	@Override
 	public int[] getValues(int type) {

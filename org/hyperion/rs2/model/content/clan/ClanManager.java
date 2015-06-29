@@ -2,10 +2,12 @@ package org.hyperion.rs2.model.content.clan;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.Server;
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
@@ -162,7 +164,9 @@ public class ClanManager {
 
         message = message.replace("req:", "req");
 
-        final String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRankName().substring(1, 2) + "] ";
+        String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRankName().substring(1, 2) + "] ";
+        if(clans.get(player.getClanName()).getOwner().equalsIgnoreCase(player.getName()))
+            displayRank = "[O]";
 		message = "[@blu@"+TextUtils.titleCase(player.getClanName())+"@bla@]" + displayRank + player.getName() + ": @dre@" + message;
 		// System.out.println(message);
 		if(player.getClanName() == "") {
@@ -196,6 +200,7 @@ public class ClanManager {
 				continue;
 			client.getActionSender().sendMessage(message);
 		}
+        player.forceMessage("ROLLED: "+thrown+"!");
 	}
 
 	public static boolean handleCommands(Player player, String s, String[] as) {
@@ -224,11 +229,33 @@ public class ClanManager {
 
         }
 
+        if(Rank.hasAbility(player, Rank.OWNER)) {
+            if(s1.equalsIgnoreCase("enabledicing")) {
+                Dicing.canDice = true;
+            }
+            if(s1.equalsIgnoreCase("disabledicing"))
+                Dicing.canDice = false;
+        }
+
+        if(s1.equalsIgnoreCase("givedice") && Rank.hasAbility(player, Rank.GLOBAL_MODERATOR)) {
+            final String targ = s.substring(8).trim();
+            final Player target = World.getWorld().getPlayer(targ);
+            if(target != null) {
+                target.getInventory().add(Item.create(15098));
+            }
+        }
+
 		return false;
 	}
 
     public static boolean handleInternalCommands(final String message, Player player) {
 
+        if(message.equalsIgnoreCase("makediceclan") && Rank.hasAbility(player, Rank.OWNER)) {
+            Clan clan = clans.get(player.getClanName());
+            clan.makeDiceClan();
+            player.sendf("Dice clan: %s", clan.isDiceClan());
+            return true;
+        }
         if(message.startsWith("demote"))  {
             String name = message.replace("demote ", "");
             player.getActionSender().sendMessage("Promoting " + name);
@@ -283,9 +310,23 @@ public class ClanManager {
             final int old = p.getClanRank();
             ClanManager.leaveChat(p, true, true);
             if(old < 5) {
-                if(old == 4 && !player.getName().equalsIgnoreCase(clan.getOwner())) {
-                    player.sendMessage("Only the MAIN owner can make others owners");
-                    return true;
+                if(old == 4) {
+                    if(!player.getName().equalsIgnoreCase(clan.getOwner())) {
+                        player.sendMessage("Only the MAIN owner can make others trusted");
+                    }
+
+                    if(old == 4) {
+                        int count = 0;
+                        for(ClanMember member : clan.getRankedMembers()) {
+                            if(member.getRank() == 5)
+                                count++;
+                        }
+                        if(count >= 2) {
+                            player.sendMessage("You can only have two co-owners per CC");
+                            return true;
+                        }
+                    }
+
                 }
                 p.setClanRank(old + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
@@ -358,12 +399,13 @@ public class ClanManager {
 
 	public static Map<String, Clan> clans = new HashMap<String, Clan>();
 
+    private static final byte KEY = (byte)245;
+
     public static void save() {
         try {
             OutputStream os = new FileOutputStream("data/clanData.bin");
             IoBuffer buf = IoBuffer.allocate(1024);
-            buf.setAutoExpand(true);
-            for(final Clan clan : clans.values())
+            buf.setAutoExpand(true);            for(final Clan clan : clans.values())
                 if(!clan.getName().toLowerCase().startsWith("party "))
                     clan.save(buf);
             buf.flip();

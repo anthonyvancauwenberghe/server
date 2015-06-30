@@ -897,12 +897,17 @@ Thu Jan 08 12:44:30 GMT+01:00 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
-Thu Jun 25 10:23:02 EDT 2015
-	class: class java.lang.NullPointerException
-	at org.hyperion.rs2.saving.impl.SaveAchievements.save(SaveAchievements.java:34)
-	at org.hyperion.rs2.saving.PlayerSaving.save(PlayerSaving.java:243)
+Fri May 29 19:57:03 CEST 2015
+	class: class java.lang.StringIndexOutOfBoundsException
+	message: String index out of range: 1
+	at java.lang.String.substring(String.java:1951)
+	at org.hyperion.rs2.util.TextUtils.titleCase(TextUtils.java:157)
+	at org.hyperion.rs2.util.TextUtils.titleCase(TextUtils.java:139)
+	at org.hyperion.rs2.saving.impl.SaveYellTag.getValue(SaveYellTag.java:25)
+	at org.hyperion.rs2.saving.SaveString.save(SaveString.java:25)
+	at org.hyperion.rs2.saving.PlayerSaving.save(PlayerSaving.java:242)
 	at org.hyperion.rs2.GenericWorldLoader.savePlayer(GenericWorldLoader.java:79)
-	at org.hyperion.rs2.model.World$5.run(World.java:962)
+	at org.hyperion.rs2.model.World$5.run(World.java:960)
 	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:207)
 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)

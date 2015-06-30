@@ -2196,7 +2196,7 @@ public class Player extends Entity implements Persistable, Cloneable{
                 return "";
             case 1:
                 rank = "Recruit";
-                if(Dicing.diceClans.contains(clanName)) rank = "@blu@100K max@whi@";
+                if(Dicing.diceClans.contains(clanName)) rank = "@cya@100K max@whi@";
                 break;
             case 2:
                 rank = "Corporal";
@@ -2210,13 +2210,13 @@ public class Player extends Entity implements Persistable, Cloneable{
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "Owner";
+                rank = "@fff000@Owner";
                 break;
             case 6:
-                rank = "Mod";
+                rank = "@blu@Mod";
                 break;
             case 7:
-                rank = "Admin";
+                rank = "@red@Admin";
                 break;
         }
         return "[" + rank + "]";

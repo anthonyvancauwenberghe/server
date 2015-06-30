@@ -414,7 +414,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("dicing", Rank.GRAPHICS_DESIGNER, Rank.HELPER, Rank.FORUM_MODERATOR) {
+        submit(new Command("dicing", Rank.PLAYER) {
             public boolean execute(Player player, String input) {
                 Magic.teleport(player, Location.create(3048, 4979, 1), false);
                 ClanManager.joinClanChat(player, "dicing", false);

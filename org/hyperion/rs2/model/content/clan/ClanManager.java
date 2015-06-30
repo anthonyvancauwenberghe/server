@@ -67,7 +67,7 @@ public class ClanManager {
 			}
 		}
 
-		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
+		if(Rank.hasAbility(player, Rank.DEVELOPER))
 			player.setClanRank(7);
 		else if(Rank.hasAbility(player, Rank.MODERATOR))
 			player.setClanRank(6);
@@ -293,7 +293,7 @@ public class ClanManager {
             String name = message.replace("promote ", "");
             player.getActionSender().sendMessage("Promoting " + name);
             Clan clan = ClanManager.clans.get(player.getClanName());
-            if(!player.isClanMainOwner()) {
+            if(!player.isClanMainOwner() && player.getClanRank() != 7) {
                 player.getActionSender().sendMessage("Only clan chat owners are able to give ranks.");
                 return true;
             }
@@ -316,7 +316,7 @@ public class ClanManager {
                 ClanManager.leaveChat(p, true, true);
                 p.setClanRank(old + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
-                sendClanMessage(player, "@bla@ "+name+ " has been promoted to "+p.getClanRankName(), true);
+                sendClanMessage(player, "@bla@ "+TextUtils.titleCase(name)+ " has been promoted to "+p.getClanRankName(), true);
             } else {
                 player.getActionSender().sendMessage("This player already has the highest rank possible");
                 return true;

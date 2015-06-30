@@ -62,8 +62,8 @@ public class Dicing implements ContentTemplate {
 			return;
 		}
 
-		if(player.getClanRank() < 5 || !diceClans.contains(player.getClanName())) {
-			player.getActionSender().sendMessage("You must be a trusted rank in a dicing clan chat to do this");
+		if(player.getClanRank() < 1 || !diceClans.contains(player.getClanName())) {
+			player.getActionSender().sendMessage("You must be ranked in a dice clan to do this");
 			return;
 		}
 		final Clan clan = ClanManager.clans.get(player.getClanName());

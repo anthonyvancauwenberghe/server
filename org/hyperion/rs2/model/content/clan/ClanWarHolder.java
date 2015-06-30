@@ -2,7 +2,7 @@ package org.hyperion.rs2.model.content.clan;
 
 import org.hyperion.rs2.model.DeathDrops;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.util.ArrayUtils;
+import org.hyperion.util.*;
 
 import java.util.ArrayList;
 import java.util.List;

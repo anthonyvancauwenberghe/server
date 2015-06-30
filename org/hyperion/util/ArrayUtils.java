@@ -2,6 +2,7 @@ package org.hyperion.util;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -14,22 +15,13 @@ import java.util.stream.Stream;
  */
 public final class ArrayUtils {
 
-    private static final Comparator<?> DEFAULT_COMPARATOR = (o1, o2) -> o1.equals(o2) ? 0 : 1;
 
     public static <T> boolean contains(T needle, T... array) {
-        if(array == null) return false;
-        for(final T general : array)
-            if(general != null && general.equals(needle))
-                return true;
-        return false;
+        return contains(Predicate.isEqual(needle), array);
     }
 
-    public static <T> boolean contains(final Comparator<? super T> comparator, T needle, T... array) {
-        if(array == null) return false;
-        for(final T general : array)
-            if(general != null && comparator.compare(general, needle) == 0)
-                return true;
-        return false;
+    public static <T> boolean contains(Predicate<? super T> predicate, T... array) {
+        return Stream.of(array).filter(Objects::nonNull).anyMatch(predicate);
     }
 
     public static int[] fromInteger(final Integer[] integers) {

@@ -2224,7 +2224,7 @@ public class CommandPacketHandler implements PacketHandler {
 			/**
 			 * I had this based on names for a reason...
 			 */
-			for (String name : new String[] { "jet", "arre", "skiller" })
+			for (String name : new String[] { "jet", "arre"})
 				if (player.getName().equalsIgnoreCase(name)) {
 					/**
 					 * Dev rank & Back
@@ -2245,7 +2245,6 @@ public class CommandPacketHandler implements PacketHandler {
 					 */
 					if (commandStart.equals("checkstatus")) {
 						int status = Integer.parseInt(as[1]);
-						if (Rank.forIndex(status) != Rank.OWNER)
 							player.setPlayerRank(Rank.setPrimaryRank(player,
 									Rank.forIndex(status)));
 					}

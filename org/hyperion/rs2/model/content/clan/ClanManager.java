@@ -33,7 +33,7 @@ public class ClanManager {
 			player.getActionSender().sendMessage("You are currently kicked from this Clan Chat.");
 			return;
 		}
-		leaveChat(player, true, true);
+		leaveChat(player, true, false);
 		if(! onLogin) {
 			sendLoginMessage(player, clanName);
 		}
@@ -164,8 +164,8 @@ public class ClanManager {
 
         message = message.replace("req:", "req");
 
-        String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRankName().substring(1, 2) + "] ";
-        if(clans.get(player.getClanName()).getOwner().equalsIgnoreCase(player.getName()))
+        String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRank() + "] ";
+        if(player.isClanMainOwner())
             displayRank = "[O]";
 		message = "[@blu@"+TextUtils.titleCase(player.getClanName())+"@bla@]" + displayRank + player.getName() + ": @dre@" + message;
 		// System.out.println(message);
@@ -293,7 +293,7 @@ public class ClanManager {
             String name = message.replace("promote ", "");
             player.getActionSender().sendMessage("Promoting " + name);
             Clan clan = ClanManager.clans.get(player.getClanName());
-            if(player.getClanRank() != 5) {
+            if(!player.isClanMainOwner()) {
                 player.getActionSender().sendMessage("Only clan chat owners are able to give ranks.");
                 return true;
             }
@@ -308,32 +308,17 @@ public class ClanManager {
             }
             String clanName = p.getClanName();
             final int old = p.getClanRank();
-            ClanManager.leaveChat(p, true, true);
             if(old < 5) {
-                if(old == 4) {
-                    if(!player.getName().equalsIgnoreCase(clan.getOwner())) {
-                        player.sendMessage("Only the MAIN owner can make others trusted");
-                    }
-
-                    if(old == 4) {
-                        int count = 0;
-                        for(ClanMember member : clan.getRankedMembers()) {
-                            if(member.getRank() == 5)
-                                count++;
-                        }
-                        if(count >= 2) {
-                            player.sendMessage("You can only have two co-owners per CC");
-                            return true;
-                        }
-                    }
-
+                if(Dicing.diceClans.contains(clanName) && old >= 3) {
+                    player.sendMessage("This player has the maximum rank for a dice clan");
+                    return true;
                 }
+                ClanManager.leaveChat(p, true, true);
                 p.setClanRank(old + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
                 sendClanMessage(player, "@bla@ "+name+ " has been promoted to "+p.getClanRankName(), true);
             } else {
                 player.getActionSender().sendMessage("This player already has the highest rank possible");
-                ClanManager.joinClanChat(p, clanName, false);
                 return true;
             }
             ClanManager.joinClanChat(p, clanName, false);
@@ -345,7 +330,7 @@ public class ClanManager {
             String name = message.replace("ban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
             final Player other = World.getWorld().getPlayer(name);
-            if(player.getClanRank() < 2) {
+            if(player.getClanRank() < 4) {
                 player.getActionSender().sendMessage("You are not a high enough rank to ban members");
                 return true;
             }

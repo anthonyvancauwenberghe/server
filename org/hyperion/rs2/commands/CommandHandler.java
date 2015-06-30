@@ -56,6 +56,7 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.content.misc.PotionDecanting;
@@ -409,6 +410,14 @@ public class CommandHandler {
         submit(new Command("sz", Rank.GRAPHICS_DESIGNER, Rank.HELPER, Rank.FORUM_MODERATOR) {
             public boolean execute(Player player, String input) {
                 Magic.teleport(player, Location.create(2846, 5213, 0), false);
+                return true;
+            }
+        });
+
+        submit(new Command("dicing", Rank.GRAPHICS_DESIGNER, Rank.HELPER, Rank.FORUM_MODERATOR) {
+            public boolean execute(Player player, String input) {
+                Magic.teleport(player, Location.create(3048, 4979, 1), false);
+                ClanManager.joinClanChat(player, "dicing", false);
                 return true;
             }
         });

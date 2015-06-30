@@ -44,6 +44,7 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Mail;
 import org.hyperion.rs2.model.content.misc.SkillingData;
 import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
@@ -2195,18 +2196,21 @@ public class Player extends Entity implements Persistable, Cloneable{
                 return "";
             case 1:
                 rank = "Recruit";
+                if(Dicing.diceClans.contains(clanName)) rank = "@blu@100K max@whi@";
                 break;
             case 2:
                 rank = "Corporal";
+                if(Dicing.diceClans.contains(clanName)) rank = "@gre@500K max@whi@";
                 break;
             case 3:
                 rank = "Sergeant";
+                if(Dicing.diceClans.contains(clanName)) rank = "@or2@Unlimited@whi@";
                 break;
             case 4:
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "Trusted";
+                rank = "Owner";
                 break;
             case 6:
                 rank = "Mod";

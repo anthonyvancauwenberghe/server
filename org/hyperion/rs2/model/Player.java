@@ -2210,13 +2210,13 @@ public class Player extends Entity implements Persistable, Cloneable{
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "@fff000@Owner";
+                rank = "@fff000@Owner@whi@";
                 break;
             case 6:
-                rank = "@blu@Mod";
+                rank = "@blu@Mod@whi@";
                 break;
             case 7:
-                rank = "@red@Admin";
+                rank = "@red@Admin@whi@";
                 break;
         }
         return "[" + rank + "]";

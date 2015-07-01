@@ -1645,6 +1645,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 * @param source The Entity dealing the blow.
 	 */
 	public void inflictDamage(Hit inc, Entity source) {
+        if(inc.getDamage() < 0)
+            return;
 		if(! getUpdateFlags().get(UpdateFlag.HIT)) {
 			getDamage().setHit1(inc);
 			getUpdateFlags().flag(UpdateFlag.HIT);
@@ -1896,6 +1898,9 @@ public class Player extends Entity implements Persistable, Cloneable{
             if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
                 damg = 0;
        // }
+
+        if(damg < 0)
+            damg = 0;
 		if(poison)
 			hitType = HitType.POISON_DAMAGE;
 		else if(damg <= 0)

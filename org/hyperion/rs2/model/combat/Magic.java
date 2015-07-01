@@ -304,6 +304,8 @@ public class Magic {
 				splash = true;
 			}
 		}
+
+            opp.lastHit = System.currentTimeMillis();
 		int deltaBonus = AtkBonus - DefBonus;
 		int toAdd = Misc.random(deltaBonus / 3);
         if(spellId != 12445)

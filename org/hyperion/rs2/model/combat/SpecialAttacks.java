@@ -112,28 +112,28 @@ public class SpecialAttacks {
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.3;
+				specialAccuracy = 1.25;
 				break;
 			case 1215:
 				playerGfx = 252;
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.3;
+				specialAccuracy = 1.25;
 				break;
 			case 1231:
 				playerGfx = 252;
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-                specialAccuracy = 1.3;
+                specialAccuracy = 1.25;
                 break;
 			case 5680:
 				playerGfx = 252;
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-                specialAccuracy = 1.3;
+                specialAccuracy = 1.25;
 				break;
 			case 861:
 				playerGfx = 249;
@@ -152,6 +152,7 @@ public class SpecialAttacks {
 				specialAnimation = 12031;
 				specialDis = 1;
 				specialDrain = 55;
+                specialAccuracy = 1.3;
 				break;
 			case 4151:
 				oppGfx = 341;
@@ -943,7 +944,7 @@ public class SpecialAttacks {
                 break;
 			case 11730:
 			case 11696:
-				specDamage = 1.10;
+				specDamage = 1.13;
 				break;
 			case 10887:
 			case 1215: // dragon daggers
@@ -951,7 +952,7 @@ public class SpecialAttacks {
 			case 5680:
 			case 5698:
 			case 15007:
-				specDamage = 1.2;
+				specDamage = 1.25;
 
 				break;
 			case 1305:
@@ -967,7 +968,7 @@ public class SpecialAttacks {
 				specDamage = 1.3;
 				break;
 			case 14484:
-				specDamage = 1.07;
+				specDamage = 1.13;
 				break;
 		}
 		return specDamage;

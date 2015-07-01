@@ -22,7 +22,11 @@ public class CountDownEvent extends Event {
 			this.stop();
 		}
 		for(Player player : World.getWorld().getPlayers()) {
-			player.getActionSender().sendString("@gre@Event in @red@"+counter+" @gre@secs!", 7332);
+            try {
+			    player.getActionSender().sendString("@gre@Event in @red@"+counter+" @gre@secs!", 7332);
+            }catch(Exception e) {
+                this.stop();
+            }
 		}
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)

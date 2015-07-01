@@ -428,6 +428,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
 		submit(new Command("spammessage", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {

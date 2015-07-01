@@ -293,7 +293,7 @@ public class SpecialAttacks {
 				specialAnimation = 12153;
 				specialDis = 9;
 				specialDrain = 50;
-				specialAccuracy = 1.35;
+				specialAccuracy = 1.15;
 				player.getCombat().predictedAtk = System.currentTimeMillis() + 700;
 				ranged = true;
 				break;

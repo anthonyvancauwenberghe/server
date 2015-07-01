@@ -816,7 +816,7 @@ public class CombatAssistant {
 	 * Real RuneScape Formulas.
 	 */
 	public static double getEffectiveStr(Player p) {
-		return p.getSkills().getLevel(2) * getPrayerStr(p) + getStyleBonus(p);
+		return p.getSkills().getLevel(2) * getPrayerStr(p);
 	}
 
 	public static double getPrayerStr(Player p) {
@@ -852,7 +852,7 @@ public class CombatAssistant {
 		double effective = getEffectiveStr(p);
 		double strengthBonus = p.getBonus().get(EquipmentStats.STRENGTH);
 
-		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 64)) / 10;
+		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 75)) / 10;
 
 
 		if(p.specOn) {
@@ -1053,9 +1053,9 @@ public class CombatAssistant {
 	}
 
 	public static int calculateRangeMaxHit(Player p) {
-		int rangedBoosted = p.getSkills().getLevel(4);
 		int rangedLevel = p.getSkills().getLevelForExp(4);
-		int rangedStr = 0;
+        int rangedBoosted = p.getSkills().getLevel(4) - rangedLevel;
+        int rangedStr = 0;
 
 		if(CombatAssistant.getCombatStyle(p.cE) == Constants.RANGEDWEPSTYPE)
 			rangedStr = getRangeStr(p.getEquipment().get(Equipment.SLOT_WEAPON)
@@ -1076,9 +1076,9 @@ public class CombatAssistant {
 		}  else if (p.getPrayers().isEnabled(26))
             bonus = 1.25;
 		if(fullVoidRange(p)) {
-			bonus += .20;
+			bonus += .15;
 		}
-		double e = Math.floor(rangedLevel * bonus + rangedBoosted / 8);
+		double e = Math.floor(rangedLevel * bonus + rangedBoosted / 3);
 		if(p.getEquipment().get(Equipment.SLOT_WEAPON) != null)
 			if(p.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4212)
 				rangedStr = 70;
@@ -1113,7 +1113,7 @@ public class CombatAssistant {
 					}
 					break;
 				case 15241:
-					specialBonus = 1.1;
+					specialBonus = 1.05;
 			}
 		}
 		double max = (1.3 + e / 8 + rangedStr / 80 + e * rangedStr / 640);

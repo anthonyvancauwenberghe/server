@@ -226,7 +226,7 @@ public class Combat {
 					hit = true;
 					finishOff = false;
 					if(weaponId != 15241) {
-					combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
+					    combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
 					}else {
 						if(Misc.random(150) == 0) { // 1/101 chance of exploding when specing
 							combatEntity.getPlayer().getEquipment().set(Equipment.SLOT_WEAPON, null);

@@ -1137,7 +1137,7 @@ public class CombatAssistant {
 			rangeAtk *= 1.15;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             rangeAtk = p.getDungoneering().perks.boost(Constants.RANGE, true, rangeAtk);
-		return (int) (((rangeAtk * .55) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED))/1.65));
+		return (int) (((rangeAtk * .55) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED))/1.75));
 	}
 
 	public static int calculateRangeDefence(Entity entity) {
@@ -1179,7 +1179,7 @@ public class CombatAssistant {
         if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             bonus = (int)player.getDungoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl/3 +
-				(int)(bonus * 1.36);
+				(int)(bonus * 1.38);
 	}
 
 	public static int calculateMageDef(Entity entity) {

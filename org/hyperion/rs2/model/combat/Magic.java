@@ -306,6 +306,8 @@ public class Magic {
 		}
 
             opp.lastHit = System.currentTimeMillis();
+            if(spell.isMulti())
+                AtkBonus *= 0.9;
 		int deltaBonus = AtkBonus - DefBonus;
 		int toAdd = Misc.random(deltaBonus / 3);
         if(spellId != 12445)

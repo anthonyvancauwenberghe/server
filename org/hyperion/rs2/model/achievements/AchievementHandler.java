@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.achievements;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.achievements.KillStreakAchievement;
@@ -65,10 +67,27 @@ public class AchievementHandler {
         return -1;
     }
 
-    public static void progressAchievement(Player player, String name) {
+    private static void progress(Player player, String name) {
         int index = getAchievementIndex(player, name);
         if(player.getAchievements()[index].getState() != 2)
             player.getAchievements()[index].progress(player);
+    }
+
+    public static void progressAchievement(Player player, String type) {
+        switch(type) {
+            case "Kill Player":
+                AchievementHandler.progress(player, "Kill 5 Players");
+                AchievementHandler.progress(player, "Kill 25 Players");
+                AchievementHandler.progress(player, "Kill 50 Players");
+                AchievementHandler.progress(player, "Kill 100 Players");
+                AchievementHandler.progress(player, "Kill 250 Players");
+                AchievementHandler.progress(player, "Kill 500 Players");
+                break;
+            case "Kill Streak":
+                AchievementHandler.progress(player, "Streak of 6");
+                AchievementHandler.progress(player, "Streak of 10");
+                break;
+        }
     }
 
     private static void clearInterface(Player player) {

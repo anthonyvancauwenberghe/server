@@ -1037,7 +1037,7 @@ public class CombatAssistant {
 			{4218, 70}, {4219, 70}, {4220, 70}, {4221, 70},
 			{4222, 70}, {4223, 70}, {6522, 49}, {10034, 15},
 			{15015, 130}, {15016, 110}, {4734, 49}, {4740, 49},
-			{19157, 80}, {19162, 80}, {19152, 80}, {15243, 150},
+			{19157, 80}, {19162, 80}, {19152, 80}, {15243, 140},
 			{13883, 130}, {13879, 135}, {8882, 145}
 	};
 
@@ -1054,7 +1054,7 @@ public class CombatAssistant {
 
 	public static int calculateRangeMaxHit(Player p) {
 		int rangedLevel = p.getSkills().getLevelForExp(4);
-        int rangedBoosted = p.getSkills().getLevel(4) - rangedLevel;
+        int rangedBoosted = p.getSkills().getLevel(4);
         int rangedStr = 0;
 
 		if(CombatAssistant.getCombatStyle(p.cE) == Constants.RANGEDWEPSTYPE)
@@ -1078,7 +1078,7 @@ public class CombatAssistant {
 		if(fullVoidRange(p)) {
 			bonus += .15;
 		}
-		double e = Math.floor(rangedLevel * bonus + rangedBoosted / 3);
+		double e = Math.floor(rangedLevel * bonus + rangedBoosted / 8);
 		if(p.getEquipment().get(Equipment.SLOT_WEAPON) != null)
 			if(p.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4212)
 				rangedStr = 70;

@@ -2,10 +2,15 @@ package org.hyperion.rs2.model.achievements;
 
 import org.hyperion.rs2.model.Player;
 
+import java.util.ArrayList;
+
+
 /**
  * Created by Scott Perretta on 5/20/2015.
  */
 public abstract class Achievement {
+
+    public static ArrayList<Achievement> achievements = new ArrayList<>();
 
     private String name;
     private Difficulty difficulty;
@@ -19,6 +24,7 @@ public abstract class Achievement {
         this.interfaceId = interfaceId;
         this.reward = reward;
         this.instructions = instructions;
+        achievements.add(this);
     }
 
     /**

@@ -209,6 +209,7 @@ public class ActionSender {
             sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
             sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
             sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
+            sendMessage("");
             sendMessage("@red@10X @blu@decaying PKP BOOST active for the first 100 minutes of gameplay");
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
@@ -216,7 +217,8 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#",
+                    "Boosts Active: @red@2X Vote, 2X PKP, and 2X BH Pts");
 
             passChangeShit();
 

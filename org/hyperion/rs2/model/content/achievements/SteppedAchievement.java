@@ -18,7 +18,6 @@ public class SteppedAchievement extends Achievement {
         this.pkp = pkp;
         this.dp = dp;
         setState(getStateForProgress());
-        System.out.println(getState());
     }
 
     public int getSteps() {

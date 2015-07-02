@@ -10,6 +10,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
@@ -583,6 +584,7 @@ public class Duel {
 
             player.getInventory();
             Container.transfer(opponent.getDuel(), player.getInventory());
+            AchievementHandler.progressAchievement(player, "duel");
         }
         opponent.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);

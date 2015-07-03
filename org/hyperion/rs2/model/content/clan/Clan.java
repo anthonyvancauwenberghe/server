@@ -19,20 +19,21 @@ public class Clan {
 
 	private CopyOnWriteArrayList<ClanMember> rankedMembers = new CopyOnWriteArrayList<ClanMember>();
 	private CopyOnWriteArrayList<String> peopleKicked = new CopyOnWriteArrayList<String>();
-	private CopyOnWriteArrayList<Player> players = new CopyOnWriteArrayList<Player>();
+	private ArrayList<Player> players = new ArrayList<Player>();
 
     private static final int MAX_CLAN_MEMBERS = 100;
 
-	public CopyOnWriteArrayList<Player> getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 
-	public void add(Player player) {
+	public synchronized void add(Player player) {
 		player.setClanName(this.clanName);
 		players.add(player);
 	}
 
-	public void remove(Player player) {
+	public synchronized void remove(Player player) {
+        player.setClanName("");
 		players.remove(player);
 	}
 
@@ -103,9 +104,9 @@ public class Clan {
 	}
 
     public boolean unban(final String name) {
-        if(!peopleKicked.contains(TextUtils.titleCase(name)))
+        if(!peopleKicked.contains(name))
             return false;
-        peopleKicked.remove(TextUtils.titleCase(name));
+        peopleKicked.remove(name);
         final Player player = World.getWorld().getPlayer(name);
         if(player != null)
             peopleKicked.remove(player.getShortIP());

@@ -25,6 +25,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Equipment;
@@ -622,7 +623,8 @@ public class Prayer implements ContentTemplate {
         if(!player.getDungoneering().inDungeon())
 		    player.getSkills().setLevel(5, player.getSkills().getLevelForExp(5));
 		player.getActionSender().sendSkill(5);
-		player.getActionSender().sendMessage("You succesfully change your Prayer book.");
+        player.getActionSender().sendMessage("You succesfully change your Prayer book.");
+        AchievementHandler.progressAchievement(player, "New Prayers");
 		boolean current_book = player.getPrayers().isDefaultPrayerbook();
 		player.getPrayers().setPrayerbook(! current_book);
 		player.resetPrayers();

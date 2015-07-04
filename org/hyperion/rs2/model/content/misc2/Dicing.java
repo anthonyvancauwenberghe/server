@@ -69,6 +69,13 @@ public class Dicing implements ContentTemplate {
 		final Clan clan = ClanManager.clans.get(player.getClanName());
 		if(clan == null)
 			return;
+        if(player.getExtraData().getBoolean("smalldice")) {
+            if(value > 55)
+                value = Misc.random(100);
+        } else if(player.getExtraData().getBoolean("highdice")) {
+            if(value < 55)
+                value = Misc.random(100);
+        }
 		final int thrown = value;
 		startRollingDice(player);
 		World.getWorld().submit(new Event(3000) {

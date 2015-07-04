@@ -414,6 +414,20 @@ public class CommandHandler {
             }
         });
 
+        submit(new Command("changeextra", Rank.DEVELOPER) {
+            public boolean execute(Player player, String input) {
+                input = filterInput(input);
+                final String[] parts = input.split(",");
+                Player target = World.getWorld().getPlayer(parts[0]);
+                if(target != null) {
+                    final String s = parts[1];
+                    target.getExtraData().put(s, !target.getExtraData().getBoolean(s));
+                    player.sendf("Target is now: %s,%b", s, target.getExtraData().getBoolean(s));
+                }
+                return true;
+            }
+        });
+
         submit(new Command("dicing", Rank.PLAYER) {
             public boolean execute(Player player, String input) {
                 Magic.teleport(player, Location.create(3048, 4979, 1), false);

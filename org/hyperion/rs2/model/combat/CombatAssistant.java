@@ -852,7 +852,7 @@ public class CombatAssistant {
 		double effective = getEffectiveStr(p);
 		double strengthBonus = p.getBonus().get(EquipmentStats.STRENGTH);
 
-		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 75)) / 10;
+		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 72)) / 10;
 
 
 		if(p.specOn) {

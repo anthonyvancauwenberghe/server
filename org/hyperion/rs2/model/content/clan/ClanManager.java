@@ -134,18 +134,11 @@ public class ClanManager {
 		Clan c = clans.get(player.getClanName());
 		if(c != null) {
 			for(Player p : c.getPlayers()) {
-				for(Player p2 : c.getPlayers()) {
-					p.getActionSender().removeClanMember(p2.getPlayersNameInClan());
-				}
+		        p.getActionSender().removeClanMember(player.getPlayersNameInClan());
 			}
 			player.setClanRank(0);
 			c.remove(player);
 			player.getActionSender().sendMessage("You left your current clan chat.");
-			for(Player p : c.getPlayers()) {
-				for(Player p2 : c.getPlayers()) {
-					p.getActionSender().addClanMember(p2.getPlayersNameInClan());
-				}
-			}
 
 		}
 		player.getActionSender().sendString(18139, "Talking in: -");

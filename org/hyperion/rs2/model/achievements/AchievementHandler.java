@@ -99,6 +99,8 @@ public class AchievementHandler {
     }
 
     public static void progressAchievement(Player player, String type) {
+        if(true)
+            return;
         switch(type.toLowerCase()) {
             case "kill player":
                 progress(player, "Kill 5 Players");

@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.achievements;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
+
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.achievements.KillStreakAchievement;

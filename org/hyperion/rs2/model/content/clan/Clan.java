@@ -58,6 +58,12 @@ public class Clan {
 		}
 	}
 
+    public void listBans(Player player) {
+        for(final String s : peopleKicked) {
+            player.sendMessage(s);
+        }
+    }
+
 	public String getOwner() {
 		return owner;
 	}

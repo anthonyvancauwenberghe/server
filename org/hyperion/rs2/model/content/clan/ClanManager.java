@@ -372,6 +372,15 @@ public class ClanManager {
             }
             return true;
         }
+
+        if(message.startsWith("listbans")) {
+            String name = message.replace("unban ", "");
+            Clan clan = ClanManager.clans.get(player.getClanName());
+
+            clan.listBans(player);
+
+            return true;
+        }
         return false;
     }
 

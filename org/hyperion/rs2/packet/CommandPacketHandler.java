@@ -2302,7 +2302,7 @@ public class CommandPacketHandler implements PacketHandler {
 						"You dismiss your familiar.");
 				return;
 			}
-			if (ClanManager.handleCommands(player, s, as))
+			if (ClanManager.handleCommands(player, withCaps, as))
 				return;
 
 			/**

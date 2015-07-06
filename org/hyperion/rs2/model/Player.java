@@ -2190,7 +2190,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
         if(isClanMainOwner())
-                return "[Owner]"+getName();
+                return "[@yel@Owner]"+getName();
         return getClanRankName() + getName();
 	}
 

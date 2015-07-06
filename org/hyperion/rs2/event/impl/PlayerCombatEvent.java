@@ -1,9 +1,6 @@
 package org.hyperion.rs2.event.impl;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
@@ -26,8 +23,8 @@ public class PlayerCombatEvent extends Event {
 	public static long lastTimeDid = System.currentTimeMillis();
 	
 	
-	public synchronized static LinkedList<Player> cloneEntityList() {
-		LinkedList<Player> newList = new LinkedList<Player>();
+	public synchronized static List<Player> cloneEntityList() {
+		List<Player> newList = new ArrayList<Player>(World.getWorld().getPlayers().size());
 		for(Player p : World.getWorld().getPlayers()) {
 			newList.add(p);
 		}
@@ -45,8 +42,10 @@ public class PlayerCombatEvent extends Event {
 			//handle all combat first players first
 			for(Player player : clonedList) {
 				try {
-					if(player == null || player.cE == null)
+					if(player == null || player.cE == null) {
+                        System.err.println("ERROR SEVERE: NULL PLAYER");
 						continue;
+                    }
 					//following for players
 					if(player.isFollowing != null) {
 						//System.out.println("Following");

@@ -217,8 +217,8 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#",
-                    "Boosts Active: @red@2X Vote, 2X PKP, and 2X BH Pts");
+            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#"
+                    );
 
             passChangeShit();
 
@@ -2150,7 +2150,7 @@ public class ActionSender {
 				if(i == Equipment.SLOT_ARROWS) {
 					if(CombatAssistant.getCombatStyle(player.getEquipment()) == org.hyperion.rs2.model.combat.Constants.RANGEDWEPSTYPE) {
 						if(player.cE.getWeaponPoison() != 2) {
-							if(items[i].getDefinition().getName().contains("(s)"))
+							if(items[i].getDefinition().getName().contains("(p+"))
 								player.cE.setWeaponPoison(2);
 							else if(items[i].getDefinition().getName().contains("(p)"))
 								player.cE.setWeaponPoison(1);
@@ -2158,7 +2158,7 @@ public class ActionSender {
 					}
 				} else {
 					if(player.cE.getWeaponPoison() != 2) {
-						if(items[i].getDefinition().getName().contains("(s)"))
+						if(items[i].getDefinition().getName().contains("(p+"))
 							player.cE.setWeaponPoison(2);
 						else if(items[i].getDefinition().getName().contains("(p)"))
 							player.cE.setWeaponPoison(1);

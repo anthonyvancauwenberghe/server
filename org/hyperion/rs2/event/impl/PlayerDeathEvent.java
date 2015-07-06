@@ -259,7 +259,7 @@ public class PlayerDeathEvent extends Event {
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)
                                 pkpIncrease = 40;
-							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease) * 2;
+							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease);
 							if(player.getKillStreak() >= 6) {
                                 AchievementHandler.progressAchievement(player, "Kill Streak");
                                 ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");

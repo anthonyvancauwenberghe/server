@@ -1244,7 +1244,7 @@ public class Combat {
 					}
 				}
 				if(lastDamg == - 1)
-					lastDamg = random(10);
+					lastDamg = random(7);
 				if(ticks == 0) {
 					lastDamg--;
 					ticks = 4;

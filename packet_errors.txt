@@ -55947,3 +55947,55 @@ Tue Jul 07 13:18:07 CEST 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Tue Jul 07 16:12:26 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: 15
+	at org.hyperion.rs2.model.itf.impl.DungoneeringParty.handle(DungoneeringParty.java:41)
+	at org.hyperion.rs2.packet.InterfacePacketHandler.handleData(InterfacePacketHandler.java:39)
+	at org.hyperion.rs2.packet.InterfacePacketHandler.handle(InterfacePacketHandler.java:23)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Tue Jul 07 18:01:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jul 07 18:51:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Tue Jul 07 23:17:58 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.content.ticket.TicketManager.lambda$new$19(TicketManager.java:24)
+	at org.hyperion.rs2.model.content.ticket.TicketManager$$Lambda$1/793589513.compare(null:-1)
+	at java.util.TreeMap.getEntryUsingComparator(TreeMap.java:376)
+	at java.util.TreeMap.getEntry(TreeMap.java:345)
+	at java.util.TreeMap.remove(TreeMap.java:603)
+	at java.util.TreeSet.remove(TreeSet.java:276)
+	at org.hyperion.rs2.model.content.ticket.TicketManager.remove(TicketManager.java:64)
+	at org.hyperion.rs2.model.itf.impl.HelpInterface.handle(HelpInterface.java:34)
+	at org.hyperion.rs2.packet.InterfacePacketHandler.handleData(InterfacePacketHandler.java:39)
+	at org.hyperion.rs2.packet.InterfacePacketHandler.handle(InterfacePacketHandler.java:23)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

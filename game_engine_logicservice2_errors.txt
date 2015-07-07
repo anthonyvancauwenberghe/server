@@ -19186,3 +19186,1323 @@ Wed Jul 01 05:45:54 CEST 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sat Jul 04 13:10:16 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:16 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:18 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:19 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:19 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:20 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:20 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:21 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:22 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:22 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.ObjectManager.update(ObjectManager.java:214)
+	at org.hyperion.rs2.model.ObjectManager.addObject(ObjectManager.java:205)
+	at org.hyperion.rs2.model.Wilderness.replaceGlobalObject(Wilderness.java:112)
+	at org.hyperion.rs2.model.Wilderness.useObelisk(Wilderness.java:42)
+	at org.hyperion.rs2.packet.ObjectClickHandler.objectClickOne(ObjectClickHandler.java:74)
+	at org.hyperion.rs2.packet.ObjectClickHandler.clickObject(ObjectClickHandler.java:32)
+	at org.hyperion.rs2.model.Player.handleClickNow(Player.java:1045)
+	at org.hyperion.rs2.model.WalkingQueue.processNextMovement(WalkingQueue.java:486)
+	at org.hyperion.rs2.task.impl.PlayerTickTask.execute(PlayerTickTask.java:53)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:135)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:228)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Jul 04 13:10:23 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:24 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:24 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:25 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:25 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:26 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:27 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:27 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:28 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:28 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:29 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:30 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:31 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:31 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:32 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:33 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:33 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:34 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:34 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:35 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:36 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:36 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:37 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:37 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:38 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:39 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:39 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:40 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:40 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:41 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:42 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:42 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:43 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:43 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:44 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:45 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:45 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:46 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:46 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:47 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:48 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:48 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:49 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:49 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:50 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:51 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:51 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:52 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:52 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:53 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:54 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:54 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:55 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:55 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:58 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:58 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:10:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:00 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:00 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:02 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:03 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:03 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:05 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:08 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:11 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:12 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:12 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:13 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:13 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:14 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:15 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:15 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:16 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:16 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:17 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:18 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:18 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:19 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:19 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:20 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:21 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:21 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:22 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:22 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:23 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:24 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:24 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:25 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:26 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:30 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:32 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:33 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:33 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:34 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:11:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:00 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:02 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:03 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:03 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:05 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:08 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:12 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:13 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:14 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:15 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:16 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:16 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:17 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:18 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:18 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:19 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:19 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:20 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:21 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:21 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:22 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:22 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:24 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:24 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:25 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:25 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:26 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:27 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:27 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:28 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:29 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:29 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:30 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:30 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:31 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:32 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:32 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:33 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:33 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:34 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:35 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:35 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:36 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:36 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:37 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:38 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:38 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:39 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:39 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:40 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:41 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:41 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:42 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:42 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:43 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:44 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:44 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:45 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:45 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:46 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:48 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:49 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:50 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:51 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:51 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:52 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:53 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:53 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:54 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:55 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:58 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:12:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:00 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:00 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:02 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:02 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:03 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:03 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:05 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:05 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:08 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:08 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:11 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:11 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:12 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:12 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:13 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:42 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:43 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:46 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:47 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:47 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:48 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:48 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:49 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:50 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:52 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:53 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:53 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:54 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:54 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:56 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:57 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:58 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:58 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:13:59 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:00 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:01 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:02 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:02 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:04 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:05 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:05 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:06 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:07 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:08 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:08 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:09 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:10 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:11 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:11 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:12 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:13 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================
+Sat Jul 04 13:14:13 CEST 2015
+	class: class java.lang.NullPointerException
+
+================================

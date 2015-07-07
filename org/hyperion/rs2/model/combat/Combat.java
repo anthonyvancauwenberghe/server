@@ -312,7 +312,9 @@ public class Combat {
 				int wepId = 0;
 				if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
 					wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
-				if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121)
+                if(combatEntity._getPlayer().isPresent() && combatEntity.getPlayer().getNpcState()) {
+                    combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
+                } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121)
 					combatEntity.doAnim(426);
 				else if(bowType == Constants.RANGEDWEPSTYPE)
 					combatEntity.doAnim(806);// throw stuff anim

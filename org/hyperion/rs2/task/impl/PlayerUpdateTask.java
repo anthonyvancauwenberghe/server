@@ -52,7 +52,6 @@ public class PlayerUpdateTask implements Task {
 	@Override
 	public void execute(GameEngine context) {
 
-		
 		/*
 		 * If the map region changed send the new one.
 		 * We do this immediately as the client can begin loading it before the

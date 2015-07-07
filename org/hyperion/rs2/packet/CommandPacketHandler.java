@@ -2319,6 +2319,18 @@ public class CommandPacketHandler implements PacketHandler {
 				Magic.teleport(player, 2539, 4718, 0, false);
 				return;
 			}
+
+            if(commandStart.equals("switchmode")) {
+                if(player.getExtraData().getBoolean("switchmode")) {
+                    player.setGameMode(0);
+                    player.sendMessage("Successfully switched to normal game mode");
+                } else {
+                    player.sendMessage("Type ::switchmode again to switch to normal game mode");
+                    player.getExtraData().put("switchmode", true);
+                }
+                return;
+            }
+
 			if (commandStart.equals("multipk")) {
 				Magic.teleport(player, 3234, 3650, 0, false);
 				return;

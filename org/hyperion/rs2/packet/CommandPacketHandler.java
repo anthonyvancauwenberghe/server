@@ -2321,8 +2321,13 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 
             if(commandStart.equals("switchmode")) {
-                player.setGameMode(0);
-                player.sendMessage("Successfully switched to normal game mode");
+                if(player.getExtraData().getBoolean("switchmode")) {
+                    player.setGameMode(0);
+                    player.sendMessage("Successfully switched to normal game mode");
+                } else {
+                    player.sendMessage("Type ::switchmode again to switch to normal game mode");
+                    player.getExtraData().put("switchmode", true);
+                }
                 return;
             }
 

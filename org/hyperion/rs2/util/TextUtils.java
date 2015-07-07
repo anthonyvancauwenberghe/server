@@ -18,7 +18,7 @@ public class TextUtils {
 	 * @param size       The length.
 	 * @return The string.
 	 */
-	/*public static String textUnpack(byte packedData[], int size) {
+	public static String textUnpack(byte packedData[], int size) {
 		byte[] decodeBuf = new byte[4096];
 		int idx = 0, highNibble = - 1;
 		for(int i = 0; i < size * 2; i++) {
@@ -35,24 +35,14 @@ public class TextUtils {
 			}
 		}
 		return new String(decodeBuf, 0, idx);
-	}*/
-    public static String textUnpack(byte packedData[], int size) {
-        byte[] decodeBuf = new byte[4096];
-        int idx = 0; //highNibble = -1;
-        for (int i = 0; i < size; i++) {
-            int val = packedData[i];
-            decodeBuf[idx++] = (byte)Constants.XLATE_TABLE[val];
-        }
-        return new String(decodeBuf, 0, idx);
-    }
+	}
 
 	public static String shortIp(String fullIp) {
 		String[] parts = fullIp.split(":");
 		return parts[0].replace("/", "");
 	}
 
-    private static final char[] USERNAME_TRANSLATE_TABLE = {
-            ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+    private static final char[] USERNAME_TRANSLATE_TABLE = { ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4',
             '5', '6', '7', '8', '9' };
 
@@ -167,7 +157,7 @@ public class TextUtils {
 		return tag.substring(0, 1).toUpperCase()+tag.substring(1);
 	}
 
-	/*public static void textPack(byte[] stream, String s) {
+	public static void textPack(byte[] stream, String s) {
 		if(s.length() > 80)
 			s = s.substring(0, 80);
 		s = s.toLowerCase();
@@ -183,26 +173,7 @@ public class TextUtils {
 			}
 			stream[++ i] = (byte) k;
 		}
-	}*/
-    public static void textPack(byte packedData[], java.lang.String text) {
-        if (text.length() > 80)
-            text = text.substring(0, 80);
-        text = text.toLowerCase();
-
-        int carryOverNibble = -1;
-        int ofs = 0;
-        for (int idx = 0; idx < text.length(); idx++) {
-            char c = text.charAt(idx);
-            int tableIdx = 0;
-            for (int i = 0; i < Constants.XLATE_TABLE.length; i++) {
-                if (c == Constants.XLATE_TABLE[i]) {
-                    tableIdx = i;
-                    break;
-                }
-            }
-            packedData[ofs++] = (byte) (carryOverNibble);
-        }
-    }
+	}
 
 
 	/**

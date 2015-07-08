@@ -866,7 +866,7 @@ public class CombatAssistant {
 		}
 		if(hasDharokEquiped(p)) {
 			double ratio = (double) p.getSkills().getLevel(Skills.HITPOINTS) / (double) p.getSkills().getLevelForExp(Skills.HITPOINTS);
-			base *= 1.85 - ratio;
+			base *= 2.0 - ratio;
 		}
 		if(base <= 0) {
 			base = 1;
@@ -1269,7 +1269,7 @@ public class CombatAssistant {
 		}
         if(player.getKillCount() < 5 && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
             bonus *= 1.25;
-		return (int) ((meleeAtk * .5 + (bonus * 1.1)));
+		return (int) ((meleeAtk * .5 + (bonus * 1.15)));
 
 	}
 
@@ -1302,7 +1302,7 @@ public class CombatAssistant {
 					bonus = player.getBonus().get(i);
 				}
 			}
-			return (int) (meleeDef * .4 + bonus * .8) + 80;
+			return (int) (meleeDef * .4 + bonus * .8) + 70;
 		} else {
 			return (int)(entity.cE.getCombat() * .7);
 		}

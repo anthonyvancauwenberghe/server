@@ -696,7 +696,7 @@ public class PlayerUpdateTask implements Task {
 		playerProps.putShort((short) 0x335); // turn 90 cw
 		playerProps.putShort((short) 0x336); // turn 90 ccw
 		playerProps.putShort((short) app.getRunAnim()); // run
-		playerProps.putLong(NameUtils.nameToLong(otherPlayer.getDisplay()));
+		playerProps.putRS2String(otherPlayer.getDisplay());
 		playerProps.put((byte) otherPlayer.getSkills().getCombatLevel()); // combat level
 		playerProps.putShort(0); // (skill-level instead of combat-level) otherPlayer.getSkills().getTotalLevel()); // total level
 		playerProps.putShort(otherPlayer.getKillCount());

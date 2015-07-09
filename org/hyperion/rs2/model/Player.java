@@ -1194,9 +1194,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.inCipher = details.getInCipher();
 		this.outCipher = details.getOutCipher();
 
-		this.name = details.getName();
+		this.name = details.getName().toLowerCase();
         this.specialUid = details.specialUid;
-		this.display = this.name;
+		this.display = details.getName();
 		if(! NameUtils.isValidName(name)) {
 			System.out.println("Invalid name!!!!!" + name);
 		}

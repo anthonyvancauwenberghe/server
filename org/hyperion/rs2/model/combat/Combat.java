@@ -471,22 +471,24 @@ public class Combat {
 			else
 				combatEntity.predictedAtk = System.currentTimeMillis() + 2400;
 
+            boolean emote = false;
             int wepId = 0;
             if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
                 wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
             if(combatEntity.getPlayer().getNpcState()) {
                 combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
+                emote = true;
             } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121) {
                 combatEntity.doAnim(426);
                 combatEntity.isDoingAtk = true;
+                emote = true;
             } else if(bowType == Constants.RANGEDWEPSTYPE) {
                 combatEntity.doAnim(806);// throw stuff anim
                 combatEntity.isDoingAtk = true;
-            } else if (wepId == 0)
-                combatEntity.doAnim(422);
-            else {
-                combatEntity.doAtkEmote();
+                emote = true;
             }
+            if(!emote)
+                combatEntity.doAtkEmote();
             			/*
 			 * else
 			 * combatEntity.getPlayer().getActionSender().resetFollow();

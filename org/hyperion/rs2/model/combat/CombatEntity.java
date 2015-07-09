@@ -378,6 +378,7 @@ public class CombatEntity {
 	public void doAnim(int id) {
 		if(id < 1)
 			return;
+
 		getEntity().playAnimation(Animation.create(id, 0));
 	}
 

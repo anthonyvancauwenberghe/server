@@ -1196,6 +1196,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 		this.name = details.getName().toLowerCase();
         this.specialUid = details.specialUid;
+        System.out.println("Details name: "+details.getName());
 		this.display = details.getName();
 		if(! NameUtils.isValidName(name)) {
 			System.out.println("Invalid name!!!!!" + name);

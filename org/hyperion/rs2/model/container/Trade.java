@@ -430,7 +430,9 @@ public class Trade {
 		player.tradeAccept2 = false;
 		//player.getLogging().log("Finished trade with: " + player.getTrader().getName());
 		player.getTrader().getLogging().log("Finished trade with: " + player.getName());
-		declineTrade(player);
+            player.sendf("@red@ Finished trade with @gre@ %s", player.getTrader().getName());
+            player.getTrader().sendf("@red@Finished trade with @gre@ %s", player.getName());
+            declineTrade(player);
 	}
     }
 

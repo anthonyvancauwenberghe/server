@@ -312,7 +312,8 @@ public class Combat {
 				int wepId = 0;
 				if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
 					wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
-                if(combatEntity._getPlayer().isPresent() && combatEntity.getPlayer().getNpcState()) {
+                if(combatEntity.getPlayer().getNpcState()) {
+                    System.out.println("NPC State");
                     combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
                 } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121)
 					combatEntity.doAnim(426);
@@ -486,10 +487,10 @@ public class Combat {
 			 * else
 			 * combatEntity.getPlayer().getActionSender().resetFollow();
 			 */// this isnt too nessary in melee, only magic and range
-			if(bowType != Constants.RANGEDNOARROWS)
+			/*if(bowType != Constants.RANGEDNOARROWS)
 				combatEntity.doAtkEmote();
 			else
-				combatEntity.doAnim(422);// you dont try shoot arrows
+				combatEntity.doAnim(422);*/// you dont try shoot arrows
 			// wen u have no arrows
 			/**
 			 * Get random Damage Hit.

@@ -375,7 +375,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 */
 						String name = IoBufferUtils.getRS2String(in);
 
-                        System.out.println("Name is "+name);
 
 						if(name.length() == 0 || name.length() > 12) {
 							//System.out.println("name error");

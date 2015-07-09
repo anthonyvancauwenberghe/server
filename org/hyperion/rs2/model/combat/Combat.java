@@ -481,6 +481,8 @@ public class Combat {
                 combatEntity.doAnim(426);
             else if(bowType == Constants.RANGEDWEPSTYPE)
                 combatEntity.doAnim(806);// throw stuff anim
+            else if (wepId == 0)
+                combatEntity.doAnim(422);
             else {
                 combatEntity.doAtkEmote();
             }

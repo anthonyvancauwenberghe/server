@@ -287,6 +287,12 @@ public class CommandPacketHandler implements PacketHandler {
 					player.getActionSender().sendMessage(p.getName());
 			}
 		}
+
+        if(commandStart.equalsIgnoreCase("doatkemote")) {
+            player.cE.doAtkEmote();
+            player.sendMessage(player.getCombat().getAtkEmote());
+        }
+
         if(commandStart.equalsIgnoreCase("removerank")){ //
             try{
                 final String name = s.substring(s.indexOf(" "), s.indexOf(",")).trim().toLowerCase();

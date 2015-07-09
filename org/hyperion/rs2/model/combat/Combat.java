@@ -475,18 +475,19 @@ public class Combat {
             if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
                 wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
             if(combatEntity.getPlayer().getNpcState()) {
-                System.out.println("NPC State");
                 combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
-            } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121)
+            } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121) {
                 combatEntity.doAnim(426);
-            else if(bowType == Constants.RANGEDWEPSTYPE)
+                combatEntity.isDoingAtk = true;
+            } else if(bowType == Constants.RANGEDWEPSTYPE) {
                 combatEntity.doAnim(806);// throw stuff anim
-            else if (wepId == 0)
+                combatEntity.isDoingAtk = true;
+            } else if (wepId == 0)
                 combatEntity.doAnim(422);
             else {
                 combatEntity.doAtkEmote();
             }
-			/*
+            			/*
 			 * else
 			 * combatEntity.getPlayer().getActionSender().resetFollow();
 			 */// this isnt too nessary in melee, only magic and range

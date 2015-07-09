@@ -373,7 +373,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					/*
 					 * We read and format the name and passwords.
 					 */
-						String name = NameUtils.formatName(IoBufferUtils.getRS2String(in)).trim();
+						String name = IoBufferUtils.getRS2String(in);
+
+                        System.out.println("Name is "+name);
+
 						if(name.length() == 0 || name.length() > 12) {
 							//System.out.println("name error");
 							session.close(false);

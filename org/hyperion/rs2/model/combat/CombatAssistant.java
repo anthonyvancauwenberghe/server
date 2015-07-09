@@ -1259,8 +1259,8 @@ public class CombatAssistant {
 		} else if(player.getPrayers().isEnabled(49)) {
 			meleeAtk *= 1.25;
 		}
-        if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-            meleeAtk = player.getDungoneering().perks.boost(Constants.MELEE, true, meleeAtk);
+
+
 		double bonus = player.getBonus().get(0);
 		for(int i = 1; i < 3; i++) {
 			if(player.getBonus().get(i) > bonus) {
@@ -1269,6 +1269,11 @@ public class CombatAssistant {
 		}
         if(player.getKillCount() < 5 && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
             bonus *= 1.25;
+        if(hasDharokEquiped(player)) {
+            double ratio = (double) player.getSkills().getLevel(Skills.HITPOINTS) / (double) player.getSkills().getLevelForExp(Skills.HITPOINTS);
+            bonus *= (1.5 - ratio/2);
+        }
+
 		return (int) ((meleeAtk * .5 + (bonus * 1.15)));
 
 	}
@@ -1302,7 +1307,7 @@ public class CombatAssistant {
 					bonus = player.getBonus().get(i);
 				}
 			}
-			return (int) (meleeDef * .4 + bonus * .8) + 70;
+			return (int) (meleeDef * .5 + bonus * .8) + 70;
 		} else {
 			return (int)(entity.cE.getCombat() * .7);
 		}

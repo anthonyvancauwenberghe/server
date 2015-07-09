@@ -309,19 +309,7 @@ public class Combat {
 				}
 				int arrowType = CombatAssistant.getArrowType(arrowId);
 				maxHit = CombatAssistant.calculateRangeMaxHit(combatEntity.getPlayer());
-				int wepId = 0;
-				if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
-					wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
-                if(combatEntity.getPlayer().getNpcState()) {
-                    System.out.println("NPC State");
-                    combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
-                } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121)
-					combatEntity.doAnim(426);
-				else if(bowType == Constants.RANGEDWEPSTYPE)
-					combatEntity.doAnim(806);// throw stuff anim
-				else {
-					combatEntity.doAtkEmote();
-				}
+
 
 				// System.out.println("range max: "+maxHit);
 
@@ -483,6 +471,19 @@ public class Combat {
 			else
 				combatEntity.predictedAtk = System.currentTimeMillis() + 2400;
 
+            int wepId = 0;
+            if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
+                wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
+            if(combatEntity.getPlayer().getNpcState()) {
+                System.out.println("NPC State");
+                combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
+            } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121)
+                combatEntity.doAnim(426);
+            else if(bowType == Constants.RANGEDWEPSTYPE)
+                combatEntity.doAnim(806);// throw stuff anim
+            else {
+                combatEntity.doAtkEmote();
+            }
 			/*
 			 * else
 			 * combatEntity.getPlayer().getActionSender().resetFollow();

@@ -361,9 +361,17 @@ public class CombatEntity {
 	public void doDefEmote() {
 		if(isDoingAtk)
 			return;
-		if(getEntity() instanceof Player)
-			doAnim(defEmote);
-		else if(n.getDefinition().blockEmote() > 0)
+		if(getEntity() instanceof Player) {
+            if(player.getNpcState()) {
+                NPCDefinition def = NPCDefinition.forId(player.getNpcId());
+                if(def.doesDefEmote())
+                    doAnim(def.blockEmote());
+                else
+
+                    doAnim(defEmote);
+            } else
+			    doAnim(defEmote);
+        } else if(n.getDefinition().blockEmote() > 0)
 			doAnim(n.getDefinition().blockEmote());
 	}
 

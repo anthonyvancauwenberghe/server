@@ -61,7 +61,7 @@ public class ClanManager {
 
 	private static void checkClanRank(Player player, Clan clan) {
 		for(ClanMember cm : clan.getRankedMembers()) {
-			if(cm.getName().equals(player.getName())) {
+			if(cm.getName().equalsIgnoreCase(player.getName())) {
 				player.setClanRank(cm.getRank());
 				break;
 			}

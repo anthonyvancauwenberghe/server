@@ -105,7 +105,7 @@ public class SpecialAttacks {
 				specialAnimation = 10961;
 				specialDis = 1;
 				specialDrain = 50;
-				specialAccuracy = 1.5;
+				specialAccuracy = 1.6;
 				break;
 			case 5698:
 				playerGfx = 252;
@@ -478,6 +478,9 @@ public class SpecialAttacks {
                         Magic.vengeance(oldEntity.getPlayer(),
                                 player.cE, hitDamage);
                     }
+                    if(weaponId == 14484 && hitDamage > 0)
+                        player.cE.getOpponent().hit((int) hitDamage/2,
+                                player, false, 0);
 					this.stop();
 				}
 			});
@@ -762,8 +765,7 @@ public class SpecialAttacks {
 			case 14484:
 				player.cE.doGfx(1950, 0);
 				if(hitDamage > 0) {
-					player.cE.getOpponent().hit((int) hitDamage/2,
-							player, false, 0);
+
 					World.getWorld().submit(new Event(1000) {
 						@Override
 						public void execute() {
@@ -919,7 +921,6 @@ public class SpecialAttacks {
 
 	private static boolean delayedWeapon(int weaponId) {
 		switch(weaponId) {
-		case 14484:
 		case 4153:
 		case 17646:
 			return false;
@@ -968,7 +969,7 @@ public class SpecialAttacks {
 				specDamage = 1.3;
 				break;
 			case 14484:
-				specDamage = 1.13;
+				specDamage = 1.1;
 				break;
 		}
 		return specDamage;

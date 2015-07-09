@@ -471,33 +471,6 @@ public class Combat {
 			else
 				combatEntity.predictedAtk = System.currentTimeMillis() + 2400;
 
-            boolean emote = false;
-            int wepId = 0;
-            if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
-                wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
-            if(combatEntity.getPlayer().getNpcState()) {
-                combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
-                emote = true;
-                combatEntity.getPlayer().debugMessage("Doing attack emote 1");
-            } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121) {
-                combatEntity.doAnim(426);
-                combatEntity.isDoingAtk = true;
-                emote = true;
-                combatEntity.getPlayer().debugMessage("Doing attack emote 2");
-            } else if(bowType == Constants.RANGEDWEPSTYPE) {
-                combatEntity.doAnim(806);// throw stuff anim
-                combatEntity.isDoingAtk = true;
-                emote = true;
-                combatEntity.getPlayer().debugMessage("Doing attack emote 3");
-            } else if(wepId == 0) {
-                combatEntity.doAnim(422);
-            }
-            if(!emote) {
-                combatEntity.doAtkEmote();
-                combatEntity.getPlayer().debugMessage("Doing attack emote 4");
-            }
-
-            combatEntity.getPlayer().debugMessage("Emote: "+emote);
             			/*
 			 * else
 			 * combatEntity.getPlayer().getActionSender().resetFollow();
@@ -559,6 +532,19 @@ public class Combat {
 		} else {
 			damg = SpiritShields.applyEffects(opponent.cE, damg);
 		}
+
+        int wepId = 0;
+        if(combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null)
+            wepId = combatEntity.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON).getId();
+        if(combatEntity.getPlayer().getNpcState()) {
+            combatEntity.doAnim(NPCDefinition.forId(combatEntity.getPlayer().getNpcId()).getAtkEmote(0));
+        } else if(wepId == 4212 || FightPits.isBow(wepId) || wepId == 14121) {
+            combatEntity.doAnim(426);
+            combatEntity.isDoingAtk = true;
+        } else if(wepId == 0) {
+            combatEntity.doAnim(422);
+        } else
+            combatEntity.doAtkEmote();
 
         if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
             if(SlayerShop.hasHelm(combatEntity.getPlayer()))

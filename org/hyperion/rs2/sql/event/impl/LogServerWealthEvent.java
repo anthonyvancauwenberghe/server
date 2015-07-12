@@ -18,8 +18,8 @@ public class LogServerWealthEvent extends SQLEvent {
                 "VALUES ((\n" +
                 "SELECT SUM(value) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank' ),\n" +
                 "(SELECT SUM(pkvalue) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank'),\n" +
-                "(SELECT SUM(value) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank' AND (`Timestamp` > DATE_SUB(now(), INTERVAL 10 DAY))),\n" +
-                "(SELECT SUM(pkvalue) FROM accountvalues WHERE pkvalue>100 AND name<>'thomas' AND name<>'rwt bank' AND (`Timestamp` > DATE_SUB(now(), INTERVAL 10 DAY))))");
+                "(SELECT SUM(value) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank' AND (`Timestamp` > DATE_SUB(now(), INTERVAL 14 DAY))),\n" +
+                "(SELECT SUM(pkvalue) FROM accountvalues WHERE pkvalue>100 AND name<>'thomas' AND name<>'rwt bank' AND (`Timestamp` > DATE_SUB(now(), INTERVAL 14 DAY))))");
         super.updateStartTime();
     }
 }

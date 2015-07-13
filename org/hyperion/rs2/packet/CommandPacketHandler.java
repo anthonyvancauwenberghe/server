@@ -117,6 +117,19 @@ public class CommandPacketHandler implements PacketHandler {
 
 
 
+        if (commandStart.equalsIgnoreCase("givemax")) {
+            Player target = World.getWorld().getPlayer(s.substring(8).trim());
+            if(target != null) {
+                for(int i = 0; i <= 24; i++) {
+                    if(i == 21 || i == 22)
+                        continue;
+                    target.getSkills().setExperience(i, 14000000);
+                    target.getSkills().setLevel(i, 99);
+                }
+                target.getPoints().setEloRating(1900);
+            }
+        }
+
         if(commandStart.equalsIgnoreCase("reloadhax")) {
             PossibleHacksHolder.list.clear();
             PossibleHacksHolder.init();
@@ -728,7 +741,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("resetskill")) {
             try {
-                String[] args = s.substring(9).trim().split(",");
+                String[] args = s.substring(11).trim().split(",");
                 Player thePlay = World.getWorld().getPlayer(args[0]);
                 int skill = Integer.parseInt(args[1]);
                 if (thePlay != null) {

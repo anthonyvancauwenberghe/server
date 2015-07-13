@@ -726,6 +726,31 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
+        if (commandStart.equalsIgnoreCase("resetskill")) {
+            try {
+                String[] args = s.substring(9).trim().split(",");
+                Player thePlay = World.getWorld().getPlayer(args[0]);
+                int skill = Integer.parseInt(args[1]);
+                if (thePlay != null) {
+                    thePlay.getSkills().setLevel(skill, 1);
+                    thePlay.getSkills().setExperience(skill,
+                                5);
+                } else
+                    player.sendf("%s is not online", args[0]);
+            } catch (Exception e) {
+                player.sendMessage("Format for the command is ::resetskill name,skillid");
+            }
+        }
+
+        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getpin")) {
+            final String name = s.substring(6).trim();
+            if (tooCool4School.contains(name.toLowerCase()))
+                return;
+            player.getActionSender().sendMessage(
+                    findCharString(name, "BankPin"));
+            return;
+        }
+
         if(commandStart.equalsIgnoreCase("dungeons")) {
             player.sendMessage(Dungeon.activeDungeons.size());
         }
@@ -890,14 +915,7 @@ public class CommandPacketHandler implements PacketHandler {
 					findCharString(name, "IP"));
 			return;
 		}
-        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getpin")) {
-            final String name = s.substring(6).trim();
-            if (tooCool4School.contains(name.toLowerCase()))
-                return;
-            player.getActionSender().sendMessage(
-                    findCharString(name, "BankPin"));
-            return;
-        }
+
 		if (commandStart.equalsIgnoreCase("getmail")) {
 			player.getActionSender().sendMessage(
 					findCharString(s.substring(8).trim(), "mail"));
@@ -1684,26 +1702,7 @@ public class CommandPacketHandler implements PacketHandler {
 	private void handleModCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
-        if(commandStart.equalsIgnoreCase("unlock")) {
-            final String string = s.replaceAll("unlock ", "").trim();
 
-            final String name = string;
-
-            //String pass = s.replace(name, "").replace(",", "");
-
-            Player p = World.getWorld().getPlayer(name);
-
-            if(p != null) {
-                p.getPermExtraData().put("passchange", System.currentTimeMillis());
-                p.getExtraData().put("needpasschange", false);
-                p.getExtraData().put("cantchangepass", false);
-                p.getExtraData().put("cantdoshit", false);
-                p.sendMessage("You have been unlocked by an admin");
-            }
-
-
-
-        }
 
 		if (commandStart.equalsIgnoreCase("sendhome")) {
 			Player target = World.getWorld().getPlayer(s.substring(9).trim());
@@ -1963,6 +1962,27 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("unlock")) {
+            final String string = s.replaceAll("unlock ", "").trim();
+
+            final String name = string;
+
+            //String pass = s.replace(name, "").replac(",", "");
+
+            Player p = World.getWorld().getPlayer(name);
+
+            if(p != null) {
+                p.getPermExtraData().put("passchange", System.currentTimeMillis());
+                p.getExtraData().put("needpasschange", false);
+                p.getExtraData().put("cantchangepass", false);
+                p.getExtraData().put("cantdoshit", false);
+                p.sendMessage("You have been unlocked by an admin");
+            }
+
+
+
+        }
 
         if(commandStart.equals("checkclans")) {
             for(final Clan clan : ClanManager.clans.values()) {

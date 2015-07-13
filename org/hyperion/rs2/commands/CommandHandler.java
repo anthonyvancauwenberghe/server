@@ -2,47 +2,12 @@ package org.hyperion.rs2.commands;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.AllToMeCommand;
-import org.hyperion.rs2.commands.impl.DemoteCommand;
-import org.hyperion.rs2.commands.impl.EpicRapeCommand;
-import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
-import org.hyperion.rs2.commands.impl.GiveIntCommand;
-import org.hyperion.rs2.commands.impl.KeywordCommand;
-import org.hyperion.rs2.commands.impl.LvlCommand;
-import org.hyperion.rs2.commands.impl.PromoteCommand;
-import org.hyperion.rs2.commands.impl.RapeCommand;
-import org.hyperion.rs2.commands.impl.RecordingCommand;
-import org.hyperion.rs2.commands.impl.RestartServerCommand;
-import org.hyperion.rs2.commands.impl.ScreenshotCommand;
-import org.hyperion.rs2.commands.impl.SendiCommand;
-import org.hyperion.rs2.commands.impl.SkillCommand;
-import org.hyperion.rs2.commands.impl.SpawnCommand;
-import org.hyperion.rs2.commands.impl.StaffYellCommand;
-import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
-import org.hyperion.rs2.commands.impl.VoteCommand;
-import org.hyperion.rs2.commands.impl.YellCommand;
+import org.hyperion.rs2.commands.impl.*;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.Ban;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.OSPK;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerPoints;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SpecialBar;
-import org.hyperion.rs2.model.SpellBook;
-import org.hyperion.rs2.model.UpdateFlags;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.achievements.Difficulty;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
@@ -200,6 +165,7 @@ public class CommandHandler {
 		submit(new SendiCommand());
 		submit(new EpicRapeCommand());
 		submit(new RestartServerCommand());
+        submit(new WikiCommand());
 		submit(new SpawnCommand("item"), new SpawnCommand("pickup"), new SpawnCommand("spawn"));
 		submit(new KeywordCommand("setkeyword"));
         submit(new Command("dp", Rank.DONATOR) {
@@ -252,14 +218,6 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("wiki", Rank.PLAYER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                final String site = TextUtils.titleCase(filterInput(input)).replace(" ", "%20");
-                player.sendf("l4unchur13 http://www.arteropk.wikia.com/wiki/%s", site);
-                return true;
-            }
-        });
 
         submit(new Command("leavelms", Rank.PLAYER) {
             @Override
@@ -1593,30 +1551,41 @@ public class CommandHandler {
 
         submit(new Command("npcinfo", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String line){
-                player.sendf("NPC Count: %,d", World.getWorld().getNPCs().size());
-                try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt", true))){
-                    writer.newLine();
-                    writer.newLine();
-                    writer.write("Date: " + new Date());
-                    writer.newLine();
-                    writer.write(String.format("NPC Count: %,d", World.getWorld().getNPCs().size()));
-                    writer.newLine();
-                    for(final NPC npc : World.getWorld().getNPCs()){
-                        writer.write(String.format(
-                                "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",
-                                npc.getDefinition().getName(),
-                                npc.getDefinition().getId(),
-                                npc.getLocation().getX(),
-                                npc.getLocation().getY(),
-                                npc.health, npc.maxHealth,
-                                npc.isDead()
-                        ));
-                        writer.newLine();
+                String args = filterInput(line);
+                int id = 0;
+                try {
+                    id = Integer.parseInt(args);
+                    NPCDefinition def = NPCDefinition.forId(id);
+                    player.sendf("NPC Name: %s Combat: %d MaxHP: %d", def.getName(), def.combat(),def.maxHp());
+                    for(NPCDrop drop : def.getDrops()) {
+                        player.sendf("%s : 1/%d , %d - %d", ItemDefinition.forId(drop.getId()).getName(), drop.getChance(), drop.getMin(), drop.getMax());
                     }
-                    player.sendf("Dumped to data/npc-info.txt");
-                    return true;
-                }catch(Exception ex){
-                    player.sendf("Error dumping npc info: %s", ex);
+                }catch(Exception e) {
+                    player.sendf("NPC Count: %,d", World.getWorld().getNPCs().size());
+                    try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt", true))){
+                        writer.newLine();
+                        writer.newLine();
+                        writer.write("Date: " + new Date());
+                        writer.newLine();
+                        writer.write(String.format("NPC Count: %,d", World.getWorld().getNPCs().size()));
+                        writer.newLine();
+                        for(final NPC npc : World.getWorld().getNPCs()){
+                            writer.write(String.format(
+                                    "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",
+                                    npc.getDefinition().getName(),
+                                    npc.getDefinition().getId(),
+                                    npc.getLocation().getX(),
+                                    npc.getLocation().getY(),
+                                    npc.health, npc.maxHealth,
+                                    npc.isDead()
+                            ));
+                            writer.newLine();
+                        }
+                        player.sendf("Dumped to data/npc-info.txt");
+                        return true;
+                    }catch(Exception ex){
+                        player.sendf("Error dumping npc info: %s", ex);
+                    }
                 }
                 return true;
             }

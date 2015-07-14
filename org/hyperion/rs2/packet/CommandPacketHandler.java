@@ -11,15 +11,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import javax.swing.JFrame;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.*;
+import org.hyperion.rs2.event.impl.CountDownEvent;
+import org.hyperion.rs2.event.impl.CutSceneEvent;
+import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.NpcDeathEvent;
+import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.rs2.event.impl.ServerMessages;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.BankPin;
 import org.hyperion.rs2.model.DialogueManager;
@@ -52,18 +67,17 @@ import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.EquipmentReq;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.ge.Offer;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -97,8 +111,6 @@ import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
 import org.madturnip.tools.RoomDefinitionCreator;
-
-import javax.swing.*;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -935,7 +947,7 @@ public class CommandPacketHandler implements PacketHandler {
 			return;
 		}
 		if (commandStart.equalsIgnoreCase("ferry")) {
-			player.setTeleportTarget(Location.create(2574, 3298, 2));
+			player.setTeleportTarget(Location.create(2501, 3860, 1));
 			return;
 		}
 		if (commandStart.equalsIgnoreCase("superman")) {

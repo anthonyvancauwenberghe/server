@@ -56,7 +56,6 @@ public class PlayerProfileInterface extends Interface{
 
     public void handle(final Player player, final Packet pkt){
         final int requestId = pkt.getByte();
-        System.out.println("request id: " + requestId);
         if(player.getExtraData().get("lastKnownName") == null)
             return;
         final Player viewing = World.getWorld().getPlayer(player.getExtraData().getString("lastKnownName"));

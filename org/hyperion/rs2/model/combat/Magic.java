@@ -339,7 +339,7 @@ public class Magic {
 
 		}
 
-        if(Misc.random(AtkBonus) < Misc.random(DefBonus/2))
+        if(Misc.random(AtkBonus) < Misc.random((int)(DefBonus/1.6)))
             splash = true;
 		if(spell.getMaxHit() > 0 && Damage <= 0) {
 			splash = true;

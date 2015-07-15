@@ -1,29 +1,79 @@
 package org.hyperion.rs2.commands;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.*;
+import org.hyperion.rs2.commands.impl.AllToMeCommand;
+import org.hyperion.rs2.commands.impl.DemoteCommand;
+import org.hyperion.rs2.commands.impl.EpicRapeCommand;
+import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
+import org.hyperion.rs2.commands.impl.GiveIntCommand;
+import org.hyperion.rs2.commands.impl.KeywordCommand;
+import org.hyperion.rs2.commands.impl.LvlCommand;
+import org.hyperion.rs2.commands.impl.PromoteCommand;
+import org.hyperion.rs2.commands.impl.RapeCommand;
+import org.hyperion.rs2.commands.impl.RecordingCommand;
+import org.hyperion.rs2.commands.impl.RestartServerCommand;
+import org.hyperion.rs2.commands.impl.ScreenshotCommand;
+import org.hyperion.rs2.commands.impl.SendiCommand;
+import org.hyperion.rs2.commands.impl.SkillCommand;
+import org.hyperion.rs2.commands.impl.SpawnCommand;
+import org.hyperion.rs2.commands.impl.StaffYellCommand;
+import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
+import org.hyperion.rs2.commands.impl.VoteCommand;
+import org.hyperion.rs2.commands.impl.WikiCommand;
+import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Ban;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.OSPK;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.PlayerPoints;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.SpecialBar;
+import org.hyperion.rs2.model.SpellBook;
+import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
-import org.hyperion.rs2.model.achievements.Difficulty;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.content.misc.PotionDecanting;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
@@ -64,22 +114,6 @@ import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -574,13 +608,6 @@ public class CommandHandler {
 				return true;
 			}
 		});
-        submit(new Command("nexonsplace", Rank.SUPER_DONATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                Magic.teleport(player, 2464,4782,0, false, false);
-                return true;
-            }
-        });
 		submit(new Command("bank", Rank.SUPER_DONATOR, Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -1816,5 +1843,19 @@ public class CommandHandler {
                 return true;
             }
         });
+
+		submit(new Command("aliplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				Magic.teleport(player, 3500, 3572, 0, false);
+				return false;
+			}
+		});
+
+		submit(new Command("marcusplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				Magic.teleport(player, 1971, 5002, 0, false);
+				return false;
+			}
+		});
 	}
 }

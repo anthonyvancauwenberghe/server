@@ -40,7 +40,7 @@ public class WikiCommand extends Command {
             public boolean execute(Player player, String input) throws Exception {
                 final String[] args = filterInput(input).split(",");
                 KEY_TO_URL.put(args[0], args[1]);
-                try (final BufferedWriter writer = new BufferedWriter(new FileWriter("", true))) {
+                try (final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/wikilinks.txt", true))) {
                     writer.write(args[0]+"-"+args[1]);
                 } catch(Exception e) {
 

@@ -57,7 +57,7 @@ public class WikiCommand extends Command {
     public boolean execute(final Player player, final String input) {
         String key = filterInput(input);
         if(KEY_TO_URL.containsKey(key))
-            key = KEY_TO_URL.get(KEY_TO_URL);
+            key = KEY_TO_URL.get(key);
         String site = TextUtils.titleCase(key).replace(" ", "%20");
         player.sendf("l4unchur13 http://www.arteropk.wikia.com/wiki/%s", site);
         return true;

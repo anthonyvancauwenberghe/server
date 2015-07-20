@@ -41,10 +41,10 @@ public class YellCommand extends Command {
 		}
 	}
 
-	public static final int NORMAL_YELL_DELAY = 30000;
-	public static final int DONATOR_YELL_DELAY = 12000;
+	public static final int NORMAL_YELL_DELAY = 150000;
+	public static final int DONATOR_YELL_DELAY = 120000;
     public static final int SUPER_YELL_DELAY = 7000;
-	public static final int SKILLER_YELL_DELAY = 15000;
+	public static final int SKILLER_YELL_DELAY = 90000;
 	
 	public static int minYellRank = 0;
 
@@ -108,7 +108,7 @@ public class YellCommand extends Command {
 		input = input.replaceAll("arsen", "graham");
 		input = input.replaceAll("Arsen", "Graham");
 
-		long yellMilliseconds = (long) (System.currentTimeMillis() - player.getYelling().getYellTimer());
+		long yellMilliseconds = (long) (System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur"));
 		if(!Rank.isStaffMember(player)) {
 			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
@@ -116,6 +116,7 @@ public class YellCommand extends Command {
 					return false;
 				}
 				player.getYelling().updateYellTimer();
+                player.getPermExtraData().put("yelltimur", player.getYelling().getYellTimer());
 			} else {
                player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level, or purchase donator to start yelling");
                return false;
@@ -123,7 +124,6 @@ public class YellCommand extends Command {
 		}
 		final String colors = Rank.getPrimaryRank(player).getYellColor();
 		final boolean hasTag = !player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player);
-		final boolean aboveDonator = Rank.getPrimaryRank(player).ordinal() > Rank.DONATOR.ordinal();
 		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
 		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: ";
 		input = input.replaceFirst("yell ", "");

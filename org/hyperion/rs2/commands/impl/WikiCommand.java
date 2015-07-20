@@ -42,6 +42,7 @@ public class WikiCommand extends Command {
                 KEY_TO_URL.put(args[0], args[1]);
                 try (final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/wikilinks.txt", true))) {
                     writer.write(args[0]+"-"+args[1]);
+                    writer.newLine();
                 } catch(Exception e) {
 
                 }

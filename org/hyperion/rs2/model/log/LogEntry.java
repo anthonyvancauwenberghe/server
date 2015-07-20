@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.log;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
@@ -187,8 +188,10 @@ public class LogEntry implements Comparable<LogEntry>{
     public static LogEntry death(final Player player, final Player killer, final Item[] items){
         return new LogEntry(Category.DEATH,
                 String.format(
-                        "@blu@Killed By: @red@%s%s@blu@Lost:@bla@ %s",
+                        "@blu@Killed By: @red@%s (ip match: %s, mac match: %s)%s@blu@Lost:@bla@ %s",
                         (killer != null ? killer.getName() : "---"),
+                        Objects.equals(player.getShortIP(), killer != null ? killer.getShortIP() : ""),
+                        player.getUID() == (killer != null ? killer.getUID() : -1),
                         LogUtils.NEW_LINE,
                         LogUtils.toString(items)
                 )
@@ -198,8 +201,10 @@ public class LogEntry implements Comparable<LogEntry>{
     public static LogEntry kill(final Player killer, final Player player, final Item[] items){
         return new LogEntry(Category.KILL,
                 String.format(
-                        "@blu@Killed: @red@%s%s@blu@Lost:@bla@ %s",
+                        "@blu@Killed: @red@%s (ip match: %s, mac match: %s)%s@blu@Lost:@bla@ %s",
                         (player != null ? player.getName() : "---"),
+                        Objects.equals(killer.getShortIP(), player != null ? player.getShortIP() : ""),
+                        killer.getUID() == (player != null ? player.getUID() : -1),
                         LogUtils.NEW_LINE,
                         LogUtils.toString(items)
                 )

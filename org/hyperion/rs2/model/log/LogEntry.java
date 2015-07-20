@@ -19,6 +19,7 @@ public class LogEntry implements Comparable<LogEntry>{
         PRIVATE_CHAT("private-chat.log", "private chat", "private msg", "pm"),
         ACTIVITY("activity.log", "activity"),
         DEATH("death.log", "death"),
+        KILL("kill.log", "kill"),
         PICKUP_ITEM("pickup-items.log", "pickup item"),
         COMMAND("command.log", "command"),
         GAMBLE("gamble.log", "gamble", "gambling", "stake"),
@@ -188,6 +189,17 @@ public class LogEntry implements Comparable<LogEntry>{
                 String.format(
                         "@blu@Killed By: @red@%s%s@blu@Lost:@bla@ %s",
                         (killer != null ? killer.getName() : "---"),
+                        LogUtils.NEW_LINE,
+                        LogUtils.toString(items)
+                )
+        );
+    }
+
+    public static LogEntry kill(final Player killer, final Player player, final Item[] items){
+        return new LogEntry(Category.KILL,
+                String.format(
+                        "@blu@Killed: @red@%s%s@blu@Lost:@bla@ %s",
+                        (player != null ? player.getName() : "---"),
                         LogUtils.NEW_LINE,
                         LogUtils.toString(items)
                 )

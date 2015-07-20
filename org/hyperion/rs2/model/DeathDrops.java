@@ -1,5 +1,8 @@
 package org.hyperion.rs2.model;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.EP.EPDrops;
@@ -10,11 +13,6 @@ import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author SaosinHax
@@ -72,8 +70,10 @@ public class DeathDrops {
             World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 200_000)));
         }
 
-        player.getLogManager().add(LogEntry.death(player, killer, droppingItems.toArray(new Item[droppingItems.size()])));;
+		final Item[] dropped = droppingItems.toArray(new Item[droppingItems.size()]);
 
+        player.getLogManager().add(LogEntry.death(player, killer, dropped));
+		killer.getLogManager().add(LogEntry.kill(killer, player, dropped));
 
     }
 

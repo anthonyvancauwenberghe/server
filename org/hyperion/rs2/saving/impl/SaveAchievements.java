@@ -25,20 +25,20 @@ public class SaveAchievements {
 
     public boolean save(Player player, BufferedWriter writer) throws IOException {
         /* Updates all of the states to the array */
-        for(int i = 0; i < player.getAchievements().length; i++) {
-            Achievement achievement = player.getAchievements()[i];
+        for(int i = 0; i < player.getAchievements().size(); i++) {
+            Achievement achievement = player.getAchievements().get(i);
             if(achievement != null) {
                 if (achievement instanceof SteppedAchievement) {
                     player.setAchievementProgress(i, ((SteppedAchievement) achievement).getCurrentStep());
                 } else {
-                    player.setAchievementProgress(i, achievement.getState());
+                    player.setAchievementProgress(i, achievement.getCurrentStep());
                 }
             }
         }
        // writer.write(getName());
         writer.newLine();
-        for(int i = 0; i < player.getAchievementProgress().length; i++) {
-            writer.write(player.getAchievementProgress()[i] + "");
+        for(int i = 0; i < player.getAchievementProgress().size(); i++) {
+            writer.write(player.getAchievementProgress().get(i) + "");
             writer.newLine();
         }
         return false;
@@ -50,6 +50,7 @@ public class SaveAchievements {
         while((line = reader.readLine()).length() > 0) {
             int value = Integer.parseInt(line);
             player.setAchievementProgress(index++, value);
+            System.out.println(player.getAchievementProgress().get(index - 1));
         }
     }
 }

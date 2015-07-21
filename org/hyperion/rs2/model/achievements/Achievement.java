@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.achievements;
 
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 
 import java.util.ArrayList;
@@ -12,18 +13,14 @@ public abstract class Achievement {
 
     public static ArrayList<Achievement> achievements = new ArrayList<>();
 
-    private String name;
-    private Difficulty difficulty;
-    private int interfaceId;
-    private int state;
-    private String[] instructions, reward;
+    protected String name;
+    protected AchievementData achievementData;
+    protected int currentStep;
 
-    public Achievement(String name, Difficulty difficulty, int interfaceId, String[] reward, String... instructions) {
+    public Achievement(String name, AchievementData achievementData) {
         this.name = name;
-        this.difficulty = difficulty;
-        this.interfaceId = interfaceId;
-        this.reward = reward;
-        this.instructions = instructions;
+        this.achievementData = achievementData;
+        currentStep = 0;
         achievements.add(this);
     }
 
@@ -36,41 +33,43 @@ public abstract class Achievement {
      */
     public abstract void progress(Player player);
 
+    public int getCurrentStep() {
+        return currentStep;
+    }
+
+    public void setCurrentStep(int currentStep) {
+        this.currentStep = currentStep;
+    }
+
+    public AchievementData getAchievementData() {
+        return achievementData;
+    }
+
     public String getName() {
         return name;
     }
 
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public int getInterfaceId() {
-        return interfaceId;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
     public void loadInformation(Player player) {
-        for(int i = 28989; i < instructions.length + 28989; i++) {
-            player.getActionSender().sendString(i, instructions[i - 28989]);
+        for(int i = 28989; i < achievementData.getInstructions().length + 28989; i++) {
+            player.getActionSender().sendString(i, achievementData.getInstructions()[i - 28989]);
         }
-        for(int i = 29402; i < reward.length + 29402; i++) {
-            player.getActionSender().sendString(i, reward[i - 29402]);
+        for(int i = 29402; i < achievementData.getRewards().length + 29402; i++) {
+            player.getActionSender().sendString(i, achievementData.getRewards()[i - 29402]);
         }
     }
 
-    public void giveReward(Player player, int pkp, int dp) {
-        player.getPoints().inceasePkPoints(pkp);
-        String message = "For completing " + name + ", you have been rewarded " + pkp + " pk points";
-        if(dp > 0) {
-            player.getPoints().increaseDonatorPoints(dp);
-            message += " and " + dp + " donator points!";
+    public void giveReward(Player player) {
+        player.getPoints().inceasePkPoints(achievementData.getPkp());
+        String message = "For completing " + name + ", you have been rewarded " + achievementData.getPkp() + " pk points";
+        if(achievementData.getDp() > 0) {
+            player.getPoints().increaseDonatorPoints(achievementData.getDp());
+            message += " and " + achievementData.getDp() + " donator points!";
+        }
+        if(achievementData.getItems() != null) {
+            for(Item item : achievementData.getItems()) {
+                player.getBank().add(item);
+            }
+            player.getActionSender().sendMessage("Your rewards were added to your bank!");
         }
         player.getActionSender().sendMessage(message);
     }

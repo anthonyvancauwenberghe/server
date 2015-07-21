@@ -1,16 +1,20 @@
 package org.hyperion.rs2.model.achievements;
 
-import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.content.achievements.KillStreakAchievement;
 import org.hyperion.rs2.model.content.achievements.SteppedAchievement;
-import org.hyperion.rs2.model.content.achievements.TotalLevelAchievement;
+
+import java.util.ArrayList;
 
 public class AchievementHandler {
 
-    public static final int TOTAL_ACHIEVEMENTS = 50;
+    static {
+        Achievement achievement = new SteppedAchievement("Kill 5 Players", AchievementData.KILL_5);
+        achievement = new SteppedAchievement("Kill 25 Players", AchievementData.KILL_25);
+    }
 
     public static boolean achievementButton(Player player, int buttonId) {
+        if(true)
+            return false;
         for (int i = 29457; i <= 29462; i++) {
             if(buttonId == i) {
                 Difficulty newDifficulty = Difficulty.values()[i - 29457];
@@ -19,58 +23,45 @@ public class AchievementHandler {
                 return true;
             }
         }
-        Achievement[] achievements = getAchievementByDifficulty(player, player.getViewingDifficulty());
-        for (int i = 0; i < achievements.length; i++) {
-            if(achievements[i].getInterfaceId() == buttonId) {
-                player.getActionSender().sendString(28883, achievements[i].getName() + " Guide");
-                achievements[i].loadInformation(player);
-                if(achievements[i] instanceof SteppedAchievement) {
-                    SteppedAchievement achievement = (SteppedAchievement) achievements[i];
-                    if(achievement.getSteps() > 1)
-                        player.getActionSender().sendString(28989, "Current Progress: " + achievement.getCurrentStep() + "/" + achievement.getSteps());
-                }
-                return true;
+        if(buttonId > 28885 && buttonId < 28950) {
+            ArrayList<Achievement> achievements = getAchievementByDifficulty(player, player.getViewingDifficulty());
+            int index = buttonId - 28886;
+            player.getActionSender().sendString(28883, achievements.get(index).getName() + " Guide");
+            achievements.get(index).loadInformation(player);
+            if (achievements.get(index) instanceof SteppedAchievement) {
+                SteppedAchievement achievement = (SteppedAchievement) achievements.get(index);
+                if (achievement.getAchievementData().getSteps() > 1)
+                    player.getActionSender().sendString(28989, "Current Progress: " + achievement.getCurrentStep() + "/" + achievement.getAchievementData().getSteps());
             }
+            return true;
         }
         return false;
     }
 
-    public static Achievement[] getAchievementByDifficulty(Player player, Difficulty difficulty) {
-        Achievement[] achievements = new Achievement[difficulty.getNumberOfAchievements()];
-        int index = 0;
+    public static ArrayList<Achievement> getAchievementByDifficulty(Player player, Difficulty difficulty) {
+        ArrayList<Achievement> achievements = new ArrayList<>();
         for(Achievement achievement : player.getAchievements()) {
             if(achievement == null)
                 continue;
-            if(achievement.getDifficulty() == difficulty)
-                achievements[index++] = achievement;
+            if(achievement.getAchievementData().getDifficulty() == difficulty)
+                achievements.add(achievement);
         }
         return achievements;
     }
 
     public static void openInterface(Player player, Difficulty difficulty, boolean refresh) {
+        if(true)
+            return;
         clearInterface(player);
-        Achievement[] achievements = getAchievementByDifficulty(player, difficulty);
+        ArrayList<Achievement> achievements = getAchievementByDifficulty(player, difficulty);
+        int interfaceId = 28886;
         for(Achievement achievement : achievements) {
-            player.getActionSender().sendString(achievement.getInterfaceId(), getTextColor(achievement.getState()) + achievement.getName());
+            player.getActionSender().sendString(interfaceId, getTextColor(achievement.getCurrentStep(), achievement.getAchievementData().getSteps()) + achievement.getName());
+            interfaceId++;
         }
         player.getActionSender().sendString(28881, difficulty.getName() + " Achievement Diary");
         if(!refresh)
             player.getActionSender().showInterface(28880);
-    }
-
-    public static int getAchievementIndex(Player player, String name) {
-        for(int i = 0; i < player.getAchievements().length; i++) {
-            if(player.getAchievements()[i].getName().equals(name)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private static void progress(Player player, String name) {
-        int index = getAchievementIndex(player, name);
-        if(player.getAchievements()[index].getState() != 2)
-            player.getAchievements()[index].progress(player);
     }
 
     private static void clearInterface(Player player) {
@@ -80,67 +71,52 @@ public class AchievementHandler {
         for(int i = 29402; i < 29409; i++) {
             player.getActionSender().sendString(i, "");
         }
-        for(int i = 28886; i <= 28886 + TOTAL_ACHIEVEMENTS; i++) {
+        for(int i = 28886; i <= 28886 + player.getAchievements().size(); i++) {
             player.getActionSender().sendString(i, "");
         }
         player.getActionSender().sendString(28883, "Achievement Guide");
     }
 
-    private static String getTextColor(int state) {
-        switch(state) {
-            case 0:
-                return "@red@";
-            case 1:
-                return "@yel@";
-            case 2:
-                return "@gre@";
-        }
-        return null;
+    private static String getTextColor(int currentStep, int steps) {
+        if(currentStep == 0)
+            return "@red@";
+        else if(currentStep > 0 && currentStep < steps)
+            return "@yel@";
+        else
+            return "@gre@";
     }
 
+    /**
+     * Progresses every achievement of this type.
+     * @param player Player player
+     * @param type Type type of achievement.
+     */
     public static void progressAchievement(Player player, String type) {
         if(true)
             return;
-        switch(type.toLowerCase()) {
-            case "kill player":
-                progress(player, "Kill 5 Players");
-                progress(player, "Kill 25 Players");
-                progress(player, "Kill 50 Players");
-                progress(player, "Kill 100 Players");
-                progress(player, "Kill 250 Players");
-                progress(player, "Kill 500 Players");
-                return;
-            case "dungeoneering":
-                progress(player, "5 Dungeon Runs");
-                progress(player, "15 Dungeon Runs");
-                progress(player, "50 Dungeon Runs");
-                progress(player, "200 Dungeon Runs");
-                return;
-            case "kill streak":
-                progress(player, "Streak of 6");
-                progress(player, "Streak of 10");
-                return;
-            case "duel":
-                progress(player, "Win 20 Duels");
-                progress(player, "Win 50 Duels");
-                return;
-            case "total":
-                progress(player, "Total Level 800");
-                progress(player, "Total Level 1100");
-                progress(player, "Total Level 1500");
-                progress(player, "Total Level 1800");
-                return;
-            default:
-                progress(player, type);
-                return;
+        for(int i = 0; i < player.getAchievements().size(); i++) {
+            if(player.getAchievements().get(i).getAchievementData().getType().equals(type)) {
+                player.getAchievements().get(i).progress(player);
+            }
         }
     }
 
+    public static void initAchievements(Player player, ArrayList<Integer> progress) {
+        if(true)
+            return;
+        for(int i = 0; i < Achievement.achievements.size(); i++) {
+            Achievement achievement = Achievement.achievements.get(i);
+            achievement.setCurrentStep(progress.get(i));
+            player.getAchievements().add(achievement);
+        }
+    }
+
+    /**
     public static void initAchievements(Player player, int[] progress) {
         int index = 0;
         int interfaceId = 28886;
 
-        /* Very easy difficulty achievements*/
+        /* Very easy difficulty achievements
         Difficulty difficulty = Difficulty.VERY_EASY;
 
         player.getAchievements()[index++] = new SteppedAchievement("Kill 5 Players", difficulty, interfaceId++, 5, progress[index - 1], 250, 0, new String[] {"", "", "250 pkp"},
@@ -155,7 +131,7 @@ public class AchievementHandler {
         player.getAchievements()[index++] = new TotalLevelAchievement("Total Level 800", difficulty, interfaceId++, 800, progress[index - 1], 200, 0, new String[] {"", "", "200 pkp"},
                 "", "", "Achieve a total level of at least 800 to", "complete this achievement");
 
-        /* Easy difficulty achievements*/
+        /* Easy difficulty achievements
         interfaceId = 28886;
         difficulty = Difficulty.EASY;
 
@@ -165,7 +141,7 @@ public class AchievementHandler {
         player.getAchievements()[index++] = new SteppedAchievement("5 Dungeon Runs", difficulty, interfaceId++, 5, progress[index - 1], 400, 0, new String[] {"", "", "400 pkp"},
                 "", "", "You must complete a total of 5", "complete dungeoneering dungeons in order to.", "complete this achievement!");
 
-        /* Medium difficulty achievements*/
+        /* Medium difficulty achievements
         interfaceId = 28886;
         difficulty = Difficulty.MEDIUM;
 
@@ -191,7 +167,7 @@ public class AchievementHandler {
         player.getAchievements()[index++] = new TotalLevelAchievement("Total Level 1100", difficulty, interfaceId++, 1100, progress[index - 1], 400, 0, new String[] {"", "", "400 pkp"},
                 "", "", "Achieve a total level of at least 1100 to", "complete this achievement");
 
-        /* Hard difficulty achievements*/
+        /* Hard difficulty achievements
         interfaceId = 28886;
         difficulty = Difficulty.HARD;
 
@@ -204,7 +180,7 @@ public class AchievementHandler {
         player.getAchievements()[index++] = new TotalLevelAchievement("Total Level 1500", difficulty, interfaceId++, 1500, progress[index - 1], 800, 0, new String[] {"", "", "800 pkp"},
                 "", "", "Achieve a total level of at least 1500 to", "complete this achievement");
 
-        /* Very hard difficulty achievements*/
+        /* Very hard difficulty achievements
         interfaceId = 28886;
         difficulty = Difficulty.VERY_HARD;
 
@@ -220,7 +196,7 @@ public class AchievementHandler {
         player.getAchievements()[index++] = new TotalLevelAchievement("Total Level 1800", difficulty, interfaceId++, 1800, progress[index - 1], 1200, 0, new String[] {"", "", "1200 pkp"},
                 "", "", "Achieve a total level of at least 1800 to", "complete this achievement");
 
-        /* Legendary difficulty achievements */
+        /* Legendary difficulty achievements
         interfaceId = 28886;
         difficulty = Difficulty.LEGENDARY;
 
@@ -237,6 +213,6 @@ public class AchievementHandler {
         player.getAchievements()[index++] = new SteppedAchievement("200 Dungeon Runs", difficulty, interfaceId++, 200, progress[index - 1], 8000, 0, new String[] {"", "", "8000 pkp"},
                 "", "", "You must complete a total of 200", "complete dungeoneering dungeons in order to.", "complete this achievement!");
 
-    }
+    }*/
 
 }

@@ -7,3 +7,4 @@ setwatched
 qts
 setwatched
 setwatched
+hypnotic

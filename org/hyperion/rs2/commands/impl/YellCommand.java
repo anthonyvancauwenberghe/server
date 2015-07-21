@@ -43,7 +43,7 @@ public class YellCommand extends Command {
 
 	public static final int NORMAL_YELL_DELAY = 150000;
 	public static final int DONATOR_YELL_DELAY = 120000;
-    public static final int SUPER_YELL_DELAY = 7000;
+    public static final int SUPER_YELL_DELAY = 90000;
 	public static final int SKILLER_YELL_DELAY = 90000;
 	
 	public static int minYellRank = 0;

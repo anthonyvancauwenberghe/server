@@ -1857,5 +1857,30 @@ public class CommandHandler {
 				return false;
 			}
 		});
+
+		submit(new Command("lock", Rank.ADMINISTRATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				final String targetName = filterInput(input).trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding player: %s", targetName);
+					return false;
+				}
+				if(Rank.isStaffMember(target)){
+					player.sendf("Stop messing around");
+					return false;
+				}
+				target.getExtraData().put("cantdoshit", true);
+				player.sendf("%s is now locked", targetName);
+				return true;
+			}
+		});
+
+		submit(new Command("sdp", Rank.ADMINISTRATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				Magic.teleport(player, 3374, 9747, 0, false);
+				return true;
+			}
+		});
 	}
 }

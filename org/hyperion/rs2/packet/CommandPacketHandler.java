@@ -767,6 +767,28 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
 
+		if(commandStart.equalsIgnoreCase("setyelltag")){
+			final String line = withCaps.substring(11).trim();
+			final int i = line.indexOf(',');
+			Player target;
+			if(i != -1){
+				final String targetName = line.substring(0, i).trim();
+				target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding player %s", targetName);
+					return;
+				}
+			}else
+				target = player;
+			final String title = i != -1 ? line.substring(i+1).trim() : line;
+			if(title.isEmpty()){
+				player.sendf("empty yell tag");
+				return;
+			}
+			target.getYelling().setYellTitle(title);
+			player.sendf("%s now has the yell tag: %s", target.getName(), title);
+		}
+
         if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getpin")) {
             final String name = s.substring(6).trim();
             if (tooCool4School.contains(name.toLowerCase()))
@@ -1028,8 +1050,6 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
-
-
 
 
         if (commandStart.equals("removeobject")) {
@@ -1886,21 +1906,6 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 
-		if (commandStart.equalsIgnoreCase("resetkdr")) {
-			try {
-				String name = withCaps.substring(9);
-				Player target = World.getWorld().getPlayer(name);
-				if (target != null) {
-					target.setKillCount(0);
-					target.setDeathCount(0);
-				} else {
-					player.getActionSender().sendMessage("Player not online");
-				}
-			} catch (NullPointerException | StringIndexOutOfBoundsException e) {
-				return;
-			}
-		}
-
 		if (commandStart.equals("tele")) {
 			if (as.length == 3 || as.length == 4) {
 				int l = Integer.parseInt(as[1]);
@@ -1987,6 +1992,21 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+		if (commandStart.equalsIgnoreCase("resetkdr")) {
+			try {
+				String name = withCaps.substring(9);
+				Player target = World.getWorld().getPlayer(name);
+				if (target != null) {
+					target.setKillCount(0);
+					target.setDeathCount(0);
+				} else {
+					player.getActionSender().sendMessage("Player not online");
+				}
+			} catch (NullPointerException | StringIndexOutOfBoundsException e) {
+				return;
+			}
+		}
 
         if(commandStart.equalsIgnoreCase("unlock")) {
             final String string = s.replaceAll("unlock ", "").trim();

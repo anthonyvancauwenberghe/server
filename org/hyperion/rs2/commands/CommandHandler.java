@@ -3,12 +3,14 @@ package org.hyperion.rs2.commands;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -110,6 +112,7 @@ import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLUtils;
+import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
@@ -1878,6 +1881,37 @@ public class CommandHandler {
 		submit(new Command("sdp", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
 				Magic.teleport(player, 3374, 9747, 0, false);
+				return true;
+			}
+		});
+
+		submit(new Command("ipalts", Rank.ADMINISTRATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				final String ip = filterInput(input).trim();
+				if(ip.isEmpty()){
+					player.sendf("Enter an ip");
+					return false;
+				}
+				if(!ip.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")){
+					player.sendf("Enter a valid ip");
+					return false;
+				}
+				final String query = String.format("SELECT * FROM playerips WHERE ip = '%s'", ip);
+				final HashMap<String, Date> map = new LinkedHashMap<>();
+				synchronized(SQLite.getDatabase()){
+					try(final ResultSet rs = SQLite.getDatabase().query(query)){
+						while(rs.next()){
+							final String name = rs.getString("name");
+							final Date time = new Date(rs.getLong("time"));
+							map.put(name, time);
+						}
+					}
+				}
+				map.entrySet().stream()
+						.sorted((e1, e2) -> -1)
+						.limit(20)
+						.map(e -> String.format("%s @ %s", e.getKey(), e.getValue()))
+						.forEach(player::sendf);
 				return true;
 			}
 		});

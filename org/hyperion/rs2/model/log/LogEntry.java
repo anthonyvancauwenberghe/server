@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.log.util.LogUtils;
 
@@ -138,14 +139,26 @@ public class LogEntry implements Comparable<LogEntry>{
 
     public static LogEntry duelResult(final Player winner, final Player loser){
         final Item winnerWeapon = winner.getEquipment().get(Equipment.SLOT_WEAPON);
+        final Item winnerAmulet = winner.getEquipment().get(Equipment.SLOT_AMULET);
+        final Item winnerRing = winner.getEquipment().get(Equipment.SLOT_RING);
+        final int winnerHp = winner.getSkills().getLevel(Skills.HITPOINTS);
         final Item loserWeapon = loser.getEquipment().get(Equipment.SLOT_WEAPON);
+        final Item loserAmulet = winner.getEquipment().get(Equipment.SLOT_AMULET);
+        final Item loserRing = winner.getEquipment().get(Equipment.SLOT_RING);
+        final int loserHp = loser.getSkills().getLevel(Skills.HITPOINTS);
         return new LogEntry(Category.DUEL,
                 String.format(
-                        "@red@%s (%s)@blu@ vs @red@%s (%s)@blu@: Winner: @red@%s",
+                        "@red@%s (HP: %d, Wep: %s, Ammy: %s, Ring: %s)@blu@ vs @red@%s (HP: %d, Wep: %s, Ammy: %s, Ring: %s)@blu@: Winner: @red@%s",
                         winner.getName(),
+                        winnerHp,
                         winnerWeapon != null ? winnerWeapon.getDefinition().getName() : "UNARMED",
+                        winnerAmulet != null ? winnerAmulet.getDefinition().getName() : "NONE",
+                        winnerRing != null ? winnerRing.getDefinition().getName() : "NONE",
                         loser.getName(),
+                        loserHp,
                         loserWeapon != null ? loserWeapon.getDefinition().getName() : "UNARMED",
+                        loserAmulet != null ? loserAmulet.getDefinition().getName() : "NONE",
+                        loserRing != null ? loserRing.getDefinition().getName() : "NONE",
                         winner.getName()
                 )
         );

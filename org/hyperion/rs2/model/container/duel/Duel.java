@@ -584,7 +584,7 @@ public class Duel {
 
             player.getInventory();
             Container.transfer(opponent.getDuel(), player.getInventory());
-            AchievementHandler.progressAchievement(player, "duel");
+            AchievementHandler.progressAchievement(player, "Duel");
         }
         opponent.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);

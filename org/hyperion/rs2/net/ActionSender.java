@@ -367,7 +367,7 @@ public class ActionSender {
 		sendString(29179, "@or1@Welfare Hybrid Set");
 		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
         AchievementHandler.initAchievements(player, player.getAchievementProgress());
-        AchievementHandler.progressAchievement(player, "total"); // for returning players who already have max
+        AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
 /**
  * OVL BUG
  */
@@ -1345,6 +1345,7 @@ public class ActionSender {
 				player.getPoints().inceasePkPoints(20);
 			}
 		}
+        AchievementHandler.progressAchievement(player, "Total");
 	}
 	/**
 	 * force movement update mask

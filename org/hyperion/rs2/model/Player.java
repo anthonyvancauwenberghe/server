@@ -226,14 +226,14 @@ public class Player extends Entity implements Persistable, Cloneable{
         return achievements;
     }
 
-    private ArrayList<Integer> achievementProgress = new ArrayList<>();
+    private int[] achievementProgress = new int[50];
 
-    public ArrayList<Integer> getAchievementProgress() {
+    public int[] getAchievementProgress() {
         return achievementProgress;
     }
 
     public void setAchievementProgress(int index, int progress) {
-        achievementProgress.set(index, progress);
+        achievementProgress[index] = progress;
     }
 
     private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
@@ -1217,9 +1217,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();
-        for(int i = 0; i < 50; i++) {
-            getAchievementProgress().add(0);
-        }
         logManager = new LogManager(this);
        // itfManager = new InterfaceManager(this);
 	}

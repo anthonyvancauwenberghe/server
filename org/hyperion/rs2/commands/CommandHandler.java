@@ -236,8 +236,7 @@ public class CommandHandler {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 player.increaseKillCount();
-                AchievementHandler.progressAchievement(player, "Streak of 6");
-                AchievementHandler.progressAchievement(player, "Streak of 10");
+                AchievementHandler.progressAchievement(player, "Killstreak");
                 return true;
             }
         });

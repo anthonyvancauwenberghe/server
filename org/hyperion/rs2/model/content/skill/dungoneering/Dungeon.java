@@ -141,7 +141,7 @@ public class Dungeon {
     public void complete() {
         synchronized (this) {
             for(final Player player : players) {
-                AchievementHandler.progressAchievement(player, "dungeoneering");
+                AchievementHandler.progressAchievement(player, "Dungeon");
                 remove(player, true);
             }
         }

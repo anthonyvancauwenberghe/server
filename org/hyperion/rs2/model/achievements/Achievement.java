@@ -60,10 +60,10 @@ public abstract class Achievement {
 
     public void giveReward(Player player) {
         player.getPoints().inceasePkPoints(achievementData.getPkp());
-        String message = "For completing " + name + ", you have been rewarded " + achievementData.getPkp() + " pk points";
+        String message = "For completing " + name + ", you have been rewarded " + achievementData.getPkp() + " pkp";
         if(achievementData.getDp() > 0) {
             player.getPoints().increaseDonatorPoints(achievementData.getDp());
-            message += " and " + achievementData.getDp() + " donator points!";
+            message += ", " + achievementData.getDp() + " donator points!";
         }
         if(achievementData.getItems() != null) {
             for(Item item : achievementData.getItems()) {

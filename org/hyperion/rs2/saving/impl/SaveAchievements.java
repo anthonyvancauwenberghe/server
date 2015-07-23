@@ -21,8 +21,6 @@ public class SaveAchievements {
      *
      * @param
      */
-
-
     public boolean save(Player player, BufferedWriter writer) throws IOException {
         /* Updates all of the states to the array */
         for(int i = 0; i < player.getAchievements().size(); i++) {
@@ -37,8 +35,8 @@ public class SaveAchievements {
         }
        // writer.write(getName());
         writer.newLine();
-        for(int i = 0; i < player.getAchievementProgress().size(); i++) {
-            writer.write(player.getAchievementProgress().get(i) + "");
+        for(int i = 0; i < player.getAchievementProgress().length; i++) {
+            writer.write(player.getAchievementProgress()[i] + "");
             writer.newLine();
         }
         return false;
@@ -50,7 +48,6 @@ public class SaveAchievements {
         while((line = reader.readLine()).length() > 0) {
             int value = Integer.parseInt(line);
             player.setAchievementProgress(index++, value);
-            System.out.println(player.getAchievementProgress().get(index - 1));
         }
     }
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import org.hyperion.rs2.model.GlobalItem;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
@@ -224,8 +225,13 @@ public class LogEntry implements Comparable<LogEntry>{
         );
     }
 
-    public static LogEntry pickupItem(final Item item){
-        return new LogEntry(Category.PICKUP_ITEM, LogUtils.toString(item));
+    public static LogEntry pickupItem(final GlobalItem item){
+        return new LogEntry(Category.PICKUP_ITEM,
+                String.format("%s [%s]",
+                        LogUtils.toString(item.getItem()),
+                        item.owner
+                )
+        );
     }
 
     public static LogEntry command(final String cmd){

@@ -108,7 +108,7 @@ public class GlobalItemManager {
                 }
 				globalItems.remove(globalItem);
                 if(item != 2422) {
-                    player.getLogManager().add(LogEntry.pickupItem(globalItem.getItem()));
+                    player.getLogManager().add(LogEntry.pickupItem(globalItem));
 			        player.getInventory().add(globalItem.getItem());
                 }
 			    removeItem(globalItem);

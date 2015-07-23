@@ -1907,8 +1907,9 @@ public class CommandHandler {
 						}
 					}
 				}
-				map.entrySet().stream()
-						.sorted((e1, e2) -> -1)
+				final List<Map.Entry<String, Date>> reversed = new ArrayList<>(map.entrySet());
+				Collections.reverse(reversed);
+				reversed.stream()
 						.limit(20)
 						.map(e -> String.format("%s @ %s", e.getKey(), e.getValue()))
 						.forEach(player::sendf);

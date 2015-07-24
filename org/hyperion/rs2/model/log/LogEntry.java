@@ -144,19 +144,19 @@ public class LogEntry implements Comparable<LogEntry>{
         final Item winnerRing = winner.getEquipment().get(Equipment.SLOT_RING);
         final int winnerHp = winner.getSkills().getLevel(Skills.HITPOINTS);
         final Item loserWeapon = loser.getEquipment().get(Equipment.SLOT_WEAPON);
-        final Item loserAmulet = winner.getEquipment().get(Equipment.SLOT_AMULET);
-        final Item loserRing = winner.getEquipment().get(Equipment.SLOT_RING);
+        final Item loserAmulet = loser.getEquipment().get(Equipment.SLOT_AMULET);
+        final Item loserRing = loser.getEquipment().get(Equipment.SLOT_RING);
         final int loserHp = loser.getSkills().getLevel(Skills.HITPOINTS);
         return new LogEntry(Category.DUEL,
                 String.format(
-                        "@red@%s (HP: %d, Wep: %s, Ammy: %s, Ring: %s)@blu@ vs @red@%s (HP: %d, Wep: %s, Ammy: %s, Ring: %s)@blu@: Winner: @red@%s",
+                        "@red@%s (Wep: %s, Ammy: %s, Ring: %s)@blu@ vs @red@%s (Wep: %s, Ammy: %s, Ring: %s)@blu@: Winner: @red@%s",
                         winner.getName(),
-                        winnerHp,
+//                        winnerHp,
                         winnerWeapon != null ? winnerWeapon.getDefinition().getName() : "UNARMED",
                         winnerAmulet != null ? winnerAmulet.getDefinition().getName() : "NONE",
                         winnerRing != null ? winnerRing.getDefinition().getName() : "NONE",
                         loser.getName(),
-                        loserHp,
+//                        loserHp,
                         loserWeapon != null ? loserWeapon.getDefinition().getName() : "UNARMED",
                         loserAmulet != null ? loserAmulet.getDefinition().getName() : "NONE",
                         loserRing != null ? loserRing.getDefinition().getName() : "NONE",

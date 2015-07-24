@@ -1912,7 +1912,7 @@ public class CommandHandler {
 				reversed.stream()
 						.limit(20)
 						.map(e -> String.format("%s @ %s", e.getKey(), e.getValue()))
-						.forEach(player::sendf);
+						.forEach(player::sendMessage);
 				return true;
 			}
 		});

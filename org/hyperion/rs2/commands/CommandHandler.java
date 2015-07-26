@@ -62,6 +62,7 @@ import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.SpellBook;
 import org.hyperion.rs2.model.UpdateFlags;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -230,6 +231,7 @@ public class CommandHandler {
         submit(new Command("achievements", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
+                System.out.println(player.getAchievementsProgress().size());
                 AchievementHandler.openInterface(player, player.getViewingDifficulty(), false);
                 return true;
             }
@@ -238,7 +240,7 @@ public class CommandHandler {
         submit(new Command("progress", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                player.increaseKillCount();
+                player.setKillStreak(6);
                 AchievementHandler.progressAchievement(player, "Killstreak");
                 return true;
             }

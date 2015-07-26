@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -224,6 +225,13 @@ public class ActionSender {
 
 
         }
+        /* This is for when we add new achievements.
+         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
+            int start = player.getAchievementsProgress().size();
+            for(int i = start; i < AchievementData.values().length; i++) {
+                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
+            }
+        }*/
         sendMessage("       ");
 		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
 		//sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
@@ -366,7 +374,6 @@ public class ActionSender {
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
 		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
-        AchievementHandler.initAchievements(player, player.getAchievementProgress());
         AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
 /**
  * OVL BUG

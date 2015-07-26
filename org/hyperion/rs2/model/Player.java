@@ -11,8 +11,7 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.achievements.Achievement;
-import org.hyperion.rs2.model.achievements.AchievementHandler;
+import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.Difficulty;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
@@ -78,11 +77,7 @@ import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -220,20 +215,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return playerChecker;
 	}
 
-    private ArrayList<Achievement> achievements = new ArrayList<>();
+    private HashMap<AchievementData, Integer> achievementsProgress = new HashMap<>();
 
-    public ArrayList<Achievement> getAchievements() {
-        return achievements;
-    }
-
-    private int[] achievementProgress = new int[50];
-
-    public int[] getAchievementProgress() {
-        return achievementProgress;
-    }
-
-    public void setAchievementProgress(int index, int progress) {
-        achievementProgress[index] = progress;
+    public HashMap<AchievementData, Integer> getAchievementsProgress() {
+        return achievementsProgress;
     }
 
     private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
@@ -1214,6 +1199,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		active = false;
 		if(newCharacter) {
 			this.created = System.currentTimeMillis();
+           // for(int i = 0; i < )
 		}
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();

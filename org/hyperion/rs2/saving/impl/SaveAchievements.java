@@ -1,9 +1,7 @@
 package org.hyperion.rs2.saving.impl;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.achievements.Achievement;
-import org.hyperion.rs2.model.achievements.AchievementHandler;
-import org.hyperion.rs2.model.content.achievements.SteppedAchievement;
+import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.saving.SaveObject;
 
 import java.io.BufferedReader;
@@ -14,29 +12,26 @@ import java.io.IOException;
  * Created by User on 6/25/2015.
  */
 
-public class SaveAchievements {
+public class SaveAchievements extends SaveObject {
 
     /**
      * Constructs a new SaveObject with the specified name.
      *
      * @param
      */
+    public SaveAchievements(String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
+
     public boolean save(Player player, BufferedWriter writer) throws IOException {
-        /* Updates all of the states to the array */
-        for(int i = 0; i < player.getAchievements().size(); i++) {
-            Achievement achievement = player.getAchievements().get(i);
-            if(achievement != null) {
-                if (achievement instanceof SteppedAchievement) {
-                    player.setAchievementProgress(i, ((SteppedAchievement) achievement).getCurrentStep());
-                } else {
-                    player.setAchievementProgress(i, achievement.getCurrentStep());
-                }
-            }
-        }
-       // writer.write(getName());
+        writer.write(getName());
         writer.newLine();
-        for(int i = 0; i < player.getAchievementProgress().length; i++) {
-            writer.write(player.getAchievementProgress()[i] + "");
+        for(int i = 0; i < AchievementData.values().length; i++) {
+            if(player.getAchievementsProgress().get(AchievementData.values()[i]) == null)
+                writer.write(0 + "");
+            else
+                writer.write(player.getAchievementsProgress().get(AchievementData.values()[i]) + "");
             writer.newLine();
         }
         return false;
@@ -47,7 +42,7 @@ public class SaveAchievements {
         int index = 0;
         while((line = reader.readLine()).length() > 0) {
             int value = Integer.parseInt(line);
-            player.setAchievementProgress(index++, value);
+            player.getAchievementsProgress().put(AchievementData.values()[index++], value);
         }
     }
 }

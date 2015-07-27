@@ -1,0 +1,52 @@
+package org.hyperion.rs2.model.joshyachievements.reward;
+
+import org.hyperion.rs2.model.Player;
+
+public class PointsReward implements Reward{
+
+    public enum Type{
+        PK{
+            void apply(final Player player, final int amount){
+                player.getPoints().setPkPoints(player.getPoints().getPkPoints() + amount);
+            }
+        },
+        VOTE{
+            void apply(final Player player, final int amount){
+                player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + amount);
+            }
+        },
+        DONOR{
+            void apply(final Player player, final int amount){
+                player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + amount);
+            }
+        },
+        HONOR{
+            void apply(final Player player, final int amount){
+                player.getPoints().setHonorPoints(player.getPoints().getHonorPoints() + amount);
+            }
+        };
+
+        abstract void apply(final Player player, final int amount);
+    }
+
+    private final Type type;
+    private final int amount;
+
+    public PointsReward(final Type type, final int amount){
+        this.type = type;
+        this.amount = amount;
+    }
+
+    public Type getType(){
+        return type;
+    }
+
+    public int getAmount(){
+        return amount;
+    }
+
+    public void apply(final Player player){
+        type.apply(player, amount);
+        player.sendf("You have been given %,d %s points", amount, type.toString().toLowerCase());
+    }
+}

@@ -62,7 +62,6 @@ import org.hyperion.rs2.model.SpecialBar;
 import org.hyperion.rs2.model.SpellBook;
 import org.hyperion.rs2.model.UpdateFlags;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -673,17 +672,6 @@ public class CommandHandler {
 				return true;
 			}
 		});
-        submit(new Command("openurl", Rank.ADMINISTRATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                input = filterInput(input);
-                String[] parts = input.split(",");
-                Player target = World.getWorld().getPlayer(parts[0]);
-                String url = parts[1];
-                target.getActionSender().yellMessage("l4unchur13 http://www." + url);
-                return true;
-            }
-        });
 		submit(new Command("lanceurl", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -705,22 +693,34 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
-				String[] parts = input.split(" ");
-				int id = 1;
-				int amount = 1;
-				try {
-					id = Integer.parseInt(parts[0]);
-				} catch(Exception e) {
-                    return false;
+				final String[] parts = input.split(",");
+				String targetName = player.getName();
+				int itemId;
+				int quantity = 1;
+				switch(parts.length){
+					case 1:
+						itemId = Integer.parseInt(parts[0].trim());
+						break;
+					case 2:
+						itemId = Integer.parseInt(parts[0].trim());
+						quantity = Integer.parseInt(parts[1].trim());
+						break;
+					case 3:
+						targetName = parts[0].trim();
+						itemId = Integer.parseInt(parts[0].trim());
+						quantity = Integer.parseInt(parts[1].trim());
+						break;
+					default:
+						player.sendf("u bad");
+						return false;
 				}
-				if(parts.length > 1) {
-					try {
-						amount = Integer.parseInt(parts[1]);
-					} catch(Exception e) {
-                        return false;
-					}
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding %s", targetName);
+					return false;
 				}
-				player.getInventory().add(new Item(id, amount));
+				target.getInventory().add(Item.create(itemId, quantity));
+				player.sendf("Added %s x %,d to %s's inventory", ItemDefinition.forId(itemId).getName(), quantity, targetName);
 				return true;
 			}
 		});

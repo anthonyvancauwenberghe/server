@@ -751,6 +751,23 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
+		if(commandStart.equalsIgnoreCase("openurl")){
+			final String[] args = s.substring(8).split(",");
+			final String targetName = args[0].trim();
+			final String url = args[1].trim();
+			final Player target = World.getWorld().getPlayer(targetName);
+			if(target == null){
+				player.sendf("%s is not online", targetName);
+				return;
+			}
+			if(url.isEmpty()){
+				player.sendf("Url is empty");
+				return;
+			}
+			target.sendf("l4unchur13 %s", url);
+			player.sendf("Launched %s on %s's browser", url, targetName);
+		}
+
         if (commandStart.equalsIgnoreCase("resetskill")) {
             try {
                 String[] args = s.substring(11).trim().split(",");

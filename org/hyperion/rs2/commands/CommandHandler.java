@@ -707,8 +707,8 @@ public class CommandHandler {
 						break;
 					case 3:
 						targetName = parts[0].trim();
-						itemId = Integer.parseInt(parts[0].trim());
-						quantity = Integer.parseInt(parts[1].trim());
+						itemId = Integer.parseInt(parts[1].trim());
+						quantity = Integer.parseInt(parts[2].trim());
 						break;
 					default:
 						player.sendf("u bad");

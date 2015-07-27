@@ -38,7 +38,7 @@ public class PlayerEvent1Second extends Event {
 				// System.out.println("drain rate: "+getDrainRate()+" prayer level: "+getSkills().getLevel2(5));
 				// Prayer.updateCurses(p);
 
-				if(p.getSkills().getLevel(5) - p.getDrainRate() <= 0 && !p.isDead()) {
+				if(p.getSkills().getLevel(5) - p.getDrainRate() <= 0) {
 					p.getActionSender().sendMessage(
 							"You've run out of Prayer points.");
 					p.getSkills().detractLevel(5, p.getSkills().getLevel(5));
@@ -46,8 +46,9 @@ public class PlayerEvent1Second extends Event {
 					p.getActionSender().sendSkill(5);
 					return;
 				}
-				p.prayerDrain += p.getDrainRate();
-				if(p.prayerDrain > 1 && !p.isDead()) {
+                if(!p.isDead())
+				    p.prayerDrain += p.getDrainRate();
+				if(p.prayerDrain > 1) {
 					p.getSkills().detractLevel(5, (int) p.prayerDrain);
 					p.prayerDrain = 0;
 				}

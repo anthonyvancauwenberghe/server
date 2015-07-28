@@ -57,6 +57,7 @@ import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 import org.hyperion.rs2.model.content.ticket.TicketHolder;
 import org.hyperion.rs2.model.ge.GrandExchangeTracker;
 import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.joshyachievements.AchievementTracker;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
@@ -220,6 +221,12 @@ public class Player extends Entity implements Persistable, Cloneable{
     public HashMap<AchievementData, Integer> getAchievementsProgress() {
         return achievementsProgress;
     }
+
+	private final AchievementTracker achievementTracker = new AchievementTracker(this);
+
+	public AchievementTracker getJoshyAchievementTracker(){
+		return achievementTracker;
+	}
 
     private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
 

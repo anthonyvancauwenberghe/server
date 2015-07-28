@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.joshyachievements.condition.Condition;
+import org.hyperion.rs2.model.joshyachievements.requirement.Requirement;
 import org.hyperion.rs2.model.joshyachievements.parser.AchievementContextParser;
 import org.hyperion.rs2.model.joshyachievements.parser.ParserUtils;
 import org.hyperion.rs2.model.joshyachievements.reward.Reward;
@@ -31,15 +31,15 @@ public class AchievementContext{
     private final int id;
     private final Difficulty difficulty;
     private final String title;
-    private final Condition condition;
+    private final Requirement requirement;
     private final List<String> instructions;
     private final List<Reward> rewards;
 
-    public AchievementContext(final int id, final Difficulty difficulty, final String title, final Condition condition){
+    public AchievementContext(final int id, final Difficulty difficulty, final String title, final Requirement requirement){
         this.id = id;
         this.difficulty = difficulty;
         this.title = title;
-        this.condition = condition;
+        this.requirement = requirement;
 
         instructions = new ArrayList<>();
         rewards = new ArrayList<>();
@@ -53,8 +53,8 @@ public class AchievementContext{
         return difficulty;
     }
 
-    public String getTitle(){
-        return title;
+    public String getTitle(final Player player){
+        return Optional.ofNullable(title).orElse(requirement.toString(player));
     }
 
     public List<String> getInstructions(){
@@ -65,12 +65,12 @@ public class AchievementContext{
         instructions.add(line);
     }
 
-    public <T extends Condition> T getCondition(){
-        return (T)condition;
+    public int applyRequirement(final Player player){
+        return requirement.apply(player);
     }
 
-    public boolean isConditionMet(final Player player){
-        return condition.test(player);
+    public <T extends Requirement> T getRequirement(){
+        return (T) requirement;
     }
 
     public int getRewardCount(){
@@ -108,7 +108,7 @@ public class AchievementContext{
     public static Optional<AchievementContext> findFirst(final AchievementTracker tracker, final Predicate<AchievementContext> filter){
         return stream(filter)
                 .filter(a -> tracker.getProgress(a).isNotComplete())
-                .min(Comparator.comparingInt(a -> a.getCondition().getMax(tracker.getPlayer())));
+                .min(Comparator.comparingInt(a -> a.getRequirement().apply(tracker.getPlayer())));
     }
 
     public static boolean load(){

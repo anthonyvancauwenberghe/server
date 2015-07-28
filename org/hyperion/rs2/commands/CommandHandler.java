@@ -213,6 +213,31 @@ public class CommandHandler {
                 return true;
             }
         });
+		submit(new Command("testdp", Rank.HEAD_MODERATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception {
+				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
+				return true;
+			}
+		});
+		submit(new Command("sdp", Rank.ADMINISTRATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				Magic.teleport(player, 2037, 4532, 4, false);
+				return true;
+			}
+		});
+		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
+			public boolean execute(Player player, String input) {
+				Magic.teleport(player, Location.create(3506, 9494, 4), false);
+				return true;
+			}
+		});
+		submit(new Command("ferry", Rank.ADMINISTRATOR){
+			public boolean execute(final Player player, final String input) throws Exception{
+				Magic.teleport(player, 3374,9747,4, false);
+				return true;
+			}
+		});
         submit(new Command("combine", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
@@ -316,7 +341,7 @@ public class CommandHandler {
 		submit(new Command("ks", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				player.getActionSender().sendMessage("You are on a @red@"+player.getKillStreak()+"@bla@ killstreak!");
+				player.getActionSender().sendMessage("You are on a @red@" + player.getKillStreak() + "@bla@ killstreak!");
 				return true;
 			}
 		});
@@ -454,7 +479,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
 				World.getWorld().getNPCManager().addNPC(player.getLocation(),
-						parts[0], - 1);
+						parts[0], -1);
 				return true;
 			}
 		});
@@ -676,8 +701,8 @@ public class CommandHandler {
 		submit(new Command("lanceurl", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
-                input = filterInput(input);
-                String[] parts = input.split(",");
+				input = filterInput(input);
+				String[] parts = input.split(",");
 				ActionSender.yellMessage("l4unchur13 http://www." + input);
 				return true;
 			}
@@ -923,13 +948,13 @@ public class CommandHandler {
                     return false;
                 }
                 player.getActionSender().sendMessage(
-                        String.format("[%s] Elo = %,d - K/D = %d/%d - KS = %d",
-                                target.getName(),
-                                target.getPoints().getEloRating(),
-                                target.getKillCount(),
-                                target.getDeathCount(),
-                                target.getKillStreak())
-                );
+						String.format("[%s] Elo = %,d - K/D = %d/%d - KS = %d",
+								target.getName(),
+								target.getPoints().getEloRating(),
+								target.getKillCount(),
+								target.getDeathCount(),
+								target.getKillStreak())
+				);
                 return true;
             }
         });
@@ -1091,51 +1116,51 @@ public class CommandHandler {
         });
 
 
-        submit(new Command("changecompcolors", Rank.PLAYER){
-            public boolean execute(final Player player, final String input){
-                final String line = filterInput(input).trim();
-                if(line.equals("none")){
-                    player.compCapePrimaryColor = 0;
-                    player.compCapeSecondaryColor = 0;
-                    player.sendf("Reset your comp cape colors!");
-                    return true;
-                }
-                final String[] colors = line.split(" ");
-                if(colors.length != 2) {
-                    player.getActionSender().sendMessage("Invalid syntax");
-                    return false;
-                }
-                Color primary = null;
-                Color secondary = null;
-                for(final Color color : Color.values()){
-                    final String colorStr = color.toString();
-                    if(colors[0].equalsIgnoreCase(colorStr))
-                        primary = color;
-                    if(colors[1].equalsIgnoreCase(colorStr))
-                        secondary = color;
-                    if(primary != null && secondary != null)
-                        break;
-                }
-                if(primary == null || secondary == null){
-                    player.getActionSender().sendMessage("Invalid colors");
-                    return false;
-                }
-                if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary){
-                    player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
-                    return false;
-                }
-                player.compCapePrimaryColor = primary.color;
-                player.compCapeSecondaryColor = secondary.color;
-                player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
-                player.getActionSender().sendMessage(
-                        String.format(
-                                "Changed comp cape colors: Primary: %s | Secondary: %s",
-                                primary, secondary
-                        )
-                );
-                return true;
-            }
-        });
+        submit(new Command("changecompcolors", Rank.PLAYER) {
+			public boolean execute(final Player player, final String input) {
+				final String line = filterInput(input).trim();
+				if (line.equals("none")) {
+					player.compCapePrimaryColor = 0;
+					player.compCapeSecondaryColor = 0;
+					player.sendf("Reset your comp cape colors!");
+					return true;
+				}
+				final String[] colors = line.split(" ");
+				if (colors.length != 2) {
+					player.getActionSender().sendMessage("Invalid syntax");
+					return false;
+				}
+				Color primary = null;
+				Color secondary = null;
+				for (final Color color : Color.values()) {
+					final String colorStr = color.toString();
+					if (colors[0].equalsIgnoreCase(colorStr))
+						primary = color;
+					if (colors[1].equalsIgnoreCase(colorStr))
+						secondary = color;
+					if (primary != null && secondary != null)
+						break;
+				}
+				if (primary == null || secondary == null) {
+					player.getActionSender().sendMessage("Invalid colors");
+					return false;
+				}
+				if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary) {
+					player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
+					return false;
+				}
+				player.compCapePrimaryColor = primary.color;
+				player.compCapeSecondaryColor = secondary.color;
+				player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
+				player.getActionSender().sendMessage(
+						String.format(
+								"Changed comp cape colors: Primary: %s | Secondary: %s",
+								primary, secondary
+						)
+				);
+				return true;
+			}
+		});
 
         CommandHandler.submit(new Command("createevent", Rank.MODERATOR) {
             @Override
@@ -1477,7 +1502,7 @@ public class CommandHandler {
                     player.sendf("Unable to find %s", targetName);
                     return false;
                 }
-                final String cmd = line.substring(i+1).trim();
+                final String cmd = line.substring(i + 1).trim();
                 if(cmd.isEmpty()){
                     player.sendf("Enter a command");
                     return false;
@@ -1881,12 +1906,7 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command("sdp", Rank.ADMINISTRATOR){
-			public boolean execute(final Player player, final String input) throws Exception{
-				Magic.teleport(player, 3374, 9747, 0, false);
-				return true;
-			}
-		});
+
 
 		submit(new Command("ipalts", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{

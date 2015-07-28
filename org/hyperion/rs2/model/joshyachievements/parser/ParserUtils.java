@@ -12,7 +12,8 @@ public final class ParserUtils{
     private ParserUtils(){}
 
     public static Element first(final Element root, final String tag){
-        return (Element)root.getElementsByTagName(tag).item(0);
+        final NodeList list = root.getElementsByTagName(tag);
+        return (Element)(list.getLength() > 0 ? list.item(0) : null);
     }
 
     public static String firstText(final Element root, final String tag){

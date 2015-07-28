@@ -1,14 +1,14 @@
 <achievements>
     <achievement id="0" difficulty="EASY">
         <title>Kill 100 players</title>
-        <condition type="playerKill" kills="100"/>
+        <requirement type="playerKill" kills="100"/>
         <rewards>
             <reward type="points" kind="PK" amount="10000"/>
         </rewards>
     </achievement>
     <achievement id="1" difficulty="HARD">
         <title>Kill 300 KBDs</title>
-        <conition type="npcKill" npcId="50" kills="300"/>
+        <requirement type="npcKill" npcId="50" kills="300"/>
         <rewards>
             <reward type="points" kind="DP" amount="100"/>
             <reward type="item" itemId="14484" amount="1" preferInventory="true"/>

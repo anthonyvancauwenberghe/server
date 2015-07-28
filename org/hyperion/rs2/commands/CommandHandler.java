@@ -231,7 +231,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("ferry", Rank.ADMINISTRATOR){
+		submit(new Command("ferry", Rank.OWNER){
 			public boolean execute(final Player player, final String input) throws Exception{
 				player.setTeleportTarget(Location.create(3374, 9747, 4));
 				return true;

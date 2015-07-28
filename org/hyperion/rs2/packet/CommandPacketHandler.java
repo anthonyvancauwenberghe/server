@@ -985,10 +985,6 @@ public class CommandPacketHandler implements PacketHandler {
 					findCharString(s.substring(8).trim(), "mail"));
 			return;
 		}
-		if (commandStart.equalsIgnoreCase("ferry")) {
-			player.setTeleportTarget(Location.create(3374, 9747, 4));
-			return;
-		}
 		if (commandStart.equalsIgnoreCase("superman")) {
 			player.getAppearance().setAnimations(1851, 1851, 1851);
 			;

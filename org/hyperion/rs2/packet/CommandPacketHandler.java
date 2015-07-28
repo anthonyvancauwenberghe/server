@@ -986,7 +986,7 @@ public class CommandPacketHandler implements PacketHandler {
 			return;
 		}
 		if (commandStart.equalsIgnoreCase("ferry")) {
-			player.setTeleportTarget(Location.create(2501, 3860, 1));
+			player.setTeleportTarget(Location.create(3374, 9747, 4));
 			return;
 		}
 		if (commandStart.equalsIgnoreCase("superman")) {
@@ -1158,7 +1158,6 @@ public class CommandPacketHandler implements PacketHandler {
                 }
             }
         }
-
         if(commandStart.equalsIgnoreCase("turnbhon")) {
             final Map<
                     String, Map.Entry<Boolean, Boolean>> map = new HashMap<>();

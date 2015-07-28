@@ -208,7 +208,8 @@ public class CommandHandler {
         submit(new Command("dp", Rank.DONATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                DialogueManager.openDialogue(player, 158);
+                //DialogueManager.openDialogue(player, 158);
+				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
                 return true;
             }
         });
@@ -231,7 +232,7 @@ public class CommandHandler {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 System.out.println(player.getAchievementsProgress().size());
-                AchievementHandler.openInterface(player, player.getViewingDifficulty(), false);
+				AchievementHandler.openInterface(player, player.getViewingDifficulty(), false);
                 return true;
             }
         });
@@ -239,7 +240,7 @@ public class CommandHandler {
         submit(new Command("progress", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                player.setKillStreak(6);
+				player.setKillStreak(6);
                 AchievementHandler.progressAchievement(player, "Killstreak");
                 return true;
             }
@@ -250,7 +251,7 @@ public class CommandHandler {
             public boolean execute(Player player, String input) throws Exception {
                 LastManStanding.getLastManStanding().enterLobby(player);
                 player.getActionSender().sendMessage("WARNING: ON YOUR THIRD DEATH, YOU WILL LOSE ALL NON-PROTECTED ITEMS!");
-                player.getActionSender().sendMessage("To leave the lobby, use the ::leavelms command.");
+				player.getActionSender().sendMessage("To leave the lobby, use the ::leavelms command.");
                 return true;
             }
         });
@@ -262,7 +263,7 @@ public class CommandHandler {
                 if(LastManStanding.getLastManStanding().gameStarted) {
                     player.getActionSender().sendMessage("You cannot leave until you have died three times!");
                     return true;
-                }
+				}
                 LastManStanding.getLastManStanding().leaveGame(player, false);
                 return true;
             }
@@ -294,7 +295,7 @@ public class CommandHandler {
             public boolean execute(final Player player, final String input) {
                 final boolean set;
                 player.getPermExtraData().put("disableprofile", set = !player.getPermExtraData().getBoolean("disableprofile"));
-                player.sendf("Your public profile is currently @red@%s", set ? "not viewable" : "viewable");
+				player.sendf("Your public profile is currently @red@%s", set ? "not viewable" : "viewable");
                 return true;
             }
         });

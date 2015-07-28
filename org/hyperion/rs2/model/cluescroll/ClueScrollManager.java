@@ -16,6 +16,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,6 +47,23 @@ public final class ClueScrollManager {
         final ClueScroll cs = getInInventory(player);
         if(cs == null)
             return;
+        if(!Rank.hasAbility(player, Rank.DEVELOPER)){
+            for(int i = MIN_ID; i <= MAX_ID; i++){
+                final int invCount = player.getInventory().getCount(i);
+                final int bankCount = player.getInventory().getCount(i);
+                if(invCount > 0)
+                    player.getInventory().remove(new Item(i, invCount));
+                if(bankCount > 0)
+                    player.getBank().remove(new Item(i, bankCount));
+            }
+            for(final Player p : World.getWorld().getPlayers()){
+                if(p != null && Rank.hasAbility(p, Rank.HELPER)){
+                    p.sendf("%s had clue scrolls! - Contact someone with a higher rank", player.getName());
+                }
+            }
+            player.sendf("All clue scrolls have been removed and a report has been sent.");
+            return;
+        }
         if(cs.getTrigger().getId() != id) {
             if(player.debug)
                 player.sendf("cluescroll trigger: %d | your trigger: %d", cs.getTrigger().getId(), id);

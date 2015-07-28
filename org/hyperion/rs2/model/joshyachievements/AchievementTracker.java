@@ -1,11 +1,9 @@
 package org.hyperion.rs2.model.joshyachievements;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
-import org.hyperion.rs2.model.NPCDefinition;
+import java.util.TreeMap;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.joshyachievements.requirement.KillStreakRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.NpcKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.PlayerKillRequirement;
@@ -80,7 +78,7 @@ public class AchievementTracker{
     public AchievementTracker(final Player player){
         this.player = player;
 
-        map = new HashMap<>();
+        map = new TreeMap<>();
     }
 
     public Player getPlayer(){
@@ -103,11 +101,21 @@ public class AchievementTracker{
         ctx.reward(player);
     }
 
-    public String getProgressString(final AchievementContext ctx, final int current, final int max){
-        return String.format("");
+    public String getUpdateString(final AchievementContext ctx, final int current, final int max){
+        return String.format(
+                "[@blu@%s@bla@] @blu@%,d@bla@ / @blu@%,d@bla@ (@blu@%,d@bla@ remaining!)",
+                ctx.getTitle(player),
+                current,
+                max,
+                max-current
+        );
     }
 
-    private void progress(final AchievementContext ctx, final int incrementSize, final String updateText){
+    public String getUpdateString(final AchievementContext ctx){
+        return getUpdateString(ctx, getProgress(ctx).getCurrent(), ctx.applyRequirement(player));
+    }
+
+    private void progress(final AchievementContext ctx, final int incrementSize, final boolean showUpdateText){
         final Progress progress = getProgress(ctx.getId());
         if(progress.isComplete()) //already finished the achievement
             return;
@@ -117,16 +125,10 @@ public class AchievementTracker{
             if(current >= ctx.applyRequirement(player)){ //finally finished
                 finish(ctx, progress);
             }else {
-                if(updateText != null){
-                    player.sendMessage(
-                            updateText.replace("$TITLE", String.format("@blu@%s@bla@", ctx.getTitle(player)))
-                                    .replace("$CURRENT", String.format("@blu@%,d@bla@", current))
-                                    .replace("$MAX", String.format("@blu@%,d@bla@", max))
-                                    .replace("$REMAINING", String.format("@blu@%,d@bla@", max - current))
-                    );
-                    if(progress.increment(incrementSize) >= max)
-                        finish(ctx, progress);
-                }
+                if(showUpdateText)
+                    player.sendMessage(getUpdateString(ctx, current, max));
+                if(progress.increment(incrementSize) >= max)
+                    finish(ctx, progress);
             }
         }else{
             progress.start();
@@ -134,34 +136,28 @@ public class AchievementTracker{
         }
     }
 
-    private void progress(final AchievementContext ctx, final int incrementSize, final String updateFormat, final Object... args){
-        progress(ctx, incrementSize, String.format(updateFormat, args));
-    }
-
-    private void progress(final AchievementContext ctx, final String updateFormat, final Object... args){
-        progress(ctx, 1, updateFormat, args);
+    private void progress(final AchievementContext ctx, final boolean showUpdateText){
+        progress(ctx, 1, showUpdateText);
     }
 
     public void npcKilled(final int npcId){
-        final String name = NPCDefinition.forId(npcId).getName();
         AchievementContext.findFirst(this, NpcKillRequirement.filter(npcId))
-                .ifPresent(a -> progress(a, "[$TITLE] $CURRENT / $MAX %s kills! ($REMAINING kills remaining!)", name));
+                .ifPresent(a -> progress(a, true));
     }
 
     public void playerKilled(){
         AchievementContext.findFirst(this, PlayerKillRequirement.filter())
-                .ifPresent(a -> progress(a, "[$TITLE] $CURRENT / $MAX kills! ($REMAINING kills remaining!)"));
+                .ifPresent(a -> progress(a, true));
     }
 
     public void skillIncreased(final int skill, final int xpGained){
-        final String name = Skills.SKILL_NAME[skill];
         AchievementContext.findFirst(this, SkillRequirement.filter(skill))
-                .ifPresent(a -> progress(a, xpGained, "[$TITLE] $CURRENT / $MAX %s XP! ($REMAINING XP remaining!)", name));
+                .ifPresent(a -> progress(a, xpGained, true));
     }
 
     public void killStreakIncreased(){
         AchievementContext.findFirst(this, KillStreakRequirement.filter())
-                .ifPresent(a -> progress(a, "[$TITLE] $CURRENT / $MAX kills! ($REMAINING kills remaining!"));
+                .ifPresent(a -> progress(a, true));
     }
 
 }

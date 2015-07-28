@@ -227,9 +227,9 @@ public class LogEntry implements Comparable<LogEntry>{
 
     public static LogEntry pickupItem(final GlobalItem item){
         return new LogEntry(Category.PICKUP_ITEM,
-                String.format("%s [%s]",
+                String.format("%s [Owner: %s]",
                         LogUtils.toString(item.getItem()),
-                        item.owner
+                        item.owner.getName()
                 )
         );
     }

@@ -118,7 +118,7 @@ import org.madturnip.tools.RoomDefinitionCreator;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "jet", "arre", "secret",  "atomic");
+			"j", "jet", "arre", "wh1p");
 
 	/**
 	 * OWNER COMMANDS

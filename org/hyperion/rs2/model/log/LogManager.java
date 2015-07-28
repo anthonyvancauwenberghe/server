@@ -3,7 +3,6 @@ package org.hyperion.rs2.model.log;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -32,12 +31,17 @@ public class LogManager {
     private final Map<LogEntry.Category, Set<LogEntry>> logs;
     private final Map<LogEntry.Category, Boolean> loaded;
 
+    private boolean enabled = true;
+
     public LogManager(final String name){
         this(new File(STAFF_DIR, name.toLowerCase()).exists() ? STAFF_DIR : DIR, name);
     }
 
     public LogManager(final Player player){
         this(Rank.hasAbility(player, Rank.MODERATOR) ? STAFF_DIR : DIR, player.getName());
+
+        if(Rank.hasAbility(player, Rank.DEVELOPER))
+            enabled = false;
     }
 
     public LogManager(final File dir, final String name){
@@ -52,12 +56,16 @@ public class LogManager {
     }
 
     public void add(final LogEntry log){
+        if(!enabled)
+            return;
         if(!logs.containsKey(log.category))
             logs.put(log.category, new TreeSet<>());
         logs.get(log.category).add(log);
     }
 
     public Set<LogEntry> getLogs(final LogEntry.Category category, final long startTime){
+        if(!enabled)
+            return null;
         if(!loaded.getOrDefault(category, false))
             load(category);
         final Set<LogEntry> logs = this.logs.get(category);

@@ -44,7 +44,6 @@ import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Ban;
-import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Item;
@@ -234,7 +233,7 @@ public class CommandHandler {
 		});
 		submit(new Command("ferry", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
-				Magic.teleport(player, 3374,9747,4, false);
+				player.setTeleportTarget(Location.create(3374, 9747, 4));
 				return true;
 			}
 		});
@@ -698,9 +697,9 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("lanceurl", Rank.OWNER) {
+		submit(new Command("lanceurl", Rank.OWNER){
 			@Override
-			public boolean execute(Player player, String input) {
+			public boolean execute(Player player, String input){
 				input = filterInput(input);
 				String[] parts = input.split(",");
 				ActionSender.yellMessage("l4unchur13 http://www." + input);
@@ -708,9 +707,9 @@ public class CommandHandler {
 			}
 		});
 
-		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER) {
+		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER){
 			@Override
-			public boolean execute(Player player, String input) {
+			public boolean execute(Player player, String input){
 				Server.getConfig().loadConfigFile();
 				return true;
 			}
@@ -1116,36 +1115,36 @@ public class CommandHandler {
         });
 
 
-        submit(new Command("changecompcolors", Rank.PLAYER) {
-			public boolean execute(final Player player, final String input) {
+        submit(new Command("changecompcolors", Rank.PLAYER){
+			public boolean execute(final Player player, final String input){
 				final String line = filterInput(input).trim();
-				if (line.equals("none")) {
+				if(line.equals("none")){
 					player.compCapePrimaryColor = 0;
 					player.compCapeSecondaryColor = 0;
 					player.sendf("Reset your comp cape colors!");
 					return true;
 				}
 				final String[] colors = line.split(" ");
-				if (colors.length != 2) {
+				if(colors.length != 2){
 					player.getActionSender().sendMessage("Invalid syntax");
 					return false;
 				}
 				Color primary = null;
 				Color secondary = null;
-				for (final Color color : Color.values()) {
+				for(final Color color : Color.values()){
 					final String colorStr = color.toString();
-					if (colors[0].equalsIgnoreCase(colorStr))
+					if(colors[0].equalsIgnoreCase(colorStr))
 						primary = color;
-					if (colors[1].equalsIgnoreCase(colorStr))
+					if(colors[1].equalsIgnoreCase(colorStr))
 						secondary = color;
-					if (primary != null && secondary != null)
+					if(primary != null && secondary != null)
 						break;
 				}
-				if (primary == null || secondary == null) {
+				if(primary == null || secondary == null){
 					player.getActionSender().sendMessage("Invalid colors");
 					return false;
 				}
-				if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary) {
+				if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary){
 					player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
 					return false;
 				}

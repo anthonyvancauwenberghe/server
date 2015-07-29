@@ -221,7 +221,10 @@ public class ActionSender {
 
 			if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 				String rank = Rank.getPrimaryRank(player).toString();
-				player.sendServerMessage(rank + " " + Misc.formatPlayerName(player.getName()) + " has logged in. Feel free to ask him/her for help!");
+				for(Player p : World.getWorld().getPlayers()) {
+					if (p != null)
+						p.sendServerMessage(rank + " " + Misc.formatPlayerName(player.getName()) + " has logged in. Feel free to ask him/her for help!");
+				}
 			}
 
             passChangeShit();

@@ -2429,7 +2429,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public ActionSender sendServerMessage(Object... message) {
 		for(Object o : message) {
-			ActionSender.yellMessage("@59f654@[SERVER] " + o.toString());
+			actionSender.sendMessage("@59f654@[SERVER] " + o.toString());
 		}
 		return getActionSender();
 	}

@@ -4,22 +4,16 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -133,7 +127,7 @@ public class NewGameMode implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(1, 10003);
                 return true;
             case 10001:
-                ClanManager.joinClanChat(player, "help", false);
+                ClanManager.joinClanChat(player, "Help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {
                     try {
                         if( i >= MAIN_STARTER.length - 40) {
@@ -146,7 +140,7 @@ public class NewGameMode implements ContentTemplate {
                     }
                 }
                 player.getInventory().add(Item.create(1856));
-                player.sendMessage("A starter has been added to your bank!");
+                player.sendImportantMessage("A starter has been added to your bank!");
                 player.sendMessage("l4unchur13 " + NORMAL_GAME_GUIDE);
                 player.getActionSender().removeChatboxInterface();
                 player.setTutorialProgress(8);

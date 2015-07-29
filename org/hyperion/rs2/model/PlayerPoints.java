@@ -1,14 +1,14 @@
 package org.hyperion.rs2.model;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.hyperion.Server;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerPoints {
 
@@ -94,8 +94,8 @@ public class PlayerPoints {
 			} else
 				player.setPlayerRank(Rank.addAbility(player, newRank));
 		}
-		player.getQuestTab().sendAllInfo();
-		player.getQuestTab().sendElo();
+		player.getQuestTab().sendRank();
+		player.getQuestTab().sendPvpRating();
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class PlayerPoints {
 			honorPoints -= days * 10;
 			if(honorPoints < 0)
 				honorPoints = 0;
-			player.getActionSender().sendMessage("@blu@You've lost Honor Points due to inactivity!");
+			player.getActionSender().sendMessage("@blu@You've lost honor points due to inactivity!");
 			player.getQuestTab().sendHonorPoints();
 			player.setLastHonorPointsReward(System.currentTimeMillis());
 		}

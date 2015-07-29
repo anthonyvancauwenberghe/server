@@ -1,17 +1,18 @@
 package org.hyperion.rs2.event.impl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class ServerMessages extends Event {
 
@@ -170,8 +171,8 @@ public class ServerMessages extends Event {
 			final String message = MESSAGES.get(currentIndex++);
 			for(Player p : World.getWorld().getPlayers())
 				if(p != null)
-					p.sendMessage("[@whi@Server Message@bla@]: "+message);
-		}catch(final Exception e) {
+					p.sendServerMessage(message);
+		} catch(final Exception e) {
 			e.printStackTrace();
 			this.stop();
 		}

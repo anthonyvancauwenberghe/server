@@ -1,21 +1,19 @@
 package org.hyperion.rs2.model.content.bounty;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.hyperion.rs2.model.GlobalItem;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.rs2.model.container.Container;
-import org.hyperion.util.Misc;
+import org.hyperion.rs2.model.container.bank.BankItem;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BountyHunter {
 
@@ -137,7 +135,7 @@ public class BountyHunter {
 		for(Player p : new Player[]{player, opp}) {
 			p.getBountyHunter().target = null;
 			p.getActionSender().createArrow(10, -1);
-			p.getQuestTab().sendAllInfo();
+			p.getQuestTab().updateQuestTab();
 		}
         final List<Item> emblems = Emblem.getEmblems(opp.getInventory());
         for(final Item item : emblems) {

@@ -1,54 +1,48 @@
 package org.hyperion.rs2.net;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange.GEItem;
-import org.hyperion.rs2.model.content.minigame.*;
+import org.hyperion.rs2.model.content.minigame.GodWars;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
+import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
-import org.hyperion.rs2.model.itf.impl.PinInterface;
-import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet.Type;
-import org.hyperion.rs2.packet.CommandPacketHandler;
-import org.hyperion.rs2.sql.requests.GetSpecialUID;
 import org.hyperion.rs2.util.NewcomersLogging;
+import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * A utility class for sending packets.
@@ -185,79 +179,63 @@ public class ActionSender {
                 e.printStackTrace();
             }
 **/
-
+		//Checks for staff IP's
         if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
             boolean has = false;
             for(String ipz : GoodIPs.GOODS) {
-                if(player.getShortIP().startsWith(ipz))
-                    has = true;
+                if(player.getShortIP().startsWith(ipz)) {
+					has = true;
+					break;
+				}
             }
-            if(!has)
-               player.getSession().close(false);
+            if(!has) {
+				System.out.println(Misc.formatPlayerName(player.getName()) + " tried to log in from IP " + player.getShortIP());
+				player.getSession().close(false);
+			}
         }
+
         player.getLogManager().add(LogEntry.login(player));
+
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
 		player.setActive(true);
 		player.isHidden(false);
 		sendDetails();
-        if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            Magic.teleport(player, Edgeville.LOCATION, true);
-        }
+		ClanManager.cleanClanChat(player);
+
         if(player.isNew()){
             player.getInventory().add(Item.create(15707));
-            Magic.teleport(player, Location.create(2795, 3321, 0), true);
-            sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
-            sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
-            sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
-            sendMessage("");
-            sendMessage("@red@10X @blu@decaying PKP BOOST active for the first 100 minutes of gameplay");
-        }else{
+
+			player.sendMessage("@bla@Welcome to @dre@ArteroPK@bla@.");
+			player.sendMessage("");
+			player.sendMessage("@bla@Questions? Visit @dre@::forums@bla@ or do @dre@::onlinestaff@bla@ and PM a staff member.");
+			player.sendMessage("@bla@Do not forget to @dre@::vote@bla@ and @dre@::donate@bla@ to keep the server alive!");
+            player.sendImportantMessage("10x decaying Pk points active for the first 100 minutes of gameplay.");
+        } else {
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getInventory().add(Item.create(15707));
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
-            }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#"
-                    );
+        }
+            player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "", "@bla@Subscribe to the community channel: @blu@http://j.mp/apkchannel#url#");
+
+			if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+				String rank = Rank.getPrimaryRank(player).toString();
+				player.sendServerMessage(rank + " " + Misc.formatPlayerName(player.getName()) + " has logged in. Feel free to ask him/her for help!");
+			}
 
             passChangeShit();
 
 
         }
-        /* This is for when we add new achievements.
-         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
-            int start = player.getAchievementsProgress().size();
-            for(int i = start; i < AchievementData.values().length; i++) {
-                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
-            }
-        }*/
-        sendMessage("       ");
-		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
-		//sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
-        //sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
-        //sendMessage("Alert##We removed Divines and Special restores from the economy##Anyone with them was refunded their shop value!");
-		// sendMessage("@blu@Please register on our forums!");
-		//loadAnnouncements();
 		writeQuestTab();
 
 		player.getPoints().loginCheck();
-		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-			String rank = Rank.getPrimaryRank(player).toString();
-			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
+
+		if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+			Magic.teleport(player, Edgeville.LOCATION, true);
 		}
 
-
-
-	    /*
-         * if(player.isMember)
-		 * sendMessage("You currently have membership status."); else {
-		 * sendMessage
-		 * ("You currently are not a member, please donate to keep the server alive"
-		 * ); sendMessage(
-		 * "membership status is at little as $3 see www.RS2.server.org for details."
-		 * ); }
-		 */
 		if(Combat.getWildLevel(player.getLocation().getX(), player
 				.getLocation().getY()) > 0) {
 			sendPlayerOption("Attack", 2, 1);
@@ -373,7 +351,6 @@ public class ActionSender {
 		sendString(29177, "@or1@Pure Set");
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
-		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
         AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
 /**
  * OVL BUG
@@ -472,9 +449,9 @@ public class ActionSender {
 		if(i != - 1) {
 			sendString(199, "Level: " + i);// wild levle
 		}
-		if(i != - 1) {
+		if (i != -1) {
 			sendEP2();
-            sendString(36505, "Killstreak:@red@"+player.getKillStreak());
+            sendString(36505, "Killstreak:@red@" + player.getKillStreak());
 		}
 		return this;
 	}
@@ -528,7 +505,7 @@ public class ActionSender {
 		return this;
 	}
 
-    public ActionSender sendEP2() {
+	public ActionSender sendEP2() {
         sendString(36504, "EP :" + getEPString());
         return this;
     }
@@ -703,8 +680,8 @@ public class ActionSender {
             width = 100;
         if(height > 100)
             height = 100;
-        PacketBuilder bldr = new PacketBuilder(172);
-        bldr.putShort(interfaceID);
+		PacketBuilder bldr = new PacketBuilder(172);
+		bldr.putShort(interfaceID);
         bldr.put((byte) width);
         bldr.put((byte) height);
         player.write(bldr.toPacket());
@@ -971,7 +948,7 @@ public class ActionSender {
 	 */
 
 	public void writeQuestTab() {
-		player.getQuestTab().sendAllInfo();
+		player.getQuestTab().updateQuestTab();
 		sendString("Revenants (Multi)", 45614);
 	}
 
@@ -1003,11 +980,16 @@ public class ActionSender {
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendMessage(String message) {
-		    player.write(new PacketBuilder(253, Type.VARIABLE)
+		player.write(new PacketBuilder(253, Type.VARIABLE)
 				.putRS2String(message).toPacket());
 		return this;
 	}
-	
+	public ActionSender sendClanMessage(String message) {
+		message = "@dre@" + message;
+		player.write(new PacketBuilder(253, Type.VARIABLE)
+				.putRS2String(message).toPacket());
+		return this;
+	}
 
 	/**
 	 * Sends a message to all players.
@@ -1017,6 +999,11 @@ public class ActionSender {
 	public static void yellMessage(String message) {
 		for(Player p : World.getWorld().getPlayers()) {
 			p.getActionSender().sendMessage(message);
+		}
+	}
+	public static void pkMessage(String message) {
+		for(Player p : World.getWorld().getPlayers()) {
+			p.getActionSender().sendMessage("@red@" + message);
 		}
 	}
 
@@ -1037,10 +1024,7 @@ public class ActionSender {
 	public ActionSender sendClanInfo() {
 		if(ClanManager.clans.get(player.getClanName()) == null)
 			return this;
-		player.write(new PacketBuilder(217, Type.VARIABLE)
-				.putRS2String(player.getName())
-				.putRS2String("Has joined clan chat.")
-				.putRS2String(
+		player.write(new PacketBuilder(217, Type.VARIABLE).putRS2String(Misc.formatPlayerName(player.getName())).putRS2String("has joined clan chat.").putRS2String(
 						ClanManager.clans.get(player.getClanName()).getName())
 				.putShort(2).toPacket());
 		return this;
@@ -1058,7 +1042,7 @@ public class ActionSender {
 		if(ClanManager.clans.get(player.getClanName()) == null)
 			return this;
 		player.write(new PacketBuilder(213, Type.VARIABLE).putRS2String(
-                playerName).toPacket());
+				playerName).toPacket());
 		return this;
 	}
 
@@ -1137,29 +1121,65 @@ public class ActionSender {
 	}
 
 	public ActionSender openPlayersInterface() {
-		sendString(8144, "Players Online: "
-				+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
-		int i = 0;
+		sendString(8144, "@dre@Players online: "+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
 		Player p3 = null;
 
-        for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
-        }
-		for(; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
-			if(i >= 99)
+		//Clears the questtab
+		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
+			sendString(QUEST_MENU_IDS[d], "");
+		}
+
+		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
+			if(i >= 99) {
+				sendString(QUEST_MENU_IDS[99], "@dre@And another " + ((int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI) - i) + " players");
 				break;
+			}
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {
 				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
 				if (p3.isHidden())
 					continue;
-				String s = p3.getName();
-                if(s.isEmpty())
-                    continue;
-                s += "["+(s.length()-s.replace(" ", "").length())+"]";
-				if(Rank.getPrimaryRankIndex(p3) != 0)
-					s += "[" + Rank.getPrimaryRankIndex(p3) + "]";
+				String s = Misc.formatPlayerName(p3.getName());
+				if(s.isEmpty())
+					continue;
 
-				sendString(QUEST_MENU_IDS[i], s);
+				sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + s);
+				i++;
+			}
+		}
+		showInterface(8134);
+		return this;
+	}
+
+	public ActionSender openStaffInterface() {
+		int staffOnline = 0;
+		for(Player i : World.getWorld().getPlayers()) {
+			if (i != null && Rank.isStaffMember(i)) {
+				staffOnline++;
+			}
+		}
+
+		sendString(8144, "@dre@Staff online: " + staffOnline);
+		Player p3 = null;
+
+		//Clears the questtab
+		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
+			sendString(QUEST_MENU_IDS[d], "");
+		}
+
+		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
+			if(World.getWorld().getPlayers().get((i + 1)) != null) {
+				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
+				if (p3.isHidden())
+					continue;
+				if (!Rank.isStaffMember(p3)) {
+					continue;
+				}
+				String s = Misc.formatPlayerName(p3.getName());
+				if(s.isEmpty())
+					continue;
+
+				sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + s);
+				i++;
 			}
 		}
 		showInterface(8134);
@@ -1185,6 +1205,7 @@ public class ActionSender {
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
+		sendString(8144, "@dre@Items kept on death");
         int i = 0;
         for(; i < itemList.size(); i++)
             sendString(QUEST_MENU_IDS[i], itemList.get(i).getDefinition().getName());

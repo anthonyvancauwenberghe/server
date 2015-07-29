@@ -1,17 +1,13 @@
 package org.hyperion.rs2.event.impl;
 
-import java.io.IOException;
-
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Afk;
-import org.hyperion.rs2.util.PushMessage;
 
 /**
  * An event which increases ActivityPoints, refreshes Quest Tab , refreshes
@@ -31,17 +27,6 @@ public class PlayerEvent36Seconds extends Event {
 		super(CYCLETIME);
 	}
 	public static String old;
-	public static void worldCupCycles() {
-        //try {
-            //String n = QuestTab.getWorldCupScores();
-            //if(old == null || !old.equalsIgnoreCase(n)) {
-            //	old = n;
-            //	PushMessage.pushGlobalMessage("[WC NEWS]: "+n);
-            //}
-            //}catch(IOException e) {
-            //	e.printStackTrace();
-            //}
-	}
 
 	@Override
 	public void execute() {
@@ -50,9 +35,10 @@ public class PlayerEvent36Seconds extends Event {
         		continue;
         	}
         	player.getSummBar().cycle();
-        	player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
+        	//player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
         	player.getSpecBar().normalize();
-        	player.getQuestTab().sendPlayercount();
+			player.getQuestTab().sendPlayerCount();
+			player.getQuestTab().sendStaffCount();
         	player.getQuestTab().sendUptime();
             Afk.procesPlayer(player);
     		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE) && !player.getDungoneering().inDungeon()) {
@@ -65,7 +51,6 @@ public class PlayerEvent36Seconds extends Event {
         }
 
         ClanManager.save();
-        //worldCupCycles();
 	}
 
 }

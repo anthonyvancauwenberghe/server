@@ -1,36 +1,23 @@
 package org.hyperion.rs2.saving;
 
-import java.io.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Appearance;
-import org.hyperion.rs2.model.FriendList;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.clan.Clan;
-import org.hyperion.rs2.model.content.skill.Farming;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
 import org.hyperion.rs2.saving.impl.*;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This class holds all the PlayerSaving logic and settings.
@@ -234,7 +221,7 @@ public class PlayerSaving {
 		//saveSQL(player);
 		//return true;
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-			player.getActionSender().sendMessage("Saving your account");
+			player.sendServerMessage("Saving your account");
 		}
 		try (BufferedWriter file = new BufferedWriter(new FileWriter(
                 getFileName(player)), BUFFER_SIZE)){

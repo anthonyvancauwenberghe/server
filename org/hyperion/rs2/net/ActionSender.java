@@ -1156,8 +1156,9 @@ public class ActionSender {
 	public ActionSender openStaffInterface() {
 		int staffOnline = 0;
 		for(Player i : World.getWorld().getPlayers()) {
-			if (i != null && Rank.isStaffMember(i)) {
-				staffOnline++;
+			if (i != null) {
+				if(Rank.isStaffMember(i))
+					staffOnline++;
 			}
 		}
 
@@ -1168,19 +1169,19 @@ public class ActionSender {
 		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
 			sendString(QUEST_MENU_IDS[d], "");
 		}
-
 		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {
 				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
-				if (p3.isHidden())
+				if(p3.isHidden())
 					continue;
-				if (!Rank.isStaffMember(p3)) {
-					continue;
-				}
+
 				String s = Misc.formatPlayerName(p3.getName());
 				if(s.isEmpty())
 					continue;
-
+				/*
+				if(!Rank.isStaffMember(p3))
+					continue;
+				*/
 				sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + s);
 				i++;
 			}

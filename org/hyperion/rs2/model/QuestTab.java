@@ -8,7 +8,7 @@ import org.hyperion.util.Misc;
 
 /**
  * @author Arsen Maxyutov.
- * @author Glis
+ * @author Glis				29/07/2015
  */
 public class QuestTab {
     /**

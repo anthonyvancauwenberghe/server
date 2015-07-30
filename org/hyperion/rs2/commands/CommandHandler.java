@@ -43,24 +43,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.Ban;
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.NPCDrop;
-import org.hyperion.rs2.model.OSPK;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerPoints;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SpecialBar;
-import org.hyperion.rs2.model.SpellBook;
-import org.hyperion.rs2.model.UpdateFlags;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -207,17 +190,10 @@ public class CommandHandler {
         submit(new Command("dp", Rank.DONATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                //DialogueManager.openDialogue(player, 158);
-				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
+                DialogueManager.openDialogue(player, 158);
+				//player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
                 return true;
             }
-        });
-		submit(new Command("testdp", Rank.HEAD_MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
-				return true;
-			}
 		});
 		submit(new Command("sdp", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
@@ -225,7 +201,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
+		submit(new Command("sdppvm", Rank.ADMINISTRATOR) {
 			public boolean execute(Player player, String input) {
 				Magic.teleport(player, Location.create(3506, 9494, 4), false);
 				return true;
@@ -1827,7 +1803,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("getpin", Rank.DEVELOPER){
+        submit(new Command("getpin", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                 final Player target = input.equals("getpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
                 if(target == null){

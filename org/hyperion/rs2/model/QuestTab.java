@@ -208,15 +208,13 @@ public class QuestTab {
         player.getActionSender().sendString(!hasRank ? "" : "@or1@" + Misc.centerQuestTab("Available ranks"), getId(35));
 		if(!hasRank)
 			max_index = 35;
-	*/
+			*/
 	}
 
     public void fillQuestTab() {
-		/*
         for(int i = getNextIndex(); i < QUEST_TAB_IDS.length; i++) {
             player.getActionSender().sendString("", QUEST_TAB_IDS[i]);
         }
-	*/
     }
 
     static {

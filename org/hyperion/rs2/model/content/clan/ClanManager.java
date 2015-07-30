@@ -43,7 +43,7 @@ public class ClanManager {
 		}
 		checkClanRank(player, clan);
 		clan.add(player);
-        player.setClanName(clan.getName());
+        //player.setClanName(clan.getName());
 		player.getActionSender().sendClanInfo();
 		updateClanInfo(player, clan);
 

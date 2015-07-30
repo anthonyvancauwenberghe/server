@@ -1,8 +1,6 @@
 package org.hyperion.rs2.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1863,6 +1861,61 @@ public class CommandHandler {
 				return false;
 			}
 		});
+
+        submit(new Command("reloadnpcdrops", Rank.OWNER) {
+             @Override
+             public boolean execute(Player player, String input) throws Exception {
+                 String name = "./data/npcdrops.cfg";
+                 BufferedReader file = null;
+                 int lineInt = 1;
+                 try {
+                     file = new BufferedReader(new FileReader(name));
+                     String line;
+                     while((line = file.readLine()) != null) {
+                         int spot = line.indexOf('=');
+                         if(spot > - 1) {
+                             int id = 0;
+                             int i = 1;
+                             try {
+                                 if(line.contains("/"))
+                                     line = line.substring(spot + 1, line.indexOf("/"));
+                                 else
+                                     line = line.substring(spot + 1);
+                                 String values = line;
+                                 values = values.replaceAll("\t\t", "\t");
+                                 values = values.trim();
+                                 String[] valuesArray = values.split("\t");
+                                 id = Integer.valueOf(valuesArray[0]);
+                                 NPCDefinition def = NPCDefinition.forId(id);
+                                 def.getDrops().clear();
+                                 for(i = 1; i < valuesArray.length; i++) {
+                                     String[] itemData = valuesArray[i].split("-");
+                                     final int itemId = Integer.valueOf(itemData[0]);
+                                     final int minAmount = Integer.valueOf(itemData[1]);
+                                     final int maxAmount = Integer.valueOf(itemData[2]);
+                                     final int chance = Integer.valueOf(itemData[3]);
+
+                                     def.getDrops().add(NPCDrop.create(itemId, minAmount, maxAmount, chance));
+                                 }
+                             } catch(Exception e) {
+                                 e.printStackTrace();
+                                 System.out.println("error on array: " + i + " npcId: "
+                                         + id);
+                             }
+                         }
+                         lineInt++;
+
+                     }
+                 } catch(Exception e) {
+                     e.printStackTrace();
+                     System.out.println("error on line: " + lineInt + " ");
+                 } finally {
+                     if(file != null)
+                         file.close();
+                 }
+                return false;
+             }
+        });
 
 		submit(new Command("lock", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{

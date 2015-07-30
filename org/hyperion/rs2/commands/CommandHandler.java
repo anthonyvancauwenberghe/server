@@ -153,18 +153,10 @@ public class CommandHandler {
         submit(new Command("dp", Rank.DONATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                //DialogueManager.openDialogue(player, 158);
-				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
-                return true;
+                DialogueManager.openDialogue(player, 158);
+				return true;
             }
         });
-		submit(new Command("testdp", Rank.HEAD_MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
-				return true;
-			}
-		});
 		submit(new Command("sdp", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
 				Magic.teleport(player, 2037, 4532, 4, false);

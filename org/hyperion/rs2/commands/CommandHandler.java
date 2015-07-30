@@ -1,42 +1,8 @@
 package org.hyperion.rs2.commands;
 
-import java.io.*;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.AllToMeCommand;
-import org.hyperion.rs2.commands.impl.DemoteCommand;
-import org.hyperion.rs2.commands.impl.EpicRapeCommand;
-import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
-import org.hyperion.rs2.commands.impl.GiveIntCommand;
-import org.hyperion.rs2.commands.impl.KeywordCommand;
-import org.hyperion.rs2.commands.impl.LvlCommand;
-import org.hyperion.rs2.commands.impl.PromoteCommand;
-import org.hyperion.rs2.commands.impl.RapeCommand;
-import org.hyperion.rs2.commands.impl.RecordingCommand;
-import org.hyperion.rs2.commands.impl.RestartServerCommand;
-import org.hyperion.rs2.commands.impl.ScreenshotCommand;
-import org.hyperion.rs2.commands.impl.SendiCommand;
-import org.hyperion.rs2.commands.impl.SkillCommand;
-import org.hyperion.rs2.commands.impl.SpawnCommand;
-import org.hyperion.rs2.commands.impl.StaffYellCommand;
-import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
-import org.hyperion.rs2.commands.impl.VoteCommand;
-import org.hyperion.rs2.commands.impl.WikiCommand;
-import org.hyperion.rs2.commands.impl.YellCommand;
+import org.hyperion.rs2.commands.impl.*;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
@@ -69,17 +35,8 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
-import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
-import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
-import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
+import org.hyperion.rs2.model.punishment.*;
+import org.hyperion.rs2.model.punishment.cmd.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
@@ -97,6 +54,11 @@ import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.*;
+import java.sql.ResultSet;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -1862,7 +1824,7 @@ public class CommandHandler {
 			}
 		});
 
-        submit(new Command("reloadnpcdrops", Rank.OWNER) {
+        submit(new Command("reloaddrops", Rank.OWNER) {
              @Override
              public boolean execute(Player player, String input) throws Exception {
                  String name = "./data/npcdrops.cfg";

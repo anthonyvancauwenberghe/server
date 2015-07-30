@@ -2,29 +2,44 @@ package org.hyperion.rs2.model.joshyachievements;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.joshyachievements.requirement.AchievementCompletionRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.KillStreakRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.NpcKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.PlayerKillRequirement;
-import org.hyperion.rs2.model.joshyachievements.requirement.SkillRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.SkillXpRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.SkillingObjectRequirement;
 
 public class AchievementTracker{
 
     public static class Progress{
 
+        private final int achievementId;
         private Date start;
         private int current;
-        private Date end;
+        private Date finish;
 
-        private Progress(final Date start, final int current, final Date end){
+        private Progress(final int achievementId, final Date start, final int current, final Date finish){
+            this.achievementId = achievementId;
             this.start = start;
             this.current = current;
-            this.end = end;
+            this.finish = finish;
         }
 
-        private Progress(){
-            this(null, 0, null);
+        private Progress(final int achievementId){
+            this(achievementId, null, 0, null);
+        }
+
+        public int getAchievementId(){
+            return achievementId;
+        }
+
+        public AchievementContext getAchievement(){
+            return AchievementContext.get(achievementId);
         }
 
         public int getCurrent(){
@@ -47,16 +62,16 @@ public class AchievementTracker{
             this.start = start;
         }
 
-        public Date getEnd(){
-            return end;
+        public Date getFinish(){
+            return finish;
         }
 
-        public void setEnd(final Date end){
-            this.end = end;
+        public void setFinish(final Date finish){
+            this.finish = finish;
         }
 
         public void finish(){
-            end = new Date();
+            finish = new Date();
         }
 
         public boolean isStarted(){
@@ -64,11 +79,36 @@ public class AchievementTracker{
         }
 
         public boolean isComplete(){
-            return start != null && end != null && end.after(start);
+            return start != null && finish != null && finish.after(start);
         }
 
         public boolean isNotComplete(){
             return !isComplete();
+        }
+
+        private String toSaveString(){
+            return String.format(
+                    "%d:%d:%d:%d",
+                    achievementId,
+                    Optional.ofNullable(start).map(Date::getTime).orElse(-1L),
+                    current,
+                    Optional.ofNullable(finish).map(Date::getTime).orElse(-1L)
+            );
+        }
+
+        private static Progress fromSaveString(final String line){
+            final String[] tokens = line.split(":");
+            final int achievementId = Integer.parseInt(tokens[0]);
+            final Date start = Optional.of(Integer.parseInt(tokens[1]))
+                    .filter(i -> i != -1)
+                    .map(Date::new)
+                    .orElse(null);
+            final int current = Integer.parseInt(tokens[2]);
+            final Date end = Optional.of(Integer.parseInt(tokens[3]))
+                    .filter(i -> i != -1)
+                    .map(Date::new)
+                    .orElse(null);
+            return new Progress(achievementId, start, current, end);
         }
     }
 
@@ -87,24 +127,33 @@ public class AchievementTracker{
 
     public Progress getProgress(final int id){
         if(!map.containsKey(id))
-            map.put(id, new Progress());
+            map.put(id, new Progress(id));
         return map.get(id);
+    }
+
+    private void putProgress(final Progress progress){
+        map.put(progress.getAchievementId(), progress);
     }
 
     public Progress getProgress(final AchievementContext ctx){
         return getProgress(ctx.getId());
     }
 
+    public Stream<Progress> streamProgress(){
+        return map.values().stream();
+    }
+
     private void finish(final AchievementContext ctx, final Progress progress){
         progress.finish();
-        player.sendf("Congratulations! Achievement complete: %s", ctx.getTitle(player));
+        player.sendf("Congratulations! Achievement complete: %s", ctx.getTitle());
         ctx.reward(player);
+        achievementCompleted();
     }
 
     public String getUpdateString(final AchievementContext ctx, final int current, final int max){
         return String.format(
                 "[@blu@%s@bla@] @blu@%,d@bla@ / @blu@%,d@bla@ (@blu@%,d@bla@ remaining!)",
-                ctx.getTitle(player),
+                ctx.getTitle(),
                 current,
                 max,
                 max-current
@@ -112,28 +161,27 @@ public class AchievementTracker{
     }
 
     public String getUpdateString(final AchievementContext ctx){
-        return getUpdateString(ctx, getProgress(ctx).getCurrent(), ctx.applyRequirement(player));
+        return getUpdateString(ctx, getProgress(ctx).getCurrent(), ctx.getRequirementMax());
+    }
+
+    public String getUpdateString(final int id){
+        return getUpdateString(AchievementContext.get(id));
     }
 
     private void progress(final AchievementContext ctx, final int incrementSize, final boolean showUpdateText){
         final Progress progress = getProgress(ctx.getId());
         if(progress.isComplete()) //already finished the achievement
             return;
-        if(progress.isStarted()){
-            final int current = progress.getCurrent();
-            final int max = ctx.applyRequirement(player);
-            if(current >= ctx.applyRequirement(player)){ //finally finished
-                finish(ctx, progress);
-            }else {
-                if(showUpdateText)
-                    player.sendMessage(getUpdateString(ctx, current, max));
-                if(progress.increment(incrementSize) >= max)
-                    finish(ctx, progress);
-            }
-        }else{
+        final int current = progress.increment(incrementSize);
+        final int max = ctx.getRequirementMax();
+        if(!progress.isStarted()){
+            player.sendf("Good luck! Achievement started: %s", ctx.getTitle());
             progress.start();
-            player.sendf("Good luck! Achievement started: %s", ctx.getTitle(player));
         }
+        if(showUpdateText)
+            player.sendMessage(getUpdateString(ctx, current, max));
+        if(current >= max)
+            finish(ctx, progress);
     }
 
     private void progress(final AchievementContext ctx, final boolean showUpdateText){
@@ -151,13 +199,35 @@ public class AchievementTracker{
     }
 
     public void skillIncreased(final int skill, final int xpGained){
-        AchievementContext.findFirst(this, SkillRequirement.filter(skill))
+        AchievementContext.findFirst(this, SkillXpRequirement.filter(skill))
                 .ifPresent(a -> progress(a, xpGained, true));
+    }
+
+    public void skillingObjectIncreased(final int skill, final int itemId, final int gained){
+        AchievementContext.findFirst(this, SkillingObjectRequirement.filter(skill, itemId))
+                .ifPresent(a -> progress(a, gained, true));
     }
 
     public void killStreakIncreased(){
         AchievementContext.findFirst(this, KillStreakRequirement.filter())
                 .ifPresent(a -> progress(a, true));
+    }
+
+    public void achievementCompleted(){
+        AchievementContext.findFirst(this, AchievementCompletionRequirement.filter())
+                .ifPresent(a -> progress(a, true));
+    }
+
+    public String toSaveString(){
+        return streamProgress()
+                .map(Progress::toSaveString)
+                .collect(Collectors.joining(","));
+    }
+
+    public void loadFromSaveString(final String line){
+        Stream.of(line.split(","))
+                .map(Progress::fromSaveString)
+                .forEach(this::putProgress);
     }
 
 }

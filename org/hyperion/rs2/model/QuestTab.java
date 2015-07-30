@@ -195,6 +195,7 @@ public class QuestTab {
     }
 
 	public void sendRankInfo() {
+		/*
 		max_index = 36;
 		boolean hasRank = false;
 			for(Rank rank : Rank.values()) {
@@ -207,15 +208,19 @@ public class QuestTab {
         player.getActionSender().sendString(!hasRank ? "" : "@or1@" + Misc.centerQuestTab("Available ranks"), getId(35));
 		if(!hasRank)
 			max_index = 35;
+	*/
 	}
 
     public void fillQuestTab() {
+		/*
         for(int i = getNextIndex(); i < QUEST_TAB_IDS.length; i++) {
             player.getActionSender().sendString("", QUEST_TAB_IDS[i]);
         }
+	*/
     }
 
     static {
+		/*
 		for(int i = 36; i < 36 + Rank.values().length; i++) {
 			final int i2 = i;
 			ActionsManager.getManager().submit(getId(i), new ButtonAction() {
@@ -235,6 +240,7 @@ public class QuestTab {
 				}
 			});
 		}
+		*/
 
         ActionsManager.getManager().submit(getId(0), new ButtonAction() {
             @Override

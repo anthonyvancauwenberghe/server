@@ -630,7 +630,6 @@ public class ShopManager {
 			try {
 				String[] parts = line.split(",");
 				int shopId = Integer.parseInt(parts[0]);
-				parts[1] = parts[1].replaceAll("_", " ");
 				String shopName = parts[1];
 				String type = parts[2];
 				Shop shop = null;

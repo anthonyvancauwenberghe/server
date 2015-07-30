@@ -8,11 +8,10 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.SpecialAttacks;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
-import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.Container.Type;
-import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
@@ -1026,7 +1025,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				if(player.getCombat().getFamiliar() != null)
 				SummoningSpecial.preformSpecial(player,
 						SummoningSpecial.getCorrectSpecial(player.getCombat().getFamiliar().getDefinition().getId()));
-				//player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
+				player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
 				break;
 			case 10136: //dismiss
             case 17023:

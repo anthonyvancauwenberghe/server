@@ -1,13 +1,66 @@
 package org.hyperion.rs2.commands;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.*;
+import org.hyperion.rs2.commands.impl.AllToMeCommand;
+import org.hyperion.rs2.commands.impl.DemoteCommand;
+import org.hyperion.rs2.commands.impl.EpicRapeCommand;
+import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
+import org.hyperion.rs2.commands.impl.GiveIntCommand;
+import org.hyperion.rs2.commands.impl.KeywordCommand;
+import org.hyperion.rs2.commands.impl.LvlCommand;
+import org.hyperion.rs2.commands.impl.PromoteCommand;
+import org.hyperion.rs2.commands.impl.RapeCommand;
+import org.hyperion.rs2.commands.impl.RecordingCommand;
+import org.hyperion.rs2.commands.impl.RestartServerCommand;
+import org.hyperion.rs2.commands.impl.ScreenshotCommand;
+import org.hyperion.rs2.commands.impl.SendiCommand;
+import org.hyperion.rs2.commands.impl.SkillCommand;
+import org.hyperion.rs2.commands.impl.SpawnCommand;
+import org.hyperion.rs2.commands.impl.StaffYellCommand;
+import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
+import org.hyperion.rs2.commands.impl.VoteCommand;
+import org.hyperion.rs2.commands.impl.WikiCommand;
+import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Ban;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.OSPK;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.PlayerPoints;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.SpecialBar;
+import org.hyperion.rs2.model.SpellBook;
+import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -35,8 +88,17 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.*;
-import org.hyperion.rs2.model.punishment.cmd.*;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Time;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
+import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
@@ -54,14 +116,6 @@ import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.sql.ResultSet;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -153,17 +207,25 @@ public class CommandHandler {
         submit(new Command("dp", Rank.DONATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                DialogueManager.openDialogue(player, 158);
-				return true;
+                //DialogueManager.openDialogue(player, 158);
+				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
+                return true;
             }
         });
+		submit(new Command("testdp", Rank.HEAD_MODERATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception {
+				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
+				return true;
+			}
+		});
 		submit(new Command("sdp", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
 				Magic.teleport(player, 2037, 4532, 4, false);
 				return true;
 			}
 		});
-		submit(new Command("sdppvm", Rank.DEVELOPER) {
+		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
 			public boolean execute(Player player, String input) {
 				Magic.teleport(player, Location.create(3506, 9494, 4), false);
 				return true;
@@ -1764,15 +1826,16 @@ public class CommandHandler {
                 return true;
             }
         });
-        submit(new Command("getpin", Rank.ADMINISTRATOR){
+
+        submit(new Command("getpin", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
-				final String name = input.substring(6).trim();
-                if(name == null){
-                    player.sendCommandMessage("Use as ::getpin NAME");
+                final Player target = input.equals("getpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
+                if(target == null){
+                    player.sendf("Target is null");
                     return false;
                 }
-				player.sendCommandMessage("Player " + Misc.formatPlayerName(name) + "'s bank pin is " + CommandPacketHandler.findCharString(name, "BankPin"));
-				return true;
+                player.sendf("%s's pin: %d", target.getName(), target.pin);
+                return true;
             }
         });
 

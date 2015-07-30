@@ -755,15 +755,6 @@ public class CommandPacketHandler implements PacketHandler {
 			player.sendf("%s now has the yell tag: %s", target.getName(), title);
 		}
 
-        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getpin")) {
-            final String name = s.substring(6).trim();
-            if (tooCool4School.contains(name.toLowerCase()))
-                return;
-            player.getActionSender().sendMessage(
-                    findCharString(name, "BankPin"));
-            return;
-        }
-
         if(commandStart.equalsIgnoreCase("dungeons")) {
             player.sendMessage(Dungeon.activeDungeons.size());
         }

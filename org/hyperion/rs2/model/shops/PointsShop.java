@@ -30,7 +30,7 @@ public abstract class PointsShop extends Shop {
 			updatePlayers();
 		} else {
 			player.getActionSender().sendMessage(
-					"You don't have enough " + getPointsName() + " to buy this item.");
+					"You don't have enough '@dre@" + getPointsName().toLowerCase() + "@bla@' to buy this item.");
 		}
 	}
 
@@ -38,19 +38,19 @@ public abstract class PointsShop extends Shop {
 	public void valueBuyItem(Player player, Item item) {
 		int price = getPrice(item.getId());
 
-		String message = "The shop will sell a "
-				+ item.getDefinition().getProperName() + " for " + price + " " + getPointsName() + ".";
+		String message = "The shop will sell a '@dre@"
+				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " " + getPointsName().toLowerCase() + ".";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}
 		player.getActionSender().sendMessage(message);
         if(item.getId() == LEGENDARY_TICKET)
-            player.sendMessage("@red@WARNING:@bla@ you cannot sell this item back to the shop");
+            player.sendMessage("You cannot sell this item back to the shop");
 	}
 
 	@Override
 	public void valueSellItem(Player player, Item item) {
-		player.getActionSender().sendMessage("You can't sell to this shop.");
+		player.getActionSender().sendMessage("You cannot sell to this shop.");
 	}
 
 	@Override

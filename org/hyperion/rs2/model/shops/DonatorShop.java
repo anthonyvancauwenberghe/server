@@ -9,8 +9,8 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.MysteryBox;
-import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.sql.requests.QueryRequest;
+import org.hyperion.util.Misc;
 
 import java.util.HashMap;
 
@@ -57,8 +57,12 @@ public class DonatorShop extends Shop {
 			player.getActionSender().sendUpdateItems(3823,
 					player.getInventory().toArray());
 			updatePlayers();
-			ActionSender.yellMessage("@blu@Exclusive items have been added to the donator shop");
-			ActionSender.yellMessage("@blu@only " + item.getCount() + " of these items will ever be sold.");
+			for(Player p : World.getWorld().getPlayers()) {
+				if (p != null) {
+					p.sendServerMessage("Exclusive items have been added to the donator shop...");
+					p.sendServerMessage("Only " + item.getCount() + " of these items will ever be sold!");
+				}
+			}
 			return;
 		}
         if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603 || item.getId() == 17999) {
@@ -89,7 +93,8 @@ public class DonatorShop extends Shop {
 	public void buyFromShop(Player player, Item item) {
 		int price = item.getCount() * getPrice(item.getId());
 		if(price <= 0) {
-			player.getActionSender().sendMessage("Cannot buy this item! Please contact a staff member about this issue!");
+			player.getActionSender().sendMessage("Cannot buy this item.");
+			player.getActionSender().yellModMessage("@red@" + Misc.formatPlayerName(player.getName()) + " found a unbuyable item in a donator store.");
 			return;
 		}
 		if(player.getPoints().getDonatorPoints() >= price) {
@@ -104,14 +109,22 @@ public class DonatorShop extends Shop {
 			if(isVeblenGood(item.getId())) {
 				if(first) {
 					first = false;
-					ActionSender.yellMessage("@yel@" + player.getName() + " was the first one to buy an exclusive item today!!");
+					for(Player p : World.getWorld().getPlayers()) {
+						if (p != null) {
+							p.sendServerMessage("@yel@" + player.getName() + " was the first one to buy an exclusive item today!!");
+						}
+					}
 				} else {
-					ActionSender.yellMessage("@yel@" + player.getName() + " has just bought an exclusive item!");
+					for(Player p : World.getWorld().getPlayers()) {
+						if (p != null) {
+							p.sendServerMessage("@yel@" + player.getName() + " has just bought an exclusive item!");
+						}
+					}
 				}
 			}
 		} else {
 			player.getActionSender().sendMessage(
-					"You don't have enough donator points to buy this item.");
+					"You do not have enough donator points to buy this item.");
 		}
 	}
 
@@ -119,18 +132,19 @@ public class DonatorShop extends Shop {
 	public void valueBuyItem(Player player, Item item) {
 		int price = getPrice(item.getId());
 		if(price <= 0) {
-			player.getActionSender().sendMessage("Cannot buy this item! Please contact a staff member about this issue!");
+			player.getActionSender().sendMessage("Cannot buy this item.");
+			player.getActionSender().yellModMessage("@red@" + Misc.formatPlayerName(player.getName()) + " found a unbuyable item in a donator store.");
 			return;
 		}
-		String message = "The shop will sell a "
-				+ item.getDefinition().getProperName() + " for " + price + " donator points.";
+		String message = "The shop will sell a '@dre@"
+				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " donator points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}
 
 		player.getActionSender().sendMessage(message);
         if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603 || item.getId() == 17999)
-            player.sendMessage("@red@WARNING:@bla@ you cannot sell this item back to the shop");
+			player.sendImportantMessage("You cannot sell this back to the shop");
 	}
 
 	@Override
@@ -145,8 +159,8 @@ public class DonatorShop extends Shop {
 			return;
 		}
 		price *= RESELL_RATE;
-		String message = "The shop will buy a "
-				+ item.getDefinition().getProperName() + " for " + price + " donator points.";
+		String message = "The shop will buy a '@dre@"
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " donator points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}

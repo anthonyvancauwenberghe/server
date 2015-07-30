@@ -41,7 +41,7 @@ public class RecklessHonorShop extends PointsShop {
 	public void buyFromShop(Player player, Item item) {
 		int requiredHonors = EquipmentReq.requiredHonorPoints(item.getId());
 		if(player.getPoints().getHonorPoints() < requiredHonors) {
-			player.getActionSender().sendMessage("You need at least " + requiredHonors + " Honor Points to buy this item.");
+			player.getActionSender().sendMessage("You need at least " + requiredHonors + " honor points to buy this item.");
 		} else {
 			super.buyFromShop(player, item);
 		}

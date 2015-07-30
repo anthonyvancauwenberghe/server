@@ -1169,6 +1169,8 @@ public class ActionSender {
 		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
 			sendString(QUEST_MENU_IDS[d], "");
 		}
+		int r = 0;
+
 		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {
 				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
@@ -1178,11 +1180,10 @@ public class ActionSender {
 				String s = Misc.formatPlayerName(p3.getName());
 				if(s.isEmpty())
 					continue;
-				/*
-				if(!Rank.isStaffMember(p3))
-					continue;
-				*/
-				sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + s);
+				if(Rank.isStaffMember(p3)) {
+					sendString(QUEST_MENU_IDS[i], "@dre@" + (r + 1) + ". @bla@" + s);
+					r++;
+				}
 				i++;
 			}
 		}
@@ -1195,7 +1196,7 @@ public class ActionSender {
 	 * @return chain
 	 */
 	public ActionSender displayItems(Item...items) {
-		sendString(8144, "Item search");
+		sendString(8144, "@dre@Item search");
 		int i = 0;
 		for(; i < items.length; i++) {
 			sendString(QUEST_MENU_IDS[i], items[i].getDefinition().getName() + " - "+items[i].getDefinition().getId());

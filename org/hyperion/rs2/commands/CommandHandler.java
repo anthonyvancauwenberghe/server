@@ -163,7 +163,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
+		submit(new Command("sdppvm", Rank.DEVELOPER) {
 			public boolean execute(Player player, String input) {
 				Magic.teleport(player, Location.create(3506, 9494, 4), false);
 				return true;

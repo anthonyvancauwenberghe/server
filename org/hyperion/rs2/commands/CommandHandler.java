@@ -1,66 +1,13 @@
 package org.hyperion.rs2.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.AllToMeCommand;
-import org.hyperion.rs2.commands.impl.DemoteCommand;
-import org.hyperion.rs2.commands.impl.EpicRapeCommand;
-import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
-import org.hyperion.rs2.commands.impl.GiveIntCommand;
-import org.hyperion.rs2.commands.impl.KeywordCommand;
-import org.hyperion.rs2.commands.impl.LvlCommand;
-import org.hyperion.rs2.commands.impl.PromoteCommand;
-import org.hyperion.rs2.commands.impl.RapeCommand;
-import org.hyperion.rs2.commands.impl.RecordingCommand;
-import org.hyperion.rs2.commands.impl.RestartServerCommand;
-import org.hyperion.rs2.commands.impl.ScreenshotCommand;
-import org.hyperion.rs2.commands.impl.SendiCommand;
-import org.hyperion.rs2.commands.impl.SkillCommand;
-import org.hyperion.rs2.commands.impl.SpawnCommand;
-import org.hyperion.rs2.commands.impl.StaffYellCommand;
-import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
-import org.hyperion.rs2.commands.impl.VoteCommand;
-import org.hyperion.rs2.commands.impl.WikiCommand;
-import org.hyperion.rs2.commands.impl.YellCommand;
+import org.hyperion.rs2.commands.impl.*;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.Ban;
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.NPCDrop;
-import org.hyperion.rs2.model.OSPK;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerPoints;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SpecialBar;
-import org.hyperion.rs2.model.SpellBook;
-import org.hyperion.rs2.model.UpdateFlags;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -88,17 +35,8 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
-import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
-import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
-import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
+import org.hyperion.rs2.model.punishment.*;
+import org.hyperion.rs2.model.punishment.cmd.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
@@ -116,6 +54,11 @@ import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.*;
+import java.sql.ResultSet;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -207,17 +150,10 @@ public class CommandHandler {
         submit(new Command("dp", Rank.DONATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                //DialogueManager.openDialogue(player, 158);
-				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
+                DialogueManager.openDialogue(player, 158);
+				//player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
                 return true;
             }
-        });
-		submit(new Command("testdp", Rank.HEAD_MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
-				return true;
-			}
 		});
 		submit(new Command("sdp", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
@@ -225,7 +161,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
+		submit(new Command("sdppvm", Rank.ADMINISTRATOR) {
 			public boolean execute(Player player, String input) {
 				Magic.teleport(player, Location.create(3506, 9494, 4), false);
 				return true;
@@ -420,10 +356,10 @@ public class CommandHandler {
 				TileMap tilemap = tilemapbuilder.build();
 				Tile tile = tilemap.getTile(0, 0);
 				player.getActionSender().sendMessage((new StringBuilder())
-						.append("N: ").append(tile.isNorthernTraversalPermitted())
-						.append(" E: ").append(tile.isEasternTraversalPermitted())
-						.append(" S: ").append(tile.isSouthernTraversalPermitted())
-						.append(" W: ").append(tile.isWesternTraversalPermitted()).toString());
+                        .append("N: ").append(tile.isNorthernTraversalPermitted())
+                        .append(" E: ").append(tile.isEasternTraversalPermitted())
+                        .append(" S: ").append(tile.isSouthernTraversalPermitted())
+                        .append(" W: ").append(tile.isWesternTraversalPermitted()).toString());
 				return true;
 			}
 		});
@@ -478,7 +414,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
 				World.getWorld().getNPCManager().addNPC(player.getLocation(),
-						parts[0], -1);
+                        parts[0], -1);
 				return true;
 			}
 		});
@@ -487,14 +423,14 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
 				    World.getWorld().getNPCManager().addNPC(player.getLocation(),
-						parts[0], parts.length == 2 ? parts[1] : 50);
+                            parts[0], parts.length == 2 ? parts[1] : 50);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
-						+ parts[0] + "	" + player.getLocation() + "	"
-						+ (player.getLocation().getX() - 1) + "	"
-						+ (player.getLocation().getY() - 1) + "	"
-						+ (player.getLocation().getX() + 1) + "	"
-						+ (player.getLocation().getY() + 1) + "	1	"
-						+ NPCDefinition.forId(parts[0]).name());
+                        + parts[0] + "	" + player.getLocation() + "	"
+                        + (player.getLocation().getX() - 1) + "	"
+                        + (player.getLocation().getY() - 1) + "	"
+                        + (player.getLocation().getX() + 1) + "	"
+                        + (player.getLocation().getY() + 1) + "	1	"
+                        + NPCDefinition.forId(parts[0]).name());
 				return true;
 			}
 		});
@@ -505,12 +441,12 @@ public class CommandHandler {
 				World.getWorld().getNPCManager().addNPC(player.getLocation(),
 						parts[0], -1);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
-						+ parts[0] + "	" + player.getLocation() + "	"
-						+ (player.getLocation().getX()) + "	"
-						+ (player.getLocation().getY()) + "	"
-						+ (player.getLocation().getX()) + "	"
-						+ (player.getLocation().getY()) + "	1	"
-						+ NPCDefinition.forId(parts[0]).name());
+                        + parts[0] + "	" + player.getLocation() + "	"
+                        + (player.getLocation().getX()) + "	"
+                        + (player.getLocation().getY()) + "	"
+                        + (player.getLocation().getX()) + "	"
+                        + (player.getLocation().getY()) + "	1	"
+                        + NPCDefinition.forId(parts[0]).name());
 				return true;
 			}
 		});
@@ -670,11 +606,11 @@ public class CommandHandler {
 			}
 		});
 		submit(new Command("fixnpcs", Rank.MODERATOR) {
-			public boolean execute(Player player, String input) {
-				World.getWorld().submit(new NpcCombatEvent());
-				return true;
-			}
-		});
+            public boolean execute(Player player, String input) {
+                World.getWorld().submit(new NpcCombatEvent());
+                return true;
+            }
+        });
 		submit(new Command("fixwild", Rank.MODERATOR) {
 			public boolean execute(Player player, String input) {
 				World.getWorld().submit(new PlayerCombatEvent());
@@ -707,13 +643,13 @@ public class CommandHandler {
 			}
 		});
 
-		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER){
-			@Override
-			public boolean execute(Player player, String input){
-				Server.getConfig().loadConfigFile();
-				return true;
-			}
-		});
+		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER) {
+            @Override
+            public boolean execute(Player player, String input) {
+                Server.getConfig().loadConfigFile();
+                return true;
+            }
+        });
 		submit(new Command(Server.getConfig().getString("spawncommand"), Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -1050,24 +986,24 @@ public class CommandHandler {
 
         submit(new ViewPacketActivityCommand());
 
-        submit(new Command("viewprofile", Rank.PLAYER){
-            public boolean execute(final Player player, final String input){
+        submit(new Command("viewprofile", Rank.PLAYER) {
+            public boolean execute(final Player player, final String input) {
                 final String targetName = filterInput(input).trim();
-                try{
+                try {
                     return InterfaceManager.<PlayerProfileInterface>get(PlayerProfileInterface.ID).view(player, targetName);
-                }catch(Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                     return false;
                 }
             }
         });
 
-        submit(new Command("dumpcommands", Rank.DEVELOPER){
-            public boolean execute(final Player player, final String input){
+        submit(new Command("dumpcommands", Rank.DEVELOPER) {
+            public boolean execute(final Player player, final String input) {
                 final Map<Rank, Set<String>> map = new HashMap<>();
-                for(final Command cmd : commands.values()){
-                    for(final Rank rank : cmd.getRanks()){
-                        if(!map.containsKey(rank))
+                for (final Command cmd : commands.values()) {
+                    for (final Rank rank : cmd.getRanks()) {
+                        if (!map.containsKey(rank))
                             map.put(rank, new TreeSet<String>());
                         map.get(rank).add(cmd.getKey());
                     }
@@ -1078,13 +1014,13 @@ public class CommandHandler {
                         return r2.ordinal() - r1.ordinal();
                     }
                 });
-                try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/commands.txt"))){
-                    for(final Rank rank : ranks){
+                try (final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/commands.txt"))) {
+                    for (final Rank rank : ranks) {
                         writer.write("============================");
                         writer.newLine();
                         writer.write(rank.toString());
                         writer.newLine();
-                        for(final String cmd : map.get(rank)){
+                        for (final String cmd : map.get(rank)) {
                             writer.write("\t> " + cmd);
                             writer.newLine();
                         }
@@ -1093,7 +1029,7 @@ public class CommandHandler {
                     }
                     player.getActionSender().sendMessage("Finshed dumping commands");
                     return true;
-                }catch(Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                     player.getActionSender().sendMessage("Error dumping commands: " + ex);
                     return false;
@@ -1101,12 +1037,12 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("changename", Rank.DEVELOPER){
-            public boolean execute(final Player player, final String input){
+        submit(new Command("changename", Rank.DEVELOPER) {
+            public boolean execute(final Player player, final String input) {
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');
                 final String target = i == -1 ? line : line.substring(0, i).trim();
-                if(!PlayerFiles.exists(target)){
+                if (!PlayerFiles.exists(target)) {
                     player.sendf("Player does not exist: %s", target);
                     return false;
                 }
@@ -1115,51 +1051,51 @@ public class CommandHandler {
         });
 
 
-        submit(new Command("changecompcolors", Rank.PLAYER){
-			public boolean execute(final Player player, final String input){
-				final String line = filterInput(input).trim();
-				if(line.equals("none")){
-					player.compCapePrimaryColor = 0;
-					player.compCapeSecondaryColor = 0;
-					player.sendf("Reset your comp cape colors!");
-					return true;
-				}
-				final String[] colors = line.split(" ");
-				if(colors.length != 2){
-					player.getActionSender().sendMessage("Invalid syntax");
-					return false;
-				}
-				Color primary = null;
-				Color secondary = null;
-				for(final Color color : Color.values()){
-					final String colorStr = color.toString();
-					if(colors[0].equalsIgnoreCase(colorStr))
-						primary = color;
-					if(colors[1].equalsIgnoreCase(colorStr))
-						secondary = color;
-					if(primary != null && secondary != null)
-						break;
-				}
-				if(primary == null || secondary == null){
-					player.getActionSender().sendMessage("Invalid colors");
-					return false;
-				}
-				if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary){
-					player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
-					return false;
-				}
-				player.compCapePrimaryColor = primary.color;
-				player.compCapeSecondaryColor = secondary.color;
-				player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
-				player.getActionSender().sendMessage(
-						String.format(
-								"Changed comp cape colors: Primary: %s | Secondary: %s",
-								primary, secondary
-						)
-				);
-				return true;
-			}
-		});
+        submit(new Command("changecompcolors", Rank.PLAYER) {
+            public boolean execute(final Player player, final String input) {
+                final String line = filterInput(input).trim();
+                if (line.equals("none")) {
+                    player.compCapePrimaryColor = 0;
+                    player.compCapeSecondaryColor = 0;
+                    player.sendf("Reset your comp cape colors!");
+                    return true;
+                }
+                final String[] colors = line.split(" ");
+                if (colors.length != 2) {
+                    player.getActionSender().sendMessage("Invalid syntax");
+                    return false;
+                }
+                Color primary = null;
+                Color secondary = null;
+                for (final Color color : Color.values()) {
+                    final String colorStr = color.toString();
+                    if (colors[0].equalsIgnoreCase(colorStr))
+                        primary = color;
+                    if (colors[1].equalsIgnoreCase(colorStr))
+                        secondary = color;
+                    if (primary != null && secondary != null)
+                        break;
+                }
+                if (primary == null || secondary == null) {
+                    player.getActionSender().sendMessage("Invalid colors");
+                    return false;
+                }
+                if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary) {
+                    player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
+                    return false;
+                }
+                player.compCapePrimaryColor = primary.color;
+                player.compCapeSecondaryColor = secondary.color;
+                player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
+                player.getActionSender().sendMessage(
+                        String.format(
+                                "Changed comp cape colors: Primary: %s | Secondary: %s",
+                                primary, secondary
+                        )
+                );
+                return true;
+            }
+        });
 
         CommandHandler.submit(new Command("createevent", Rank.MODERATOR) {
             @Override
@@ -1827,7 +1763,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("getpin", Rank.DEVELOPER){
+        submit(new Command("getpin", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
                 final Player target = input.equals("getpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
                 if(target == null){
@@ -1842,6 +1778,7 @@ public class CommandHandler {
         submit(new Command("yaks", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
                 Magic.teleport(player, 3051, 3515, 0, false);
+                ClanManager.joinClanChat(player, "Risk Fights", false);
                 return true;
             }
         });
@@ -1886,6 +1823,61 @@ public class CommandHandler {
 				return false;
 			}
 		});
+
+        submit(new Command("reloaddrops", Rank.OWNER) {
+             @Override
+             public boolean execute(Player player, String input) throws Exception {
+                 String name = "./data/npcdrops.cfg";
+                 BufferedReader file = null;
+                 int lineInt = 1;
+                 try {
+                     file = new BufferedReader(new FileReader(name));
+                     String line;
+                     while((line = file.readLine()) != null) {
+                         int spot = line.indexOf('=');
+                         if(spot > - 1) {
+                             int id = 0;
+                             int i = 1;
+                             try {
+                                 if(line.contains("/"))
+                                     line = line.substring(spot + 1, line.indexOf("/"));
+                                 else
+                                     line = line.substring(spot + 1);
+                                 String values = line;
+                                 values = values.replaceAll("\t\t", "\t");
+                                 values = values.trim();
+                                 String[] valuesArray = values.split("\t");
+                                 id = Integer.valueOf(valuesArray[0]);
+                                 NPCDefinition def = NPCDefinition.forId(id);
+                                 def.getDrops().clear();
+                                 for(i = 1; i < valuesArray.length; i++) {
+                                     String[] itemData = valuesArray[i].split("-");
+                                     final int itemId = Integer.valueOf(itemData[0]);
+                                     final int minAmount = Integer.valueOf(itemData[1]);
+                                     final int maxAmount = Integer.valueOf(itemData[2]);
+                                     final int chance = Integer.valueOf(itemData[3]);
+
+                                     def.getDrops().add(NPCDrop.create(itemId, minAmount, maxAmount, chance));
+                                 }
+                             } catch(Exception e) {
+                                 e.printStackTrace();
+                                 System.out.println("error on array: " + i + " npcId: "
+                                         + id);
+                             }
+                         }
+                         lineInt++;
+
+                     }
+                 } catch(Exception e) {
+                     e.printStackTrace();
+                     System.out.println("error on line: " + lineInt + " ");
+                 } finally {
+                     if(file != null)
+                         file.close();
+                 }
+                return false;
+             }
+        });
 
 		submit(new Command("lock", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception{

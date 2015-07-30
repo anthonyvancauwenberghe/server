@@ -5,13 +5,9 @@ import org.hyperion.rs2.model.Entity;
 import org.hyperion.rs2.model.Graphic;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.summoning.AbstractSummoningSpecial;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.misc2.SummoningBoBs;
 
 public final class PackYak extends AbstractSummoningSpecial {	
 	private final int usedWith, slot;
@@ -43,7 +39,7 @@ public final class PackYak extends AbstractSummoningSpecial {
 	public void execute(Player player) {
         Item item = player.getInventory().get(slot);
         BankItem bankItem = new BankItem(0, item.getId(), item.getCount());
-        if(player.getInventory().remove(item = Item.create(item.getId())) == 1) {
+        if(player.getInventory().remove(item) == item.getCount()) {
             player.getBank().add(bankItem);
         }
         player.playAnimation(Animation.create(7660));

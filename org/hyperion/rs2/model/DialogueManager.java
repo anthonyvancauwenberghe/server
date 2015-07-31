@@ -1301,12 +1301,20 @@ public class DialogueManager {
                 ShopManager.open(player, 82);
                 break;
 			case 194:
-				player.getActionSender().sendDialogue("::graves teleports you to 31 wildy, are you sure?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Yes! teleport me to level 31 wildy", "No!");
+				player.getActionSender().sendDialogue("You're about to teleport to the wilderness, do you really want to?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Yes! teleport me to level 31 wildy", "No!");
 				player.getInterfaceState().setNextDialogueId(0, 195);
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
 			case 195:
 				Magic.teleport(player, Location.create(2975, 3745, 0), false);
+				break;
+			case 196:
+				player.getActionSender().sendDialogue("Wests is in wildy, are you sure?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Yes!", "No!");
+				player.getInterfaceState().setNextDialogueId(0, 197);
+				player.getInterfaceState().setNextDialogueId(1, -1);
+				break;
+			case 197:
+				Magic.teleport(player, Location.create(2979, 3613, 0), false);
 				break;
 
             case 6000:

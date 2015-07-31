@@ -30,7 +30,7 @@ public class TeleportCommands {
         CommandHandler.submit(new Command("wests", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                Magic.teleport(player, Location.create(2979, 3613, 0), false);
+				DialogueManager.openDialogue(player, 196);
                 return true;
             }
         });

@@ -751,6 +751,11 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
+		if (commandStart.equalsIgnoreCase("setelo")) {
+			int rating = Integer.parseInt(as[1]);
+			player.getPoints().setEloRating(rating);
+		}
+
 		if(commandStart.equalsIgnoreCase("openurl")){
 			final String[] args = s.substring(8).split(",");
 			final String targetName = args[0].trim();
@@ -1500,10 +1505,6 @@ public class CommandPacketHandler implements PacketHandler {
 				});
 			}
 			return;
-		}
-		if (commandStart.equalsIgnoreCase("setelo")) {
-			int rating = Integer.parseInt(as[1]);
-			player.getPoints().setEloRating(rating);
 		}
 
 		if (commandStart.equalsIgnoreCase("infhp")) {

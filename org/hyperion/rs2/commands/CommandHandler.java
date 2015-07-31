@@ -1,14 +1,69 @@
 package org.hyperion.rs2.commands;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.*;
+import org.hyperion.rs2.commands.impl.AllToMeCommand;
+import org.hyperion.rs2.commands.impl.DemoteCommand;
+import org.hyperion.rs2.commands.impl.EpicRapeCommand;
+import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
+import org.hyperion.rs2.commands.impl.GiveIntCommand;
+import org.hyperion.rs2.commands.impl.KeywordCommand;
+import org.hyperion.rs2.commands.impl.LvlCommand;
+import org.hyperion.rs2.commands.impl.PromoteCommand;
+import org.hyperion.rs2.commands.impl.RapeCommand;
+import org.hyperion.rs2.commands.impl.RecordingCommand;
+import org.hyperion.rs2.commands.impl.RestartServerCommand;
+import org.hyperion.rs2.commands.impl.ScreenshotCommand;
+import org.hyperion.rs2.commands.impl.SendiCommand;
+import org.hyperion.rs2.commands.impl.SkillCommand;
+import org.hyperion.rs2.commands.impl.SpawnCommand;
+import org.hyperion.rs2.commands.impl.StaffYellCommand;
+import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
+import org.hyperion.rs2.commands.impl.VoteCommand;
+import org.hyperion.rs2.commands.impl.WikiCommand;
+import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.achievements.AchievementHandler;
+import org.hyperion.rs2.model.Ban;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.OSPK;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.PlayerPoints;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.SpecialBar;
+import org.hyperion.rs2.model.SpellBook;
+import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
@@ -35,8 +90,17 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.*;
-import org.hyperion.rs2.model.punishment.cmd.*;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Time;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
+import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
@@ -54,11 +118,6 @@ import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
-
-import java.io.*;
-import java.sql.ResultSet;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -191,8 +250,8 @@ public class CommandHandler {
         submit(new Command("achievements", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                System.out.println(player.getAchievementsProgress().size());
-				AchievementHandler.openInterface(player, player.getViewingDifficulty(), false);
+                //System.out.println(player.getAchievementsProgress().size());
+				//AchievementHandler.openInterface(player, player.getViewingDifficulty(), false);
                 return true;
             }
         });
@@ -200,8 +259,8 @@ public class CommandHandler {
         submit(new Command("progress", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-				player.setKillStreak(6);
-                AchievementHandler.progressAchievement(player, "Killstreak");
+				//player.setKillStreak(6);
+                //AchievementHandler.progressAchievement(player, "Killstreak");
                 return true;
             }
         });
@@ -1149,7 +1208,7 @@ public class CommandHandler {
         CommandHandler.submit(new PunishCommand("macjail", Target.MAC, Type.JAIL, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("suidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
 
-        CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
+        CommandHandler.submit(new PunishCommand("yellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.HELPER));
         CommandHandler.submit(new PunishCommand("ipyellmute", Target.IP, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("macyellmute", Target.MAC, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("suidyellmute", Target.SPECIAL, Type.YELL_MUTE, Rank.DEVELOPER));
@@ -1174,14 +1233,13 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unmacjail", Target.MAC, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new UnPunishCommand("unsuidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
 
-        CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.MODERATOR));
+        CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.HELPER));
         CommandHandler.submit(new UnPunishCommand("unipyellmute", Target.IP, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidyellmute", Target.SPECIAL, Type.YELL_MUTE, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unmute", Target.ACCOUNT, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unipmute", Target.IP, Type.MUTE, Rank.MODERATOR));
-
         CommandHandler.submit(new UnPunishCommand("unmacmute", Target.MAC, Type.MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidmute", Target.SPECIAL, Type.MUTE, Rank.DEVELOPER));
 

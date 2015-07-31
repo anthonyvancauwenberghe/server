@@ -323,7 +323,7 @@ public class NpcDeathEvent extends Event {
     public static Optional<NPCKillReward> getReward(final int id) {
         switch(id) {
             case 8133:
-                return Optional.of(new NPCKillReward(15, 200, 10));
+                return Optional.of(new NPCKillReward(10, 200, 10));
             case 8596:
                 return Optional.of(new NPCKillReward(40, 300, 8));
             case 50:

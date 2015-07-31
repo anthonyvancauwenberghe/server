@@ -1716,6 +1716,10 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equalsIgnoreCase("checktickets")) {
 			Ticket.checkTickets(player);
 		}
+		if (commandStart.startsWith("syell")) {
+			String message = s.substring(5).trim();
+			PushMessage.pushStaffMessage(message, player);
+		}
         if(s.equalsIgnoreCase("jail"))
             player.setTeleportTarget(Jail.LOCATION);
         if(s.equalsIgnoreCase("unjail"))
@@ -1891,10 +1895,6 @@ public class CommandPacketHandler implements PacketHandler {
 
 		}
 
-		if (commandStart.startsWith("syell")) {
-			String message = s.substring(5).trim();
-			PushMessage.pushStaffMessage(message, player);
-		}
 
 		if (commandStart.equalsIgnoreCase("accvalue")) {
 			Player p = World.getWorld().getPlayer(s.substring(8).trim());

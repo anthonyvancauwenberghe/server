@@ -12,7 +12,7 @@ public enum Rank {
 	LEGEND("@bla@"), // 2
 	VETERAN("@ffb226@"), // 3
 	DONATOR("@red@"), // 4
-	SUPER_DONATOR("@008000@"), // 5
+	SUPER_DONATOR("@gre@"), // 5
 	GRAPHICS_DESIGNER("@bla@"), // 6
 	EVENT_MANAGER("@bla@"), // 7
 	HELPER("@a14eaa@"), // 8
@@ -20,7 +20,7 @@ public enum Rank {
 	MODERATOR("@blu@"), // 10
 	GLOBAL_MODERATOR("@blu@"), // 11
 	COMMUNITY_MANAGER("@blu@"), // 12
-	HEAD_MODERATOR("@blu@"), // 13
+	HEAD_MODERATOR("@cya@"), // 13
 	ADMINISTRATOR("@dbl@"), // 14
 	DEVELOPER("@6F0095@"), // 15
 	OWNER("@FFFFFF@"); // 16

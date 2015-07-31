@@ -223,8 +223,8 @@ public class PlayerDeathEvent extends Event {
 					BountyPerkHandler.handleSpecialPerk(killer);
 					if(true || killer.getLocation().inPvPArea()) {
 						boolean isDev = false;
-						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.ADMINISTRATOR.ordinal()
-								|| Rank.getPrimaryRank(player).ordinal() >= Rank.ADMINISTRATOR.ordinal())
+						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal()
+								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
 							isDev = true;
 						if(!isDev) {
 						    killer.increaseKillCount();

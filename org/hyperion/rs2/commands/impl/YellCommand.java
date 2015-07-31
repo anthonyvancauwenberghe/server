@@ -128,6 +128,9 @@ public class YellCommand extends Command {
 		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
+		if(!Rank.hasAbility(player, Rank.DEVELOPER) || !player.getName().equalsIgnoreCase("nab")){
+			input = input.replaceAll("@[\\w\\d]+@", "");
+		}
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}
 		 */

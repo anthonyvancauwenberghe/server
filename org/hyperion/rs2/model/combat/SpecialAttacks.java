@@ -985,8 +985,8 @@ public class SpecialAttacks {
 								offsetY,
 								offsetX,
 								50,
-								clientSpeed + 10,
-								256, 46, 36, hitId, slope + 6);
+								clientSpeed,
+								256, 46, 41, hitId, slope + 9);
 				damg4 = Combat.random(maxDamg);
 				damg8 = Combat.random(maxDamg);
 				damg4 = damg4 + toAddFirst;

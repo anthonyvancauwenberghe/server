@@ -15,7 +15,7 @@ public enum Rank {
 	SUPER_DONATOR("@gre@"), // 5
 	GRAPHICS_DESIGNER("@bla@"), // 6
 	EVENT_MANAGER("@bla@"), // 7
-	HELPER("@a14eaa@"), // 8
+	HELPER("@b71499@"), // 8
 	FORUM_MODERATOR("@blu@"), // 9
 	MODERATOR("@blu@"), // 10
 	GLOBAL_MODERATOR("@blu@"), // 11

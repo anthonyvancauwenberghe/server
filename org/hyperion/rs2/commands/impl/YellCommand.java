@@ -76,11 +76,11 @@ public class YellCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
 		if(Rank.getPrimaryRank(player).ordinal() < minYellRank) {
-			player.sendCommandMessage("An administrator has set the minimum yell rank higher temporarily");
+			player.sendMessage("An administrator has set the minimum yell rank higher temporarily");
 			return false;
 		}
 		if(player.isMuted || player.yellMuted) {
-			player.sendCommandMessage("Muted players cannot use the yell command.");
+			player.sendMessage("Muted players cannot use the yell command.");
 			return false;
 		}
 
@@ -119,7 +119,7 @@ public class YellCommand extends Command {
 				player.getYelling().updateYellTimer();
                 player.getPermExtraData().put("yelltimur", player.getYelling().getYellTimer());
 			} else {
-               player.sendCommandMessage("You need at least 1,800 PvP rating peak, 1800 total level, or purchase donator to start yelling");
+               player.sendMessage("You need at least 1,800 PvP rating peak, 1800 total level, or purchase donator to start yelling");
                return false;
 			}
 		}

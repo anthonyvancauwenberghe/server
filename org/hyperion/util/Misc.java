@@ -12,6 +12,7 @@ public class Misc {
 	/**
 	 * @param amount , for instance 14300000
 	 * @return formatted value, in this case 14,3 Mil
+	 * @Author Glis
 	 */
 	public static String getFormattedValue(int amount) {
 		if(amount >= 1000000) {

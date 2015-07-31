@@ -980,11 +980,6 @@ public class CommandPacketHandler implements PacketHandler {
 			return;
 		}
 
-		if (commandStart.equalsIgnoreCase("getmail")) {
-			player.getActionSender().sendMessage(
-					findCharString(s.substring(8).trim(), "mail"));
-			return;
-		}
 		if (commandStart.equalsIgnoreCase("superman")) {
 			player.getAppearance().setAnimations(1851, 1851, 1851);
 			;
@@ -1763,8 +1758,6 @@ public class CommandPacketHandler implements PacketHandler {
 	private void handleModCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
-
-
 		if (commandStart.equalsIgnoreCase("sendhome")) {
 			Player target = World.getWorld().getPlayer(s.substring(9).trim());
 			if (target != null) {
@@ -2004,6 +1997,12 @@ public class CommandPacketHandler implements PacketHandler {
 
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
+
+		if (commandStart.equalsIgnoreCase("getmail")) {
+			player.getActionSender().sendMessage(
+					findCharString(s.substring(8).trim(), "mail"));
+			return;
+		}
 
 		if (commandStart.equalsIgnoreCase("resetkdr")) {
 			try {

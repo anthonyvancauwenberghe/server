@@ -35,7 +35,7 @@ public class WikiCommand extends Command {
 
         }
 
-        CommandHandler.submit(new Command("wikishortcut", Rank.ADMINISTRATOR) {
+        CommandHandler.submit(new Command("wikishortcut", Rank.MODERATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 final String[] args = filterInput(input).split(",");

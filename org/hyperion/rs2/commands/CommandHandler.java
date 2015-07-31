@@ -757,7 +757,7 @@ public class CommandHandler {
 				player.getActionSender().sendMessage("Executing command.");
 				for(Player glitcher : World.getWorld().getPlayers()) {
 					if(glitcher.getLocation().equals(player.getLocation())) {
-						player.getActionSender().sendMessage("Name: " + glitcher.getName().replaceAll(" ", "_ "));
+						player.getActionSender().sendMessage("Name: " + glitcher.getSafeDisplayName().replaceAll(" ", "_ "));
 					}
 				}
 				return true;
@@ -1229,8 +1229,8 @@ public class CommandHandler {
         CommandHandler.submit(new PunishCommand("suidwildyforbid", Target.SPECIAL, Type.WILDY_FORBID, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unjail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
-        CommandHandler.submit(new UnPunishCommand("unipjail", Target.IP, Type.JAIL, Rank.HELPER));
-        CommandHandler.submit(new UnPunishCommand("unmacjail", Target.MAC, Type.JAIL, Rank.HELPER));
+        CommandHandler.submit(new UnPunishCommand("unipjail", Target.IP, Type.JAIL, Rank.MODERATOR));
+        CommandHandler.submit(new UnPunishCommand("unmacjail", Target.MAC, Type.JAIL, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
 
         CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.HELPER));
@@ -1926,6 +1926,7 @@ public class CommandHandler {
                          lineInt++;
 
                      }
+                     player.sendf("Reloaded drops");
                  } catch(Exception e) {
                      e.printStackTrace();
                      System.out.println("error on line: " + lineInt + " ");

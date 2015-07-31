@@ -21,7 +21,7 @@ public class PkShop extends PointsShop {
 			price = 10;
 		}
 		if(price <= 0) {
-			player.getActionSender().sendMessage("Cannot buy this item! Please contact a staff member about this issue!");
+            player.getActionSender().yellModMessage("@red@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
 			return;
 		}
 
@@ -30,8 +30,8 @@ public class PkShop extends PointsShop {
             return;
         }
 
-		String message = "The shop will buy a "
-				+ item.getDefinition().getProperName() + " for " + price + " pk points.";
+		String message = "The shop will buy a '@dre@"
+				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " PK points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}

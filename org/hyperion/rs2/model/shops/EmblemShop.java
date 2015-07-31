@@ -20,7 +20,7 @@ public class EmblemShop extends PointsShop{
     @Override
     public void buyFromShop(Player player, Item item) {
         super.buyFromShop(player, item);
-        player.getActionSender().sendString(3901, "Emblem Points: @red@" + player.getBountyHunter().getEmblemPoints());
+        player.getActionSender().sendString(3901, "Emblem points: @red@" + player.getBountyHunter().getEmblemPoints());
     }
 
 

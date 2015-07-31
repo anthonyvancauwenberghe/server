@@ -82,7 +82,7 @@ public abstract class Shop {
 	public Shop(int id, String name, Container container, boolean general) {
 		this.id = id;
 		this.container = container;
-		this.name = name;
+		this.name = name.replace("_", " ");
 		this.general = general;
 	}
 

@@ -44,7 +44,7 @@ public class CurrencyShop extends Shop {
 		if(coins == null) {
 			player.getActionSender().sendMessage(
 					"You don't have enough "
-							+ ItemDefinition.forId(currency).getName()
+							+ ItemDefinition.forId(currency).getName().toLowerCase()
 							+ " to buy this item.");
 			return;
 		}
@@ -63,7 +63,7 @@ public class CurrencyShop extends Shop {
 		} else {
 			player.getActionSender().sendMessage(
 					"You don't have enough "
-							+ ItemDefinition.forId(currency).getName()
+							+ ItemDefinition.forId(currency).getName().toLowerCase()
 							+ " to buy this item.");
 		}
 
@@ -72,9 +72,9 @@ public class CurrencyShop extends Shop {
 	@Override
 	public void valueBuyItem(Player player, Item item) {
 		int price = calculateUnitBuyPrice(item);
-		String message = "The shop will sell a "
-				+ item.getDefinition().getProperName() + " for " + price + " "
-				+ ItemDefinition.forId(currency).getName() + ".";
+		String message = "The shop will sell a '@dre@"
+				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " "
+				+ ItemDefinition.forId(currency).getName().toLowerCase() + ".";
 		player.getActionSender().sendMessage(message);
 
 	}
@@ -82,9 +82,9 @@ public class CurrencyShop extends Shop {
 	@Override
 	public void valueSellItem(Player player, Item item) {
 		int price = calculateUnitSellPrice(item);
-		String message = "The shop will buy a "
-				+ item.getDefinition().getProperName() + " for " + price + " "
-				+ ItemDefinition.forId(currency).getName() + ".";
+		String message = "The shop will buy a '@dre@"
+				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " "
+				+ ItemDefinition.forId(currency).getName().toLowerCase() + ".";
 		player.getActionSender().sendMessage(message);
 	}
 

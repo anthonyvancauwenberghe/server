@@ -217,7 +217,7 @@ public class ActionSender {
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome back to @dre@ArteroPK.", "Subscribe to the community channel: @blu@ http://j.mp/apkchannel#url#");
+            player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "", "@bla@Subscribe to the community channel: @blu@ http://j.mp/apkchannel#url#");
 
             passChangeShit();
 

@@ -47,6 +47,10 @@ public class PointsReward implements Reward{
 
     public void apply(final Player player){
         type.apply(player, amount);
-        player.sendf("You have been given %,d %s points", amount, type.toString().toLowerCase());
+        player.sendf("You have been given %,d %s points", amount, type);
+    }
+
+    public String toString(){
+        return String.format("PointsReward(type=%s,amount=%,d)", type, amount);
     }
 }

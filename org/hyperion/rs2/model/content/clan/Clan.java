@@ -7,7 +7,6 @@ import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -72,7 +71,7 @@ public class Clan {
 	public void setOwner(String owner) {
 		this.owner = owner;
 		for(Player p : players)
-			p.getActionSender().sendString(18140, "Owner: " + Misc.formatPlayerName(owner));
+			p.getActionSender().sendString(18140, "Owner: " + owner.toUpperCase());
 	}
 
 	public Clan(String owner, String name) {
@@ -92,7 +91,7 @@ public class Clan {
 	public boolean kick(String name, boolean ip) {
 		for(Player p : players) {
 			if(p.getName().equalsIgnoreCase(name)) {
-				p.getActionSender().sendClanMessage("You have been kicked.");
+				p.getActionSender().sendMessage("You have been kicked.");
 				ClanManager.leaveChat(p, true, false);
 				peopleKicked.add(p.getName());
                 if(ip)

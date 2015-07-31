@@ -4,7 +4,6 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
-import org.hyperion.util.Misc;
 
 /**
  * @author Arsen Maxyutov.
@@ -22,8 +21,7 @@ public class PkShop extends PointsShop {
 			price = 10;
 		}
 		if(price <= 0) {
-			player.getActionSender().sendMessage("Cannot buy this item.");
-            player.getActionSender().yellModMessage("@red@" + Misc.formatPlayerName(player.getName()) + " found a unbuyable item in a PK store.");
+			player.getActionSender().sendMessage("Cannot buy this item! Please contact a staff member about this issue!");
 			return;
 		}
 
@@ -32,8 +30,8 @@ public class PkShop extends PointsShop {
             return;
         }
 
-		String message = "The shop will buy a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " pk points.";
+		String message = "The shop will buy a "
+				+ item.getDefinition().getProperName() + " for " + price + " pk points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}
@@ -44,7 +42,7 @@ public class PkShop extends PointsShop {
 	@Override
 	public void sellToShop(Player player, Item item) {
         if(item.getId() == LEGENDARY_TICKET) {
-            player.sendImportantMessage("You cannot sell this back to the shop");
+            player.sendMessage("You cannot sell this back to the shop");
             return;
         }
 		int payment = this.getPrice(item.getId());

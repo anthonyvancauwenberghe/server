@@ -136,10 +136,17 @@ public class SpecialAttacks {
                 specialAccuracy = 1.3;
 				break;
 			case 861:
-				playerGfx = 249;
+				playerGfx = 256;
 				specialAnimation = 426;
 				specialDis = 9;
 				specialDrain = 55;
+				minimum = 10;
+				if(player.getEquipment()
+						.get(Equipment.SLOT_ARROWS).getId() == 892) {
+					maxDamg += maxDamg * 0.09;// 90% for rune
+					minimum += 5;
+					specialAccuracy = 2;
+				}
 				break;
 			case 3204:
 				playerGfx = 282;
@@ -910,7 +917,110 @@ public class SpecialAttacks {
 				break;**/
 			case 861:
 				// TODO
+				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getLocation().disabledRange())
+					return false;
+				// ContentEntity.startAnimation(combatEntity.getPlayer(), 426);
+				if(currentdistance <= 1) {
+					clientSpeed = 55;
+				} else if(currentdistance <= 3) {
+					clientSpeed = 55;
+				} else if(currentdistance <= 8) {
+					clientSpeed = 65;
+				} else {
+					clientSpeed = 75;
+				}
+				showDelay = 45;
+				slope = 15;
+				clientSpeed += 30;
+				deltaBonus2 = -5;
+				deltaBonus3 = -5;
+				if(player.getCombat().getOpponent() != null && player.getCombat().getOpponent().getEntity() instanceof Player) {
+					deltaBonus2 = CombatAssistant.calculateRangeAttack(player) -
+							CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer());
+					deltaBonus3 = CombatAssistant.calculateRangeAttack(player) -
+							CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer());
+					player.debugMessage("ur range atk is: "+CombatAssistant.calculateRangeAttack(player));
+					player.debugMessage("opp range def is: "+CombatAssistant.calculateRangeDefence(player.getCombat().getOpponent().getPlayer()));
+				}
 
+				toAddFirst = Misc.random(deltaBonus2 / 3);
+				toAddSecond = Misc.random(deltaBonus3 / 3);
+				offsetY = ((player.cE.getAbsX()) - player.cE
+						.getOpponent().getAbsX()) * - 1;
+				offsetX = ((player.cE.getAbsY()) - player.cE
+						.getOpponent().getAbsY()) * - 1;
+				hitId = player.cE.getSlotId(player);
+				// attacker.playProjectile(Projectile.create(attacker.getLocation(),
+				// victim.getCentreLocation(),
+				// attacker.getEquipment().get(Equipment.SLOT_ARROWS).getId() ==
+				// 11212 ? 1099 : 1101, showDelay, 50, clientSpeed - 10, 41, 31,
+				// victim.getProjectileLockonIndex(), 3, 36));
+				// attacker.playProjectile(Projectile.create(attacker.getLocation(),
+				// victim.getCentreLocation(),
+				// attacker.getEquipment().get(Equipment.SLOT_ARROWS).getId() ==
+				// 11212 ? 1099 : 1101, showDelay, 50, clientSpeed + 10, 46, 36,
+				// victim.getProjectileLockonIndex(), slope + 6, 36));
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed - 10,
+								256, 46, 31, hitId, 3);
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed + 10,
+								256, 46, 36, hitId, slope + 6);
+				damg4 = Combat.random(maxDamg);
+				damg8 = Combat.random(maxDamg);
+				damg4 = damg4 + toAddFirst;
+				damg8 = damg8 + toAddSecond;
+				if(damg4 <= minimum)
+					damg4 = minimum;
+				if(damg4 > maxDamg)
+					damg4 = maxDamg;
+				if(damg8 <= minimum)
+					damg8 = minimum;
+				if(damg8 > maxDamg)
+					damg8 = maxDamg;
+				damg4 = SpiritShields.applyEffects(player.cE.getOpponent(), damg4);
+				damg8 = SpiritShields.applyEffects(player.cE.getOpponent(), damg8);
+				if(oldEntity.getEntity() instanceof Player) {
+					damg4 = oldEntity.getPlayer().getInflictDamage(damg4, player, false, combatStyle);
+					damg8 = oldEntity.getPlayer().getInflictDamage(damg8, player, false, combatStyle);
+				}
+				Combat.addXP(player, damg4, true);
+				Combat.addXP(player, damg8, true);
+				final int hit1t = damg4;
+				final int hit2t = damg8;
+				final CombatEntity entityt =player.cE.getOpponent();
+				if(entityt != null) {
+					World.getWorld().submit(new Event(200 * distance + 300, "combat") {
+						public void execute() {
+							entityt.hit(hit1t, player, false, 1);
+							entityt.hit(hit2t, player, false, 1);
+							if(entityt.getEntity() instanceof Player)
+								Magic.vengeance(oldEntity.getPlayer(),
+										player.cE, hit1t);
+							this.stop();
+						}
+					});
+
+					entityt
+							.getEntity()
+							.playGraphics(
+									Graphic.create(player
+													.getEquipment().get(Equipment.SLOT_ARROWS)
+													.getId() == 11212 ? 1100 : 1103,
+											6553600 + clientSpeed));
+				}
 				break;
 		}
 

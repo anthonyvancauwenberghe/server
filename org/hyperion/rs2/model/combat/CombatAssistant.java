@@ -5,13 +5,16 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.EquipmentStats;
+import org.hyperion.rs2.model.Graphic;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.misc.PrayerIcon;
 import org.hyperion.rs2.model.content.skill.Prayer;
 
 
@@ -1099,7 +1102,8 @@ public class CombatAssistant {
 					specialBonus = 1.3;
 					break;
 				case 861:
-					specialBonus = 1.1;
+					specialBonus = 1.3;
+					break;
 				case 11235:
 				case 15701:
 				case 15702:

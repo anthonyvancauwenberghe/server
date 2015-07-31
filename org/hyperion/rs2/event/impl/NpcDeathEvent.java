@@ -1,9 +1,23 @@
 package org.hyperion.rs2.event.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.GlobalItem;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.NPCManager;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.attack.TormentedDemon;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.Bork;
@@ -11,13 +25,8 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
-import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.model.shops.PvMStore;
 import org.hyperion.util.Misc;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
@@ -314,7 +323,7 @@ public class NpcDeathEvent extends Event {
     public static Optional<NPCKillReward> getReward(final int id) {
         switch(id) {
             case 8133:
-                return Optional.of(new NPCKillReward(50, 500, 10));
+                return Optional.of(new NPCKillReward(10, 200, 10));
             case 8596:
                 return Optional.of(new NPCKillReward(40, 300, 8));
             case 50:

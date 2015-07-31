@@ -18,8 +18,12 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.bank.BankField;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -34,7 +38,11 @@ import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
-import org.hyperion.rs2.model.content.misc.*;
+import org.hyperion.rs2.model.content.misc.ItemDropping;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.content.misc.Mail;
+import org.hyperion.rs2.model.content.misc.SkillingData;
+import org.hyperion.rs2.model.content.misc.TriviaSettings;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
@@ -45,6 +53,7 @@ import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungoneeringHolder;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
+//import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.content.ticket.TicketHolder;
 import org.hyperion.rs2.model.ge.GrandExchangeTracker;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -71,8 +80,6 @@ import org.hyperion.util.Time;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
-//import org.hyperion.rs2.model.itf.InterfaceManager;
 
 /**
  * Represents a player-controller character.
@@ -2165,8 +2172,9 @@ public class Player extends Entity implements Persistable, Cloneable{
     }
 
 	public String getPlayersNameInClan() {
+		//System.out.println("Clanranker is " + clanRank);
         if(isClanMainOwner())
-                return "[Owner] " + getDisplay();
+                return "[@yel@Owner@whi@]"+getDisplay();
         return getClanRankName() + getDisplay();
 	}
 
@@ -2191,20 +2199,21 @@ public class Player extends Entity implements Persistable, Cloneable{
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "Owner";
+                rank = "@yel@Owner@whi@";
                 break;
             case 6:
-                rank = "Mod";
+                rank = "@blu@Mod@whi@";
                 break;
             case 7:
-                rank = "Admin";
+                rank = "@red@Admin@whi@";
                 break;
         }
-        return "[" + rank + "] ";
+        return "[" + rank + "]";
     }
 
 	public void setClanRank(int r) {
 		clanRank = r;
+		//getActionSender().sendMessage("Your clanRank is now : " + clanRank);
 	}
 
 	private String clanName = "";
@@ -2325,7 +2334,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		switch(killStreak) {
 			case 5:
 				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " is on a "
-						+ killStreak + " killstreak!");
+						+ killStreak + " killStreak!");
 				break;
 			case 7:
 				ActionSender.yellMessage("@blu@" + getSafeDisplayName()
@@ -2406,18 +2415,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public void increaseKillCount() {
 		killCount++;
-		getQuestTab().sendKills();
-		getQuestTab().sendKdr();
-		getQuestTab().sendPvpRating();
+		getQuestTab().sendElo();
+		getQuestTab().sendKDR();
 	}
-
+	
 	public ActionSender sendMessage(Object... message) {
 		for(Object o : message) {
 			actionSender.sendMessage(o.toString());
 		}
 		return getActionSender();
 	}
-
+	
 	public ActionSender sendf(String message, Object... args) {
 		try {
 			actionSender.sendMessage(String.format(message, args));
@@ -2426,33 +2434,11 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		return getActionSender();
 	}
-
-	public ActionSender sendServerMessage(Object... message) {
-		for(Object o : message) {
-			actionSender.sendMessage("@59f654@[SERVER] " + o.toString());
-		}
-		return getActionSender();
-	}
-
-	public ActionSender sendCommandMessage(Object... message) {
-		for(Object o : message) {
-			actionSender.sendMessage("@d7faeb@" + o.toString());
-		}
-		return getActionSender();
-	}
-
-	public ActionSender sendImportantMessage(Object... message) {
-		for(Object o : message) {
-			actionSender.sendMessage("@db2222@" + o.toString());
-		}
-		return getActionSender();
-	}
 	
 	public void increaseDeathCount() {
 		deathCount++;
-		getQuestTab().sendDeaths();
-		getQuestTab().sendKdr();
-		getQuestTab().sendPvpRating();
+		getQuestTab().sendElo();
+		getQuestTab().sendKDR();
 	}
 
 	public void setKillCount(int kc) {

@@ -26,7 +26,7 @@ public class DemoteCommand extends Command {
 					continue;
 				beingDemoted.setPlayerRank(Rank.removeAbility(beingDemoted, rank));
 			}
-            beingDemoted.getQuestTab().sendRank();
+            beingDemoted.getQuestTab().sendRankInfo();
 
             player.getActionSender().sendMessage(beingDemoted.getName()+" is demoted. current abilities:");
             for(Rank rank : Rank.values()) {

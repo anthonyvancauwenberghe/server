@@ -5,22 +5,22 @@ import org.hyperion.rs2.model.Player;
 
 public class ItemReward implements Reward{
 
-    private final int id;
-    private final int amount;
+    private final int itemId;
+    private final int quantity;
     private final boolean preferInventory;
 
-    public ItemReward(final int id, final int amount, final boolean preferInventory){
-        this.id = id;
-        this.amount = amount;
+    public ItemReward(final int itemId, final int quantity, final boolean preferInventory){
+        this.itemId = itemId;
+        this.quantity = quantity;
         this.preferInventory = preferInventory;
     }
 
-    public int getId(){
-        return id;
+    public int getItemId(){
+        return itemId;
     }
 
-    public int getAmount(){
-        return amount;
+    public int getQuantity(){
+        return quantity;
     }
 
     public boolean isPreferInventory(){
@@ -28,7 +28,7 @@ public class ItemReward implements Reward{
     }
 
     public Item getItem(){
-        return Item.create(id, amount);
+        return Item.create(itemId, quantity);
     }
 
     public void apply(final Player player){
@@ -40,5 +40,9 @@ public class ItemReward implements Reward{
             player.getBank().add(item);
             player.sendf("%s (x%,d) has been added to your bank!", item.getDefinition().getName(), item.getCount());
         }
+    }
+
+    public String toString(){
+        return String.format("ItemReward(itemId=%d,quantity=%,d)", itemId, quantity);
     }
 }

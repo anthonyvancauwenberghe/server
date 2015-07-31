@@ -596,6 +596,10 @@ public class EquipmentReq {
 				equipReqData[4] = 61;
 				break;
 
+            case 6603:
+                equipReqData[0] = 99;
+                return equipReqData;
+
 			case 4151:
 				equipReqData[0] = 70;
 				return equipReqData;

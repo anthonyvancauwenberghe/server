@@ -5,12 +5,11 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
 
 import java.util.LinkedList;
 
 public class YellCommand extends Command {
-	
+
 	private static enum YellRanks {
 		NEWBIE(0),
 		NOVICE(10),
@@ -28,25 +27,25 @@ public class YellCommand extends Command {
 		REAPER(4000),
 		OVERLORD(6000),
 		GOD(10000);
-		
+
 		private YellRanks(final int minimum) {
 			this.minimum = minimum;
 			this.title = TextUtils.titleCase(super.toString().replaceAll("_", ""));
 		}
-		
+
 		private final int minimum;
 		private final String title;
-		
+
 		public final String toString() {
 			return title;
 		}
 	}
 
 	public static final int NORMAL_YELL_DELAY = 150000;
-	public static final int DONATOR_YELL_DELAY = 100000;
-    public static final int SUPER_YELL_DELAY = 60000;
+	public static final int DONATOR_YELL_DELAY = 120000;
+	public static final int SUPER_YELL_DELAY = 7000;
 	public static final int SKILLER_YELL_DELAY = 90000;
-	
+
 	public static int minYellRank = 0;
 
 	public static final int MAX_SAME_PERSON_YELLS = 3;
@@ -56,12 +55,12 @@ public class YellCommand extends Command {
 	public YellCommand() {
 		super("yell", Rank.PLAYER);
 	}
-	
+
 	private int getYellDelay(Player player) {
-        if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
-            return SUPER_YELL_DELAY;
-        else if (Rank.hasAbility(player, Rank.DONATOR))
-            return DONATOR_YELL_DELAY;
+		if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
+			return SUPER_YELL_DELAY;
+		else if (Rank.hasAbility(player, Rank.DONATOR))
+			return DONATOR_YELL_DELAY;
 		int timer = 60000;
 		int deltaElo = player.getPoints().getEloRating() - 1200;
 		if(deltaElo <= 0)
@@ -72,15 +71,15 @@ public class YellCommand extends Command {
 		timer -= reduction;
 		return NORMAL_YELL_DELAY + timer;
 	}
-	
+
 	@Override
 	public boolean execute(Player player, String input) {
 		if(Rank.getPrimaryRank(player).ordinal() < minYellRank) {
-			player.sendCommandMessage("An administrator has set the minimum yell rank higher temporarily");
+			player.getActionSender().sendMessage("An administrator has set the minimum yell rank higher temporarily");
 			return false;
 		}
 		if(player.isMuted || player.yellMuted) {
-			player.sendCommandMessage("Muted players cannot use the yell command.");
+			player.getActionSender().sendMessage("Muted players cannot use the yell command.");
 			return false;
 		}
 
@@ -117,29 +116,29 @@ public class YellCommand extends Command {
 					return false;
 				}
 				player.getYelling().updateYellTimer();
-                player.getPermExtraData().put("yelltimur", player.getYelling().getYellTimer());
+				player.getPermExtraData().put("yelltimur", player.getYelling().getYellTimer());
 			} else {
-               player.sendCommandMessage("You need at least 1,800 PvP rating peak, 1800 total level, or purchase donator to start yelling");
-               return false;
+				player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level, or purchase donator to start yelling");
+				return false;
 			}
 		}
-
 		final String colors = Rank.getPrimaryRank(player).getYellColor();
 		final boolean hasTag = !player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player);
 		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
-		final String suffix = (player.hardMode() ? colors + "[" + tag + "]@bla@" : "[" + colors + tag + "@bla@]") + " " + Misc.formatPlayerName(player.getName()) + (Rank.getPrimaryRank(player).equals(Rank.OWNER) ? ":@whi@ " : ":@bla@ ");
+		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: ";
 		input = input.replaceFirst("yell ", "");
-		input = input.substring(0, 1).toUpperCase() + input.substring(1);
-
+		/**
+		 * {@link org.hyperion.rs2.util.PushMessage}
+		 */
 		PushMessage.pushYell(suffix, input, player);
-
+		//Makes sure one player can't yell 10 messages in a row.
 		lastYells.add(player);
 		if(lastYells.size() > 3) {
 			lastYells.poll();
 		}
 		return true;
 	}
-	
+
 	public static String getTitle(final Player player) {
 		final int kills = player.getKillCount();
 		final YellRanks ranks[] = YellRanks.values();
@@ -149,7 +148,7 @@ public class YellCommand extends Command {
 		}
 		return "Newbie";
 	}
-	
+
 	public static void main(String args[]) {
 		System.out.println(Rank.SUPER_DONATOR.toString()+"hello");
 	}

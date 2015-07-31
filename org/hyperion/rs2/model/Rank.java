@@ -38,14 +38,14 @@ public enum Rank {
 	}
 
 	public String getYellColor() {
-        if(this == HELPER)
-            return "@b71499@";
-        if(this == COMMUNITY_MANAGER || this == HEAD_MODERATOR)
-            return "@00cccc@";
-        if(this == SUPER_DONATOR)
-            //return "@5Fe85A@";
-            return "@gre@";
-        return yellColor;
+		if(this == HELPER)
+			return "@b71499@";
+		if(this == COMMUNITY_MANAGER || this == HEAD_MODERATOR)
+			return "@00cccc@";
+		if(this == SUPER_DONATOR)
+			//return "@5Fe85A@";
+			return "@gre@";
+		return yellColor;
 	}
 
 	@Override

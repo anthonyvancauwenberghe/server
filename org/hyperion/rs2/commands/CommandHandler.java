@@ -638,6 +638,13 @@ public class CommandHandler {
 				return true;
 			}
 		});
+        submit(new Command("support", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) {
+                player.getActionSender().sendMessage("l4unchur13 http://support.arteropk.com/helpdesk/");
+                return true;
+            }
+        });
 		submit(new Command("noskiller", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {

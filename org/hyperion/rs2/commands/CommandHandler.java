@@ -540,6 +540,61 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+        submit(new Command("moderns", Rank.SUPER_DONATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                    player.getSpellBook().changeSpellBook(SpellBook.REGULAR_SPELLBOOK);
+                    player.getActionSender().sendSidebarInterface(6, 1151);
+                } else {
+                    player.getActionSender().sendMessage("You cannot do this at this time!");
+                }
+                return true;
+            }
+        });
+        submit(new Command("ancients", Rank.SUPER_DONATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                    player.getSpellBook().changeSpellBook(SpellBook.ANCIENT_SPELLBOOK);
+                    player.getActionSender().sendSidebarInterface(6, 12855);
+                } else {
+                    player.getActionSender().sendMessage("You cannot do this at this time!");
+                }
+                return true;
+            }
+        });
+        submit(new Command("lunars", Rank.SUPER_DONATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                    player.getSpellBook().changeSpellBook(SpellBook.LUNAR_SPELLBOOK);
+                    player.getActionSender().sendSidebarInterface(6, 29999);
+                } else {
+                    player.getActionSender().sendMessage("You cannot do this at this time!");
+                }
+                return true;
+            }
+        });
+
+        submit(new Command("switchprayers", Rank.SUPER_DONATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                    player.getPrayers().setPrayerbook(!player.getPrayers().isDefaultPrayerbook());
+                    if(!player.getPrayers().isDefaultPrayerbook()) {
+                        player.getActionSender().sendSidebarInterface(5, 22500);
+                    } else {
+                        player.getActionSender().sendSidebarInterface(5, 5608);
+                    }
+                } else {
+                    player.getActionSender().sendMessage("You cannot do this at this time!");
+                }
+                return true;
+            }
+        });
+
 		submit(new Command("update", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {

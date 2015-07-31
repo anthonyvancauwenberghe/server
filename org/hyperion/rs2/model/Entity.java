@@ -28,10 +28,7 @@ public abstract class Entity {
 	public static Location getDefaultLocation(String type) {
 		if(type.toLowerCase().contains("npc"))
 			return Location.create(0, 0, 0);
-		if(World.getWorld().getPlayers().size() > 200)
-			return Location.create(3093 + Combat.random(1), 3476 + Combat.random(2), 0);
-		else
-			return Location.create(3085 + Combat.random(1), 3496 + Combat.random(2), 0);
+		return Location.create(3093 + Combat.random(1), 3476 + Combat.random(2), 0);
 	}
 
 	/**

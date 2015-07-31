@@ -2418,10 +2418,24 @@ public class Player extends Entity implements Persistable, Cloneable{
 		getQuestTab().sendElo();
 		getQuestTab().sendKDR();
 	}
-	
+
 	public ActionSender sendMessage(Object... message) {
 		for(Object o : message) {
 			actionSender.sendMessage(o.toString());
+		}
+		return getActionSender();
+	}
+
+	public ActionSender sendServerMessage(Object... message) {
+		for(Object o : message) {
+			actionSender.sendMessage("@whi@[SERVER] " + o.toString());
+		}
+		return getActionSender();
+	}
+
+	public ActionSender sendImportantMessage(Object... message) {
+		for(Object o : message) {
+			actionSender.sendMessage("@red@[IMPORTANT] " + o.toString());
 		}
 		return getActionSender();
 	}

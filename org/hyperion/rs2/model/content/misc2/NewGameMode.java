@@ -128,7 +128,7 @@ public class NewGameMode implements ContentTemplate {
         switch(dialogueId) {
             case 10000:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Begin Tutorial. You will receive vesta (deg) upon completion", "Skip Tutorial. (WARNING: You will not receive the tutorial reward)");
+                        "@blu@Begin tutorial:@bla@ You will receive a '@dre@Vesta (deg)@bla@' set upon completion.", "@blu@Skip tutorial:@bla@ You will not receive the tutorial reward.");
                 player.getInterfaceState().setNextDialogueId(0, 10002);
                 player.getInterfaceState().setNextDialogueId(1, 10003);
                 return true;
@@ -146,7 +146,7 @@ public class NewGameMode implements ContentTemplate {
                     }
                 }
                 player.getInventory().add(Item.create(1856));
-                player.sendMessage("A starter has been added to your bank!");
+                player.sendImportantMessage("A starter has been added to your bank!");
                 player.sendMessage("l4unchur13 " + NORMAL_GAME_GUIDE);
                 player.getActionSender().removeChatboxInterface();
                 player.setTutorialProgress(8);
@@ -161,7 +161,7 @@ public class NewGameMode implements ContentTemplate {
                 return true;
             case 10003:
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "Normal Game Mode (highly reccomended)", "Hard Mode");
+                        "Normal mode (recommended)", "Hard mode");
                 player.getInterfaceState().setNextDialogueId(0, 10001);
                 player.getInterfaceState().setNextDialogueId(1, 10004);
                 return true;
@@ -177,7 +177,7 @@ public class NewGameMode implements ContentTemplate {
                 }
                 player.setGameMode(1);
                 player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
-                player.sendMessage("@red@Welcome to the hard game mode", "@red@Check your bank for starter items");
+                player.sendImportantMessage("Welcome to Hard Mode", "Check your bank for starter items");
                 player.getActionSender().removeChatboxInterface();
                 player.setTutorialProgress(8);
                 Magic.teleport(player, Edgeville.LOCATION, true);

@@ -216,6 +216,9 @@ public class EquipmentReq {
 			case 13902:
 				equipReqData[0] = 78;
 				return equipReqData;
+            case 18353:
+                equipReqData[0] = 80;
+                return equipReqData;
 			case 18357:
 				equipReqData[4] = 80;
 				return equipReqData;
@@ -492,6 +495,7 @@ public class EquipmentReq {
 				equipReqData[1] = 42;
 				break;
 			case 16425:
+                equipReqData[0] = 99;
 				equipReqData[2] = 99;
 				break;
             case 10548:

@@ -2435,7 +2435,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public ActionSender sendImportantMessage(Object... message) {
 		for(Object o : message) {
-			actionSender.sendMessage("@red@[IMPORTANT] " + o.toString());
+			actionSender.sendMessage("@db2222@[IMPORTANT] " + o.toString());
 		}
 		return getActionSender();
 	}

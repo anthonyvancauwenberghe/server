@@ -170,7 +170,7 @@ public class ServerMessages extends Event {
 			final String message = MESSAGES.get(currentIndex++);
 			for(Player p : World.getWorld().getPlayers())
 				if(p != null)
-					p.sendMessage("[@whi@Server Message@bla@]: "+message);
+					p.sendServerMessage(message);
 		}catch(final Exception e) {
 			e.printStackTrace();
 			this.stop();

@@ -206,20 +206,18 @@ public class ActionSender {
         }
         if(player.isNew()){
             player.getInventory().add(Item.create(15707));
-            Magic.teleport(player, Location.create(2795, 3321, 0), true);
-            sendMessage("@bla@Welcome To @red@Artero! @bla@Happy Playing!");
-            sendMessage("@bla@Questions? Visit @red@::forums@bla@ or do @red@::onlinestaff@bla@ and PM a staff member.");
-            sendMessage("@bla@Do not forget to @red@::vote@bla@ and @red@::donate@bla@ to keep the server alive!");
-            sendMessage("");
-            sendMessage("@red@10X @blu@decaying PKP BOOST active for the first 100 minutes of gameplay");
+			player.sendMessage("@bla@Welcome to @dre@ArteroPK.");
+			player.sendMessage("Questions? Visit @blu@::forums@bla@ or use the 'Request Help' button.");
+			player.sendMessage("Do not forget to @blu@::vote@bla@ and @blu@::donate@bla@ to keep the server alive.");
+			player.sendMessage("");
+            player.sendImportantMessage("10x decaying PK points boost active for the first 100 minutes!");
         }else{
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getInventory().add(Item.create(15707));
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome Back To @red@Artero! @bla@Happy Playing!", "@red@Subscribe to our Community Channel: @blu@ http://j.mp/apkchannel#url#"
-                    );
+            player.sendMessage("@bla@Welcome back to @dre@ArteroPK.", "Subscribe to the community channel: @blu@ http://j.mp/apkchannel#url#");
 
             passChangeShit();
 
@@ -232,19 +230,14 @@ public class ActionSender {
                 player.getAchievementsProgress().put(AchievementData.values()[i], 0);
             }
         }*/
-        sendMessage("       ");
-		//sendMessage("@blu@Welcome To " + Server.NAME + "!");
-		//sendMessage("@blu@Please Register On Our Forums: @whi@http://www.deviouspk.com/ipb #url#");
-        //sendMessage("@blu@FREE Donator Pts Surveys: @whi@http://deviouspk.com/surveys/?name="+  player.getName() +" #url#");
-        //sendMessage("Alert##We removed Divines and Special restores from the economy##Anyone with them was refunded their shop value!");
-		// sendMessage("@blu@Please register on our forums!");
-		//loadAnnouncements();
 		writeQuestTab();
 
 		player.getPoints().loginCheck();
 		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			String rank = Rank.getPrimaryRank(player).toString();
-			ActionSender.yellMessage("@blu@" + rank + " " + player.getName() + " has logged in. Feel free to ask him/her for help!");
+			for(Player p : World.getWorld().getPlayers())
+				if(p != null)
+					p.sendServerMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
 		}
 
 

@@ -28,7 +28,7 @@ public abstract class Entity {
 	public static Location getDefaultLocation(String type) {
 		if(type.toLowerCase().contains("npc"))
 			return Location.create(0, 0, 0);
-		return Location.create(3093 + Combat.random(1), 3476 + Combat.random(2), 0);
+		return Location.create(2795, 3321, 0);
 	}
 
 	/**

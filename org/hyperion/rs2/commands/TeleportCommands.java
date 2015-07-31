@@ -22,6 +22,7 @@ public class TeleportCommands {
         CommandHandler.submit(new Command("graves", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
+				player.sendf("@red@Graves teleports you to level 31 wildy!");
                 Magic.teleport(player, Location.create(2975, 3745, 0), false);
                 return true;
             }

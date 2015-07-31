@@ -11,12 +11,12 @@ public class Tutorial implements ContentTemplate {
 
     private static final String[] STEP_DESCRIPTION = {
             "Welcome to ArteroPK! Completing this tutorial gives you '@dre@Vesta (deg)@bla@', a very powerful armor on this server",
-            "To request for help, use the @blu@::reqhelp@bla@ command anytime.",
-            "To look up the rules, use the @blu@::rules@bla@ command.",
-            "Use the @blu@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
+            "To request for help, use the @whi@::reqhelp@bla@ command anytime.",
+            "To look up the rules, use the @whi@::rules@bla@ command.",
+            "Use the @whi@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
             "Teleport home in order to complete the tutorial",
-            "Use the @blu@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
-            "Use the @blu@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
+            "Use the @whi@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
+            "Use the @whi@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
             "You have completed the tutorial!",
             "You chose to skip the tutorial..."
     };
@@ -48,7 +48,7 @@ public class Tutorial implements ContentTemplate {
         player.getInventory().add(new Item(15273, 100));
         player.getInventory().add(new Item(13889, 1));
         player.getInventory().add(new Item(13895, 1));
-        player.getActionSender().sendMessage("The Vesta gear has a 20% chance of being destroyed on death!");
+        player.sendImportantMessage("The Vesta gear has a 20% chance of being destroyed on death!");
     }
 
     @Override
@@ -73,14 +73,14 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2101:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "First, if you ever need any help, use the @blu@::reqhelp", "command to alert a moderator. Be sure to add a reason!");
+                        "First, if you ever need any help, use the @whi@::reqhelp", "command to alert a moderator. Be sure to add a reason!");
                 player.getInterfaceState().setNextDialogueId(0, 2102);
                 return true;
             case 2102:
                 player.getActionSender().sendMessage(STEP_DESCRIPTION[player.getTutorialProgress()]);
                 player.setTutorialProgress(2);
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Use the @blu@::rules@bla@ command to learn the what", "you prohibited of doing on this server!");
+                        "Use the @whi@::rules@bla@ command to learn the what", "you prohibited of doing on this server!");
                 player.getInterfaceState().setNextDialogueId(0, 2103);
                 return true;
             case 2103:
@@ -95,7 +95,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2105:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "You can find guides on our forums. Just go to", "@blu@www.arteropk.com");
+                        "You can find guides on our forums. Just go to", "@whi@www.arteropk.com");
                 player.setTutorialProgress(3);
                 player.getInterfaceState().setNextDialogueId(0, 2106);
                 return true;
@@ -106,11 +106,11 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2107:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Click on your ring to @blu@teleport to the lobby@bla@ now.", "You will be teleported to the team dungeoneering lobby.");
+                        "Click on your ring to @whi@teleport to the lobby@bla@ now.", "You will be teleported to the team dungeoneering lobby.");
                 player.getInterfaceState().setNextDialogueId(0, 2108);
                 return true;
             case 2108:
-                player.getActionSender().sendMessage("Click your '@dre@Ring of Kinship@bla@' and then use @blu@::tutorial@bla@ to continue.");
+                player.getActionSender().sendMessage("Click your '@dre@Ring of Kinship@bla@' and then use @whi@::tutorial@bla@ to continue.");
                 player.getActionSender().removeChatboxInterface();
                 return true;
             case 2109:
@@ -131,7 +131,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2112:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the home of ArteroPK, all the shops are here.", "You can use the @blu@::home@bla@ command to teleport here in the future.");
+                        "This is the home of ArteroPK, all the shops are here.", "You can use the @whi@::home@bla@ command to teleport here.");
                 player.getInterfaceState().setNextDialogueId(0, 2113);
                 return true;
             case 2113:
@@ -141,7 +141,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2114:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the mage bank, you can get here by doing the", "@blu@::mb @bla@command. It is a popular PKing spot,", "just click on the lever and you are good to go.");
+                        "This is the mage bank, you can get here by doing the", "@whi@::mb @bla@command. It is a popular PKing spot,", "just click on the lever and you are good to go.");
                 player.getInterfaceState().setNextDialogueId(0, 2115);
                 return true;
             case 2115:
@@ -166,7 +166,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2119:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "You can donate by typing @blu@::donate@bla@ in the chatbox.", "This is where you can PvM for really good gear. ", "Now we'll take you to the other donator zone for skilling!");
+                        "You can donate by typing @whi@::donate@bla@ in the chatbox.", "This is where you can PvM for really good gear. ", "Now we'll take you to the other donator zone for skilling!");
                 player.getInterfaceState().setNextDialogueId(0, 2120);
                 return true;
             case 2120:
@@ -191,7 +191,7 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2124:
                 player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "If you have any other questions, use the @blu@::reqhelp@bla@ command", "and remember to have fun!");
+                        "If you have any other questions, use the @whi@::reqhelp@bla@ command", "and remember to have fun!");
                 player.getInterfaceState().setNextDialogueId(0, 2125);
                 return true;
             case 2125:

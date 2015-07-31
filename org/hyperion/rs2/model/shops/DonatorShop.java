@@ -135,7 +135,7 @@ public class DonatorShop extends Shop {
 			return;
 		}
 		String message = "The shop will sell a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " donator points.";
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " donator points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}
@@ -158,7 +158,7 @@ public class DonatorShop extends Shop {
 		}
 		price *= RESELL_RATE;
 		String message = "The shop will buy a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " donator points.";
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " donator points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}

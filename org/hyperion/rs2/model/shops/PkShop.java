@@ -31,7 +31,7 @@ public class PkShop extends PointsShop {
         }
 
 		String message = "The shop will buy a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " PK points.";
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " PK points.";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}

@@ -73,7 +73,7 @@ public class CurrencyShop extends Shop {
 	public void valueBuyItem(Player player, Item item) {
 		int price = calculateUnitBuyPrice(item);
 		String message = "The shop will sell a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " "
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " "
 				+ ItemDefinition.forId(currency).getName().toLowerCase() + ".";
 		player.getActionSender().sendMessage(message);
 
@@ -83,7 +83,7 @@ public class CurrencyShop extends Shop {
 	public void valueSellItem(Player player, Item item) {
 		int price = calculateUnitSellPrice(item);
 		String message = "The shop will buy a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " "
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " "
 				+ ItemDefinition.forId(currency).getName().toLowerCase() + ".";
 		player.getActionSender().sendMessage(message);
 	}

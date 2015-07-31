@@ -39,7 +39,7 @@ public abstract class PointsShop extends Shop {
 		int price = getPrice(item.getId());
 
 		String message = "The shop will sell a '@dre@"
-				+ item.getDefinition().getProperName().toLowerCase() + "@bla@' for " + price + " " + getPointsName().toLowerCase() + ".";
+				+ item.getDefinition().getProperName() + "@bla@' for " + price + " " + getPointsName().toLowerCase() + ".";
 		if(price == 1) {
 			message = message.replace("points", "point");
 		}

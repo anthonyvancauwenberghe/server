@@ -2174,7 +2174,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
         if(isClanMainOwner())
-                return "[@yel@Owner@whi@]"+getDisplay();
+                return "[Owner] " + getDisplay();
         return getClanRankName() + getDisplay();
 	}
 
@@ -2185,35 +2185,34 @@ public class Player extends Entity implements Persistable, Cloneable{
                 return "";
             case 1:
                 rank = "Recruit";
-                if(Dicing.diceClans.contains(clanName)) rank = "@cya@100K max@whi@";
+                if(Dicing.diceClans.contains(clanName)) rank = "100K max";
                 break;
             case 2:
                 rank = "Corporal";
-                if(Dicing.diceClans.contains(clanName)) rank = "@gre@500K max@whi@";
+                if(Dicing.diceClans.contains(clanName)) rank = "500K max";
                 break;
             case 3:
                 rank = "Sergeant";
-                if(Dicing.diceClans.contains(clanName)) rank = "@or2@Unlimited@whi@";
+                if(Dicing.diceClans.contains(clanName)) rank = "Unlimited";
                 break;
             case 4:
                 rank = "Lieutenant";
                 break;
             case 5:
-                rank = "@yel@Owner@whi@";
+                rank = "Owner";
                 break;
             case 6:
-                rank = "@blu@Mod@whi@";
+                rank = "Mod";
                 break;
             case 7:
-                rank = "@red@Admin@whi@";
+                rank = "Admin";
                 break;
         }
-        return "[" + rank + "]";
+        return "[" + rank + "] ";
     }
 
 	public void setClanRank(int r) {
 		clanRank = r;
-		//getActionSender().sendMessage("Your clanRank is now : " + clanRank);
 	}
 
 	private String clanName = "";
@@ -2433,9 +2432,16 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return getActionSender();
 	}
 
+	public ActionSender sendClanMessage(Object... message) {
+		for(Object o : message) {
+			actionSender.sendMessage("@dre@" + o.toString());
+		}
+		return getActionSender();
+	}
+
 	public ActionSender sendImportantMessage(Object... message) {
 		for(Object o : message) {
-			actionSender.sendMessage("@db2222@[IMPORTANT] " + o.toString());
+			actionSender.sendMessage("@dre@[IMPORTANT] " + o.toString());
 		}
 		return getActionSender();
 	}

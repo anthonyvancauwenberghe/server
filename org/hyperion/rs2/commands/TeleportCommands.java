@@ -1,6 +1,7 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.rs2.event.impl.RandomTeleportEvent;
+import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -22,8 +23,7 @@ public class TeleportCommands {
         CommandHandler.submit(new Command("graves", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-				player.sendf("@red@Graves teleports you to level 31 wildy!");
-                Magic.teleport(player, Location.create(2975, 3745, 0), false);
+				DialogueManager.openDialogue(player, 194);
                 return true;
             }
         });

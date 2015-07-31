@@ -7,20 +7,20 @@ import org.hyperion.rs2.util.TextUtils;
  */
 public enum Rank {
 
-	PLAYER("@0x0@"), // 0
-	HERO("@blu@"), // 1
-	LEGEND("@blu@"), // 2
-	VETERAN("@FF9000@"), // 3
+	PLAYER("@bla@"), // 0
+	HERO("@bla@"), // 1
+	LEGEND("@bla@"), // 2
+	VETERAN("@ffb226@"), // 3
 	DONATOR("@red@"), // 4
-	SUPER_DONATOR("@66ff33@"), // 5
-	GRAPHICS_DESIGNER("@0x0@"), // 6
-	EVENT_MANAGER("@ff0099@"), // 7
-	HELPER("@663300@"), // 8
-	FORUM_MODERATOR("@007700@"), // 9
-	MODERATOR("@007700@"), // 10
-	GLOBAL_MODERATOR("@007700@"), // 11
-	COMMUNITY_MANAGER("@cya@"), // 12
-	HEAD_MODERATOR("@003300@"), // 13
+	SUPER_DONATOR("@008000@"), // 5
+	GRAPHICS_DESIGNER("@bla@"), // 6
+	EVENT_MANAGER("@bla@"), // 7
+	HELPER("@a14eaa@"), // 8
+	FORUM_MODERATOR("@blu@"), // 9
+	MODERATOR("@blu@"), // 10
+	GLOBAL_MODERATOR("@blu@"), // 11
+	COMMUNITY_MANAGER("@blu@"), // 12
+	HEAD_MODERATOR("@blu@"), // 13
 	ADMINISTRATOR("@dbl@"), // 14
 	DEVELOPER("@6F0095@"), // 15
 	OWNER("@FFFFFF@"); // 16
@@ -39,9 +39,9 @@ public enum Rank {
 
 	public String getYellColor() {
         if(this == HELPER)
-            return "@e519c0@";
-        if(this == COMMUNITY_MANAGER)
-            return "@cya@";
+            return "@b71499@";
+        if(this == COMMUNITY_MANAGER || this == HEAD_MODERATOR)
+            return "@00cccc@";
         if(this == SUPER_DONATOR)
             //return "@5Fe85A@";
             return "@gre@";

@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
 
 import java.util.LinkedList;
 
@@ -75,11 +76,11 @@ public class YellCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
 		if(Rank.getPrimaryRank(player).ordinal() < minYellRank) {
-			player.getActionSender().sendMessage("An administrator has set the minimum yell rank higher temporarily");
+			player.sendCommandMessage("An administrator has set the minimum yell rank higher temporarily");
 			return false;
 		}
 		if(player.isMuted || player.yellMuted) {
-			player.getActionSender().sendMessage("Muted players cannot use the yell command.");
+			player.sendCommandMessage("Muted players cannot use the yell command.");
 			return false;
 		}
 
@@ -118,20 +119,20 @@ public class YellCommand extends Command {
 				player.getYelling().updateYellTimer();
                 player.getPermExtraData().put("yelltimur", player.getYelling().getYellTimer());
 			} else {
-               player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level, or purchase donator to start yelling");
+               player.sendCommandMessage("You need at least 1,800 PvP rating peak, 1800 total level, or purchase donator to start yelling");
                return false;
 			}
 		}
+
 		final String colors = Rank.getPrimaryRank(player).getYellColor();
 		final boolean hasTag = !player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player);
 		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
-		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@]" +player.getSafeDisplayName() + "@bla@: ";
+		final String suffix = (player.hardMode() ? colors + "[" + tag + "]@bla@" : "[" + colors + tag + "@bla@]") + " " + Misc.formatPlayerName(player.getName()) + (Rank.getPrimaryRank(player).equals(Rank.OWNER) ? ":@whi@ " : ":@bla@ ");
 		input = input.replaceFirst("yell ", "");
-		/**
-		 * {@link org.hyperion.rs2.util.PushMessage}
-		 */
+		input = input.substring(0, 1).toUpperCase() + input.substring(1);
+
 		PushMessage.pushYell(suffix, input, player);
-		//Makes sure one player can't yell 10 messages in a row.
+
 		lastYells.add(player);
 		if(lastYells.size() > 3) {
 			lastYells.poll();

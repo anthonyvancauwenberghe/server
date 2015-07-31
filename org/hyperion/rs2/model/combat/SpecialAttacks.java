@@ -978,6 +978,15 @@ public class SpecialAttacks {
 								50,
 								clientSpeed + 10,
 								256, 46, 36, hitId, slope + 6);
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed + 10,
+								256, 46, 36, hitId, slope + 6);
 				damg4 = Combat.random(maxDamg);
 				damg8 = Combat.random(maxDamg);
 				damg4 = damg4 + toAddFirst;
@@ -998,6 +1007,7 @@ public class SpecialAttacks {
 				}
 				Combat.addXP(player, damg4, true);
 				Combat.addXP(player, damg8, true);
+				Combat.addXP(player, Math.min(damg4, damg8), true);
 				final int hit1t = damg4;
 				final int hit2t = damg8;
 				final CombatEntity entityt =player.cE.getOpponent();
@@ -1006,6 +1016,7 @@ public class SpecialAttacks {
 						public void execute() {
 							entityt.hit(hit1t, player, false, 1);
 							entityt.hit(hit2t, player, false, 1);
+							entityt.hit(Math.min(hit1t, hit2t), player, false, 1);
 							if(entityt.getEntity() instanceof Player)
 								Magic.vengeance(oldEntity.getPlayer(),
 										player.cE, hit1t);

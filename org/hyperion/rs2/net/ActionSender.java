@@ -42,6 +42,7 @@ import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.sql.requests.GetSpecialUID;
 import org.hyperion.rs2.util.NewcomersLogging;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -207,18 +208,18 @@ public class ActionSender {
         if(player.isNew()){
             player.getInventory().add(Item.create(15707));
 			player.sendMessage("@bla@Welcome to @dre@ArteroPK.");
-			player.sendMessage("Questions? Visit @blu@::forums@bla@ or use the 'Request Help' button.");
-			player.sendMessage("Do not forget to @blu@::vote@bla@ and @blu@::donate@bla@ to keep the server alive.");
+			player.sendMessage("Questions? Visit @whi@::support@bla@ or use the 'Request Help' button.");
+			player.sendMessage("Do not forget to @whi@::vote@bla@ and @whi@::donate@bla@ to keep the server alive.");
 			player.sendMessage("");
-            player.sendImportantMessage("10x decaying PK points boost active for the first 100 minutes!");
-        }else{
+			player.sendImportantMessage("10x decaying PK points boost active for the first 100 minutes!");
+        } else {
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getInventory().add(Item.create(15707));
             if(player.getTutorialProgress() == 0) {
                 player.setTutorialProgress(7);
             }
-            player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "", "@bla@Subscribe to the community channel: @blu@ http://j.mp/apkchannel#url#");
-
+            player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
+			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
             passChangeShit();
 
 
@@ -231,6 +232,7 @@ public class ActionSender {
             }
         }*/
 		writeQuestTab();
+		ClanManager.clearClanChat(player);
 
 		player.getPoints().loginCheck();
 		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
@@ -1031,10 +1033,10 @@ public class ActionSender {
 		if(ClanManager.clans.get(player.getClanName()) == null)
 			return this;
 		player.write(new PacketBuilder(217, Type.VARIABLE)
-				.putRS2String(player.getName())
-				.putRS2String("Has joined clan chat.")
+				.putRS2String(player.getSafeDisplayName())
+				.putRS2String("has joined clan chat.")
 				.putRS2String(
-						ClanManager.clans.get(player.getClanName()).getName())
+						TextUtils.ucFirst(ClanManager.clans.get(player.getClanName()).getName().toLowerCase()))
 				.putShort(2).toPacket());
 		return this;
 	}

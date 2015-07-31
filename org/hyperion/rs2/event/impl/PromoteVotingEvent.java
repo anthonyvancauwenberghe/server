@@ -17,7 +17,7 @@ public class PromoteVotingEvent extends Event {
 	public void execute() {
 		for(Player player : World.getWorld().getPlayers()) {
 			if(System.currentTimeMillis() - player.getLastVoted() > Time.ONE_HOUR * 12) {
-				player.getActionSender().sendMessage("@or3@Your voting timer has been reset, you may vote again using the ::vote command!");
+				player.sendServerMessage("Don't forget to vote again using the ::vote command.");
 			}
 		}
 	}

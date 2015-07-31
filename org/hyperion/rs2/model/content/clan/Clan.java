@@ -91,7 +91,7 @@ public class Clan {
 	public boolean kick(String name, boolean ip) {
 		for(Player p : players) {
 			if(p.getName().equalsIgnoreCase(name)) {
-				p.getActionSender().sendMessage("You have been kicked.");
+				p.sendClanMessage("You have been kicked.");
 				ClanManager.leaveChat(p, true, false);
 				peopleKicked.add(p.getName());
                 if(ip)

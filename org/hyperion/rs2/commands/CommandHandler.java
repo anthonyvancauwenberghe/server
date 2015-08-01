@@ -84,6 +84,7 @@ import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
+import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
@@ -582,13 +583,7 @@ public class CommandHandler {
             @Override
             public boolean execute(Player player, String input) {
                 if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
-                    player.getPrayers().setPrayerbook(!player.getPrayers().isDefaultPrayerbook());
-                    player.getPrayers().clear();
-                    if(!player.getPrayers().isDefaultPrayerbook()) {
-                        player.getActionSender().sendSidebarInterface(5, 22500);
-                    } else {
-                        player.getActionSender().sendSidebarInterface(5, 5608);
-                    }
+                    Prayer.changeCurses(player);
                 } else {
                     player.getActionSender().sendMessage("You cannot do this at this time!");
                 }

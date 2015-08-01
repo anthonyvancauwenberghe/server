@@ -45,7 +45,7 @@ public class PushMessage {
 		for(Player target : World.getWorld().getPlayers()) {
 			if(target != null) {
 				if(Rank.isStaffMember(target)) {
-					target.getActionSender().sendMessage("@red@[Important]" + name + " " + s);
+					target.getActionSender().sendMessage("@blu@[Staff] " + name + ": " + s);
 				}
 			}
 		}

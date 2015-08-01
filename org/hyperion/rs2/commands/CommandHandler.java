@@ -583,6 +583,7 @@ public class CommandHandler {
             public boolean execute(Player player, String input) {
                 if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
                     player.getPrayers().setPrayerbook(!player.getPrayers().isDefaultPrayerbook());
+                    player.getPrayers().clear();
                     if(!player.getPrayers().isDefaultPrayerbook()) {
                         player.getActionSender().sendSidebarInterface(5, 22500);
                     } else {

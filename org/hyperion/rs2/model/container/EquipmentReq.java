@@ -137,6 +137,7 @@ public class EquipmentReq {
                 equipReqData[1] = 99;
                 equipReqData[6] = 99;
                 break;
+
             case 17017: //celestial staff
             case 17018:
             case 16173:
@@ -156,6 +157,7 @@ public class EquipmentReq {
                 equipReqData[6] = 75;
                 break;
             case 15486: // Staff of light
+                equipReqData[0] = 75;
                 equipReqData[6] = 75;
                 break;
             case 5730:
@@ -538,6 +540,16 @@ public class EquipmentReq {
 				equipReqData[1] = 75;
 				break;
 
+            case 9101:
+            case 9198:
+            case 9096:
+            case 9099:
+            case 9097:
+            case 9100:
+                equipReqData[1] = 40;
+                equipReqData[6] = 65;
+                break;
+
 			case 6889:
 			case 6914:
 				equipReqData[6] = 60;
@@ -562,6 +574,17 @@ public class EquipmentReq {
 			case 11728:
 				equipReqData[1] = 65;
 				break;
+
+            case 6131:
+            case 6133:
+            case 6135:
+                equipReqData[1] = 40;
+                break;
+
+            case 10887:
+                equipReqData[0] = 50;
+                equipReqData[5] = 50;
+                break;
 
 			case 3749:
 			case 3751:

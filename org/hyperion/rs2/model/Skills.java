@@ -520,9 +520,10 @@ public class Skills {
                             bonusSkill = Misc.random(Skills.SKILL_COUNT-8)+7;
                         }
                         BONUS_SKILL = bonusSkill;
-                        for(Player player1 : World.getWorld().getPlayers())
-                            player1.getQuestTab().sendBonusSkill();
-                        PushMessage.pushGlobalMessage("The bonus skill has been changed to: "+Misc.getSkillName(Skills.BONUS_SKILL));
+                        for(Player player1 : World.getWorld().getPlayers()) {
+							player1.getQuestTab().sendBonusSkill();
+							player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
+						}
                     }
                     World.getWorld().putProperty("lastSkillChange", dayOfYear);
                 }

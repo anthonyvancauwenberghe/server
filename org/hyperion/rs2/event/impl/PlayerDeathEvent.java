@@ -262,7 +262,9 @@ public class PlayerDeathEvent extends Event {
 							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease);
 							if(player.getKillStreak() >= 6) {
                                 AchievementHandler.progressAchievement(player, "Killstreak");
-                                ActionSender.yellMessage("@blu@" + killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+								for(Player p : World.getWorld().getPlayers())
+									if(p != null)
+                                		p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}
 							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
                             if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))

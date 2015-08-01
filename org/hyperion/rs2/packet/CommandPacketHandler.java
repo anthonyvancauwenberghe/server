@@ -2218,16 +2218,16 @@ public class CommandPacketHandler implements PacketHandler {
                 final String text = withCaps.replaceFirst("challenge", "").trim();
                 final Challenge challenge = ChallengeManager.getChallenge(text);
                 if(challenge == null){
-                    player.sendf("No challenge found for: @blu@%s", text);
+                    player.sendf("No challenge found for: '@dre@%s@bla@'.", text);
                     return;
                 }
                 ChallengeManager.remove(challenge);
                 player.getBank().add(challenge.getPrize());
-                player.sendf("@blu@%s x%,d has been added to your bank!", challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
-                final String winMsg = String.format("@blu@%s has beat %s's challenge for %s x%,d!", player.getName(), challenge.getName(), challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
+                player.sendImportantMessage("%s x%,d has been added to your bank!", challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
+                final String winMsg = String.format("@blu@[Challenge] %s has beaten %s's challenge for %s x%,d!", player.getName(), challenge.getName(), challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
                 for(final Player p : World.getWorld().getPlayers())
                     if(p != null)
-                        p.sendf(winMsg);
+                        p.sendMessage(winMsg);
             }
 
             if(commandStart.equalsIgnoreCase("maxhit")) {

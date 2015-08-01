@@ -2382,7 +2382,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 				ppl += "narbs";
 				break;
 			case 2:
-				ppl += "worthless pkers";
+				ppl += "shits";
 				break;
 			case 3:
 				ppl += "enemies";
@@ -2391,10 +2391,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 				ppl += "noobs";
 				break;
 			case 5:
-				ppl += "human-like creatures";
+				ppl += "chickens";
 				break;
 			case 6:
-				ppl += "homo sapiens";
+				ppl += "fleshbags";
 				break;
 			default:
 				ppl += "people";

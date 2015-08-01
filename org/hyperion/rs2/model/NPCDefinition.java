@@ -277,8 +277,11 @@ public class NPCDefinition {
                                 hp = 950;
                                 combat = 350;
                                 break;
-                            case 1519:
-                                hp = 400;
+                            case 1590:
+                            case 1591:
+                            case 1592:
+                                hp *= 5;
+                                combat *= 1.5;
                                 break;
                             case 54:
                                 combat = 240;

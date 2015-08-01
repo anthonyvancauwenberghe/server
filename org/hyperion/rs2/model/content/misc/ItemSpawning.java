@@ -118,6 +118,10 @@ public class ItemSpawning {
             player.getActionSender().sendMessage("You cannot do this while trading");
             return false;
         }
+        if(player.getLocation().inSDArea()) {
+            player.sendMessage("You cannot teleport in this area");
+            return false;
+        }
         if(player.getExtraData().getBoolean("cantteleport"))
             return false;
         if(player.getLocation().inDungeonLobby())

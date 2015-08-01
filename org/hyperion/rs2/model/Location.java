@@ -371,6 +371,10 @@ public class Location {
 				&& y <= 3283;
 	}
 
+    public boolean inSDArea() {
+        return x >= 3465 && y >= 9481 && y <= 9550 && x <= 3508;
+    }
+
 	static {
 		CommandHandler.submit(new Command("ardypvp", Rank.PLAYER) {
 			@Override

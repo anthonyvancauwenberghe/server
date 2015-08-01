@@ -41,11 +41,11 @@ public class PushMessage {
 	public static final void pushStaffMessage(String s, Player player) {
 		String name = "";
 		if(player != null)
-			name = player.getName();
+			name = player.getSafeDisplayName();
 		for(Player target : World.getWorld().getPlayers()) {
 			if(target != null) {
 				if(Rank.isStaffMember(target)) {
-					target.getActionSender().sendMessage("@red@[Important]" + name + " " + s);
+					target.getActionSender().sendMessage("@blu@[Staff] " + name + ": " + TextUtils.ucFirst(s.toLowerCase()));
 				}
 			}
 		}

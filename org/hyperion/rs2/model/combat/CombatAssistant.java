@@ -1313,7 +1313,7 @@ public class CombatAssistant {
 			}
 			return (int) (meleeDef * .5 + bonus * .8) + 70;
 		} else {
-			return (int)(entity.cE.getCombat() * .7);
+			return (int)(entity.cE.getCombat() * .9);
 		}
 	}
 

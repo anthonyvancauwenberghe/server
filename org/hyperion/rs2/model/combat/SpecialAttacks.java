@@ -140,11 +140,11 @@ public class SpecialAttacks {
 				specialAnimation = 426;
 				specialDis = 9;
 				specialDrain = 55;
-				minimum = 15;
+				minimum = 10;
 				if(player.getEquipment()
 						.get(Equipment.SLOT_ARROWS).getId() == 892) {
-					maxDamg += maxDamg * 0.4;// 90% for rune
-					minimum += 10;
+					maxDamg += maxDamg * 0.05;// 90% for rune
+					minimum += 5;
 					specialAccuracy = 5;
 				}
 				break;
@@ -980,7 +980,43 @@ public class SpecialAttacks {
 								offsetX,
 								50,
 								clientSpeed - 10,
-								1099, 46, 31, hitId, 3);
+								1099, 46, 45, hitId, 3);
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed + 10,
+								256, 46, 40, hitId, 6);
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed - 10,
+								1099, 46, 35, hitId, 9);
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed + 10,
+								256, 46, 30, hitId, 12);
+				player.getActionSender()
+						.createGlobalProjectile(
+								player.cE.getAbsY(),
+								player.cE.getAbsX(),
+								offsetY,
+								offsetX,
+								50,
+								clientSpeed - 10,
+								1099, 46, 25, hitId, 15);
 				damg4 = Combat.random(maxDamg);
 				damg8 = Combat.random(maxDamg);
 				damg4 = damg4 + toAddFirst;
@@ -999,16 +1035,26 @@ public class SpecialAttacks {
 					damg4 = oldEntity.getPlayer().getInflictDamage(damg4, player, false, combatStyle);
 					damg8 = oldEntity.getPlayer().getInflictDamage(damg8, player, false, combatStyle);
 				}
-				final int hit = damg4 + damg8;
-				Combat.addXP(player, hit, true);
+				Combat.addXP(player, damg4, true);
+				Combat.addXP(player, damg8, true);
+				Combat.addXP(player, Math.min(damg4, damg8), true);
+				final int hit1tt = damg4;
+				final int hit2tt = damg8;
+				final int hit3tt = Math.min(damg4, damg8);
+				final int hit4tt = hit3tt/2;
+				final int hit5tt = hit4tt/2;
 				final CombatEntity entitytt =player.cE.getOpponent();
 				if(entitytt != null) {
 					World.getWorld().submit(new Event(200 * distance + 300, "combat") {
 						public void execute() {
-							entitytt.hit(hit, player, false, 1);
+							entitytt.hit(hit1tt, player, false, 1);
+							entitytt.hit(hit2tt, player, false, 1);
+							entitytt.hit(hit3tt, player, false, 1);
+							entitytt.hit(hit4tt, player, false, 1);
+							entitytt.hit(hit5tt, player, false, 1);
 							if(entitytt.getEntity() instanceof Player)
 								Magic.vengeance(oldEntity.getPlayer(),
-										player.cE, hit);
+										player.cE, hit1tt);
 							this.stop();
 						}
 					});

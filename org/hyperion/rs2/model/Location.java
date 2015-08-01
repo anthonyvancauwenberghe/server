@@ -372,7 +372,7 @@ public class Location {
 	}
 
     public boolean inSDArea() {
-        return x >= 3465 && y >= 9481 && y <= 9481 && x <= 3508;
+        return x >= 3465 && y >= 9481 && y <= 9550 && x <= 3508;
     }
 
 	static {

@@ -39,6 +39,8 @@ public class PushMessage {
 	 * Pushes message to all staff members {@link org.hyperion.rs2.packet.CommandPacketHandler}
 	 */
 	public static final void pushStaffMessage(String s, Player player) {
+		if(s.isEmpty())
+			return;
 		String name = "";
 		if(player != null)
 			name = player.getSafeDisplayName();

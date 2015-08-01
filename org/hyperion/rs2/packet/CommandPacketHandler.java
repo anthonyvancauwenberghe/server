@@ -2224,7 +2224,7 @@ public class CommandPacketHandler implements PacketHandler {
                 ChallengeManager.remove(challenge);
                 player.getBank().add(challenge.getPrize());
                 player.sendImportantMessage("%s x%,d has been added to your bank!", challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
-                final String winMsg = String.format("@blu@[Challenge] %s has beaten %s's challenge for %s x%,d!", player.getName(), challenge.getName(), challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
+                final String winMsg = String.format("@blu@[Challenge] %s has beaten %s's challenge for %s x%,d!", player.getSafeDisplayName(), challenge.getName(), challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
                 for(final Player p : World.getWorld().getPlayers())
                     if(p != null)
                         p.sendMessage(winMsg);

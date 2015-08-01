@@ -2428,8 +2428,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public void increaseKillCount() {
 		killCount++;
-		getQuestTab().sendElo();
-		getQuestTab().sendKDR();
+		getQuestTab().updateQuestTab();
 	}
 
 	public ActionSender sendMessage(Object... message) {
@@ -2488,8 +2487,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	
 	public void increaseDeathCount() {
 		deathCount++;
-		getQuestTab().sendElo();
-		getQuestTab().sendKDR();
+		getQuestTab().updateQuestTab();
 	}
 
 	public void setKillCount(int kc) {

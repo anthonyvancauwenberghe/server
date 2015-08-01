@@ -10,7 +10,7 @@ import org.hyperion.util.Time;
 public class ServerMinigame extends Event {
 
     public static int x, y, z;
-    public static String name = "@red@Event Dormant";
+    public static String name = null;
 	
 	public ServerMinigame() {
 		super(Time.TEN_HOURS);

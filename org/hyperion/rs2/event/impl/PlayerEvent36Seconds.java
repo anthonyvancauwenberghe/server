@@ -52,7 +52,7 @@ public class PlayerEvent36Seconds extends Event {
         	player.getSummBar().cycle();
         	player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
         	player.getSpecBar().normalize();
-        	player.getQuestTab().sendPlayercount();
+			player.getQuestTab().updateQuestTab();
         	player.getQuestTab().sendUptime();
             Afk.procesPlayer(player);
     		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE) && !player.getDungoneering().inDungeon()) {

@@ -1035,14 +1035,16 @@ public class SpecialAttacks {
 					damg4 = oldEntity.getPlayer().getInflictDamage(damg4, player, false, combatStyle);
 					damg8 = oldEntity.getPlayer().getInflictDamage(damg8, player, false, combatStyle);
 				}
-				Combat.addXP(player, damg4, true);
-				Combat.addXP(player, damg8, true);
-				Combat.addXP(player, Math.min(damg4, damg8), true);
 				final int hit1tt = damg4;
 				final int hit2tt = damg8;
 				final int hit3tt = Math.min(damg4, damg8);
 				final int hit4tt = hit3tt/2;
 				final int hit5tt = hit4tt/2;
+				Combat.addXP(player, hit1tt, true);
+				Combat.addXP(player, hit2tt, true);
+				Combat.addXP(player, hit3tt, true);
+				Combat.addXP(player, hit3tt, true);
+				Combat.addXP(player, hit3tt, true);
 				final CombatEntity entitytt =player.cE.getOpponent();
 				if(entitytt != null) {
 					World.getWorld().submit(new Event(200 * distance + 300, "combat") {

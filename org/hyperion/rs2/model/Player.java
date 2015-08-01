@@ -2324,7 +2324,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public void increaseKillStreak() {
 		killStreak++;
-        actionSender.sendString(36505, "Killstreak: @red@"+killStreak);
+        actionSender.sendString(36505, "Killstreak: @red@" + killStreak);
 		bounty = (int)(4 * Math.pow(killStreak, 1.87));
         if(bounty > 40_000)
             bounty = 40_000;
@@ -2332,28 +2332,42 @@ public class Player extends Entity implements Persistable, Cloneable{
 			bounty = 10;
 		switch(killStreak) {
 			case 5:
-				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " is on a "
-						+ killStreak + " killStreak!");
+				for(Player p : World.getWorld().getPlayers())
+					if(p != null)
+						p.sendPkMessage(getSafeDisplayName() + " is on a "
+						+ killStreak + " killstreak!");
 				break;
 			case 7:
-				ActionSender.yellMessage("@blu@" + getSafeDisplayName()
+				for(Player p : World.getWorld().getPlayers())
+					if(p != null)
+						p.sendPkMessage(getSafeDisplayName()
 						+ " has begun a rampage with a killstreak of " + killStreak);
 				break;
 			case 9:
-				ActionSender.yellMessage("@blu@" + getSafeDisplayName()
+				for(Player p : World.getWorld().getPlayers())
+					if(p != null)
+						p.sendPkMessage(getSafeDisplayName()
 						+ " is on a massacre with " + killStreak + " kills!");
 				break;
 		}
 		if(killStreak >= 10) {
-			if(Math.random() > 0.5)
-				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " has now "
-						+ killStreak + " kills in a row! Kill him and gain "
-						+ bounty + " Pk Points!");
-			else {
+			if(Math.random() > 0.5) {
+				for (Player p : World.getWorld().getPlayers()) {
+					if (p != null) {
+						p.sendPkMessage(getSafeDisplayName() + " now has "
+								+ killStreak + " kills in a row! Kill him and gain "
+								+ bounty + " Pk points!");
+					}
+				}
+			} else {
 				String ppl = getPeopleString();
-				ActionSender.yellMessage("@blu@" + getSafeDisplayName() + " has killed "
-						+ killStreak + ppl + " in a row! Kill him and gain "
-						+ bounty + " Pk Points!");
+				for(Player p : World.getWorld().getPlayers()) {
+					if (p != null) {
+						p.sendPkMessage(getSafeDisplayName() + " has killed "
+								+ killStreak + ppl + " in a row! Kill him and gain "
+								+ bounty + " Pk points!");
+					}
+				}
 			}
 		}
 	}

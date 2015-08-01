@@ -212,6 +212,11 @@ public class EquipmentReq {
 				equipReqData[1] = 30;
 				equipReqData[6] = 60;
 				return equipReqData;
+            case 12747:
+            case 12744:
+                for(int i = 0 ; i < 7 ; i++)
+                    equipReqData[i] = 99;
+                return equipReqData;
 			case 13899:
 			case 13902:
 				equipReqData[0] = 78;

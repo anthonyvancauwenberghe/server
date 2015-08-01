@@ -65,9 +65,9 @@ public class PlayerPoints {
 		String message = "@blu@You have defeaten an opponent with elo " + opponentRating + ", your new elo is: " + eloRating;
 		message = message.replaceAll("elo", "PvP Rating");
 		if(resultType == EloRating.WIN)
-			player.getActionSender().sendMessage(message);
+			player.sendPkMessage(message);
 		else if(resultType == EloRating.LOSE)
-			player.getActionSender().sendMessage(message.replace("have defeaten", "were defeaten by"));
+			player.sendPkMessage(message.replace("have defeaten", "were defeaten by"));
 	}
 
 	public void setEloRating(int rating) {
@@ -82,14 +82,14 @@ public class PlayerPoints {
 			if(Rank.hasAbility(player, Rank.HERO)) {
 				player.setPlayerRank(Rank.removeAbility(player, Rank.LEGEND));
 				player.setPlayerRank(Rank.removeAbility(player, Rank.HERO));
-				player.getActionSender().sendMessage("Your elo has dropped below the required threshold");
-				player.getActionSender().sendMessage("you have been stripped of your master/grandmaster title and abilities.");
+				player.sendPkMessage("Your PvP rating has dropped below the required threshold...");
+				player.sendPkMessage("You have been stripped of your master/grandmaster title and abilities.");
 			}
 		} else {
             //annoying seeing this all the time
             if(!Rank.hasAbility(player, newRank))
-                player.getActionSender().sendMessage("Congratulations! You have received: "+newRank.toString());
-			if(Rank.getPrimaryRank(player) == Rank.PLAYER) {
+                player.sendPkMessage("Congratulations! You have received " + newRank.toString() + "!");
+			if (Rank.getPrimaryRank(player) == Rank.PLAYER) {
                 player.setPlayerRank(Rank.addAbility(player, newRank));
 			} else
 				player.setPlayerRank(Rank.addAbility(player, newRank));
@@ -139,7 +139,7 @@ public class PlayerPoints {
                 System.out.println("Error saving donor points change: " + ex);
             }
 		}
-		player.getActionSender().sendMessage("You have been given " + amount + " donator points.");
+		player.sendServerMessage("You have been given " + amount + " donator points.");
 		player.getQuestTab().sendDonatePoints();
 	}
 
@@ -224,8 +224,7 @@ public class PlayerPoints {
 	public void increasePkPoints(int points, boolean message) {
 		pkPoints += points;
 		if(message)
-		player.getActionSender().sendMessage("Your " + Server.NAME + " points have been increased by "
-				+ points + "!");
+		player.sendPkMessage("Your " + Server.NAME + " points have been increased by " + points + "!");
 		player.getQuestTab().sendPkPoints();
 	}
 
@@ -244,7 +243,7 @@ public class PlayerPoints {
 				}
 				honorPoints += (int) (reward);
 
-				player.getActionSender().sendMessage("@blu@You have been awarded " + (int) reward + " honor points!");
+				player.sendPkMessage("You have been awarded " + (int) reward + " honor points!");
 				player.getQuestTab().sendHonorPoints();
 				player.setLastHonorPointsReward(System.currentTimeMillis());
 			}
@@ -253,7 +252,7 @@ public class PlayerPoints {
 			honorPoints -= days * 10;
 			if(honorPoints < 0)
 				honorPoints = 0;
-			player.getActionSender().sendMessage("@blu@You've lost Honor Points due to inactivity!");
+			player.sendPkMessage("You've lost honor points due to inactivity!");
 			player.getQuestTab().sendHonorPoints();
 			player.setLastHonorPointsReward(System.currentTimeMillis());
 		}
@@ -326,8 +325,8 @@ public class PlayerPoints {
             return originalPkp;
         double max_increase = 10.0;
         double modifier = max_increase/(minutes/10D);
-        player.sendf("You get @red@%.1f X@bla@ pkp bonus for being new", modifier);
-        return (int)(originalPkp * modifier);
+        player.sendPkMessage("You get %.1f x Pk points bonus for being new!", modifier);
+		return (int)(originalPkp * modifier);
     }
 
 }

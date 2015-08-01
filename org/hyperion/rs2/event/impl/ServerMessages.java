@@ -79,7 +79,7 @@ public class ServerMessages extends Event {
     }
 	
 	public ServerMessages() {
-		super(300000);
+		super(250000);
 	}
 
     public static boolean load(){
@@ -171,7 +171,7 @@ public class ServerMessages extends Event {
 			for(Player p : World.getWorld().getPlayers())
 				if(p != null)
 					p.sendServerMessage(message);
-		}catch(final Exception e) {
+		} catch(final Exception e) {
 			e.printStackTrace();
 			this.stop();
 		}

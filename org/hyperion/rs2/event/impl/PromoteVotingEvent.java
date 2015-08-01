@@ -2,6 +2,7 @@ package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
 

@@ -2425,9 +2425,26 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return getActionSender();
 	}
 
+	public ActionSender sendPkMessage(Object... message) {
+		for(Object o : message) {
+			if(!Rank.hasAbility(this, Rank.OWNER))
+				actionSender.sendMessage("@blu@[Wilderness] " + o.toString());
+		}
+		return getActionSender();
+	}
+
 	public ActionSender sendServerMessage(Object... message) {
 		for(Object o : message) {
-			actionSender.sendMessage("@whi@[SERVER] " + o.toString());
+			if(!Rank.hasAbility(this, Rank.OWNER))
+				actionSender.sendMessage("@whi@[Server] " + o.toString());
+		}
+		return getActionSender();
+	}
+
+	public ActionSender sendStaffMessage(Object... message) {
+		for(Object o : message) {
+			if(!Rank.hasAbility(this, Rank.OWNER))
+				actionSender.sendMessage("@blu@[Server] " + o.toString());
 		}
 		return getActionSender();
 	}
@@ -2441,7 +2458,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public ActionSender sendImportantMessage(Object... message) {
 		for(Object o : message) {
-			actionSender.sendMessage("@dre@[IMPORTANT] " + o.toString());
+			actionSender.sendMessage("@dre@[Important] " + o.toString());
 		}
 		return getActionSender();
 	}

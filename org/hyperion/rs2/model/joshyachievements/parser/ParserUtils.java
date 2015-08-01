@@ -11,6 +11,13 @@ public final class ParserUtils{
 
     private ParserUtils(){}
 
+    public static int[] ints(final Element root, final String parentTag, final String childTag, final String valueAttribute){
+        return elements(root, parentTag)
+                .filter(e -> e.getTagName().equals(childTag))
+                .mapToInt(e -> Integer.parseInt(e.getAttribute(valueAttribute)))
+                .toArray();
+    }
+
     public static Element first(final Element root, final String tag){
         final NodeList list = root.getElementsByTagName(tag);
         return (Element)(list.getLength() > 0 ? list.item(0) : null);

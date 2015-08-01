@@ -1,6 +1,9 @@
 package org.hyperion.rs2.model.joshyachievements.requirement;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.hyperion.rs2.model.joshyachievements.AchievementContext;
 
 public class SkillingObjectRequirement extends DelegatedRequirement{
@@ -18,29 +21,29 @@ public class SkillingObjectRequirement extends DelegatedRequirement{
         public boolean test(final AchievementContext ctx){
             return ctx.getRequirement() instanceof SkillingObjectRequirement
                     && ctx.<SkillingObjectRequirement>getRequirement().getSkill() == skill
-                    && ctx.<SkillingObjectRequirement>getRequirement().getItemId() == itemId;
+                    && ctx.<SkillingObjectRequirement>getRequirement().getItemIds().contains(itemId);
         }
     }
 
     private final int skill;
-    private final int itemId;
+    private final List<Integer> itemIds;
 
-    public SkillingObjectRequirement(final int skill, final int itemId, final int value){
+    public SkillingObjectRequirement(final int skill, final int[] itemIds, final int value){
         super(value);
         this.skill = skill;
-        this.itemId = itemId;
+        this.itemIds = Arrays.stream(itemIds).boxed().collect(Collectors.toList());
     }
 
     public int getSkill(){
         return skill;
     }
 
-    public int getItemId(){
-        return itemId;
+    public List<Integer> getItemIds(){
+        return itemIds;
     }
 
     public String toString(){
-        return String.format("SkillingObjectRequirement(skill=%d,itemId=%d,value=%,d)", skill, itemId, get());
+        return String.format("SkillingObjectRequirement(skill=%d,itemIds=%s,value=%,d)", skill, itemIds, get());
     }
 
     public static Predicate<AchievementContext> filter(final int skill, final int itemId){

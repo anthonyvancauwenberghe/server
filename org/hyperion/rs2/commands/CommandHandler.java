@@ -214,13 +214,13 @@ public class CommandHandler {
                 return true;
             }
 		});
-		submit(new Command("sdp", Rank.ADMINISTRATOR){
+		submit(new Command("sdp", Rank.SUPER_DONATOR){
 			public boolean execute(final Player player, final String input) throws Exception{
 				Magic.teleport(player, 2037, 4532, 4, false);
 				return true;
 			}
 		});
-		submit(new Command("sdppvm", Rank.ADMINISTRATOR) {
+		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
 			public boolean execute(Player player, String input) {
 				Magic.teleport(player, Location.create(3506, 9494, 4), false);
 				return true;

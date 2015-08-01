@@ -39,13 +39,13 @@ public class PushMessage {
 	 * Pushes message to all staff members {@link org.hyperion.rs2.packet.CommandPacketHandler}
 	 */
 	public static final void pushStaffMessage(String s, Player player) {
-		String name = "ALERT";
+		String name = "";
 		if(player != null)
 			name = player.getName();
 		for(Player target : World.getWorld().getPlayers()) {
 			if(target != null) {
 				if(Rank.isStaffMember(target)) {
-					target.getActionSender().sendMessage("[@blu@S@bla@]" + name + ": " + s);
+					target.getActionSender().sendMessage("@red@[Important]" + name + " " + s);
 				}
 			}
 		}

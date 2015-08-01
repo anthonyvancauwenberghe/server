@@ -271,6 +271,9 @@ public class Magic {
                         maxDamg *= 1.24;
                     }
                     break;
+                case 6603:
+                    maxDamg *= 1.15;
+                    break;
             }
 		switch(necklaceId) {
 			case 18333:

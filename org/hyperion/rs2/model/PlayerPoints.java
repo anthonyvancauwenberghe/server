@@ -94,8 +94,8 @@ public class PlayerPoints {
 			} else
 				player.setPlayerRank(Rank.addAbility(player, newRank));
 		}
-
-		player.getQuestTab().updateQuestTab();
+		player.getQuestTab().sendAllInfo();
+		player.getQuestTab().sendElo();
 	}
 
 	/**

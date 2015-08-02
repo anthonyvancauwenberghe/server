@@ -196,8 +196,6 @@ public class ActionSender {
             if(!has)
                player.getSession().close(false);
         }
-		player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
-
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		// sendClientConfig(65535, 0);
@@ -371,6 +369,7 @@ public class ActionSender {
 		sendString(29177, "@or1@Pure Set");
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
+		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
         AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
 /**
  * OVL BUG
@@ -968,7 +967,7 @@ public class ActionSender {
 	 */
 
 	public void writeQuestTab() {
-		player.getQuestTab().updateQuestTab();
+		player.getQuestTab().sendAllInfo();
 		sendString("Revenants (Multi)", 45614);
 	}
 
@@ -1134,67 +1133,29 @@ public class ActionSender {
 	}
 
 	public ActionSender openPlayersInterface() {
-		sendString(8144, "@dre@Players online: "+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
+		sendString(8144, "Players Online: "
+				+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
+		int i = 0;
 		Player p3 = null;
 
-		//Clears the questtab
-		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
-			sendString(QUEST_MENU_IDS[d], "");
-		}
-
-		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
-			if(i >= 99) {
-				sendString(QUEST_MENU_IDS[99], "@dre@And another " + ((int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI) - i) + " players");
+        for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
+            sendString(QUEST_MENU_IDS[d], "");
+        }
+		for(; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
+			if(i >= 99)
 				break;
-			}
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {
 				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
 				if (p3.isHidden())
 					continue;
-				String s = p3.getSafeDisplayName();
-				if(s.isEmpty())
-					continue;
+				String s = p3.getName();
+                if(s.isEmpty())
+                    continue;
+                s += "["+(s.length()-s.replace(" ", "").length())+"]";
+				if(Rank.getPrimaryRankIndex(p3) != 0)
+					s += "[" + Rank.getPrimaryRankIndex(p3) + "]";
 
-				sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + s);
-				i++;
-			}
-		}
-		showInterface(8134);
-		return this;
-	}
-
-	public ActionSender openStaffInterface() {
-		int staffOnline = 0;
-		for(Player i : World.getWorld().getPlayers()) {
-			if (i != null) {
-				if(Rank.isStaffMember(i))
-					staffOnline++;
-			}
-		}
-
-		sendString(8144, "@dre@Staff online: " + staffOnline);
-		Player p3 = null;
-
-		//Clears the questtab
-		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
-			sendString(QUEST_MENU_IDS[d], "");
-		}
-		int r = 0;
-
-		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
-			if(World.getWorld().getPlayers().get((i + 1)) != null) {
-				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
-				if(p3.isHidden())
-					continue;
-
-				String s = p3.getSafeDisplayName();
-				if(s.isEmpty())
-					continue;
-				if(Rank.isStaffMember(p3)) {
-					sendString(QUEST_MENU_IDS[i], "@dre@" + (r + 1) + ". @bla@" + s);
-					r++;
-				}
-				i++;
+				sendString(QUEST_MENU_IDS[i], s);
 			}
 		}
 		showInterface(8134);
@@ -1206,7 +1167,7 @@ public class ActionSender {
 	 * @return chain
 	 */
 	public ActionSender displayItems(Item...items) {
-		sendString(8144, "@dre@Item search");
+		sendString(8144, "Item search");
 		int i = 0;
 		for(; i < items.length; i++) {
 			sendString(QUEST_MENU_IDS[i], items[i].getDefinition().getName() + " - "+items[i].getDefinition().getId());
@@ -1219,7 +1180,6 @@ public class ActionSender {
 	}
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
-		sendString(8144, "@dre@Items kept on death");
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
         int i = 0;
         for(; i < itemList.size(); i++)

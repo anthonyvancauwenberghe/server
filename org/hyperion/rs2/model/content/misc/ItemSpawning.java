@@ -1,15 +1,17 @@
 package org.hyperion.rs2.model.content.misc;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.VotingBox;
@@ -118,10 +120,10 @@ public class ItemSpawning {
             player.getActionSender().sendMessage("You cannot do this while trading");
             return false;
         }
-        if(player.getLocation().inSDArea()) {
-            player.sendMessage("You cannot teleport in this area");
-            return false;
-        }
+//        if(player.getLocation().inSDArea()) {
+//            player.sendMessage("You cannot spawn here");
+//            return false;
+//        }
         if(player.getExtraData().getBoolean("cantteleport"))
             return false;
         if(player.getLocation().inDungeonLobby())

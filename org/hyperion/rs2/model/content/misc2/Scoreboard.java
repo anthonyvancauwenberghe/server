@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ScoreboardPlayer;
 import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
@@ -69,10 +70,10 @@ public class Scoreboard implements ContentTemplate {
 	 * @param player
 	 */
 	public static void sendScoreboard(Player player) {
-		player.getActionSender().sendString(8144, "Most wanted:");
+		player.getActionSender().sendString(8144, "@dre@Most wanted:");
 		int i = 0;
 		for(ScoreboardPlayer sp : getTopList()) {
-			player.getActionSender().sendString(ActionSender.QUEST_MENU_IDS[i++], i + ". " + sp.getName() + "            Bounty: " + sp.getBounty() + " Pk Points");
+			player.getActionSender().sendString(ActionSender.QUEST_MENU_IDS[i++], "@dre@" + i + ". @bla@" + TextUtils.ucFirst(sp.getName()) + "            @dre@Bounty: @bla@" + sp.getBounty() + " Pk points");
 		}
 		for(; i < ActionSender.QUEST_MENU_IDS.length; i++) {
 			player.getActionSender().sendString(ActionSender.QUEST_MENU_IDS[i], "");

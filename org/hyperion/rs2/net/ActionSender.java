@@ -329,7 +329,7 @@ public class ActionSender {
 		sendString(1326, "Teleports you to training spots.");
 		sendString(1350, "Minigame Teleport");
 		sendString(1351, "Teleports you to any minigame.");
-		sendString(1382, "Player Killing Teleport");
+		sendString(1382, "PK Teleport");
 		sendString(1383, "Teleports you to the wilderness.");
 		sendString(1415, "Boss Teleport");
 		sendString(1416, "Teleports you to dungeons.");
@@ -340,7 +340,7 @@ public class ActionSender {
 		sendString(13048, "Teleports you to training spots.");
 		sendString(13055, "Minigame Teleport");
 		sendString(13056, "Teleports you to any minigame.");
-		sendString(13063, "Player Killing Teleport");
+		sendString(13063, "PK Teleport");
 		sendString(13064, "Teleports you to the wilderness.");
 		sendString(13071, "Boss Teleport");
 		sendString(13072, "Teleports you to a dungeon.");
@@ -1167,7 +1167,7 @@ public class ActionSender {
 	 * @return chain
 	 */
 	public ActionSender displayItems(Item...items) {
-		sendString(8144, "Item search");
+		sendString(8144, "@dre@Item search");
 		int i = 0;
 		for(; i < items.length; i++) {
 			sendString(QUEST_MENU_IDS[i], items[i].getDefinition().getName() + " - "+items[i].getDefinition().getId());
@@ -1180,10 +1180,11 @@ public class ActionSender {
 	}
 
 	public ActionSender openItemsKeptOnDeathInterface(Player player) {
+		sendString(8144, "@dre@Items kept on death");
 		java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
         int i = 0;
         for(; i < itemList.size(); i++)
-            sendString(QUEST_MENU_IDS[i], itemList.get(i).getDefinition().getName());
+            sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" +itemList.get(i).getDefinition().getName());
         for(; i < 15; i++) {
             sendString(QUEST_MENU_IDS[i], "");
         }

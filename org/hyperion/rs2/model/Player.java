@@ -2432,49 +2432,41 @@ public class Player extends Entity implements Persistable, Cloneable{
 		getQuestTab().sendKDR();
 	}
 
-	public ActionSender sendMessage(Object... message) {
+	public ActionSender sendHeadedMessage(final String color, final String header, final Object... message) {
 		for(Object o : message) {
-			actionSender.sendMessage(o.toString());
+			actionSender.sendMessage((color == null ? "" : color) + (header == null ? "" : header + " ") + o.toString());
 		}
 		return getActionSender();
 	}
 
+	public ActionSender sendMessage(Object... message) {
+		return sendHeadedMessage(null, null, message);
+	}
+
 	public ActionSender sendPkMessage(Object... message) {
-		for(Object o : message) {
-			if(!Rank.hasAbility(this, Rank.OWNER))
-				actionSender.sendMessage("@blu@[APk] " + o.toString());
-		}
+		if(!Rank.hasAbility(this, Rank.OWNER))
+			return sendHeadedMessage("@blu@", "[APk]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendServerMessage(Object... message) {
-		for(Object o : message) {
-			if(!Rank.hasAbility(this, Rank.OWNER))
-				actionSender.sendMessage("@whi@[Server] " + o.toString());
-		}
+		if(!Rank.hasAbility(this, Rank.OWNER))
+			return sendHeadedMessage("@whi@", "[Server]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendStaffMessage(Object... message) {
-		for(Object o : message) {
 			if(!Rank.hasAbility(this, Rank.OWNER))
-				actionSender.sendMessage("@blu@[Staff] " + o.toString());
-		}
+				return sendHeadedMessage("@blu@", "[Staff]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendClanMessage(Object... message) {
-		for(Object o : message) {
-			actionSender.sendMessage("@dre@" + o.toString());
-		}
-		return getActionSender();
+			return sendHeadedMessage("@dre@", null, message);
 	}
 
 	public ActionSender sendImportantMessage(Object... message) {
-		for(Object o : message) {
-			actionSender.sendMessage("@dre@[Important] " + o.toString());
-		}
-		return getActionSender();
+		return sendHeadedMessage("@dre@", "[Important]", message);
 	}
 	
 	public ActionSender sendf(String message, Object... args) {

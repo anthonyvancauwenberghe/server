@@ -95,6 +95,8 @@ public class Weapon extends Item {
 			return new Bow(id, 1200);
 		if(id == 16887)
 			return new Bow(id, 900);
+        if(id == 6603)
+            return new StaffOfTheDead();
         //if (name.contains("maul") && !name.contains("granite"))
         //    return new DungeoneeringMaul(id);
         if(id == -1 || name.startsWith("unarmed"))

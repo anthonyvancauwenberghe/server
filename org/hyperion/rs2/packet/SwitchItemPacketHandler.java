@@ -29,6 +29,7 @@ public class SwitchItemPacketHandler implements PacketHandler {
         }
         if ((interfaceId >= -15448) && (interfaceId <= -15440)) {
             if (player.getBankField().isSearching()) {
+                player.sendMessage("You cannot use this feature while searching!");
                 return;
             }
             if ((fromTab > 8) || (fromTab < 0)) {
@@ -77,6 +78,7 @@ public class SwitchItemPacketHandler implements PacketHandler {
         }
         if ((interfaceId >= (-15485)) && (interfaceId <= (-15477))) {
             if (player.getBankField().isSearching()) {
+                player.sendMessage("You cannot use this feature while searching!");
                 return;
             }
             int toTab = interfaceId + (15485);

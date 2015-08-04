@@ -123,14 +123,11 @@ public class YellCommand extends Command {
 			}
 		}
 		final String colors = Rank.getPrimaryRank(player).getYellColor();
-		final boolean hasTag = !player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player);
+		final boolean hasTag = (!player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player)) || player.getName().equalsIgnoreCase("nab");
 		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
 		final String suffix = (player.hardMode() ? "[I]" : "") + "["+colors+tag +"@bla@] " +player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
-		if(!Rank.hasAbility(player, Rank.DEVELOPER) || !player.getName().equalsIgnoreCase("nab")){
-			input = input.replaceAll("@[\\w\\d]+@", "");
-		}
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}
 		 */

@@ -49,7 +49,7 @@ public class SummoningBoBs implements ContentTemplate {
                 return true;
             }
         } else if(type == ClickType.ITEM_ON_ITEM){
-            if(player.getCombat().getFamiliar() != null && player.cE.getFamiliar().getDefinition().getId() == SummonType.PACKYAK.npcId && useItem == PACK_YAK_SCROLL) {
+            if(player.getCombat().getFamiliar() != null && !player.isDead() && player.cE.getFamiliar().getDefinition().getId() == SummonType.PACKYAK.npcId && useItem == PACK_YAK_SCROLL) {
             	SummoningSpecial.preformSpecial(player, new PackYak(onItem, slot));
             }
         } else if (type == ClickType.EAT) {

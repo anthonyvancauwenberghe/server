@@ -1063,12 +1063,13 @@ public class CombatAssistant {
 		if(CombatAssistant.getCombatStyle(p.cE) == Constants.RANGEDWEPSTYPE)
 			rangedStr = getRangeStr(p.getEquipment().get(Equipment.SLOT_WEAPON)
 					.getId());
-		else
+		else {
 			if(p.getEquipment().get(Equipment.SLOT_ARROWS) != null)
 			rangedStr = getRangeStr(p.getEquipment().get(Equipment.SLOT_ARROWS)
 					.getId());
-        if(p.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684 && p.getEquipment().getItemId(Equipment.SLOT_ARROWS) == 8882)
-            rangedStr = 80;
+            if(p.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684 && p.getEquipment().getItemId(Equipment.SLOT_ARROWS) == 8882)
+                rangedStr = 80;
+        }
 		double bonus = 1.00;
 		if(p.getPrayers().isEnabled(3) || p.getPrayers().isEnabled(32)) {
 			bonus = 1.05;

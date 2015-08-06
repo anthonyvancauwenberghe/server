@@ -2,8 +2,6 @@ package org.hyperion.rs2.model.content.minigame.poker;
 
 import org.hyperion.rs2.model.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**

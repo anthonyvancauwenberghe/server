@@ -54,7 +54,7 @@ public class Trade {
         }
 
 		if(player.getName().equalsIgnoreCase(player2.getName())) {
-			System.out.println("Trading yourself is not good. 1");
+			System.out.println("Trading yourself is not good.");
 			return;
 		}
 		if(! player.getLocation().isWithinDistance(player.getLocation(), 3)) {
@@ -97,8 +97,14 @@ public class Trade {
 		player2.getActionSender().sendInterfaceInventory(3323, 3321);
 		player2.getInterfaceState().addListener(player2.getTrade(), new InterfaceContainerListener(player2, TRADE_INVENTORY_INTERFACE));
 		player2.getInterfaceState().addListener(player2.getInventory(), new InterfaceContainerListener(player2, PLAYER_INVENTORY_INTERFACE));
+		player.getActionSender().sendString(19000, player2.getSafeDisplayName());
+		player2.getActionSender().sendString(19000, player.getSafeDisplayName());
+		player.getActionSender().sendString(19001, "has " + player2.getInventory().freeSlots() + " free");
+		player2.getActionSender().sendString(19001, "has " + player.getInventory().freeSlots() + " free");
 		player.getActionSender().sendString(3535, "Are you sure you want to make this trade?");
 		player2.getActionSender().sendString(3535, "Are you sure you want to make this trade?");
+		player.getActionSender().sendString(3431, "");
+		player2.getActionSender().sendString(3431, "");
 		player2.getActionSender().sendString(3417, "Trading with: " + player.getSafeDisplayName());
 		player.getActionSender().sendString(3417, "Trading with: " + player2.getSafeDisplayName());
 		player.openingTrade = false;
@@ -160,8 +166,10 @@ public class Trade {
 			player.getTrader().tradeAccept1 = false;
 			player.getTrader().tradeAccept2 = false;
 			//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": removed: "+newId+":"+transferAmount+" from trade.");
-			player.getTrader().getActionSender().sendString(3431, "Are you sure you want to make this trade?");
-			player.getActionSender().sendString(3431, "Are you sure you want to make this trade?");
+			player.getActionSender().sendString(3431, "");
+			player.getTrader().getActionSender().sendString(3431, "");
+			player.getActionSender().sendString(19001, "has " + player.getTrader().getInventory().freeSlots() + " free");
+			player.getTrader().getActionSender().sendString(19001, "has " + player.getInventory().freeSlots() + " free");
 		} else {
 			player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many."); // this is the real message
 		}
@@ -288,8 +296,10 @@ public class Trade {
 			player.tradeAccept2 = false;
 			trader.tradeAccept1 = false;
 			trader.tradeAccept2 = false;
-			trader.getActionSender().sendString(3431, "Are you sure you want to make this trade?");
-			player.getActionSender().sendString(3431, "Are you sure you want to make this trade?");
+			player.getActionSender().sendString(3431, "");
+			trader.getActionSender().sendString(3431, "");
+			player.getActionSender().sendString(19001, "has " + trader.getInventory().freeSlots() + " free");
+			trader.getActionSender().sendString(19001, "has " + player.getInventory().freeSlots() + " free");
 		}
 	}
 
@@ -369,7 +379,6 @@ public class Trade {
 			int id = 3535;
 			if(! player.onConfirmScreen && !player.getTrader().onConfirmScreen) {
                 id = 3431;
-                return;
             }
 			if((player.tradeAccept1 && ! player.getTrader().tradeAccept1) || (player.tradeAccept2 && ! player.getTrader().tradeAccept2)) {
 				player.getActionSender().sendString(id, "Waiting on the other player.");
@@ -430,8 +439,8 @@ public class Trade {
 		player.tradeAccept2 = false;
 		//player.getLogging().log("Finished trade with: " + player.getTrader().getName());
 		player.getTrader().getLogging().log("Finished trade with: " + player.getName());
-            player.sendf("@red@Finished trade with  %s", player.getTrader().getSafeDisplayName());
-            player.getTrader().sendf("@red@Finished trade with %s", player.getSafeDisplayName());
+            player.sendf("Trade accepted", player.getTrader().getSafeDisplayName());
+            player.getTrader().sendf("Trade accepted", player.getSafeDisplayName());
             declineTrade(player);
 	}
     }

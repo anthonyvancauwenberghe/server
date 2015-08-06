@@ -1266,8 +1266,8 @@ public class DialogueManager {
 
             case 188:
                 player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "Exhcnage my PvP Artifacts for PKP",
-                        "Exchange my emblems for points",
+                        "Exchange my PvP Artifacts for Pk points",
+                        "Exchange my Emblems for points",
                         "Open up Emblem Point shop");
                 player.getInterfaceState().setNextDialogueId(0, 189);
                 player.getInterfaceState().setNextDialogueId(1, 190);
@@ -1276,10 +1276,10 @@ public class DialogueManager {
             case 189:
                 if(EPExchange.exchangeDrops(player))
                     player.getActionSender().sendMessage(
-                            "You have exchanged your Statuettes.");
+                            "You have exchanged your statues.");
                 else
                     player.getActionSender().sendMessage(
-                            "You don't have any Statuettes with you..");
+                            "You don't have any statues with you..");
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 190:

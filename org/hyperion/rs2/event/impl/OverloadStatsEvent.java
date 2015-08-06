@@ -26,7 +26,7 @@ public class OverloadStatsEvent extends Event {
 			player.getSkills().speedNormalizeLevel(Skills.DEFENCE);
 			player.getSkills().speedNormalizeLevel(Skills.RANGED);
 			player.getSkills().speedNormalizeLevel(Skills.MAGIC);
-			player.getActionSender().sendMessage("@red@Your overload has worn out!");
+			player.getActionSender().sendMessage("@dre@Your overload has worn out!");
 			if(player.isOverloaded())
 				ContentEntity.increaseSkill(player, Skills.HITPOINTS, 50);
 			player.getExtraData().remove(KEY);
@@ -142,7 +142,7 @@ public class OverloadStatsEvent extends Event {
 		}
 		if(player.getOverloadCounter().incrementAndGet() < CYCLES && player.isOverloaded()) {
 			if((CYCLES - player.getOverloadCounter().get()) == 4)
-				player.getActionSender().sendMessage("@red@Your overload will run out in 1 minute.");
+				player.getActionSender().sendMessage("@dre@Your overload will run out in 1 minute.");
 			OverloadFactory.applyBoosts(player);
 		} else {
 			OverloadFactory.endOverload(player);

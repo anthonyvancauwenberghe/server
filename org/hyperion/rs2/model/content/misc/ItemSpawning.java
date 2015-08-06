@@ -253,7 +253,7 @@ public class ItemSpawning {
             case 5068:
             case 4295:
 			case VotingBox.ID:
-				return "This item is to sexy for you to spawn.";
+				return "This item is too sexy for you to spawn.";
 		}
 		for(String forbiddenName : FORBIDDEN_NAMES) {
 			if(itemName.contains(forbiddenName))

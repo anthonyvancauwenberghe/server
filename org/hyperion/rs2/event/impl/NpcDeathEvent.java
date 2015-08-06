@@ -3,6 +3,8 @@ package org.hyperion.rs2.event.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import com.sun.javafx.binding.StringFormatter;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
@@ -222,7 +224,7 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);
-                player.sendf("You now have @red@%d@bla@ %s kills", kills, npc.getDefinition().getName());
+                player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
 
                 if(kills%1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());

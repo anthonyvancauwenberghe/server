@@ -372,12 +372,12 @@ public class ClanManager {
             }
 
             if(clan.unban(name)) {
-                sendClanMessage(player, "@bla@ "+name+ " has been UN-BANNED from the channel", true);
+                sendClanMessage(player, "@bla@ "+name+ " has been unbanned from the channel", true);
             }
             return true;
         }
 
-        if(message.startsWith("listbans")) {
+        if(message.startsWith("listbans") && Rank.isStaffMember(player)) {
             String name = message.replace("unban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
 

@@ -1078,7 +1078,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("players2", Rank.PLAYER){
+        submit(new Command("players2", Rank.HELPER){
             public boolean execute(final Player player, final String input){
                 player.getActionSender().sendMessage("playersstart");
                 for(final Player p : World.getWorld().getPlayers())

@@ -189,7 +189,7 @@ public class PlayerPoints {
 			toAdd += Misc.random(maxpoints) + 1;
 		}
 		votingPoints += toAdd;
-		player.getActionSender().sendMessage("Your voting points have been increased by " +
+		player.sendServerMessage("Your voting points have been increased by " +
 				toAdd + ", you now have " + votingPoints + " voting points!");
 		player.getQuestTab().sendVotePoints();
 	}

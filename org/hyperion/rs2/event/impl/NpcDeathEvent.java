@@ -253,7 +253,7 @@ public class NpcDeathEvent extends Event {
                                             Item.create(drop.getId(), amt));
                                     if (drop.getChance() < 30) {
                                         for (Player p : player.getRegion().getPlayers())
-                                            p.sendf("@gre@%s has just gotten a %d of %s", player.getSafeDisplayName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                                            p.sendf("@gre@[Loot] %s has just gotten %s %s%s.", player.getSafeDisplayName(), amt, ItemDefinition.forId(drop.getId()).getName(), amt > 1 ? "s" : "");
                                     }
                                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                                 }

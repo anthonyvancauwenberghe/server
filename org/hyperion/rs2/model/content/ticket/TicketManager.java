@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.packet.InterfacePacketHandler;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.util.*;
 
@@ -27,8 +28,8 @@ public class TicketManager {
         tickets.add(ticket);
         for(final Player player : World.getWorld().getPlayers()) {
             if (Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()) {
-                player.sendMessage("@red@New ticket submitted--------------",
-                        "Name: @blu@" + ticket.name, "Title: @blu@" + ticket.title, "Reason: @blu@" + ticket.request, "Rank: @blu@" + ticket.min_rank);
+                player.sendMessage("@dre@        -*-*-*-*-*-*-*-*-*- New ticket submitted -*-*-*-*-*-*-*-*-*-",
+                        "@dre@        Player: @bla@" + TextUtils.ucFirst(ticket.name), "@dre@        Title: @bla@" + TextUtils.ucFirst(ticket.title), "@dre@        Reason: @bla@" + ticket.request, "@dre@        Rank: @bla@" + ticket.min_rank);
             }
         }
 

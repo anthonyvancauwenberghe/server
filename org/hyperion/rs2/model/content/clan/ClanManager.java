@@ -142,8 +142,7 @@ public class ClanManager {
 			player.sendClanMessage("You leave your current clan chat.");
 
 		}
-		player.getActionSender().sendString(18139, "Talking in: Not in clan");
-		player.getActionSender().sendString(18140, "Owner: None");
+        clearClanChat(player);
 		if(! keepRank)
 			player.setClanRank(0);
 		if(resetClanName)

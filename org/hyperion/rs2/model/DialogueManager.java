@@ -1170,7 +1170,7 @@ public class DialogueManager {
                 break;
             case 176:
                 player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-                        "Yes i'm sure I want to use 20 slayer points",
+                        "Yes I'm sure I want to use 20 slayer points",
                         "Nevermind."
                 );
                 player.getInterfaceState().setNextDialogueId(0, 187);
@@ -1180,7 +1180,7 @@ public class DialogueManager {
                 if(player.getSlayer().resetTask())
                     player.sendMessage("Your task has been successfully reset!");
                 else
-                    player.sendMessage("You need more slayer points to reset your task");
+                    player.sendMessage("You need more slayer points to reset your task!");
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 177:
@@ -1188,12 +1188,12 @@ public class DialogueManager {
                 break;
             case 178:
                 if(player.getSlayer().getSlayerPoints() < 1) {
-                    player.getActionSender().sendMessage("You need at least 1 slayer point to do this");
+                    player.getActionSender().sendMessage("You need at least 1 slayer point to do this!");
                     player.getActionSender().removeChatboxInterface();
                     return;
                 }
                 player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-                        "Yes i'm sure. I want to reset my task progress!",
+                        "Yes I'm sure. I want to reset my task progress!",
                         "Nevermind."
                 );
                 player.getInterfaceState().setNextDialogueId(0, 200);

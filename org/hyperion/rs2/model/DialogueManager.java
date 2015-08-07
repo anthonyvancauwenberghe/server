@@ -53,9 +53,8 @@ public class DialogueManager {
 			return;
 		switch(dialogueId) {
 			case 0:
-				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Good day. How may I help you?");
-				player.getInterfaceState().setNextDialogueId(0, 1);
+				player.getActionSender().removeChatboxInterface();
+				Bank.open(player, false);
 				break;
 			case 1:
 				if(player.bankPin != null && !player.bankPin.equals("null")) {

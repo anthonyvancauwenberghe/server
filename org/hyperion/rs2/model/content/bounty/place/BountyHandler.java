@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.bounty.place.Bounty;
 import org.hyperion.rs2.util.PushMessage;
+import org.hyperion.rs2.util.TextUtils;
 
 public final class BountyHandler {
 	private final List<Bounty> bounties = new ArrayList<>();
@@ -20,11 +21,11 @@ public final class BountyHandler {
 			return false;
 		else if(old != null) {
 			if(remove(old)) {
-                PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
+                PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
                 return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
             } else return false;
 		}
-        PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
+        PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
         return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
 	}
 	

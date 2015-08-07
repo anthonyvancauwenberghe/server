@@ -265,6 +265,9 @@ public class NpcDeathEvent extends Event {
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),
                                 Item.create(18768, 1));
+                        for (Player p : player.getRegion().getPlayers())
+                            p.sendf("@gre@[Loot] %s has just gotten 1 %s.", player.getSafeDisplayName(), ItemDefinition.forId(18768).getName());
+
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
 
                     }

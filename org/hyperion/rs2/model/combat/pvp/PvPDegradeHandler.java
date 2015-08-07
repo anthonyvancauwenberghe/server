@@ -22,7 +22,7 @@ public final class PvPDegradeHandler {
 	private static void sendWarningMessages(final Player player, final int degrade, final int id) {
 		final String item = ItemDefinition.forId(id).getName();
 		if(degrade%100 == 0) {
-			player.sendf("@blu@Your %s is at @red@%d%%@blu@", item, degrade/10);
+			player.sendf("Your %s is at %d%%.", item, degrade/10);
 		}
 	}
 	

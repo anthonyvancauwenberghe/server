@@ -74,13 +74,12 @@ public class SummoningMonsters {
 			//}
 		}
 		if(p.SummoningCounter <= 0) {
+			p.getActionSender().sendMessage("Your Summoning monster has died.");
 			World.getWorld().resetSummoningNpcs(p);
 		} else if(p.SummoningCounter == 100) {
-			p.getActionSender().sendMessage(
-					"Your Summoning monster will die in a minute..");
+			p.getActionSender().sendMessage("Your Summoning monster will die in a minute...");
 		} else if(p.SummoningCounter == 200) {
-			p.getActionSender().sendMessage(
-					"Your Summoning monster will die in 2 minutes");
+			p.getActionSender().sendMessage("Your Summoning monster will die in 2 minutes.");
 		}
 		//}
 	}

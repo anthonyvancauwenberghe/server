@@ -20,11 +20,11 @@ public final class BountyHandler {
 			return false;
 		else if(old != null) {
 			if(remove(old)) {
-                PushMessage.pushGlobalMessage(String.format("[@or2@BOUNTY@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
+                PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
                 return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
             } else return false;
 		}
-        PushMessage.pushGlobalMessage(String.format("[@or2@BOUNTY@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
+        PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", fromPlayer, bounty, playerName));
         return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
 	}
 	
@@ -55,7 +55,7 @@ public final class BountyHandler {
             if(ipCheck(killer, key))
                 return;
 			if(remove(bounty)) {
-				PushMessage.pushGlobalMessage(String.format("[@or2@BOUNTY@bla@]: %s has just defeated %s for a %d PKP bounty!", killer.getName(),key, pkpToGain));
+				PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just defeated %s for a %d Pk points bounty!", killer.getName(),key, pkpToGain));
 				killer.getPoints().inceasePkPoints(pkpToGain);
 			}
 		}

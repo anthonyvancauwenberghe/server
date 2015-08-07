@@ -202,7 +202,7 @@ public class Dicing implements ContentTemplate {
                 if(itemvalue > 10_000)
                     r = Misc.random(75);
 
-                player.getActionSender().sendMessage("The npc rolled @red@" + r + "@bla@ on the percentile dice.");
+                player.getActionSender().sendMessage("The gambler rolled " + r + " with his dice.");
                 dicer.forceMessage(r + "!");
 				String query = null;
                 player.getLogManager().add(LogEntry.gamble(dicer, item, r));
@@ -210,7 +210,7 @@ public class Dicing implements ContentTemplate {
 					int amount = count;
 					if(amount > 10 && Misc.random(2) == 0) {
 						amount *= .9;
-						player.getActionSender().sendMessage("@red@The gambler feels greedy and takes a 10% cut!");
+						player.getActionSender().sendMessage("The gambler feels greedy and takes a 10% cut!");
 					}
                     if(toPkp)
                         player.getInventory().add(Item.create(5020, pkpValues.get(id) * 2 * amount));
@@ -251,7 +251,7 @@ public class Dicing implements ContentTemplate {
 		World.getWorld().submit(new Event(3000) {
 			public void execute() {
 				int thrown = getRandomNumber(player, 100);
-				player.getActionSender().sendMessage("You roll @red@" + thrown + "@bla@ on the percentile dice.");
+				player.getActionSender().sendMessage("You roll " + thrown + " with your dice.");
 				this.stop();
 			}
 		});

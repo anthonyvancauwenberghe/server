@@ -542,7 +542,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			if(World.getWorld().getContentManager().handlePacket(4, player, id, slot, interfaceId, - 1))
 				return;
 		if(player.getPvPStorage().contains(id)) {
-			player.sendf("@blu@You have approximately @red@%d%%@blu@ charges left on your %s", player.getPvPStorage().get(id)/10, ItemDefinition.forId(id).getName());
+			player.sendf("You have approximately %d%% charges left on your %s", player.getPvPStorage().get(id)/10, ItemDefinition.forId(id).getName());
 		}
 		switch(id) {
 		case 11283:

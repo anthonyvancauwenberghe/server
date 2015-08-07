@@ -58,9 +58,15 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, 1);
 				break;
 			case 1:
-				player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-						"I'd like to access my bank account, please.",
-						"I'd like to set/change my PIN please.");
+				if(player.bankPin != null && !player.bankPin.equals("null")) {
+					player.getActionSender().sendDialogue("Select an option", DialogueType.OPTION, -1, FacialAnimation.DEFAULT,
+							"I'd like to access my bank account, please.",
+							"I'd like to change my PIN please.");
+				} else {
+					player.getActionSender().sendDialogue("Select an option", DialogueType.OPTION, -1, FacialAnimation.DEFAULT,
+							"I'd like to access my bank account, please.",
+							"I'd like to set my PIN please.");
+				}
 				player.getInterfaceState().setNextDialogueId(0, 2);
 				player.getInterfaceState().setNextDialogueId(1, 3);
 				//player.getInterfaceState().setNextDialogueId(2, 4);
@@ -70,8 +76,13 @@ public class DialogueManager {
 				Bank.open(player, false);
 				break;
 			case 3:
-				player.getActionSender().sendDialogue(player.getName(), DialogueType.PLAYER, - 1, FacialAnimation.DEFAULT,
-						"I'd like to set my PIN please.");
+				if(player.bankPin != null && !player.bankPin.equals("null")) {
+					player.getActionSender().sendDialogue(player.getName(), DialogueType.PLAYER, -1, FacialAnimation.DEFAULT,
+							"I'd like to change my PIN please.");
+				} else {
+					player.getActionSender().sendDialogue(player.getName(), DialogueType.PLAYER, -1, FacialAnimation.DEFAULT,
+							"I'd like to set my PIN please.");
+				}
 				player.getInterfaceState().setNextDialogueId(0, 4);
 				break;
 			case 4:
@@ -215,7 +226,7 @@ public class DialogueManager {
 			case 26:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
 						"Your current task is to kill " + player.slayerAm,
-						NPCDefinition.forId(player.slayerTask).getName() + "'s.");
+						NPCDefinition.forId(player.slayerTask).getName().toLowerCase() + "'s.");
 				player.getInterfaceState().setNextDialogueId(0, 27);
 				break;
 			case 27:
@@ -263,7 +274,7 @@ public class DialogueManager {
 			case 34://more
 				player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
 						"Rock Crabs",
-						"Greater Demons.",
+						"Greater Demons",
 						"Back"
 				);
 				player.getInterfaceState().setNextDialogueId(0, 35);
@@ -759,12 +770,12 @@ public class DialogueManager {
 				break;
 			case 118:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Hi, Do you want ", "to exchange your implings", "for rewards?");
+						"Hello, Do you want to exchange your", "implings for rewards?");
 				player.getInterfaceState().setNextDialogueId(0, 119);
 				break;
 			case 119:
 				player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-						"Yea sure", "Nop"
+						"Yes please", "No thank you"
 				);
 				player.getInterfaceState().setNextDialogueId(0, 120);
 				player.getInterfaceState().setNextDialogueId(1, - 1);
@@ -794,7 +805,7 @@ public class DialogueManager {
 				player.getActionSender().removeAllInterfaces();
 				break;
 			case 124:
-				player.getActionSender().sendDialogue("Talk About:", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+				player.getActionSender().sendDialogue("Talk About", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
 						"Ranging Minigame", "Ranging SkillCape"
 				);
 				player.getInterfaceState().setNextDialogueId(0, 125);
@@ -827,13 +838,13 @@ public class DialogueManager {
 			case 130:
 				if(npc != null)
                     player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Hey, I'm a dice game hoster ", "if I throw 55 or higher I'll double your item!", "if I throw less than 55, you'll lose your item");
+						"Hello there, I am the dice game hoster.", "If I throw 55 or higher I'll double your item!", "But if I throw less than 55, you'll lose your item!");
 				player.getInterfaceState().setNextDialogueId(0, 131);
 				break;
 			case 131:
 				if(npc.getDefinition() != null) {
 					player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-							"To play , simply give", "the item to me", "-use item with gambler-");
+							"To play, simply give an item to me.", "@dre@(Use the item of the gambler)");
 					player.getInterfaceState().setNextDialogueId(0, -1);
 				}
 				break;
@@ -1268,7 +1279,7 @@ public class DialogueManager {
                 player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
                         "Exchange my PvP Artifacts for Pk points",
                         "Exchange my Emblems for points",
-                        "Open up Emblem Point shop");
+                        "Open up Emblem point shop");
                 player.getInterfaceState().setNextDialogueId(0, 189);
                 player.getInterfaceState().setNextDialogueId(1, 190);
                 player.getInterfaceState().setNextDialogueId(2, 191);
@@ -1279,12 +1290,12 @@ public class DialogueManager {
                             "You have exchanged your statues.");
                 else
                     player.getActionSender().sendMessage(
-                            "You don't have any statues with you..");
+                            "You don't have any statues with you.");
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 190:
                 player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT,
-                        "Exchange my emblems for "+player.getBountyHunter().emblemExchagePrice()+ " emblem points",
+                        "Exchange my emblems for " + player.getBountyHunter().emblemExchangePrice() + " emblem points",
                         "Nevermind");
                 player.getInterfaceState().setNextDialogueId(0, 192);
                 player.getInterfaceState().setNextDialogueId(1, -1);
@@ -1294,14 +1305,14 @@ public class DialogueManager {
                 break;
             case 192:
                 player.getBountyHunter().exchangeEmblems();
-                player.sendf("You now have @red@%d@bla@ emblem points", player.getBountyHunter().getEmblemPoints());
+                player.sendf("You now have %d emblem points", player.getBountyHunter().getEmblemPoints());
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 193:
                 ShopManager.open(player, 82);
                 break;
 			case 194:
-				player.getActionSender().sendDialogue("You're about to teleport to the wilderness, do you really want to?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Yes! teleport me to level 31 wildy", "No!");
+				player.getActionSender().sendDialogue("Pick an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Teleport me to level 31 wilderness", "Stay here");
 				player.getInterfaceState().setNextDialogueId(0, 195);
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
@@ -1309,12 +1320,13 @@ public class DialogueManager {
 				Magic.teleport(player, Location.create(2975, 3745, 0), false);
 				break;
 			case 196:
-				player.getActionSender().sendDialogue("Wests is in wildy, are you sure?", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Yes!", "No!");
+				player.getActionSender().sendDialogue("Pick an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Teleport me to level 14 wilderness", "Stay here");
 				player.getInterfaceState().setNextDialogueId(0, 197);
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
 			case 197:
 				Magic.teleport(player, Location.create(2979, 3613, 0), false);
+				player.getActionSender().removeChatboxInterface();
 				break;
 
             case 6000:

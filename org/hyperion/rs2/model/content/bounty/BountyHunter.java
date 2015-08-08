@@ -164,7 +164,7 @@ public class BountyHunter {
         }
     }
 
-    public int emblemExchagePrice() {
+    public int emblemExchangePrice() {
         return Emblem.getTotalVal(player.getInventory().toArray());
     }
 

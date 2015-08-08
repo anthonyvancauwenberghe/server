@@ -469,7 +469,7 @@ public class ActionSender {
 		}
 		if(i != - 1) {
 			sendEP2();
-            sendString(36505, "Killstreak:@red@"+player.getKillStreak());
+            sendString(36505, "Killstreak: @red@"+player.getKillStreak());
 		}
 		return this;
 	}
@@ -518,13 +518,13 @@ public class ActionSender {
 	}
 
 	public ActionSender sendEP() {
-		sendString(12280, " Potential :");// ep
+		sendString(12280, " Potential: ");// ep
 		sendString(12281, getEPString());
 		return this;
 	}
 
     public ActionSender sendEP2() {
-        sendString(36504, "EP :" + getEPString());
+        sendString(36504, "EP: " + getEPString());
         return this;
     }
 

@@ -233,9 +233,11 @@ public class PlayerSaving {
 	public boolean save(Player player) {
 		//saveSQL(player);
 		//return true;
+		/*
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-			player.getActionSender().sendMessage("Saving your account");
+			player.sendServerMessage("Saving your account");
 		}
+		*/
 		try (BufferedWriter file = new BufferedWriter(new FileWriter(
                 getFileName(player)), BUFFER_SIZE)){
 

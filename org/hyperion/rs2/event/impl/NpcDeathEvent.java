@@ -3,6 +3,8 @@ package org.hyperion.rs2.event.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import com.sun.javafx.binding.StringFormatter;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
@@ -222,7 +224,7 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);
-                player.sendf("You now have @red@%d@bla@ %s kills", kills, npc.getDefinition().getName());
+                player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
 
                 if(kills%1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
@@ -251,7 +253,7 @@ public class NpcDeathEvent extends Event {
                                             Item.create(drop.getId(), amt));
                                     if (drop.getChance() < 30) {
                                         for (Player p : player.getRegion().getPlayers())
-                                            p.sendf("@gre@%s has just gotten a %d of %s", player.getSafeDisplayName(), amt, ItemDefinition.forId(drop.getId()).getName());
+                                            p.sendf("@gre@[Loot] %s has just gotten %s %s%s.", player.getSafeDisplayName(), amt, ItemDefinition.forId(drop.getId()).getName(), amt > 1 ? "s" : "");
                                     }
                                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                                 }
@@ -263,6 +265,9 @@ public class NpcDeathEvent extends Event {
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),
                                 Item.create(18768, 1));
+                        for (Player p : player.getRegion().getPlayers())
+                            p.sendf("@gre@[Loot] %s has just gotten 1 %s.", player.getSafeDisplayName(), ItemDefinition.forId(18768).getName());
+
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
 
                     }

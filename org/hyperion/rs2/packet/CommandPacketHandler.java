@@ -2758,9 +2758,9 @@ public class CommandPacketHandler implements PacketHandler {
 						+ player.getKillCount() + "/" + player.getDeathCount());
 				return;
 			}
-			if (commandStart.equals("resetslayertask")) {
+			if (commandStart.equals("resetslayertask") && Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 				player.slayerTask = 0;
-				player.getActionSender().sendMessage("@blu@Slayer Task Reset!");
+				player.getActionSender().sendMessage("Slayer task reset.");
 				return;
 			}
 			if (commandStart.equals("train")) {

@@ -183,7 +183,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 				Trade.open(player, tradeWith);
 			else {
 				tradeWith.getActionSender().sendMessage(player.getName() + " :tradereq:");
-				player.getActionSender().sendMessage("Sending trade request.");
+				player.getActionSender().sendMessage("Sending trade request...");
 			}
 		} else {
 			player.getActionSender().sendMessage("This player is busy.");
@@ -288,8 +288,8 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			if(player1.duelWith2 == player) {
 				Duel.open(player, player1);
 			} else {
-				player1.getActionSender().sendMessage((new StringBuilder()).append(player.getName()).append(" :duelreq:").toString());
-				player1.getActionSender().sendMessage("Sending duel request.");
+				player1.getActionSender().sendMessage((new StringBuilder()).append(player.getSafeDisplayName()).append(" :duelreq:").toString());
+				player1.getActionSender().sendMessage("Sending duel request...");
 			}
 		}
 	}
@@ -308,8 +308,8 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			if(tradeWith.tradeWith2 == player)
 				Trade.open(player, tradeWith);
 			else {
-				tradeWith.getActionSender().sendMessage(player.getName() + " :tradereq:");
-				player.getActionSender().sendMessage("Sending trade request.");
+				tradeWith.getActionSender().sendMessage(player.getSafeDisplayName() + " :tradereq:");
+				player.getActionSender().sendMessage("Sending trade request...");
 			}
 		}
 	}

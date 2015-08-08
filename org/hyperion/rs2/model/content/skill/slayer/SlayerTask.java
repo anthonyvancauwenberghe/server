@@ -75,7 +75,7 @@ public enum SlayerTask {
     BRONZE_DRAGON(31, Difficulty.HARD, 1, 479, 1590),
 
     /** Medium tasks  */
-    ABERANT_SPECTRES(31, Difficulty.DIFFICULT, 60, 290, 1606),
+    ABERANT_SPECTRES(31, Difficulty.DIFFICULT, 60, 290, 1604),
     ORK(30, Difficulty.DIFFICULT, 1, 280, 6272, 6271, 6273),
     GREATER_DEMON(26, Difficulty.DIFFICULT, 1, 210, 83),
     JELLY(14,Difficulty.DIFFICULT, 52, 212,

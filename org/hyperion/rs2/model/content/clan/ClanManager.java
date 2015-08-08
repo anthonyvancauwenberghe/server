@@ -142,8 +142,7 @@ public class ClanManager {
 			player.sendClanMessage("You leave your current clan chat.");
 
 		}
-		player.getActionSender().sendString(18139, "Talking in: Not in clan");
-		player.getActionSender().sendString(18140, "Owner: None");
+        clearClanChat(player);
 		if(! keepRank)
 			player.setClanRank(0);
 		if(resetClanName)
@@ -153,7 +152,7 @@ public class ClanManager {
     public static void clearClanChat(Player player) {
         player.getActionSender().sendString(18139, "Talking in: Not in clan");
         player.getActionSender().sendString(18140, "Owner: None");
-        for (int i = 18144; i <= 18444; i ++) {
+        for (int i = 18144; i <= 18444; i++) {
             player.getActionSender().sendString(i, "");
         }
     }
@@ -372,12 +371,12 @@ public class ClanManager {
             }
 
             if(clan.unban(name)) {
-                sendClanMessage(player, "@bla@ "+name+ " has been UN-BANNED from the channel", true);
+                sendClanMessage(player, "@bla@ "+name+ " has been unbanned from the channel", true);
             }
             return true;
         }
 
-        if(message.startsWith("listbans")) {
+        if(message.startsWith("listbans") && Rank.isStaffMember(player)) {
             String name = message.replace("unban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
 

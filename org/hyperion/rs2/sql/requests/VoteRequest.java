@@ -67,9 +67,9 @@ public class VoteRequest extends SQLRequest {
                 } else {
                     player.getBank().add(new BankItem(0, 3062, thisClaim));
                 }
-                player.getActionSender().sendMessage(
-                        String.format("@blu@Thanks for voting! @red@%d@blu@ Vote box have been added to your %s",
-                                thisClaim, (freeSlots >= thisClaim ? "inventory" : "bank"
+                player.sendServerMessage(
+                        String.format("Thank you for voting! %d vote %s have been added to your %s.",
+                                thisClaim, thisClaim == 1 ? "box" : "boxes", (freeSlots >= thisClaim ? "inventory" : "bank"
                                 ))
                 );
                 player.setLastVoted(System.currentTimeMillis());

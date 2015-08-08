@@ -122,10 +122,12 @@ public class Teleports implements ContentTemplate {
 				case - 20018:
 					 boolean acc = player.getExtraData().getBoolean("kbdtele");
 					if(!acc) {
-						player.sendMessage("@red@This zone is in deep wilderness and leads into multi combat", "Teleport again if you wish to proceed");
+						player.sendImportantMessage("This zone is in deep wilderness and leads into multi combat.");
+						player.sendImportantMessage("Teleport again if you wish to proceed.");
 						player.getExtraData().put("kbdtele", true);
 					} else
 					Magic.teleport(player, 3007, 3849, 0, false);
+					player.getExtraData().put("kbdtele", false);
 					break;
 				case 177209: //Dag Kings
 				case - 20015:
@@ -136,12 +138,13 @@ public class Teleports implements ContentTemplate {
 				case - 20012:
 					acc = player.getExtraData().getBoolean("eletele");
 					if(!acc) {
-						player.sendMessage("@red@This zone is in deep wilderness and leads into multi combat",
-								"@blu@Teleport again if you wish to proceed");
+						player.sendImportantMessage("This zone is in deep wilderness and leads into multi combat.");
+						player.sendImportantMessage("Teleport again if you wish to proceed.");
 						player.getExtraData().put("eletele", true);
 
 					} else
 					Magic.teleport(player, 3295, 3921, 0, false);
+					player.getExtraData().put("eletele", false);
 					break;
 				case 178034: //Mage Bank
 				case - 19934:

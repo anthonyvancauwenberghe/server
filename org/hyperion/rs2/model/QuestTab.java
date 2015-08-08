@@ -2,6 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
@@ -264,6 +265,15 @@ public class QuestTab {
 			@Override
 			public void handle(Player player, int id) {
 				player.getActionSender().openStaffInterface();
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(2), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				if(ServerMinigame.name != null && ServerMinigame.x != 0) {
+					Magic.teleport(player, Location.create(ServerMinigame.x, ServerMinigame.y, ServerMinigame.z), false, false);
+				}
 			}
 		});
 

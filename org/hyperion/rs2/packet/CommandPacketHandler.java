@@ -2183,7 +2183,7 @@ public class CommandPacketHandler implements PacketHandler {
             /**
              * Made the system already pshh, it'll just sit there
              */
-            if (Rank.hasAbility(player, Rank.SUPER_DONATOR) && commandStart.equalsIgnoreCase("settag")) {
+            if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && commandStart.equalsIgnoreCase("settag")) {
                 try {
                     String tag = withCaps.substring(7); // how else can i
                     // have "Rich Homie"

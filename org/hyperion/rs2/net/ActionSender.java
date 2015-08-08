@@ -1132,7 +1132,7 @@ public class ActionSender {
 	}
 
 	public ActionSender openPlayersInterface() {
-		sendString(8144, "Players Online: "
+		sendString(8144, "@dre@Players Online: "
 				+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
 		int i = 0;
 		Player p3 = null;
@@ -1141,20 +1141,22 @@ public class ActionSender {
             sendString(QUEST_MENU_IDS[d], "");
         }
 		for(; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
-			if(i >= 99)
+			if(i >= 99) {
+				sendString(QUEST_MENU_IDS[99], "@dre@And another " + (98 - (World.getWorld().getPlayers().size() * World.PLAYER_MULTI)) + " players");
 				break;
+			}
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {
 				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
 				if (p3.isHidden())
 					continue;
-				String s = p3.getName();
+				String s = p3.getSafeDisplayName();
+
                 if(s.isEmpty())
                     continue;
-                s += "["+(s.length()-s.replace(" ", "").length())+"]";
-				if(Rank.getPrimaryRankIndex(p3) != 0)
-					s += "[" + Rank.getPrimaryRankIndex(p3) + "]";
 
-				sendString(QUEST_MENU_IDS[i], s);
+				String s1 = "@dre@" + (i + 1) + ". @bla@" + s;
+
+				sendString(QUEST_MENU_IDS[i], s1);
 			}
 		}
 		showInterface(8134);

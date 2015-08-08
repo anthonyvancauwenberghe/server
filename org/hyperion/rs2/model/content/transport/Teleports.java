@@ -126,8 +126,7 @@ public class Teleports implements ContentTemplate {
 						player.sendImportantMessage("Teleport again if you wish to proceed.");
 						player.getExtraData().put("kbdtele", true);
 					} else
-					Magic.teleport(player, 3007, 3849, 0, false);
-					player.getExtraData().put("kbdtele", false);
+					    Magic.teleport(player, 3007, 3849, 0, false);
 					break;
 				case 177209: //Dag Kings
 				case - 20015:
@@ -143,8 +142,7 @@ public class Teleports implements ContentTemplate {
 						player.getExtraData().put("eletele", true);
 
 					} else
-					Magic.teleport(player, 3295, 3921, 0, false);
-					player.getExtraData().put("eletele", false);
+					    Magic.teleport(player, 3295, 3921, 0, false);
 					break;
 				case 178034: //Mage Bank
 				case - 19934:

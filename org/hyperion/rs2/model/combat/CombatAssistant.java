@@ -1167,7 +1167,7 @@ public class CombatAssistant {
                 rangeDef *= 1.23;
 			return (int)(rangeDef * 0.50) + (player.getBonus().get(EquipmentStats.DEFENCE_RANGED)) / 2 + 80;
 		} else //NPCs
-			return (int)(entity.cE.getCombat()/2.6);
+			return (int)(entity.cE.getCombat()/2.6) + 40;
 	}
 
 	public static int calculateMageAtk(Player player) {
@@ -1314,7 +1314,7 @@ public class CombatAssistant {
 			}
 			return (int) (meleeDef * .5 + bonus * .8) + 70;
 		} else {
-			return (int)(entity.cE.getCombat() * .9);
+			return (int)(entity.cE.getCombat() * .8) + 40;
 		}
 	}
 

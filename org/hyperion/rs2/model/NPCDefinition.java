@@ -279,12 +279,11 @@ public class NPCDefinition {
                                 break;
                             case 1590:
                             case 1591:
-                                hp *= 4;
-                                combat *= 1.35;
+                                hp *= 3;
+                                combat *= 1.15;
                                 break;
                             case 1592:
-                                hp *= 3;
-                                combat *= 1.2;
+                                hp *= 2;
                                 break;
                             case 54:
                                 combat = 240;

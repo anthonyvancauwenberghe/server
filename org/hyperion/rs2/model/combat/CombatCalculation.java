@@ -81,7 +81,7 @@ public enum CombatCalculation {
         int rangeAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = (int)(CombatAssistant.calculateRangeAttack(attack)) - (int)(def.getDefinition().getBonus()[9] * .95);
+            final int deltaBonus = (int)(CombatAssistant.calculateRangeAttack(attack)) - ((int)(def.getDefinition().getBonus()[9] * .95) + 40);
             randomDamage += Misc.random(deltaBonus/2);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }

@@ -5,6 +5,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.*;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.util.Misc;
 
 
 public class CorporealBeast implements Attack {
@@ -29,24 +30,27 @@ public class CorporealBeast implements Attack {
 	 */
 	public static int reduceDamage(Player atk, int damage, int style) {
 		Item weapon = atk.getEquipment().get(Equipment.SLOT_WEAPON);
-		if(atk.debug && Rank.hasAbility(atk, Rank.ADMINISTRATOR)) {
-			atk.getSpecBar().increment(100);
-		}
-		if(style == Constants.MELEE && !CombatAssistant.isStab(weapon)) {
-			damage =  (int)(damage * (0.6 + (Math.random() * .4)));
-			if(Combat.random(10) == 1)
-				atk.getActionSender().sendMessage("Your weapon doesn't rip through the beast's tough skin!");
-			if(Rank.hasAbility(atk, Rank.ADMINISTRATOR)) {
-				atk.getActionSender().sendMessage("You loose damage because your weapon isn't a stab weapon!");
-			}
+		if(style == Constants.MELEE) {
+            if(CombatAssistant.isStab(weapon)) {
+			    damage =  (int)(damage * (0.6 + (Math.random() * .4)));
+			    if(Combat.random(10) == 1)
+				    atk.getActionSender().sendMessage("Your weapon doesn't rip through the beast's tough skin!");
+			    if(Rank.hasAbility(atk, Rank.ADMINISTRATOR)) {
+				    atk.getActionSender().sendMessage("You loose damage because your weapon isn't a stab weapon!");
+			    }
+            } else {
+                damage *= 1.2;
+            }
 		}
 		else if(style == Constants.MAGE)
 			damage = (int)(damage * Math.random());
 		else if(style == Constants.RANGE) {
 			if(damage > 50)
 				damage = 50;
-				
-		}
+            if(Misc.random(3) == 0)
+                atk.getActionSender().sendMessage("Your bolts bounce off the beast's tough skin!");
+
+        }
 		/**
 		 * I want to make it so crush/slash aren't as effective as stab, but I can't find where it handles that
 		 */

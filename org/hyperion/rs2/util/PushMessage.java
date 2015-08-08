@@ -29,7 +29,7 @@ public class PushMessage {
 		for(Player other : World.getWorld().getPlayers()) {
 			if(other != null) {
 				String message = suffix + input;
-				if(other.getYelling().isYellEnabled())
+				if(other.getPermExtraData().getBoolean("yelling"))
 					other.getActionSender().sendMessage(message);
 			}
 		}

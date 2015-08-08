@@ -240,7 +240,7 @@ public class ActionSender {
 			String rank = Rank.getPrimaryRank(player).toString();
 			for(Player p : World.getWorld().getPlayers())
 				if(p != null)
-					if(p.isStaffMessagesEnabled())
+					if(p.getPermExtraData().getBoolean("staffmessages"))
 						p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
 		}
 

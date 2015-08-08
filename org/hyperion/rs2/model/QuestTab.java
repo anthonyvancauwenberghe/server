@@ -16,7 +16,7 @@ public class QuestTab {
 	 */
 	public static int[] QUEST_TAB_IDS = {	//Stored the usable ID's
 			/*663,*/ 7332, 7333, 7334, 7336, 7383, 7339, 7338, 7340, 7346, 7341, 7342, 7337, 7343, 7335, 7344,
-			7345, 7347, /*7348, 682,*/ 12772, 673, 673, 7352, 17510, 7353, 12129,
+			7345, 7347, /*7348, 682,*/ 12772, 673, 7352, 17510, 7353, 12129,
 			8438, 12852, 15841, 7354, 7355, 7356, 8679, 7459, 16149, 6987,
 			7357, 12836, 7358, 7359, 14169, 10115, 14604, 7360, 12282, 13577,
 			12839, 7361, 16128, 11857, 7362, 7363, 7364, 10125, /*4508,*/10135, 18517,
@@ -28,7 +28,7 @@ public class QuestTab {
 	};
 	public static int[] QUEST_TAB_TO_CLEAR = {	//Stored the ID's to clear
 			663, 7332, 7333, 7334, 7336, 7383, 7339, 7338, 7340, 7346, 7341, 7342, 7337, 7343, 7335, 7344,
-			7345, 7347, 7348, 682, 12772, 673, 673, 7352, 17510, 7353, 12129,
+			7345, 7347, 7348, 682, 12772, 673, 7352, 17510, 7353, 12129,
 			8438, 12852, 15841, 7354, 7355, 7356, 8679, 7459, 16149, 6987,
 			7357, 12836, 7358, 7359, 14169, 10115, 14604, 7360, 12282, 13577,
 			12839, 7361, 16128, 11857, 7362, 7363, 7364, 10125, /*4508,*/ 18517,
@@ -163,7 +163,7 @@ public class QuestTab {
 	}
 
 	public void sendPkPoints() {
-		player.getActionSender().sendString("@or1@PK points: @gre@" + player.getPoints().getPkPoints(), getId(18));
+		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + player.getPoints().getPkPoints(), getId(18));
 	}
 
 	public void sendVotePoints() {
@@ -171,7 +171,7 @@ public class QuestTab {
 	}
 
 	public void sendDonatePoints() {
-		player.getActionSender().sendString("@or1@Donator points: @gre@" + player.getPoints().getDonatorPoints() + "@or1@/@gre@" + player.getPoints().getDonatorPointsBought(), getId(20));
+		player.getActionSender().sendString("@or1@Donator points: @gre@" + player.getPoints().getDonatorPoints()/* + "@or1@/@gre@" + player.getPoints().getDonatorPointsBought()*/, getId(20));
 	}
 
 	public void sendHonorPoints() {
@@ -196,7 +196,7 @@ public class QuestTab {
 	*/
 
 	public void sendYellEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getYelling().isYellEnabled() ? "Disable" : "Enable") + " yelling", getId(29));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("yelling") ? "Disable" : "Enable") + " yelling", getId(29));
 	}
 
 	public void sendTriviaEnabled() {
@@ -204,11 +204,11 @@ public class QuestTab {
 	}
 
 	public void sendPkMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.isPkMessagesEnabled() ? "Disable" : "Enable") + " PK messages", getId(31));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("pkmessages") ? "Disable" : "Enable") + " PK messages", getId(31));
 	}
 
 	public void sendStaffMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.isStaffMessagesEnabled() ? "Disable" : "Enable") + " staff messages", getId(32));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("staffmessages") ? "Disable" : "Enable") + " staff messages", getId(32));
 	}
 
 	public void sendExpLockEnabled() {
@@ -324,11 +324,18 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(20), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.forceMessage(player.getPoints().getDonatorPointsBought() == 0 ? "I have never bought any donator points." : "I bought " + player.getPoints().getDonatorPointsBought() + " donator points and " + (player.getPoints().getDonatorPointsBought() == player.getPoints().getDonatorPoints() ? "still have them all." : "still have " + player.getPoints().getDonatorPoints() + "of them left."));
+				player.forceMessage(player.getPoints().getDonatorPointsBought() == 0 ? "I have never bought any donator points." : "I bought " + player.getPoints().getDonatorPointsBought() + " donator points and " + (player.getPoints().getDonatorPointsBought() == player.getPoints().getDonatorPoints() ? "still have them all." : "still have " + player.getPoints().getDonatorPoints() + " of them left."));
 			}
 		});
 
 		ActionsManager.getManager().submit(getId(21), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				player.forceMessage("I have " + (player.getPoints().getHonorPoints() == 0 ? "no" : player.getPoints().getHonorPoints()) + " " + (player.getPoints().getHonorPoints() == 1 ? "honor point" : "honor points") + ".");
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(22), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getBountyHunter().getKills() == 0 ? "no" : player.getBountyHunter().getKills()) + " " + (player.getBountyHunter().getKills() == 1 ? "BH point" : "BH points") + ".");
@@ -340,6 +347,7 @@ public class QuestTab {
 			public void handle(Player player, int id) {
 				player.getPermExtraData().put("bhon", player.getBountyHunter().switchEnabled());
 				player.getQuestTab().sendBHEnabled();
+				player.sendMessage("Bounty hunter is now " + (player.getPermExtraData().getBoolean("bhon") ? "enabled" : "disabled") + ".");
 			}
 		});
 
@@ -353,9 +361,9 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(29), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getYelling().setYellEnabled(!player.getYelling().isYellEnabled());
+				player.getPermExtraData().put("yelling", !player.getPermExtraData().getBoolean("yelling"));
 				player.getQuestTab().sendYellEnabled();
-				player.sendMessage("Yell is now " + (player.getYelling().isYellEnabled() ? "enabled" : "disabled") + ".");
+				player.sendMessage("Yell is now " + (player.getPermExtraData().getBoolean("yelling") ? "enabled" : "disabled") + ".");
 			}
 		});
 
@@ -371,18 +379,18 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(31), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.setPkMessagesEnabled(!player.isPkMessagesEnabled());
+				player.getPermExtraData().put("pkmessages", !player.getPermExtraData().getBoolean("pkmessages"));
 				player.getQuestTab().sendPkMessagesEnabled();
-				player.sendMessage("Pk messages are now " + (player.isPkMessagesEnabled() ? "enabled" : "disabled") + ".");
+				player.sendMessage("Pk messages are now " + (player.getPermExtraData().getBoolean("pkmessages") ? "enabled" : "disabled") + ".");
 			}
 		});
 
 		ActionsManager.getManager().submit(getId(32), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.setStaffMessagesEnabled(!player.isStaffMessagesEnabled());
+				player.getPermExtraData().put("staffmessages", !player.getPermExtraData().getBoolean("staffmessages"));
 				player.getQuestTab().sendStaffMessagesEnabled();
-				player.sendMessage("Staff messages are now " + (player.isStaffMessagesEnabled() ? "enabled" : "disabled") + ".");
+				player.sendMessage("Staff messages are now " + (player.getPermExtraData().getBoolean("staffmessages") ? "enabled" : "disabled") + ".");
 			}
 		});
 

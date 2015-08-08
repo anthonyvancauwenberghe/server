@@ -166,14 +166,6 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int maxCapeSecondaryColor = 0;
     private int treasureScroll;
 
-	private boolean isStaffMessagesEnabled = true;
-	public void setStaffMessagesEnabled(boolean staffMessagesEnabled) { isStaffMessagesEnabled = staffMessagesEnabled; }
-	public boolean isStaffMessagesEnabled() { return isStaffMessagesEnabled; }
-
-	private boolean isPkMessagesEnabled = true;
-	public void setPkMessagesEnabled(boolean pkMessagesEnabled) { isPkMessagesEnabled = pkMessagesEnabled; }
-	public boolean isPkMessagesEnabled() { return isPkMessagesEnabled; }
-
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
 
@@ -2451,7 +2443,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(isPkMessagesEnabled())
+		if(getPermExtraData().getBoolean("pkmessages"))
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}

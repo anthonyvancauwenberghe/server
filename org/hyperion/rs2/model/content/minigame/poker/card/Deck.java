@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.minigame.poker.card;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,10 +14,16 @@ import java.util.List;
  */
 public class Deck {
 
-    public final List<Card> cards;
+    private static final Stack<Card> ALL_CARDS;
+
+    static {
+        ALL_CARDS = getAllCards();
+    }
+
+    public final Stack<Card> cards;
 
     public Deck() {
-        this.cards = getAllCards();
+        cards = new Stack() {{addAll(ALL_CARDS);}};
     }
 
     public synchronized void shuffleDeck() {
@@ -24,11 +31,11 @@ public class Deck {
     }
 
     public synchronized Card draw() {
-        return cards.remove(0);
+        return cards.pop();
     }
 
-    public static List<Card> getAllCards() {
-        final List<Card> cards = new ArrayList<>(52);
+    public static Stack<Card> getAllCards() {
+        final Stack<Card> cards = new Stack<>();
         for(Type type : Type.values()) {
             for(CardNumber number : CardNumber.values()) {
                 cards.add(new Card(type, number));

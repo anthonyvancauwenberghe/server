@@ -11,12 +11,20 @@ public class PokerHolder {
 
     private int chips;
 
+    public PokerHolder(int chips) {
+        this.chips = chips;
+    }
+
     public void addChips(int chips) {
         this.chips += chips;
     }
 
     public void removeChips(int chips) {
         this.chips -= chips;
+    }
+
+    public int getChips() {
+        return chips;
     }
 
 

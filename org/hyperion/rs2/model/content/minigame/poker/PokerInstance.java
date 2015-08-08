@@ -12,12 +12,12 @@ import org.hyperion.rs2.model.content.minigame.poker.card.Deck;
  */
 public class PokerInstance {
 
-    private int chips;
+    private final PokerHolder chips;
 
     public Card[] cards = new Card[2];
 
     public PokerInstance(int chips) {
-        this.chips = chips;
+        this.chips = new PokerHolder(chips);
     }
 
     public void deal(final Deck deck) {

@@ -1,16 +1,13 @@
 package org.hyperion.rs2.model.container.bank;
 
-import org.hyperion.rs2.model.BankPin;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
+import java.security.acl.Owner;
 import java.util.Arrays;
 
 /**
@@ -47,25 +44,27 @@ public class Bank {
      * @param player The player to open the bank for.
      */
     public static void open(Player player, boolean setPin) {
-        if(player.getLocation().inPvPArea() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            return;
-        }
-
-        if(!ItemSpawning.canSpawn(player)) {
-            return;
-        }
-
-        if(FightPits.inPits(player))
-            return;
-        player.resetingPin = false;
-        if(player.bankPin != null && !player.bankPin.equals("null")) {
-            if ((player.bankPin.length() < 4 && setPin)
-                    || (player.bankPin.length() >= 4 && !player.bankPin
-                    .equals(player.enterPin))) {
-                BankPin.loadUpPinInterface(player);
+        if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
+            if (player.getLocation().inPvPArea() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
                 return;
             }
+
+            if (!ItemSpawning.canSpawn(player)) {
+                return;
+            }
+
+            if (FightPits.inPits(player))
+                return;
         }
+            player.resetingPin = false;
+            if (player.bankPin != null && !player.bankPin.equals("null")) {
+                if ((player.bankPin.length() < 4 && setPin)
+                        || (player.bankPin.length() >= 4 && !player.bankPin
+                        .equals(player.enterPin))) {
+                    BankPin.loadUpPinInterface(player);
+                    return;
+                }
+            }
         player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
         player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));
         player.getInterfaceState().addListener(player.getInventory(),

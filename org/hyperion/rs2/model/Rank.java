@@ -11,7 +11,7 @@ public enum Rank {
 	HERO("@bla@"), // 1
 	LEGEND("@bla@"), // 2
 	VETERAN("@ffb226@"), // 3
-	DONATOR("@d00303@"), // 4
+	DONATOR("@ba0000@"), // 4
 	SUPER_DONATOR("@03ce10@"), // 5
 	GRAPHICS_DESIGNER("@bla@"), // 6
 	EVENT_MANAGER("@bla@"), // 7

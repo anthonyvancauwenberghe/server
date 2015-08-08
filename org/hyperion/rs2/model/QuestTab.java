@@ -121,7 +121,7 @@ public class QuestTab {
 	}
 
 	public void sendBonusSkill() {
-		player.getActionSender().sendString("@or2@Bonus Skill: @gre@ "+ Misc.getSkillName(Skills.BONUS_SKILL), getId(2));
+		player.getActionSender().sendString("@or2@Bonus Skill: @gre@ALL SKILLS "/*+ Misc.getSkillName(Skills.BONUS_SKILL)*/, getId(2));
 	}
 
 	public void sendElo() {

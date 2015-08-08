@@ -125,18 +125,6 @@ public class NpcDeathEvent extends Event {
             Player killer = npc.cE.getKiller();
             if(jet != null && killer != null && npc != null)
                 jet.getActionSender().sendMessage("Killer is: "+killer.getName()+" for npc: "+npc.getDefinition().getName());
-            /*if(npc.getDefinition().getId() == 8133) {
-                for(Player p : World.getWorld().getPlayers()) {
-                    if(p.getCorpDamage() > 100) {
-                        p.getPoints().inceasePkPoints((int)(p.getCorpDamage()/12));//1750 hp, 175pkp
-                        p.getPoints().increaseDonatorPoints((int)(p.getCorpDamage()/150), false);//12 donators pts to divvy up?
-                        if(jet != null) {
-                            jet.getActionSender().sendMessage(""+p.getName()+" has hit: "+p.getCorpDamage());
-                        }
-                    }
-                    p.setCorpDamage(0);
-                }
-            }*/
             if(killer != null) {
                 if(! npc.serverKilled) {
                     World.getWorld().getContentManager().handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());

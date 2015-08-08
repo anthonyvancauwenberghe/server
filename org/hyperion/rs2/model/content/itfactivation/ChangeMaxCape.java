@@ -38,7 +38,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
                 player.sendMessage("You successfully changed your colors");
                 player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 10000);
             } else {
-                player.sendMessage("You need 10K pk points to change your max cape colors");
+                player.sendMessage("You need 10k PK points to change your max cape colors");
             }
         } else {
             player.maxCapePrimaryColor = pkt.getInt();

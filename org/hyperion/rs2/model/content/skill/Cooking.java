@@ -243,7 +243,6 @@ public class Cooking implements ContentTemplate {
 
 	@Override
 	public boolean clickObject(final Player client, final int type, final int itemId, final int slot, final int objId, final int a) {
-		//System.out.println("cook: "+objId);
 		if(type == 0) {
 			boolean fire = (Boolean) client.getExtraData().get("fire");
 			if(itemId == 13720)

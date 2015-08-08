@@ -2443,7 +2443,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(getPermExtraData().getBoolean("pkmessages"))
+		if(!getPermExtraData().getBoolean("disabledPkMessages"))
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}

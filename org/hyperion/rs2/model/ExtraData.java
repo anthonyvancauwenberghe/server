@@ -32,9 +32,6 @@ public class ExtraData {
 		extraData = new HashMap<String, Object>();
 		this.put("zombiewave", 0);
 		this.put("bhon", true);
-		this.put("staffmessages", true);
-		this.put("pkmessages", true);
-		this.put("yelling", true);
 	}
 
 	/**

@@ -16,7 +16,7 @@ public class QuestTab {
 	 */
 	public static int[] QUEST_TAB_IDS = {	//Stored the usable ID's
 			/*663,*/ 7332, 7333, 7334, 7336, 7383, 7339, 7338, 7340, 7346, 7341, 7342, 7337, 7343, 7335, 7344,
-			7345, 7347, /*7348, 682,*/ 12772, 673, 7352, 17510, 7353, 12129,
+			7345, 7347, 7348, /*682,*/ 12772, 673, 7352, 17510, 7353, 12129,
 			8438, 12852, 15841, 7354, 7355, 7356, 8679, 7459, 16149, 6987,
 			7357, 12836, 7358, 7359, 14169, 10115, 14604, 7360, 12282, 13577,
 			12839, 7361, 16128, 11857, 7362, 7363, 7364, 10125, /*4508,*/10135, 18517,
@@ -66,12 +66,10 @@ public class QuestTab {
 		sendStaffCount();
 		sendUptime();
 		sendBonusSkill();
-		sendName();
-		sendRank();
-		sendItemsKept();
 		sendKills();
 		sendDeaths();
 		sendKdr();
+		sendItemsKept();
 		sendPvpRating();
 		sendPkPoints();
 		sendVotePoints();
@@ -80,11 +78,13 @@ public class QuestTab {
 		sendBHPoints();
 		sendBHTarget();
 		sendBHEnabled();
-		//sendBHPerks();
+		sendBHPerks();
 		sendYellEnabled();
 		sendTriviaEnabled();
 		sendPkMessagesEnabled();
 		sendStaffMessagesEnabled();
+		sendParticlesEnabled();
+		sendTitlesEnabled();
 		sendExpLockEnabled();
 		sendRankInfo();
 		fillQuestTab();
@@ -97,16 +97,14 @@ public class QuestTab {
 		player.getActionSender().sendString(Misc.formatPlayerName(player.getName()) + "'s log", 640);
 		player.getActionSender().sendString("", getId(3));
 		player.getActionSender().sendString("", getId(5));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Account -*-"), getId(6));
-		player.getActionSender().sendString("", getId(10));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- PK -*-"), getId(11));
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- PK -*-"), getId(6));
 		player.getActionSender().sendString("", getId(16));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Points -*-"), getId(17));
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Points -*-"), getId(12));
+		player.getActionSender().sendString("", getId(17));
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Bounty Hunter -*-"), getId(18));
 		player.getActionSender().sendString("", getId(23));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Bounty Hunter -*-"), getId(24));
-		player.getActionSender().sendString("", getId(28));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Locks -*-"), getId(28));
-		player.getActionSender().sendString("", getId(34));
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Locks -*-"), getId(24));
+		player.getActionSender().sendString("", getId(32));
 	}
 
 	public void sendPlayerCount() {
@@ -134,89 +132,88 @@ public class QuestTab {
 		player.getActionSender().sendString("@or1@Bonus skill: @gre@All skills", getId(4));
 	}
 
-	public void sendName() {
-		player.getActionSender().sendString("@or1@Name: @gre@"+ Misc.formatPlayerName(player.getName()), getId(7));
-	}
-
-	public void sendRank() {
-		player.getActionSender().sendString("@or1@Rank: @gre@" + player.getQuestTabRank(), getId(8));
-	}
-
-	public void sendItemsKept() {
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Items kept on death"), getId(9));
-	}
-
 	public void sendKills() {
-		player.getActionSender().sendString("@or1@Kills: @gre@" + player.getKillCount(), getId(12));
+		player.getActionSender().sendString("@or1@Kills: @gre@" + player.getKillCount(), getId(7));
 	}
 
 	public void sendDeaths() {
-		player.getActionSender().sendString("@or1@Deaths: @gre@" + player.getDeathCount(), getId(13));
+		player.getActionSender().sendString("@or1@Deaths: @gre@" + player.getDeathCount(), getId(8));
 	}
 
 	public void sendKdr() {
-		player.getActionSender().sendString("@or1@Kill/Death: @gre@" + player.getKDR(), getId(14));
+		player.getActionSender().sendString("@or1@Kill/Death: @gre@" + player.getKDR(), getId(9));
+	}
+
+	public void sendItemsKept() {
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Items kept on death"), getId(10));
 	}
 
 	public void sendPvpRating() {
-		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(15));
+		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(13));
 	}
 
 	public void sendPkPoints() {
-		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + player.getPoints().getPkPoints(), getId(18));
+		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + player.getPoints().getPkPoints(), getId(14));
 	}
 
 	public void sendVotePoints() {
-		player.getActionSender().sendString("@or1@Voting points: @gre@" + player.getPoints().getVotingPoints(), getId(19));
+		player.getActionSender().sendString("@or1@Voting points: @gre@" + player.getPoints().getVotingPoints(), getId(15));
 	}
 
 	public void sendDonatePoints() {
-		player.getActionSender().sendString("@or1@Donator points: @gre@" + player.getPoints().getDonatorPoints()/* + "@or1@/@gre@" + player.getPoints().getDonatorPointsBought()*/, getId(20));
+		player.getActionSender().sendString("@or1@Donator points: @gre@" + player.getPoints().getDonatorPoints()/* + "@or1@/@gre@" + player.getPoints().getDonatorPointsBought()*/, getId(16));
 	}
 
 	public void sendHonorPoints() {
-		player.getActionSender().sendString("@or1@Honor points: @gre@" + player.getPoints().getHonorPoints(), getId(21));
+		player.getActionSender().sendString("@or1@Honor points: @gre@" + player.getPoints().getHonorPoints(), getId(17));
 	}
 
 	public void sendBHPoints() {
-		player.getActionSender().sendString("@or1@BH points: @gre@" + player.getBountyHunter().getKills(), getId(22));
+		player.getActionSender().sendString("@or1@BH points: @gre@" + player.getBountyHunter().getKills(), getId(19));
 	}
 
 	public void sendBHTarget() {
-		player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), getId(25));
+		player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), getId(20));
 	}
 
 	public void sendBHEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("bhon") ? "Disable" : "Enable") + " bounty hunter", getId(26));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("bhon") ? "Disable" : "Enable") + " bounty hunter", getId(21));
 	}
-	/*
+
 	public void sendBHPerks() {
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Click to see your BH perks"), getId(27));
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Click to see the BH perks"), getId(22));
 	}
-	*/
 
 	public void sendYellEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("yelling") ? "Disable" : "Enable") + " yelling", getId(29));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledYell") ? "Enable" : "Disable") + " yelling", getId(25));
 	}
 
 	public void sendTriviaEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia", getId(30));
+		player.getActionSender().sendString("@or1@" + (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia", getId(26));
 	}
 
 	public void sendPkMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("pkmessages") ? "Disable" : "Enable") + " PK messages", getId(31));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages", getId(27));
 	}
 
 	public void sendStaffMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("staffmessages") ? "Disable" : "Enable") + " staff messages", getId(32));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff messages", getId(28));
+	}
+
+	public void sendParticlesEnabled() {
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles", getId(29));
+	}
+
+	public void sendTitlesEnabled() {
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledTitles") ? "Enable" : "Disable") + " titles", getId(30));
 	}
 
 	public void sendExpLockEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.xpLock ? "Disable" : "Enable") + " exp lock", getId(33));
+		player.getActionSender().sendString("@or1@" + (player.xpLock ? "Disable" : "Enable") + " exp lock", getId(31));
 	}
 
 	public void sendRankInfo() {
-		max_index = 36;
+		max_index = 34;
 		boolean hasRank = false;
 		for(Rank rank : Rank.values()) {
 			if(Rank.hasAbility(player, rank)) {
@@ -225,9 +222,9 @@ public class QuestTab {
 					hasRank = true;
 			}
 		}
-		player.getActionSender().sendString(!hasRank ? "" : "@or1@" + Misc.centerQuestTab("-*- Available ranks -*-"), getId(35));
+		player.getActionSender().sendString(!hasRank ? "" : "@or1@" + Misc.centerQuestTab("-*- Available ranks -*-"), getId(33));
 		if(!hasRank)
-			max_index = 35;
+			max_index = 33;
 	}
 
 	public void fillQuestTab() {
@@ -237,17 +234,16 @@ public class QuestTab {
 	}
 
 	static {
-		for(int i = 36; i < 36 + Rank.values().length; i++) {
+		for(int i = 34; i < 34 + Rank.values().length; i++) {
 			final int i2 = i;
 			ActionsManager.getManager().submit(getId(i), new ButtonAction() {
 				@Override
 				public void handle(Player player, int id) {
-					int index = 36;
+					int index = 34;
 					for(Rank rank : Rank.values()) {
 						if(Rank.hasAbility(player, rank)){
 							if(i2 == index) {
 								player.setPlayerRank(Rank.setPrimaryRank(player, rank));
-								player.getQuestTab().sendRank();
 								player.getQuestTab().sendRankInfo();
 							}
 							index++;
@@ -271,28 +267,21 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(9), new ButtonAction() {
-			@Override
-			public void handle(Player player, int id) {
-				player.getActionSender().openItemsKeptOnDeathInterface(player);
-			}
-		});
-
-		ActionsManager.getManager().submit(getId(12), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(7), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getKillCount() == 0 ? "no" : player.getKillCount()) + " " + (player.getKillCount() == 1 ? "kill" : "kills") + " so far.");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(13), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(8), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getDeathCount() == 0 ? "no" : player.getDeathCount()) + " " + (player.getDeathCount() == 1 ? "death" : "deaths") + " so far.");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(14), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(9), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				String kdr = "" + player.getKDR();
@@ -300,49 +289,56 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(15), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(10), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				player.getActionSender().openItemsKeptOnDeathInterface(player);
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(13), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("My PvP rating is " + player.getPoints().getEloRating() + ". " + (player.getPoints().getEloRating() == player.getPoints().getEloPeak() ? "This is also my best PvP rating ever." : "My best PvP rating ever was " + player.getPoints().getEloPeak() + "."));
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(18), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(14), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getPoints().getPkPoints() == 0 ? "no" : player.getPoints().getPkPoints()) + " " + (player.getPoints().getPkPoints() == 1 ? "PK point" : "PK points") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(19), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(15), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getPoints().getVotingPoints() == 0 ? "no" : player.getPoints().getVotingPoints()) + " " + (player.getPoints().getVotingPoints() == 1 ? "voting point" : "voting points") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(20), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(16), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage(player.getPoints().getDonatorPointsBought() == 0 ? "I have never bought any donator points." : "I bought " + player.getPoints().getDonatorPointsBought() + " donator points and " + (player.getPoints().getDonatorPointsBought() == player.getPoints().getDonatorPoints() ? "still have them all." : "still have " + player.getPoints().getDonatorPoints() + " of them left."));
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(21), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(17), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getPoints().getHonorPoints() == 0 ? "no" : player.getPoints().getHonorPoints()) + " " + (player.getPoints().getHonorPoints() == 1 ? "honor point" : "honor points") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(22), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(19), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("I have " + (player.getBountyHunter().getKills() == 0 ? "no" : player.getBountyHunter().getKills()) + " " + (player.getBountyHunter().getKills() == 1 ? "BH point" : "BH points") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(26), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(21), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.getPermExtraData().put("bhon", player.getBountyHunter().switchEnabled());
@@ -351,23 +347,25 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(27), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(22), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.sendMessage("Not implemented yet.");
+				player.sendMessage("Special perk: Increase special attack after a kill.");
+				player.sendMessage("Veng reduction: Reduce cooldown on vengeance.");
+				player.sendMessage("Prayer leech: Leech opponent's prayer on hit.");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(29), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(25), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getPermExtraData().put("yelling", !player.getPermExtraData().getBoolean("yelling"));
+				player.getPermExtraData().put("disabledYell", !player.getPermExtraData().getBoolean("disabledYell"));
 				player.getQuestTab().sendYellEnabled();
-				player.sendMessage("Yell is now " + (player.getPermExtraData().getBoolean("yelling") ? "enabled" : "disabled") + ".");
+				player.sendMessage("Yell is now " + (player.getPermExtraData().getBoolean("disabledYell") ? "disabled" : "enabled") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(30), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(26), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.getTrivia().setEnabled(!player.getTrivia().isEnabled());
@@ -376,25 +374,49 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(31), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(27), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getPermExtraData().put("pkmessages", !player.getPermExtraData().getBoolean("pkmessages"));
+				player.getPermExtraData().put("disabledPkMessages", !player.getPermExtraData().getBoolean("disabledPkMessages"));
 				player.getQuestTab().sendPkMessagesEnabled();
-				player.sendMessage("Pk messages are now " + (player.getPermExtraData().getBoolean("pkmessages") ? "enabled" : "disabled") + ".");
+				player.sendMessage("Pk messages are now " + (player.getPermExtraData().getBoolean("disabledPkMessages") ? "disabled" : "enabled") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(32), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(28), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getPermExtraData().put("staffmessages", !player.getPermExtraData().getBoolean("staffmessages"));
+				player.getPermExtraData().put("disabledStaffMessages", !player.getPermExtraData().getBoolean("disabledStaffMessages"));
 				player.getQuestTab().sendStaffMessagesEnabled();
-				player.sendMessage("Staff messages are now " + (player.getPermExtraData().getBoolean("staffmessages") ? "enabled" : "disabled") + ".");
+				player.sendMessage("Staff messages are now " + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "disabled" : "enabled") + ".");
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(33), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(29), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				/*
+				player.getPermExtraData().put("disabledParticles", !player.getPermExtraData().getBoolean("disabledParticles"));
+				player.getQuestTab().sendParticlesEnabled();
+				player.sendMessage("Particles are now " + (player.getPermExtraData().getBoolean("disabledParticles") ? "disabled" : "enabled") + ".");
+				*/
+				player.sendMessage("Not yet implemented.");
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(30), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				/*
+				player.getPermExtraData().put("disabledTitles", !player.getPermExtraData().getBoolean("disabledTitles"));
+				player.getQuestTab().sendTitlesEnabled();
+				player.sendMessage("Player titles are now " + (player.getPermExtraData().getBoolean("disabledTitles") ? "disabled" : "enabled") + ".");
+				*/
+				player.sendMessage("Not yet implemented.");
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(31), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.xpLock = !player.xpLock;

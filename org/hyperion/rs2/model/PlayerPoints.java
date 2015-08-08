@@ -242,7 +242,7 @@ public class PlayerPoints {
 					reward = (0.22 * eloRating + 14) / 7;
 				}
                 if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
-                    reward *= 1.1;
+                    reward *= 1.25;
 				honorPoints += (int) (reward);
 
 				player.sendPkMessage("You have been awarded " + (int) reward + " honor points!");

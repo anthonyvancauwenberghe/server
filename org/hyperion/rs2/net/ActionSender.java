@@ -201,6 +201,7 @@ public class ActionSender {
 		// sendClientConfig(65535, 0);
 		player.setActive(true);
 		player.isHidden(false);
+		player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
 		sendDetails();
         if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
             Magic.teleport(player, Edgeville.LOCATION, true);
@@ -239,7 +240,8 @@ public class ActionSender {
 			String rank = Rank.getPrimaryRank(player).toString();
 			for(Player p : World.getWorld().getPlayers())
 				if(p != null)
-					p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
+					if(p.isStaffMessagesEnabled())
+						p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
 		}
 
 
@@ -368,7 +370,6 @@ public class ActionSender {
 		sendString(29177, "@or1@Pure Set");
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
-		sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
         AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
 /**
  * OVL BUG
@@ -966,7 +967,7 @@ public class ActionSender {
 	 */
 
 	public void writeQuestTab() {
-		player.getQuestTab().sendAllInfo();
+		player.getQuestTab().updateQuestTab();
 		sendString("Revenants (Multi)", 45614);
 	}
 
@@ -1135,6 +1136,7 @@ public class ActionSender {
 		sendString(8144, "@dre@Players Online: "
 				+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
 		int i = 0;
+		int r = 1;
 		Player p3 = null;
 
         for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
@@ -1154,9 +1156,49 @@ public class ActionSender {
                 if(s.isEmpty())
                     continue;
 
-				String s1 = "@dre@" + (i + 1) + ". @bla@" + s;
+				String s1 = "@dre@" + r + ". @bla@" + s;
 
 				sendString(QUEST_MENU_IDS[i], s1);
+				r++;
+			}
+		}
+		showInterface(8134);
+		return this;
+	}
+
+	public ActionSender openStaffInterface() {
+		int staffOnline = 0;
+		for(Player i : World.getWorld().getPlayers()) {
+			if (i != null) {
+				if(Rank.getPrimaryRank(i).ordinal() >= Rank.HELPER.ordinal())
+					if(!i.isHidden())
+					staffOnline++;
+			}
+		}
+
+		sendString(8144, "@dre@Staff online: " + staffOnline);
+		Player p3 = null;
+
+		//Clears the questtab
+		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
+			sendString(QUEST_MENU_IDS[d], "");
+		}
+		int r = 0;
+
+		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
+			if(World.getWorld().getPlayers().get((i + 1)) != null) {
+				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
+
+				String s = p3.getSafeDisplayName();
+				if(s.isEmpty())
+					continue;
+				if(Rank.getPrimaryRank(p3).ordinal() >= Rank.HELPER.ordinal()) {
+					if(!p3.isHidden()) {
+						sendString(QUEST_MENU_IDS[i], "@dre@" + (r + 1) + ". @bla@" + s);
+						r++;
+					}
+				}
+				i++;
 			}
 		}
 		showInterface(8134);

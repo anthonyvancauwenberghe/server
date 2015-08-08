@@ -137,7 +137,7 @@ public class BountyHunter {
 		for(Player p : new Player[]{player, opp}) {
 			p.getBountyHunter().target = null;
 			p.getActionSender().createArrow(10, -1);
-			p.getQuestTab().sendAllInfo();
+			p.getQuestTab().updateQuestTab();
 		}
         final List<Item> emblems = Emblem.getEmblems(opp.getInventory());
         for(final Item item : emblems) {

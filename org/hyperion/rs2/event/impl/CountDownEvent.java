@@ -3,6 +3,7 @@ package org.hyperion.rs2.event.impl;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 
@@ -17,7 +18,7 @@ public class CountDownEvent extends Event {
 		if(--counter == 0) {
 			FightPits.startEvent();
 			for(Player player : World.getWorld().getPlayers()) {
-				player.getActionSender().sendString(ServerMinigame.name == null ? "Event Dormant" : ServerMinigame.name, 7332);
+				player.getQuestTab().updateQuestTab();
 			}
 			this.stop();
 		}

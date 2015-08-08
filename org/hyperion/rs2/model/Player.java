@@ -166,6 +166,14 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int maxCapeSecondaryColor = 0;
     private int treasureScroll;
 
+	private boolean isStaffMessagesEnabled = true;
+	public void setStaffMessagesEnabled(boolean staffMessagesEnabled) { isStaffMessagesEnabled = staffMessagesEnabled; }
+	public boolean isStaffMessagesEnabled() { return isStaffMessagesEnabled; }
+
+	private boolean isPkMessagesEnabled = true;
+	public void setPkMessagesEnabled(boolean pkMessagesEnabled) { isPkMessagesEnabled = pkMessagesEnabled; }
+	public boolean isPkMessagesEnabled() { return isPkMessagesEnabled; }
+
     public int compCapePrimaryColor;
     public int compCapeSecondaryColor;
 
@@ -2428,8 +2436,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public void increaseKillCount() {
 		killCount++;
-		getQuestTab().sendElo();
-		getQuestTab().sendKDR();
+		getQuestTab().updateQuestTab();
 	}
 
 	public ActionSender sendHeadedMessage(final String color, final String header, final Object... message) {
@@ -2444,7 +2451,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(!Rank.hasAbility(this, Rank.OWNER))
+		if(isPkMessagesEnabled())
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}
@@ -2456,9 +2463,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public ActionSender sendStaffMessage(Object... message) {
-			if(!Rank.hasAbility(this, Rank.OWNER))
 				return sendHeadedMessage("@blu@", "[Staff]", message);
-		return getActionSender();
 	}
 
 	public ActionSender sendClanMessage(Object... message) {
@@ -2480,8 +2485,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	
 	public void increaseDeathCount() {
 		deathCount++;
-		getQuestTab().sendElo();
-		getQuestTab().sendKDR();
+		getQuestTab().updateQuestTab();
 	}
 
 	public void setKillCount(int kc) {

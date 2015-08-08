@@ -23,7 +23,7 @@ public class TriviaBot {
 	/**
 	 * Prefix for all messages done by TriviaBot.
 	 */
-	private static final String TITLE = "[@whi@TriviaBot@bla@]:";
+	private static final String TITLE = "[@whi@TriviaBot@bla@] ";
 
 	/**
 	 * The cycle time.

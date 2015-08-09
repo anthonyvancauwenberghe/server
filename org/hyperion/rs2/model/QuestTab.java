@@ -206,7 +206,7 @@ public class QuestTab {
 	}
 
 	public void sendTitlesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledTitles") ? "Enable" : "Disable") + " titles", getId(30));
+		player.getActionSender().sendString("@or1@ Toggle right-click options", getId(30));
 	}
 
 	public void sendExpLockEnabled() {
@@ -410,7 +410,7 @@ public class QuestTab {
 				player.getQuestTab().sendParticlesEnabled();
 				player.sendMessage("Particles are now " + (player.getPermExtraData().getBoolean("disabledParticles") ? "disabled" : "enabled") + ".");
 				*/
-				player.sendMessage("Not yet implemented.");
+				player.sendMessage("Do ::particles to change particles on/off.");
 			}
 		});
 
@@ -422,7 +422,7 @@ public class QuestTab {
 				player.getQuestTab().sendTitlesEnabled();
 				player.sendMessage("Player titles are now " + (player.getPermExtraData().getBoolean("disabledTitles") ? "disabled" : "enabled") + ".");
 				*/
-				player.sendMessage("Not yet implemented.");
+				player.sendMessage("Do ::switchoption trade/profile/follow to change options (do ::commands for more)");
 			}
 		});
 

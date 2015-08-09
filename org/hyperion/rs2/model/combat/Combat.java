@@ -947,9 +947,12 @@ public class Combat {
 					if(! combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
 						return "I am already in combat";
 				}
-			} else if(opponent.getOpponent() != null
-					&& opponent.getOpponent() != combatEntity)
-				return "This " + type + " is already in combat...";
+			} else if(opponent.getOpponent() != null && opponent.getOpponent() != combatEntity)
+				if(type.equalsIgnoreCase("NPC")) {
+					return "This monster is already in combat...";
+				} else {
+					return "This " + type + " is already in combat...";
+				}
 		}
 		if(combatEntity.getEntity() instanceof Player
 				&& opponent.getEntity() instanceof Player) {

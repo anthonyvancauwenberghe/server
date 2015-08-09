@@ -300,7 +300,7 @@ public class QuestTab {
 			@Override
 			public void handle(Player player, int id) {
 				String kdr = "" + player.getKDR();
-				player.forceMessage("My kill/deathrating is " + kdr + ".");
+				player.forceMessage("My kill/deathratio is " + kdr + ".");
 			}
 		});
 

@@ -522,7 +522,7 @@ public class Skills {
                         BONUS_SKILL = bonusSkill;
                         for(Player player1 : World.getWorld().getPlayers()) {
 							player1.getQuestTab().sendBonusSkill();
-							player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
+							//player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
 						}
                     }
                     World.getWorld().putProperty("lastSkillChange", dayOfYear);

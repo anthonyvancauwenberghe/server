@@ -62,11 +62,12 @@ public class PlayerPoints {
 
 	public void updateEloRating(int opponentRating, int resultType) {
 		setEloRating(EloRating.getNewRating(eloRating, opponentRating, resultType));
-		String message = "@blu@You have defeaten an opponent with elo " + opponentRating + ", your new elo is: " + eloRating;
-		message = message.replaceAll("elo", "PvP Rating");
-		if(resultType == EloRating.WIN)
+		String message = "You have defeaten by an opponent with PvP Rating " + opponentRating;
+		String message2 = "Your new PvP Rating is: " + eloRating;
+		if(resultType == EloRating.WIN) {
 			player.sendPkMessage(message);
-		else if(resultType == EloRating.LOSE)
+			player.sendPkMessage(message2);
+		} else if(resultType == EloRating.LOSE)
 			player.sendPkMessage(message.replace("have defeaten", "were defeaten by"));
 	}
 

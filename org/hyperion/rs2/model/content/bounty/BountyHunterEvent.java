@@ -21,18 +21,18 @@ public class BountyHunterEvent extends Event{
 		counter--;
 		if(counter == 0) {
 			for(final Player p : World.getWorld().getPlayers()) {
-					p.getBountyHunter().setTarget(null);
-					p.getActionSender().removeArrow();
-			}
-		}
-		if(counter%2 == 0) {
-			final List<Player> list = PlayerCombatEvent.cloneEntityList();
-			for(final Player p : list) {
-				if(BountyHunter.applicable(p))
-					p.getBountyHunter().findTarget();
-			}
-		}
-		if(counter == 0)
+            p.getBountyHunter().setTarget(null);
+            p.getActionSender().removeArrow();
+        }
+    }
+    if(counter%2 == 0) {
+        final List<Player> list = PlayerCombatEvent.cloneEntityList();
+        for(final Player p : list) {
+            if(BountyHunter.applicable(p))
+                p.getBountyHunter().findTarget();
+        }
+    }
+    if(counter == 0)
 			counter = 11;
 		for(final Player p : World.getWorld().getPlayers()) {
 			p.getQuestTab().sendBHTarget();

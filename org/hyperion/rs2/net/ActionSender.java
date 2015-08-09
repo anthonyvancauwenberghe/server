@@ -1144,7 +1144,7 @@ public class ActionSender {
         }
 		for(; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
 			if(i >= 99) {
-				sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int)(98 - (World.getWorld().getPlayers().size() * World.PLAYER_MULTI)) + " players");
+				sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int)((World.getWorld().getPlayers().size() * World.PLAYER_MULTI) - 98) + " players");
 				break;
 			}
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {

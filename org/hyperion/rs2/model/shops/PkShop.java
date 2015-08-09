@@ -20,7 +20,7 @@ public class PkShop extends PointsShop {
 		if(item.getId() == 5020) {
 			price = 10;
 		}
-		if(price <= 0) {
+        if(price <= 0 && player.getInventory().freeSlots() != 0) {
             player.getActionSender().yellModMessage("@red@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
 			return;
 		}

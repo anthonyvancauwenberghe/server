@@ -2436,7 +2436,7 @@ public class CommandPacketHandler implements PacketHandler {
 				for (int i = 1; i <= 5; i++) {
 					int bonusSkill = ((dayOfYear + i) % (Skills.SKILL_COUNT - 8)) + 7;
 					if (bonusSkill == 21) {
-						player.sendMessage("random");
+						player.sendMessage("Random");
 					} else {
 						player.sendMessage(Misc.getSkillName(bonusSkill));
 					}

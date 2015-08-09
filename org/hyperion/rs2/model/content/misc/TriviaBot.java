@@ -108,7 +108,7 @@ public class TriviaBot {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("There are currently "
-						+ TriviaBot.getBot().getPlayersAmount() + " ppl playing");
+						+ TriviaBot.getBot().getPlayersAmount() + " people playing");
 				return true;
 			}
 		});
@@ -176,7 +176,7 @@ public class TriviaBot {
 		}
 		for(String s : NOT_ALLOWED_WORDS) {
 			if(answer.toLowerCase().contains(s)) {
-				p.getActionSender().sendMessage("Your answer contains inacceptable language..");
+				p.getActionSender().sendMessage("Your answer contains unacceptable language.");
 				return;
 			}
 		}
@@ -193,7 +193,7 @@ public class TriviaBot {
 		attemptedAnswers.add(answer);
 		p.getActionSender().sendMessage("You haven't answered the question correctly.");
 		if(Math.random() > 0.96) {
-			yellMessage("@blu@There are currently " + getPlayersAmount() + " people playing Trivia.");
+			yellMessage("There are currently " + getPlayersAmount() + " people playing Trivia.");
 		}
 		p.getTrivia().updateTimer();
 	}
@@ -205,17 +205,18 @@ public class TriviaBot {
 	 * @param p
 	 */
 	private void rightAnswer(Player p) {
-		yellMessage("Player @blu@" + p.getName() + "@bla@ has answered my question correctly ...");
-		yellMessage("One of the correct answers was : @dre@" + currentAnswers.get(0));
-		yellMessage("..and has been rewarded " + Server.NAME + " Points. The question will soon be updated.");
+		yellMessage("Player @dre@" + p.getSafeDisplayName() + "@bla@ has answered my question correctly.");
+		yellMessage("One of the correct answers was: @dre@" + currentAnswers.get(0));
+		yellMessage("He has been rewarded " + Server.NAME + " points. The question will soon be updated.");
 		String wrongAnswers = "";
-		//System.out.println(attemptedAnswers);
 		for(String s : attemptedAnswers) {
 			if(wrongAnswers.length() > 80)
 				break;
 			wrongAnswers += s + ", ";
 		}
-		yellMessage("Wrong answers were :" + wrongAnswers + "...");
+		wrongAnswers = wrongAnswers.substring(0, wrongAnswers.lastIndexOf(","));
+		if(!wrongAnswers.isEmpty())
+			yellMessage("Wrong answers were: @dre@" + wrongAnswers);
 		currentQuestion = "";
 		resetAnswers();
 		addReward(p);
@@ -261,7 +262,7 @@ public class TriviaBot {
 		if(currentQuestion.length() < 45)
 			yellMessage("New question: @dre@" + currentQuestion);
 		else {
-			yellMessage("New question: ");
+			yellMessage("@dre@New question: ");
 			yellMessage("@dre@" + currentQuestion);
 		}
 	}

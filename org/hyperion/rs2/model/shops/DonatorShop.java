@@ -92,7 +92,7 @@ public class DonatorShop extends Shop {
 	@Override
 	public void buyFromShop(Player player, Item item) {
 		int price = item.getCount() * getPrice(item.getId());
-		if(price <= 0) {
+		if(price <= 0 && player.getInventory().freeSlots() != 0) {
 			player.getActionSender().yellModMessage("@red@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
 			return;
 		}

@@ -3,10 +3,12 @@ package org.hyperion.rs2.model;
 import org.hyperion.Server;
 import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -282,6 +284,23 @@ public class QuestTab {
 			}
 		});
 
+		ActionsManager.getManager().submit(getId(4), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				Calendar c = Calendar.getInstance();
+				player.sendMessage("@dre@The next bonus skills will be; ");
+				int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
+				for (int i = 1; i <= 5; i++) {
+					int bonusSkill = ((dayOfYear + i) % (Skills.SKILL_COUNT - 8)) + 7;
+					if (bonusSkill == 21) {
+						player.sendMessage("Random");
+					} else {
+						player.sendMessage("@dre@" + i + ". @bla@" + Misc.getSkillName(bonusSkill));
+					}
+				}
+			}
+		});
+
 		ActionsManager.getManager().submit(getId(7), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
@@ -365,9 +384,21 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(22), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.sendMessage("Special perk: Increase special attack after a kill.");
-				player.sendMessage("Veng reduction: Reduce cooldown on vengeance.");
-				player.sendMessage("Prayer leech: Leech opponent's prayer on hit.");
+				int perk1 = 0;
+				int perk2 = 0;
+				int perk3 = 0;
+				for(int i = -1; i < player.getBHPerks().hasPerk(BountyPerks.Perk.SPEC_RESTORE); i++) {
+					perk1++;
+				}
+				for(int i = -1; i < player.getBHPerks().hasPerk(BountyPerks.Perk.VENG_REDUCTION); i++) {
+					perk2++;
+				}
+				for(int i = -1; i < player.getBHPerks().hasPerk(BountyPerks.Perk.PRAY_LEECH); i++) {
+					perk3++;
+				}
+				player.sendMessage("@dre@" + (perk1 == 0 ? "" : "(Level " + perk1 + ") ") + "Special perk:@bla@ Increase special attack after a kill.");
+				player.sendMessage("@dre@" + (perk2 == 0 ? "" : "(Level " + perk2 + ") ") + "Veng reduction:@bla@ Reduce cooldown on vengeance.");
+				player.sendMessage("@dre@" + (perk3 == 0 ? "" : "(Level " + perk3 + ") ") + "Prayer leech:@bla@ Leech opponent's prayer on hit.");
 			}
 		});
 

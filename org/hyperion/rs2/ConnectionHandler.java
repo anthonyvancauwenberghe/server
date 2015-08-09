@@ -89,7 +89,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					long expiration_time = System.currentTimeMillis() + Time.ONE_MINUTE;
 					World.getWorld().getBanManager().moderate("Server", p, 2, true, expiration_time, "Suspected layer 7 ddos.");
 				}
-				if(packetCount > 149) {
+				if(packetCount > 249) {
 					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
                 	//session.close(false);
 				}

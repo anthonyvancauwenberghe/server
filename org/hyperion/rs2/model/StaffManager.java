@@ -33,13 +33,13 @@ public class StaffManager {
 			@Override
 			public boolean execute(Player player, String input) {
 				List<Player> onlineStaff = World.getWorld().getStaffManager().getOnlineStaff();
-				player.getActionSender().sendMessage("Staff online : " + onlineStaff.size());
+				player.getActionSender().sendMessage("Staff online: @dre@" + onlineStaff.size());
 				for(Player staffMember : onlineStaff) {
-                    final Rank rank = Rank.getPrimaryRank(staffMember);
+					final Rank rank = Rank.getPrimaryRank(staffMember);
 					player.getActionSender().sendMessage(String.format(
-                            "[%s%s@bla@] - %s%s",
-                            rank.getYellColor(), staffMember.display == null || staffMember.display.isEmpty() ? staffMember.getName() : staffMember.display,
-                            rank.getYellColor(), rank
+							"[%s%s@bla@] - %s%s",
+							rank.getYellColor(), staffMember.display == null || staffMember.display.isEmpty() ? staffMember.getName() : staffMember.display,
+							rank.getYellColor(), rank
                     ));
 				}
 				return true;

@@ -1136,7 +1136,7 @@ public class ActionSender {
 		sendString(8144, "@dre@Players Online: "
 				+ (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
 		int i = 0;
-		int r = 1;
+		int r = 0;
 		Player p3 = null;
 
         for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
@@ -1144,7 +1144,7 @@ public class ActionSender {
         }
 		for(; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
 			if(i >= 99) {
-				sendString(QUEST_MENU_IDS[99], "@dre@And another " + (98 - (World.getWorld().getPlayers().size() * World.PLAYER_MULTI)) + " players");
+				sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int)(98 - (World.getWorld().getPlayers().size() * World.PLAYER_MULTI)) + " players");
 				break;
 			}
 			if(World.getWorld().getPlayers().get((i + 1)) != null) {
@@ -1156,9 +1156,9 @@ public class ActionSender {
                 if(s.isEmpty())
                     continue;
 
-				String s1 = "@dre@" + r + ". @bla@" + s;
+				String s1 = "@dre@" + (r + 1) + ". @bla@" + s;
 
-				sendString(QUEST_MENU_IDS[i], s1);
+				sendString(QUEST_MENU_IDS[r], s1);
 				r++;
 			}
 		}
@@ -1166,44 +1166,6 @@ public class ActionSender {
 		return this;
 	}
 
-	public ActionSender openStaffInterface() {
-		int staffOnline = 0;
-		for(Player i : World.getWorld().getPlayers()) {
-			if (i != null) {
-				if(Rank.getPrimaryRank(i).ordinal() >= Rank.HELPER.ordinal())
-					if(!i.isHidden())
-					staffOnline++;
-			}
-		}
-
-		sendString(8144, "@dre@Staff online: " + staffOnline);
-		Player p3 = null;
-
-		//Clears the questtab
-		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
-			sendString(QUEST_MENU_IDS[d], "");
-		}
-		int r = 0;
-
-		for(int i = 0; (i + 1) <= World.getWorld().getPlayers().size();) {
-			if(World.getWorld().getPlayers().get((i + 1)) != null) {
-				p3 = (Player) World.getWorld().getPlayers().get((i + 1));
-
-				String s = p3.getSafeDisplayName();
-				if(s.isEmpty())
-					continue;
-				if(Rank.getPrimaryRank(p3).ordinal() >= Rank.HELPER.ordinal()) {
-					if(!p3.isHidden()) {
-						sendString(QUEST_MENU_IDS[i], "@dre@" + (r + 1) + ". @bla@" + s);
-						r++;
-					}
-				}
-				i++;
-			}
-		}
-		showInterface(8134);
-		return this;
-	}
 	/**
 	 * 
 	 * @param items to display

@@ -95,25 +95,28 @@ public class Bank {
      * @param amount The amount of the item to deposit.
      */
     public static void withdraw(Player player, int id, int amount) {
-        if (!player.getBankField().isBanking()) {
-            return;
-        }
+        if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
+            if (!player.getBankField().isBanking()) {
+                return;
+            }
 
-        if(!ItemSpawning.canSpawn(player)) {
-            return;
+            if (!ItemSpawning.canSpawn(player)) {
+                return;
+            }
+            if (player.isInCombat() || player.getLocation().inPvPArea()) {
+                player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
+                return;
+            }
         }
-        if(player.isInCombat() || player.getLocation().inPvPArea()) {
-            player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
-            return;
-        }
-        int slot = player.getBank().getSlotById(id);
-        if(slot < 0) {
-            return;
+            int slot = player.getBank().getSlotById(id);
+            if (slot < 0) {
+                return;
         }
         BankItem bankItem = (BankItem) player.getBank().get(slot);
         if ((bankItem == null) || (bankItem.getId() != id)) {
             return;
         }
+
         int tab = bankItem.getTabIndex();
         int transferAmount = player.getBank().getCount(bankItem.getId());
         if (transferAmount >= amount) {
@@ -182,20 +185,22 @@ public class Bank {
 
     public static void deposit(Player player, int slot, int id, int amount,
                                Container container, boolean inventory, boolean refresh) {
-        if(player.getLocation().inPvPArea())
-            return;
-        if(slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
-            return;
-        if(Location.inAttackableArea(player))
-            return;
-        if(FightPits.inPits(player))
-            return;
-        if (!player.getBankField().isBanking()) {
-            return;
-        }
+        if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
+            if (player.getLocation().inPvPArea())
+                return;
+            if (slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
+                return;
+            if (Location.inAttackableArea(player))
+                return;
+            if (FightPits.inPits(player))
+                return;
+            if (!player.getBankField().isBanking()) {
+                return;
+            }
 
-        if(!ItemSpawning.canSpawn(player)) {
-            return;
+            if (!ItemSpawning.canSpawn(player)) {
+                return;
+            }
         }
         if (player.getBankField().isSearching()) {
             viewTab(player, 0);

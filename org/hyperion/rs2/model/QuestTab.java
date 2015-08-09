@@ -7,6 +7,8 @@ import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
 
+import java.util.List;
+
 /**
  * @author Arsen Maxyutov.
  * @author Glis				29/07/2015
@@ -32,9 +34,9 @@ public class QuestTab {
 			7345, 7347, 7348, 682, 12772, 673, 7352, 17510, 7353, 12129,
 			8438, 12852, 15841, 7354, 7355, 7356, 8679, 7459, 16149, 6987,
 			7357, 12836, 7358, 7359, 14169, 10115, 14604, 7360, 12282, 13577,
-			12839, 7361, 16128, 11857, 7362, 7363, 7364, 10125, /*4508,*/ 18517,
+			12839, 7361, 16128, 11857, 7362, 7363, 7364, 10135, 10125, /*4508,*/ 18517,
 			11907, 7365, 7366, 7367, 13389, 15487, 7368, 11132, 7369, 12389,
-			13974, 6027, 7370, 8137, 7371, 12345, 7372, 8115, 10135, 18684,
+			13974, 6027, 7370, 8137, 7371, 12345, 7372, 8115, 18684,
 			15499, 18306, 668, 8576, 12139, 14912, 7374, 7373, 8969, 15352,
 			7375, 7376, 15098, 15592, 249, 1740, 15235, 3278, 664, 7378, 6518,
 			7379, 7380, 7381, 11858, 191, 9927, 6024, 7349, 7350, 7351, 13356
@@ -113,14 +115,7 @@ public class QuestTab {
 		player.getActionSender().sendString("@or1@Players online: @gre@" + players, getId(0));
 	}
 	public void sendStaffCount() {
-		int staffOnline = 0;
-		for(Player i : World.getWorld().getPlayers()) {
-			if (i != null) {
-				if(Rank.getPrimaryRank(i).ordinal() >= Rank.HELPER.ordinal())
-					if(!i.isHidden())
-						staffOnline++;
-			}
-		}
+		int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
 		player.getActionSender().sendString("@or1@Staff online: " + (staffOnline == 0 ? "@red@" : "@gre@") + staffOnline, getId(1));
 	}
 
@@ -208,7 +203,7 @@ public class QuestTab {
 	}
 
 	public void sendTitlesEnabled() {
-		player.getActionSender().sendString("@or1@ Toggle right-click options", getId(30));
+		player.getActionSender().sendString("@or1@Toggle right-click options", getId(30));
 	}
 
 	public void sendExpLockEnabled() {
@@ -266,7 +261,15 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(1), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getActionSender().openStaffInterface();
+				List<Player> onlineStaff = World.getWorld().getStaffManager().getOnlineStaff();
+				player.getActionSender().sendMessage("Staff online: @dre@" + onlineStaff.size());
+				for(Player staffMember : onlineStaff) {
+					final Rank rank = Rank.getPrimaryRank(staffMember);
+					player.getActionSender().sendMessage(String.format(
+							"[%s%s@bla@] - %s%s",
+							rank.getYellColor(), staffMember.display == null || staffMember.display.isEmpty() ? staffMember.getName() : staffMember.display,
+							rank.getYellColor(), rank));
+				}
 			}
 		});
 

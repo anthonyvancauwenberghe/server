@@ -28,12 +28,12 @@ public class TicketManager {
         tickets.add(ticket);
         for(final Player player : World.getWorld().getPlayers()) {
             if (Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()) {
-                player.sendMessage( "@dre@-*-*-*-*-*-*-*-*-*- New ticket submitted -*-*-*-*-*-*-*-*-*-",
+                player.sendMessage( "@dre@------------------------------ New ticket submitted ------------------------------",
                                     "@dre@Player: @bla@" + TextUtils.ucFirst(ticket.name),
                                     "@dre@Title: @bla@" + TextUtils.ucFirst(ticket.title),
                                     "@dre@Reason: @bla@" + ticket.request,
                                     "@dre@Rank: @bla@" + ticket.min_rank,
-                                    "@dre@-*-*-*-*-*-*-*-*-*-*-*-*-*  *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
+                                    "@dre@----------------------------------------------------------------------------------"
                         );
             }
         }

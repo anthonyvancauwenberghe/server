@@ -97,30 +97,30 @@ public class QuestTab {
 		for(int i = 0; i < QUEST_TAB_TO_CLEAR.length; i++) {
 			player.getActionSender().sendString("", QUEST_TAB_TO_CLEAR[i]);
 		}
-		player.getActionSender().sendString(Misc.formatPlayerName(player.getName()) + "'s log", 640);
-		player.getActionSender().sendString("", getId(3));
+		player.getActionSender().sendString("     ArteroPk", 640);
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Server Information -"), getId(0));
 		player.getActionSender().sendString("", getId(5));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- PK -*-"), getId(6));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- PK Information -"), getId(6));
 		player.getActionSender().sendString("", getId(16));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Points -*-"), getId(12));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Ingame Points -"), getId(12));
 		player.getActionSender().sendString("", getId(17));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Bounty Hunter -*-"), getId(18));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Bounty Hunter -"), getId(18));
 		player.getActionSender().sendString("", getId(23));
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("-*- Locks -*-"), getId(24));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Locks -"), getId(24));
 		player.getActionSender().sendString("", getId(32));
 	}
 
 	public void sendPlayerCount() {
 		int players = (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI);
-		player.getActionSender().sendString("@or1@Players online: @gre@" + players, getId(0));
+		player.getActionSender().sendString("@or1@Players online: @gre@" + players, getId(1));
 	}
 	public void sendStaffCount() {
 		int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
-		player.getActionSender().sendString("@or1@Staff online: " + (staffOnline == 0 ? "@red@" : "@gre@") + staffOnline, getId(1));
+		player.getActionSender().sendString("@or1@Staff online: " + (staffOnline == 0 ? "@red@" : "@gre@") + staffOnline, getId(2));
 	}
 
 	public void sendUptime() {
-		player.getActionSender().sendString(Rank.hasAbility(player, Rank.ADMINISTRATOR) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + ServerMinigame.name), getId(2));
+		player.getActionSender().sendString(Rank.hasAbility(player, Rank.ADMINISTRATOR) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + ServerMinigame.name), getId(3));
 	}
 
 	public void sendBonusSkill() {
@@ -141,7 +141,7 @@ public class QuestTab {
 	}
 
 	public void sendItemsKept() {
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Items kept on death"), getId(10));
+		player.getActionSender().sendString("@or1@Items kept on death", getId(10));
 	}
 
 	public void sendPvpRating() {
@@ -215,12 +215,12 @@ public class QuestTab {
 		boolean hasRank = false;
 		for(Rank rank : Rank.values()) {
 			if(Rank.hasAbility(player, rank)) {
-				player.getActionSender().sendString((Rank.getPrimaryRank(player).equals(rank) ? "@gre@" : "@red@") + rank.toString(), getId(getNextIndex()));
+				player.getActionSender().sendString((Rank.getPrimaryRank(player).equals(rank) ? "@gre@" : "@or1@") + rank.toString(), getId(getNextIndex()));
 				if(!hasRank && rank != Rank.PLAYER)
 					hasRank = true;
 			}
 		}
-		player.getActionSender().sendString(!hasRank ? "" : "@or1@" + Misc.centerQuestTab("-*- Available ranks -*-"), getId(33));
+		player.getActionSender().sendString(!hasRank ? "" : "@yel@" + Misc.centerQuestTab("- Available ranks -"), getId(33));
 		if(!hasRank)
 			max_index = 33;
 	}
@@ -251,14 +251,14 @@ public class QuestTab {
 			});
 		}
 
-		ActionsManager.getManager().submit(getId(0), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(1), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.getActionSender().openPlayersInterface();
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(1), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(2), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				List<Player> onlineStaff = World.getWorld().getStaffManager().getOnlineStaff();
@@ -273,7 +273,7 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(2), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(3), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				if(ServerMinigame.name != null && ServerMinigame.x != 0) {

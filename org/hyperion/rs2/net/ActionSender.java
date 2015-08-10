@@ -986,7 +986,7 @@ public class ActionSender {
 	 */
 
 	public void writeQuestTab() {
-		player.getQuestTab().updateQuestTab();
+		player.getQuestTab().createQuestTab();
 		sendString("Revenants (Multi)", 45614);
 	}
 

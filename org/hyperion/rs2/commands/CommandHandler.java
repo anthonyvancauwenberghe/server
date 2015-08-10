@@ -768,7 +768,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("gfx", Rank.PLAYER) {
+        submit(new Command("gfx", Rank.DEVELOPER) {
             public boolean execute(Player player, String input) {
                 input = filterInput(input);
                 final String[] parts = input.split(",");
@@ -777,7 +777,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("heal", Rank.PLAYER) {
+        submit(new Command("heal", Rank.DEVELOPER) {
             public boolean execute(Player player, String input) {
                 player.heal(150);
                 return true;

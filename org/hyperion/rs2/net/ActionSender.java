@@ -711,6 +711,22 @@ public class ActionSender {
         return this;
     }
 
+    public ActionSender sendTooltip(int interfaceID, String tooltip) {
+        PacketBuilder bldr = new PacketBuilder(173, Type.VARIABLE_SHORT);
+        bldr.putRS2String(tooltip);
+        bldr.putShort(interfaceID);
+        player.write(bldr.toPacket());
+        return this;
+    }
+
+    public ActionSender sendFont(int interfaceID, byte fontIndex) {
+        PacketBuilder bldr = new PacketBuilder(154);
+        bldr.put(fontIndex);
+        bldr.putShort(interfaceID);
+        player.write(bldr.toPacket());
+        return this;
+    }
+
     public ActionSender sendInterfaceSpriteDim(int interfaceID, int width, int height) {
         if(width <= 0 || height <= 0)
             return this;

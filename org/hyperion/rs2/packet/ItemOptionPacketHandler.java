@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
@@ -278,6 +279,9 @@ public class ItemOptionPacketHandler implements PacketHandler {
 					}
 				}
 				break;
+            case GrandExchange.INVENTORY_SELL_INTER:
+                player.getGrandExchange().setSellItem(id);
+                break;
             case RunePouch.INVENTORY_INTERFACE:
                 if(player.openedBoB)
                     BoB.deposit(player, slot, id, 1);

@@ -54,6 +54,8 @@ public class Offer {
         return amountProcessed;
     }
 
+    public void setItemId(int itemId) { this.itemId = itemId; }
+
     public void increaseQuantity() {
         quantity++;
     }

@@ -11,6 +11,8 @@ import java.text.DecimalFormat;
  */
 public class GrandExchange {
 
+    public static final int INVENTORY_SELL_INTER = 26571;
+
     private static DecimalFormat formatter = new DecimalFormat("#,###,###,###");
 
     private Player player;
@@ -161,6 +163,14 @@ public class GrandExchange {
             player.getActionSender().sendUpdateItems(26571, player.getInventory().getItems());
             player.getActionSender().sendInterfaceInventory(22670, 26570);
         }
+    }
+
+    public void setSellItem(int itemId) {
+        ItemDefinition def = ItemDefinition.forId(itemId);
+        if(def.isNoted())
+            itemId = def.getNormalId();
+        setNewOffer(new Offer(itemId, 1, 1337, player.getGrandExchange().getNewOffer().getType()));
+        refreshNewOffer();
     }
 
     /**

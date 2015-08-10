@@ -39,8 +39,14 @@ public class GnomeStronghold implements ContentTemplate{
 	public static boolean objectClicking(Player p, int objectId) {
 		switch(objectId) {
             case 9293:
-                if(p.getSkills().getLevel(Skills.AGILITY) >= 70)
-                    Agility.walkAcross(p, Location.create(2892, 9799, 0), 844, 0, 0, -1);
+				if(p.getSkills().getLevel(Skills.AGILITY) >= 70) {
+					if(p.getLocation().getX() == 2886 && p.getLocation().getY() == 9799)
+						Agility.walkAcross(p, Location.create(2892, 9799, 0), 844, 0, 0, -1);
+					if(p.getLocation().getX() == 2892 && p.getLocation().getY() == 9799)
+						Agility.walkAcross(p, Location.create(2886, 9799, 0), 844, 0, 0, -1);
+				} else {
+					p.sendMessage("You need an agility level of at least 70 to use this shortcut.");
+				}
                 break;
 		case 2295://log
 			Agility.walkAcross(p, Location.create(2474, 3429, 0), 762, 0, 10, COURSE_TYPE, /*ticks*/8, 15);

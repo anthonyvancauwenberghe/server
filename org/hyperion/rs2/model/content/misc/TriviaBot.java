@@ -206,7 +206,11 @@ public class TriviaBot {
 	 */
 	private void rightAnswer(Player p) {
 		yellMessage("Player @dre@" + p.getSafeDisplayName() + "@bla@ has answered my question correctly.");
-		yellMessage("One of the correct answers was: @dre@" + currentAnswers.get(0));
+		if(currentAnswers.size() == 1) {
+			yellMessage("The answer was: @dre@" + currentAnswers.get(0));
+		} else {
+			yellMessage("One of the answers was: @dre@" + currentAnswers.get(0));
+		}
 		yellMessage("He has been rewarded " + Server.NAME + " points. The question will soon be updated.");
 		String wrongAnswers = "";
 		for(String s : attemptedAnswers) {

@@ -151,8 +151,12 @@ public class ClanManager {
 	}*/
 
     public static void clearClanChat(Player player) {
-        player.getActionSender().sendString(18139, "Talking in: -");
-        player.getActionSender().sendString(18140, "Owner: -");
+        player.getActionSender().sendString(18139, "Talking in: Not in clan");
+        player.getActionSender().sendString(18140, "Owner: None");
+
+        for (int i = 18144; i <= 18444; i ++) {
+
+        }
     }
 
 	public static void sendClanMessage(Player player, String message, boolean toMe) {

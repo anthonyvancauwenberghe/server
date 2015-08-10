@@ -57,12 +57,12 @@ public class PlayerPoints {
 	 * @param opponentRating
 	 * @param resultType
 	 */
-	
-	private int eloPeak =EloRating.DEFAULT_ELO_START_RATING;
+
+	private int eloPeak = EloRating.DEFAULT_ELO_START_RATING;
 
 	public void updateEloRating(int opponentRating, int resultType) {
 		setEloRating(EloRating.getNewRating(eloRating, opponentRating, resultType));
-		String message = "You have defeaten by an opponent with PvP Rating " + opponentRating;
+		String message = "You have defeaten an opponent with PvP Rating " + opponentRating;
 		String message2 = "Your new PvP Rating is: " + eloRating;
 		if(resultType == EloRating.WIN) {
 			player.sendPkMessage(message);

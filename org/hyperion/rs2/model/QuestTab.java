@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
+import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
 import java.util.Calendar;
@@ -65,8 +66,12 @@ public class QuestTab {
 		this.player = player;
 	}
 
-	public void updateQuestTab() {
+	public void createQuestTab() {
 		resetQuestTab();
+		updateQuestTab();
+	}
+
+	public void updateQuestTab() {
 		sendPlayerCount();
 		sendStaffCount();
 		sendUptime();
@@ -74,8 +79,8 @@ public class QuestTab {
 		sendKills();
 		sendDeaths();
 		sendKdr();
-		sendItemsKept();
 		sendPvpRating();
+		sendItemsKept();
 		sendPkPoints();
 		sendVotePoints();
 		sendDonatePoints();
@@ -104,7 +109,7 @@ public class QuestTab {
 		player.getActionSender().sendString("", getId(5));
 		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- PK Information -"), getId(6));
 		player.getActionSender().sendString("", getId(16));
-		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Ingame Points -"), getId(12));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Ingame Points -"), getId(13));
 		player.getActionSender().sendString("", getId(17));
 		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Bounty Hunter -"), getId(18));
 		player.getActionSender().sendString("", getId(23));
@@ -122,7 +127,7 @@ public class QuestTab {
 	}
 
 	public void sendUptime() {
-		player.getActionSender().sendString(Rank.hasAbility(player, Rank.ADMINISTRATOR) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + ServerMinigame.name), getId(3));
+		player.getActionSender().sendString(Rank.hasAbility(player, Rank.ADMINISTRATOR) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + TextUtils.ucFirst(ServerMinigame.name)), getId(3));
 	}
 
 	public void sendBonusSkill() {
@@ -142,12 +147,12 @@ public class QuestTab {
 		player.getActionSender().sendString("@or1@Kill/Death: @gre@" + player.getKDR(), getId(9));
 	}
 
-	public void sendItemsKept() {
-		player.getActionSender().sendString("@or1@Items kept on death", getId(10));
+	public void sendPvpRating() {
+		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(10));
 	}
 
-	public void sendPvpRating() {
-		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(13));
+	public void sendItemsKept() {
+		player.getActionSender().sendString("@or1@Items kept on death", getId(11));
 	}
 
 	public void sendPkPoints() {
@@ -197,7 +202,7 @@ public class QuestTab {
 	}
 
 	public void sendStaffMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff messages", getId(28));
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff login", getId(28));
 	}
 
 	public void sendParticlesEnabled() {
@@ -323,14 +328,14 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(10), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(11), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.getActionSender().openItemsKeptOnDeathInterface(player);
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(13), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(10), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.forceMessage("My PvP rating is " + player.getPoints().getEloRating() + ". " + (player.getPoints().getEloRating() == player.getPoints().getEloPeak() ? "This is also my best PvP rating ever." : "My best PvP rating ever was " + player.getPoints().getEloPeak() + "."));
@@ -340,7 +345,7 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(14), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.forceMessage("I have " + (player.getPoints().getPkPoints() == 0 ? "no" : player.getPoints().getPkPoints()) + " " + (player.getPoints().getPkPoints() == 1 ? "PK point" : "PK points") + ".");
+				player.forceMessage("I have " + (player.getPoints().getPkPoints() == 0 ? "no" : player.getPoints().getPkPoints()) + " " + (player.getPoints().getPkPoints() == 1 ? "ArteroPK point" : "ArteroPK points") + ".");
 			}
 		});
 

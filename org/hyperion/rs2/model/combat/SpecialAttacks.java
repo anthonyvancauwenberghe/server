@@ -718,9 +718,11 @@ public class SpecialAttacks {
                             - CombatAssistant.calculateMeleeDefence(oldEntity.getEntity());
 
                 randomIncrease = Misc.random(deltaBonus / 2);
+				/*
                 if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);
                 }
+                */
                 // System.out.println("RandomIncrease " + randomIncrease +
                 // " Deltabonus : " + deltaBonus);
                 tempDamage += randomIncrease;

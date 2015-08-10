@@ -2449,9 +2449,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public ActionSender sendServerMessage(Object... message) {
-		if(!Rank.hasAbility(this, Rank.OWNER))
-			return sendHeadedMessage("@whi@", "[Server]", message);
-		return getActionSender();
+		return sendHeadedMessage("@whi@", "[Server]", message);
 	}
 
 	public ActionSender sendStaffMessage(Object... message) {

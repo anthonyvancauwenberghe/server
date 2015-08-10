@@ -1246,20 +1246,21 @@ public class CommandHandler {
                     final int y = Integer.valueOf(split[1]);
                     final int z = Integer.valueOf(split[2]);
                     if(Combat.getWildLevel(x, y) > 0) {
-                        player.sendMessage("Not in wild!");
+                        player.sendMessage("Events cannot be in wilderness.");
                         return false;
                     }
                     final String name = split[3];
                     ServerMinigame.x = x;
                     ServerMinigame.y = y;
                     ServerMinigame.z = z;
-                    ServerMinigame.name = name;
-                    PushMessage.pushGlobalMessage(String.format("[@whi@%s@bla@]: %s has just created this event. View in quest tab", name, player.getName()));
+                    ServerMinigame.name = TextUtils.ucFirst(name);
                     for(final Player p : World.getWorld().getPlayers()) {
+                        p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), ServerMinigame.name));
+                        p.sendServerMessage("Click it in the questtab to join in!");
                         p.getQuestTab().sendUptime();
                     }
                 } catch(Exception ex) {
-                    player.sendMessage("Please use the command as such: ::createevent x,y,z,name");
+                    player.sendMessage("Please use the command as: ::createevent X,Y,Z,EVENTNAME");
                 }
                 return false;
             }
@@ -1267,11 +1268,14 @@ public class CommandHandler {
             new Command("removeevent", Rank.MODERATOR) {
                 @Override
                 public boolean execute(Player player, String input) throws Exception {
+                    String oldEvent = ServerMinigame.name;
                     ServerMinigame.name = null;
 
-                    for(final Player p : World.getWorld().getPlayers())
+                    for(final Player p : World.getWorld().getPlayers()) {
                         p.getQuestTab().sendUptime();
-                    player.sendMessage("Event removed");
+                        p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
+                    }
+                    player.sendMessage("The event '" + oldEvent + "' has been removed.");
                     return true;
                 }
             });

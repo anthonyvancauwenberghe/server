@@ -127,7 +127,7 @@ public class QuestTab {
 	}
 
 	public void sendUptime() {
-		player.getActionSender().sendString(Rank.hasAbility(player, Rank.ADMINISTRATOR) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + TextUtils.ucFirst(ServerMinigame.name)), getId(3));
+		player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && ServerMinigame.name == null) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + TextUtils.ucFirst(ServerMinigame.name)), getId(3));
 	}
 
 	public void sendBonusSkill() {
@@ -148,7 +148,7 @@ public class QuestTab {
 	}
 
 	public void sendPvpRating() {
-		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(10));
+		player.getActionSender().sendString("@or1@PvP rating: @gre@" + Misc.shortNumber(player.getPoints().getEloRating()), getId(10));
 	}
 
 	public void sendItemsKept() {
@@ -156,23 +156,23 @@ public class QuestTab {
 	}
 
 	public void sendPkPoints() {
-		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + player.getPoints().getPkPoints(), getId(14));
+		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + Misc.shortNumber(player.getPoints().getPkPoints()), getId(14));
 	}
 
 	public void sendVotePoints() {
-		player.getActionSender().sendString("@or1@Voting points: @gre@" + player.getPoints().getVotingPoints(), getId(15));
+		player.getActionSender().sendString("@or1@Voting points: @gre@" + Misc.shortNumber(player.getPoints().getVotingPoints()), getId(15));
 	}
 
 	public void sendDonatePoints() {
-		player.getActionSender().sendString("@or1@Donator points: @gre@" + player.getPoints().getDonatorPoints()/* + "@or1@/@gre@" + player.getPoints().getDonatorPointsBought()*/, getId(16));
+		player.getActionSender().sendString("@or1@Donator points: @gre@" + Misc.shortNumber(player.getPoints().getDonatorPoints()), getId(16));
 	}
 
 	public void sendHonorPoints() {
-		player.getActionSender().sendString("@or1@Honor points: @gre@" + player.getPoints().getHonorPoints(), getId(17));
+		player.getActionSender().sendString("@or1@Honor points: @gre@" + Misc.shortNumber(player.getPoints().getHonorPoints()), getId(17));
 	}
 
 	public void sendBHPoints() {
-		player.getActionSender().sendString("@or1@BH points: @gre@" + player.getBountyHunter().getKills(), getId(19));
+		player.getActionSender().sendString("@or1@BH points: @gre@" + Misc.shortNumber(player.getBountyHunter().getKills()), getId(19));
 	}
 
 	public void sendBHTarget() {
@@ -323,8 +323,7 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(9), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				String kdr = "" + player.getKDR();
-				player.forceMessage("My kill/deathratio is " + kdr + ".");
+				player.forceMessage("My kill/deathratio is " + player.getKDR() + ".");
 			}
 		});
 
@@ -422,6 +421,8 @@ public class QuestTab {
 				player.getTrivia().setEnabled(!player.getTrivia().isEnabled());
 				player.getQuestTab().sendTriviaEnabled();
 				player.sendMessage("Trivia is now " + (player.getTrivia().isEnabled() ? "enabled" : "disabled") + ".");
+				if(player.getTrivia().isEnabled())
+					player.sendMessage("To answer, simply use ::answer ANSWER.");
 			}
 		});
 

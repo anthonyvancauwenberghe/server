@@ -1,0 +1,7 @@
+id - integer - primary - auto increment
+player_id - integer - default: none
+other_id - integer - default: none
+item_id - integer - default:none
+quantity - integer - default: 1
+price - integer - default: none
+type - integer - size: 1 - default: 0 (buy)

@@ -1,0 +1,4 @@
+id - primary (item id)
+prev_price or price_history array
+price
+

@@ -427,7 +427,7 @@ public class NPCManager {
 		return attacks[n.getDefinition().getId()];
 	}
 
-	public Attack[] attacks = new Attack[10000];// 3000 npcs?
+	public Attack[] attacks = new Attack[12000];// 3000 npcs?
 
 	static {
 		CommandHandler.submit(new Command("npcids", Rank.MODERATOR) {

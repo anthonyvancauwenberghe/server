@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.attack.BulwarkBeast;
 import org.hyperion.rs2.model.combat.attack.CorporealBeast;
 import org.hyperion.rs2.model.combat.attack.TormentedDemon;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
@@ -286,6 +287,10 @@ public class CombatEntity {
 						damage = CorporealBeast.reduceDamage(atk, damage, style);
 					}
 				}
+                if(id == 10106) {
+                    Player atk = (Player) attacker;
+                    BulwarkBeast.handleRecoil(atk, damage);
+                }
                 if(id == 8596) {
                     if(style == Constants.MELEE)
                         damage = 0;

@@ -1440,3 +1440,67 @@ Sun Aug 02 20:33:07 CEST 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sat Aug 08 18:44:20 EDT 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.Damage.getHitType1(Damage.java:136)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.appendHitUpdate(PlayerUpdateTask.java:342)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.updatePlayer(PlayerUpdateTask.java:469)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.execute(PlayerUpdateTask.java:83)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ParallelTask$1.run(ParallelTask.java:44)
+	at org.hyperion.rs2.GameEngine$3.run(GameEngine.java:186)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Aug 08 18:44:32 EDT 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.Damage.getHitType1(Damage.java:136)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.appendHitUpdate(PlayerUpdateTask.java:342)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.updatePlayer(PlayerUpdateTask.java:469)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.execute(PlayerUpdateTask.java:83)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ParallelTask$1.run(ParallelTask.java:44)
+	at org.hyperion.rs2.GameEngine$3.run(GameEngine.java:186)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Aug 08 18:44:36 EDT 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.Damage.getHitType1(Damage.java:136)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.appendHitUpdate(PlayerUpdateTask.java:342)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.updatePlayer(PlayerUpdateTask.java:469)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.execute(PlayerUpdateTask.java:83)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ParallelTask$1.run(ParallelTask.java:44)
+	at org.hyperion.rs2.GameEngine$3.run(GameEngine.java:186)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Aug 08 18:44:45 EDT 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.Damage.getHitType2(Damage.java:143)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.appendHit2Update(PlayerUpdateTask.java:333)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.updatePlayer(PlayerUpdateTask.java:472)
+	at org.hyperion.rs2.task.impl.PlayerUpdateTask.execute(PlayerUpdateTask.java:83)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ParallelTask$1.run(ParallelTask.java:44)
+	at org.hyperion.rs2.GameEngine$3.run(GameEngine.java:186)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

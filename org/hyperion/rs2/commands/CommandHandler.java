@@ -767,6 +767,23 @@ public class CommandHandler {
                 return true;
             }
         });
+
+        submit(new Command("gfx", Rank.PLAYER) {
+            public boolean execute(Player player, String input) {
+                input = filterInput(input);
+                final String[] parts = input.split(",");
+                player.cE.doGfx(Integer.parseInt(parts[0]));
+                return true;
+            }
+        });
+
+        submit(new Command("heal", Rank.PLAYER) {
+            public boolean execute(Player player, String input) {
+                player.heal(150);
+                return true;
+            }
+        });
+
 		submit(new Command(Server.getConfig().getString("spawncommand"), Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {

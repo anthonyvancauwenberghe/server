@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.combat.attack.AvatarOfDestruction;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
 import org.hyperion.rs2.model.combat.attack.GodWarsBandos;
@@ -334,6 +335,7 @@ public class NPCDefinition {
                         }
                         AvatarOfDestruction.loadDefinitions();
                         BorkAndMinions.init();
+                        WildernessBossEvent.init();
 						//int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime
 						System.out.println("Loaded " + j + " NPC Definitions.");
 						return;

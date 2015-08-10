@@ -684,6 +684,25 @@ public class ActionSender {
 		return this;
 	}
 
+    public ActionSender shakeScreen(int verticleAmount, int verticleSpeed, int horizontalAmount, int horizontalSpeed, long time) {
+        PacketBuilder bldr = new PacketBuilder(35);
+        bldr.put((byte) verticleAmount);
+        bldr.put((byte) verticleSpeed);
+        bldr.put((byte) horizontalAmount);
+        bldr.put((byte) horizontalSpeed);
+        if(time > -1) {
+            World.getWorld().submit(new Event(time) {
+                @Override
+                public void execute() throws IOException {
+                    player.getActionSender().cameraReset();
+                    this.stop();
+                }
+            });
+        }
+        player.write(bldr.toPacket());
+        return this;
+    }
+
     public ActionSender sendHideComponent(int interfaceID, boolean hidden) {
         PacketBuilder bldr = new PacketBuilder(170);
         bldr.put((byte)(hidden ? 1 : 0));

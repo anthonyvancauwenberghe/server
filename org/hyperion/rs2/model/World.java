@@ -389,7 +389,7 @@ public class World {
             SpawnCommand.init();
             NewcomersLogging.getLogging().init();
             submit(new PunishmentExpirationEvent());
-            submit(new WildernessBossEvent(true));
+            //submit(new WildernessBossEvent(true));
         }
     }
 

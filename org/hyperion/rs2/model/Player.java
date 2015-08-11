@@ -124,17 +124,7 @@ public class Player extends Entity implements Persistable, Cloneable{
     public String lastIp;
     public boolean verified;
 
-	private boolean joinedHns = false;
-
-	public boolean hasJoinedHns() {
-		return joinedHns;
-	}
-
-	public void setJoinedHns(boolean joinedHns) {
-		this.joinedHns = joinedHns;
-	}
-
-	public int tutorialProgress = 0;
+    public int tutorialProgress = 0;
 
     public int getTutorialProgress() {
         return tutorialProgress;

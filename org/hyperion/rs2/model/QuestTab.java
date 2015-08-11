@@ -3,7 +3,6 @@ package org.hyperion.rs2.model;
 import org.hyperion.Server;
 import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
@@ -128,7 +127,7 @@ public class QuestTab {
 	}
 
 	public void sendUptime() {
-		player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : ((Events.eventName == "") ? "" : "@or1@Event: @gre@" + Events.eventName), getId(3));
+		player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && ServerMinigame.name == null) ? "@or1@Uptime: @gre@" + Server.getUptime() : ((ServerMinigame.name == null || ServerMinigame.name.equalsIgnoreCase("")) ? "" : "@or1@Event: @gre@" + TextUtils.ucFirst(ServerMinigame.name)), getId(3));
 	}
 
 	public void sendBonusSkill() {
@@ -149,7 +148,7 @@ public class QuestTab {
 	}
 
 	public void sendPvpRating() {
-		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(10));
+		player.getActionSender().sendString("@or1@PvP rating: @gre@" + Misc.shortNumber(player.getPoints().getEloRating()), getId(10));
 	}
 
 	public void sendItemsKept() {
@@ -284,8 +283,8 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(3), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				if(Events.eventName != "") {
-					Events.joinEvent(player);
+				if(ServerMinigame.name != null && ServerMinigame.x != 0) {
+					Magic.teleport(player, Location.create(ServerMinigame.x, ServerMinigame.y, ServerMinigame.z), false, false);
 				}
 			}
 		});

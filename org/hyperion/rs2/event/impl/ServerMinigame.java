@@ -4,6 +4,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Time;
 

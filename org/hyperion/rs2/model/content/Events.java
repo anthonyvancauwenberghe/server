@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.misc.HideNSeek;
 
 /**
  * Created by Allen Kinzalow on 4/8/2015.
@@ -44,6 +45,7 @@ public class Events {
         eventTimeTillStart = 0;
         eventLocation = null;
         for(Player player : World.getWorld().getPlayers()) {
+            player.getQuestTab().sendUptime();
             player.getActionSender().sendString("cancel", 32456);
         }
     }
@@ -59,6 +61,7 @@ public class Events {
         eventStartTime = System.currentTimeMillis();
         eventLocation = location;
         for(Player player : World.getWorld().getPlayers()) {
+            player.getQuestTab().sendUptime();
             player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }
@@ -69,6 +72,11 @@ public class Events {
             player.getActionSender().sendString("cancel", 32456);
             return;
         }
+        if(eventName == "HideNSeek") {
+            HideNSeek.getBot().joinHideNSeek(player);
+            return;
+        }
+
         Magic.teleport(player, eventLocation, false);
         System.out.println("You teleport to the event: " + eventName);
         player.getActionSender().sendString("cancel", 32456);

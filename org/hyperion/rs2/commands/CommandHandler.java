@@ -77,10 +77,7 @@ import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc.PotionDecanting;
-import org.hyperion.rs2.model.content.misc.RandomSpamming;
-import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
-import org.hyperion.rs2.model.content.misc.Tutorial;
+import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
@@ -1232,53 +1229,53 @@ public class CommandHandler {
         });
 
         CommandHandler.submit(new Command("createevent", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                input = filterInput(input);
-                String[] split = input.split(",");
-                try {
-                    if(ServerMinigame.name != null) {
-                        player.sendMessage("There is already an active event, remove it via ::removeevent");
-                        return false;
-                    }
+                                  @Override
+                                  public boolean execute(Player player, String input) throws Exception {
+                                      input = filterInput(input);
+                                      String[] split = input.split(",");
+                                      try {
+                                          if (ServerMinigame.name != null) {
+                                              player.sendMessage("There is already an active event, remove it via ::removeevent");
+                                              return false;
+                                          }
 
-                    final int x = Integer.valueOf(split[0]);
-                    final int y = Integer.valueOf(split[1]);
-                    final int z = Integer.valueOf(split[2]);
-                    if(Combat.getWildLevel(x, y) > 0) {
-                        player.sendMessage("Events cannot be in wilderness.");
-                        return false;
-                    }
-                    final String name = split[3];
-                    ServerMinigame.x = x;
-                    ServerMinigame.y = y;
-                    ServerMinigame.z = z;
-                    ServerMinigame.name = TextUtils.ucFirst(name);
-                    for(final Player p : World.getWorld().getPlayers()) {
-                        p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), ServerMinigame.name));
-                        p.sendServerMessage("Click it in the questtab to join in!");
-                        p.getQuestTab().sendUptime();
-                    }
-                } catch(Exception ex) {
-                    player.sendMessage("Please use the command as: ::createevent X,Y,Z,EVENTNAME");
-                }
-                return false;
-            }
-        },
-            new Command("removeevent", Rank.MODERATOR) {
-                @Override
-                public boolean execute(Player player, String input) throws Exception {
-                    String oldEvent = ServerMinigame.name;
-                    ServerMinigame.name = null;
+                                          final int x = Integer.valueOf(split[0]);
+                                          final int y = Integer.valueOf(split[1]);
+                                          final int z = Integer.valueOf(split[2]);
+                                          if (Combat.getWildLevel(x, y) > 0) {
+                                              player.sendMessage("Events cannot be in wilderness.");
+                                              return false;
+                                          }
+                                          final String name = split[3];
+                                          ServerMinigame.x = x;
+                                          ServerMinigame.y = y;
+                                          ServerMinigame.z = z;
+                                          ServerMinigame.name = TextUtils.ucFirst(name);
+                                          for (final Player p : World.getWorld().getPlayers()) {
+                                              p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), ServerMinigame.name));
+                                              p.sendServerMessage("Click it in the questtab to join in!");
+                                              p.getQuestTab().sendUptime();
+                                          }
+                                      } catch (Exception ex) {
+                                          player.sendMessage("Please use the command as: ::createevent X,Y,Z,EVENTNAME");
+                                      }
+                                      return false;
+                                  }
+                              },
+                new Command("removeevent", Rank.MODERATOR) {
+                    @Override
+                    public boolean execute(Player player, String input) throws Exception {
+                        String oldEvent = ServerMinigame.name;
+                        ServerMinigame.name = null;
 
-                    for(final Player p : World.getWorld().getPlayers()) {
-                        p.getQuestTab().sendUptime();
-                        p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
+                        for (final Player p : World.getWorld().getPlayers()) {
+                            p.getQuestTab().sendUptime();
+                            p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
+                        }
+                        player.sendMessage("The event '" + oldEvent + "' has been removed.");
+                        return true;
                     }
-                    player.sendMessage("The event '" + oldEvent + "' has been removed.");
-                    return true;
-                }
-            });
+                });
 
 
 
@@ -1797,9 +1794,9 @@ public class CommandHandler {
                     target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                 }else{
                     World.getWorld().submit(
-                            new Event(1000){
-                                public void execute(){
-                                    if(target.isDead())
+                            new Event(1000) {
+                                public void execute() {
+                                    if (target.isDead())
                                         stop();
                                     else
                                         target.cE.hit(5, player, true, Constants.MELEE);
@@ -1885,6 +1882,76 @@ public class CommandHandler {
                     player.sendf("Enter a valid amount");
                     return false;
                 }
+            }
+        });
+
+        CommandHandler.submit(new Command("createhns", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                HideNSeek.getBot().createHideNSeek(player);
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("starthns", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                HideNSeek.getBot().startHideNSeek(player);
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("stophns", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                HideNSeek.getBot().stopHideNSeek(player);
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("resethns", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                HideNSeek.getBot().resetHideNSeek(player);
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("hnstimer", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                input = input.replace("hnstimer ", "");
+                try {
+                    HideNSeek.getBot().setTimer(player, Integer.parseInt(input));
+                } catch(Exception e) {
+                    player.sendMessage("[@whi@HideNSeek@bla@] Use as ::hnstimer TIME, the time is in minutes.");
+                }
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("addclue", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                input = input.replace("addclue ", "");
+                HideNSeek.getBot().addClue(player, input);
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("hns", Rank.MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) {
+                HideNSeek.getBot().showInfo(player);
+                return true;
+            }
+        });
+
+        CommandHandler.submit(new Command("showclues", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) {
+                HideNSeek.getBot().showClues(player);
+                return true;
             }
         });
 

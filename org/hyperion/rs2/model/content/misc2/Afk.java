@@ -20,7 +20,7 @@ public class Afk implements ContentTemplate {
 	public static void procesPlayer(Player player) {
 		if(isAfking(player)) {
 			if(Math.random() > 0.5)
-				player.getPoints().inceasePkPoints(1);
+				player.getPoints().increasePkPoints(1);
 		}
 	}
 

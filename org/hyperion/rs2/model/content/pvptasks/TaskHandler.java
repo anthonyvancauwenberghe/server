@@ -31,7 +31,7 @@ public final class TaskHandler {
 	
 	public static void handleTaskEnd(Player killer) {
 		killer.getActionSender().sendMessage("@red@You have just completed your PvP Task!");
-		killer.getPoints().inceasePkPoints(75 + Combat.random(30));
+		killer.getPoints().increasePkPoints(75 + Combat.random(30));
 		killer.setPvPTask(null);
 		killer.setPvPTaskAmount(0);
 	}

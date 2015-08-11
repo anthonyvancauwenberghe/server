@@ -116,7 +116,7 @@ public class LastManStanding implements ContentTemplate {
             Magic.teleport(player, Edgeville.LOCATION, true);
             if (gameStarted) {
                 if (loseItems) {
-                    player.getPoints().inceasePkPoints(500);
+                    player.getPoints().increasePkPoints(500);
                     DeathDrops.dropItems(player, false);
                 }
             }

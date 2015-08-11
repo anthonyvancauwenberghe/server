@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.sun.javafx.binding.StringFormatter;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
@@ -100,7 +99,7 @@ public class NpcDeathEvent extends Event {
                     final int dp = (int)(reward.get().dp * percent);
                     final int pkp = (int)(reward.get().pkp * percent);
                     tokens = (int)(reward.get().tokens * percent);
-                    player.getPoints().inceasePkPoints(pkp);//1750 hp, 175pkp
+                    player.getPoints().increasePkPoints(pkp);//1750 hp, 175pkp
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
                     double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.035 : 0.04;
                     for(double d  = 0.03; d < percent; d += increment) {

@@ -123,7 +123,7 @@ public enum AchievementData {
     }
 
     public void giveReward(Player player) {
-        player.getPoints().inceasePkPoints(pkp);
+        player.getPoints().increasePkPoints(pkp);
         player.getActionSender().sendMessage("You have completed the achievement @blu@" + name);
         String message = "You have been rewarded " + pkp + " pkp";
         if(dp > 0) {

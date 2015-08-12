@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.log.LogEntry;
+import org.hyperion.rs2.util.PushMessage;
 
 
 /**
@@ -73,6 +74,10 @@ public class BoB {
 	 */
 	public static void withdraw(Player player, int slot, int id, int amount) {
 		if(! Server.SPAWN) {
+			return;
+		}
+		if(player.cE.summonedNpc == null){
+			PushMessage.pushStaffMessage("Trying to withdraw from BOB with no summoned npc", player);
 			return;
 		}
 		if(player.duelAttackable > 0 || FightPits.inPits(player)) {
@@ -160,6 +165,10 @@ public class BoB {
 	public static void deposit(Player player, int slot, int id, int amount,
 	                           Container container) {
 		if(! Server.SPAWN) {
+			return;
+		}
+		if(player.cE.summonedNpc == null){
+			PushMessage.pushStaffMessage("Trying to deposit into BOB with no summoned npc", player);
 			return;
 		}
         if(FightPits.inPits(player) || FightPits.inGame(player) || FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY()))

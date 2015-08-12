@@ -77,7 +77,8 @@ public class BoB {
 			return;
 		}
 		if(player.cE.summonedNpc == null){
-			PushMessage.pushStaffMessage("Trying to withdraw from BOB with no summoned npc", player);
+			PushMessage.pushStaffMessage("@red@[Important] " + player.getSafeDisplayName() + " is trying to withdraw", player);
+			PushMessage.pushStaffMessage("@red@[Important] from BoB without any summoned followers.", player);
 			return;
 		}
 		if(player.duelAttackable > 0 || FightPits.inPits(player)) {

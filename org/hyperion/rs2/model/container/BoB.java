@@ -40,6 +40,10 @@ public class BoB {
 	 * @param player The player to have a opened deposit Box
 	 */
 	public static void openInventory(Player player) {
+		if(player.cE.summonedNpc == null){
+			PushMessage.pushStaffMessage("Trying to view BOB inventory with no familiar", player);
+			return;
+		}
 		player.openedBoB = true;
 
 		player.getBoB().shift();

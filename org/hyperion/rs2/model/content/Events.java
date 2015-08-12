@@ -61,8 +61,6 @@ public class Events {
         eventLocation = location;
         for(Player player : World.getWorld().getPlayers()) {
             player.getQuestTab().sendUptime();
-            if(!player.hasJoinedHns())
-                player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }
 

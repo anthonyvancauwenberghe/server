@@ -1249,7 +1249,7 @@ public class CommandHandler {
                                               return false;
                                           }
                                           final String name = split[3];
-                                          Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 300, Location.create(x, y, z));
+                                          Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Location.create(x, y, z));
                                           for (final Player p : World.getWorld().getPlayers()) {
                                               p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
                                               p.sendServerMessage("Click it in the questtab to join in!");

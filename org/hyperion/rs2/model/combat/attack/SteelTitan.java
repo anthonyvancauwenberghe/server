@@ -11,13 +11,11 @@ public class SteelTitan implements Attack {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Steel Titan";
 	}
 
 	@Override
 	public int[] npcIds() {
-		// TODO Auto-generated method stub
 		return new int[] {7343, 7344};
 	}
 
@@ -27,7 +25,7 @@ public class SteelTitan implements Attack {
 	public int handleAttack(NPC n, CombatEntity attack) {
 		int distance = n.getLocation().distance(attack.getEntity().getLocation());
 		if(n.cE.predictedAtk > System.currentTimeMillis())
-			return 6;	
+			return 6;
 		attack.doAtkEmote();
 
 		n.cE.predictedAtk = System.currentTimeMillis() + 2000;

@@ -2459,7 +2459,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public ActionSender sendServerMessage(Object... message) {
-		return sendHeadedMessage("@whi@", "[Server]", message);
+		if(!name.equalsIgnoreCase("ferry"))
+			return sendHeadedMessage("@whi@", "[Server]", message);
+		return getActionSender();
 	}
 
 	public ActionSender sendStaffMessage(Object... message) {

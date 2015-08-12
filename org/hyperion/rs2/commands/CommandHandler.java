@@ -1264,7 +1264,6 @@ public class CommandHandler {
                 new Command("removeevent", Rank.MODERATOR) {
                     @Override
                     public boolean execute(Player player, String input) throws Exception {
-						if(Events.eventName != "HideNSeek") {
 							String oldEvent = Events.eventName;
 							Events.resetEvent();
 
@@ -1272,9 +1271,6 @@ public class CommandHandler {
 								p.getQuestTab().sendUptime();
 								p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
 							}
-						} else {
-							player.sendMessage("You can reset HideNSeek by doing ::resethns.");
-						}
                         return true;
                     }
                 });
@@ -1886,64 +1882,6 @@ public class CommandHandler {
                 }
             }
         });
-
-        CommandHandler.submit(new Command("createhns", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                HideNSeek.getBot().createHideNSeek(player);
-                return true;
-            }
-        });
-
-        CommandHandler.submit(new Command("starthns", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                HideNSeek.getBot().startHideNSeek(player);
-                return true;
-            }
-        });
-
-        CommandHandler.submit(new Command("stophns", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                HideNSeek.getBot().stopHideNSeek(player);
-                return true;
-            }
-        });
-
-        CommandHandler.submit(new Command("resethns", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                HideNSeek.getBot().resetHideNSeek(player);
-                return true;
-            }
-        });
-
-        CommandHandler.submit(new Command("addclue", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                input = input.replace("addclue ", "");
-                HideNSeek.getBot().addClue(player, input);
-                return true;
-            }
-        });
-
-        CommandHandler.submit(new Command("hns", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) {
-                HideNSeek.getBot().showInfo(player);
-                return true;
-            }
-        });
-
-        CommandHandler.submit(new Command("showclues", Rank.PLAYER) {
-            @Override
-            public boolean execute(Player player, String input) {
-                HideNSeek.getBot().showClues(player);
-                return true;
-            }
-        });
-
         submit(new Command("setpin", Rank.DEVELOPER) {
             public boolean execute(final Player player, final String input) {
                 final Player target = input.equals("setpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());

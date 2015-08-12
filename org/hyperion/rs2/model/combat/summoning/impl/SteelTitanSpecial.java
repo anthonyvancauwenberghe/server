@@ -84,7 +84,6 @@ public class SteelTitanSpecial extends AbstractSummoningSpecial {
 
 	@Override
 	public int requiredSpecial() {
-		// TODO Auto-generated method stub
 		return 33;
 	}
 

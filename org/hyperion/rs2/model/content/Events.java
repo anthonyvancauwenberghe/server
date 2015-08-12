@@ -4,7 +4,6 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.misc.HideNSeek;
 
 /**
  * Created by Allen Kinzalow on 4/8/2015.
@@ -62,7 +61,8 @@ public class Events {
         eventLocation = location;
         for(Player player : World.getWorld().getPlayers()) {
             player.getQuestTab().sendUptime();
-            player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
+            if(!player.hasJoinedHns())
+                player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }
 
@@ -70,10 +70,6 @@ public class Events {
         if(eventLocation == null || !isEventActive()) {
             player.getActionSender().sendMessage("There was an error joining this event, try again later.");
             player.getActionSender().sendString("cancel", 32456);
-            return;
-        }
-        if(eventName == "HideNSeek") {
-            HideNSeek.getBot().joinHideNSeek(player);
             return;
         }
 

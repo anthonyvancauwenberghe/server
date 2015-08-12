@@ -101,7 +101,7 @@ public class SummoningData {
 		ABBYTITAN(7349, 12796, 93, 3200, ATTACK),//abyssal titan
 		IRONTITAN(7375, 12822, 95, 6000, DEFENCE),//iron titan
 		PACKYAK(6873, 12093, 96, 5800, STRENGTH),//pack yak
-		STELLTITAN(7343, 12790, 99, 6400, RANGE),//Steel titan
+		STEELTITAN(7343, 12790, 99, 6400, RANGE),//Steel titan
         REV_KNIGHT(6692, 17989, 99, (int)Time.TEN_MINUTES, MAGIC),
         REV_BEAST(6691, 17988, 90,(int) Time.TEN_MINUTES, MAGIC),
         REV_ORK(6690, 17987, 80, (int)Time.TEN_MINUTES, MAGIC),

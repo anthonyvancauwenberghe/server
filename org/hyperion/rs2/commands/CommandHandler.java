@@ -1244,17 +1244,21 @@ public class CommandHandler {
                                           final int x = Integer.valueOf(split[0]);
                                           final int y = Integer.valueOf(split[1]);
                                           final int z = Integer.valueOf(split[2]);
+
                                           if (Combat.getWildLevel(x, y) > 0) {
                                               player.sendMessage("Events cannot be in wilderness.");
                                               return false;
                                           }
+
                                           final String name = split[3];
                                           Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Location.create(x, y, z));
+
                                           for (final Player p : World.getWorld().getPlayers()) {
                                               p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
                                               p.sendServerMessage("Click it in the questtab to join in!");
                                               p.getQuestTab().sendUptime();
                                           }
+
                                       } catch (Exception ex) {
                                           player.sendMessage("Please use the command as: ::createevent X,Y,Z,EVENTNAME");
                                       }

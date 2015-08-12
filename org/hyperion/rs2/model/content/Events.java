@@ -44,7 +44,6 @@ public class Events {
         eventTimeTillStart = 0;
         eventLocation = null;
         for(Player player : World.getWorld().getPlayers()) {
-            player.getQuestTab().sendUptime();
             player.getActionSender().sendString("cancel", 32456);
         }
     }
@@ -61,6 +60,7 @@ public class Events {
         eventLocation = location;
         for(Player player : World.getWorld().getPlayers()) {
             player.getQuestTab().sendUptime();
+            player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }
 
@@ -72,7 +72,6 @@ public class Events {
         }
 
         Magic.teleport(player, eventLocation, false);
-        System.out.println("You teleport to the event: " + eventName);
         player.getActionSender().sendString("cancel", 32456);
     }
 

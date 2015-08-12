@@ -12,7 +12,6 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.CombatEntity;
-import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -20,7 +19,6 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.checkers.GameHandler;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.SnowItems;
-import org.hyperion.rs2.model.newcombat.Skills;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.util.Misc;
 
@@ -134,7 +132,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 							victim.getActionSender().sendMessage("You just got snowballed by " + player.getName() + "!!!");
 							if(Math.random() > 0.90) {
 								player.forceMessage("Owned idiot");
-								player.getPoints().inceasePkPoints(1);
+								player.getPoints().increasePkPoints(1);
 							}
 							this.stop();
 						}

@@ -1,24 +1,18 @@
 package org.hyperion.rs2.net;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
@@ -28,19 +22,14 @@ import org.hyperion.rs2.model.content.grandexchange.GrandExchange.GEItem;
 import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
-import org.hyperion.rs2.model.itf.impl.PinInterface;
-import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet.Type;
-import org.hyperion.rs2.packet.CommandPacketHandler;
-import org.hyperion.rs2.sql.requests.GetSpecialUID;
 import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -1386,7 +1375,7 @@ public class ActionSender {
 					ClanManager.joinClanChat(player, "skilling2", false);
 			player.forcedIntoSkilling = true;
 			if(player.getSkills().getLevelForExp(skill) % 10 == 0) {
-				player.getPoints().inceasePkPoints(20);
+				player.getPoints().increasePkPoints(20);
 			}
 		}
         AchievementHandler.progressAchievement(player, "Total");

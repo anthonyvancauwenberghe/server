@@ -54,7 +54,7 @@ public class EPExchange {
 		}
 		points *= count;
 		ContentEntity.deleteItemA(p, id, count);
-		p.getPoints().inceasePkPoints(points * 4);
+		p.getPoints().increasePkPoints(points * 4);
 		return true;
 	}
 

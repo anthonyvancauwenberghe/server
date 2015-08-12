@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.content.bounty.place.Bounty;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -57,7 +56,7 @@ public final class BountyHandler {
                 return;
 			if(remove(bounty)) {
 				PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just defeated %s for a %d Pk points bounty!", killer.getName(),key, pkpToGain));
-				killer.getPoints().inceasePkPoints(pkpToGain);
+				killer.getPoints().increasePkPoints(pkpToGain);
 			}
 		}
 	}

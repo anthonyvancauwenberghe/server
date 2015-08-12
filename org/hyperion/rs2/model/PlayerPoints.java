@@ -217,7 +217,7 @@ public class PlayerPoints {
 		player.getQuestTab().sendPkPoints();
 	}
 
-	public void inceasePkPoints(int points) {
+	public void increasePkPoints(int points) {
 		increasePkPoints(points, true);
 	}
 	

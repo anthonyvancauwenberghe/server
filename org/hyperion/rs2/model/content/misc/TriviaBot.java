@@ -218,7 +218,9 @@ public class TriviaBot {
 				break;
 			wrongAnswers += s + ", ";
 		}
-		wrongAnswers = wrongAnswers.substring(0, wrongAnswers.lastIndexOf(","));
+		try {
+			wrongAnswers = wrongAnswers.substring(0, wrongAnswers.lastIndexOf(","));
+		} catch(Exception e){}
 		if(!wrongAnswers.isEmpty())
 			yellMessage("Wrong answers were: @dre@" + wrongAnswers);
 		currentQuestion = "";
@@ -277,7 +279,7 @@ public class TriviaBot {
 	 * @param player
 	 */
 	private void addReward(Player player) {
-		player.getPoints().inceasePkPoints(Misc.random(getPlayersAmount() * 2) + 1);
+		player.getPoints().increasePkPoints(Misc.random(getPlayersAmount() * 2) + 1);
 	}
 
 	/**

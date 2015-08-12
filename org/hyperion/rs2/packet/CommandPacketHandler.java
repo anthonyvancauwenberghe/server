@@ -2711,7 +2711,7 @@ public class CommandPacketHandler implements PacketHandler {
 				int removed;
 				if ((removed = player.getInventory().remove(
 						new Item(5020, tickets))) > 0) {
-					player.getPoints().inceasePkPoints(removed * 10);
+					player.getPoints().increasePkPoints(removed * 10);
 					player.getActionSender().sendMessage(
 							"You sold: " + removed + " pk tickets!");
 				}

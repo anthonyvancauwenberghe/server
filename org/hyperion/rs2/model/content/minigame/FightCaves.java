@@ -133,7 +133,7 @@ public class FightCaves
 			if(j != 2745 && player.fightCavesKills == 0) {
 				player.fightCavesWave++;
 				if(player.fightCavesKills % 10 == 0) {
-					player.getPoints().inceasePkPoints(5);
+					player.getPoints().increasePkPoints(5);
 				}
 				spawnWave(player, player.fightCavesWave);
 			}

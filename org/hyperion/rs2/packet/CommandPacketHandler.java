@@ -1719,7 +1719,7 @@ public class CommandPacketHandler implements PacketHandler {
         if(s.equalsIgnoreCase("jail"))
             player.setTeleportTarget(Jail.LOCATION);
         if(s.equalsIgnoreCase("unjail"))
-            player.setTeleportTarget(Zanaris.LOCATION);
+            player.setTeleportTarget(Edgeville.LOCATION);
         /*if (commandStart.startsWith("unjail")) {
             try {
                 s = s.replace("unjail ", "");

@@ -109,7 +109,7 @@ public class PestControl implements ContentTemplate {
 
 	public void spawnNpc(int i, Location location, Player player) {
 		World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
-		//npc.agressiveDis = 150;
+		//npc.agreesiveDis = 150;
 	}
 
 	public void process() {

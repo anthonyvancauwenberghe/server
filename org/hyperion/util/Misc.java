@@ -53,7 +53,7 @@ public class Misc {
 		if (amount < 1000000)
 			return (String.format(((amount%1000)%100 != 0 ? "%.2f" : "%.1f"), amount / 1000)  + "K").replace(",", ".");
 		else
-			return (String.format(((amount%1000000)%100000 != 0 ? "%.2f" : "%.1f"), amount / 1000000)  + "M").replace(",", ".");
+			return (String.format(((amount%1000000)%100000 != 0 ? "%.2f" : "%.1f"), amount / 1000000)  + "K").replace(",", ".");
 	}
 
 	/**

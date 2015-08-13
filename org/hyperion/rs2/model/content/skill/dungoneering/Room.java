@@ -70,7 +70,7 @@ public class Room {
         for(int i = 0; i < npcCount; i++) {
             final Point loc = definition.randomLoc();
             final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
-            npc.agressiveDis = 10;
+            npc.agreesiveDis = 10;
             npcs.add(npc);
         }
 

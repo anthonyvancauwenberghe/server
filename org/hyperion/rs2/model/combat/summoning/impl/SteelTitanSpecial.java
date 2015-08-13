@@ -45,12 +45,10 @@ public class SteelTitanSpecial extends AbstractSummoningSpecial {
 	@Override
 	public void executeOpponent(Entity combat) throws NullPointerException {
 		final CombatEntity ce = combat.getCombat();
+		combat.getCombat().doGfx(1449);
 		if(!Combat.isInMulti(ce)) {
 			throw new NullPointerException();
 		}
-
-		combat.getCombat().doGfx(1449);
-
 		World.getWorld().submit(new Event(800) {
 			int i = 1;
 			int damage = CombatCalculation.getCalculatedDamage(ce.getOpponent().getEntity(), ce.getEntity(), (int) (Math.random() * 30), Constants.RANGE, 30);

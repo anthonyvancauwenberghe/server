@@ -1173,7 +1173,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if(commandStart.equalsIgnoreCase("reloadrevs")) {
             for(final NPC n : World.getWorld().getNPCs()) {
-                n.agressiveDis = NPCManager.getAgreDis(n.getDefinition().getId());
+                n.agreesiveDis = NPCManager.getAgreDis(n.getDefinition().getId());
             }
             for(int k : RevAttack.getRevs()) {
                 final NPCDefinition def = NPCDefinition.forId(k);

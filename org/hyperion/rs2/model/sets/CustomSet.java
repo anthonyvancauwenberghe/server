@@ -16,6 +16,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Created with IntelliJ IDEA.
+ * User: Wasay
+ * Date: 12/7/14
+ * Time: 4:22 PM
+ * To change this template use File | Settings | File Templates.
+ */
 public class CustomSet {
 
     public static CustomSet rand() {

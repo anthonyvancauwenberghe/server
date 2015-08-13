@@ -234,6 +234,7 @@ public class ContentEntity {
 	}
 
 	public static void heal(Player player, int heal) {
+		//System.out.println("heal");
 		player.heal(heal);
 	}
 	

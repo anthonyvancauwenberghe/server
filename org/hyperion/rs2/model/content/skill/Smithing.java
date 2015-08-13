@@ -2,7 +2,10 @@ package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -570,11 +573,21 @@ public class Smithing implements ContentTemplate {
 			return smithSpiritShield(client, id, itemId2);
 		}
 		if(type == 14) {
-			if(itemId2 == 2782 || itemId2 == 2783 || itemId2 == 4306 || itemId2 == 6150) {
-				if(id == 18350 || id == 18352 || id == 18354 || id == 18356 || id == 18358 || id == 18360)
+			//System.out.println("running thise codes");
+			switch(id) {
+				case 18350:
+				case 18352:
+				case 18354:
+				case 18356:
+				case 18358:
+				case 18360:
 					return repairChaotics(client, id);
-				if(id >= 11702 || id == 1540)
+			}
+			if(itemId2 == 2782 || itemId2 == 2783 || itemId2 == 4306
+					|| itemId2 == 6150) {
+				if(id >= 11702 || id == 1540) {
 					return smithExtraItems(client, id);
+				}
 
 				try {
 					if(id == 2349) {
@@ -639,22 +652,14 @@ public class Smithing implements ContentTemplate {
 			return true;
 		ContentEntity.removeAllWindows(p);
 		if(ContentEntity.getItemAmount(p, 2347) <= 0) {
-			ContentEntity.sendMessage(p, "You need a hammer to repair this item.");
+			ContentEntity.sendMessage(p, "You need a hammer to make this.");
 			return true;
 		}
-		if(ContentEntity.returnSkillLevel(p, Skills.SMITHING) < 85) {
-			ContentEntity.sendMessage(p, "You need 85 smithing to repair this item.");
-			return false;
-		}
-		if(p.getPoints().getPkPoints() < 2500) {
-			p.sendMessage("You need 2500 ArteroPK points to repair this item.");
-			return true;
-		}
-		p.getPoints().setPkPoints(p.getPoints().getPkPoints() - 2500);
+		p.removeAsTax(1000000);
 		ContentEntity.startAnimation(p, 898);
 		ContentEntity.deleteItem(p, id);
 		ContentEntity.addItem(p, id - 1);
-		ContentEntity.sendMessage(p, "You have successfully repaired your " + ItemDefinition.forId(id).getProperName() + ".");
+		ContentEntity.sendMessage(p, "You have successfully repaired your broken item...");
 		return true;
 	}
 

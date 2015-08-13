@@ -137,7 +137,7 @@ public class Barrows3 implements ContentTemplate {
 				Item bonusReward = new Item(BONUS_REWARDS[Misc.random(BONUS_REWARDS.length - 1)]);
 				player.getInventory().add(bonusReward);
 			}
-			ContentEntity.sendMessage(player, "Congratulations on completing the barrows minigame.");
+			ContentEntity.sendMessage(player, "Congratulations on completing the barrows mini-game.");
 			player.getExtraData().remove(BROTHERS_KILLED_KEY);
 			player.getExtraData().remove(KILLSCOUNT_KEY);
 			player.getExtraData().remove(BROTHER_TARGET);
@@ -267,7 +267,7 @@ public class Barrows3 implements ContentTemplate {
 				ContentEntity.teleport(player, 3551, 9692, 0);
 				NPC n = World.getWorld().getNPCManager().addNPC(3553, 9694, 0, player.getExtraData().getInt(BROTHER_TARGET), - 1);
 				n.forceMessage("You dare disturb my slumber!!");
-				n.agressiveDis = 7;
+				n.agreesiveDis = 7;
 				n.ownerId = player.getIndex();
 				this.stop();
 			}
@@ -286,9 +286,9 @@ public class Barrows3 implements ContentTemplate {
 			}
 			if(! client.hasTarget()) {
 				//spawn npc
-				NPC n = World.getWorld().getNPCManager().addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
+				NPC n = World.getWorld().getNPCManager().addNPC(oX + 2, oY + 2, 3, npcForCoffin(oId), - 1);
 				n.forceMessage("You dare disturb my slumber!");
-				n.agressiveDis = 7;
+				n.agreesiveDis = 7;
 				n.ownerId = client.getIndex();
 				client.setHasTarget(true);
 			}

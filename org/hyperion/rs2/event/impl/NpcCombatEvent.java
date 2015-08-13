@@ -1,5 +1,6 @@
 package org.hyperion.rs2.event.impl;
 
+import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
@@ -79,29 +80,33 @@ public class NpcCombatEvent extends Event {
 		}
 	}
 	public static void agressiveNPCS() {
+		//if(Math.random() < 100)
+		//return;
+		//handles agressive npcs
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try {
-				if(npc.agressiveDis > 0 && npc.ownerId > 0) {
+				//simple agressive code used for jad etc
+				if(npc.agreesiveDis > 0 && npc.ownerId > 0) {
 					Player player1 = (Player) World.getWorld().getPlayers().get(npc.ownerId);
 					if(player1 == null) {
 						npc.cE.setOpponent(null);
 						npc.serverKilled = true;
 						npc.health = 0;
-						if(!npc.isDead()) {
-							World.getWorld().unregister(npc);
+						if(! npc.isDead()) {
+							World.getWorld().submit(new NpcDeathEvent(npc));
 						}
 						npc.setDead(true);
 						continue;
 					}
-					if(player1.getLocation().isWithinDistance(npc.getLocation(), npc.agressiveDis)) {
+					if(player1.getLocation().isWithinDistance(npc.getLocation(), npc.agreesiveDis)) {
 						npc.cE.setOpponent(player1.cE);
 					}
-				} else if(npc.agressiveDis > 0) {
+				} else if(npc.agreesiveDis > 0) {
 					//complicated agressecode used for all players
 					int dis = 1000;
 					Player player2 = null;
 					for(Player player4 : World.getWorld().getPlayers()) {
-						if(player4 != null && player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agressiveDis) {
+						if(player4 != null && player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agreesiveDis) {
 							dis = player4.getLocation().distance(npc.getLocation());
 							player2 = player4;
 						}

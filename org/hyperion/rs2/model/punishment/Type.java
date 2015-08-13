@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.punishment;
 
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.misc2.Zanaris;
 
 public enum Type {
 
@@ -17,7 +17,7 @@ public enum Type {
         }
 
         public void unapply(final Player player){
-            player.setTeleportTarget(Edgeville.LOCATION);
+            player.setTeleportTarget(Zanaris.LOCATION);
         }
     },
     YELL_MUTE{

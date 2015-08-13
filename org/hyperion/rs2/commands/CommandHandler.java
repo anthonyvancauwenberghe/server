@@ -982,13 +982,6 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("acceptyellrules", Rank.PLAYER) {
-                   public boolean execute(final Player player, final String input) {
-                       DialogueManager.openDialogue(player, 198);
-                       return true;
-                   }
-               });
-
         submit(new Command("buyrocktails", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
                 try{

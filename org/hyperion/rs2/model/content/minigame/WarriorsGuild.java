@@ -138,10 +138,9 @@ public class WarriorsGuild implements ContentTemplate {
 			public void execute() {
 				if(inCyclopsRoom(p)) {
 					if(ContentEntity.deleteItemA(p, TOKENS, 10)) {
-						p.getActionSender().sendMessage("10 tokens disappear from your inventory.");
+						p.getActionSender().sendMessage("10 Tokens dissapear from your inventory..");
 					} else {
 						Magic.teleport(p, 2843, 3540, 2, true);
-						p.getActionSender().sendMessage("You ran out of tokens!");
 					}
 				} else {
 					this.stop();
@@ -152,6 +151,7 @@ public class WarriorsGuild implements ContentTemplate {
 	}
 
 	/**
+	 * @param Player p
 	 * @return Whether the Player is in the Cyclops Room or not
 	 */
 	public static boolean inCyclopsRoom(Player p) {
@@ -186,6 +186,7 @@ public class WarriorsGuild implements ContentTemplate {
 			return false;
 		}
 		if(type == 14 && y == 15621) {
+			//System.out.println("a " + a + " x " + y + " y " + y);
 			int[] needed = getNeededItems(a);
 			for(int i = 0; i < needed.length; i++) {
 				if(ContentEntity.getItemAmount(player, needed[i]) <= 0) {
@@ -197,8 +198,7 @@ public class WarriorsGuild implements ContentTemplate {
 				ContentEntity.deleteItem(player, needed[i]);
 			}
 			System.out.println("NpcId " + ANIMATED_ARMOURS[getType(a)]);
-			NPC n = spawnNpc(ANIMATED_ARMOURS[getType(a)], Location.create(2855, 3541, 0), player);
-			n.forceMessage("I'm coming for you " + player.getSafeDisplayName() + "!");
+			spawnNpc(ANIMATED_ARMOURS[getType(a)], player.getLocation(), player);
 		}
 		if(type == 16) {
 			if(a == CYCLOPSIDS[0] || a == CYCLOPSIDS[1]) {
@@ -206,7 +206,6 @@ public class WarriorsGuild implements ContentTemplate {
 				if(player.getEquipment().get(Equipment.SLOT_RING) != null)
 					if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 2572)
 						r = 10;
-
 				if(Misc.random(r) == 0) {
 					GlobalItem defender = new GlobalItem(
 							player, x, y, player.getLocation().getZ(),
@@ -237,13 +236,13 @@ public class WarriorsGuild implements ContentTemplate {
 		return false;
 	}
 
-	public NPC spawnNpc(int npcId, Location location, Player player) {
+	public NPC spawnNpc(int npcid, Location location, Player player) {
 		NPC npc = World
 				.getWorld()
 				.getNPCManager()
 				.addNPC(location.getX(), location.getY(), location.getZ(),
-						npcId, - 1);
-		npc.agressiveDis = 10;
+						npcid, - 1);
+		npc.agreesiveDis = 10;
 		npc.ownerId = player.getIndex();
 		return npc;
 	}

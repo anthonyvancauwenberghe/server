@@ -96,7 +96,7 @@ public class NpcCombatEvent extends Event {
 					if(player1.getLocation().isWithinDistance(npc.getLocation(), npc.agressiveDis)) {
 						npc.cE.setOpponent(player1.cE);
 					}
-				} else if(npc.agressiveDis > 0 && npc.ownerId <= 0) {
+				} else if(npc.agressiveDis > 0) {
 					//complicated agressecode used for all players
 					int dis = 1000;
 					Player player2 = null;

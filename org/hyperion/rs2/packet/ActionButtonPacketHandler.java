@@ -1118,15 +1118,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
 			case 151:
 				player.autoRetailate = ! player.autoRetailate;
-				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-					player.getActionSender().sendMessage("Auto retaliate if now: " + player.autoRetailate);
-				}
 				break;
 			case 150:
 				player.autoRetailate = ! player.autoRetailate;
-				if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-					player.getActionSender().sendMessage("Auto retaliate if now: " + player.autoRetailate);
-				}
 				break;
 			case 25834:
 				if(! player.splitPriv) {

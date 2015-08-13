@@ -21,7 +21,6 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
@@ -586,7 +585,7 @@ public class FightPits implements ContentTemplate {
 	@SuppressWarnings("unused")
 	private void spawnNpc(int i, Location location) {
 		NPC npc = World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), 0, i, - 1);
-		npc.agreesiveDis = 150;
+		npc.agressiveDis = 150;
 		monsters.add(npc);
 	}
 

@@ -106,7 +106,7 @@ public class RecipeForDisaster implements ContentTemplate {
 				.getNPCManager()
 				.addNPC(location.getX(), location.getY(), location.getZ(),
 						npcid, - 1);
-		npc.agreesiveDis = 150;
+		npc.agressiveDis = 150;
 		npc.ownerId = player.getIndex();
 		return npc;
 	}

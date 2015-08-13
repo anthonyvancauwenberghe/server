@@ -443,7 +443,7 @@ public class Duel {
 	public static void declineTrade(Player player) {
 		player.onConfirmScreen = false;
 		//player.cannotSwitch = false;
-		player.debugMessage("declined trade");
+		//player.debugMessage("declined trade");
 		//System.out.println("decline: "+player.getName());
 		if(player.getTrader() != null && player.getTrader().getTrader() != null && player.getTrader().getTrader().equals(player)) {
 			//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": declined a trade with: ").append(player.getTrader().getName()).toString());

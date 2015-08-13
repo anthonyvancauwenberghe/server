@@ -73,38 +73,38 @@ public class PlayerDeathEvent extends Event {
             toTransfer = kP.getPkPoints();
         if(!player.isNewlyCreated()) {
             kP.setPkPoints(kP.getPkPoints() - toTransfer);
-            player.sendf("You lose @red@%d@bla@ pkp for this death", toTransfer);
+            player.sendPkMessage("You lose Pk points for this death", toTransfer);
         }
         toTransfer *= 0.9D;
         toTransfer = killer.getPoints().pkpBonus(toTransfer);
         killer.getPoints().increasePkPoints((int)(toTransfer) + original, false);
 
-        killer.sendf("You have received @red@%d@bla@ pkp for this kill", toTransfer + original);
+        killer.sendPkMessage("You have received %d PK points for this kill", toTransfer + original);
 
 
     }
 	
 	private static final String[] KILLER_MESSAGES = new String[] {
-		"You have wiped the floor with %s",
+		"You have wiped the floor with %s.",
 		"%s regrets the day that he met you.",
-		"You rock, clearly %s does not",
-		"You have sent %s to his grave",
+		"You rock, clearly %s does not.",
+		"You have sent %s to his grave.",
 		"All the kings horses and men could never put %s back together again...",
 		"%s falls before your might.",
-		"With a crushing blow %s's life is met with an untimely end",
-		"You have ended %s's life abruptly",
-		"The mysteries of life can no longer be discovered by %s",
-		"The sword is obviously mightier than %s",
-		"The death of %s is a burden you must bear",
+		"With a crushing blow %s's life is met with an untimely end.",
+		"You have ended %s's life abruptly.",
+		"The mysteries of life can no longer be discovered by %s.",
+		"The sword is obviously mightier than %s.",
+		"The death of %s is a burden you must bear.",
 		"%s must of dissapointed the gods...",
-         "I think %s said square root, not square up - either way, he died"
+         "I think %s said square root, not square up - either way, he died."
 	};
 	
 	private static final String[] DEATH_MESSAGES = new String[] {
 		"Oh dear! You are dead",
 		"Death is a harsh mistress",
 		"Life is fragile, you had to learn it the hard way",
-		"Life is part of a cycle, yours is over",
+		"Life is part of a cycle, the cycle just ended.",
 		"The darkness of the afterlife awaits you...",
 		"You're stupid... and dead"
 	};
@@ -113,7 +113,7 @@ public class PlayerDeathEvent extends Event {
 	private Player player;
 
 	public static Location DEATH_LOCATION() {
-		return Location.create(3221, 3218, 0);
+		return Location.create(3096, 3471, 0);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class PlayerDeathEvent extends Event {
                             e.printStackTrace();
                         }
                         if(isRecentKill(killer, player)) {
-                            killer.getActionSender().sendMessage("You have recently killed this player and do not receive pk points.");
+                            killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
                             if(killer.getGameMode() <= player.getGameMode())
                                 handlePkpTransfer(killer, player, 0);
                         } else {
@@ -314,7 +314,7 @@ public class PlayerDeathEvent extends Event {
 		player.cE.setPoisoned(false);
 		player.getWalkingQueue().reset();
 		player.isFollowing = null;
-		player.cE.morrigansLeft = 0;		
+		player.cE.morrigansLeft = 0;
 	}
 
 

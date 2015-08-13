@@ -2,21 +2,16 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.combat.attack.RevAttack;
-import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.util.ClassUtils;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.ArrayUtils;
 import org.hyperion.util.Misc;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +22,7 @@ public class NPCManager {
 		// World.getWorld().getNPCManager().addNPC(player.getLocation().getX(),
 		// player.getLocation().getY(), player.getLocation().getZ(),
 		// Integer.parseInt(as[1]), -1);
-		// npc.agreesiveDis = 25;
+		// npc.agressiveDis = 25;
 		// spawn = 175 2159 5104 0 2160 5105 2158 5103 1
 		// TextUtils.writeToFile("./data/spawns.cfg",
 		// "spawn = "+Integer.parseInt(as[1])+"	"+player.getLocation().getX()+"	"+player.getLocation().getY()+"	"+player.getLocation().getZ()+"	"+(player.getLocation().getX()-1)+"	"+(player.getLocation().getY()-1)+"	"+(player.getLocation().getX()+1)+"	"+(player.getLocation().getY()+1)+"	1");
@@ -306,7 +301,7 @@ public class NPCManager {
 	public NPC addNPC(Location loc, int npcId, int respawnTime) {
 		NPCDefinition nD = NPCDefinition.forId(npcId);
 		NPC n = new NPC(nD, respawnTime, loc);
-		n.agreesiveDis = getAgreDis(npcId);
+		n.agressiveDis = getAgreDis(npcId);
 		n.bones = getBones(npcId, n.getDefinition().getName());
 		World.getWorld().npcsWaitingList.add(n);
 		return n;

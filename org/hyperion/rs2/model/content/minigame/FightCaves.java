@@ -175,7 +175,7 @@ public class FightCaves
 
 	public NPC spawnNpc(int i, Location location, Player player) {
 		NPC npc = World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
-		npc.agreesiveDis = 150;
+		npc.agressiveDis = 150;
 		npc.ownerId = player.getIndex();
 		return npc;
 	}

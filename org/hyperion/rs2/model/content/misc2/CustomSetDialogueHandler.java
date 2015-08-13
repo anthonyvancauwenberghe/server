@@ -20,13 +20,12 @@ public class CustomSetDialogueHandler implements ContentTemplate {
 
     @Override
     public void init() throws FileNotFoundException {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public int[] getValues(int type) {
         if(type == ClickType.DIALOGUE_MANAGER)
-            return new int[]{1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007};  //To change body of implemented methods use File | Settings | File Templates.
+            return new int[]{1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007};
         else if(type == ClickType.ACTION_BUTTON)
             return new int[]{29162, 29163};
         else
@@ -35,7 +34,7 @@ public class CustomSetDialogueHandler implements ContentTemplate {
 
     public boolean actionButton(Player player, int actionButton) {
         if(!ItemSpawning.canSpawn(player)) {
-            player.getActionSender().sendMessage("You cannot spawn Items in the wilderness.");
+            player.getActionSender().sendMessage("You cannot spawn items in the wilderness.");
             return false;
         }
 

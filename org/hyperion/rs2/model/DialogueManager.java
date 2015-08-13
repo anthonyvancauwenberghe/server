@@ -1327,6 +1327,17 @@ public class DialogueManager {
 				Magic.teleport(player, Location.create(2979, 3613, 0), false);
 				player.getActionSender().removeChatboxInterface();
 				break;
+			case 198:
+				player.getActionSender().sendDialogue("Pick an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "I accept the yell rules.", "I do not accept the yell rules.");
+				player.getInterfaceState().setNextDialogueId(0, 199);
+				player.getInterfaceState().setNextDialogueId(1, -1);
+				break;
+			case 199:
+				player.getActionSender().removeChatboxInterface();
+				player.getPermExtraData().put("yellAccepted", true);
+				player.sendMessage("You can now use the yell chat. Remember that you can turn it off");
+				player.sendMessage("at any time in the blue questtab.");
+				break;
 
             case 6000:
                 player.getActionSender().removeChatboxInterface();

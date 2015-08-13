@@ -1190,6 +1190,34 @@ public class ActionSender {
 		return this;
 	}
 
+	public ActionSender yellRules() {
+		String[] rules = {
+				"Use the clanchat 'Chatting' for everyday chatting",
+				"No flaming",
+				"No luring",
+				"No spamming",
+				"Be respectful"
+		};
+
+		sendString(8144, "@dre@Yell rules");
+
+		for(int d = 0; d < QUEST_MENU_IDS.length; d++) {
+			sendString(QUEST_MENU_IDS[d], "");
+		}
+
+		for(int i = 0; i < rules.length; i++) {
+			sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + rules[i]);
+		}
+
+		sendString(QUEST_MENU_IDS[rules.length + 1], "@dre@Breaking any of these rules will result in a");
+		sendString(QUEST_MENU_IDS[rules.length + 2], "@dre@            instant yell mute.");
+		sendString(QUEST_MENU_IDS[rules.length + 4], "Use the command ::acceptyellrules to accept");
+		sendString(QUEST_MENU_IDS[rules.length + 5], "                 these rules.");
+
+		showInterface(8134);
+		return this;
+	}
+
 	/**
 	 * 
 	 * @param items to display

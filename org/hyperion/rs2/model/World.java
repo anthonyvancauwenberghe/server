@@ -659,8 +659,8 @@ public class World {
                 if(npc.ownerId == player.getIndex()
                         && player.cE.summonedNpc != npc) {
                     npc.serverKilled = true;
-                    if(! npc.isDead()) {
-                        submit(new NpcDeathEvent(npc));
+                    if(!npc.isDead()) {
+                        World.getWorld().unregister(npc);
                     }
                     npc.setDead(true);
                     npc.health = 0;

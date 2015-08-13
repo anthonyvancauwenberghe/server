@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 
@@ -31,7 +30,7 @@ public class NPC extends Entity {
 		health = 10;
 		maxHealth = 10;
 		npcDeathTimer = - 1;
-		agreesiveDis = - 1;
+		agressiveDis = - 1;
 		ownerId = - 1;
 		serverKilled = false;
 		definition = npcdefinition;
@@ -127,7 +126,7 @@ public class NPC extends Entity {
 
 	public int npcDeathTimer = - 1;
 
-	public int agreesiveDis;
+	public int agressiveDis;
 	public int ownerId;
 	public boolean serverKilled;
 

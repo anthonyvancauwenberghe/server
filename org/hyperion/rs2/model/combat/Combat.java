@@ -5,7 +5,6 @@ import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
-import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ClickId;
@@ -18,11 +17,8 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
-
-import java.util.Date;
 
 /**
  * @authors Martin and Arsen
@@ -393,7 +389,7 @@ public class Combat {
 					combatEntity.doGfx(855);
 					if(combatEntity.getEntity() instanceof Player) {
 						ContentEntity.heal(combatEntity.getPlayer(), (damg + damgDouble)/3);
-						combatEntity.getPlayer().sendMessage("@gr1@You restore some hitpoints!");
+						combatEntity.getPlayer().sendMessage("You restore some hitpoints.");
 					}
 				}
 				
@@ -401,7 +397,7 @@ public class Combat {
 					combatEntity.getOpponent().doGfx(469);
 					damgDouble *= 1.35;
 					damg *= 1.35;
-					combatEntity.getPlayer().sendMessage("@red@Your arrows slice through the armour!");
+					combatEntity.getPlayer().sendMessage("Your arrows slice through the armour.");
 
 				}
                 if(combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
@@ -743,8 +739,8 @@ public class Combat {
 			combatEntity.getNPC().face(combatEntity.getOpponent().getEntity().getLocation());
 			int type = combatEntity.attack.handleAttack(combatEntity.getNPC(), combatEntity.getOpponent());
 			if(type == 1
-					&& combatEntity.getNPC().agreesiveDis > 0
-					&& combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) <= combatEntity.getNPC().agreesiveDis) {
+					&& combatEntity.getNPC().agressiveDis > 0
+					&& combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) <= combatEntity.getNPC().agressiveDis) {
 				type = 0;
 			}
 			if(type == 5) {

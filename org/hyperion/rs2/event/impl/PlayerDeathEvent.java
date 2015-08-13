@@ -79,7 +79,7 @@ public class PlayerDeathEvent extends Event {
         toTransfer = killer.getPoints().pkpBonus(toTransfer);
         killer.getPoints().increasePkPoints((int)(toTransfer) + original, false);
 
-        killer.sendPkMessage("You have received %d PK points for this kill", toTransfer + original);
+        killer.sendPkMessage("You have received " + (toTransfer + original) +" PK points for this kill");
 
 
     }
@@ -245,7 +245,7 @@ public class PlayerDeathEvent extends Event {
                             e.printStackTrace();
                         }
                         if(isRecentKill(killer, player)) {
-                            killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
+							killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
                             if(killer.getGameMode() <= player.getGameMode())
                                 handlePkpTransfer(killer, player, 0);
                         } else {

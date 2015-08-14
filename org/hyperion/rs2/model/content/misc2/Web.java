@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
@@ -14,6 +15,10 @@ import java.io.FileNotFoundException;
 public class Web implements ContentTemplate {
 
 	public static boolean slash(final Player player, final Location loc, final int objectId) {
+        if(player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("bow") || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("staff")) {
+            player.getActionSender().sendMessage("You cannot cut this with this weapon!");
+            return false;
+        }
 		player.face(loc);
 		ContentEntity.startAnimation(player, 451);
 		boolean successful = Misc.random(2) == 0 ? true : false;
@@ -50,14 +55,19 @@ public class Web implements ContentTemplate {
 	                           int d) {
 		if(type == 6) {
             if(objectId == 1765) {
+                if(player.isInCombat()) {
+                    player.getActionSender().sendMessage("You cannot do this in combat!");
+                    return false;
+                }
                 if(player.getLocation().distance(Location.create(x, y, player.getLocation().getZ())) > 3) {
-                    player.sendMessage("You cannot use the ladder from here");
+                    player.getActionSender().sendMessage("You cannot use the ladder from here");
                     return false;
                 }
                 if(player.getLastAttack().timeSinceLastAttack() > 5000 && !player.isTeleBlocked()) {
                     Magic.teleport(player, Location.create(2272, 4682, 0), true);
                 } else {
-                    player.sendMessage("You're a bit busy to be climbing down a ladder");
+                    player.getActionSender().sendMessage("You're a bit busy to be climbing down a ladder");
+                    return false;
                 }
                 return true;
             }

@@ -105,7 +105,7 @@ public class MiningV2 implements ContentTemplate {
 				135,/*xp*/
 				10,/*time*/
 				5,/*respawndelay*/
-				new int[]{2092, 2093,}/*rock ids*/
+				new int[]{2092, 2093,14856}/*rock ids*/
 		),
 		SILVER(442,
 				20,/*level*/
@@ -126,7 +126,7 @@ public class MiningV2 implements ContentTemplate {
 				300,/*xp*/
 				14,/*time*/
 				20,/*respawndelay*/
-				new int[]{2096, 2097}/*rock ids*/
+				new int[]{2096, 2097, 14850, 14851, 14852}/*rock ids*/
 		),
 		GOLD(444,
 				40,/*level*/
@@ -140,14 +140,14 @@ public class MiningV2 implements ContentTemplate {
 				480,/*xp*/
 				18,/*time*/
 				15,/*respawndelay*/
-				new int[]{2102, 2103}/*rock ids*/
+				new int[]{2102, 2103, 14855, 14853, 14854}/*rock ids*/
 		),
 		ADAMANTITE(449,
 				70,/*level*/
 				520,/*xp*/
 				20,/*time*/
 				15,/*respawndelay*/
-				new int[]{2104, 2105,}/*rock ids*/
+				new int[]{2104, 2105,14862}/*rock ids*/
 		),
 		RUNITE(451,
 				85,/*level*/

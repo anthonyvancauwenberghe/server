@@ -54,6 +54,14 @@ public class TeleportCommands {
             }
         });
 
+        CommandHandler.submit(new Command("gdz", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                Magic.teleport(player, Location.create(3287, 3886, 0), false);
+                return true;
+            }
+        });
+
         CommandHandler.submit(new Command("nathanplace", Rank.MODERATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {

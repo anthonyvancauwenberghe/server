@@ -19,11 +19,12 @@ public class WalkingPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
-
+/*
         if(player.getExtraData().getBoolean("cantdoshit")) {
             player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
             return;
         }
+        */
 		if(player.inGame) {
 			player.getActionSender().sendMessage("You cannot move in this game.");
 			return;

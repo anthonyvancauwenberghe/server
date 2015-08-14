@@ -180,10 +180,12 @@ public class Duel {
 	 * @param amount The amount of the item to deposit.
 	 */
 	public static void deposit(Player player, int slot, int id, int amount) {
+		/*
         if(player.getExtraData().getBoolean("cantdoshit")) {
             player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
             return;
         }
+        */
 		if(player.tradeAccept1 && player.getTrader() != null && player.getTrader().tradeAccept1)
 			return;
         if(player.getTrader() == null || player.getGameMode() != player.getTrader().getGameMode()) {

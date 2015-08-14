@@ -2021,7 +2021,7 @@ public class CommandHandler {
                 return false;
             }
         });
-
+/*
 		submit(new Command("lock", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) throws Exception {
                 final String targetName = filterInput(input).trim();
@@ -2039,8 +2039,7 @@ public class CommandHandler {
                 return true;
             }
         });
-
-
+*/
 
 		submit(new Command("ipalts", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) throws Exception {

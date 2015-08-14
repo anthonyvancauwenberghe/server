@@ -2019,7 +2019,7 @@ public class CommandPacketHandler implements PacketHandler {
 				return;
 			}
 		}
-
+/*
         if(commandStart.equalsIgnoreCase("unlock")) {
             final String string = s.replaceAll("unlock ", "").trim();
 
@@ -2038,8 +2038,8 @@ public class CommandPacketHandler implements PacketHandler {
             }
 
 
-
         }
+*/
 
         if(commandStart.equals("checkclans")) {
             for(final Clan clan : ClanManager.clans.values()) {

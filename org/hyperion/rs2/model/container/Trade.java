@@ -186,11 +186,12 @@ public class Trade {
 	 */
 	public static void deposit(Player player, int slot, int id, int amount) {
 		Player trader = player.getTrader();
-
+/*
         if(player.getExtraData().getBoolean("cantdoshit")) {
             player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
             return;
         }
+        */
 		if(trader == null)
 			return;
         if(player.getExtraData().getBoolean("needpasschange"))

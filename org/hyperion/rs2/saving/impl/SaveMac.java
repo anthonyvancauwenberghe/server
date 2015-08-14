@@ -13,8 +13,10 @@ public class SaveMac extends SaveInteger {
     }
 
     public Integer getValue(final Player player){
+        /*
         if(player.getExtraData().getBoolean("cantdoshit"))
             return player.getExtraData().getInt("olduid");
+        */
         return player.getUID();
     }
 

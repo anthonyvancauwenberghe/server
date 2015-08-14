@@ -767,9 +767,11 @@ public class ActionSender {
             player.getExtraData().put("cantchangepass", true);
 
             if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
+				/*
                 player.getExtraData().put("cantdoshit", true);
 
                 player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
+                */
 
                 SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
                 boolean found = false;
@@ -787,8 +789,10 @@ public class ActionSender {
 
                         String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
                         if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+							/*
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                             player.getExtraData().put("cantdoshit", false);
+                            */
                             found = true;
                             break;
                         }
@@ -796,8 +800,10 @@ public class ActionSender {
                         shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
 
                         if(player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+							/*
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                             player.getExtraData().put("cantdoshit", false);
+                            */
                             found = true;
                             break;
                         }

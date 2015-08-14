@@ -211,11 +211,11 @@ public class Teleports implements ContentTemplate {
 				case - 20009://corp
 					//player.getActionSender().sendMessage("Under development");
 					if(player.getPoints().getPkPoints() < 20) {
-						player.getActionSender().sendMessage("To enter his lair you need to sacrifice 20 pk points!");
+						player.getActionSender().sendMessage("To enter his lair you must sacrifice 20 ArteroPK points!");
 					} else {
 						player.getPoints().setPkPoints((player.getPoints().getPkPoints() - 20));
-						player.getActionSender().sendMessage("The mighty beast steals 20 "+Server.NAME+" points from you upon entering!");
-						player.getActionSender().sendMessage("@red@Calm from afar, if you grab the beast's attention be prepared to die!");
+						player.getActionSender().sendMessage("The mighty beast steals 20 "+ Server.NAME +" points from you upon entering!");
+						player.sendMessage("@dre@Calm from afar, but if you grab the beast's attention...", "@dre@Then be prepared to die!");
 						Magic.teleport(player,2533,4652,0,false);
 					}
 					

@@ -2,8 +2,10 @@ package org.hyperion.rs2.model.content.minigame;
 // Yay
 
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -36,7 +38,7 @@ public class MageArena implements ContentTemplate {
 			return j;
 		}
 		if(type == 6) {
-			int[] j = {2878, 2879};
+			int[] j = {2878, 2879, 9706, 9707};
 			return j;
 		}
 		return null;
@@ -52,7 +54,12 @@ public class MageArena implements ContentTemplate {
 			else
 				wonMinigame(client);
 		} else if(type == 6) {
-			if(oId == 2878 || oId == 2879) {
+            if(oId == 9706) {
+                Magic.teleport(client, Location.create(3105, 3951, 0), true);
+            } else if(oId == 9707) {
+                Magic.teleport(client, Location.create(3105, 3951, 0), true);
+            }
+			else if(oId == 2878 || oId == 2879) {
 				client.getWalkingQueue().reset();
 				if(oId == 2878) {
 					client.getWalkingQueue().addStep(2542, client.getLocation().getY() + 1);

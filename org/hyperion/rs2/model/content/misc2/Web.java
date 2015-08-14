@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
@@ -14,6 +15,10 @@ import java.io.FileNotFoundException;
 public class Web implements ContentTemplate {
 
 	public static boolean slash(final Player player, final Location loc, final int objectId) {
+        if(player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("bow") || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("staff")) {
+            player.getActionSender().sendMessage("You cannot cut this with this weapon!");
+            return false;
+        }
 		player.face(loc);
 		ContentEntity.startAnimation(player, 451);
 		boolean successful = Misc.random(2) == 0 ? true : false;

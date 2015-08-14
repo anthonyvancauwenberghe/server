@@ -10,7 +10,6 @@ import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
@@ -321,7 +320,7 @@ public class Magic {
             if(attacker.getPlayer().getPrayers().isEnabled(27))
                 Damage *= 1.08;
             if(attacker.getPlayer().getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-                Damage = (int)attacker.getPlayer().getDungoneering().perks.boost(Constants.MAGE, false, Damage);
+                Damage = (int)attacker.getPlayer().getDungeoneering().perks.boost(Constants.MAGE, false, Damage);
 
             if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
                 if(SlayerShop.hasHex(attacker.getPlayer()))
@@ -1152,7 +1151,7 @@ public class Magic {
             return;
         }
 
-		if(!player.getDungoneering().inDungeon() && (World.getWorld().getContentManager()
+		if(!player.getDungeoneering().inDungeon() && (World.getWorld().getContentManager()
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| World.getWorld().getContentManager()
 				.handlePacket(6, player, 30001, - 1, - 1, - 1))) {
@@ -1192,10 +1191,10 @@ public class Magic {
 					return;
 				}
 				if(index >= 17) {
-                    if(player.getDungoneering().inDungeon()) {
-                        final Room room = player.getDungoneering().getCurrentDungeon().getStartRoom();
+                    if(player.getDungeoneering().inDungeon()) {
+                        final Room room = player.getDungeoneering().getCurrentDungeon().getStartRoom();
                         player.setTeleportTarget(room.getSpawnLocation());
-                        player.getDungoneering().setCurrentRoom(room);
+                        player.getDungeoneering().setCurrentRoom(room);
                     } else {
                         player.setTeleportTarget(Location.create(x, y, 0));
                     }
@@ -1341,8 +1340,8 @@ public class Magic {
 					player.playAnimation(Animation.create(8941, 0));
 				else
 					player.playAnimation(Animation.create(- 1, 0));
-                if(player.getDungoneering().inDungeon())
-                    player.getDungoneering().getCurrentDungeon().remove(player, false);
+                if(player.getDungeoneering().inDungeon())
+                    player.getDungeoneering().getCurrentDungeon().remove(player, false);
 				this.stop();
 			}
 		});
@@ -1367,10 +1366,12 @@ public class Magic {
 	}
 	
 	public static void goTo13s(final Player player) {
-		if(canGoTo13s(player))
-            SpecialAreaHolder.get("hybrid").ifPresent(area -> area.enter(player));
-		else
-			player.sendMessage("@red@You have to be on the Ancient Spellooks to go to 13s", "@red@You cannot bring Divine or Elysian Spirit Shields with you here");
+		if(canGoTo13s(player)) {
+			SpecialAreaHolder.get("hybrid").ifPresent(area -> area.enter(player));
+		} else {
+			player.sendImportantMessage("You have to be on the Ancient Spellooks to go to 13s");
+			player.sendImportantMessage("You cannot bring Divine or Elysian Spirit Shields with you here");
+		}
 	}
 	
 	

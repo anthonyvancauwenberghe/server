@@ -8,7 +8,6 @@ import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -536,7 +535,7 @@ public class Skills {
 
         if(player.xpLock && skill <= MAGIC)
             return;
-        if(skill <= MAGIC && player.getDungoneering().inDungeon())
+        if(skill <= MAGIC && player.getDungeoneering().inDungeon())
             exp *= 1.75;
 
 

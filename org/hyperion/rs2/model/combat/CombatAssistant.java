@@ -875,7 +875,7 @@ public class CombatAssistant {
 			base = 1;
 		}
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-            base = p.getDungoneering().perks.boost(Constants.MELEE, false, base);
+            base = p.getDungeoneering().perks.boost(Constants.MELEE, false, base);
 		// p.getActionSender().sendMessage("Your max is " + Math.floor(base));
 		return (int) Math.floor(base);
 
@@ -1125,7 +1125,7 @@ public class CombatAssistant {
 		//p.getActionSender().sendMessage("Range max : " + max);
 		max *= specialBonus;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-            max = p.getDungoneering().perks.boost(Constants.RANGE, false, max);
+            max = p.getDungeoneering().perks.boost(Constants.RANGE, false, max);
 		return (int) max;
 	}
 
@@ -1141,7 +1141,7 @@ public class CombatAssistant {
 		if(fullVoidRange(p))
 			rangeAtk *= 1.15;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-            rangeAtk = p.getDungoneering().perks.boost(Constants.RANGE, true, rangeAtk);
+            rangeAtk = p.getDungeoneering().perks.boost(Constants.RANGE, true, rangeAtk);
 		return (int) (((rangeAtk * .55) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED))/1.75));
 	}
 
@@ -1182,7 +1182,7 @@ public class CombatAssistant {
 		} else if(player.getPrayers().isEnabled(27))
             mageLvl *= 1.25;
         if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-            bonus = (int)player.getDungoneering().perks.boost(Constants.MAGE, true, bonus);
+            bonus = (int)player.getDungeoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl/3 +
 				(int)(bonus * 1.43);
 	}

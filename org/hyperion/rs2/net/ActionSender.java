@@ -939,8 +939,8 @@ public class ActionSender {
 		//System.out.println("Follow id : " + id);
 		if(GodWars.inGodwars(player))
 			return this;
-        if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player))
-            return this;
+		if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player))
+			return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
             if(player.isFollowing == null) // if the player index returns null player, shouldn't be following

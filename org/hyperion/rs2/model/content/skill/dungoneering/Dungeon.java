@@ -49,9 +49,9 @@ public class Dungeon {
         final Room start = rooms.get(0);
         for(final Player player : players) {
             player.setTeleportTarget(start.getSpawnLocation());
-            player.getDungoneering().setCurrentRoom(start);
+            player.getDungeoneering().setCurrentRoom(start);
             player.getInventory().add(Item.create(995, (int)(difficulty.coins * size.multiplier)));
-            for(final Item bound : player.getDungoneering().getBinds())
+            for(final Item bound : player.getDungeoneering().getBinds())
                 player.getInventory().add(bound);
         }
         start.initialized = true;
@@ -63,7 +63,7 @@ public class Dungeon {
 
 
     public final void remove(final Player player, boolean complete) {
-        player.getDungoneering().loadXP(player.getSkills(), false);
+        player.getDungeoneering().loadXP(player.getSkills(), false);
         players.remove(player);
         if(complete) {
             long elapsed_time = System.currentTimeMillis() - start_time;
@@ -82,7 +82,7 @@ public class Dungeon {
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
             int tokens = xp/30;
             player.getSkills().addExperience(Skills.DUNGEONEERING, xp);
-            player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
+            player.getDungeoneering().setTokens(player.getDungeoneering().getTokens() + tokens);
             final String s =
                     String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
                             toPercent(size_multi), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
@@ -104,8 +104,8 @@ public class Dungeon {
                 player.getEquipment().remove(item);
         }
 
-        player.getDungoneering().setCurrentRoom(null);
-        player.getDungoneering().setCurrentDungeon(null);
+        player.getDungeoneering().setCurrentRoom(null);
+        player.getDungeoneering().setCurrentDungeon(null);
 
 
         player.getExtraData().put("dungoffer", null);
@@ -182,7 +182,7 @@ public class Dungeon {
     public void kill(final Player player) {
         int old = deaths.getOrDefault(player, 0);
         deaths.put(player, old + 1);
-        player.getDungoneering().setCurrentRoom(getStartRoom());
+        player.getDungeoneering().setCurrentRoom(getStartRoom());
     }
 
     private static final String toPercent(final double d) {

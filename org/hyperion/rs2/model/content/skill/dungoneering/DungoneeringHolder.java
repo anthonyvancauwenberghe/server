@@ -67,10 +67,10 @@ public class DungoneeringHolder {
         if(players.size() == 0)
             return;
         players.forEach(Trade::declineTrade);
-        players.forEach(p -> p.getDungoneering().loadXP(p.getSkills(), true));
+        players.forEach(p -> p.getDungeoneering().loadXP(p.getSkills(), true));
         final Dungeon dungeon = new Dungeon(players, chosen, size);
         dungeon.start();
-        players.forEach(p -> p.getDungoneering().setCurrentDungeon(dungeon));
+        players.forEach(p -> p.getDungeoneering().setCurrentDungeon(dungeon));
     }
 
     public void bind(final Item item, final int slot) {

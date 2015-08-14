@@ -29,17 +29,21 @@ public class DropItemPacketHandler implements PacketHandler {
 			return;
         if(itemId == 15707) {
             player.sendMessage("Perks: ");
-            player.sendMessage(player.getDungoneering().perks.boosts());
+            player.sendMessage(player.getDungeoneering().perks.boosts());
             return;
         }
-		if(! player.getDropping().canDrop(toRemove.getId())) {
+		if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709) {
+			player.getActionSender().sendMessage("You cannot drop this item.");
+			return;
+		}
+		if (!player.getDropping().canDrop(toRemove.getId())) {
 			player.getActionSender().sendMessage("Please confirm you want to drop this item by dropping it again.");
 			return;
 		}
 		if(Rank.hasAbility(player, Rank.MODERATOR))
 			World.getWorld().getGlobalItemManager().dropItem(player, itemId, itemSlot);
-        else {
-		    player.getInventory().remove(toRemove);
+		else {
+			player.getInventory().remove(toRemove);
 		    player.getActionSender().sendMessage("Your item dissapears.");
         }
 		player.getDropping().reset();

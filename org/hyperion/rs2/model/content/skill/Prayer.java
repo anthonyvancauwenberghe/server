@@ -620,7 +620,7 @@ public class Prayer implements ContentTemplate {
 
 	public static void changeCurses(Player player) {
 		player.playAnimation(Animation.create(645, 0));
-        if(!player.getDungoneering().inDungeon())
+        if(!player.getDungeoneering().inDungeon())
 		    player.getSkills().setLevel(5, player.getSkills().getLevelForExp(5));
 		player.getActionSender().sendSkill(5);
         player.getActionSender().sendMessage("You succesfully change your Prayer book.");

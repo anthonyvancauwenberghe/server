@@ -119,7 +119,7 @@ public class FightCaves
 			}
 		}
 		if(i == 16) {
-            if(player.getDungoneering().inDungeon())
+            if(player.getDungeoneering().inDungeon())
                 return false;
 			if(player.fightCavesKills == - 1) {
 				return false;

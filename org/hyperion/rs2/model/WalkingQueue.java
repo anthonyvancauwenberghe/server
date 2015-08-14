@@ -5,6 +5,7 @@ import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent.OverloadFactory;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
@@ -383,6 +384,12 @@ public class WalkingQueue {
 				}
 				player.wildernessLevel = 12;
 				player.getActionSender().sendPvPLevel(false);
+			}
+			if(Duel.inDuelLocation(player)) {
+				if(player.duelAttackable <= 0) {
+					Magic.teleport(player, 3087, 3501, 0, true, false);
+					player.sendMessage("You're in the arena");
+				}
 			}
 
             for(final Map.Entry<String, SpecialArea> area : SpecialAreaHolder.getAll()) {

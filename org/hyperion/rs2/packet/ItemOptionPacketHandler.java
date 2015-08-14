@@ -17,7 +17,6 @@ import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc.Rune;
 import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.net.Packet;
 
@@ -135,13 +134,13 @@ public class ItemOptionPacketHandler implements PacketHandler {
 
 		int onItem = player.getInventory().get(usedWithSlot).getId();
 		int useItem = player.getInventory().get(itemUsedSlot).getId();
-        if(onItem == 15707 && player.getDungoneering().inDungeon()) {
+        if(onItem == 15707 && player.getDungeoneering().inDungeon()) {
             final Item item = player.getInventory().get(itemUsedSlot);
             if(item == null || (!FightPits.scItems.contains(item.getId()) && !ItemSpawning.canSpawn(item.getId()))) {
                 player.sendMessage("You cannot bind this item");
                 return;
             }
-            for(final Item item1 : player.getDungoneering().getBinds()) {
+            for(final Item item1 : player.getDungeoneering().getBinds()) {
                 if(item1 != null && item1.getId() == item.getId()) {
                     player.sendMessage("You already have this item binded!");
                     return;

@@ -97,8 +97,8 @@ public class DungeoneeringManager implements ContentTemplate {
                 e.printStackTrace();
             }
         } else if (type == ClickType.ITEM_OPTOION6) {
-            if(player.getDungoneering().inDungeon()) {
-                String[] names = player.getDungoneering().getCurrentDungeon().getPlayers().stream().map(Player::getName).toArray(String[]::new);
+            if(player.getDungeoneering().inDungeon()) {
+                String[] names = player.getDungeoneering().getCurrentDungeon().getPlayers().stream().map(Player::getName).toArray(String[]::new);
                 if(names.length > 5) {
                     final String[] old = names.clone();
                     names = new String[5];
@@ -112,7 +112,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 }
             }
         } else if(type == ClickType.ITEM_OPTION7) {
-            player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungoneering().getTokens()));
+            player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungeoneering().getTokens()));
             return true;
         }
         return false;
@@ -162,24 +162,24 @@ public class DungeoneeringManager implements ContentTemplate {
                 itf.show(player);
                 break;
             case 2477:
-                final Location loc = player.getDungoneering().clickPortal();
+                final Location loc = player.getDungeoneering().clickPortal();
                 if(loc == null) {
                     player.sendMessage("You need to clear the room before progressing");
                     return true;
                 }
                 Combat.resetAttack(player.getCombat().getOpponent());
                 player.setTeleportTarget(loc);
-                player.getDungoneering().getRoom().initialize();
+                player.getDungeoneering().getRoom().initialize();
                 return true;
             case 2476:
-                final Location location = player.getDungoneering().clickBackPortal();
+                final Location location = player.getDungeoneering().clickBackPortal();
                 if(location == null) {
                     DialogueManager.openDialogue(player, 7002);
                     return true;
                 }
                 Combat.resetAttack(player.getCombat().getOpponent());
                 player.setTeleportTarget(location);
-                player.getDungoneering().getRoom().initialize();
+                player.getDungeoneering().getRoom().initialize();
                 break;
         }
         return false;
@@ -201,11 +201,11 @@ public class DungeoneeringManager implements ContentTemplate {
                 state.setNextDialogueId(1, 7004);
                 return true;
             case 7003:
-                if(player.getDungoneering().inDungeon())
-                    player.getDungoneering().getCurrentDungeon().remove(player, false);
+                if(player.getDungeoneering().inDungeon())
+                    player.getDungeoneering().getCurrentDungeon().remove(player, false);
                 break;
             case 7005:
-                player.getDungoneering().showBindDialogue(player.getActionSender(), player.getInterfaceState());
+                player.getDungeoneering().showBindDialogue(player.getActionSender(), player.getInterfaceState());
                 return true;
             case 7006:
             case 7007:
@@ -218,7 +218,7 @@ public class DungeoneeringManager implements ContentTemplate {
                     player.sendMessage("This slot is not available for you");
                     break;
                 }
-                player.getDungoneering().bind((Item)player.getExtraData().get("binditem"), slot);
+                player.getDungeoneering().bind((Item)player.getExtraData().get("binditem"), slot);
                 break;
             case 7011:
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
@@ -243,9 +243,9 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7017:
             case 7018:
                 try {
-                    final Player to = player.getDungoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014);
+                    final Player to = player.getDungeoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014);
                     player.setTeleportTarget(to.getLocation());
-                    player.getDungoneering().setCurrentRoom(to.getDungoneering().getRoom());
+                    player.getDungeoneering().setCurrentRoom(to.getDungeoneering().getRoom());
                 } catch(final Exception ex) {
                     ex.printStackTrace();
                 }
@@ -253,8 +253,8 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7019:
                 final String[] perk_pricse = Stream.of(RingPerks.Perk.values()).
                         map(perk ->
-                                perk.maxLevel != player.getDungoneering().perks.hasPerk(perk) ?
-                                        String.format("%s %d tokens",perk.name(), player.getDungoneering().perks.calcNextPerkCost(perk.index)) :
+                                perk.maxLevel != player.getDungeoneering().perks.hasPerk(perk) ?
+                                        String.format("%s %d tokens",perk.name(), player.getDungeoneering().perks.calcNextPerkCost(perk.index)) :
                                         String.format("%s MAXED", perk.name())).toArray(String[]::new);
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
                         perk_pricse);
@@ -265,11 +265,11 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7021:
             case 7022:
                 final RingPerks.Perk perk = RingPerks.Perk.forStyle(dialogueId - 7020);
-                if(player.getDungoneering().perks.hasPerk(perk) == perk.maxLevel) {
+                if(player.getDungeoneering().perks.hasPerk(perk) == perk.maxLevel) {
                     player.sendMessage("This perk is maxed");
                     break;
                 }
-                if(player.getDungoneering().buyPerk(dialogueId - 7020)) {
+                if(player.getDungeoneering().buyPerk(dialogueId - 7020)) {
                     player.sendMessage("You successfully upgrade your perk. Check perk bonuses by right clicking your ring");
                 } else {
                     player.sendMessage("You need more tokens to do that!");
@@ -336,8 +336,8 @@ public class DungeoneeringManager implements ContentTemplate {
 
 
     public static final void handleDying(final Player player) {
-        player.setTeleportTarget(player.getDungoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
-        player.getDungoneering().getCurrentDungeon().kill(player);
+        player.setTeleportTarget(player.getDungeoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
+        player.getDungeoneering().getCurrentDungeon().kill(player);
     }
     static {
         CommandHandler.submit(new Command("resetparse", Rank.PLAYER) {

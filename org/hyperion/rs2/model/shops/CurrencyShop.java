@@ -25,7 +25,7 @@ public class CurrencyShop extends Shop {
 
 	@Override
 	public void sellToShop(Player player, Item item) {
-        if(currency == COINS_ID && player.hardMode() && !player.getDungoneering().inDungeon()) {
+        if(currency == COINS_ID && player.hardMode() && !player.getDungeoneering().inDungeon()) {
             player.sendMessage("You cannot sell items to currency shops in this mode");
             return;
         }
@@ -48,7 +48,7 @@ public class CurrencyShop extends Shop {
 							+ " to buy this item.");
 			return;
 		}
-        if(currency == COINS_ID && player.hardMode() && !player.getDungoneering().inDungeon()) {
+        if(currency == COINS_ID && player.hardMode() && !player.getDungeoneering().inDungeon()) {
             player.sendMessage("You cannot buy from this shop in this mode");
             return;
         }

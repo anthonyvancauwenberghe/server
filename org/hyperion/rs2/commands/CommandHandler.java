@@ -44,7 +44,6 @@ import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
-import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Ban;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.GameObject;
@@ -83,7 +82,6 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.Prayer;
-import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
@@ -116,7 +114,6 @@ import org.hyperion.rs2.sql.SQLUtils;
 import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
-import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 
 /**
@@ -1408,8 +1405,8 @@ public class CommandHandler {
 
         submit(new GiveIntCommand("givedt", Rank.DEVELOPER){
             public void process(final Player player, final Player target, final int value){
-                target.getDungoneering().setTokens(target.getDungoneering().getTokens() + value);
-                player.sendf("%s now has %,d dung tokens", target.getName(), target.getDungoneering().getTokens());
+                target.getDungeoneering().setTokens(target.getDungeoneering().getTokens() + value);
+                player.sendf("%s now has %,d dung tokens", target.getName(), target.getDungeoneering().getTokens());
             }
         });
 

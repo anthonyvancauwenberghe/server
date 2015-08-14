@@ -20,7 +20,8 @@ public class LogPlayercountEvent extends SQLEvent {
 	public void execute(SQLConnection sql) throws SQLException {
 		if (Server.getUptime().minutesUptime() >= 20) {
 			int playerCount = World.getWorld().getPlayers().size();
-			sql.query("INSERT INTO playercount(count) VALUES(" + playerCount + ")");
+			int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
+			sql.query("INSERT INTO playercount(count,staffonline) VALUES(" + playerCount +"," + staffOnline + ")");
 		}
 		super.updateStartTime();
 	}

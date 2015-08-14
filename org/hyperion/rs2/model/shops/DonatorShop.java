@@ -241,6 +241,7 @@ public class DonatorShop extends Shop {
 		case 14484:  //claws
 		case 16935:  //novite rapier
 		case 18363:  //farseer kiteshield
+		//case 11694:	//Ags
 			return 1199;
 			
 		}
@@ -455,6 +456,7 @@ public class DonatorShop extends Shop {
 			case 14484:  //claws
 			case 16935:  //novite rapier
 			case 18363:  //farseer kiteshield
+			case 11694:
 				return 1199;
 
 			//case 18351:
@@ -505,7 +507,6 @@ public class DonatorShop extends Shop {
 			case 13354:
 			case 13355:
 			case 13356:
-			case 11694:
 			case 15241:
 			case 19143:
 			case 19146:

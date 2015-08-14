@@ -15,7 +15,6 @@ import java.util.Map;
 public class Farming implements ContentTemplate {
 
 	public static class Plant {
-		//this repsents a speed placeable in soil
 		public int[] normalStages;
 		public int[] wetStages;
 		public int[] dieseasedStages;
@@ -27,10 +26,10 @@ public class Farming implements ContentTemplate {
 		public int seedId;
 		public Item[] items;
 
-		public Plant(int seedId, int level, int xp, int[] normalStages, int[] wetStages, int[] dieseasedStages, int growTime, int type, Item[] items) {
+		public Plant(int seedId, int level, int xp, int[] normalStages, int[] wetStages, int[] diseasedStages, int growTime, int type, Item[] items) {
 			this.normalStages = normalStages;
 			this.wetStages = wetStages;
-			this.dieseasedStages = dieseasedStages;
+			this.dieseasedStages = diseasedStages;
 			this.growTime = growTime;
 			this.type = type;
 			this.level = level;
@@ -276,7 +275,7 @@ public class Farming implements ContentTemplate {
 			player.getActionSender().sendReplaceObject(x + offset(serverPlant.type), y + offset(serverPlant.type), 6951, 0, 10);
 			player.getActionSender().sendReplaceObject(x, y, plant.plotId, 0, 10);
 			player.getFarm().plants.remove(((x * 16) + y));
-			player.getSkills().addExperience(Skills.FARMING, serverPlant.xp * MULTIPLYER);
+			player.getSkills().addExperience(Skills.FARMING, serverPlant.xp * MULTIPLIER);
 			player.getActionSender().sendMessage("You harvest the plant.");
 			for(Item item : serverPlant.items) {
 				player.getInventory().add(item);
@@ -284,7 +283,7 @@ public class Farming implements ContentTemplate {
 		}
 	}
 
-	public static final int MULTIPLYER = 40;
+	public static final int MULTIPLIER = 40;
 
 	public void digUp(final Player player, int x, int y) {
 		if(player.isBusy())

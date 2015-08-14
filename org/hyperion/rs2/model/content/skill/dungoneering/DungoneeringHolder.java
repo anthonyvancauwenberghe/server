@@ -2,18 +2,10 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Trade;
-import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
 import org.hyperion.rs2.net.ActionSender;
-import org.madturnip.tools.ItemDefEditor;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -65,7 +57,7 @@ public class DungoneeringHolder {
         final List<Player> copy = new ArrayList<>();
         while(it.hasNext()) {
             final Player p = it.next();
-            if(DungeoneeringManager.cantJoin(p) || !p.getLocation().inDungeonLobby() || p.getSkills().getLevel(Skills.DUNGEONINEERING) < chosen.min_level) {
+            if(DungeoneeringManager.cantJoin(p) || !p.getLocation().inDungeonLobby() || p.getSkills().getLevel(Skills.DUNGEONEERING) < chosen.min_level) {
                 p.sendMessage("You didn't meet the requirements to join and have been kicked out!");
                 copy.add(p);
             }

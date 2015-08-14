@@ -2,10 +2,7 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
-import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.util.NameUtils;
 
 import java.awt.*;
 import java.util.*;
@@ -84,7 +81,7 @@ public class Dungeon {
             final double size_multi = size.multiplier;
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
             int tokens = xp/30;
-            player.getSkills().addExperience(Skills.DUNGEONINEERING, xp);
+            player.getSkills().addExperience(Skills.DUNGEONEERING, xp);
             player.getDungoneering().setTokens(player.getDungoneering().getTokens() + tokens);
             final String s =
                     String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",

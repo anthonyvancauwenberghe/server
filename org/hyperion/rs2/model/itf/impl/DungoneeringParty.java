@@ -3,16 +3,13 @@ package org.hyperion.rs2.model.itf.impl;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,7 +54,7 @@ public class DungoneeringParty extends Interface {
                     if(p == null || !p.getLocation().inDungeonLobby()) {
                         player.sendMessage("%s cannot join party, removed from group", s);
                     } else {
-                        if(p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level)
+                        if(p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level)
                             player.sendMessage("%s does not meet difficulty level requirements, removed from group", s);
                         if(!players.contains(p))
                             players.add(p);
@@ -84,7 +81,7 @@ public class DungoneeringParty extends Interface {
                     player.sendMessage("You cannot invite yourself!");
                     return;
                 }
-                if(p == null || p.getSkills().getLevel(Skills.DUNGEONINEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
+                if(p == null || p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
                     player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
                     break;
                 }

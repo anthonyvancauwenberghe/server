@@ -162,7 +162,7 @@ public class EquipmentReq {
                 break;
             case 5730:
                 equipReqData[0] = 60;
-                equipReqData[Skills.DUNGEONINEERING] = 80;
+                equipReqData[Skills.DUNGEONEERING] = 80;
                 break;
 			/**
 			 * Torva, Pernix and Virtus

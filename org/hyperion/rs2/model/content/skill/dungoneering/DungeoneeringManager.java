@@ -6,27 +6,19 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.bounty.BountyPerks;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
 import org.hyperion.rs2.net.ActionSender;
-import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.util.Misc;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -220,7 +212,7 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7008:
             case 7009:
             case 7010:
-                final int slots = 1 + (player.getSkills().getLevel(Skills.DUNGEONINEERING) +1)/4;
+                final int slots = 1 + (player.getSkills().getLevel(Skills.DUNGEONEERING) +1)/4;
                 final int slot = dialogueId - 7006;
                 if(slot > slots) {
                     player.sendMessage("This slot is not available for you");

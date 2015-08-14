@@ -70,10 +70,7 @@ import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
 import org.hyperion.rs2.sql.SQLite;
-import org.hyperion.rs2.util.AccountLogger;
-import org.hyperion.rs2.util.AccountValue;
-import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -240,7 +237,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public boolean checkMaxCapeRequirment() {
 		for(int i = 7; i < this.getSkills().getLevels().length; i++) {
-			if(i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONINEERING)
+			if(i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONEERING)
 				continue;
 			if(this.getSkills().getLevels()[i] < 99)
 				return false;
@@ -265,8 +262,8 @@ public class Player extends Entity implements Persistable, Cloneable{
     public void checkCapes() {
         checkContainers(12747, checkCompCapeReq());
         checkContainers(12744, checkMaxCapeRequirment());
-        checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONINEERING]== 99);
-        checkContainers(19709, skills.getExperience(Skills.DUNGEONINEERING) == Skills.MAXIMUM_EXP);
+        checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99);
+        checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP);
     }
 
     private void checkContainers(final int id, final boolean add) {
@@ -275,8 +272,12 @@ public class Player extends Entity implements Persistable, Cloneable{
         for(final Container container : containers) {
             if(container.contains(id)) {
                 contains = true;
-                if(!add)
-                    container.remove(Item.create(id));
+                if(!add) {
+					container.remove(Item.create(id));
+					for(Player p : World.getWorld().getPlayers()) {
+						p.sendServerMessage(getSafeDisplayName() + " has just achieved " + ItemDefinition.forId(id) + "!");
+					}
+				}
             }
         }
 

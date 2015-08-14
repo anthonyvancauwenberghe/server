@@ -377,8 +377,10 @@ public class WalkingQueue {
 			if(OSPK.inArea(player)) {
 				if(player.isOverloaded())
 					player.setOverloaded(false);
-				if(!OSPK.canEnter(player))
+				if(!OSPK.canEnter(player)) {
 					Magic.teleport(player, "home");
+					player.sendMessage("You cannot enter the OSPK'ing with what you're using.");
+				}
 				player.wildernessLevel = 12;
 				player.getActionSender().sendPvPLevel(false);
 			}

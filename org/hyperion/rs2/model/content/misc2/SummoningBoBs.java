@@ -34,6 +34,10 @@ public class SummoningBoBs implements ContentTemplate {
                 player.debugMessage("Npc ownerid "+npc.ownerId+" npc id "+useItem);
                 if(npc.ownerId < 1)
                     return false;
+                if(npc.ownerId != player.getIndex()) {
+                    player.sendMessage("This is not your familiar.");
+                    return false;
+                }
                 player.playAnimation(Animation.create(7270));
                 if(player.getBoB() != null) {
                    int index2 = - 1;

@@ -123,8 +123,7 @@ public class ClanManager {
 				p.getActionSender().removeClanMember(player.getPlayersNameInClan());
 			}
 		}
-		player.getActionSender().sendString(18139, "Talking in: -");
-		player.getActionSender().sendString(18140, "Owner: -");
+		clearClanChat(player);
 		if(!keepRank)
 			player.setClanRank(0);
 		if(resetClanName)

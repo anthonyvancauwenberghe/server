@@ -899,14 +899,11 @@ public class Summoning implements ContentTemplate {
 	@Override
 	public boolean clickObject(Player player, int type, int a, int b, int c,
 	                           int slot) {
-		// System.out.println("Type :" + type + " a " + a + " b " + b + " c " +
-		// c);
 		if(type == 13) {
 			ItemonItem(player, a, c);
 		}
 		if(type == 17) {
 			SummoningMonsters.SummonNewNPC(player, SummoningData.getNpcbyPouchId(a), a);
-			//ContentEntity.deleteItem(player, a); // double delete
 		}
 		if(type == 11) {
 			Entity npc = World.getWorld().getNPCs().get(slot);

@@ -4,6 +4,7 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -60,7 +61,9 @@ public class YellCommand extends Command {
 		if(!Rank.isStaffMember(player)) {
 			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
-					player.getActionSender().sendMessage("Please wait " + (int) ((getYellDelay(player) - yellMilliseconds) / 1000) + " seconds before yelling.");
+					player.sendMessage("Please wait " + (int) ((getYellDelay(player) - yellMilliseconds) / 1000) + " seconds before yelling.");
+					if(player.getClanName().equalsIgnoreCase(""))
+						ClanManager.joinClanChat(player, "chatting", false);
 					return false;
 				}
 				player.getYelling().updateYellTimer();

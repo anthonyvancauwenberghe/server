@@ -845,9 +845,9 @@ public class Magic {
 			x = 3215;
 			y = 3424;
 		} else if(location.equals("home")) {
-			x = Entity.getDefaultLocation("player").getX();
-			y = Entity.getDefaultLocation("player").getY();
-			z = Entity.getDefaultLocation("player").getZ();
+			x = 3087;
+			y = 3501;
+			z = 0;
 		} else if(location.equals("lumbridge")) {
 			// do nothing
 		} else if(location.equals("falnor")) {

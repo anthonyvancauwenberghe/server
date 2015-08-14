@@ -13,7 +13,7 @@ public class OSPK {
 			Magic.teleport(player, 2758, 3496, 0, false);
 			return true;
 		} else {
-			player.sendMessage("@red@"+canEnterMessage(player));
+			player.sendMessage("@dre@" + canEnterMessage(player));
 			player.getActionSender().removeChatboxInterface();
 		}
 		return false;
@@ -40,7 +40,7 @@ public class OSPK {
 	}
 	
 	private static LinkedList<Integer> exceptions = new LinkedList<Integer>(Arrays.asList(new Integer[]{
-		11732, 20072	
+		11732, 20072
 	}));
 	
 	private static boolean valid(int id) {

@@ -1130,7 +1130,6 @@ public class Combat {
 	}
 
 	public static void follow(final CombatEntity combatEntity, final CombatEntity opponent) {
-		// System.out.println("Running this Method");
 		if(combatEntity.isFrozen())
 			return;
 

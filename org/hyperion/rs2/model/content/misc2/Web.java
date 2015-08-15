@@ -16,7 +16,7 @@ public class Web implements ContentTemplate {
 
 	public static boolean slash(final Player player, final Location loc, final int objectId) {
 		try {
-			if (player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("bow") || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("staff")) {
+			if (player.getEquipment().get(Equipment.SLOT_WEAPON) == null || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("bow") || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("staff")) {
 				player.getActionSender().sendMessage("You cannot cut this with this weapon!");
 				return false;
 			}

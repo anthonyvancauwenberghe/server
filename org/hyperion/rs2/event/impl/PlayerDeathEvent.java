@@ -70,7 +70,7 @@ public class PlayerDeathEvent extends Event {
             toTransfer = kP.getPkPoints();
         if(!player.isNewlyCreated()) {
             kP.setPkPoints(kP.getPkPoints() - toTransfer);
-            player.sendPkMessage("You lose Pk points for this death", toTransfer);
+            player.sendPkMessage("You lose " + toTransfer +" Pk points for this death");
         }
         toTransfer *= 0.9D;
         toTransfer = killer.getPoints().pkpBonus(toTransfer);

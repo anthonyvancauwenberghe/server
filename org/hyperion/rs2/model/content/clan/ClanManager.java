@@ -154,7 +154,7 @@ public class ClanManager {
         player.getActionSender().sendString(18140, "Owner: None");
 
         for (int i = 18144; i <= 18444; i ++) {
-
+            player.getActionSender().sendString(i, "");
         }
     }
 
@@ -169,7 +169,7 @@ public class ClanManager {
         String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRank() + "] ";
         if(player.isClanMainOwner())
             displayRank = "@ffd700@*@bla@";
-		message = "[@blu@" + TextUtils.titleCase(player.getClanName()) + "@bla@] " + displayRank + player.getSafeDisplayName() + ": @dre@" + message;
+		message = "[@blu@" + TextUtils.titleCase(player.getClanName()) + "@bla@] " + displayRank + player.getSafeDisplayName() + ": @dre@" + TextUtils.ucFirst(message.toLowerCase().replaceAll("@", ""));
 
 		if(player.getClanName() == "") {
 			player.sendClanMessage("You need to join a clan chat before you can send messages.");

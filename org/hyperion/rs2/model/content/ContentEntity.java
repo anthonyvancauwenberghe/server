@@ -258,7 +258,10 @@ public class ContentEntity {
 	}
 
 	public static void decreaseSkill(Player player, int skill, int am) {
-		player.getSkills().setLevel(skill, player.getSkills().getLevel(skill) - am);
+		if(player.getSkills().getLevel(skill) - am > 1)
+			player.getSkills().setLevel(skill, player.getSkills().getLevel(skill) - am);
+		else
+			player.getSkills().setLevel(skill, 1);
 	}
 
 	public static boolean isItemInBag(Player player, int item, int slot) {

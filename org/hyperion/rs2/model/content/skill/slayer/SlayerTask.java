@@ -50,7 +50,6 @@ public enum SlayerTask {
 
     /** The elite tasks */
     GENERAL_GRAARDOR(27, Difficulty.ELITE, 1, 1100, 6260),
-    CORPOREAL_BEAST(22, Difficulty.ELITE, 1, 1700, 8133),
     TORMENTED_DEMON(1,Difficulty.ELITE, 1, 634, 8349),
     MITHRIL_DRAGON(2, Difficulty.ELITE, 1, 622, 5363),
     KING_BLACK_DRAGON(3, Difficulty.ELITE, 1, 722, 50),

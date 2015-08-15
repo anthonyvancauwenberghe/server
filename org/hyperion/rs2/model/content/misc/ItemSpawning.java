@@ -192,7 +192,7 @@ public class ItemSpawning {
 			case 15444:
             case 6603:
             case 6604:
-			case 11694:
+			//case 11694:
 				return "This item can only be purchased in the donator shop.";
 		}
 		String itemName = ItemDefinition.forId(id).getName().toLowerCase();

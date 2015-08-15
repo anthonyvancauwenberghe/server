@@ -136,7 +136,7 @@ public class FightPits implements ContentTemplate {
 	
 	
 	public static final boolean inPitsFightArea(int x, int y) {
-		return x <= 2420 && y >= 5129 && y <= 5167 && x >= 2375;
+		return x <= 2420 && y >= 5129 && y <= 5168 && x >= 2375;
 	}
 
 	private static <V> V random(List<V> list) {
@@ -249,7 +249,7 @@ public class FightPits implements ContentTemplate {
 		teamBlue = new CopyOnWriteArrayList<Player>();
 		playersInGame = new CopyOnWriteArrayList<Player>();
 		monsters = new CopyOnWriteArrayList<NPC>();
-		lastChamp = "Mad Turnip";
+		lastChamp = "";
 		timeLeft = 0;
 		for(int i = 0; i < 4; i++) {
 			meleeItems.add(new ArrayList<Item>());
@@ -423,7 +423,6 @@ public class FightPits implements ContentTemplate {
 			final Player p2 = player;
 			World.getWorld().submit(new Event(600) {
 				public void execute() {
-                    System.out.println("Jank check");
                     spawnItems(p2);
 					this.stop();
 				}
@@ -475,7 +474,7 @@ public class FightPits implements ContentTemplate {
 			player.getActionSender().sendSidebarInterface(6, 12855);
 		}
 		
-		player.sendMessage("You've been given the spell: "+s.toString()+" to use!");
+		player.sendMessage("You've been given the spell: "+s.toString()+"!");
 		
 		for(int i : s.getRunes())
 			player.getInventory().add(Item.create(i, 1000));
@@ -507,7 +506,7 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	private static void assignRed(Player player) {
-		player.getActionSender().sendMessage("You are part of the @red@red@bla@ team");
+		player.getActionSender().sendMessage("You are part of the @dre@red@bla@ team");
 		player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(RED_CAPE));
 		teamRed.add(player);
 		ClanManager.joinClanChat(player, "Team Red", false);
@@ -602,7 +601,7 @@ public class FightPits implements ContentTemplate {
 				return;
 			}
 			if(!canJoin(player)) {
-				player.getActionSender().sendMessage("Please bank @red@ALL@bla@ all of your items before joining!");
+				player.getActionSender().sendMessage("Please bank all of your items before joining!");
 				return;
 			}
 			
@@ -660,7 +659,7 @@ public class FightPits implements ContentTemplate {
 					timeStood = 12;
 				if(getReward) {
                     player.getBank().add(new BankItem(0, 5020, timeStood));
-					player.sendMessage(String.format("%d PK Tickets were sent to your bank", timeStood));
+					player.sendMessage(String.format("%d PK Tickets were sent to your bank.", timeStood));
                     //player.getPoints().increaseMinigamePoints(1);
 				} else {
 					player.sendMessage("You don't get any reward due to lack of participation");
@@ -718,7 +717,7 @@ public class FightPits implements ContentTemplate {
 				player1.getActionSender().showInterfaceWalkable(- 1);
 				if(getReward) {
 					player1.getBank().add(new Item(5020, rewardCount));
-					player1.getActionSender().sendMessage(String.format("@red@ %d @bla@PKT have been sent to your bank", rewardCount));
+					player1.getActionSender().sendMessage(String.format("%d Pk tickets have been sent to your bank", rewardCount));
                     //player1.getPoints().increaseMinigamePoints(2);
                 } else {
 					player1.getActionSender().sendMessage("You get no reward due to lack of participation");
@@ -726,12 +725,12 @@ public class FightPits implements ContentTemplate {
 				player1.setPitsDamage(0);
 				if(startPlayersAmount > 5 && getReward) {
 					int dpAmt = startPlayersAmount/size;
-					player1.sendMessage("@red@For winning a large game, you gain @gre@"+dpAmt+"@red@ donator points!");
+					player1.sendServerMessage("For winning a large game, you gain @gre@"+dpAmt+"@red@ donator points!");
 					player1.getPoints().increaseDonatorPoints(dpAmt, false);
 					if(Misc.random(60 * size) == 1) { //if 10 chance is 1/80 in total (half players each have chance of 1/400)
 						Item reward = Item.create(random(rewardItems));
-						player1.sendMessage("You receive one @red@"+reward.getDefinition().getName());
-						PushMessage.pushGlobalMessage(player1.getName()+ " has just received a @red@"+reward.getDefinition().getName()+"@bla@ from fight pits!");
+						player1.sendMessage("You receive a "+reward.getDefinition().getName());
+						PushMessage.pushGlobalMessage("@gre@[Loot] " + player1.getSafeDisplayName()+ " has just received a "+reward.getDefinition().getName()+" from fight pits!");
 						player1.getInventory().add(reward);
 					}
 				}

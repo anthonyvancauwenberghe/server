@@ -297,36 +297,23 @@ public class WalkingQueue {
 
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
-			/**if(player.getCombat().getFamiliar() != null) {
-				if(player.getLocation().distance(player.getCombat().getFamiliar().getLocation()) > 1)
-				Combat.follow2(player.getCombat().getFamiliar().getCombat(), 
-						player.getCombat().getFamiliar().getCombat().getAbsX(), 
-						player.getCombat().getFamiliar().getCombat().getAbsX(), 
-						player.getCombat().getAbsX()-1, 
-						player.getCombat().getAbsY()-1, player.getCombat().getAbsZ());
-			}**/
+
 			if(entity.cE.isFrozen() || entity.isDead()) {
 				reset();
 			}
-
-            //player.getActionSender().sendDestroyObject(10, 0, Location.create(3795, 2844, 0));
-
             if(player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
                 if(player.duelAttackable <= 0) {
                     World.getWorld().submit(new PlayerDeathEvent(player));
                 }
                 return false;
             }
-			/*if(FFARandom.inFFA(player)){
-				FFARandom.check(player);
-			}*/
+
             final int wildLevel = Combat.getWildLevel(player
                     .getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
             if(! player.duelOption) {
 				if(player.getLocation().inDuel()) {
 					player.getActionSender()
 							.sendPlayerOption("Challenge", 5, 0);
-					//debug("Sending challenge cuz !duelopt");
 					player.duelOption = true;
 				}
 			} else if(!player.getLocation().inDuel()) {
@@ -334,15 +321,14 @@ public class WalkingQueue {
 					player.getActionSender().sendPlayerOption("Moderate", 5, 0);
 				else
 					player.getActionSender().sendPlayerOption("null", 5, 0);
-				//debug("Sending null cuz duelopt");
 				player.duelOption = false;
 			}
+
 			if(! player.attackOption) {
 
 				if(wildLevel > 0 || Location.inAttackableArea(player)) {
 					player.getActionSender().sendPlayerOption("Attack", 2, 0);
 					player.setCanSpawnSet(false);
-					//debug("Sending attk cuz !atkop");
 					player.attackOption = true;
 					if(player.isOverloaded())
 						OverloadFactory.applyBoosts(player);
@@ -351,9 +337,9 @@ public class WalkingQueue {
 				player.setCanSpawnSet(true);
                 player.cE.getDamageDealt().clear();
 				player.getActionSender().sendPlayerOption("null", 2, 1);
-				//debug("Sending atk cuz atkop");
 				player.attackOption = false;
 			}
+
 			if(! player.isInMuli && Combat.isInMulti(player.cE)) {
 				player.isInMuli = true;
 				player.getActionSender().sendMultiZone(1);
@@ -388,6 +374,11 @@ public class WalkingQueue {
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
 					player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+				}
+			}
+			if(FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY())) {
+				if (!FightPits.inGame(player)) {
+					player.setTeleportTarget(Location.create(2399, 5178, 0), false);
 				}
 			}
 

@@ -15,12 +15,12 @@ import java.io.FileNotFoundException;
 public class Web implements ContentTemplate {
 
 	public static boolean slash(final Player player, final Location loc, final int objectId) {
-		/*
-        if(player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("bow") || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("staff")) {
-            player.getActionSender().sendMessage("You cannot cut this with this weapon!");
-            return false;
-        }
-        */
+		try {
+			if (player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("bow") || player.getEquipment().get(Equipment.SLOT_WEAPON).getDefinition().getName().contains("staff")) {
+				player.getActionSender().sendMessage("You cannot cut this with this weapon!");
+				return false;
+			}
+		} catch(Exception e) {}
 		player.face(loc);
 		ContentEntity.startAnimation(player, 451);
 		boolean successful = Misc.random(2) == 0 ? true : false;

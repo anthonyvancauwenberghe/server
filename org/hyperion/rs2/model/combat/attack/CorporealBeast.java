@@ -29,7 +29,7 @@ public class CorporealBeast implements Attack {
 	public static int reduceDamage(Player atk, int damage, int style) {
 		Item weapon = atk.getEquipment().get(Equipment.SLOT_WEAPON);
 		if(style == Constants.MELEE) {
-            if(CombatAssistant.isStab(weapon)) {
+            if(!CombatAssistant.isStab(weapon)) {
 			    damage =  (int)(damage * (0.6 + (Math.random() * .4)));
 			    if(Combat.random(10) == 1)
 				    atk.getActionSender().sendMessage("Your weapon doesn't rip through the beast's tough skin!");

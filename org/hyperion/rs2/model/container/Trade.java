@@ -206,8 +206,8 @@ public class Trade {
 		}
 		if(player.tradeAccept1 && trader.tradeAccept1)
 			return;
-        if((player.getDungoneering().inDungeon() && trader.getDungoneering().inDungeon())) {
-            for(final Item item : player.getDungoneering().getBinds()) {
+        if((player.getDungeoneering().inDungeon() && trader.getDungeoneering().inDungeon())) {
+            for(final Item item : player.getDungeoneering().getBinds()) {
                 if(item.getId() == id) {
                     player.sendMessage("You cannot trade a binded-type item");
                     return;

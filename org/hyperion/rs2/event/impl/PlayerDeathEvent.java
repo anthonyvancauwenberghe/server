@@ -14,15 +14,12 @@ import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
-import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 
 public class PlayerDeathEvent extends Event {
@@ -194,7 +191,7 @@ public class PlayerDeathEvent extends Event {
 			Duel.finishFullyDuel(player);
         } else if (World.getWorld().getContentManager().handlePacket(6, player, BarrowsFFA.DEATH_CHECK_ID , killer == null ? player.getIndex() : killer.getIndex(), -1, -1)) {
 
-        } else if (player.getDungoneering().inDungeon()) {
+        } else if (player.getDungeoneering().inDungeon()) {
             DungeoneeringManager.handleDying(player);
         } else if (Bork.doDeath(player)) {
 

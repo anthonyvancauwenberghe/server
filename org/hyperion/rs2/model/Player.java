@@ -260,13 +260,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
     public void checkCapes() {
-        checkContainers(12747, checkCompCapeReq());
-        checkContainers(12744, checkMaxCapeRequirment());
-        checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99);
-        checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP);
+        checkContainers(12747, checkCompCapeReq(), "Completionist cape");
+        checkContainers(12744, checkMaxCapeRequirment(), "Max cape");
+        checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99, "Dungeoneering cape");
+        checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP, "Dungeoneering master cape");
     }
 
-    private void checkContainers(final int id, final boolean add) {
+    private void checkContainers(final int id, final boolean add, String name) {
         final Container[] containers = new Container[]{bank, equipment, inventory};
         boolean contains = false;
         for(final Container container : containers) {
@@ -274,15 +274,16 @@ public class Player extends Entity implements Persistable, Cloneable{
                 contains = true;
                 if(!add) {
 					container.remove(Item.create(id));
-					for(Player p : World.getWorld().getPlayers()) {
-						p.sendServerMessage(getSafeDisplayName() + " has just achieved " + ItemDefinition.forId(id) + "!");
-					}
 				}
             }
         }
 
-        if(!contains && add)
-            bank.add(new BankItem(0, id, 1));
+        if(!contains && add) {
+			for (Player p : World.getWorld().getPlayers()) {
+				p.sendServerMessage(getSafeDisplayName() + " has just achieved " + name +"!");
+			}
+			bank.add(new BankItem(0, id, 1));
+		}
     }
 
 	/**
@@ -326,7 +327,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
     private final DungoneeringHolder dungoneeringHolder = new DungoneeringHolder();
 
-    public DungoneeringHolder getDungoneering() {
+    public DungoneeringHolder getDungeoneering() {
         return dungoneeringHolder;
     }
 
@@ -1038,7 +1039,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public int wildernessLevel = - 1;
-	public boolean isInMutli = false;
+	public boolean isInMuli = false;
 	public int headIconId = - 1;
 
 	/*

@@ -10,16 +10,16 @@ import org.hyperion.rs2.saving.SaveString;
  * Time: 5:32 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveDungoneering extends SaveString {
+public class SaveDungeoneering extends SaveString {
 
-    public SaveDungoneering() {
+    public SaveDungeoneering() {
         super("dungoneeringdata");
     }
 
     @Override
     public void setValue(Player player, String value) {
         try {
-            player.getDungoneering().load(value);
+            player.getDungeoneering().load(value);
         }catch(final Exception ex) {
             ex.printStackTrace();
         }
@@ -27,6 +27,6 @@ public class SaveDungoneering extends SaveString {
 
     @Override
     public String getValue(Player player) {
-        return player.getDungoneering().save();  //To change body of implemented methods use File | Settings | File Templates.
+        return player.getDungeoneering().save();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

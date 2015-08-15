@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -898,7 +897,7 @@ public class World {
         if(player.getLogging() != null)
             //player.getLogging().log("Logging out");
             Combat.logoutReset(player.cE);
-        player.getDungoneering().fireOnLogout(player);
+        player.getDungeoneering().fireOnLogout(player);
         player.setActive(false);
         LastManStanding.getLastManStanding().leaveGame(player, true);
         Bork.doDeath(player);

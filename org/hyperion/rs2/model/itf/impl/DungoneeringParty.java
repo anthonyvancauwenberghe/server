@@ -67,7 +67,7 @@ public class DungoneeringParty extends Interface {
                     @Override
                     public void execute() throws IOException {
                         players.add(player);
-                        player.getDungoneering().start(players, difficulty, size);
+                        player.getDungeoneering().start(players, difficulty, size);
                         this.stop();
                     }
                 });

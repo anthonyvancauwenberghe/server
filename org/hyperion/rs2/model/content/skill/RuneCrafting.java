@@ -68,9 +68,6 @@ public class RuneCrafting implements ContentTemplate {
 	/**
 	 * Gets the real amount of the rune if player can make more runes from one essence.
 	 *
-	 * @param rune   The rune.
-	 * @param amount The current amount of the rune.
-	 * @param level  The current Runecrafting level of the player.
 	 * @return The real amount of runes.
 	 */
 
@@ -198,7 +195,7 @@ public class RuneCrafting implements ContentTemplate {
 	public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int itemSlot2) {
 		if(type == 6) {
 			if(id == AIR_ALTAR) {
-                if(client.getDungoneering().inDungeon()) {
+                if(client.getDungeoneering().inDungeon()) {
                     DialogueManager.openDialogue(client, 1020);
                 } else
 				if(isRunecraftable(client, id, 556, slot, itemId2)) {

@@ -172,7 +172,7 @@ public class NpcDeathEvent extends Event {
                             new Item(npc.bones, 1));
                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
                 }
-                if(!player.getDungoneering().inDungeon()) {
+                if(!player.getDungeoneering().inDungeon()) {
                 //charms
                     if(npc.charm > 0) {
                         GlobalItem globalItem5 = new GlobalItem(
@@ -220,7 +220,7 @@ public class NpcDeathEvent extends Event {
                         player.getBank().add(add);
                 }
                 //normal drops
-                if(!player.getDungoneering().inDungeon()) {
+                if(!player.getDungeoneering().inDungeon()) {
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                     if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                         int chance =  isTask ? 750 : 1000;
@@ -259,8 +259,8 @@ public class NpcDeathEvent extends Event {
 
                     }
                 } else {
-                    if(player.getDungoneering().getRoom().boss) {
-                        for(int i = 0; i < player.getDungoneering().getCurrentDungeon().difficulty.ordinal() + 1; i++) {
+                    if(player.getDungeoneering().getRoom().boss) {
+                        for(int i = 0; i < player.getDungeoneering().getCurrentDungeon().difficulty.ordinal() + 1; i++) {
                             final ItemDefinition def = ItemDefinition.forId(FightPits.scItems.get(Misc.random(FightPits.scItems.size()-1)));
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                     npc.getLocation().getY(), npc.getLocation().getZ(),

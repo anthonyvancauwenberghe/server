@@ -19,6 +19,7 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.util.Misc;
 
 import java.util.Date;
 
@@ -439,7 +440,13 @@ public class Duel {
 	}
 	
 	public static boolean inDuelLocation(int x, int y) {
-		return x > 3329 && y > 3203 && x < 3392 && y < 3261;
+		return ((x >= 3331 && y >= 3243 && x <= 3355 && y <= 3259) || Misc.isInCircle(x, y, 3351, 3250, 7) ||//Arena 1
+				(x >= 3331 && y >= 3224 && x <= 3355 && y <= 3240) || Misc.isInCircle(x, y, 3351, 3232, 7) ||//Arena 2
+				(x >= 3331 && y >= 3205 && x <= 3355 && y <= 3221) || Misc.isInCircle(x, y, 3351, 3213, 7) ||//Arena 3
+				(x >= 3370 && y >= 3249 && x <= 3390 && y <= 3243) || Misc.isInCircle(x, y, 3370, 3250, 7) ||//Arena 4
+				(x >= 3370 && y >= 3240 && x <= 3390 && y <= 3224) || Misc.isInCircle(x, y, 3370, 3232, 7) ||//Arena 5
+				(x >= 3370 && y >= 3221 && x <= 3390 && y <= 3205) || Misc.isInCircle(x, y, 3370, 3213, 7)   //Arena 6
+		);
 	}
 	
 	public static void declineTrade(Player player) {
@@ -588,6 +595,8 @@ public class Duel {
             Container.transfer(opponent.getDuel(), player.getInventory());
             AchievementHandler.progressAchievement(player, "Duel");
         }
+		player.cE.setPoisoned(false);
+		opponent.cE.setPoisoned(false);
         opponent.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.getActionSender().sendMessage("You have "+(won ? "won" : "lost")+ " the duel.");

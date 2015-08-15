@@ -1,17 +1,13 @@
 package org.hyperion.rs2.event.impl;
 
-import java.io.IOException;
-
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Afk;
-import org.hyperion.rs2.util.PushMessage;
 
 /**
  * An event which increases ActivityPoints, refreshes Quest Tab , refreshes
@@ -56,7 +52,7 @@ public class PlayerEvent36Seconds extends Event {
 			player.getQuestTab().sendStaffCount();
         	player.getQuestTab().sendUptime();
             Afk.procesPlayer(player);
-    		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE) && !player.getDungoneering().inDungeon()) {
+    		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE) && !player.getDungeoneering().inDungeon()) {
 				try {
 					FightPits.dissapate(player);
 				}catch(StackOverflowError|Exception e) {

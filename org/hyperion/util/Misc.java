@@ -24,6 +24,12 @@ public class Misc {
 		return priceString;
 	}
 
+	public static boolean isInCircle(int x, int y, int x2, int y2, int r) {
+		if(Math.pow((x - x2), 2) + Math.pow((y - y2), 2) <= Math.pow(r, 2))
+			return true;
+		return false;
+	}
+
 	/**
 	 * @param needle
 	 * @param haystack

@@ -366,7 +366,7 @@ public class FightPits implements ContentTemplate {
 				return inGame(player);
 			}
 			if(clickId == ClickId.CAN_TELEPORT) {
-				return waitingRoom.contains(player) || inGame(player) || player.getDungoneering().inDungeon();
+				return waitingRoom.contains(player) || inGame(player) || player.getDungeoneering().inDungeon();
 			}
 			if(clickId == ClickId.FIGHT_PITS_DEATH) {
 

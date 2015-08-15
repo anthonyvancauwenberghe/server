@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Appearance;
@@ -24,9 +23,6 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.clan.Clan;
-import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
 import org.hyperion.rs2.saving.impl.*;
 import org.hyperion.rs2.sql.SQLConnection;
@@ -207,7 +203,7 @@ public class PlayerSaving {
         saveList.add(new SaveBonusXP());
         saveList.add(new SavePin());
         saveList.add(new SavePid());
-        saveList.add(new SaveDungoneering());
+        saveList.add(new SaveDungeoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));
         saveList.add(new SaveTutorialProgress("tutorial"));
         //saveList.add(new SaveAchievements("Achievements"));

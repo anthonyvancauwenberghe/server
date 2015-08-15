@@ -72,13 +72,15 @@ public class CombatAssistant {
 	
 	public static final List<Integer> STAB_WEAPONS = new LinkedList<Integer>(Arrays.asList(new Integer[]
 			{ 11716, 11717, 13454,5698, 13889, 14484, 18349, 17135
-			
 			}));
 	
 	public static final boolean isStab(Item item) {
 		if(item == null)
 			return false;
-		return STAB_WEAPONS.contains(item.getId()) || item.getDefinition().getName().contains("spear");
+		boolean isStab = STAB_WEAPONS.contains(item.getId());
+		if(!isStab)
+			isStab = item.getDefinition().getName().contains("spear");
+		return isStab;
 	}
 
 	/**

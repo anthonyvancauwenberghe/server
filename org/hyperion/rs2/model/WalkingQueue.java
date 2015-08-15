@@ -387,7 +387,7 @@ public class WalkingQueue {
 			}
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
-					Magic.teleport(player, 3087, 3501, 0, true, false);
+					player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
 				}
 			}
 

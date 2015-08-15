@@ -396,7 +396,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			case 2431:// scim
 			case 12297:// WHip
 				player.cE.setAtkType(3);
-				//player.getActionSender().sendMessage(player.cE.getAtkType() + "");
+				player.getActionSender().sendMessage(player.cE.getAtkType() + "");
 			case 1772:
 			case 4454:
 			case 1757:
@@ -411,7 +411,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			case 1755:
 			case 4452:
 				player.cE.setAtkType(6);
-				//player.getActionSender().sendMessage(player.cE.getAtkType() + "");
+				player.getActionSender().sendMessage(player.cE.getAtkType() + "");
 				break;
 			case 2432: // Scimmy Slash
 			case 2284: // stab

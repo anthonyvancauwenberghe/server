@@ -1039,7 +1039,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public int wildernessLevel = - 1;
-	public boolean isInMutli = false;
+	public boolean isInMuli = false;
 	public int headIconId = - 1;
 
 	/*

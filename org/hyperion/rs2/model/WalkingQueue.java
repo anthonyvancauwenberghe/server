@@ -354,11 +354,11 @@ public class WalkingQueue {
 				//debug("Sending atk cuz atkop");
 				player.attackOption = false;
 			}
-			if(! player.isInMutli && Combat.isInMulti(player.cE)) {
-				player.isInMutli = true;
+			if(! player.isInMuli && Combat.isInMulti(player.cE)) {
+				player.isInMuli = true;
 				player.getActionSender().sendMultiZone(1);
-			} else if(player.isInMutli && ! Combat.isInMulti(player.cE)) {
-				player.isInMutli = false;
+			} else if(player.isInMuli && ! Combat.isInMulti(player.cE)) {
+				player.isInMuli = false;
 				player.getActionSender().sendMultiZone(0);
 			}
 			if(player.wildernessLevel != wildLevel && !OSPK.inArea(player) && !DangerousPK.inDangerousPK(player)) {
@@ -388,7 +388,6 @@ public class WalkingQueue {
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
 					Magic.teleport(player, 3087, 3501, 0, true, false);
-					player.sendMessage("You're in the arena");
 				}
 			}
 

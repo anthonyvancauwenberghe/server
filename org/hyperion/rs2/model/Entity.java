@@ -373,8 +373,9 @@ public abstract class Entity {
 	public void playAnimation(Animation animation) {
 		this.currentAnimation = animation;
 		this.getUpdateFlags().flag(UpdateFlag.ANIMATION);
-        if(this instanceof Player)
-            ((Player)this).debugMessage("Animation: "+animation.getId());
+        if(this instanceof Player) {
+			((Player) this).debugMessage("Animation: " + animation.getId());
+		}
 	}
 
 	/**

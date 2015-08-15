@@ -283,7 +283,7 @@ public class Prayer implements ContentTemplate {
                     opp.getPrayers().setEnabled(p2.getId(), false);
                     opp.setDrainRate(getPryDrain(opp));
                     setHeadIcon(opp, p2);
-                    player.forceMessage("The Gods cannot save you now!");
+                    player.forceMessage("The gods cannot save you now!");
                 }
             }
 
@@ -336,7 +336,7 @@ public class Prayer implements ContentTemplate {
 		player.playAnimation(Animation.create(645, 0));
 		player.getSkills().setLevel(5, player.getSkills().getLevelForExp(5));
 		player.getActionSender().sendSkill(5);
-		player.getActionSender().sendMessage("You recharge your Prayer and Summon points.");
+		player.getActionSender().sendMessage("You recharge your prayer and summoning points.");
         /*
          * if(c.playerLevel[5] >=
 		 * c.getActionAssistant().getLevelForXP(c,c.playerXP[5])) {

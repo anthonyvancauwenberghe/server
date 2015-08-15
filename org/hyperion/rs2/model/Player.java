@@ -299,7 +299,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 * @return
 	 */
 	public double getKDR() {
-		double kdr = (double) getKillCount() / (double) getDeathCount();
+		double kdr = getKillCount();
+		if(getDeathCount() != 0) {
+			kdr = (double) getKillCount() / (double) getDeathCount();
+		}
 		kdr = Misc.round(kdr, 3);
 		return kdr;
 	}

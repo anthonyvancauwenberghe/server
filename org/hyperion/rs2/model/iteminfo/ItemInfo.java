@@ -140,7 +140,8 @@ public class ItemInfo{
         final Map<String, String> msgs = new HashMap<>();
         try(final Scanner input = new Scanner(file)){
             while(input.hasNextLine()){
-                final String line = input.nextLine().trim();
+                final String line = input.nextLine().trim()
+                        .replaceAll("\\/\\*([^*/]+)\\*\\/", "$1");
                 if(line.isEmpty() || line.startsWith("//") || line.startsWith("ignore"))
                     continue;
                 Matcher m;

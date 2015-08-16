@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
@@ -63,7 +64,8 @@ public class ItemInfo{
 
         public String msg(final ItemDefinition def){
             return rawMsg.replace("$id$", Integer.toString(def.getId()))
-                    .replace("$name$", def.getProperName());
+                    .replace("$name$", def.getProperName())
+                    .replace("$server$", Server.NAME);
         }
 
         private static Entry id(final String msg, final int id){

@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
@@ -63,7 +64,8 @@ public class ItemInfo{
 
         public String msg(final ItemDefinition def){
             return rawMsg.replace("$id$", Integer.toString(def.getId()))
-                    .replace("$name$", def.getProperName());
+                    .replace("$name$", def.getProperName())
+                    .replace("$server$", Server.NAME);
         }
 
         private static Entry id(final String msg, final int id){
@@ -83,10 +85,10 @@ public class ItemInfo{
     public static UnTradeables untradeables = new UnTradeables();
 
     private static final Pattern MSG =
-            Pattern.compile("msg ([\\w\\s\\d]+)\\s*=\\s*([\\w\\s\\d]+)");
+            Pattern.compile("msg ([^=]+)\\s*=\\s*([^=]+)");
 
     private static final Pattern ENTRY =
-            Pattern.compile("entry-(id|equals|contains) ([\\w\\s\\d,-]+)\\s*(?:=\\s*([\\w\\s\\d]+))?");
+            Pattern.compile("entry-(id|equals|contains) ([^=]+)\\s*(?:=\\s*([^=]+))?");
 
     private static final Pattern RANGE =
             Pattern.compile("(\\d{1,8})-(\\d{1,8})");
@@ -102,6 +104,10 @@ public class ItemInfo{
         entries = new ArrayList<>();
 
         cache = new HashMap<>();
+    }
+
+    public int size(){
+        return entries.size();
     }
 
     public Entry find(final ItemDefinition def){
@@ -135,7 +141,7 @@ public class ItemInfo{
         try(final Scanner input = new Scanner(file)){
             while(input.hasNextLine()){
                 final String line = input.nextLine().trim();
-                if(line.isEmpty())
+                if(line.isEmpty() || line.startsWith("//") || line.startsWith("ignore"))
                     continue;
                 Matcher m;
                 if((m = MSG.matcher(line)).find()){
@@ -160,7 +166,7 @@ public class ItemInfo{
                     final String fmsg = msg;
                     Stream.of(m.group(2).trim().split(","))
                             .map(String::trim)
-                            .filter(s -> !s.isEmpty())
+                            .filter(s -> !s.isEmpty() && !s.startsWith("//") && !s.startsWith("ignore"))
                             .forEach(s -> {
                                 switch(matcherType){
                                     case 0:

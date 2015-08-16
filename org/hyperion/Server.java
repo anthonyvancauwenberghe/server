@@ -1,18 +1,14 @@
 package org.hyperion;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.skill.dungoneering.DungoneeringHolder;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
-import org.madturnip.tools.CharEditor;
-import org.madturnip.tools.DumpNpcDrops;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A class to start both the file and game servers.
@@ -114,7 +110,8 @@ public class Server {
             PossibleHacksHolder.init();
             RoomDefinition.load();
             ClanManager.load();
-            System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
+//			ItemInfo.init();
+			System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			logger.log(Level.SEVERE, "Error starting Hyperion.", ex);

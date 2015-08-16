@@ -27,7 +27,7 @@ public class TeleportCommands {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("wests", Rank.PLAYER) {
+        CommandHandler.submit(new Command("wests", Rank.DEVELOPER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
 				DialogueManager.openDialogue(player, 196);

@@ -19,6 +19,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.checkers.GameHandler;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.SnowItems;
+import org.hyperion.rs2.model.content.skill.Thieving;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.util.Misc;
 
@@ -64,12 +65,19 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 					return;
 				NPC victim = (NPC) World.getWorld().getNPCs().get(id);
 				if(victim != null) {
-					if(victim.ownerId > 1)
+					player.debugMessage("NpcId: " + victim.getDefinition().getId());
+					try {
+						for (int i = 0; i < Thieving.pickPocketNpcs.length; i++) {
+							if (Thieving.pickPocketNpcs[i] == victim.getDefinition().getId())
+								return;
+						}
+					} catch(Exception e){}
+
+					if(victim.ownerId > 1 && victim.summoned)
 						return;
-					//player.getLogging().log("Clicked on npc : " + victim.getDefinition().getName());
+
 					player.cE.setOpponent(victim.cE);
-					//if(player.cE.getPlayer().getName().equals("Flux"))
-					//System.out.println("AtkNpcPacket l0ll0");
+
 					if(! Combat.processCombat(player.cE))
 						Combat.resetAttack(player.cE);
 					int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());

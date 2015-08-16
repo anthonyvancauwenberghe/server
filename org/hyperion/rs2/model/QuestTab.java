@@ -178,7 +178,6 @@ public class QuestTab {
 
 	public void sendBHTarget() {
 		player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), getId(20));
-        player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), 36502);
 
     }
 
@@ -299,7 +298,7 @@ public class QuestTab {
 				for (int i = 1; i <= 5; i++) {
 					int bonusSkill = ((dayOfYear + i) % (Skills.SKILL_COUNT - 8)) + 7;
 					if (bonusSkill == 21) {
-						player.sendMessage("Random");
+						player.sendMessage("@dre@" + i + ". @bla@Random");
 					} else {
 						player.sendMessage("@dre@" + i + ". @bla@" + Misc.getSkillName(bonusSkill));
 					}
@@ -359,7 +358,7 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(16), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.forceMessage(player.getPoints().getDonatorPointsBought() == 0 ? "I have never bought any donator points." : "I bought " + player.getPoints().getDonatorPointsBought() + " donator points and " + (player.getPoints().getDonatorPointsBought() == player.getPoints().getDonatorPoints() ? "still have them all." : "still have " + player.getPoints().getDonatorPoints() + " of them left."));
+				player.forceMessage(player.getPoints().getDonatorPointsBought() == 0 ? "I have never bought any donator points." : "I bought " + player.getPoints().getDonatorPointsBought() + " donator points for $" + player.getPoints().getDonatorPointsBought() / 100 + " and " + (player.getPoints().getDonatorPointsBought() == player.getPoints().getDonatorPoints() ? "still have them all." : "still have " + player.getPoints().getDonatorPoints() + " of them left."));
 			}
 		});
 

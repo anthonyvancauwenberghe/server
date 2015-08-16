@@ -2754,7 +2754,7 @@ public class CommandPacketHandler implements PacketHandler {
 				try {
 					final Player p = World.getWorld().getPlayer(s.substring("resetslayertask".length()).trim());
 					p.getSlayer().setPoints(p.getSlayer().getSlayerPoints() + 20);
-					p.getSlayer().resetTask(false);
+					p.getSlayer().resetTask();
 					player.getActionSender().sendMessage("You have successfully reset " + p.getSafeDisplayName() + " their slayer task.");
 					p.getActionSender().sendMessage("Your slayer task has been reset by " + player.getSafeDisplayName() + ".");
 				} catch(Exception e) {}

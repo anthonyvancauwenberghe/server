@@ -323,7 +323,8 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(9), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.forceMessage("My kill/deathratio is " + player.getKDR() + ".");
+				double kdr = player.getKDR();
+				player.forceMessage(String.format("My kill/deathratio is %.2f.", kdr));
 			}
 		});
 

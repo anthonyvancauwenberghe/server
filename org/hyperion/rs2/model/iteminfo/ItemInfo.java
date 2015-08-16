@@ -83,10 +83,10 @@ public class ItemInfo{
     public static UnTradeables untradeables = new UnTradeables();
 
     private static final Pattern MSG =
-            Pattern.compile("msg ([\\w\\s\\d$]+)\\s*=\\s*([\\w\\s\\d$]+)");
+            Pattern.compile("msg ([^=]+)\\s*=\\s*([^=]+)");
 
     private static final Pattern ENTRY =
-            Pattern.compile("entry-(id|equals|contains) ([\\w\\s\\d,-]+)\\s*(?:=\\s*([\\w\\s\\d]+))?");
+            Pattern.compile("entry-(id|equals|contains) ([^=]+)\\s*(?:=\\s*([^=]+))?");
 
     private static final Pattern RANGE =
             Pattern.compile("(\\d{1,8})-(\\d{1,8})");

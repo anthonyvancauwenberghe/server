@@ -141,7 +141,7 @@ public class ItemInfo{
         try(final Scanner input = new Scanner(file)){
             while(input.hasNextLine()){
                 final String line = input.nextLine().trim();
-                if(line.isEmpty() || line.startsWith("//"))
+                if(line.isEmpty() || line.startsWith("//") || line.startsWith("ignore"))
                     continue;
                 Matcher m;
                 if((m = MSG.matcher(line)).find()){

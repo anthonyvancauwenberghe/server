@@ -166,7 +166,7 @@ public class ItemInfo{
                     final String fmsg = msg;
                     Stream.of(m.group(2).trim().split(","))
                             .map(String::trim)
-                            .filter(s -> !s.isEmpty())
+                            .filter(s -> !s.isEmpty() && !s.startsWith("//") && !s.startsWith("ignore"))
                             .forEach(s -> {
                                 switch(matcherType){
                                     case 0:

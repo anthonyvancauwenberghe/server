@@ -1,0 +1,10 @@
+msg dp = $name$ can only be bought at the Donator Shop
+msg pkp = $name$ can only be bought at the Pkp Shop
+
+entry-id 14484,14485,15333-15335 = dp
+entry-contains party,chaotic,santa,primal,arcane = dp
+
+entry-contains void,defender,vesta,statius,morrigan,spirit = pkp
+entry-id 5020-5023 = pkp
+
+entry-equals null = Do not try and spawn this shit

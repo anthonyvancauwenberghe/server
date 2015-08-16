@@ -498,12 +498,12 @@ public class CommandHandler {
 				World.getWorld().getNPCManager().addNPC(player.getLocation(),
 						parts[0], -1);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
-                        + parts[0] + "	" + player.getLocation() + "	"
-                        + (player.getLocation().getX()) + "	"
-                        + (player.getLocation().getY()) + "	"
-                        + (player.getLocation().getX()) + "	"
-                        + (player.getLocation().getY()) + "	1	"
-                        + NPCDefinition.forId(parts[0]).name());
+						+ parts[0] + "	" + player.getLocation() + "	"
+						+ (player.getLocation().getX()) + "	"
+						+ (player.getLocation().getY()) + "	"
+						+ (player.getLocation().getX()) + "	"
+						+ (player.getLocation().getY()) + "	1	"
+						+ NPCDefinition.forId(parts[0]).name());
 				return true;
 			}
 		});
@@ -758,12 +758,12 @@ public class CommandHandler {
 		});
 
 		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER) {
-            @Override
-            public boolean execute(Player player, String input) {
-                Server.getConfig().loadConfigFile();
-                return true;
-            }
-        });
+			@Override
+			public boolean execute(Player player, String input) {
+				Server.getConfig().loadConfigFile();
+				return true;
+			}
+		});
 
         submit(new Command("gfx", Rank.DEVELOPER) {
             public boolean execute(Player player, String input) {
@@ -1236,53 +1236,53 @@ public class CommandHandler {
         });
 
         CommandHandler.submit(new Command("createevent", Rank.MODERATOR) {
-                                  @Override
-                                  public boolean execute(Player player, String input) throws Exception {
-                                      input = filterInput(input);
-                                      String[] split = input.split(",");
-                                      try {
-                                          if (Events.eventName != "") {
-                                              player.sendMessage("There is already an active event, remove it via ::removeevent");
-                                              return false;
-                                          }
+								  @Override
+								  public boolean execute(Player player, String input) throws Exception {
+									  input = filterInput(input);
+									  String[] split = input.split(",");
+									  try {
+										  if (Events.eventName != "") {
+											  player.sendMessage("There is already an active event, remove it via ::removeevent");
+											  return false;
+										  }
 
-                                          final int x = Integer.valueOf(split[0]);
-                                          final int y = Integer.valueOf(split[1]);
-                                          final int z = Integer.valueOf(split[2]);
+										  final int x = Integer.valueOf(split[0]);
+										  final int y = Integer.valueOf(split[1]);
+										  final int z = Integer.valueOf(split[2]);
 
-                                          if (Combat.getWildLevel(x, y) > 0) {
-                                              player.sendMessage("Events cannot be in wilderness.");
-                                              return false;
-                                          }
+										  if (Combat.getWildLevel(x, y) > 0) {
+											  player.sendMessage("Events cannot be in wilderness.");
+											  return false;
+										  }
 
-                                          final String name = split[3];
-                                          Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Location.create(x, y, z));
+										  final String name = split[3];
+										  Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Location.create(x, y, z));
 
-                                          for (final Player p : World.getWorld().getPlayers()) {
-                                              p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
-                                              p.sendServerMessage("Click it in the questtab to join in!");
-                                              p.getQuestTab().sendUptime();
-                                          }
+										  for (final Player p : World.getWorld().getPlayers()) {
+											  p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
+											  p.sendServerMessage("Click it in the questtab to join in!");
+											  p.getQuestTab().sendUptime();
+										  }
 
-                                      } catch (Exception ex) {
-                                          player.sendMessage("Please use the command as: ::createevent X,Y,Z,EVENTNAME");
-                                      }
-                                      return false;
-                                  }
-                              },
-                new Command("removeevent", Rank.MODERATOR) {
-                    @Override
-                    public boolean execute(Player player, String input) throws Exception {
-							String oldEvent = Events.eventName;
-							Events.resetEvent();
+									  } catch (Exception ex) {
+										  player.sendMessage("Please use the command as: ::createevent X,Y,Z,EVENTNAME");
+									  }
+									  return false;
+								  }
+							  },
+				new Command("removeevent", Rank.MODERATOR) {
+					@Override
+					public boolean execute(Player player, String input) throws Exception {
+						String oldEvent = Events.eventName;
+						Events.resetEvent();
 
-							for (final Player p : World.getWorld().getPlayers()) {
-								p.getQuestTab().sendUptime();
-								p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
-							}
-                        return true;
-                    }
-                });
+						for (final Player p : World.getWorld().getPlayers()) {
+							p.getQuestTab().sendUptime();
+							p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
+						}
+						return true;
+					}
+				});
 
 
 
@@ -1342,60 +1342,60 @@ public class CommandHandler {
         CommandHandler.submit(new RemovePunishmentCommand());
 
         submit(new GiveIntCommand("givehp", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.getPoints().setHonorPoints(target.getPoints().getHonorPoints() + value);
-                player.sendf("%s now has %,d honor pts", target.getName(), target.getPoints().getHonorPoints());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.getPoints().setHonorPoints(target.getPoints().getHonorPoints() + value);
+				player.sendf("%s now has %,d honor pts", target.getName(), target.getPoints().getHonorPoints());
+			}
+		});
 
         submit(new GiveIntCommand("giveelo", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.getPoints().setEloRating(target.getPoints().getEloRating() + value);
-                player.sendf("%s now has %,d elo", target.getName(), target.getPoints().getEloRating());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.getPoints().setEloRating(target.getPoints().getEloRating() + value);
+				player.sendf("%s now has %,d elo", target.getName(), target.getPoints().getEloRating());
+			}
+		});
 
         submit(new GiveIntCommand("givekills", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.setKillCount(target.getKillCount() + value);
-                player.sendf("%s now has %,d kills", target.getName(), target.getKillCount());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.setKillCount(target.getKillCount() + value);
+				player.sendf("%s now has %,d kills", target.getName(), target.getKillCount());
+			}
+		});
 
         submit(new GiveIntCommand("givedeaths", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.setDeathCount(target.getDeathCount() + value);
-                player.sendf("%s now has %,d deaths", target.getName(), target.getDeathCount());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.setDeathCount(target.getDeathCount() + value);
+				player.sendf("%s now has %,d deaths", target.getName(), target.getDeathCount());
+			}
+		});
 
         submit(new GiveIntCommand("givevp", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.getPoints().setVotingPoints(target.getPoints().getVotingPoints() + value);
-                player.sendf("%s now has %,d vote points", target.getName(), target.getPoints().getVotingPoints());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.getPoints().setVotingPoints(target.getPoints().getVotingPoints() + value);
+				player.sendf("%s now has %,d vote points", target.getName(), target.getPoints().getVotingPoints());
+			}
+		});
 
         submit(new GiveIntCommand("givepkp", Rank.OWNER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.getPoints().setPkPoints(target.getPoints().getPkPoints() + value);
-                player.sendf("%s now has %,d pk points", target.getName(), target.getPoints().getPkPoints());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.getPoints().setPkPoints(target.getPoints().getPkPoints() + value);
+				player.sendf("%s now has %,d pk points", target.getName(), target.getPoints().getPkPoints());
+			}
+		});
 
         submit(new GiveIntCommand("givebhp", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.getBountyHunter().setKills(target.getBountyHunter().getKills() + value);
-                player.sendf("%s now has %,d bounty hunter points", target.getName(), target.getBountyHunter().getKills());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.getBountyHunter().setKills(target.getBountyHunter().getKills() + value);
+				player.sendf("%s now has %,d bounty hunter points", target.getName(), target.getBountyHunter().getKills());
+			}
+		});
 
         submit(new GiveIntCommand("givesp", Rank.DEVELOPER) {
-            public void process(final Player player, final Player target, final int value) {
-                target.getSlayer().setPoints(target.getSlayer().getSlayerPoints() + value);
-                player.sendf("%s now has %,d slayer points", target.getName(), target.getSlayer().getSlayerPoints());
-            }
-        });
+			public void process(final Player player, final Player target, final int value) {
+				target.getSlayer().setPoints(target.getSlayer().getSlayerPoints() + value);
+				player.sendf("%s now has %,d slayer points", target.getName(), target.getSlayer().getSlayerPoints());
+			}
+		});
 
         submit(new GiveIntCommand("giveep", Rank.DEVELOPER) {
             public void process(final Player player, final Player target, final int value) {
@@ -1905,12 +1905,21 @@ public class CommandHandler {
 
         submit(new Command("getpin", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) {
-                final Player target = input.equals("getpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
-                if (target == null) {
-                    player.sendf("Target is null");
+				String name = "";
+				try {
+					name = input.substring(7).trim();
+				} catch(Exception e) {}
+                if (name.equalsIgnoreCase("")) {
+                    player.sendMessage("Use as ::getpin NAME.");
                     return false;
                 }
-                player.sendf("%s's pin: %d", target.getName(), target.pin);
+				String pin = CommandPacketHandler.findCharString(name, "BankPin");
+				if(pin.equalsIgnoreCase("Could not find player!")) {
+					player.sendMessage("Player " + TextUtils.ucFirst(name.toLowerCase()) + " does not exist.");
+					return false;
+				}
+
+				player.sendMessage(TextUtils.ucFirst(name.toLowerCase()) + (pin.equalsIgnoreCase("null") ? " has no bank pin." : "'s bank pin is " + pin));
                 return true;
             }
         });
@@ -1952,14 +1961,14 @@ public class CommandHandler {
 
 		submit(new Command("aliplace", Rank.MODERATOR) {
             public boolean execute(final Player player, final String input) throws Exception {
-                Magic.teleport(player, 3500, 3572, 0, false);
+				Magic.teleport(player, 3500, 3572, 0, false);
                 return false;
             }
         });
 
 		submit(new Command("marcusplace", Rank.MODERATOR) {
             public boolean execute(final Player player, final String input) throws Exception {
-                Magic.teleport(player, 1971, 5002, 0, false);
+				Magic.teleport(player, 1971, 5002, 0, false);
                 return false;
             }
         });

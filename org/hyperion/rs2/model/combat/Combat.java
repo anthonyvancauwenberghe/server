@@ -820,8 +820,9 @@ public class Combat {
 					//defence
 					if(npc.getDefinition().getId() == 9463) {
 						if(Misc.random(12) == 0) {
-							combatEntity.setFreezeTimer(20000);
-							combatEntity.getPlayer().getActionSender().sendMessage("The ice strykewyrm used his ice bite and freezes you!");
+							combatEntity.setFreezeTimer(2000);
+							newDamg += Misc.random(2);
+							combatEntity.getPlayer().getActionSender().sendMessage("The ice strykewyrm used his ice bite!");
 						}
 					}
 				}

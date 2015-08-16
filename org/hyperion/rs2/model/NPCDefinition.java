@@ -291,7 +291,7 @@ public class NPCDefinition {
                                 hp = 210;
                                 break;
 							case 9463:
-								hp = 450;
+								hp = 350;
 								break;
 							case 1677:
 							case 1678:
@@ -323,7 +323,7 @@ public class NPCDefinition {
 							bonus[i2] = 340;
 						}
 						int[] atks = {12791};
-						definition[9463] = new NPCDefinition(9463, 450, 220, bonus, 12793, 12791, atks, 2, "Ice_Skry", 30);
+						definition[9463] = new NPCDefinition(9463, 450, 220, bonus, 12793, 12791, atks, 2, "Ice_Strykewyrm", 30);
 						definition[8349] = new NPCDefinition(8349, 700, 350, bonus, 10924, 10923, atks, 2, "Tormented_Demons", 30);
 						definition[8133] = NPCDefinition.create(8133, 1200, 650, bonus, 10059, 10053, new int[]{10057, 10058}, 4, "Corporeal_Beast", 184);
 						for(int n : SummoningMonsters.SUMMONING_MONSTERS) {

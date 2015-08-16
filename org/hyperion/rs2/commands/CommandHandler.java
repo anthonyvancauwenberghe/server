@@ -82,6 +82,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
@@ -2069,5 +2070,25 @@ public class CommandHandler {
                 return true;
             }
         });
+
+		submit(new Command("reloadunspawnables", Rank.DEVELOPER){
+			public boolean execute(final Player player, final String input) throws Exception{
+				if(ItemInfo.unspawnables.reload())
+					player.sendf("Reloaded %,d spawnables", ItemInfo.unspawnables.size());
+				else
+					player.sendf("Error reloading spawnables");
+				return true;
+			}
+		});
+
+		submit(new Command("reloaduntradeables", Rank.DEVELOPER){
+			public boolean execute(final Player player, final String input) throws Exception{
+				if(ItemInfo.untradeables.reload())
+					player.sendf("Reloaded %,d untradeables", ItemInfo.untradeables.size());
+				else
+					player.sendf("Error reloading untradeables");
+				return true;
+			}
+		});
 	}
 }

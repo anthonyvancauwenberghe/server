@@ -83,7 +83,7 @@ public class ItemInfo{
     public static UnTradeables untradeables = new UnTradeables();
 
     private static final Pattern MSG =
-            Pattern.compile("msg ([\\w\\s\\d]+)\\s*=\\s*([\\w\\s\\d]+)");
+            Pattern.compile("msg ([\\w\\s\\d$]+)\\s*=\\s*([\\w\\s\\d$]+)");
 
     private static final Pattern ENTRY =
             Pattern.compile("entry-(id|equals|contains) ([\\w\\s\\d,-]+)\\s*(?:=\\s*([\\w\\s\\d]+))?");
@@ -102,6 +102,10 @@ public class ItemInfo{
         entries = new ArrayList<>();
 
         cache = new HashMap<>();
+    }
+
+    public int size(){
+        return entries.size();
     }
 
     public Entry find(final ItemDefinition def){

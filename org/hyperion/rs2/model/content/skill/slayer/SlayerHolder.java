@@ -45,10 +45,15 @@ public class SlayerHolder {
 
 
     public boolean resetTask() {
+        return resetTask(true);
+    }
+
+    public boolean resetTask(boolean reset) {
         if(slayerPoints < 20)
             return false;
         slayerPoints -= 20;
-        taskAmount = 0;
+        if(reset)
+            taskAmount = 0;
         return true;
     }
 

@@ -2661,7 +2661,7 @@ public class CommandPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage("EP level " + player.EP);
 				return;
 			}
-			if (commandStart.equals("givemetabsplz") && Server.SPAWN) {
+			if (commandStart.equals("givemetabsplz") && Server.SPAWN && !player.hardMode()) {
 				for (int i = 0; i < 100; i++) {
 					int id = 8008 + Misc.random(4);
 					ContentEntity.addItem(player, id);
@@ -2713,7 +2713,7 @@ public class CommandPacketHandler implements PacketHandler {
 						new Item(5020, tickets))) > 0) {
 					player.getPoints().increasePkPoints(removed * 10);
 					player.getActionSender().sendMessage(
-							"You sold: " + removed + " pk tickets!");
+							"You sold: " + removed + " PK tickets!");
 				}
 			}
 
@@ -2722,7 +2722,7 @@ public class CommandPacketHandler implements PacketHandler {
 					DialogueManager.openDialogue(player, 143);
 				else
 					player.getActionSender().sendMessage(
-							"You cannot empty inside a pvp area!");
+							"You cannot empty inside a PVP area!");
 				return;
 			}
 			if (player.getLocation().getX() >= 3180
@@ -2741,14 +2741,6 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 			if (commandStart.equals("kdr")) {
 				if (player.getDeathCount() == 0) {
-					player.getActionSender()
-							.sendMessage(
-									"The limit as deathcount goes to zero of KillCount/DeathCount");
-					player.getActionSender().sendMessage(
-							"is positive or negative infinite, this means :");
-					player.getActionSender()
-							.sendMessage(
-									"You are total badass or you totally suck at Pking.");
 					return;
 				}
 				double kdr = (double) player.getKillCount()
@@ -2762,7 +2754,7 @@ public class CommandPacketHandler implements PacketHandler {
 				try {
 					final Player p = World.getWorld().getPlayer(s.substring("resetslayertask".length()).trim());
 					p.getSlayer().setPoints(p.getSlayer().getSlayerPoints() + 20);
-					p.getSlayer().resetTask();
+					p.getSlayer().resetTask(false);
 					player.getActionSender().sendMessage("You have successfully reset " + p.getSafeDisplayName() + " their slayer task.");
 					p.getActionSender().sendMessage("Your slayer task has been reset by " + player.getSafeDisplayName() + ".");
 				} catch(Exception e) {}
@@ -2777,7 +2769,7 @@ public class CommandPacketHandler implements PacketHandler {
 				if (Server.SPAWN)
 					player.getActionSender()
 							.sendMessage(
-									"@blu@Please note that combat skills can be set by using commands such as ::str 99");
+									"Please note that combat skills can be set by using commands such as ::str 99");
 				return;
 			}
 

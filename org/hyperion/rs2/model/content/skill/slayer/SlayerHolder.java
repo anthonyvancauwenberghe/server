@@ -20,7 +20,7 @@ public class SlayerHolder {
     private SlayerTask task;
 
     public boolean assignTask(final int slayerLevel) {
-        if(taskAmount > 0)
+        if(taskAmount > 0 && task != null)
             return false;
         task = SlayerTask.forLevel(slayerLevel);
         taskAmount = task.getDifficulty().getAmount();

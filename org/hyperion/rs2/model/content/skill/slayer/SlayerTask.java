@@ -58,8 +58,8 @@ public enum SlayerTask {
     /** The hard tasks */
     BLACK_DEMON(4,Difficulty.HARD, 1, 220,
             84),
-    GORAK(5, Difficulty.HARD, 68, 320,
-            6218),
+    /*GORAK(5, Difficulty.HARD, 68, 320,
+            6218),*/
     HELL_HOUND(6,Difficulty.HARD, 1, 319,
             6210, 49),
     DARK_BEAST(7,Difficulty.HARD, 95, 297,

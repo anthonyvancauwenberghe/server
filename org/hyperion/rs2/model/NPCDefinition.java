@@ -291,7 +291,7 @@ public class NPCDefinition {
                                 hp = 210;
                                 break;
 							case 9463:
-								hp = 350;
+								hp = 400;
 								break;
 							case 1677:
 							case 1678:

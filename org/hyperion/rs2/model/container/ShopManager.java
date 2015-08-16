@@ -55,10 +55,19 @@ public class ShopManager {
 		Shop shop = Shop.forId(id);
 		player.getActionSender().sendUpdateItems(3900,
 				shop.getContainer().toArray());
-        if(id != 78) {
-		    player.getActionSender().sendString(3901, shop.getName());
-        } else
-            player.getActionSender().sendString(3901, "Emblem Points: @red@"+player.getBountyHunter().getEmblemPoints());
+        if(id == 78) {
+			player.getActionSender().sendString(3901, "Emblem Points: @gre@"+player.getBountyHunter().getEmblemPoints());
+        } else if(id == 63 || id == 64) {
+			player.getActionSender().sendString(3901, "Donator points: @gre@" + player.getPoints().getDonatorPoints());
+		} else if(id == 75) {
+			player.getActionSender().sendString(3901, "Voting points: @gre@" + player.getPoints().getVotingPoints());
+		} else if(id == 71) {
+			player.getActionSender().sendString(3901, "ArteroPK points: @gre@" + player.getPoints().getPkPoints());
+		} else if(id == 76) {
+			player.getActionSender().sendString(3901, "Honor points: @gre@" + player.getPoints().getHonorPoints());
+		} else {
+			player.getActionSender().sendString(3901, shop.getName());
+		}
 		player.setShopId(id);
 	}
 
@@ -582,7 +591,6 @@ public class ShopManager {
 	/**
 	 * Finds all shops whose names contain the specified key.
 	 *
-	 * @param name
 	 * @return
 	 */
 	public static List<Shop> forName(String key) {

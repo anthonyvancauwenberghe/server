@@ -33,6 +33,7 @@ public class SaveIP extends SaveString {
                         player.getExtraData().put("isdrasticallydiff", true);
                 }
 			} catch(Exception e) {
+                System.out.println(value);
 				e.printStackTrace();
 			}
 	}

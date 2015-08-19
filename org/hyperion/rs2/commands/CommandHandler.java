@@ -42,6 +42,7 @@ import org.hyperion.rs2.commands.impl.VoteCommand;
 import org.hyperion.rs2.commands.impl.WikiCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.model.Ban;
@@ -413,10 +414,10 @@ public class CommandHandler {
 				TileMap tilemap = tilemapbuilder.build();
 				Tile tile = tilemap.getTile(0, 0);
 				player.getActionSender().sendMessage((new StringBuilder())
-                        .append("N: ").append(tile.isNorthernTraversalPermitted())
-                        .append(" E: ").append(tile.isEasternTraversalPermitted())
-                        .append(" S: ").append(tile.isSouthernTraversalPermitted())
-                        .append(" W: ").append(tile.isWesternTraversalPermitted()).toString());
+						.append("N: ").append(tile.isNorthernTraversalPermitted())
+						.append(" E: ").append(tile.isEasternTraversalPermitted())
+						.append(" S: ").append(tile.isSouthernTraversalPermitted())
+						.append(" W: ").append(tile.isWesternTraversalPermitted()).toString());
 				return true;
 			}
 		});
@@ -471,7 +472,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
 				World.getWorld().getNPCManager().addNPC(player.getLocation(),
-                        parts[0], -1);
+						parts[0], -1);
 				return true;
 			}
 		});
@@ -482,12 +483,12 @@ public class CommandHandler {
 				    World.getWorld().getNPCManager().addNPC(player.getLocation(),
                             parts[0], parts.length == 2 ? parts[1] : 50);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
-                        + parts[0] + "	" + player.getLocation() + "	"
-                        + (player.getLocation().getX() - 1) + "	"
-                        + (player.getLocation().getY() - 1) + "	"
-                        + (player.getLocation().getX() + 1) + "	"
-                        + (player.getLocation().getY() + 1) + "	1	"
-                        + NPCDefinition.forId(parts[0]).name());
+						+ parts[0] + "	" + player.getLocation() + "	"
+						+ (player.getLocation().getX() - 1) + "	"
+						+ (player.getLocation().getY() - 1) + "	"
+						+ (player.getLocation().getX() + 1) + "	"
+						+ (player.getLocation().getY() + 1) + "	1	"
+						+ NPCDefinition.forId(parts[0]).name());
 				return true;
 			}
 		});
@@ -747,9 +748,9 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("lanceurl", Rank.OWNER){
+		submit(new Command("lanceurl", Rank.OWNER) {
 			@Override
-			public boolean execute(Player player, String input){
+			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				String[] parts = input.split(",");
 				ActionSender.yellMessage("l4unchur13 http://www." + input);
@@ -766,20 +767,20 @@ public class CommandHandler {
 		});
 
         submit(new Command("gfx", Rank.DEVELOPER) {
-            public boolean execute(Player player, String input) {
-                input = filterInput(input);
-                final String[] parts = input.split(",");
-                player.cE.doGfx(Integer.parseInt(parts[0]));
-                return true;
-            }
-        });
+			public boolean execute(Player player, String input) {
+				input = filterInput(input);
+				final String[] parts = input.split(",");
+				player.cE.doGfx(Integer.parseInt(parts[0]));
+				return true;
+			}
+		});
 
         submit(new Command("heal", Rank.DEVELOPER) {
-            public boolean execute(Player player, String input) {
-                player.heal(150);
-                return true;
-            }
-        });
+			public boolean execute(Player player, String input) {
+				player.heal(150);
+				return true;
+			}
+		});
 
 		submit(new Command(Server.getConfig().getString("spawncommand"), Rank.OWNER) {
 			@Override
@@ -841,7 +842,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				Player target = World.getWorld().getPlayer(input);
-				if(target != null) {
+				if (target != null) {
 					target.getPoints().setEloRating(1200);
 				}
 				return true;
@@ -1021,13 +1022,13 @@ public class CommandHandler {
                     return false;
                 }
                 player.getActionSender().sendMessage(
-                        String.format("[%s] Elo = %,d - K/D = %d/%d - KS = %d",
-                                target.getName(),
-                                target.getPoints().getEloRating(),
-                                target.getKillCount(),
-                                target.getDeathCount(),
-                                target.getKillStreak())
-                );
+						String.format("[%s] Elo = %,d - K/D = %d/%d - KS = %d",
+								target.getName(),
+								target.getPoints().getEloRating(),
+								target.getKillCount(),
+								target.getDeathCount(),
+								target.getKillStreak())
+				);
                 return true;
             }
         });
@@ -1190,50 +1191,50 @@ public class CommandHandler {
 
 
         submit(new Command("changecompcolors", Rank.PLAYER) {
-            public boolean execute(final Player player, final String input) {
-                final String line = filterInput(input).trim();
-                if (line.equals("none")) {
-                    player.compCapePrimaryColor = 0;
-                    player.compCapeSecondaryColor = 0;
-                    player.sendf("Reset your comp cape colors!");
-                    return true;
-                }
-                final String[] colors = line.split(" ");
-                if (colors.length != 2) {
-                    player.getActionSender().sendMessage("Invalid syntax");
-                    return false;
-                }
-                Color primary = null;
-                Color secondary = null;
-                for (final Color color : Color.values()) {
-                    final String colorStr = color.toString();
-                    if (colors[0].equalsIgnoreCase(colorStr))
-                        primary = color;
-                    if (colors[1].equalsIgnoreCase(colorStr))
-                        secondary = color;
-                    if (primary != null && secondary != null)
-                        break;
-                }
-                if (primary == null || secondary == null) {
-                    player.getActionSender().sendMessage("Invalid colors");
-                    return false;
-                }
-                if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary) {
-                    player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
-                    return false;
-                }
-                player.compCapePrimaryColor = primary.color;
-                player.compCapeSecondaryColor = secondary.color;
-                player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
-                player.getActionSender().sendMessage(
-                        String.format(
-                                "Changed comp cape colors: Primary: %s | Secondary: %s",
-                                primary, secondary
-                        )
-                );
-                return true;
-            }
-        });
+			public boolean execute(final Player player, final String input) {
+				final String line = filterInput(input).trim();
+				if (line.equals("none")) {
+					player.compCapePrimaryColor = 0;
+					player.compCapeSecondaryColor = 0;
+					player.sendf("Reset your comp cape colors!");
+					return true;
+				}
+				final String[] colors = line.split(" ");
+				if (colors.length != 2) {
+					player.getActionSender().sendMessage("Invalid syntax");
+					return false;
+				}
+				Color primary = null;
+				Color secondary = null;
+				for (final Color color : Color.values()) {
+					final String colorStr = color.toString();
+					if (colors[0].equalsIgnoreCase(colorStr))
+						primary = color;
+					if (colors[1].equalsIgnoreCase(colorStr))
+						secondary = color;
+					if (primary != null && secondary != null)
+						break;
+				}
+				if (primary == null || secondary == null) {
+					player.getActionSender().sendMessage("Invalid colors");
+					return false;
+				}
+				if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && primary == Color.WHITE && primary == secondary) {
+					player.getActionSender().sendMessage("Ferry bitch slapped you from making both colors white");
+					return false;
+				}
+				player.compCapePrimaryColor = primary.color;
+				player.compCapeSecondaryColor = secondary.color;
+				player.getUpdateFlags().set(UpdateFlags.UpdateFlag.APPEARANCE, true);
+				player.getActionSender().sendMessage(
+						String.format(
+								"Changed comp cape colors: Primary: %s | Secondary: %s",
+								primary, secondary
+						)
+				);
+				return true;
+			}
+		});
 
         CommandHandler.submit(new Command("createevent", Rank.MODERATOR) {
 								  @Override
@@ -1801,15 +1802,15 @@ public class CommandHandler {
                     target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                 }else{
                     World.getWorld().submit(
-                            new Event(1000) {
-                                public void execute() {
-                                    if (target.isDead())
-                                        stop();
-                                    else
-                                        target.cE.hit(5, player, true, Constants.MELEE);
-                                }
-                            }
-                    );
+							new Event(1000) {
+								public void execute() {
+									if (target.isDead())
+										stop();
+									else
+										target.cE.hit(5, player, true, Constants.MELEE);
+								}
+							}
+					);
                 }
                 return true;
             }
@@ -1960,11 +1961,18 @@ public class CommandHandler {
         });
 
 		submit(new Command("aliplace", Rank.MODERATOR) {
-            public boolean execute(final Player player, final String input) throws Exception {
+			public boolean execute(final Player player, final String input) throws Exception {
 				Magic.teleport(player, 3500, 3572, 0, false);
-                return false;
-            }
-        });
+				return false;
+			}
+		});
+
+		submit(new Command("startminigame", Rank.COMMUNITY_MANAGER) {
+			public boolean execute(final Player player, final String input) throws Exception {
+				World.getWorld().submit(new CountDownEvent());
+				return true;
+			}
+		});
 
 		submit(new Command("marcusplace", Rank.MODERATOR) {
             public boolean execute(final Player player, final String input) throws Exception {

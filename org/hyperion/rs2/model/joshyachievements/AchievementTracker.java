@@ -8,11 +8,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievements.requirement.AchievementCompletionRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.ItemOpenRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.KillStreakRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.NpcKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.PlayerKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillXpRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillingObjectRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.VoteRequirement;
 
 public class AchievementTracker{
 
@@ -216,6 +218,24 @@ public class AchievementTracker{
     public void achievementCompleted(){
         AchievementContext.findFirst(this, AchievementCompletionRequirement.filter())
                 .ifPresent(a -> progress(a, true));
+    }
+
+    public void itemOpened(final int itemId, final int times){
+        AchievementContext.findFirst(this, ItemOpenRequirement.filter(itemId))
+                .ifPresent(a -> progress(a, times, true));
+    }
+
+    public void itemOpened(final int itemId){
+        itemOpened(itemId, 1);
+    }
+
+    public void voted(final int times){
+        AchievementContext.findFirst(this, VoteRequirement.filter())
+                .ifPresent(a -> progress(a, times, true));
+    }
+
+    public void voted(){
+        voted(1);
     }
 
     public String toSaveString(){

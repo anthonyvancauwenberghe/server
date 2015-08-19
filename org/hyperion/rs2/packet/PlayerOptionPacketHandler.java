@@ -188,7 +188,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			if(tradeWith.tradeWith2 == player)
 				Trade.open(player, tradeWith);
 			else {
-				tradeWith.getActionSender().sendMessage(player.getName() + " :tradereq:");
+				tradeWith.getActionSender().sendMessage(player.getSafeDisplayName() + " :tradereq:");
 				player.getActionSender().sendMessage("Sending trade request...");
 			}
 		} else {

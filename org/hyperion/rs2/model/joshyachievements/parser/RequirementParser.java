@@ -1,12 +1,14 @@
 package org.hyperion.rs2.model.joshyachievements.parser;
 
 import org.hyperion.rs2.model.joshyachievements.requirement.AchievementCompletionRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.ItemOpenRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.KillStreakRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.NpcKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.PlayerKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.Requirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillXpRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillingObjectRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.VoteRequirement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -31,6 +33,10 @@ public final class RequirementParser{
                 return new AchievementCompletionRequirement(intAttr(e, "value"));
             case "SkillingObject":
                 return new SkillingObjectRequirement(intAttr(e, "skill"), ints(e, "items", "item", "id"), intAttr(e, "quantity"));
+            case "ItemOpen":
+                return new ItemOpenRequirement(ints(e, "items", "item", "id"), intAttr(e, "quantity"));
+            case "Vote":
+                return new VoteRequirement(intAttr(e, "amount"));
             default:
                 throw new IllegalArgumentException("RequirementParser - Invalid element type: " + e.getAttribute("type"));
         }
@@ -45,14 +51,7 @@ public final class RequirementParser{
             final NpcKillRequirement nkr = (NpcKillRequirement) req;
             e.setAttribute("type", "NpcKill");
             e.setAttribute("kills", req.get().toString());
-            final Element npcs = doc.createElement("npcs");
-            nkr.getNpcIds().stream()
-                    .map(id -> {
-                        final Element npc = doc.createElement("npc");
-                        npc.setAttribute("id", Integer.toString(id));
-                        return npc;
-                    }).forEach(npcs::appendChild);
-            e.appendChild(npcs);
+            e.appendChild(ints(nkr.getNpcIds(), doc, "npcs", "npc", "id"));
         }else if(req instanceof PlayerKillRequirement){
             e.setAttribute("type", "PlayerKill");
             e.setAttribute("kills", req.get().toString());
@@ -68,14 +67,15 @@ public final class RequirementParser{
             e.setAttribute("type", "SkillingObject");
             e.setAttribute("skill", Integer.toString(sor.getSkill()));
             e.setAttribute("quantity", req.get().toString());
-            final Element items = doc.createElement("items");
-            sor.getItemIds().stream()
-                    .map(id -> {
-                        final Element item = doc.createElement("item");
-                        item.setAttribute("id", Integer.toString(id));
-                        return item;
-                    }).forEach(items::appendChild);
-            e.appendChild(items);
+            e.appendChild(ints(sor.getItemIds(), doc, "items", "item", "id"));
+        }else if(req instanceof ItemOpenRequirement){
+            final ItemOpenRequirement ior = (ItemOpenRequirement) req;
+            e.setAttribute("type", "ItemOpen");
+            e.setAttribute("quantity", ior.get().toString());
+            e.appendChild(ints(ior.getItemIds(), doc, "items", "item", "id"));
+        }else if(req instanceof VoteRequirement){
+            e.setAttribute("type", "Vote");
+            e.setAttribute("amount", req.get().toString());
         }else
             throw new IllegalArgumentException("RequirementParser - Invalid requirement: " + req.getClass());
         root.appendChild(e);

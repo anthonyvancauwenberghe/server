@@ -29,7 +29,6 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.CutSceneEvent;
 import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
@@ -88,7 +87,6 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
-import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.model.content.skill.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -757,7 +755,7 @@ public class CommandPacketHandler implements PacketHandler {
 		}
 
 		if(commandStart.equalsIgnoreCase("openurl")){
-			final String[] args = s.substring(8).split(",");
+			final String[] args = withCaps.substring(8).split(",");
 			final String targetName = args[0].trim();
 			final String url = args[1].trim();
 			final Player target = World.getWorld().getPlayer(targetName);

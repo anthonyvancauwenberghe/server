@@ -51,14 +51,7 @@ public final class RequirementParser{
             final NpcKillRequirement nkr = (NpcKillRequirement) req;
             e.setAttribute("type", "NpcKill");
             e.setAttribute("kills", req.get().toString());
-            final Element npcs = doc.createElement("npcs");
-            nkr.getNpcIds().stream()
-                    .map(id -> {
-                        final Element npc = doc.createElement("npc");
-                        npc.setAttribute("id", Integer.toString(id));
-                        return npc;
-                    }).forEach(npcs::appendChild);
-            e.appendChild(npcs);
+            e.appendChild(ints(nkr.getNpcIds(), doc, "npcs", "npc", "id"));
         }else if(req instanceof PlayerKillRequirement){
             e.setAttribute("type", "PlayerKill");
             e.setAttribute("kills", req.get().toString());
@@ -74,26 +67,12 @@ public final class RequirementParser{
             e.setAttribute("type", "SkillingObject");
             e.setAttribute("skill", Integer.toString(sor.getSkill()));
             e.setAttribute("quantity", req.get().toString());
-            final Element items = doc.createElement("items");
-            sor.getItemIds().stream()
-                    .map(id -> {
-                        final Element item = doc.createElement("item");
-                        item.setAttribute("id", Integer.toString(id));
-                        return item;
-                    }).forEach(items::appendChild);
-            e.appendChild(items);
+            e.appendChild(ints(sor.getItemIds(), doc, "items", "item", "id"));
         }else if(req instanceof ItemOpenRequirement){
             final ItemOpenRequirement ior = (ItemOpenRequirement) req;
             e.setAttribute("type", "ItemOpen");
             e.setAttribute("quantity", ior.get().toString());
-            final Element items = doc.createElement("items");
-            ior.getItemIds().stream()
-                    .map(id -> {
-                        final Element item = doc.createElement("item");
-                        item.setAttribute("id", Integer.toString(id));
-                        return item;
-                    }).forEach(items::appendChild);
-            e.appendChild(items);
+            e.appendChild(ints(ior.getItemIds(), doc, "items", "item", "id"));
         }else if(req instanceof VoteRequirement){
             e.setAttribute("type", "Vote");
             e.setAttribute("amount", req.get().toString());

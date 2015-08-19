@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.joshyachievements.parser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,6 +17,17 @@ public final class ParserUtils{
                 .filter(e -> e.getTagName().equals(childTag))
                 .mapToInt(e -> Integer.parseInt(e.getAttribute(valueAttribute)))
                 .toArray();
+    }
+
+    public static Element ints(final List<Integer> ints, final Document doc, final String parentTag, final String childTag, final String childAttr){
+        final Element parent = doc.createElement(parentTag);
+        ints.stream()
+                .map(i -> {
+                    final Element child = doc.createElement(childTag);
+                    child.setAttribute(childAttr, Integer.toString(i));
+                    return child;
+                }).forEach(parent::appendChild);
+        return parent;
     }
 
     public static Element first(final Element root, final String tag){

@@ -1,10 +1,8 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.QuestTab;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 
 public class CountDownEvent extends Event {
@@ -22,13 +20,9 @@ public class CountDownEvent extends Event {
 			}
 			this.stop();
 		}
-		for(Player player : World.getWorld().getPlayers()) {
-            try {
-			    player.getActionSender().sendString("@gre@Event in @red@"+counter+" @gre@secs!", 7332);
-            }catch(Exception e) {
-                this.stop();
-            }
-		}
+
+		Events.fireNewEvent("Fight pits", true, counter, Location.create(2399, 5178, 0));
+
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)
 				npc.forceMessage("Fight pits event in "+counter+" seconds! Go to ::fightpits");

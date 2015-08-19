@@ -922,9 +922,6 @@ public class CommandPacketHandler implements PacketHandler {
             SummoningMonsters.openSummonTab(player,monster);
         }
 
-		if (commandStart.equals("startminigame"))
-			World.getWorld().submit(new CountDownEvent());
-
         if(commandStart.equalsIgnoreCase("savepricelist")) {
             try (final BufferedWriter writer = new BufferedWriter(new FileWriter(new File("./data/prices.txt")))) {
                 int count = 0;

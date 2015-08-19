@@ -13,15 +13,13 @@ public class CountDownEvent extends Event {
 	
 	private int counter = 300; //5minutes
 	public void execute() {
+		if(counter == 300) {
+			Events.fireNewEvent("Fight pits", true, 0, Location.create(2399, 5178, 0));
+		}
 		if(--counter == 0) {
 			FightPits.startEvent();
-			for(Player player : World.getWorld().getPlayers()) {
-				player.getQuestTab().updateQuestTab();
-			}
 			this.stop();
 		}
-
-		Events.fireNewEvent("Fight pits", true, counter, Location.create(2399, 5178, 0));
 
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)

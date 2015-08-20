@@ -105,6 +105,7 @@ public class DonatorShop extends Shop {
 			World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 			player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 			updatePlayers();
+			player.getActionSender().sendString(3901, "Donator points: @gre@" + player.getPoints().getDonatorPoints());
 			if(isVeblenGood(item.getId())) {
 				if(first) {
 					first = false;

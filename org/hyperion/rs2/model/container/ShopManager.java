@@ -65,6 +65,8 @@ public class ShopManager {
 			player.getActionSender().sendString(3901, "ArteroPK points: @gre@" + player.getPoints().getPkPoints());
 		} else if(id == 76) {
 			player.getActionSender().sendString(3901, "Honor points: @gre@" + player.getPoints().getHonorPoints());
+		} else if(id == 81) {
+			player.getActionSender().sendString(3901, "Dungeoneering tokens: @gre@" + player.getDungeoneering().getTokens());
 		} else {
 			player.getActionSender().sendString(3901, shop.getName());
 		}

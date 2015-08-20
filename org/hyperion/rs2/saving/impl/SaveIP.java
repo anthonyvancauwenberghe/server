@@ -17,8 +17,10 @@ public class SaveIP extends SaveString {
 
 	@Override
 	public void setValue(Player player, String value) {
+        if(value.equals("null"))
+            return;
 			try {
-                player.getExtraData().put("oldfullip", value);
+               // player.getExtraData().put("oldfullip", value);
                 String smallIp = player.getFullIP().substring(0, player.getFullIP().indexOf(":"));
                 String shortenedValue = value.substring(0, value.indexOf(":"));
                 player.lastIp = shortenedValue.replace("/", "");
@@ -45,7 +47,8 @@ public class SaveIP extends SaveString {
 		    return player.getFullIP();
         else
         */
-            return player.getExtraData().getString("oldfullip");
+        return player.getFullIP();
+            //return player.getExtraData().getString("oldfullip");
 	}
 
 }

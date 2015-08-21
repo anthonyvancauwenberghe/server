@@ -95,8 +95,10 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
 
         for(Player player : lobby) {
-            sendInterfaceString(player, 0, "@cya@Players Waiting: @gre@"+game.size());
+            sendInterfaceString(player, 0, "@cya@Players Waiting: @gre@"+lobby.size());
             sendInterfaceString(player, 1, "@cya@Estimated Time Left: @red@" + toMinutes(gameTime + nextGameTime));
+            if(player.getBarrowsFFA().getBarrowSet() == null)
+                System.out.println("Null set: "+player.getName());
             sendInterfaceString(player, 2, "@cya@Set: @or2@"+player.getBarrowsFFA().getBarrowSet().toString());
             sendInterfaceString(player, 3, "");
         }

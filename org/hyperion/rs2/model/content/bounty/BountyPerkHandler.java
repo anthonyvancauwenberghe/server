@@ -27,7 +27,7 @@ public final class BountyPerkHandler {
         long nextVeng = 30000;
         if(level < 0)
             return nextVeng;
-        nextVeng -= (1000 * Math.pow(2, level + 2));//4000, 8000, 16000 ms reductions
+        nextVeng -= (1000 * Math.pow(2, level + 1.6));//4000, 8000, 16000 ms reductions
         return nextVeng;
     }
 

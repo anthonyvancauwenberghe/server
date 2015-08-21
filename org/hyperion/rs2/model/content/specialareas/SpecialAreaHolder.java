@@ -23,10 +23,6 @@ public class SpecialAreaHolder {
         map.put("purepk", new PurePk());
         map.put("newgamepk", new NewGamePK());
         map.put("hybrid", new HybridZone());
-        if(BarrowsFFA.barrowsFFA != null) {
-            map.put("barrowsffa", BarrowsFFA.barrowsFFA);
-            System.out.println("NOT NULL BARROWS FFA");
-        }
 
         for(final Map.Entry<String, SpecialArea> area : map.entrySet()) {
             CommandHandler.submit(area.getValue().command(area.getKey()));

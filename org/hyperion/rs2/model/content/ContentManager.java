@@ -43,7 +43,7 @@ public class ContentManager {
                             InterfaceManager.addGlobal((Interface)content);
                         }
                         if(content instanceof SpecialArea || SpecialArea.class.isAssignableFrom(cls)) {
-                            SpecialAreaHolder.put(cls.getSimpleName(), (SpecialArea)content, false);
+                            SpecialAreaHolder.put(cls.getSimpleName(), (SpecialArea)content, true);
                             System.err.println("HIT "+cls.getSimpleName() + " TO ADD CONTENT SPECIAL AREA");
                         }
 						if(cls.getName().contains("prayer"))

@@ -32,67 +32,8 @@ public class AchievementContext{
     public enum Difficulty{
         EASY,
         MEDIUM,
-        HARD
-    }
-
-    public static class Builder{
-
-        private int id = -1;
-        private Difficulty difficulty;
-        private Rank forRank = Rank.PLAYER;
-        private String title;
-        private Requirement requirement;
-        private final List<String> instructions = new ArrayList<>();
-        private final List<Reward> rewards = new ArrayList<>();
-
-        private Builder(){}
-
-        public Builder id(final int id){
-            this.id = id;
-            return this;
-        }
-
-        public Builder difficulty(final Difficulty difficulty){
-            this.difficulty = difficulty;
-            return this;
-        }
-
-        public Builder forRank(final Rank forRank){
-            this.forRank = forRank;
-            return this;
-        }
-
-        public Builder title(final String title){
-            this.title = title;
-            return this;
-        }
-
-        public Builder require(final Requirement requirement){
-            this.requirement = requirement;
-            return this;
-        }
-
-        public Builder instruct(final String line){
-            instructions.add(line);
-            return this;
-        }
-
-        public Builder reward(final Reward reward){
-            rewards.add(reward);
-            return this;
-        }
-
-        public AchievementContext build(){
-            final AchievementContext ctx = new AchievementContext(id == -1 ? count() : id, difficulty, forRank, title, requirement);
-            ctx.instructions.addAll(instructions);
-            ctx.rewards.addAll(rewards);
-            return ctx;
-        }
-
-        public Builder put(){
-            AchievementContext.put(build());
-            return builder();
-        }
+        HARD,
+        ELITE
     }
 
     private static final Map<Integer, AchievementContext> MAP = new TreeMap<>();
@@ -176,10 +117,6 @@ public class AchievementContext{
                 rewards.size(),
                 rewards.stream().map(Reward::toString).collect(Collectors.joining("\n"))
         );
-    }
-
-    public static Builder builder(){
-        return new Builder();
     }
 
     public static void put(final AchievementContext ctx){

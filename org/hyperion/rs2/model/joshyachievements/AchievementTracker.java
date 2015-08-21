@@ -8,9 +8,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievements.requirement.AchievementCompletionRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.BarrowsTripRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.BhTargetKillRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.FightPitResultRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.ItemOpenRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.KillStreakRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.NpcKillRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.PickupItemRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.PlayerKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillXpRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillingObjectRequirement;
@@ -190,9 +194,17 @@ public class AchievementTracker{
         progress(ctx, 1, showUpdateText);
     }
 
-    public void npcKilled(final int npcId){
-        AchievementContext.findFirst(this, NpcKillRequirement.filter(npcId))
+    public void npcKilled(final boolean slayerTask, final int npcId){
+        AchievementContext.findFirst(this, NpcKillRequirement.filter(slayerTask, npcId))
                 .ifPresent(a -> progress(a, true));
+    }
+
+    public void npcKilled(final int npcId){
+        npcKilled(false, npcId);
+    }
+
+    public void slayerTaskNpcKilled(final int npcId){
+        npcKilled(true, npcId);
     }
 
     public void playerKilled(){
@@ -236,6 +248,42 @@ public class AchievementTracker{
 
     public void voted(){
         voted(1);
+    }
+
+    public void barrowsTripCompleted(){
+        AchievementContext.findFirst(this, BarrowsTripRequirement.filter())
+                .ifPresent(a -> progress(a, true));
+    }
+
+    public void bhTargetKilled(){
+        AchievementContext.findFirst(this, BhTargetKillRequirement.filter())
+                .ifPresent(a -> progress(a, true));
+    }
+
+    public void fightPitResult(final FightPitResultRequirement.Result result){
+        AchievementContext.findFirst(this, FightPitResultRequirement.filter(result))
+                .ifPresent(a -> progress(a, true));
+    }
+
+    public void fightPitWin(){
+        fightPitResult(FightPitResultRequirement.Result.WIN);
+    }
+
+    public void fightPitLose(){
+        fightPitResult(FightPitResultRequirement.Result.LOSE);
+    }
+
+    public void pickupItem(final PickupItemRequirement.From from, final int itemId, final int quantity){
+        AchievementContext.findFirst(this, PickupItemRequirement.filter(from, itemId))
+                .ifPresent(a -> progress(a, quantity, true));
+    }
+
+    public void pickupItemFromPlayer(final int itemId, final int quantity){
+        pickupItem(PickupItemRequirement.From.NPC, itemId, quantity);
+    }
+
+    public void pckupItemFromNpc(final int itemId, final int quantity){
+        pickupItem(PickupItemRequirement.From.PLAYER, itemId, quantity);
     }
 
     public String toSaveString(){

@@ -24,6 +24,21 @@ public class PointsReward implements Reward{
             void apply(final Player player, final int amount){
                 player.getPoints().setHonorPoints(player.getPoints().getHonorPoints() + amount);
             }
+        },
+        SLAYER{
+            void apply(final Player player, final int amount){
+                player.getSlayer().setPoints(player.getSlayer().getSlayerPoints() + amount);
+            }
+        },
+        EMBLEM{
+            void apply(final Player player, final int amount){
+                player.getBountyHunter().setEmblemPoints(player.getBountyHunter().getEmblemPoints() + amount);
+            }
+        },
+        BH{
+            void apply(final Player player, final int amount){
+                player.getBountyHunter().setKills(player.getBountyHunter().getKills() + amount);
+            }
         };
 
         abstract void apply(final Player player, final int amount);

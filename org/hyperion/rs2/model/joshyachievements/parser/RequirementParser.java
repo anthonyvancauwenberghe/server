@@ -1,9 +1,13 @@
 package org.hyperion.rs2.model.joshyachievements.parser;
 
 import org.hyperion.rs2.model.joshyachievements.requirement.AchievementCompletionRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.BarrowsTripRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.BhTargetKillRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.FightPitResultRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.ItemOpenRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.KillStreakRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.NpcKillRequirement;
+import org.hyperion.rs2.model.joshyachievements.requirement.PickupItemRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.PlayerKillRequirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.Requirement;
 import org.hyperion.rs2.model.joshyachievements.requirement.SkillXpRequirement;
@@ -24,7 +28,7 @@ public final class RequirementParser{
             case "KillStreak":
                 return new KillStreakRequirement(intAttr(e, "kills"));
             case "NpcKill":
-                return new NpcKillRequirement(ints(e, "npcs", "npc", "id"), intAttr(e, "kills"));
+                return new NpcKillRequirement(Boolean.parseBoolean(e.getAttribute("slayerTask")), ints(e, "npcs", "npc", "id"), intAttr(e, "kills"));
             case "PlayerKill":
                 return new PlayerKillRequirement(intAttr(e, "kills"));
             case "SkillXp":
@@ -37,6 +41,14 @@ public final class RequirementParser{
                 return new ItemOpenRequirement(ints(e, "items", "item", "id"), intAttr(e, "quantity"));
             case "Vote":
                 return new VoteRequirement(intAttr(e, "amount"));
+            case "BarrowsTrip":
+                return new BarrowsTripRequirement(intAttr(e, "trips"));
+            case "BhTargetKill":
+                return new BhTargetKillRequirement(intAttr(e, "kills"));
+            case "FightPitResult":
+                return new FightPitResultRequirement(FightPitResultRequirement.Result.valueOf(e.getAttribute("result")), intAttr(e, "amount"));
+            case "PickupItem":
+                return new PickupItemRequirement(PickupItemRequirement.From.valueOf(e.getAttribute("from")), ints(e, "items", "item", "id"), intAttr(e, "quantity"));
             default:
                 throw new IllegalArgumentException("RequirementParser - Invalid element type: " + e.getAttribute("type"));
         }
@@ -50,6 +62,7 @@ public final class RequirementParser{
         }else if(req instanceof NpcKillRequirement){
             final NpcKillRequirement nkr = (NpcKillRequirement) req;
             e.setAttribute("type", "NpcKill");
+            e.setAttribute("slayerTask", Boolean.toString(nkr.isSlayerTask()));
             e.setAttribute("kills", req.get().toString());
             e.appendChild(ints(nkr.getNpcIds(), doc, "npcs", "npc", "id"));
         }else if(req instanceof PlayerKillRequirement){
@@ -76,6 +89,23 @@ public final class RequirementParser{
         }else if(req instanceof VoteRequirement){
             e.setAttribute("type", "Vote");
             e.setAttribute("amount", req.get().toString());
+        }else if(req instanceof BarrowsTripRequirement){
+            e.setAttribute("type", "BarrowsTrip");
+            e.setAttribute("trips", req.get().toString());
+        }else if(req instanceof BhTargetKillRequirement){
+            e.setAttribute("type", "BhTargetKill");
+            e.setAttribute("kills", req.get().toString());
+        }else if(req instanceof FightPitResultRequirement){
+            final FightPitResultRequirement fprr = (FightPitResultRequirement) req;
+            e.setAttribute("type", "FightPitResult");
+            e.setAttribute("result", fprr.getResult().name());
+            e.setAttribute("amount", fprr.get().toString());
+        }else if(req instanceof PickupItemRequirement){
+            final PickupItemRequirement pir = (PickupItemRequirement) req;
+            e.setAttribute("type", "PickupItem");
+            e.setAttribute("from", pir.getFrom().name());
+            e.setAttribute("quantity", pir.get().toString());
+            e.appendChild(ints(pir.getItemIds(), doc, "items", "item", "id"));
         }else
             throw new IllegalArgumentException("RequirementParser - Invalid requirement: " + req.getClass());
         root.appendChild(e);

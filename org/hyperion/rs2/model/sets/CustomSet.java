@@ -1,20 +1,19 @@
 package org.hyperion.rs2.model.sets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.EquipmentReq;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Misc;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class CustomSet {
 
@@ -55,6 +54,8 @@ public class CustomSet {
         if(Location.inAttackableArea(player))
             return false;
         if(FightPits.inGame(player) || FightPits.inPits(player))
+            return false;
+        if(player.getDungeoneering().inDungeon())
             return false;
         for(final Container toClear : new Container[]{player.getInventory(), player.getEquipment()})
             if(!Container.transfer(toClear, player.getBank()))

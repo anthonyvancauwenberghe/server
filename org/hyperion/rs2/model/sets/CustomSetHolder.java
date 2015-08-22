@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.sets;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +38,10 @@ public class CustomSetHolder {
      */
 
     public boolean save(int slot) {
+        if(player != null && (player.getDungeoneering().inDungeon()
+                || FightPits.inGame(player)
+                || FightPits.inPits(player)))
+            return false;
         final boolean save = slot < getSlotCount();
         if(save)
             sets[slot] = CustomSet.fromGear(player.getInventory(), player.getEquipment());

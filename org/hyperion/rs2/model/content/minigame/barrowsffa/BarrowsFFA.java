@@ -231,16 +231,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
         if(id == DEATH_CHECK_ID) {
 
-            final Player killer = (Player) World.getWorld().getPlayers().get(x);
-            System.out.println("Killer: "+killer.getName());
-            boolean one = game.contains(killer);
-            boolean two = game.contains(player);
 
-            System.out.println(one + " | "+two);
-            if(game.contains(killer) && game.contains(player)) {
-                deathCheck(player, killer);
-                return true;
-            }
 
         }
         if(id == PORTAL_ENTER_OBJECT.getId()) {
@@ -332,15 +323,26 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     }
 
 
-    public void deathCheck(final Player player, final Player killer) {
-        boolean rampage = killer.getBarrowsFFA().kill(player);
-        boolean die = player.getBarrowsFFA().die(killer);
+    public boolean deathCheck(final Player player, final Player killer) {
 
-        if(die)
-            exit(player);
-        if(rampage) {
-            game.forEach(p -> p.sendf("%s is on a rampage of %d kills", killer.getName(), killer.getBarrowsFFA().getKillStreak()));
+        System.out.println("Killer: "+killer.getName());
+        boolean one = game.contains(killer);
+        boolean two = game.contains(player);
+
+        System.out.println(one + " | "+two);
+        if(one && two) {
+
+            boolean rampage = killer.getBarrowsFFA().kill(player);
+            boolean die = player.getBarrowsFFA().die(killer);
+
+            if(die)
+                exit(player);
+            if(rampage) {
+                game.forEach(p -> p.sendf("%s is on a rampage of %d kills", killer.getName(), killer.getBarrowsFFA().getKillStreak()));
+            }
+            return true;
         }
+        return false;
 
     }
 

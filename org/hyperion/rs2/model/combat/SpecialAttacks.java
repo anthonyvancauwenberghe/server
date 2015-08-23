@@ -518,7 +518,6 @@ public class SpecialAttacks {
 		case 5730:
 			if(player.cE.getOpponent().getEntity() instanceof Player)  {
                 final Player opp = player.cE.getOpponent().getPlayer();
-                player.vacateSquare();
 				opp.vacateSquare();
                 opp.playGraphics(Graphic.create(245, 6553600));
                 opp.cE.setFreezeTimer(2000);

@@ -84,8 +84,10 @@ public class Combat {
                     if(!player.getSession().isConnected() && !opp.getSession().isConnected())  {
                         return false;
                     }
-                    if(player.getExtraData().getLong("stuntimez") > System.currentTimeMillis())
+                    if(player.getExtraData().getLong("stuntimez") > System.currentTimeMillis())  {
+                        player.sendMessage("You are too dazed to fight");
                         return false;
+                    }
                 }
 				return processPlayerCombat(combatEntity, distance);
 			} else {

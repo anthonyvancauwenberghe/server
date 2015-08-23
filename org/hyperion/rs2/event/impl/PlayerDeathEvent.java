@@ -189,7 +189,7 @@ public class PlayerDeathEvent extends Event {
         if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
 				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
 			Duel.finishFullyDuel(player);
-        } else if (World.getWorld().getContentManager().handlePacket(6, player, BarrowsFFA.DEATH_CHECK_ID , killer == null ? player.getIndex() : killer.getIndex(), -1, -1)) {
+        } else if (BarrowsFFA.barrowsFFA.deathCheck(player, killer == null ? player : killer)) {
 
         } else if (player.getDungeoneering().inDungeon()) {
             DungeoneeringManager.handleDying(player);

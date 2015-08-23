@@ -22,6 +22,8 @@ public class Dragons implements Attack {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
 			}
+			if(attack.getPlayer() == null)
+				return 1;
 			int attackId = Combat.random(20);
 	        /*
 			 * 

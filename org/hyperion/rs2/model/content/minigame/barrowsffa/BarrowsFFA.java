@@ -41,7 +41,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
 
     private static final int EXIT_LOBBY_ID = 8883;
-    public static final int DEATH_CHECK_ID = 40000;
+    public static final int DEATH_CHECK_ID = 40050;
 
     public static final int LOGOUT_CHECK_ID = 40001;
 
@@ -197,13 +197,9 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 player.getEquipment().clear();
                 player.getInventory().clear();
             }
-            if(lobby.remove(player))
-                player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
-            if(game.remove(player)) {
-                player.setTeleportTarget(LOBBY, false);
-                player.getBarrowsFFA().destroy();
-                lobby.add(player);
-            }
+
+            player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
+            player.getBarrowsFFA().destroy();
 
             player.getActionSender().showInterfaceWalkable(-1);
         }

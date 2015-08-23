@@ -67,6 +67,8 @@ public class CustomSet {
             if(!ItemSpawning.canSpawn(id) || player.hardMode())
                 if(player.getBank().remove(item) < 1)
                     continue;
+            if(ItemSpawning.canSpawn(id) && item.getDefinition().isStackable())
+                item.setCount(500);
             player.getEquipment().set(Equipment.getType(item).getSlot(), item);
         }
         for(int index = 0; index < inventoryIds.length; index++) {

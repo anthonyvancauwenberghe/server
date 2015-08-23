@@ -38,11 +38,7 @@ public class CustomSetHolder {
      */
 
     public boolean save(int slot) {
-        if(player != null && (player.getDungeoneering().inDungeon()
-                || FightPits.inGame(player)
-                || FightPits.inPits(player)))
-            return false;
-        final boolean save = slot < getSlotCount();
+        final boolean save = player != null && slot < getSlotCount();
         if(save)
             sets[slot] = CustomSet.fromGear(player.getInventory(), player.getEquipment());
         return save;

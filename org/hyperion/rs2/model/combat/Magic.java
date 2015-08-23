@@ -535,9 +535,11 @@ public class Magic {
 					"You already have Vengeance casted!.");
 			return;
 		}
-		if(!(System.currentTimeMillis() > player.lastVeng + BountyPerkHandler.getVengTimer(player)) && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+        final long vengTimer = BountyPerkHandler.getVengTimer(player);
+        final long nextVeng = vengTimer - (System.currentTimeMillis() - player.lastVeng);
+		if(nextVeng > 0) {
 			player.getActionSender().sendMessage(
-					"You can only cast Vengeance every" + (BountyPerkHandler.getVengTimer(player)/1000)+" seconds.");
+					"You can only cast Vengeance every" + (vengTimer/1000)+" seconds ("+ nextVeng +"ms remaining)");
 			return;
 		}
 		player.lastVeng = System.currentTimeMillis();

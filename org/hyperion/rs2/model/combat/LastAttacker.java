@@ -36,10 +36,10 @@ public class LastAttacker {
 			return;
         latest = name;
         lastAttackers.put(name.toLowerCase(), lastAttack + MIN_TIME);
+        lastAttack = System.currentTimeMillis();
     }
 
     public void updateLastAttacker(int npcIndex) {
-        lastAttack = System.currentTimeMillis();
         lastNpcAttack = npcIndex;
     }
 

@@ -408,10 +408,10 @@ public class SpecialAttacks {
 		} else {
             if(!ranged)
 			    deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
-					- player.cE.getOpponent().getCombat()/2;
+					- player.cE.getOpponent().getCombat();
             else
                 deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
-                        - (int)(player.cE.getOpponent().getCombat()/3.0);
+                        - (int)(player.cE.getOpponent().getCombat()/1.5);
 		}
 		int randomIncrease = Misc.random(deltaBonus / 2);
 

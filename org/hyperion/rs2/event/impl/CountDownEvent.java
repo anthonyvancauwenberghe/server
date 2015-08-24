@@ -33,7 +33,7 @@ public class CountDownEvent extends Event {
 
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)
-				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " (5x PKP)");
+				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " (5x PKP for 30min)");
 		}
 	}
 

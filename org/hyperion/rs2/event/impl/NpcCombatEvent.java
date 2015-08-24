@@ -81,8 +81,8 @@ public class NpcCombatEvent extends Event {
 	public static void agressiveNPCS() {
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try {
-                if(npc.agressiveDis < 1 && Combat.getWildLevel(npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ()) > 20)
-                    npc.agressiveDis = 2;
+                if(npc.ownerId < 1 && npc.agressiveDis < 1 && Combat.getWildLevel(npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ()) > 20)
+                    npc.agressiveDis = 3;
 				if(npc.agressiveDis > 0 && npc.ownerId > 0) {
 					Player player1 = (Player) World.getWorld().getPlayers().get(npc.ownerId);
 					if(player1 == null) {

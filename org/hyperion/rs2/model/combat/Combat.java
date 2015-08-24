@@ -1056,7 +1056,7 @@ public class Combat {
             return (((absY - 3520) / 8) + 3);
         else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
             return 57;
-        else if(absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10258)
+        else if(absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
             return 53;
         else if(DangerousPK.inDangerousPK(absX, absY))
             return 12;

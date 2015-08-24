@@ -34,7 +34,6 @@ public class LastAttacker {
 	public void updateLastAttacker(String name, boolean first) {
 		if(name.equals(clientName))
 			return;
-		lastAttack = System.currentTimeMillis();
         latest = name;
         lastAttackers.put(name.toLowerCase(), lastAttack + MIN_TIME);
     }

@@ -20,12 +20,7 @@ public class SpecialBar {
 			return;
 
         amount += FULL / 10;
-        if(player != null) {
-            if(Rank.hasAbility(player, Rank.DONATOR))
-                amount += FULL / 20;
-            if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
-                amount += FULL / 20;
-        }
+
 
 		if(amount > 100)
 			amount = 100;

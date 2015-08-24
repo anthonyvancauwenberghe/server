@@ -76,4 +76,9 @@ public abstract class NIGGERUZ extends SpecialArea {
 
     @Override
     public abstract String canEnter(Player player);
+
+    @Override
+    public boolean wildInterface() {
+        return true;
+    }
 }

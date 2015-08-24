@@ -81,4 +81,8 @@ public class HybridZone extends NIGGERUZ {
     public boolean inTheWild(Location l) {
         return l.getZ() == height && l.inPvPArea();
     }
+
+    public boolean wildInterface() {
+        return false;
+    }
 }

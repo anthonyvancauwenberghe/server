@@ -262,7 +262,7 @@ public class PlayerDeathEvent extends Event {
 							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease);
 
                             for(SpecialArea area: SpecialAreaHolder.getAreas()) {
-                                if(area.inEvent())
+                                if(area.inEvent() && area.inArea(player))
                                     pointsToAdd *= 5;
                             }
 							if(player.getKillStreak() >= 6) {

@@ -52,8 +52,8 @@ public class Bork  {
                 if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
                     player.sendf("You must wait@red@ %d @bla@more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
                     return true;
-                } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 4)  {
-                    player.sendf("You need at least 4 hours of online time to attempt Bork");
+                } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 6)  {
+                    player.sendf("You need at least 6 hours of online time to attempt Bork");
                     return true;
                 }
 
@@ -84,7 +84,7 @@ public class Bork  {
 
 
     private static final class BorkEvent extends Event {
-        private static final double PKP_MULTIPLIER = 5;
+        private static final double PKP_MULTIPLIER = 3;
         private static final double TOKEN_MULTIPLIER = 1;
         /**
          * This represents the percent which is covered by time, rest is given

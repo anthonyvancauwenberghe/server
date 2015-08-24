@@ -27,7 +27,7 @@ public final class BountyPerkHandler {
         long nextVeng = 30000;
         if(level < 0)
             return nextVeng;
-        nextVeng -= (1000 * Math.pow(2, level + 1.5));//4000, 8000, 16000 ms reductions
+        nextVeng -= (1000 * Math.pow(1.9, level + 1.2));//4000, 8000, 16000 ms reductions
         return nextVeng;
     }
 
@@ -37,7 +37,7 @@ public final class BountyPerkHandler {
             return;
         if(opponent != null)  {
             int toDrain = (int)(hit * .1);
-            toDrain *= Math.pow(1.8, level);
+            toDrain *= Math.pow(1.6, level);
             if(!opponent.equals(attacker.getBountyHunter().getTarget()))
             	toDrain = toDrain/3;
             opponent.getSkills().detractLevel(5, toDrain);

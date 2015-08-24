@@ -20,9 +20,9 @@ public class CountDownEvent extends Event {
         this.run = builder.run;
 	}
 	
-	private int counter = 200; //5minutes
+	private int counter = 60; //5minutes
 	public void execute() {
-		if(counter == 200) {
+		if(counter == 60) {
 			Events.fireNewEvent(name, true, 0, location);
 		}
 		if(--counter == 0) {

@@ -241,7 +241,7 @@ public class WeaponContainerListener implements ContainerListener {
 			player.getActionSender().sendSidebarInterface(0, 776);
 			player.getActionSender().sendInterfaceModel(777, 200, id);
 			player.getActionSender().sendString(779, name);
-		} else if(name.endsWith("c'bow") || name.equals("Karils crossbow")) {
+		} else if((name.endsWith("c'bow") || name.equals("Karils crossbow")) && id != 14684) {
 			player.getActionSender().sendSidebarInterface(0, 1749);
 			player.getActionSender().sendInterfaceModel(1750, 200, id);
 			player.getActionSender().sendString(1752, name);

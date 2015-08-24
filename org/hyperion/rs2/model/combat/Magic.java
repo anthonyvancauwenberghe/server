@@ -588,9 +588,12 @@ public class Magic {
 	                               final CombatEntity p, final int Damage, final Spell spell,
 	                               boolean castedOn, boolean splash, boolean critical) {
 		if(p.getEntity() instanceof Player) {
-			if(spell.getSpellId() == 12445 && ! splash && c.getPlayer().getSpellBook().isRegular()) {
-				p.getPlayer().setTeleBlock(
+			if(spell.getSpellId() == 12445 && c.getPlayer().getSpellBook().isRegular() && (!splash || Misc.random(4) == 1)) {
+				if(!splash)
+                    p.getPlayer().setTeleBlock(
 						System.currentTimeMillis() + 300000);
+                else
+                    p.getPlayer().setTeleBlock(System.currentTimeMillis() + 150000);
 				p.getPlayer().getActionSender()
 						.sendMessage("You are now teleblocked");
 				p.getEntity().playGraphics(Graphic.create(1843));

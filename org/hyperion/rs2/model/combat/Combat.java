@@ -815,7 +815,7 @@ public class Combat {
                         newDamg = 0;
                     }
                     if(type == 2
-                            && Combat.random(npc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
+                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
                         newDamg = 0;
                     }*/
 					//defence

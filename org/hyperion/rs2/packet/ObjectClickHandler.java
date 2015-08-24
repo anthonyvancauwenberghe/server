@@ -14,6 +14,8 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.DoorManager;
 import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 
+import java.io.IOException;
+
 public class ObjectClickHandler {
 
 	public static void clickObject(Player p, int id, int x, int y, int type) {
@@ -96,6 +98,15 @@ public class ObjectClickHandler {
 					player.sendMessage("You need an agility level of at least 70 to use this shortcut.");
 				}
 				break;
+            case 1766:
+                player.playAnimation(Animation.create(828));  //ladder climb anim
+                World.getWorld().submit(new Event(600) {
+                    @Override
+                    public void execute() throws IOException {
+                        player.setTeleportTarget(Location.create(3017, 3850, 0));
+                    }
+                });
+                break;
 			case 2213:
 			case 2214:
 			case 3045:

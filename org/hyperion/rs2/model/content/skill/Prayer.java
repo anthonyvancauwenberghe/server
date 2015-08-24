@@ -247,7 +247,7 @@ public class Prayer implements ContentTemplate {
             return;
         if(Combat.isInMulti(player.getCombat().getOpponent()))
             return;
-        final int time = damage * 150+ 1000;
+        final int time = damage * 150+ 2000;
         player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
 
 

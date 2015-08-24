@@ -319,12 +319,12 @@ public class SpecialAttacks {
 				ranged = true;
 				break;
             case 14684:
-                playerGfx = 694;
+                playerGfx = 2010;
                 specialAnimation = player.getCombat().getAtkEmote();
                 specialDis = 9;
                 specialDrain = 50;
-                specialAccuracy = 1.2;
-                maxDamg *= 1.2;
+                specialAccuracy = 1.25;
+                maxDamg *= 1.25;
                 ranged = true;
                 break;
 			case 11235:
@@ -422,8 +422,8 @@ public class SpecialAttacks {
 			tempDamage = 0;
 		else if(tempDamage > maxDamg)
 			tempDamage = maxDamg;
-
-		tempDamage = SpiritShields.applyEffects(player.cE.getOpponent(), tempDamage);
+        if(weaponId != 14684)
+		    tempDamage = SpiritShields.applyEffects(player.cE.getOpponent(), tempDamage);
 
 
 		/*

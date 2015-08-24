@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -11,6 +12,7 @@ import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Web implements ContentTemplate {
 
@@ -57,20 +59,13 @@ public class Web implements ContentTemplate {
 	                           int d) {
 		if(type == 6) {
             if(objectId == 1765) {
-                if(player.isInCombat()) {
-                    player.getActionSender().sendMessage("You cannot do this in combat!");
-                    return false;
-                }
-                if(player.getLocation().distance(Location.create(x, y, player.getLocation().getZ())) > 3) {
-                    player.getActionSender().sendMessage("You cannot use the ladder from here");
-                    return false;
-                }
-                if(player.getLastAttack().timeSinceLastAttack() > 5000 && !player.isTeleBlocked()) {
-                    Magic.teleport(player, Location.create(2272, 4682, 0), true);
-                } else {
-                    player.getActionSender().sendMessage("You're a bit busy to be climbing down a ladder");
-                    return false;
-                }
+                player.playAnimation(Animation.create(828));  //ladder climb anim
+                World.getWorld().submit(new Event(600) {
+                    @Override
+                    public void execute() throws IOException {
+                        player.setTeleportTarget(Location.create(3069, 10255, 0));
+                    }
+                });
                 return true;
             }
             slash(player, Location.create(x, y, 0), objectId);

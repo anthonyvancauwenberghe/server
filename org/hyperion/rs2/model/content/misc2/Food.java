@@ -176,6 +176,11 @@ public class Food implements ContentTemplate {
                     player.sendMessage("You are too exhasuted to use the potion!");
                     return true;
                 }
+
+                if(Location.inAttackableArea(player)) {
+                    player.sendMessage("You cannot use this potion here");
+                    return true;
+                }
 				ContentEntity.startAnimation(player, ANIMATION_DRINK_ID);
 				//client.getActionSender().sendMessage("You drink a Special restore potion.");
 

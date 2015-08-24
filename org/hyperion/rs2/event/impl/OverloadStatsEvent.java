@@ -40,7 +40,7 @@ public class OverloadStatsEvent extends Event {
 		public static int getBoost(Player player, int skillId) {
 			double boostPercentage = 0;
 			if(Location.inAttackableArea(player))
-				boostPercentage = .17;
+				boostPercentage = .15;
 			else
 				boostPercentage = MELEE_PERCENTAGE_BOOST;
 			int bonus = MELEE_BONUS;
@@ -48,10 +48,10 @@ public class OverloadStatsEvent extends Event {
 				if(!Location.inAttackableArea(player))
 					boostPercentage = NON_MELEE_PERCENTAGE_BOOST;
 				else
-					boostPercentage = .11;
+					boostPercentage = .08;
 			}
 			if(skillId == Skills.MAGIC) {
-				boostPercentage = .02;
+				boostPercentage = 0;
 			}
 			int boostedLevel = (int)(boostPercentage * player.getSkills().getLevelForExp(skillId)) + bonus;
 			int currentLevelDiff = player.getSkills().getLevel(skillId) - player.getSkills().getRealLevels()[skillId];

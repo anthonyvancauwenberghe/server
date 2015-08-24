@@ -104,117 +104,170 @@ public class QuestTab {
 	public void resetQuestTab() {
 		for(int i = 0; i < QUEST_TAB_TO_CLEAR.length; i++) {
 			player.getActionSender().sendString("", QUEST_TAB_TO_CLEAR[i]);
+			player.getActionSender().sendTooltip(QUEST_TAB_TO_CLEAR[i], "");
 		}
-		player.getActionSender().sendString("     ArteroPk", 640);
-		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Server Information -"), getId(0));
+		player.getActionSender().sendString("@or1@     ArteroPk", 640);
+		player.getActionSender().sendString("@or1@  Server Information", getId(0));
+		player.getActionSender().sendFont(getId(0), 2);
 		player.getActionSender().sendString("", getId(5));
-		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- PK Information -"), getId(6));
+		player.getActionSender().sendString("@or1@      PK Information", getId(6));
+		player.getActionSender().sendFont(getId(6), 2);
 		player.getActionSender().sendString("", getId(16));
-		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Ingame Points -"), getId(13));
+		player.getActionSender().sendString("@or1@       Ingame Points", getId(13));
+		player.getActionSender().sendFont(getId(13), 2);
 		player.getActionSender().sendString("", getId(17));
-		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Bounty Hunter -"), getId(18));
+		player.getActionSender().sendString("@or1@       Bounty Hunter", getId(18));
+		player.getActionSender().sendFont(getId(18), 2);
 		player.getActionSender().sendString("", getId(23));
-		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Locks -"), getId(24));
+		player.getActionSender().sendString("@or1@             Locks", getId(24));
+		player.getActionSender().sendFont(getId(24), 2);
 		player.getActionSender().sendString("", getId(32));
 	}
 
 	public void sendPlayerCount() {
 		int players = (int)(World.getWorld().getPlayers().size() * World.PLAYER_MULTI);
-		player.getActionSender().sendString("@or1@Players online: @gre@" + players, getId(1));
+		int id = getId(1);	//Easier to adjust later
+
+		player.getActionSender().sendString("@or1@Players online: @gre@" + players, id);
+		player.getActionSender().sendTooltip(id, "Players online");
 	}
 	public void sendStaffCount() {
+		int id = getId(2);
 		int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
-		player.getActionSender().sendString("@or1@Staff online: " + (staffOnline == 0 ? "@red@" : "@gre@") + staffOnline, getId(2));
+		player.getActionSender().sendString("@or1@Staff online: " + (staffOnline == 0 ? "@red@" : "@gre@") + staffOnline, id);
+		player.getActionSender().sendTooltip(id, "Staff online");
 	}
 
 	public void sendUptime() {
-		player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : (Events.eventName == "" ? "" : "@or1@Event: @gre@" + Events.eventName), getId(3));
+		int id = getId(3);
+		player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : (Events.eventName == "" ? "" : "@or1@Event: @gre@" + Events.eventName), id);
+		player.getActionSender().sendTooltip(id, (Events.eventName == "" ? "" : "Teleport to event"));
 	}
 
 	public void sendBonusSkill() {
-		player.getActionSender().sendString("@or1@Bonus skill: @gre@"+ Misc.getSkillName(Skills.BONUS_SKILL), getId(4));
-		//player.getActionSender().sendString("@or1@Bonus skill: @gre@All skills", getId(4));
+		int id = getId(4);
+		player.getActionSender().sendString("@or1@Bonus skill: @gre@"+ Misc.getSkillName(Skills.BONUS_SKILL), id);
+		player.getActionSender().sendTooltip(id, "Bonus skill");
 	}
 
 	public void sendKills() {
-		player.getActionSender().sendString("@or1@Kills: @gre@" + player.getKillCount(), getId(7));
+		int id = getId(7);
+		player.getActionSender().sendString("@or1@Kills: @gre@" + player.getKillCount(), id);
+		player.getActionSender().sendTooltip(id, "Yell kills");
 	}
 
 	public void sendDeaths() {
-		player.getActionSender().sendString("@or1@Deaths: @gre@" + player.getDeathCount(), getId(8));
+		int id = getId(8);
+		player.getActionSender().sendString("@or1@Deaths: @gre@" + player.getDeathCount(), id);
+		player.getActionSender().sendTooltip(id, "Yell deaths");
 	}
 
 	public void sendKdr() {
-		player.getActionSender().sendString("@or1@Kill/Death: @gre@" + player.getKDR(), getId(9));
+		int id = getId(9);
+		player.getActionSender().sendString("@or1@Kill/Death: @gre@" + player.getKDR(), id);
+		player.getActionSender().sendTooltip(id, "Yell kdr");
 	}
 
 	public void sendPvpRating() {
-		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), getId(10));
+		int id = getId(10);
+		player.getActionSender().sendString("@or1@PvP rating: @gre@" + player.getPoints().getEloRating(), id);
+		player.getActionSender().sendTooltip(id, "Yell PvP rating");
 	}
 
 	public void sendItemsKept() {
-		player.getActionSender().sendString("@or1@Items kept on death", getId(11));
+		int id = getId(11);
+		player.getActionSender().sendString("@or1@Items kept on death", id);
+		player.getActionSender().sendTooltip(id, "Open items kept on death");
 	}
 
 	public void sendPkPoints() {
-		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + Misc.shortNumber(player.getPoints().getPkPoints()), getId(14));
+		int id = getId(14);
+		player.getActionSender().sendString("@or1@ArteroPK points: @gre@" + Misc.shortNumber(player.getPoints().getPkPoints()), id);
+		player.getActionSender().sendTooltip(id, "Yell ArteroPK points");
 	}
 
 	public void sendVotePoints() {
-		player.getActionSender().sendString("@or1@Voting points: @gre@" + Misc.shortNumber(player.getPoints().getVotingPoints()), getId(15));
+		int id = getId(15);
+		player.getActionSender().sendString("@or1@Voting points: @gre@" + Misc.shortNumber(player.getPoints().getVotingPoints()), id);
+		player.getActionSender().sendTooltip(id, "Yell voting points");
 	}
 
 	public void sendDonatePoints() {
-		player.getActionSender().sendString("@or1@Donator points: @gre@" + Misc.shortNumber(player.getPoints().getDonatorPoints()), getId(16));
+		int id = getId(16);
+		player.getActionSender().sendString("@or1@Donator points: @gre@" + Misc.shortNumber(player.getPoints().getDonatorPoints()), id);
+		player.getActionSender().sendTooltip(id, "Yell donator points");
 	}
 
 	public void sendHonorPoints() {
-		player.getActionSender().sendString("@or1@Honor points: @gre@" + Misc.shortNumber(player.getPoints().getHonorPoints()), getId(17));
+		int id = getId(17);
+		player.getActionSender().sendString("@or1@Honor points: @gre@" + Misc.shortNumber(player.getPoints().getHonorPoints()), id);
+		player.getActionSender().sendTooltip(id, "Yell honor points");
 	}
 
 	public void sendBHPoints() {
-		player.getActionSender().sendString("@or1@BH points: @gre@" + player.getBountyHunter().getKills(), getId(19));
+		int id = getId(19);
+		player.getActionSender().sendString("@or1@BH points: @gre@" + player.getBountyHunter().getKills(), id);
+		player.getActionSender().sendTooltip(id, "Yell BH points");
 	}
 
 	public void sendBHTarget() {
-		player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), getId(20));
+		int id = getId(20);
+		player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), id);
 		player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), 36502);
-    }
+	}
 
 	public void sendBHEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("bhon") ? "Disable" : "Enable") + " bounty hunter", getId(21));
+		int id = getId(21);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("bhon") ? "Disable" : "Enable") + " bounty hunter", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("bhon") ? "Disable" : "Enable") + " bounty hunter");
 	}
 
 	public void sendBHPerks() {
-		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Click to see the BH perks"), getId(22));
+		int id = getId(22);
+		player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Click to see the BH perks"), id);
+		player.getActionSender().sendTooltip(id, "Check BH perks");
 	}
 
 	public void sendYellEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledYell") ? "Enable" : "Disable") + " yelling", getId(25));
+		int id = getId(25);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledYell") ? "Enable" : "Disable") + " yelling", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledYell") ? "Enable" : "Disable") + " yelling");
 	}
 
 	public void sendTriviaEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia", getId(26));
+		int id = getId(26);
+		player.getActionSender().sendString("@or1@" + (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia", id);
+		player.getActionSender().sendTooltip(id, (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia");
 	}
 
 	public void sendPkMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages", getId(27));
+		int id = getId(27);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages");
 	}
 
 	public void sendStaffMessagesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff login", getId(28));
+		int id = getId(28);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff login", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff login");
 	}
 
 	public void sendParticlesEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles", getId(29));
+		int id = getId(29);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles");
 	}
 
 	public void sendTitlesEnabled() {
-		player.getActionSender().sendString("@or1@Toggle right-click options", getId(30));
+		int id = getId(30);
+		player.getActionSender().sendString("@or1@Toggle right-click options", id);
+		player.getActionSender().sendTooltip(id, "Toggle right-click options");
 	}
 
 	public void sendExpLockEnabled() {
-		player.getActionSender().sendString("@or1@" + (player.xpLock ? "Disable" : "Enable") + " exp lock", getId(31));
+		int id = getId(31);
+		player.getActionSender().sendString("@or1@" + (player.xpLock ? "Disable" : "Enable") + " exp lock", id);
+		player.getActionSender().sendTooltip(id, (player.xpLock ? "Disable" : "Enable") + " exp lock");
 	}
 
 	public void sendRankInfo() {
@@ -222,12 +275,15 @@ public class QuestTab {
 		boolean hasRank = false;
 		for(Rank rank : Rank.values()) {
 			if(Rank.hasAbility(player, rank)) {
-				player.getActionSender().sendString((Rank.getPrimaryRank(player).equals(rank) ? "@gre@" : "@or1@") + rank.toString(), getId(getNextIndex()));
+				int id = getId(getNextIndex());
+				player.getActionSender().sendString((Rank.getPrimaryRank(player).equals(rank) ? "@gre@" : "@or1@") + rank.toString(), id);
+				player.getActionSender().sendTooltip(id, (Rank.getPrimaryRank(player).equals(rank) ? "" : "Set rank to " + rank.toString()));
 				if(!hasRank && rank != Rank.PLAYER)
 					hasRank = true;
 			}
 		}
-		player.getActionSender().sendString(!hasRank ? "" : "@yel@" + Misc.centerQuestTab("- Available ranks -"), getId(33));
+		player.getActionSender().sendString(!hasRank ? "" : "@or1@     Available ranks", getId(33));
+		player.getActionSender().sendFont(getId(33), 2);
 		if(!hasRank)
 			max_index = 33;
 	}

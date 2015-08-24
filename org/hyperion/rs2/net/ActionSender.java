@@ -708,9 +708,9 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendFont(int interfaceID, byte fontIndex) {
+    public ActionSender sendFont(int interfaceID, int fontIndex) {
         PacketBuilder bldr = new PacketBuilder(154);
-        bldr.put(fontIndex);
+        bldr.put((byte)fontIndex);
         bldr.putShort(interfaceID);
         player.write(bldr.toPacket());
         return this;

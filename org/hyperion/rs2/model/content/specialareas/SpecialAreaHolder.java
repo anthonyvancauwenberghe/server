@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.specialareas;
 
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.OSPK;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.rs2.model.content.specialareas.impl.NewGamePK;
@@ -23,6 +24,7 @@ public class SpecialAreaHolder {
         map.put("purepk", new PurePk());
         map.put("newgamepk", new NewGamePK());
         map.put("hybrid", new HybridZone());
+        map.put("ospk", new OSPK());
 
         for(final Map.Entry<String, SpecialArea> area : map.entrySet()) {
             CommandHandler.submit(area.getValue().command(area.getKey()));

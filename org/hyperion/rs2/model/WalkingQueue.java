@@ -347,7 +347,7 @@ public class WalkingQueue {
 				player.isInMuli = false;
 				player.getActionSender().sendMultiZone(0);
 			}
-			if(player.wildernessLevel != wildLevel && !OSPK.inArea(player) && !DangerousPK.inDangerousPK(player)) {
+			if(player.wildernessLevel != wildLevel && !DangerousPK.inDangerousPK(player)) {
 					player.wildernessLevel = wildLevel;
                 boolean special = false;
                 for(SpecialArea area : SpecialAreaHolder.getAreas()) {
@@ -361,16 +361,6 @@ public class WalkingQueue {
 			if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
                 player.getActionSender().sendLastManStandingStatus(true);
             }
-			if(OSPK.inArea(player)) {
-				if(player.isOverloaded())
-					player.setOverloaded(false);
-				if(!OSPK.canEnter(player)) {
-					Magic.teleport(player, "home");
-					player.sendMessage("You cannot enter the OSPK'ing with what you're using.");
-				}
-				player.wildernessLevel = 12;
-				player.getActionSender().sendPvPLevel(false);
-			}
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
 					player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);

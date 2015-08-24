@@ -351,8 +351,7 @@ public class Location {
 				|| (player.cE.getAbsX() >= 2460 && player.cE.getAbsX() <= 2557 && player.cE.getAbsY() >= 3264 && player.cE.getAbsY() <= 3335)
 				|| (player.cE.getAbsX() >= 3271 && player.cE.getAbsX() <= 3307 && player.cE.getAbsY() >= 3012 && player.cE.getAbsY() <= 3039) 
 				|| WalkingQueue.hasSnowball(player)
-				|| DangerousPK.inDangerousPK(player)
-				|| OSPK.inArea(player);
+				|| DangerousPK.inDangerousPK(player);
 	}
 	
 	public boolean cannotMax() { 

@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.util.Time;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,8 @@ import org.hyperion.rs2.model.combat.Magic;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class SpecialArea {
+
+    public long eventTime = 0L;
 
 
     public void check(final Player player) {
@@ -50,6 +53,14 @@ public abstract class SpecialArea {
                 return true;
             }
         };
+    }
+
+    public void createEvent() {
+        eventTime = System.currentTimeMillis();
+    }
+
+    public boolean inEvent() {
+        return System.currentTimeMillis() - eventTime < Time.THIRTY_MINUTES;
     }
 
     public abstract boolean canSpawn();

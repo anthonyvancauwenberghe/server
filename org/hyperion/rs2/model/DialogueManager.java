@@ -997,7 +997,7 @@ public class DialogueManager {
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 153:
-				OSPK.enter(player);
+				SpecialAreaHolder.get("ospk").ifPresent(s -> s.enter(player));
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 154:

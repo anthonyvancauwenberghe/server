@@ -13,6 +13,8 @@ import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -256,7 +258,13 @@ public class PlayerDeathEvent extends Event {
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)
                                 pkpIncrease = 40;
+
 							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease);
+
+                            for(SpecialArea area: SpecialAreaHolder.getAreas()) {
+                                if(area.inEvent())
+                                    pointsToAdd *= 5;
+                            }
 							if(player.getKillStreak() >= 6) {
                                 AchievementHandler.progressAchievement(player, "Killstreak");
 								for(Player p : World.getWorld().getPlayers())

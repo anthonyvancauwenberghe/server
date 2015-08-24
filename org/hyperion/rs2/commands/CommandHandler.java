@@ -45,6 +45,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
+import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.model.Ban;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.GameObject;
@@ -83,6 +84,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
@@ -650,7 +652,8 @@ public class CommandHandler {
 		submit(new Command("ospk", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				return OSPK.enter(player);
+                SpecialAreaHolder.get("ospk").ifPresent(s -> s.enter(player));
+				return true;
 			}
 		});
 		submit(new Command("object", Rank.DEVELOPER) {
@@ -1969,7 +1972,8 @@ public class CommandHandler {
 
 		submit(new Command("startminigame", Rank.COMMUNITY_MANAGER) {
 			public boolean execute(final Player player, final String input) throws Exception {
-				World.getWorld().submit(new CountDownEvent());
+                int builder = Integer.parseInt(filterInput(input));
+				World.getWorld().submit(new CountDownEvent(ServerMinigame.builders[builder]));
 				return true;
 			}
 		});

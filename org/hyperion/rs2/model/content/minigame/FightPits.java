@@ -128,7 +128,6 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public static void startEvent() {
-		Events.resetEvent();
 		NEXT_GAME_EVENT = true;
 	}
 	

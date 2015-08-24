@@ -6,24 +6,34 @@ import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 
 public class CountDownEvent extends Event {
+
+    final Runnable run;
+    final String command;
+    final String name;
+    final Location location;
 	
-	public CountDownEvent() {
+	public CountDownEvent(ServerMinigame.CountDownEventBuilder builder) {
 		super(1000);
+        this.name = builder.name;
+        this.command = builder.command;
+        this.location = builder.location;
+        this.run = builder.run;
 	}
 	
-	private int counter = 300; //5minutes
+	private int counter = 200; //5minutes
 	public void execute() {
-		if(counter == 300) {
-			Events.fireNewEvent("Fight pits", true, 0, Location.create(2399, 5178, 0));
+		if(counter == 200) {
+			Events.fireNewEvent(name, true, 0, location);
 		}
 		if(--counter == 0) {
-			FightPits.startEvent();
-			this.stop();
+			run.run();
+            Events.resetEvent();
+            this.stop();
 		}
 
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)
-				npc.forceMessage("Fight pits event in "+counter+" seconds! Go to ::fightpits");
+				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " (5x PKP)");
 		}
 	}
 

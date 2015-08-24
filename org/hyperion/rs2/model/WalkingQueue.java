@@ -349,12 +349,6 @@ public class WalkingQueue {
 			}
 			if(player.wildernessLevel != wildLevel && !DangerousPK.inDangerousPK(player)) {
 					player.wildernessLevel = wildLevel;
-                boolean special = false;
-                for(SpecialArea area : SpecialAreaHolder.getAreas()) {
-                    if(!area.wildInterface() && area.inArea(player))
-                        special = true;
-                }
-                if(!special || wildLevel == -1)
 				    player.getActionSender().sendWildLevel(player.wildernessLevel);
 
 			} 

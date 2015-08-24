@@ -111,8 +111,6 @@ public class GlobalItemManager {
                 if(item != 2422) {
                     player.getLogManager().add(LogEntry.pickupItem(globalItem));
 			        player.getInventory().add(globalItem.getItem());
-                    if(!ItemsTradeable.isTradeable(item))
-                        PlayerSaving.getSaving().save(player);
                 }
 			    removeItem(globalItem);
 			    globalItem.destroy();

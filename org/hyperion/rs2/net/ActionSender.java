@@ -701,18 +701,18 @@ public class ActionSender {
     }
 
     public ActionSender sendTooltip(int interfaceID, String tooltip) {
-        PacketBuilder bldr = new PacketBuilder(173, Type.VARIABLE_SHORT);
+        /*PacketBuilder bldr = new PacketBuilder(173, Type.VARIABLE_SHORT);
         bldr.putRS2String(tooltip);
         bldr.putShort(interfaceID);
-        player.write(bldr.toPacket());
+        player.write(bldr.toPacket());*/
         return this;
     }
 
     public ActionSender sendFont(int interfaceID, int fontIndex) {
-        PacketBuilder bldr = new PacketBuilder(154);
-        bldr.put((byte)fontIndex);
+        /*PacketBuilder bldr = new PacketBuilder(154);
+        bldr.put(fontIndex);
         bldr.putShort(interfaceID);
-        player.write(bldr.toPacket());
+        player.write(bldr.toPacket());*/
         return this;
     }
 

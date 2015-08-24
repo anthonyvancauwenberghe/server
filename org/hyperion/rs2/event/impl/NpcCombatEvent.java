@@ -83,22 +83,7 @@ public class NpcCombatEvent extends Event {
 			try {
                 if(npc.ownerId < 1 && npc.agressiveDis < 1 && Combat.getWildLevel(npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ()) > 20)
                     npc.agressiveDis = 3;
-				if(npc.ownerId > 0) {
-					Player player1 = (Player) World.getWorld().getPlayers().get(npc.ownerId);
-					if(player1 == null) {
-						npc.cE.setOpponent(null);
-						npc.serverKilled = true;
-						npc.health = 0;
-						if(!npc.isDead()) {
-							World.getWorld().unregister(npc);
-						}
-						npc.setDead(true);
-						continue;
-					}
-					if(player1.getCombat().getOpponent() != null) {
-						npc.cE.setOpponent(player1.cE.getOpponent());
-					}
-				} else if(npc.agressiveDis > 0) {
+				if(npc.agressiveDis > 0) {
 					//complicated agressecode used for all players
 					int dis = 1000;
 					Player player2 = null;

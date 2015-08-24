@@ -3,6 +3,7 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.log.LogEntry;
+import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -110,6 +111,8 @@ public class GlobalItemManager {
                 if(item != 2422) {
                     player.getLogManager().add(LogEntry.pickupItem(globalItem));
 			        player.getInventory().add(globalItem.getItem());
+                    if(!ItemsTradeable.isTradeable(item))
+                        PlayerSaving.getSaving().save(player);
                 }
 			    removeItem(globalItem);
 			    globalItem.destroy();

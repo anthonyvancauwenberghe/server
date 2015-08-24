@@ -84,7 +84,7 @@ public class Bork  {
 
 
     private static final class BorkEvent extends Event {
-        private static final double PKP_MULTIPLIER = 3;
+        private static final double PKP_MULTIPLIER = 5;
         private static final double TOKEN_MULTIPLIER = 1;
         /**
          * This represents the percent which is covered by time, rest is given
@@ -125,7 +125,7 @@ public class Bork  {
         public void giveReward(boolean kill) {
             int percentIncrease = (int)percentIncrease();
             int tokens = (int)(percentIncrease * TOKEN_MULTIPLIER);
-            int pkt = (int)(percentIncrease * PKP_MULTIPLIER);
+            int pkt = (int)(percentIncrease * PKP_MULTIPLIER/2);
             if(!kill)
             {
                 pkt = pkt/3;

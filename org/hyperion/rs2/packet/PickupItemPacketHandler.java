@@ -1,10 +1,7 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.saving.PlayerSaving;
 
@@ -39,6 +36,7 @@ public class PickupItemPacketHandler implements PacketHandler {
 			@Override
 			public void execute() {
                 if(loc.distance(player.getLocation()) == 1 && timeout > 0) {
+
                     World.getWorld().getGlobalItemManager().pickupItem(player, itemID, itemX, itemY);
                     player.playAnimation(Animation.create(7270));
                     player.getWalkingQueue().finish();

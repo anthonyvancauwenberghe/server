@@ -64,6 +64,7 @@ public class Web implements ContentTemplate {
                     @Override
                     public void execute() throws IOException {
                         player.setTeleportTarget(Location.create(3069, 10255, 0));
+                        this.stop();
                     }
                 });
                 return true;

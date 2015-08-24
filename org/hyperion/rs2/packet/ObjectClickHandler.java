@@ -104,6 +104,7 @@ public class ObjectClickHandler {
                     @Override
                     public void execute() throws IOException {
                         player.setTeleportTarget(Location.create(3017, 3850, 0));
+                        this.stop();
                     }
                 });
                 break;

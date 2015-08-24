@@ -51,7 +51,7 @@ public class OverloadStatsEvent extends Event {
 					boostPercentage = .08;
 			}
 			if(skillId == Skills.MAGIC) {
-				boostPercentage = 0;
+				boostPercentage = 0;;
 			}
 			int boostedLevel = (int)(boostPercentage * player.getSkills().getLevelForExp(skillId)) + bonus;
 			int currentLevelDiff = player.getSkills().getLevel(skillId) - player.getSkills().getRealLevels()[skillId];

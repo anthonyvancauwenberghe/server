@@ -186,7 +186,7 @@ public class Food implements ContentTemplate {
 
 				player.getSpecBar().increment(SpecialBar.FULL / 2);
 				player.getSpecBar().sendSpecAmount();
-				player.specPotionTimer = System.currentTimeMillis();
+				player.specPotionTimer = System.currentTimeMillis();;
 				break;
             case 17652:
                 if(player.getExtraData().get(PrayerRenwalEvent.KEY) != null) {

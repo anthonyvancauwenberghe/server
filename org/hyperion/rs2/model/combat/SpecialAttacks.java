@@ -238,6 +238,7 @@ public class SpecialAttacks {
 				specialDrain = 50;
                 break;
             case 17646:
+                ;
                 playerGfx = 340;
                 specialAnimation = 1667;
                 specialDis = 1;

@@ -768,6 +768,8 @@ public class Combat {
 				 * combatEntity.getOpponent().setOpponent(combatEntity);
 				 * } }
 				 */
+                if(combatEntity.getOpponent().getEntity() instanceof Player)
+                    combatEntity.getOpponent().getPlayer().getLastAttack().updateLastAttacker(combatEntity.getNPC().getIndex());
 				combatEntity.getOpponent().lastHit = System.currentTimeMillis();
 				// successful
 			} else if(type == 1) {
@@ -919,7 +921,11 @@ public class Combat {
 					else
 						// otherwise there attacking a player in singles
 						return "blablabla";
-				}
+                 //not summoned npc
+				} else {
+                    if(opponent.getEntity() instanceof Player && System.currentTimeMillis() - opponent.lastHit < 5000 && opponent.getPlayer().getLastAttack().getLastNpcAttack() != combatEntity.getNPC().getIndex())
+                        return "blablabla";
+                }
 			}
 			if((combatEntity.getEntity() instanceof Player)
 					&& (opponent.getEntity() instanceof Player)
@@ -941,7 +947,7 @@ public class Combat {
 				/**
 				 * If you are in combat, is the person who recently attacked you = person who u wanna atk?
 				 */
-				if(combatEntity.getPlayer().getLastAttack().timeSinceLastAttack() < 5000) {
+				if(System.currentTimeMillis() - combatEntity.lastHit < 5000) {
 					if(! combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
 						return "I am already in combat";
 				}

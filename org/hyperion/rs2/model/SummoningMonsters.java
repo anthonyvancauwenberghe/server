@@ -36,6 +36,9 @@ public class SummoningMonsters {
 		case 6869:
 			return NPCDefinition.create(id, 250, 139, new int[]{10, 10, 10, 10, 10, 10, 10, 10, 10, 10}, 
 					8305, 8304, new int[]{8303}, 1, "Wolpertinger", 0);
+            case 6873:
+                return NPCDefinition.create(id, 250, 239, new int[]{10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
+                    0, 0, new int[]{0}, 1, "Pack Yak", 0);
 		}
 		return null;
 	}

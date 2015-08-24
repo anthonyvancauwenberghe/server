@@ -19,6 +19,7 @@ public class LastAttacker {
     private String latest;
 	private String clientName;
 	private long lastAttack;
+    private int lastNpcAttack;
 
 	public LastAttacker(String clientName) {
         latest = "";
@@ -38,6 +39,11 @@ public class LastAttacker {
         lastAttackers.put(name.toLowerCase(), lastAttack + MIN_TIME);
     }
 
+    public void updateLastAttacker(int npcIndex) {
+        lastAttack = System.currentTimeMillis();
+        lastNpcAttack = npcIndex;
+    }
+
 	public boolean contains(final String name) {
         final long time = lastAttackers.getOrDefault(name.toLowerCase(), 0L) - System.currentTimeMillis();
         //System.out.println("Time: "+time);
@@ -50,6 +56,10 @@ public class LastAttacker {
 
     public String getName() {
         return latest;
+    }
+
+    public int getLastNpcAttack() {
+        return lastNpcAttack;
     }
 
 }

@@ -113,6 +113,7 @@ public class SpecialBar {
 			case 15704:
 			case 15015:
 			case 15016:
+			case 14684:
 				player.getActionSender().sendFrame171(0, 7549);
 				sendColouredBar(7561);
 				break;

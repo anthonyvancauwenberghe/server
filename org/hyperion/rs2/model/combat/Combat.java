@@ -592,7 +592,6 @@ public class Combat {
          * Zanik's crossbow prayer take-off
          */
 
-        Prayer.zaniksEffect(combatEntity.getPlayer(), damg);
 
 		if(opponent.getEntity() instanceof Player) {
 			damg = opponent.getPlayer().getInflictDamage(damg, combatEntity.getEntity(), false, combatStyle);

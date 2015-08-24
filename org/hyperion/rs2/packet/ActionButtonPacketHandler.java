@@ -1118,10 +1118,12 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
 			case 151:
 				player.autoRetailate = ! player.autoRetailate;
-				break;
+                player.getCombat().setOpponent(null);
+                break;
 			case 150:
 				player.autoRetailate = ! player.autoRetailate;
-				break;
+                player.getCombat().setOpponent(null);
+                break;
 			case 25834:
 				if(! player.splitPriv) {
 					player.splitPriv = true;

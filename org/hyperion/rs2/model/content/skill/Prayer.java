@@ -241,34 +241,14 @@ public class Prayer implements ContentTemplate {
 
 
     public static void zaniksEffect(final Player player, int damage) {
-        if(damage < 7)
-            return;
         if(player == null || player.getCombat().getOpponent() == null)
             return;
         if(player.getEquipment().getItemId(Equipment.SLOT_WEAPON) != 14684)
             return;
         if(Combat.isInMulti(player.getCombat().getOpponent()))
             return;
-        final int time = damage * 80;
+        final int time = damage * 150+ 1000;
         player.getCombat().getOpponent()._getPlayer().ifPresent(opp -> {
-
-
-
-            for(int i : Prayers.OVERHEADS) {
-
-
-                if(player.getPrayers().isEnabled(i)) {
-                    final int idx = Prayer.getIndex(i);
-                    if(i == -1)
-                        continue;
-                    PrayerIcon p2 = prayers.get(idx);
-                    player.getActionSender().sendClientConfig(p2.getFrame(), 0);
-                    player.getPrayers().setEnabled(p2.getId(), false);
-                    player.setDrainRate(getPryDrain(player));
-                    setHeadIcon(player, p2);
-                    player.sendMessage("The gods do not appreciate hypocrisy");
-                }
-            }
 
 
             for(int i : Prayers.OVERHEADS) {
@@ -288,7 +268,6 @@ public class Prayer implements ContentTemplate {
             }
 
             opp.getPrayers().disableFor(time, Prayers.OVERHEADS);
-            player.getPrayers().disableFor(time, Prayers.OVERHEADS);
 
 
         });

@@ -89,7 +89,7 @@ public class SpecialAttacks {
 				ranged = true;
 				specialAnimation = 10504;
 				playerGfx = 1836;
-				specialAccuracy = 1.9;
+				specialAccuracy = 1.4;
 				specialDrain = 50;
 				specialDis = 6;
 				break;
@@ -97,7 +97,7 @@ public class SpecialAttacks {
 				ranged = true;
 				specialAnimation = 10501;
 				playerGfx = 1838;
-				specialAccuracy = 1.5;
+				specialAccuracy = 1.2;
 				specialDrain = 50;
 				specialDis = 6;
 				break;
@@ -311,13 +311,22 @@ public class SpecialAttacks {
 				break;
 			case 15241:
 				playerGfx = 2141;
-				specialAnimation = 12153;
+				specialAnimation = player.getCombat().getAtkEmote();
 				specialDis = 9;
 				specialDrain = 50;
 				specialAccuracy = 1.15;
 				player.getCombat().predictedAtk = System.currentTimeMillis() + 700;
 				ranged = true;
 				break;
+            case 14684:
+                playerGfx = 694;
+                specialAnimation = player.getCombat().getAtkEmote();
+                specialDis = 9;
+                specialDrain = 50;
+                specialAccuracy = 1.2;
+                maxDamg *= 1.2;
+                ranged = true;
+                break;
 			case 11235:
 			case 15701:
 			case 15702:
@@ -420,6 +429,9 @@ public class SpecialAttacks {
 		/*
 		 * Determine if damage is critical..
 		 */
+
+        Prayer.zaniksEffect(combatEntity.getPlayer(), tempDamage);
+
         final CombatEntity oldEntity = player.getCombat().getOpponent();
         if(oldEntity.getEntity() instanceof Player)
             tempDamage = oldEntity.getPlayer().getInflictDamage(tempDamage, player, false, combatStyle);
@@ -548,6 +560,7 @@ public class SpecialAttacks {
 					}
 				});
 				break;
+
 			case 11235:
 			case 15701:
 			case 15702:

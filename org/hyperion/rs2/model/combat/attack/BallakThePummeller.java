@@ -27,7 +27,7 @@ public class BallakThePummeller implements Attack {
     }
 
     private void handleFlames(NPC npc) {
-        npc.forceMessage("BUUUUUUURRRRRRRRRRNNNNNNNN!");
+        npc.forceMessage("BUUUUUUURRRRRRRRRNNNNNNNN!");
         npc.cE.doAnim(13605);
         for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
             int unlucky = Combat.random(1);

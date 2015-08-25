@@ -90,6 +90,7 @@ public class BallakThePummeller implements Attack {
         } else if(n.cE.predictedAtk > System.currentTimeMillis()) {
             return 6;
         }
+        int distance = attack.getEntity().getLocation().distance(n.getLocation());
         if(specialDelay <= System.currentTimeMillis()) {
             int special = Combat.random(2);
             switch (special) {
@@ -111,6 +112,8 @@ public class BallakThePummeller implements Attack {
             n.getCombat().doAtkEmote();
             Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MELEE_DAMAGE), 0, MAX_MELEE_DAMAGE), 200, 0);
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;
+            return 5;
+        } else if(distance <= 10) {
             return 5;
         } else {
             return 0;

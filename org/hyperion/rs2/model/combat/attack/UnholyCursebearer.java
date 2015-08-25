@@ -74,6 +74,7 @@ public class UnholyCursebearer implements Attack {
         } else if(specialDelay > System.currentTimeMillis()) {
             return 6;
         }
+        n.cE.setFreezeTimer(1000000000);
         if (n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 10)) {
             switch (special) {
                 case 0:

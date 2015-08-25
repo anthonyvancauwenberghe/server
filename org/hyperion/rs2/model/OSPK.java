@@ -33,7 +33,7 @@ public class OSPK extends NIGGERUZ {
         if(!builder.toString().equalsIgnoreCase(base))
             return builder.toString();
 		if(!player.getPrayers().isDefaultPrayerbook())
-			return "You are on curses!";
+			return "You must be on the normal prayer book!";
 		return "";
 	}
 	

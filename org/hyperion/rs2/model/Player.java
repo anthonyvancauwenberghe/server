@@ -1903,15 +1903,16 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 			}
 		}
-		if(damg >= 10) {
-			if (source.cE.getOpponent().getPlayer().getEquipment().get(Equipment.SLOT_RING) != null && source.cE.getOpponent().getPlayer().getEquipment().get(Equipment.SLOT_RING).getId() == WildernessBossEvent.RING_ID) {
+        //so many fucking null checks required + PUT THIS SOMEPLACE ELSE WHY THE FUCK IS IT HERE
+		/*if(damg >= 10) {
+			if (source != null && source.cE.getOpponent() != null && source.cE.getOpponent().getPlayer().getEquipment().get(Equipment.SLOT_RING).getId() == WildernessBossEvent.RING_ID) {
 				Hit hit = new Hit(((int) (damg * .1)), hitType, style);
 				if (source instanceof Player)
 					source.cE.getPlayer().inflictDamage(hit, source.cE.getOpponent().getEntity());
 				else
 					source.cE.getNPC().inflictDamage(hit, source.cE.getOpponent().getEntity());
 			}
-		}
+		}  */
 		Hit hit = new Hit(damg, hitType, style);
 		inflictDamage(hit, source);
 		Prayer.redemption(this);

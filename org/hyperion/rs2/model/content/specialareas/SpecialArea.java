@@ -23,7 +23,7 @@ public abstract class SpecialArea {
         final String enter = canEnter(player);
         if(inArea(player) && enter.length() > 1) {
             exit(player);
-            player.sendMessage(enter);
+            player.sendImportantMessage(enter);
         }
     }
 

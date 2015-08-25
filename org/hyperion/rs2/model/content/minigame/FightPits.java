@@ -79,7 +79,7 @@ public class FightPits implements ContentTemplate {
 				
 				//melee
 				add(Arrays.asList(new Integer[] {
-					6735, 6737, 11732, 3105, 4131, 1305, 11694, 11696, 11700, 1725
+					6735, 6737, 11732, 3105, 4131, 1305, 11696, 11700, 1725
 				}));
 				
 				//range

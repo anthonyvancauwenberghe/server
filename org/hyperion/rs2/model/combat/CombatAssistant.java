@@ -1144,7 +1144,7 @@ public class CombatAssistant {
 			rangeAtk *= 1.15;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             rangeAtk = p.getDungeoneering().perks.boost(Constants.RANGE, true, rangeAtk);
-		return (int) (((rangeAtk) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED)/1.75)));
+		return (int) (((rangeAtk * 0.75) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED)/1.75)));
 	}
 
 	public static int calculateRangeDefence(Entity entity) {

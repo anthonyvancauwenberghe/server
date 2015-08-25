@@ -8,6 +8,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -1900,6 +1901,15 @@ public class Player extends Entity implements Persistable, Cloneable{
 				return 0;
 			}catch(Exception e) {
 
+			}
+		}
+		if(damg >= 10) {
+			if (source.cE.getOpponent().getPlayer().getEquipment().get(Equipment.SLOT_RING) != null && source.cE.getOpponent().getPlayer().getEquipment().get(Equipment.SLOT_RING).getId() == WildernessBossEvent.RING_ID) {
+				Hit hit = new Hit(((int) (damg * .1)), hitType, style);
+				if (source instanceof Player)
+					source.cE.getPlayer().inflictDamage(hit, source.cE.getOpponent().getEntity());
+				else
+					source.cE.getNPC().inflictDamage(hit, source.cE.getOpponent().getEntity());
 			}
 		}
 		Hit hit = new Hit(damg, hitType, style);

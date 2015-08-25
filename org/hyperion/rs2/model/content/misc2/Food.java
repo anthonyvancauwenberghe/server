@@ -168,19 +168,16 @@ public class Food implements ContentTemplate {
 				antiFire(player, true);
 				break;
 			case 2430:
-				if(foodItem.getId() == 2430 && System.currentTimeMillis() - player.specPotionTimer < 20000) {
-					ContentEntity.sendMessage(player, "You can only drink special restore potions every 20 seconds!");
+				if(foodItem.getId() == 2430 && System.currentTimeMillis() - player.specPotionTimer < 30000) {
+					ContentEntity.sendMessage(player, "You can only drink special restore potions every 30 seconds!");
 					return true;
 				}
-                if(System.currentTimeMillis() - player.getExtraData().getLong("lastspecialatk") < 2000) {
+                if(System.currentTimeMillis() - player.getExtraData().getLong("lastspecialatk") < 10000) {
                     player.sendMessage("You are too exhasuted to use the potion!");
                     return true;
                 }
 
-                if(Location.inAttackableArea(player)) {
-                    player.sendMessage("You cannot use this potion here");
-                    return true;
-                }
+
 				ContentEntity.startAnimation(player, ANIMATION_DRINK_ID);
 				//client.getActionSender().sendMessage("You drink a Special restore potion.");
 

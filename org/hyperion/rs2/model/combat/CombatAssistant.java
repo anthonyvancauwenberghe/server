@@ -1169,7 +1169,7 @@ public class CombatAssistant {
                 rangeDef *= 1.23;
 			return (int)(rangeDef) + (int)(player.getBonus().get(EquipmentStats.DEFENCE_RANGED)/1.75) + 74;
 		} else //NPCs
-			return (int)(entity.cE.getCombat()/1.6) + 40;
+			return (int)(entity.cE.getCombat()/1.5) + 64;
 	}
 
 	public static int calculateMageAtk(Player player) {
@@ -1186,7 +1186,7 @@ public class CombatAssistant {
         if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             bonus = (int)player.getDungeoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl/3 +
-				(int)(bonus * 1.43);
+				(int)(bonus * 1.48) + 10;
 	}
 
 	public static int calculateMageDef(Entity entity) {
@@ -1221,9 +1221,9 @@ public class CombatAssistant {
 			} else if(player.getPrayers().isEnabled(27))
                 mageLevel *= 1.23;
 			
-			return (int)(bonus * 1.36) + defLevel / 4 + mageLevel / 3;
+			return (int)(bonus * 1.36) + defLevel / 4 + mageLevel / 3 + 15;
 		} else //NPCs
-			return (int)(entity.cE.getCombat()/2);
+			return (int)(entity.cE.getCombat()/2.2) + 20;
 	}
 
 	public static int bestMeleeDef(Player player) {

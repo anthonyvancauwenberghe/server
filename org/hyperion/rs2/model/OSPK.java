@@ -18,27 +18,31 @@ public class OSPK extends NIGGERUZ {
 	}
 	
 	public String canEnter(Player player) {
+        final String base = "You cannot have: ";
+        final StringBuilder builder = new StringBuilder(base);
 		for(Item i : player.getEquipment().toArray()) {
 			if(i != null)
 				if(!valid(i.getId()))
-					return "You are wearing an item with an id > 11000";
+					builder.append(i.getDefinition().getName()).append(", ");
 		}
 		for(Item i : player.getInventory().toArray()) {
 			if(i != null)
 				if(!valid(i.getId()))
-					return "Your inventory contains an item with an id > 11000";
+                    builder.append(i.getDefinition().getName()).append(", ");
 		}
+        if(!builder.toString().equalsIgnoreCase(base))
+            return builder.toString();
 		if(!player.getPrayers().isDefaultPrayerbook())
 			return "You are on curses!";
 		return "";
 	}
 	
 	private static LinkedList<Integer> exceptions = new LinkedList<Integer>(Arrays.asList(new Integer[]{
-		11732, 20072
+		13351
 	}));
 
 	private static boolean valid(int id) {
-		return id < 11000 || exceptions.contains(id);
+		return id < 12000 || exceptions.contains(id);
 	}
 
 	

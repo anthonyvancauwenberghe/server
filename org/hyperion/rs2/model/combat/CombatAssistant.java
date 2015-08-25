@@ -1144,7 +1144,7 @@ public class CombatAssistant {
 			rangeAtk *= 1.15;
         if(p.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             rangeAtk = p.getDungeoneering().perks.boost(Constants.RANGE, true, rangeAtk);
-		return (int) (((rangeAtk) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED)/1.65)));
+		return (int) (((rangeAtk) + (p.getBonus().get(EquipmentStats.ATTACK_RANGED)/1.75)));
 	}
 
 	public static int calculateRangeDefence(Entity entity) {
@@ -1167,7 +1167,7 @@ public class CombatAssistant {
 				rangeDef *= 1.15;
 			} else if (player.getPrayers().isEnabled(27) || player.getPrayers().isEnabled(26))
                 rangeDef *= 1.23;
-			return (int)(rangeDef) + (int)(player.getBonus().get(EquipmentStats.DEFENCE_RANGED)/1.75) + 74;
+			return (int)(rangeDef * .88) + (int)(player.getBonus().get(EquipmentStats.DEFENCE_RANGED)/1.75) + 74;
 		} else //NPCs
 			return (int)(entity.cE.getCombat()/1.5) + 64;
 	}
@@ -1281,7 +1281,7 @@ public class CombatAssistant {
             bonus *= (1.33 - ratio/3);
         }
 
-		return (int) ((meleeAtk * .7 + (bonus * .9)));
+		return (int) ((meleeAtk * .7 + (bonus * .8)));
 
 	}
 
@@ -1314,7 +1314,7 @@ public class CombatAssistant {
 					bonus = player.getBonus().get(i);
 				}
 			}
-			return (int) (meleeDef * .8 + bonus * .7) + 74;
+			return (int) (meleeDef * .7 + bonus * .7) + 74;
 		} else {
 			return (int)(entity.cE.getCombat()) + 64;
 		}

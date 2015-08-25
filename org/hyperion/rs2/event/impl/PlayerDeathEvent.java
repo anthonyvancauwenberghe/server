@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
+import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
@@ -292,7 +293,15 @@ public class PlayerDeathEvent extends Event {
 					DeathDrops.dropsAtDeath(player, player);
 				}
 			}
-			player.setTeleportTarget(DEATH_LOCATION(), false);
+            boolean inSpecial = false;
+            for(SpecialArea area : SpecialAreaHolder.getAreas()) {
+                if(area.inArea(player) && area instanceof NIGGERUZ) {
+                    inSpecial = true;
+                    player.setTeleportTarget(area.getDefaultLocation(), false);
+                }
+            }
+            if(!inSpecial)
+			    player.setTeleportTarget(DEATH_LOCATION(), false);
 			player.getActionSender().sendMessage(getDeathMessage());
 		}
 		player.setSkulled(false);

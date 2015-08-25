@@ -19,7 +19,7 @@ public class OSPK extends NIGGERUZ {
 	
 	public String canEnter(Player player) {
         final String base = "You cannot have: ";
-        final StringBuilder builder = new StringBuilder(base);
+        final StringBuilder builder = new StringBuilder().append(base);
 		for(Item i : player.getEquipment().toArray()) {
 			if(i != null)
 				if(!valid(i.getId()))

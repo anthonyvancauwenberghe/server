@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
+import org.madturnip.tools.DumpNpcDrops;
 
 /**
  * A class to start both the file and game servers.
@@ -106,7 +107,7 @@ public class Server {
 		try {
 			//new FileServer().bind().start();
 			new RS2Server().start();
-			//DumpNpcDrops.startDump4();
+			//DumpNpcDrops.startDump2();
             PossibleHacksHolder.init();
             RoomDefinition.load();
             ClanManager.load();

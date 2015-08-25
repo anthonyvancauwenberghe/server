@@ -46,9 +46,7 @@ public class Tutorial implements ContentTemplate {
 
     public static void giveReward(Player player) {
         player.getInventory().add(new Item(15273, 100));
-        player.getInventory().add(new Item(13889, 1));
-        player.getInventory().add(new Item(13895, 1));
-        player.sendImportantMessage("The Vesta gear has a 20% chance of being destroyed on death!");
+        player.sendImportantMessage("Check your bank for your starter pack!");
     }
 
     @Override

@@ -5,7 +5,9 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadDrinkingEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.event.impl.PrayerRenwalEvent;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -260,8 +262,11 @@ public class Food implements ContentTemplate {
 			}
 			return true;
 		}
-		if(foodItem.getHeal() < 0 || (foodItem.getHeal() > 0)) {
-			ContentEntity.heal(player, foodItem.getHeal());
+		int heal = foodItem.getHeal();
+		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
+			heal += 3;
+		if(heal < 0 || (heal > 0)) {
+			ContentEntity.heal(player, heal);
 		}
 		if(foodItem.getSkillId() != - 1 && foodItem.getSkillAdd() != - 1) {
 			ContentEntity.increaseSkill(player, foodItem.getSkillId(), foodItem.getSkillAdd());
@@ -274,7 +279,9 @@ public class Food implements ContentTemplate {
 
 	private void rocktail(Player player, int slot) {
 		int heal = 23;
-		int newHpLevel = player.getSkills().getLevel(Skills.HITPOINTS) + 23;
+		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
+			heal += 3;
+		int newHpLevel = player.getSkills().getLevel(Skills.HITPOINTS) + heal;
 		if(newHpLevel >= player.getSkills().calculateMaxLifePoints() + 10) {
 			heal = (player.getSkills().calculateMaxLifePoints() + 10) - player.getSkills().getLevel(3);
 		}
@@ -288,6 +295,8 @@ public class Food implements ContentTemplate {
         if(player.duelRule[DuelRule.DuelRules.FOOD.ordinal()])
             return;
         int heal = healAmt;
+		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
+			heal += 3;
         player.heal(heal, true);
         ContentEntity.startAnimation(player, ANIMATION_EAT_ID);
         ContentEntity.deleteItem(player, id, slot, 1);

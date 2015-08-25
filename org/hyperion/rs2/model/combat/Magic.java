@@ -18,6 +18,7 @@ import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -457,7 +458,13 @@ public class Magic {
 			return;
 		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-			victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
+            World.getWorld().submit(new Event(600) {
+                @Override
+                public void execute() throws IOException {
+                    victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
+                    this.stop();
+                }
+            });
 			player.vengeance = false;
 		}
 	}

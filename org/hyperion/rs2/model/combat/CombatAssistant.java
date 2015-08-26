@@ -1281,7 +1281,7 @@ public class CombatAssistant {
             bonus *= (1.33 - ratio/3);
         }
 
-		return (int) ((meleeAtk * .7 + (bonus * .8)));
+		return (int) ((meleeAtk * .4 + (bonus * 1.05)));
 
 	}
 
@@ -1318,9 +1318,9 @@ public class CombatAssistant {
             if(player.isNewlyCreated() && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
                 bonus *= 1.15;
 
-			return (int) (meleeDef * .7 + bonus * .7) + 74;
+			return (int) (meleeDef * .5 + bonus) + 74;
 		} else {
-			return (int)(entity.cE.getCombat()) + 64;
+			return (int)(entity.cE.getCombat()/1.5) + 84;
 		}
 	}
 

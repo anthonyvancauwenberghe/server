@@ -112,28 +112,28 @@ public class SpecialAttacks {
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.2;
+				specialAccuracy = 1.25;
 				break;
 			case 1215:
 				playerGfx = 252;
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-				specialAccuracy = 1.2;
+				specialAccuracy = 1.25;
 				break;
 			case 1231:
 				playerGfx = 252;
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-                specialAccuracy = 1.2;
+                specialAccuracy = 1.255;
                 break;
 			case 5680:
 				playerGfx = 252;
 				specialAnimation = 1062;
 				specialDis = 1;
 				specialDrain = 25;
-                specialAccuracy = 1.2;
+                specialAccuracy = 1.25;
 				break;
 			case 859:
 				playerGfx = -1;
@@ -141,12 +141,6 @@ public class SpecialAttacks {
 				specialDis = 9;
 				specialDrain = 55;
 				minimum = 10;
-				if(player.getEquipment()
-						.get(Equipment.SLOT_ARROWS).getId() == 892) {
-					maxDamg += maxDamg * 0.05;// 90% for rune
-					minimum += 5;
-					specialAccuracy = 5;
-				}
 				break;
 			case 861:
 				playerGfx = 256;
@@ -154,12 +148,6 @@ public class SpecialAttacks {
 				specialDis = 9;
 				specialDrain = 55;
 				minimum = 10;
-				if(player.getEquipment()
-						.get(Equipment.SLOT_ARROWS).getId() == 892) {
-					maxDamg += maxDamg * 0.09;// 90% for rune
-					minimum += 5;
-					specialAccuracy = 2;
-				}
 				break;
 			case 3204:
 				playerGfx = 282;
@@ -409,12 +397,12 @@ public class SpecialAttacks {
 		} else {
             if(!ranged)
 			    deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
-					- player.cE.getOpponent().getCombat();
+					- (int)(player.cE.getOpponent().getCombat()/1.5) + 64;
             else
                 deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
                         - (int)(player.cE.getOpponent().getCombat()/1.5);
 		}
-		int randomIncrease = Misc.random(deltaBonus / 2);
+		int randomIncrease = Misc.random(deltaBonus / 3);
 
 		// System.out.println("RandomIncrease " + randomIncrease +
 		// " Deltabonus : " + deltaBonus);
@@ -730,7 +718,7 @@ public class SpecialAttacks {
                 deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
                             - CombatAssistant.calculateMeleeDefence(oldEntity.getEntity());
 
-                randomIncrease = Misc.random(deltaBonus / 2);
+                randomIncrease = Misc.random(deltaBonus / 3);
 				/*
                 if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);

@@ -1281,7 +1281,7 @@ public class CombatAssistant {
             bonus *= (1.33 - ratio/3);
         }
 
-		return (int) ((meleeAtk * .25 + (bonus * 0.4)));
+		return (int) ((meleeAtk * .25 + (bonus * 0.43)));
 
 	}
 

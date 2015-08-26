@@ -500,7 +500,7 @@ public class Combat {
 						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
 					int deltaBonus = MeleeAtk - MeleeDef;
-					int toAdd = Misc.random((int)(deltaBonus));
+					int toAdd = Misc.random((int)(deltaBonus/2));
 					damg += toAdd;
 					combatEntity.getPlayer().debugMessage("Toadd: "+toAdd);
 					if(damg < 0)

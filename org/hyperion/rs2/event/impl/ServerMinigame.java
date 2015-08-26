@@ -14,7 +14,7 @@ import org.hyperion.util.Time;
 public class ServerMinigame extends Event {
 	
 	public ServerMinigame() {
-		super(Time.ONE_HOUR * 5);
+		super(Time.ONE_HOUR * 4);
 	}
 
     public static final CountDownEventBuilder[] builders = new CountDownEventBuilder[]{

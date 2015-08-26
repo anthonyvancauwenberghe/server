@@ -397,7 +397,7 @@ public class SpecialAttacks {
 		} else {
             if(!ranged)
 			    deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
-					- (int)((player.cE.getOpponent().getCombat()/1.5) + 64);
+					- (int)((player.cE.getOpponent().getCombat()/1.6) + 64);
             else
                 deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
                         - (int)(player.cE.getOpponent().getCombat()/1.5);

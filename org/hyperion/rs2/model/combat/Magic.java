@@ -652,7 +652,7 @@ public class Magic {
 			}
 		});
 		int endGfx = spell.getEndGfx();
-		if(! c.canMove())
+		if(! p.canMove())
 			if(endGfx == 369)
 				endGfx = 1677;
 		// ancients effects -l0l freezeing stoped caster moving not enemy

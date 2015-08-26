@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.combat;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -478,6 +479,8 @@ public class Magic {
 				if(Misc.random(40) == 0) {
 					p.getEquipment().set(Equipment.SLOT_RING, null);
 				}
+			} else if(p.getEquipment().get(Equipment.SLOT_RING).getId() == WildernessBossEvent.RING_ID) {
+				victim.hit((int) (hit * 0.10), p, false, 3);
 			}
 		}
 	}

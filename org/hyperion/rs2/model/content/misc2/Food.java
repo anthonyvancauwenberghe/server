@@ -264,7 +264,7 @@ public class Food implements ContentTemplate {
 		}
 		int heal = foodItem.getHeal();
 		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
-			heal += 3;
+			heal *= 1.1;
 		if(heal < 0 || (heal > 0)) {
 			ContentEntity.heal(player, heal);
 		}
@@ -280,7 +280,7 @@ public class Food implements ContentTemplate {
 	private void rocktail(Player player, int slot) {
 		int heal = 23;
 		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
-			heal += 3;
+			heal *= 1.1;
 		int newHpLevel = player.getSkills().getLevel(Skills.HITPOINTS) + heal;
 		if(newHpLevel >= player.getSkills().calculateMaxLifePoints() + 10) {
 			heal = (player.getSkills().calculateMaxLifePoints() + 10) - player.getSkills().getLevel(3);
@@ -296,7 +296,7 @@ public class Food implements ContentTemplate {
             return;
         int heal = healAmt;
 		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
-			heal += 3;
+			heal *= 1.1;
         player.heal(heal, true);
         ContentEntity.startAnimation(player, ANIMATION_EAT_ID);
         ContentEntity.deleteItem(player, id, slot, 1);

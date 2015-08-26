@@ -2466,7 +2466,7 @@ public class CommandPacketHandler implements PacketHandler {
 								player.getLocation().getX(), player
 										.getLocation().getY()));
 			}
-			if (ItemSpawning.canSpawn(player) &&
+			if (ItemSpawning.canSpawn(player, false) &&
                     !player.hardMode()) {
 				if (commandStart.equals("vengrunes") && Server.SPAWN) {
 					ContentEntity.addItem(player, 557, 1000);

@@ -104,20 +104,24 @@ public class ItemSpawning {
 	}
 
     public static boolean canSpawn(final Player player) {
+        return canSpawn(player, true);
+    }
+
+    public static boolean canSpawn(final Player player, boolean msg) {
         if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            player.getActionSender().sendMessage("You cannot spawn items here.");
+            if(msg)player.getActionSender().sendMessage("You cannot spawn items here.");
             return false;
         }
         if(player.getLocation().inPvPArea()) {
-            player.getActionSender().sendMessage(
+            if(msg)player.getActionSender().sendMessage(
                     "You cannot do that in a PvP area.");
             return false;
         } else if(player.duelAttackable > 0) {
-            player.getActionSender().sendMessage(
+            if(msg)player.getActionSender().sendMessage(
                     "You cannot do that in the duel arena.");
             return false;
         }else if(player.getTrader() != null){
-            player.getActionSender().sendMessage("You cannot do this while trading");
+            if(msg)player.getActionSender().sendMessage("You cannot do this while trading");
             return false;
         }
 //        if(player.getLocation().inSDArea()) {
@@ -133,13 +137,13 @@ public class ItemSpawning {
             return false;
         if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
                 player.cE.getAbsX() <= 2539 && player.cE.getAbsY() <= 4660)) {
-            player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
+            if(msg)player.getActionSender().sendMessage("The corporeal beast stops you from spawning!");
             return false;
         }
         if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
                 player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getLocation().distance(Location.create(3068, 10256, 0)) < 8) {
             if(player.getLocation().getZ() == 0) {
-            player.sendMessage("It's too hot in here to do that!");
+                if(msg)player.sendMessage("It's too hot in here to do that!");
             return false;
             }
         }
@@ -147,7 +151,7 @@ public class ItemSpawning {
         if(Combat.inNonSpawnMulti(player.getLocation().getX(), player.getLocation().getY()))
             return false;
         if(player.getLastAttack().timeSinceLastAttack() < 5000) {
-            player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
+            if(msg)player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
             return false;
         }
         if(FightPits.inPits(player))

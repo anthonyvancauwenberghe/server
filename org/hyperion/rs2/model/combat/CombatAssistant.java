@@ -1174,7 +1174,7 @@ public class CombatAssistant {
 
     public static int calculateMageSplashDef(Entity entity) {
         if (entity instanceof Player)
-            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.7) + (((Player)entity).getSkills().getLevel(6)/2);
+            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.9) + (((Player)entity).getSkills().getLevel(6)/3);
         else
             return entity.getCombat().getCombat()/2;
     }

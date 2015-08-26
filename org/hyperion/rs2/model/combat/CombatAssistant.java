@@ -1320,7 +1320,7 @@ public class CombatAssistant {
 
 			return (int) (meleeDef * .25 + bonus * 0.415) + 64;
 		} else {
-			return (int)(entity.cE.getCombat()/1.7) + 64;
+			return (int)(entity.cE.getCombat()/2) + 74;
 		}
 	}
 

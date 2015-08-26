@@ -1193,7 +1193,7 @@ public class CombatAssistant {
         if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             bonus = (int)player.getDungeoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl +
-				(int)(bonus * 1.65) + 10;
+				(int)(bonus * 1.48) + 10;
 	}
 
 	public static int calculateMageDef(Entity entity) {
@@ -1228,7 +1228,7 @@ public class CombatAssistant {
 			} else if(player.getPrayers().isEnabled(27))
                 mageLevel *= 1.23;
 			
-			return (int)(bonus * 1.44) + defLevel / 3 + mageLevel;
+			return (int)(bonus * 1.42) + defLevel / 3 + mageLevel;
 		} else //NPCs
 			return (int)(entity.cE.getCombat()/2.2) + 20;
 	}

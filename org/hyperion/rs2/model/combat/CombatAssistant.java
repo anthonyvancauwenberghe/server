@@ -1186,7 +1186,7 @@ public class CombatAssistant {
         if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             bonus = (int)player.getDungeoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl/3 +
-				(int)(bonus * 1.55) + 10;
+				(int)(bonus * 1.51) + 10;
 	}
 
 	public static int calculateMageDef(Entity entity) {
@@ -1281,7 +1281,7 @@ public class CombatAssistant {
             bonus *= (1.33 - ratio/3);
         }
 
-		return (int) ((meleeAtk * .3 + (bonus * 0.525)));
+		return (int) ((meleeAtk * .3 + (bonus * 0.53)));
 
 	}
 
@@ -1318,7 +1318,7 @@ public class CombatAssistant {
             if(player.isNewlyCreated() && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
                 bonus *= 1.15;
 
-			return (int) (meleeDef * .25 + bonus * 0.39) + 64;
+			return (int) (meleeDef * .25 + bonus * 0.415) + 64;
 		} else {
 			return (int)(entity.cE.getCombat()/2) + 64;
 		}

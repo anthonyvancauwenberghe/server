@@ -403,7 +403,7 @@ public class SpecialAttacks {
                         - (int)(player.cE.getOpponent().getCombat()/1.5);
 		}
 
-        int randomIncrease = Misc.random((int)(deltaBonus/2.5));
+        int randomIncrease = Misc.random((int)(deltaBonus/3));
 
         // System.out.println("RandomIncrease " + randomIncrease +
 		// " Deltabonus : " + deltaBonus);

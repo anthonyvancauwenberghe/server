@@ -1172,6 +1172,13 @@ public class CombatAssistant {
 			return (int)(entity.cE.getCombat()/1.5) + 64;
 	}
 
+    public static int calculateMageSplashDef(Entity entity) {
+        if (entity instanceof Player)
+            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.6);
+        else
+            return entity.getCombat().getCombat()/2;
+    }
+
 	public static int calculateMageAtk(Player player) {
 		int mageLvl = player.getSkills().getLevel(6);
 		int bonus = player.getBonus().get(EquipmentStats.ATTACK_MAGIC);

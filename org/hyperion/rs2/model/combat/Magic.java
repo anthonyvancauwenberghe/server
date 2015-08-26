@@ -343,12 +343,12 @@ public class Magic {
 
 		}
 
-        if(Misc.random(AtkBonus) < Misc.random((int)(DefBonus/1.7)))
+        if(Misc.random(AtkBonus) < Misc.random((int)(CombatAssistant.calculateMageSplashDef(opponent.getEntity())/1.7)))
             splash = true;
-		if(spell.getMaxHit() > 0 && Damage <= 0) {
+		/*if(spell.getMaxHit() > 0 && Damage <= 0) {
 			splash = true;
 			Damage = 0;
-		}
+		}   */
 		if(splash) {
 			Damage = 0;
 		}

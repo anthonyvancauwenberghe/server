@@ -46,7 +46,7 @@ public class UnholyCursebearer implements Attack {
             player.cE.doGfx(curseGfx);
             player.getActionSender().sendMessage("@red@You have been cursed by the Cursebearer!");
             World.getWorld().submit(new Event(1500) {
-                int curseTicks = Combat.random(3) + 2;
+                int curseTicks = Combat.random(2) + 2;
                 @Override
                 public void execute() throws IOException {
                     if (curseTicks <= 0) {
@@ -55,7 +55,7 @@ public class UnholyCursebearer implements Attack {
                     }
                     curseTicks--;
                     player.cE.doGfx(curseGfx);
-                    player.inflictDamage(new Damage.Hit(Combat.random(10) + 5, Damage.HitType.POISON_DAMAGE, 0));
+                    player.inflictDamage(new Damage.Hit(Combat.random(9) + 1, Damage.HitType.POISON_DAMAGE, 0));
                 }
 
                 @Override

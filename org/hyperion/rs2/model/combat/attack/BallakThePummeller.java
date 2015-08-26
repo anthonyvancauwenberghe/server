@@ -71,7 +71,7 @@ public class BallakThePummeller implements Attack {
                     }
                     burnTicks--;
                     player.cE.doGfx(fireGfx);
-                    player.inflictDamage(new Damage.Hit(10, null, 7));
+                    player.inflictDamage(new Damage.Hit(Combat.random(5) + 5, null, 7));
                 }
 
                 @Override

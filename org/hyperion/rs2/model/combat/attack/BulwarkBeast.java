@@ -10,7 +10,7 @@ public class BulwarkBeast implements Attack {
     private long specialDelay;
 
     private static final int MAX_MELEE_DAMAGE = 65;
-    private static final int MAX_QUAKE_DAMAGE = 37;
+    private static final int MAX_QUAKE_DAMAGE = 30;
 
     @Override
     public String getName() {

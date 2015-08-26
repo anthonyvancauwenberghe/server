@@ -327,7 +327,7 @@ public class PlayerPoints {
             return originalPkp;
         double max_increase = 10.0;
         double modifier = max_increase/(minutes/10D);
-        player.sendPkMessage("You get %.1f x Pk points bonus for being new!", modifier);
+        player.sendPkMessage("You get"+String.format(".1f", modifier)+" x Pk points bonus for being new!");
 		return (int)(originalPkp * modifier);
     }
 

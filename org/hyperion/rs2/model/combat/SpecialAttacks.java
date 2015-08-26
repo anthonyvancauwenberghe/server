@@ -384,7 +384,7 @@ public class SpecialAttacks {
 			tempDamage = maxDamg;
 		}
 		int deltaBonus;
-		if(player.cE.getOpponent().getEntity() instanceof Player) {
+        if(player.cE.getOpponent().getEntity() instanceof Player) {
 			if(! ranged)
 				deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
 						- CombatAssistant.calculateMeleeDefence(player.cE
@@ -402,9 +402,10 @@ public class SpecialAttacks {
                 deltaBonus = (int)(CombatAssistant.calculateRangeAttack(player) * specialAccuracy)
                         - (int)(player.cE.getOpponent().getCombat()/1.5);
 		}
-		int randomIncrease = Misc.random(deltaBonus / 3);
 
-		// System.out.println("RandomIncrease " + randomIncrease +
+        int randomIncrease = Misc.random(deltaBonus / 2);
+
+        // System.out.println("RandomIncrease " + randomIncrease +
 		// " Deltabonus : " + deltaBonus);
 		tempDamage += randomIncrease;
 		if(tempDamage < 0)
@@ -718,7 +719,7 @@ public class SpecialAttacks {
                 deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
                             - CombatAssistant.calculateMeleeDefence(oldEntity.getEntity());
 
-                randomIncrease = Misc.random(deltaBonus / 3);
+                randomIncrease = Misc.random(deltaBonus / 2);
 				/*
                 if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);

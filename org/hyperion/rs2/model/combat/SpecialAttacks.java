@@ -403,7 +403,7 @@ public class SpecialAttacks {
                         - (int)(player.cE.getOpponent().getCombat()/1.5);
 		}
 
-        int randomIncrease = Misc.random((int)(deltaBonus / 1.3));
+        int randomIncrease = Misc.random((int)(deltaBonus/1.5));
 
         // System.out.println("RandomIncrease " + randomIncrease +
 		// " Deltabonus : " + deltaBonus);
@@ -719,7 +719,7 @@ public class SpecialAttacks {
                 deltaBonus = (int)(CombatAssistant.calculateMeleeAttack(player) * specialAccuracy)
                             - CombatAssistant.calculateMeleeDefence(oldEntity.getEntity());
 
-                randomIncrease = Misc.random(deltaBonus / 2);
+                randomIncrease = Misc.random((int)(deltaBonus / 1.5));
 				/*
                 if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                     player.getActionSender().sendMessage("Delta bonus: " + deltaBonus);

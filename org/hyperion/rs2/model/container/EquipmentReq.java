@@ -304,6 +304,12 @@ public class EquipmentReq {
             else
                 equipReqData[1] = 90;
         }
+
+        if(s.startsWith("snakeskin")) {
+            equipReqData[4] = 30;
+            equipReqData[1] = 30;
+        }
+
         if(s.contains("saradomin") || s.contains("guthix") || s.contains("zamorak")) {
             if(s.contains("chap") || s.toLowerCase().endsWith(" body"))
                 equipReqData[4] = 70;
@@ -590,6 +596,7 @@ public class EquipmentReq {
 			case 3751:
 			case 3755:
             case 12673:
+            case 12674:
             case 12672:
             case 12675:
 				equipReqData[1] = 45;

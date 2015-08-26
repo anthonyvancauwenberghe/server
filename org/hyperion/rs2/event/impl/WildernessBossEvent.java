@@ -13,18 +13,13 @@ public class WildernessBossEvent extends Event {
 
     public static final int NECKLACE_ID = 19888;
     public static final int RING_ID = 20054;
-/*
+
     private static final Location[] SPAWN_POINTS = { Location.create(3064, 3774, 0),
             Location.create(3144, 3778, 0), Location.create(3255, 3884, 0),
             Location.create(3133, 3846, 0), Location.create(3006, 3825, 0)
-    };*/
-
-    private static final Location[] SPAWN_POINTS = { Location.create(3255, 3884, 0)
     };
 
-   /* private static final int[] BOSS_IDS = {10141, 9752, 10106, 10126};*/
-
-    private static final int[] BOSS_IDS = {10126};
+    private static final int[] BOSS_IDS = {10141, 9752, 10106, 10126};
 
 
     /**
@@ -43,18 +38,18 @@ public class WildernessBossEvent extends Event {
     public static void init() {
         int index = 0;
         int[] bonus = new int[10];
-       /* Arrays.fill(bonus, 365);
-        NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
-                NPCDefinition.create(BOSS_IDS[index++], 1500, 450, bonus, 13602, 13601, new int[]{13603}, 2, "Bal'lak the Pummeller", -1);
-        Arrays.fill(bonus, 370);
-        NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
-                NPCDefinition.create(BOSS_IDS[index++], 1050, 420, bonus, 13424, 13420, new int[]{13430}, 2, "Night-gazer Khighorahk", -1);*/
-        /*Arrays.fill(bonus, 400);
-        NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
-                NPCDefinition.create(BOSS_IDS[index++], 1200, 430, bonus, 13005, 13000, new int[]{13001}, 4, "Bulwark Beast", -1);*/
         Arrays.fill(bonus, 365);
         NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
-                NPCDefinition.create(BOSS_IDS[index++], 1000, 433, bonus, 13171, 13167, new int[]{13170}, 2, "Unholy Cursebearer", -1);
+                NPCDefinition.create(BOSS_IDS[index++], 1100, 450, bonus, 13602, 13601, new int[]{13603}, 2, "Bal'lak the Pummeller", -1);
+        Arrays.fill(bonus, 370);
+        NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
+                NPCDefinition.create(BOSS_IDS[index++], 1050, 420, bonus, 13424, 13420, new int[]{13430}, 2, "Night-gazer Khighorahk", -1);
+        Arrays.fill(bonus, 400);
+        NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
+                NPCDefinition.create(BOSS_IDS[index++], 1250, 430, bonus, 13005, 13000, new int[]{13001}, 4, "Bulwark Beast", -1);
+        Arrays.fill(bonus, 365);
+        NPCDefinition.getDefinitions()[BOSS_IDS[index]] =
+                NPCDefinition.create(BOSS_IDS[index++], 1075, 475, bonus, 13171, 13167, new int[]{13170}, 2, "Unholy Cursebearer", -1);
     }
 
     public static boolean isWildernessBoss(int npcId) {

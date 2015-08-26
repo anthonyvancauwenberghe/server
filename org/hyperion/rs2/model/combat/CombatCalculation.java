@@ -19,7 +19,7 @@ public enum CombatCalculation {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
             final int deltaBonus = attack.getDefinition().getBonus()[3] - CombatAssistant.calculateMageDef(def);
-            randomDamage += Misc.random(deltaBonus/4);
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
@@ -27,15 +27,15 @@ public enum CombatCalculation {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
             final int deltaBonus = (int)(attack.getDefinition().getBonus()[4] * 1.15) - CombatAssistant.calculateRangeDefence(def);
-            randomDamage += Misc.random(deltaBonus/4);
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
         int meleeAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final NPC attack = (NPC)attacker;
             final Player def = (Player)defender;
-            final int deltaBonus = (int)(attack.getDefinition().combat() * .85) - CombatAssistant.calculateMeleeDefence(def);
-            randomDamage += Misc.random(deltaBonus/4);
+            final int deltaBonus = (int)(attack.getDefinition().combat() * .65) - CombatAssistant.calculateMeleeDefence(def);
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
     },
@@ -82,7 +82,7 @@ public enum CombatCalculation {
             final Player attack = (Player)attacker;
             final NPC def = (NPC)defender;
             final int deltaBonus = (int)(CombatAssistant.calculateRangeAttack(attack)) - CombatAssistant.calculateRangeDefence(def);
-            randomDamage += Misc.random(deltaBonus/2);
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
         @Override

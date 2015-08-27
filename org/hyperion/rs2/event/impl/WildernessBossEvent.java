@@ -2,6 +2,7 @@ package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class WildernessBossEvent extends Event {
+
+    public static NPC currentBoss;
 
     public static final int NECKLACE_ID = 19888;
     public static final int RING_ID = 20054;
@@ -63,7 +66,7 @@ public class WildernessBossEvent extends Event {
     public void execute() throws IOException {
         final int spawn = Combat.random(SPAWN_POINTS.length - 1);
         final int boss = Combat.random(BOSS_IDS.length - 1);
-        World.getWorld().getNPCManager().addNPC(SPAWN_POINTS[spawn].getX(), SPAWN_POINTS[spawn].getY(), SPAWN_POINTS[spawn].getZ(), BOSS_IDS[boss], -1);
+        currentBoss = World.getWorld().getNPCManager().addNPC(SPAWN_POINTS[spawn].getX(), SPAWN_POINTS[spawn].getY(), SPAWN_POINTS[spawn].getZ(), BOSS_IDS[boss], -1);
         this.stop();
     }
 

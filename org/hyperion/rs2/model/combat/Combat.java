@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.combat;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
 import org.hyperion.rs2.model.container.Equipment;
@@ -1071,6 +1072,10 @@ public class Combat {
     }
 
 	public static boolean isInMulti(CombatEntity combatEntity) {
+        if(combatEntity == null || combatEntity.getEntity() == null)
+            return false;
+        if(WildernessBossEvent.currentBoss != null && WildernessBossEvent.currentBoss.getLocation().distance(combatEntity.getEntity().getLocation()) < 10)
+            return true;
 		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
 				&& combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607)
 				|| (combatEntity.getAbsX() >= 3190

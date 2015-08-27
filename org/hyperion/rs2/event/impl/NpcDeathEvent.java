@@ -294,8 +294,10 @@ public class NpcDeathEvent extends Event {
                 }
             }
         } else if(timer == - 1) {
-            if(WildernessBossEvent.isWildernessBoss(npc.getDefinition().getId()))
+            if(WildernessBossEvent.isWildernessBoss(npc.getDefinition().getId())) {
                 World.getWorld().submit(new WildernessBossEvent(false));
+                WildernessBossEvent.currentBoss = null;
+            }
             World.getWorld().unregister(npc);
             this.stop();
         } else if(timer == 10) {

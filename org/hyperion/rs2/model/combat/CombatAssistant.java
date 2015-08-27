@@ -1169,7 +1169,7 @@ public class CombatAssistant {
                 rangeDef *= 1.23;
 			return (int)(rangeDef * .5) + (int)(player.getBonus().get(EquipmentStats.DEFENCE_RANGED)/2.5) + 64;
 		} else //NPCs
-			return (int)(entity.cE.getCombat()/1.5) + 64;
+			return (int)(entity.cE.getCombat()/2.5) + 64;
 	}
 
     public static int calculateMageSplashDef(Entity entity) {
@@ -1327,7 +1327,7 @@ public class CombatAssistant {
 
 			return (int) (meleeDef * .25 + bonus * 0.415) + 64;
 		} else {
-			return (int)(entity.cE.getCombat()/2) + 74;
+			return (int)(entity.cE.getCombat()/2.5) + 74;
 		}
 	}
 

@@ -350,9 +350,10 @@ public class Magic {
 			splash = true;
 			Damage = 0;
 		}   */
-		if(splash) {
+		if(splash || Damage <= 0) {
 			Damage = 0;
 		}
+
 		
 		attacker.getPlayer().debugMessage("Damage stage 3:"+Damage);
 

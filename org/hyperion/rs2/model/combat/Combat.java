@@ -1099,7 +1099,7 @@ public class Combat {
 						&& combatEntity.getAbsX() <= 2557
 						&& combatEntity.getAbsY() >= 3264 && combatEntity.getAbsY() <= 3335)
 
-				|| // wildy bosses
+				/*|| // wildy bosses
 				(combatEntity.getAbsX() >= 3054
 						&& combatEntity.getAbsX() <= 3074
 						&& combatEntity.getAbsY() >= 3764 && combatEntity.getAbsY() <= 3784)
@@ -1119,7 +1119,7 @@ public class Combat {
 						&& combatEntity.getAbsX() <= 3016
 						&& combatEntity.getAbsY() >= 3815 && combatEntity.getAbsY() <= 3835)
 
-
+                  */
 				|| // fun pk multi
 				(combatEntity.getAbsX() >= 3071
 						&& combatEntity.getAbsX() <= 3146

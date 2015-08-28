@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 public class ViewCustomTriviaCommand extends Command{
 
     public ViewCustomTriviaCommand(){
-        super("viewtriviaquestions", Rank.PLAYER);
+        super("viewtrivia", Rank.PLAYER);
     }
 
     public boolean execute(final Player player, final String input) throws Exception{

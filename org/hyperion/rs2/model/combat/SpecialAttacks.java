@@ -24,7 +24,6 @@ public class SpecialAttacks {
 		int weaponId = player.getEquipment().get(3).getId();
 		switch(weaponId) {
 			case 4153:
-			case 17646:
 				// maul
 				if(player.cE.getOpponent() != null) {
 					String message = Combat.canAtk(player.cE, player.cE.getOpponent());
@@ -222,7 +221,7 @@ public class SpecialAttacks {
 				specialAnimation = 1667;
 				specialDis = 1;
                 if(combatEntity.getOpponent() != null)
-                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.09) - 1.0;
+                    specialAccuracy = Math.pow(CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getEntity()), 0.135) - 1.1;
 				specialDrain = 50;
                 break;
             case 17646:
@@ -259,7 +258,7 @@ public class SpecialAttacks {
 				specialAnimation = 7074;
 				specialDis = 1;
 				specialDrain = 50;
-				specialAccuracy = 1.2;
+				specialAccuracy = 1.25;
 				break;
 			case 11698:
 				playerGfx = 1220;
@@ -1238,7 +1237,7 @@ public class SpecialAttacks {
 			case 1305:
             case 13899:
             case 11694:
-				specDamage = 1.15;
+				specDamage = 1.25;
 				break;
             case 19605:
                 specDamage = 1.19;

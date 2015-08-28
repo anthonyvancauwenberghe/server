@@ -45,24 +45,24 @@ public enum CombatCalculation {
         int magicAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final NPC attack = (NPC)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = attack.getDefinition().combat() - def.getDefinition().getBonus()[3];
-            randomDamage += Misc.random(deltaBonus/4);
+            final int deltaBonus = attack.getDefinition().getBonus()[3] - def.getDefinition().getBonus()[8];
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
         int rangeAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final NPC attack = (NPC)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = attack.getDefinition().combat() - def.getDefinition().getBonus()[4];
-            randomDamage += Misc.random(deltaBonus/4);
+            final int deltaBonus = attack.getDefinition().combat() - def.getDefinition().combat();
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
         @Override
         int meleeAttack(final Entity attacker, final Entity defender, int randomDamage, final int maxDamage) {
             final NPC attack = (NPC)attacker;
             final NPC def = (NPC)defender;
-            final int deltaBonus = attack.getDefinition().combat() - CombatAssistant.calculateMeleeDefence(def);
-            randomDamage += Misc.random(deltaBonus/4);
+            final int deltaBonus = attack.getDefinition().combat()/2 - CombatAssistant.calculateMeleeDefence(def);
+            randomDamage += Misc.random(deltaBonus/3);
             return randomDamage > maxDamage ? maxDamage : randomDamage < 0 ? 0 : randomDamage;
         }
 

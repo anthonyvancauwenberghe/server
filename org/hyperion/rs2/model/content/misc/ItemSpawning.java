@@ -48,7 +48,7 @@ public class ItemSpawning {
 	 * Items that simply shouldn't be spawned by anone.
 	 */
 	private static final String[] FORBIDDEN_NAMES = {
-			"zanik", "crate", "charm", "more", "null"
+			"zanik", "crate", "charm", "more", "null", "armadyl godsword"
 	};
 
 	/**
@@ -196,7 +196,6 @@ public class ItemSpawning {
 			case 15444:
             case 6603:
             case 6604:
-			//case 11694:
 				return "This item can only be purchased in the donator shop.";
 		}
 		String itemName = ItemDefinition.forId(id).getName().toLowerCase();
@@ -286,6 +285,10 @@ public class ItemSpawning {
 			case VotingBox.ID:
 				return "This item is too sexy for you to spawn.";
 		}
+        switch(id) {
+            case 11694:
+                return "You can only buy this in the emblem pt store";
+        }
 		for(String forbiddenName : FORBIDDEN_NAMES) {
 			if(itemName.contains(forbiddenName))
 				return "This item is forbidden and therefore cannot be spawned.";

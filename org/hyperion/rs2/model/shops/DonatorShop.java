@@ -240,9 +240,10 @@ public class DonatorShop extends Shop {
 			return 1999;
 
 		case 14484:  //claws
+            return 1499;
 		case 16935:  //novite rapier
 		case 18363:  //farseer kiteshield
-		//case 11694:	//Ags
+		case 11694:	//Ags
 			return 1199;
 			
 		}

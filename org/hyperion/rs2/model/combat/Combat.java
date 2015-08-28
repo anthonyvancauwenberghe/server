@@ -123,10 +123,7 @@ public class Combat {
          * Skull Adding
          */
         CombatAssistant.checkSkull(combatEntity);
-        /**
-         * Degrading
-         */
-        PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
+
 
 
 		int magicAtk = combatEntity.getNextMagicAtk();
@@ -162,6 +159,10 @@ public class Combat {
 				// spell hit etc
 				hit = true;
 				finishOff = false;
+                /**
+                 * Degrading
+                 */
+                PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
 				if(! (combatEntity.getAutoCastId() > 0)) {
 					combatEntity.setOpponent(null);
 					return false;
@@ -553,16 +554,19 @@ public class Combat {
             if(SlayerShop.hasHelm(combatEntity.getPlayer()))
                 damg *= 1.15;
         }
+        if(hit) {
 
+            /**
+             * Degrading
+             */
+            PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
+            ItemDegrading.check(combatEntity.getPlayer());
+        }
 		if(finishOff) {
 
 			finishOff(combatEntity, damg, hit, bowType, damgDouble, doubleHit, distance, possibleMaxHit, combatStyle);
 		}
-        if(hit) {
 
-
-            ItemDegrading.check(combatEntity.getPlayer());
-        }
 		Curses.applyLeeches(combatEntity.getPlayer());
 		return true;
 	}

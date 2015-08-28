@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.customtrivia;
 
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.util.TextUtils;
 
 public class CustomTrivia{
 
@@ -14,7 +15,7 @@ public class CustomTrivia{
 
     public CustomTrivia(final Player creator, final String question, final String answer, final Item prize){
         this.creator = creator;
-        this.question = question;
+        this.question = TextUtils.titleCase(question);
         this.answer = answer;
         this.prize = prize;
 

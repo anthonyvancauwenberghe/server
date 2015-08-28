@@ -41,6 +41,7 @@ public final class CustomTriviaManager{
                         player.getSafeDisplayName(), trivia.creator.getSafeDisplayName(),
                         trivia.prize.getDefinition().getName(), trivia.prize.getCount()));
             }
+            break; //not expecting there to be multiple trivia questions with same answer but break anyway
         }
     }
 }

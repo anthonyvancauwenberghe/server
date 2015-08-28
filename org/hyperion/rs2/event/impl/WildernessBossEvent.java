@@ -73,8 +73,10 @@ public class WildernessBossEvent extends Event {
             final int spawn = Combat.random(SPAWN_POINTS.length - 1);
             final int boss = Combat.random(BOSS_IDS.length - 1);
             currentBoss = World.getWorld().getNPCManager().addNPC(SPAWN_POINTS[spawn].getX(), SPAWN_POINTS[spawn].getY(), SPAWN_POINTS[spawn].getZ(), BOSS_IDS[boss], -1);
-            final int wildLevel = Combat.getWildLevel(currentBoss
-                    .getLocation().getX(), currentBoss.getLocation().getY(), currentBoss.getLocation().getZ());
+
+            currentBoss.maxHealth *= (World.getWorld().getPlayers().size()/75);
+            currentBoss.health = currentBoss.maxHealth;
+
             World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(currentBoss.getDefinition().getName() + " has been summoned at around level, buy a locator from the pk shop!"));
         }
         this.stop();

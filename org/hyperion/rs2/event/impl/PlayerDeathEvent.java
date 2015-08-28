@@ -196,8 +196,6 @@ public class PlayerDeathEvent extends Event {
 
         } else if (player.getDungeoneering().inDungeon()) {
             DungeoneeringManager.handleDying(player);
-        } else if (Bork.doDeath(player)) {
-
         } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
 			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
 			if(killer != null) //in fight pits death, reward player

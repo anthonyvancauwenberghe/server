@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class DonatorShop extends Shop {
 
-	public static final double RESELL_RATE = 0.75;
+	public static final double RESELL_RATE = 0.7;
 
 	public static final int[][] VEBLEN_GOODS = {
 			{13672, 20000},
@@ -473,16 +473,19 @@ public class DonatorShop extends Shop {
 
 			case 11794:
 				return 999;
-
+            //phats
 			case 1042:
-				return 899;
-
+				return 55000; //899
 			case 1038:
+                return 50000; //899 all phats
 			case 1040:
+                return 40000;
 			case 1044:
+                return 44000;
 			case 1046:
+                return 52500;
 			case 1048:
-				return 899;
+				return 47500;
 
 			case 15042:
 				return 1199;
@@ -514,16 +517,22 @@ public class DonatorShop extends Shop {
 			case 19143:
 			case 19146:
 			case 19149:
-			case 1050:
-			case 1053:
-			case 1055:
-			case 1057:
 			case 1037:
 			case 10887:
 			case 3140:
 			case 15006:
 			case 15020:
 				return 399;
+            //santa - 399 dp
+            case 1050:
+                return 30000;
+            //hweens 399dp
+            case 1057:
+                return 25000;
+            case 1055:
+                return 20000;
+            case 1053:
+                return 17000;
 
 			case 1419:
 			case 10696:

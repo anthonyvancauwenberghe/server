@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.util.Time;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 public class WildernessBossEvent extends Event {
 
     public static NPC currentBoss;
+    public static long timeStart;
 
     public static final int NECKLACE_ID = 19888;
     public static final int RING_ID = 20054;
@@ -30,12 +32,15 @@ public class WildernessBossEvent extends Event {
      */
     private static final int RESPAWN_TIME = 30;
 
+    public static final long DELAY_FOR_RESPAWN = 30 * Time.ONE_MINUTE;
+
     /**
      * @param forceSpawn used so when the server is restarted, the boss will spawn immediately
      * instead of 30 minutes after the restart.
      */
     public WildernessBossEvent(boolean forceSpawn) {
-        super(forceSpawn ? 0 : 60000 * RESPAWN_TIME);
+        super(forceSpawn ? 0 : DELAY_FOR_RESPAWN);
+        timeStart = System.currentTimeMillis();
     }
 
     public static void init() {
@@ -70,7 +75,7 @@ public class WildernessBossEvent extends Event {
             currentBoss = World.getWorld().getNPCManager().addNPC(SPAWN_POINTS[spawn].getX(), SPAWN_POINTS[spawn].getY(), SPAWN_POINTS[spawn].getZ(), BOSS_IDS[boss], -1);
             final int wildLevel = Combat.getWildLevel(currentBoss
                     .getLocation().getX(), currentBoss.getLocation().getY(), currentBoss.getLocation().getZ());
-            World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(currentBoss.getDefinition().getName() + " has been summoned at around level " + wildLevel + " wilderness!"));
+            World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(currentBoss.getDefinition().getName() + " has been summoned at around level, buy a locator from the pk shop!"));
         }
         this.stop();
     }

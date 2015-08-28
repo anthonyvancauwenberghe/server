@@ -90,7 +90,7 @@ public class UnholyCursebearer implements Attack {
             specialDelay = System.currentTimeMillis() + 3000;
             return 5;
         } else {
-            return 0;
+            return 1;
         }
     }
 

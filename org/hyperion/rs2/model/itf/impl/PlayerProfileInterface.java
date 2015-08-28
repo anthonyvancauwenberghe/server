@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.itf.impl;
 
 import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.Packet;
@@ -37,7 +38,7 @@ public class PlayerProfileInterface extends Interface{
             player.sendf("This player is offline");
             return false;
         }
-        if(target.getPermExtraData().getBoolean("disableprofile")) {
+        if(target.getPermExtraData().getBoolean("disableprofile") && !Rank.hasAbility(player, Rank.MODERATOR)) {
             player.sendMessage("Player has disabled his public profile");
             return false;
         }

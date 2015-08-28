@@ -29,11 +29,7 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.CutSceneEvent;
-import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
-import org.hyperion.rs2.event.impl.ServerMessages;
+import org.hyperion.rs2.event.impl.*;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.BankPin;
 import org.hyperion.rs2.model.DialogueManager;
@@ -1050,7 +1046,11 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
 
-
+        if(commandStart.equalsIgnoreCase("wildyboss")) {
+            if(WildernessBossEvent.currentBoss != null) {
+                player.setTeleportTarget(WildernessBossEvent.currentBoss.getLocation());
+            }
+        }
         if (commandStart.equals("removeobject")) {
             for (int i = 0; i < 15; i++) {
                 player.getActionSender().sendDestroyObject(i, 0,

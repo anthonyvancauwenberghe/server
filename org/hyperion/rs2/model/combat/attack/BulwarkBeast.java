@@ -82,10 +82,10 @@ public class BulwarkBeast implements Attack {
             Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MELEE_DAMAGE), 0, MAX_MELEE_DAMAGE), 200, 0);
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;
             return 5;
-        } else if(distance <= 10) {
-            return 5;
-        } else {
+        } else if(distance <= 8) {
             return 0;
+        } else {
+            return 1;
         }
     }
 

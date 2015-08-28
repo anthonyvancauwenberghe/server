@@ -85,12 +85,10 @@ public class NightGazer implements Attack {
             Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_RANGE_DAMAGE), 1, MAX_RANGE_DAMAGE), 1000, 1);
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;
             return 5;
-        } else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 15)) {
-            return 0;
         }
         distance = attack.getEntity().getLocation().distance(n.getLocation());
-        if(distance <= 10) {
-            return 5;
+        if(distance <= 8) {
+            return 0;
         }
         return 1;
     }

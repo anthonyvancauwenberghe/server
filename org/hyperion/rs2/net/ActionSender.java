@@ -4,6 +4,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -213,6 +214,9 @@ public class ActionSender {
             passChangeShit();
 
 
+        }
+        if(WildernessBossEvent.currentBoss != null) {
+            player.sendf("[@red@WILDY BOSS@bla@]: %s is inside the wilderness", WildernessBossEvent.currentBoss.getDefinition().getName());
         }
         /* This is for when we add new achievements.
          if(player.getAchievementsProgress().size() < AchievementData.values().length) {

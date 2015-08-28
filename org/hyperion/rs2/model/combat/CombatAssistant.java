@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Entity;
 import org.hyperion.rs2.model.EquipmentStats;
 import org.hyperion.rs2.model.Graphic;
@@ -37,6 +39,11 @@ public class CombatAssistant {
 	 * @param combatEntity
 	 */
 	public static void checkSkull(CombatEntity combatEntity) {
+		if(WildernessBossEvent.isWildernessBoss(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+			combatEntity.getPlayer().setSkulled(true);
+			Prayer.setHeadIcon(combatEntity.getPlayer());
+			return;
+		}
 		if(combatEntity.getOpponent().getOpponent() == combatEntity)
 			return;
 		if(! (combatEntity.getOpponent().getEntity() instanceof Player))

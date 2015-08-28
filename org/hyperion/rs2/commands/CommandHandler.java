@@ -85,6 +85,9 @@ import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.customtrivia.cmd.AnswerCustomTriviaCommand;
+import org.hyperion.rs2.model.customtrivia.cmd.CreateCustomTriviaCommand;
+import org.hyperion.rs2.model.customtrivia.cmd.ViewCustomTriviaCommand;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
@@ -2111,5 +2114,9 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new ViewCustomTriviaCommand());
+		submit(new AnswerCustomTriviaCommand());
+		submit(new CreateCustomTriviaCommand());
 	}
 }

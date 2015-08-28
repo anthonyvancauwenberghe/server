@@ -67,7 +67,7 @@ public class WildernessBossEvent extends Event {
         final int spawn = Combat.random(SPAWN_POINTS.length - 1);
         final int boss = Combat.random(BOSS_IDS.length - 1);
         currentBoss = World.getWorld().getNPCManager().addNPC(SPAWN_POINTS[spawn].getX(), SPAWN_POINTS[spawn].getY(), SPAWN_POINTS[spawn].getZ(), BOSS_IDS[boss], -1);
-        World.getWorld().getPlayers().forEach(p -> p.getActionSender().sendMessage(currentBoss.getDefinition().getName() + " has been summoned in the wilderness!"));
+        World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(currentBoss.getDefinition().getName() + " has been summoned in the wilderness!"));
         this.stop();
     }
 

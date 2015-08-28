@@ -188,7 +188,6 @@ public class ActionSender {
         }
         player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
-		// sendClientConfig(65535, 0);
 		player.setActive(true);
 		player.isHidden(false);
 		player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
@@ -215,9 +214,9 @@ public class ActionSender {
 
 
         }
-        if(WildernessBossEvent.currentBoss != null) {
-            player.sendf("[@red@WILDY BOSS@bla@]: %s is inside the wilderness", WildernessBossEvent.currentBoss.getDefinition().getName());
-        }
+		if(WildernessBossEvent.currentBoss != null) {
+			player.sendImportantMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is inside the wilderness");
+		}
         /* This is for when we add new achievements.
          if(player.getAchievementsProgress().size() < AchievementData.values().length) {
             int start = player.getAchievementsProgress().size();

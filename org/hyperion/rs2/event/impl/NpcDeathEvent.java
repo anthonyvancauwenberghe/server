@@ -5,19 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.GlobalItem;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDrop;
-import org.hyperion.rs2.model.NPCManager;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -295,6 +283,7 @@ public class NpcDeathEvent extends Event {
             }
         } else if(timer == - 1) {
             if(WildernessBossEvent.isWildernessBoss(npc.getDefinition().getId())) {
+                World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " has been defeated!"));
                 World.getWorld().submit(new WildernessBossEvent(false));
                 WildernessBossEvent.currentBoss = null;
             }

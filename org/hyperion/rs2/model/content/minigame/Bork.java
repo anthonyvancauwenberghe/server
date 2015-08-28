@@ -50,7 +50,7 @@ public class Bork  {
             public boolean execute(final Player player, final String input) {
                 long delay;
                 if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
-                    player.sendf("You must wait@red@ %d @bla@more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
+                    player.sendf("You must wait %d more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
                     return true;
                 } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 6)  {
                     player.sendf("You need at least 6 hours of online time to attempt Bork");
@@ -133,7 +133,7 @@ public class Bork  {
             }
             player.getBank().add(Item.create(PvMStore.TOKEN, tokens));
             player.getBank().add(Item.create(5020, pkt));
-            player.sendf("@red@ %d @bla@ PvM Tokens and @red@ %d @bla@ Pk Tickets have been added to your bank", tokens, pkt);
+            player.sendf("%d PvM Tokens and %d Pk Tickets have been added to your bank", tokens, pkt);
         }
 
         public void updateInterface() {

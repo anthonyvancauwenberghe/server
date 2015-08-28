@@ -1078,8 +1078,9 @@ public class Combat {
 	public static boolean isInMulti(CombatEntity combatEntity) {
         if(combatEntity == null || combatEntity.getEntity() == null)
             return false;
-        if(WildernessBossEvent.currentBoss != null && WildernessBossEvent.currentBoss.getLocation().distance(combatEntity.getEntity().getLocation()) < 10)
-            return true;
+        if(WildernessBossEvent.currentBoss != null)
+			if(Misc.isInCircle(WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), 10))
+            	return true;
 		if((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
 				&& combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607)
 				|| (combatEntity.getAbsX() >= 3190

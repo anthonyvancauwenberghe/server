@@ -48,7 +48,7 @@ public class NightGazer implements Attack {
                 return;
             } else {
                 player.getSkills().setLevel(skill, (int) (player.getSkills().getLevel(skill) * .67));
-                player.getActionSender().sendMessage("@red@You feel that one of your combat abilities have been severely weakened!");
+                player.getActionSender().sendMessage("@dre@You feel that one of your combat abilities have been severely weakened!");
             }
             int type = Combat.random(1) + 1;
             Combat.npcRangeAttack(npc, player.cE, type == 1 ? 977 : 979, 0, true);

@@ -26,7 +26,7 @@ public class UnholyCursebearer implements Attack {
     }
 
     private void handleMagicSpell(NPC npc) {
-        npc.forceMessage("TASTE THE PAIN OF DEATH!");
+        npc.forceMessage(Combat.random(1) == 0 ? "TASTE THE PAIN OF DEATH!" : "MY MAGIC WILL END ALL!");
         npc.cE.doAnim(13172);
         for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
             player.getSkills().setLevel(Skills.PRAYER, (int) (player.getSkills().getLevel(Skills.PRAYER) * .8));
@@ -45,8 +45,8 @@ public class UnholyCursebearer implements Attack {
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             player.cE.doGfx(curseGfx);
             player.getActionSender().sendMessage("@dre@You have been cursed by the Cursebearer!");
-            World.getWorld().submit(new Event(1500) {
-                int curseTicks = Combat.random(2) + 2;
+            World.getWorld().submit(new Event(1000) {
+                int curseTicks = Combat.random(2) + 1;
                 @Override
                 public void execute() throws IOException {
                     if (curseTicks <= 0) {

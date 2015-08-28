@@ -40,8 +40,8 @@ public final class CustomTriviaManager{
                         "@blu@%s@bla@ has answered @blu@%s@bla@'s trivia question correctly for @red@%s@bla@ x @red@%,d",
                         player.getSafeDisplayName(), trivia.creator.getSafeDisplayName(),
                         trivia.prize.getDefinition().getName(), trivia.prize.getCount()));
+                break; //not expecting there to be multiple trivia questions with same answer but break anyway
             }
-            break; //not expecting there to be multiple trivia questions with same answer but break anyway
         }
     }
 }

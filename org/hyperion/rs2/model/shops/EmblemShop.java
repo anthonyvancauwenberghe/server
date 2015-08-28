@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.container.Container;
 
 /**
@@ -36,8 +37,8 @@ public class EmblemShop extends PointsShop{
                 return 10;
             case 18806:
                 return 1;
-            case 19605:
-                return 2500;
+            case 11694:
+                return 1500;
             case 13898:
                 return 600;
             case 13892:
@@ -57,6 +58,18 @@ public class EmblemShop extends PointsShop{
                 return 2500;
             case 14684:
                 return 1750;
+            case PvPArmourStorage.ZURIELS_TOP:
+            case PvPArmourStorage.MORRIGANS_CHAPS:
+                return 80;
+            case PvPArmourStorage.ZURIELS_BOTTOMS:
+            case PvPArmourStorage.MORRIGANS_COIF:
+                return 60;
+            case PvPArmourStorage.ZURIELS_HAT:
+                return 40;
+            case PvPArmourStorage.MORRIGANS_TOP:
+            case PvPArmourStorage.ZURIELS_STAFF:
+                return 150;
+
 
         }
         return 50_000;  //To change body of implemented methods use File | Settings | File Templates.

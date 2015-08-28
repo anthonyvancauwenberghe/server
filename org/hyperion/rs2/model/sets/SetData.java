@@ -68,7 +68,7 @@ public class SetData {
 		new Item(560, 1000),
 		new Item(9075, 1000),
 		new Item(5698),
-		new Item(11694),
+
         new Item(3144, 2),
         new Item(11090, 1)
 	};
@@ -145,7 +145,7 @@ public class SetData {
 			new Item(555, 1000),
 			new Item(560, 1000),
 			new Item(565, 1000),
-			new Item(11694, 1),
+			new Item(5698, 1),
 			new Item(4749),
 			new Item(4151),
 			new Item(11732),
@@ -184,7 +184,7 @@ public class SetData {
 			new Item(557, 1000),
 			new Item(560, 1000),
 			new Item(9075, 1000),
-			new Item(11694, 1),
+			new Item(1434, 1),
             new Item(11090, 1)
 	};
 

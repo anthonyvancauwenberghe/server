@@ -43,9 +43,7 @@ public class RevAttack implements Attack {
         for(final NPCDefinition def : revs.values()) {
             if(def != null) {
                 for(final int i : PvPArmourStorage.getArmours())
-                    def.getDrops().add(NPCDrop.create(i, 1, 1, def.combat() / 10));
-                def.getDrops().add(NPCDrop.create(13895, 1, 1, def.combat() / 50));
-                def.getDrops().add(NPCDrop.create(13889, 1, 1, def.combat()/30));
+                    def.getDrops().add(NPCDrop.create(i, 1, 1, (int)(Math.pow(def.combat(), 1.9)/1000)));
 
             }
         }
@@ -76,8 +74,8 @@ public class RevAttack implements Attack {
             return 6;//we dont want to reset attack but just wait another 500ms or so...
         }
         final int distance = n.getLocation().distance(attack.getEntity().getLocation());
-        if(Misc.random(7) == 1 && n.health < n.maxHealth/3) {
-            n.health += 15;
+        if(Misc.random(5) == 1 && n.health < n.maxHealth/2) {
+            n.health += 18;
             n.cE.predictedAtk = System.currentTimeMillis() + 2400;
             return 5;
         }

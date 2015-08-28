@@ -107,7 +107,7 @@ public class Server {
 		try {
 			//new FileServer().bind().start();
 			new RS2Server().start();
-			//DumpNpcDrops.startDump2();
+			DumpNpcDrops.startDump2();
             PossibleHacksHolder.init();
             RoomDefinition.load();
             ClanManager.load();

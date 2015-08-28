@@ -680,6 +680,7 @@ public class Smithing implements ContentTemplate {
 					+ " to smith this item.");
 			return false;
 		}
+		if(true) return false;
 		for(int i = 0; i < extraItemIds[index].length; i++) {
 			if(! ContentEntity.isItemInBag(player, extraItemIds[index][i]))
 				return true;

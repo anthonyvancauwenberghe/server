@@ -85,7 +85,7 @@ public class MysteryBox implements ContentTemplate {
 			case 1053:
 			case 1055:
 			case 1057:
-				return 399;
+				return 50099;
 			case 18351:
 			case 18349:
 			case 18353:
@@ -100,7 +100,7 @@ public class MysteryBox implements ContentTemplate {
 	}
 
 	private static final int[] CHEAP_RARES = {
-			1050, 1053, 1055, 1057
+			13736, 13744, 18335
 	};
 
 	private static final int[] CHAOTIC_ITEMS = {

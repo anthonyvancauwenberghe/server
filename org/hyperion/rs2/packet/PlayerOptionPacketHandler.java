@@ -66,12 +66,6 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 				NPC victim = (NPC) World.getWorld().getNPCs().get(id);
 				if(victim != null) {
 					player.debugMessage("NpcId: " + victim.getDefinition().getId());
-					try {
-						for (int i = 0; i < Thieving.pickPocketNpcs.length; i++) {
-							if (Thieving.pickPocketNpcs[i] == victim.getDefinition().getId())
-								return;
-						}
-					} catch(Exception e){}
 
 					if(victim.ownerId > 1 && victim.summoned)
 						return;

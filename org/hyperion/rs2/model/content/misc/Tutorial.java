@@ -46,6 +46,8 @@ public class Tutorial implements ContentTemplate {
 
     public static void giveReward(Player player) {
         player.getInventory().add(new Item(15273, 100));
+        player.getInventory().add(new Item(6570));
+        player.getInventory().add(new Item(10551));
         player.sendImportantMessage("Check your bank for your starter pack!");
     }
 

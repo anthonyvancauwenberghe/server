@@ -696,7 +696,7 @@ public class Magic {
 		for(NPC n : hit.getEntity().getRegion().getNpcs()) {
 			if(hit.getEntity().getLocation()
 					.isWithinDistance(n.getLocation(), 1)
-					&& Combat.isInMulti(n.cE))
+					&& Combat.isInMulti(n.cE) && !(n.summoned && n.ownerId > 0))
 				k.add(n.cE);
 		}
 		return k;

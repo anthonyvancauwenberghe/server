@@ -24,7 +24,7 @@ public class CustomTrivia{
 
     public void send(final Player player, final boolean alert){
         if(alert){
-            player.sendf("Alert##%'s Trivia for %s x %,d##%s##::answertrivia %s | ::viewtrivia",
+            player.sendf("Alert##%s's Trivia for %s x %,d##%s##::answertrivia %s | ::viewtrivia",
                     creator.getSafeDisplayName(),
                     prize.getDefinition().getProperName(), prize.getCount(),
                     question, blurredAnswer);

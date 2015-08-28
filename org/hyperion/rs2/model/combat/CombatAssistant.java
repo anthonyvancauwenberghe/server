@@ -7,12 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.EquipmentStats;
-import org.hyperion.rs2.model.Graphic;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
@@ -39,7 +34,7 @@ public class CombatAssistant {
 	 * @param combatEntity
 	 */
 	public static void checkSkull(CombatEntity combatEntity) {
-		if(WildernessBossEvent.isWildernessBoss(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+		if(combatEntity.getOpponent().getEntity() instanceof NPC && WildernessBossEvent.isWildernessBoss(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
 			combatEntity.getPlayer().setSkulled(true);
 			Prayer.setHeadIcon(combatEntity.getPlayer());
 			return;

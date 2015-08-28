@@ -215,7 +215,9 @@ public class ActionSender {
 
         }
 		if(WildernessBossEvent.currentBoss != null) {
-			player.sendImportantMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is inside the wilderness");
+			final int wildLevel = Combat.getWildLevel(WildernessBossEvent.currentBoss
+					.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY(), WildernessBossEvent.currentBoss.getLocation().getZ());
+			player.sendImportantMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " has been summoned at around level " + wildLevel + " wilderness!");
 		}
         /* This is for when we add new achievements.
          if(player.getAchievementsProgress().size() < AchievementData.values().length) {

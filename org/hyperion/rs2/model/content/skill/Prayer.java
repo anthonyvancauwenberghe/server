@@ -504,16 +504,19 @@ public class Prayer implements ContentTemplate {
 				p.resetPrayers();
 				return false;
 			}
-			if(p2.getId() == 30) {
+			if (p2.getId() == 30) {
 				//12567 ,2213
-				ContentEntity.startAnimation(p, 12567);
+				if(!p.getLocation().inPvPArea())
+					ContentEntity.startAnimation(p, 12567);
 				ContentEntity.playerGfx(p, 2213, 0);
-			} else if(p2.getId() == 35) {
+			} else if (p2.getId() == 35) {
 				ContentEntity.playerGfx(p, 2266, 0);
-				ContentEntity.startAnimation(p, 12589);
-			} else if(p2.getId() == 49) {
+				if(!p.getLocation().inPvPArea())
+					ContentEntity.startAnimation(p, 12589);
+			} else if (p2.getId() == 49) {
 				ContentEntity.playerGfx(p, 2226, 0);
-				ContentEntity.startAnimation(p, 12565);
+				if(!p.getLocation().inPvPArea())
+					ContentEntity.startAnimation(p, 12565);
 				//IMPORTANT LINE OF CODE! p.canLeech.clear();
 			}
             /*

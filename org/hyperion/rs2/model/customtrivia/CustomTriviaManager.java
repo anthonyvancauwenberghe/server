@@ -37,7 +37,7 @@ public final class CustomTriviaManager{
                 player.getBank().add(trivia.prize);
                 player.sendf("@blu@%s@bla@ x @blu@%,d@bla@ has been added to your bank!", trivia.prize.getDefinition().getName(), trivia.prize.getCount());
                 PushMessage.pushGlobalMessage(String.format(
-                        "@blu@%s@bla@ has answered @blu@%s@bla@'s trivia question correctly for @red@%s@bla@ x @red@%,d@bla@",
+                        "@blu@%s@bla@ has answered @blu@%s@bla@'s trivia question correctly for @red@%s@bla@ x @red@%,d",
                         player.getSafeDisplayName(), trivia.creator.getSafeDisplayName(),
                         trivia.prize.getDefinition().getName(), trivia.prize.getCount()));
             }

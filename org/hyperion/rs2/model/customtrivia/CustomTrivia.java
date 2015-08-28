@@ -23,7 +23,7 @@ public class CustomTrivia{
 
     public void send(final Player player, final boolean alert){
         if(alert){
-            player.sendf("Alert##%'s Trivia for %s x %,d##%s##::triviaanswer %s | ::viewtriviaquestions",
+            player.sendf("Alert##%'s Trivia for %s x %,d##%s##::answertrivia %s | ::viewtrivia",
                     creator.getSafeDisplayName(),
                     prize.getDefinition().getProperName(), prize.getCount(),
                     question, blurredAnswer);
@@ -31,7 +31,7 @@ public class CustomTrivia{
             player.sendf("@red@----------------------------------------------------------------------------------------");
             player.sendf("@blu@%s@bla@'s Trivia for @blu@%s @bla@x@blu@ %,d@bla@!", player.getSafeDisplayName(), prize.getDefinition().getProperName(), prize.getCount());
             player.sendf("@blu@%s", question);
-            player.sendf("@blu@::triviaanswer @red@%s", blurredAnswer);
+            player.sendf("@blu@::answertrivia @red@%s", blurredAnswer);
             player.sendf("@red@----------------------------------------------------------------------------------------");
         }
     }

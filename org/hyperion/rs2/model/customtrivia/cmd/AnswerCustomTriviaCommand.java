@@ -5,15 +5,17 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 
-public class ViewCustomTriviaCommand extends Command{
+public class AnswerCustomTriviaCommand extends Command{
 
-    public ViewCustomTriviaCommand(){
-        super("viewtriviaquestions", Rank.PLAYER);
+    public AnswerCustomTriviaCommand(){
+        super("answertrivia", Rank.PLAYER);
     }
 
     public boolean execute(final Player player, final String input) throws Exception{
-        CustomTriviaManager.send(player);
+        final String answer = filterInput(input).trim();
+        if(answer.isEmpty())
+            return false;
+        CustomTriviaManager.processAnswer(player, answer);
         return true;
-
     }
 }

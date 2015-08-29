@@ -27,7 +27,7 @@ public class WildyBossTracker implements ContentTemplate {
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
         if(WildernessBossEvent.currentBoss != null)
-            player.sendMessage("You must walk @red@ %s", compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY()));
+            player.sendf("You must walk @red@ %s", compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY()));
         else
             player.sendf("Wilderness boss spawning in:@red@ %s @bla@minutes", TimeUnit.MINUTES.convert(
                     (WildernessBossEvent.DELAY_FOR_RESPAWN - (System.currentTimeMillis() - WildernessBossEvent.timeStart)), TimeUnit.MILLISECONDS)

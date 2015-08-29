@@ -80,8 +80,9 @@ public class CombatAssistant {
 		if(item == null)
 			return false;
 		boolean isStab = STAB_WEAPONS.contains(item.getId());
+        final String name = item.getDefinition().getName().toLowerCase();
 		if(!isStab)
-			isStab = item.getDefinition().getName().contains("spear");
+			isStab = name.contains("spear") || name.contains("rapier") || name.contains("dagger");
 		return isStab;
 	}
 
@@ -859,7 +860,7 @@ public class CombatAssistant {
 		double effective = getEffectiveStr(p);
 		double strengthBonus = p.getBonus().get(EquipmentStats.STRENGTH);
 
-		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 72)) / 10;
+		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 64)) / 10;
 
 
 		if(p.specOn) {
@@ -1290,7 +1291,7 @@ public class CombatAssistant {
             bonus *= (1.33 - ratio/3);
         }
 
-		return (int) ((meleeAtk * .3 + (bonus * 0.53)));
+		return (int) ((meleeAtk * .3 + (bonus * 0.52)));
 
 	}
 
@@ -1327,7 +1328,7 @@ public class CombatAssistant {
             if(player.isNewlyCreated() && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
                 bonus *= 1.15;
 
-			return (int) (meleeDef * .25 + bonus * 0.44) + 64;
+			return (int) (meleeDef * .25 + bonus * 0.45) + 64;
 		} else {
 			return (int)(entity.cE.getCombat()/2.5) + 74;
 		}

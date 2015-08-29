@@ -131,11 +131,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 								player.getEquipment().set(Equipment.SLOT_WEAPON, null);
                             }
 							victim.playGraphics(Graphic.create(1282));
-							victim.getActionSender().sendMessage("You just got snowballed by " + player.getName() + "!!!");
-							if(Math.random() > 0.90) {
-								player.forceMessage("Owned idiot");
-								player.getPoints().increasePkPoints(1);
-							}
+							victim.getActionSender().sendMessage("You just got snowballed by " + player.getSafeDisplayName() + "!");
 							this.stop();
 						}
 					});

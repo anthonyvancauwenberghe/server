@@ -932,14 +932,22 @@ public class DialogueManager {
 				break;
 			case 143:
 				player.getActionSender().sendDialogue("Are you sure?", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-						"Yes! I want to empty my inventory!",
-						"No..."
+						"Yes, I want to empty my inventory!",
+						"Do not empty my inventory"
 				);
 				player.getInterfaceState().setNextDialogueId(0, 144);
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
 			case 144:
-				player.getInventory().clear();
+				for(int i = 0; i < 28; i++) {
+					Item item = player.getInventory().get(i);
+					int itemId = item.getId();
+					if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709)
+						continue;
+
+					player.getInventory().remove(item);
+
+				}
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 145:
@@ -1043,21 +1051,7 @@ public class DialogueManager {
 				}
 				break;
 			case 158:
-				player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
-						"PvM Area",
-						"Skilling Area"
-				);
-				//
-				//
-				player.getInterfaceState().setNextDialogueId(0, 159);
-				player.getInterfaceState().setNextDialogueId(1, 160);
-				break;
-			case 159:
 				Magic.teleport(player, Location.create(2373, 4972, 0), false, false);
-				player.getActionSender().removeChatboxInterface();
-				break;
-			case 160:
-				Magic.teleport(player, Location.create(3793, 2851, 0), false);
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 161:

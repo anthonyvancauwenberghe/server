@@ -139,15 +139,15 @@ public class Dicing implements ContentTemplate {
 			player.getActionSender().sendMessage("The gambler doesn't have a very strong stomache!");
 		}
 		if(DonatorShop.isVeblenGood(item.getId())) {
-			player.getActionSender().sendMessage("Sorry, such exclusive items can not be played with..");
+			player.getActionSender().sendMessage("The gambler doesn't play with such exclusive items.");
 			return;
 		}
 		if(! (ItemSpawning.allowedMessage(item.getId()).length() > 1)) {
-			player.getActionSender().sendMessage("Sorry, I only gamble with unspawnables.");
+			player.getActionSender().sendMessage("The gambler only gambles with unspawnables.");
 			return;
 		}
-        if((item.getId() >= 13195 && item.getId() <= 13205)) {
-            player.sendMessage("The gambler doesn't know what to do with these...");
+        if((item.getId() >= 13195 && item.getId() <= 13205) || item.getId() == 12747 || item.getId() == 12744 || item.getId() == 18509 || item.getId() == 19709) {
+            player.sendMessage("The gambler doesn't know what to do with this item.");
             return;
         }
 		if(item.getCount() > 1000 && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
@@ -156,7 +156,7 @@ public class Dicing implements ContentTemplate {
 		}
 
         if(item.getCount() > 20 && item.getId() == 13663) {
-            player.getActionSender().sendMessage("Exhanging over 20 of these poses a security risk");
+            player.getActionSender().sendMessage("Exchanging over 20 of these poses a security risk.");
             return;
         }
 

@@ -214,7 +214,6 @@ public class CommandHandler {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 DialogueManager.openDialogue(player, 158);
-				//player.getActionSender().sendMessage("Donator Zone is closed for 24-48 hours due to technical reasons. Come back later.");
                 return true;
             }
 		});

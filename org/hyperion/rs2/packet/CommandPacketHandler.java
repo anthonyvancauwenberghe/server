@@ -1689,7 +1689,12 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 		}
 		if (commandStart.equalsIgnoreCase("clearinv")) {
-			player.getInventory().clear();
+			if (!player.getLocation().inPvPArea())
+				DialogueManager.openDialogue(player, 143);
+			else
+				player.getActionSender().sendMessage(
+						"You cannot empty inside a PVP area!");
+			return;
 		}
 	}
 

@@ -14,6 +14,7 @@ public class CountDownEvent extends Event {
     final String command;
     final String name;
     final Location location;
+    final String message;
 	
 	public CountDownEvent(ServerMinigame.CountDownEventBuilder builder) {
 		super(1000);
@@ -21,6 +22,7 @@ public class CountDownEvent extends Event {
         this.command = builder.command;
         this.location = builder.location;
         this.run = builder.run;
+        this.message = builder.message;
 	}
 	
 	private int counter = 120; //2 minutes
@@ -37,7 +39,7 @@ public class CountDownEvent extends Event {
 
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)
-				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " (5x PKP for 30min)");
+				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " ("+message+")");
 
 		}
 

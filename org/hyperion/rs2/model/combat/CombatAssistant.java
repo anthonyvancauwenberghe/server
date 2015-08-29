@@ -1177,7 +1177,7 @@ public class CombatAssistant {
 
     public static int calculateMageSplashDef(Entity entity) {
         if (entity instanceof Player)
-            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.9) + (((Player)entity).getSkills().getLevel(6)/3);
+            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.8) + (((Player)entity).getSkills().getLevel(6)/3);
         else
             return entity.getCombat().getCombat()/2;
     }
@@ -1196,7 +1196,7 @@ public class CombatAssistant {
         if(player.getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
             bonus = (int)player.getDungeoneering().perks.boost(Constants.MAGE, true, bonus);
 		return mageLvl +
-				(int)(bonus * 1.55) + 10;
+				(int)(bonus * 1.59) + 10;
 	}
 
 	public static int calculateMageDef(Entity entity) {

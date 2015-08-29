@@ -210,6 +210,7 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
+            player.sendMessage("@blu@BONUSES ACTIVE: @red@1.5X Drop Rates, 2X Slayer Points, and 2X Dung Tokens");
             passChangeShit();
 
 

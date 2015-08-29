@@ -80,7 +80,7 @@ public class Dungeon {
             double team_penalty = Math.pow(1.04, teamSize - 1);
             final double size_multi = size.multiplier;
             final int xp = (int)((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
-            int tokens = xp/30;
+            int tokens = xp/15;
             player.getSkills().addExperience(Skills.DUNGEONEERING, xp);
             player.getDungeoneering().setTokens(player.getDungeoneering().getTokens() + tokens);
             final String s =

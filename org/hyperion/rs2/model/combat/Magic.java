@@ -266,10 +266,10 @@ public class Magic {
                     break;
                 case 19323:
                     if(opponent.getEntity() instanceof NPC && spellId == 1189) {
-                        maxDamg = 50;
-                        AtkBonus *= 1.33;
+                        maxDamg = 55;
+                        AtkBonus *= 1.23;
                     } else {
-                        maxDamg *= 1.17;
+                        maxDamg *= 1.24;
                     }
                     break;
                 case 6603:

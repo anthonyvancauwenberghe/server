@@ -42,6 +42,7 @@ public class ServerMinigame extends Event {
                 World.getWorld().submit(new Event(Time.THIRTY_MINUTES) {
                     public void execute() {
                         NpcDeathEvent.npcIdForDoubleDrops = -1;
+                        this.stop();
                     }
                 });
             });

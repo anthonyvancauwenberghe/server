@@ -141,6 +141,23 @@ public class CommandPacketHandler implements PacketHandler {
             PossibleHacksHolder.init();
         }
 
+        if(commandStart.equalsIgnoreCase("resetpevents")) {
+            ServerMinigame.CountDownEventBuilder[] builders =  new ServerMinigame.CountDownEventBuilder[]{
+                    new ServerMinigame.CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3X PKP Game", () -> FightPits.startEvent()),
+                    new ServerMinigame.CountDownEventBuilder("Hybridding", "hybrid"),
+                    new ServerMinigame.CountDownEventBuilder("OldSchool PK", "ospk"),
+                    new ServerMinigame.CountDownEventBuilder("Pure Pking", "purepk"),
+                    new ServerMinigame.CountDownEventBuilder(8133, Location.create(2521,4647,0)),
+                    new ServerMinigame.CountDownEventBuilder(8549, Location.create(2660, 9634, 0)),
+                    new ServerMinigame.CountDownEventBuilder(50, Location.create(2270, 4687, 0))
+            };
+            for(int i = 0; i < ServerMinigame.builders.length; i++)
+                ServerMinigame.builders[i] = builders[i];
+        }
+
+        if(commandStart.equalsIgnoreCase("resetnpcdd"))
+            NpcDeathEvent.npcIdForDoubleDrops = -1;
+
 
         if(commandStart.equalsIgnoreCase("resetpossiblehacks")) {
             final List<String> charMasterList = new ArrayList<>();

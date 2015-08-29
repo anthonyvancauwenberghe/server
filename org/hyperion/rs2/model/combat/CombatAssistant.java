@@ -1231,7 +1231,7 @@ public class CombatAssistant {
 			} else if(player.getPrayers().isEnabled(27))
                 mageLevel *= 1.23;
 			
-			return (int)(bonus * 1.4) + defLevel / 2 + mageLevel + 10;
+			return (int)(bonus * 1.35) + defLevel / 2 + mageLevel + 10;
 		} else //NPCs
 			return (int)(entity.cE.getCombat()/2.2) + 20;
 	}

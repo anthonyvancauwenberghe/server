@@ -4,6 +4,9 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.util.Time;
+
+import java.io.IOException;
 
 public class CountDownEvent extends Event {
 
@@ -20,21 +23,38 @@ public class CountDownEvent extends Event {
         this.run = builder.run;
 	}
 	
-	private int counter = 60; //5minutes
+	private int counter = 120; //2 minutes
 	public void execute() {
-		if(counter == 60) {
-			Events.fireNewEvent(name, true, 0, location);
+		if(counter == 120) {
+			Events.fireNewEvent(name, true, counter, location);
+            World.getWorld().getPlayers().stream().forEach(p -> p.sendImportantMessage("Event is starting now! Decline or accept?"));
 		}
 		if(--counter == 0) {
 			run.run();
-            Events.resetEvent();
+            World.getWorld().submit(new ResetEvent());
             this.stop();
 		}
 
 		for(NPC npc : World.getWorld().getNPCs()) {
 			if(npc != null)
 				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " (5x PKP for 30min)");
+
 		}
+
+
 	}
+
+    private static final class ResetEvent extends Event {
+        public ResetEvent() {
+            super(Time.THIRTY_MINUTES);
+        }
+
+        @Override
+        public void execute() throws IOException {
+            Events.resetEvent();
+            this.stop();
+        }
+
+    }
 
 }

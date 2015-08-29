@@ -25,6 +25,11 @@ import org.hyperion.util.Misc;
 
 public class NpcDeathEvent extends Event {
 
+
+    public static int npcIdForDoubleDrops;
+
+
+
     public static final int CYCLES_AMOUNT = 9;
 
     private NPC npc;
@@ -213,6 +218,8 @@ public class NpcDeathEvent extends Event {
                     if(npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                         int chance =  isTask ? 750 : 750;
                         if(npc.getDefinition().getId() == 8349 && player.getLocation().inPvPArea())
+                            chance = 500;
+                        if(npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
                         for(NPCDrop drop : npc.getDefinition().getDrops()) {
                             if(drop == null) continue;

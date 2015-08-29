@@ -80,36 +80,15 @@ public class Cooking implements ContentTemplate {
 		return - 1;
 	}
 
-	private static final int[] FIRE_OBJECTS = {2732,};
+	private static final int[] FIRE_OBJECTS = {2732};
 
-	private static final int[] RANGE_OBJECTS = {114, 2728, 4172, 8750, 2732, 2728, 2729, 2730, 2731, 2859, 3039,};
+	private static final int[] RANGE_OBJECTS = {114, 2728, 4172, 8750, 2732, 2728, 2729, 2730, 2731, 2859, 3039};
 
 	public boolean interfaceLook(final Player player, final int item, final int objId) {
 		if(player.isBusy())
 			return false;
-		//Check if we are using a proper object
-		boolean fire = false;
-		for(int i = 0; i < FIRE_OBJECTS.length; i++) {
-			if(i == objId) {
-				fire = true;
-			}
-		}
-	    /*boolean canCook = false;
-        for(int i = 0; i < RANGE_OBJECTS.length; i++) {
-			if(i == objId) {
-				canCook = true;
-			}
-		}
-		for(int i = 0; i < FIRE_OBJECTS.length; i++) {
-			if(i == objId) {
-				canCook = true;
-			}
-		}
-		if(canCook == false) {
-			return false;
-		}*/
+
 		player.closeChatInterface = true;
-		player.getExtraData().put("fire", fire);
 		player.getExtraData().put("cookFishId", item);
 		player.getActionSender().sendPacket164(1743);
 		player.getActionSender().sendInterfaceModel(13716, 250, item);
@@ -125,81 +104,61 @@ public class Cooking implements ContentTemplate {
 	public boolean cookItem(final Player client, final int item, final boolean fireCook, final int amount) {
 		final CookingItem cookItem;
 		try {
-			// Create the variable.
 			cookItem = cookingItems.get(getIndex(item));
 		} catch(Exception e) {
 			return false;
 		}
 		ContentEntity.removeAllWindows(client);
-		//TODO: Add in face object
-		// Check if the player can cook this item.
+
 		if(ContentEntity.returnSkillLevel(client, 7) < cookItem.getLevel()) {
-			ContentEntity.sendMessage(client, "Your Cooking level is not high enough.");
+			ContentEntity.sendMessage(client, "You need a cooking level of " + cookItem.getLevel() + " to cook this item.");
 			return true;
 		}
 		client.setBusy(true);
-		// Start animation.
+
 		if(! fireCook) {
 			ContentEntity.startAnimation(client, COOKING_ANIM_RANGE);
 		} else {
 			ContentEntity.startAnimation(client, COOKING_ANIM_FIRE);
 		}
 
-		World.getWorld().submit(new Event(3000) {
+		World.getWorld().submit(new Event(2500) {
 			int amount2 = amount;
 
 			@Override
 			public void execute() {
-				if(! client.isBusy()) {
-					stop2();
+				if(!client.isBusy()) {
+					stop();
 					return;
 				}
-				// Check if the player still have the item that has to be cooked.
-				if(ContentEntity.getItemAmount(client, item) != 0 || amount2 > 0) {
-					amount2--;
-					// Remove the item.
-					ContentEntity.deleteItem(client, item);
 
-					String name = ContentEntity.getItemName(item);
+				amount2--;
+				ContentEntity.deleteItem(client, item);
+				String name = ContentEntity.getItemName(item);
 
-					// Check if the item has a succes level.
-					//if(cookItem.getSuccesLevel() != -1 && ContentEntity.returnSkillLevel(client,7) >= cookItem.getSuccesLevel()) {
-					if(Combat.random(client.getSkills().getLevel(7) + 3 - cookItem.getLevel()) != 1) {
-						ContentEntity.addItem(client, cookItem.getCookedItem(), 1);
-						ContentEntity.addSkillXP(client, cookItem.getExperience() * EXPMULTIPLIER, 7);
-						ContentEntity.sendMessage(client, "You succesfully cook the " + name + ".");
-
-					} else {
-						// Add the cooked/burned item.
-						//if(r.nextInt(3) != 1) {
-						/*if (Combat.random(client.getSkills().getLevel(7) + 3 - cookItem.getLevel()) == 1) {
-							ContentEntity.addItem(client,cookItem.getCookedItem(), 1);
-							ContentEntity.addSkillXP(client,cookItem.getExperience(), 7);
-							ContentEntity.sendMessage(client,"You succesfully cook the "+name+".");
-						} else {*/
-						ContentEntity.addItem(client, cookItem.getBurnedItem(), 1);
-						ContentEntity.sendMessage(client, "You accidentally burn the " + name + ".");
-						//}
-					}
-
-					// Start animation.
-					if(ContentEntity.getItemSlot(client, item) != - 1) {
-						if(! fireCook) {
-							ContentEntity.startAnimation(client, COOKING_ANIM_RANGE);
-						} else {
-							ContentEntity.startAnimation(client, COOKING_ANIM_FIRE);
-						}
-					} else {
-						stop2();
-					}
-
+				if(Combat.random(client.getSkills().getLevel(7) + 3 - cookItem.getLevel()) != 1) {
+					ContentEntity.addItem(client, cookItem.getCookedItem(), 1);
+					ContentEntity.addSkillXP(client, cookItem.getExperience() * EXPMULTIPLIER, 7);
+					ContentEntity.sendMessage(client, "You succesfully cook some " + ContentEntity.getItemName(cookItem.getCookedItem()).toLowerCase() + ".");
 				} else {
-					stop2();
+					ContentEntity.addItem(client, cookItem.getBurnedItem(), 1);
+					ContentEntity.sendMessage(client, "You accidentally burn the " + name.toLowerCase() + ".");
 				}
 
+				if(amount2 <= 0 || ContentEntity.getItemSlot(client, item) == - 1) {
+					stop();
+					return;
+				}
+
+				if (!fireCook) {
+					ContentEntity.startAnimation(client, COOKING_ANIM_RANGE);
+				} else {
+					ContentEntity.startAnimation(client, COOKING_ANIM_FIRE);
+				}
 			}
 
-			public void stop2() {
+			@Override
+			public void stop() {
 				ContentEntity.startAnimation(client, - 1);
 				client.setBusy(false);
 				this.stop();
@@ -245,17 +204,28 @@ public class Cooking implements ContentTemplate {
 	public boolean clickObject(final Player client, final int type, final int itemId, final int slot, final int objId, final int a) {
 		if(type == 0) {
 			boolean fire = (Boolean) client.getExtraData().get("fire");
+			int id = (Integer)client.getExtraData().get("cookFishId");
 			if(itemId == 13720)
-				cookItem(client, (Integer) client.getExtraData().get("cookFishId"), fire, 1);
+				cookItem(client, id, fire, 1);
 			if(itemId == 13719)
-				cookItem(client, (Integer) client.getExtraData().get("cookFishId"), fire, 5);
+				cookItem(client, id, fire, 5);
 			if(itemId == 13718)
-				cookItem(client, (Integer) client.getExtraData().get("cookFishId"), fire, 10);
+				cookItem(client, id, fire, 10);
 			if(itemId == 13717)
-				cookItem(client, (Integer) client.getExtraData().get("cookFishId"), fire, 28);
+				cookItem(client, id, fire, 28);
 			return true;
-		} else if(type == 14 && (objId == 114 || objId == 2728 || objId == 4172 || objId == 8750 || objId == 2732 || objId == 2728 || objId == 2729 || objId == 2730 || objId == 2731 || objId == 2859 || objId == 3039)) {
-			return interfaceLook(client, itemId, objId);
+		} else if(type == 14) {
+			for(int i = 0; i < FIRE_OBJECTS.length; i++)
+				if (objId == FIRE_OBJECTS[i]) {
+					client.getExtraData().put("fire", true);
+					return interfaceLook(client, itemId, objId);
+				}
+			for(int i = 0; i < RANGE_OBJECTS.length; i++)
+				if (objId == RANGE_OBJECTS[i]) {
+					client.getExtraData().put("fire", false);
+					return interfaceLook(client, itemId, objId);
+				}
+			return false;
 		} else {
 			return false;
 		}

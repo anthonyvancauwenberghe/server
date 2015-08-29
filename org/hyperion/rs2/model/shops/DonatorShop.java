@@ -93,7 +93,7 @@ public class DonatorShop extends Shop {
 	public void buyFromShop(Player player, Item item) {
 		int price = item.getCount() * getPrice(item.getId());
 		if(price <= 0 && player.getInventory().freeSlots() != 0) {
-			player.getActionSender().yellModMessage("@red@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
+			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
 			return;
 		}
 		if(player.getPoints().getDonatorPoints() >= price) {
@@ -132,7 +132,7 @@ public class DonatorShop extends Shop {
 	public void valueBuyItem(Player player, Item item) {
 		int price = getPrice(item.getId());
 		if(price <= 0) {
-			player.getActionSender().yellModMessage("@red@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
+			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
 			return;
 		}
 		String message = "The shop will sell a '@dre@"

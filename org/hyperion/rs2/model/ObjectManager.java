@@ -81,15 +81,13 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
             globalObjects.add(new GameObject(GameObjectDefinition.forId(410), create(3106, 3507, 0), 10, 0));//guthix (curses) altar
 
-            //globalObjects.remove(new GameObject(GameObjectDefinition.forId(409), Location.create(2617, 3309, 0),10,0));
-
             globalObjects.add(new GameObject(GameObjectDefinition.forId(13192), create(2617, 3306, 0), 10, 2));
             //RFD Stuff.
             globalObjects.add(new GameObject(GameObjectDefinition.forId(12356), create(3207, 3225, 0), 10, 2));
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2403), create(3207, 3220, 0), 10, 0));
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2156), create(2975, 3392, 0), 10, 2));
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2157), create(2957, 3195, 0), 10, 0));
-
+/*
             GameObjectDefinition object = GameObjectDefinition.forId(1278);
             globalObjects.add(new GameObject(object, create(3802, 2855, 0), 10, 0));
             globalObjects.add(new GameObject(object, create(3802, 2858, 0), 10, 0));
@@ -139,7 +137,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
                 globalObjects.add(new GameObject(GameObjectDefinition.forId(2104), create(3793-(i*2), 2834, 0), 10, 0));
                 globalObjects.add(new GameObject(GameObjectDefinition.forId(2106), create(3793-(i*2), 2833, 0), 10, 0));
             }
-
+*/
             //globalObjects.add(new GameObject(GameObjectDefinition.forId(-1), create(3795, 2844, 0), 10, 0));
 
             //BarrowsFFA.spawnObject(globalObjects);

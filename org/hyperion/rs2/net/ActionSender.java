@@ -210,13 +210,14 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
-            player.sendMessage("@blu@BONUSES ACTIVE: @red@1.5X Drop Rates, 2X Slayer Points, and 2X Dung Tokens");
+            player.sendMessage("@dre@Bonus active: @bla@1.5x drop rates, 2x slayer points, and 2x dungeoneering tokens.");
+			player.sendMessage("");
             passChangeShit();
 
 
         }
 		if(WildernessBossEvent.currentBoss != null) {
-			player.sendImportantMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is in the wild! Check the locator for info");
+			player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
 		}
         /* This is for when we add new achievements.
          if(player.getAchievementsProgress().size() < AchievementData.values().length) {

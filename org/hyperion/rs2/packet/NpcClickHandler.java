@@ -34,8 +34,12 @@ public class NpcClickHandler {
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		switch(npc.getDefinition().getId()) {
-			case 495:
 			case 494:
+			case 495:
+			case 496:
+			case 497:
+			case 498:
+			case 499:
 			case 3199:
 				//GrandExchangeV2.openGE(player);
 				break;
@@ -127,8 +131,12 @@ public class NpcClickHandler {
 			case 2617:
 				ShopManager.open(player, 30);
 				break;
-			case 495:
 			case 494:
+			case 495:
+			case 496:
+			case 497:
+			case 498:
+			case 499:
 			case 3199:
 				player.setInteractingEntity(npc);
 				DialogueManager.openDialogue(player, 0);
@@ -280,8 +288,13 @@ public class NpcClickHandler {
 			case 6970:
 				ShopManager.open(player, 72);
 				break;
-			case 495:
 			case 494:
+			case 495:
+			case 496:
+			case 497:
+			case 498:
+			case 499:
+			case 3199:
 				Bank.open(player, false);
 				break;
 			case 528:// shop keeper

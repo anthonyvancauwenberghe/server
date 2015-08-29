@@ -21,7 +21,7 @@ public class PkShop extends PointsShop {
 			price = 10;
 		}
         if(price <= 0 && player.getInventory().freeSlots() != 0) {
-            player.getActionSender().yellModMessage("@red@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
+            player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
 			return;
 		}
 

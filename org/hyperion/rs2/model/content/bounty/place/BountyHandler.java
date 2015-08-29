@@ -20,11 +20,11 @@ public final class BountyHandler {
 			return false;
 		else if(old != null) {
 			if(remove(old)) {
-                PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
+                PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@] %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
                 return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
             } else return false;
 		}
-        PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
+        PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@] %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
         return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
 	}
 	

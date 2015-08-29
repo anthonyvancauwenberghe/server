@@ -144,9 +144,7 @@ public class WieldPacketHandler implements PacketHandler {
                         //player.getActionSender().sendMessage(type.getSlot()+" | "+item);
                         if(type.getSlot() != EquipmentType.ARROWS.getSlot() && type.getSlot() != EquipmentType.WEAPON.getSlot()) {
                             if(item.getCount() > 1) {
-                                player.getActionSender().yellModMessage("@red@[Important] " + player.getSafeDisplayName() + " is attempting to wield multiple shields.");
                                 item = new Item(item.getId());
-                                //return;
                             }
                         }
 						player.getEquipment().set(type.getSlot(), item);

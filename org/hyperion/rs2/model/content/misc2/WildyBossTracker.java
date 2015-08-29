@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -21,33 +22,37 @@ public class WildyBossTracker implements ContentTemplate {
     public int[] getValues(int type) {
         if(type == ClickType.EAT)
             return new int[]{15008};
-        return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new int[0];
     }
 
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
-        if(WildernessBossEvent.currentBoss != null)
-            player.sendf("You must walk @red@ %s", compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY()));
-        else
-            player.sendf("Wilderness boss spawning in:@red@ %s @bla@minutes", TimeUnit.MINUTES.convert(
-                    (WildernessBossEvent.DELAY_FOR_RESPAWN - (System.currentTimeMillis() - WildernessBossEvent.timeStart)), TimeUnit.MILLISECONDS)
+        if(WildernessBossEvent.currentBoss != null) {
+            if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()) > 0) {
+                player.sendMessage(compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY()));
+            } else {
+                player.sendMessage("This item only works in the wilderness.");
+            }
+        } else {
+            player.sendf("Wilderness boss spawning in %s minutes.", TimeUnit.MINUTES.convert(
+                            (WildernessBossEvent.DELAY_FOR_RESPAWN - (System.currentTimeMillis() - WildernessBossEvent.timeStart)), TimeUnit.MILLISECONDS)
             );
-        return true;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+        return true;
     }
 
     public static String compassDirection(int xPos, int yPos, int xDest, int yDest) {
-        if(xDest == xPos && yDest == yPos)
-            return "Undefined";
+
         final StringBuilder builder = new StringBuilder();
-        if(yPos != yDest) {
-            builder.append(yPos > yDest ? "South" : "North");
+        if(yPos != yDest && (yPos + 7 < yDest || yPos - 7 > yDest)) {
+            builder.append(yPos > yDest ? "south" : "north");
         }
-        if(xPos != xDest) {
-            builder.append(xPos > xDest ? "West" : "East");
+        if(xPos != xDest && (xPos + 7 < xDest || xPos - 7 > xDest)) {
+            builder.append(xPos > xDest ? "west" : "east");
         }
-
-
-        return builder.toString();
+        if(builder.length() == 0)
+            return "The boss should be here somewhere...";
+        return "The boss is to the " + builder.toString() + " of you.";
 
     }
 

@@ -112,8 +112,8 @@ public class Spam {
 	 * @param spammer the player spamming
 	 */
 	public static void warnModerators(Player spammer) {
-		String warning = "Possibly someone spamming with username: " + spammer.getName();
-		String extraInfo = "Location: " + spammer.getLocation() + " use ::banallspammers to ban all spammers";
+		String warning = "@dre@[Important] Possibly someone spamming with username: " + spammer.getName();
+		String extraInfo = "@dre@[Important] Location: " + spammer.getLocation();
 		ActionSender.yellModMessage(warning, extraInfo);
 	}
 

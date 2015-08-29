@@ -288,8 +288,10 @@ public class CombatEntity {
 					}
 				}
                 if(id == 10106) {
-                    Player atk = (Player) attacker;
-                    BulwarkBeast.handleRecoil(atk, damage);
+					if(attacker instanceof Player) {
+						Player atk = (Player) attacker;
+						BulwarkBeast.handleRecoil(atk, damage);
+					}
                 }
                 if(id == 8596) {
                     if(style == Constants.MELEE)

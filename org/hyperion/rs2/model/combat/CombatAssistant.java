@@ -656,7 +656,7 @@ public class CombatAssistant {
 					return 229;
 				default:
 					System.out.println("Missing throwGfx :" + weapon);
-					return - 1;
+					return 213;
 			}
 		}
 		return - 1;

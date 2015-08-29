@@ -278,23 +278,7 @@ public class CombatEntity {
 				}
 				return player.inflictDamage(damage, attacker, poison, style);
 			} else {
-                final int id = n.getDefinition().getId();
-                if(attacker instanceof Player)
-                    damage = TormentedDemon.getReduction(n, (Player)attacker, damage);
-				if(id == 8133) {
-					if(attacker instanceof Player) {
-						Player atk = (Player)attacker;
-						damage = CorporealBeast.reduceDamage(atk, damage, style);
-					}
-				}
-                if(id == 10106) {
-                    Player atk = (Player) attacker;
-                    BulwarkBeast.handleRecoil(atk, damage);
-                }
-                if(id == 8596) {
-                    if(style == Constants.MELEE)
-                        damage = 0;
-                }
+                damage = endEffect(n, attacker, damage, style);
 				return n.inflictDamage(damage, attacker, poison, style);
 			}
 		} catch(Exception e) {
@@ -303,6 +287,27 @@ public class CombatEntity {
 			return 0;
 		}
 	}
+    //use this for end effect from now on, don't crowd the inflictdamg
+    public static int endEffect( NPC n, Entity attacker, int damage, int style) {
+        final int id = n.getDefinition().getId();
+        if(attacker instanceof Player)
+            return TormentedDemon.getReduction(n, (Player)attacker, damage);
+        if(id == 8133) {
+            if(attacker instanceof Player) {
+                Player atk = (Player)attacker;
+                damage = CorporealBeast.reduceDamage(atk, damage, style);
+            }
+        }
+        if(id == 10106 && attacker instanceof Player) {
+            Player atk = (Player) attacker;
+            BulwarkBeast.handleRecoil(atk, damage);
+        }
+        if(id == 8596) {
+            if(style == Constants.MELEE)
+                damage = 0;
+        }
+        return damage;
+    }
 
 
 	public CombatEntity getCurrentAtker() {

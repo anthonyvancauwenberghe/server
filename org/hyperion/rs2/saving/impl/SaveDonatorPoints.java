@@ -18,7 +18,7 @@ public class SaveDonatorPoints extends SaveInteger {
 
 	@Override
 	public void setValue(Player player, int value) {
-		if(value > 150000) {
+		if(value > 250000) {
 			String query = "INSERT INTO glitchers(name,message) VALUES ('" + player.getName().toLowerCase() + "','donatorpoints glitch:" +
 					value + "')";
 			World.getWorld().getLogsConnection().offer(query);

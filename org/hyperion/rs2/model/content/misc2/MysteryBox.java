@@ -61,6 +61,8 @@ public class MysteryBox implements ContentTemplate {
 				}
 				if(random(18) == 0)
 					return new Item(14484, 1);
+                if(random(3500) == 0)
+                    return new Item(1042);
 				break;
 			case 1:
 				if(random(4) == 0)

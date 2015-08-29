@@ -138,7 +138,7 @@ public class ObjectClickHandler {
 				player.setTeleportTarget(Location.create(2900, 4449, 0));
 				break;
 			case 1733:
-				player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() + 6396), 0));
+				player.setTeleportTarget(Location.create((player.getLocation().getX() - 3), (player.getLocation().getY() + 6396), 0));
 				break;
             case 1734:
                 player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() - 6396), 0));

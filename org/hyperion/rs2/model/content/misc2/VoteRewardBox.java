@@ -102,7 +102,7 @@ public class VoteRewardBox implements ContentTemplate {
 	private static final int[] CHEAP_RARES = {
 		13887, 13893, 13889, 13905, 13884, 13890, 13896, 13902, 13870,// not cheap items nope ope
 		13858, 13861, 13864, 13867, 13873, 13876,//nerf'd like fucking dick now
-			1050, 1053, 1055, 1057
+            13736, 13744, 18335
 	};
 
 	private static final int[] CHAOTIC_ITEMS = {

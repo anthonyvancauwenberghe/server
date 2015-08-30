@@ -928,7 +928,7 @@ public class Combat {
 						return "blablabla";
                  //not summoned npc
 				} else {
-                    if((opponent.getEntity() instanceof Player && System.currentTimeMillis() - opponent.lastHit < 5000 && opponent.getPlayer().getLastAttack().getLastNpcAttack() != combatEntity.getNPC().getIndex()) || opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 5000)
+                    if(opponent.getEntity() instanceof Player && ((System.currentTimeMillis() - opponent.lastHit < 5000 && opponent.getPlayer().getLastAttack().getLastNpcAttack() != combatEntity.getNPC().getIndex()) || opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 5000))
                         return "blablabla";
                 }
 			}

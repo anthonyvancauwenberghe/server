@@ -160,19 +160,20 @@ public class Tutorial implements ContentTemplate {
                 return true;
             case 2116:
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
-                        "You can get donator by donating at least 10$ to the server.");
+                        "You can get donator by donating at", "least having 2000 donator points.");
                 player.setTutorialProgress(18);
                 player.getInterfaceState().setNextDialogueId(0, 2117);
                 return true;
             case 2117:
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
-                        "If you donate more than 20$, you'll receive Super donator.");
+                        "If you have more than 10.000 donator points,",
+                        "you'll receive Super donator.");
                 player.setTutorialProgress(19);
                 player.getInterfaceState().setNextDialogueId(0, 2118);
                 return true;
             case 2118:
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
-                        "Donators have a lot of perks on the server,", "and exclusive shops. More information at", "@blu@::wiki Donator_Benefits");
+                        "Donators have a lot of perks on the server,", "and exclusive shops. More information at", "@blu@::wiki Donator Benefits");
                 player.setTutorialProgress(20);
                 player.getInterfaceState().setNextDialogueId(0, 2119);
                 return true;

@@ -13,7 +13,7 @@ public class Tutorial implements ContentTemplate {
     public static void getProgress(Player player) {
         if(player.getTutorialProgress() == 1) {
             DialogueManager.openDialogue(player, 10000);
-        } else if(player.getTutorialProgress() <= 27) {
+        } else if(player.getTutorialProgress() >= 27) {
             player.sendMessage("You have already completed the tutorial.");
         } else {
             DialogueManager.openDialogue(player, 2098 + player.getTutorialProgress());

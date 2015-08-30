@@ -252,6 +252,9 @@ public class ActionSender {
 		 * "membership status is at little as $3 see www.RS2.server.org for details."
 		 * ); }
 		 */
+		if(WarriorsGuild.inCyclopsRoom(player)) {
+			Magic.teleport(player, Location.create(2846, 3541, 2), true, false);
+		}
 		if(Combat.getWildLevel(player.getLocation().getX(), player
 				.getLocation().getY()) > 0) {
 			sendPlayerOption("Attack", 2, 1);

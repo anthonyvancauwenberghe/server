@@ -121,9 +121,6 @@ public class ObjectClickHandler {
 			case 12800:
 			case 3193:
 			case 12801:
-				if(WorldMap.bankBooths.get((x * 5000) + y) == null)
-					break;
-				player.setInteractingEntity(World.getWorld().getNPCManager().banker);
 				DialogueManager.openDialogue(player, 0);
 				break;
 			case 3537:
@@ -254,8 +251,6 @@ public class ObjectClickHandler {
 			case 12800:
 			case 3193:
 			case 12801:
-				if(WorldMap.bankBooths.get((x * 5000) + y) == null)
-					break;
 				Bank.open(player, false);
 				break;
 		}

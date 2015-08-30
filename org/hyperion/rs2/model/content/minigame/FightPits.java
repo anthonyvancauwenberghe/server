@@ -692,7 +692,7 @@ public class FightPits implements ContentTemplate {
 				return;
 			if(EVENT)
 				PushMessage.pushGlobalMessage(
-					String.format("%s has just won fight pits with only @red@ %d @bla@ players left!", winningTeam, size));
+					String.format("%s has just won fight pits with only %d player " + (size > 0 ? "s" : "") +  " left!", winningTeam, size));
 			for(Player player1 : winner) {
 				if(player1 == null)
 					continue;

@@ -66,7 +66,8 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 				NPC victim = (NPC) World.getWorld().getNPCs().get(id);
 				if(victim != null) {
 					player.debugMessage("NpcId: " + victim.getDefinition().getId());
-
+				if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)
+					return;
 					if(victim.ownerId > 1 && victim.summoned)
 						return;
 

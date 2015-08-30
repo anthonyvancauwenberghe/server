@@ -312,7 +312,9 @@ public class Prayer implements ContentTemplate {
 	public void rechargePrayer(Player player) {
 		player.playAnimation(Animation.create(645, 0));
 		player.getSkills().setLevel(5, player.getSkills().getLevelForExp(5));
-		player.getActionSender().sendSkill(5);
+		player.getSummBar().increment(100);
+		player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
+		player.getActionSender().sendSkill(24);
 		player.getActionSender().sendMessage("You recharge your prayer and summoning points.");
         /*
          * if(c.playerLevel[5] >=

@@ -36,12 +36,13 @@ public class CountDownEvent extends Event {
             World.getWorld().submit(new ResetEvent());
             this.stop();
 		}
+        if(counter%5 == 0) {
+            for(NPC npc : World.getWorld().getNPCs()) {
+                if(npc != null)
+                    npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " ("+message+")");
 
-		for(NPC npc : World.getWorld().getNPCs()) {
-			if(npc != null)
-				npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " ("+message+")");
-
-		}
+            }
+        }
 
 
 	}

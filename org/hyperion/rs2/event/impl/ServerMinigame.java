@@ -20,7 +20,7 @@ public class ServerMinigame extends Event {
             new CountDownEventBuilder("OldSchool PK", "ospk"),
             new CountDownEventBuilder("Pure Pking", "purepk"),
             new CountDownEventBuilder(8133, Location.create(2521,4647,0)),
-            new CountDownEventBuilder(8549, Location.create(2660, 9634, 0)),
+            new CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
             new CountDownEventBuilder(50, Location.create(2270, 4687, 0))
     };
 

@@ -89,7 +89,7 @@ public class MiningV2 implements ContentTemplate {
 				80,/*xp*/
 				5,/*time*/
 				3,/*respawndelay*/
-				new int[]{2094, 2095,}/*rock ids*/
+				new int[]{2094, 2095,14902}/*rock ids*/
 		),
 
 		COPPER(436,
@@ -97,7 +97,7 @@ public class MiningV2 implements ContentTemplate {
 				80,/*xp*/
 				5,/*time*/
 				3,/*respawndelay*/
-				new int[]{2090, 2091}/*rock ids*/
+				new int[]{2090, 2091, 14916}/*rock ids*/
 		),
 
 		IRON(440,
@@ -105,14 +105,14 @@ public class MiningV2 implements ContentTemplate {
 				135,/*xp*/
 				10,/*time*/
 				5,/*respawndelay*/
-				new int[]{2092, 2093,14856}/*rock ids*/
+				new int[]{2092, 2093, 14856, 14913}/*rock ids*/
 		),
 		SILVER(442,
 				20,/*level*/
 				180,/*xp*/
 				12,/*time*/
 				8,/*respawndelay*/
-				new int[]{2101, 2100, 11187,}/*rock ids*/
+				new int[]{2101, 2100, 11187}/*rock ids*/
 		),
 		ESSENCE(1436,
 				30,/*level*/

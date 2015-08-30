@@ -192,7 +192,7 @@ public class PlayerDeathEvent extends Event {
         if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
 				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
 			Duel.finishFullyDuel(player);
-        } if (player.getDungeoneering().inDungeon()) {
+        } else if (player.getDungeoneering().inDungeon()) {
             DungeoneeringManager.handleDying(player);
         } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
 			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))

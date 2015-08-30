@@ -84,6 +84,8 @@ public class CastMagicPacketHandler implements PacketHandler {
 		NPC victim = (NPC) World.getWorld().getNPCs().get(id);
 		int spell = packet.getShortA();
 		if(victim != null) {
+			if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)
+				return;
 			if(victim.getLocation().distance(player.getLocation()) <= 8)
 				player.getWalkingQueue().reset();
 			player.cE.addSpellAttack(spell);

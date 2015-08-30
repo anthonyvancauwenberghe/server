@@ -1386,7 +1386,7 @@ public class Magic {
 		if(canGoTo13s(player)) {
 			SpecialAreaHolder.get("hybrid").ifPresent(area -> area.enter(player));
 		} else {
-			player.sendImportantMessage("You have to be on the Ancient Spellooks to go to 13s");
+			player.sendImportantMessage("You have to be on the Ancient Spellbooks to go to 13s");
 			player.sendImportantMessage("You cannot bring Divine or Elysian Spirit Shields with you here");
 		}
 	}

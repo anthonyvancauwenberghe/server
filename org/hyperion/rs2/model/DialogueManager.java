@@ -941,6 +941,7 @@ public class DialogueManager {
 			case 144:
 				for(int i = 0; i < 28; i++) {
 					Item item = player.getInventory().get(i);
+                    if(item == null) continue;
 					int itemId = item.getId();
 					if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709)
 						continue;

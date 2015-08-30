@@ -34,8 +34,7 @@ public class WalkingPacketHandler implements PacketHandler {
             player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
             return;
         }
-        if(player.getTutorialProgress() == 6) {
-            player.getActionSender().sendMessage("Please use ::tutorial to continue this part of the tutorial!");
+        if(player.getTutorialProgress() < 28) {
             return;
         }
 		if(player.getAgility().isRunning()) {

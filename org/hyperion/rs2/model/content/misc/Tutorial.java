@@ -5,42 +5,18 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.net.ActionSender;
 
 public class Tutorial implements ContentTemplate {
 
-    private static final String[] STEP_DESCRIPTION = {
-            "Welcome to ArteroPK! Completing this tutorial gives you '@dre@Vesta (deg)@bla@', a very powerful armor on this server",
-            "To request for help, use the @whi@::reqhelp@bla@ command anytime.",
-            "To look up the rules, use the @whi@::rules@bla@ command.",
-            "Use the @whi@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
-            "Teleport home in order to complete the tutorial",
-            "Use the @whi@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
-            "Use the @whi@::tutorial@bla@ command to continue if the dialogue does not continue automatically",
-            "You have completed the tutorial!",
-            "You chose to skip the tutorial..."
-    };
-
     public static void getProgress(Player player) {
-        switch(player.getTutorialProgress()) {
-            case 1:
-                DialogueManager.openDialogue(player, 2100);
-                return;
-            case 2:
-                DialogueManager.openDialogue(player, 2103);
-                return;
-            case 3:
-                DialogueManager.openDialogue(player, 2106);
-                return;
-            case 4:
-                DialogueManager.openDialogue(player, 2109);
-                return;
-            case 6:
-                DialogueManager.openDialogue(player, 2111);
-                return;
-            default:
-                player.getActionSender().sendMessage(STEP_DESCRIPTION[player.getTutorialProgress()]);
-                return;
+        if(player.getTutorialProgress() == 1) {
+            DialogueManager.openDialogue(player, 10000);
+        } else if(player.getTutorialProgress() >= 27) {
+            player.sendMessage("You have already completed the tutorial.");
+        } else {
+            DialogueManager.openDialogue(player, 2098 + player.getTutorialProgress());
         }
     }
 
@@ -48,7 +24,6 @@ public class Tutorial implements ContentTemplate {
         player.getInventory().add(new Item(15273, 100));
         player.getInventory().add(new Item(6570));
         player.getInventory().add(new Item(10551));
-        player.sendImportantMessage("Check your bank for your starter pack!");
     }
 
     @Override
@@ -67,139 +42,191 @@ public class Tutorial implements ContentTemplate {
     public boolean dialogueAction(Player player, int dialogueId) {
         switch (dialogueId) {
             case 2100:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This tutorial will go through the basics", "of ArteroPK and teach you what you need to know.", "After the tutorial you will receive your reward!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "Welcome to ArteroPK, " + player.getSafeDisplayName() + "!",
+                        "I am the Greg and I will be your guide for today.");
+                player.setTutorialProgress(2);
                 player.getInterfaceState().setNextDialogueId(0, 2101);
                 return true;
             case 2101:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "First, if you ever need any help, use the @whi@::reqhelp", "command to alert a moderator. Be sure to add a reason!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "If you get stuck at any point, just type @blu@::tutorial@bla@.");
+                player.setTutorialProgress(3);
                 player.getInterfaceState().setNextDialogueId(0, 2102);
                 return true;
             case 2102:
-                player.getActionSender().sendMessage(STEP_DESCRIPTION[player.getTutorialProgress()]);
-                player.setTutorialProgress(2);
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Use the @whi@::rules@bla@ command to learn the what", "you prohibited of doing on this server!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "Let's get started by going to the skilling area.");
+                player.setTutorialProgress(4);
                 player.getInterfaceState().setNextDialogueId(0, 2103);
                 return true;
             case 2103:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "A good way to make money is PKing in Edgeville.", "You can acquire emblems and artifacts for PK points!");
+                Magic.teleport(player, Location.create(3803, 2836, 0), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is where you can practice almost every skill.",
+                        "We have a wide variaty of skills available,",
+                        "including summoning, dungeoneering and hunter.");
+                player.setTutorialProgress(5);
                 player.getInterfaceState().setNextDialogueId(0, 2104);
                 return true;
             case 2104:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "There are also bosses you can fight with decent drops,", "if you're lucky, you can loot strong items like claws!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "You can get your slayer tasks here from Duradel too.",
+                        "He also hosts the PvM store.");
+                player.setTutorialProgress(6);
                 player.getInterfaceState().setNextDialogueId(0, 2105);
                 return true;
             case 2105:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "You can find guides on our forums. Just go to", "@whi@www.arteropk.com");
-                player.setTutorialProgress(3);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "You can return here at any point by doing @blu@::skilling@bla@.");
+                player.setTutorialProgress(7);
                 player.getInterfaceState().setNextDialogueId(0, 2106);
                 return true;
             case 2106:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Team dungeoneering is a very fun activity that you can", "play if you aren't feeling up to PKing!");
+                Magic.teleport(player, Edgeville.LOCATION, true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is Edgeville, it is the main hub for the server.",
+                        "Edgeville offers most of the shops, and ofcourse Pk'ing.");
+                player.setTutorialProgress(8);
                 player.getInterfaceState().setNextDialogueId(0, 2107);
                 return true;
             case 2107:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Click on your ring to @whi@teleport to the lobby@bla@ now.", "You will be teleported to the team dungeoneering lobby.");
+                Magic.teleport(player, Location.create(3087, 3512, 0), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is the wilderness above Edgeville,",
+                        "a decent amount of the Pk activity takes place here.");
+                player.setTutorialProgress(9);
                 player.getInterfaceState().setNextDialogueId(0, 2108);
                 return true;
             case 2108:
-                player.getActionSender().sendMessage("Click your '@dre@Ring of Kinship@bla@' and then use @whi@::tutorial@bla@ to continue.");
-                player.getActionSender().removeChatboxInterface();
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "You can return here at any point by doing @blu@::home@bla@.");
+                player.setTutorialProgress(10);
+                player.getInterfaceState().setNextDialogueId(0, 2109);
                 return true;
             case 2109:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "There are also various monster teleports and other", "minigames that are available.");
+                Magic.teleport(player, Location.create(2977, 3611, 24), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is @blu@::13s@bla@. This is a Hybrid Pk'ing place.", "We offer multiple specialized Pk'ing places.");
                 player.getInterfaceState().setNextDialogueId(0, 2110);
+                player.setTutorialProgress(11);
                 return true;
             case 2110:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "For this next part, we will now show you some", "important locations throughout ArteroPK!");
+                Magic.teleport(player, Location.create(2259, 4697, 600), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This for example is @blu@::ospk@bla@.",
+                        "A Pk'ing place that doesn't allow custom items.");
+                player.setTutorialProgress(12);
                 player.getInterfaceState().setNextDialogueId(0, 2111);
                 return true;
             case 2111:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Edgeville.LOCATION, true);
-                player.setTutorialProgress(6);
-                DialogueManager.openDialogue(player, 2112);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This for example is @blu@::ospk@bla@.",
+                        "A Pk'ing place that doesn't allow custom items.");
+                player.setTutorialProgress(13);
+                player.getInterfaceState().setNextDialogueId(0, 2112);
                 return true;
             case 2112:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the home of ArteroPK, all the shops are here.", "You can use the @whi@::home@bla@ command to teleport here.");
+                Magic.teleport(player, Location.create(2795, 3321, 0), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "We also offer some PvM, let's go check out some bosses.");
+                player.setTutorialProgress(14);
                 player.getInterfaceState().setNextDialogueId(0, 2113);
                 return true;
             case 2113:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Location.create(2539, 4717, 0), true);
-                DialogueManager.openDialogue(player, 2114);
+                Magic.teleport(player, Location.create(2264, 4689, 4), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is the King Black Dragon, it's one of the easier bosses.",
+                        "It has a couple of very valuable drops.");
+                player.setTutorialProgress(15);
+                player.getInterfaceState().setNextDialogueId(0, 2114);
                 return true;
             case 2114:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the mage bank, you can get here by doing the", "@whi@::mb @bla@command. It is a popular PKing spot,", "just click on the lever and you are good to go.");
+                Magic.teleport(player, 2533, 4652, 4, false);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is the Corporeal Beast. This is one of the hardest",
+                        "bosses. It requires a team to fight, but also",
+                        "has very valuable drops.");
+                player.setTutorialProgress(16);
                 player.getInterfaceState().setNextDialogueId(0, 2115);
                 return true;
             case 2115:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Location.create(2480, 5174, 0), true);
-                DialogueManager.openDialogue(player, 2116);
+                Magic.teleport(player, 2367, 4963, 0, false);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "This is the PvM area for donators.",
+                        "Donators will soon also receive their own skilling area.");
+                player.setTutorialProgress(17);
+                player.getInterfaceState().setNextDialogueId(0, 2116);
                 return true;
             case 2116:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Inside this cave is a high risk PK zone. ", "None of your items are protected beyond that point!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "You can get donator by donating at", "least having 2000 donator points.");
+                player.setTutorialProgress(18);
                 player.getInterfaceState().setNextDialogueId(0, 2117);
                 return true;
             case 2117:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Location.create(2373, 4972, 0), true);
-                DialogueManager.openDialogue(player, 2118);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "If you have more than 10.000 donator points,",
+                        "you'll receive Super donator.");
+                player.setTutorialProgress(19);
+                player.getInterfaceState().setNextDialogueId(0, 2118);
                 return true;
             case 2118:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the donator zone. You must buy ", "2000 donator points to become a @red@Donator@bla@.", " and 10,000 donator points to become a @gre@Super Donator@bla@.");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "Donators have a lot of perks on the server,", "and exclusive shops. More information at", "@blu@::wiki Donator Benefits");
+                player.setTutorialProgress(20);
                 player.getInterfaceState().setNextDialogueId(0, 2119);
                 return true;
             case 2119:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "You can donate by typing @whi@::donate@bla@ in the chatbox.", "This is where you can PvM for really good gear. ", "Now we'll take you to the other donator zone for skilling!");
+                Magic.teleport(player, Location.create(2795, 3321, 0), true);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "If you have any more questions, feel free",
+                        "to join the clanchat 'help'.",
+                        "You can also always use the request help button.");
+                player.setTutorialProgress(21);
                 player.getInterfaceState().setNextDialogueId(0, 2120);
                 return true;
             case 2120:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Location.create(3793, 2851, 0), true);
-                DialogueManager.openDialogue(player, 2121);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "Keep in mind that different staff do different things.",
+                        "More info on the forums about this.");
+                player.setTutorialProgress(22);
+                player.getInterfaceState().setNextDialogueId(0, 2121);
                 return true;
             case 2121:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the donator zone where you can skill,", "and now we'll show you where most players PK!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "We also have serverwide chat, but since we ",
+                        "have a large amount of players we have a delay on this.");
+                player.setTutorialProgress(23);
                 player.getInterfaceState().setNextDialogueId(0, 2122);
                 return true;
             case 2122:
-                player.getActionSender().removeChatboxInterface();
-                Magic.teleport(player, Location.create(3088, 3517, 0), true);
-                DialogueManager.openDialogue(player, 2123);
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "If you really want to chat with random people,",
+                        "just go to the clanchat 'chatting'.");
+                player.setTutorialProgress(24);
+                player.getInterfaceState().setNextDialogueId(0, 2123);
                 return true;
             case 2123:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "This is the main place where people PK. If you want to", "gear up fast, go to the achievements tab and click on a set.", "This will gear you up so you are ready to PK!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "We have a wiki with most of the server info on it.",
+                         "Just use @blu@::wiki info @bla@for more information.");
+                player.setTutorialProgress(25);
                 player.getInterfaceState().setNextDialogueId(0, 2124);
                 return true;
             case 2124:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "If you have any other questions, use the @whi@::reqhelp@bla@ command", "and remember to have fun!");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "These are the basics of the server,",
+                        "I'm dropping you off at Edgeville with your new Firecape.");
+                player.setTutorialProgress(26);
                 player.getInterfaceState().setNextDialogueId(0, 2125);
                 return true;
             case 2125:
-                player.getActionSender().sendDialogue("Tutorial", ActionSender.DialogueType.NPC, 1, Animation.FacialAnimation.DEFAULT,
-                        "Congratulations, you have completed the tutorial.", "Be sure to try out the armor we placed in your bag...", "It's very powerful.");
+                player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
+                        "Have fun on the server!");
                 player.getInterfaceState().setNextDialogueId(0, 10003);
-                if(player.getTutorialProgress() == 6) {
-                    player.setTutorialProgress(7);
+                if(player.getTutorialProgress() == 26) {
+                    player.setTutorialProgress(27);
                     giveReward(player);
                 }
                 return true;

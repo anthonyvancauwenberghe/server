@@ -196,7 +196,6 @@ public class WarriorsGuild implements ContentTemplate {
 			for(int i = 0; i < needed.length; i++) {
 				ContentEntity.deleteItem(player, needed[i]);
 			}
-			System.out.println("NpcId " + ANIMATED_ARMOURS[getType(a)]);
 			NPC n = spawnNpc(ANIMATED_ARMOURS[getType(a)], Location.create(2855, 3541, 0), player);
 			n.forceMessage("I'm coming for you " + player.getSafeDisplayName() + "!");
 		}

@@ -917,6 +917,8 @@ public class Combat {
 		if(! isInMulti(combatEntity) || ! isInMulti(opponent)) {
 			/* Summon Npcs */
 			if(combatEntity.getEntity() instanceof NPC) {
+				if(combatEntity.getNPC().getDefinition().getId() == 21 || combatEntity.getNPC().getDefinition().getId() == 2256)
+					return "blablabla";
 				if(combatEntity.getNPC().summoned) {
 					if(opponent.getEntity() instanceof NPC)// summon attacking
 						// another npc

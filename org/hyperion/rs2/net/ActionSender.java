@@ -1,5 +1,6 @@
 package org.hyperion.rs2.net;
 
+import com.sun.javafx.geom.Edge;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
@@ -205,9 +206,11 @@ public class ActionSender {
         } else {
             if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getInventory().add(Item.create(15707));
-            if(player.getTutorialProgress() == 0) {
-                player.setTutorialProgress(7);
-            }
+            if(player.getTutorialProgress() != 28) {
+				if(player.getTutorialProgress() >= 17 && player.getTutorialProgress() <= 20)
+					Magic.teleport(player, Edgeville.LOCATION, true, false);
+				player.setTutorialProgress(28);
+			}
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
             player.sendMessage("@dre@Bonus active: @bla@1.5x drop rates, 2x slayer points, and 2x dungeoneering tokens.");
@@ -249,6 +252,9 @@ public class ActionSender {
 		 * "membership status is at little as $3 see www.RS2.server.org for details."
 		 * ); }
 		 */
+		if(WarriorsGuild.inCyclopsRoom(player)) {
+			Magic.teleport(player, Location.create(2846, 3541, 2), true, false);
+		}
 		if(Combat.getWildLevel(player.getLocation().getX(), player
 				.getLocation().getY()) > 0) {
 			sendPlayerOption("Attack", 2, 1);

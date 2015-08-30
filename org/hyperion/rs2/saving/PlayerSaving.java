@@ -35,10 +35,6 @@ import org.hyperion.rs2.util.TextUtils;
  */
 public class PlayerSaving {
 
-	/**
-	 * The saving directory.
-	 */
-	public static final File SAVE_DIR = new File("./data/characters/");
 
 	/**
 	 * The buffer size used for saving and loading.
@@ -125,6 +121,7 @@ public class PlayerSaving {
 	private void initSaveObjects() {
 		saveList.add(new SaveName("Name"));
 		saveList.add(new SavePass("Pass"));
+		saveList.add(new SaveSalt("Salt"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
         saveList.add(new SaveBankPin("BankPin"));
@@ -234,6 +231,9 @@ public class PlayerSaving {
 			player.sendServerMessage("Saving your account");
 		}
 		*/
+		if(player.needsNameChange() || player.doubleChar()) {
+			return false;
+		}
 		try (BufferedWriter file = new BufferedWriter(new FileWriter(
                 getFileName(player)), BUFFER_SIZE)){
 
@@ -599,11 +599,11 @@ public class PlayerSaving {
 	 *
 	 * @param player
 	 */
-	public void load(Player player) {
+	public void load(Player player, String dir) {
 		//loadSQL(player);
 
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(getFileName(player)), BUFFER_SIZE);
+			BufferedReader in = new BufferedReader(new FileReader(dir + player.getName().toLowerCase() + ".txt"), BUFFER_SIZE);
 			String line;
 			while((line = in.readLine()) != null) {
 				if(line.length() <= 1)
@@ -666,6 +666,7 @@ public class PlayerSaving {
                         so.load(player, values, in);
                     }
                 }catch(Exception ex) {
+					ex.printStackTrace();
                     copyFile(player.getName());
                     return;
                 }
@@ -749,7 +750,7 @@ public class PlayerSaving {
 	 * @returns The players save file.
 	 */
 	public static String getFileName(String name) {
-		return SAVE_DIR + "/" + name.toLowerCase() + ".txt";
+		return MergedSaving.MERGED_DIR + "/" + name.toLowerCase() + ".txt";
 	}
 
 	/**

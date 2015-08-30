@@ -116,6 +116,7 @@ import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLUtils;
 import org.hyperion.rs2.sql.SQLite;
@@ -386,7 +387,7 @@ public class CommandHandler {
             }
         });
 
-		submit(new Command("getpass", Rank.DEVELOPER) {
+		/*submit(new Command("getpass", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
@@ -409,6 +410,7 @@ public class CommandHandler {
 			}
 
 		});
+		*/
         submit(new Command("tmask", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -1122,7 +1124,7 @@ public class CommandHandler {
                 if(pass.isEmpty())
                     return false;
                 for(final Player p : World.getWorld().getPlayers())
-                    if(p != null && p.getPassword() != null && p.getPassword().equalsIgnoreCase(pass))
+                    if(p != null && p.getPassword() != null && p.getPassword().getRealPassword().equalsIgnoreCase(pass))
                         player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
                 return true;
             }
@@ -1186,7 +1188,7 @@ public class CommandHandler {
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');
                 final String target = i == -1 ? line : line.substring(0, i).trim();
-                if (!PlayerFiles.exists(target)) {
+                if (!MergedSaving.exists(target)) {
                     player.sendf("Player does not exist: %s", target);
                     return false;
                 }
@@ -1478,6 +1480,7 @@ public class CommandHandler {
             }
         });
 
+		/*
         submit(new Command("rename", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String newName = filterInput(input).trim();
@@ -1506,7 +1509,7 @@ public class CommandHandler {
                 return true;
             }
         });
-
+		*/
         submit(new Command("stafftome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 for(final Player p : World.getWorld().getPlayers())
@@ -1776,7 +1779,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("checkpass", Rank.DEVELOPER){
+        /*submit(new Command("checkpass", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String pass = filterInput(input).trim();
                 if(pass.isEmpty()){
@@ -1788,7 +1791,7 @@ public class CommandHandler {
                         player.sendf("%s has the pass: %s", p.getName(), pass);
                 return true;
             }
-        });
+        });*/
 
         submit(new Command("killplayer", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -7,6 +8,8 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
+import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.util.NameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -302,6 +305,117 @@ public class InterfaceState {
 
 	public void destroy() {
 		player = null;
+	}
+
+
+	public void setStringListener(String listener) {
+		this.string_input_listener = listener;
+		player.getActionSender().sendEnterStringInterface();
+	}
+
+	private String string_input_listener = "";
+
+	public boolean receiveStringListener(String result) {
+		if (string_input_listener == null || string_input_listener.length() == 0) {
+			return false;
+		}
+
+		switch (string_input_listener) {
+			case "doublecharinstant":
+				if(player.doubleChar()) {
+					boolean allowed = true;
+					if(MergedSaving.exists(result)) {
+						allowed = false;
+					}
+					if(!NameUtils.isValidName(result)) {
+						allowed = false;
+					}
+					if(allowed) {
+						boolean success = MergedSaving.renameInstant(player.getName(), result);
+						if(success) {
+							System.out.println("Successfully renamed instant file");
+							World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + player.getName() + "', " + player.getSource() + ",'renamed instant file to: " + result + "')");
+							player.getSession().close(false);
+						} else {
+							System.out.println("Failed to rename instant file");
+						}
+					} else {
+						DialogueManager.openDialogue(player, 513);
+					}
+				}
+				return true;
+			case "doublecharartero":
+				if(player.doubleChar()) {
+					boolean allowed = true;
+					if(MergedSaving.exists(result)) {
+						allowed = false;
+					}
+					if(!NameUtils.isValidName(result)) {
+						allowed = false;
+					}
+					if(allowed) {
+
+						boolean success = MergedSaving.renameArtero(player.getName(), result);
+						if(success) {
+							System.out.println("Succesfully renamed artero file");
+							World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + player.getName() + "', " + player.getSource() + ",'renamed artero file to: " + result + "')");
+							player.getSession().close(false);
+						} else {
+							System.out.println("Failed to rename artero file");
+						}
+
+					} else {
+						DialogueManager.openDialogue(player, 514);
+					}
+				}
+				return true;
+			case "namechange":
+				if(player.needsNameChange()) {
+					boolean allowed = true;
+					if(MergedSaving.exists(result)) {
+						allowed = false;
+					}
+					if(!NameUtils.isValidName(result)) {
+						allowed = false;
+					}
+					if(allowed) {
+						String rename = player.getExtraData().getString("rename");
+						if(rename != null) {
+							if(rename.equalsIgnoreCase(result)) {
+								boolean success = false;
+								if(player.getSource() == GenericWorldLoader.ARTERO) {
+									success = MergedSaving.cleanArteroFile(player.getName());
+								} else if(player.getSource() == GenericWorldLoader.INSTANT) {
+									success = MergedSaving.cleanInstantFile(player.getName());
+								}
+								String initialName = player.getName();
+								if(success) {
+									player.setName(result);
+									player.display = result;
+									player.getActionSender().sendMessage("@blu@You've changed your name to: " + result);
+									player.setNeedsNameChange(false);
+									MergedSaving.save(player);
+									World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + initialName + "', " + player.getSource() + ",'changed name to: " + result + "')");
+								} else {
+									World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + initialName + "', " + player.getSource() + ",'failed change name to: " + result + "')");
+								}
+								player.getSession().close(false);
+							} else {
+								DialogueManager.openDialogue(player, 406);
+							}
+						} else {
+							player.getExtraData().put("rename", result);
+							DialogueManager.openDialogue(player, 405);
+						}
+					} else {
+						DialogueManager.openDialogue(player, 403);
+					}
+				}
+
+				return true;
+			default:
+				return false;
+		}
 	}
 
 }

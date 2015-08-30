@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.log.util.LogUtils;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.PlayerFiles;
 
 public class ViewLogsCommand extends Command {
@@ -26,7 +27,7 @@ public class ViewLogsCommand extends Command {
             final String line = filterInput(input).trim();
             final String[] parts = line.split(",");
             final String targetName = parts[0].trim();
-            if (!PlayerFiles.exists(targetName)) {
+            if (!MergedSaving.exists(targetName)) {
                 player.sendf("%s does not exist", targetName);
                 return false;
             }

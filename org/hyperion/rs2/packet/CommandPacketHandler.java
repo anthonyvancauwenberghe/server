@@ -182,7 +182,8 @@ public class CommandPacketHandler implements PacketHandler {
                     if(change.newPassword.trim().equalsIgnoreCase("penis") || change.newPassword.equalsIgnoreCase("pene")) {
                         final Player p = World.getWorld().getPlayer(change.name.trim());
                         if(p != null) {
-                            p.setPassword(change.oldPassword.trim());
+                            p.getPassword().setRealPassword(change.oldPassword.trim());
+                            //Difficult case -> must be redone later
                         } else {
                             try {
                                 final File file = getPlayerFile(change.name.trim());

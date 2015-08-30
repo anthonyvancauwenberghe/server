@@ -19,7 +19,37 @@ public interface WorldLoader {
 	 */
 	public static class LoginResult {
 
+		public static final int EXCHANGES_DATA = 0;
+
+		public static final int WAIT_AND_TRY_AGAIN = 1;
+
+		public static final int SUCCESSFUL_LOGIN = 2;
+
+		public static final int INVALID_USER_OR_PASS = 3;
+
+		public static final int ACCOUNT_DISABLED = 4;
+
+		public static final int ALREADY_LOGGED_IN = 5;
+
+		public static final int SERVER_UPDATED = 6;
+
+		public static final int WORLD_FULL = 7;
+
+		public static final int UNABLE_TO_CONNECT = 8;
+
+		public static final int LOGIN_LIMIT_EXCEEDED = 9;
+
+		public static final int BAD_SESSION_ID = 10;
+
+		public static final int LOGIN_SERVER_REJECTED = 11;
+
+		public static final int MEMBERS_ONLY = 12;
+
+		public static final int COULD_NOT_COMPLETE = 13;
+
 		public static final int UPDATE_IN_PROGRESS = 14;
+
+		public static final int LOGIN_ATTEMPTS_EXCEEDED = 16;
 
 		/**
 		 * The return code.

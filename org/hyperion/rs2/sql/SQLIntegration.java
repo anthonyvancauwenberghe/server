@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.shops.*;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.io.*;
@@ -48,7 +49,7 @@ public class SQLIntegration implements Runnable {
         //System.exit(0);
         try {
             while (!connection.isClosed()) {
-                File[] characters = PlayerSaving.SAVE_DIR.listFiles();
+                File[] characters = new File(MergedSaving.MERGED_DIR).listFiles();
                 assert characters != null : "Character files are null";
                 assert characters.length > 0 : "Character files cannot be found";
 

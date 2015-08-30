@@ -3,6 +3,7 @@ package org.madturnip.tools;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class CharEditor {
         save();
     }
 
-    static final File[] users = PlayerSaving.SAVE_DIR.listFiles(new FilenameFilter() {
+    static final File[] users = new File(MergedSaving.MERGED_DIR).listFiles(new FilenameFilter() {
         @Override
         public boolean accept(File dir, String name) {
             return name.endsWith("txt");
@@ -107,7 +108,7 @@ public class CharEditor {
             final String pass = CommandPacketHandler.findCharString(name, "Pass");
             final String ip = CommandPacketHandler.findCharString(name, "IP");
             final Player player = new Player(new PlayerDetails(null, name, pass, uid, null, null, ip, "yo"), false);
-            PlayerSaving.getSaving().load(player);
+            PlayerSaving.getSaving().load(player, MergedSaving.MERGED_DIR);
             System.out.println("Loaded "+name);
             players.add(player);
             }catch(Exception ex) {

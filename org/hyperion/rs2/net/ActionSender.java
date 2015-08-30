@@ -5,6 +5,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -49,13 +50,13 @@ import java.util.*;
  */
 public class ActionSender {
 
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     private static Date LAST_PASS_RESET;
 
     static {
         try {
-            LAST_PASS_RESET = dateFormat.parse("31-April-2015");
+			LAST_PASS_RESET = dateFormat.parse("31-04-2015");
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -145,12 +146,240 @@ public class ActionSender {
 		}
 	}
 
+
+	public void basicLogin() {
+
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+			boolean has = false;
+			for(String ipz : GoodIPs.GOODS) {
+				if(player.getShortIP().startsWith(ipz))
+					has = true;
+			}
+			if(!has)
+				player.getSession().close(false);
+		}
+		player.getLogManager().add(LogEntry.login(player));
+		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
+		// sendClientConfig(65535, 0);
+		player.setActive(true);
+		player.isHidden(false);
+		sendDetails();
+		if(player.isNew()){
+			player.getInventory().add(Item.create(15707));
+			player.sendMessage("@bla@Welcome to @dre@ArteroPK.");
+			player.sendMessage("Questions? Visit @whi@::support@bla@ or use the 'Request Help' button.");
+			player.sendMessage("Do not forget to @whi@::vote@bla@ and @whi@::donate@bla@ to keep the server alive.");
+			player.sendMessage("");
+			player.sendImportantMessage("10x decaying PK points boost active for the first 100 minutes!");
+		} else {
+			if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
+				player.getInventory().add(Item.create(15707));
+			if(player.getTutorialProgress() == 0) {
+				player.setTutorialProgress(7);
+			}
+			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
+			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
+			passChangeShit();
+
+
+		}
+	        /* This is for when we add new achievements.
+	         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
+	            int start = player.getAchievementsProgress().size();
+	            for(int i = start; i < AchievementData.values().length; i++) {
+	                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
+	            }
+	        }*/
+		writeQuestTab();
+		ClanManager.clearClanChat(player);
+
+		player.getPoints().loginCheck();
+		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+			String rank = Rank.getPrimaryRank(player).toString();
+			for(Player p : World.getWorld().getPlayers())
+				if(p != null)
+					p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
+		}
+
+
+
+		    /*
+	         * if(player.isMember)
+			 * sendMessage("You currently have membership status."); else {
+			 * sendMessage
+			 * ("You currently are not a member, please donate to keep the server alive"
+			 * ); sendMessage(
+			 * "membership status is at little as $3 see www.RS2.server.org for details."
+			 * ); }
+			 */
+		if(Combat.getWildLevel(player.getLocation().getX(), player
+				.getLocation().getY()) > 0) {
+			sendPlayerOption("Attack", 2, 1);
+			player.attackOption = true;
+		} else {
+			sendPlayerOption("null", 2, 1);
+		}
+		if(!player.getPermExtraData().getBoolean("tradeoption"))
+			sendPlayerOption("Trade", 4, 0);
+		if(!player.getPermExtraData().getBoolean("followoption"))
+			sendPlayerOption("Follow", 3, 0);
+		if(!player.getPermExtraData().getBoolean("profileoption"))
+			sendPlayerOption("View profile", 6, 0);
+		if(player.getLocation().getX() >= 3353
+				&& player.getLocation().getY() >= 3264
+				&& player.getLocation().getX() <= 3385
+				&& player.getLocation().getY() <= 3283) {
+			sendPlayerOption("Challenge", 5, 0);
+			player.duelOption = true;
+		} else {
+			if(Rank.hasAbility(player, Rank.MODERATOR) && ! player.getLocation().inDuel())
+				sendPlayerOption("Moderate", 5, 0);
+			else
+				sendPlayerOption("null", 5, 0);
+		}
+		sendSidebarInterfaces();
+		// GodWars.godWars.checkGodWarsInterface(player);
+		if(player.getSpellBook().isAncient()) {
+			player.getActionSender().sendSidebarInterface(6, 12855);
+		} else if(player.getSpellBook().isRegular()) {
+			player.getActionSender().sendSidebarInterface(6, 1151);
+		} else if(player.getSpellBook().isLunars()) {
+			player.getActionSender().sendSidebarInterface(6, 29999);
+		}
+		if(! player.getPrayers().isDefaultPrayerbook()) {
+			player.getActionSender().sendSidebarInterface(5, 22500);
+		} else {
+			player.getActionSender().sendSidebarInterface(5, 5608);
+		}
+		player.getWalkingQueue().setRunningToggled(true);
+		sendMapRegion();
+		// World.getWorld().getGlobalItemManager().displayItems(player);
+		InterfaceContainerListener interfacecontainerlistener = new InterfaceContainerListener(
+				player, 3214);
+		player.getInventory().addListener(interfacecontainerlistener);
+		player.getSpecBar().sendSpecBar();
+		player.getSpecBar().sendSpecAmount();
+
+		player.getActionSender().sendClientConfig(115, 0);// rests bank noting
+		InterfaceContainerListener interfacecontainerlistener1 = new InterfaceContainerListener(
+				player, 1688);
+		player.getEquipment().addListener(interfacecontainerlistener1);
+		player.getEquipment().addListener(
+				new EquipmentContainerListener(player));
+		player.getEquipment().addListener(new WeaponContainerListener(player));
+		sendClientConfigs(player);
+
+		// player.calculateMemberShip();
+
+		player.startUpEvents();
+		if(player.fightCavesWave > 0) {
+			World.getWorld().getContentManager()
+					.handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
+		}
+		if(player.isNew()) {
+			sendSkills();
+		}
+		NewcomersLogging.getLogging().loginCheck(player);
+		sendString(1300, "City Teleport");
+		sendString(1301, "Teleports you to any city.");
+		sendString(1325, "Training Teleports");
+		sendString(1326, "Teleports you to training spots.");
+		sendString(1350, "Minigame Teleport");
+		sendString(1351, "Teleports you to any minigame.");
+		sendString(1382, "PK Teleport");
+		sendString(1383, "Teleports you to the wilderness.");
+		sendString(1415, "Boss Teleport");
+		sendString(1416, "Teleports you to dungeons.");
+
+		sendString(13037, "City Teleport");
+		sendString(13038, "Teleports you to any city.");
+		sendString(13047, "Training Teleports");
+		sendString(13048, "Teleports you to training spots.");
+		sendString(13055, "Minigame Teleport");
+		sendString(13056, "Teleports you to any minigame.");
+		sendString(13063, "PK Teleport");
+		sendString(13064, "Teleports you to the wilderness.");
+		sendString(13071, "Boss Teleport");
+		sendString(13072, "Teleports you to a dungeon.");
+
+		sendString(30067, "City Teleport"); // Needed
+		sendString(30068, "Teleports you to any city.");
+
+		sendString(30109, "Training Teleports"); // Needed
+		sendString(30110, "Teleports you to training spots.");
+
+		sendString(30078, "Minigame Teleport"); // Needed
+		sendString(30079, "Teleports players to any minigame.");
+
+		sendString(30083 + 3, "Boss Teleport"); // Needed
+		sendString(30083 + 4, "Teleports you to a dungeon.");
+
+		sendString(30117, "Player Killing Teleport"); // Needed
+		sendString(30118, "Teleports you to the wilderness.");
+
+		int[] lunarids = {30138, 30146, 30162, 30170, 30226, 30234};
+		for(int i = 0; i < lunarids.length; i++) {
+			sendString(lunarids[i] + 3, "Not in use.");
+			sendString(lunarids[i] + 4, "Not in use.");
+		}
+		World.getWorld().getEnemies().check(player);
+		sendString(29177, "@or1@Pure Set");
+		sendString(29178, "@or1@Zerk Set");
+		sendString(29179, "@or1@Welfare Hybrid Set");
+
+		AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
+		/**
+		 * OVL BUG
+		 */
+		for(int i = 0; i < 7; i++) {
+			if(player.getSkills().getLevel(i) >= 119 && i != 3 && i != 5)
+				player.getSkills().setLevel(i, 99);
+		}
+		/**
+		 * Last movement event - simple for autoclickers
+		 */
+
+		player.checkCapes();
+
+		if(player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
+			sendMessage("script~x123");
+		}
+
+		// player.getInterfaceManager().show(RecoveryInterface.ID);
+		if(Rank.isStaffMember(player))
+			player.getInterfaceManager().show(PendingRequests.ID);
+
+		if(player.pin == -1) {
+			player.verified = true;
+			//PinInterface.get().set(player);
+			//sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/11966-updates-1302015/");
+		}else if(!player.getShortIP().equals(player.lastIp)) {
+			player.verified = true;
+			//PinInterface.get().enter(player);
+		}else{
+			player.verified = true;
+		}
+
+		System.out.println("ActionSender login past");
+
+	}
+
 	/**
 	 * Sends all the login packets.
 	 *
 	 * @return The action sender instance, for chaining.
 	 */
 	public ActionSender sendLogin() {
+		if(player.doubleChar()) {
+			basicLogin();
+			DialogueManager.openDialogue(player, 500);
+			return this;
+		}
+		if(player.needsNameChange()) {
+			basicLogin();
+			DialogueManager.openDialogue(player, 400);
+			return this;
+		}
 		/*
             try{
                 World.getWorld().getCharactersConnection().query("INSERT IGNORE INTO players (name) VALUES (' " + player.getName() + "')");
@@ -827,12 +1056,19 @@ public class ActionSender {
 
         } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()
                 && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+			/*
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);
             InterfaceManager.get(6).show(player);
+            */
         }
     }
+
+	public ActionSender sendEnterStringInterface() {
+		player.write(new PacketBuilder(187).toPacket());
+		return this;
+	}
 
 	/**
 	 * Sends the initial login packet (e.g. members, player id).

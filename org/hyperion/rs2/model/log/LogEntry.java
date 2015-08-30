@@ -229,7 +229,7 @@ public class LogEntry implements Comparable<LogEntry>{
         return new LogEntry(Category.PICKUP_ITEM,
                 String.format("%s [Owner: %s]",
                         LogUtils.toString(item.getItem()),
-                        item.owner.getName()
+                        item.owner == null ? "null" : item.owner.getName()
                 )
         );
     }

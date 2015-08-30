@@ -209,6 +209,8 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public static boolean isBow(int id) {
+        if(true)
+            return false;
 		for(Item i : FightPits.rangeItems.get(WEAPON)) {
 			if(i != null && i.getId() == id)
 				return true;

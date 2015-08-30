@@ -1,29 +1,41 @@
 package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MysteryBox implements ContentTemplate {
 
-	public static void main(String... args) {
-		int money = 10000;
+	public static void main(String... args) throws Exception{
+//        ItemDefinition.init();
+
+        final Map<Integer, Integer> map = new HashMap<>();
+        final int totalMoney = 100_000_000;
+		int money = totalMoney;
+        int moneyMade = 0;
 		int counter = 0;
 		while(money > 99) {
 			money -= 99;
 			counter++;
 			Item reward = generateRewardItem();
-			System.out.println(reward.getDefinition().getName());
 			int price = DonatorShop.getPrice(reward.getId());
-			System.out.println(money);
-			money += price;
+            map.put(reward.getId(), map.getOrDefault(reward.getId(), 0) + 1);
+			moneyMade += price;
 
 		}
-		System.out.println("Boxes opened: " + counter);
+		System.out.printf("Boxes opened: %,d DP Made: %,d DP Lost: %,d Difference: %,d\n\n", counter, moneyMade, totalMoney, (totalMoney - moneyMade));
+        final int total = map.values().stream().mapToInt(Integer::valueOf).sum();
+        for(Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            System.out.printf("[%d] %s - Collected: %d Percent: %.2f%%\n", entry.getKey(), ItemDefinition.forId(entry.getKey()).getName(), entry.getValue(), (double)entry.getValue()/total * 100D);
+        }
+
 	}
 
 	public static final int ID = 18768;
@@ -56,11 +68,11 @@ public class MysteryBox implements ContentTemplate {
 		int r = Misc.random(2);
 		switch(r) {
 			case 0:
-				if(random(100) == 0) {
+				if(random(130) == 0) {
 					return new Item(16425, 1);
 				}
-				if(random(18) == 0)
-					return new Item(14484, 1);
+                if(random(22) == 0)
+                    return new Item(14484, 1);
                 if(random(3500) == 0)
                     return new Item(1042);
 				break;
@@ -102,7 +114,7 @@ public class MysteryBox implements ContentTemplate {
 	}
 
 	private static final int[] CHEAP_RARES = {
-			13736, 13744, 18335
+			13736, 13744, 18335, 13734, 13738
 	};
 
 	private static final int[] CHAOTIC_ITEMS = {
@@ -115,7 +127,7 @@ public class MysteryBox implements ContentTemplate {
 	private final static int[] CHEAP_ITEMS = {14876, 14878, 14879, 14881, 14887, 14880,
 			14888, 14885, 14889,// Stats
 			13887, 13893, 13889, 13905, 13884, 13890, 13896, 13902, 13870,// PvP
-			13858, 13861, 13864, 13867, 13873, 13876, 14484,
+			13858, 13861, 13864, 13867, 13873, 13876,
 	};
 
 

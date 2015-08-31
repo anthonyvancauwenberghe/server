@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.combat;
 
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
+import org.hyperion.map.pathfinding.PathfinderV2;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
@@ -1173,9 +1174,17 @@ public class Combat {
 		return (int) (java.lang.Math.random() * (range + 1));
 	}
 
-	public static void follow(final CombatEntity combatEntity, final CombatEntity opponent) {
-		if(combatEntity.isFrozen())
-			return;
+    public static void follow(final CombatEntity combatEntity, final CombatEntity opponent) {
+        if(combatEntity.isFrozen())
+            return;
+        if(combatEntity._getPlayer().isPresent()) {
+            follow3(combatEntity, opponent);
+        } else {
+            follow2(combatEntity, combatEntity.getAbsX(), combatEntity.getAbsY(), opponent.getAbsX(), opponent.getAbsY(), opponent.getAbsZ());
+        }
+    }
+
+	public static void follow3(final CombatEntity combatEntity, final CombatEntity opponent) {
 
         try {
             //Combat.follow(player.cE, player.isFollowing.cE);
@@ -1219,11 +1228,23 @@ public class Combat {
 		int moveX = 0;
 		int moveY = 0;
 		
-		/*
-		 * int path[][] = PathfinderV2.findRoute(x,y,toX, toY,height); if(path
-		 * == null) return; toX = path[1][0]; toX = path[1][1];
-		 */
-		if(x > toX)
+        try {
+            long time = System.currentTimeMillis();
+		    int path[][] = PathfinderV2.findRoute(x, y, toX, toY, height);
+            if(path == null) return;
+            combatEntity.getEntity().getWalkingQueue().reset();
+            for(int[] p : path) {
+                if(p[0] != toX || p[1] != toY)
+                    combatEntity.getEntity().getWalkingQueue().addStep(p[0], p[1]);
+                System.out.printf("%d , %d\n", p[0], p[1]);
+            }
+            combatEntity.getEntity().getWalkingQueue().finish();
+            System.out.println("Took: "+(System.currentTimeMillis() - time));
+        }catch(Exception e) {
+
+        }
+
+		/*if(x > toX)
 			moveX = - 1;
 		else if(x < toX)
 			moveX = 1;
@@ -1261,7 +1282,7 @@ public class Combat {
 				}
 			}
 		}
-		combatEntity.getEntity().getWalkingQueue().addStep(x + moveX, y + moveY);
+		combatEntity.getEntity().getWalkingQueue().addStep(x + moveX, y + moveY); */
 	}
 
 	/**

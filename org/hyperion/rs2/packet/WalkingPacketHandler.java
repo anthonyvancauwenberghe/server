@@ -47,9 +47,9 @@ public class WalkingPacketHandler implements PacketHandler {
             return;
         }
 		//player.getActionSender().sendMessage("Trying to walk 5");
-        /*if(player.getTutorialProgress() < 28) {
+        if(player.getTutorialProgress() < 28) {
             return;
-        }*/
+        }
 		//player.getActionSender().sendMessage("Trying to walk 6");
 		if(player.getAgility().isRunning()) {
 			player.getActionSender().sendMessage("You're a bit busy to be walking around!");

@@ -1180,8 +1180,11 @@ public class Combat {
         if(combatEntity._getPlayer().isPresent()) {
             follow3(combatEntity, opponent);
         } else {
+            combatEntity.getEntity().getWalkingQueue().reset();
             follow2(combatEntity, combatEntity.getAbsX(), combatEntity.getAbsY(), opponent.getAbsX(), opponent.getAbsY(), opponent.getAbsZ());
+            combatEntity.getEntity().getWalkingQueue().finish();
         }
+
     }
 
 	public static void follow3(final CombatEntity combatEntity, final CombatEntity opponent) {

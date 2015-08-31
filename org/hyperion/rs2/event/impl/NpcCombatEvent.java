@@ -38,7 +38,7 @@ public class NpcCombatEvent extends Event {
 					if(! Combat.processCombat(npc.cE))
 						Combat.resetAttack(npc.cE);
 				} else if(! npc.isDead())
-					NPC.randomWalk(npc);
+					;//NPC.randomWalk(npc);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

@@ -1177,7 +1177,7 @@ public class CombatAssistant {
 
     public static int calculateMageSplashDef(Entity entity) {
         if (entity instanceof Player)
-            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.75) + (((Player)entity).getSkills().getLevel(6)/3);
+            return (int)(((Player)entity).getBonus().get(EquipmentStats.DEFENCE_MAGIC) * 1.7) + (((Player)entity).getSkills().getLevel(6)/3);
         else
             return entity.getCombat().getCombat()/2;
     }
@@ -1231,7 +1231,7 @@ public class CombatAssistant {
 			} else if(player.getPrayers().isEnabled(27))
                 mageLevel *= 1.23;
 			
-			return (int)(bonus * 1.35) + defLevel / 2 + mageLevel + 10;
+			return (int)(bonus * 1.3) + defLevel / 2 + mageLevel + 13;
 		} else //NPCs
 			return (int)(entity.cE.getCombat()/2.2) + 20;
 	}

@@ -145,28 +145,27 @@ public class NewGameMode implements ContentTemplate {
                         e.printStackTrace();
                     }
                 }
-                player.getInventory().add(Item.create(1856));
                 player.sendImportantMessage("A starter has been added to your bank!");
                 player.sendMessage("l4unchur13 " + NORMAL_GAME_GUIDE);
                 player.getActionSender().removeChatboxInterface();
-                player.setTutorialProgress(8);
+                player.setTutorialProgress(28);
                 for(int i = 0; i <= 6; i++) {
                     player.getSkills().setLevel(i, 99);
                     player.getSkills().setExperience(i, Math.max(13100000, player.getSkills().getExperience(i)));
                 }
-                Magic.teleport(player, Edgeville.LOCATION, true);
                 return true;
             case 10002:
                 DialogueManager.openDialogue(player, 2100);
                 return true;
             case 10003:
+                Magic.teleport(player, Edgeville.LOCATION, true);
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
                         "Normal mode (recommended)", "Hard mode");
                 player.getInterfaceState().setNextDialogueId(0, 10001);
                 player.getInterfaceState().setNextDialogueId(1, 10004);
                 return true;
             case 10004:
-                ClanManager.joinClanChat(player, "help2", false);
+                ClanManager.joinClanChat(player, "help", false);
                 player.getInventory().add(Item.create(995, 15_000_000));
                 for(int i = 0; i < IRON_STARTER.length; i++) {
                     try {
@@ -176,11 +175,10 @@ public class NewGameMode implements ContentTemplate {
                     }
                 }
                 player.setGameMode(1);
-                player.sendMessage("l4unchur13 "+HARD_GAME_GUIDE);
+                player.sendMessage("l4unchur13 " + HARD_GAME_GUIDE);
                 player.sendImportantMessage("Welcome to Hard Mode", "Check your bank for starter items");
                 player.getActionSender().removeChatboxInterface();
-                player.setTutorialProgress(8);
-                Magic.teleport(player, Edgeville.LOCATION, true);
+                player.setTutorialProgress(28);
                 return true;
         }
         return false;

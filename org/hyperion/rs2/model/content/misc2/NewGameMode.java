@@ -149,7 +149,7 @@ public class NewGameMode implements ContentTemplate {
                 player.sendImportantMessage("A starter has been added to your bank!");
                 player.sendMessage("l4unchur13 " + NORMAL_GAME_GUIDE);
                 player.getActionSender().removeChatboxInterface();
-                player.setTutorialProgress(8);
+                player.setTutorialProgress(28);
                 for(int i = 0; i <= 6; i++) {
                     player.getSkills().setLevel(i, 99);
                     player.getSkills().setExperience(i, Math.max(13100000, player.getSkills().getExperience(i)));

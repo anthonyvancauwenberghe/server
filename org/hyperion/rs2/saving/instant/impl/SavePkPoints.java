@@ -18,7 +18,7 @@ public class SavePkPoints extends SaveInteger {
 
 	@Override
 	public void setValue(Player player, int value) {
-		player.getPoints().setPkPoints(value);
+		player.getPoints().setPkPoints(value/13);
 	}
 
 	@Override

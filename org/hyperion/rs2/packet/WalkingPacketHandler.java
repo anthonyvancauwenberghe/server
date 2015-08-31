@@ -20,9 +20,9 @@ public class WalkingPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
-		player.getActionSender().sendMessage("Trying to walk");
+		//player.getActionSender().sendMessage("Trying to walk");
 		if(player.doubleChar()) {
-			player.getActionSender().sendMessage("Walking!2");
+			//player.getActionSender().sendMessage("Walking!2");
 			DialogueManager.openDialogue(player, 500);
 			return;
 		}

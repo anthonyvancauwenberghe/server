@@ -20,6 +20,11 @@ public class SaveInventory extends SaveContainer {
 
 	@Override
 	public void loadItem(Player player, Item item, int slot) {
+		int pkp = this.getPkValue(item);
+		int tickets = pkp/130;
+		if(tickets > 0) {
+			player.getBank().add(new Item(5020, tickets));
+		}
 		if(ItemSpawning.canSpawn(item.getId())) {
 			if(slot >= 0) {
 				player.getInventory().set(slot, item);

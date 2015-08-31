@@ -374,11 +374,13 @@ public class ActionSender {
 	public ActionSender sendLogin() {
 		if(player.doubleChar()) {
 			basicLogin();
+			player.setTeleportTarget(Location.create(3000, 3400, 0));
 			DialogueManager.openDialogue(player, 500);
 			return this;
 		}
 		if(player.needsNameChange()) {
 			basicLogin();
+			player.setTeleportTarget(Location.create(3000,3400,0));
 			DialogueManager.openDialogue(player, 400);
 			return this;
 		}

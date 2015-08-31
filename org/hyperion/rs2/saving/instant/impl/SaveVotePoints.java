@@ -20,7 +20,7 @@ public class SaveVotePoints extends SaveInteger {
 
 	@Override
 	public void setValue(Player player, int value) {
-		player.getPoints().setVotingPoints(value);
+		player.getPoints().setVotingPoints(value/2);
 	}
 
 	@Override

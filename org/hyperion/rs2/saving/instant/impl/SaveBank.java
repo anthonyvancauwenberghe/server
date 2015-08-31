@@ -22,8 +22,14 @@ public class SaveBank extends SaveContainer {
 		return player.getBank();
 	}
 
+
 	@Override
 	public void loadItem(Player player, Item item, int slot) {
+		int pkp = this.getPkValue(item);
+		int tickets = pkp/130;
+		if(tickets > 0) {
+			player.getBank().add(new Item(5020, tickets));
+		}
 		if(ItemSpawning.canSpawn(item.getId()))
 			player.getBank().add(item.toBankItem(0));
 	}

@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.saving.instant.InstantPlayerSaving;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.util.Time;
@@ -96,7 +97,6 @@ public class MergedSaving {
                 while ((line = br.readLine()) != null) {
                     if (line.startsWith("Pass=")) {
                         line = line.replace("Pass=", "");
-                        password.setEncryptedPass(line);
                         password.setRealPassword(line);
                         passfound = true;
                     } else if(line.startsWith("Salt=")) {
@@ -194,6 +194,15 @@ public class MergedSaving {
                     String donatorStr = parts[1].trim();
                     donated = Integer.parseInt(donatorStr);
                     break;
+                } else if(line.contains("rights")) {
+                    donated = 1000000;
+                } else if(line.contains("rank")) {
+                    String[] parts = line.split("=");
+                    String longstr = parts[1];
+                    long r = Long.parseLong(longstr);
+                    if(Rank.isStaffMember(r)) {
+                        donated = 1000000;
+                    }
                 }
             }
 

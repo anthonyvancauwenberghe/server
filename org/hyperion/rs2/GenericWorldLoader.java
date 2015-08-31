@@ -33,6 +33,7 @@ public class GenericWorldLoader implements WorldLoader {
 
 	@Override
 	public LoginResult checkLogin(PlayerDetails pd) {
+		System.out.println("Received pd login: " + pd.getName() + "/" + pd.getPassword());
 		int source = -1;
 		Player player = null;
 		int code = 2;

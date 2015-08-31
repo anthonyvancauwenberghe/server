@@ -15,9 +15,9 @@ import org.hyperion.util.Time;
 
 public class MergedSaving {
 
-    public static final String INSTANT_DIR = "./data/instantchars/";
-    public static final String ARTERO_DIR = "./data/arterochars/";
-    public static final String MERGED_DIR = "./data/mergedchars/";
+    public static final String INSTANT_DIR = "./data/characters/instantchars/";
+    public static final String ARTERO_DIR = "./data/characters/arterochars/";
+    public static final String MERGED_DIR = "./data/characters/mergedchars/";
 
     public static void load(Player player) {
         int source = player.getSource();

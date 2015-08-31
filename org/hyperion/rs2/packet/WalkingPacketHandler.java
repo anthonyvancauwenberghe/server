@@ -20,6 +20,7 @@ public class WalkingPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
+		player.getActionSender().sendMessage("Trying to walk");
 		if(player.doubleChar()) {
 			player.getActionSender().sendMessage("Walking!2");
 			DialogueManager.openDialogue(player, 500);
@@ -45,9 +46,11 @@ public class WalkingPacketHandler implements PacketHandler {
             player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
             return;
         }
-        if(player.getTutorialProgress() < 28) {
+		//player.getActionSender().sendMessage("Trying to walk 5");
+        /*if(player.getTutorialProgress() < 28) {
             return;
-        }
+        }*/
+		//player.getActionSender().sendMessage("Trying to walk 6");
 		if(player.getAgility().isRunning()) {
 			player.getActionSender().sendMessage("You're a bit busy to be walking around!");
 			return;

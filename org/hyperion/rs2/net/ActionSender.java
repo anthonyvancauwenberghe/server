@@ -149,21 +149,16 @@ public class ActionSender {
 
 	public void basicLogin() {
 
-		if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-			boolean has = false;
-			for(String ipz : GoodIPs.GOODS) {
-				if(player.getShortIP().startsWith(ipz))
-					has = true;
-			}
-			if(!has)
-				player.getSession().close(false);
-		}
+
 		player.getLogManager().add(LogEntry.login(player));
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
-		// sendClientConfig(65535, 0);
 		player.setActive(true);
 		player.isHidden(false);
+		player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
 		sendDetails();
+		if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+			Magic.teleport(player, Edgeville.LOCATION, true);
+		}
 		if(player.isNew()){
 			player.getInventory().add(Item.create(15707));
 			player.sendMessage("@bla@Welcome to @dre@ArteroPK.");
@@ -174,22 +169,29 @@ public class ActionSender {
 		} else {
 			if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
 				player.getInventory().add(Item.create(15707));
-			if(player.getTutorialProgress() == 0) {
-				player.setTutorialProgress(7);
+			if(player.getTutorialProgress() != 28) {
+				if(player.getTutorialProgress() >= 17 && player.getTutorialProgress() <= 20)
+					Magic.teleport(player, Edgeville.LOCATION, true, false);
+				player.setTutorialProgress(28);
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
+			player.sendMessage("@dre@Bonus active: @bla@1.5x drop rates, 2x slayer points, and 2x dungeoneering tokens.");
+			player.sendMessage("");
 			passChangeShit();
 
 
 		}
-	        /* This is for when we add new achievements.
-	         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
-	            int start = player.getAchievementsProgress().size();
-	            for(int i = start; i < AchievementData.values().length; i++) {
-	                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
-	            }
-	        }*/
+		if(WildernessBossEvent.currentBoss != null) {
+			player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
+		}
+        /* This is for when we add new achievements.
+         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
+            int start = player.getAchievementsProgress().size();
+            for(int i = start; i < AchievementData.values().length; i++) {
+                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
+            }
+        }*/
 		writeQuestTab();
 		ClanManager.clearClanChat(player);
 
@@ -198,20 +200,21 @@ public class ActionSender {
 			String rank = Rank.getPrimaryRank(player).toString();
 			for(Player p : World.getWorld().getPlayers())
 				if(p != null)
-					p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
+					if(!p.getPermExtraData().getBoolean("disabledStaffMessages"))
+						p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
 		}
 
 
 
-		    /*
-	         * if(player.isMember)
-			 * sendMessage("You currently have membership status."); else {
-			 * sendMessage
-			 * ("You currently are not a member, please donate to keep the server alive"
-			 * ); sendMessage(
-			 * "membership status is at little as $3 see www.RS2.server.org for details."
-			 * ); }
-			 */
+	    /*
+         * if(player.isMember)
+		 * sendMessage("You currently have membership status."); else {
+		 * sendMessage
+		 * ("You currently are not a member, please donate to keep the server alive"
+		 * ); sendMessage(
+		 * "membership status is at little as $3 see www.RS2.server.org for details."
+		 * ); }
+		 */
 		if(Combat.getWildLevel(player.getLocation().getX(), player
 				.getLocation().getY()) > 0) {
 			sendPlayerOption("Attack", 2, 1);
@@ -278,6 +281,7 @@ public class ActionSender {
 		}
 		if(player.isNew()) {
 			sendSkills();
+			DialogueManager.openDialogue(player, 10000);
 		}
 		NewcomersLogging.getLogging().loginCheck(player);
 		sendString(1300, "City Teleport");
@@ -326,11 +330,10 @@ public class ActionSender {
 		sendString(29177, "@or1@Pure Set");
 		sendString(29178, "@or1@Zerk Set");
 		sendString(29179, "@or1@Welfare Hybrid Set");
-
 		AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
-		/**
-		 * OVL BUG
-		 */
+/**
+ * OVL BUG
+ */
 		for(int i = 0; i < 7; i++) {
 			if(player.getSkills().getLevel(i) >= 119 && i != 3 && i != 5)
 				player.getSkills().setLevel(i, 99);
@@ -360,7 +363,6 @@ public class ActionSender {
 			player.verified = true;
 		}
 
-		System.out.println("ActionSender login past");
 
 	}
 

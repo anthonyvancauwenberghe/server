@@ -1225,10 +1225,8 @@ public class Combat {
 	}
 
 	public static void follow2(final CombatEntity combatEntity, int x, int y, int toX, int toY, int height) {
-		int moveX = 0;
-		int moveY = 0;
 		
-        try {
+      /*  try {
             long time = System.currentTimeMillis();
 		    int path[][] = PathfinderV2.findRoute(x, y, toX, toY, height);
             if(path == null) return;
@@ -1242,9 +1240,12 @@ public class Combat {
             System.out.println("Took: "+(System.currentTimeMillis() - time));
         }catch(Exception e) {
 
-        }
+        } */
 
-		/*if(x > toX)
+        int moveX = 0;
+        int moveY = 0;
+
+		if(x > toX)
 			moveX = - 1;
 		else if(x < toX)
 			moveX = 1;
@@ -1282,7 +1283,7 @@ public class Combat {
 				}
 			}
 		}
-		combatEntity.getEntity().getWalkingQueue().addStep(x + moveX, y + moveY); */
+		combatEntity.getEntity().getWalkingQueue().addStep(x + moveX, y + moveY);
 	}
 
 	/**

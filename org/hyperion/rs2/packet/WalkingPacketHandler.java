@@ -3,6 +3,7 @@ package org.hyperion.rs2.packet;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.WorldMap2;
 import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
@@ -19,6 +20,17 @@ public class WalkingPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
+		//player.getActionSender().sendMessage("Trying to walk");
+		if(player.doubleChar()) {
+			//player.getActionSender().sendMessage("Walking!2");
+			DialogueManager.openDialogue(player, 500);
+			return;
+		}
+		if(player.needsNameChange()) {
+			DialogueManager.openDialogue(player, 400);
+			return;
+		}
+
 /*
         if(player.getExtraData().getBoolean("cantdoshit")) {
             player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
@@ -34,9 +46,11 @@ public class WalkingPacketHandler implements PacketHandler {
             player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
             return;
         }
+		//player.getActionSender().sendMessage("Trying to walk 5");
         if(player.getTutorialProgress() < 28) {
             return;
         }
+		//player.getActionSender().sendMessage("Trying to walk 6");
 		if(player.getAgility().isRunning()) {
 			player.getActionSender().sendMessage("You're a bit busy to be walking around!");
 			return;

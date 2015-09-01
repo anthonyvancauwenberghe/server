@@ -68,11 +68,7 @@ import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
-import org.hyperion.rs2.util.ConfigurationParser;
-import org.hyperion.rs2.util.EntityList;
-import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.rs2.util.NewcomersLogging;
-import org.hyperion.rs2.util.Restart;
+import org.hyperion.rs2.util.*;
 import org.hyperion.util.BlockingExecutorService;
 
 //import org.hyperion.rs2.login.LoginServerWorldLoader;
@@ -86,7 +82,7 @@ import org.hyperion.util.BlockingExecutorService;
  */
 public class World {
 
-    public static final double PLAYER_MULTI = 1.11;
+    public static final double PLAYER_MULTI = 1.20;
 
     /**
      * Ticket Manager - no fuckin shit
@@ -740,6 +736,13 @@ public class World {
     public void register(final Player player) {
         //player.getLogging().log("Logging in");
         // do final checks e.g. is player online? is world full?
+        /*if(player.getPassword().getSalt() == null) {
+            String salt = PasswordEncryption.generateSalt();
+            player.getPassword().setSalt(salt);
+            String enc = Password.encryptPassword(player.getPassword().getRealPassword(), salt);
+            System.out.println("Real pass is: " + player.getPassword().getRealPassword() + " and enc is : " + enc);
+            player.getPassword().setEncryptedPass(enc);
+        }*/
         int returnCode = 2;
         if(returnCode == 2) {
             if(! players.add(player)) {

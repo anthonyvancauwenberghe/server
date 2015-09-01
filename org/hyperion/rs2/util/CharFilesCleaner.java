@@ -1,6 +1,7 @@
 package org.hyperion.rs2.util;
 
 import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.saving.MergedSaving;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +18,7 @@ public class CharFilesCleaner implements Runnable {
 
 	@Override
 	public void run() {
-		File[] files = PlayerSaving.SAVE_DIR.listFiles();
+		File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
 		System.out.println("Started char files cleaner! Files count: " + files.length);
 		final long currentTime = System.currentTimeMillis();
 		for(File file : files) {

@@ -4,6 +4,7 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.PlayerFiles;
 
 /**
@@ -17,7 +18,7 @@ public class ClearLogsCommand extends Command {
 
     public boolean execute(final Player player, final String input){
         final String targetName = filterInput(input).trim();
-        if(!PlayerFiles.exists(targetName)){
+        if(!MergedSaving.exists(targetName)){
             player.sendf("%s does not exist", targetName);
             return false;
         }

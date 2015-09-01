@@ -25,6 +25,8 @@ public class WieldPacketHandler implements PacketHandler {
 	@Override
 	public void handle(final Player player, Packet packet) {
 		//player.getWalkingQueue().reset();
+		if(player.needsNameChange() || player.doubleChar())
+			return;
 		int id = packet.getShort() & 0xFFFF;
 		int slot = packet.getShortA() & 0xFFFF;
 		int interfaceId = packet.getShortA() & 0xFFFF;

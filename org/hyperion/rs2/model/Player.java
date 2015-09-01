@@ -5,6 +5,7 @@ import org.apache.mina.core.session.IoSession;
 import org.hyperion.Server;
 import org.hyperion.data.Persistable;
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
@@ -87,6 +88,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player extends Entity implements Persistable, Cloneable{
 
 	public static final int MAX_NAME_LENGTH = 12;
+
+
+	private boolean doublechar = false;
+
+	public boolean doubleChar() {
+		return doublechar;
+	}
+
+	public void setDoubleChar(boolean b) {
+		System.out.println("Double char case!");
+		doublechar = b;
+	}
+
+	private boolean needsNamechange = false;
+
+	public boolean needsNameChange() {
+		return needsNamechange;
+	}
+
+	public void setNeedsNameChange(boolean b) {
+		needsNamechange = b;
+	}
 
 	@Override
 	public Object clone() throws CloneNotSupportedException{
@@ -806,7 +829,27 @@ public class Player extends Entity implements Persistable, Cloneable{
 	/**
 	 * The password.
 	 */
-	private String password;
+	private Password password = new Password();
+
+	private int initialSource = GenericWorldLoader.MERGED;
+
+	public int getInitialSource() {
+		return initialSource;
+	}
+
+	public void setInitialSource(int source) {
+		this.initialSource = source;
+	}
+
+	private int source = GenericWorldLoader.MERGED;
+
+	public int getSource() {
+		return source;
+	}
+
+	public void setSource(int source) {
+		this.source = source;
+	}
 
 	/**
 	 * The rights level.
@@ -1191,7 +1234,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			System.out.println("Invalid name!!!!!" + name);
 		}
 		this.nameLong = NameUtils.nameToLong(this.name);
-		this.password = details.getPassword();
+		this.password.setRealPassword(details.getPassword());
 		this.uid = details.getUID();
 		this.IP = details.IP;
 		LoginDebugger.getDebugger().log("1.So far made new Player obj");
@@ -1505,7 +1548,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 *
 	 * @return The player's password.
 	 */
-	public String getPassword() {
+	public Password getPassword() {
 		return password;
 	}
 
@@ -1514,9 +1557,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 *
 	 * @param pass The password.
 	 */
-	public void setPassword(String pass) {
-		this.password = pass;
-	}
+
 
 	/**
 	 * Gets the player's UID.

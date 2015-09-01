@@ -1333,7 +1333,124 @@ public class DialogueManager {
 				player.sendMessage("You can now use the yell chat. Remember that you can turn it off");
 				player.sendMessage("at any time in the blue questtab.");
 				break;
+			case 400:
+				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Dear Player, please read carefully...", "InstantPk and ArteroPk have merged the servers!");
+				player.getInterfaceState().setNextDialogueId(0, 401);
+				break;
+			case 401:
 
+				System.out.println("Running code 401");
+				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Your account has been saved but...", "You have to change your name to activate it.", "Please enter a new name in the input box.");
+				player.getInterfaceState().setNextDialogueId(0, 402);
+				break;
+			case 402:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getActionSender().removeChatboxInterface();
+				player.getInterfaceState().setStringListener("namechange");
+				break;
+
+			case 403:
+				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Unfortunately this name is already taken,","please choose an other name");
+				player.getInterfaceState().setNextDialogueId(0, 404);
+				break;
+			case 404:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getActionSender().removeChatboxInterface();
+				player.getInterfaceState().setStringListener("namechange");
+				break;
+			case 405:
+				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Please remember this username very well,","@red@next time you have to log in with this new name!","Please confirm this name.");
+				player.getInterfaceState().setNextDialogueId(0, 404);
+				break;
+			case 406:
+				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"You have entered different usernames.","Please re-enter your name.");
+				player.getExtraData().remove("rename");
+				player.getInterfaceState().setNextDialogueId(0, 404);
+				break;
+
+
+
+			case 500:
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Dear Player, please read this very carefully...", "You have 2 accounts, one on both ArteroPk and InstantPk.","One of them can be kept, one must be renamed.");
+				player.getInterfaceState().setNextDialogueId(0, 501);
+				break;
+			case 501:
+				player.getActionSender().sendDialogue("Choose an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Rename ArteroPk account", "Rename InstantPk account");
+				player.getInterfaceState().setNextDialogueId(0, 502);
+				player.getInterfaceState().setNextDialogueId(1, 507);
+				break;
+			case 502:
+				//Means player wanted to rename Artero acc
+				player.getActionSender().sendDialogue("Confirm", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Rename InstantPk account", "Rename ArteroPk account");
+				player.getInterfaceState().setNextDialogueId(0, 506);
+				player.getInterfaceState().setNextDialogueId(1, 504);
+				break;
+
+			case 504:
+				//Confirmed he wanted to rename Artero acc
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Please enter a new name for your","ArteroPk account.");
+				player.getInterfaceState().setNextDialogueId(0, 505);
+				break;
+			case 505:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getActionSender().removeChatboxInterface();
+				player.getInterfaceState().setStringListener("doublecharartero");
+				break;
+			case 506:
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"You have made an invalid choice, please try again.");
+				player.getInterfaceState().setNextDialogueId(0, 501);
+
+				break;
+			case 507:
+				//Player wanted to rename InstantPk
+				player.getActionSender().sendDialogue("Confirm", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Rename InstantPk account", "Rename ArteroPk account");
+				player.getInterfaceState().setNextDialogueId(0, 508);
+				player.getInterfaceState().setNextDialogueId(1, 510);
+				break;
+			case 508:
+				//Confirmed he wanted to rename InstantPk acc
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Please enter a new name for your","InstantPk account.");
+				player.getInterfaceState().setNextDialogueId(0, 509);
+				break;
+			case 509:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getActionSender().removeChatboxInterface();
+				player.getInterfaceState().setStringListener("doublecharinstant");
+				break;
+			case 510:
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"You have made an invalid choice, please try again.");
+				player.getInterfaceState().setNextDialogueId(0, 501);
+				break;
+			case 511:
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"Thank you for changing your name!","You will be logged out now.");
+				player.getInterfaceState().setNextDialogueId(0, 512);
+				break;
+			case 512:
+				player.getSession().close(false);
+				break;
+			case 513:
+				//InstantPk
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"This name is already in use, please choose an other name.");
+				player.getInterfaceState().setNextDialogueId(0, 509);
+				break;
+			case 514:
+				//Artero
+				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
+						"This name is already in use, please choose an other name.");
+				player.getInterfaceState().setNextDialogueId(0, 505);
+				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;

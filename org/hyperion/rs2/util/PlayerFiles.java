@@ -11,38 +11,7 @@ import java.io.FileReader;
 public class PlayerFiles {
 
 
-	/**
-	 * @param playerName
-	 * @returns Checks whether a character file for the specified username exists.
-	 */
-	public static boolean exists(String playerName) {
-		return new File("./Data/characters/" + playerName.toLowerCase() + ".txt").exists();
-	}
 
-	/**
-	 * @param playerName
-	 * @returns The password of the player with the specified username.
-	 */
-	public static String getPassword(String playerName) {
-		playerName = playerName.toLowerCase();
-		String pass = "";
-		if(! exists(playerName))
-			return pass;
-		try {
-			BufferedReader br = new BufferedReader(new FileReader("./Data/characters/" + playerName + ".txt"));
-			String line = br.readLine();
-			while((line = br.readLine()) != null) {
-				if(line.startsWith("Pass=")) {
-					pass = line.replace("Pass=", "");
-					break;
-				}
-			}
-			br.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return pass;
-	}
 
 
 	/**

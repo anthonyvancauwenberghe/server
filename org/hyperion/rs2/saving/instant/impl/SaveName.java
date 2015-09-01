@@ -12,8 +12,7 @@ public class SaveName extends SaveString {
 
 	@Override
 	public void setValue(Player player, String value) {
-		value = TextUtils.ucFirst(value);
-		player.setName(value);
+
 	}
 
 	@Override

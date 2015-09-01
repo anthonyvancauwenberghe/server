@@ -764,7 +764,7 @@ public class Combat {
 			}
 			combatEntity.getNPC().face(combatEntity.getOpponent().getEntity().getLocation());
 			int type = combatEntity.attack.handleAttack(combatEntity.getNPC(), combatEntity.getOpponent());
-			if(type == 1 && combatEntity.getOpponent() != null
+			if(type == 1
 					&& combatEntity.getNPC().agressiveDis > 0
 					&& combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) <= combatEntity.getNPC().agressiveDis) {
 				type = 0;

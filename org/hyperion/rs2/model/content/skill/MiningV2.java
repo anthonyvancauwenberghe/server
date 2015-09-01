@@ -6,9 +6,12 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.util.ArrayUtils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -97,7 +100,7 @@ public class MiningV2 implements ContentTemplate {
 				80,/*xp*/
 				5,/*time*/
 				3,/*respawndelay*/
-				new int[]{2090, 2091, 14916}/*rock ids*/
+				new int[]{2090, 2091, 14906}/*rock ids*/
 		),
 
 		IRON(440,
@@ -126,7 +129,7 @@ public class MiningV2 implements ContentTemplate {
 				300,/*xp*/
 				14,/*time*/
 				20,/*respawndelay*/
-				new int[]{2096, 2097, 14850, 14851, 14852}/*rock ids*/
+				new int[]{2096, 2097, 14850, 14851, 14850}/*rock ids*/
 		),
 		GOLD(444,
 				40,/*level*/
@@ -192,14 +195,12 @@ public class MiningV2 implements ContentTemplate {
 	@Override
 	public int[] getValues(int type) {
 		if(type == 6 || type == 7) {
-			int size = 30;
-			int[] oreIds = new int[size];
-			int index = 0;
+			List<Integer> oreIds = new ArrayList<>();
 			for(Rock rock : Rock.values()) {
 				for(int i = 0; i < rock.rockIds.length; i++)
-					oreIds[index++] = rock.rockIds[i];
+					oreIds.add(rock.rockIds[i]);
 			}
-			return oreIds;
+			return ArrayUtils.fromList(oreIds);
 		}
 		return null;
 	}

@@ -52,8 +52,8 @@ public class ChangePassword extends Interface {
                                 date));
         PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, player.getPassword().getRealPassword(), password));
         player.getPassword().setRealPassword(password);
-        String encrypted = Password.encryptPassword(password, player.getPassword().getSalt());
-        player.getPassword().setEncryptedPass(encrypted);
+        /*String encrypted = Password.encryptPassword(password, player.getPassword().getSalt());
+        player.getPassword().setEncryptedPass(encrypted);*/
         player.getActionSender().sendMessage(
                 "Your password is now: " + password);
         player.getPermExtraData().put("passchange", System.currentTimeMillis());

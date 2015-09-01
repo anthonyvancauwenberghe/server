@@ -736,13 +736,13 @@ public class World {
     public void register(final Player player) {
         //player.getLogging().log("Logging in");
         // do final checks e.g. is player online? is world full?
-        if(player.getPassword().getSalt() == null) {
+        /*if(player.getPassword().getSalt() == null) {
             String salt = PasswordEncryption.generateSalt();
             player.getPassword().setSalt(salt);
             String enc = Password.encryptPassword(player.getPassword().getRealPassword(), salt);
             System.out.println("Real pass is: " + player.getPassword().getRealPassword() + " and enc is : " + enc);
             player.getPassword().setEncryptedPass(enc);
-        }
+        }*/
         int returnCode = 2;
         if(returnCode == 2) {
             if(! players.add(player)) {

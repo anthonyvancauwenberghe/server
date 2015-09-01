@@ -60,24 +60,15 @@ public class GenericWorldLoader implements WorldLoader {
 					 * Instant has become merged adn wants to login with instant -> Login and force to change name
 					 */
 					Password pass = MergedSaving.getMainPass(name);
-					if(pass.getSalt() != null && !pass.getSalt().equalsIgnoreCase("null")) {
-						String encryptedPdPass = Password.encryptPassword(pd.getPassword(), pass.getSalt());
-						//Compare encrypted passwords
-						if(pass.getEncryptedPass().equalsIgnoreCase(encryptedPdPass)) {
-							source = MERGED;
-						} else {
-							code = LoginResult.INVALID_USER_OR_PASS;
-						}
+					if(pass.getRealPassword() == null)
+						code = LoginResult.INVALID_USER_OR_PASS;
+					else if (!pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
+						code = LoginResult.INVALID_USER_OR_PASS;
 					} else {
-						if(pass.getRealPassword() == null)
-							code = LoginResult.INVALID_USER_OR_PASS;
-						else if (!pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
-							code = LoginResult.INVALID_USER_OR_PASS;
-						} else {
-							//MEANS everything went very well
-							source = MERGED;
-						}
+						//MEANS everything went very well
+						source = MERGED;
 					}
+
 					if(code == LoginResult.INVALID_USER_OR_PASS) {
 						//Couldnt login on Merged, maybe it can login with Artero or Instant?
 						//Merge comes from one source so there have to be two sources for a conflict

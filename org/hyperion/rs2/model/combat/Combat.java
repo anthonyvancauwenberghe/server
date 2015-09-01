@@ -736,13 +736,20 @@ public class Combat {
 					return false;
 				}
 			}
-			if(combatEntity.getNPC().ownerId > 1 && combatEntity.getNPC().summoned) {
+			if(combatEntity.getNPC().ownerId >= 1 && combatEntity.getNPC().summoned) {
 				if(combatEntity.getOpponent() != null && combatEntity.getOpponent().getEntity() instanceof Player) {
 					if(!Location.inAttackableArea(combatEntity.getOpponent().getPlayer()) || !isInMulti(combatEntity.getOpponent())) {
 						return false;
 					}
 				}
 			}
+				if(combatEntity.getNPC().ownerId >= 1 && !combatEntity.getNPC().summoned) {
+					if (combatEntity.getOpponent() != null && combatEntity.getOpponent().getEntity() instanceof Player) {
+						if (combatEntity.getNPC().ownerId != combatEntity.getOpponent().getPlayer().getIndex()) {
+							return false;
+						}
+					}
+				}
 			combatEntity.getNPC().face(combatEntity.getOpponent().getEntity().getLocation());
 			int type = combatEntity.attack.handleAttack(combatEntity.getNPC(), combatEntity.getOpponent());
 			if(type == 1 && combatEntity.getOpponent() != null

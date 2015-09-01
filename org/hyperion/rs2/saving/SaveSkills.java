@@ -44,6 +44,11 @@ public class SaveSkills extends SaveObject {
 			int exp = Integer.parseInt(parts[2]);
 			level = level > 200 ? 200 : level;
 			player.getSkills().setSkill(skill, level, exp);
+
+			if(skill == Skills.HITPOINTS) {
+				level = level > player.getSkills().calculateMaxLifePoints() ? player.getSkills().calculateMaxLifePoints() : level;
+				player.getSkills().setSkill(skill, level, exp);
+			}
 		}
 		player.getActionSender().sendSkills();
 	}

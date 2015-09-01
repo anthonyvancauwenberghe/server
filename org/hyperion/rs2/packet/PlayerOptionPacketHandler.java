@@ -68,7 +68,10 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 					player.debugMessage("NpcId: " + victim.getDefinition().getId());
 				if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)
 					return;
-					if(victim.ownerId > 1 && victim.summoned)
+					if(victim.ownerId >= 1 && victim.summoned)
+						return;
+
+					if(victim.ownerId >= 1 && victim.ownerId != player.getIndex() && !victim.summoned)
 						return;
 
 					player.cE.setOpponent(victim.cE);

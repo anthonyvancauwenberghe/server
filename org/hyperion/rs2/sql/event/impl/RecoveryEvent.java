@@ -72,7 +72,7 @@ public class RecoveryEvent extends SQLEvent {
 	private void writePassInFile(String name, String pass) {
 		World.getWorld().getLogsConnection().writeLog("Changing pass for " + name + "," + pass);
 		try {
-			String fileName = "./data/characters/" + name + ".txt";
+			String fileName = "./data/characters/mergedchars/" + name + ".txt";
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			LinkedList<String> lines = new LinkedList<String>();
 			String line = "";

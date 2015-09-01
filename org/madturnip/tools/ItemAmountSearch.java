@@ -17,7 +17,7 @@ public class ItemAmountSearch {
             try {
                 int itemID = Integer.valueOf(args[0]);
                 int itemAmount = Integer.valueOf(args[1]);
-                File dir = new File("./data/characters");
+                File dir = new File("./data/characters/mergedchars");
                 for(File characterFile : dir.listFiles()) {
                     if(characterFile.isDirectory())
                         continue;

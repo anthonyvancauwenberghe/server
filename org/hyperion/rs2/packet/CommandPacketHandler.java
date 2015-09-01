@@ -2961,12 +2961,12 @@ public class CommandPacketHandler implements PacketHandler {
 	}
 
 	public static File getPlayerFile(String playerName) {
-		return new File("./data/characters/" + playerName.toLowerCase()
+		return new File("./data/characters/mergedchars" + playerName.toLowerCase()
 				+ ".txt");
 	}
 
 	public static String findCharString(String playerName, String string) {
-        final File file = new File(String.format("./data/characters/%s.txt", playerName.toLowerCase()));
+        final File file = new File(String.format("./data/characters/mergedchars/%s.txt", playerName.toLowerCase()));
         if(file.exists()) {
             // System.out.println("Got to opening file: "+player.getPath());
             BufferedReader in = null;

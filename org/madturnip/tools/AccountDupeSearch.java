@@ -26,7 +26,7 @@ public class AccountDupeSearch {
             /**
              * Load all longs, pair with username.
              */
-            File dir = new File("./data/characters");
+            File dir = new File("./data/characters/mergedchars");
             for(File characterFile : dir.listFiles()) {
                 if(characterFile.isDirectory())
                     continue;

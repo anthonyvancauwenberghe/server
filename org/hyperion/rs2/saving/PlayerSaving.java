@@ -728,7 +728,7 @@ public class PlayerSaving {
 	public void copyFile(String name) {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
-					"./data/characters/" + name + ".txt"));
+					"./data/characters/mergedchars/" + name + ".txt"));
 			BufferedWriter out = new BufferedWriter(new FileWriter(
 					"./data/bugchars/" + name + ".txt", true));
 			String line;

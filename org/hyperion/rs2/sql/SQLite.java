@@ -280,9 +280,9 @@ public class SQLite {
 						namesToDelete.add(alt);
 					}
 					for(String s : namesToDelete) {
-						File file = new File("./data/characters/" + s + ".txt");
+						File file = new File("./data/characters/mergedchars/" + s + ".txt");
 						player.getActionSender().sendMessage("You are attemptng to move " + file.toString());
-						if(file.renameTo(new File("./data/characters/wiped/" + file.getName())))
+						if(file.renameTo(new File("./data/characters/mergedchars/wiped/" + file.getName())))
 							player.getActionSender().sendMessage("You have just moved " + file.toString());
 						else
 							player.getActionSender().sendMessage("Failed to move file " + file.toString());

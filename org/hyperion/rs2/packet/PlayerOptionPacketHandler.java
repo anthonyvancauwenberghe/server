@@ -71,6 +71,9 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 					if(victim.ownerId > 1 && victim.summoned)
 						return;
 
+					if(victim.ownerId != player.getIndex() && !victim.summoned)
+						return;
+
 					player.cE.setOpponent(victim.cE);
 
 					if(! Combat.processCombat(player.cE))

@@ -198,7 +198,7 @@ public class MergedSaving {
                     donated = 1000000;
                 } else if(line.contains("rank")) {
                     String[] parts = line.split("=");
-                    String longstr = parts[1];
+                    String longstr = parts[1].trim();
                     long r = Long.parseLong(longstr);
                     if(Rank.isStaffMember(r)) {
                         donated = 1000000;

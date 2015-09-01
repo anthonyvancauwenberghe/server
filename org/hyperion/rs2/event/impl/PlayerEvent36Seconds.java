@@ -47,6 +47,7 @@ public class PlayerEvent36Seconds extends Event {
         	}
 			player.getActionSender().sendMessage("We are currently in testing mode, testing the merge..");
 			player.getActionSender().sendMessage("Your game progress of the past hour will possibly be lost.");
+			player.getActionSender().sendMessage("Please report all bugs to staff members!");
         	player.getSummBar().cycle();
         	player.getActionSender().sendString(4508, player.getSummBar().getAmount() + "");
         	player.getSpecBar().normalize();

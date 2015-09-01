@@ -193,15 +193,6 @@ public class WarriorsGuild implements ContentTemplate {
 					return false;
 				}
 			}
-			for(int i = 1; i <= World.getWorld().npcs.size(); i++) {
-				if(World.getWorld().npcs.get(i) != null) {
-					NPC npc = (NPC) World.getWorld().npcs.get(i);
-					if (npc.ownerId == player.getIndex() && player.cE.summonedNpc != npc) {
-						npc.forceMessage("I'm not done with you " + player.getSafeDisplayName() + "!");
-						return false;
-					}
-				}
-			}
 			for(int i = 0; i < needed.length; i++) {
 				ContentEntity.deleteItem(player, needed[i]);
 			}

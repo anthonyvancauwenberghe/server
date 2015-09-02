@@ -860,7 +860,7 @@ public class CombatAssistant {
 		double effective = getEffectiveStr(p);
 		double strengthBonus = p.getBonus().get(EquipmentStats.STRENGTH);
 
-		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 64)) / 10;
+		base = (13 + effective + (strengthBonus / 10) + ((effective * strengthBonus) / 70)) / 10;
 
 
 		if(p.specOn) {
@@ -1181,6 +1181,7 @@ public class CombatAssistant {
         else
             return entity.getCombat().getCombat()/2;
     }
+
 
 	public static int calculateMageAtk(Player player) {
 		int mageLvl = player.getSkills().getLevel(6);

@@ -235,6 +235,18 @@ public class CommandHandler {
 				return true;
 			}
 		});
+		submit(new Command("sm", Rank.DEVELOPER){
+			public boolean execute(final Player player, final String input) throws Exception{
+				String input1 = filterInput(input);
+				if(input1.equalsIgnoreCase("sm")) {
+					player.sendMessage("Use as ::sm MESSAGE");
+					return false;
+				}
+				for(Player p : World.getWorld().getPlayers())
+					p.sendServerMessage(TextUtils.optimizeText(input1));
+				return true;
+			}
+		});
         submit(new Command("combine", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {

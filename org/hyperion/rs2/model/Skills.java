@@ -548,9 +548,16 @@ public class Skills {
         else if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;
         resetBonuxXP();
-		int oldLevel = (int) getLevelForExp(skill);
+		int oldLevel = getLevelForExp(skill);
+		int oldExp = getExperience(skill);
 		exps[skill] += exp;
-		if(exps[skill] > MAXIMUM_EXP) {
+		if(exps[skill] >= MAXIMUM_EXP) {
+			if(oldExp != MAXIMUM_EXP) {
+				for(Player p : World.getWorld().getPlayers()) {
+					p.sendServerMessage(player.getSafeDisplayName() + " has just reached 200m experience in " + SKILL_NAME[skill] + "!");
+				}
+				player.checkCapes();
+			}
 			exps[skill] = MAXIMUM_EXP;
 			return;
 		}
@@ -562,6 +569,9 @@ public class Skills {
 			player.playGraphics(Graphic.create(199));
 			levels[skill] += levelDiff;
 			player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+			if(getLevel(skill) == 99) {
+				player.checkCapes();
+			}
 		}
 		player.getActionSender().sendSkill(skill);
 	}

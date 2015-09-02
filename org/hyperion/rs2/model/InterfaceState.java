@@ -319,7 +319,7 @@ public class InterfaceState {
 		if (string_input_listener == null || string_input_listener.length() == 0) {
 			return false;
 		}
-
+		result = result.replaceAll("_"," ");
 		switch (string_input_listener) {
 			case "doublecharinstant":
 				if(player.doubleChar()) {

@@ -130,6 +130,7 @@ public class Bork  {
             {
                 pkt = pkt/3;
                 tokens = tokens/3;
+                player.sendMessage("You did not manage to defeat bork.");
             }
             player.getBank().add(Item.create(PvMStore.TOKEN, tokens));
             player.getBank().add(Item.create(5020, pkt));
@@ -180,7 +181,6 @@ public class Bork  {
         ((BorkEvent)player.getExtraData().get(KEY)).stop();
         player.setTeleportTarget(Edgeville.LOCATION, false);
         return true;
-
     }
 
     public static boolean handleBorkDeath(final Player player, final NPC npc) {

@@ -194,7 +194,6 @@ public class CommandHandler {
 		SpawnServerCommands.init();
 		TestCommands.init();
 		TeleportCommands.init();
-		submit(new StaffYellCommand("staffyell", Rank.MODERATOR));
 		submit(new AllToMeCommand("alltome", Rank.DEVELOPER));
 		submit(new GiveDonatorPointsCommand("givedp"));
 		submit(new YellCommand());

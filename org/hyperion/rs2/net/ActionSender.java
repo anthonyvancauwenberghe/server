@@ -191,8 +191,8 @@ public class ActionSender {
                 player.getAchievementsProgress().put(AchievementData.values()[i], 0);
             }
         }*/
-		writeQuestTab();
 		player.getPoints().checkDonator();
+		writeQuestTab();
 		ClanManager.clearClanChat(player);
 
 		player.getPoints().loginCheck();
@@ -461,8 +461,8 @@ public class ActionSender {
                 player.getAchievementsProgress().put(AchievementData.values()[i], 0);
             }
         }*/
-		writeQuestTab();
 		player.getPoints().checkDonator();
+		writeQuestTab();
 		ClanManager.clearClanChat(player);
 
 		player.getPoints().loginCheck();

@@ -120,10 +120,7 @@ public class PlayerPoints {
 		donatorPoints += amount;
 		if(bought) {
 			donatorPointsBought += amount;
-			if(donatorPointsBought >= 10000)
-				player.setPlayerRank(Rank.addAbility(player, Rank.SUPER_DONATOR));
-			if(donatorPointsBought >= 1500)
-				player.setPlayerRank(Rank.addAbility(player, Rank.DONATOR));
+			checkDonator();
             try{
                 final File f = new File("./data/donate.txt");
                 if(!f.exists())
@@ -135,12 +132,19 @@ public class PlayerPoints {
                 ));
                 writer.flush();
                 writer.close();
-            }catch(Exception ex){
+            } catch(Exception ex){
                 System.out.println("Error saving donor points change: " + ex);
             }
 		}
 		player.sendServerMessage("You have been given " + amount + " donator points.");
 		player.getQuestTab().sendDonatePoints();
+	}
+
+	public void checkDonator() {
+		if(donatorPointsBought >= 10000)
+			player.setPlayerRank(Rank.addAbility(player, Rank.SUPER_DONATOR));
+		if(donatorPointsBought >= 1500)
+			player.setPlayerRank(Rank.addAbility(player, Rank.DONATOR));
 	}
 
 	/**

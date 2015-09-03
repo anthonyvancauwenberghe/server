@@ -192,6 +192,7 @@ public class ActionSender {
             }
         }*/
 		writeQuestTab();
+		player.getPoints().checkDonator();
 		ClanManager.clearClanChat(player);
 
 		player.getPoints().loginCheck();
@@ -461,6 +462,7 @@ public class ActionSender {
             }
         }*/
 		writeQuestTab();
+		player.getPoints().checkDonator();
 		ClanManager.clearClanChat(player);
 
 		player.getPoints().loginCheck();

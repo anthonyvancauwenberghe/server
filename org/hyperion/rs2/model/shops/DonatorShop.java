@@ -65,7 +65,7 @@ public class DonatorShop extends Shop {
 			}
 			return;
 		}
-        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603 || item.getId() == 17999) {
+        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603) {
             player.sendMessage("You cannot sell this item back to the store");
             return;
         }
@@ -142,7 +142,7 @@ public class DonatorShop extends Shop {
 		}
 
 		player.getActionSender().sendMessage(message);
-        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603 || item.getId() == 17999)
+        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603)
             player.sendImportantMessage("You cannot sell this item back to the shop");
 	}
 
@@ -398,6 +398,9 @@ public class DonatorShop extends Shop {
                 return 2000;
             case 19323:
                 return 2500;
+
+			case 17999:
+				return 999;
 
             case 18739:
             case 18740:
@@ -710,7 +713,6 @@ public class DonatorShop extends Shop {
 				return 1;
 
             case 6603:
-            case 17999:
                 return 0;
 		}
 		return 0;

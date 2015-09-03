@@ -13,8 +13,8 @@ public class SaveName extends SaveString {
 	@Override
 	public void setValue(Player player, String value) {
 		//value = TextUtils.ucFirst(value);
-        if(!player.getName().equalsIgnoreCase(value))
-		    player.display = value;
+       /* if(!player.getName().equalsIgnoreCase(value))
+		    player.display = value;*/
 	}
 
 	@Override

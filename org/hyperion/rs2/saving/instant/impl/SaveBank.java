@@ -25,6 +25,10 @@ public class SaveBank extends SaveContainer {
 
 	@Override
 	public void loadItem(Player player, Item item, int slot) {
+		if(this.transferedPkItem(item)) {
+			player.getBank().add(item.toBankItem(0));
+			return;
+		}
 		int pkp = this.getPkValue(item);
 		int tickets = pkp/130;
 		if(tickets > 0) {

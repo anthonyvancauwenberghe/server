@@ -20,6 +20,11 @@ public class SaveEquipment extends SaveContainer {
 
 	@Override
 	public void loadItem(Player player, Item item, int slot) {
+		if(this.transferedPkItem(item)) {
+			slot = Equipment.getType(item).getSlot();
+			player.getEquipment().set(slot, item);
+			return;
+		}
 		int pkp = this.getPkValue(item);
 		int tickets = pkp/130;
 		if(tickets > 0) {

@@ -950,10 +950,10 @@ public class ActionSender {
 			return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
-            player.isFollowing.beingFollowed = player;
             if(player.isFollowing == null) // if the player index returns null player, shouldn't be following
                 return this;
-            Combat.follow(player.cE, player.isFollowing.cE);
+			player.isFollowing.beingFollowed = player;
+			Combat.follow(player.cE, player.isFollowing.cE);
 			// System.out.println("Follow method");
 			/*
 			 * PacketBuilder bldr = new PacketBuilder(175); bldr.putShort(id);

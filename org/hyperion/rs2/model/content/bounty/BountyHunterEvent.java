@@ -26,7 +26,7 @@ public class BountyHunterEvent extends Event{
         }
     }
     if(counter%2 == 0) {
-        final List<Player> list = PlayerCombatEvent.cloneEntityList();
+        final Player[] list = PlayerCombatEvent.cloneEntityList();
         for(final Player p : list) {
             if(BountyHunter.applicable(p))
                 p.getBountyHunter().findTarget();

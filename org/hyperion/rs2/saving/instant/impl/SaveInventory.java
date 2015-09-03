@@ -20,6 +20,14 @@ public class SaveInventory extends SaveContainer {
 
 	@Override
 	public void loadItem(Player player, Item item, int slot) {
+		if(this.transferedPkItem(item)) {
+			if(slot >= 0) {
+				player.getInventory().set(slot, item);
+			} else {
+				player.getInventory().add(item);
+			}
+			return;
+		}
 		int pkp = this.getPkValue(item);
 		int tickets = pkp/130;
 		if(tickets > 0) {

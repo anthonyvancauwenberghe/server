@@ -53,9 +53,9 @@ public class PlayerEvent36Seconds extends Event {
 				artero++;
 			else if(player.getInitialSource() == GenericWorldLoader.INSTANT)
 				instant++;
-			System.out.println("Instant players: " + instant + "/ artero: " + artero);
-			if(player.getInitialSource() == GenericWorldLoader.INSTANT) {
-				player.getActionSender().sendMessage("People from InstantPk have their items converted to donator or pk points!");
+
+			if(player.getSource() == GenericWorldLoader.INSTANT) {
+				player.getActionSender().sendMessage("People from IPK have their items converted to donator points and pk tickets in bank!");
 			}
 			/*player.getActionSender().sendMessage("We are currently in testing mode, testing the merge..");
 			player.getActionSender().sendMessage("Your game progress of the past hour will possibly be lost.");
@@ -67,15 +67,8 @@ public class PlayerEvent36Seconds extends Event {
 			player.getQuestTab().sendStaffCount();
         	player.getQuestTab().sendUptime();
             Afk.procesPlayer(player);
-    		if(!World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, player, ClickId.ATTACKABLE) && !player.getDungeoneering().inDungeon()) {
-				try {
-					FightPits.dissapate(player);
-				}catch(StackOverflowError|Exception e) {
-					e.printStackTrace();
-				}
-			}
         }
-
+		System.out.println("Instant players: " + instant + "/ artero: " + artero);
         ClanManager.save();
         //worldCupCycles();
 	}

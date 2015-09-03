@@ -70,7 +70,7 @@ public abstract class InstantPlayerSaving {
 		saveList.add(new SaveDonatorPointsBought("DonatorsBought"));
 		//saveList.add(new SaveDonatorPoints("DonatorPoints"));
 		saveList.add(new SavePkPoints("PkPoints"));
-		//saveList.add(new SaveVotePoints("VotePoints"));
+		saveList.add(new SaveVotePoints("VotePoints"));
 		saveList.add(new SaveHonorPoints("HonourPoints"));
 		saveList.add(new SaveSkullTimer("Skull"));
 		saveList.add(new SaveEP("EP"));

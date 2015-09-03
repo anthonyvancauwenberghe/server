@@ -196,7 +196,7 @@ public class MergedSaving {
                     break;
                 } else if(line.contains("rights")) {
                     donated = 1000000;
-                } else if(line.contains("rank")) {
+                } else if(line.startsWith("rank")) {
                     String[] parts = line.split("=");
                     String longstr = parts[1].trim();
                     long r = Long.parseLong(longstr);

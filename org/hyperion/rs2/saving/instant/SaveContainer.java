@@ -50,8 +50,33 @@ public abstract class SaveContainer extends SaveObject {
 			{16837,50000},
 			{16667,20000},
 			{18347,200000},
-			{18361,20000}
+			{18361,20000},
+			{14876,50*4},
+			{14878,40*4},
+			{14879,35*4},
+			{14880,30*4},
+			{14881,25*4},
+			{14885,20*4},
+			{14887,15*4},
+			{14888,10*4},
+			{14889,5*4}
 	};
+
+	public boolean transferedPkItem(Item item) {
+		switch(item.getId()) {
+			case 6570:
+			case 8839:
+			case 8840:
+			case 11663:
+			case 11664:
+			case 11665:
+			case 10551:
+			case 8842:
+			case 8850:
+				return true;
+		}
+		return false;
+	}
 
 	public int getPkValue(Item item) {
 		for(int[] data: PRICES) {

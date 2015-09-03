@@ -146,7 +146,8 @@ public class QuestTab {
 
 	public void sendBonusSkill() {
 		int id = getId(4);
-		player.getActionSender().sendString("@or1@Bonus skill: @gre@"+ Misc.getSkillName(Skills.BONUS_SKILL), id);
+		//player.getActionSender().sendString("@or1@Bonus skill: @gre@"+ Misc.getSkillName(Skills.BONUS_SKILL), id);
+		player.getActionSender().sendString("@or1@Bonus skill: @gre@All skills", id);
 		player.getActionSender().sendTooltip(id, "Bonus skill");
 	}
 

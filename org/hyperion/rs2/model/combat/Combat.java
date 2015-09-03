@@ -1197,7 +1197,7 @@ public class Combat {
         try {
 
             int dis = combatEntity.getEntity().getLocation().distance(opponent.getEntity().getLocation());
-            if(dis > 20 || dis < 1)
+            if(dis > 20 || dis < 0)
                 return;
 
             combatEntity.face(opponent.getAbsX() ,opponent.getAbsY()

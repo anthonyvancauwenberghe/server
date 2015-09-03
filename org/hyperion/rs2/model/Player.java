@@ -1004,6 +1004,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public Player challengedBy = null;
 	public int[] checkersRecord;
 
+    public Player beingFollowed = null;
 	public Player isFollowing = null;
 	public boolean isMoving = false;
 

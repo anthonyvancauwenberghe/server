@@ -105,6 +105,9 @@ public class AStarPathFinder implements PathFinder {
 			// be the most likely to be the next step based on our heuristic
 
 			Node current = getFirstInOpen();
+
+            if(tx >= map.getWidthInTiles() || tx >= map.getHeightInTiles())
+                break; //fix error
 			if(current == nodes[tx][ty]) {
 				break;
 			}

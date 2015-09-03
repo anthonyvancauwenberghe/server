@@ -154,6 +154,9 @@ public class WalkingPacketHandler implements PacketHandler {
 		}
 		player.getWalkingQueue().finish();
 
+        if(player.beingFollowed != null)
+            Combat.follow(player.beingFollowed.cE, player.cE);
+
 	}
 
 }

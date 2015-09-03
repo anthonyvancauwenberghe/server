@@ -1195,9 +1195,16 @@ public class Combat {
 	public static void follow3(final CombatEntity combatEntity, final CombatEntity opponent) {
 
         try {
-            //Combat.follow(player.cE, player.isFollowing.cE);
-            //int startx = player.getLocation().getX();
-            //int starty = player.getLocation().getY();
+
+            int dis = combatEntity.getEntity().getLocation().distance(opponent.getEntity().getLocation());
+            if(dis > 20 || dis < 1)
+                return;
+
+            combatEntity.face(opponent.getAbsX() ,opponent.getAbsY()
+            );
+
+            combatEntity.getEntity().setInteractingEntity(opponent.getEntity());
+
 
             int toX = opponent.getAbsX();
             int toY = opponent.getAbsY();

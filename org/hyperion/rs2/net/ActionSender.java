@@ -174,7 +174,7 @@ public class ActionSender {
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
-			player.sendMessage("", "@dre@Bonus: @bla@Double experience in every skill for the merge!");
+			player.sendMessage("", "@dre@Bonus: @bla@Double experience in every skill & 2x vote reward for the merge!");
 			passChangeShit();
 
 

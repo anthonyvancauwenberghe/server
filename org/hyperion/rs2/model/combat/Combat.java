@@ -1220,7 +1220,7 @@ public class Combat {
             if(p != null) {
                 for(int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
-                    if((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
+                    //if((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
                         combatEntity.getEntity().getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
                 }
                 combatEntity.getEntity().getWalkingQueue().finish();

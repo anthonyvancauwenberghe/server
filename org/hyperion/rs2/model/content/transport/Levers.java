@@ -36,8 +36,12 @@ public class Levers implements ContentTemplate {
 		}
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return false;
+		if(player.getLocation().getX() != loc.getX() || player.getLocation().getY() != loc.getY()) {
+			return false;
+		}
 		player.playAnimation(LEVER_ANIMATION);
 		player.getActionSender().sendCreateObject(5961, 4, lever.getDirection1(), loc);
+		player.getCombat().setOpponent(null);
 		player.setCanWalk(false);
 		player.updateTeleportTimer();
 		World.getWorld().submit(new Event(1500) {

@@ -15,7 +15,7 @@ public class ServerMinigame extends Event {
 	}
 
     public static final CountDownEventBuilder[] builders = new CountDownEventBuilder[]{
-            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3X PKP Game", () -> FightPits.startEvent()),
+            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3x Pk points game", () -> FightPits.startEvent()),
             new CountDownEventBuilder("Hybridding", "hybrid"),
             new CountDownEventBuilder("OldSchool PK", "ospk"),
             new CountDownEventBuilder("Pure Pking", "purepk"),
@@ -37,7 +37,7 @@ public class ServerMinigame extends Event {
         public final String message;
 
         public CountDownEventBuilder(final int npcId, final Location location) {
-            this(NPCDefinition.forId(npcId).getName(), "the event tab", location, "2X Drop Rates for 30Min", () -> {
+            this(NPCDefinition.forId(npcId).getName(), "the event tab", location, "2x drop rates for 30 minutes", () -> {
                 NpcDeathEvent.npcIdForDoubleDrops = npcId;
                 World.getWorld().submit(new Event(Time.THIRTY_MINUTES) {
                     public void execute() {
@@ -53,7 +53,7 @@ public class ServerMinigame extends Event {
         }
 
         public CountDownEventBuilder(final String name, final String command, final SpecialArea area) {
-            this(name, command, area.getDefaultLocation(), "5X PKP for 30min", () -> area.createEvent());
+            this(name, command, area.getDefaultLocation(), "5x Pk points for 30 minutes", () -> area.createEvent());
         }
 
         public CountDownEventBuilder(final String name, final String command, final Location location, final String msg, Runnable run) {

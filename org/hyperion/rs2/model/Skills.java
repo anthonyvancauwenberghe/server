@@ -543,12 +543,10 @@ public class Skills {
         	exp *= 1.02;
         }
 
-		//Bonus Exp
-		exp *= 2;
-
-		if(skill == BONUS_SKILL) {
-			//exp *= 2;
-		} else if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
+		//if(skill == BONUS_SKILL) {
+		if(skill > 6)
+			exp *= 2;
+		else if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;
         resetBonuxXP();
 		int oldLevel = getLevelForExp(skill);

@@ -125,6 +125,7 @@ public class PlayerSaving {
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
         saveList.add(new SaveBankPin("BankPin"));
+		saveList.add(new SaveInitialSource("InitialSource"));
         saveList.add(new SaveTabAmount());
         saveList.add(new SaveTurkeyKills("TurkeyKills"));
 		saveList.add(new SaveRank("Rank"));

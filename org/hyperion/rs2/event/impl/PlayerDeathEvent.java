@@ -324,7 +324,7 @@ public class PlayerDeathEvent extends Event {
 		Combat.logoutReset(player.cE);
 		player.cE.setPoisoned(false);
 		player.getWalkingQueue().reset();
-		player.isFollowing = null;
+		player.getActionSender().resetFollow();
 		player.cE.morrigansLeft = 0;
 	}
 

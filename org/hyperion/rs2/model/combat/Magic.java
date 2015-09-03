@@ -1136,7 +1136,7 @@ public class Magic {
 
 	public static void homeTeleport(final Player player) {
 		player.getWalkingQueue().reset();
-		player.isFollowing = null;
+		player.getActionSender().resetFollow();
 		final int x = (3085 + Misc.random(2));
 		final int y = (3491 + Misc.random(2));
         if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {

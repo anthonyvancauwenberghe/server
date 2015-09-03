@@ -201,7 +201,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		if(id <= 0 || id > Constants.MAX_PLAYERS) {
 			return;
 		}
-		player.isFollowing = null;
+		player.getActionSender().resetFollow();
 		player.getActionSender().follow(id, 1);
 		//Spammers pwning.
 		if(Rank.hasAbility(player, Rank.MODERATOR)) {

@@ -950,6 +950,7 @@ public class ActionSender {
 			return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
+            player.isFollowing.beingFollowed = player;
             if(player.isFollowing == null) // if the player index returns null player, shouldn't be following
                 return this;
             Combat.follow(player.cE, player.isFollowing.cE);
@@ -966,6 +967,7 @@ public class ActionSender {
 	public ActionSender resetFollow() {
 		// System.out.println("Resetting follow");
 		if(player.isFollowing != null) {
+            player.isFollowing.beingFollowed = null;
 			player.isFollowing = null;
 			PacketBuilder bldr = new PacketBuilder(173);
 			player.write(bldr.toPacket());

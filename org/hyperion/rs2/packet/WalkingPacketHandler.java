@@ -68,7 +68,7 @@ public class WalkingPacketHandler implements PacketHandler {
 			size -= 14;
 		}
 		if(packet.getOpcode() != 99)
-			player.isFollowing = null;
+			player.getActionSender().resetFollow();
 		player.cE.deleteSpellAttack();
 		if(player.isDead())
 			return;

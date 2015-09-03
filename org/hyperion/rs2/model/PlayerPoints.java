@@ -143,7 +143,7 @@ public class PlayerPoints {
 	public void checkDonator() {
 		if(donatorPointsBought >= 10000)
 			player.setPlayerRank(Rank.addAbility(player, Rank.SUPER_DONATOR));
-		if(donatorPointsBought >= 1500)
+		if(donatorPointsBought >= 2000)
 			player.setPlayerRank(Rank.addAbility(player, Rank.DONATOR));
 	}
 

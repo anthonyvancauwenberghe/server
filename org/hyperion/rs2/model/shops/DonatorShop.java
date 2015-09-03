@@ -142,7 +142,7 @@ public class DonatorShop extends Shop {
 		}
 
 		player.getActionSender().sendMessage(message);
-        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603 || item.getId() == 17999)
+        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603)
             player.sendImportantMessage("You cannot sell this item back to the shop");
 	}
 

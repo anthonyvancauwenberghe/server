@@ -37,7 +37,7 @@ public class ServerMinigame extends Event {
         public final String message;
 
         public CountDownEventBuilder(final int npcId, final Location location) {
-            this(NPCDefinition.forId(npcId).getName(), "the event tab", location, "2x drop rates for 30 minutes", () -> {
+            this(NPCDefinition.forId(npcId).getName().replaceAll("_", " "), "the event tab", location, "2x drop rates for 30 minutes", () -> {
                 NpcDeathEvent.npcIdForDoubleDrops = npcId;
                 World.getWorld().submit(new Event(Time.THIRTY_MINUTES) {
                     public void execute() {

@@ -29,17 +29,17 @@ public class CountDownEvent extends Event {
 	public void execute() {
 		if(counter == 120) {
 			Events.fireNewEvent(name, true, counter, location);
-            World.getWorld().getPlayers().stream().forEach(p -> p.sendImportantMessage("Event is starting now! Decline or accept?"));
+            World.getWorld().getPlayers().stream().forEach(p -> p.sendServerMessage(name + " event is starting in 2 minutes!"));
 		}
 		if(--counter == 0) {
 			run.run();
             World.getWorld().submit(new ResetEvent());
             this.stop();
 		}
-        if(counter%5 == 0) {
+        if(counter%10 == 0) {
             for(NPC npc : World.getWorld().getNPCs()) {
                 if(npc != null)
-                    npc.forceMessage(name+" event in "+counter+" seconds! Go to "+command + " ("+message+")");
+                    npc.forceMessage(name + " event in " + counter + " seconds! Go to " + command + " for " + message + "!");
 
             }
         }

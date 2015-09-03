@@ -1,5 +1,6 @@
 package org.hyperion.rs2.event.impl;
 
+import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -8,6 +9,7 @@ import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Afk;
+import sun.net.www.content.text.Generic;
 
 /**
  * An event which increases ActivityPoints, refreshes Quest Tab , refreshes
@@ -41,13 +43,23 @@ public class PlayerEvent36Seconds extends Event {
 
 	@Override
 	public void execute() {
+		int artero = 0;
+		int instant = 0;
         for(Player player : World.getWorld().getPlayers()) {
         	if(player == null) {
         		continue;
         	}
-			//player.getActionSender().sendMessage("We are currently in testing mode, testing the merge..");
-			//player.getActionSender().sendMessage("Your game progress of the past hour will possibly be lost.");
-			//player.getActionSender().sendMessage("Please report all bugs to staff members!");
+			if(player.getInitialSource() == GenericWorldLoader.ARTERO)
+				artero++;
+			else if(player.getInitialSource() == GenericWorldLoader.INSTANT)
+				instant++;
+			System.out.println("Instant players: " + instant + "/ artero: " + artero);
+			if(player.getInitialSource() == GenericWorldLoader.INSTANT) {
+				player.getActionSender().sendMessage("People from InstantPk have their items converted to donator or pk points!");
+			}
+			/*player.getActionSender().sendMessage("We are currently in testing mode, testing the merge..");
+			player.getActionSender().sendMessage("Your game progress of the past hour will possibly be lost.");
+			player.getActionSender().sendMessage("Please report all bugs to staff members!");*/
         	player.getSummBar().cycle();
         	player.getActionSender().sendString(4508, player.getSummBar().getAmount() + "");
         	player.getSpecBar().normalize();

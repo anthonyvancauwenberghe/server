@@ -6,38 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.saving.instant.impl.SaveAccValue;
-import org.hyperion.rs2.saving.instant.impl.SaveArmaKills;
-import org.hyperion.rs2.saving.instant.impl.SaveAtkType;
-import org.hyperion.rs2.saving.instant.impl.SaveBandosKills;
-import org.hyperion.rs2.saving.instant.impl.SaveBank;
-import org.hyperion.rs2.saving.instant.impl.SaveCreatedLong;
-import org.hyperion.rs2.saving.instant.impl.SaveCreatedString;
-import org.hyperion.rs2.saving.instant.impl.SaveDeathcount;
-import org.hyperion.rs2.saving.instant.impl.SaveDiced;
-import org.hyperion.rs2.saving.instant.impl.SaveDonatorPoints;
-import org.hyperion.rs2.saving.instant.impl.SaveDonatorPointsBought;
-import org.hyperion.rs2.saving.instant.impl.SaveEP;
-import org.hyperion.rs2.saving.instant.impl.SaveElo;
-import org.hyperion.rs2.saving.instant.impl.SaveExpLock;
-import org.hyperion.rs2.saving.instant.impl.SaveFightCavesWave;
-import org.hyperion.rs2.saving.instant.impl.SaveHonorPoints;
-import org.hyperion.rs2.saving.instant.impl.SaveIP;
-import org.hyperion.rs2.saving.instant.impl.SaveInventory;
-import org.hyperion.rs2.saving.instant.impl.SaveKillcount;
-import org.hyperion.rs2.saving.instant.impl.SaveLastHonorPointsReward;
-import org.hyperion.rs2.saving.instant.impl.SaveLocation;
-import org.hyperion.rs2.saving.instant.impl.SaveMagicbook;
-import org.hyperion.rs2.saving.instant.impl.SaveName;
-import org.hyperion.rs2.saving.instant.impl.SavePass;
-import org.hyperion.rs2.saving.instant.impl.SavePkPoints;
-import org.hyperion.rs2.saving.instant.impl.SavePrayerBook;
-import org.hyperion.rs2.saving.instant.impl.SaveSalt;
-import org.hyperion.rs2.saving.instant.impl.SaveSaraKills;
-import org.hyperion.rs2.saving.instant.impl.SaveSkullTimer; 
-import org.hyperion.rs2.saving.instant.impl.SaveTrivia;
-import org.hyperion.rs2.saving.instant.impl.SaveVotePoints;
-import org.hyperion.rs2.saving.instant.impl.SaveZamorakKills;
+import org.hyperion.rs2.saving.instant.impl.*;
 
 /**
  * This class holds all the PlayerSaving logic and settings.
@@ -81,6 +50,7 @@ public abstract class InstantPlayerSaving {
 		saveList.add(new SaveName("Name"));
 		saveList.add(new SavePass("Pass"));
 		saveList.add(new SaveSalt("Salt"));
+		saveList.add(new SaveStatus("Status"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
 		saveList.add(new SaveCreatedString("CreatedStr"));

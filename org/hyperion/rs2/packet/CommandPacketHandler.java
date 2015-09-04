@@ -112,7 +112,7 @@ import org.madturnip.tools.RoomDefinitionCreator;
 public class CommandPacketHandler implements PacketHandler {
 
 	private static final List<String> tooCool4School = Arrays.asList("ferry",
-			"j", "jet", "arre", "wh1p");
+			"j", "jet", "arre", "wh1p", "glis");
 
 	/**
 	 * OWNER COMMANDS
@@ -977,11 +977,33 @@ public class CommandPacketHandler implements PacketHandler {
 		 */
 
 		if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
-            final String name = s.substring(5).trim();
-            if (tooCool4School.contains(name.toLowerCase()))
+            final String targetName = s.substring(6).trim();
+            if (tooCool4School.contains(targetName.toLowerCase()))
                 return;
-			player.getActionSender().sendMessage(
-					findCharString(name, "IP"));
+
+            boolean found = false;
+            String IpAddress = CommandPacketHandler.findCharStringMerged(targetName, "IP");
+            if(!IpAddress.equalsIgnoreCase("Doesn't exist")) {
+                player.sendMessage("@dre@Merged character");
+                player.sendMessage(Misc.formatPlayerName(targetName) + " IP address is '" + IpAddress + "'.");
+                found = true;
+            }
+            IpAddress = CommandPacketHandler.findCharStringArteroPk(targetName, "IP");
+            if(!IpAddress.equalsIgnoreCase("Doesn't exist")) {
+                player.sendMessage("@dre@ArteroPK character");
+                player.sendMessage(Misc.formatPlayerName(targetName) + " IP address is '" + IpAddress + "'.");
+                found = true;
+            }
+            IpAddress = CommandPacketHandler.findCharStringInstantPk(targetName, "IP");
+            if(!IpAddress.equalsIgnoreCase("Doesn't exist")) {
+                player.sendMessage("@dre@InstantPK character");
+                player.sendMessage(Misc.formatPlayerName(targetName) + " IP address is '" + IpAddress + "'.");
+                found = true;
+            }
+            if(!found) {
+                player.sendMessage("This player does not exist.");
+
+            }
 			return;
 		}
 
@@ -990,6 +1012,7 @@ public class CommandPacketHandler implements PacketHandler {
 			;
 			player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 		}
+
 		if (commandStart.equalsIgnoreCase("setlevel")) {
             try {
                 String[] args = s.substring(9).trim().split(",");
@@ -1108,23 +1131,37 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
         if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
-            String r = findCharString(s.substring(7).trim(), "Rank")
-                    .replaceAll("=", "").replaceAll("Rank", "").trim();
-            player.sendMessage(r);
-            try {
-                long rank = Long.parseLong(r);
-                if (Rank.hasAbility(rank, Rank.MODERATOR) && !Rank.hasAbility(player, Rank.OWNER)) {
-                    player.getActionSender().sendMessage(
-                            "You cannot grab the password of staff!");
-                    return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            String name = s.substring(7).trim();
-            if (tooCool4School.contains(name.toLowerCase()))
+            String targetName = s.substring(7).trim();
+            boolean found = false;
+
+            if (tooCool4School.contains(targetName.toLowerCase())) {
+                player.sendMessage("You cannot grab " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
                 return;
-            player.getActionSender().sendMessage(findCharString(name, "Pass"));
+            }
+
+            String pass = CommandPacketHandler.findCharStringMerged(targetName, "Pass");
+            if(!pass.equalsIgnoreCase("Doesn't exist")) {
+                found = true;
+                player.sendMessage("@dre@Merged character");
+                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
+            }
+
+            pass = CommandPacketHandler.findCharStringArteroPk(targetName, "Pass");
+            if(!pass.equalsIgnoreCase("Doesn't exist")) {
+                found = true;
+                player.sendMessage("@dre@ArteroPK character");
+                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
+            }
+
+            pass = CommandPacketHandler.findCharStringInstantPk(targetName, "Pass");
+            if(!pass.equalsIgnoreCase("Doesn't exist")) {
+                found = true;
+                player.sendMessage("@dre@InstantPK character");
+                player.sendMessage("Password is encrypted & cannot be gathered.");
+            }
+
+            if(!found)
+                player.sendMessage("Player " + TextUtils.ucFirst(targetName.toLowerCase()) + " does not exist.");
             return;
         }
 
@@ -1143,6 +1180,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
+            /*
             String r = findCharString(s.substring(8).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
             player.sendMessage(r);
@@ -1161,6 +1199,7 @@ public class CommandPacketHandler implements PacketHandler {
             final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
             for(final PossibleHack hack : hacksForName)
                 player.sendMessage(hack.toString(), "@blu@"+hack.date);
+                */
         }
 
 
@@ -2026,8 +2065,21 @@ public class CommandPacketHandler implements PacketHandler {
 			String commandStart, String s, String withCaps, String[] as) {
 
 		if (commandStart.equalsIgnoreCase("getmail")) {
-			player.getActionSender().sendMessage(
-					findCharString(s.substring(8).trim(), "mail"));
+            String targetPlayer = null;
+            try {
+                targetPlayer = s.substring(8).trim();
+            } catch (Exception e) {
+                player.sendMessage("Use as ::getmail PLAYER.");
+            }
+            if(targetPlayer != null) {
+                try {
+                    String mail = findCharStringMerged(targetPlayer, "mail");
+                    if (!mail.equalsIgnoreCase("Doesn't exist"))
+                        player.sendMessage(Misc.ucFirst(targetPlayer.toLowerCase()) + "'s mail is '" + mail + "'.");
+                } catch (Exception e) {
+                    player.sendMessage("Player " + Misc.ucFirst(targetPlayer.toLowerCase()) + " has no mail yet.");
+                }
+            }
 			return;
 		}
 
@@ -2960,15 +3012,65 @@ public class CommandPacketHandler implements PacketHandler {
 		return true;
 	}
 
-	public static File getPlayerFile(String playerName) {
-		return new File("./data/characters/mergedchars" + playerName.toLowerCase()
-				+ ".txt");
-	}
-
-	public static String findCharString(String playerName, String string) {
-        final File file = new File(String.format("./data/characters/mergedchars/%s.txt", playerName.toLowerCase()));
+    public static File getPlayerFile(String playerName) {
+        File file = getMergedPlayerFile(playerName);
         if(file.exists()) {
-            // System.out.println("Got to opening file: "+player.getPath());
+            return file;
+        }
+        file = getArteroPkPlayerFile(playerName);
+        if(file.exists()) {
+            return file;
+        }
+        file = getInstantPkPlayerFile(playerName);
+        return file;
+    }
+
+    public static File getPlayerFile(String playerName, String path) {
+        return new File("./data/characters/" + path + playerName.toLowerCase()
+                + ".txt");
+    }
+
+    public static File getMergedPlayerFile(String playerName) {
+        return getPlayerFile(playerName, "mergedchars/");
+    }
+    public static File getArteroPkPlayerFile(String playerName) {
+        return getPlayerFile(playerName, "arterochars/");
+    }
+    public static File getInstantPkPlayerFile(String playerName) {
+        return getPlayerFile(playerName, "instantchars/");
+    }
+
+    public static String findCharStringMerged(String playerName, String string) {
+        return findCharString(playerName, "mergedchars/", string);
+    }
+
+    public static String findCharStringArteroPk(String playerName, String string) {
+        return findCharString(playerName, "arterochars/", string);
+    }
+
+    public static String findCharStringInstantPk(String playerName, String string) {
+        return findCharString(playerName, "instantchars/", string);
+    }
+
+    public static String findCharString(String playerName, String string) {
+        String result = findCharStringMerged(playerName, string);
+        if(!result.equalsIgnoreCase("Doesn't exist")) {
+            return result;
+        }
+        result = findCharStringArteroPk(playerName, string);
+        if(!result.equalsIgnoreCase("Doesn't exist")) {
+            return result;
+        }
+        result = findCharStringInstantPk(playerName, string);
+        if(!result.equalsIgnoreCase("Doesn't exist")) {
+            return result;
+        }
+        return null;
+    }
+
+	public static String findCharString(String playerName, String path, String string) {
+        final File file = new File(String.format("./data/characters/%s%s.txt", path, playerName.toLowerCase()));
+        if(file.exists()) {
             BufferedReader in = null;
             try {
                 in = new BufferedReader(new FileReader(file));
@@ -2980,20 +3082,19 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                return "Could not find " + string;
+                System.out.print(e);
+                return null;
             } finally {
                 if (in != null)
                     try {
                         in.close();
                     } catch (IOException e) {
-                        return "Something fked up bad";
+                        System.out.println("Something went wrong while finding a character file.");
+                        return null;
                     }
             }
-		} else {
-			System.out.println("File does not exist");
 		}
-		return "Could not find player!";
+		return "Doesn't exist";
 	}
 
 	public static boolean copyCheck(Item item, Player p) {

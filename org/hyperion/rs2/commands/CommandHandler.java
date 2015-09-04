@@ -123,6 +123,7 @@ import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
 
 /**
  * @author Jack Daniels.
@@ -173,7 +174,7 @@ public class CommandHandler {
 				}
 
 			} catch(Exception e) {
-				player.getActionSender().sendMessage("Invalid input was given..");
+				player.getActionSender().sendMessage("Invalid input has been given.");
 				if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					e.printStackTrace();
 			}
@@ -934,7 +935,7 @@ public class CommandHandler {
 					Player target = World.getWorld().getPlayer(input);
 					if(target == null)
 						return false;
-					player.getActionSender().sendMessage(target.getName()+"'s Ip address is: "+target.getFullIP());
+					player.getActionSender().sendMessage(target.getSafeDisplayName()+"'s IP address is '"+target.getFullIP() + "'.");
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -1431,17 +1432,41 @@ public class CommandHandler {
         });
 
         submit(new Command("getmac", Rank.DEVELOPER){
-            public boolean execute(final Player player, final String input){
-                final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
-                if(target != null){
-                    player.sendf("%s mac: %d", target.getName(), target.getUID());
-                    return true;
-                }
-                final String value = CommandPacketHandler.findCharString(targetName, "Mac");
-                player.sendf("%s mac: %s", targetName, value);
-                return true;
-            }
+            public boolean execute(final Player player, final String input) {
+				String targetName = "";
+				try {
+					targetName = input.substring(7).trim();
+				} catch (Exception e) {
+				}
+				if (targetName.equalsIgnoreCase("")) {
+					player.sendMessage("Use as ::getmac NAME.");
+					return false;
+				}
+				boolean found = false;
+				String mac = CommandPacketHandler.findCharStringMerged(targetName, "Mac");
+				if(!mac.equalsIgnoreCase("Doesn't exist")) {
+					player.sendMessage("@dre@Merged character");
+					player.sendf("%s's MAC adress is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), mac);
+					found = true;
+				}
+				mac = CommandPacketHandler.findCharStringArteroPk(targetName, "Mac");
+				if(!mac.equalsIgnoreCase("Doesn't exist")) {
+					player.sendMessage("@dre@ArteroPK character");
+					player.sendf("%s's MAC adress is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), mac);
+					found = true;
+				}
+				mac = CommandPacketHandler.findCharStringInstantPk(targetName, "Mac");
+				if(!mac.equalsIgnoreCase("Doesn't exist")) {
+					player.sendMessage("@dre@InstantPK character");
+					player.sendf("InstantPK characters don't keep MAC adress in their character file.");
+					found = true;
+				}
+				if (!found) {
+					player.sendMessage("This player does not exist.");
+					return false;
+				}
+				return true;
+			}
         });
 
         submit(new Command("takeitem", Rank.DEVELOPER){
@@ -1925,22 +1950,54 @@ public class CommandHandler {
 
         submit(new Command("getpin", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) {
-				String name = "";
+				String targetName = "";
 				try {
-					name = input.substring(7).trim();
+					targetName = input.substring(7).trim();
 				} catch(Exception e) {}
-                if (name.equalsIgnoreCase("")) {
-                    player.sendMessage("Use as ::getpin NAME.");
-                    return false;
-                }
-				String pin = CommandPacketHandler.findCharString(name, "BankPin");
-				if(pin.equalsIgnoreCase("Could not find player!")) {
-					player.sendMessage("Player " + TextUtils.ucFirst(name.toLowerCase()) + " does not exist.");
+				if (targetName.equalsIgnoreCase("")) {
+					player.sendMessage("Use as ::getpin NAME.");
 					return false;
 				}
+				boolean found = false;
+				try {
+					String pin = CommandPacketHandler.findCharStringMerged(targetName, "BankPin");
+					if(!pin.equalsIgnoreCase("Doesn't exist")) {
+						found = true;
+						if(!pin.equalsIgnoreCase("null")) {
+							player.sendMessage("@dre@Merged character");
+							player.sendf("%s's bank pin is '%s'", Misc.ucFirst(targetName.toLowerCase()), pin);
+						} else {
+							player.sendMessage("@dre@Merged character");
+							player.sendf("%s has no bank pin.", Misc.ucFirst(targetName.toLowerCase()));
+						}
+					}
+				} catch(Exception e) {
+					found = true;
+					player.sendMessage("@dre@Merged character");
+					player.sendf("%s has no bank pin.", Misc.ucFirst(targetName.toLowerCase()));
+				}
+				try {
+					String pin = CommandPacketHandler.findCharStringArteroPk(targetName, "BankPin");
+					if(!pin.equalsIgnoreCase("Doesn't exist")) {
+						found = true;
+						if(!pin.equalsIgnoreCase("null")) {
+							player.sendMessage("@dre@ArteroPK character");
+							player.sendf("%s's bank pin is '%s'", Misc.ucFirst(targetName.toLowerCase()), pin);
+						} else {
+							player.sendMessage("@dre@Merged character");
+							player.sendf("%s has no bank pin.", Misc.ucFirst(targetName.toLowerCase()));
+						}
+					}
+				} catch(Exception e) {
+					found = true;
+					player.sendMessage("@dre@ArteroPK character");
+					player.sendf("%s has no bank pin.", Misc.ucFirst(targetName.toLowerCase()));
+				}
 
-				player.sendMessage(TextUtils.ucFirst(name.toLowerCase()) + (pin.equalsIgnoreCase("null") ? " has no bank pin." : "'s bank pin is " + pin));
-                return true;
+				if(!found) {
+					player.sendMessage("This player does not exist.");
+				}
+				return true;
             }
         });
 

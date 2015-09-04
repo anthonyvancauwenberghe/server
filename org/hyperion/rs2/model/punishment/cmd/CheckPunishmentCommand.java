@@ -13,14 +13,15 @@ import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
 
 public class CheckPunishmentCommand extends Command {
 
-    public CheckPunishmentCommand(){
+    public CheckPunishmentCommand() {
         super("checkpunish", Rank.HELPER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String targetName = filterInput(input);
         final Player target = World.getWorld().getPlayer(targetName);
         final List<Punishment> punishments = new ArrayList<>();
@@ -46,7 +47,7 @@ public class CheckPunishmentCommand extends Command {
             }
         }
         if(punishments.isEmpty()){
-            player.sendf("%s is not punished", targetName);
+            player.sendf("%s is not punished", Misc.ucFirst(targetName.toLowerCase()));
             return false;
         }
         for(final Punishment p : punishments)

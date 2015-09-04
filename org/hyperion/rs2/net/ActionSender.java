@@ -35,6 +35,7 @@ import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Time;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -174,7 +175,7 @@ public class ActionSender {
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
-			player.sendMessage("", "@dre@Bonus: @bla@Double experience in every skill & 2x vote reward for the merge!");
+			player.sendMessage("");
 			passChangeShit();
 
 
@@ -476,7 +477,7 @@ public class ActionSender {
 			sendEP();
 			return this;
 		} else {
-			player.write(new PacketBuilder(208).putLEShort(- 1).toPacket());
+			player.write(new PacketBuilder(208).putLEShort(-1).toPacket());
 			return this;
 		}
 	}

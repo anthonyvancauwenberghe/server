@@ -73,7 +73,6 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 			}
 			br.close();
 
-            //globalObjects.add(new GameObject(GameObjectDefinition.forId(6552), Location.create(3256,3484,0), 10, 2));//ancient altar
             globalObjects.add(new GameObject(GameObjectDefinition.forId(7353), create(3203, 3422, 0), 10, 0));//slayer portal
             globalObjects.add(new GameObject(GameObjectDefinition.forId(61), create(3098, 3506, 0), 10, 2));//chaos altar
             globalObjects.add(new GameObject(GameObjectDefinition.forId(409), create(3094, 3506, 0), 10, 2));//Normal altar
@@ -87,61 +86,6 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2403), create(3207, 3220, 0), 10, 0));
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2156), create(2975, 3392, 0), 10, 2));
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2157), create(2957, 3195, 0), 10, 0));
-/*
-            GameObjectDefinition object = GameObjectDefinition.forId(1278);
-            globalObjects.add(new GameObject(object, create(3802, 2855, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3802, 2858, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3802, 2861, 0), 10, 0));
-
-            object = GameObjectDefinition.forId(1308);
-            globalObjects.add(new GameObject(object, create(3799, 2861, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3796, 2861, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3793, 2861, 0), 10, 0));
-
-            object = GameObjectDefinition.forId(1307);
-            globalObjects.add(new GameObject(object, create(3799, 2858, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3796, 2858, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3793, 2858, 0), 10, 0));
-
-            object = GameObjectDefinition.forId(1306);
-            globalObjects.add(new GameObject(object, create(3799, 2855, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3796, 2855, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3793, 2855, 0), 10, 0));
-
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2785, 0), 10, 1));
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2784, 0), 10, 1));
-
-            object = GameObjectDefinition.forId(4172);
-            globalObjects.add(new GameObject(object, create(3800, 2850, 0), 10, 2));
-            globalObjects.add(new GameObject(object, create(3800, 2852, 0), 10, 2));
-
-            object = GameObjectDefinition.forId(2782);
-            globalObjects.add(new GameObject(object, create(3800, 2847, 0), 10, 0));
-            globalObjects.add(new GameObject(object, create(3800, 2846, 0), 10, 0));
-
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(409), create(3795, 2839, 0), 10, 2));
-
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(2478), create(3786, 2843, 0), 10, 0));
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(2488), create(3790, 2843, 0), 10, 0));
-
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(2471), create(2977, 3605, 0), 10, 0));
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(2471), create(2976, 3605, 0), 10, 0));
-
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(16000), create(3266, 3913, 0), 10, 0));
-
-            for(int i = 0; i < 4; i++) {
-                globalObjects.add(new GameObject(GameObjectDefinition.forId(2090), create(3793-(i*2), 2838, 0), 10, 0));
-                globalObjects.add(new GameObject(GameObjectDefinition.forId(2092), create(3793-(i*2), 2837, 0), 10, 0));
-                globalObjects.add(new GameObject(GameObjectDefinition.forId(2096), create(3793-(i*2), 2836, 0), 10, 0));
-                globalObjects.add(new GameObject(GameObjectDefinition.forId(2102), create(3793-(i*2), 2835, 0), 10, 0));
-                globalObjects.add(new GameObject(GameObjectDefinition.forId(2104), create(3793-(i*2), 2834, 0), 10, 0));
-                globalObjects.add(new GameObject(GameObjectDefinition.forId(2106), create(3793-(i*2), 2833, 0), 10, 0));
-            }
-*/
-            //globalObjects.add(new GameObject(GameObjectDefinition.forId(-1), create(3795, 2844, 0), 10, 0));
-
-            //BarrowsFFA.spawnObject(globalObjects);
-
             globalObjects.add(OSPK.loadObjects());
             OSPK.loadObjects(); // portal
             if(! Server.SPAWN) {
@@ -150,11 +94,12 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
                 }
             }
 
-
+/*
             for(SpecialArea area : SpecialAreaHolder.getAreas()) {
                 if(area instanceof NIGGERUZ)
                     ((NIGGERUZ)area).initObjects(globalObjects);
             }
+            */
 
 			//logger.info("Loading map...");idk i tried to load on diff coords didnt work either
 			/*MapIndex[] mapIndices = cache.getIndexTable().getMapIndices();

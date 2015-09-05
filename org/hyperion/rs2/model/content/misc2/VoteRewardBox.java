@@ -61,6 +61,8 @@ public class VoteRewardBox implements ContentTemplate {
 				}
 				if(random(25) == 0) //1/50 ppl will rage shit
 					return new Item(14484, 1);
+                if(random(10) == 0) //1/50 ppl will rage shit
+                    return new Item(19780, 1);
 				break;
 			case 1:
 				if(random(4) == 0)

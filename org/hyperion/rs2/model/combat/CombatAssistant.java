@@ -874,7 +874,7 @@ public class CombatAssistant {
 		}
 		if(hasDharokEquiped(p)) {
 			double ratio = (double) p.getSkills().getLevel(Skills.HITPOINTS) / (double) p.getSkills().getLevelForExp(Skills.HITPOINTS);
-			base *= 1.95 - ratio;
+			base *= 1.85 - ratio;
 		}
 		if(base <= 0) {
 			base = 1;
@@ -1289,7 +1289,7 @@ public class CombatAssistant {
             bonus *= 1.25;
         if(hasDharokEquiped(player)) {
             double ratio = (double) player.getSkills().getLevel(Skills.HITPOINTS) / (double) player.getSkills().getLevelForExp(Skills.HITPOINTS);
-            bonus *= (1.33 - ratio/3);
+            bonus *= (1.20 - ratio/3);
         }
 
 		return (int) ((meleeAtk * .3 + (bonus * 0.52)));

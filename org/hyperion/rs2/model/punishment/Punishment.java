@@ -57,21 +57,21 @@ public class Punishment {
             player.sendf(
                     "Alert##%s %s - Issued By %s (%s)##%s##Expires: %s",
                     TextUtils.titleCase(getVictimName()),
-                    getCombination(),
+                    getCombination().toString().toLowerCase(),
                     TextUtils.titleCase(issuerName),
-                    getTime(),
+                    getTime().toString().toLowerCase(),
                     TextUtils.titleCase(getReason()),
-                    getTime().isExpired() ? "NOW!" : getTime().getExpirationDateStamp()
+                    getTime().isExpired() ? "now" : getTime().getExpirationDateStamp()
             );
         }else{
-            player.sendf("@red@----------------------------------------------------------------------------------------");
-            player.sendf("@blu@%s %s@bla@ - Issued By @blu@%s@bla@ (@blu@%s@bla@)", TextUtils.titleCase(getVictimName()), getCombination(), TextUtils.titleCase(issuerName), getTime());
-            player.sendf("Reason: @blu@%s", TextUtils.titleCase(getReason()));
-            player.sendf("Issued: @blu@%s", getTime().getStartDateStamp());
-            player.sendf("Expires: @blu@%s", getTime().isExpired() ? "NOW!" : getTime().getExpirationDateStamp());
+            player.sendf("@dre@----------------------------------------------------------------------------------------");
+            player.sendf("@dre@%s's %s@bla@ - Issued By @dre@%s@bla@ (@dre@%s@bla@)", TextUtils.titleCase(getVictimName()), getCombination().toString().toLowerCase(), TextUtils.titleCase(issuerName), getTime().toString().toLowerCase());
+            player.sendf("@dre@Reason: @bla@%s", TextUtils.titleCase(getReason()));
+            player.sendf("@dre@Issued: @bla@%s", getTime().getStartDateStamp());
+            player.sendf("@dre@Expires: @bla@%s", getTime().isExpired() ? "NOW!" : getTime().getExpirationDateStamp());
             if(!getTime().isExpired())
-                player.sendf("Remaining: @blu@%s", getTime().getRemainingTimeStamp());
-            player.sendf("@red@----------------------------------------------------------------------------------------");
+                player.sendf("@dre@Remaining: @bla@%s", getTime().getRemainingTimeStamp());
+            player.sendf("@dre@----------------------------------------------------------------------------------------");
         }
     }
 

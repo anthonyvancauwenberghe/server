@@ -16,6 +16,7 @@ import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.sql.requests.GetSpecialUID;
 import org.hyperion.rs2.util.PlayerFiles;
+import org.hyperion.util.Misc;
 
 public class PunishCommand extends Command{
 
@@ -33,13 +34,13 @@ public class PunishCommand extends Command{
     public boolean execute(final Player player, final String input){
         final String[] parts = filterInput(input).split(",");
         if(parts.length != 3){
-            player.sendf("Incorrect syntax. Usage: ::%s name,duration [minutes|hours|days],reason", getKey());
+            player.sendf("Incorrect syntax. Usage: ::%s NAME,DURATION [minutes|hours|days],REASON", getKey());
             return false;
         }
         final String victimName = parts[0].trim();
         final Player victim = World.getWorld().getPlayer(victimName);
         if(victimName.isEmpty() || (!MergedSaving.existsMain(victimName) && victim == null)){
-            player.sendf("Unable to find player: %s", victimName);
+            player.sendf("Unable to find player %s", Misc.ucFirst(victimName.toLowerCase()));
             return false;
         }
         if(victim != null && Rank.isStaffMember(victim) && !Rank.hasAbility(player, Rank.DEVELOPER)){
@@ -56,7 +57,7 @@ public class PunishCommand extends Command{
         try{
             mac = Integer.parseInt(macStr);
         }catch(Exception ex){
-            player.sendf("Unable to punish %s: No mac address found", victimName);
+            player.sendf("Unable to punish %s: No MAC address found", Misc.ucFirst(victimName.toLowerCase()));
             return false;
         }
         final int[] specialUid = victim != null ? victim.specialUid : new int[20];

@@ -61,7 +61,7 @@ public class VoteRewardBox implements ContentTemplate {
 				}
 				if(random(25) == 0) //1/50 ppl will rage shit
 					return new Item(14484, 1);
-                if(random(10) == 0) //1/50 ppl will rage shit
+                if(random(3) == 0) //1/50 ppl will rage shit
                     return new Item(19780, 1);
 				break;
 			case 1:
@@ -77,7 +77,7 @@ public class VoteRewardBox implements ContentTemplate {
 	}
 
 	private static int random(int range) {
-		return Misc.random((int) (range * 1.5));
+		return Misc.random((int) (range * 1.3));
 	}
 
 

@@ -17,7 +17,7 @@ import org.hyperion.rs2.saving.PlayerSaving;
 public class PlayerCombatEvent extends Event {
 	
 	public PlayerCombatEvent() {
-		super(600);
+		super(600,"playercb");
 	}
 	
 	public static long lastTimeDid = System.currentTimeMillis();

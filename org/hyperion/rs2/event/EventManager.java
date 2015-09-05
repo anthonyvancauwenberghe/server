@@ -1,6 +1,7 @@
 package org.hyperion.rs2.event;
 
 import org.hyperion.rs2.GameEngine;
+import org.hyperion.rs2.model.ServerTimeManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,6 +49,7 @@ public class EventManager {
 				long start = System.currentTimeMillis();
 				if(event.isRunning()) { // this must be false, however
 					try {
+
 						event.execute(); // doesnt execute this
 					} catch(Exception e) {
 						e.printStackTrace();
@@ -56,6 +58,7 @@ public class EventManager {
 					return;
 				}
 				long elapsed = System.currentTimeMillis() - start;
+				ServerTimeManager.getSingleton().add(event.getName(), elapsed);
 				long remaining = event.getDelay() - elapsed;
 				if(remaining <= 0) {
 					remaining = 0;

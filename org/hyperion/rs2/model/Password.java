@@ -34,7 +34,7 @@ public class Password {
 
     public void setEncryptedPass(String encrypted) {
         this.encryptedPass = encrypted;
-        System.out.println("Setting encrypted pass: " + encrypted);
+        //System.out.println("Setting encrypted pass: " + encrypted);
     }
 
 

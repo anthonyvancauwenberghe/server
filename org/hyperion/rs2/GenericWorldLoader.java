@@ -33,7 +33,7 @@ public class GenericWorldLoader implements WorldLoader {
 
 	@Override
 	public LoginResult checkLogin(PlayerDetails pd) {
-		System.out.println("Received pd login: " + pd.getName() + "/" + pd.getPassword());
+		//System.out.println("Received pd login: " + pd.getName() + "/" + pd.getPassword());
 		int source = -1;
 		Player player = null;
 		int code = 2;
@@ -127,7 +127,7 @@ public class GenericWorldLoader implements WorldLoader {
 					//determine which file has bigger priority
 					int arteroPriority = MergedSaving.getArteroPriority(name);
 					int instantPriority = MergedSaving.getInstantPriority(name);
-					System.out.println("Instantprior: " + instantPriority + "/artero: " + arteroPriority);
+					//System.out.println("Instantprior: " + instantPriority + "/artero: " + arteroPriority);
 					boolean instant = instantPriority > arteroPriority;
 					if(instant) {
 						/*
@@ -255,7 +255,7 @@ public class GenericWorldLoader implements WorldLoader {
 			//System.out.println("Creating new player");
 			LoginDebugger.getDebugger().log("About to make new player in GWL");
 			player = new Player(pd, newcharacter);
-			System.out.println("Loaded player");
+			//System.out.println("Loaded player");
 			player.setSource(source);
 			if(source == GenericWorldLoader.ARTERO || source == GenericWorldLoader.INSTANT) {
 				player.setInitialSource(source);

@@ -20,7 +20,7 @@ public class SaveDonatorPointsBought extends SaveInteger {
 	@Override
 	public void setValue(Player player, int value) {
 		player.getPoints().setDonatorsBought(value);
-		if(value >= 1500)
+		if(value >= 2000)
 			Rank.addAbility(player, Rank.DONATOR);
 		if(value >= 10000)
 			Rank.addAbility(player, Rank.SUPER_DONATOR);

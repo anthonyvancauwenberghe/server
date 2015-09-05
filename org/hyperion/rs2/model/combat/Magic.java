@@ -567,7 +567,7 @@ public class Magic {
 	public static void clickVenganceOther(Player caster, Player player2) {
 		if(caster.getSkills().getLevel(6) < 93) {
 			ContentEntity.sendMessage(caster,
-					"You need 93 magic to cast Vengeance Other.");
+                    "You need 93 magic to cast Vengeance Other.");
 			return;
 		}
 		if(ContentEntity.getItemAmount(caster, 9075) < 3
@@ -744,52 +744,84 @@ public class Magic {
 			if(! hasStaff(c, spell.getFirstRune())
 					&& (c.getPlayer().getInventory().getById(spell.getFirstRune()) == null || c
 					.getPlayer().getInventory()
-					.getById(spell.getFirstRune()).getCount() < spell.getFirstAmount()))
+					.getById(spell.getFirstRune()).getCount() < spell.getFirstAmount())
+					&& (c.getPlayer().getRunePouch().getById(spell.getFirstRune()) == null || c.getPlayer().getRunePouch().getById(spell.getFirstRune()).getCount() < spell.getFirstAmount()))
 				return spell.getFirstRune();
 		if(spell.getSecondRune() > 0 && spell.getSecondAmount() > 0)
 			if(! hasStaff(c, spell.getSecondRune())
 					&& (c.getPlayer().getInventory()
 					.getById(spell.getSecondRune()) == null || c
 					.getPlayer().getInventory()
-					.getById(spell.getSecondRune()).getCount() < spell.getSecondAmount()))
+					.getById(spell.getSecondRune()).getCount() < spell.getSecondAmount())
+					&& (c.getPlayer().getRunePouch().getById(spell.getSecondRune()) == null || c.getPlayer().getRunePouch().getById(spell.getSecondRune()).getCount() < spell.getSecondAmount()))
 				return spell.getSecondRune();
 		if(spell.getThirdRune() > 0 && spell.getThirdAmount() > 0)
 			if(! hasStaff(c, spell.getThirdRune())
 					&& (c.getPlayer().getInventory().getById(spell.getThirdRune()) == null || c
 					.getPlayer().getInventory()
-					.getById(spell.getThirdRune()).getCount() < spell.getThirdAmount()))
+					.getById(spell.getThirdRune()).getCount() < spell.getThirdAmount())
+					&& (c.getPlayer().getRunePouch().getById(spell.getThirdRune()) == null || c.getPlayer().getRunePouch().getById(spell.getThirdRune()).getCount() < spell.getThirdAmount()))
 				return spell.getThirdRune();
 		if(spell.getFourthRune() > 0 && spell.getFourthAmount() > 0)
 			if(! hasStaff(c, spell.getFourthRune())
 					&& (c.getPlayer().getInventory()
 					.getById(spell.getFourthRune()) == null || c
 					.getPlayer().getInventory()
-					.getById(spell.getFourthRune()).getCount() < spell.getFourthAmount()))
+					.getById(spell.getFourthRune()).getCount() < spell.getFourthAmount())
+					&& (c.getPlayer().getRunePouch().getById(spell.getFourthRune()) == null || c.getPlayer().getRunePouch().getById(spell.getFourthRune()).getCount() < spell.getFourthAmount()))
 				return spell.getFourthRune();
 		return - 1;
 	}
 
 	public static boolean deleteRunes(CombatEntity c, Spell spell) {
 		if(! hasStaff(c, spell.getFirstRune()))
-			c.getPlayer()
-					.getInventory()
-					.remove(- 1,
-							new Item(spell.getFirstRune(), spell.getFirstAmount()));
+			if(c.getPlayer().getRunePouch().getById(spell.getFirstRune()) == null || c.getPlayer().getRunePouch().getById(spell.getFirstRune()).getCount() < spell.getFirstAmount()) {
+				c.getPlayer()
+						.getInventory()
+						.remove(-1,
+								new Item(spell.getFirstRune(), spell.getFirstAmount()));
+			} else {
+				c.getPlayer()
+						.getRunePouch()
+						.remove(-1,
+								new Item(spell.getFirstRune(), spell.getFirstAmount()));
+			}
 		if(! hasStaff(c, spell.getSecondRune()))
-			c.getPlayer()
-					.getInventory()
-					.remove(- 1,
-							new Item(spell.getSecondRune(), spell.getSecondAmount()));
+            if(c.getPlayer().getRunePouch().getById(spell.getSecondRune()) == null || c.getPlayer().getRunePouch().getById(spell.getSecondRune()).getCount() < spell.getSecondAmount()) {
+                c.getPlayer()
+                        .getInventory()
+                        .remove(- 1,
+                                new Item(spell.getSecondRune(), spell.getSecondAmount()));
+            } else {
+                c.getPlayer()
+                        .getRunePouch()
+                        .remove(-1,
+                                new Item(spell.getSecondRune(), spell.getSecondAmount()));
+            }
 		if(! hasStaff(c, spell.getThirdRune()))
-			c.getPlayer()
-					.getInventory()
-					.remove(- 1,
-							new Item(spell.getThirdRune(), spell.getThirdAmount()));
+            if(c.getPlayer().getRunePouch().getById(spell.getThirdRune()) == null || c.getPlayer().getRunePouch().getById(spell.getThirdRune()).getCount() < spell.getThirdAmount()) {
+                c.getPlayer()
+                        .getInventory()
+                        .remove(- 1,
+                                new Item(spell.getThirdRune(), spell.getThirdAmount()));
+            } else {
+                c.getPlayer()
+                        .getRunePouch()
+                        .remove(-1,
+                                new Item(spell.getThirdRune(), spell.getThirdAmount()));
+            }
 		if(! hasStaff(c, spell.getFourthRune()))
-			c.getPlayer()
-					.getInventory()
-					.remove(- 1,
-							new Item(spell.getFourthRune(), spell.getFourthAmount()));
+            if(c.getPlayer().getRunePouch().getById(spell.getFourthRune()) == null || c.getPlayer().getRunePouch().getById(spell.getFourthRune()).getCount() < spell.getFourthAmount()) {
+                c.getPlayer()
+                        .getInventory()
+                        .remove(-1,
+                                new Item(spell.getFourthRune(), spell.getFourthAmount()));
+            } else {
+                c.getPlayer()
+                        .getRunePouch()
+                        .remove(-1,
+                                new Item(spell.getFourthRune(), spell.getFourthAmount()));
+            }
 		return true;
 	}
 

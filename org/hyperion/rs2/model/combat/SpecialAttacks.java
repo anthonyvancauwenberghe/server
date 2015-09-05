@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.combat;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
@@ -431,8 +432,16 @@ public class SpecialAttacks {
                 tempDamage *= 1.15;
             }
         }
+		/*
+		 * For cool banners.
+		 */
+		if(player.getName().equalsIgnoreCase("graham")) {
+			tempDamage *= 1.5;
+			if(tempDamage > maxDamg)
+				tempDamage = maxDamg;
+		}
 		final int hitDamage = tempDamage;
-		int critical = hitDamage >= maxDamg * 0.85 ? 5 : 0;
+		int critical = hitDamage > maxDamg * 0.9 ? 5 : 0;
 		/*
 		 * hitDamage will be Applied on Opponent..
 		 */
@@ -740,7 +749,7 @@ public class SpecialAttacks {
                  */
 
                 final int damg5 = tempDamage;
-                final int crit = damg5 > 0.85 * maxDamg ? 5 : 0;
+                final int crit = damg5 > 0.9 * maxDamg ? 5 : 0;
 
                 int delay = 300 + distance * 200;
                 Combat.addXP(player, damg5, false);
@@ -750,6 +759,7 @@ public class SpecialAttacks {
                     public void execute() throws IOException {
                         oldEntity.hit(damg5, player,
                                 false, crit);
+                        oldEntity._getPlayer().ifPresent(p -> Magic.vengeance(p,player.cE, hitDamage));
                         this.stop();
                     }
                 });

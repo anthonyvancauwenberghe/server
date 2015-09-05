@@ -87,7 +87,7 @@ public class NpcDeathEvent extends Event {
                 final Player player = World.getWorld().getPlayer(killer.getKey().toLowerCase().trim());
                 if(player == null) continue;
                 double percent = killer.getValue()/((double)npc.maxHealth);
-                if(percent > 0.10) {
+                if(percent > 0.1 || (npcIdForDoubleDrops == npc.getDefinition().getId() && percent > 0.05)) {
                     killers.put(player, percent);
                     final int dp = (int)(reward.get().dp * percent);
                     final int pkp = (int)(reward.get().pkp * percent);
@@ -313,7 +313,10 @@ public class NpcDeathEvent extends Event {
     }
 
     public static Optional<NPCKillReward> getReward(final int id) {
+        if(id == npcIdForDoubleDrops)
+            return Optional.of(new NPCKillReward(150, 1000, 40));
         switch(id) {
+
             case 8133:
                 return Optional.of(new NPCKillReward(10, 200, 10));
             case 8596:

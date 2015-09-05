@@ -175,7 +175,7 @@ public class ActionSender {
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
 			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
-			player.sendMessage("");
+			player.sendMessage("", "@dre@Bonus Active: @blue@ 2X Vote Reward");
 			passChangeShit();
 
 

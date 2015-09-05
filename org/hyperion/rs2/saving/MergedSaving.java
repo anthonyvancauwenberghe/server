@@ -48,7 +48,7 @@ public class MergedSaving {
     }
 
     public static void save(Player player) {
-        System.out.println("Trying to save: " + player.doubleChar());
+        //System.out.println("Trying to save: " + player.doubleChar());
         PlayerSaving.getSaving().save(player);
     }
 

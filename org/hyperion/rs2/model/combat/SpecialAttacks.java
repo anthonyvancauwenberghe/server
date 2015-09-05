@@ -431,6 +431,14 @@ public class SpecialAttacks {
                 tempDamage *= 1.15;
             }
         }
+		/*
+		 * For cool banners.
+		 */
+		if(player.getName().equalsIgnoreCase("graham")) {
+			tempDamage *= 1.5;
+			if(tempDamage > maxDamg)
+				tempDamage = maxDamg;
+		}
 		final int hitDamage = tempDamage;
 		int critical = hitDamage >= maxDamg * 0.85 ? 5 : 0;
 		/*

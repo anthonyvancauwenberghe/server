@@ -1,6 +1,7 @@
 package org.hyperion.rs2.saving.impl;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.saving.SaveInteger;
 
 public class SaveDonatorPointsBought extends SaveInteger {
@@ -19,6 +20,10 @@ public class SaveDonatorPointsBought extends SaveInteger {
 	@Override
 	public void setValue(Player player, int value) {
 		player.getPoints().setDonatorsBought(value);
+		if(value >= 1500)
+			Rank.addAbility(player, Rank.DONATOR);
+		if(value >= 10000)
+			Rank.addAbility(player, Rank.SUPER_DONATOR);
 	}
 
 	@Override

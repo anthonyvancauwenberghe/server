@@ -543,8 +543,8 @@ public class Skills {
         	exp *= 1.02;
         }
 
-		//if(skill == BONUS_SKILL) {
-		if(skill > 6)
+		if(skill == BONUS_SKILL)
+		//if(skill > 6)
 			exp *= 2;
 		else if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;

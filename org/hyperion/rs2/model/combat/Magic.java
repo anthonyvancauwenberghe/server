@@ -343,7 +343,7 @@ public class Magic {
 
 		}
 
-        double reduction = Damage <= 0 ? 1.7 : 1.3;
+        double reduction = Damage <= 0 ? 1.8 : 1.3;
         if(Misc.random(AtkBonus) < Misc.random((int)(CombatAssistant.calculateMageSplashDef(opponent.getEntity())/reduction)))
             splash = true;
 		/*if(spell.getMaxHit() > 0 && Damage <= 0) {

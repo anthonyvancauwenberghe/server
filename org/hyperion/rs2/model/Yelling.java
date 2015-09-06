@@ -21,30 +21,33 @@ public class Yelling {
 		yellTitle = s;
 	}
 	private static final String UNAVAILABLE_TAGS[] = {
-		"Owner",
-		"Mod",
-		"Admin",
-		"Staff",
-		"Manager",
-		"Creator",
-		"Distributor",
-		"Sell",
-		"Buy",
-		"Spawn",
-		"Sucks",
-		"Hate",
-		"Flame",
-		"Bitch",
-		"Nigga",
-		"Hoe",
-		"Whore",
-		"Scam",
-		"Shit",
-        "Demote",
-        "Trusted"
+			"Owner",
+			"Mod",
+			"Admin",
+			"Staff",
+			"Manager",
+			"Creator",
+			"Distributor",
+			"Sell",
+			"Buy",
+			"Spawn",
+			"Sucks",
+			"Hate",
+			"Flame",
+			"Bitch",
+			"Nigga",
+			"Hoe",
+			"Whore",
+			"Scam",
+			"Shit",
+			"Demote",
+			"Trusted",
+			"Fuck",
+			"Slut"
+
 	};
 	public static String isValidTitle(String s) {
-		StringBuilder errorMessage = new StringBuilder("").append("You cannot have: ");
+		StringBuilder errorMessage = new StringBuilder("").append("You cannot have ");
 		if(s.contains("@"))
 			errorMessage.append("@s, ");
 		for(String wrong : UNAVAILABLE_TAGS) {
@@ -54,7 +57,7 @@ public class Yelling {
 		if(errorMessage.toString().length() > 18) {
 			errorMessage.append(" in your tag");
 			return errorMessage.toString();
-		}else
+		} else
 			return "";
 	}
 	

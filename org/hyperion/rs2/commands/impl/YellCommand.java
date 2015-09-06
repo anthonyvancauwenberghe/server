@@ -2,10 +2,7 @@ package org.hyperion.rs2.commands.impl;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
@@ -78,11 +75,10 @@ public class YellCommand extends Command {
 
 		final String colors = Rank.getPrimaryRank(player).getYellColor();
 
-		final boolean hasTag = (!player.getYelling().getTag().isEmpty() && !Rank.isStaffMember(player)) || player.getName().equalsIgnoreCase("nab");
-
-		final String tag = hasTag ? player.getYelling().getTag() : Rank.getPrimaryRank(player).toString();
+		final String tag = getTag(player);
 
 		final String suffix = (player.hardMode() ? "[I]" : "") + "[" + colors + tag + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
+		final String suffixWithoutTitles = (player.hardMode() ? "[I]" : "") + "[" + colors + Rank.getPrimaryRank(player).toString() + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
 		if(!Rank.isStaffMember(player)) {
@@ -99,8 +95,29 @@ public class YellCommand extends Command {
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}
 		 */
-		PushMessage.pushYell(suffix, input, player);
+		for(Player other : World.getWorld().getPlayers()) {
+			if(other != null) {
+				if(!other.getPermExtraData().getBoolean("disabledYell")) {
+					String message;
+					if (!other.getPermExtraData().getBoolean("disabledYellTitles")) {
+						message = suffix + input;
+					} else {
+						message = suffixWithoutTitles + input;
+					}
+					other.getActionSender().sendMessage(message);
+				}
+			}
+		}
 
 		return true;
+	}
+
+	public String getTag(Player player) {
+		if(player.getPoints().getDonatorPointsBought() < 25000 || Rank.isStaffMember(player)) {
+			return Rank.getPrimaryRank(player).toString();
+		}
+		if(player.getName().equalsIgnoreCase("nab"))
+			return "B";
+		return player.getYelling().getTag();
 	}
 }

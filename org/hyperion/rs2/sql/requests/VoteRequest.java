@@ -3,13 +3,18 @@ package org.hyperion.rs2.sql.requests;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
+import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * @author Arsen Maxyutov.
@@ -20,6 +25,9 @@ public class VoteRequest extends SQLRequest {
      * The votes table name.
      */
     public static final String VOTES_TABLE = Server.getConfig().getString("votestable");
+    private static int bonus = -1;
+    private static int votingPoints = 0;
+    private static int streak;
 
 
     /**
@@ -32,7 +40,215 @@ public class VoteRequest extends SQLRequest {
         super.setPlayer(player);
     }
 
+    private void doBonus() {
+        switch(bonus) {
+            case 0:
+                player.sendMessage("... And get double voting points!");
+                votingPoints *= 2;
+                break;
+            case 1:
+                long time;
+                switch(streak) {
+                    case 10:
+                        time = 2 * Time.ONE_HOUR;
+                        break;
+                    case 5:
+                        time = 90 * Time.ONE_MINUTE;
+                        break;
+                    case 3:
+                        time = 1 * Time.ONE_HOUR;
+                        break;
+                    case 2:
+                        time = 45 * Time.ONE_MINUTE;
+                        break;
+                    case 1:
+                        time = 30 * Time.ONE_MINUTE;
+                        break;
+                    default:
+                        time = 15 * Time.ONE_MINUTE;
+                        break;
+                }
+                player.getExtraData().put("doubleExperience", System.currentTimeMillis() + time);
+                player.sendMessage("... And received double experience for " + time/Time.ONE_MINUTE + " minutes!");
+                break;
+            case 2:
+                double multiplier;
+                switch(streak) {
+                    case 10:
+                        multiplier = 1.5;
+                        break;
+                    case 5:
+                        multiplier = 1.2;
+                        break;
+                    case 3:
+                        multiplier = 1.1;
+                        break;
+                    case 2:
+                        multiplier = 1.05;
+                        break;
+                    case 1:
+                        multiplier = 1.02;
+                        break;
+                    default:
+                        multiplier = 1.01;
+                        break;
+                }
+                player.getExtraData().put("increasedDroprate", System.currentTimeMillis() + Time.ONE_HOUR);
+                player.getExtraData().put("dropRateMultiplier", multiplier);
+                player.sendMessage("... And received increased droprates for one hour!");
+                break;
+            case 3:
+                double reducement;
+                switch(streak) {
+                    case 10:
+                        reducement = 0.5;
+                        break;
+                    case 5:
+                        reducement = 0.8;
+                        break;
+                    case 3:
+                        reducement = 0.9;
+                        break;
+                    case 2:
+                        reducement = 0.95;
+                        break;
+                    case 1:
+                        reducement = 0.98;
+                        break;
+                    default:
+                        reducement = 0.99;
+                        break;
+                }
+                player.getExtraData().put("loweredYellTimer", System.currentTimeMillis() + Time.ONE_HOUR);
+                player.getExtraData().put("yellReduction", reducement);
+                player.sendMessage("... And received a reduced yelldelay for one hour!");
+                break;
+            case 4:
+                if(Misc.random(50/streak) == 1) {
+                    int donatorPoints = 0;
+                    player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
+                    player.sendMessage("... And receive " + donatorPoints + " donator points as a rare bonus!");
+                    for(Player p : World.getWorld().getPlayers()) {
+                        p.sendServerMessage(player.getSafeDisplayName() + " has just received " + donatorPoints + " donator points for voting!");
+                    }
+                } else {
+                    doBonus();
+                }
+                break;
+        }
+    }
+
     public void process(final SQLConnection sql) {
+        if (!sql.isConnected()) {
+            player.getActionSender().sendMessage("Voting is offline right now. Try again later.");
+            return;
+        }
+        int currentStreak = player.getPermExtraData().getInt("votingStreak");
+        boolean voted = false;
+
+        ResultSet rs = null;
+        try {
+            //If voted is 1, it means they voted for at least one site
+            rs = sql.query(String.format("SELECT * FROM waitingVotes WHERE realUsername = '%s' AND voted = 1", player.getName()));
+            while (rs.next()) {
+                final boolean runelocus = rs.getByte("runelocus") == 1;
+                final boolean topg = rs.getByte("topg") == 1;
+                final boolean top100 = rs.getByte("top100") == 1;
+                //If the player didn't vote for any of them
+                if (!runelocus && !topg && !top100)
+                    continue;
+                //If player voted on all 3 he receives a bonus
+                if (runelocus && topg && top100) {
+                    bonus = Misc.random(4);
+
+                    //This will check if they voted yesterday too, if so; receive streak.
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.DATE, -1);
+                    String yesterday = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+
+                    if (player.getPermExtraData().getString("lastVoted").equalsIgnoreCase(yesterday)) {
+                        player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                        currentStreak++;
+                    }
+                }
+
+                //- When a player votes 2 days in a row his streak becomes 1.
+                //- When a player votes 4 days in a row his streak becomes 2.
+                //- When a player votes 7 days in a row his streak becomes 3 and he gains an achievement.
+                //- When a player votes 14 days in a row his streak becomes 5 and he gains another achievement.
+                //- When a player votes 31 days in a row his streak becomes 10 and he gains another achievement.
+
+                int streak = 0;
+                if (currentStreak >= 31) {
+                    streak = 10;
+                } else if (currentStreak >= 14) {
+                    streak = 5;
+                } else if (currentStreak >= 7) {
+                    streak = 3;
+                } else if (currentStreak >= 4) {
+                    streak = 2;
+                } else if (currentStreak >= 2) {
+                    streak = 1;
+                }
+                int votingPoints = 1 + streak;
+
+                if (bonus != -1) {
+                    player.sendMessage("You get a bonus for voting on all 3 voting sites...");
+                    doBonus();
+                }
+
+                player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
+                player.sendMessage("Thank you for voting. You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".");
+                player.setLastVoted(System.currentTimeMillis());
+                player.getExtraData().put("lastVoteDate", Calendar.DATE);
+                voted = true;
+
+                //This will let the player know where he can still vote.
+                if (bonus == -1) {
+                    StringBuilder sb = new StringBuilder("You can still vote on ");
+                    if (!runelocus)
+                        sb.append("runelocus &");
+                    if (!top100)
+                        sb.append("top100 &");
+                    if (!topg)
+                        sb.append("topg");
+                    if (sb.toString().endsWith(" &")) {
+                        sb.replace(sb.length() - 2, sb.length(), "");
+                    }
+                    sb.append(".");
+                    player.sendMessage(sb.toString());
+                } else if (currentStreak != 0) {
+                    player.sendMessage("You are now on a " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " voting streak!");
+                }
+                final int rl = runelocus ? 1 : 0;
+                final int t100 = top100 ? 1 : 0;
+                final int tg = topg ? 1 : 0;
+                sql.query(String.format(
+                                "INSERT INTO votes (name, runelocus, top100, topg) VALUES ('%s', %d, %d, %d) ON DUPLICATE KEY UPDATE runelocus = runelocus + %d, top100 = top100 + %d, topg = topg + %d",
+                                player.getName().toLowerCase(), rl, t100, tg, rl, t100, tg)
+                );
+            }
+            sql.query(String.format("DELETE FROM waitingVotes WHERE realUsername!=fakeUsername AND realUsername = '%s'", player.getName()));
+            sql.query(String.format("UPDATE waitingVotes SET runelocus=0,top100=0,topg=0,voted=1 WHERE realUsername ='%s'", player.getName()));
+            sql.query("DELETE FROM waitingVotes WHERE fakeUsername = realUsername AND timestamp <= date_sub(now(), interval 12 hour)");
+        } catch (Exception e) {
+            player.getActionSender().sendMessage("Something went wrong with the voting... Try again later!");
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (!voted)
+            player.sendMessage("You have no votes to claim. Use ::vote to vote.");
+    }
+
+
+/*
         player.sendMessage("Attempting to retrieve vote points...");
         if (!sql.isConnected()) {
             player.getActionSender().sendMessage("Your request could not be processed. Try again later.");
@@ -61,6 +277,7 @@ public class VoteRequest extends SQLRequest {
                     thisClaim += 1;
                 if (topg)
                     thisClaim++;
+                thisClaim *= 2;
                 final int freeSlots = player.getInventory().freeSlots();
                 if(freeSlots >= thisClaim) {
                     player.getInventory().add(new Item(3062, thisClaim));

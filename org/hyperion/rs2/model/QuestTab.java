@@ -1,13 +1,10 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
-import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
 import java.util.Calendar;
@@ -91,9 +88,11 @@ public class QuestTab {
 		sendBHEnabled();
 		sendBHPerks();
 		sendYellEnabled();
+		sendYellTitlesEnabled();
 		sendTriviaEnabled();
 		sendPkMessagesEnabled();
 		sendStaffMessagesEnabled();
+		sendLootMessagesEnabled();
 		sendParticlesEnabled();
 		sendTitlesEnabled();
 		sendExpLockEnabled();
@@ -235,44 +234,56 @@ public class QuestTab {
 		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledYell") ? "Enable" : "Disable") + " yelling");
 	}
 
-	public void sendTriviaEnabled() {
+	public void sendYellTitlesEnabled() {
 		int id = getId(26);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledYellTitles") ? "Enable" : "Disable") + " yell titles", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledYellTitles") ? "Enable" : "Disable") + " yell titles");
+	}
+
+	public void sendTriviaEnabled() {
+		int id = getId(27);
 		player.getActionSender().sendString("@or1@" + (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia", id);
 		player.getActionSender().sendTooltip(id, (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia");
 	}
 
 	public void sendPkMessagesEnabled() {
-		int id = getId(27);
+		int id = getId(28);
 		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages", id);
 		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages");
 	}
 
 	public void sendStaffMessagesEnabled() {
-		int id = getId(28);
+		int id = getId(29);
 		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff login", id);
 		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "Enable" : "Disable") + " staff login");
 	}
 
+	public void sendLootMessagesEnabled() {
+		int id = getId(30);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledLootMessages") ? "Enable" : "Disable") + " loot messages", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledLootMessages") ? "Enable" : "Disable") + " loot messages");
+	}
+
 	public void sendParticlesEnabled() {
-		int id = getId(29);
+		int id = getId(31);
 		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles", id);
 		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles");
 	}
 
 	public void sendTitlesEnabled() {
-		int id = getId(30);
-		player.getActionSender().sendString("@or1@Toggle right-click options", id);
-		player.getActionSender().sendTooltip(id, "Toggle right-click options");
+		int id = getId(32);
+		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPlayerTitles") ? "Enable" : "Disable") + " player titles", id);
+		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledPlayerTitles") ? "Enable" : "Disable") + " player titles");
 	}
 
 	public void sendExpLockEnabled() {
-		int id = getId(31);
+		int id = getId(33);
 		player.getActionSender().sendString("@or1@" + (player.xpLock ? "Disable" : "Enable") + " exp lock", id);
 		player.getActionSender().sendTooltip(id, (player.xpLock ? "Disable" : "Enable") + " exp lock");
 	}
 
 	public void sendRankInfo() {
-		max_index = 34;
+		max_index = 36;
 		boolean hasRank = false;
 		for(Rank rank : Rank.values()) {
 			if(Rank.hasAbility(player, rank)) {
@@ -283,10 +294,10 @@ public class QuestTab {
 					hasRank = true;
 			}
 		}
-		player.getActionSender().sendString(!hasRank ? "" : "@or1@     Available ranks", getId(33));
-		player.getActionSender().sendFont(getId(33), 2);
+		player.getActionSender().sendString(!hasRank ? "" : "@yel@" + Misc.centerQuestTab("- Available ranks- "), getId(35));
+		player.getActionSender().sendFont(getId(35), 2);
 		if(!hasRank)
-			max_index = 33;
+			max_index = 35;
 	}
 
 	public void fillQuestTab() {
@@ -296,12 +307,12 @@ public class QuestTab {
 	}
 
 	static {
-		for(int i = 34; i < 34 + Rank.values().length; i++) {
+		for(int i = 36; i < 36 + Rank.values().length; i++) {
 			final int i2 = i;
 			ActionsManager.getManager().submit(getId(i), new ButtonAction() {
 				@Override
 				public void handle(Player player, int id) {
-					int index = 34;
+					int index = 36;
 					for(Rank rank : Rank.values()) {
 						if(Rank.hasAbility(player, rank)){
 							if(i2 == index) {
@@ -476,6 +487,15 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(26), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
+				player.getPermExtraData().put("disabledYellTitles", !player.getPermExtraData().getBoolean("disabledYellTitles"));
+				player.getQuestTab().sendYellTitlesEnabled();
+				player.sendMessage("Yell titles are now " + (player.getPermExtraData().getBoolean("disabledYellTitles") ? "disabled" : "enabled") + ".");
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(27), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
 				player.getTrivia().setEnabled(!player.getTrivia().isEnabled());
 				player.getQuestTab().sendTriviaEnabled();
 				player.sendMessage("Trivia is now " + (player.getTrivia().isEnabled() ? "enabled" : "disabled") + ".");
@@ -484,7 +504,7 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(27), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(28), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.getPermExtraData().put("disabledPkMessages", !player.getPermExtraData().getBoolean("disabledPkMessages"));
@@ -493,40 +513,45 @@ public class QuestTab {
 			}
 		});
 
-		ActionsManager.getManager().submit(getId(28), new ButtonAction() {
+		ActionsManager.getManager().submit(getId(29), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.getPermExtraData().put("disabledStaffMessages", !player.getPermExtraData().getBoolean("disabledStaffMessages"));
 				player.getQuestTab().sendStaffMessagesEnabled();
-				player.sendMessage("Staff messages are now " + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "disabled" : "enabled") + ".");
-			}
-		});
-
-		ActionsManager.getManager().submit(getId(29), new ButtonAction() {
-			@Override
-			public void handle(Player player, int id) {
-				/*
-				player.getPermExtraData().put("disabledParticles", !player.getPermExtraData().getBoolean("disabledParticles"));
-				player.getQuestTab().sendParticlesEnabled();
-				player.sendMessage("Particles are now " + (player.getPermExtraData().getBoolean("disabledParticles") ? "disabled" : "enabled") + ".");
-				*/
-				player.sendMessage("Do ::particles to change particles on/off.");
+				player.sendMessage("Staff login messages are now " + (player.getPermExtraData().getBoolean("disabledStaffMessages") ? "disabled" : "enabled") + ".");
 			}
 		});
 
 		ActionsManager.getManager().submit(getId(30), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				/*
-				player.getPermExtraData().put("disabledTitles", !player.getPermExtraData().getBoolean("disabledTitles"));
-				player.getQuestTab().sendTitlesEnabled();
-				player.sendMessage("Player titles are now " + (player.getPermExtraData().getBoolean("disabledTitles") ? "disabled" : "enabled") + ".");
-				*/
-				player.sendMessage("Do ::switchoption trade/profile/follow to change options (do ::commands for more)");
+				player.getPermExtraData().put("disabledLootMessages", !player.getPermExtraData().getBoolean("disabledLootMessages"));
+				player.getQuestTab().sendLootMessagesEnabled();
+				player.sendMessage("Loot messages are now " + (player.getPermExtraData().getBoolean("disabledLootMessages") ? "disabled" : "enabled") + ".");
 			}
 		});
 
 		ActionsManager.getManager().submit(getId(31), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				player.getPermExtraData().put("disabledParticles", !player.getPermExtraData().getBoolean("disabledParticles"));
+				player.sendMessage("script-particles");
+				player.getQuestTab().sendParticlesEnabled();
+				player.sendMessage("Particles are now " + (player.getPermExtraData().getBoolean("disabledParticles") ? "disabled" : "enabled") + ".");
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(32), new ButtonAction() {
+			@Override
+			public void handle(Player player, int id) {
+				player.getPermExtraData().put("disabledPlayerTitles", !player.getPermExtraData().getBoolean("disabledPlayerTitles"));
+				player.sendMessage("script-titles");
+				player.getQuestTab().sendTitlesEnabled();
+				player.sendMessage("Player titles are now " + (player.getPermExtraData().getBoolean("disabledPlayerTitles") ? "disabled" : "enabled") + ".");
+			}
+		});
+
+		ActionsManager.getManager().submit(getId(33), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
 				player.xpLock = !player.xpLock;

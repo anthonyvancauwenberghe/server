@@ -174,7 +174,7 @@ public class ActionSender {
 				player.setTutorialProgress(28);
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-			player.sendMessage("@bla@Subscribe to the community channel: @whi@ http://j.mp/apkchannel#url#");
+			player.sendMessage("@bla@Run client in high-priority for fast speeds: @blu@ http://j.mp/fastclient#url#");
 			//Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
 			player.sendMessage("", "@dre@Bonus Active: @bla@ 2x vote reward!");
 			passChangeShit();

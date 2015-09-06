@@ -106,20 +106,20 @@ public class QuestTab {
 			player.getActionSender().sendString("", QUEST_TAB_TO_CLEAR[i]);
 			player.getActionSender().sendTooltip(QUEST_TAB_TO_CLEAR[i], "");
 		}
-		player.getActionSender().sendString("@or1@     ArteroPk", 640);
-		player.getActionSender().sendString("@or1@  Server Information", getId(0));
+		player.getActionSender().sendString("@yel@     ArteroPk", 640);
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Server Information -"), getId(0));
 		player.getActionSender().sendFont(getId(0), 2);
 		player.getActionSender().sendString("", getId(5));
-		player.getActionSender().sendString("@or1@      PK Information", getId(6));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Pk Information -"), getId(6));
 		player.getActionSender().sendFont(getId(6), 2);
 		player.getActionSender().sendString("", getId(16));
-		player.getActionSender().sendString("@or1@       Ingame Points", getId(13));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Ingame Points -"), getId(13));
 		player.getActionSender().sendFont(getId(13), 2);
 		player.getActionSender().sendString("", getId(17));
-		player.getActionSender().sendString("@or1@       Bounty Hunter", getId(18));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Bounty hunter -"), getId(18));
 		player.getActionSender().sendFont(getId(18), 2);
 		player.getActionSender().sendString("", getId(23));
-		player.getActionSender().sendString("@or1@             Locks", getId(24));
+		player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Locks -"), getId(24));
 		player.getActionSender().sendFont(getId(24), 2);
 		player.getActionSender().sendString("", getId(32));
 	}
@@ -423,8 +423,8 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(17), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.forceMessage("I have " + (player.getPoints().getHonorPoints() == 0 ? "no" : player.getPoints().getHonorPoints()) + " " + (player.getPoints().getHonorPoints() == 1 ? "honor point" : "honor points") + ".");
-			}
+				DialogueManager.openDialogue(player, 530);
+				}
 		});
 
 		ActionsManager.getManager().submit(getId(19), new ButtonAction() {

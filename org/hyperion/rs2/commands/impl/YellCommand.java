@@ -1,9 +1,11 @@
 package org.hyperion.rs2.commands.impl;
 
 import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
@@ -83,6 +85,16 @@ public class YellCommand extends Command {
 		final String suffix = (player.hardMode() ? "[I]" : "") + "[" + colors + tag + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
+		if(!Rank.isStaffMember(player)) {
+			World.getWorld().submit(
+					new Event(getYellDelay(player)) {
+						public void execute() {
+							player.sendMessage("[B] Nab: Hey " + player.getSafeDisplayName() + ", you can yell again!");
+							stop();
+						}
+					}
+			);
+		}
 
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}

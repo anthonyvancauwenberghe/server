@@ -195,11 +195,11 @@ public class ActionSender {
 		ClanManager.clearClanChat(player);
 
 		player.getPoints().loginCheck();
-		if(Rank.hasAbility(player, Rank.HELPER) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+		if(Rank.getPrimaryRank(player).ordinal() >= Rank.HELPER.ordinal() && !Rank.hasAbility(player, Rank.DEVELOPER)) {
 			String rank = Rank.getPrimaryRank(player).toString();
 			for(Player p : World.getWorld().getPlayers())
-				if(p != null)
-					if(!p.getPermExtraData().getBoolean("disabledStaffMessages"))
+				if (p != null)
+					if (!p.getPermExtraData().getBoolean("disabledStaffMessages"))
 						p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
 		}
 

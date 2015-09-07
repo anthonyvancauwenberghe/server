@@ -46,7 +46,7 @@ public enum Rank {
 		String name = super.toString();
 		name = name.replace("_", " ");
 		name = TextUtils.titleCase(name, true);
-		name = name.replaceAll("Super", "S.").replaceAll("Head", "H.").replaceAll("Forum", "F.").replaceAll("Community", "Comm.").replaceAll("Editor", "E.");
+		name = name.replaceAll("Super", "S.").replaceAll("Head", "H.").replaceAll("Forum", "F.").replaceAll("Community", "Comm.");
 		return name;
 	}
 

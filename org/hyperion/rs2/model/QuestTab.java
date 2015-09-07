@@ -266,14 +266,14 @@ public class QuestTab {
 
 	public void sendParticlesEnabled() {
 		int id = getId(31);
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles", id);
-		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledParticles") ? "Enable" : "Disable") + " particles");
+		player.getActionSender().sendString("@or1@ Toggle particles", id);
+		player.getActionSender().sendTooltip(id, "");
 	}
 
 	public void sendTitlesEnabled() {
 		int id = getId(32);
-		player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPlayerTitles") ? "Enable" : "Disable") + " player titles", id);
-		player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledPlayerTitles") ? "Enable" : "Disable") + " player titles");
+		player.getActionSender().sendString("@or1@ Toggle player titles", id);
+		player.getActionSender().sendTooltip(id, "");
 	}
 
 	public void sendExpLockEnabled() {
@@ -534,20 +534,16 @@ public class QuestTab {
 		ActionsManager.getManager().submit(getId(31), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getPermExtraData().put("disabledParticles", !player.getPermExtraData().getBoolean("disabledParticles"));
 				player.sendMessage("script-particles");
 				player.getQuestTab().sendParticlesEnabled();
-				player.sendMessage("Particles are now " + (player.getPermExtraData().getBoolean("disabledParticles") ? "disabled" : "enabled") + ".");
 			}
 		});
 
 		ActionsManager.getManager().submit(getId(32), new ButtonAction() {
 			@Override
 			public void handle(Player player, int id) {
-				player.getPermExtraData().put("disabledPlayerTitles", !player.getPermExtraData().getBoolean("disabledPlayerTitles"));
 				player.sendMessage("script-titles");
 				player.getQuestTab().sendTitlesEnabled();
-				player.sendMessage("Player titles are now " + (player.getPermExtraData().getBoolean("disabledPlayerTitles") ? "disabled" : "enabled") + ".");
 			}
 		});
 

@@ -2,6 +2,7 @@ package org.hyperion.rs2;
 
 import org.hyperion.rs2.event.impl.UpdateEvent;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.ServerTimeManager;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.task.Task;
@@ -132,7 +133,10 @@ public class GameEngine implements Runnable {
 					submitLogic(new Runnable() {
 						@Override
 						public void run() {
+							long start = System.currentTimeMillis();
 							task.execute(GameEngine.this);
+							long delta = System.currentTimeMillis() - start;
+							ServerTimeManager.getSingleton().add(task.getClass().getSimpleName(), delta);
 						}
 					});
 				} catch(InterruptedException e) {

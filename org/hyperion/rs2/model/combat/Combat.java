@@ -807,7 +807,7 @@ public class Combat {
 
 	public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, final int type, final boolean prayerBlock) {
 
-		World.getWorld().submit(new Event(delay, "npcatx") {
+		World.getWorld().submit(new Event(delay, "npcattack") {
 			@Override
 			public void execute() {
                 if ((combatEntity == null ||

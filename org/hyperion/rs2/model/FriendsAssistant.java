@@ -57,7 +57,7 @@ public class FriendsAssistant {
 		if(lastChatId == 10000) {
 			lastChatId = 1;
 		}
-        final String text = TextUtils.textUnpack(chatText, chatTextSize);
+        final String text = TextUtils.pmText(chatTextSize, chatText);
         final String fromName = NameUtils.longToName(from);
         final Player fromPlayer = World.getWorld().getPlayer(fromName);
 		if(LogEntry.privateChat(fromName, p.getName(), text) !=null) {

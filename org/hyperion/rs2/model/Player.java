@@ -304,7 +304,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
         if(!contains && add) {
 			for (Player p : World.getWorld().getPlayers()) {
-				p.sendServerMessage(getSafeDisplayName() + " has just achieved " + name +"!");
+				p.sendLootMessage("Achievement", getSafeDisplayName() + " has just achieved " + name + "!");
 			}
 			bank.add(new BankItem(0, id, 1));
 		}
@@ -2496,10 +2496,14 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return getActionSender();
 	}
 
-	public ActionSender sendServerMessage(Object... message) {
-		if(!name.equalsIgnoreCase("ferry"))
-			return sendHeadedMessage("@whi@", "[Server]", message);
+	public ActionSender sendLootMessage(String tag, Object... message) {
+		if(!getPermExtraData().getBoolean("disabledLootMessages"))
+			return sendHeadedMessage("@gre@", "[" + tag + "]", message);
 		return getActionSender();
+	}
+
+	public ActionSender sendServerMessage(Object... message) {
+		return sendHeadedMessage("@whi@", "[Server]", message);
 	}
 
 	public ActionSender sendStaffMessage(Object... message) {

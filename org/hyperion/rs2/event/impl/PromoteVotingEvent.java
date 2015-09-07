@@ -18,7 +18,8 @@ public class PromoteVotingEvent extends Event {
 	public void execute() {
 		for(Player player : World.getWorld().getPlayers()) {
 			if(System.currentTimeMillis() - player.getLastVoted() > Time.ONE_HOUR * 12) {
-				player.sendServerMessage("Don't forget to vote again using the ::vote command.");
+				if(!Rank.hasAbility(player, Rank.DEVELOPER))
+					player.sendServerMessage("Don't forget to vote again using the ::vote command.");
 			}
 		}
 	}

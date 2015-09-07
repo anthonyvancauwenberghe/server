@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
+import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.container.Equipment;
@@ -364,6 +365,12 @@ public class WalkingQueue {
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
 					player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+				}
+
+			}
+			if(Jail.inJail(player)) {
+				if(player.getLocation().getX() < 2088 || player.getLocation().getX() > 2107 || player.getLocation().getY() > 4438 || player.getLocation().getY() < 4420) {
+					player.setTeleportTarget(Location.create(2097, 4428, 0), false);
 				}
 			}
 			if(FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY())) {

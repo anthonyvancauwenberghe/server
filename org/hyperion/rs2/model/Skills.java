@@ -555,7 +555,7 @@ public class Skills {
 		if(exps[skill] >= MAXIMUM_EXP) {
 			if(oldExp != MAXIMUM_EXP) {
 				for(Player p : World.getWorld().getPlayers()) {
-					p.sendServerMessage(player.getSafeDisplayName() + " has just reached 200m experience in " + SKILL_NAME[skill] + "!");
+					p.sendLootMessage("Achievement", player.getSafeDisplayName() + " has just reached 200m experience in " + SKILL_NAME[skill] + "!");
 				}
 				player.checkCapes();
 			}

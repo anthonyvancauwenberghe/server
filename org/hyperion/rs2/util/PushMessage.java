@@ -22,18 +22,6 @@ public class PushMessage {
 				other.getActionSender().sendMessage(s);
 		}
 	}
-	/**
-	 * Sends message to all that have yell enabled
-	 */
-	public static final void pushYell(String suffix, String input, Player player) {
-		for(Player other : World.getWorld().getPlayers()) {
-			if(other != null) {
-				String message = suffix + input;
-				if(!other.getPermExtraData().getBoolean("disabledYell"))
-					other.getActionSender().sendMessage(message);
-			}
-		}
-	}
 
 	/**
 	 * Pushes message to all staff members {@link org.hyperion.rs2.packet.CommandPacketHandler}

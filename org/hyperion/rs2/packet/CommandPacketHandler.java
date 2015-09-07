@@ -2261,24 +2261,28 @@ public class CommandPacketHandler implements PacketHandler {
             /**
              * Made the system already pshh, it'll just sit there
              */
-            if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && commandStart.equalsIgnoreCase("settag")) {
-                try {
-                    String tag = withCaps.substring(7); // how else can i
-                    // have "Rich Homie"
-                    if(tag.length() > 14) {
-                        player.sendMessage("Tag is too long");
+            if (commandStart.equalsIgnoreCase("settag")) {
+                if(player.getPoints().getDonatorPointsBought() >= 25000) {
+                    try {
+                        String tag = withCaps.substring(7);
+                        if (tag.length() > 14) {
+                            player.sendMessage("Tag is too long");
+                            return;
+                        }
+                        if (Yelling.isValidTitle(tag).length() > 1) {
+                            player.getActionSender().sendMessage(
+                                    Yelling.isValidTitle(tag));
+                            return;
+                        }
+                        player.sendMessage("Your yell tag has been set to '" + TextUtils.ucFirst(tag.toLowerCase()) + "'.");
+                        player.getYelling().setYellTitle(TextUtils.ucFirst(tag.toLowerCase()));
+                    } catch (NullPointerException
+                            | StringIndexOutOfBoundsException e) {
+                        player.getActionSender().sendMessage("Use as ::settag TAG.");
                         return;
                     }
-                    if (Yelling.isValidTitle(tag).length() > 1) {
-                        player.getActionSender().sendMessage(
-                                Yelling.isValidTitle(tag));
-                        return;
-                    }
-                    player.getYelling().setYellTitle(tag);
-                } catch (NullPointerException
-                        | StringIndexOutOfBoundsException e) {
-                    player.getActionSender().sendMessage("Invalid tag");
-                    return;
+                } else {
+                    player.sendMessage("You need to donate at least $250 to be able to set your tag.");
                 }
             }
             if(commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {

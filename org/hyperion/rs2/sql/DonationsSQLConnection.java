@@ -44,7 +44,6 @@ public class DonationsSQLConnection extends MySQLConnection {
 				}
 				World.getWorld().getDonationsConnection()
 						.offer(new VoteRequest(player));
-				// System.out.println("Voted for: " + player.getName());
 				player.getExtraData().put("lastsql", System.currentTimeMillis());
 				return true;
 			}

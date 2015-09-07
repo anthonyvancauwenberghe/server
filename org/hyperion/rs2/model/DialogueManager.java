@@ -32,6 +32,8 @@ import org.hyperion.rs2.packet.ModerationOverride;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Optional;
 
 
@@ -1450,6 +1452,45 @@ public class DialogueManager {
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"This name is already in use, please choose an other name.");
 				player.getInterfaceState().setNextDialogueId(0, 505);
+				break;
+			case 530:
+				player.getActionSender().sendDialogue("Click an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Check time for next honor points", "Yell out honor points");
+				player.getInterfaceState().setNextDialogueId(0, 531);
+				player.getInterfaceState().setNextDialogueId(1, 532);
+				break;
+			case 531:
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(System.currentTimeMillis() - player.getLastHonorPointsReward());
+				if(System.currentTimeMillis() - player.getLastHonorPointsReward() < 0) {
+					player.sendMessage("You will receive honor points again if you relog.");
+				} else {
+					StringBuilder output = new StringBuilder();
+					if (cal.get(Calendar.HOUR) > 0) {
+						output.append(cal.get(Calendar.HOUR));
+						if (cal.get(Calendar.HOUR) == 1) {
+							output.append(" hour");
+						} else {
+							output.append(" hours");
+						}
+						if (cal.get(Calendar.MINUTE) > 0) {
+							output.append(" and ");
+						}
+					}
+					if (cal.get(Calendar.MINUTE) > 0) {
+						output.append(cal.get(Calendar.MINUTE));
+						if (cal.get(Calendar.MINUTE) == 1) {
+							output.append(" minute");
+						} else {
+							output.append(" minutes");
+						}
+					}
+					player.sendMessage("You will receive honor points again in " + output.toString() + ".");
+				}
+				player.getActionSender().removeChatboxInterface();
+				break;
+			case 532:
+				player.forceMessage("I have " + (player.getPoints().getHonorPoints() == 0 ? "no" : player.getPoints().getHonorPoints()) + " " + (player.getPoints().getHonorPoints() == 1 ? "honor point" : "honor points") + ".");
+				player.getActionSender().removeChatboxInterface();
 				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

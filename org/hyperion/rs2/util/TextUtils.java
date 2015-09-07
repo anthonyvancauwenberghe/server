@@ -37,6 +37,25 @@ public class TextUtils {
 		return new String(decodeBuf, 0, idx);
 	}
 
+    public static String pmText(int i, byte[] array) {
+        int j = 0;
+        final char[] aCharArray631 = new char[100];
+        for(int l = 0; l < i; l++) {
+            aCharArray631[j++] = validChars[array[l]];
+        }
+        boolean flag1 = true;
+        for(int k1 = 0; k1 < j; k1++) {
+            char client = aCharArray631[k1];
+            if(flag1 && client >= 'a' && client <= 'z') {
+                aCharArray631[k1] += '\uFFE0';
+                flag1 = false;
+            }
+            if(client == '.' || client == '!' || client == '?')
+                flag1 = true;
+        }
+        return new String(aCharArray631, 0, j);
+    }
+
 	public static String shortIp(String fullIp) {
 		String[] parts = fullIp.split(":");
 		return parts[0].replace("/", "");

@@ -53,7 +53,7 @@ public class YellCommand extends Command {
 			return false;
 
 		input = PushMessage.filteredString(input);
-		input = input.replaceAll("tradereq", "").replaceAll("duelreq", "");
+		input = input.replaceAll("tradereq", "").replaceAll("duelreq", "").replaceAll(":clan:", "");
 
 		long yellMilliseconds = (long)(System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur"));
 
@@ -69,6 +69,8 @@ public class YellCommand extends Command {
 				player.getPermExtraData().put("yelltimur", player.getYelling().getYellTimer());
 			} else {
 				player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level or purchase donator", "to start yelling");
+                if(player.getClanName().equalsIgnoreCase(""))
+                    ClanManager.joinClanChat(player, "chatting", false);
 				return false;
 			}
 		}

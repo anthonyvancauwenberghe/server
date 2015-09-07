@@ -13,7 +13,7 @@ public enum Rank {
 	VETERAN("@ffb226@"), // 3
 	DONATOR("@ba0000@"), // 4
 	SUPER_DONATOR("@03ce10@"), // 5
-	GRAPHICS_DESIGNER("@bla@"), // 6
+	WIKI_EDITOR("@bla@"), // 6
 	EVENT_MANAGER("@bla@"), // 7
 	HELPER("@e519c0@"), // 8
 	FORUM_MODERATOR("@blu@"), // 9
@@ -46,7 +46,7 @@ public enum Rank {
 		String name = super.toString();
 		name = name.replace("_", " ");
 		name = TextUtils.titleCase(name, true);
-		name = name.replaceAll("Super", "S.").replaceAll("Head", "H.").replaceAll("Forum", "F.").replaceAll("Community", "Comm");
+		name = name.replaceAll("Super", "S.").replaceAll("Head", "H.").replaceAll("Forum", "F.").replaceAll("Community", "Comm.").replaceAll("Editor", "E.");
 		return name;
 	}
 

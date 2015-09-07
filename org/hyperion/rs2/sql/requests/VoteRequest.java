@@ -139,6 +139,7 @@ public class VoteRequest extends SQLRequest {
     }
 
     public void process(final SQLConnection sql) {
+        /*
         if (!sql.isConnected()) {
             player.getActionSender().sendMessage("Voting is offline right now. Try again later.");
             return;
@@ -248,7 +249,7 @@ public class VoteRequest extends SQLRequest {
     }
 
 
-/*
+*/
         player.sendMessage("Attempting to retrieve vote points...");
         if (!sql.isConnected()) {
             player.getActionSender().sendMessage("Your request could not be processed. Try again later.");

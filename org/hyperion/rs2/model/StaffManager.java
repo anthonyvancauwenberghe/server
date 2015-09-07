@@ -18,7 +18,7 @@ public class StaffManager {
 			if(player.isHidden())
 				continue;
             if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-                if(Rank.getPrimaryRank(player).ordinal() < Rank.GRAPHICS_DESIGNER.ordinal())
+                if(Rank.getPrimaryRank(player).ordinal() < Rank.WIKI_EDITOR.ordinal())
                     continue;
             }
 			if(Rank.isStaffMember(player) && Rank.getPrimaryRank(player) != Rank.OWNER) {

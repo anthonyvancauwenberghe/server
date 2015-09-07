@@ -2262,7 +2262,7 @@ public class CommandPacketHandler implements PacketHandler {
              * Made the system already pshh, it'll just sit there
              */
             if (commandStart.equalsIgnoreCase("settag")) {
-                if(player.getPoints().getDonatorPointsBought() >= 250000) {
+                if(player.getPoints().getDonatorPointsBought() >= 25000) {
 
                     try {
                         String tag = withCaps.substring(7);

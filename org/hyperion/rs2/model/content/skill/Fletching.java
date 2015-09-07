@@ -39,38 +39,38 @@ public class Fletching implements ContentTemplate {
 	//TODO: recode whole shit
 	//TODO: add make x
 
-	public final int[] LOGS = {1511, 1521, 1519, 1517, 1515, 1513};
-	public final int[] UNSTRUNG_BOWS = {50, 48, 54, 56, 60, 58, 64, 62, 68, 66, 72, 70};
-	public final int[] STRUNG_BOWS = {841, 839, 843, 845, 849, 847, 853, 851, 857, 855, 861, 859,};
-	public final int[] FLETCHING_LEVELS = {5, 10, 20, 25, 35, 40, 50,
+	public static final int[] LOGS = {1511, 1521, 1519, 1517, 1515, 1513};
+	public static final int[] UNSTRUNG_BOWS = {50, 48, 54, 56, 60, 58, 64, 62, 68, 66, 72, 70};
+	public static final int[] STRUNG_BOWS = {841, 839, 843, 845, 849, 847, 853, 851, 857, 855, 861, 859,};
+	public static final int[] FLETCHING_LEVELS = {5, 10, 20, 25, 35, 40, 50,
 			55, 65, 70, 80, 85};
-	public final int[] EXPERIENCE = {10, 20, 33, 50, 66, 83, 100,
+	public static final int[] EXPERIENCE = {10, 20, 33, 50, 66, 83, 100,
 			117, 133, 150, 167, 183};
 
-	public final int[] ARROWS = {882, 884, 886, 888, 890, 892};
-	public final int[] ARROW_HEADS = {39, 40, 41, 42, 43, 44};
-	public final int[] ARROW_LEVELS = {1, 15, 30, 45, 60, 75};
-	public final int[] ARROW_EXPERIENCE = {40, 57, 95, 133, 168, 207};
+	public static final int[] ARROWS = {882, 884, 886, 888, 890, 892};
+	public static final int[] ARROW_HEADS = {39, 40, 41, 42, 43, 44};
+	public static final int[] ARROW_LEVELS = {1, 15, 30, 45, 60, 75};
+	public static final int[] ARROW_EXPERIENCE = {40, 57, 95, 133, 168, 207};
 
-	public final int[] DARTS = {806, 807, 808, 809, 810, 811};
-	public final int[] DART_TIPS = {819, 820, 821, 822, 823, 824};
-	public final int[] DART_LEVELS = {1, 22, 37, 52, 67, 81};
-	public final int[] DART_EXPERIENCE = {2, 4, 8, 12, 15, 19, 25};
+	public static final int[] DARTS = {806, 807, 808, 809, 810, 811};
+	public static final int[] DART_TIPS = {819, 820, 821, 822, 823, 824};
+	public static final int[] DART_LEVELS = {1, 22, 37, 52, 67, 81};
+	public static final int[] DART_EXPERIENCE = {2, 4, 8, 12, 15, 19, 25};
 
-	public final int[] LEFT_ITEM = {50, 54, 60, 64, 68, 72};
-	public final int[] RIGHT_ITEM = {48, 56, 58, 62, 66, 70};
-	public String[] LEFT_ITEM_NAME = {"Longbow(u)", "Oak Longbow(u)",
+	public static final int[] LEFT_ITEM = {50, 54, 60, 64, 68, 72};
+	public static final int[] RIGHT_ITEM = {48, 56, 58, 62, 66, 70};
+	public static String[] LEFT_ITEM_NAME = {"Longbow(u)", "Oak Longbow(u)",
 			"Willow Longbow(u)", "Maple Longbow(u)", "Yew Longbow(u)",
 			"Magic Longbow(u)"};
-	public String[] RIGHT_ITEM_NAME = {"Shortbow(u)",
+	public static String[] RIGHT_ITEM_NAME = {"Shortbow(u)",
 			"Oak Shortbow(u)", "Willow Shortbow(u)", "Maple Shortbow(u)",
 			"Yew Shortbow(u)", "Magic Shortbow(u)"};
 
-	public final int FLETCHING_DELAY = 2500;
+	public static final int FLETCHING_DELAY = 2500;
 
 	// private int logId = 0;
 
-	public int getLogId(Player client) {
+	public static int getLogId(Player client) {
 		if(client.getExtraData().get("logId") == null) {
 			return - 1;
 		}
@@ -78,11 +78,11 @@ public class Fletching implements ContentTemplate {
 		return log;
 	}
 
-	public void setLogId(Player client, int id) {
+	public static void setLogId(Player client, int id) {
 		client.getExtraData().put("logId", (Integer) id);
 	}
 
-	public int getIntArray(int[] array1, int[] array2, int bow) {
+	public static int getIntArray(int[] array1, int[] array2, int bow) {
 		int a = 0;
 		for(int object : array1) {
 			if(object == bow) {
@@ -294,7 +294,7 @@ public class Fletching implements ContentTemplate {
 		return true;
 	}
 
-	public boolean startFletching(final Player client, final int amount,
+	public static boolean startFletching(final Player client, final int amount,
 	                              final String length) {
 		if(client.isBusy()) {
 			return true;
@@ -379,7 +379,7 @@ public class Fletching implements ContentTemplate {
 
 	@Override
 	public int[] getValues(int type) {
-		if(type == 13) {
+		if (type == 13) {
 			int ai[] = {
 					946, 1777, 314, 50, 48, 54, 56, 58, 60, 62,
 					64, 66, 68, 70, 72, 39, 40, 41, 42, 43,
@@ -387,15 +387,51 @@ public class Fletching implements ContentTemplate {
 			};
 			return ai;
 		}
-		if(type == 0) {
-			int ai1[] = {
-					8897, 8896, 8895, 8894, 8893, 8892, 8891, 8890, 8889, 8888,
-					8887, 8886
-			};
-			return ai1;
-		} else {
-			return null;
+		return null;
+	}
+
+	public static boolean clickInterface(final Player player, final int id) {
+		switch(id) {
+			case 8889:
+				startFletching(player, 1, "shortbow");
+				return true;
+
+			case 8897:
+				startFletching(player, 1, "longbow");
+				return true;
+
+			case 8888:
+				startFletching(player, 5, "shortbow");
+				return true;
+
+			case 8896:
+				startFletching(player, 5, "longbow");
+				return true;
+
+			case 8887:
+				startFletching(player, 10, "shortbow");
+				return true;
+
+			case 8895:
+				startFletching(player, 10, "longbow");
+				return true;
+
+			case 8893:
+				startFletching(player, 1, "shaft");
+				setLogId(player, 52);
+				return true;
+
+			case 8892:
+				startFletching(player, 5, "shaft");
+				setLogId(player, 52);
+				return true;
+
+			case 8891:
+				startFletching(player, 10, "shaft");
+				setLogId(player, 52);
+				return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -404,69 +440,8 @@ public class Fletching implements ContentTemplate {
 			return isFletchable(player, slot, itemSlot2, id, itemId2);
 		}
 		if(type == 0) {
-			if((int) player.getExtraData().get("crafting") == 1) {
-				switch(id) {
-
-					case 8889:
-						return Crafting.startAgain(player, 1, 0);
-					case 8897:
-						return Crafting.startAgain(player, 1, 2);
-					case 8888:
-						return Crafting.startAgain(player, 5, 0);
-					case 8896:
-						return Crafting.startAgain(player, 5, 2);
-					case 8887:
-						return Crafting.startAgain(player, 10, 0);
-					case 8895:
-						return Crafting.startAgain(player, 10, 2);
-					case 8893:
-						return Crafting.startAgain(player, 1, 1);
-					case 8892:
-						return Crafting.startAgain(player, 5, 1);
-					case 8891:
-						return Crafting.startAgain(player, 10, 1);
-
-				}
-			}
-			switch(id) {
-				case 8889:
-					startFletching(player, 1, "shortbow");
-					return true;
-
-				case 8897:
-					startFletching(player, 1, "longbow");
-					return true;
-
-				case 8888:
-					startFletching(player, 5, "shortbow");
-					return true;
-
-				case 8896:
-					startFletching(player, 5, "longbow");
-					return true;
-
-				case 8887:
-					startFletching(player, 10, "shortbow");
-					return true;
-
-				case 8895:
-					startFletching(player, 10, "longbow");
-					return true;
-
-				case 8893:
-					startFletching(player, 1, "shaft");
-					setLogId(player, 52);
-					return true;
-
-				case 8892:
-					startFletching(player, 5, "shaft");
-					setLogId(player, 52);
-					return true;
-
-				case 8891:
-					startFletching(player, 10, "shaft");
-					setLogId(player, 52);
-					return true;
+			if(player.getExtraData().getBoolean("crafting")) {
+				return Crafting.clickInterface(player, id);
 			}
 		}
 		return false;

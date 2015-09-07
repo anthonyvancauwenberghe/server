@@ -9,10 +9,15 @@ import java.text.DecimalFormat;
 
 public class Misc {
 
+	public static String aOrAn(String word) {
+		return ((word.startsWith("A") || word.startsWith("E") || word.startsWith("O")) ? "an" : "a");
+	}
+
 	/**
 	 * @param amount , for instance 14300000
 	 * @return formatted value, in this case 14,3 Mil
 	 */
+
 	public static String getFormattedValue(int amount) {
 		if(amount >= 1000000) {
 			double mills = (double) amount / (double) 1000000;

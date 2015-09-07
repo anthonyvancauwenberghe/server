@@ -2,14 +2,14 @@ package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.EnumSet;
 
 
 /**
@@ -24,17 +24,152 @@ public class Crafting implements ContentTemplate {
 	public Crafting() {
 	}
 
-	private final static int GEM_ANIM = 2269,
-			CRAFT_ANIM = 2269;
-
 	private final static int EXPMULTIPLIER = 3 * Constants.XPRATE;
 
-	public final static int[] uncuts = {1623, 1621, 1619, 1617, 1631, 1625, 1627, 1629,/*bolts*/1607, 1605, 1603, 1601, 1615, 1609, 1611, 1613,};
-	public final static int[] cut = {1607, 1605, 1603, 1601, 1615, 1609, 1611, 1613,/*bolts*/9189, 9190, 9191, 9192, 9193, 9187, 45, 9188,};
-	public final static int[] cutLevel = {20, 27, 34, 43, 55, 23, 25, 30,/*bolts*/1, 20, 30, 40, 60, 20, 25, 30,};
-	public final static int[] cutXp = {40, 65, 80, 85, 100, 70, 75, 80,/*bolts*/40, 50, 60, 90, 120, 90, 70, 80};
+	public enum Gems {
+		SAPPHIRE_GEM(1623, 1607, 40, 20, 888),
+		EMERALD_GEM(1621, 1605, 65, 27, 889),
+		RUBY_GEM(1619, 1603, 80, 34, 887),
+		DIAMOND_GEM(1617, 1601, 85, 43, 886),
+		DRAGONSTONE_GEM(1631, 1615, 100, 55, 885),
+		OPAL_GEM(1625, 1609, 70, 23, 890),
+		JADE_GEM(1627, 1611, 75, 25, 891),
+		RED_TOPAZ_GEM(1629, 1613, 80, 30, 892),
 
-	public boolean attemptCut(Player c, int useItem, int slot1, int onItem, int slot2) {
+		SAPPHIRE_BOLT_TIPS(1607, 9189, 40, 1, 888),
+		EMERALD_BOLT_TIPS(1605, 9190, 50, 20, 889),
+		RUBY_BOLT_TIPS(1603, 9191, 60, 30, 887),
+		DIAMOND_BOLT_TIPS(1601, 9192, 90, 40, 886),
+		DRAGONSTONE_BOLT_TIPS(1615, 9193, 120, 60, 885),
+		OPAL_BOLT_TIPS(1609, 9187, 90, 20, 890),
+		JADE_BOLT_TIPS(1611, 45, 70, 25, 891),
+		RED_TOPAZ_BOLT_TIPS(1613, 9188, 80, 30, 892);
+
+		private int gemId;
+		private int resultId;
+		private int exp;
+		private int levelReq;
+		private int emote;
+
+		public int getResultId() {
+			return resultId;
+		}
+
+		public int getGemId() {
+			return gemId;
+		}
+
+		public int getExp() {
+			return exp;
+		}
+
+		public int getLevelReq() {
+			return levelReq;
+		}
+
+		public String getName() {
+			return Misc.ucFirst(this.toString().replaceAll("_", " ").replaceAll(" GEM", "").toLowerCase());
+		}
+
+		public int getEmote() {
+			return emote;
+		}
+
+		Gems(int gemId, int resultId, int exp, int levelReq, int emote) {
+			this.gemId = gemId;
+			this.resultId = resultId;
+			this.exp = exp;
+			this.levelReq = levelReq;
+			this.emote = emote;
+		}
+
+	}
+
+	private enum Leather {
+		LEATHER(1741, Leather_Item.LEATHER_BOOTS, Leather_Item.LEATHER_VAMBS, Leather_Item.LEATHER_CHAPS, Leather_Item.LEATHER_BODY),
+		HARD_LEATHER(1743, Leather_Item.HARDLEATHER_BODY),
+		GREEN_DRAGON_LEATHER(1745, Leather_Item.GREEN_DHIDE_VAMBS, Leather_Item.GREEN_DHIDE_CHAPS, Leather_Item.GREEN_DHIDE_BODY),
+		BLUE_DRAGON_LEATHER(2505, Leather_Item.BLUE_DHIDE_VAMBS, Leather_Item.BLUE_DHIDE_CHAPS, Leather_Item.BLUE_DHIDE_BODY),
+		RED_DRAGON_LEATHER(2507, Leather_Item.RED_DHIDE_VAMBS, Leather_Item.RED_DHIDE_CHAPS, Leather_Item.RED_DHIDE_BODY),
+		BLACK_DRAGON_LEATHER(2509, Leather_Item.BLACK_DHIDE_VAMBS, Leather_Item.BLACK_DHIDE_CHAPS, Leather_Item.BLACK_DHIDE_BODY);
+
+		private int itemId;
+		private Leather_Item[] items;
+
+		public Leather_Item[] getItems() {
+			return items;
+		}
+
+		public int getItemId() {
+			return itemId;
+		}
+
+		public String getName() {
+			return Misc.ucFirst(this.toString().replaceAll("_", " ").toLowerCase());
+		}
+
+		Leather(int itemId, Leather_Item... items) {
+			this.itemId = itemId;
+			this.items = items;
+		}
+
+
+	}
+
+	private enum Leather_Item {
+		LEATHER_BOOTS(1061, 1, 1, 16),
+		LEATHER_VAMBS(1063, 1, 9, 22),
+		LEATHER_CHAPS(1095, 1, 11, 27),
+		LEATHER_BODY(1129, 1, 14, 25),
+		HARDLEATHER_BODY(1131, 1, 28, 35),
+		GREEN_DHIDE_VAMBS(1065, 1, 57, 62),
+		GREEN_DHIDE_CHAPS(1099, 2, 60, 124),
+		GREEN_DHIDE_BODY(1135, 3, 63, 186),
+		BLUE_DHIDE_VAMBS(2487, 1, 66, 70),
+		BLUE_DHIDE_CHAPS(2493, 2, 68, 140),
+		BLUE_DHIDE_BODY(2499, 3, 71, 210),
+		RED_DHIDE_VAMBS(2489, 1, 73, 78),
+		RED_DHIDE_CHAPS(2495, 2, 75, 156),
+		RED_DHIDE_BODY(2501, 3, 77, 234),
+		BLACK_DHIDE_VAMBS(2491, 1, 79, 86),
+		BLACK_DHIDE_CHAPS(2497, 2, 82, 172),
+		BLACK_DHIDE_BODY(2503, 3, 84, 258);
+
+		private int
+				itemId,
+				levelReq,
+				amountReq,
+				exp;
+
+		public int getItemId() {
+			return itemId;
+		}
+
+		public int getLevelReq() {
+			return levelReq;
+		}
+
+		public int getAmountReq() {
+			return amountReq;
+		}
+
+		public int getExp() {
+			return exp;
+		}
+
+		public String getName() {
+			return Misc.ucFirst(this.toString().replaceAll("_", " ").replaceAll("DHIDE", "D'HIDE").toLowerCase());
+		}
+
+		Leather_Item(int itemId, int amountReq, int levelReq, int exp) {
+			this.itemId = itemId;
+			this.amountReq = amountReq;
+			this.levelReq = levelReq;
+			this.exp = exp;
+		}
+	}
+
+	public boolean attemptCraft(Player c, int useItem, int slot1, int onItem, int slot2) {
 		if(onItem == 1755) {
 			onItem = useItem;
 			slot2 = slot1;
@@ -51,201 +186,127 @@ public class Crafting implements ContentTemplate {
 		return false;
 	}
 
-	public int getGem(int i) {
-		for(int k = 0; k < uncuts.length; k++) {
-			if(uncuts[k] == i)
-				return k;
+	private Gems getGem(int i) {
+		for(Gems gem : Gems.values()) {
+			if(gem.getGemId() == i)
+				return gem;
 		}
-		return - 1;
+		return null;
+	}
+
+	private static Leather_Item getLeatherItem(int i) {
+		for(Leather_Item item : Leather_Item.values()) {
+			if(item.getItemId() == i)
+				return item;
+		}
+		return null;
+	}
+
+	private static Leather getLeather(int i) {
+		for(Leather l : Leather.values()) {
+			if(l.getItemId() == i)
+				return l;
+		}
+		return null;
 	}
 
 	public boolean cutGem(Player c, int gem, int slot) {
-		int g = getGem(gem);
-		if(g == - 1) {
-			ContentEntity.sendMessage(c, "You cannot cut this item.");
-			return true;
-		}
-		String name = ContentEntity.getItemName(gem);
-
-		// Check if the player can cut the gem.
-		if(ContentEntity.returnSkillLevel(c, 12) < cutLevel[g]) {
-			ContentEntity.sendMessage(c, "Your Crafting level is not high enough to craft this.");
-			return true;
+		Gems g = getGem(gem);
+		if(g == null) {
+			return false;
 		}
 
-		ContentEntity.startAnimation(c, GEM_ANIM);
+		if(ContentEntity.returnSkillLevel(c, 12) < g.getLevelReq()) {
+			ContentEntity.sendMessage(c, "You need a crafting level of " + g.getLevelReq() + " to cut this gem.");
+			return false;
+		}
 
-		ContentEntity.sendMessage(c, "You cut the " + name + ".");
-		ContentEntity.deleteItem(c, uncuts[g], slot);
-		if(g >= 8)
-			ContentEntity.addItem(c, cut[g], 15);
-		else
-			ContentEntity.addItem(c, cut[g], 1);
+		if(c.isBusy())
+			return false;
 
+		c.setBusy(true);
+		ContentEntity.startAnimation(c, g.getEmote());
 
-		ContentEntity.addSkillXP(c, cutXp[g] * EXPMULTIPLIER, 12);//look this one has params(c,stuff)
+		ContentEntity.sendMessage(c, "You start cutting the gem...");
 
+		World.getWorld().submit(new Event(2200) {
+			@Override
+			public void execute() {
+				ContentEntity.deleteItem(c, g.getGemId(), slot);
+				boolean isBolt = g.getName().contains("tip");
+				if (isBolt) {
+					ContentEntity.sendMessage(c, "You cut the gem into " + g.getName().toLowerCase() + ".");
+					ContentEntity.addItem(c, g.getResultId(), 15);
+				} else {
+					ContentEntity.sendMessage(c, "You cut the gem into " + Misc.aOrAn(g.getName()) + " " + g.getName().toLowerCase() + ".");
+					ContentEntity.addItem(c, g.getResultId(), 1);
+				}
+				ContentEntity.addSkillXP(c, g.getExp(), Skills.CRAFTING);
+				c.setBusy(false);
+				this.stop();
+			}
+		});
 		return true;
 	}
 
-	/**
-	 * Crafting any kind of leather with a needle.
-	 *
-	 * @param c    The {@link Player}.
-	 * @param item The leather.
-	 */
+	public final static int[][] frameId = {
+			{}, //0 items
+			{}, //1 items
+			{8866, 8874, 8878, 8869, 8670},//2 items
+			{8880, 8889, 8893, 8897, 8883, 8884, 8885},//3 items
+			{8899, 8909, 8913, 8917, 8921, 8902, 8903, 8904, 8905},//4 items
+			{8938, 8949, 8953, 8957, 8961, 8965, 8941, 8942, 8943, 8944, 8945},//5 items
+	};
 
 	public boolean craftLeather(final Player c, final int item) {
 		try {
-			int l = getLeather(item);
-			if(l == - 1) {
-				ContentEntity.sendMessage(c, "You cannot craft this item");
+			Leather l = getLeather(item);
+			if(l == null) {
 				return true;
 			}
-			if(ContentEntity.returnSkillLevel(c, 12) < leatherLevel[l][0]) {
-				ContentEntity.sendMessage(c, "Your Crafting level is not high enough to craft this.");
-				return true;
-			}
-			c.getExtraData().put("crafting", 1);
-			c.getExtraData().put("craftingItem", l);
+			c.getExtraData().put("crafting", true);
+			c.getExtraData().put("craftingFrom", l.getItemId());
 			c.setBusy(true);
-			int[] items = finishItem[l];
-			int index = 0;
-			for(int k : frameId[items.length]) {
-				if(index == 0) {
-					ContentEntity.sendString(c, "What do you want to make?", k);
-				} else if(index >= (items.length * 2 + 1)) {
-					c.getActionSender().sendPacket164(k);
-				} else if(index >= (items.length + 1)) {
-					ContentEntity.sendInterfaceModel(c, k, 250, items[(index - items.length - 1)]);
-				} else {
-					ContentEntity.sendString(c, ContentEntity.getItemName(items[index - 1]), k);
+			Leather_Item[] items = l.getItems();
+			if(items.length > 1) {
+				ContentEntity.sendString(c, "What would you like to make?", frameId[items.length][0]);
+				c.getActionSender().sendPacket164(frameId[items.length][0]);
+				for (int i = 0; i < items.length; i++) {
+					ContentEntity.sendString(c, items[i].getName(), frameId[items.length][i + 1]);
+					ContentEntity.sendInterfaceModel(c, frameId[items.length][items.length + i + 1], 250, items[i].getItemId());
 				}
-				index++;
+			} else {
+				startAgain(c, 1, 0);
 			}
 			return true;
-	    /*
-        sendFrame126("What do you want to make?", 8879);
-		sendFrame246(8870, 250, longbows[id]); // right picture
-		sendFrame246(8869, 250, shortbows[id]); // left picture
-			sendFrame126(getItemName(shortbows[id]), 8871);
-			sendFrame126(getItemName(shortbows[id]), 8874);
-			sendFrame126(getItemName(longbows[id]), 8878);
-			sendFrame126(getItemName(longbows[id]), 8875);
-		sendFrame164(8866);*/
-		
-		/*
-		sendString("What would you like to make?", 8898);
-		sendString("Vambraces", 8889);
-		sendString("Chaps", 8893);
-		sendString("Body", 8897);
-		sendFrame246(8883, 250, gloves[i]);
-		sendFrame246(8884, 250, legs[i]);
-		sendFrame246(8885, 250, chests[i]);
-		sendFrame164(8880);
-		*/
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 
-	private static final int[][] unenchanted = {
-			{1637, 1687,},//sats
-			{1639, 1688,},//emralds
-			{1641, 1689,},//rubys
-			{1643, 1690,},//diamonds
-			{1645, 1691,},//dragonstone
-			{6575, 6581,},//onyx
-	};
-
-	private static final int[][] enchanted = {
-			{2550, 1727,},//sats
-			{2552, 1729,},//emralds
-			{2568, 1725,},//rubys
-			{2570, 1731,},//diamonds
-			{2572, 1704,},//dragonstone
-			{6583, 6585,},//onyx
-	};
-
-	private static final int[][] gfxEnchant = {
-			{238, 114,},//sats
-			{238, 115,},//emralds
-			{238, 116,},//rubys
-			{238, 153,},//diamonds
-			{238, 154,},//dragonstone
-			{238, 452,},//onyx
-	};
-
-	private static final int[] levelEnchant = {7, 27, 49, 57, 68, 87,};
-
-	public boolean enchant(final Player player, int spell, int item, int slot) {
-		int i = 0;
-		if(unenchanted[spell][0] != item && unenchanted[spell][1] != item) {
-			player.getActionSender().sendMessage("You cannot enchant this item.");
-			return false;
-		}
-		if(levelEnchant[spell] > player.getSkills().getLevel(6)) {
-			player.getActionSender().sendMessage("You need a magic level of " + levelEnchant[spell] + " to enchant this item.");
-			return false;
-		}
-		if(unenchanted[spell][0] != item)
-			i = 1;
-		ContentEntity.playerGfx(player, gfxEnchant[spell][i]);//722
-		if(i == 1)
-			ContentEntity.startAnimation(player, 719);
-		else
-			ContentEntity.startAnimation(player, 727);
-
-		ContentEntity.deleteItem(player, item, slot);
-		ContentEntity.addItem(player, enchanted[spell][i], 1);
-		return true;
-	}
-	
-	
-	/*
-	 * rings
-	 * Tab.anIntArray240[0] = 4233;
-		Tab.anIntArray240[1] = 4246;
-		Tab.anIntArray240[2] = 4247;
-		Tab.anIntArray240[3] = 4248;
-		Tab.anIntArray240[4] = 4249;
-		Tab.anIntArray240[5] = 4250;
-		Tab.anIntArray240[6] = 6021;
-	 * 
-	 * necklases
-	 * Tab.anIntArray240[0] = 4239;
-		Tab.anIntArray240[1] = 4251;
-		Tab.anIntArray240[2] = 4252;
-		Tab.anIntArray240[3] = 4253;
-		Tab.anIntArray240[4] = 4254;
-		Tab.anIntArray240[5] = 4255;
-		Tab.anIntArray240[6] = 6022;
-	 * 
-	 * 
-	 * amulets
-	 * Tab.anIntArray240[0] = 4245;
-		Tab.anIntArray240[1] = 4256;
-		Tab.anIntArray240[2] = 4257;
-		Tab.anIntArray240[3] = 4258;
-		Tab.anIntArray240[4] = 4259;
-		Tab.anIntArray240[5] = 4260;
-		Tab.anIntArray240[6] = 6023;
-	 */
-
-
 	public static boolean startAgain(final Player c, final int amm, final int slot) {
-		if(((Integer) c.getExtraData().get("craftingItem")) == - 1) {
-			System.out.println("problem");
+		Leather leather = getLeather(c.getExtraData().getInt("craftingFrom"));
+
+		if(leather == null)
+			return false;
+
+		Leather_Item item = leather.getItems()[slot];
+		if(item != null)
+			c.getExtraData().put("toCraft", item.getItemId());
+		c.getActionSender().removeAllInterfaces();
+		if(ContentEntity.returnSkillLevel(c, 12) < item.getLevelReq()) {
+			ContentEntity.sendMessage(c, "You need a crafting level of " + item.getLevelReq() + " to craft this item.");
 			return false;
 		}
-		c.getActionSender().removeAllInterfaces();
-		if(ContentEntity.returnSkillLevel(c, 12) < leatherLevel[((Integer) c.getExtraData().get("craftingItem"))][slot]) {
-			ContentEntity.sendMessage(c, "Your Crafting level is not high enough to craft this.");
-			return true;
+		if (ContentEntity.getItemAmount(c, leather.getItemId()) < item.getAmountReq()) {
+			c.sendMessage("You need at least " + item.getAmountReq() + " pieces of " + leather.getName().toLowerCase() + ".");
+			return false;
 		}
-		c.getExtraData().put("craftingMade", finishItem[((Integer) c.getExtraData().get("craftingItem"))][slot]);
-		c.getExtraData().put("craftingAmm", amountHide[((Integer) c.getExtraData().get("craftingItem"))][slot]);
+		if (ContentEntity.getItemAmount(c, 1734) <= 0) {
+			c.sendMessage("You don't have any thread.");
+			return false;
+		}
 		finishCraft(c, amm);
 		return true;
 	}
@@ -253,103 +314,69 @@ public class Crafting implements ContentTemplate {
 	public static void finishCraft(final Player c, final int amm) {
 		if(c == null)
 			return;
-		if(((Integer) c.getExtraData().get("craftingItem")) == - 1 || ((Integer) c.getExtraData().get("craftingMade")) == - 1 || amm <= 0)
+
+		Leather_Item item = getLeatherItem(c.getExtraData().getInt("toCraft"));
+		Leather leather = getLeather(c.getExtraData().getInt("craftingFrom"));
+
+		if(item == null || leather == null || amm <= 0) {
 			return;
+		}
+
 		c.setBusy(true);
-		ContentEntity.startAnimation(c, CRAFT_ANIM);
+		ContentEntity.startAnimation(c, 1249);
+
 		World.getWorld().submit(new Event(2000) {
 			int craftAm = amm;
 
 			@Override
 			public void execute() {
-				if(craftAm <= 0 || ! c.isBusy()) {
-					stop2();
-					return;
-				} else if(ContentEntity.getItemAmount(c, (leatherItem[((Integer) c.getExtraData().get("craftingItem"))])) >= ((Integer) c.getExtraData().get("craftingAmm")) && ContentEntity.getItemAmount(c, 1734) > 0) {
-					if(craftAm > 1)
-						ContentEntity.startAnimation(c, CRAFT_ANIM);
-					ContentEntity.sendMessage(c, "You craft the leather.");
-					ContentEntity.deleteItemA(c, leatherItem[((Integer) c.getExtraData().get("craftingItem"))], ((Integer) c.getExtraData().get("craftingAmm")));
-					ContentEntity.deleteItemA(c, 1734, 1);
-					ContentEntity.addItem(c, ((Integer) c.getExtraData().get("craftingMade")), 1);
-					ContentEntity.addSkillXP(c, leatherXp[((Integer) c.getExtraData().get("craftingItem"))] * EXPMULTIPLIER, 12);
-					craftAm--;
-				} else {
-					stop2();
+				if (craftAm <= 0 || !c.isBusy() || ContentEntity.getItemAmount(c, leather.getItemId()) <= 0) {
+					stop();
 					return;
 				}
+				if (ContentEntity.getItemAmount(c, 1734) <= 0) {
+					c.sendMessage("You don't have any thread.");
+					stop();
+					return;
+				}
+				if (ContentEntity.getItemAmount(c, leather.getItemId()) < item.getAmountReq()) {
+					c.sendMessage("You need at least " + item.getAmountReq() + " pieces of " + leather.getName().toLowerCase() + ".");
+					stop();
+					return;
+				}
+				if (ContentEntity.getItemAmount(c, 1733) <= 0) {
+					c.sendMessage("You need a needle for this.");
+					stop();
+					return;
+				}
+				c.sendMessage("You craft the " + leather.getName().toLowerCase() +  " into " + Misc.aOrAn(item.getName()) + ((item.getName().contains("chaps") || item.getName().contains("boots") || item.getName().contains("vambs")) ? " pair of" : "") + " " + item.getName().toLowerCase() + ".");
+				ContentEntity.deleteItemA(c, leather.getItemId(), item.getAmountReq());
+				if (Misc.random(2) == 1)
+					ContentEntity.deleteItemA(c, 1734, 1);
+				ContentEntity.addItem(c, item.getItemId(), 1);
+				ContentEntity.addSkillXP(c, item.getExp() * EXPMULTIPLIER, 12);
+				if (craftAm > 1)
+					ContentEntity.startAnimation(c, 1249);
+				craftAm--;
 			}
 
-
-			public void stop2() {
-				//c.getExtraData().put("craftingItem",-1);
-				//c.getExtraData().put("craftingMade",-1);
+			@Override
+			public void stop() {
+				c.getExtraData().put("toCraft", null);
+				c.getExtraData().put("craftingFrom", null);
+				c.getExtraData().put("crafting", false);
 				c.setBusy(false);
-				this.stop();
+				ContentEntity.startAnimation(c, -1);
+				super.stop();
 			}
 
 		});
 	}
 
-	public int getLeather(int i) {
-		for(int k = 0; k < leatherItem.length; k++) {
-			if(leatherItem[k] == i)
-				return k;
-		}
-		return - 1;
-	}
-
-	public final static int[][] frameId = {
-			{},//0 items we dont use this
-			{},//1 items
-			{},//2 items
-			{8898, 8889, 8893, 8897, 8883, 8884, 8885, 8880},//3 items
-			{},//4 Item
-	};
-	public final static int[] leatherItem = {1741, 1743, 1745, 2505, 2507, 2509};
-	public final static int[][] finishItem = {
-			{1061, 1063, 1095,/*1129*/},
-			{1131, 1131, 1131},
-			{1065, 1099, 1135,},
-			{2487, 2493, 2499},
-			{2489, 2495, 2501},
-			{2491, 2497, 2503},
-	};
-	public final static int[][] amountHide = {
-			{1, 1, 1,},
-			{1, 1, 1,},
-			{1, 2, 3,},
-			{1, 2, 3,},
-			{1, 2, 3,},
-			{1, 2, 3,},
-	};
-	/*
-	 * Gloves	1	13.8
-	Boots	7	16.3
-	Cowl	9	18.5
-	Vambraces	11	22
-	Leather body	14	25
-	Chaps	18	27
-	Coif	38	37
-	Hard leather body	28	35
-	Studded leather body	41	40+25
-	Studded leather chaps	44	42+27
-	 * */
-
-	public final static int[] leatherXp = {28, 50, 186, 210, 234, 258};
-	public final static int[][] leatherLevel = {
-			{1, 9, 11},
-			{28, 41, 44},
-			{57, 60, 63,},
-			{66, 68, 71},
-			{73, 75, 77,},
-			{79, 82, 84},
-	};
-
 	@Override
 	public int[] getValues(int type) {
 		if(type == 13) {
-			int[] j = {1755, 1733,/*uncuts*/1623, 1621, 1619, 1617, 1631, 1625, 1627, 1629,/*bolts*/1607, 1605, 1603, 1601, 1615, 1609, 1611, 1613,/*hides*/1741, 1743, 1745, 2505, 2507, 2509,};
+			int[] j = {1755, 1733,/*uncuts*/1623, 1621, 1619, 1617, 1631, 1625, 1627, 1629,/*cuts*/1607, 1605, 1603, 1601, 1615, 1609, 1611, 1613,/*hides*/1741, 1743, 1745, 2505, 2507, 2509,};
 			return j;
 		}
 		if(type == 18) {
@@ -360,26 +387,102 @@ public class Crafting implements ContentTemplate {
 			int[] j = {2646, 2644,};
 			return j;
 		}
-		if(type == 6) {
-			int[] j = {1747/*ladder*/,};
-			return j;
-		}
 		if(type == 14) {
-			int[] j = {1779,};
+			int[] j = {1779};
 			return j;
 		}
 		return null;
 	}
 
+	public static boolean clickInterface(final Player client, final int id) {
+		switch(id) {
+			case 8909:
+			case 8889:
+			case 8949:
+			case 8874:
+				return startAgain(client, 1, 0);
+			case 8913:
+			case 8893:
+			case 8953:
+			case 8878:
+				return startAgain(client, 1, 1);
+			case 8917:
+			case 8897:
+			case 8957:
+				return startAgain(client, 1, 2);
+			case 8921:
+			case 8961:
+				return startAgain(client, 1, 3);
+			case 8965:
+				return startAgain(client, 1, 4);
+
+			case 8908:
+			case 8888:
+			case 8948:
+			case 8873:
+				return startAgain(client, 5, 0);
+			case 8912:
+			case 8892:
+			case 8952:
+			case 8877:
+				return startAgain(client, 5, 1);
+			case 8916:
+			case 8896:
+			case 8956:
+				return startAgain(client, 5, 2);
+			case 8920:
+			case 8960:
+				return startAgain(client, 5, 3);
+			case 8964:
+				return startAgain(client, 5, 4);
+
+			case 8907:
+			case 8887:
+			case 8947:
+			case 8872:
+				return startAgain(client, 10, 0);
+			case 8911:
+			case 8891:
+			case 8951:
+			case 8876:
+				return startAgain(client, 10, 1);
+			case 8915:
+			case 8895:
+			case 8955:
+				return startAgain(client, 10, 2);
+			case 8919:
+			case 8959:
+				return startAgain(client, 10, 3);
+			case 8963:
+				return startAgain(client, 10, 4);
+
+			case 8906:
+			case 8946:
+			case 8886:
+			case 8871:
+				return startAgain(client, 28, 0);
+			case 8910:
+			case 8950:
+			case 8890:
+			case 8875:
+				return startAgain(client, 28, 1);
+			case 8914:
+			case 8954:
+			case 8894:
+				return startAgain(client, 28, 2);
+			case 8918:
+			case 8958:
+				return startAgain(client, 28, 3);
+			case 8962:
+				return startAgain(client, 28, 4);
+		}
+		return false;
+	}
+
 	@Override
 	public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int itemSlot2) {
 		if(type == 13) {
-			return attemptCut(client, id, slot, itemId2, itemSlot2);
-		}
-		if(type == 6) {
-			//System.out.println("ladder");
-			client.setTeleportTarget(Location.create(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ() + 1));
-			return true;
+			return attemptCraft(client, id, slot, itemId2, itemSlot2);
 		}
 		if(type == 7) {
 			if(id == 2644)
@@ -389,31 +492,18 @@ public class Crafting implements ContentTemplate {
 		if(type == 14) {
 			return spinFlax(client, id);
 		}
-		if(type == 18)
-			if(id == 1155)
-				return enchant(client, 0, slot, itemId2);
-			else if(id == 1165)
-				return enchant(client, 1, slot, itemId2);
-			else if(id == 1176)
-				return enchant(client, 2, slot, itemId2);
-			else if(id == 1180)
-				return enchant(client, 3, slot, itemId2);
-			else if(id == 1187)
-				return enchant(client, 4, slot, itemId2);
-			else if(id == 6003)
-				return enchant(client, 5, slot, itemId2);
 		return false;
 	}
 
 	private boolean pickFlax(final Player client, int id) {
 		if(client.isBusy())
-			return true;
+			return false;
 		client.setBusy(true);
 		ContentEntity.startAnimation(client, 2286);
 		World.getWorld().submit(new Event(2000) {
 			@Override
 			public void execute() {
-				if(! client.isBusy()) {
+				if(!client.isBusy()) {
 					this.stop();
 					return;
 				}
@@ -454,22 +544,4 @@ public class Crafting implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 	}
-
-	// needle: 1733
-	// chisel: 1755
-	/* 1059 Leather gloves 
- 1061 Leather boots 
- 1063 Leather vambraces 
- 1095 Leather chaps 
- 1129 Leather body 
- 1131 Hardleather body 
- 1167 Leather cowl 
- 1741 Leather 
- 1743 Hard leather 
- 1745 Green d-leather 
- 2505 Blue d-leather 
- 2507 Red dragon leather 
- 2509 Black d-leather 
-*/
-
 }

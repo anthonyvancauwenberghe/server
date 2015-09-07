@@ -266,13 +266,13 @@ public class QuestTab {
 
 	public void sendParticlesEnabled() {
 		int id = getId(31);
-		player.getActionSender().sendString("@or1@ Toggle particles", id);
+		player.getActionSender().sendString("@or1@Toggle particles", id);
 		player.getActionSender().sendTooltip(id, "");
 	}
 
 	public void sendTitlesEnabled() {
 		int id = getId(32);
-		player.getActionSender().sendString("@or1@ Toggle player titles", id);
+		player.getActionSender().sendString("@or1@Toggle player titles", id);
 		player.getActionSender().sendTooltip(id, "");
 	}
 

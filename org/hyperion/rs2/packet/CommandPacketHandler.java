@@ -2262,8 +2262,9 @@ public class CommandPacketHandler implements PacketHandler {
              * Made the system already pshh, it'll just sit there
              */
             if (commandStart.equalsIgnoreCase("settag")) {
-                if(player.getPoints().getDonatorPointsBought() >= 25000) {
-
+                if(player.getPoints().getDonatorPointsBought() < 25000) {
+                    player.sendMessage("You need to donate at least $250 to be able to set your tag.");
+                } else {
                     try {
                         String tag = withCaps.substring(7);
                         if (tag.length() > 14) {
@@ -2282,10 +2283,9 @@ public class CommandPacketHandler implements PacketHandler {
                         player.getActionSender().sendMessage("Use as ::settag TAG.");
                         return;
                     }
-                } else {
-                    player.sendMessage("You need to donate at least $250 to be able to set your tag.");
                 }
             }
+
             if(commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
                 try {
                     InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(6));

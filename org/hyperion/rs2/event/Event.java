@@ -38,7 +38,7 @@ public abstract class Event {
 
 	public Event(long delay) {
 		this.delay = delay;
-		this.name = "unset";
+		this.name = this.getClass().getName();
 	}
 
 	/**

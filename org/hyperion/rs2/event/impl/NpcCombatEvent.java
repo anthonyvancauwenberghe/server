@@ -23,7 +23,7 @@ public class NpcCombatEvent extends Event {
 	 * Creates the update event to cycle every 600 milliseconds.
 	 */
 	public NpcCombatEvent() {
-		super(CYCLE_TIME);
+		super(CYCLE_TIME, "npccombat");
 	}
 
 	public static long lastTimeDid = System.currentTimeMillis();

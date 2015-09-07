@@ -11,7 +11,7 @@ import java.util.List;
 public class GlobalItemManager {
 
 	public GlobalItemManager() {
-		World.getWorld().submit(new Event(1000) {
+		World.getWorld().submit(new Event(1000, "globalitems") {
 			@Override
 			public void execute() {
 				process();

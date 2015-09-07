@@ -59,7 +59,7 @@ public class PlayerEvent36Seconds extends Event {
 				player.sendServerMessage("and donator points. They have been added to their bank.");
 			}
 			player.getSummBar().cycle();
-        	player.getActionSender().sendString(4508, player.getSummBar().getAmount() + "");
+        	player.getActionSender().sendString(38760, player.getSummBar().getAmount() + "");
         	player.getSpecBar().normalize();
         	player.getQuestTab().sendPlayerCount();
 			player.getQuestTab().sendStaffCount();

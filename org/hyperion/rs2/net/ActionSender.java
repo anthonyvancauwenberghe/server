@@ -153,7 +153,7 @@ public class ActionSender {
 		LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
 		player.setActive(true);
 		player.isHidden(false);
-		player.getActionSender().sendString(4508, player.getSummBar().getAmount()+"");
+		player.getActionSender().sendString(38760, player.getSummBar().getAmount()+"");
 		sendDetails();
 		if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
 			Magic.teleport(player, Edgeville.LOCATION, true);

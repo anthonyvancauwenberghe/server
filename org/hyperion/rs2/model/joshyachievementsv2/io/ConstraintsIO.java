@@ -18,6 +18,13 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
         default String tag(){
             return "constraint";
         }
+
+        default void encode(final Document doc, final Element root, final T c){
+            attr(root, "desc", c.desc());
+            encodeTask(doc, root, c);
+        }
+
+        void encodeTask(final Document doc, final Element root, final T c);
     }
 
     protected ConstraintsIO(){
@@ -26,7 +33,7 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
 
     protected void populate(){
         put(LocationConstraint.class, new ConstraintIO<LocationConstraint>(){
-            public void encode(final Document doc, final Element root, final LocationConstraint c){
+            public void encodeTask(final Document doc, final Element root, final LocationConstraint c){
                 final Element min = create(doc, "min");
                 attr(min, "x", c.minX);
                 attr(min, "y", c.minY);
@@ -54,7 +61,7 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
         });
 
         put(EquipmentConstraint.class, new ConstraintIO<EquipmentConstraint>(){
-            public void encode(final Document doc, final Element root, final EquipmentConstraint c){
+            public void encodeTask(final Document doc, final Element root, final EquipmentConstraint c){
                 final Element equipment = create(doc, "equipment");
                 attr(equipment, "slot", c.slot);
                 attr(equipment, "quantity", c.itemQuantity);
@@ -72,7 +79,7 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
         });
 
         put(WildLevelConstraint.class, new ConstraintIO<WildLevelConstraint>(){
-            public void encode(final Document doc, final Element root, final WildLevelConstraint c){
+            public void encodeTask(final Document doc, final Element root, final WildLevelConstraint c){
                 final Element wild = create(doc, "wild");
                 attr(wild, "minLevel", c.minLevel);
                 attr(wild, "maxLevel", c.maxLevel);
@@ -88,7 +95,7 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
         });
 
         put(DungeoneeringConstraint.class, new ConstraintIO<DungeoneeringConstraint>(){
-            public void encode(final Document doc, final Element root, final DungeoneeringConstraint obj){
+            public void encodeTask(final Document doc, final Element root, final DungeoneeringConstraint obj){
 
             }
 
@@ -98,7 +105,7 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
         });
 
         put(PrayerBookConstraint.class, new ConstraintIO<PrayerBookConstraint>(){
-            public void encode(final Document doc, final Element root, final PrayerBookConstraint c){
+            public void encodeTask(final Document doc, final Element root, final PrayerBookConstraint c){
                 attr(root, "book", c.book.name());
             }
 

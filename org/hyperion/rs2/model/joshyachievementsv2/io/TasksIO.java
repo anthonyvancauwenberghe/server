@@ -38,6 +38,7 @@ public class TasksIO extends IOManager<Task, Tasks, TasksIO.TaskIO>{
             attr(root, "id", t.id);
             attr(root, "threshold", t.threshold);
             attr(root, "preTaskId", t.preTaskId);
+            attr(root, "desc", t.desc);
             encodeTask(doc, root, t);
             root.appendChild(IO.constraints.out(doc, t.constraints));
         }

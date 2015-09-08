@@ -25,6 +25,8 @@ import org.hyperion.rs2.model.joshyachievementsv2.task.impl.VoteTask;
 
 public class AchievementTracker{
 
+    public static boolean active = false;
+
     private final Player player;
     private final Map<Integer, AchievementProgress> progress;
 
@@ -94,6 +96,8 @@ public class AchievementTracker{
     }
 
     private void progress(final Task.Filter filter, final int progress){
+        if(!active)
+            return;
         findAvailableTask(filter, progress)
                 .ifPresent(t -> progress(t, progress));
     }
@@ -120,10 +124,6 @@ public class AchievementTracker{
                 ap.achievement().rewards.reward(player);
             }
         }
-    }
-
-    public void progress(final Task task){
-        progress(task, 1);
     }
 
     public void barrowsTrip(){

@@ -1,10 +1,16 @@
 package org.hyperion.rs2.model.joshyachievementsv2.io;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.Instructions;
@@ -75,6 +81,25 @@ public class AchievementsIO extends IOManager<Achievement, Achievements, Achieve
         }catch(Exception ex){
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean save(final Achievements achievements){
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        try{
+            final DocumentBuilder bldr = factory.newDocumentBuilder();
+            final Document doc = bldr.newDocument();
+            doc.appendChild(out(doc, achievements));
+            final Transformer tr = TransformerFactory.newInstance().newTransformer();
+            tr.setOutputProperty(OutputKeys.INDENT, "yes");
+            tr.setOutputProperty(OutputKeys.METHOD, "xml");
+            tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            tr.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(FILE)));
+            return true;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
         }
     }
 }

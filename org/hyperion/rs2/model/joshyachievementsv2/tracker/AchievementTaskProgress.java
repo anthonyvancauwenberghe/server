@@ -13,15 +13,15 @@ public class AchievementTaskProgress{
 
     public int progress;
 
-    public Date start;
-    public Date finish;
+    public Date startDate;
+    public Date finishDate;
 
-    public AchievementTaskProgress(final int achievementId, final int taskId, final int progress, final Date start, final Date finish){
+    public AchievementTaskProgress(final int achievementId, final int taskId, final int progress, final Date startDate, final Date finishDate){
         this.achievementId = achievementId;
         this.taskId = taskId;
         this.progress = progress;
-        this.start = start;
-        this.finish = finish;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
     }
 
     public AchievementTaskProgress(final int achievementId, final int taskId){
@@ -37,21 +37,21 @@ public class AchievementTaskProgress{
     }
 
     public boolean started(){
-        return start != null;
+        return startDate != null;
     }
 
     public void startNow(){
-        start = new Date();
+        startDate = new Date();
     }
 
     public void finishNow(){
-        finish = new Date();
+        finishDate = new Date();
     }
 
     public boolean finished(){
-        return start != null
-                && finish != null
-                && finish.after(start)
+        return startDate != null
+                && finishDate != null
+                && finishDate.after(startDate)
                 && taskFinished();
     }
 

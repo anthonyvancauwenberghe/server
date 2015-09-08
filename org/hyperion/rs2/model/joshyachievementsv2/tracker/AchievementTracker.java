@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
@@ -51,6 +52,11 @@ public class AchievementTracker{
 
     public void add(final AchievementProgress ap){
         progress.put(ap.achievementId, ap);
+    }
+
+    public Stream<AchievementTaskProgress> streamAvailableTaskProgress(){
+        return progress.values().stream()
+                .flatMap(AchievementProgress::streamAvailableProgress);
     }
 
     public AchievementProgress progress(final int achievementId){

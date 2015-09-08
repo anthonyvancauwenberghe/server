@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
+import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 
 import java.awt.*;
@@ -63,6 +64,7 @@ public class Dungeon {
 
 
     public final void remove(final Player player, boolean complete) {
+        Trade.declineTrade(player);
         player.getDungeoneering().loadXP(player.getSkills(), false);
         players.remove(player);
         if(complete) {

@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
@@ -12,8 +13,8 @@ public class AchievementProgress{
     public final int achievementId;
     private final Map<Integer, AchievementTaskProgress> progress;
 
-    public Date start;
-    public Date finish;
+    public Date startDate;
+    public Date finishDate;
 
     public AchievementProgress(final int achievementId){
         this.achievementId = achievementId;
@@ -25,11 +26,11 @@ public class AchievementProgress{
     }
 
     public void startNow(){
-        start = new Date();
+        startDate = new Date();
     }
 
     public void finishNow(){
-        finish = new Date();
+        finishDate = new Date();
     }
 
     public Achievement achievement(){
@@ -44,6 +45,11 @@ public class AchievementProgress{
         return progress.get(taskId);
     }
 
+    public Stream<AchievementTaskProgress> streamAvailableProgress(){
+        return progress.values().stream()
+                .filter(AchievementTaskProgress::started);
+    }
+
     public int progress(){
         return progress.values().stream()
                 .mapToInt(atp -> atp.progress)
@@ -51,13 +57,13 @@ public class AchievementProgress{
     }
 
     public boolean started(){
-        return start != null;
+        return startDate != null;
     }
 
     public boolean finished(){
-        return start != null
-                && finish != null
-                && finish.after(start)
+        return startDate != null
+                && finishDate != null
+                && finishDate.after(startDate)
                 && tasksFinished();
     }
 

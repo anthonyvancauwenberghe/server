@@ -73,6 +73,10 @@ public class AchievementsIO extends IOManager<Achievement, Achievements, Achieve
     }
 
     public Achievements load(){
+        if(!FILE.exists()){
+            System.out.println("Achievements file not found: " + FILE);
+            return null;
+        }
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try{
             final DocumentBuilder bldr = factory.newDocumentBuilder();

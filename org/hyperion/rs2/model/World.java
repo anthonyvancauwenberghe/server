@@ -51,6 +51,7 @@ import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.content.ticket.TicketManager;
+import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -385,6 +386,8 @@ public class World {
             NewcomersLogging.getLogging().init();
             submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));
+
+            Achievements.load();
         }
     }
 

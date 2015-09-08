@@ -387,7 +387,7 @@ public class World {
             submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));
 
-            Achievements.load();
+            System.out.println("Loaded achievements: " + Achievements.load());
         }
     }
 

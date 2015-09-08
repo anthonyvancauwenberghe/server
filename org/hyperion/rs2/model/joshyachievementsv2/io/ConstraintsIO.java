@@ -57,16 +57,16 @@ public class ConstraintsIO extends IOManager<Constraint, Constraints, Constraint
             public void encode(final Document doc, final Element root, final EquipmentConstraint c){
                 final Element equipment = create(doc, "equipment");
                 attr(equipment, "slot", c.slot);
-                equipment.appendChild(ints(doc, "items", "tem", "id", c.itemIds));
+                attr(equipment, "quantity", c.itemQuantity);
+                equipment.appendChild(ints(doc, "items", "item", "id", c.itemIds));
                 root.appendChild(equipment);
             }
 
             public EquipmentConstraint decode(final Element root){
                 final Element equipment = child(root, "equipment");
                 final int slot = intAttr(equipment, "slot");
-                final Element item = child(root, "item");
+                final int itemQuantity = intAttr(equipment, "quantity");
                 final List<Integer> itemIds = ints(equipment, "items", "item", "id");
-                final int itemQuantity = intAttr(item, "quantity");
                 return new EquipmentConstraint(slot, itemIds, itemQuantity);
             }
         });

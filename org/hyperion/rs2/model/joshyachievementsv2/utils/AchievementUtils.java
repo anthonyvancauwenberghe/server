@@ -15,6 +15,8 @@ public final class AchievementUtils{
                 .map(NPCDefinition::forId)
                 .filter(Objects::nonNull)
                 .map(NPCDefinition::getName)
+                .filter(s -> !s.equalsIgnoreCase("null"))
+                .map(s -> s.replace("_", " "))
                 .distinct()
                 .collect(Collectors.joining(" or "));
     }

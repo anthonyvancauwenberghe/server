@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -13,9 +12,6 @@ public class AchievementProgress{
     public final int achievementId;
     private final Map<Integer, AchievementTaskProgress> progress;
 
-    public Date startDate;
-    public Date finishDate;
-
     public AchievementProgress(final int achievementId){
         this.achievementId = achievementId;
 
@@ -23,14 +19,6 @@ public class AchievementProgress{
 
         achievement().tasks.stream()
                 .forEach(t -> add(new AchievementTaskProgress(achievementId, t.id)));
-    }
-
-    public void startNow(){
-        startDate = new Date();
-    }
-
-    public void finishNow(){
-        finishDate = new Date();
     }
 
     public Achievement achievement(){
@@ -56,15 +44,8 @@ public class AchievementProgress{
                 .sum();
     }
 
-    public boolean started(){
-        return startDate != null;
-    }
-
     public boolean finished(){
-        return startDate != null
-                && finishDate != null
-                && finishDate.after(startDate)
-                && tasksFinished();
+        return tasksFinished();
     }
 
     public boolean tasksFinished(){

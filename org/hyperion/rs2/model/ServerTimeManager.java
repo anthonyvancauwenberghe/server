@@ -57,8 +57,10 @@ public class ServerTimeManager {
                 long time = entry.getValue();
                 long increment = incrementsMap.get(name);
                 double pct = (double) (time * 100) / (double) this.getRunningTime();
-                out.write(name + " - " + pct + "% - max inc: " + increment + " ms.");
-                out.newLine();
+                if(pct > 0.1 || increment > 10) {
+                    out.write(name + " - " + pct + "% - max inc: " + increment + " ms.");
+                    out.newLine();
+                }
             }
             out.close();
         } catch (IOException e) {

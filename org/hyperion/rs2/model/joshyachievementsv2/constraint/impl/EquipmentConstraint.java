@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.joshyachievementsv2.constraint.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -13,11 +14,13 @@ import org.hyperion.rs2.model.joshyachievementsv2.utils.AchievementUtils;
 
 public class EquipmentConstraint implements Constraint{
 
-    private static final Map<Integer, Equipment.EquipmentType> TYPES = Stream.of(Equipment.EquipmentType.values())
-            .collect(Collectors.toMap(
-                    Equipment.EquipmentType::getSlot,
-                    Function.identity()
-            ));
+    private static final Map<Integer, Equipment.EquipmentType> TYPES = new HashMap<>();
+
+    static{
+        for(final Equipment.EquipmentType type : Equipment.EquipmentType.values())
+            if(!TYPES.containsKey(type.getSlot()))
+                TYPES.put(type.getSlot(), type);
+    }
 
     public final int slot;
     public final List<Integer> itemIds;

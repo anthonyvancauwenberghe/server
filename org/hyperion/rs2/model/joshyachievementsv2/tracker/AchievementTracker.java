@@ -34,9 +34,6 @@ public class AchievementTracker{
         this.player = player;
         
         progress = new TreeMap<>();
-
-        Achievements.get().values()
-                .forEach(a -> add(new AchievementProgress(a.id)));
     }
 
     public void sendInfo(final Achievement a){

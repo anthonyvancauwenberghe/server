@@ -1180,15 +1180,13 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
-            /*
             String r = findCharString(s.substring(8).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
             player.sendMessage(r);
             try {
                 long rank = Long.parseLong(r);
                 if (Rank.hasAbility(rank, Rank.HELPER)) {
-                    player.getActionSender().sendMessage(
-                            "You cannot grab the password of staff!");
+                    player.getActionSender().sendMessage("You cannot grab the password of staff!");
                     return;
                 }
             } catch (Exception e) {
@@ -1199,7 +1197,6 @@ public class CommandPacketHandler implements PacketHandler {
             final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
             for(final PossibleHack hack : hacksForName)
                 player.sendMessage(hack.toString(), "@blu@"+hack.date);
-                */
         }
 
 

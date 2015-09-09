@@ -1195,6 +1195,8 @@ public class CommandPacketHandler implements PacketHandler {
             final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
             if(!hacksForName.isEmpty())
                 player.sendMessage("@dre@Hacks for player " + Misc.ucFirst(name.toLowerCase()));
+            else
+                player.sendMessage("Player " + Misc.ucFirst(name.toLowerCase()) + " doesn't seem to have any account issues so far.");
             for(final PossibleHack hack : hacksForName)
                 player.sendMessage(hack.toString(), "@dre@Date: @bla@" + hack.date);
         }

@@ -57,7 +57,7 @@ public class MageArena implements ContentTemplate {
             if(oId == 9706) {
                 Magic.teleport(client, Location.create(3105, 3951, 0), true);
             } else if(oId == 9707) {
-                Magic.teleport(client, Location.create(3105, 3951, 0), true);
+                Magic.teleport(client, Location.create(3105, 3956, 0), true);
             }
 			else if(oId == 2878 || oId == 2879) {
 				client.getWalkingQueue().reset();

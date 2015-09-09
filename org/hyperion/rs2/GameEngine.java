@@ -136,7 +136,7 @@ public class GameEngine implements Runnable {
 							long start = System.currentTimeMillis();
 							task.execute(GameEngine.this);
 							long delta = System.currentTimeMillis() - start;
-							ServerTimeManager.getSingleton().add(task.getClass().getSimpleName(), delta);
+							//ServerTimeManager.getSingleton().add(task.getClass().getSimpleName(), delta);
 						}
 					});
 				} catch(InterruptedException e) {

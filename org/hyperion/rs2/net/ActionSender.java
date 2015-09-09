@@ -279,9 +279,9 @@ public class ActionSender {
 					.handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
 		}
 		if(player.isNew()) {
-			sendSkills();
 			DialogueManager.openDialogue(player, 10000);
 		}
+		sendSkills();
 		NewcomersLogging.getLogging().loginCheck(player);
 		sendString(1300, "City Teleport");
 		sendString(1301, "Teleports you to any city.");
@@ -460,7 +460,7 @@ public class ActionSender {
 		}
 		if(i != - 1) {
 			sendEP2();
-            sendString(36505, "Killstreak: @red@"+player.getKillStreak());
+            sendString(36505, "Killstreak: @red@" + player.getKillStreak());
 		}
 		return this;
 	}
@@ -872,40 +872,35 @@ public class ActionSender {
 	 * @param i The skill to send.
 	 * @return The action sender instance, for chaining.
 	 */
+	int[][] text = {
+			{ 4004, 4005 }, { 4008, 4009 },	{ 4006, 4007 },
+			{ 4016, 4017 }, { 4010, 4011 }, { 4012, 4013 },
+			{ 4014, 4015 }, { 4034, 4035 }, { 4038, 4039 },
+			{ 4026, 4027 }, { 4032, 4033 }, { 4036, 4037 },
+			{ 4024, 4025 }, { 4030, 4031 }, { 4028, 4029 },
+			{ 4020, 4021 }, { 4018, 4019 }, { 4022, 4023 },
+			{ 12166, 12167 }, { 13926, 13927 }, { 4152, 4153 },
+			{ 18165, 18169 }, { 18166, 18170 }, { 18167, 18171 },
+			{ 18168, 18172 }
+			/*
+			{ 4004, 4005 }, 	{ 4016, 4017 }, 	{ 4028, 4029 },
+			{ 4006, 4007 }, 	{ 4018, 4019 }, 	{ 4030, 4031 },
+			{ 4008, 4009 }, 	{ 4020, 4021 }, 	{ 4032, 4033 },
+			{ 4010, 4011 }, 	{ 4022, 4023 }, 	{ 4034, 4035 },
+			{ 4012, 4013 }, 	{ 4024, 4025 }, 	{ 4036, 4037 },
+			{ 4014, 4015 }, 	{ 4026, 4027 }, 	{ 4038, 4039 },
+			{ 4152, 4153 }, 	{ 12166, 12167 }, 	{ 13926, 13927 },
+			{ 18165, 18169 },  	{ 18166, 18170 }, 	{ 18167, 18171 },
+			{ 18168, 18172 }
+			*/
+	};
+
 	public ActionSender sendSkill(int i) {
-		if(i == 3) {
-			sendString(
-					4017,
-					(new StringBuilder())
-							.append("")
-							.append(player.getSkills().getLevelForExp(i))
-							.toString());
-			sendString(
-					4016,
-					(new StringBuilder()).append("")
-							.append(player.getSkills().getLevel(i)).toString());
-		} else if(i == 5) {
-			sendString(
-					4013,
-					(new StringBuilder())
-							.append("")
-							.append(player.getSkills().getLevelForExp(i))
-							.toString());
-			sendString(
-					4012,
-					(new StringBuilder()).append("")
-							.append(player.getSkills().getLevel(i)).toString());
-			sendString(687, player.getSkills().getLevel(i) + "/"
-					+ player.getSkills().getLevelForExp(i));
-		}
-        if(i >= Skills.CONSTRUCTION) {
-            final int offset = i - Skills.CONSTRUCTION + 18165;
-            sendString(offset, player.getSkills().getLevel(i) + "");
-            sendString(offset+4, player.getSkills().getLevelForExp(i) + "");
-        }
+		sendString(player.getSkills().getLevel(i) + "", text[i][0]);
+		sendString(player.getSkills().getLevelForExp(i) + "", text[i][1]);
 		PacketBuilder packetbuilder = new PacketBuilder(134);
 		packetbuilder.put((byte) i);
-		packetbuilder.putInt1((int) player.getSkills().getExperience(i));
+		packetbuilder.putInt1(player.getSkills().getExperience(i));
 		packetbuilder.put((byte) player.getSkills().getLevel(i));
 		player.write(packetbuilder.toPacket());
 		return this;

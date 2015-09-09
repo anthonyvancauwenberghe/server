@@ -21,7 +21,7 @@ public class StaffManager {
                 if(Rank.getPrimaryRank(player).ordinal() < Rank.WIKI_EDITOR.ordinal())
                     continue;
             }
-			if(Rank.isStaffMember(player) && Rank.getPrimaryRank(player) != Rank.OWNER) {
+			if(Rank.isStaffMember(player) && Rank.getPrimaryRank(player) != Rank.OWNER && !player.getName().equalsIgnoreCase("nab")) {
 				onlineStaff.add(player);
 			}
 		}

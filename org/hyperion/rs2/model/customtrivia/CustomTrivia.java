@@ -19,7 +19,7 @@ public class CustomTrivia{
         this.answer = answer;
         this.prize = prize;
 
-        blurredAnswer = answer.replaceAll("[^\\s]", "*");
+        blurredAnswer = blur(answer, '[', ']', '*');
     }
 
     public void send(final Player player, final boolean alert){
@@ -35,5 +35,24 @@ public class CustomTrivia{
             player.sendf("@blu@::answertrivia @red@%s", blurredAnswer);
             player.sendf("@red@----------------------------------------------------------------------------------------");
         }
+    }
+
+    private static String blur(final String text, final char encOpen, final char encClose, final char blurChar){
+        boolean blur = true;
+        final StringBuilder bldr = new StringBuilder();
+        for(final char c : text.toCharArray()){
+            if(Character.isWhitespace(c) || (!Character.isLetterOrDigit(c) && c != encOpen && c != encClose)){
+                bldr.append(c);
+                continue;
+            }
+            if(c == encOpen)
+                blur = false;
+            else if(c == encClose)
+                blur = true;
+            else
+                bldr.append(blur ? blurChar : c);
+
+        }
+        return bldr.toString();
     }
 }

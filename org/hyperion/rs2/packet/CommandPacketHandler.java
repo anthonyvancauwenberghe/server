@@ -1182,21 +1182,21 @@ public class CommandPacketHandler implements PacketHandler {
         if(commandStart.equalsIgnoreCase("checkhax")) {
             String r = findCharString(s.substring(8).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
-            player.sendMessage(r);
             try {
                 long rank = Long.parseLong(r);
-                if (Rank.hasAbility(rank, Rank.HELPER)) {
-                    player.getActionSender().sendMessage("You cannot grab the password of staff!");
+                if (Rank.hasAbility(rank, Rank.getPrimaryRank(player))) {
+                    player.getActionSender().sendMessage("This does not work on staff with a higher or the same rank!");
                     return;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             final String name = s.substring(9).trim();
-            System.out.println(name);
             final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
+            if(!hacksForName.isEmpty())
+                player.sendMessage("@dre@Hacks for player " + Misc.ucFirst(name.toLowerCase()));
             for(final PossibleHack hack : hacksForName)
-                player.sendMessage(hack.toString(), "@blu@"+hack.date);
+                player.sendMessage(hack.toString(), "@dre@Date: @bla@" + hack.date);
         }
 
 

@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.possiblehacks;
 
+import org.hyperion.util.Misc;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay
@@ -17,6 +19,6 @@ public class IPChange extends PossibleHack {
     }
 
     public String toString() {
-        return String.format("[@red@Name@bla@]: %s [@red@OLDIP@bla@]: %s [@red@NEWIP@bla@]: %s", name, ip, newIp);
+        return String.format("@dre@Ipchange@bla@ %s @dre@->@bla@ %s.", ip, newIp);
     }
 }

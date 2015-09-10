@@ -1287,10 +1287,6 @@ public class CombatAssistant {
 		}
         if(player.isNewlyCreated() && player.duelAttackable < 1 && player.getAccountValue().getTotalValue() < 10000)
             bonus *= 1.15;
-        if(hasDharokEquiped(player)) {
-            double ratio = (double) player.getSkills().getLevel(Skills.HITPOINTS) / (double) player.getSkills().getLevelForExp(Skills.HITPOINTS);
-            bonus *= (1.20 - ratio/3);
-        }
 
 		return (int) ((meleeAtk * .3 + (bonus * 0.52)));
 

@@ -53,6 +53,13 @@ public class AchievementProgress{
                     .allMatch(AchievementTaskProgress::finished);
     }
 
+    public String getTabString(){
+        final String color = progress.values().stream().anyMatch(AchievementTaskProgress::started)
+                ? "@yel@" :
+                finished() ? "@gre@" : "@red@";
+        return color + achievement().title;
+    }
+
     public void sendProgressHeader(final Player player){
         player.sendf("[@blu@%s@bla@] @blu@%,d@bla@ / @red@%,d@bla@ | @gre@%1.2f%%@bla@ Complete",
                 achievement().title, progress(), achievement().tasks.threshold, progressPercent());

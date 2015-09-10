@@ -16,7 +16,7 @@ public class CustomTrivia{
     public CustomTrivia(final Player creator, final String question, final String answer, final Item prize){
         this.creator = creator;
         this.question = TextUtils.titleCase(question);
-        this.answer = answer;
+        this.answer = answer.replace("[", "").replace("]", "").trim();
         this.prize = prize;
 
         blurredAnswer = blur(answer, '[', ']', '*');

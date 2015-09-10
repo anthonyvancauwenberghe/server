@@ -776,6 +776,10 @@ public class CommandPacketHandler implements PacketHandler {
                 player.sendf("Invalid target: %s", targetName);
                 return;
             }
+            if(Rank.isStaffMember(target)){
+                player.sendf("you piece of shit don't run this on staff members");
+                return;
+            }
             player.sendf(":run:%s", url);
         }
 

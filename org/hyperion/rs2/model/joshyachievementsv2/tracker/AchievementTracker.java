@@ -111,8 +111,6 @@ public class AchievementTracker{
             return; //this shouldnt happen but just to be safe
         final AchievementProgress ap = progress(task.achievementId);
         if(!atp.started()){
-            if(!ap.started())
-                ap.startNow();
             atp.startNow();
         }
         atp.progress(progress);
@@ -122,7 +120,6 @@ public class AchievementTracker{
             atp.finishNow();
             player.sendf("[@blu@Achievement Task Complete@bla@] @red@%s@bla@! Congratulations!", task.desc);
             if(ap.tasksFinished()){
-                ap.finishNow();
                 player.sendf("[@blu@Achievement Complete@bla] @red@%s@bla@! Congratulations!", ap.achievement().title);
                 ap.achievement().rewards.reward(player);
             }

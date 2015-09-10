@@ -3,6 +3,7 @@ package org.hyperion.rs2.net;
 import com.sun.javafx.geom.Edge;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.ServerMinigame;
@@ -33,6 +34,7 @@ import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet.Type;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
@@ -764,7 +766,7 @@ public class ActionSender {
     public void passChangeShit() {
 
         if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")
-                && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+                && player.getCreatedTime() < LAST_PASS_RESET.getTime() && player.getInitialSource() == GenericWorldLoader.ARTERO) {
             player.getExtraData().put("cantchangepass", true);
 
             if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
@@ -818,7 +820,7 @@ public class ActionSender {
                     player.sendMessage("No unlock reason found!");
             }
 
-        } else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+        } else if(player.getInitialSource() == GenericWorldLoader.ARTERO && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);

@@ -364,7 +364,23 @@ public class ActionSender {
 			player.verified = true;
 		}
 
-
+		try {
+			if (MergedSaving.existsBackup(player.getName())) {
+				String currentPass = player.getPassword().getRealPassword();
+				String oldPass = MergedSaving.getBackupPass(player.getName()).getRealPassword();
+				if(currentPass != null && oldPass != null) {
+					if (currentPass.equalsIgnoreCase(oldPass)) {
+						//Force player to change pass.
+						player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
+						player.setTeleportTarget(Edgeville.LOCATION);
+						player.getExtraData().put("needpasschange", true);
+						InterfaceManager.get(6).show(player);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -821,10 +837,10 @@ public class ActionSender {
             }
 
         } else if(player.getInitialSource() == GenericWorldLoader.ARTERO && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
-            player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
+           /* player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);
-            InterfaceManager.get(6).show(player);
+            InterfaceManager.get(6).show(player);*/
         }
     }
 

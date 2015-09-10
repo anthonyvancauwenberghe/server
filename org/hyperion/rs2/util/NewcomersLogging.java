@@ -17,20 +17,6 @@ import java.util.HashMap;
  */
 public class NewcomersLogging {
 
-	/**
-	 * The newcomers table name.
-	 */
-	public static final String NEWCOMERS_TABLE_NAME = "newcomersips";
-
-	/**
-	 * The player ips table name.
-	 */
-	public static final String PLAYER_IPS_TABLE_NAME = "playersips";
-
-	/**
-	 * The sql connection.
-	 */
-	private SQLConnection sql = World.getWorld().getLogsConnection();
 
 	/**
 	 * Holds the counter for newcomers.
@@ -73,11 +59,8 @@ public class NewcomersLogging {
 		if(! ips.containsKey(ip)) {
 			add(ip);
 			if(player.isNew()) {
-				String query = "UPDATE " + NEWCOMERS_TABLE_NAME + " SET active = 1 WHERE " +
-						"ip = '" + ip + "'";
-				sql.offer(query);
-				query = "INSERT INTO newcomers_stats (username) VALUES ('" + player.getName().toLowerCase() + "')";
-				sql.offer(query);
+				String query = "UPDATE marketing SET active = 1 WHERE ip = '" + ip + "'";
+				World.getWorld().getDonationsConnection().offer(query);
 				counter++;
 			}
 		}
@@ -102,8 +85,8 @@ public class NewcomersLogging {
 	public void add(String ip) {
 		ips.put(ip, new Object());
 		//writeLog(ip);
-		String query = "INSERT INTO `" + PLAYER_IPS_TABLE_NAME + "`(`ip`) VALUES ('" + ip + "');";
-		sql.offer(new QueryRequest(query));
+		String query = "INSERT INTO playersips (`ip`) VALUES ('" + ip + "');";
+		World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 	}
 
 	/**
@@ -113,19 +96,17 @@ public class NewcomersLogging {
 	 */
 	public void init() {
 		try {
-			if(false) {
 			long start = System.currentTimeMillis();
-			ResultSet rs = sql.query("SELECT * FROM " + PLAYER_IPS_TABLE_NAME + " WHERE 1");
+			ResultSet rs = World.getWorld().getLogsConnection().query("SELECT * FROM playersips");
 			if(rs == null)
 				return;
 			while(rs.next()) {
-
 				String ip = rs.getString("ip");
 				ips.put(ip, new Object());
 			}
 			long delta = System.currentTimeMillis() - start;
 			System.out.println("Loaded NewcomersLogging in: " + delta + " ms.");
-			}
+
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}

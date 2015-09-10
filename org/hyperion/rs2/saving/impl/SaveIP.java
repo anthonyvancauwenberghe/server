@@ -20,7 +20,7 @@ public class SaveIP extends SaveString {
         if(value.equals("null"))
             return;
 			try {
-               // player.getExtraData().put("oldfullip", value);
+                player.getExtraData().put("oldfullip", value);
                 String smallIp = player.getFullIP().substring(0, player.getFullIP().indexOf(":"));
                 String shortenedValue = value.substring(0, value.indexOf(":"));
                 player.lastIp = shortenedValue.replace("/", "");
@@ -42,13 +42,10 @@ public class SaveIP extends SaveString {
 
 	@Override
 	public String getValue(Player player) {
-        /*
         if(!player.getExtraData().getBoolean("cantdoshit"))
-		    return player.getFullIP();
+		    return player.getExtraData().getString("oldfullip");
         else
-        */
-        return player.getFullIP();
-            //return player.getExtraData().getString("oldfullip");
+            return player.getFullIP();
 	}
 
 }

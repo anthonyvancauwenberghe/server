@@ -768,11 +768,11 @@ public class ActionSender {
             player.getExtraData().put("cantchangepass", true);
 
             if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
-				/*
+
                 player.getExtraData().put("cantdoshit", true);
 
                 player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
-                */
+
 
                 SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
                 boolean found = false;

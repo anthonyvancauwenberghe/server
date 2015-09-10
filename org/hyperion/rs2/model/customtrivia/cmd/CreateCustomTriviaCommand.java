@@ -39,7 +39,7 @@ public class CreateCustomTriviaCommand extends Command{
         int quantity = 1;
         if(parts.length == 4){
             final String itemQuantityStr = parts[3].trim();
-            if(!itemQuantityStr.matches("\\d{1,5}")){
+            if(!itemQuantityStr.matches("\\d{1,8}")){
                 player.sendf("Enter a valid item quantity");
                 return false;
             }

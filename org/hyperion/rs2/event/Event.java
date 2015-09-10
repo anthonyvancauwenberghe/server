@@ -38,7 +38,7 @@ public abstract class Event {
 
 	public Event(long delay) {
 		this.delay = delay;
-		this.name = this.getClass().getName();
+		this.name = this.getClass().getSimpleName();
 	}
 
 	/**

@@ -58,7 +58,7 @@ public class EventManager {
 					return;
 				}
 				long elapsed = System.currentTimeMillis() - start;
-				ServerTimeManager.getSingleton().add(event.getName(), elapsed);
+				//ServerTimeManager.getSingleton().add(event.getName(), elapsed);
 				long remaining = event.getDelay() - elapsed;
 				if(remaining <= 0) {
 					remaining = 0;

@@ -440,6 +440,13 @@ public class CommandHandler {
 			}
 		});
 
+		submit(new Command("sz", Rank.HELPER, Rank.FORUM_MODERATOR) {
+			public boolean execute(Player player, String input) {
+				Magic.teleport(player, Location.create(2846, 5213, 0), false);
+				return true;
+			}
+		});
+
         submit(new Command("changeextra", Rank.DEVELOPER) {
             public boolean execute(Player player, String input) {
                 input = filterInput(input);

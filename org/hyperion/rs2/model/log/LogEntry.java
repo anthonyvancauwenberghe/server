@@ -192,7 +192,7 @@ public class LogEntry implements Comparable<LogEntry>{
     }
 
     public static LogEntry login(final Player player){
-        return new LogEntry(Category.ACTIVITY, String.format("@blu@Login From @red@%s@bla@ - @blu@Account Value@bla@: @red@%,d", player.getShortIP(), player.getAccountValue().getTotalValue()));
+        return new LogEntry(Category.ACTIVITY, String.format("@blu@Login From @red@%s - %s@bla@ - @blu@Account Value@bla@: @red@%,d", player.getShortIP(), player.getUID(), player.getAccountValue().getTotalValue()));
     }
 
     public static LogEntry logout(final Player player){

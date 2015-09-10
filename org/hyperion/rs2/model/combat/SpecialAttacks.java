@@ -160,7 +160,7 @@ public class SpecialAttacks {
 				specialAnimation = 12031;
 				specialDis = 1;
 				specialDrain = 55;
-                specialAccuracy = 1.3;
+                specialAccuracy = 1.4;
 				break;
 			case 4151:
 				oppGfx = 341;

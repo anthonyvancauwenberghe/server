@@ -46,7 +46,11 @@ public class FriendsAssistant {
             return;
 		for(Player c : World.getWorld().getPlayers()) {
 			if(c.getNameAsLong() == to) {
-				sendPM(c, p.getNameAsLong(), chatText, chatTextSize, (int) Rank.getPrimaryRankIndex(p));
+				try {
+					sendPM(c, p.getNameAsLong(), chatText, chatTextSize, (int) Rank.getPrimaryRankIndex(p));
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

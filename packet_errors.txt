@@ -64779,3 +64779,2390 @@ Tue Sep 08 23:42:24 CEST 2015
 	class: class java.lang.ClassCastException
 
 ================================
+Wed Sep 09 01:36:11 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:36:19 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:36:56 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:38:13 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:39:46 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:41:06 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:41:15 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 01:42:42 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 02:02:02 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -6
+	at org.hyperion.rs2.util.NameUtils.longToName(NameUtils.java:60)
+	at org.hyperion.rs2.packet.ClanChatPacketHandler.handle(ClanChatPacketHandler.java:13)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 02:51:37 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 02:51:46 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 02:51:54 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 03:44:28 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 03:45:53 CEST 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.FriendsAssistant.sendPM(FriendsAssistant.java:64)
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:49)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 04:06:54 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 04:07:07 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 04:07:18 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 04:08:22 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 04:27:23 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 04:27:33 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 04:27:45 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 04:28:14 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 04:28:32 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 15:40:10 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.util.NameUtils.longToName(NameUtils.java:60)
+	at org.hyperion.rs2.packet.ClanChatPacketHandler.handle(ClanChatPacketHandler.java:13)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Wed Sep 09 16:13:51 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 16:14:01 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 16:14:11 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 17:12:34 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 17:12:44 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 17:12:55 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:39:04 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:39:12 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:39:22 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:39:33 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:39:43 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:39:51 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:42:40 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:45:35 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 18:45:43 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 19:47:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Wed Sep 09 20:32:56 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 20:33:08 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Wed Sep 09 22:42:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -13312
+	at org.hyperion.rs2.model.container.Container.get(Container.java:325)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handleItemOnNpc(ItemOptionPacketHandler.java:189)
+	at org.hyperion.rs2.packet.ItemOptionPacketHandler.handle(ItemOptionPacketHandler.java:122)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 00:59:00 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 00:59:15 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 00:59:27 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 00:59:59 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:01:30 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:01:43 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:29:30 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:29:39 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:30:01 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:42:14 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:42:29 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:42:43 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:42:50 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:42:55 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:43:00 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:43:08 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:43:25 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:43:44 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:44:47 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:48:41 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:52:44 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 01:52:59 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 04:05:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 04:44:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 05:31:53 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 05:32:48 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 05:33:19 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 05:54:16 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 05:54:25 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 05:54:35 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 05:54:50 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:18:08 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:18:51 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:19:00 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:19:12 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:19:54 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:53:10 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 06:53:39 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 07:31:42 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 07:34:12 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 07:36:39 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 08:07:21 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 08:07:30 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 08:07:39 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 08:07:47 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 08:07:58 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 09:12:39 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 09:12:54 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 09:13:04 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 09:18:13 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 13:14:39 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 16:22:56 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 16:23:04 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 16:23:33 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 16:53:25 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 16:53:34 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 16:53:48 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 18:21:36 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 18:21:48 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 18:21:58 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 18:22:13 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 18:22:39 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 18:29:46 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 18:30:06 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 18:30:47 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 18:30:57 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 20:13:41 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -22
+	at org.hyperion.rs2.util.TextUtils.pmText(TextUtils.java:44)
+	at org.hyperion.rs2.model.FriendsAssistant.sendPM(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:49)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 20:13:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -44
+	at org.hyperion.rs2.util.TextUtils.pmText(TextUtils.java:44)
+	at org.hyperion.rs2.model.FriendsAssistant.sendPM(FriendsAssistant.java:60)
+	at org.hyperion.rs2.model.FriendsAssistant.sendPm(FriendsAssistant.java:49)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 20:14:36 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:15:13 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:15:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:15:35 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:15:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:16:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:17:46 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:18:01 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:18:10 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:18:17 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:18:24 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:18:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:19:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:19:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:19:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:19:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:20:24 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:20:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:20:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:21:08 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:21:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:21:31 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:21:46 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:21:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:22:02 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:22:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:22:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:22:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:22:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:22:43 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:08 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:30 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:35 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:23:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:24:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:24:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:24:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:25:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:25:23 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:25:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:25:58 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:26:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:26:13 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:26:18 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:26:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:27:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:27:26 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:27:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:27:39 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:27:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:28:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:28:23 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:28:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:28:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:29:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:29:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:29:14 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:29:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:29:30 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:30:13 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:31:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:31:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:31:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:31:36 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:31:40 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:31:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:36 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:52 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:32:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:33:02 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:33:08 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:33:16 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:33:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:33:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:34:44 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:34:55 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:34:57 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 20:35:06 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 20:35:13 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:35:14 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 20:35:16 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:35:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:35:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:35:52 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:36:12 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:36:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:36:42 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:37:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:37:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:37:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:37:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:38:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:38:10 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:38:31 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:39:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:39:16 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:39:17 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:39:29 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:39:35 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:39:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:40:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:40:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:40:42 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:40:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:40:55 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:41:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:41:52 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:41:57 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:42:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:43:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:43:31 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:43:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:43:36 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:43:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:02 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:18 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:41 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:41 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:44:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:45:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:45:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:45:15 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:45:39 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:45:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:46:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:46:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:47:31 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:47:34 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:47:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:47:59 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:48:01 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:48:08 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:48:34 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:48:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:48:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:49:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:50:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:51:12 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:51:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:51:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:51:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:51:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:51:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:52:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:52:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:52:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:52:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:52:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:52:58 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:53:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:53:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:53:34 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:53:46 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:54:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:55:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:55:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:55:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:55:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:55:46 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:55:57 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:56:29 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:56:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:56:39 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:56:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:56:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:24 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:44 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:46 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:57:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:29 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:30 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:39 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 20:59:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:00:18 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:00:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:00:24 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:00:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:00:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:01:13 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:02:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:03:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:03:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:03:29 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:03:42 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:03:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:03:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:04:14 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:04:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:06:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:06:58 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:07:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:07:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:07:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:07:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:07:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:08:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:08:18 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:08:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:08:26 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:08:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:09:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:09:43 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:10:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:12:24 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:12:59 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:13:15 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:13:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:13:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:14:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:14:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:14:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:17:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:18:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:18:30 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:18:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:18:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:18:55 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:19:13 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:19:17 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:19:41 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:19:55 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:20:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:20:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:20:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:16 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:31 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:21:58 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:22:18 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:22:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:22:24 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:22:59 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:23:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:23:38 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:24:15 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:24:17 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:24:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:25:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:25:15 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:25:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:25:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:26:35 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:26:44 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:26:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:26:51 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:28:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:28:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:28:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:28:40 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:28:44 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:29:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:29:17 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:29:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:29:44 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:30:47 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:30:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:31:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:32:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:32:39 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:34:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:34:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:35:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:35:41 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:36:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:36:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:36:33 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:37:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:37:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:37:30 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:37:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:37:48 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:37:57 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:38:02 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:38:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:38:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:38:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:38:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:01 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:35 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:35 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:46 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:39:55 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:40:12 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:40:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:40:23 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:40:28 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:41:40 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 21:42:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:42:17 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:42:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:42:27 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:42:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:42:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:42:57 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:45:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:45:43 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:46:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:46:09 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:46:29 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:46:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:50:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:51:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:51:43 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:52:11 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:52:12 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:52:29 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:52:50 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:53:06 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:53:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:55:00 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:55:42 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:56:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:57:51 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:57:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 21:57:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:01:42 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:01:58 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:04:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:04:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:04:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:05:04 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:05:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:05:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:05:31 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:08:20 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:08:49 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:08:58 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:09:03 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:09:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:09:23 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:12:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:13:56 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:14:21 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:17:40 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:18:10 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:19:41 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:22:22 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:25:37 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:29:02 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:29:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:35:16 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:36:12 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:36:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:43:40 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:44:45 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:44:57 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:45:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:45:07 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:45:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:49:36 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:50:05 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:51:25 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:55:08 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:55:19 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:58:54 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 22:59:32 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 23:03:44 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.util.NameUtils.longToName(NameUtils.java:60)
+	at org.hyperion.rs2.packet.FriendModifier.handle(FriendModifier.java:37)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 23:06:08 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 23:06:40 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 23:06:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 23:07:11 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 23:07:20 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 23:07:33 CEST 2015
+	class: class java.lang.ClassCastException
+
+================================
+Thu Sep 10 23:07:53 CEST 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+
+================================
+Thu Sep 10 23:41:08 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 23:41:18 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Thu Sep 10 23:41:27 CEST 2015
+	class: class java.lang.ClassCastException
+	message: java.lang.Integer cannot be cast to java.lang.Boolean
+	at org.hyperion.rs2.model.ExtraData.getBoolean(ExtraData.java:102)
+	at org.hyperion.rs2.model.content.skill.clickSkillingInterface.clickObject(clickSkillingInterface.java:26)
+	at org.hyperion.rs2.model.content.ContentManager.handlePacket(ContentManager.java:119)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:61)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

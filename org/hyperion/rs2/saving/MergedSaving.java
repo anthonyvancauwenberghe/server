@@ -20,6 +20,8 @@ public class MergedSaving {
     public static final String ARTERO_DIR = "./data/characters/arterochars/";
     public static final String MERGED_DIR = "./data/characters/mergedchars/";
 
+    public static final String BACKUP_DIR = "C:/Users/Administrator/Desktop/TEST/artero/";
+
     public static void load(Player player) {
         int source = player.getSource();
         if(source == GenericWorldLoader.ARTERO) {
@@ -115,6 +117,35 @@ public class MergedSaving {
         return password;
     }
 
+    public static Password getBackupPass(String name) {
+        Password password = new Password();
+        name = name.toLowerCase();
+        if(existsBackup(name)) {
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(BACKUP_DIR + name + ".txt"));
+                String line = br.readLine();
+                boolean passfound = false;
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith("Pass=")) {
+                        line = line.replace("Pass=", "");
+                        password.setRealPassword(line);
+                        passfound = true;
+                    } else if(line.startsWith("Salt=")) {
+                        line = line.replace("Salt=","");
+                        password.setSalt(line);
+                        if(passfound) {
+                            break;
+                        }
+                    }
+                }
+                br.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return password;
+    }
+
 
     public static String getArteroPass(String playerName) {
         playerName = playerName.toLowerCase();
@@ -135,6 +166,12 @@ public class MergedSaving {
             e.printStackTrace();
         }
         return pass;
+    }
+
+    public static boolean existsBackup(String name) {
+        name = name.toLowerCase();
+        File file = new File(BACKUP_DIR + name + ".txt");
+        return file.exists();
     }
 
     public static boolean existsMain(String name) {

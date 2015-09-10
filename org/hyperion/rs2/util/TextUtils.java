@@ -39,21 +39,22 @@ public class TextUtils {
 
     public static String pmText(int i, byte[] array) {
         int j = 0;
-        final char[] aCharArray631 = new char[100];
+        final char[] charArr = new char[100];
         for(int l = 0; l < i; l++) {
-            aCharArray631[j++] = validChars[array[l]];
+			char ch = VALID_CHARS[array[l]];
+            charArr[j++] = ch;
         }
         boolean flag1 = true;
         for(int k1 = 0; k1 < j; k1++) {
-            char client = aCharArray631[k1];
+            char client = charArr[k1];
             if(flag1 && client >= 'a' && client <= 'z') {
-                aCharArray631[k1] += '\uFFE0';
+                charArr[k1] += '\uFFE0';
                 flag1 = false;
             }
             if(client == '.' || client == '!' || client == '?')
                 flag1 = true;
         }
-        return new String(aCharArray631, 0, j);
+        return new String(charArr, 0, j);
     }
 
 	public static String shortIp(String fullIp) {
@@ -112,7 +113,7 @@ public class TextUtils {
 		return new String(decodeBuf, 0, j);
 	}*/
 
-	private static char validChars[] = {
+	private static char VALID_CHARS[] = {
 			' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r',
 			'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p',
 			'b', 'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2',
@@ -184,8 +185,8 @@ public class TextUtils {
 		for(int j = 0; j < s.length(); j++) {
 			char c = s.charAt(j);
 			int k = 0;
-			for(int l = 0; l < validChars.length; l++) {
-				if(c != validChars[l])
+			for(int l = 0; l < VALID_CHARS.length; l++) {
+				if(c != VALID_CHARS[l])
 					continue;
 				k = l;
 				break;
@@ -215,6 +216,10 @@ public class TextUtils {
 			}
 		}
 		return bldr.toString();
+	}
+
+	public static void writeToFile(String file, String format, Object...args) {
+		writeToFile(file, String.format(format,args));
 	}
 
 	public static void writeToFile(String file, String line) {

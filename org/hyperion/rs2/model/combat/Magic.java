@@ -1279,6 +1279,8 @@ public class Magic {
                 player.getActionSender().sendMessage("You cannot teleport in this minigame.");
                 return;
             }
+			if(player.getAgility().isBusy())
+				return;
 			if(DangerousPK.inDangerousPK(player)) {
                 if(player.getPoints().getPkPoints() > 75) {
                     player.sendMessage("You loose 75 PKT upon teleporting!");

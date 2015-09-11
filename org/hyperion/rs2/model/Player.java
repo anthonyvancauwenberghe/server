@@ -52,10 +52,9 @@ import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.content.skill.agility.Agility;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungoneeringHolder;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
-import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
-//import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.content.ticket.TicketHolder;
 import org.hyperion.rs2.model.ge.GrandExchangeTracker;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -225,7 +224,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return hasCompCape;
 	}
 
-	private Agility agility = new Agility();
+	private Agility agility = new Agility(this);
 
 	public Agility getAgility() {
 		return agility;

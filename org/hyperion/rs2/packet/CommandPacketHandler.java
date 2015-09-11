@@ -83,7 +83,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
-import org.hyperion.rs2.model.content.skill.GnomeStronghold;
+import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
@@ -2711,7 +2711,7 @@ public class CommandPacketHandler implements PacketHandler {
 			}
 
 			if (commandStart.equals("agility")) {
-				Magic.teleport(player, GnomeStronghold.GNOMELOCATION, false);
+				Magic.teleport(player, GnomeStronghold.location, false);
 			}
 
 			if (commandStart.equals("showwildinterface")) {

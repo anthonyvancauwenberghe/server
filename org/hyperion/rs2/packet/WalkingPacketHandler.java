@@ -41,6 +41,10 @@ public class WalkingPacketHandler implements PacketHandler {
 			player.getActionSender().sendMessage("You cannot move in this game.");
 			return;
 		}
+
+		if(player.getAgility().isBusy())
+			return;
+
         if(player.getExtraData().getBoolean("needpasschange")) {
             player.sendMessage("Please reset your password before continuing to play.");
             player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");
@@ -50,11 +54,6 @@ public class WalkingPacketHandler implements PacketHandler {
         if(player.getTutorialProgress() < 28) {
             return;
         }
-		//player.getActionSender().sendMessage("Trying to walk 6");
-		if(player.getAgility().isRunning()) {
-			player.getActionSender().sendMessage("You're a bit busy to be walking around!");
-			return;
-		}
 		if(player.inAction) {
 			player.inAction = false;
 			ContentEntity.startAnimation(player, - 1);

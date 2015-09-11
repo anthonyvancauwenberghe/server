@@ -5,6 +5,34 @@
 <!--This is if the door is facing SW, SE, NW, NE instead of just N, S, E, W (best way I could explain it.-->
 <!--Everything else should be pretty selfexplanatory. - Brown.-->
 <list>
+    <door>
+        <type>NORMAL</type>
+        <isOpen>false</isOpen>
+        <ids>
+            <int>2309</int>
+            <int>2309</int>
+        </ids>
+        <faces>
+            <int>0</int>
+            <int>3</int>
+        </faces>
+        <types>
+            <int>0</int>
+            <int>0</int>
+        </types>
+        <locations>
+            <location> <!--The open doors location. DONE-->
+                <x>2998</x>
+                <y>3916</y>
+                <z>0</z>
+            </location>
+            <location> <!--The closed doors location. DONE-->
+                <x>2998</x>
+                <y>3917</y>
+                <z>0</z>
+            </location>
+        </locations>
+    </door>
     <door> <!--Zanaris door set...-->
         <type>DOUBLEFORCE</type>
         <isOpen>false</isOpen>

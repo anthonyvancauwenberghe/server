@@ -12,7 +12,6 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.DoorManager;
-import org.hyperion.rs2.model.content.skill.unfinished.agility.Agility;
 
 import java.io.IOException;
 
@@ -87,16 +86,6 @@ public class ObjectClickHandler {
 						this.stop();
 					}
 				});
-				break;
-			case 9294:
-				if(player.getSkills().getLevel(Skills.AGILITY) >= 70) {
-					if(player.getLocation().getX() == 2880 && player.getLocation().getY() == 9813)
-						Agility.walkAcross(player, Location.create(2878, 9813, 0), 1115, 0, 0, -1);
-					if(player.getLocation().getX() == 2878 && player.getLocation().getY() == 9813)
-						Agility.walkAcross(player, Location.create(2880, 9813, 0), 1115, 0, 0, -1);
-				} else {
-					player.sendMessage("You need an agility level of at least 70 to use this shortcut.");
-				}
 				break;
             case 1766:
                 player.playAnimation(Animation.create(828));  //ladder climb anim

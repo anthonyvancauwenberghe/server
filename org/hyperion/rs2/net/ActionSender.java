@@ -176,7 +176,7 @@ public class ActionSender {
 				player.setTutorialProgress(28);
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-			player.sendImportantMessage("@bla@WIN FREE DONOR AND CLAWS: @blu@ http://j.mp/ytgiveaway#url#");
+			player.sendMessage("@dre@Giveaway: @bla@Win free donator and claws! @blu@http://j.mp/ytgiveaway#url#");
 			//Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
 			passChangeShit();
 
@@ -957,7 +957,7 @@ public class ActionSender {
 		//System.out.println("Follow id : " + id);
 		if(GodWars.inGodwars(player))
 			return this;
-		if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player))
+		if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
 			return this;
 		if(player.isFollowing == null) {
 			player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
@@ -1104,7 +1104,7 @@ public class ActionSender {
 		if(ClanManager.clans.get(player.getClanName()) == null)
 			return this;
 		player.write(new PacketBuilder(213, Type.VARIABLE).putRS2String(
-                playerName).toPacket());
+				playerName).toPacket());
 		return this;
 	}
 
@@ -1396,7 +1396,7 @@ public class ActionSender {
 
 	public ActionSender sendChatboxInterface(int interfaceId) {
 		player.getSession().write(
-                new PacketBuilder(164).putLEShort(interfaceId).toPacket());
+				new PacketBuilder(164).putLEShort(interfaceId).toPacket());
 		return this;
 	}
 
@@ -1450,13 +1450,19 @@ public class ActionSender {
     /**
      * "force movement" for things such as firemaking or agility
      */
-    public void forceMovement(final int finishX, final int finishY, final int animId) {
-    	player.getAppearance().setWalkAnim(animId);
-    	player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
-    	player.getWalkingQueue().reset();
-    	player.getWalkingQueue().addStep(finishX, finishY);
-    	player.getWalkingQueue().finish();
-    }
+	public void forceMovement(final int finishX, final int finishY, final int animId) {
+		player.getAppearance().setWalkAnim(animId);
+		player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+		player.getWalkingQueue().reset();
+		player.getWalkingQueue().addStep(finishX, finishY);
+		player.getWalkingQueue().finish();
+	}
+
+	public void forceMovement(final int finishX, final int finishY) {
+		player.getWalkingQueue().reset();
+		player.getWalkingQueue().addStep(finishX, finishY);
+		player.getWalkingQueue().finish();
+	}
 
 	private int getForceDirection(int x, int y, int finishX, int finishY) {
 		//north

@@ -10,7 +10,7 @@ import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.skill.GnomeStronghold;
+import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.util.Misc;
 
 
@@ -23,7 +23,7 @@ public class GnomeGliders implements ContentTemplate {
 	//button,x,y,h,move
 	public static final int[][] GLIDER_DATA = {
 			{826, 2848, 3497, 0, 1}, //  TO MOUNTAIN
-			{825, GnomeStronghold.GNOMELOCATION.getX(), GnomeStronghold.GNOMELOCATION.getY(), GnomeStronghold.GNOMELOCATION.getZ(), 2}, // TO GRAND TREE
+			{825, GnomeStronghold.location.getX(), GnomeStronghold.location.getY(), GnomeStronghold.location.getZ(), 2}, // TO GRAND TREE
 			{827, 3321, 3427, 0, 3}, // TO CASTLE
 			{828, 3278, 3212, 0, 4}, // TO DESERT
 			{824, 2894, 2730, 0, 8}, // TO CRASH ISLAND

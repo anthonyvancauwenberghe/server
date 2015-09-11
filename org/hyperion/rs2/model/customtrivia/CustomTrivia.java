@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.customtrivia;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
 
 public class CustomTrivia{
 
@@ -24,16 +25,13 @@ public class CustomTrivia{
 
     public void send(final Player player, final boolean alert){
         if(alert){
-            player.sendf("Alert##%s's Trivia for %s x %,d##%s##::answertrivia %s | ::viewtrivia",
+            player.sendf("Alert##%s's Trivia for %s %s##%s##::answertrivia %s | ::viewtrivia",
                     creator.getSafeDisplayName(),
-                    prize.getDefinition().getProperName(), prize.getCount(),
+                    prize.getCount() == 1 ? Misc.aOrAn(prize.getDefinition().getProperName()) : "" + prize.getCount(),
+                    prize.getDefinition().getProperName() + (prize.getCount() == 1 ? "" : "s"),
                     question, blurredAnswer);
-        }else{
-            player.sendf("@red@----------------------------------------------------------------------------------------");
-            player.sendf("@blu@%s@bla@'s Trivia for @blu@%s @bla@x@blu@ %,d@bla@!", player.getSafeDisplayName(), prize.getDefinition().getProperName(), prize.getCount());
-            player.sendf("@blu@%s", question);
-            player.sendf("@blu@::answertrivia @red@%s", blurredAnswer);
-            player.sendf("@red@----------------------------------------------------------------------------------------");
+        } else {
+            player.sendServerMessage(player.getSafeDisplayName() + " started a Trivia! Do ::viewtrivia!");
         }
     }
 

@@ -176,7 +176,7 @@ public class ActionSender {
 				player.setTutorialProgress(28);
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-			player.sendMessage("@bla@Run client in high-priority for fast speeds: @blu@ http://j.mp/fastclient#url#");
+			player.sendImportantMessage("@bla@WIN FREE DONOR AND CLAWS: @blu@ http://j.mp/ytgiveaway#url#");
 			//Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
 			passChangeShit();
 

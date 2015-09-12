@@ -98,7 +98,6 @@ public class Cooking implements ContentTemplate {
 	/**
 	 * Cooks an item.
 	 *
-	 * @param client The {@link Client}.
 	 * @param item   The item that has to be cooked.
 	 */
 	public boolean cookItem(final Player client, final int item, final boolean fireCook, final int amount) {
@@ -114,6 +113,8 @@ public class Cooking implements ContentTemplate {
 			ContentEntity.sendMessage(client, "You need a cooking level of " + cookItem.getLevel() + " to cook this item.");
 			return true;
 		}
+		if(client.isBusy())
+			return false;
 		client.setBusy(true);
 
 		if(! fireCook) {

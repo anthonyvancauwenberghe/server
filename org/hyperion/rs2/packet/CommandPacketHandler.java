@@ -143,10 +143,10 @@ public class CommandPacketHandler implements PacketHandler {
 
         if(commandStart.equalsIgnoreCase("resetpevents")) {
             ServerMinigame.CountDownEventBuilder[] builders =  new ServerMinigame.CountDownEventBuilder[]{
-                    new ServerMinigame.CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3x Pk points game", () -> FightPits.startEvent()),
-                    new ServerMinigame.CountDownEventBuilder("Hybridding", "hybrid"),
-                    new ServerMinigame.CountDownEventBuilder("OldSchool PK", "ospk"),
-                    new ServerMinigame.CountDownEventBuilder("Pure Pking", "purepk"),
+                    new ServerMinigame.CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3x Pk points game", () -> FightPits.startEvent(), true),
+                    new ServerMinigame.CountDownEventBuilder("Hybridding", "hybrid", false),
+                    new ServerMinigame.CountDownEventBuilder("OldSchool PK", "ospk", false),
+                    new ServerMinigame.CountDownEventBuilder("Pure Pking", "purepk", false),
                     new ServerMinigame.CountDownEventBuilder(8133, Location.create(2521,4647,0)),
                     new ServerMinigame.CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
                     new ServerMinigame.CountDownEventBuilder(50, Location.create(2270, 4687, 0))

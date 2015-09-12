@@ -15,6 +15,7 @@ public class CountDownEvent extends Event {
     final String name;
     final Location location;
     final String message;
+    final boolean safe;
 	
 	public CountDownEvent(ServerMinigame.CountDownEventBuilder builder) {
 		super(1000);
@@ -23,12 +24,13 @@ public class CountDownEvent extends Event {
         this.location = builder.location;
         this.run = builder.run;
         this.message = builder.message;
+        this.safe = builder.safe;
 	}
 	
 	private int counter = 120; //2 minutes
 	public void execute() {
 		if(counter == 120) {
-			Events.fireNewEvent(name, true, counter, location);
+			Events.fireNewEvent(name, safe, counter, location);
             World.getWorld().getPlayers().stream().forEach(p -> p.sendServerMessage(name + " event is starting in 2 minutes!"));
 		}
 		if(--counter == 0) {

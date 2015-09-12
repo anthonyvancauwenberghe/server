@@ -1072,8 +1072,9 @@ public class Combat {
         for(SpecialArea area : SpecialAreaHolder.getAreas())
             if(area.isPkArea() && area.inArea(absX, absY, absZ))
                 return area.getPkLevel();
-
-        if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+		if((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+			return (((absY - 10340) / 8) + 3);
+        else if((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
             return (((absY - 3520) / 8) + 3);
         else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306) //stair case nigga shit
             return 57;
@@ -1118,28 +1119,10 @@ public class Combat {
 				(combatEntity.getAbsX() >= 2460
 						&& combatEntity.getAbsX() <= 2557
 						&& combatEntity.getAbsY() >= 3264 && combatEntity.getAbsY() <= 3335)
-
-				/*|| // wildy bosses
-				(combatEntity.getAbsX() >= 3054
-						&& combatEntity.getAbsX() <= 3074
-						&& combatEntity.getAbsY() >= 3764 && combatEntity.getAbsY() <= 3784)
-
-				|| // wildy bosses
-				(combatEntity.getAbsX() >= 3134
-						&& combatEntity.getAbsX() <= 3154
-						&& combatEntity.getAbsY() >= 3768 && combatEntity.getAbsY() <= 3788)
-
-				|| // wildy bosses
-				(combatEntity.getAbsX() >= 3123
-						&& combatEntity.getAbsX() <= 3143
-						&& combatEntity.getAbsY() >= 3836 && combatEntity.getAbsY() <= 3856)
-
-				|| // wildy bosses
-				(combatEntity.getAbsX() >= 2996
-						&& combatEntity.getAbsX() <= 3016
-						&& combatEntity.getAbsY() >= 3815 && combatEntity.getAbsY() <= 3835)
-
-                  */
+				|| // Wilderness agility downstairs
+				(combatEntity.getAbsX() >= 2992
+						&& combatEntity.getAbsX() <= 3008
+						&& combatEntity.getAbsY() >= 10340 && combatEntity.getAbsY() <= 10364)
 				|| // fun pk multi
 				(combatEntity.getAbsX() >= 3071
 						&& combatEntity.getAbsX() <= 3146

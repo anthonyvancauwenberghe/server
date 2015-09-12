@@ -119,7 +119,6 @@ public class ContentManager {
 			return a.clickObject(player, type, id, b, c, d);
 		} else {
 			if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-				//dont comment this out arsen.....hi martin u cool
 				player.debugMessage("no template exists for: "+id+" type: "+type);
 			}
 			return false;

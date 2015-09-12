@@ -20,6 +20,34 @@ public class Obstacle {
                     progress;
     protected Course course;
 
+    public int getObjectId() {
+        return objectId;
+    }
+
+    public int getAnimId() {
+        return animId;
+    }
+
+    public int getSkillXp() {
+        return skillXp;
+    }
+
+    public int getLevelReq() {
+        return levelReq;
+    }
+
+    public int getFailRate() {
+        return failRate;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
     public Obstacle(int objectId, int animId, int levelReq, int skillXp, int failRate, Course course, int progress) {
         if(failRate > 100 || failRate < 0) {
             this.failRate = 0;
@@ -65,11 +93,14 @@ public class Obstacle {
     public void executeObject(Player player, String succeedMessage, String failMessage) {
         player.setBusy(true);
         player.getAgility().setBusy(true);
-        failRate =- player.getSkills().getLevel(Skills.AGILITY);
-        if(failRate < 0)
+        if(failRate < 0 || failRate > 100)
             failRate = 0;
-        if(Misc.random(100) < failRate) {
+        int reduction = (player.getSkills().getLevel(Skills.AGILITY) - levelReq)/2;
+        failRate = 100 - (failRate - reduction);
+        int random = Misc.random(100);
+        if(random > failRate) {
             fail(player, 0, failMessage);
+            return;
         }
         succeed(player, 0, succeedMessage);
     }
@@ -104,6 +135,7 @@ public class Obstacle {
 
     public static void reset(Player player) {
         player.setBusy(false);
+        player.getAgility().setBusy(false);
         player.getWalkingQueue().setRunningToggled(true);
         player.getAppearance().setWalkAnim(0x337); //default walk animation
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
@@ -114,10 +146,16 @@ public class Obstacle {
         int middleY = start.getY();
 
         if(start.getX() != end.getX()) {
-            middleX = start.getX() + (end.getX() - start.getX());
+            if(start.getX() > end.getX())
+                middleX = start.getX() - start.distance(end)/2;
+            else
+                middleX = start.getX() + start.distance(end)/2;
         }
         if(start.getY() != end.getY()) {
-            middleY = start.getY() + (end.getY() - start.getY());
+            if(start.getY() > end.getY())
+                middleY = start.getY() - start.distance(end)/2;
+            else
+                middleY = start.getY() + start.distance(end)/2;
         }
         return Location.create(middleX, middleY, start.getZ());
     }

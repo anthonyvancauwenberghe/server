@@ -15,10 +15,10 @@ public class ServerMinigame extends Event {
 	}
 
     public static final CountDownEventBuilder[] builders = new CountDownEventBuilder[]{
-            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3x Pk points game", () -> FightPits.startEvent()),
-            new CountDownEventBuilder("Hybridding", "hybrid"),
-            new CountDownEventBuilder("OldSchool PK", "ospk"),
-            new CountDownEventBuilder("Pure Pking", "purepk"),
+            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3x Pk points game", () -> FightPits.startEvent(), true),
+            new CountDownEventBuilder("Hybridding", "hybrid", false),
+            new CountDownEventBuilder("OldSchool PK", "ospk", false),
+            new CountDownEventBuilder("Pure Pking", "purepk", false),
             new CountDownEventBuilder(8133, Location.create(2521,4647,0)),
             new CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
             new CountDownEventBuilder(50, Location.create(2270, 4687, 0))
@@ -35,6 +35,7 @@ public class ServerMinigame extends Event {
         public final String name;
         public final Location location;
         public final String message;
+        public final boolean safe;
 
         public CountDownEventBuilder(final int npcId, final Location location) {
             this(NPCDefinition.forId(npcId).getName().replaceAll("_", " "), "the event tab", location, "2x drop rates for 30 minutes", () -> {
@@ -45,23 +46,24 @@ public class ServerMinigame extends Event {
                         this.stop();
                     }
                 });
-            });
+            }, false);
         }
 
-        public CountDownEventBuilder(final String name, final String specialArea) {
-            this(name, "::"+specialArea, SpecialAreaHolder.get(specialArea).get());
+        public CountDownEventBuilder(final String name, final String specialArea, boolean safe) {
+            this(name, "::"+specialArea, SpecialAreaHolder.get(specialArea).get(), safe);
         }
 
-        public CountDownEventBuilder(final String name, final String command, final SpecialArea area) {
-            this(name, command, area.getDefaultLocation(), "5x Pk points for 30 minutes", () -> area.createEvent());
+        public CountDownEventBuilder(final String name, final String command, final SpecialArea area, boolean safe) {
+            this(name, command, area.getDefaultLocation(), "5x Pk points for 30 minutes", () -> area.createEvent(), safe);
         }
 
-        public CountDownEventBuilder(final String name, final String command, final Location location, final String msg, Runnable run) {
+        public CountDownEventBuilder(final String name, final String command, final Location location, final String msg, Runnable run, final boolean safe) {
             this.name = name;
             this.command = command;
             this.location = location;
             this.run = run;
             this.message = msg;
+            this.safe = safe;
         }
     }
 

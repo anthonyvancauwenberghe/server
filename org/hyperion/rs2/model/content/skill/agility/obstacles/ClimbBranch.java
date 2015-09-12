@@ -23,13 +23,13 @@ public class ClimbBranch extends Obstacle {
 
     @Override
     public boolean overCome(Player player) {
+        if(!super.overCome(player))
+            return false;
         for(int i = 0; i < start.length; i++) {
             if(player.getLocation().getX() == start[i].getX() && player.getLocation().getY() == start[i].getY()) {
                 executeObject(player);
             }
         }
-        if(!super.overCome(player))
-            return false;
         return true;
     }
 

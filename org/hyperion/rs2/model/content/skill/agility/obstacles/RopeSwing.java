@@ -2,22 +2,26 @@ package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Constants;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
+import org.hyperion.util.Misc;
 
 /**
  * Created by Gilles on 11/09/2015.
  */
 public class RopeSwing extends Obstacle{
     private Location start,
-            end;
+                    end,
+                    fail;
     private int direction;
 
-    public RopeSwing(int objectId, int skillXp, int levelReq, Location start, Location end, int direction, int failRate, Course course, int progress) {
+    public RopeSwing(int objectId, int skillXp, int levelReq, Location start, Location end, Location fail, int direction, int failRate, Course course, int progress) {
         super(objectId, 751, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
         this.direction = direction;
+        this.fail = fail;
     }
 
     @Override
@@ -79,9 +83,7 @@ public class RopeSwing extends Obstacle{
                         player.sendMessage(message);
                     player.getAppearance().setAnimations(a, b, c);
                     player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
-                    player.setBusy(false);
-                    player.getAgility().setBusy(false);
-                    course.progressCourse(player, progress);
+                    course.progressCourse(player, getProgress());
                     stop();
                 }
                 progress--;
@@ -91,9 +93,35 @@ public class RopeSwing extends Obstacle{
 
     @Override
     public void fail(Player player, int tick, String message) {
-        super.fail(player, start.distance(end) + 1, message);
-        Location middle = Obstacle.calculateMiddle(start, end);
-        player.getActionSender().forceMovement(middle.getX(), middle.getY(), animId);
+        World.getWorld().submit(new Event(600) {
+            int progress = start.distance(end);
+
+            @Override
+            public void execute() {
+                if (progress == start.distance(end)) {
+                    player.getWalkingQueue().setRunningToggled(true);
+                } else if (progress == start.distance(end) - 1) {
+                    if (direction == 0)
+                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() + 1, 768);
+                    if (direction == 1)
+                        player.getActionSender().forceMovement(player.getLocation().getX() + 1, player.getLocation().getY(), 768);
+                    if (direction == 2)
+                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() - 1, 768);
+                    if (direction == 3)
+                        player.getActionSender().forceMovement(player.getLocation().getX() - 1, player.getLocation().getY(), 768);
+                    if(!message.isEmpty())
+                        player.sendMessage(message);
+                } else if  (progress == start.distance(end) - 2) {
+                    player.setTeleportTarget(Location.create(fail.getX(), fail.getY(), fail.getZ()));
+                    player.getAgility().appendHit(Misc.random(3) + 3);
+                }
+                else if(progress == 0) {
+                    reset(player);
+                    stop();
+                }
+                progress--;
+            }
+        });
     }
 
     @Override

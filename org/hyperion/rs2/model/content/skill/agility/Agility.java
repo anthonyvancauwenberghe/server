@@ -1,11 +1,9 @@
 package org.hyperion.rs2.model.content.skill.agility;
 
+import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
-
-import java.io.FileNotFoundException;
+import org.hyperion.util.Misc;
 
 /**
  * Created by Gilles on 10/09/2015.
@@ -14,8 +12,8 @@ public class Agility {
 
     private Player player;
 
-    private int GnomeCourseProgress = 0;
-    private int WildernessCourseProgress = 0;
+    private int gnomeCourseProgress = 0;
+    private int wildernessCourseProgress = 0;
 
     private boolean isBusy = false;
 
@@ -31,23 +29,27 @@ public class Agility {
         this.isBusy = isBusy;
     }
 
+    public void appendHit(int hit) {
+        player.getCombat().hit(hit, player, false, Constants.DEFLECT);
+    }
+
     public void progressGnomeCourse(int progress, Course course) {
-        if (GnomeCourseProgress + 1 == progress)
-            GnomeCourseProgress = progress;
-        if (GnomeCourseProgress == course.getMaxCourseProgress()) {
+        if (gnomeCourseProgress + 1 == progress)
+            gnomeCourseProgress = progress;
+        if (gnomeCourseProgress == course.getMaxCourseProgress()) {
             player.getSkills().addExperience(Skills.AGILITY, course.getCourseBonusExp());
             player.sendMessage("You just completed the " + course.toString().toLowerCase() + "!");
-            GnomeCourseProgress = 0;
+            gnomeCourseProgress = 0;
         }
     }
 
     public void progressWildernessCourse(int progress, Course course) {
-        if (WildernessCourseProgress + 1 == progress)
-            WildernessCourseProgress = progress;
-        if (WildernessCourseProgress == course.getMaxCourseProgress()) {
+        if (wildernessCourseProgress + 1 == progress)
+            wildernessCourseProgress = progress;
+        if (wildernessCourseProgress == course.getMaxCourseProgress()) {
             player.getSkills().addExperience(Skills.AGILITY, course.getCourseBonusExp());
             player.sendMessage("You just completed the " + course.toString().toLowerCase() + "!");
-            WildernessCourseProgress = 0;
+            wildernessCourseProgress = 0;
         }
     }
 }

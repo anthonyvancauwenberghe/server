@@ -45,6 +45,7 @@ public class PlayerEvent36Seconds extends Event {
 	public void execute() {
 		int artero = 0;
 		int instant = 0;
+        int merged = 0;
         for(Player player : World.getWorld().getPlayers()) {
         	if(player == null) {
         		continue;
@@ -53,6 +54,8 @@ public class PlayerEvent36Seconds extends Event {
 				artero++;
 			else if(player.getInitialSource() == GenericWorldLoader.INSTANT)
 				instant++;
+            else if(player.getInitialSource() == GenericWorldLoader.MERGED)
+                merged++;
 
 			if(player.getSource() == GenericWorldLoader.INSTANT) {
 				player.sendServerMessage("Players from InstantPK had their items converted to Pk tickets");
@@ -66,7 +69,8 @@ public class PlayerEvent36Seconds extends Event {
         	player.getQuestTab().sendUptime();
             Afk.procesPlayer(player);
         }
-		System.out.println("InstantPK players: " + instant + "/ArteroPK players: " + artero);
+        double total = instant + artero + merged;
+		System.out.printf("IPK: %.1f%% (%d)  APK: %.1f%% (%d) Merged: %.1f%% (%d)\n", instant/total * 100d, instant, artero/total * 100d, artero, merged/total * 100d, merged);
         ClanManager.save();
 	}
 

@@ -176,8 +176,9 @@ public class ActionSender {
 				player.setTutorialProgress(28);
 			}
 			player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-			player.sendMessage("@dre@Giveaway: @bla@Win free donator and claws!@blu@ http://j.mp/ytgiveaway#url#");
+			player.sendMessage("@dre@Giveaway: WIN FREE DONATOR AND CLAWS! @blu@CLICK: @blu@ http://j.mp/ytgiveaway#url#");
 			//Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
+            player.sendMessage("@blu@ Bonus Active: @bla@ 2X bork reward (::bork) until Monday.");
 			passChangeShit();
 
 

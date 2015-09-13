@@ -124,8 +124,8 @@ public class Bork  {
 
         public void giveReward(boolean kill) {
             int percentIncrease = (int)percentIncrease();
-            int tokens = (int)(percentIncrease * TOKEN_MULTIPLIER);
-            int pkt = (int)(percentIncrease * PKP_MULTIPLIER/2);
+            int tokens = (int)(percentIncrease * TOKEN_MULTIPLIER) * 2;
+            int pkt = (int)(percentIncrease * PKP_MULTIPLIER/2) * 2;
             if(!kill)
             {
                 pkt = pkt/3;

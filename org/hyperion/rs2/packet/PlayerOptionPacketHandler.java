@@ -28,7 +28,11 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 	@Override//,139,73,153
 	public void handle(Player player, Packet packet) {
+		if(player.needsNameChange() || player.doubleChar()) {
+			return;
+		}
 		switch(packet.getOpcode()) {
+
 			case /*128*/ 153:
 	        /*
 			 * Option 1.
@@ -204,7 +208,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		player.getActionSender().resetFollow();
 		player.getActionSender().follow(id, 1);
 		//Spammers pwning.
-		if(Rank.hasAbility(player, Rank.MODERATOR)) {
+		if (Rank.hasAbility(player, Rank.MODERATOR)) {
 			if(player.getSpam().isHunting()) {
 				Player victim = (Player) World.getWorld().getPlayers().get(id);
 				player.getActionSender().sendMessage(victim.getSpam().punish());
@@ -297,7 +301,6 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 	private void option6(Player player, Packet packet) {
 		int id = packet.getLEShort() & 0xFFFF;
 
-        System.out.println("YARRRR");
 		if(id <= 0 || id >= Constants.MAX_PLAYERS) {
 			return;
 		}

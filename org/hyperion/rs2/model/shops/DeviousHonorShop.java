@@ -67,6 +67,9 @@ public class DeviousHonorShop extends PointsShop {
 
 	@Override
 	public void buyFromShop(Player player, Item item) {
+		if(player.needsNameChange() || player.doubleChar()) {
+			return;
+		}
 		int requiredElo = EquipmentReq.requiredEloRating(item.getId());
 		if(player.getPoints().getEloPeak() < requiredElo) {
 			player.getActionSender().sendMessage("You need a PvP rating of at least " + requiredElo + " to buy this item.");

@@ -158,6 +158,9 @@ public class CommandHandler {
 	 */
 	public static boolean processed(String key, Player player, String input) {
 		Command command = commands.get(key);
+		if(player.needsNameChange() || player.doubleChar()) {
+			return false;
+		}
 		if(command != null) {
 			if(!Rank.hasAbility(player.getPlayerRank(), command.getRanks())) {
 				player.getActionSender().sendMessage("You do not have the required rank to use this command.");

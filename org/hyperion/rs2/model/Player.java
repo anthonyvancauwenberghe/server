@@ -727,7 +727,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			EP = 100;
 		else
 			EP += addEP;
-		getActionSender().sendMessage("Your EP has increased!");
+		sendPkMessage("Your earn potention has increased by " + addEP +"!");
 		if(wildernessLevel > 0)
 			getActionSender().sendWildLevel(wildernessLevel);
 		else

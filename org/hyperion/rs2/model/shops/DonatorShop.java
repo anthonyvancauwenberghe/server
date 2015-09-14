@@ -52,6 +52,9 @@ public class DonatorShop extends Shop {
 
 	@Override
 	public void sellToShop(Player player, Item item) {
+		if(player.needsNameChange() || player.doubleChar()) {
+			return;
+		}
 		if(isVeblenGood(item.getId()) && player.isServerOwner()) {
 			getContainer().add(item);
 			player.getActionSender().sendUpdateItems(3823,
@@ -95,6 +98,9 @@ public class DonatorShop extends Shop {
 
 	@Override
 	public void buyFromShop(Player player, Item item) {
+		if(player.needsNameChange() || player.doubleChar()) {
+			return;
+		}
 		int price = item.getCount() * getPrice(item.getId());
 		if(price <= 0 && player.getInventory().freeSlots() != 0) {
 			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");

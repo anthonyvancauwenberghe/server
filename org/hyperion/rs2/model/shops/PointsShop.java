@@ -13,11 +13,17 @@ public abstract class PointsShop extends Shop {
 
 	@Override
 	public void sellToShop(Player player, Item item) {
+		if(player.needsNameChange() || player.doubleChar()) {
+			return;
+		}
 		player.getActionSender().sendMessage("You can't sell to this shop.");
 	}
 
 	@Override
 	public void buyFromShop(Player player, Item item) {
+		if(player.needsNameChange() || player.doubleChar()) {
+			return;
+		}
         if(!ItemSpawning.canSpawn(player)) {
             return;
         }

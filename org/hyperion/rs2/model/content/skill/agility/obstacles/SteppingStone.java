@@ -90,6 +90,8 @@ public class SteppingStone extends Obstacle {
             @Override
             public void execute() {
                 if (progress == 0) {
+                    if (!message.isEmpty())
+                        player.sendMessage(message);
                     player.setTeleportTarget(Location.create(fail.getX(), fail.getY(), fail.getZ()));
                     player.getAgility().appendHit(Misc.random(3) + 3);
                     reset(player);
@@ -99,8 +101,6 @@ public class SteppingStone extends Obstacle {
                 }
                 else if (player.getLocation().getX() == calculateMiddle(start, end).getX() && player.getLocation().getY() == calculateMiddle(start, end).getY()) {
                     player.playAnimation(Animation.create(770));
-                    if (!message.isEmpty())
-                        player.sendMessage(message);
                 }
                 else if (0 == progress % 3) {
                     if (direction == 0)

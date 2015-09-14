@@ -71,6 +71,7 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
+import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.Offer;
@@ -763,10 +764,10 @@ public class CommandPacketHandler implements PacketHandler {
 	private void processAdminCommands(final Player player, String commandStart,
 			String s, String withCaps, String[] as) {
 
-		if (commandStart.equalsIgnoreCase("setelo")) {
-			int rating = Integer.parseInt(as[1]);
-			player.getPoints().setEloRating(rating);
-		}
+        if (commandStart.equalsIgnoreCase("setelo")) {
+            int rating = Integer.parseInt(as[1]);
+            player.getPoints().setEloRating(rating);
+        }
 
 		if(commandStart.equalsIgnoreCase("openurl")){
 			final String[] args = withCaps.substring(8).split(",");

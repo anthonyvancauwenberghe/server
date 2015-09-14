@@ -35,6 +35,8 @@ public class BountyHunterEvent extends Event{
 			for (final Player p : World.getWorld().getPlayers()) {
 				if (!BountyHunter.applicable(p))
 					continue;
+				if(!BountyHunterLogout.isBlocked(p))
+					continue;
 				if(!p.getBountyHunter().applicable(p.getBountyHunter().getTarget())) {
 					p.getBountyHunter().setPrevTarget(p.getBountyHunter().getTarget());
 					p.getBountyHunter().setTarget(null);
@@ -50,7 +52,7 @@ public class BountyHunterEvent extends Event{
 				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
 				continue;
 			}
-			if (!p.getBountyHunter().applicable(p.getBountyHunter().getTarget()) || !p.getBountyHunter().applicable(p)) {
+			if (!p.getBountyHunter().applicable2(p.getBountyHunter().getTarget()) || !p.getBountyHunter().applicable2(p)) {
 				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
 				continue;
 			}

@@ -241,13 +241,12 @@ public class PlayerDeathEvent extends Event {
                             System.err.println("PvP tasks error!");
                             e.printStackTrace();
                         }
+						killer.getBountyHunter().handleBHKill(player);
                         if(isRecentKill(killer, player)) {
 							killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
                             if(killer.getGameMode() <= player.getGameMode())
                                 handlePkpTransfer(killer, player, 0);
-							killer.getBountyHunter().handleBHKill(player);
                         } else {
-
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}

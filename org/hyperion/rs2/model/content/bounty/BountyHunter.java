@@ -97,8 +97,11 @@ public class BountyHunter {
 			    assignTarget(p);
 			break;
 		}
-        if(this.target == null)
+        if(this.target == null) {
             player.sendPkMessage("Could not find any Bounty Hunter targets for you.");
+            player.getActionSender().createArrow(10, -1);
+            player.getQuestTab().updateQuestTab();
+        }
 	}
 	
 	public void assignTarget(Player p) {
@@ -125,12 +128,18 @@ public class BountyHunter {
 		final int oppAccValue = opp.getAccountValue().getTotalValue();
 		return (oppAccValue < DP_SPLIT && accValue < DP_SPLIT) || (accValue >= DP_SPLIT && oppAccValue >= DP_SPLIT);
 	}
-	
-	public static boolean applicable(Player player) {
+
+    public static boolean applicable(Player player) {
         if(player == null)
             return false;
-		return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
-	}
+        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+    }
+
+    public static boolean applicable2(Player player) {
+        if(player == null)
+            return false;
+        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+    }
 	
 	public static void fireLogout(final Player player) {
 		final Player targ = player.getBountyHunter().getTarget();

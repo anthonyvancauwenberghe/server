@@ -43,7 +43,7 @@ public class VoteRequest extends SQLRequest {
     private void doBonus() {
         switch(bonus) {
             case 0:
-                player.sendMessage("... And get double voting points!");
+                player.sendMessage("Alert##You get double voting points!");
                 votingPoints *= 2;
                 break;
             case 1:
@@ -69,7 +69,7 @@ public class VoteRequest extends SQLRequest {
                         break;
                 }
                 player.getExtraData().put("doubleExperience", System.currentTimeMillis() + time);
-                player.sendMessage("... And received double experience for " + time/Time.ONE_MINUTE + " minutes!");
+                player.sendMessage("You received double experience for " + time/Time.ONE_MINUTE + " minutes!");
                 break;
             case 2:
                 double multiplier;
@@ -95,7 +95,7 @@ public class VoteRequest extends SQLRequest {
                 }
                 player.getExtraData().put("increasedDroprate", System.currentTimeMillis() + Time.ONE_HOUR);
                 player.getExtraData().put("dropRateMultiplier", multiplier);
-                player.sendMessage("... And received increased droprates for one hour!");
+                player.sendMessage("You received increased droprates for one hour!");
                 break;
             case 3:
                 double reducement;
@@ -121,13 +121,13 @@ public class VoteRequest extends SQLRequest {
                 }
                 player.getExtraData().put("loweredYellTimer", System.currentTimeMillis() + Time.ONE_HOUR);
                 player.getExtraData().put("yellReduction", reducement);
-                player.sendMessage("... And received a reduced yelldelay for one hour!");
+                player.sendMessage("You received a reduced yelldelay for one hour!");
                 break;
             case 4:
                 if(Misc.random(50/streak) == 1) {
                     int donatorPoints = 1000;
                     player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
-                    player.sendMessage("... And receive " + donatorPoints + " donator points as a rare bonus!");
+                    player.sendMessage("You receive " + donatorPoints + " donator points as a rare bonus!");
                     for(Player p : World.getWorld().getPlayers()) {
                         p.sendServerMessage(player.getSafeDisplayName() + " has just received " + donatorPoints + " donator points for voting!");
                     }
@@ -167,15 +167,25 @@ public class VoteRequest extends SQLRequest {
                     cal.add(Calendar.DATE, -1);
                     String yesterday = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
 
-                    if (player.getPermExtraData().getString("lastVoted").equalsIgnoreCase(yesterday)) {
-                        player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
-                        currentStreak++;
-                    } else if(!player.getPermExtraData().getString("lastVoted").equals(Calendar.DATE)){
-                        player.sendMessage("Your voting streak has been reset!");
-                        player.getPermExtraData().put("votingStreak", 0);
-                        currentStreak = 0;
+                    String lastVoted = player.getPermExtraData().getString("lastVoted");
+                    if(lastVoted != null) {
+                        if (lastVoted.equalsIgnoreCase(yesterday)) {
+                            player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                            currentStreak++;
+                        } else if (!player.getPermExtraData().getString("lastVoted").equals(Calendar.DATE)) {
+                            player.sendMessage("Your voting streak has been reset!");
+                            player.getPermExtraData().put("votingStreak", 0);
+                            currentStreak = 0;
+                        }
                     }
                 }
+                int votingPoints = 0;
+                if(runelocus)
+                    votingPoints += 1;
+                if(top100)
+                    votingPoints += 1;
+                if(topg)
+                    votingPoints += 1;
 
                 //- When a player votes 2 days in a row his streak becomes 1.
                 //- When a player votes 4 days in a row his streak becomes 2.
@@ -195,15 +205,13 @@ public class VoteRequest extends SQLRequest {
                 } else if (currentStreak >= 2) {
                     streak = 1;
                 }
-                int votingPoints = 1 + streak;
+                votingPoints += streak;
 
                 if (bonus != -1) {
-                    player.sendMessage("You get a bonus for voting on all 3 voting sites...");
                     doBonus();
                 }
 
                 player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
-                player.sendMessage("Thank you for voting. You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".");
                 player.setLastVoted(System.currentTimeMillis());
                 player.getExtraData().put("lastVoteDate", Calendar.DATE);
                 voted = true;
@@ -212,16 +220,16 @@ public class VoteRequest extends SQLRequest {
                 if (bonus == -1) {
                     StringBuilder sb = new StringBuilder("You can still vote on ");
                     if (!runelocus)
-                        sb.append("runelocus &");
+                        sb.append("runelocus & ");
                     if (!top100)
-                        sb.append("top100 &");
+                        sb.append("top100 & ");
                     if (!topg)
                         sb.append("topg");
-                    if (sb.toString().endsWith(" &")) {
-                        sb.replace(sb.length() - 2, sb.length(), "");
+                    if (sb.toString().endsWith(" & ")) {
+                        sb.replace(sb.length() - 3, sb.length(), "");
                     }
                     sb.append(".");
-                    player.sendMessage(sb.toString());
+                    player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
                 } else if (currentStreak != 0) {
                     player.sendMessage("You are now on a " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " voting streak!");
                 }

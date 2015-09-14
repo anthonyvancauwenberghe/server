@@ -64,7 +64,7 @@ public class DonationsSQLConnection extends MySQLConnection {
 				return true;
 			}
 		};
-		CommandHandler.submit(voteCommand);
+		//CommandHandler.submit(voteCommand, donationCommand);
 
 		return true;
 		/*

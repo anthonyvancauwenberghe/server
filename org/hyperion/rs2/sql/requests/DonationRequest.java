@@ -31,7 +31,6 @@ public class DonationRequest extends SQLRequest {
 	@Override
 	public void process(final SQLConnection sql) {
 		try {
-            player.sendMessage("Attempting to retrieve points...");
 			if(!sql.isConnected()) {
 				World.getWorld().submit(new Event(0, "Reconnecting SQL") {
 					@Override
@@ -56,6 +55,7 @@ public class DonationRequest extends SQLRequest {
             boolean didSurvey = false;
 			int donations = 0;
 			String orderId = "";
+
 			while(rs.next()) {
 				String amountString = rs.getString("amount");
 				try {
@@ -86,23 +86,14 @@ public class DonationRequest extends SQLRequest {
 			}
 			if(amount < 0) {
                 player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + amount);
-				if(donations == 1) {
-					player.sendMessage(
-							"Alert##You have received your donation points from" + donations + " donations.",
-							"Order ID:" + orderId,
-							"Amount: " + amount,
-							"Thank you for supporting the server!"
-					);
-				} else {
-					player.sendMessage(
-							"Alert##You have received your donation points from" + donations + " donations.",
-							"Amount: " + amount,
-							"Thank you for supporting the server!"
-					);
-				}
 				player.getQuestTab().sendDonatePoints();
 			}
 			if(amount > 0) {
+				if(donations == 1) {
+					player.sendf("Alert##You have received your points from 1 donation.##Order ID: %s##Amount: $%d (%,d donator points)", orderId, amount/100, amount);
+				} else {
+					player.sendf("Alert##You have received your points from %d donations.##Total amount: $%d (%,d donator points)", donations, amount/100, amount);
+				}
 				player.getPoints().increaseDonatorPoints(amount);
 			} else {
 				if(!didSurvey)

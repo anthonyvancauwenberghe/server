@@ -56,7 +56,7 @@ public final class BountyPerkHandler {
 			player.getBHPerks().upgradePerk(perk);
 			player.getQuestTab().updateQuestTab();
 		} else {
-			player.sendMessage("You don't have enough bh points for this!");
+			player.sendMessage("You don't have enough BH points for this!");
 		}
 		player.getActionSender().removeChatboxInterface();
     }

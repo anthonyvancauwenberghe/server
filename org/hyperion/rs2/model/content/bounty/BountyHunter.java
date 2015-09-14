@@ -76,18 +76,29 @@ public class BountyHunter {
     private int emblemPoints = 0;
 	private final Player player;
 	private Player target;
+    private Player prevTarget;
     private boolean enabled = true;
 
-	public BountyHunter(Player player) {
+    public Player getPrevTarget() {
+        return prevTarget;
+    }
+
+    public void setPrevTarget(Player prevTarget) {
+        this.prevTarget = prevTarget;
+    }
+
+    public BountyHunter(Player player) {
 		this.player = player;
 	}
 	
 	public void findTarget() {
 		for(final Player p : World.getWorld().getPlayers()) {
-			if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p)) continue;
-			assignTarget(p);
+			if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p) || p.equals(prevTarget)) continue;
+			    assignTarget(p);
 			break;
 		}
+        if(this.target == null)
+            player.sendPkMessage("Could not find any Bounty Hunter targets for you.");
 	}
 	
 	public void assignTarget(Player p) {
@@ -116,12 +127,16 @@ public class BountyHunter {
 	}
 	
 	public static boolean applicable(Player player) {
-		return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getPermExtraData().getBoolean("bhon");
+        if(player == null)
+            return false;
+		return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
 	}
 	
 	public static void fireLogout(final Player player) {
 		final Player targ = player.getBountyHunter().getTarget();
 		if(targ != null) {
+            BountyHunterLogout.playerLogout(player);
+            targ.getBountyHunter().setPrevTarget(player);
 			targ.getBountyHunter().setTarget(null);
 			targ.getActionSender().removeArrow();
 			targ.getQuestTab().sendBHTarget();
@@ -132,7 +147,7 @@ public class BountyHunter {
 		if(!opp.equals(target)) return;
         if(opp.getSkills().getCombatLevel() < 80 || player.getSkills().getCombatLevel() < 80)
             return;
-		player.sendMessage("@blu@You now have @red@"+incrementAndGet()+" @blu@bh points!");
+		player.sendPkMessage("You now have " + incrementAndGet() + " BH points!");
 		handleBHDrops(opp);
 		for(Player p : new Player[]{player, opp}) {
 			p.getBountyHunter().target = null;
@@ -142,7 +157,7 @@ public class BountyHunter {
         final List<Item> emblems = Emblem.getEmblems(opp.getInventory());
         for(final Item item : emblems) {
             player.getBank().add(new BankItem(0, item.getId(), opp.getInventory().remove(item)));
-            player.sendf("A @red@%s EMBLEM@bla@ was added to your bank", Emblem.forId(item.getId()).toString());
+            player.sendMessage("A " + Emblem.forId(item.getId()).toString() + " emblem has been added to your bank.");
         }
 	}
 	

@@ -31,6 +31,9 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		if(player.needsNameChange() || player.doubleChar()) {
 			return;
 		}
+		if(player.getTutorialProgress() < 28) {
+			return;
+		}
 		switch(packet.getOpcode()) {
 
 			case /*128*/ 153:

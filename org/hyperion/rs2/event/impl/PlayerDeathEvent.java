@@ -245,13 +245,13 @@ public class PlayerDeathEvent extends Event {
 							killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
                             if(killer.getGameMode() <= player.getGameMode())
                                 handlePkpTransfer(killer, player, 0);
+							killer.getBountyHunter().handleBHKill(player);
                         } else {
 
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
-                            AchievementHandler.progressAchievement(player, "Kill");
-                            killer.getBountyHunter().handleBHKill(player);
+							AchievementHandler.progressAchievement(player, "Kill");
                             killer.addLastKill(player.getName());
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)
@@ -275,6 +275,7 @@ public class PlayerDeathEvent extends Event {
                             if(Rank.hasAbility(killer, Rank.DONATOR))
                                 killer.getSpecBar().increment(SpecialBar.CYCLE_INCREMENT);
                             killer.getSpecBar().sendSpecBar();
+							killer.getSpecBar().sendSpecAmount();
 
                         }
 						if(!isDev) {

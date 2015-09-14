@@ -68,10 +68,6 @@ public class DonatorShop extends Shop {
 			}
 			return;
 		}
-		if(item.getId() == 18768) {
-			player.sendMessage("This item can temporarily not be sold back.");
-			return;
-		}
         if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603) {
             player.sendMessage("You cannot sell this item back to the store");
             return;
@@ -159,10 +155,6 @@ public class DonatorShop extends Shop {
 	@Override
 	public void valueSellItem(Player player, Item item) {
 		int price = getPrice(item.getId());
-		if(item.getId() == 18768) {
-			player.sendMessage("This item can temporarily not be sold back.");
-			return;
-		}
         if(item.getId() == LEGENDARY_TICKET) {
             player.sendImportantMessage("You cannot sell this back to the store");
             return;

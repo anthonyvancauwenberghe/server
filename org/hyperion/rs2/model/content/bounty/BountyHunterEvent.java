@@ -16,10 +16,10 @@ public class BountyHunterEvent extends Event{
 	
 	public void execute() {
 		counter--;
-		if(counter == 0) {
+		if (counter == 0) {
 			counter = 5;
-			for(final Player p : World.getWorld().getPlayers()) {
-				if(p.getCombat().getOpponent() != null) {
+			for (final Player p : World.getWorld().getPlayers()) {
+				if (p.getCombat().getOpponent() != null) {
 					if (p.getCombat().getOpponent().getEntity() instanceof Player) {
 						if (p.getCombat().getOpponent().getPlayer().equals(p.getBountyHunter().getTarget())) {
 							continue;
@@ -31,24 +31,31 @@ public class BountyHunterEvent extends Event{
 				p.getActionSender().removeArrow();
 			}
 		}
-		if(counter%2 == 0) {
-			final Player[] list = PlayerCombatEvent.cloneEntityList();
-			for(final Player p : list) {
-				if(BountyHunter.applicable(p))
-					p.getBountyHunter().findTarget();
+		if (counter % 2 == 0) {
+			for (final Player p : World.getWorld().getPlayers()) {
+				if (!BountyHunter.applicable(p))
+					continue;
+				if(!p.getBountyHunter().applicable(p.getBountyHunter().getTarget())) {
+					p.getBountyHunter().setPrevTarget(p.getBountyHunter().getTarget());
+					p.getBountyHunter().setTarget(null);
+					p.getActionSender().removeArrow();
+				}
+				p.getBountyHunter().findTarget();
 			}
 		}
-		for(Player p : World.getWorld().getPlayers()) {
-			if(p == null)
+		for (Player p : World.getWorld().getPlayers()) {
+			if (p == null)
 				continue;
-			if (!p.getBountyHunter().applicable(p.getBountyHunter().getTarget()) && p.getBountyHunter().getTarget() != null) {
+			if (p.getBountyHunter().getTarget() == null) {
 				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
-			} else {
-				if (p.getBountyHunter().getTarget() != null) {
-					p.sendMessage("Your target is at level " + p.getBountyHunter().getTarget().wildernessLevel + " wilderness.");
-				}
-				p.getActionSender().sendString("@or1@Reset: @gre@" + counter + " @or1@min", 36503);
+				continue;
 			}
+			if (!p.getBountyHunter().applicable(p.getBountyHunter().getTarget()) || !p.getBountyHunter().applicable(p)) {
+				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
+				continue;
+			}
+			p.sendMessage("Your target is at level " + p.getBountyHunter().getTarget().wildernessLevel + " wilderness.");
+			p.getActionSender().sendString("@or1@Reset: @gre@" + counter + " @or1@min", 36503);
 		}
 	}
 }

@@ -125,7 +125,7 @@ public class VoteRequest extends SQLRequest {
                 break;
             case 4:
                 if(Misc.random(50/streak) == 1) {
-                    int donatorPoints = 0;
+                    int donatorPoints = 1000;
                     player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
                     player.sendMessage("... And receive " + donatorPoints + " donator points as a rare bonus!");
                     for(Player p : World.getWorld().getPlayers()) {
@@ -170,6 +170,10 @@ public class VoteRequest extends SQLRequest {
                     if (player.getPermExtraData().getString("lastVoted").equalsIgnoreCase(yesterday)) {
                         player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
                         currentStreak++;
+                    } else if(!player.getPermExtraData().getString("lastVoted").equals(Calendar.DATE)){
+                        player.sendMessage("Your voting streak has been reset!");
+                        player.getPermExtraData().put("votingStreak", 0);
+                        currentStreak = 0;
                     }
                 }
 
@@ -247,9 +251,8 @@ public class VoteRequest extends SQLRequest {
         if (!voted)
             player.sendMessage("You have no votes to claim. Use ::vote to vote.");
     }
+    */
 
-
-*/
         player.sendMessage("Attempting to retrieve vote points...");
         if (!sql.isConnected()) {
             player.getActionSender().sendMessage("Your request could not be processed. Try again later.");

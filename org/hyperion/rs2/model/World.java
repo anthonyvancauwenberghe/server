@@ -41,6 +41,7 @@ import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
+import org.hyperion.rs2.model.content.bounty.BountyHunterLogout;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.Bork;
@@ -528,6 +529,7 @@ public class World {
         submit(new ServerMinigame());
         submit(new ServerMessages());
         submit(new BountyHunterEvent());
+        submit(new BountyHunterLogout());
         submit(new GoodIPs());
         TriviaBot.getBot().init();
         objectManager.submitEvent();

@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.sql.ResultSet;
 
@@ -31,7 +32,7 @@ public class DonationRequest extends SQLRequest {
 	public void process(final SQLConnection sql) {
 		try {
             player.sendMessage("Attempting to retrieve points...");
-			if(! sql.isConnected()) {
+			if(!sql.isConnected()) {
 				World.getWorld().submit(new Event(0, "Reconnecting SQL") {
 					@Override
 					public void execute() {
@@ -41,29 +42,36 @@ public class DonationRequest extends SQLRequest {
 						}
 					}
 				});
-				player.getActionSender().sendMessage(
-						"Your request could not be processed, Attempting to fix this, Please Try again later.");
+				player.getActionSender().sendMessage("Your request could not be processed, Attempting to fix this, Please Try again later.");
 				return;
 			}
+
 			String name = player.getName().toLowerCase().replaceAll("_", " ");
-			ResultSet rs = sql.query("SELECT * FROM donator WHERE finished = 0 AND name = '"
-					+ name + "'");
+			ResultSet rs = sql.query("SELECT * FROM donator WHERE finished = 0 AND name = '" + name + "'");
 			if(rs == null) {
-				player.getActionSender().sendMessage("There are no points available. It can take up to 24h to receive your points!");
+				player.getActionSender().sendMessage("There are no points available.");
 				return;
 			}
 			int amount = 0;
             boolean didSurvey = false;
+			int donations = 0;
+			String orderId = "";
 			while(rs.next()) {
 				String amountString = rs.getString("amount");
 				try {
 					int toAdd = (int) (Double.parseDouble(amountString) * 100);
+
                     if(rs.getString("method").equals("survey")){
                         player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + toAdd);
-                        player.sendf("%,d donator points have been added to your account for surveys", toAdd);
+                        player.sendServerMessage(toAdd + " donator points have been added to your account for surveys");
                         didSurvey = true;
-                    }else
-                        amount += toAdd;
+                    } else {
+						amount += toAdd;
+						if(donations == 0) {
+							orderId = rs.getString("TOKEN_ID");
+						}
+						donations++;
+					}
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -78,12 +86,24 @@ public class DonationRequest extends SQLRequest {
 			}
 			if(amount < 0) {
                 player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + amount);
-				player.getActionSender().sendMessage(Math.abs(amount) + " donator points have been removed from your account.");
+				if(donations == 1) {
+					player.sendMessage(
+							"Alert##You have received your donation points from" + donations + " donations.",
+							"Order ID:" + orderId,
+							"Amount: " + amount,
+							"Thank you for supporting the server!"
+					);
+				} else {
+					player.sendMessage(
+							"Alert##You have received your donation points from" + donations + " donations.",
+							"Amount: " + amount,
+							"Thank you for supporting the server!"
+					);
+				}
 				player.getQuestTab().sendDonatePoints();
 			}
 			if(amount > 0) {
 				player.getPoints().increaseDonatorPoints(amount);
-                //player.getActionSender().sendMessage("You have received a 25% donation bonus from santa!");
 			} else {
 				if(!didSurvey)
                     player.getActionSender().sendMessage("There are no points available. It can take up to 24h to receive your points!");
@@ -97,7 +117,7 @@ public class DonationRequest extends SQLRequest {
 		return new Event(1000) {
 			@Override
 			public void execute() {
-				System.out.println("Hack Attempt too many donatorpoints!!! " + name);
+				System.out.println("Hack attempt, too many donatorpoints by player " + name);
 			}
 		};
 	}

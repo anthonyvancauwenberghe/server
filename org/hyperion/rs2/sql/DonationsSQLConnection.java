@@ -7,6 +7,7 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.sql.event.impl.ClaimEvent;
 import org.hyperion.rs2.sql.event.impl.KeepConnectionAliveEvent;
 import org.hyperion.rs2.sql.requests.DonationRequest;
 import org.hyperion.rs2.sql.requests.VoteRequest;
@@ -29,6 +30,7 @@ public class DonationsSQLConnection extends MySQLConnection {
 		establishConnection();
 		try {
 			submit(new KeepConnectionAliveEvent());
+			submit(new ClaimEvent());
 			start();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -57,13 +59,12 @@ public class DonationsSQLConnection extends MySQLConnection {
 					player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
 					return false;
 				}
-				World.getWorld().getDonationsConnection()
-						.offer(new DonationRequest(player));
+				World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
 				player.getExtraData().put("lastsql", System.currentTimeMillis());
 				return true;
 			}
 		};
-		CommandHandler.submit(voteCommand, donationCommand);
+		CommandHandler.submit(voteCommand);
 
 		return true;
 		/*

@@ -41,11 +41,13 @@ public class MysteryBox implements ContentTemplate {
 	public static final int ID = 18768;
 
 	public static void openBox(Player player, int i) {
+		/*
 		if(player.getInventory().getCount(ID) <= 0)
 			return;
 		if(player.getInventory().remove(new Item(i)) > 0) {
 			addReward(player);
 		}
+		*/
 	}
 
 	private static Item generateRewardItem() {

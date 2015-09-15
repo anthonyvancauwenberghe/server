@@ -934,6 +934,8 @@ public class World {
             LastManStanding.getLastManStanding().leaveGame(player, true);
         }
         Trade.declineTrade(player);
+        if(player.getTrader() != null)
+            Trade.declineTrade(player.getTrader());
         FightPits.removePlayerFromGame(player, false);
         BountyHunter.fireLogout(player);
         FriendsAssistant.refreshGlobalList(player, true);

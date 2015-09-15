@@ -15,8 +15,8 @@ import org.hyperion.util.Time;
 
 public class ClaimEvent extends SQLEvent {
 
-    public static final long DELAY = Time.ONE_MINUTE;
-    //public static final long DELAY = Time.ONE_SECOND * 10;
+    //public static final long DELAY = Time.ONE_MINUTE;
+    public static final long DELAY = Time.ONE_SECOND * 10;
 
     public ClaimEvent() {
         super(DELAY);
@@ -42,7 +42,7 @@ public class ClaimEvent extends SQLEvent {
             rs.close();
         }
 
-        rs = sql.query("SELECT * FROM waitingVotes WHERE voted=0");
+        rs = sql.query("SELECT * FROM waitingVotes WHERE processed=0");
         if(rs != null) {
             while(rs.next()) {
                 String name = rs.getString("realUsername");

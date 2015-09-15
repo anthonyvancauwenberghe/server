@@ -6,6 +6,8 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
 
+import java.util.function.Function;
+
 public class BountyHunterEvent extends Event{
 
 	public BountyHunterEvent() {
@@ -19,23 +21,13 @@ public class BountyHunterEvent extends Event{
 		if (counter == 0) {
 			counter = 5;
 			//Checks if the player is in combat with his target, if not he'll reset
-			for (final Player p : World.getWorld().getPlayers()) {
-				if (p.getCombat().getOpponent() != null) {
-					if (p.getCombat().getOpponent().getEntity() instanceof Player) {
-						if (p.getCombat().getOpponent().getPlayer().equals(p.getBountyHunter().getTarget())) {
-							continue;
-						}
-					}
-				}
-				//This clears the target, which makes the player applicable again
-				p.getBountyHunter().clearTarget();
-			}
+            World.getWorld().getPlayers().stream().filter(p ->
+                p.cE.getOpponent() == null || !p.getCombat().getOpponent().getEntity().equals(p.getBountyHunter().getTarget())
+            ).forEach(p -> p.getBountyHunter().clearTarget());
 		}
 		if (counter % 2 == 0) {
 			for (final Player p : World.getWorld().getPlayers()) {
 				//if the player has a target, but the target is not in the wilderness anymore
-				if(!p.getBountyHunter().applicable2(p.getBountyHunter().getTarget()))
-					p.getBountyHunter().clearTarget();
 
 				if (BountyHunter.applicable(p))
 					p.getBountyHunter().findTarget();
@@ -50,10 +42,10 @@ public class BountyHunterEvent extends Event{
 				continue;
 			}
 			//This will happen if the player or his target get out of the wilderness
-			if (!p.getBountyHunter().applicable2(p.getBountyHunter().getTarget()) || !p.getBountyHunter().applicable2(p)) {
+			/*if (BountyHunter.applicable2(p.getBountyHunter().getTarget()) || !BountyHunter.applicable2(p)) {
 				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
 				continue;
-			}
+			} */
 			//If neither happened, it will assume normal scenario
 			p.sendMessage("Your target is at level " + p.getBountyHunter().getTarget().wildernessLevel + " wilderness.");
 			p.getActionSender().sendString("@or1@Reset: @gre@" + counter + " @or1@min", 36503);

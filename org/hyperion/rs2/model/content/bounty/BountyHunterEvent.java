@@ -33,26 +33,14 @@ public class BountyHunterEvent extends Event{
 		}
 		if (counter % 2 == 0) {
 			for (final Player p : World.getWorld().getPlayers()) {
-				if (!BountyHunter.applicable(p))
-					continue;
-				if(!BountyHunterLogout.isBlocked(p))
-					continue;
-				if(!p.getBountyHunter().applicable(p.getBountyHunter().getTarget())) {
-					p.getBountyHunter().setPrevTarget(p.getBountyHunter().getTarget());
-					p.getBountyHunter().setTarget(null);
-					p.getActionSender().removeArrow();
-				}
-				p.getBountyHunter().findTarget();
+				if (!BountyHunter.applicable(p) && !BountyHunterLogout.isBlocked(p))
+				    p.getBountyHunter().findTarget();
 			}
 		}
 		for (Player p : World.getWorld().getPlayers()) {
 			if (p == null)
 				continue;
 			if (p.getBountyHunter().getTarget() == null) {
-				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
-				continue;
-			}
-			if (!p.getBountyHunter().applicable2(p.getBountyHunter().getTarget()) || !p.getBountyHunter().applicable2(p)) {
 				p.getActionSender().sendString("@or1@Reset: @gre@" + (((counter + 1) % 2) + 1) + " @or1@min", 36503);
 				continue;
 			}

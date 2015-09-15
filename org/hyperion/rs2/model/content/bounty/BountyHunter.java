@@ -92,12 +92,14 @@ public class BountyHunter {
 	}
 	
 	public void findTarget() {
+        final Player previous = target;
 		for(final Player p : World.getWorld().getPlayers()) {
 			if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p) || p.equals(prevTarget)) continue;
 			    assignTarget(p);
 			break;
 		}
-        if(this.target == null) {
+        setPrevTarget(previous);
+        if(this.target == null || previous == target) {
             player.sendPkMessage("Could not find any Bounty Hunter targets for you.");
             player.getActionSender().createArrow(10, -1);
             player.getQuestTab().updateQuestTab();
@@ -138,7 +140,7 @@ public class BountyHunter {
     public static boolean applicable2(Player player) {
         if(player == null)
             return false;
-        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getPermExtraData().getBoolean("bhon");
     }
 	
 	public static void fireLogout(final Player player) {

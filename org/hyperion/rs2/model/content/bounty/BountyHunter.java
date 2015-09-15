@@ -92,27 +92,35 @@ public class BountyHunter {
 	}
 	
 	public void findTarget() {
-        final Player previous = target;
 		for(final Player p : World.getWorld().getPlayers()) {
 			if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p) || p.equals(prevTarget)) continue;
 			    assignTarget(p);
 			break;
 		}
-        setPrevTarget(previous);
-        if(this.target == null || previous == target) {
-            player.sendPkMessage("Could not find any Bounty Hunter targets for you.");
-            player.getActionSender().createArrow(10, -1);
-            player.getQuestTab().updateQuestTab();
-        }
 	}
+
+    public void clearTarget() {
+        if(player.getBountyHunter().getTarget() == null)
+            return;
+        Player oldTarget = target;
+        player.getBountyHunter().setPrevTarget(player.getBountyHunter().getTarget());
+        player.getBountyHunter().setTarget(null);
+        player.getActionSender().removeArrow();
+        player.getQuestTab().sendBHTarget();
+        oldTarget.getBountyHunter().setPrevTarget(oldTarget.getBountyHunter().getTarget());
+        oldTarget.getBountyHunter().setTarget(null);
+        oldTarget.getActionSender().removeArrow();
+        oldTarget.getQuestTab().sendBHTarget();
+}
 	
 	public void assignTarget(Player p) {
+        if(target == p)
+            return;
 		this.target = p;
-		p.getBountyHunter().target = player;
-		player.getActionSender().createArrow(target);
-		p.getActionSender().createArrow(player);
-		p.getQuestTab().sendBHTarget();
+        player.getActionSender().createArrow(target);
 		player.getQuestTab().sendBHTarget();
+        p.getBountyHunter().assignTarget(player);
+
 	}
 	
 	public boolean levelCheck(Player p) {
@@ -134,13 +142,13 @@ public class BountyHunter {
     public static boolean applicable(Player player) {
         if(player == null)
             return false;
-        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getBountyHunter().target == null && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+        return player.getBountyHunter().target == null && applicable2(player);
     }
 
     public static boolean applicable2(Player player) {
         if(player == null)
             return false;
-        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getPermExtraData().getBoolean("bhon");
+        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
     }
 	
 	public static void fireLogout(final Player player) {

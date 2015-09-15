@@ -63,7 +63,7 @@ public class GnomeStronghold extends Course {
     };
 
     public GnomeStronghold() {
-        super(30 * EXPMULTIPLIER, 7);
+        super(60 * EXPMULTIPLIER, 7);
         generateObstacles();
     }
 

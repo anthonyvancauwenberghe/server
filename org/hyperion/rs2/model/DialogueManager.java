@@ -31,6 +31,7 @@ import org.hyperion.rs2.net.ActionSender.DialogueType;
 import org.hyperion.rs2.packet.ModerationOverride;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -1460,7 +1461,7 @@ public class DialogueManager {
 				break;
 			case 531:
 				Calendar cal = Calendar.getInstance();
-				cal.setTimeInMillis(System.currentTimeMillis() - player.getLastHonorPointsReward());
+				cal.setTimeInMillis((player.getLastHonorPointsReward()  + (Time.ONE_HOUR * 12)) - System.currentTimeMillis());
 				if(System.currentTimeMillis() - player.getLastHonorPointsReward() < 0) {
 					player.sendMessage("You will receive honor points again if you relog.");
 				} else {

@@ -1,6 +1,7 @@
 package org.hyperion.rs2.sql.requests;
 
 import org.hyperion.Server;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -14,10 +15,13 @@ import org.hyperion.util.Time;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * @author Arsen Maxyutov.
+ * @author Gilles.
  */
 public class VoteRequest extends SQLRequest {
 
@@ -141,111 +145,56 @@ public class VoteRequest extends SQLRequest {
     public void process(final SQLConnection sql) {
         /*
         if (!sql.isConnected()) {
+            World.getWorld().submit(new Event(0, "Reconnecting SQL") {
+                @Override
+                public void execute() {
+                    synchronized(sql) {
+                        if(!sql.isConnected())
+                            sql.establishConnection();
+                    }
+                }
+            });
             player.getActionSender().sendMessage("Voting is offline right now. Try again later.");
             return;
         }
         int currentStreak = player.getPermExtraData().getInt("votingStreak");
-        boolean voted = false;
+        boolean runelocus = false;
+        boolean top100 = false;
+        boolean topg = false;
+        int runelocusVotes = 0;
+        int top100Votes = 0;
+        int topgVotes = 0;
+        List<Integer> index = new ArrayList<>();
 
         ResultSet rs = null;
         try {
-            //If voted is 1, it means they voted for at least one site
-            rs = sql.query(String.format("SELECT * FROM waitingVotes WHERE realUsername = '%s' AND voted = 1", player.getName()));
+            rs = sql.query(String.format("SELECT * FROM waitingVotes WHERE realUsername = '%s'", player.getName()));
             while (rs.next()) {
-                final boolean runelocus = rs.getByte("runelocus") == 1;
-                final boolean topg = rs.getByte("topg") == 1;
-                final boolean top100 = rs.getByte("top100") == 1;
-                //If the player didn't vote for any of them
-                if (!runelocus && !topg && !top100)
-                    continue;
-                //If player voted on all 3 he receives a bonus
-                if (runelocus && topg && top100) {
-                    bonus = Misc.random(4);
-
-                    //This will check if they voted yesterday too, if so; receive streak.
-                    Calendar cal = Calendar.getInstance();
-                    cal.add(Calendar.DATE, -1);
-                    String yesterday = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
-
-                    String lastVoted = player.getPermExtraData().getString("lastVoted");
-                    if(lastVoted != null) {
-                        if (lastVoted.equalsIgnoreCase(yesterday)) {
-                            player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
-                            currentStreak++;
-                        } else if (!player.getPermExtraData().getString("lastVoted").equals(Calendar.DATE)) {
-                            player.sendMessage("Your voting streak has been reset!");
-                            player.getPermExtraData().put("votingStreak", 0);
-                            currentStreak = 0;
-                        }
-                    }
+                //if it hasn't been processed yet it will simply just give them their points
+                if (rs.getByte("processed") == 0) {
+                    if (rs.getByte("runelocus") == 1)
+                        runelocusVotes++;
+                    if (rs.getByte("topg") == 1)
+                        topgVotes++;
+                    if (rs.getByte("top100") == 1)
+                        top100Votes++;
+                    //Simply will set it so it won't ever be processed again, but it doesn't need deletion if it is not an old vote.
+                    sql.query(String.format("UPDATE waitingVotes SET processed = 1 WHERE index = %d", rs.getInt("index")));
                 }
-                int votingPoints = 0;
-                if(runelocus)
-                    votingPoints += 1;
-                if(top100)
-                    votingPoints += 1;
-                if(topg)
-                    votingPoints += 1;
-
-                //- When a player votes 2 days in a row his streak becomes 1.
-                //- When a player votes 4 days in a row his streak becomes 2.
-                //- When a player votes 7 days in a row his streak becomes 3 and he gains an achievement.
-                //- When a player votes 14 days in a row his streak becomes 5 and he gains another achievement.
-                //- When a player votes 31 days in a row his streak becomes 10 and he gains another achievement.
-
-                int streak = 0;
-                if (currentStreak >= 31) {
-                    streak = 10;
-                } else if (currentStreak >= 14) {
-                    streak = 5;
-                } else if (currentStreak >= 7) {
-                    streak = 3;
-                } else if (currentStreak >= 4) {
-                    streak = 2;
-                } else if (currentStreak >= 2) {
-                    streak = 1;
+                //If the vote was today it will tell the loader that the user has voted for a certain site today
+                if (rs.getDate("date").equals(Calendar.DATE)) {
+                    if (rs.getByte("runelocus") == 1)
+                        runelocus = true;
+                    if (rs.getByte("topg") == 1)
+                        topg = true;
+                    if (rs.getByte("top100") == 1)
+                        top100 = true;
+                } else {
+                    //If it's an old vote it will be removed after adding the points.
+                    sql.query(String.format("DELETE FROM waitingVotes WHERE index = %d", rs.getInt("index")));
                 }
-                votingPoints += streak;
-
-                if (bonus != -1) {
-                    doBonus();
-                }
-
-                player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
-                player.setLastVoted(System.currentTimeMillis());
-                player.getExtraData().put("lastVoteDate", Calendar.DATE);
-                voted = true;
-
-                //This will let the player know where he can still vote.
-                if (bonus == -1) {
-                    StringBuilder sb = new StringBuilder("You can still vote on ");
-                    if (!runelocus)
-                        sb.append("runelocus & ");
-                    if (!top100)
-                        sb.append("top100 & ");
-                    if (!topg)
-                        sb.append("topg");
-                    if (sb.toString().endsWith(" & ")) {
-                        sb.replace(sb.length() - 3, sb.length(), "");
-                    }
-                    sb.append(".");
-                    player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
-                } else if (currentStreak != 0) {
-                    player.sendMessage("You are now on a " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " voting streak!");
-                }
-                final int rl = runelocus ? 1 : 0;
-                final int t100 = top100 ? 1 : 0;
-                final int tg = topg ? 1 : 0;
-                sql.query(String.format(
-                                "INSERT INTO votes (name, runelocus, top100, topg) VALUES ('%s', %d, %d, %d) ON DUPLICATE KEY UPDATE runelocus = runelocus + %d, top100 = top100 + %d, topg = topg + %d",
-                                player.getName().toLowerCase(), rl, t100, tg, rl, t100, tg)
-                );
             }
-            sql.query(String.format("DELETE FROM waitingVotes WHERE realUsername!=fakeUsername AND realUsername = '%s'", player.getName()));
-            sql.query(String.format("UPDATE waitingVotes SET runelocus=0,top100=0,topg=0,voted=1 WHERE realUsername ='%s'", player.getName()));
-            sql.query("DELETE FROM waitingVotes WHERE fakeUsername = realUsername AND timestamp <= date_sub(now(), interval 12 hour)");
         } catch (Exception e) {
-            player.getActionSender().sendMessage("Something went wrong with the voting... Try again later!");
             e.printStackTrace();
         } finally {
             if (rs != null) {
@@ -256,10 +205,108 @@ public class VoteRequest extends SQLRequest {
                 }
             }
         }
-        if (!voted)
+        //Checks if the player actually voted at any point in time
+        if (runelocusVotes == 0 && top100Votes == 0 && topgVotes == 0) {
             player.sendMessage("You have no votes to claim. Use ::vote to vote.");
+            return;
+        }
+
+        //Builds the calendar to get yesterday
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        String yesterday = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+
+        //This will check if they voted yesterday too, if so; receive streak.
+        String lastVoted = player.getPermExtraData().getString("lastVoted");
+        //If they never voted there is nothing that should happen
+        if(lastVoted != null) {
+            if (lastVoted.equalsIgnoreCase(yesterday)) {
+                player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                currentStreak++;
+                //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
+            } else if (!player.getPermExtraData().getString("lastVoted").equals(new SimpleDateFormat("dd/MM/yyyy").format(Calendar.DATE))) {
+                player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                player.sendMessage("Your voting streak has been reset!");
+                player.getPermExtraData().put("votingStreak", 0);
+                currentStreak = 0;
+            }
+        } else {
+            //If they never voted before, today is their first time!
+            player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+        }
+
+        //If the player voted for all 3 websites today he'll receive the bonus & they get the streak bonus, depending on the streak we just calculated.
+        //It will also check if he didn't receive the streak yet today
+        if (runelocus && topg && top100 && !lastVoted.equals(new SimpleDateFormat("dd/MM/yyyy").format(Calendar.DATE))) {
+            int streak = 0;
+            if (currentStreak >= 31) {
+                streak = 10;
+            } else if (currentStreak >= 14) {
+                streak = 5;
+            } else if (currentStreak >= 7) {
+                streak = 3;
+            } else if (currentStreak >= 4) {
+                streak = 2;
+            } else if (currentStreak >= 2) {
+                streak = 1;
+            }
+            votingPoints += streak;
+
+            //The bonus gets set
+            bonus = Misc.random(4);
+        }
+
+        //Now it's time to get howmany voting points the player has to receive.
+        votingPoints += runelocusVotes + top100Votes + topgVotes;
+
+        //Now we do the bonus if the player needs one
+        StringBuilder sb = new StringBuilder();
+        if(bonus != -1) {
+            doBonus();
+        } else {
+        //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
+            sb.append("You can still vote on ");
+            if (!runelocus)
+                sb.append("runelocus & ");
+            if (!top100)
+                sb.append("top100 & ");
+            if (!topg)
+                sb.append("topg");
+            if (sb.toString().endsWith(" & ")) {
+                sb.replace(sb.length() - 3, sb.length(), "");
+            }
+            sb.append(".");
+        }
+        if(currentStreak != 0) {
+            player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + "in a row.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+        } else {
+            player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+        }
+
+        //This will add the points and update the last time the player voted
+        player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
+        player.setLastVoted(System.currentTimeMillis());
+
+        //This will update the total amount of votes a player has done.
+        final int rl = runelocusVotes;
+        final int t100 = top100Votes;
+        final int tg = topgVotes;
+        try {
+            sql.query(String.format("INSERT INTO votes (name, runelocus, top100, topg) VALUES ('%s', %d, %d, %d) ON DUPLICATE KEY UPDATE runelocus = runelocus + %d, top100 = top100 + %d, topg = topg + %d", player.getName().toLowerCase(), rl, t100, tg, rl, t100, tg));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
-    */
+
+    /**/
 
         player.sendMessage("Attempting to retrieve vote points...");
         if (!sql.isConnected()) {

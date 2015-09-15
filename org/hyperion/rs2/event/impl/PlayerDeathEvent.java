@@ -167,6 +167,7 @@ public class PlayerDeathEvent extends Event {
 
 	private void resetPlayer() {
 		player.playAnimation(Animation.create(- 1, 0));
+		player.getCombat().setOpponent(null);
 		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
 			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
 		}

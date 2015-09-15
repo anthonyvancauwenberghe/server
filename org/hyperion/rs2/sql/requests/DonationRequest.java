@@ -3,6 +3,7 @@ package org.hyperion.rs2.sql.requests;
 import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
@@ -41,7 +42,7 @@ public class DonationRequest extends SQLRequest {
 						}
 					}
 				});
-				player.getActionSender().sendMessage("Your request could not be processed, Attempting to fix this, Please Try again later.");
+				player.getActionSender().sendMessage("Donations are offline right now. Try again later.");
 				return;
 			}
 
@@ -86,7 +87,6 @@ public class DonationRequest extends SQLRequest {
 			}
 			if(amount < 0) {
                 player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + amount);
-				player.getQuestTab().sendDonatePoints();
 			}
 			if(amount > 0) {
 				if(donations == 1) {
@@ -95,6 +95,12 @@ public class DonationRequest extends SQLRequest {
 					player.sendf("Alert##You have received your points from %d donations.##Total amount: $%d (%,d donator points)", donations, amount/100, amount);
 				}
 				player.getPoints().increaseDonatorPoints(amount);
+				if(!Rank.isStaffMember(player)) {
+					if (Rank.hasAbility(player, Rank.DONATOR) && !Rank.hasAbility(player, Rank.SUPER_DONATOR))
+						Rank.setPrimaryRank(player, Rank.DONATOR);
+					else if (Rank.hasAbility(player, Rank.SUPER_DONATOR))
+						Rank.setPrimaryRank(player, Rank.SUPER_DONATOR);
+				}
 			} else {
 				if(!didSurvey)
                     player.getActionSender().sendMessage("There are no points available. It can take up to 24h to receive your points!");
@@ -102,6 +108,7 @@ public class DonationRequest extends SQLRequest {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public static Event getHackEvent(final String name) {

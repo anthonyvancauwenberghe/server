@@ -1033,23 +1033,6 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
 
-        if (commandStart.equalsIgnoreCase("sethp") && Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-            try {
-                String[] args = s.substring(6).trim().split(",");
-                Player thePlay = World.getWorld().getPlayer(args[0]);
-                int level = Integer.parseInt(args[1]);
-                if (thePlay != null) {
-                    if (level <= Integer.MAX_VALUE) {
-                        thePlay.getSkills().setLevel(Skills.HITPOINTS, level);
-                        thePlay.sendMessage(player.getSafeDisplayName() + " set your hitpoints to " + level + ".");
-                    }
-                } else
-                    player.sendf("%s is not online.", Misc.formatPlayerName(args[0]));
-            } catch (Exception e) {
-                player.sendMessage("Use as ::sethp NAME,LEVEL.");
-            }
-        }
-
         /**
          * w8ing to test spec is a drag!
          *
@@ -1829,8 +1812,7 @@ public class CommandPacketHandler implements PacketHandler {
 			if (target != null) {
 				if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
 					player.getActionSender()
-							.sendMessage(
-									"The Intermolecular force of Jet's micropenis stops him from being teleported!");
+                    .sendMessage("The Intermolecular force of Jet's micropenis stops him from being teleported!");
 					return;
 				}
 				if (Rank.isStaffMember(target)
@@ -2064,6 +2046,23 @@ public class CommandPacketHandler implements PacketHandler {
 	private void handleHeadModCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
 
+        if (commandStart.equalsIgnoreCase("sethp")) {
+            try {
+                String[] args = s.substring(6).trim().split(",");
+                Player thePlay = World.getWorld().getPlayer(args[0]);
+                int level = Integer.parseInt(args[1]);
+                if (thePlay != null) {
+                    if (level <= Integer.MAX_VALUE) {
+                        thePlay.getSkills().setLevel(Skills.HITPOINTS, level);
+                        thePlay.sendMessage(player.getSafeDisplayName() + " set your hitpoints to " + level + ".");
+                    }
+                } else
+                    player.sendf("%s is not online.", Misc.formatPlayerName(args[0]));
+            } catch (Exception e) {
+                player.sendMessage("Use as ::sethp NAME,LEVEL.");
+            }
+        }
+
 		if (commandStart.equalsIgnoreCase("getmail")) {
             String targetPlayer = null;
             try {
@@ -2242,13 +2241,11 @@ public class CommandPacketHandler implements PacketHandler {
 			if (Rank.hasAbility(player, Rank.OWNER))
 				this.processOwnerCommands(player, commandStart, s, withCaps, as);
 			if (Rank.hasAbility(player, Rank.DEVELOPER))
-				this.processAdminCommands(player, commandStart, s, withCaps, as);
+                this.processDeveloperCommands(player, commandStart, s, withCaps, as);
 			if (Rank.hasAbility(player, Rank.ADMINISTRATOR))
-				this.processDeveloperCommands(player, commandStart, s,
-						withCaps, as);
+                this.processAdminCommands(player, commandStart, s, withCaps, as);
 			if (Rank.hasAbility(player, Rank.HEAD_MODERATOR))
-				this.handleHeadModCommands(player, commandStart, s, withCaps,
-						as);
+				this.handleHeadModCommands(player, commandStart, s, withCaps, as);
 			if(Rank.hasAbility(player, Rank.GLOBAL_MODERATOR))
 				this.handleGlobalModCommands(player, commandStart, s, withCaps, as);
 			if (Rank.hasAbility(player, Rank.MODERATOR))

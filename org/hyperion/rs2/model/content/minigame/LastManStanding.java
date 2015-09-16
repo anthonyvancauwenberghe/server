@@ -215,10 +215,22 @@ public class LastManStanding implements ContentTemplate {
                 topTenPlayers.add(p);
                 System.out.println(topTenPlayers.size());
             }
-            World.getWorld().getPlayers().forEach(player -> player.sendImportantMessage("LMS event has ended. Do ::top10 to look at the top 10 players."));
+            World.getWorld().getPlayers().forEach(player -> openInterface(player));
         }
         participants.clear();
         finishedPlayers.clear();
+    }
+
+    private Optional<Participant> hasParticipated(Player player) {
+        return finishedPlayers.stream().filter(p -> p.getPlayer().getName().equals(player.getName())).findFirst();
+    }
+
+    public void openInterface(Player player) {
+        if(!hasParticipated(player).isPresent() || player.getLocation().inPvPArea() || player.isInCombat()) {
+            player.sendImportantMessage("LMS event has ended. Do ::top10 to look at the top 10 players.");
+            return;
+        }
+        loadTopTenInterface(player);
     }
 
     public static void loadTopTenInterface(Player player) {

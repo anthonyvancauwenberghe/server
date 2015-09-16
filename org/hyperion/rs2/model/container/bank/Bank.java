@@ -54,9 +54,9 @@ public class Bank {
                 }
                 if (FightPits.inPits(player))
                     return;
-            } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()) {
-                player.getActionSender().sendMessage("You can only open the bank while you are invincible.");
-                player.getActionSender().sendMessage("You are invincible after you die for 20 seconds, unless you attack someone.");
+            } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()
+                    || (LastManStanding.getLastManStanding().participants.get(player) != null && LastManStanding.getLastManStanding().participants.get(player).getDeaths() > 0 )) {
+                player.getActionSender().sendMessage("You can only bank before the game starts. ");
                 return;
             }
         }

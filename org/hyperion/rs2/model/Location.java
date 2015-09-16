@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.util.Misc;
@@ -333,7 +334,7 @@ public class Location {
 	 * @return
 	 */
 	public boolean inPvPArea() {
-		return Combat.getWildLevel(x, y, z) > 0 || inFunPk();
+		return Combat.getWildLevel(x, y, z) > 0 || inFunPk() || (LastManStanding.getLastManStanding().gameStarted == true && LastManStanding.inLMSArea(x, y));
 	}
 	public boolean disabledMagic() {
 		return x >= 3072 && y >= 3519 && x <= 3108 && y <= 3543;

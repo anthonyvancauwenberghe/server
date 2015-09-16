@@ -73,7 +73,10 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 			}
 			br.close();
 
-            globalObjects.add(new GameObject(GameObjectDefinition.forId(7353), create(3203, 3422, 0), 10, 0));//slayer portal
+			globalObjects.add(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2785, 0), 10, 1));
+			globalObjects.add(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2784, 0), 10, 1));
+
+			globalObjects.add(new GameObject(GameObjectDefinition.forId(7353), create(3203, 3422, 0), 10, 0));//slayer portal
             globalObjects.add(new GameObject(GameObjectDefinition.forId(61), create(3098, 3506, 0), 10, 2));//chaos altar
             globalObjects.add(new GameObject(GameObjectDefinition.forId(409), create(3094, 3506, 0), 10, 2));//Normal altar
             globalObjects.add(new GameObject(GameObjectDefinition.forId(6552), create(3096, 3500, 0), 10, 0));//ancient altar

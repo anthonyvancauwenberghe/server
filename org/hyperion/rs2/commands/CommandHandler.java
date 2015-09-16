@@ -284,44 +284,10 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("lms", Rank.PLAYER) {
+        submit(new Command("top10", Rank.PLAYER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                LastManStanding.getLastManStanding().enterLobby(player);
-                player.getActionSender().sendMessage("WARNING: ON YOUR THIRD DEATH, YOU WILL LOSE ALL NON-PROTECTED ITEMS!");
-				player.getActionSender().sendMessage("To leave the lobby, use the ::leavelms command.");
-                return true;
-            }
-        });
-
-
-        submit(new Command("leavelms", Rank.PLAYER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                if(LastManStanding.getLastManStanding().gameStarted) {
-                    player.getActionSender().sendMessage("You cannot leave until you have died three times!");
-                    return true;
-				}
-                LastManStanding.getLastManStanding().leaveGame(player, false);
-                return true;
-            }
-        });
-
-        submit(new Command("startlms", Rank.ADMINISTRATOR) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                if(LastManStanding.getLastManStanding().canJoin)
-                    return true;
-                LastManStanding.getLastManStanding().canJoin = true;
-                LastManStanding.getLastManStanding().startCountdown();
-                return true;
-            }
-        });
-
-        submit(new Command("stoplms", Rank.ADMINISTRATOR) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                LastManStanding.getLastManStanding().canJoin = false;
+                LastManStanding.getLastManStanding().loadTopTenInterface(player);
                 return true;
             }
         });
@@ -1651,14 +1617,6 @@ public class CommandHandler {
                     return false;
                 }
                 target.setTeleportTarget(Edgeville.LOCATION);
-                return true;
-            }
-        });
-
-        submit(new Command("lmstimer", Rank.PLAYER){
-            public boolean execute(final Player player, final String input){
-                if(LastManStanding.getLastManStanding().participants.get(player.getName()) != null)
-                    player.getActionSender().sendMessage("The game will begin in " + LastManStanding.getLastManStanding().getCounter() + " seconds.");
                 return true;
             }
         });

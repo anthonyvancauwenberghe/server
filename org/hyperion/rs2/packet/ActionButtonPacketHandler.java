@@ -70,6 +70,9 @@ public class ActionButtonPacketHandler implements PacketHandler {
             return;
         }
 		switch(button) {
+			case 28887:
+				player.getActionSender().removeAllInterfaces();
+				break;
             case -29034:
                 final Player opp = player.getBountyHunter().getTarget();
                 if(opp != null) {

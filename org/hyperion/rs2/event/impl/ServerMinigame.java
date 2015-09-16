@@ -3,6 +3,7 @@ package org.hyperion.rs2.event.impl;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.util.Misc;
@@ -21,7 +22,8 @@ public class ServerMinigame extends Event {
             new CountDownEventBuilder("Pure Pking", "purepk", false),
             new CountDownEventBuilder(8133, Location.create(2521,4647,0)),
             new CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
-            new CountDownEventBuilder(50, Location.create(2270, 4687, 0))
+            new CountDownEventBuilder(50, Location.create(2270, 4687, 0)),
+            new CountDownEventBuilder("Last Man Standing", "Last Man Standing", LastManStanding.START_2,"an all risk minigame!", () -> LastManStanding.startLMS(), false)
     };
 
 	@Override

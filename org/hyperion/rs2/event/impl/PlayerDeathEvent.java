@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.Bork;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
@@ -195,6 +196,8 @@ public class PlayerDeathEvent extends Event {
 			Duel.finishFullyDuel(player);
         } else if (player.getDungeoneering().inDungeon()) {
 			DungeoneeringManager.handleDying(player);
+        } else if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+            LastManStanding.getLastManStanding().deathCheck(player, killer);
 		} else if (Bork.doDeath(player)) {
         } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
 			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))

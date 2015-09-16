@@ -7,7 +7,7 @@ import java.util.Comparator;
 /**
  * Created by Scott Perretta on 4/12/2015.
  */
-public class Participant implements Comparator<Object> {
+public class Participant implements Comparable<Participant> {
 
     private Player player;
 
@@ -53,10 +53,8 @@ public class Participant implements Comparator<Object> {
     }
 
     @Override
-    public int compare(Object a, Object b) {
-        Participant p1 = (Participant) a;
-        Participant p2 = (Participant) b;
-        return p1.getKills() < p2.getKills() ? -1 : p1.getKills() > p2.getKills() ? 1 : 0;
+    public int compareTo(Participant p) {
+        return this.getKills() < p.getKills() ? -1 : this.getKills() > p.getKills() ? 1 : 0;
     }
 
 }

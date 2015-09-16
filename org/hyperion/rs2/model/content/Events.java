@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 
 /**
  * Created by Allen Kinzalow on 4/8/2015.
@@ -70,7 +71,9 @@ public class Events {
             player.getActionSender().sendString("cancel", 32456);
             return;
         }
-
+        if(LastManStanding.getLastManStanding().canJoin) {
+            LastManStanding.getLastManStanding().enterLobby(player);
+        }
         Magic.teleport(player, eventLocation, false);
         player.getActionSender().sendString("cancel", 32456);
     }

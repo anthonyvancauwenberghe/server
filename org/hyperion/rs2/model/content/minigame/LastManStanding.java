@@ -18,15 +18,16 @@ public class LastManStanding implements ContentTemplate {
 
     public HashMap<String, Participant> participants = new HashMap<>();
 
-    private ArrayList finishedPlayers = new ArrayList();
+    private List<Participant> finishedPlayers = new ArrayList<>();
+    private static List<Participant> topTenPlayers = new ArrayList<>();
 
-    public static Location LOBBY = Location.create(2970, 9678, 0);
     public static Location START = Location.create(3272, 2785, 0);
+    public static Location START_2 = Location.create(3264, 2784, 0);
 
     public boolean gameStarted = false;
     public boolean canJoin = false;
 
-    public int counter;
+    public static int counter;
 
     public int getCounter() {
         return counter;
@@ -38,12 +39,12 @@ public class LastManStanding implements ContentTemplate {
         return x <= 3274 && y <= 2809 && y >= 2752 && x >= 3205;
     }
 
-    public void startCountdown() {
-        counter = 300;
+    private static void startCountdown() {
+        counter = 120;
         World.getWorld().submit(new Event(1000) {
             @Override
             public void execute() {
-                if(!canJoin) {
+                if(!getLastManStanding().canJoin) {
                     super.stop();
                     return;
                 }
@@ -51,16 +52,16 @@ public class LastManStanding implements ContentTemplate {
                     stop();
                     return;
                 }
-                for(NPC npc : World.getWorld().getNPCs()) {
-                    if(npc != null)
-                        npc.forceMessage("Last Man Standing event starts in "+counter+" seconds! Go to ::lms");
+                if(counter % 30 == 0) {
+                    getLastManStanding().participants.forEach((s, participant) -> participant.getPlayer().getActionSender().sendMessage("Last Man Standing starts in " + counter + " seconds!"));
                 }
                 counter--;
             }
 
             public void stop() {
-                startGame();
+                getLastManStanding().startGame();
                 counter = 0;
+                getLastManStanding().participants.forEach((s, participant) -> participant.getPlayer().getActionSender().sendMessage("Last Man Standing has begun! Attack anyone starting now!"));
                 super.stop();
             }
         });
@@ -68,10 +69,10 @@ public class LastManStanding implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-       /* if (type == 6 || type == 7) {
+        if (type == 6 || type == 7) {
             int[] j = {2213};
             return j;
-        }    */
+        }
         return new int[0];
     }
 
@@ -89,11 +90,15 @@ public class LastManStanding implements ContentTemplate {
         lastManStanding = this;
     }
 
-    public void invincibleEvent(Participant participant) {
+    public void invincibleEvent(Participant participant, long time) {
         if (participant == null)
             return;
-        participant.getPlayer().getExtraData().put("combatimmunity", System.currentTimeMillis() + 5000L);
-        participant.getPlayer().getActionSender().sendMessage("You are now invincible for a short period of time!");
+        participant.getPlayer().getExtraData().put("combatimmunity", System.currentTimeMillis() + time);
+        participant.getPlayer().getActionSender().sendMessage("You are now invincible for " + time / 1000 + " seconds, until the event starts!");
+    }
+
+    public void invincibleEvent(Participant participant) {
+        invincibleEvent(participant, 20000);
     }
 
     public static LastManStanding lastManStanding = null;
@@ -107,27 +112,38 @@ public class LastManStanding implements ContentTemplate {
     public void enterLobby(Player player) {
         if (!gameStarted && canJoin) {
             participants.put(player.getName(), new Participant(player, 0, 0));
-            Magic.teleport(player, LOBBY, false);
+            invincibleEvent(participants.get(player.getName()), (counter * 1000));
+        } else {
+            player.getActionSender().sendMessage("You cannot join as the event has started.");
         }
+    }
+
+    public static void startLMS() {
+        if(LastManStanding.getLastManStanding().canJoin)
+            return;
+        LastManStanding.getLastManStanding().canJoin = true;
+        startCountdown();
     }
 
     public void leaveGame(Player player, boolean loseItems) {
         if(participants.remove(player.getName()) != null) {
-            Magic.teleport(player, Edgeville.LOCATION, true);
+            player.setTeleportTarget(Edgeville.LOCATION, false);
             if (gameStarted) {
                 if (loseItems) {
                     player.getPoints().increasePkPoints(500);
                     DeathDrops.dropItems(player, false);
                 }
+                if (participants.size() <= 1) {
+                    endGame();
+                }
             }
-            if (participants.size() <= 1) {
-                endGame();
-            }
-            player.getActionSender().sendLastManStandingStatus(false);
+            player.getActionSender().sendWildLevel(-1);
         }
     }
 
     public void deathCheck(Player player, Player killer) {
+        if(participants == null || player == null || killer == null)
+            return;
         Participant participant = participants.get(player.getName());
         Participant killerParticipant = participants.get(killer.getName());
         if (participant == null || killerParticipant == null) {
@@ -163,17 +179,16 @@ public class LastManStanding implements ContentTemplate {
     public void startGame() {
         if (participants.size() < 2) {
             for (Participant participant : participants.values()) {
-                participant.getPlayer().getActionSender().sendMessage("There must be at least 2 participants in order for this event to start!");
+                participant.getPlayer().getActionSender().sendMessage("This event is canceled because there were less than 2 participants.");
+                leaveGame(participant.getPlayer(), false);
             }
+            canJoin = false;
+            participants.clear();
             return;
         }
+        canJoin = false;
         gameStarted = true;
         totalParticipants = participants.size();
-        for (Participant participant : participants.values()) {
-            participant.getPlayer().getActionSender().sendMessage("You have a 20 seconds to find a good location to fight in!");
-            Magic.teleport(participant.getPlayer(), START, true);
-            invincibleEvent(participant);
-        }
     }
 
     public void endGame() {
@@ -183,34 +198,40 @@ public class LastManStanding implements ContentTemplate {
         }
         gameStarted = false;
         canJoin = false;
-        if (winner == null) {
-            return;
-        }
-        int points = winner.getBountyReward() + (500 * totalParticipants);
-        winner.getPlayer().getPoints().increasePkPoints(winner.getBountyReward(), false);
-        winner.getPlayer().getPoints().increasePkPoints(500 * totalParticipants, false);
-        winner.getPlayer().getActionSender().sendMessage("You have won this event and are rewarded " + points + " pk points!");
-        Magic.teleport(winner.getPlayer(), Edgeville.LOCATION, true);
-        winner.getPlayer().getActionSender().sendLastManStandingStatus(false);
-        finishedPlayers.add(winner);
-        Collections.sort(finishedPlayers, Collections.reverseOrder());
-        for(Player player : World.getWorld().getPlayers()) {
-            if(player == null)
-                continue;
-            if(!player.isInCombat() && !player.getLocation().inPvPArea() && !player.openingTrade) {
-                player.getActionSender().sendString(28672, "Top Killers");
-                int size = 10;
-                if(finishedPlayers.size() < 10)
-                    size = finishedPlayers.size();
-                for(int i = 0; i < size; i++) {
-                    Participant p = (Participant) finishedPlayers.get(i);
-                    player.getActionSender().sendString(28685 + i, p.getPlayer().getName() + ": " + p.getKills());
-                }
-                player.getInterfaceState().interfaceOpened(28671);
+        if (winner != null) {
+            int points = winner.getBountyReward() + (500 * totalParticipants);
+            winner.getPlayer().getPoints().increasePkPoints(winner.getBountyReward(), false);
+            winner.getPlayer().getPoints().increasePkPoints(500 * totalParticipants, false);
+            winner.getPlayer().getActionSender().sendMessage("You have won this event and are rewarded " + points + " pk points!");
+            winner.getPlayer().setTeleportTarget(Edgeville.LOCATION, false);
+            winner.getPlayer().getActionSender().sendWildLevel(-1);
+            finishedPlayers.add(winner);
+            Collections.sort(finishedPlayers, Collections.reverseOrder());
+            int size = 10;
+            if (finishedPlayers.size() < size)
+                size = finishedPlayers.size();
+            for (int i = 0; i < size; i++) {
+                Participant p = finishedPlayers.get(i);
+                topTenPlayers.add(p);
+                System.out.println(topTenPlayers.size());
             }
+            World.getWorld().getPlayers().forEach(player -> player.sendImportantMessage("LMS event has ended. Do ::top10 to look at the top 10 players."));
         }
         participants.clear();
         finishedPlayers.clear();
+    }
+
+    public static void loadTopTenInterface(Player player) {
+        if(topTenPlayers.size() <= 0) {
+            System.out.println(topTenPlayers.size());
+            return;
+        }
+        player.getActionSender().sendString(28672, "Top Killers");
+        for (int i = 0; i < topTenPlayers.size(); i++) {
+            Participant p = topTenPlayers.get(i);
+            player.getActionSender().sendString(28685 + i, p.getPlayer().getSafeDisplayName()+ ": " + p.getKills());
+        }
+        player.getActionSender().showInterface(28670);
     }
 
 

@@ -45,26 +45,30 @@ public class Bank {
      */
     public static void open(Player player, boolean setPin) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
-            if (player.getLocation().inPvPArea() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                return;
-            }
-
-            if (!ItemSpawning.canSpawn(player)) {
-                return;
-            }
-
-            if (FightPits.inPits(player))
-                return;
-        }
-            player.resetingPin = false;
-            if (player.bankPin != null && !player.bankPin.equals("null")) {
-                if ((player.bankPin.length() < 4 && setPin)
-                        || (player.bankPin.length() >= 4 && !player.bankPin
-                        .equals(player.enterPin))) {
-                    BankPin.loadUpPinInterface(player);
+            if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                if (player.getLocation().inPvPArea()) {
                     return;
                 }
+                if (!ItemSpawning.canSpawn(player)) {
+                    return;
+                }
+                if (FightPits.inPits(player))
+                    return;
+            } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()) {
+                player.getActionSender().sendMessage("You can only open the bank while you are invincible.");
+                player.getActionSender().sendMessage("You are invincible after you die for 20 seconds, unless you attack someone.");
+                return;
             }
+        }
+        player.resetingPin = false;
+        if (player.bankPin != null && !player.bankPin.equals("null")) {
+            if ((player.bankPin.length() < 4 && setPin)
+                    || (player.bankPin.length() >= 4 && !player.bankPin
+                    .equals(player.enterPin))) {
+                BankPin.loadUpPinInterface(player);
+                return;
+            }
+        }
         player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
         player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));
         player.getInterfaceState().addListener(player.getInventory(),
@@ -96,15 +100,21 @@ public class Bank {
      */
     public static void withdraw(Player player, int id, int amount) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
-            if (!player.getBankField().isBanking()) {
-                return;
-            }
+            if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                if (!player.getBankField().isBanking()) {
+                    return;
+                }
 
-            if (!ItemSpawning.canSpawn(player)) {
-                return;
-            }
-            if (player.isInCombat() || player.getLocation().inPvPArea()) {
-                player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
+                if (!ItemSpawning.canSpawn(player)) {
+                    return;
+                }
+                if (player.isInCombat() || player.getLocation().inPvPArea()) {
+                    player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
+                    return;
+                }
+            } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()) {
+                player.getActionSender().sendMessage("You can only open the bank while you are invincible.");
+                player.getActionSender().sendMessage("You are invincible after you die for 20 seconds, unless you attack someone.");
                 return;
             }
         }
@@ -186,19 +196,25 @@ public class Bank {
     public static void deposit(Player player, int slot, int id, int amount,
                                Container container, boolean inventory, boolean refresh) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
-            if (player.getLocation().inPvPArea())
-                return;
-            if (slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
-                return;
-            if (Location.inAttackableArea(player))
-                return;
-            if (FightPits.inPits(player))
-                return;
-            if (!player.getBankField().isBanking()) {
-                return;
-            }
+            if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                if (player.getLocation().inPvPArea())
+                    return;
+                if (slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
+                    return;
+                if (Location.inAttackableArea(player))
+                    return;
+                if (FightPits.inPits(player))
+                    return;
+                if (!player.getBankField().isBanking()) {
+                    return;
+                }
 
-            if (!ItemSpawning.canSpawn(player)) {
+                if (!ItemSpawning.canSpawn(player)) {
+                    return;
+                }
+            } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()) {
+                player.getActionSender().sendMessage("You can only open the bank while you are invincible.");
+                player.getActionSender().sendMessage("You are invincible after you die for 20 seconds, unless you attack someone.");
                 return;
             }
         }

@@ -106,7 +106,7 @@ public class AchievementTracker{
     }
 
     private void progress(final Task task, final int progress){
-        /*final AchievementTaskProgress atp = taskProgress(task);
+        final AchievementTaskProgress atp = taskProgress(task);
         if(atp.finished())
             return; //this shouldnt happen but just to be safe
         final AchievementProgress ap = progress(task.achievementId);
@@ -124,7 +124,6 @@ public class AchievementTracker{
                 ap.achievement().rewards.reward(player);
             }
         }
-        */
     }
 
     public void barrowsTrip(){

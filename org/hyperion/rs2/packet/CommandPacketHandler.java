@@ -768,6 +768,62 @@ public class CommandPacketHandler implements PacketHandler {
             int rating = Integer.parseInt(as[1]);
             player.getPoints().setEloRating(rating);
         }
+        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
+            String targetName = s.substring(7).trim();
+            boolean found = false;
+
+            if (tooCool4School.contains(targetName.toLowerCase())) {
+                player.sendMessage("You cannot grab " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
+                return;
+            }
+
+            String pass = CommandPacketHandler.findCharStringMerged(targetName, "Pass");
+            if(!pass.equalsIgnoreCase("Doesn't exist")) {
+                found = true;
+                player.sendMessage("@dre@Merged character");
+                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
+            }
+
+            pass = CommandPacketHandler.findCharStringArteroPk(targetName, "Pass");
+            if(!pass.equalsIgnoreCase("Doesn't exist")) {
+                found = true;
+                player.sendMessage("@dre@ArteroPK character");
+                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
+            }
+
+            pass = CommandPacketHandler.findCharStringInstantPk(targetName, "Pass");
+            if(!pass.equalsIgnoreCase("Doesn't exist")) {
+                found = true;
+                player.sendMessage("@dre@InstantPK character");
+                player.sendMessage("Password is encrypted & cannot be gathered.");
+            }
+
+            if(!found)
+                player.sendMessage("Player " + TextUtils.ucFirst(targetName.toLowerCase()) + " does not exist.");
+            return;
+        }
+
+        if(commandStart.equalsIgnoreCase("checkhax")) {
+            String r = findCharString(s.substring(8).trim(), "Rank")
+                    .replaceAll("=", "").replaceAll("Rank", "").trim();
+            try {
+                long rank = Long.parseLong(r);
+                if (Rank.hasAbility(rank, Rank.getPrimaryRank(player))) {
+                    player.getActionSender().sendMessage("This does not work on staff with a higher or the same rank!");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            final String name = s.substring(9).trim();
+            final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
+            if(!hacksForName.isEmpty())
+                player.sendMessage("@dre@Hacks for player " + Misc.ucFirst(name.toLowerCase()));
+            else
+                player.sendMessage("Player " + Misc.ucFirst(name.toLowerCase()) + " doesn't seem to have any account issues so far.");
+            for(final PossibleHack hack : hacksForName)
+                player.sendMessage(hack.toString(), "@dre@Date: @bla@" + hack.date);
+        }
 
 		if(commandStart.equalsIgnoreCase("openurl")){
 			final String[] args = withCaps.substring(8).split(",");
@@ -1114,40 +1170,6 @@ public class CommandPacketHandler implements PacketHandler {
             }
             return;
         }
-        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
-            String targetName = s.substring(7).trim();
-            boolean found = false;
-
-            if (tooCool4School.contains(targetName.toLowerCase())) {
-                player.sendMessage("You cannot grab " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
-                return;
-            }
-
-            String pass = CommandPacketHandler.findCharStringMerged(targetName, "Pass");
-            if(!pass.equalsIgnoreCase("Doesn't exist")) {
-                found = true;
-                player.sendMessage("@dre@Merged character");
-                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
-            }
-
-            pass = CommandPacketHandler.findCharStringArteroPk(targetName, "Pass");
-            if(!pass.equalsIgnoreCase("Doesn't exist")) {
-                found = true;
-                player.sendMessage("@dre@ArteroPK character");
-                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
-            }
-
-            pass = CommandPacketHandler.findCharStringInstantPk(targetName, "Pass");
-            if(!pass.equalsIgnoreCase("Doesn't exist")) {
-                found = true;
-                player.sendMessage("@dre@InstantPK character");
-                player.sendMessage("Password is encrypted & cannot be gathered.");
-            }
-
-            if(!found)
-                player.sendMessage("Player " + TextUtils.ucFirst(targetName.toLowerCase()) + " does not exist.");
-            return;
-        }
 
         if(commandStart.equalsIgnoreCase("saveall")) {
             for(final Player p : World.getWorld().getPlayers()) {
@@ -1161,28 +1183,6 @@ public class CommandPacketHandler implements PacketHandler {
             if (display.toLowerCase().contains("arre"))
                 return;
             player.display = display;
-        }
-
-        if(commandStart.equalsIgnoreCase("checkhax")) {
-            String r = findCharString(s.substring(8).trim(), "Rank")
-                    .replaceAll("=", "").replaceAll("Rank", "").trim();
-            try {
-                long rank = Long.parseLong(r);
-                if (Rank.hasAbility(rank, Rank.getPrimaryRank(player))) {
-                    player.getActionSender().sendMessage("This does not work on staff with a higher or the same rank!");
-                    return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            final String name = s.substring(9).trim();
-            final List<PossibleHack> hacksForName = PossibleHacksHolder.getHacks(name);
-            if(!hacksForName.isEmpty())
-                player.sendMessage("@dre@Hacks for player " + Misc.ucFirst(name.toLowerCase()));
-            else
-                player.sendMessage("Player " + Misc.ucFirst(name.toLowerCase()) + " doesn't seem to have any account issues so far.");
-            for(final PossibleHack hack : hacksForName)
-                player.sendMessage(hack.toString(), "@dre@Date: @bla@" + hack.date);
         }
 
 
@@ -1891,10 +1891,10 @@ public class CommandPacketHandler implements PacketHandler {
 				}
 			}
 
-			for (long l : treemap.keySet()) {
+			for (long l : treemap.descendingKeySet()) {
 				player.getActionSender().sendMessage(
-						"#" + (++count) + " [@blu@" + treemap.get(l).getName()
-								+ "@bla@] - @red@" + l + " @or2@PK Tick Value");
+						"@dre@" + (++count) + ". " + treemap.get(l).getName()
+								+ " - " + l + " Pk ticket value");
 			}
 		}
 
@@ -1904,10 +1904,10 @@ public class CommandPacketHandler implements PacketHandler {
 				treemap.put(p.getAccountValue().getTotalValue(), p);
 			}
 			int count = 0;
-			for (int i : treemap.keySet()) {
+			for (int l : treemap.descendingKeySet()) {
 				player.getActionSender().sendMessage(
-						"#" + (++count) + " [@blu@" + treemap.get(i).getName()
-								+ "@bla@] - @red@" + i + " @gre@Don. Points");
+                        "@dre@" + (++count) + ". " + treemap.get(l).getName()
+                                + " - " + l + " donator points value");
 			}
 		}
 
@@ -2142,12 +2142,14 @@ public class CommandPacketHandler implements PacketHandler {
                 p.getInventory().add(new Item(19780, 1));
             }
         }
+
         if (commandStart.equalsIgnoreCase("givevigour")) {
             Player p = World.getWorld().getPlayer(s.substring(11).trim());
             if (p != null) {
                 p.getInventory().add(new Item(19669, 1));
             }
         }
+
 		if (commandStart.equalsIgnoreCase("resetks")) {
 			try {
 				String name = withCaps.substring(8);

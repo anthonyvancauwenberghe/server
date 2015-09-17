@@ -15,59 +15,59 @@ import org.hyperion.util.Time;
 
 public class DonationsSQLConnection extends MySQLConnection {
 
-	public DonationsSQLConnection(Configuration config) {
-		super("DonationsSQL", config.getString("donationsurl"), config.getString("donationsuser"), config.getString("donationspass"), 30000, 3000, 300);
-	}
+    public DonationsSQLConnection(Configuration config) {
+        super("DonationsSQL", config.getString("donationsurl"), config.getString("donationsuser"), config.getString("donationspass"), 30000, 3000, 300);
+    }
 
-	public DonationsSQLConnection(String url, String username, String password) {
-		super("DonationsSQL", url, username, password, 30000, 3000, 300);
-	}
+    public DonationsSQLConnection(String url, String username, String password) {
+        super("DonationsSQL", url, username, password, 30000, 3000, 300);
+    }
 
-	@Override
-	public boolean init() {
-		if(! Server.getConfig().getBoolean("sql"))
-			return false;
-		establishConnection();
-		try {
-			submit(new KeepConnectionAliveEvent());
-			submit(new ClaimEvent());
-			start();
-		} catch(Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		Command voteCommand = new Command("voted", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				long lastTime = player.getExtraData().getLong("lastsql");
-				if(System.currentTimeMillis() - lastTime < Time.ONE_SECOND * 20) {
-					player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
-					return false;
-				}
-				World.getWorld().getDonationsConnection()
-						.offer(new VoteRequest(player));
-				player.getExtraData().put("lastsql", System.currentTimeMillis());
-				return true;
-			}
-		};
-		Command donationCommand = new Command("getpoints",
-				Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				long lastTime = player.getExtraData().getLong("lastsql");
-				if(System.currentTimeMillis() - lastTime < Time.ONE_SECOND * 20) {
-					player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
-					return false;
-				}
-				World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
-				player.getExtraData().put("lastsql", System.currentTimeMillis());
-				return true;
-			}
-		};
-		//CommandHandler.submit(voteCommand, donationCommand);
+    @Override
+    public boolean init() {
+        if (!Server.getConfig().getBoolean("sql"))
+            return false;
+        establishConnection();
+        try {
+            submit(new KeepConnectionAliveEvent());
+            submit(new ClaimEvent());
+            start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        Command voteCommand = new Command("voted", Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) {
+                long lastTime = player.getExtraData().getLong("lastsql");
+                if (System.currentTimeMillis() - lastTime < Time.ONE_SECOND * 20) {
+                    player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
+                    return false;
+                }
+                World.getWorld().getDonationsConnection()
+                        .offer(new VoteRequest(player));
+                player.getExtraData().put("lastsql", System.currentTimeMillis());
+                return true;
+            }
+        };
+        Command donationCommand = new Command("getpoints",
+                Rank.PLAYER) {
+            @Override
+            public boolean execute(Player player, String input) {
+                long lastTime = player.getExtraData().getLong("lastsql");
+                if (System.currentTimeMillis() - lastTime < Time.ONE_SECOND * 20) {
+                    player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
+                    return false;
+                }
+                World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
+                player.getExtraData().put("lastsql", System.currentTimeMillis());
+                return true;
+            }
+        };
+        CommandHandler.submit(voteCommand, donationCommand);
 
-		return true;
-		/*
+        return true;
+        /*
 		 * CommandHandler.submit(new Command("debugsql", Command.ADMIN_RIGHTS) {
 		 * 
 		 * @Override public void execute(Player player, String input) {
@@ -90,6 +90,6 @@ public class DonationsSQLConnection extends MySQLConnection {
 		 * resetSQLObject(); getSQL().start();
 		 * player.getActionSender().sendMessage("Done!"); } });
 		 */
-	}
+    }
 
 }

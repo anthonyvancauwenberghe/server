@@ -24,7 +24,7 @@ public class ClaimEvent extends SQLEvent {
 
     @Override
     public void execute(SQLConnection sql) throws SQLException {
-        List<Player> donated = new ArrayList<Player>();
+ /*       List<Player> donated = new ArrayList<Player>();
         List<Player> voted = new ArrayList<Player>();
 
         ResultSet rs = sql.query("SELECT * FROM donator WHERE `currentTime` >= DATE_SUB(NOW(), INTERVAL 14 DAY) and finished=0 and amount>0");
@@ -42,7 +42,7 @@ public class ClaimEvent extends SQLEvent {
             rs.close();
         }
 
-        rs = sql.query("SELECT * FROM waitingVotes WHERE processed=0");
+        rs = sql.query("SELECT * FROM waitingVotes WHERE voted=0");
         if(rs != null) {
             while(rs.next()) {
                 String name = rs.getString("realUsername");
@@ -55,7 +55,7 @@ public class ClaimEvent extends SQLEvent {
                 }
             }
             rs.close();
-        }
+        }*/
         super.updateStartTime();
     }
 

@@ -922,7 +922,7 @@ public class Combat {
         if (combatEntity.getAbsZ() != opponent.getAbsZ())
             return "This player is too far away to attack!";
         if (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())) {
-            if (opponent.getPlayer().getExtraData().getLong("combatimmunity") > System.currentTimeMillis()) {
+            if (opponent != null && opponent.getPlayer().getExtraData().getLong("combatimmunity") > System.currentTimeMillis()) {
                 return "This player is currently immune.";
             }
         }

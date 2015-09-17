@@ -803,6 +803,27 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
 
+        if (commandStart.equalsIgnoreCase("infhp")) {
+            Player target = null;
+            try {
+                target = World.getWorld().getPlayer(
+                        s.substring(6).trim());
+            } catch (NullPointerException
+                    | StringIndexOutOfBoundsException e) {
+            }
+            target = (target == null) ? player : target;
+
+            final Player t = target;
+            World.getWorld().submit(new Event(500) {
+                public void execute() {
+                    int hp = t.getSkills().calculateMaxLifePoints();
+                    t.getSkills().setLevel(Skills.HITPOINTS, hp);
+                    if (t.cE == null)
+                        this.stop();
+                }
+            });
+        }
+
         if(commandStart.equalsIgnoreCase("checkhax")) {
             String r = findCharString(s.substring(8).trim(), "Rank")
                     .replaceAll("=", "").replaceAll("Rank", "").trim();
@@ -1339,8 +1360,8 @@ public class CommandPacketHandler implements PacketHandler {
 		}
 		if (commandStart.equalsIgnoreCase("findcoolloc")) {
 			player.setTeleportTarget(Location.create(
-					Combat.random(3000), Combat.random(3000),
-					Combat.random(3)));
+                    Combat.random(3000), Combat.random(3000),
+                    Combat.random(3)));
 		}
 		if (commandStart.equalsIgnoreCase("killnpcs")) {
 			for (NPC n : player.getRegion().getNpcs()) {
@@ -1375,7 +1396,7 @@ public class CommandPacketHandler implements PacketHandler {
 		if (commandStart.equalsIgnoreCase("teleothercloseloc")) {
 			Player other = World.getWorld().getPlayer(as[1]);
 			other.setTeleportTarget(player.getLocation()
-					.getCloseLocation());
+                    .getCloseLocation());
 		}
 
 		/**
@@ -1518,7 +1539,7 @@ public class CommandPacketHandler implements PacketHandler {
 				Combat.follow(summ.cE, player.cE);
 			} else {
 				player.getActionSender().sendMessage(
-						"You don't have a familiar");
+                        "You don't have a familiar");
 			}
 		}
 
@@ -1548,27 +1569,6 @@ public class CommandPacketHandler implements PacketHandler {
 				});
 			}
 			return;
-		}
-
-		if (commandStart.equalsIgnoreCase("infhp")) {
-			Player target = null;
-			try {
-				target = World.getWorld().getPlayer(
-						s.substring(6).trim());
-			} catch (NullPointerException
-					| StringIndexOutOfBoundsException e) {
-			}
-			target = (target == null) ? player : target;
-
-			final Player t = target;
-			World.getWorld().submit(new Event(500) {
-				public void execute() {
-					int hp = t.getSkills().calculateMaxLifePoints();
-					t.getSkills().setLevel(Skills.HITPOINTS, hp);
-					if (t.cE == null)
-						this.stop();
-				}
-			});
 		}
 
 		if (commandStart.equalsIgnoreCase("showalert")) {

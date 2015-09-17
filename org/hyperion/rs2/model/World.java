@@ -35,6 +35,7 @@ import org.hyperion.rs2.event.EventManager;
 import org.hyperion.rs2.event.impl.*;
 import org.hyperion.rs2.login.LoginServerConnector;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentManager;
@@ -934,8 +935,6 @@ public class World {
             LastManStanding.getLastManStanding().leaveGame(player, true);
         }
         Trade.declineTrade(player);
-        if(player.getTrader() != null)
-            Trade.declineTrade(player.getTrader());
         FightPits.removePlayerFromGame(player, false);
         BountyHunter.fireLogout(player);
         FriendsAssistant.refreshGlobalList(player, true);

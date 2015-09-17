@@ -81,6 +81,7 @@ public class ObstaclePipe extends Obstacle {
                         player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
                     }
                     else if(progress == 0) {
+                        player.setTeleportTarget(end);
                         reset(player);
                         course.progressCourse(player, getProgress());
                         stop();

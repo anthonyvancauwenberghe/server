@@ -222,6 +222,12 @@ public class NpcDeathEvent extends Event {
                             chance = 500;
                         if(npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
+                        if(player.getExtraData().getLong("increasedDroprate") <= System.currentTimeMillis()) {
+                            chance = (int)(chance * player.getExtraData().getLong("dropRateMultiplier")) - chance;
+                        } else if(player.getExtraData().getLong("increasedDroprate") > System.currentTimeMillis()) {
+                            player.getExtraData().remove("increaseDroprate");
+                            player.getExtraData().remove("dropRateMultiplier");
+                        }
                         for(NPCDrop drop : npc.getDefinition().getDrops()) {
                             if(drop == null) continue;
                             if(Combat.random(chance) <= drop.getChance()) {

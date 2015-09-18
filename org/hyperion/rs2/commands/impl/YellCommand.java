@@ -24,6 +24,16 @@ public class YellCommand extends Command {
 	}
 
 	private int getYellDelay(Player player) {
+		if(player.getExtraData().getLong("loweredYellTimer") <= System.currentTimeMillis()) {
+			if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
+				return (int)(SUPER_YELL_DELAY * player.getExtraData().getLong("loweredYellTimer"));
+			else if (Rank.hasAbility(player, Rank.DONATOR))
+				return (int)(DONATOR_YELL_DELAY * player.getExtraData().getLong("loweredYellTimer"));
+			return (int)(NORMAL_YELL_DELAY * player.getExtraData().getLong("loweredYellTimer"));
+		} else if(player.getExtraData().getLong("loweredYellTimer") > System.currentTimeMillis()) {
+			player.getExtraData().remove("loweredYellTimer");
+			player.getExtraData().remove("yellReduction");
+		}
 		if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
 			return SUPER_YELL_DELAY;
 		else if (Rank.hasAbility(player, Rank.DONATOR))

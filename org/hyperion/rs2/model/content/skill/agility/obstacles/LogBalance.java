@@ -46,10 +46,11 @@ public class LogBalance extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, start.distance(end) + 1, message);
         player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
-        World.getWorld().submit(new Event(tick * 600) {
+        World.getWorld().submit(new Event((start.distance(end) + 1) * 600) {
             @Override
             public void execute() {
                 player.setTeleportTarget(end);
+                stop();
             }
         });
     }

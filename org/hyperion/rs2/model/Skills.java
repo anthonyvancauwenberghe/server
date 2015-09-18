@@ -543,13 +543,13 @@ public class Skills {
         	exp *= 1.02;
         }
 
-		if(player.getExtraData().getLong("doubleExperience") > System.currentTimeMillis()) {
+		if(player.getExtraData().getLong("doubleExperience") < System.currentTimeMillis() && player.getExtraData().getLong("doubleExperience") != 0) {
 			player.getExtraData().remove("doubleExperience");
 		}
 
 		if(skill == BONUS_SKILL)
 			exp *= 2;
-		else if(player.getExtraData().getLong("doubleExperience") <= System.currentTimeMillis())
+		else if(player.getExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getExtraData().getLong("doubleExperience") != 0)
 			exp *= 2;
 		else if(skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;

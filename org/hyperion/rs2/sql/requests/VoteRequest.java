@@ -253,7 +253,7 @@ public class VoteRequest extends SQLRequest {
         //Now we do the bonus if the player needs one
         StringBuilder sb = new StringBuilder();
         if(runelocus && topg && rspslist) {
-            //sb.append(doBonus());
+            sb.append(doBonus());
         } else {
         //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
             sb.append("You can still vote on ");

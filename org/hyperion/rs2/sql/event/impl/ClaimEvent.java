@@ -15,8 +15,8 @@ import org.hyperion.util.Time;
 
 public class ClaimEvent extends SQLEvent {
 
-    //public static final long DELAY = Time.ONE_MINUTE;
-    public static final long DELAY = Time.ONE_SECOND * 10;
+    public static final long DELAY = Time.ONE_MINUTE;
+    //public static final long DELAY = Time.ONE_SECOND * 10;
 
     public ClaimEvent() {
         super(DELAY);

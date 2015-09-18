@@ -67,6 +67,7 @@ import org.hyperion.rs2.model.UpdateFlags;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
+import org.hyperion.rs2.model.cluescroll.ClueScroll;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
@@ -1884,15 +1885,15 @@ public class CommandHandler {
                 try{
                     int amount = Integer.parseInt(filterInput(input).trim());
                     if(amount < 1){
-                        player.sendf("retard");
+                        player.sendMessage("You need to try and spawn at least 1 of them.");
                         return false;
                     }
                     if(amount == 1)
                         amount = 2;
-                    for(int id = ClueScrollManager.MIN_ID; id <= ClueScrollManager.MAX_ID; id++)
-                        player.getBank().add(new BankItem(0, id, amount));
+                    for(ClueScroll clue : ClueScrollManager.getAll())
+                        player.getBank().add(new BankItem(0, clue.getId(), amount));
                     return true;
-                }catch(Exception ex){
+                } catch(Exception ex) {
                     player.sendf("Enter a valid amount");
                     return false;
                 }

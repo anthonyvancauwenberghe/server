@@ -25,7 +25,7 @@ public class ExperienceReward extends Reward{
 
     protected boolean give(final Player player, final int amount){
         player.getSkills().addExperience(skill, amount);
-        player.sendf("@red@%,d %s XP @blu@has been added to your account!", amount, Skills.SKILL_NAME[skill]);
+        player.sendf("You receive @%,d %s experience.", amount, Skills.SKILL_NAME[skill].toLowerCase());
         return true;
     }
 

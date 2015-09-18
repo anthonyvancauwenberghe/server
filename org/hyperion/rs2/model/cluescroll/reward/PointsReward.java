@@ -49,7 +49,7 @@ public class PointsReward extends Reward{
 
     protected boolean give(final Player player, final int amount){
         type.apply(player, amount);
-        player.sendf("@blu@You have been awarded @red@%,d %s", amount, type);
+        player.sendf("@blu@You receive %,d %s", amount, type.toString().toLowerCase());
         return true;
     }
 

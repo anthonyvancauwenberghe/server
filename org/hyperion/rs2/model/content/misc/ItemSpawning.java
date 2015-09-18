@@ -169,7 +169,7 @@ public class ItemSpawning {
 			case Dicing.DICE_ID:
 				return "";
 		}
-        if(id >= ClueScrollManager.MIN_ID && id <= ClueScrollManager.MAX_ID)
+        if(ItemDefinition.forId(id).getName().toLowerCase().replaceAll("_", " ").contains("clue scroll"))
             return "You cannot spawn these!";
 		if(id > MAX_ID || id <= 0)
 			return "You have specified an id that is out of range.";

@@ -38,47 +38,27 @@ public final class ClueScrollManager {
         }
     }
 
-    public static final int MIN_ID = 2677;
-    public static final int MAX_ID = 2713;
-
     private ClueScrollManager(){}
 
     public static void trigger(final Player player, final int id){
-        final ClueScroll cs = getInInventory(player);
-        if(cs == null)
+        final ClueScroll clue = getInInventory(player);
+        if(clue == null)
             return;
-        if(!Rank.hasAbility(player, Rank.DEVELOPER)){
-            for(int i = MIN_ID; i <= MAX_ID; i++){
-                final int invCount = player.getInventory().getCount(i);
-                final int bankCount = player.getInventory().getCount(i);
-                if(invCount > 0)
-                    player.getInventory().remove(new Item(i, invCount));
-                if(bankCount > 0)
-                    player.getBank().remove(new Item(i, bankCount));
-            }
-            for(final Player p : World.getWorld().getPlayers()){
-                if(p != null && Rank.hasAbility(p, Rank.HELPER)){
-                    p.sendf("%s had clue scrolls! - Contact someone with a higher rank", player.getName());
-                }
-            }
-            player.sendf("All clue scrolls have been removed and a report has been sent.");
-            return;
-        }
-        if(cs.getTrigger().getId() != id) {
+        if(clue.getTrigger().getId() != id) {
             if(player.debug)
-                player.sendf("cluescroll trigger: %d | your trigger: %d", cs.getTrigger().getId(), id);
+                player.sendf("cluescroll trigger: %d | your trigger: %d", clue.getTrigger().getId(), id);
             return;
         }
         if(getInventoryCount(player) > 1){
-            player.sendf("You are only allowed to have 1 clue scroll in your inventory");
+            player.sendMessage("You are only allowed to have 1 clue scroll in your inventory!");
             return;
         }
-        if(!cs.hasAllRequirements(player)) {
+        if(!clue.hasAllRequirements(player)) {
             if(player.debug)
-                player.sendf("you don't meet all requirements");
+                player.sendMessage("You do not meet all requirements for this clue scroll.");
             return;
         }
-        cs.apply(player);
+        clue.apply(player);
     }
 
     public static void trigger(final Player player, final ClueScroll.Trigger trigger){
@@ -120,7 +100,7 @@ public final class ClueScrollManager {
         return MAP.values();
     }
 
-    public static Collection<ClueScroll> getAll(final ClueScroll.Difficulty difficulty){
+    public static List<ClueScroll> getAll(final ClueScroll.Difficulty difficulty){
         return DIFFICULTY_MAP.get(difficulty);
     }
 

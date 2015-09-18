@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cluescrolls>
-    <cluescroll difficulty="EASY" id="2677" trigger="JUMP_FOR_JOY">
-        <description>Next to the store of defensive
-            walls, jump for joy near the stool.
-            Equip a Sled and Void Melee Set.</description>
+    <cluescroll difficulty="EASY" id="10180" trigger="JUMP_FOR_JOY">
+        <description>Next to the store of defensive walls, jump for joy near the stool. Equip a Sled and Void Melee Set.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2979</x>
@@ -84,10 +82,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2678" trigger="CRY">
-        <description>Cry under the Gambler.
-            Equip Magic Secateurs
-            and be level 70 combat.</description>
+    <cluescroll difficulty="EASY" id="10182" trigger="CRY">
+        <description>Cry under the Gambler. Equip Magic Secateurs and be level 70 combat.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3089</x>
@@ -97,9 +93,6 @@
             <requirement type="EQUIPMENT">
                 <slot>3</slot>
                 <itemId>7409</itemId>
-            </requirement>
-            <requirement type="COMBAT_LEVEL">
-                <combatLevel>70</combatLevel>
             </requirement>
         </requirements>
         <rewards>
@@ -135,12 +128,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2679" trigger="ANGRY">
-        <description>I'M TIRED OF THESE ARROWS!
-            SHOW YOUR ANGER at the
-            Ranging Guild door!
-            I know you're fearless because
-            of the Bravery Potion you have.</description>
+    <cluescroll difficulty="EASY" id="10184" trigger="ANGRY">
+        <description>I'M TIRED OF THESE ARROWS! SHOW YOUR ANGER at the Ranging Guild door! I know you're fearless because of the Bravery Potion you have.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2657</x>
@@ -179,11 +168,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2681" trigger="LAUGH">
-        <description>The horrible smell from above
-            will not be able to keep me from
-            my treasure! Laugh south of the chain
-            with a Gas Mask and Cattleprod.</description>
+    <cluescroll difficulty="EASY" id="10186" trigger="LAUGH">
+        <description>The horrible smell from above will not be able to keep me from my treasure! Laugh south of the chain with a Gas Mask and Cattleprod.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3422</x>
@@ -232,12 +218,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2682" trigger="HEAD_BANG">
-        <description>Those greedy Dwaves won't let you
-            into their guild? Let's see
-            what they think when you have a Bomber
-            Jacket and Gunpowder on you
-            at the door. Headbang with 60 Firemaking.</description>
+    <cluescroll difficulty="EASY" id="10188" trigger="HEAD_BANG">
+        <description>Those greedy Dwaves won't let you into their guild? Let's see what they think when you have a Bomber Jacket and Gunpowder on you at the door. Headbang with 60 Firemaking.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3046</x>
@@ -290,12 +272,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2683" trigger="PANIC">
-        <description>UH OH!
-            It's time for to get new clothes!
-            Panic at  'As Hat Lies' 's
-            store next to the ladder
-            Have 31 agility.</description>
+    <cluescroll difficulty="EASY" id="10190" trigger="PANIC">
+        <description>UH OH! It's time for to get new clothes! Panic at  'As Hat Lies' 's store next to the ladder Have 31 agility.</description>
         <requirements>
             <requirement type="EXPERIENCE">
                 <skill>16</skill>
@@ -340,11 +318,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2684" trigger="RASPBERRY">
-        <description>Blow a Raspberry next to the Fishing
-            Trawler Net. Wear a Brass Necklace,
-            Rainbow Afro, and a Handcannon Shot.
-            You must also be 91 Combat.</description>
+    <cluescroll difficulty="EASY" id="10192" trigger="RASPBERRY">
+        <description>Blow a Raspberry next to the Fishing Trawler Net. Wear a Brass Necklace, Rainbow Afro, and a Handcannon Shot. You must also be 91 Combat.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2667</x>
@@ -406,12 +381,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2685" trigger="HERBLORE_CAPE">
-        <description>Do the Herblore Emote in front
-            of the Statue of Saradomin.
-            Wear a Morrigan's Zuriel's Staff,
-            Morrigan's Leather Body, and
-            Pirate Boots.</description>
+    <cluescroll difficulty="MEDIUM" id="10254" trigger="HERBLORE_CAPE">
+        <description>Do the Herblore Emote in front of the Statue of Saradomin. Wear a Morrigan's Zuriel's Staff, Morrigan's Leather Body, and Pirate Boots.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2515</x>
@@ -471,17 +442,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2686" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2687" trigger="BOW">
-        <description>Do the Herblore Emote in front
-            of the Statue of Saradomin.
-            Wear a Morrigan's Zuriel's Staff,
-            Morrigan's Leather Body, and
-            Pirate Boots.</description>
+    <cluescroll difficulty="MEDIUM" id="10256" trigger="BOW">
+        <description>Do the Herblore Emote in front of the Statue of Saradomin. Wear a Morrigan's Zuriel's Staff, Morrigan's Leather Body, and Pirate Boots.</description>
         <requirements>
             <requirement type="EQUIPMENT">
                 <slot>3</slot>
@@ -540,12 +502,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2688" trigger="ATTACK_CAPE">
-        <description>Do the Attack Cape Emote north
-            of the Ladder that takes you down
-            to the Dagannoth Kings' Lair.
-            You must have 40 slayer and
-            a seercull bow.</description>
+    <cluescroll difficulty="MEDIUM" id="10258" trigger="ATTACK_CAPE">
+        <description>Do the Attack Cape Emote north of the Ladder that takes you down to the Dagannoth Kings' Lair. You must have 40 slayer and a seercull bow.</description>
         <requirements>
             <requirement type="EQUIPMENT">
                 <slot>1</slot>
@@ -608,13 +566,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2689" trigger="FIREMAKING_CAPE">
-        <description>The Unholy Spirit summoned from
-            the Black Candle to find the tool to
-            help Merlin. Do the Firemaking emote
-            in this symbol. Make sure you bring
-            your Lantern to keep the bugs away and
-            your War-Chief Cap.</description>
+    <cluescroll difficulty="MEDIUM" id="10260" trigger="FIREMAKING_CAPE">
+        <description>The Unholy Spirit summoned from the Black Candle to find the tool to help Merlin. Do the Firemaking emote in this symbol. Make sure you bring your Lantern to keep the bugs away and your War-Chief Cap.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2780</x>
@@ -671,13 +624,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2690" trigger="WOODUCTTING_CAPE">
-        <description>This tiny little Island, it looks like
-            a pilot crashed. It has a pit with..
-            GIANT SNAKES!? I'll have to fight them
-            off with my Full Fungicide and the Extreme
-            Defence will help me survive longer. Good
-            thing I can cut any tree with my Cape's Emote.</description>
+    <cluescroll difficulty="MEDIUM" id="10262" trigger="WOODUCTTING_CAPE">
+        <description>This tiny little Island, it looks like a pilot crashed. It has a pit with... GIANT SNAKES!? I'll have to fight them off with my Full Fungicide and the Extreme Defence will help me survive longer. Good thing I can cut any tree with my Cape's Emote.</description>
         <requirements>
             <requirement type="EQUIPMENT">
                 <slot>1</slot>
@@ -740,12 +688,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2691" trigger="SALUTE">
-        <description>The Black Knights have taken the White
-            Tree for 'Mountain Daughter'! Salute
-            north of the tree while wielding a
-            pair of Initiate Cuisse and
-            Proselyte Hauberk, with 75 Herblore. </description>
+    <cluescroll difficulty="MEDIUM" id="10264" trigger="SALUTE">
+        <description>The Black Knights have taken the White Tree for 'Mountain Daughter'! Salute north of the tree while wielding a pair of Initiate Cuisse and Proselyte Hauberk, with 75 Herblore. </description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3534</x>
@@ -796,17 +740,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2692" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2693" trigger="WAVE">
-        <description>The Black Knights have taken the White
-            Tree for 'Mountain Daughter'! Salute
-            north of the tree while wielding a
-            pair of Initiate Cuisse and
-            Proselyte Hauberk, with 75 Herblore. </description>
+    <cluescroll difficulty="MEDIUM" id="10266" trigger="WAVE">
+        <description>The Black Knights have taken the White Tree for 'Mountain Daughter'! Salute north of the tree while wielding a pair of Initiate Cuisse and Proselyte Hauberk, with 75 Herblore. </description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2386</x>
@@ -858,12 +793,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="MEDIUM" id="2694" trigger="SMITHING_CAPE">
-        <description>Smithing emote at the South
-            Eastern corner of Duel Arena?
-            Maybe you should get a Top hat,
-            Brown Infinity Robe and Adamant
-            Defender to go with that.</description>
+    <cluescroll difficulty="MEDIUM" id="10268" trigger="SMITHING_CAPE">
+        <description>Smithing emote at the South Eastern corner of Duel Arena? Maybe you should get a Top hat, Brown Infinity Robe and Adamant Defender to go with that.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3392</x>
@@ -924,23 +855,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2695" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="EASY" id="2696" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="HARD" id="2697" trigger="SPIN">
-        <description>I don't think the guardsmen with
-            their glass bows will just open
-            the Huge Gate by Waving....
-            Especially when I'm only level 54
-            with a Chaotic Maul and Imbued
-            Seer's Ring.</description>
+    <cluescroll difficulty="HARD" id="10234" trigger="SPIN">
+        <description>I don't think the guardsmen with their glass bows will just open the Huge Gate by Waving... Especially when I'm only level 54 with a Chaotic Maul and Imbued Seer's Ring.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2994</x>
@@ -1007,18 +923,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2698" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="HARD" id="2699" trigger="WAVE">
-        <description>I don't think the guardsmen with
-            their glass bows will just open
-            the Huge Gate by Waving....
-            Especially when I'm only level 54
-            with a Chaotic Maul and Imbued
-            Seer's Ring.</description>
+    <cluescroll difficulty="HARD" id="10236" trigger="WAVE">
+        <description>I don't think the guardsmen with their glass bows will just open the Huge Gate by Waving... Especially when I'm only level 54 with a Chaotic Maul and Imbued Seer's Ring.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3441</x>
@@ -1081,18 +987,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2700" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="HARD" id="2701" trigger="FLETCHING_CAPE">
-        <description>I don't think the guardsmen with
-            their glass bows will just open
-            the Huge Gate by Waving....
-            Especially when I'm only level 54
-            with a Chaotic Maul and Imbued
-            Seer's Ring.</description>
+    <cluescroll difficulty="HARD" id="10238" trigger="FLETCHING_CAPE">
+        <description>I don't think the guardsmen with their glass bows will just open the Huge Gate by Waving.... Especially when I'm only level 54 with a Chaotic Maul and Imbued Seer's Ring.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3294</x>
@@ -1162,17 +1058,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2702" trigger="BOW">
-        <description>Enter Description</description>
-        <requirements/>
-        <rewards/>
-    </cluescroll>
-    <cluescroll difficulty="HARD" id="2703" trigger="YAWN">
-        <description>Yawn south of the eastern most
-            Tree in Level 18 Wild. You must wield
-            a Chaotic Kiteshield, Bandos Boots,
-            and have 4 Rockcakes, 2 Gold Rings,
-            and 1 Special Restore Potion on you.
+    <cluescroll difficulty="HARD" id="10240" trigger="YAWN">
+        <description>Yawn south of the eastern most Tree in Level 18 Wild. You must wield a Chaotic Kiteshield, Bandos Boots, and have 4 Rockcakes, 2 Gold Rings, and 1 Special Restore Potion on you.
         </description>
         <requirements>
             <requirement type="LOCATION">
@@ -1240,13 +1127,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2704" trigger="BOW">
-        <description>Solve this anagram to find out
-            what npc's store to go to.
-            Risk Gun elm.
-            Bow at the location with
-            a Warrior Ring (i), Fighter
-            Torso, and Bandos Tassets.</description>
+    <cluescroll difficulty="ELITE" id="19043" trigger="BOW">
+        <description>Solve this anagram to find out what npc's store to go to. \n'RISK GUN ELM'\n Bow at the location with a Warrior Ring (i), Fighter Torso, and Bandos Tassets.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2661</x>
@@ -1305,13 +1187,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2705" trigger="THIEVING_CAPE">
-        <description>This yellow unburdened soil, among the black.
-            With the Two mushrooms on the top.
-            Do the Thieving emote above the brown
-            entrance. Equip a pair of Novite
-            Boots and have a Charm Collector
-            in your inventory.</description>
+    <cluescroll difficulty="ELITE" id="19044" trigger="THIEVING_CAPE">
+        <description>This yellow unburdened soil, among the black. With the Two mushrooms on the top. Do the Thieving emote above the brown entrance. Equip a pair of Novite Boots and have a Charm Collector in your inventory.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3167</x>
@@ -1368,12 +1245,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2706" trigger="CLIMB_ROPE">
-        <description>Climb the rope when your in
-            search of a wedding ring to the
-            North while wearing your lucky Silver
-            Necklace and the purple otherworldy
-            ward. Have 83 Summoning and 115 combat.</description>
+    <cluescroll difficulty="ELITE" id="19045" trigger="CLIMB_ROPE">
+        <description>Climb the rope when your in search of a wedding ring to the North while wearing your lucky Silver Necklace and the purple otherworldy ward. Have 83 Summoning and 115 combat.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2912</x>
@@ -1435,12 +1308,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2707" trigger="ANGRY">
-        <description>I'm not of a lover of fowl, but
-            solve this anagram to reveal
-            my true identity!
-            'IRAN COVE'
-            Show your anger on the steps.</description>
+    <cluescroll difficulty="ELITE" id="19046" trigger="ANGRY">
+        <description>I'm not of a lover of fowl, but solve this anagram to reveal my true identity! \n'IRAN COVE'\n Show your anger on the steps.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3497</x>
@@ -1487,13 +1356,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2708" trigger="MAGIC_CAPE">
-        <description>I heard this house holds mages
-            that perform Death Magic. I'll
-            show them my Magical Emote
-            under these charms. My Mastery
-            of Runecrafting will also be of use,
-            aswell as my Virtus Mask.</description>
+    <cluescroll difficulty="ELITE" id="19047" trigger="MAGIC_CAPE">
+        <description>I heard this house holds mages that perform Death Magic. I'll show them my Magical Emote under these charms. My Mastery of Runecrafting will also be of use, aswell as my Virtus Mask.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2665</x>
@@ -1556,14 +1420,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2709" trigger="FARMING_CAPE">
-        <description>I don't think this crude raft
-            will survive down such a rough
-            stream. Even if I am a master of
-            Agility, I don't think my lucky Golden
-            Dark bow and my small Pirate
-            Friend can help me out. Before
-            I head out, I'll plant some flowers.</description>
+    <cluescroll difficulty="ELITE" id="19048" trigger="FARMING_CAPE">
+        <description>I don't think this crude raft will survive down such a rough stream. Even if I am a master of Agility, I don't think my lucky Golden Dark bow and my small Pirate Friend can help me out. Before I head out, I'll plant some flowers.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2510</x>
@@ -1636,13 +1494,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2710" trigger="JUMP_FOR_JOY">
-        <description>They say that across the bridge,
-            that is over lava, holds a monster
-            so fearsome in a cave. That is a delight
-            for a master Slayer, I Jump for Joy. With
-            my Focus Sight on, and my Spirit
-            Kyatt in my inventory, I'm Ready.</description>
+    <cluescroll difficulty="ELITE" id="19049" trigger="JUMP_FOR_JOY">
+        <description>They say that across the bridge, that is over lava, holds a monster so fearsome in a cave. That is a delight for a master Slayer, I Jump for Joy. With my Focus Sight on, and my Spirit Kyatt in my inventory, I'm Ready.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2529</x>
@@ -1705,12 +1558,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2711" trigger="MINING_CAPE">
-        <description>Journey to Red Dragon Island
-            and do the Mining Emote in the
-            middle of 6 Skeletons. Carry
-            1 of each Pk statuette and Sagittarian
-            Vambraces. You must be level 121.</description>
+    <cluescroll difficulty="ELITE" id="19050" trigger="MINING_CAPE">
+        <description>Journey to Red Dragon Island and do the Mining Emote in the middle of 6 Skeletons. Carry 1 of each Pk statuette and Sagittarian Vambraces. You must be level 121.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3211</x>
@@ -1808,13 +1657,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2712" trigger="DANCE">
-        <description>Beneath the Totem made of a
-            pure Tropical Tree, lies the lair
-            of shadows. Go to the end of this
-            dungeon, next to the fungi and Dance.
-            Wield a Purple Tricorn Hat, Dragon
-            Defender and Amulet of Range.</description>
+    <cluescroll difficulty="ELITE" id="19052" trigger="DANCE">
+        <description>Beneath the Totem made of a pure Tropical Tree, lies the lair of shadows. Go to the end of this dungeon, next to the fungi and Dance. Wield a Purple Tricorn Hat, Dragon Defender and Amulet of Range.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2697</x>
@@ -1873,13 +1717,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="ELITE" id="2713" trigger="SUMMONING_CAPE">
-        <description>I hope with this emote I can
-            Summon a familiar that is able
-            to take me across this balancing ledge.
-            Underneath the ledge are poison spiders.
-            I'll bring my Eagle-Eye Kiteshield to protect
-            me aswell as my downgraded Cloak.</description>
+    <cluescroll difficulty="ELITE" id="19052" trigger="SUMMONING_CAPE">
+        <description>I hope with this emote I can Summon a familiar that is able to take me across this balancing ledge. Underneath the ledge are poison spiders. I'll bring my Eagle-Eye Kiteshield to protect me aswell as my downgraded Cloak.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2580</x>
@@ -1942,12 +1781,8 @@
             </reward>
         </rewards>
     </cluescroll>
-    <cluescroll difficulty="EASY" id="2680" trigger="NO">
-        <description>Potions? I would think that
-            true warriors would not need
-            such false strength.
-            Show your disapproval by
-            standing north of the potions.</description>
+    <cluescroll difficulty="EASY" id="10206" trigger="NO">
+        <description>Potions? I would think that true warriors would not need such false strength. Show your disapproval by standing north of the potions.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2845</x>

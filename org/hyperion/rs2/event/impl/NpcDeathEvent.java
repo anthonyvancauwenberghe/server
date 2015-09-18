@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -235,7 +236,7 @@ public class NpcDeathEvent extends Event {
                                             Item.create(drop.getId(), amt));
                                     if (drop.getChance() < 30) {
                                         for (Player p : player.getRegion().getPlayers())
-                                            p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + (amt == 1 ? "a" : amt) + " " + ItemDefinition.forId(drop.getId()).getName() + (amt > 1 ? "s" : "") + ".");
+                                            p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + (amt == 1 ? Misc.aOrAn(ItemDefinition.forId(drop.getId()).getName()) : amt) + " " + ItemDefinition.forId(drop.getId()).getName() + (amt > 1 ? "s" : "") + ".");
                                     }
                                     World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                                 }
@@ -243,6 +244,16 @@ public class NpcDeathEvent extends Event {
                         }
 
                     }
+
+                    if(ClueScrollUtils.dropClueScroll(player, npc)) {
+                        Item clueScroll = ClueScrollUtils.getScroll(npc);
+                        GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(), clueScroll);
+                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                        for (Player p : player.getRegion().getPlayers())
+                            p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + Misc.aOrAn(clueScroll.getDefinition().getName()) + " " + clueScroll.getDefinition().getName() + ".");
+                    }
+
+
                     if(isTask && Misc.random(1000) < 1) {
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),

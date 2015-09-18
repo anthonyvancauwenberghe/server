@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 import org.hyperion.rs2.model.cluescroll.reward.Reward;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
+import org.hyperion.util.Misc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -159,8 +160,8 @@ public class ClueScroll {
     }
 
     public void send(final Player player){
-        final String[] lines = description.replaceAll("<br>", "\n").split("\n");
-        player.getActionSender().openQuestInterface(String.format("%s Clue Scroll", difficulty), lines);
+        final String[] lines = Misc.wrapString(description.replaceAll("<br>", "\n"), 50).split("\n");
+        player.getActionSender().openQuestInterface(String.format("@dre@%s Clue Scroll", Misc.ucFirst(difficulty.toString().toLowerCase())), lines);
         if(player.debug) {
             player.sendf("trigger: %s", trigger);
             for(final Requirement req : requirements)
@@ -172,11 +173,13 @@ public class ClueScroll {
         if(player.getInventory().remove(Item.create(id)) < 1)
             return;
         boolean awarded = false;
-        for(final Reward reward : rewards)
-            if(reward.apply(player))
-                awarded = true;
+        while(!awarded) {
+            for (final Reward reward : rewards)
+                if (reward.apply(player))
+                    awarded = true;
+        }
         if(!awarded)
-            player.sendf("@blu@Unlucky! You never got anything from this clue scroll");
+            player.sendMessage("Congratulations on completing " + Misc.aOrAn(difficulty.toString()) + " " + Misc.ucFirst(difficulty.toString().toLowerCase()) + " clue scroll!");
     }
 
     public Element toElement(final Document doc){

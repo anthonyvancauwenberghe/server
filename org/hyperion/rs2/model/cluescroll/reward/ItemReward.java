@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
+import org.hyperion.util.Misc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,11 +31,10 @@ public class ItemReward extends Reward{
         final BankItem bankItem = new BankItem(0, id, amount);
         if(player.getInventory().hasRoomFor(item)){
             player.getInventory().add(item);
-            player.sendf("@red@%s x%,d@blu@ has been added to your inventory", item.getDefinition().getName(), amount);
-        }else{
+        } else {
             player.getBank().add(bankItem);
-            player.sendf("@red@%s x%,d@blu@ has been added to your inventory", item.getDefinition().getName(), amount);
         }
+        player.sendf("You receive %s '@dre@%s%s@bla@' as a reward.", (amount == 1 ? Misc.aOrAn(item.getDefinition().getName()) : amount), item.getDefinition().getName(), (amount == 1 ? "" : "s"));
         return true;
     }
 

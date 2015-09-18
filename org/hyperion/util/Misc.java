@@ -67,6 +67,30 @@ public class Misc {
 			return (String.format(((amount%1000000)%100000 != 0 ? "%.2f" : "%.1f"), amount / 1000000)  + "M").replace(",", ".");
 	}
 
+	public static String wrapString(String string, int charWrap) {
+		int lastBreak = 0;
+		int nextBreak = charWrap;
+		if (string.length() > charWrap) {
+			String setString = "";
+			do {
+				while (string.charAt(nextBreak) != ' ' && nextBreak > lastBreak) {
+					nextBreak--;
+				}
+				if (nextBreak == lastBreak) {
+					nextBreak = lastBreak + charWrap;
+				}
+				setString += string.substring(lastBreak, nextBreak).trim() + "\n";
+				lastBreak = nextBreak;
+				nextBreak += charWrap;
+
+			} while (nextBreak < string.length());
+			setString += string.substring(lastBreak).trim();
+			return setString;
+		} else {
+			return string;
+		}
+	}
+
 	/**
 	 * @param bigarray
 	 * @param columnindex

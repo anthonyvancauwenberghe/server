@@ -244,7 +244,7 @@ public class NpcDeathEvent extends Event {
                         }
 
                     }
-
+/*
                     if(ClueScrollUtils.dropClueScroll(player, npc)) {
                         Item clueScroll = ClueScrollUtils.getScroll(npc);
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(), clueScroll);
@@ -252,7 +252,7 @@ public class NpcDeathEvent extends Event {
                         for (Player p : player.getRegion().getPlayers())
                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + Misc.aOrAn(clueScroll.getDefinition().getName()) + " " + clueScroll.getDefinition().getName() + ".");
                     }
-
+*/
 
                     if(isTask && Misc.random(1000) < 1) {
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),

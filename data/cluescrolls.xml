@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <cluescrolls>
     <cluescroll difficulty="EASY" id="10180" trigger="JUMP_FOR_JOY">
-        <description>Next to the store of defensive walls, jump for joy near the stool. Equip a Sled and Void Melee Set.</description>
+        <description>In the city of the white knights, look for the shield. Then jump for joy near the stool. Equip a Sled and Void Melee Set.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2979</x>
@@ -273,7 +273,7 @@
         </rewards>
     </cluescroll>
     <cluescroll difficulty="EASY" id="10190" trigger="PANIC">
-        <description>UH OH! It's time for to get new clothes! Panic at  'As Hat Lies' 's store next to the ladder Have 31 agility.</description>
+        <description>UH OH! It's time for to get new clothes! Panic at  'As Hat Lies' 's store next to the ladder have 31 agility.</description>
         <requirements>
             <requirement type="EXPERIENCE">
                 <skill>16</skill>
@@ -1059,7 +1059,7 @@
         </rewards>
     </cluescroll>
     <cluescroll difficulty="HARD" id="10240" trigger="YAWN">
-        <description>Yawn south of the eastern most Tree in Level 18 Wild. You must wield a Chaotic Kiteshield, Bandos Boots, and have 4 Rockcakes, 2 Gold Rings, and 1 Special Restore Potion on you.
+        <description>Yawn south of the most eastern tree in level 18 Wilderness. You must be wielding a Chaotic Kiteshield and Bandos Boots. You must also have 4 Rockcakes, 2 Gold Rings, and 1 Special Restore Potion on you.
         </description>
         <requirements>
             <requirement type="LOCATION">
@@ -1128,7 +1128,7 @@
         </rewards>
     </cluescroll>
     <cluescroll difficulty="ELITE" id="19043" trigger="BOW">
-        <description>Solve this anagram to find out what npc's store to go to. \n'RISK GUN ELM'\n Bow at the location with a Warrior Ring (i), Fighter Torso, and Bandos Tassets.</description>
+        <description>Solve this anagram to find out what npc's store to go to. 'RISK GUN ELM' Bow at the location with a Warrior Ring (i), Fighter Torso, and Bandos Tassets.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2661</x>
@@ -1309,7 +1309,7 @@
         </rewards>
     </cluescroll>
     <cluescroll difficulty="ELITE" id="19046" trigger="ANGRY">
-        <description>I'm not of a lover of fowl, but solve this anagram to reveal my true identity! \n'IRAN COVE'\n Show your anger on the steps.</description>
+        <description>I'm not of a lover of fowl, but solve this anagram to reveal my true identity! 'IRAN COVE' Show your anger on the steps.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>3497</x>

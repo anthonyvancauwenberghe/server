@@ -825,9 +825,9 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if(commandStart.equalsIgnoreCase("checkhax")) {
-            String r = findCharString(s.substring(8).trim(), "Rank")
-                    .replaceAll("=", "").replaceAll("Rank", "").trim();
             try {
+                String r = findCharString(s.substring(8).trim(), "Rank")
+                        .replaceAll("=", "").replaceAll("Rank", "").trim();
                 long rank = Long.parseLong(r);
                 if (Rank.hasAbility(rank, Rank.getPrimaryRank(player))) {
                     player.getActionSender().sendMessage("This does not work on staff with a higher or the same rank!");

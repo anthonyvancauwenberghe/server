@@ -843,7 +843,7 @@ public class CommandPacketHandler implements PacketHandler {
             else
                 player.sendMessage("Player " + Misc.ucFirst(name.toLowerCase()) + " doesn't seem to have any account issues so far.");
             for(final PossibleHack hack : hacksForName)
-                player.sendMessage(hack.toString(), "@dre@Date: @bla@" + hack.date);
+                player.sendMessage(hack.toString() + " @ " + hack.date);
         }
 
 		if(commandStart.equalsIgnoreCase("openurl")){

@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -26,6 +27,7 @@ public class LastManStanding implements ContentTemplate {
 
     public boolean gameStarted = false;
     public boolean canJoin = false;
+    private Participant leader = null;
 
     public static int counter;
 
@@ -39,8 +41,14 @@ public class LastManStanding implements ContentTemplate {
         return x <= 3274 && y <= 2809 && y >= 2752 && x >= 3205;
     }
 
+    public static Location getRandomLocation() {
+        int x = Combat.random(25) + 3220;
+        int y = Combat.random(25) + 2752;
+        return Location.create(x, y, 0);
+    }
+
     private static void startCountdown() {
-        counter = 120;
+        counter = 30;
         World.getWorld().submit(new Event(1000) {
             @Override
             public void execute() {
@@ -52,7 +60,7 @@ public class LastManStanding implements ContentTemplate {
                     stop();
                     return;
                 }
-                if(counter % 30 == 0) {
+                if(counter % 5 == 0) {
                     getLastManStanding().participants.forEach((s, participant) -> participant.getPlayer().getActionSender().sendMessage("Last Man Standing starts in " + counter + " seconds!"));
                 }
                 counter--;
@@ -171,6 +179,15 @@ public class LastManStanding implements ContentTemplate {
             }
             return;
         }
+        if(leader == null) {
+            leader = participants.get(killer.getName());
+            if(leader != null)
+                participants.forEach((s, p) -> p.getPlayer().getActionSender().createArrow(killer));
+        } else if(participants.get(killer.getName()) != null && participants.get(killer.getName()).getKills() > leader.getKills()) {
+            participants.forEach((s, p) -> p.getPlayer().getActionSender().removeArrow());
+            leader = participants.get(killer.getName());
+            participants.forEach((s, p) -> p.getPlayer().getActionSender().createArrow(killer));
+        }
         player.setTeleportTarget(START, false);
         player.getActionSender().sendMessage("You have " + (3 - participant.getDeaths()) + " lives left!");
         invincibleEvent(participant);
@@ -191,6 +208,11 @@ public class LastManStanding implements ContentTemplate {
         totalParticipants = participants.size();
     }
 
+    private void removeArrow(Player player) {
+        if(player.getBountyHunter().getTarget() == null)
+            player.getActionSender().removeArrow();
+    }
+
     public void endGame() {
         Participant winner = null;
         for (Participant participant : participants.values()) {
@@ -202,10 +224,14 @@ public class LastManStanding implements ContentTemplate {
             int points = winner.getBountyReward() + (500 * totalParticipants);
             winner.getPlayer().getPoints().increasePkPoints(winner.getBountyReward(), false);
             winner.getPlayer().getPoints().increasePkPoints(500 * totalParticipants, false);
+            if(leader != null)
+                leader.getPlayer().getPoints().increasePkPoints(2000, true);
             winner.getPlayer().getActionSender().sendMessage("You have won this event and are rewarded " + points + " pk points!");
             winner.getPlayer().setTeleportTarget(Edgeville.LOCATION, false);
             winner.getPlayer().getActionSender().sendWildLevel(-1);
             finishedPlayers.add(winner);
+            finishedPlayers.forEach(p -> removeArrow(p.getPlayer()));
+            leader = null;
             Collections.sort(finishedPlayers, Collections.reverseOrder());
             int size = 10;
             if (finishedPlayers.size() < size)

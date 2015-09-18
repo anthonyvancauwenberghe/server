@@ -212,7 +212,7 @@ public class PlayerDeathEvent extends Event {
 			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
 ;
 		} else {
-			if(! player.getLocation().inFunPk()) {
+			if(! player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
 				if(killer != null) {
 					//blood lust system
 					World.getWorld().getContentManager().handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);

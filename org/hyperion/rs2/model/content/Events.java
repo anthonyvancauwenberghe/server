@@ -73,8 +73,10 @@ public class Events {
         }
         if(LastManStanding.getLastManStanding().canJoin) {
             LastManStanding.getLastManStanding().enterLobby(player);
+            Magic.teleport(player, LastManStanding.getRandomLocation(), false);
+        } else {
+            Magic.teleport(player, eventLocation, false);
         }
-        Magic.teleport(player, eventLocation, false);
         player.getActionSender().sendString("cancel", 32456);
     }
 

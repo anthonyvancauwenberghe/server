@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.util.Misc;
 
 public class BountyHunter {
@@ -148,7 +149,7 @@ public class BountyHunter {
     public static boolean applicable2(Player player) {
         if(player == null)
             return false;
-        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY()) && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
     }
 	
 	public static void fireLogout(final Player player) {

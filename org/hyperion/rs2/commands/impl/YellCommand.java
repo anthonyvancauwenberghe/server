@@ -24,13 +24,13 @@ public class YellCommand extends Command {
 	}
 
 	private int getYellDelay(Player player) {
-		if(player.getExtraData().getLong("loweredYellTimer") <= System.currentTimeMillis()) {
+		if(player.getExtraData().getLong("loweredYellTimer") >= System.currentTimeMillis() && player.getExtraData().getLong("loweredYellTimer") != 0) {
 			if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
-				return (int)(SUPER_YELL_DELAY * player.getExtraData().getLong("loweredYellTimer"));
+				return (int)(SUPER_YELL_DELAY * player.getExtraData().getLong("yellReduction"));
 			else if (Rank.hasAbility(player, Rank.DONATOR))
-				return (int)(DONATOR_YELL_DELAY * player.getExtraData().getLong("loweredYellTimer"));
-			return (int)(NORMAL_YELL_DELAY * player.getExtraData().getLong("loweredYellTimer"));
-		} else if(player.getExtraData().getLong("loweredYellTimer") > System.currentTimeMillis()) {
+				return (int)(DONATOR_YELL_DELAY * player.getExtraData().getLong("yellReduction"));
+			return (int)(NORMAL_YELL_DELAY * player.getExtraData().getLong("yellReduction"));
+		} else if(player.getExtraData().getLong("loweredYellTimer") < System.currentTimeMillis() && player.getExtraData().getLong("loweredYellTimer") != 0) {
 			player.getExtraData().remove("loweredYellTimer");
 			player.getExtraData().remove("yellReduction");
 		}

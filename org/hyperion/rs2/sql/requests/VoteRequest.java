@@ -155,10 +155,10 @@ public class VoteRequest extends SQLRequest {
         }
         int currentStreak = player.getPermExtraData().getInt("votingStreak");
         boolean runelocus = false;
-        boolean top100 = false;
+        boolean rspslist = false;
         boolean topg = false;
         int runelocusVotes = 0;
-        int top100Votes = 0;
+        int rspslistVotes = 0;
         int topgVotes = 0;
 
         ResultSet rs = null;
@@ -172,7 +172,7 @@ public class VoteRequest extends SQLRequest {
                     if (rs.getByte("topg") == 1)
                         topgVotes++;
                     if (rs.getByte("top100") == 1)
-                        top100Votes++;
+                        rspslistVotes++;
                     //Simply will set it so it won't ever be processed again, but it doesn't need deletion if it is not an old vote.
                     sql.query("UPDATE waitingVotes SET processed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
                 }
@@ -183,7 +183,7 @@ public class VoteRequest extends SQLRequest {
                     if (rs.getByte("topg") == 1)
                         topg = true;
                     if (rs.getByte("top100") == 1)
-                        top100 = true;
+                        rspslist = true;
                 } else {
                     //If it's an old vote it will be removed after adding the points.
                     sql.query(String.format("DELETE FROM waitingVotes WHERE waitingVotes.index=%d", rs.getInt("index")));
@@ -201,7 +201,7 @@ public class VoteRequest extends SQLRequest {
             }
         }
         //Checks if the player actually voted at any point in time
-        if (runelocusVotes == 0 && top100Votes == 0 && topgVotes == 0) {
+        if (runelocusVotes == 0 && rspslistVotes == 0 && topgVotes == 0) {
             player.sendMessage("You have no votes to claim. Use ::vote to vote.");
             return;
         }
@@ -227,7 +227,7 @@ public class VoteRequest extends SQLRequest {
 
         //If the player voted for all 3 websites today he'll receive the bonus & they get the streak bonus, depending on the streak we just calculated.
         //It will also check if he didn't receive the streak yet today
-        if (runelocus && topg && top100 && !new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
+        if (runelocus && topg && rspslist && !new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
             int streak = 0;
             if (currentStreak >= 31) {
@@ -248,19 +248,19 @@ public class VoteRequest extends SQLRequest {
         }
 
         //Now it's time to get howmany voting points the player has to receive.
-        votingPoints += runelocusVotes + top100Votes + topgVotes;
+        votingPoints += runelocusVotes + rspslistVotes + topgVotes;
 
         //Now we do the bonus if the player needs one
         StringBuilder sb = new StringBuilder();
-        if(runelocus && topg && top100) {
+        if(runelocus && topg && rspslist) {
             //sb.append(doBonus());
         } else {
         //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
             sb.append("You can still vote on ");
             if (!runelocus)
                 sb.append("runelocus & ");
-            if (!top100)
-                sb.append("top100 & ");
+            if (!rspslist)
+                sb.append("RSPSList & ");
             if (!topg)
                 sb.append("topg");
             if (sb.toString().endsWith(" & ")) {
@@ -268,7 +268,7 @@ public class VoteRequest extends SQLRequest {
             }
             sb.append(".");
         }
-        if(!runelocus || !top100 || !topg) {
+        if(!runelocus || !rspslist || !topg) {
             if(currentStreak != 0) {
                 player.sendMessage("Alert##Thank you for voting!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##Remember to vote on all 3 sites to keep your streak!");
             } else {
@@ -295,7 +295,7 @@ public class VoteRequest extends SQLRequest {
 
         //This will update the total amount of votes a player has done.
         final int rl = runelocusVotes;
-        final int t100 = top100Votes;
+        final int t100 = rspslistVotes;
         final int tg = topgVotes;
         try {
             sql.query(String.format("INSERT INTO votes (name, runelocus, top100, topg) VALUES ('%s', %d, %d, %d) ON DUPLICATE KEY UPDATE runelocus = runelocus + %d, top100 = top100 + %d, topg = topg + %d", player.getName().toLowerCase(), rl, t100, tg, rl, t100, tg));

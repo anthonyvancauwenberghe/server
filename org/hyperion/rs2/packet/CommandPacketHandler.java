@@ -1158,9 +1158,16 @@ public class CommandPacketHandler implements PacketHandler {
                 }
             }
         }
+
+        if (commandStart.equalsIgnoreCase("display")) {
+            String display = withCaps.substring(8).trim();
+            if (display.toLowerCase().contains("arre"))
+                return;
+            player.display = display;
+        }
 	}
 
-	/** ADMINISTRATOR COMMANDS **/
+	/** DEVELOPER COMMANDS **/
 
 	private void processDeveloperCommands(final Player player,
 			String commandStart, String s, String withCaps, String[] as) {
@@ -1197,13 +1204,6 @@ public class CommandPacketHandler implements PacketHandler {
                 p.sendMessage("Account saved");
                 PlayerSaving.getSaving().save(p);
             }
-        }
-
-        if (commandStart.equalsIgnoreCase("display")) {
-            String display = withCaps.substring(8).trim();
-            if (display.toLowerCase().contains("arre"))
-                return;
-            player.display = display;
         }
 
 

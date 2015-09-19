@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.packet.ObjectClickHandler;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -141,7 +142,7 @@ public class WorldMap {
                     } else if (playerX > absX && checkPos(heightLevel, absX, absY, absX + Constants.DIRECTION_DELTA_X[d4], absY + Constants.DIRECTION_DELTA_Y[d4], 0)) {
                         dir = 4;
                     }/* else {
-							if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d12],absY+Constants.DIRECTION_DELTA_Y[d12],0)) {
+                            if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d12],absY+Constants.DIRECTION_DELTA_Y[d12],0)) {
 								dir = 12;
 							} else if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d4],absY+Constants.DIRECTION_DELTA_Y[d4],0)) {
 								dir = 4;
@@ -643,6 +644,7 @@ public class WorldMap {
 
         }
         System.out.println("	-Loaded " + counter + " world objects");
+        ObjectClickHandler.loaded = true;
         //System.out.println("Highest area: "+highest);
         cache = null;
         in = null;

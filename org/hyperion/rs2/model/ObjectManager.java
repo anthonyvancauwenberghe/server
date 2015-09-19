@@ -223,15 +223,10 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     public synchronized void addMapObject(int x, int y, int z, int id) {
-        System.out.printf("[ADDING]: %d %d %d : %d\n", x, y, z, id);
         objectMap.put(Location.create(x, y, z), id);
     }
 
     public boolean objectExist(Location loc, int id) {
-        for (Map.Entry<Location, Integer> entries : objectMap.entrySet()) {
-            if (entries.getValue() == id)
-                System.out.println(entries.getKey());
-        }
         final GameObject obj;
         return objectMap.getOrDefault(loc, -1) == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
     }

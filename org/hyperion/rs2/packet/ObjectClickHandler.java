@@ -18,6 +18,8 @@ import java.io.IOException;
 
 public class ObjectClickHandler {
 
+    public static boolean loaded = false;
+
     public static void clickObject(Player p, int id, int x, int y, int type) {
         //System.out.println("Id " + id);
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
@@ -28,7 +30,7 @@ public class ObjectClickHandler {
             return;
         }
 
-        if (!objectExist(p, id, x, y, p.getLocation().getZ())) {
+        if (loaded && !objectExist(p, id, x, y, p.getLocation().getZ())) {
             p.sendf("%d %d %d : %d", x, y, p.getLocation().getZ(), id);
             return;
         }

@@ -220,7 +220,6 @@ public class VoteRequest extends SQLRequest {
                 //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
             } else if (!lastVoted.equalsIgnoreCase(new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()))) {
                 player.sendMessage("Your voting streak has been reset!");
-                player.getPermExtraData().put("votingStreak", 0);
                 currentStreak = 0;
             }
         }
@@ -258,37 +257,39 @@ public class VoteRequest extends SQLRequest {
         //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
             sb.append("You can still vote on ");
             if (!runelocus)
-                sb.append("runelocus & ");
+                sb.append("Runelocus & ");
             if (!rspslist)
                 sb.append("RSPSList & ");
             if (!topg)
-                sb.append("topg");
+                sb.append("TopG");
             if (sb.toString().endsWith(" & ")) {
                 sb.replace(sb.length() - 3, sb.length(), "");
             }
             sb.append(".");
         }
+
         if(!runelocus || !rspslist || !topg) {
             if(currentStreak != 0) {
                 player.sendMessage("Alert##Thank you for voting!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##Remember to vote on all 3 sites to keep your streak!");
             } else {
                 player.sendMessage("Alert##Thank you for voting!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##Remember to vote on all 3 sites to get a streak!");
             }
-            return;
-        }
-        if(bonus == -1) {
-            player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + "##ArteroPK appreciates your support!");
-            return;
-        }
-        if(currentStreak != 0) {
-            player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " in a row.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
         } else {
-            player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+            if (bonus == -1) {
+                player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + "##ArteroPK appreciates your support!");
+            } else {
+                if (currentStreak != 0) {
+                    player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " in a row.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+                } else {
+                    player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+                }
+            }
         }
 
         //This will add the points and update the last time the player voted
         player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
         player.setLastVoted(System.currentTimeMillis());
+        player.getPermExtraData().put("votingStreak", currentStreak);
         votingPoints = 0;
         streak = 0;
         bonus = -1;

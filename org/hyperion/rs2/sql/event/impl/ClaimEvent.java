@@ -27,7 +27,7 @@ public class ClaimEvent extends SQLEvent {
         List<Player> donated = new ArrayList<Player>();
         List<Player> voted = new ArrayList<Player>();
 
-        ResultSet rs = sql.query("SELECT * FROM donator WHERE `currentTime` >= DATE_SUB(NOW(), INTERVAL 14 DAY) and finished=0 and amount>0");
+        ResultSet rs = sql.query("SELECT * FROM donator WHERE `currentTime` >= DATE_SUB(NOW(), INTERVAL 14 DAY) AND finished=0 AND amount>0");
         if(rs != null) {
             while(rs.next()) {
                 String name = rs.getString("name");
@@ -42,7 +42,7 @@ public class ClaimEvent extends SQLEvent {
             rs.close();
         }
 
-        rs = sql.query("SELECT * FROM waitingVotes WHERE processed=0");
+        rs = sql.query("SELECT * FROM waitingVotes WHERE `timestamp` >= DATE_SUB(NOW(), INTERVAL 14 DAY) AND processed=0");
         if(rs != null) {
             while(rs.next()) {
                 String name = rs.getString("realUsername");

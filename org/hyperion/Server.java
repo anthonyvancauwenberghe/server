@@ -115,6 +115,12 @@ public class Server {
 
             new RS2Server().start();
 
+            Cache cache = new Cache(new File("./data/cache/"));
+            MapIndex[] mapIndices = cache.getIndexTable().getMapIndices();
+            for (MapIndex index : mapIndices) {
+                new LandscapeParser(cache, index.getIdentifier(), World.getWorld().getObjectMap()).parse();
+            }
+
             DumpNpcDrops.startDump2();
             PossibleHacksHolder.init();
             RoomDefinition.load();

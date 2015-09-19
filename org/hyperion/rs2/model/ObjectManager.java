@@ -228,7 +228,6 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     public boolean objectExist(Location loc, int id) {
-        System.out.println("Id: " + id);
         for (Map.Entry<Location, Integer> entries : objectMap.entrySet()) {
             if (entries.getValue() == id)
                 System.out.println(entries.getKey());

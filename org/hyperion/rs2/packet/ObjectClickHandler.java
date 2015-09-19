@@ -28,7 +28,7 @@ public class ObjectClickHandler {
             return;
         }
 
-        if (!objectExist(p, x, y, id, p.getLocation().getZ())) {
+        if (!objectExist(p, id, x, y, p.getLocation().getZ())) {
             p.sendf("%d %d %d : %d", x, y, p.getLocation().getZ(), id);
             return;
         }

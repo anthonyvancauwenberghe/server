@@ -10,6 +10,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author Martin
@@ -101,7 +103,7 @@ public class WorldMap {
                 newdir = toadd;
             } else if (newdir < 0) {
                 /*int toadd = newdir+4;
-				newdir = newdir;*/
+                newdir = newdir;*/
             }
             return newdir;
         }
@@ -359,6 +361,8 @@ public class WorldMap {
 		}
 	}*/
 
+    static final ExecutorService service = Executors.newFixedThreadPool(10);
+
     private static void loadWorldMap2() {
         RandomAccessFile in = null;
         int counter = 0;
@@ -390,8 +394,11 @@ public class WorldMap {
                 if (id == 2213 || id == 2214 || id == 3045 || id == 5276 || id == 6084 || id == 10517 || id == 11338 || id == 11758 ||
                         id == 12798 || id == 12799 || id == 12800 || id == 3193 || id == 12801 || id == 12120 || id == 12121)
                     bankBooths.put((tileX * 5000 + tileY), face2);
-
-                world.getObjectMap().addMapObject(tileX, tileY, height, id);
+                final int x = tileX;
+                final int y = tileY;
+                final int id2 = id;
+                final int h = height;
+                service.submit(() -> world.getObjectMap().addMapObject(x, y, h, id2));
 
 				/*if(tileX >= 2814 && tileX <= 2942 && tileY >= 5250 && tileY <= 5373)
 					height--;*/

@@ -158,7 +158,7 @@ public class WorldMap {
                     } else if (playerX > absX && checkPos(heightLevel, absX, absY, absX + Constants.DIRECTION_DELTA_X[d4], absY + Constants.DIRECTION_DELTA_Y[d4], 0)) {
                         dir = 4;
                     }/* else {
-							if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d12],absY+Constants.DIRECTION_DELTA_Y[d12],0)) {
+                            if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d12],absY+Constants.DIRECTION_DELTA_Y[d12],0)) {
 								dir = 12;
 							} else if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d4],absY+Constants.DIRECTION_DELTA_Y[d4],0)) {
 								dir = 4;
@@ -395,11 +395,7 @@ public class WorldMap {
                 if (id == 2213 || id == 2214 || id == 3045 || id == 5276 || id == 6084 || id == 10517 || id == 11338 || id == 11758 ||
                         id == 12798 || id == 12799 || id == 12800 || id == 3193 || id == 12801 || id == 12120 || id == 12121)
                     bankBooths.put((tileX * 5000 + tileY), face2);
-                final int x = tileX;
-                final int y = tileY;
-                final int id2 = id;
-                final int h = height;
-                service.submit(() -> world.getObjectMap().addMapObject(x, y, h, id2));
+                world.getObjectMap().addMapObject(tileX, tileY, height, id);
 
 				/*if(tileX >= 2814 && tileX <= 2942 && tileY >= 5250 && tileY <= 5373)
 					height--;*/

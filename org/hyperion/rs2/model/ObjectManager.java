@@ -50,7 +50,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public static Cache cache;
 
-    private final Map<Location, Integer> objectMap = new HashMap<>();
+    private final int[][][] objects = new int[10000][10000][4];
 
     /**
      * Loads the objects in the map.
@@ -223,12 +223,12 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     public synchronized void addMapObject(int x, int y, int z, int id) {
-        objectMap.put(Location.create(x, y, z), id);
+        objects[x][y][z % 4] = id;
     }
 
     public boolean objectExist(Location loc, int id) {
         final GameObject obj;
-        return objectMap.getOrDefault(loc, -1) == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
+        return objects[loc.getX()][loc.getY()][loc.getZ() % 4] == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
     }
 
 

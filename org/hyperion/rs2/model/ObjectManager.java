@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
         cache = new Cache(new File("./data/cache/"));
         try {
             /*OutputStream os = new FileOutputStream("data/itemdefnew.bin");
-			buf = IoBuffer.allocate(1024);
+            buf = IoBuffer.allocate(1024);
 			buf.setAutoExpand(true);*/
             //logger.info("Loading definitions...");
             StandardIndex[] defIndices = cache.getIndexTable().getObjectDefinitionIndices();
@@ -106,16 +107,19 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
             }
 
 
-            //logger.info("Loading map...");idk i tried to load on diff coords didnt work either
-            MapIndex[] mapIndices = cache.getIndexTable().getMapIndices();
-            for (MapIndex index : mapIndices) {
-                new LandscapeParser(cache, index.getIdentifier(), this).parse();
+            try {
+                Class.forName("org.hyperion.rs2.model.World");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
+
+            //logger.info("Loading map...");idk i tried to load on diff coords didnt work either
+
             //logger.info("Loaded " + objectCount + " objects.");
             System.out.println("Loaded Objects for " + objectCount + " objects.");
 
 			/*buf.flip();
-			byte[] data = new byte[buf.limit()];
+            byte[] data = new byte[buf.limit()];
 			buf.get(data);
 			os.write(data);
 			os.flush();
@@ -130,6 +134,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     @Override
     public void objectParsed(GameObject obj) {
+        if (obj == null)
+            return;
         objectCount++;
 		/*buf.putShort((short) obj.getDefinition().getId());
 		buf.putShort((short) obj.getLocation().getX());
@@ -137,7 +143,11 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 		buf.put((byte) obj.getLocation().getZ());
 		buf.put((byte) obj.getType());
 		buf.put((byte) obj.getRotation());*/
-        World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getGameObjects().add(obj);
+
+        World.getWorld().
+                getRegionManager().
+                getRegionByLocation(obj.getLocation()).
+                getGameObjects().add(obj);
     }
 
     @Override

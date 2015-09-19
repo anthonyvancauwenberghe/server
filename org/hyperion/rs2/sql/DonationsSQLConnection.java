@@ -66,11 +66,11 @@ public class DonationsSQLConnection extends MySQLConnection {
                 return true;
             }
         };
-        //CommandHandler.submit(voteCommand, donationCommand);
+        CommandHandler.submit(voteCommand, donationCommand);
 
         return true;
         /*
-		 * CommandHandler.submit(new Command("debugsql", Command.ADMIN_RIGHTS) {
+         * CommandHandler.submit(new Command("debugsql", Command.ADMIN_RIGHTS) {
 		 * 
 		 * @Override public void execute(Player player, String input) {
 		 * SQL.getSQL().changeDebug(); player.getActionSender().sendMessage(

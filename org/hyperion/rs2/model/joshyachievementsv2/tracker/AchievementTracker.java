@@ -7,8 +7,10 @@ import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.itf.AchievementInterface;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.BarrowsTripTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask;
@@ -35,6 +37,14 @@ public class AchievementTracker{
         this.player = player;
         
         progress = new TreeMap<>();
+    }
+
+    public void openInterface(){
+        player.getInterfaceManager().show(AchievementInterface.ID);
+    }
+
+    private void updateInterface(final Achievement achievement){
+        InterfaceManager.<AchievementInterface>get(AchievementInterface.ID).sendUpdateProgress(player, achievement);
     }
 
     public void sendInfo(final Achievement a){
@@ -110,9 +120,8 @@ public class AchievementTracker{
         if(atp.finished())
             return; //this shouldnt happen but just to be safe
         final AchievementProgress ap = progress(task.achievementId);
-        if(!atp.started()){
+        if(!atp.started())
             atp.startNow();
-        }
         atp.progress(progress);
         ap.sendProgressHeader(player);
         atp.sendProgress(player, true);
@@ -124,11 +133,12 @@ public class AchievementTracker{
                 ap.achievement().rewards.reward(player);
             }
         }
+        updateInterface(ap.achievement());
     }
 
     public void barrowsTrip(){
         progress(BarrowsTripTask.filter(), 1);
-    }
+    } //call these methods where they should be called: player.getAchievementTracker().XXXXXXXXXX()
 
     public void bountyHunterKill(){
         progress(BountyHunterKillTask.filter(), 1);

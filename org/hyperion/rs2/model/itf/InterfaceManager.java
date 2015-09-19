@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.itf;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.itfactivation.ChangeMaxCape;
 import org.hyperion.rs2.model.itf.impl.*;
+import org.hyperion.rs2.model.joshyachievementsv2.itf.AchievementInterface;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public final class InterfaceManager {
         addGlobal(new NameItemInterface());
         addGlobal(new ModerationInterface());
         addGlobal(new DungoneeringParty());
+        addGlobal(new AchievementInterface());
     }
 
     private final Player player;

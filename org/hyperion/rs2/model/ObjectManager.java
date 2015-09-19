@@ -142,7 +142,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
             return;
         objectCount++;
         /*buf.putShort((short) obj.getDefinition().getId());
-		buf.putShort((short) obj.getLocation().getX());
+        buf.putShort((short) obj.getLocation().getX());
 		buf.putShort((short) obj.getLocation().getY());
 		buf.put((byte) obj.getLocation().getZ());
 		buf.put((byte) obj.getType());
@@ -227,6 +227,10 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     public boolean objectExist(Location loc, int id) {
+        for (Map.Entry<Integer, Integer> entries : objectMap.entrySet()) {
+            if (entries.getValue() == id)
+                System.out.println(entries.getKey());
+        }
         final GameObject obj;
         return ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id) || objectMap.getOrDefault(mod(loc), -1) == id;
     }

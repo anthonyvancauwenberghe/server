@@ -51,7 +51,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public static Cache cache;
 
-    private Short[][][] objects = new Short[5000][11000][4];
+    private short[][][] objects = new short[5000][11000][4];
 
     /**
      * Loads the objects in the map.

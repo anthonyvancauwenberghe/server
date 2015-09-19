@@ -28,8 +28,10 @@ public class ObjectClickHandler {
             return;
         }
 
-        if (!objectExist(x, y, id, p.getLocation().getZ()))
+        if (!objectExist(p, x, y, id, p.getLocation().getZ())) {
+            p.sendf("%d %d %d", x, y, p.getLocation().getZ());
             return;
+        }
         if (Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
             p.getActionSender().sendMessage("Clicked object: " + id);
         if (World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, -1))
@@ -270,10 +272,11 @@ public class ObjectClickHandler {
         return ((deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX));
     }
 
-    public static boolean objectExist(int id, int x, int y, int height) {
+    public static boolean objectExist(Player p, int id, int x, int y, int height) {
         final Location location = Location.create(x, y, height);
         Region region = World.getWorld().getRegionManager().getRegionByLocation(location);
         for (GameObject obj : region.getGameObjects()) {
+            p.sendf("%d", id);
             if (obj.getDefinition().getId() == id && obj.isAt(location))
                 return true;
         }

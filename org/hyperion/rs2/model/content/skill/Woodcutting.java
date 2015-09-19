@@ -3,9 +3,12 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.newcombat.*;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
@@ -194,46 +197,55 @@ public class Woodcutting implements ContentTemplate {
 					if(Misc.random(50) == 5)
 						ContentEntity.addItem(client, 6693, 1);
 					if(contains(NORMAL_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 1511, 1);
 						xp = 50;
 						ContentEntity.addItem(client, 1511, 1);
 						client.getActionSender().sendMessage(
 								"You get some logs.");
 					} else if(contains(WILLOW_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 1519, 1);
 						xp = 135;
 						ContentEntity.addItem(client, 1519, 1);
 						client.getActionSender().sendMessage(
 								"You get some willow logs.");
 					} else if(contains(OAK_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 1521, 1);
 						xp = 75;
 						ContentEntity.addItem(client, 1521, 1);
 						client.getActionSender().sendMessage(
 								"You get some oak logs.");
 					} else if(contains(MAGIC_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 1513, 1);
 						xp = 500;
 						ContentEntity.addItem(client, 1513, 1);
 						client.getActionSender().sendMessage(
 								"You get some magic logs.");
 					} else if(contains(MAPLE_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 1517, 1);
 						xp = 200;
 						ContentEntity.addItem(client, 1517, 1);
 						client.getActionSender().sendMessage(
 								"You get some maple logs.");
 					} else if(contains(MAHOGANY_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 6332, 1);
 						xp = 250;
 						ContentEntity.addItem(client, 6332, 1);
 						client.getActionSender().sendMessage(
 								"You get some mahogany logs.");
 					} else if(contains(TEAK_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 6333, 1);
 						xp = 170;
 						ContentEntity.addItem(client, 6333, 1);
 						client.getActionSender().sendMessage(
 								"You get some tweak logs.");
 					} else if(contains(ACHEY_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 2862, 1);
 						xp = 50;
 						ContentEntity.addItem(client, 2862, 1);
 						client.getActionSender().sendMessage(
 								"You get some achey logs.");
 					} else if(contains(YEW_TREES, object)) {
+						client.getAchievementTracker().itemSkilled(Skills.WOODCUTTING, 1515, 1);
 						xp = 350;
 						ContentEntity.addItem(client, 1515, 1);
 						client.getActionSender().sendMessage(

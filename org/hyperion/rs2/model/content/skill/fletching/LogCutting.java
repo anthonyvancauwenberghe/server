@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.skill.fletching;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.skill.clickSkillingInterface;
@@ -172,6 +173,7 @@ public class LogCutting extends Fletching {
                     return;
                 }
 
+                client.getAchievementTracker().itemSkilled(Skills.FLETCHING, item.getItemId(), item == cutItems.ARROW_SHAFT ? 15 : 1);
                 ContentEntity.deleteItemA(client, log.getLogId(), 1);
                 ContentEntity.addItem(client, item.getItemId(), item == cutItems.ARROW_SHAFT ? 15 : 1);
                 ContentEntity.addSkillXP(client, item.getExp() * Fletching.EXPMULTIPLIER, 9);

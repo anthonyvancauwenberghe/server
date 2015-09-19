@@ -83,6 +83,7 @@ public class ArrowMaking extends Fletching {
             amount = am2;
         ContentEntity.deleteItemA(client, 53, amount > 15 ? 15 : amount);
         ContentEntity.deleteItemA(client, item, amount > 15 ? 15 : amount);
+        client.getAchievementTracker().itemSkilled(Skills.FLETCHING, arrow.getArrowId(), amount > 15 ? 15 : amount);
         ContentEntity.addItem(client, arrow.getArrowId(), amount > 15 ? 15 : amount);
         ContentEntity.addSkillXP(client,arrow.getExp() * EXPMULTIPLIER, Skills.FLETCHING);
         ContentEntity.sendMessage(client, "You make "  + (amount == 1 ? Misc.aOrAn(arrow.getName().toLowerCase()) : "some") + " " + arrow.getName().toLowerCase() + (amount > 1 ? "s" : "") + ".");

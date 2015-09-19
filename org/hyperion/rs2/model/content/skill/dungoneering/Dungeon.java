@@ -4,7 +4,9 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.DungeoneeringFloorsTask;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -85,6 +87,33 @@ public class Dungeon {
             int tokens = xp/30;
             player.getSkills().addExperience(Skills.DUNGEONEERING, xp);
             player.getDungeoneering().setTokens(player.getDungeoneering().getTokens() + tokens);
+
+            DungeoneeringFloorsTask.Difficulty achievementDifficulty;
+            DungeoneeringFloorsTask.Size achievementSize;
+            switch(difficulty) {
+                case MEDIUM:
+                    achievementDifficulty = DungeoneeringFloorsTask.Difficulty.MEDIUM;
+                    break;
+                case HARD:
+                    achievementDifficulty = DungeoneeringFloorsTask.Difficulty.HARD;
+                    break;
+                default:
+                    achievementDifficulty = DungeoneeringFloorsTask.Difficulty.EASY;
+                    break;
+            }
+            switch(size) {
+                case MEDIUM:
+                    achievementSize = DungeoneeringFloorsTask.Size.MEDIUM;
+                    break;
+                case LARGE:
+                    achievementSize = DungeoneeringFloorsTask.Size.LARGE;
+                    break;
+                default:
+                    achievementSize = DungeoneeringFloorsTask.Size.SMALL;
+                    break;
+            }
+            player.getAchievementTracker().dungFloorCompleted(achievementDifficulty, achievementSize);
+
             final String s =
                     String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
                             toPercent(size_multi), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));

@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Firemaking implements ContentTemplate {
 
@@ -58,6 +59,7 @@ public class Firemaking implements ContentTemplate {
 					return;
 				}
 				ContentEntity.startAnimation(player, - 1);
+				player.getAchievementTracker().itemSkilled(Skills.FIREMAKING, logId, 1);
 				fires.put(player.getLocation(), new Fire(player.getLocation(), ContentEntity.random((log.timer))));
 				int obj = 2732;
 				if(logId == 1513) {

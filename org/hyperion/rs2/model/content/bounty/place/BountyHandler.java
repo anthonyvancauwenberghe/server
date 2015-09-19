@@ -16,15 +16,18 @@ public final class BountyHandler {
 		if(bounty < 400)
 		    return false;
 		Bounty old = this.getBountyByName(playerName);
+		Player player = World.getWorld().getPlayer(fromPlayer);
 		if(old != null && old.getBounty() > bounty)
 			return false;
 		else if(old != null) {
 			if(remove(old)) {
                 PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@] %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
+				player.getAchievementTracker().bountyPlaced(bounty);
                 return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
             } else return false;
 		}
         PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@] %s has just placed a bounty of %d on %s's head!", TextUtils.ucFirst(fromPlayer), bounty, TextUtils.ucFirst(playerName)));
+		player.getAchievementTracker().bountyPlaced(bounty);
         return bounties.add(Bounty.create(playerName, fromPlayer, bounty));
 	}
 	
@@ -57,6 +60,7 @@ public final class BountyHandler {
 			if(remove(bounty)) {
 				PushMessage.pushGlobalMessage(String.format("[@or2@Bounty@bla@]: %s has just defeated %s for a %d Pk points bounty!", killer.getName(),key, pkpToGain));
 				killer.getPoints().increasePkPoints(pkpToGain);
+				killer.getAchievementTracker().bountyKill(pkpToGain);
 			}
 		}
 	}

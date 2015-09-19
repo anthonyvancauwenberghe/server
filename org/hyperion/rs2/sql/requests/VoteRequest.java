@@ -234,6 +234,7 @@ public class VoteRequest extends SQLRequest {
         //It will also check if he didn't receive the streak yet today
         if (runelocus && topg && rspslist && !new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+            player.getAchievementTracker().voted();
             int streak = 0;
             if (currentStreak >= 31) {
                 streak = 10;

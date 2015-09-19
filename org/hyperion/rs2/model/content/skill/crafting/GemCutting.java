@@ -103,6 +103,7 @@ public class GemCutting extends Crafting {
         World.getWorld().submit(new Event(2200) {
             @Override
             public void execute() {
+                c.getAchievementTracker().itemSkilled(Skills.CRAFTING, g.getResultId(), 1);
                 ContentEntity.deleteItem(c, g.getGemId(), slot);
                 boolean isBolt = g.getName().contains("tip");
                 if (isBolt) {

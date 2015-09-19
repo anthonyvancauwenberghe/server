@@ -169,6 +169,7 @@ public class BountyHunter {
             return;
 		player.sendPkMessage("You now have " + incrementAndGet() + " BH points!");
 		handleBHDrops(opp);
+        player.getAchievementTracker().bountyHunterKill();
 		for(Player p : new Player[]{player, opp}) {
 			p.getBountyHunter().target = null;
 			p.getActionSender().createArrow(10, -1);

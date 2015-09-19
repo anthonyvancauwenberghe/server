@@ -4,6 +4,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -84,6 +85,7 @@ public class FishingV2 implements ContentTemplate {
 							continue;
 						}
 						if(minLevel == type.fishLevels[i] || Combat.random(100) + type.fishLevels[i] <= ContentEntity.returnSkillLevel(player, 10)) {
+							player.getAchievementTracker().itemSkilled(Skills.FISHING, type.fishIds[i], 1);
 							ContentEntity.addItem(player, type.fishIds[i], 1);
 							ContentEntity.addSkillXP(player, type.fishXp[i] * EXPMULTIPLIER, 10);
 							ContentEntity.startAnimation(player, type.animationId);

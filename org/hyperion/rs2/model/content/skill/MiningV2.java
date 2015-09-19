@@ -273,6 +273,7 @@ public class MiningV2 implements ContentTemplate {
 					return;
 				} else {
 					ContentEntity.startAnimation(player, - 1);
+					player.getAchievementTracker().itemSkilled(Skills.MINING, rock.oreId, 1);
 					ContentEntity.addItem(player, rock.oreId);
 					ContentEntity.addSkillXP(player, rock.xp * EXPMULTIPLIER, Skills.MINING);
 					if(rock.respawn > 0 && rockId != 2491) {

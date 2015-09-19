@@ -112,7 +112,12 @@ public class GlobalItemManager {
                     player.getLogManager().add(LogEntry.pickupItem(globalItem));
 			        player.getInventory().add(globalItem.getItem());
                 }
-			    removeItem(globalItem);
+				if(globalItem.owner == null) {
+					player.getAchievementTracker().pickupItemFromNpc(globalItem.getItem().getId(), globalItem.getItem().getCount());
+				} else {
+					player.getAchievementTracker().pickupItemFromPlayer(globalItem.getItem().getId(), globalItem.getItem().getCount());
+				}
+				removeItem(globalItem);
 			    globalItem.destroy();
             }
 		} else {

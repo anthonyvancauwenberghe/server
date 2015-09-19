@@ -227,6 +227,7 @@ public class Hunter implements ContentTemplate {
 							if(caught == 20) {
 								p.getActionSender().sendMessage("You can now go to Santa to receive your reward!");
 							}
+							p.getAchievementTracker().itemSkilled(Skills.HUNTER, caught, 1);
 							addItem(p, NpcId);
 							addExp(p, NpcId);
 						}

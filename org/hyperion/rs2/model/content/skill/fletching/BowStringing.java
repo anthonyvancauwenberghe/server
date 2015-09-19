@@ -134,6 +134,7 @@ public class BowStringing extends LogCutting {
             public void execute() {
                 ContentEntity.deleteItemA(client, item.getItemId(), 1);
                 ContentEntity.deleteItemA(client, string.getItemId(), 1);
+                client.getAchievementTracker().itemSkilled(Skills.FLETCHING, item.getResultId(), 1);
                 ContentEntity.addItem(client, item.getResultId(), 1);
                 ContentEntity.sendMessage(client, "You attach the " + string.getName().toLowerCase() + " to the bow.");
                 ContentEntity.addSkillXP(client, item.getExp(), Skills.FLETCHING);

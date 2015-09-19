@@ -142,6 +142,7 @@ public class Herblore implements ContentTemplate {
 						return;
 					}
 					amountLeft--;
+					c.getAchievementTracker().itemSkilled(Skills.HERBLORE, u.getPotion(), 1);
 					ContentEntity.sendMessage(c, "You make an unfinished potion.");
 					ContentEntity.deleteItem(c, herb2);
 					ContentEntity.deleteItem(c, 227);

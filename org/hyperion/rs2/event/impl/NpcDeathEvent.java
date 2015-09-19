@@ -206,6 +206,7 @@ public class NpcDeathEvent extends Event {
                 }
                 final int kills = player.getNPCLogs().log(npc);
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
+                player.getAchievementTracker().npcKill(npc.getDefinition().getId());
 
                 if(kills%1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());

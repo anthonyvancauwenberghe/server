@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.skill.fletching;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentEntity;
 
 /**
@@ -19,6 +20,7 @@ public class HeadlessArrows extends Fletching {
             int am2 = ContentEntity.getItemAmount(client, 314);
             if(am2 < amount)
                 amount = am2;
+            client.getAchievementTracker().itemSkilled(Skills.FLETCHING, 53, amount > 15 ? 15 : amount);
             ContentEntity.deleteItemA(client, 314, amount > 15 ? 15 : amount);
             ContentEntity.deleteItemA(client, item, amount > 15 ? 15 : amount);
             ContentEntity.addItem(client, 53, amount > 15 ? 15 : amount);

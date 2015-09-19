@@ -42,6 +42,7 @@ public class Slayer implements ContentTemplate {
             if(slayerXP > 0) {
                 ContentEntity.addSkillXP(player, slayerXP, Skills.SLAYER);
                 if(player.getSlayer().getTaskAmount() == 0) {
+                    player.getAchievementTracker().slayerTaskCompleted(npcId);
                     player.sendf("You have completed %d tasks in a row and have %d slayer points", player.getSlayer().getTotalTasks(),player.getSlayer().getSlayerPoints());
                 }
             }

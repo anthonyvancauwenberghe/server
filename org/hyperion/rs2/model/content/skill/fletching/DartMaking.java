@@ -83,6 +83,7 @@ public class DartMaking {
             amount = am2;
         ContentEntity.deleteItemA(client, 314, amount > 15 ? 15 : amount);
         ContentEntity.deleteItemA(client, item, amount > 15 ? 15 : amount);
+        client.getAchievementTracker().itemSkilled(Skills.FLETCHING, dart.getDartId(), amount > 15 ? 15 : amount);
         ContentEntity.addItem(client, dart.getDartId(), amount > 15 ? 15 : amount);
         ContentEntity.addSkillXP(client, dart.getExp(), Skills.FLETCHING);
         ContentEntity.sendMessage(client, "You make "  + (amount == 1 ? Misc.aOrAn(dart.getName().toLowerCase()) : "some") + " "  + dart.getName().toLowerCase() + (amount > 1 ? "s" : "") + ".");

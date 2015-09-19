@@ -4,6 +4,7 @@ import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -139,6 +140,7 @@ public class Cooking implements ContentTemplate {
 
 				if(Combat.random(client.getSkills().getLevel(7) + 3 - cookItem.getLevel()) != 1) {
 					ContentEntity.addItem(client, cookItem.getCookedItem(), 1);
+					client.getAchievementTracker().itemSkilled(Skills.COOKING, cookItem.getCookId(), 1);
 					ContentEntity.addSkillXP(client, cookItem.getExperience() * EXPMULTIPLIER, 7);
 					ContentEntity.sendMessage(client, "You succesfully cook some " + ContentEntity.getItemName(cookItem.getCookedItem()).toLowerCase() + ".");
 				} else {

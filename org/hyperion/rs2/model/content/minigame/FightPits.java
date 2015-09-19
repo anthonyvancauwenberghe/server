@@ -678,11 +678,14 @@ public class FightPits implements ContentTemplate {
 		if((teamRed.size() == 0 || teamBlue.size() == 0) && playersInGame.size() >= 1) {
 			String winningTeam = "";
 			List<Player> winner = null;
+			List<Player> loser = null;
 			if(teamRed.size() == 0) {
 				winner = teamBlue;
+				loser = teamRed;
 				winningTeam = "Team Blue";
 			} else {
 				winner = teamRed;
+				loser = teamBlue;
 				winningTeam = "Team Red";
 			}
 			int size = winner.size();
@@ -691,6 +694,9 @@ public class FightPits implements ContentTemplate {
 			if(EVENT)
 				PushMessage.pushGlobalMessage(
 					String.format("%s has just won fight pits with only %d player " + (size > 0 ? "s" : "") +  " left!", winningTeam, size));
+			for(Player player2 : loser) {
+				player2.getAchievementTracker().fightPitsLose();
+			}
 			for(Player player1 : winner) {
 				if(player1 == null)
 					continue;
@@ -722,6 +728,7 @@ public class FightPits implements ContentTemplate {
 				player1.setPitsDamage(0);
 				if(startPlayersAmount > 5 && getReward) {
 					int dpAmt = startPlayersAmount/size;
+					player1.getAchievementTracker().fightPitsWin();
 					player1.sendServerMessage("For winning a large game, you gain @gre@"+dpAmt+"@red@ donator points!");
 					player1.getPoints().increaseDonatorPoints(dpAmt, false);
 					if(Misc.random(60 * size) == 1) { //if 10 chance is 1/80 in total (half players each have chance of 1/400)

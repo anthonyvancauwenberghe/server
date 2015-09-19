@@ -167,12 +167,18 @@ public class VoteRequest extends SQLRequest {
             while (rs.next()) {
                 //if it hasn't been processed yet it will simply just give them their points
                 if (rs.getByte("processed") == 0) {
-                    if (rs.getByte("runelocus") == 1)
+                    if (rs.getByte("runelocus") == 1 && rs.getByte("runelocusProcessed") == 0) {
                         runelocusVotes++;
-                    if (rs.getByte("topg") == 1)
+                        sql.query("UPDATE waitingVotes SET runelocusProcessed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
+                    }
+                    if (rs.getByte("topg") == 1 && rs.getByte("topgProcessed") == 0) {
                         topgVotes++;
-                    if (rs.getByte("top100") == 1)
+                        sql.query("UPDATE waitingVotes SET topgProcessed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
+                    }
+                    if (rs.getByte("rspslist") == 1 && rs.getByte("rspslistProcessed") == 0) {
                         rspslistVotes++;
+                        sql.query("UPDATE waitingVotes SET rspslistProcessed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
+                    }
                     //Simply will set it so it won't ever be processed again, but it doesn't need deletion if it is not an old vote.
                     sql.query("UPDATE waitingVotes SET processed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
                 }
@@ -182,7 +188,7 @@ public class VoteRequest extends SQLRequest {
                         runelocus = true;
                     if (rs.getByte("topg") == 1)
                         topg = true;
-                    if (rs.getByte("top100") == 1)
+                    if (rs.getByte("rspslist") == 1)
                         rspslist = true;
                 } else {
                     //If it's an old vote it will be removed after adding the points.
@@ -228,6 +234,7 @@ public class VoteRequest extends SQLRequest {
         //It will also check if he didn't receive the streak yet today
         if (runelocus && topg && rspslist && !new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+            player.getAchievementTracker().voted();
             int streak = 0;
             if (currentStreak >= 31) {
                 streak = 10;

@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.skill.crafting;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.skill.clickSkillingInterface;
@@ -213,6 +214,7 @@ public class LeatherCrafting extends Crafting {
                     stop();
                     return;
                 }
+                c.getAchievementTracker().itemSkilled(Skills.CRAFTING, item.getItemId(), 1);
                 c.sendMessage("You craft the " + leather.getName().toLowerCase() +  " into " + Misc.aOrAn(item.getName()) + ((item.getName().contains("chaps") || item.getName().contains("boots") || item.getName().contains("vambs")) ? " pair of" : "") + " " + item.getName().toLowerCase() + ".");
                 ContentEntity.deleteItemA(c, leather.getItemId(), item.getAmountReq());
                 if (Misc.random(2) == 1)

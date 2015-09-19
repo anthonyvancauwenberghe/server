@@ -10,6 +10,7 @@ import org.hyperion.rs2.model.combat.attack.Barrows;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
@@ -137,6 +138,7 @@ public class Barrows3 implements ContentTemplate {
 				Item bonusReward = new Item(BONUS_REWARDS[Misc.random(BONUS_REWARDS.length - 1)]);
 				player.getInventory().add(bonusReward);
 			}
+			player.getAchievementTracker().barrowsTrip();
 			ContentEntity.sendMessage(player, "Congratulations on completing the barrows minigame.");
 			player.getExtraData().remove(BROTHERS_KILLED_KEY);
 			player.getExtraData().remove(KILLSCOUNT_KEY);

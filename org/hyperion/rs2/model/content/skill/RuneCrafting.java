@@ -3,10 +3,7 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -155,6 +152,7 @@ public class RuneCrafting implements ContentTemplate {
 				public void execute() {
 					ContentEntity.deleteItemAll(client, useItemId2, 1);
 					ContentEntity.addItem(client, r.getRuneId(), finalAmount);
+					client.getAchievementTracker().itemSkilled(Skills.RUNECRAFTING, r.getRuneId(), 1);
 					ContentEntity.sendMessage(client, "You craft " + finalAmount + " " + ContentEntity.getItemName(item) + "s.");
 					ContentEntity.addSkillXP(client, runeExp * Constants.XPRATE, 20);
 					// Stop the event.

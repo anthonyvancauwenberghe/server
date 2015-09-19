@@ -206,6 +206,7 @@ public class NpcDeathEvent extends Event {
                 }
                 final int kills = player.getNPCLogs().log(npc);
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
+                player.getAchievementTracker().npcKill(npc.getDefinition().getId());
 
                 if(kills%1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
@@ -223,7 +224,8 @@ public class NpcDeathEvent extends Event {
                         if(npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
                         if(player.getExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getExtraData().getLong("increasedDroprate") != 0) {
-                            chance = (int)(chance * player.getExtraData().getLong("dropRateMultiplier")) - chance;
+                            double increase = Double.parseDouble(player.getExtraData().getString("dropRateMultiplier"));
+                            chance = (int)(chance * increase) - chance;
                         } else if(player.getExtraData().getLong("increasedDroprate") < System.currentTimeMillis() && player.getExtraData().getLong("increasedDroprate") != 0) {
                             player.getExtraData().remove("increaseDroprate");
                             player.getExtraData().remove("dropRateMultiplier");

@@ -1,9 +1,6 @@
 package org.hyperion.rs2.model;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -13,10 +10,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.Server;
+import org.hyperion.cache.Cache;
+import org.hyperion.cache.index.impl.MapIndex;
+import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
@@ -205,7 +206,7 @@ public class World {
     }
 
     public <T> T getProperty(String key) {
-        if(propertyMap.containsKey(key)) {
+        if (propertyMap.containsKey(key)) {
             return (T) propertyMap.get(key);
         }
         return null;
@@ -217,7 +218,7 @@ public class World {
      */
     public World() {
         try {
-	        /*
+            /*
 			 * backgroundLoader.submit(new Callable<Object>() {
 			 *
 			 * @Override public Object call() throws Exception { objectManager =
@@ -238,24 +239,25 @@ public class World {
             objectManager.load();
             DoorManager.init();
 
-            for(int i = 0; i < worldmapobjects; i++) {
+            for (int i = 0; i < worldmapobjects; i++) {
                 World_Objects[i] = null;
                 World_Objects[i] = new Hashtable<BlockPoint, DirectionCollection>();
             }
             // worldMap = new WorldMap();
             WorldMap.loadWorldMap(true, this);
 
+
             // org.hyperion.map.Region.load();
             new Lottery();
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
             public void run() {
-                for(Player player : players) {
+                for (Player player : players) {
                     loader.savePlayer(player, "allsave");
                 }
                 System.out.println("Saved all players!");
@@ -305,7 +307,7 @@ public class World {
     private Wilderness wilderness = null;
 
     public Wilderness getWilderness() {
-        if(wilderness == null)
+        if (wilderness == null)
             wilderness = new Wilderness();
         return wilderness;
     }
@@ -319,7 +321,7 @@ public class World {
         return logsSQL;
     }
 
-    public MySQLConnection getCharactersConnection(){
+    public MySQLConnection getCharactersConnection() {
         return charsSQL;
     }
 
@@ -337,7 +339,7 @@ public class World {
         return updateInProgress;
     }
 
-    public int updateTimer = - 1;
+    public int updateTimer = -1;
 
     /**
      * Initialises the world: loading configuration and registering global
@@ -353,7 +355,7 @@ public class World {
     public void init(GameEngine engine) throws IOException,
             ClassNotFoundException, InstantiationException,
             IllegalAccessException {
-        if(this.engine != null) {
+        if (this.engine != null) {
             throw new IllegalStateException(
                     "The world has already been initialised.");
         } else {
@@ -366,7 +368,7 @@ public class World {
             this.staffManager = new StaffManager();
             this.loadConfiguration();
             this.registerGlobalEvents();
-            if(Server.getConfig().getBoolean("sql")) {
+            if (Server.getConfig().getBoolean("sql")) {
                 logsSQL = new LogsSQLConnection(Server.getConfig());
                 donationsSQL = new DonationsSQLConnection(Server.getConfig());
                 charsSQL = new CharactersSQLConnection(Server.getConfig());
@@ -403,22 +405,22 @@ public class World {
                     true));
             bw.write(new Date().toString());
             bw.newLine();
-            if(ex.getCause() != null) {
+            if (ex.getCause() != null) {
                 bw.write("	cause: " + ex.getCause().toString());
                 bw.newLine();
             }
-            if(ex.getClass() != null) {
+            if (ex.getClass() != null) {
                 bw.write("	class: " + ex.getClass().toString());
                 bw.newLine();
             }
-            if(ex.getMessage() != null) {
+            if (ex.getMessage() != null) {
                 bw.write("	message: " + ex.getMessage());
                 bw.newLine();
             }
-            if(ex.getStackTrace() == null)
+            if (ex.getStackTrace() == null)
                 ex.fillInStackTrace();
-            if(ex.getStackTrace() != null) {
-                for(StackTraceElement s : ex.getStackTrace()) {
+            if (ex.getStackTrace() != null) {
+                for (StackTraceElement s : ex.getStackTrace()) {
                     bw.write("	at " + s.getClassName() + "."
                             + s.getMethodName() + "(" + s.getFileName() + ":"
                             + s.getLineNumber() + ")");
@@ -430,7 +432,7 @@ public class World {
             bw.newLine();
             bw.flush();
             bw.close();
-        } catch(Exception ez) {
+        } catch (Exception ez) {
             ez.printStackTrace();
         }
     }
@@ -452,7 +454,7 @@ public class World {
 			/*
 			 * Worldloader configuration.
 			 */
-            if(mappings.containsKey("worldLoader")) {
+            if (mappings.containsKey("worldLoader")) {
                 String worldLoaderClass = mappings.get("worldLoader");
                 Class<?> loader = Class.forName(worldLoaderClass);
                 this.loader = (WorldLoader) loader.newInstance();
@@ -466,14 +468,14 @@ public class World {
 			/*
 			 * Packets configuration.
 			 */
-            if(complexMappings.containsKey("packetHandlers")) {
+            if (complexMappings.containsKey("packetHandlers")) {
                 Map<Class<?>, Object> loadedHandlers = new HashMap<Class<?>, Object>();
-                for(Map.Entry<String, String> handler : complexMappings.get(
+                for (Map.Entry<String, String> handler : complexMappings.get(
                         "packetHandlers").entrySet()) {
                     int id = Integer.parseInt(handler.getKey());
                     Class<?> handlerClass = Class.forName(handler.getValue());
                     Object handlerInstance;
-                    if(loadedHandlers.containsKey(handlerClass)) {
+                    if (loadedHandlers.containsKey(handlerClass)) {
                         handlerInstance = loadedHandlers.get(loadedHandlers
                                 .get(handlerClass));
                     } else {
@@ -544,7 +546,7 @@ public class World {
      * @param event The event to submit.
      */
     public void submit(Event event) {
-        if(eventManager == null || event == null)
+        if (eventManager == null || event == null)
             return;
         this.eventManager.submit(event);
     }
@@ -610,28 +612,28 @@ public class World {
                 int code = code2;
                 LoginDebugger.getDebugger().log("Code : " + code);
                 LoginResult lr = null;
-                if(isPlayerOnline(pd.getName())) {
+                if (isPlayerOnline(pd.getName())) {
                     LoginDebugger.getDebugger().log("About to code 5");
                     code = 5;
                 } else {
                     LoginDebugger.getDebugger().log("Pre checking");
                     lr = loader.checkLogin(pd);
                     LoginDebugger.getDebugger().log("Checked login");
-                    if(code == 0) {
+                    if (code == 0) {
                         code = lr.getReturnCode();
                         LoginDebugger.getDebugger().log("Code is 0 so..");
                     }
-                    if(code == 2 || code == 8) {
+                    if (code == 2 || code == 8) {
                         lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
                         LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
                     }
                     LoginDebugger.getDebugger().log("4. Checking loader login");
                 }
-                if(! NameUtils.isValidName(pd.getName())) {
+                if (!NameUtils.isValidName(pd.getName())) {
                     code = 11;
                 }
                 LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
-                if(code != 2 && code != 8) {
+                if (code != 2 && code != 8) {
                     LoginDebugger.getDebugger().log("Packetbuilder code");
                     PacketBuilder bldr = new PacketBuilder();
                     bldr.put((byte) code);
@@ -654,13 +656,13 @@ public class World {
     }
 
     public void resetPlayersNpcs(Player player) {
-        for(int i = 1; i <= npcs.size(); i++) {
-            if(npcs.get(i) != null) {
+        for (int i = 1; i <= npcs.size(); i++) {
+            if (npcs.get(i) != null) {
                 NPC npc = (NPC) npcs.get(i);
-                if(npc.ownerId == player.getIndex()
+                if (npc.ownerId == player.getIndex()
                         && player.cE.summonedNpc != npc) {
                     npc.serverKilled = true;
-                    if(!npc.isDead()) {
+                    if (!npc.isDead()) {
                         World.getWorld().unregister(npc);
                     }
                     npc.setDead(true);
@@ -673,10 +675,10 @@ public class World {
 
     public void resetSummoningNpcs(Player player) {
         NPC npc = player.cE.summonedNpc;
-        if(npc == null)
+        if (npc == null)
             return;
         npc.serverKilled = true;
-        if(! npc.isDead()) {
+        if (!npc.isDead()) {
             submit(new NpcDeathEvent(npc));
         }
         npc.setDead(true);
@@ -687,10 +689,10 @@ public class World {
     }
 
     public void resetNpcs() {
-        for(int i = 1; i <= npcs.size(); i++) {
-            if(npcs.get(i) != null) {
+        for (int i = 1; i <= npcs.size(); i++) {
+            if (npcs.get(i) != null) {
                 NPC npc = (NPC) npcs.get(i);
-                if(! npc.isDead()) {
+                if (!npc.isDead()) {
                     npc.serverKilled = true;
                     submit(new NpcDeathEvent(npc));
                 }
@@ -750,27 +752,27 @@ public class World {
             player.getPassword().setEncryptedPass(enc);
         }*/
         int returnCode = 2;
-        if(returnCode == 2) {
-            if(! players.add(player)) {
+        if (returnCode == 2) {
+            if (!players.add(player)) {
                 returnCode = 7;
                 LoginDebugger.getDebugger().log(
                         "Could not register player " + player.getName());
             }
         }
         final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
-        if(holder != null){
-            for(final Punishment p : holder.getPunishments()){
+        if (holder != null) {
+            for (final Punishment p : holder.getPunishments()) {
                 p.getCombination().getType().apply(player);
                 p.send(player, false);
             }
-        }else{
-            for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
-                if(player.getName().equalsIgnoreCase(h.getVictimName())) //skip acc punishments ^ wouldve been previously applied
+        } else {
+            for (final PunishmentHolder h : PunishmentManager.getInstance().getHolders()) {
+                if (player.getName().equalsIgnoreCase(h.getVictimName())) //skip acc punishments ^ wouldve been previously applied
                     continue;
-                for(final Punishment p : h.getPunishments()){
-                    if((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
+                for (final Punishment p : h.getPunishments()) {
+                    if ((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
                             || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())
-                            || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))){
+                            || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))) {
                         p.getCombination().getType().apply(player);
                         p.send(player, false);
                     }
@@ -787,7 +789,7 @@ public class World {
                 .addListener(new IoFutureListener<IoFuture>() {
                     @Override
                     public void operationComplete(IoFuture future) {
-                        if(fReturnCode != 2) {
+                        if (fReturnCode != 2) {
                             player.getSession().close(false);
                         } else {
                             player.getActionSender().sendLogin();
@@ -795,7 +797,7 @@ public class World {
                         }
                     }
                 });
-        if(returnCode == 2) {
+        if (returnCode == 2) {
             // logger.info("Registered player : " + player + " [online=" +
             // players.size() + "]");
             // System.out.println("Registered player : " + player.getName() +
@@ -832,8 +834,8 @@ public class World {
     public boolean isPlayerOnline(String name) {
         LoginDebugger.getDebugger().log("Checking online players!");
         name = NameUtils.formatName(name);
-        for(Player player : players) {
-            if(player != null && player.getName().equalsIgnoreCase(name)) {
+        for (Player player : players) {
+            if (player != null && player.getName().equalsIgnoreCase(name)) {
                 return true;
             }
         }
@@ -848,31 +850,34 @@ public class World {
      */
     public Player getPlayer(String name) {
         name = NameUtils.formatName(name);
-        for(Player player : players) {
-            if(player.getName().equalsIgnoreCase(name) && !player.isHidden()) { //yes
+        for (Player player : players) {
+            if (player.getName().equalsIgnoreCase(name) && !player.isHidden()) { //yes
                 return player;
             }
         }
         return null;
     }
+
     /**
      * Attempts to gracefully close a session
+     *
      * @param session The session that is about to be closed
      */
-    public boolean gracefullyExitSession(IoSession session){
-        if(session.containsAttribute("player")) {
+    public boolean gracefullyExitSession(IoSession session) {
+        if (session.containsAttribute("player")) {
             try {
-                Player p = (Player)session.getAttribute("player");
-                if(p != null) {
+                Player p = (Player) session.getAttribute("player");
+                if (p != null) {
                     unregister(p);
                     return true;
                 }
-            }catch(ClassCastException e) {
+            } catch (ClassCastException e) {
                 System.err.println("Session attribute \"player\" was not a player");
             }
         }
         return false;
     }
+
     /**
      * Unregisters a player, and saves their game.
      *
@@ -883,10 +888,10 @@ public class World {
 		 * Combat.resetAttack(player.cE); final long xlog =
 		 * System.currentTimeMillis();
 		 */
-        if(System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
+        if (System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
             return;
         player.getExtraData().put("lastUnregister", System.currentTimeMillis());
-        if(System.currentTimeMillis() - player.cE.lastHit >= 10000 && !player.isDead() && !player.isBusy() && player.duelAttackable < 1) {
+        if (System.currentTimeMillis() - player.cE.lastHit >= 10000 && !player.isDead() && !player.isBusy() && player.duelAttackable < 1) {
             unregister2(player);
         } else {
             submit(new Event(20000) {
@@ -903,7 +908,7 @@ public class World {
 
     public void unregister2(final Player player) {
         //auto save upon being called.
-        if(player.getLogging() != null)
+        if (player.getLogging() != null)
             //player.getLogging().log("Logging out");
             Combat.logoutReset(player.cE);
         player.getDungeoneering().fireOnLogout(player);
@@ -918,20 +923,20 @@ public class World {
 
         try {
             ClanManager.leaveChat(player, false, false);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // if(Server.dedi)
         // HighscoreConnection.updateHighscores(player.getName(),
         // ""+player.getRights().toInteger(), player.getSkills().getExps());
-        if(player.duelAttackable <= 0) {
+        if (player.duelAttackable <= 0) {
             Duel.declineTrade(player);
         } else {
             Duel.finishFullyDuel(player);
             player.setLocation(Location.create(3360 + Combat.random(17),
                     3274 + Combat.random(3), 0));
         }
-        if(LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+        if (LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
             LastManStanding.getLastManStanding().leaveGame(player, true);
         }
         Trade.declineTrade(player);
@@ -963,14 +968,14 @@ public class World {
                 player.getLogManager().save();
                 long dp = player.getAccountValue().getTotalValue();
                 long pkp = player.getAccountValue().getPkPointValue();
-                if(player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
-                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) "  +
-                             "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(),player.getValueMonitor().getStartValue(),player.getValueMonitor().getStartPKValue(),
-                            dp,pkp,player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
-                if(player.verified)
+                if (player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
+                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
+                            "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(),
+                            dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
+                if (player.verified)
                     loader.savePlayer(player, "world save");
                 resetSummoningNpcs(player);
-                if(World.getWorld().getLoginServerConnector() != null) {
+                if (World.getWorld().getLoginServerConnector() != null) {
                     World.getWorld().getLoginServerConnector().disconnected(player.getName());
                 }
                 player.destroy();
@@ -982,7 +987,7 @@ public class World {
                 // player.getSession().removeAttribute("player");
             }
         });
-        if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
+        if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
             getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
@@ -1010,7 +1015,7 @@ public class World {
         //return;
         updateTimer = time; //modifies timer regardless
         updateInProgress = true;
-        for(Player p : getPlayers()) {
+        for (Player p : getPlayers()) {
             p.getActionSender().sendUpdate();
         }
         submit(new Event(1000) {
@@ -1018,16 +1023,16 @@ public class World {
             public void execute() {
                 System.out.println("Seconds left: " + updateTimer);
                 updateTimer--;
-                if(!updateInProgress)
+                if (!updateInProgress)
                     this.stop();
-                if(updateTimer == 0) {
-                    for(Player p : getPlayers()) {
+                if (updateTimer == 0) {
+                    for (Player p : getPlayers()) {
                         Trade.declineTrade(p);
                     }
-                    for(final Dungeon dungeon : Dungeon.activeDungeons) {
+                    for (final Dungeon dungeon : Dungeon.activeDungeons) {
                         try {
                             dungeon.complete();
-                        }catch(final Exception ex) {
+                        } catch (final Exception ex) {
 
                         }
                     }

@@ -57,7 +57,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
         cache = new Cache(new File("./data/cache/"));
         try {
             /*OutputStream os = new FileOutputStream("data/itemdefnew.bin");
-			buf = IoBuffer.allocate(1024);
+            buf = IoBuffer.allocate(1024);
 			buf.setAutoExpand(true);*/
             //logger.info("Loading definitions...");
             StandardIndex[] defIndices = cache.getIndexTable().getObjectDefinitionIndices();
@@ -130,6 +130,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     @Override
     public void objectParsed(GameObject obj) {
+        if (obj == null)
+            return;
         objectCount++;
 		/*buf.putShort((short) obj.getDefinition().getId());
 		buf.putShort((short) obj.getLocation().getX());
@@ -137,7 +139,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 		buf.put((byte) obj.getLocation().getZ());
 		buf.put((byte) obj.getType());
 		buf.put((byte) obj.getRotation());*/
-        World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getGameObjects().add(obj);
+        if (obj.getLocation() != null)
+            World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getGameObjects().add(obj);
     }
 
     @Override

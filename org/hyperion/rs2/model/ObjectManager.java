@@ -223,6 +223,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     public void addMapObject(int x, int y, int z, int id) {
+        System.out.printf("[ADDING]: %d %d %d > %,d : %d\n", x, y, z, mod(x, y, z), id);
         objectMap.put(mod(x, y, z), id);
     }
 

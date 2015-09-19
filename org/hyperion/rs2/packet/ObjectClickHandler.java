@@ -31,7 +31,6 @@ public class ObjectClickHandler {
         }
 
         if (loaded && !objectExist(p, id, x, y, p.getLocation().getZ())) {
-            p.sendf("%d %d %d : %d", x, y, p.getLocation().getZ(), id);
             return;
         }
         if (Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)

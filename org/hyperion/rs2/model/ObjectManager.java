@@ -229,7 +229,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public boolean objectExist(Location loc, int id) {
         final GameObject obj;
-        return objects[loc.getX()][loc.getY()][loc.getZ()] == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
+        boolean object = ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
+        return objects[loc.getX() % 5000][loc.getY() % 11000][loc.getZ() % 4] == id || object;
     }
 
    /* public void toMap() {

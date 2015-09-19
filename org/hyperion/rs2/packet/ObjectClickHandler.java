@@ -134,8 +134,9 @@ public class ObjectClickHandler {
                 player.setTeleportTarget(Location.create((player.getLocation().getX() + 3), (player.getLocation().getY() - 6400), 0));
                 break;
             case 1755:
-                player.playAnimation(Animation.create(828));
-                player.setTeleportTarget(Location.create(3005, 3962, 0));
+                player.sendf("removed for now");
+//                player.playAnimation(Animation.create(828));
+//                player.setTeleportTarget(Location.create(3005, 3962, 0));
                 break;
             case 14758:
                 player.playAnimation(Animation.create(828));

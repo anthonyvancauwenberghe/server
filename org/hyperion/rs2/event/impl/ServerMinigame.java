@@ -10,26 +10,25 @@ import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 public class ServerMinigame extends Event {
-	
-	public ServerMinigame() {
-		super(Time.ONE_HOUR * 4);
-	}
+
+    public ServerMinigame() {
+        super(Time.ONE_HOUR * 4);
+    }
 
     public static final CountDownEventBuilder[] builders = new CountDownEventBuilder[]{
-            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0),"3x Pk points game", () -> FightPits.startEvent(), true),
+            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", () -> FightPits.startEvent(), true),
             new CountDownEventBuilder("Hybridding", "hybrid", false),
             new CountDownEventBuilder("OldSchool PK", "ospk", false),
             new CountDownEventBuilder("Pure Pking", "purepk", false),
-            new CountDownEventBuilder(8133, Location.create(2521,4647,0)),
+            new CountDownEventBuilder(8133, Location.create(2521, 4647, 0)),
             new CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
             new CountDownEventBuilder(50, Location.create(2270, 4687, 0)),
-            new CountDownEventBuilder("Last Man Standing", "Last Man Standing", LastManStanding.START_2,"an all risk minigame!", () -> LastManStanding.startLMS(), false)
     };
 
-	@Override
-	public void execute() {
-		World.getWorld().submit(new CountDownEvent(builders[Misc.random(builders.length-1)]));
-	}
+    @Override
+    public void execute() {
+        World.getWorld().submit(new CountDownEvent(builders[Misc.random(builders.length - 1)]));
+    }
 
     public static class CountDownEventBuilder {
         public final Runnable run;
@@ -52,7 +51,7 @@ public class ServerMinigame extends Event {
         }
 
         public CountDownEventBuilder(final String name, final String specialArea, boolean safe) {
-            this(name, "::"+specialArea, SpecialAreaHolder.get(specialArea).get(), safe);
+            this(name, "::" + specialArea, SpecialAreaHolder.get(specialArea).get(), safe);
         }
 
         public CountDownEventBuilder(final String name, final String command, final SpecialArea area, boolean safe) {

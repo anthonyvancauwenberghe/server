@@ -50,7 +50,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public static Cache cache;
 
-    private final int[][][] objects = new int[10000][10000][4];
+    private final int[][][] objects = new int[5000][11000][4];
 
     /**
      * Loads the objects in the map.

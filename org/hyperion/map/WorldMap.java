@@ -190,7 +190,7 @@ public class WorldMap {
                     } else if (playerY > absY && checkPos(heightLevel, absX, absY, absX + Constants.DIRECTION_DELTA_X[d0], absY + Constants.DIRECTION_DELTA_Y[d0], 0)) {
                         dir = 0;
                     }/* else {
-							if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d8],absY+Constants.DIRECTION_DELTA_Y[d8],0)) {
+                            if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d8],absY+Constants.DIRECTION_DELTA_Y[d8],0)) {
 								dir = 8;
 							} else if(isWalkAble(heightLevel,absX,absY,absX+Constants.DIRECTION_DELTA_X[d0],absY+Constants.DIRECTION_DELTA_Y[d0],0)) {
 								dir = 0;
@@ -639,8 +639,9 @@ public class WorldMap {
 
         }
         System.out.println("	-Loaded " + counter + " world objects");
+        ObjectClickHandler.loaded = true;
 
-        new Thread(() -> world.getObjectMap().toMap()).start();
+        //new Thread(() -> world.getObjectMap().toMap()).start();
         //System.out.println("Highest area: "+highest);
         cache = null;
         in = null;

@@ -51,8 +51,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public static Cache cache;
 
-    private short[][][] objects = new short[5000][11000][4];
-    private final Map<Location, Integer> objectMap = new HashMap<>();
+    private Short[][][] objects = new Short[5000][11000][4];
 
     /**
      * Loads the objects in the map.
@@ -230,10 +229,10 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public boolean objectExist(Location loc, int id) {
         final GameObject obj;
-        return objectMap.getOrDefault(loc, -1) == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
+        return objects[loc.getX()][loc.getY()][loc.getZ()] == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
     }
 
-    public void toMap() {
+   /* public void toMap() {
         if (objects == null)
             throw new IllegalStateException("Outta here");
         int i = 0;
@@ -249,7 +248,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
         System.err.println("LOADED " + i + " OBJECTS TO THE SYSTEM");
         ObjectClickHandler.loaded = true;
         System.gc();
-    }
+    }    */
 
 
 }

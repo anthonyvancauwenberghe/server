@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.packet.ObjectClickHandler;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -50,7 +51,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public static Cache cache;
 
-    private final short[][][] objects = new short[5000][10005][4];
+    private short[][][] objects = new short[5000][11000][4];
+    private final Map<Location, Integer> objectMap = new HashMap<>();
 
     /**
      * Loads the objects in the map.
@@ -222,13 +224,31 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
         return null;
     }
 
-    public synchronized void addMapObject(int x, int y, int z, int id) {
+    public void addMapObject(int x, int y, int z, int id) {
         objects[x][y][z % 4] = (short) id;
     }
 
     public boolean objectExist(Location loc, int id) {
         final GameObject obj;
-        return objects[loc.getX()][loc.getY()][loc.getZ() % 4] == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
+        return objectMap.getOrDefault(loc, -1) == id || ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
+    }
+
+    public void toMap() {
+        if (objects == null)
+            throw new IllegalStateException("Outta here");
+        int i = 0;
+        for (int x = 0; x < objects.length; x++) {
+            for (int y = 0; y < objects[x].length; y++) {
+                for (int z = 0; z < objects[x][y].length; z++) {
+                    i++;
+                    objectMap.put(Location.create(x, y, z), (int) objects[x][y][z]);
+                }
+            }
+        }
+        objects = null;
+        System.err.println("LOADED " + i + " OBJECTS TO THE SYSTEM");
+        ObjectClickHandler.loaded = true;
+        System.gc();
     }
 
 

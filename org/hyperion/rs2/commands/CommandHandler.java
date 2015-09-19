@@ -93,6 +93,7 @@ import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
+import org.hyperion.rs2.model.joshyachievementsv2.cmd.OpenCommand;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
@@ -1880,7 +1881,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("givemeclues", Rank.DEVELOPER){
+        submit(new Command("givemeclues", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
                 try{
                     int amount = Integer.parseInt(filterInput(input).trim());
@@ -1894,7 +1895,7 @@ public class CommandHandler {
                         player.getBank().add(new BankItem(0, clue.getId(), amount));
                     return true;
                 } catch(Exception ex) {
-                    player.sendf("Enter a valid amount");
+                    player.sendf("Enter a valid amount.");
                     return false;
                 }
             }
@@ -2182,5 +2183,7 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new OpenCommand());
 	}
 }

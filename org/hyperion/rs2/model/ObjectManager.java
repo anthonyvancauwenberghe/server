@@ -139,8 +139,13 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 		buf.put((byte) obj.getLocation().getZ());
 		buf.put((byte) obj.getType());
 		buf.put((byte) obj.getRotation());*/
+        if(World.getWorld() == null) { System.out.println("W NULL?"); return; }
+        if(World.getWorld().getRegionManager() == null) { System.out.println("MANAGER NULL?"); return; }
         if (obj.getLocation() != null)
-            World.getWorld().getRegionManager().getRegionByLocation(obj.getLocation()).getGameObjects().add(obj);
+            World.getWorld().
+                    getRegionManager().
+                    getRegionByLocation(obj.getLocation()).
+                    getGameObjects().add(obj);
     }
 
     @Override

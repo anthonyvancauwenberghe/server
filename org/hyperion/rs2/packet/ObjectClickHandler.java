@@ -186,7 +186,7 @@ public class ObjectClickHandler {
                     return;
                 }
                 /*player.getWalkingQueue().reset();
-				final int a = player.getAppearance().getStandAnim();
+                final int a = player.getAppearance().getStandAnim();
 				final int b = player.getAppearance().getWalkAnim();
 				final int c = player.getAppearance().getRunAnim();
 				player.getAppearance().setAnimations(6067,6067,6067);
@@ -274,8 +274,7 @@ public class ObjectClickHandler {
             if (obj.getDefinition().getId() == id && obj.isAt(location))
                 return true;
         }
-        final GameObject obj = World.getWorld().getObjectMap().getObjectAt(location);
-        return obj != null && obj.getDefinition().getId() == id;
+        return World.getWorld().getObjectMap().objectExist(location, id);
 
     }
 

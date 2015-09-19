@@ -21,6 +21,7 @@ import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
+import org.hyperion.map.WorldMap2;
 import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GameEngine;
@@ -219,7 +220,7 @@ public class World {
     public World() {
         try {
             /*
-			 * backgroundLoader.submit(new Callable<Object>() {
+             * backgroundLoader.submit(new Callable<Object>() {
 			 *
 			 * @Override public Object call() throws Exception { objectManager =
 			 * new ObjectManager(); objectManager.load(); DoorManager.init();

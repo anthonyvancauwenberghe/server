@@ -19,8 +19,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.hyperion.rs2.model.Location.create;
 
@@ -47,6 +49,8 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     private int objectCount = 0;
 
     public static Cache cache;
+
+    private final Map<Integer, Integer> objectMap = new HashMap<>();
 
     /**
      * Loads the objects in the map.
@@ -137,7 +141,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
         if (obj == null)
             return;
         objectCount++;
-		/*buf.putShort((short) obj.getDefinition().getId());
+        /*buf.putShort((short) obj.getDefinition().getId());
 		buf.putShort((short) obj.getLocation().getX());
 		buf.putShort((short) obj.getLocation().getY());
 		buf.put((byte) obj.getLocation().getZ());
@@ -207,11 +211,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public GameObject getObjectAt(int x, int y, int z) {
         final Location loc = Location.create(x, y, z);
-        for (GameObject object : globalObjects) {
-            if (object.isAt(loc))
-                return object;
-        }
-        return null;
+        return getObjectAt(loc);
     }
 
     public GameObject getObjectAt(Location loc) {
@@ -220,6 +220,23 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
                 return object;
         }
         return null;
+    }
+
+    public void addMapObject(int x, int y, int z, int id) {
+        objectMap.put(mod(x, y, z), id);
+    }
+
+    public boolean objectExist(Location loc, int id) {
+        final GameObject obj;
+        return ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id) || objectMap.getOrDefault(mod(loc), -1) == id;
+    }
+
+    private int mod(Location location) {
+        return mod(location.getX(), location.getY(), location.getZ());
+    }
+
+    private int mod(int x, int y, int z) {
+        return y * 10000 + z * 100000 + x;
     }
 
 }

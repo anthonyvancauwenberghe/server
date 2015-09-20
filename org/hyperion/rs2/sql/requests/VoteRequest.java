@@ -294,7 +294,6 @@ public class VoteRequest extends SQLRequest {
             player.getBank().add(new BankItem(0, 3062, votingPoints));
             player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
         }
-        player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
         player.setLastVoted(System.currentTimeMillis());
         player.getPermExtraData().put("votingStreak", currentStreak);
         votingPoints = 0;

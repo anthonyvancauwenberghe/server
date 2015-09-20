@@ -19,6 +19,6 @@ public class IPChange extends PossibleHack {
     }
 
     public String toString() {
-        return String.format("@dre@Ipchange@bla@ %s @dre@->@bla@ %s.", ip, newIp);
+        return String.format("[@red@IP@bla@] %s @blu@>@bla@ %s.", ip, newIp);
     }
 }

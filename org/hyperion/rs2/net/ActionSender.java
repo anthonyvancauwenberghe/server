@@ -618,7 +618,7 @@ public class ActionSender {
     }
 
 	/*
-	 * public void cameraMovement(int startX, int startY,int endX, int endY, int
+     * public void cameraMovement(int startX, int startY,int endX, int endY, int
 	 * pixelHeight, int zoomSpeed, int movementSpeed) //Camera Movement packet -
 	 * mad turnip { int mapRegionX = (startX >> 3) - 6; int mapRegionY = (startY
 	 * >> 3) - 6; outStream.createFrame(73); outStream.writeWordA(mapRegionX +
@@ -808,10 +808,10 @@ public class ActionSender {
 
                         String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
                         if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-							/*
+
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                             player.getExtraData().put("cantdoshit", false);
-                            */
+
                             found = true;
                             break;
                         }
@@ -819,10 +819,10 @@ public class ActionSender {
                         shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
 
                         if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-							/*
+
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                             player.getExtraData().put("cantdoshit", false);
-                            */
+
                             found = true;
                             break;
                         }

@@ -76,48 +76,60 @@ public class Hunter implements ContentTemplate {
 			case 1028:// baby impling
 			case 6055:// Baby impling
 				p.getInventory().add(new Item(11238));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11238, 1);
 				break;
 			case 1029:// Young impling
 			case 6056:// Young impling
 				p.getInventory().add(new Item(11240));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11240, 1);
 				break;
 			case 1030:// Gourmet impling
 			case 6057:// Gourmet impling
 				p.getInventory().add(new Item(11242));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11242, 1);
 				break;
 			case 1031:// Earth impling
 			case 6058:// Earth impling
 				p.getInventory().add(new Item(11244));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11244, 1);
 				break;
 			case 1032:// Essence impling
 			case 6059:// Essence impling
 				p.getInventory().add(new Item(11246));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11246, 1);
 				break;
 			case 1033:// Eclectic impling
 			case 6060:// Eclectic impling
 				p.getInventory().add(new Item(11248));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11248, 1);
 				break;
 			case 1034:// Nature impling
 			case 6061:// Nature impling
 				p.getInventory().add(new Item(11250));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11250, 1);
 				break;
 			case 1035:// Magpie impling
 			case 6062:// Magpie impling
 				p.getInventory().add(new Item(11252));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11252, 1);
 				break;
 			case 6063:// Ninja impling
 				p.getInventory().add(new Item(11254));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11254, 1);
 				break;
 			case 7845:// Pirate impling
 			case 7846:// Pirate impling
 				p.getInventory().add(new Item(13337));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 13337, 1);
 				break;
 			case 6064:// Dragon impling
 				p.getInventory().add(new Item(11256));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11256, 1);
 				break;
 			case 7903:// Kingly Imp
 			case 7906:
 				p.getInventory().add(new Item(15517));
+				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 15517, 1);
 				break;
 		}
 	}
@@ -227,7 +239,6 @@ public class Hunter implements ContentTemplate {
 							if(caught == 20) {
 								p.getActionSender().sendMessage("You can now go to Santa to receive your reward!");
 							}
-							p.getAchievementTracker().itemSkilled(Skills.HUNTER, caught, 1);
 							addItem(p, NpcId);
 							addExp(p, NpcId);
 						}

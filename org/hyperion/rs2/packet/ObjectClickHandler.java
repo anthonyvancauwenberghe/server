@@ -9,6 +9,7 @@ import org.hyperion.rs2.action.impl.WoodcuttingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.DoorManager;
@@ -49,7 +50,7 @@ public class ObjectClickHandler {
         if (DoorManager.handleDoor(player, loc, id))
             return;
 
-        if (loaded && !objectExist(id, x, y, player.getLocation().getZ())) {
+        if (loaded && !objectExist(id, x, y, player.getLocation().getZ()) && !slipObject(id)) {
             return;
         }
         // woodcutting
@@ -139,8 +140,13 @@ public class ObjectClickHandler {
                 player.setTeleportTarget(Location.create((player.getLocation().getX() + 3), (player.getLocation().getY() - 6400), 0));
                 break;
             case 1755:
-                player.playAnimation(Animation.create(828));
-                player.setTeleportTarget(Location.create(2884, 3396, 0));
+                if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
+                    player.playAnimation(Animation.create(828));
+                    player.setTeleportTarget(Location.create(3005, 3962, 0));
+                } else {
+                    player.playAnimation(Animation.create(828));
+                    player.setTeleportTarget(Location.create(2884, 3396, 0));
+                }
                 break;
             case 1759:
                 player.playAnimation(Animation.create(828));
@@ -279,6 +285,15 @@ public class ObjectClickHandler {
         final Location location = Location.create(x, y, height);
         return World.getWorld().getObjectMap().objectExist(location, id);
 
+    }
+
+    public static boolean slipObject(final int id) {
+        final GameObjectDefinition def = GameObjectDefinition.forId(id);
+        if (def == null || def.getName() == null)
+            return false;
+
+        String name = def.getName().toLowerCase();
+        return name.contains("ladder") || name.contains("gate") || name.contains("door");
     }
 
 }

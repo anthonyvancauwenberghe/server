@@ -514,6 +514,8 @@ public class World {
      * Registers global events such as updating.
      */
     private void registerGlobalEvents() {
+        if(Server.NAME.equalsIgnoreCase("ArteroBeta"))
+            submit(new BetaServerEvent());
         submit(new UpdateEvent());
         submit(new CleanupEvent());
         submit(new BankersFacing());

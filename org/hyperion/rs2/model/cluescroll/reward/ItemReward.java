@@ -29,12 +29,13 @@ public class ItemReward extends Reward{
     protected boolean give(final Player player, final int amount){
         final Item item = Item.create(id, amount);
         final BankItem bankItem = new BankItem(0, id, amount);
+        player.sendf("You receive %s '@dre@%s%s@bla@' as a reward.", (amount == 1 ? Misc.aOrAn(item.getDefinition().getName()) : amount), item.getDefinition().getName(), (amount == 1 ? "" : "s"));
         if(player.getInventory().hasRoomFor(item)){
             player.getInventory().add(item);
         } else {
             player.getBank().add(bankItem);
+            player.sendf("Your reward has been added to your bank.");
         }
-        player.sendf("You receive %s '@dre@%s%s@bla@' as a reward.", (amount == 1 ? Misc.aOrAn(item.getDefinition().getName()) : amount), item.getDefinition().getName(), (amount == 1 ? "" : "s"));
         return true;
     }
 

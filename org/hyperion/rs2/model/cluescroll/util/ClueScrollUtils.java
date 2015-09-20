@@ -31,11 +31,11 @@ public final class ClueScrollUtils {
             return false;
         double clueScrollChance = 1;
         if(npc.getDefinition().combat() >= 120) {
-            clueScrollChance += (1 * ((npc.getDefinition().combat() - 120)%6));
+            clueScrollChance += ((npc.getDefinition().combat() - 120)/6);
         } else if(npc.getDefinition().combat() >= 90) {
-            clueScrollChance += (1 * ((npc.getDefinition().combat() - 90)%3));
+            clueScrollChance += ((npc.getDefinition().combat() - 90)/3);
         } else if(npc.getDefinition().combat() >= 60) {
-            clueScrollChance += (1 * ((npc.getDefinition().combat() - 60)%3));
+            clueScrollChance += ((npc.getDefinition().combat() - 60)/3);
         }
 
         if(Rank.hasAbility(player, Rank.SUPER_DONATOR)) {

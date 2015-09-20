@@ -21,7 +21,8 @@ public class CleanVotesEvent extends SQLRequest {
         }
 
         try {
-            sql.query("DELETE FROM waitingVotes WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 14 DAY), runelocus = 0 AND rspslist = 0 AND topg = 0");
+            sql.query("DELETE FROM waitingVotes WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 14 DAY)");
+            sql.query("DELETE FROM waitingVotes WHERE runelocus = 0 AND rspslist = 0 AND topg = 0");
         } catch (Exception e) {
             e.printStackTrace();
         }

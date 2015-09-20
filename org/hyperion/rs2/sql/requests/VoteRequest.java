@@ -28,8 +28,8 @@ public class VoteRequest extends SQLRequest {
     /**
      * The votes table name.
      */
-
-
+    public static final SimpleDateFormat FORMAT_PLAYER = new SimpleDateFormat("dd/MM/yyyy");
+    public static final SimpleDateFormat FORMAT_SQL = new SimpleDateFormat("yyyy-MM-dd");
     public static final String VOTES_TABLE = Server.getConfig().getString("votestable");
     private int bonus = -1;
     private int votingPoints = 0;
@@ -184,7 +184,7 @@ public class VoteRequest extends SQLRequest {
                     sql.query("UPDATE waitingVotes SET processed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
                 }
                 //If the vote was today it will tell the loader that the user has voted for a certain site today
-                if (rs.getDate("timestamp").toString().equalsIgnoreCase(new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString())) {
+                if (rs.getDate("timestamp").toString().equalsIgnoreCase(FORMAT_SQL.format(Calendar.getInstance().getTime()).toString())) {
                     if (rs.getByte("runelocus") == 1)
                         runelocus = true;
                     if (rs.getByte("topg") == 1)
@@ -216,7 +216,7 @@ public class VoteRequest extends SQLRequest {
         //Builds the calendar to get yesterday
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
-        String yesterday = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+        String yesterday = FORMAT_PLAYER.format(cal.getTime());
 
         //This will check if they voted yesterday too, if so; receive streak.
         String lastVoted = player.getPermExtraData().getString("lastVoted");
@@ -225,7 +225,7 @@ public class VoteRequest extends SQLRequest {
             if (lastVoted.equalsIgnoreCase(yesterday)) {
                 currentStreak++;
                 //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
-            } else if (!lastVoted.equalsIgnoreCase(new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()))) {
+            } else if (!lastVoted.equalsIgnoreCase(FORMAT_PLAYER.format(Calendar.getInstance().getTime()))) {
                 player.sendMessage("Your voting streak has been reset!");
                 currentStreak = 0;
             }
@@ -233,8 +233,8 @@ public class VoteRequest extends SQLRequest {
 
         //If the player voted for all 3 websites today he'll receive the bonus & they get the streak bonus, depending on the streak we just calculated.
         //It will also check if he didn't receive the streak yet today
-        if (runelocus && topg && rspslist && !new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
-            player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+        if (runelocus && topg && rspslist && !FORMAT_PLAYER.format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
+            player.getPermExtraData().put("lastVoted", FORMAT_PLAYER.format(Calendar.getInstance().getTime()));
             player.getAchievementTracker().voted();
             if (currentStreak >= 31) {
                 streak = 10;

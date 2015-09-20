@@ -30,9 +30,7 @@ public class ObjectClickHandler {
             return;
         }
 
-        if (loaded && !objectExist(p, id, x, y, p.getLocation().getZ())) {
-            return;
-        }
+
         if (Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
             p.getActionSender().sendMessage("Clicked object: " + id);
         if (World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, -1))
@@ -50,6 +48,10 @@ public class ObjectClickHandler {
         Location loc = Location.create(x, y, player.getLocation().getZ());
         if (DoorManager.handleDoor(player, loc, id))
             return;
+
+        if (loaded && !objectExist(id, x, y, player.getLocation().getZ())) {
+            return;
+        }
         // woodcutting
         Tree tree = Tree.forId(id);
         if (tree != null && player.getLocation().isWithinInteractionDistance(loc)) {
@@ -273,7 +275,7 @@ public class ObjectClickHandler {
         return ((deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX));
     }
 
-    public static boolean objectExist(Player p, int id, int x, int y, int height) {
+    public static boolean objectExist(int id, int x, int y, int height) {
         final Location location = Location.create(x, y, height);
         return World.getWorld().getObjectMap().objectExist(location, id);
 

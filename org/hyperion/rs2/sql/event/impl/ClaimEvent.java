@@ -28,12 +28,12 @@ public class ClaimEvent extends SQLEvent {
         List<Player> voted = new ArrayList<Player>();
 
         ResultSet rs = sql.query("SELECT * FROM donator WHERE `currentTime` >= DATE_SUB(NOW(), INTERVAL 14 DAY) AND finished=0 AND amount>0");
-        if(rs != null) {
-            while(rs.next()) {
+        if (rs != null) {
+            while (rs.next()) {
                 String name = rs.getString("name");
                 Player player = World.getWorld().getPlayer(name);
-                if(player != null) {
-                    if(!donated.contains(player)) {
+                if (player != null) {
+                    if (!donated.contains(player)) {
                         World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
                         donated.add(player);
                     }
@@ -43,12 +43,12 @@ public class ClaimEvent extends SQLEvent {
         }
 
         rs = sql.query("SELECT * FROM waitingVotes WHERE `timestamp` >= DATE_SUB(NOW(), INTERVAL 14 DAY) AND processed=0");
-        if(rs != null) {
-            while(rs.next()) {
+        if (rs != null) {
+            while (rs.next()) {
                 String name = rs.getString("realUsername");
                 Player player = World.getWorld().getPlayer(name);
-                if(player != null) {
-                    if(!voted.contains(player)) {
+                if (player != null) {
+                    if (!voted.contains(player)) {
                         World.getWorld().getDonationsConnection().offer(new VoteRequest(player));
                         voted.add(player);
                     }
@@ -56,6 +56,7 @@ public class ClaimEvent extends SQLEvent {
             }
             rs.close();
         }
+        //literally does us no favors
         super.updateStartTime();
     }
 

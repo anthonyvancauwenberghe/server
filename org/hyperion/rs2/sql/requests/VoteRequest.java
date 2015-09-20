@@ -28,11 +28,12 @@ public class VoteRequest extends SQLRequest {
     /**
      * The votes table name.
      */
-    public static final String VOTES_TABLE = Server.getConfig().getString("votestable");
-    private static int bonus = -1;
-    private static int votingPoints = 0;
-    private static int streak;
 
+
+    public static final String VOTES_TABLE = Server.getConfig().getString("votestable");
+    private int bonus = -1;
+    private int votingPoints = 0;
+    private int streak;
 
     /**
      * Constructs a new vote request.
@@ -45,13 +46,13 @@ public class VoteRequest extends SQLRequest {
     }
 
     private String doBonus() {
-        switch(bonus) {
+        switch (bonus) {
             case 0:
                 votingPoints *= 2;
                 return ("You get double voting points!");
             case 1:
                 long time;
-                switch(streak) {
+                switch (streak) {
                     case 10:
                         time = 2 * Time.ONE_HOUR;
                         break;
@@ -72,10 +73,10 @@ public class VoteRequest extends SQLRequest {
                         break;
                 }
                 player.getExtraData().put("doubleExperience", System.currentTimeMillis() + time);
-                return "You received double experience for " + time/Time.ONE_MINUTE + " minutes!";
+                return "You received double experience for " + time / Time.ONE_MINUTE + " minutes!";
             case 2:
                 double multiplier;
-                switch(streak) {
+                switch (streak) {
                     case 10:
                         multiplier = 1.5;
                         break;
@@ -100,7 +101,7 @@ public class VoteRequest extends SQLRequest {
                 return "You received increased droprates for one hour!";
             case 3:
                 double reducement;
-                switch(streak) {
+                switch (streak) {
                     case 10:
                         reducement = 0.5;
                         break;
@@ -122,12 +123,12 @@ public class VoteRequest extends SQLRequest {
                 }
                 player.getExtraData().put("loweredYellTimer", System.currentTimeMillis() + Time.ONE_HOUR);
                 player.getExtraData().put("yellReduction", reducement);
-               return "You received a reduced yelldelay for one hour!";
+                return "You received a reduced yelldelay for one hour!";
             case 4:
-                if(Misc.random(50/streak) == 1) {
+                if (Misc.random(60 / streak) == 1) {
                     int donatorPoints = 1000;
                     player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
-                    for(Player p : World.getWorld().getPlayers()) {
+                    for (Player p : World.getWorld().getPlayers()) {
                         p.sendServerMessage(player.getSafeDisplayName() + " has just received " + donatorPoints + " donator points for voting!");
                     }
                     return "You receive " + donatorPoints + " donator points as a rare bonus!";
@@ -144,8 +145,8 @@ public class VoteRequest extends SQLRequest {
             World.getWorld().submit(new Event(0, "Reconnecting SQL") {
                 @Override
                 public void execute() {
-                    synchronized(sql) {
-                        if(!sql.isConnected())
+                    synchronized (sql) {
+                        if (!sql.isConnected())
                             sql.establishConnection();
                     }
                 }
@@ -168,7 +169,7 @@ public class VoteRequest extends SQLRequest {
                 //if it hasn't been processed yet it will simply just give them their points
                 if (rs.getByte("processed") == 0) {
                     if (rs.getByte("runelocus") == 1 && rs.getByte("runelocusProcessed") == 0) {
-                        runelocusVotes++;
+                        runelocusVotes += 2;
                         sql.query("UPDATE waitingVotes SET runelocusProcessed=1 WHERE waitingVotes.index=" + rs.getInt("index"));
                     }
                     if (rs.getByte("topg") == 1 && rs.getByte("topgProcessed") == 0) {
@@ -220,7 +221,7 @@ public class VoteRequest extends SQLRequest {
         //This will check if they voted yesterday too, if so; receive streak.
         String lastVoted = player.getPermExtraData().getString("lastVoted");
         //If they never voted there is nothing that should happen
-        if(lastVoted != null) {
+        if (lastVoted != null) {
             if (lastVoted.equalsIgnoreCase(yesterday)) {
                 currentStreak++;
                 //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
@@ -235,7 +236,6 @@ public class VoteRequest extends SQLRequest {
         if (runelocus && topg && rspslist && !new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
             player.getAchievementTracker().voted();
-            int streak = 0;
             if (currentStreak >= 31) {
                 streak = 10;
             } else if (currentStreak >= 14) {
@@ -258,10 +258,10 @@ public class VoteRequest extends SQLRequest {
 
         //Now we do the bonus if the player needs one
         StringBuilder sb = new StringBuilder();
-        if(runelocus && topg && rspslist) {
+        if (runelocus && topg && rspslist) {
             sb.append(doBonus());
         } else {
-        //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
+            //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
             sb.append("You can still vote on ");
             if (!runelocus)
                 sb.append("Runelocus & ");
@@ -275,15 +275,13 @@ public class VoteRequest extends SQLRequest {
             sb.append(".");
         }
 
-        if(!runelocus || !rspslist || !topg) {
-            if(currentStreak != 0) {
-                player.sendMessage("Alert##Thank you for voting!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##Remember to vote on all 3 sites to keep your streak!");
-            } else {
-                player.sendMessage("Alert##Thank you for voting!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##Remember to vote on all 3 sites to get a streak!");
-            }
+        if (!runelocus || !rspslist || !topg) {
+            player.sendf(
+                    "Alert##Thank you for voting!##You received %d voting point(s)##Remember to vote on all 3 sites to %s streak!",
+                    votingPoints, currentStreak != 0 ? "keep your" : "get a");
         } else {
             if (bonus == -1) {
-                player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + "##ArteroPK appreciates your support!");
+                player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " voting point(s) ##ArteroPK appreciates your support!");
             } else {
                 if (currentStreak != 0) {
                     player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " in a row.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
@@ -294,6 +292,12 @@ public class VoteRequest extends SQLRequest {
         }
 
         //This will add the points and update the last time the player voted
+        final int freeSlots = player.getInventory().freeSlots();
+        if (freeSlots >= 1) {
+            player.getInventory().add(new Item(3062, votingPoints));
+        } else {
+            player.getBank().add(new BankItem(0, 3062, votingPoints));
+        }
         player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
         player.setLastVoted(System.currentTimeMillis());
         player.getPermExtraData().put("votingStreak", currentStreak);
@@ -398,7 +402,7 @@ public class VoteRequest extends SQLRequest {
      * Processes the vote request.
      */
     /*@Override
-	public void process(SQLConnection sql) {
+    public void process(SQLConnection sql) {
         if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
             player.getActionSender().sendMessage("processing vote before try");
 		long currentTime = System.currentTimeMillis();

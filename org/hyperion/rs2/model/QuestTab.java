@@ -105,7 +105,7 @@ public class QuestTab {
             player.getActionSender().sendString("", QUEST_TAB_TO_CLEAR[i]);
             player.getActionSender().sendTooltip(QUEST_TAB_TO_CLEAR[i], "");
         }
-        player.getActionSender().sendString("@yel@" + Misc.centerQuestTab(Server.NAME), 640);
+        player.getActionSender().sendString("@yel@" + Server.NAME, 640);
         player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Server Information -"), getId(0));
         player.getActionSender().sendFont(getId(0), 2);
         player.getActionSender().sendString("", getId(5));

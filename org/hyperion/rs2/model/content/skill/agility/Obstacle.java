@@ -93,14 +93,12 @@ public class Obstacle {
     public void executeObject(Player player, String succeedMessage, String failMessage) {
         player.setBusy(true);
         player.getAgility().setBusy(true);
-        if(failRate < 0 || failRate > 100)
-            failRate = 0;
-        int reduction = (player.getSkills().getLevel(Skills.AGILITY) - levelReq)/2;
-        failRate = 100 - (failRate - reduction);
-        int random = Misc.random(100);
-        if(random > failRate) {
-            fail(player, 0, failMessage);
-            return;
+        if(failRate != 0) {
+            failRate -= ((player.getSkills().getLevel(Skills.AGILITY) - levelReq) / 2) * 10;
+            if(Misc.random(1000) <= failRate) {
+                fail(player, 0, failMessage);
+                return;
+            }
         }
         succeed(player, 0, succeedMessage);
     }

@@ -65,6 +65,25 @@ public class TestCommands {
 				return true;
 			}
 		});
+
+		CommandHandler.submit(new Command("setlevel") {
+			@Override
+			public boolean execute(Player player, String input) throws Exception {
+				try {
+					String[] args = input.substring(9).trim().split(",");
+					int skill = Integer.parseInt(args[0]);
+					int level = Integer.parseInt(args[1]);
+						player.getSkills().setLevel(skill, level);
+						if (level <= 99) {
+							player.getSkills().setExperience(skill, player.getSkills().getXPForLevel(level) + 5);
+						}
+					return true;
+				} catch (Exception e) {
+					player.sendMessage("Use as ::setlevel SKILL,LEVEL");
+					return false;
+				}
+			}
+		});
 	}
 
 }

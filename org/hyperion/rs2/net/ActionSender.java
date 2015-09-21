@@ -1259,9 +1259,7 @@ public class ActionSender {
     }
 
     public ActionSender betaChanges() {
-        List changes = BetaServerEvent.changes;
-        List toTest = BetaServerEvent.toTest;
-        if(changes.isEmpty() && toTest.isEmpty())
+        if(BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
             return this;
         sendString(8144, "@dre@Beta server");
 
@@ -1288,7 +1286,7 @@ public class ActionSender {
 
         sendString(QUEST_MENU_IDS[i++], "@dre@Test commands for this phase");
         for (String cmd : BetaServerEvent.testCommands) {
-            sendString(QUEST_MENU_IDS[i], "- " + cmd);
+            sendString(QUEST_MENU_IDS[i], "::" + cmd);
             i++;
         }
 

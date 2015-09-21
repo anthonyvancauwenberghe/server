@@ -1,10 +1,7 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.map.WorldMap;
-import org.hyperion.map.WorldMap2;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
@@ -55,6 +52,9 @@ public class WalkingPacketHandler implements PacketHandler {
 		if(player.inAction) {
 			player.inAction = false;
 			ContentEntity.startAnimation(player, - 1);
+		}
+		if(player.duelAttackable > 0 && !player.getLocation().inDuel()) {
+			return;
 		}
 		if(player.duelRule[DuelRules.MOVEMENT.ordinal()] && player.duelAttackable > 0) {
 			player.getActionSender().sendMessage("You cannot move in this duel.");

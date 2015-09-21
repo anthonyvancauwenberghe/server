@@ -2,7 +2,6 @@ package org.hyperion.rs2.commands;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 
 public class TestCommands {
 

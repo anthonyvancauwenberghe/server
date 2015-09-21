@@ -421,7 +421,7 @@ public class QuestTab {
         ActionsManager.getManager().submit(getId(15), new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.forceMessage("I have " + (player.getPoints().getVotingPoints() == 0 ? "no" : player.getPoints().getVotingPoints()) + " " + (player.getPoints().getVotingPoints() == 1 ? "voting point" : "voting points") + ".");
+                DialogueManager.openDialogue(player, 540);
             }
         });
 

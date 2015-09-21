@@ -27,7 +27,7 @@ public final class ClueScrollUtils {
     }
 
     public static boolean dropClueScroll(Player player, NPC npc) {
-        if(ClueScrollManager.getInventoryCount(player) > 0)
+        if(ClueScrollManager.hasClueScroll(player))
             return false;
         double clueScrollChance = 1;
         if(npc.getDefinition().combat() >= 120) {

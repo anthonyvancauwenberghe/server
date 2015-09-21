@@ -5,7 +5,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.BetaServerEvent;
+import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -1281,6 +1281,14 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[i++], "@dre@Things to test");
         for (String test : BetaServerEvent.toTest) {
             sendString(QUEST_MENU_IDS[i], "- " + test);
+            i++;
+        }
+
+        sendString(QUEST_MENU_IDS[i++], "");
+
+        sendString(QUEST_MENU_IDS[i++], "@dre@Test commands for this phase");
+        for (String cmd : BetaServerEvent.testCommands) {
+            sendString(QUEST_MENU_IDS[i], "- " + cmd);
             i++;
         }
 

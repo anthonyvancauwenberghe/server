@@ -5,6 +5,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.event.impl.LogPlayercountEvent;
 import org.hyperion.rs2.sql.event.impl.LogServerWealthEvent;
+import org.hyperion.rs2.sql.requests.BetaRequest;
 
 public class LogsSQLConnection extends MySQLConnection {
 
@@ -26,8 +27,10 @@ public class LogsSQLConnection extends MySQLConnection {
         establishConnection();
         submit(new LogPlayercountEvent());
         submit(new LogServerWealthEvent());
-        if(Server.NAME.equalsIgnoreCase("ArteroBeta"))
+        if(Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             submit(new BetaServerEvent());
+            offer(new BetaRequest());
+        }
         start();
         return true;
     }

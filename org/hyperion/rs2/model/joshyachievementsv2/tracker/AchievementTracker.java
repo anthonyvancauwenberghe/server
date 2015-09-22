@@ -1,30 +1,17 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
+import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.*;
+
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
-import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.BarrowsTripTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.DungeoneeringFloorsTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.FightPitsTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.ItemOpenTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillForBountyTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillstreakTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlaceBountyTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.SlayerTask;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.VoteTask;
 
 public class AchievementTracker {
 
@@ -168,6 +155,10 @@ public class AchievementTracker {
 
     public void npcKill(final int npcId) {
         progress(NpcKillTask.filter(npcId), 1);
+    }
+
+    public void playerKill(){
+        progress(PlayerKillTask.filter(), 1);
     }
 
     private void pickupItem(final PickupItemTask.From from, final int itemId, final int quantity) {

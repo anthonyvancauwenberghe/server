@@ -1,8 +1,11 @@
 package org.hyperion.rs2.commands.impl;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
@@ -24,15 +27,16 @@ public class YellCommand extends Command {
 	}
 
 	private int getYellDelay(Player player) {
-		if(player.getExtraData().getLong("loweredYellTimer") >= System.currentTimeMillis() && player.getExtraData().getLong("loweredYellTimer") != 0) {
+		if(player.getPermExtraData().getLong("loweredYellTimer") >= System.currentTimeMillis() && player.getPermExtraData().getLong("loweredYellTimer") != 0) {
+			long yellReducement = player.getPermExtraData().getLong("yellReduction");
 			if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
-				return (int)(SUPER_YELL_DELAY * player.getExtraData().getLong("yellReduction"));
+				return (int)(SUPER_YELL_DELAY * yellReducement);
 			else if (Rank.hasAbility(player, Rank.DONATOR))
-				return (int)(DONATOR_YELL_DELAY * player.getExtraData().getLong("yellReduction"));
-			return (int)(NORMAL_YELL_DELAY * player.getExtraData().getLong("yellReduction"));
-		} else if(player.getExtraData().getLong("loweredYellTimer") < System.currentTimeMillis() && player.getExtraData().getLong("loweredYellTimer") != 0) {
-			player.getExtraData().remove("loweredYellTimer");
-			player.getExtraData().remove("yellReduction");
+				return (int)(DONATOR_YELL_DELAY * yellReducement);
+			return (int)(NORMAL_YELL_DELAY * yellReducement);
+		} else if(player.getPermExtraData().getLong("loweredYellTimer") < System.currentTimeMillis() && player.getPermExtraData().getLong("loweredYellTimer") != 0) {
+			player.getPermExtraData().remove("loweredYellTimer");
+			player.getPermExtraData().remove("yellReduction");
 		}
 		if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
 			return SUPER_YELL_DELAY;
@@ -67,7 +71,7 @@ public class YellCommand extends Command {
 
 		long yellMilliseconds = (long)(System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur"));
 
-		if(!Rank.isStaffMember(player)) {
+		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
 			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
 					player.sendMessage("Please wait " + (int) ((getYellDelay(player) - yellMilliseconds) / 1000) + " seconds before yelling.");
@@ -93,7 +97,7 @@ public class YellCommand extends Command {
 		final String suffixWithoutTitles = (player.hardMode() ? "[I]" : "") + "[" + colors + Rank.getPrimaryRank(player).toString() + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
-		if(!Rank.isStaffMember(player)) {
+		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
 			World.getWorld().submit(
 					new Event(getYellDelay(player)) {
 						public void execute() {

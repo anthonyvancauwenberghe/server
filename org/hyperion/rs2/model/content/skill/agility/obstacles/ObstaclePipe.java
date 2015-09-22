@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.skill.agility.obstacles;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
@@ -83,6 +84,7 @@ public class ObstaclePipe extends Obstacle {
                     else if(progress == 0) {
                         player.setTeleportTarget(end);
                         reset(player);
+                        player.getSkills().addExperience(Skills.AGILITY, skillXp);
                         course.progressCourse(player, getProgress());
                         stop();
                     }

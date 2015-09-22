@@ -1,57 +1,15 @@
 package org.hyperion.rs2.packet;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import javax.swing.JFrame;
-
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.commands.TestCommands;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.*;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.BankPin;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.FriendsAssistant;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Graphic;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.NPCDrop;
-import org.hyperion.rs2.model.NPCManager;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SummoningMonsters;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.Yelling;
 import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
 import org.hyperion.rs2.model.color.Color;
@@ -63,16 +21,11 @@ import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
-import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.EquipmentReq;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
-import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.Offer;
@@ -80,11 +33,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
-import org.hyperion.rs2.model.content.misc2.Afk;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.content.misc2.Jail;
-import org.hyperion.rs2.model.content.misc2.NewGameMode;
-import org.hyperion.rs2.model.content.misc2.SpawnTab;
+import org.hyperion.rs2.model.content.misc2.*;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -99,14 +48,19 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLite;
-import org.hyperion.rs2.util.EventBuilder;
-import org.hyperion.rs2.util.MassEvent;
-import org.hyperion.rs2.util.PlayerFiles;
-import org.hyperion.rs2.util.PushMessage;
-import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
 import org.madturnip.tools.RoomDefinitionCreator;
+
+import javax.swing.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -2240,6 +2194,9 @@ public class CommandPacketHandler implements PacketHandler {
             if (player.isDead())
                 return;
             // player.getLogging().log("Command: " + s);
+            if (Server.NAME.equalsIgnoreCase("ArteroBeta"))
+                if(TestCommands.processBetaCommands(player, commandStart, s, withCaps, as))
+                    return;
             if (Rank.hasAbility(player, Rank.OWNER))
                 this.processOwnerCommands(player, commandStart, s, withCaps, as);
             if (Rank.hasAbility(player, Rank.DEVELOPER))

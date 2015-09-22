@@ -1880,7 +1880,7 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("givemeclues", Rank.PLAYER){
+        submit(new Command("givemeclues", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 try{
                     int amount = Integer.parseInt(filterInput(input).trim());
@@ -1888,8 +1888,6 @@ public class CommandHandler {
                         player.sendMessage("You need to try and spawn at least 1 of them.");
                         return false;
                     }
-                    if(amount == 1)
-                        amount = 2;
                     for(ClueScroll clue : ClueScrollManager.getAll())
                         player.getBank().add(new BankItem(0, clue.getId(), amount));
                     return true;

@@ -254,6 +254,7 @@ public class PlayerDeathEvent extends Event {
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
+							killer.getAchievementTracker().playerKill();
 							AchievementHandler.progressAchievement(player, "Kill");
                             killer.addLastKill(player.getName());
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);

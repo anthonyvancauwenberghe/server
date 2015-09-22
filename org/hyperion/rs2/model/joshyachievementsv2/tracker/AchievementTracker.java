@@ -22,6 +22,7 @@ import org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillstreakTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlaceBountyTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.SlayerTask;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.VoteTask;
@@ -168,6 +169,10 @@ public class AchievementTracker {
 
     public void npcKill(final int npcId) {
         progress(NpcKillTask.filter(npcId), 1);
+    }
+
+    public void playerKill(){
+        progress(PlayerKillTask.filter(), 1);
     }
 
     private void pickupItem(final PickupItemTask.From from, final int itemId, final int quantity) {

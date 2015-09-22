@@ -25,8 +25,6 @@ public class ClueScrollContentTemplate implements ContentTemplate {
     }
 
     public boolean clickObject(final Player player, final int type, final int id, final int slot, final int interfaceId, final int idk) {
-        if (true)
-            return false;
         final ClueScroll cs = ClueScrollManager.get(id);
         if (cs == null)
             return false;

@@ -1315,6 +1315,7 @@ public class DialogueManager {
 				break;
 			case 195:
 				Magic.teleport(player, Location.create(2975, 3745, 0), false);
+				player.getActionSender().removeChatboxInterface();
 				break;
 			case 196:
 				player.getActionSender().sendDialogue("Pick an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Teleport me to level 14 wilderness", "Stay here");

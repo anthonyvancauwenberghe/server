@@ -547,7 +547,7 @@ public class Skills {
             player.getExtraData().remove("doubleExperience");
         }
 
-        if (skill > 6/*== BONUS_SKILL*/)
+        if (skill == BONUS_SKILL)
             exp *= 2;
         else if (skill > 6 && player.getExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getExtraData().getLong("doubleExperience") != 0)
             exp *= 2;

@@ -1493,6 +1493,20 @@ public class DialogueManager {
 				player.forceMessage("I have " + (player.getPoints().getHonorPoints() == 0 ? "no" : player.getPoints().getHonorPoints()) + " " + (player.getPoints().getHonorPoints() == 1 ? "honor point" : "honor points") + ".");
 				player.getActionSender().removeChatboxInterface();
 				break;
+			case 540:
+				player.getActionSender().sendDialogue("Click an option", DialogueType.OPTION, 1, FacialAnimation.DEFAULT, "Yell out voting streak", "Yell out voting points");
+				player.getInterfaceState().setNextDialogueId(0, 541);
+				player.getInterfaceState().setNextDialogueId(1, 542);
+				break;
+			case 541:
+				int currentStreak = player.getPermExtraData().getInt("votingStreak");
+				player.forceMessage("I " + (currentStreak == 0 ? "have no streak going right now" : "am on a " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " voting streak") + ".");
+				player.getActionSender().removeChatboxInterface();
+				break;
+			case 542:
+				player.forceMessage("I have " + (player.getPoints().getVotingPoints() == 0 ? "no" : player.getPoints().getVotingPoints()) + " " + (player.getPoints().getVotingPoints() == 1 ? "voting point" : "voting points") + ".");
+				player.getActionSender().removeChatboxInterface();
+				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;

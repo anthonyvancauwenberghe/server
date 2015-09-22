@@ -1,5 +1,6 @@
 package org.hyperion.rs2.commands;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 
@@ -79,6 +80,8 @@ public abstract class Command {
 	}
 
 	private boolean shouldRecord(Rank[] rights) {
+		if(Server.NAME.equalsIgnoreCase("arterobeta"))
+			return false;
 		for(Rank right : rights) {
 			if(right.ordinal() >= Rank.MODERATOR.ordinal())
 				return true;

@@ -1,11 +1,9 @@
 package org.hyperion.rs2.sql.requests;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
@@ -15,9 +13,7 @@ import org.hyperion.util.Time;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Arsen Maxyutov.
@@ -30,7 +26,6 @@ public class VoteRequest extends SQLRequest {
      */
     public static final SimpleDateFormat FORMAT_PLAYER = new SimpleDateFormat("dd/MM/yyyy");
     public static final SimpleDateFormat FORMAT_SQL = new SimpleDateFormat("yyyy-MM-dd");
-    public static final String VOTES_TABLE = Server.getConfig().getString("votestable");
     private int bonus = -1;
     private int votingPoints = 0;
     private int streak;
@@ -76,7 +71,7 @@ public class VoteRequest extends SQLRequest {
                 return "You received double experience for " + time / Time.ONE_MINUTE + " minutes!";
             case 2:
                 double multiplier;
-                switch (streak) {
+                switch(streak) {
                     case 10:
                         multiplier = 1.5;
                         break;
@@ -277,8 +272,8 @@ public class VoteRequest extends SQLRequest {
 
         if (!runelocus || !rspslist || !topg) {
             player.sendf(
-                    "Alert##Thank you for voting!##You received %d voting point(s)##Remember to vote on all 3 sites to %s streak!",
-                    votingPoints, currentStreak != 0 ? "keep your" : "get a");
+                    "Alert##Thank you for voting!##You received %d voting point(s)##Remember to vote on all 3 sites to %s streak!##%s",
+                    votingPoints, currentStreak != 0 ? "keep your" : "get a", sb.toString());
         } else {
             if (bonus == -1) {
                 player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " voting point(s) ##ArteroPK appreciates your support!");
@@ -297,8 +292,8 @@ public class VoteRequest extends SQLRequest {
             player.getInventory().add(new Item(3062, votingPoints));
         } else {
             player.getBank().add(new BankItem(0, 3062, votingPoints));
+            player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
         }
-        player.getPoints().setVotingPoints(player.getPoints().getVotingPoints() + votingPoints);
         player.setLastVoted(System.currentTimeMillis());
         player.getPermExtraData().put("votingStreak", currentStreak);
         votingPoints = 0;

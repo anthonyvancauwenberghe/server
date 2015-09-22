@@ -76,9 +76,34 @@ public final class ClueScrollManager {
         return null;
     }
 
+    public static ClueScroll getInBank(final Player player){
+        for(final Item i : player.getBank().toArray()){
+            if(i == null)
+                continue;
+            final ClueScroll cs = get(i.getId());
+            if(cs != null)
+                return cs;
+        }
+        return null;
+    }
+
+    public static boolean hasClueScroll(final Player player) {
+        if(getBankCount(player) == 0 && getInventoryCount(player) == 0)
+            return true;
+        return false;
+    }
+
     public static int getInventoryCount(final Player player){
         int count = 0;
         for(final Item i : player.getInventory().toArray())
+            if(i != null && get(i.getId()) != null)
+                ++count;
+        return count;
+    }
+
+    public static int getBankCount(final Player player){
+        int count = 0;
+        for(final Item i : player.getBank().toArray())
             if(i != null && get(i.getId()) != null)
                 ++count;
         return count;

@@ -56,7 +56,6 @@ public class ClaimEvent extends SQLEvent {
             }
             rs.close();
         }
-        //literally does us no favors
         super.updateStartTime();
     }
 

@@ -29,11 +29,14 @@ public class AchievementTaskProgress{
     }
 
     public int progress(final int amount){
-        return progress = Math.max(progress + amount, task().threshold);
+        progress += amount;
+        if(progress > task().threshold)
+            progress = task().threshold;
+        return progress;
     }
 
     public double progressPercent(){
-        return (double)progress / task().threshold;
+        return progress * 100d / task().threshold;
     }
 
     public boolean started(){

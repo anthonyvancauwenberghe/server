@@ -140,11 +140,12 @@ public class Cooking implements ContentTemplate {
 
 				if(Combat.random(client.getSkills().getLevel(7) + 3 - cookItem.getLevel()) != 1) {
 					ContentEntity.addItem(client, cookItem.getCookedItem(), 1);
-					client.getAchievementTracker().itemSkilled(Skills.COOKING, cookItem.getCookId(), 1);
+					client.getAchievementTracker().itemSkilled(Skills.COOKING, cookItem.getCookedItem(), 1);
 					ContentEntity.addSkillXP(client, cookItem.getExperience() * EXPMULTIPLIER, 7);
 					ContentEntity.sendMessage(client, "You succesfully cook some " + ContentEntity.getItemName(cookItem.getCookedItem()).toLowerCase() + ".");
 				} else {
 					ContentEntity.addItem(client, cookItem.getBurnedItem(), 1);
+					client.getAchievementTracker().itemSkilled(Skills.COOKING, cookItem.getBurnedItem(), 1);
 					ContentEntity.sendMessage(client, "You accidentally burn the " + name.toLowerCase() + ".");
 				}
 

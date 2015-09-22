@@ -75,7 +75,7 @@
                 <chance>60</chance>
             </reward>
             <reward type="ITEM">
-                <id>15242</id>
+                <id>15243</id>
                 <minAmount>1</minAmount>
                 <maxAmount>20</maxAmount>
                 <chance>53</chance>
@@ -559,7 +559,7 @@
                 <chance>82</chance>
             </reward>
             <reward type="ITEM">
-                <id>15242</id>
+                <id>15243</id>
                 <minAmount>1</minAmount>
                 <maxAmount>41</maxAmount>
                 <chance>82</chance>
@@ -910,7 +910,7 @@
                 <chance>73</chance>
             </reward>
             <reward type="ITEM">
-                <id>15333</id>
+                <id>15332</id>
                 <minAmount>1</minAmount>
                 <maxAmount>4</maxAmount>
                 <chance>72</chance>
@@ -980,7 +980,7 @@
                 <chance>64</chance>
             </reward>
             <reward type="ITEM">
-                <id>15242</id>
+                <id>15243</id>
                 <minAmount>1</minAmount>
                 <maxAmount>64</maxAmount>
                 <chance>34</chance>
@@ -1301,7 +1301,7 @@
                 <chance>62</chance>
             </reward>
             <reward type="ITEM">
-                <id>15242</id>
+                <id>15243</id>
                 <minAmount>1</minAmount>
                 <maxAmount>42</maxAmount>
                 <chance>54</chance>
@@ -1349,7 +1349,7 @@
                 <chance>82</chance>
             </reward>
             <reward type="ITEM">
-                <id>15242</id>
+                <id>15243</id>
                 <minAmount>1</minAmount>
                 <maxAmount>62</maxAmount>
                 <chance>83</chance>
@@ -1545,7 +1545,7 @@
                 <chance>76</chance>
             </reward>
             <reward type="ITEM">
-                <id>15333</id>
+                <id>15332</id>
                 <minAmount>1</minAmount>
                 <maxAmount>6</maxAmount>
                 <chance>82</chance>
@@ -1762,7 +1762,7 @@
                 <chance>100</chance>
             </reward>
             <reward type="ITEM">
-                <id>15333</id>
+                <id>15332</id>
                 <minAmount>1</minAmount>
                 <maxAmount>5</maxAmount>
                 <chance>82</chance>
@@ -1816,7 +1816,7 @@
                 <chance>40</chance>
             </reward>
             <reward type="ITEM">
-                <id>15242</id>
+                <id>15243</id>
                 <minAmount>1</minAmount>
                 <maxAmount>47</maxAmount>
                 <chance>61</chance>

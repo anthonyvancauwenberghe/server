@@ -105,7 +105,7 @@ public class QuestTab {
             player.getActionSender().sendString("", QUEST_TAB_TO_CLEAR[i]);
             player.getActionSender().sendTooltip(QUEST_TAB_TO_CLEAR[i], "");
         }
-        player.getActionSender().sendString("@yel@     ArteroPk", 640);
+        player.getActionSender().sendString("@yel@" + Server.NAME, 640);
         player.getActionSender().sendString("@yel@" + Misc.centerQuestTab("- Server Information -"), getId(0));
         player.getActionSender().sendFont(getId(0), 2);
         player.getActionSender().sendString("", getId(5));
@@ -421,7 +421,7 @@ public class QuestTab {
         ActionsManager.getManager().submit(getId(15), new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.forceMessage("I have " + (player.getPoints().getVotingPoints() == 0 ? "no" : player.getPoints().getVotingPoints()) + " " + (player.getPoints().getVotingPoints() == 1 ? "voting point" : "voting points") + ".");
+                DialogueManager.openDialogue(player, 540);
             }
         });
 

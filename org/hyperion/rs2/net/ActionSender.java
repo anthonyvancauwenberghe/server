@@ -1,12 +1,11 @@
 package org.hyperion.rs2.net;
 
-import com.sun.javafx.geom.Edge;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -37,7 +36,6 @@ import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Time;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -176,7 +174,7 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@blu@ BONUS ACTIVE: @dre@ 2x EXP & 2x Dung Tokens");
+            player.sendMessage("@dre@ Bonus active: @bla@2x experience & 2x Dungeoneering tokens!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 
@@ -389,6 +387,31 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendLogin() {
+        if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+            boolean has = false;
+            for (String ipz : GoodIPs.GOODS) {
+                if (player.getShortIP().startsWith(ipz)) {
+                    has = true;
+                    break;
+                }
+            }
+            if (!has)
+                player.getSession().close(false);
+
+        } else if(Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+            boolean whitelisted = false;
+            for (String name : BetaServerEvent.whitelist) {
+                if (player.getName().equalsIgnoreCase(name)) {
+                    whitelisted = true;
+                    break;
+                }
+            }
+            if (!whitelisted)
+                player.getSession().close(false);
+
+            betaChanges();
+        }
+
         if (player.doubleChar()) {
             basicLogin();
             player.setTeleportTarget(Location.create(3000, 3400, 0));
@@ -402,15 +425,6 @@ public class ActionSender {
             return this;
         }
 
-        if (Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-            boolean has = false;
-            for (String ipz : GoodIPs.GOODS) {
-                if (player.getShortIP().startsWith(ipz))
-                    has = true;
-            }
-            if (!has)
-                player.getSession().close(false);
-        }
         basicLogin();
         return this;
     }
@@ -1239,6 +1253,42 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[rules.length + 2], "@dre@            instant yell mute.");
         sendString(QUEST_MENU_IDS[rules.length + 4], "Use the command ::acceptyellrules to accept");
         sendString(QUEST_MENU_IDS[rules.length + 5], "                 these rules.");
+
+        showInterface(8134);
+        return this;
+    }
+
+    public ActionSender betaChanges() {
+        if(BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
+            return this;
+        sendString(8144, "@dre@Beta server");
+
+        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
+            sendString(QUEST_MENU_IDS[d], "");
+        }
+
+        int i = 0;
+        sendString(QUEST_MENU_IDS[i++], "@dre@Changelog");
+        for (String change : BetaServerEvent.changes) {
+            sendString(QUEST_MENU_IDS[i], "- " + change);
+            i++;
+        }
+
+        sendString(QUEST_MENU_IDS[i++], "");
+
+        sendString(QUEST_MENU_IDS[i++], "@dre@Things to test");
+        for (String test : BetaServerEvent.toTest) {
+            sendString(QUEST_MENU_IDS[i], "- " + test);
+            i++;
+        }
+
+        sendString(QUEST_MENU_IDS[i++], "");
+
+        sendString(QUEST_MENU_IDS[i++], "@dre@Test commands for this phase");
+        for (String cmd : BetaServerEvent.testCommands) {
+            sendString(QUEST_MENU_IDS[i], "::" + cmd);
+            i++;
+        }
 
         showInterface(8134);
         return this;

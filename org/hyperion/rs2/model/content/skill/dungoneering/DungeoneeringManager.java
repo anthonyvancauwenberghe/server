@@ -38,13 +38,13 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        if(type == ClickType.EAT || type == ClickType.ITEM_OPTION7 || type == ClickType.ITEM_OPTOION6)
+        if (type == ClickType.EAT || type == ClickType.ITEM_OPTION7 || type == ClickType.ITEM_OPTOION6)
             return new int[]{15707};
-        else if(type == ClickType.OBJECT_CLICK1)
+        else if (type == ClickType.OBJECT_CLICK1)
             return new int[]{2477, 2476, 2804};
-        else if(type == ClickType.DIALOGUE_MANAGER) {
+        else if (type == ClickType.DIALOGUE_MANAGER) {
             int[] ret = new int[25];
-            for(int i = 0; i < ret.length; i++)
+            for (int i = 0; i < ret.length; i++)
                 ret[i] = DIALOGUE_ID + i;
             return ret;
         } else if (type == ClickType.NPC_OPTION1)
@@ -53,36 +53,37 @@ public class DungeoneeringManager implements ContentTemplate {
             return new int[]{8827, 8824, 9711};
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
+
     @Override
     public boolean clickObject2(Player player, int type, int npcId, int x, int y, int npcSlot) {
-        if(type == ClickType.NPC_OPTION2) {
-            if(npcId == 9711) {
+        if (type == ClickType.NPC_OPTION2) {
+            if (npcId == 9711) {
                 ShopManager.open(player, 81);
                 return true;
             }
             try {
                 player.debugMessage("Yo3");
 
-                final NPC npc = (NPC)World.getWorld().getNPCs().get(npcSlot);
-                if(npc == null) {
+                final NPC npc = (NPC) World.getWorld().getNPCs().get(npcSlot);
+                if (npc == null) {
                     player.sendMessage("Null NPC");
                     return false;
                 }
-                if(npc.isDead())
+                if (npc.isDead())
                     return false;
                 final int min_level = npcId == 8824 ? 50 : 80;
-                if(player.getSkills().getLevel(Skills.THIEVING) < min_level) {
-                    player.sendMessage("You need " + min_level +" thieving level to loot from this npc!");
+                if (player.getSkills().getLevel(Skills.THIEVING) < min_level) {
+                    player.sendMessage("You need " + min_level + " thieving level to loot from this npc!");
                     return false;
                 }
                 player.debugMessage("Yo");
 
 
-                if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
+                if (player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
                     return false;
 
                 player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000L);
-                for(int i =0; i < min_level/25; i++) {
+                for (int i = 0; i < min_level / 25; i++) {
                     player.getInventory().add(Item.create(DungeoneeringManager.randomItem(), 1));
                 }
                 player.debugMessage("Yo5");
@@ -91,27 +92,27 @@ public class DungeoneeringManager implements ContentTemplate {
                 npc.serverKilled = true;
                 npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
 
-            }catch(Exception e) {
+            } catch (Exception e) {
                 player.debugMessage("Yo4");
 
                 e.printStackTrace();
             }
         } else if (type == ClickType.ITEM_OPTOION6) {
-            if(player.getDungeoneering().inDungeon()) {
+            if (player.getDungeoneering().inDungeon()) {
                 String[] names = player.getDungeoneering().getCurrentDungeon().getPlayers().stream().map(Player::getName).toArray(String[]::new);
-                if(names.length > 5) {
+                if (names.length > 5) {
                     final String[] old = names.clone();
                     names = new String[5];
-                    for(int i = 0; i < names.length; i++) {
+                    for (int i = 0; i < names.length; i++) {
                         names[i] = old[i];
                     }
                 }
                 player.getActionSender().sendDialogue("Teleport", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, names);
-                for(int i = 0 ; i < names.length ; i++) {
+                for (int i = 0; i < names.length; i++) {
                     player.getInterfaceState().setNextDialogueId(i, 7014 + i);
                 }
             }
-        } else if(type == ClickType.ITEM_OPTION7) {
+        } else if (type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungeoneering().getTokens()));
             return true;
         }
@@ -120,7 +121,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
-        if(cantJoin(player))  {
+        if (cantJoin(player)) {
             player.sendMessage("You can only bring the ring of kinship - no summoning allowed!");
             return false;
         }
@@ -131,12 +132,12 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
-        if(npcId == TRADER_ID) {
+        if (npcId == TRADER_ID) {
             ShopManager.open(player, 80);
             return true;
         }
 
-        if(npcId == 9711) {
+        if (npcId == 9711) {
             DialogueManager.openDialogue(player, 7011);
             return true;
         }
@@ -146,11 +147,11 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
-        if(player.getLocation().distance(Location.create(x, y, 0)) > 2)
+        if (player.getLocation().distance(Location.create(x, y, 0)) > 2)
             return false;
-        switch(id) {
+        switch (id) {
             case 2804:
-                if(World.getWorld().updateInProgress()) {
+                if (World.getWorld().updateInProgress()) {
                     player.sendMessage("You cannot start a dungeon right now");
                     return true;
                 }
@@ -159,7 +160,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 break;
             case 2477:
                 final Location loc = player.getDungeoneering().clickPortal();
-                if(loc == null) {
+                if (loc == null) {
                     player.sendMessage("You need to clear the room before progressing");
                     return true;
                 }
@@ -169,7 +170,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 return true;
             case 2476:
                 final Location location = player.getDungeoneering().clickBackPortal();
-                if(location == null) {
+                if (location == null) {
                     DialogueManager.openDialogue(player, 7002);
                     return true;
                 }
@@ -183,7 +184,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public boolean dialogueAction(Player player, int dialogueId) {
-        switch(dialogueId) {
+        switch (dialogueId) {
             case 7000:
             case 7001:
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
@@ -197,7 +198,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 state.setNextDialogueId(1, 7004);
                 return true;
             case 7003:
-                if(player.getDungeoneering().inDungeon())
+                if (player.getDungeoneering().inDungeon())
                     player.getDungeoneering().getCurrentDungeon().remove(player, false);
                 break;
             case 7005:
@@ -208,13 +209,13 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7008:
             case 7009:
             case 7010:
-                final int slots = 1 + (player.getSkills().getLevel(Skills.DUNGEONEERING) +1)/4;
+                final int slots = 1 + (player.getSkills().getLevel(Skills.DUNGEONEERING) + 1) / 25;
                 final int slot = dialogueId - 7006;
-                if(slot > slots) {
+                if (slot > slots) {
                     player.sendMessage("This slot is not available for you");
                     break;
                 }
-                player.getDungeoneering().bind((Item)player.getExtraData().get("binditem"), slot);
+                player.getDungeoneering().bind((Item) player.getExtraData().get("binditem"), slot);
                 break;
             case 7011:
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
@@ -242,7 +243,7 @@ public class DungeoneeringManager implements ContentTemplate {
                     final Player to = player.getDungeoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014);
                     player.setTeleportTarget(to.getLocation());
                     player.getDungeoneering().setCurrentRoom(to.getDungeoneering().getRoom());
-                } catch(final Exception ex) {
+                } catch (final Exception ex) {
                     ex.printStackTrace();
                 }
                 break;
@@ -250,22 +251,22 @@ public class DungeoneeringManager implements ContentTemplate {
                 final String[] perk_pricse = Stream.of(RingPerks.Perk.values()).
                         map(perk ->
                                 perk.maxLevel != player.getDungeoneering().perks.hasPerk(perk) ?
-                                        String.format("%s %d tokens",perk.name(), player.getDungeoneering().perks.calcNextPerkCost(perk.index)) :
+                                        String.format("%s %d tokens", perk.name(), player.getDungeoneering().perks.calcNextPerkCost(perk.index)) :
                                         String.format("%s MAXED", perk.name())).toArray(String[]::new);
                 player.getActionSender().sendDialogue("Rewards Trader", ActionSender.DialogueType.OPTION, 9711, Animation.FacialAnimation.DEFAULT,
                         perk_pricse);
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; i++)
                     player.getInterfaceState().setNextDialogueId(i, 7020 + i);
                 return true;
             case 7020:
             case 7021:
             case 7022:
                 final RingPerks.Perk perk = RingPerks.Perk.forStyle(dialogueId - 7020);
-                if(player.getDungeoneering().perks.hasPerk(perk) == perk.maxLevel) {
+                if (player.getDungeoneering().perks.hasPerk(perk) == perk.maxLevel) {
                     player.sendMessage("This perk is maxed");
                     break;
                 }
-                if(player.getDungeoneering().buyPerk(dialogueId - 7020)) {
+                if (player.getDungeoneering().buyPerk(dialogueId - 7020)) {
                     player.sendMessage("You successfully upgrade your perk. Check perk bonuses by right clicking your ring");
                 } else {
                     player.sendMessage("You need more tokens to do that!");
@@ -280,15 +281,15 @@ public class DungeoneeringManager implements ContentTemplate {
 
     public static final List<Integer> parse() {
         final List<ItemDefinition> items = new ArrayList<>();
-        for(int i = 0; i < 13_000; i++) {
-            if(!ItemSpawning.canSpawn(i))
+        for (int i = 0; i < 13_000; i++) {
+            if (!ItemSpawning.canSpawn(i))
                 continue;
             final ItemDefinition def = ItemDefinition.forId(i);
-            if(def == null) continue;
+            if (def == null) continue;
             final String name = def.getName().toLowerCase();
-            if(nonviable(def) && !(name.endsWith(" arrow") || (def.getId() < 567 && def.getId() > 553)))
+            if (nonviable(def) && !(name.endsWith(" arrow") || (def.getId() < 567 && def.getId() > 553)))
                 continue;
-            if(def.isNoted())
+            if (def.isNoted())
                 continue;
             items.add(def);
 
@@ -298,30 +299,31 @@ public class DungeoneeringManager implements ContentTemplate {
 
         System.out.println(items.size());
         final List<Integer> ret = new ArrayList<>();
-        for(final ItemDefinition def : items)
+        for (final ItemDefinition def : items)
             ret.add(def.getId());
         return ret;
     }
 
     public static final boolean cantJoin(final Player player) {
-        return ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707) || (ContentEntity.getTotalAmountOfItems(player) == 2 && player.getInventory().contains(15707) && player.getInventory().contains(1856))) ||  player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
+        return ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707) || (ContentEntity.getTotalAmountOfItems(player) == 2 && player.getInventory().contains(15707) && player.getInventory().contains(1856))) || player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
     }
 
 
     private static final boolean nonviable(final ItemDefinition def) {
-        if(!full(def.getBonus()) || def.getName().contains("(") || def.getName().contains("/") || def.getName().endsWith("0") || def.getName().endsWith("5") || def.getName().toLowerCase().startsWith("anger"))
+        if (!full(def.getBonus()) || def.getName().contains("(") || def.getName().contains("/") || def.getName().endsWith("0") || def.getName().endsWith("5") || def.getName().toLowerCase().startsWith("anger"))
             return true;
         return false;
     }
+
     private static final boolean full(final int[] bonus) {
-        for(int i : bonus)
-            if(i > 5)
+        for (int i : bonus)
+            if (i > 5)
                 return true;
         return false;
     }
 
     public static List<Integer> getItems() {
-        if(items == null)
+        if (items == null)
             items = parse();
         return items;
     }
@@ -335,6 +337,7 @@ public class DungeoneeringManager implements ContentTemplate {
         player.setTeleportTarget(player.getDungeoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
         player.getDungeoneering().getCurrentDungeon().kill(player);
     }
+
     static {
         CommandHandler.submit(new Command("resetparse", Rank.PLAYER) {
             @Override

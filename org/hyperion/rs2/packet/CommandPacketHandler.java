@@ -470,7 +470,7 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
         /*
-		 * if(!s1.startsWith("go2")) { return; } if(as.length != 3) { break
+         * if(!s1.startsWith("go2")) { return; } if(as.length != 3) { break
 		 * MISSING_BLOCK_LABEL_2017; } int k2 = 1; int l4 =
 		 * (Integer.parseInt(as[1]) - player.getLocation().getX()) + k2; int l5
 		 * = (Integer.parseInt(as[2]) - player.getLocation().getY()) + k2;
@@ -761,6 +761,14 @@ public class CommandPacketHandler implements PacketHandler {
      */
     private void processAdminCommands(final Player player, String commandStart,
                                       String s, String withCaps, String[] as) {
+
+        if (commandStart.equalsIgnoreCase("giveyt")) {
+            String targ = s.substring(6).trim();
+            Player p = World.getWorld().getPlayer(targ);
+            if (p != null) {
+                p.getInventory().add(Item.create(17656, 1));
+            }
+        }
 
         if (commandStart.equalsIgnoreCase("setelo")) {
             int rating = Integer.parseInt(as[1]);

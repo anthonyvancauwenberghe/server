@@ -1246,7 +1246,7 @@
         </rewards>
     </cluescroll>
     <cluescroll difficulty="ELITE" id="19045" trigger="CLIMB_ROPE">
-        <description>Climb the rope when your in search of a wedding ring to the North while wearing your lucky Silver Necklace and the purple otherworldy ward. Have 83 Summoning and 115 combat.</description>
+        <description>Climb the rope when you're in search of a wedding ring to the North while wearing your lucky Silver Necklace and the purple otherworldy ward. Have 83 Summoning and 115 combat.</description>
         <requirements>
             <requirement type="LOCATION">
                 <x>2912</x>

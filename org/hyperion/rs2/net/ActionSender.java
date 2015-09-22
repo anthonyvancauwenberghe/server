@@ -174,7 +174,6 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@dre@ Bonus active: @bla@2x experience & 2x Dungeoneering tokens!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 

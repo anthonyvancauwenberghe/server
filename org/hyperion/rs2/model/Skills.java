@@ -1,15 +1,15 @@
 package org.hyperion.rs2.model;
 
-import java.util.Calendar;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
+
+import java.util.Calendar;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -543,13 +543,13 @@ public class Skills {
             exp *= 1.02;
         }
 
-        if (player.getExtraData().getLong("doubleExperience") < System.currentTimeMillis() && player.getExtraData().getLong("doubleExperience") != 0) {
-            player.getExtraData().remove("doubleExperience");
+        if (player.getPermExtraData().getLong("doubleExperience") < System.currentTimeMillis() && player.getPermExtraData().getLong("doubleExperience") != 0) {
+            player.getPermExtraData().remove("doubleExperience");
         }
 
-        if (skill > 6/*== BONUS_SKILL*/)
+        if (skill == BONUS_SKILL)
             exp *= 2;
-        else if (skill > 6 && player.getExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getExtraData().getLong("doubleExperience") != 0)
+        else if (skill > 6 && player.getPermExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getPermExtraData().getLong("doubleExperience") != 0)
             exp *= 2;
         else if (skill > 0 && getBonusXP().isPresent() && currentBonusXP.running() && currentBonusXP.getSkill() == skill)
             exp *= 2;

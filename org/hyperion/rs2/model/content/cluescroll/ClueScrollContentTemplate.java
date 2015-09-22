@@ -1,16 +1,14 @@
 package org.hyperion.rs2.model.content.cluescroll;
 
-import java.io.FileNotFoundException;
-import java.util.Collection;
-
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
+
+import java.io.FileNotFoundException;
 
 public class ClueScrollContentTemplate implements ContentTemplate {
 
     public int[] getValues(final int type) {
+        /*
         if (type != 1)
             return null;
         final Collection<ClueScroll> collection = ClueScrollManager.getAll();
@@ -19,18 +17,21 @@ public class ClueScrollContentTemplate implements ContentTemplate {
         for (final ClueScroll cs : collection)
             array[i++] = cs.getId();
         return array;
+        */
+        return null;
     }
 
     public void init() throws FileNotFoundException {
     }
 
     public boolean clickObject(final Player player, final int type, final int id, final int slot, final int interfaceId, final int idk) {
-        if (true)
-            return false;
+        /*
         final ClueScroll cs = ClueScrollManager.get(id);
         if (cs == null)
             return false;
         cs.send(player);
         return true;
+        */
+        return false;
     }
 }

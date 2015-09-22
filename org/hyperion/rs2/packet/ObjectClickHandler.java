@@ -293,7 +293,7 @@ public class ObjectClickHandler {
             return false;
 
         String name = def.getName().toLowerCase();
-        return name.contains("ladder") || name.contains("gate") || name.contains("door");
+        return name.contains("ladder") || name.contains("gate") || name.contains("door") || name.contains("stair");
     }
 
 }

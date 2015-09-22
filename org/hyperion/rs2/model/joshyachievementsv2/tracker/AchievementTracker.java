@@ -92,8 +92,8 @@ public class AchievementTracker {
 
     private Optional<Task> findAvailableTask(final Class<? extends Task> clazz, final Predicate<Task> pred, final int progress) {
         return Achievements.get().streamTasks(clazz)
-                .filter(pred.and(t -> t.canProgress(taskProgress(t).progress, progress))
-                        .and(this::canDoTask)
+                .filter(pred.and(this::canDoTask)
+                        .and(t -> t.canProgress(taskProgress(t).progress, progress))
                         .and(t -> t.constraints.constrained(player)))
                 .min(Comparator.comparingInt(t -> t.threshold));
     }

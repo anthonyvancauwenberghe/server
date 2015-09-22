@@ -36,7 +36,7 @@ public class AchievementTaskProgress{
     }
 
     public double progressPercent(){
-        return (double)progress / task().threshold;
+        return progress * 100d / task().threshold;
     }
 
     public boolean started(){

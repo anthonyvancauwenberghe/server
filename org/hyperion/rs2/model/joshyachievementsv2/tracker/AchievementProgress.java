@@ -71,6 +71,6 @@ public class AchievementProgress{
     }
 
     public double progressPercent(){
-        return (double)progress() / achievement().tasks.threshold;
+        return progress() * 100d / achievement().tasks.threshold;
     }
 }

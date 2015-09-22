@@ -93,7 +93,6 @@ import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
-import org.hyperion.rs2.model.joshyachievementsv2.cmd.OpenCommand;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
@@ -2183,7 +2182,5 @@ public class CommandHandler {
 				return true;
 			}
 		});
-
-		submit(new OpenCommand());
 	}
 }

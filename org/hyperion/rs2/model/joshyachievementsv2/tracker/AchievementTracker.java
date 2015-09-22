@@ -39,14 +39,6 @@ public class AchievementTracker {
         progress = new TreeMap<>();
     }
 
-    public void openInterface() {
-        //player.getInterfaceManager().show(AchievementInterface.ID);
-    }
-
-    private void updateInterface(final Achievement achievement) {
-        //InterfaceManager.<AchievementInterface>get(AchievementInterface.ID).sendUpdateProgress(player, achievement);
-    }
-
     public void sendInfo(final Achievement a) {
         final AchievementProgress p = progress(a.id);
         p.sendProgressHeader(player);
@@ -70,7 +62,9 @@ public class AchievementTracker {
     }
 
     public AchievementProgress progress(final int achievementId) {
-        return progress.getOrDefault(achievementId, putAndGetProgress(achievementId));
+        if(!progress.containsKey(achievementId))
+            progress.put(achievementId, new AchievementProgress(achievementId));
+        return progress.get(achievementId);
     }
 
     private AchievementProgress putAndGetProgress(final int achievementId) {
@@ -98,8 +92,8 @@ public class AchievementTracker {
 
     private Optional<Task> findAvailableTask(final Class<? extends Task> clazz, final Predicate<Task> pred, final int progress) {
         return Achievements.get().streamTasks(clazz)
-                .filter(pred.and(t -> t.canProgress(taskProgress(t).progress, progress))
-                        .and(this::canDoTask)
+                .filter(pred.and(this::canDoTask)
+                        .and(t -> t.canProgress(taskProgress(t).progress, progress))
                         .and(t -> t.constraints.constrained(player)))
                 .min(Comparator.comparingInt(t -> t.threshold));
     }
@@ -116,10 +110,10 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
-        final AchievementTaskProgress atp = taskProgress(task);
-        if (atp.finished())
-            return; //this shouldnt happen but just to be safe
         final AchievementProgress ap = progress(task.achievementId);
+        final AchievementTaskProgress atp = ap.progress(task.id);
+        if (ap.finished() || atp.finished())
+            return; //this shouldnt happen but just to be safe
         if (!atp.started())
             atp.startNow();
         atp.progress(progress);
@@ -129,11 +123,11 @@ public class AchievementTracker {
             atp.finishNow();
             player.sendf("[@blu@Achievement Task Complete@bla@] @red@%s@bla@! Congratulations!", task.desc);
             if (ap.tasksFinished()) {
-                player.sendf("[@blu@Achievement Complete@bla] @red@%s@bla@! Congratulations!", ap.achievement().title);
+                player.sendf("[@blu@Achievement Complete@bla@] @red@%s@bla@! Congratulations!", ap.achievement().title);
                 ap.achievement().rewards.reward(player);
             }
         }
-        updateInterface(ap.achievement());
+        //updateInterface(ap.achievement());
     }
 
     public void barrowsTrip() {

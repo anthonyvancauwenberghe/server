@@ -221,7 +221,7 @@ public class NpcDeathEvent extends Event {
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
                         if (player.getPermExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {
-                            double increase = Double.parseDouble(player.getExtraData().getString("dropRateMultiplier"));
+                            double increase = (double) player.getExtraData().get("dropRateMultiplier");
                             chance -= (int) ((chance * increase) - chance);
                         } else if (player.getPermExtraData().getLong("increasedDroprate") < System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {
                             player.getPermExtraData().remove("increaseDroprate");

@@ -174,6 +174,7 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
+            player.sendMessage("@red@[FREE DONOR PTS AND PKP]: @blu@ http://j.mp/ytcampaign#url#");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 
@@ -397,7 +398,7 @@ public class ActionSender {
             if (!has)
                 player.getSession().close(false);
 
-        } else if(Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+        } else if (Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             boolean whitelisted = false;
             for (String name : BetaServerEvent.whitelist) {
                 if (player.getName().equalsIgnoreCase(name)) {
@@ -910,7 +911,7 @@ public class ActionSender {
             {12166, 12167}, {13926, 13927}, {4152, 4153},
             {18165, 18169}, {18166, 18170}, {18167, 18171},
             {18168, 18172}
-			/*
+            /*
 			{ 4004, 4005 }, 	{ 4016, 4017 }, 	{ 4028, 4029 },
 			{ 4006, 4007 }, 	{ 4018, 4019 }, 	{ 4030, 4031 },
 			{ 4008, 4009 }, 	{ 4020, 4021 }, 	{ 4032, 4033 },
@@ -1258,7 +1259,7 @@ public class ActionSender {
     }
 
     public ActionSender betaChanges() {
-        if(BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
+        if (BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
             return this;
         sendString(8144, "@dre@Beta server");
 

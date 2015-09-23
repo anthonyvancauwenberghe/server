@@ -1,12 +1,7 @@
 package org.hyperion.rs2.event.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -17,6 +12,10 @@ import org.hyperion.rs2.model.content.skill.Summoning;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.PvMStore;
 import org.hyperion.util.Misc;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
@@ -221,12 +220,12 @@ public class NpcDeathEvent extends Event {
                             chance = 500;
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
-                        if (player.getExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getExtraData().getLong("increasedDroprate") != 0) {
-                            double increase = Double.parseDouble(player.getExtraData().getString("dropRateMultiplier"));
+                        if (player.getPermExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {
+                            double increase = (double) player.getExtraData().get("dropRateMultiplier");
                             chance -= (int) ((chance * increase) - chance);
-                        } else if (player.getExtraData().getLong("increasedDroprate") < System.currentTimeMillis() && player.getExtraData().getLong("increasedDroprate") != 0) {
-                            player.getExtraData().remove("increaseDroprate");
-                            player.getExtraData().remove("dropRateMultiplier");
+                        } else if (player.getPermExtraData().getLong("increasedDroprate") < System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {
+                            player.getPermExtraData().remove("increaseDroprate");
+                            player.getPermExtraData().remove("dropRateMultiplier");
                         }
                         for (NPCDrop drop : npc.getDefinition().getDrops()) {
                             if (drop == null) continue;

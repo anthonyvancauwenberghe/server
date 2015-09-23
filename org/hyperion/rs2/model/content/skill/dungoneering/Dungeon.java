@@ -4,6 +4,8 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.DungeoneeringFloorsTask;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -54,8 +56,12 @@ public class Dungeon {
             player.setTeleportTarget(start.getSpawnLocation());
             player.getDungeoneering().setCurrentRoom(start);
             player.getInventory().add(Item.create(995, (int) (difficulty.coins * size.multiplier)));
-            for (final Item bound : player.getDungeoneering().getBinds())
+            for (final Item bound : player.getDungeoneering().getBinds()) {
+                if (bound == null || (!FightPits.scItems.contains(bound.getId()) && !ItemSpawning.canSpawn(bound.getId()))) {
+                    continue;
+                }
                 player.getInventory().add(bound);
+            }
         }
         start.initialized = true;
         final Point loc = start.definition.randomLoc();

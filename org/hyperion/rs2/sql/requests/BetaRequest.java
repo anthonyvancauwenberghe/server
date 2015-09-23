@@ -1,40 +1,32 @@
-package org.hyperion.rs2.sql.event.impl;
+package org.hyperion.rs2.sql.requests;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.sql.SQLConnection;
-import org.hyperion.rs2.sql.event.SQLEvent;
-import org.hyperion.util.Time;
+import org.hyperion.rs2.sql.SQLRequest;
+import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by Gilles on 20/09/2015.
+ * Created by Gilles on 9/22/2015.
  */
-public class BetaServerEvent extends SQLEvent {
+public class BetaRequest extends SQLRequest {
 
-    public static final List<String> whitelist = new ArrayList();
-    public static final List<String> changes = new ArrayList();
-    public static final List<String> toTest = new ArrayList();
-    public static final List<String> testCommands = new ArrayList();
-
-    public BetaServerEvent(){
-        super(Time.FIVE_MINUTES);
-        System.out.println("BETA EVENT HAS STARTED. SERVER IS IN BETA MODE.");
+    public BetaRequest() {
+        super(SQLRequest.QUERY_REQUEST);
     }
 
-
-    public void execute(SQLConnection sql) throws SQLException {
+    @Override
+    public void process(SQLConnection sql) throws SQLException {
         if(Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             //First query will get the whitelist
             ResultSet rs = sql.query("SELECT * FROM whitelist");
             if (rs != null) {
                 while (rs.next()) {
                     String name = rs.getString("name");
-                    if(!name.isEmpty() && !whitelist.contains(name))
-                        whitelist.add(name);
+                    if(!name.isEmpty() && !BetaServerEvent.whitelist.contains(name))
+                        BetaServerEvent.whitelist.add(name);
                 }
                 rs.close();
             }
@@ -46,18 +38,18 @@ public class BetaServerEvent extends SQLEvent {
                     //Adds the changelog entries
                     String changelogEntries[] = rs.getString("changelog").split("#");
                     for(String entry : changelogEntries)
-                        if(!changes.contains(entry) && !entry.equalsIgnoreCase(""))
-                            changes.add(entry);
+                        if(!BetaServerEvent.changes.contains(entry) && !entry.equalsIgnoreCase(""))
+                            BetaServerEvent.changes.add(entry);
                     //Adds the toTest entries
                     String testEntries[] = rs.getString("toTest").split("#");
                     for(String test : testEntries)
-                        if(!toTest.contains(test) && !test.equalsIgnoreCase(""))
-                            toTest.add(test);
+                        if(!BetaServerEvent.toTest.contains(test) && !test.equalsIgnoreCase(""))
+                            BetaServerEvent.toTest.add(test);
                     //Adds the test command entries
                     String testCommandEntries[] = rs.getString("testCommands").split("#");
                     for(String command : testCommandEntries)
-                        if(!testCommands.contains(command) && !command.equalsIgnoreCase("") )
-                            testCommands.add(command);
+                        if(!BetaServerEvent.testCommands.contains(command) && !command.equalsIgnoreCase("") )
+                            BetaServerEvent.testCommands.add(command);
                 }
                 rs.close();
             }

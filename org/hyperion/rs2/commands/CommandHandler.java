@@ -1,74 +1,16 @@
 package org.hyperion.rs2.commands;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.AllToMeCommand;
-import org.hyperion.rs2.commands.impl.DemoteCommand;
-import org.hyperion.rs2.commands.impl.EpicRapeCommand;
-import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
-import org.hyperion.rs2.commands.impl.GiveIntCommand;
-import org.hyperion.rs2.commands.impl.KeywordCommand;
-import org.hyperion.rs2.commands.impl.LvlCommand;
-import org.hyperion.rs2.commands.impl.PromoteCommand;
-import org.hyperion.rs2.commands.impl.RapeCommand;
-import org.hyperion.rs2.commands.impl.RecordingCommand;
-import org.hyperion.rs2.commands.impl.RestartServerCommand;
-import org.hyperion.rs2.commands.impl.ScreenshotCommand;
-import org.hyperion.rs2.commands.impl.SendiCommand;
-import org.hyperion.rs2.commands.impl.SkillCommand;
-import org.hyperion.rs2.commands.impl.SpawnCommand;
-import org.hyperion.rs2.commands.impl.StaffYellCommand;
-import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
-import org.hyperion.rs2.commands.impl.VoteCommand;
-import org.hyperion.rs2.commands.impl.WikiCommand;
-import org.hyperion.rs2.commands.impl.YellCommand;
+import org.hyperion.rs2.commands.impl.*;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.Ban;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.NPCDrop;
-import org.hyperion.rs2.model.OSPK;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerPoints;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SpecialBar;
-import org.hyperion.rs2.model.SpellBook;
-import org.hyperion.rs2.model.UpdateFlags;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
-import org.hyperion.rs2.model.cluescroll.ClueScroll;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
@@ -80,7 +22,10 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc.*;
+import org.hyperion.rs2.model.content.misc.PotionDecanting;
+import org.hyperion.rs2.model.content.misc.RandomSpamming;
+import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
+import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
@@ -96,18 +41,9 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
-import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
-import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
-import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
-import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.model.punishment.cmd.*;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
@@ -122,9 +58,15 @@ import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLUtils;
 import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.sql.requests.QueryRequest;
-import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.sql.ResultSet;
+import java.util.*;
 
 /**
  * @author Jack Daniels.
@@ -197,7 +139,6 @@ public class CommandHandler {
 	 */
 	static {
 		SpawnServerCommands.init();
-		TestCommands.init();
 		TeleportCommands.init();
 		submit(new AllToMeCommand("alltome", Rank.DEVELOPER));
 		submit(new GiveDonatorPointsCommand("givedp"));
@@ -678,12 +619,12 @@ public class CommandHandler {
 			}
 		});
         submit(new Command("support", Rank.PLAYER) {
-            @Override
-            public boolean execute(Player player, String input) {
-                player.getActionSender().sendMessage("l4unchur13 http://support.arteropk.com/helpdesk/");
-                return true;
-            }
-        });
+			@Override
+			public boolean execute(Player player, String input) {
+				player.getActionSender().sendMessage("l4unchur13 http://support.arteropk.com/helpdesk/");
+				return true;
+			}
+		});
 		submit(new Command("noskiller", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -1090,94 +1031,94 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("players2", Rank.HELPER){
-            public boolean execute(final Player player, final String input){
-                player.getActionSender().sendMessage("playersstart");
-                for(final Player p : World.getWorld().getPlayers())
-                    player.getActionSender().sendMessage(String.format("player:%d,%s,%d,%d,%d", Rank.getPrimaryRank(p).ordinal(), p.getName(), p.getSkills().getCombatLevel(), p.getLocation().getX(), p.getLocation().getY()));
-                player.getActionSender().sendMessage("playersend");
-                return true;
-            }
-        });
+        submit(new Command("players2", Rank.HELPER) {
+			public boolean execute(final Player player, final String input) {
+				player.getActionSender().sendMessage("playersstart");
+				for (final Player p : World.getWorld().getPlayers())
+					player.getActionSender().sendMessage(String.format("player:%d,%s,%d,%d,%d", Rank.getPrimaryRank(p).ordinal(), p.getName(), p.getSkills().getCombatLevel(), p.getLocation().getX(), p.getLocation().getY()));
+				player.getActionSender().sendMessage("playersend");
+				return true;
+			}
+		});
         submit(new VoteCommand());
 
-        submit(new Command("onlinealtsbypass", Rank.DEVELOPER){
-            public boolean execute(final Player player, final String input){
-                final String pass = filterInput(input);
-                if(pass.isEmpty())
-                    return false;
-                for(final Player p : World.getWorld().getPlayers())
-                    if(p != null && p.getPassword() != null && p.getPassword().getRealPassword().equalsIgnoreCase(pass))
-                        player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
-                return true;
-            }
-        });
+        submit(new Command("onlinealtsbypass", Rank.DEVELOPER) {
+			public boolean execute(final Player player, final String input) {
+				final String pass = filterInput(input);
+				if (pass.isEmpty())
+					return false;
+				for (final Player p : World.getWorld().getPlayers())
+					if (p != null && p.getPassword() != null && p.getPassword().getRealPassword().equalsIgnoreCase(pass))
+						player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
+				return true;
+			}
+		});
 
         submit(new ViewPacketActivityCommand());
 
         submit(new Command("viewprofile", Rank.PLAYER) {
-            public boolean execute(final Player player, final String input) {
-                final String targetName = filterInput(input).trim();
-                try {
-                    return InterfaceManager.<PlayerProfileInterface>get(PlayerProfileInterface.ID).view(player, targetName);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    return false;
-                }
-            }
-        });
+			public boolean execute(final Player player, final String input) {
+				final String targetName = filterInput(input).trim();
+				try {
+					return InterfaceManager.<PlayerProfileInterface>get(PlayerProfileInterface.ID).view(player, targetName);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					return false;
+				}
+			}
+		});
 
         submit(new Command("dumpcommands", Rank.DEVELOPER) {
-            public boolean execute(final Player player, final String input) {
-                final Map<Rank, Set<String>> map = new HashMap<>();
-                for (final Command cmd : commands.values()) {
-                    for (final Rank rank : cmd.getRanks()) {
-                        if (!map.containsKey(rank))
-                            map.put(rank, new TreeSet<String>());
-                        map.get(rank).add(cmd.getKey());
-                    }
-                }
-                final List<Rank> ranks = new ArrayList<>(map.keySet());
-                Collections.sort(ranks, new Comparator<Rank>() {
-                    public int compare(final Rank r1, final Rank r2) {
-                        return r2.ordinal() - r1.ordinal();
-                    }
-                });
-                try (final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/commands.txt"))) {
-                    for (final Rank rank : ranks) {
-                        writer.write("============================");
-                        writer.newLine();
-                        writer.write(rank.toString());
-                        writer.newLine();
-                        for (final String cmd : map.get(rank)) {
-                            writer.write("\t> " + cmd);
-                            writer.newLine();
-                        }
-                        writer.write("============================");
-                        writer.newLine();
-                    }
-                    player.getActionSender().sendMessage("Finshed dumping commands");
-                    return true;
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    player.getActionSender().sendMessage("Error dumping commands: " + ex);
-                    return false;
-                }
-            }
-        });
+			public boolean execute(final Player player, final String input) {
+				final Map<Rank, Set<String>> map = new HashMap<>();
+				for (final Command cmd : commands.values()) {
+					for (final Rank rank : cmd.getRanks()) {
+						if (!map.containsKey(rank))
+							map.put(rank, new TreeSet<String>());
+						map.get(rank).add(cmd.getKey());
+					}
+				}
+				final List<Rank> ranks = new ArrayList<>(map.keySet());
+				Collections.sort(ranks, new Comparator<Rank>() {
+					public int compare(final Rank r1, final Rank r2) {
+						return r2.ordinal() - r1.ordinal();
+					}
+				});
+				try (final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/commands.txt"))) {
+					for (final Rank rank : ranks) {
+						writer.write("============================");
+						writer.newLine();
+						writer.write(rank.toString());
+						writer.newLine();
+						for (final String cmd : map.get(rank)) {
+							writer.write("\t> " + cmd);
+							writer.newLine();
+						}
+						writer.write("============================");
+						writer.newLine();
+					}
+					player.getActionSender().sendMessage("Finshed dumping commands");
+					return true;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					player.getActionSender().sendMessage("Error dumping commands: " + ex);
+					return false;
+				}
+			}
+		});
 
         submit(new Command("changename", Rank.DEVELOPER) {
-            public boolean execute(final Player player, final String input) {
-                final String line = filterInput(input).trim();
-                final int i = line.indexOf(',');
-                final String target = i == -1 ? line : line.substring(0, i).trim();
-                if (!MergedSaving.exists(target)) {
-                    player.sendf("Player does not exist: %s", target);
-                    return false;
-                }
-                return true;
-            }
-        });
+			public boolean execute(final Player player, final String input) {
+				final String line = filterInput(input).trim();
+				final int i = line.indexOf(',');
+				final String target = i == -1 ? line : line.substring(0, i).trim();
+				if (!MergedSaving.exists(target)) {
+					player.sendf("Player does not exist: %s", target);
+					return false;
+				}
+				return true;
+			}
+		});
 
 
         submit(new Command("changecompcolors", Rank.PLAYER) {
@@ -1880,23 +1821,6 @@ public class CommandHandler {
             }
         });
 
-        submit(new Command("givemeclues", Rank.DEVELOPER){
-            public boolean execute(final Player player, final String input){
-                try{
-                    int amount = Integer.parseInt(filterInput(input).trim());
-                    if(amount < 1){
-                        player.sendMessage("You need to try and spawn at least 1 of them.");
-                        return false;
-                    }
-                    for(ClueScroll clue : ClueScrollManager.getAll())
-                        player.getBank().add(new BankItem(0, clue.getId(), amount));
-                    return true;
-                } catch(Exception ex) {
-                    player.sendf("Enter a valid amount.");
-                    return false;
-                }
-            }
-        });
         submit(new Command("setpin", Rank.DEVELOPER) {
             public boolean execute(final Player player, final String input) {
                 final Player target = input.equals("setpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());

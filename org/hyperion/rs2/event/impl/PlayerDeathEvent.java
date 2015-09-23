@@ -10,7 +10,6 @@ import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
@@ -22,7 +21,9 @@ import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 
@@ -246,7 +247,8 @@ public class PlayerDeathEvent extends Event {
                             e.printStackTrace();
                         }
 						killer.getBountyHunter().handleBHKill(player);
-                        if(isRecentKill(killer, player)) {
+						//killer.getAchievementTracker().playerKill();
+						if(isRecentKill(killer, player)) {
 							killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
                             if(killer.getGameMode() <= player.getGameMode())
                                 handlePkpTransfer(killer, player, 0);
@@ -254,7 +256,8 @@ public class PlayerDeathEvent extends Event {
 							if(player.getKillCount() >= 10) {
 								killer.increaseKillStreak();
 							}
-							AchievementHandler.progressAchievement(player, "Kill");
+							killer.getAchievementTracker().playerKill();
+							//AchievementHandler.progressAchievement(player, "Kill");
                             killer.addLastKill(player.getName());
                             int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
                             if(pkpIncrease > 40)

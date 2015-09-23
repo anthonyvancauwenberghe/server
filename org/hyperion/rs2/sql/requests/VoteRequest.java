@@ -13,7 +13,7 @@ import org.hyperion.util.Time;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
 
 /**
  * @author Arsen Maxyutov.
@@ -44,7 +44,7 @@ public class VoteRequest extends SQLRequest {
         switch (bonus) {
             case 0:
                 votingPoints *= 2;
-                return ("You get double voting points!");
+                return ("You get double voting reward!");
             case 1:
                 long time;
                 switch (streak) {
@@ -67,7 +67,7 @@ public class VoteRequest extends SQLRequest {
                         time = 15 * Time.ONE_MINUTE;
                         break;
                 }
-                player.getExtraData().put("doubleExperience", System.currentTimeMillis() + time);
+                player.getPermExtraData().put("doubleExperience", System.currentTimeMillis() + time);
                 return "You received double experience for " + time / Time.ONE_MINUTE + " minutes!";
             case 2:
                 double multiplier;
@@ -91,8 +91,8 @@ public class VoteRequest extends SQLRequest {
                         multiplier = 1.01;
                         break;
                 }
-                player.getExtraData().put("increasedDroprate", System.currentTimeMillis() + Time.ONE_HOUR);
-                player.getExtraData().put("dropRateMultiplier", multiplier);
+                player.getPermExtraData().put("increasedDroprate", System.currentTimeMillis() + Time.ONE_HOUR);
+                player.getPermExtraData().put("dropRateMultiplier", multiplier);
                 return "You received increased droprates for one hour!";
             case 3:
                 double reducement;
@@ -116,11 +116,11 @@ public class VoteRequest extends SQLRequest {
                         reducement = 0.99;
                         break;
                 }
-                player.getExtraData().put("loweredYellTimer", System.currentTimeMillis() + Time.ONE_HOUR);
-                player.getExtraData().put("yellReduction", reducement);
+                player.getPermExtraData().put("loweredYellTimer", System.currentTimeMillis() + Time.ONE_HOUR);
+                player.getPermExtraData().put("yellReduction", reducement);
                 return "You received a reduced yelldelay for one hour!";
             case 4:
-                if (Misc.random(60 / streak) == 1) {
+                if (Misc.random(120 / streak) == 1) {
                     int donatorPoints = 1000;
                     player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
                     for (Player p : World.getWorld().getPlayers()) {
@@ -276,12 +276,12 @@ public class VoteRequest extends SQLRequest {
                     votingPoints, currentStreak != 0 ? "keep your" : "get a", sb.toString());
         } else {
             if (bonus == -1) {
-                player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " voting point(s) ##ArteroPK appreciates your support!");
+                player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + " ##ArteroPK appreciates your support!");
             } else {
                 if (currentStreak != 0) {
-                    player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " in a row.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+                    player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " in a row.##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + ".##" + sb.toString());
                 } else {
-                    player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " voting " + (votingPoints == 1 ? "point" : "points") + ".##" + sb.toString());
+                    player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + ".##" + sb.toString());
                 }
             }
         }

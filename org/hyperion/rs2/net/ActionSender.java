@@ -121,7 +121,7 @@ public class ActionSender {
             player.write(new PacketBuilder(208).putLEShort(j).toPacket());
             sendString(36502, "Total Kills: " + p.getKills());
             sendString(36503, "Lives Left: " + (3 - p.getDeaths()));
-            sendString(36504, "Bounty Reward: " + p.getBountyReward());
+            sendString(36504, "Bounty DefaultRewards: " + p.getBountyReward());
             sendString(36505, "Players Left: " + LastManStanding.getLastManStanding().participants.size());
             return this;
         } else {
@@ -175,7 +175,6 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
             player.sendMessage("@dre@Free donator points and ArteroPK points:@blu@ http://j.mp/ytcampaign#url#");
-            player.sendMessage("@dre@Bonus active: @bla@2x Slayer points & tokens");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 

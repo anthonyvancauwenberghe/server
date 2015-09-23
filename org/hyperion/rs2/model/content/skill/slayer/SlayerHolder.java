@@ -34,7 +34,7 @@ public class SlayerHolder {
                 totalTasks++;
                 slayerPoints += (int)((task.getDifficulty().getSlayerPoints() + handleTotalTasks()));
             }
-            return task.getXP() * 2;
+            return task.getXP();
         }
         return 0;
     }
@@ -68,7 +68,7 @@ public class SlayerHolder {
             pointsToAdd = 50;
         else if(totalTasks%10 == 0)
             pointsToAdd = 20;
-        return pointsToAdd * 2;
+        return pointsToAdd;
 
     }
 

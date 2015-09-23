@@ -209,6 +209,13 @@ public class TestCommands {
 				return true;
 			}
 
+		if(commandStart.equalsIgnoreCase("finishclue")) {
+			final ClueScroll clue = ClueScrollManager.getInInventory(player);
+			if(clue != null)
+				clue.apply(player);
+			return true;
+		}
+
 		return false;
 	}
 

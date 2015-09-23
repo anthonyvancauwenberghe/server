@@ -24,6 +24,29 @@ public class ClueScroll {
         ELITE
     }
 
+    public enum DefaultRewards {
+        EASY(),
+        MEDIUM(),
+        HARD(),
+        ELITE();
+
+        Reward[] rewards;
+
+        DefaultRewards(Reward... rewards) {
+            this.rewards = rewards;
+        }
+    }
+
+    public List<Reward> getRewards(Difficulty difficulty) {
+        List<Reward> rewards = new ArrayList<>();
+        for(DefaultRewards reward : DefaultRewards.values()) {
+            if(reward.getClass().getSimpleName().equalsIgnoreCase(difficulty.name()))
+                for(int i = 0; i < reward.rewards.length; i++)
+                    rewards.add(reward.rewards[i]);
+        }
+        return rewards;
+    }
+
     public enum Trigger{
         CRY(Animation.CRY),
         THINK(Animation.THINKING),
@@ -110,6 +133,8 @@ public class ClueScroll {
 
         requirements = new ArrayList<>();
         rewards = new ArrayList<>();
+        for(Reward reward : getRewards(difficulty))
+            rewards.add(reward);
     }
 
     public int getId(){
@@ -173,28 +198,50 @@ public class ClueScroll {
         Item oldItem = Item.create(id);
         if(player.getInventory().remove(oldItem) < 1)
             return;
-        int currentSteps = player.getPermExtraData().getInt("clueScrollProgress") + 1;
-        int maxSteps = getDifficulty().ordinal() + 1;
+        double currentSteps = (double)player.getPermExtraData().getInt("clueScrollProgress") + 1;
+        double maxSteps = getDifficulty().ordinal() + 2;
+        double minSteps = getDifficulty().ordinal();
         boolean giveReward = currentSteps > maxSteps;
-        //Random chance to give a reward nonetheless
-        if(!giveReward && (currentSteps / maxSteps) < Math.random()) {
-            giveReward = true;
+        double random = Math.random();
+        double number = currentSteps / maxSteps;
+        if(currentSteps >= minSteps) {
+            if (!giveReward && (number) > random) {
+                giveReward = true;
+            }
         }
         if(giveReward) {
-            giveReward = giveReward();
+            giveReward = giveReward(player);
         }
         if(!giveReward) {
             Item item = oldItem;
             while(item.getId() == oldItem.getId())
-                item = Item.create(ClueScrollManager.getAll(difficulty).get(Misc.random(ClueScrollManager.getAll(difficulty).size())).getId());
+                item = Item.create(ClueScrollManager.getAll(difficulty).get(Misc.random2(ClueScrollManager.getAll(difficulty).size())).getId());
+            player.sendMessage("You find another clue scroll!");
             player.getInventory().add(item);
+            player.getPermExtraData().put("clueScrollProgress", currentSteps);
         }
     }
 
-    public boolean giveReward() {
-        for( int amount = getDifficulty().ordinal() + 1; amount > 0; amount--) {
-
+    public boolean giveReward(final Player player) {
+        int amount = getDifficulty().ordinal() + 1;
+        List<Reward> received = new ArrayList<>();
+        while(amount > 0 || received.isEmpty()) {
+            for (final Reward reward : rewards) {
+                if(received.contains(reward))
+                    continue;
+                if (reward.apply(player)) {
+                    if(amount >= getDifficulty().ordinal() + 1) {
+                        amount--;
+                        received.add(reward);
+                    }
+                }
+                if(Misc.random(2) == 1) {
+                    amount--;
+                }
+            }
         }
+        if(!received.isEmpty())
+            return true;
         return false;
     }
 

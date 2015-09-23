@@ -170,16 +170,32 @@ public class ClueScroll {
     }
 
     public void apply(final Player player){
-        if(player.getInventory().remove(Item.create(id)) < 1)
+        Item oldItem = Item.create(id);
+        if(player.getInventory().remove(oldItem) < 1)
             return;
-        boolean awarded = false;
-        while(!awarded) {
-            for (final Reward reward : rewards)
-                if (reward.apply(player))
-                    awarded = true;
+        int currentSteps = player.getPermExtraData().getInt("clueScrollProgress") + 1;
+        int maxSteps = getDifficulty().ordinal() + 1;
+        boolean giveReward = currentSteps > maxSteps;
+        //Random chance to give a reward nonetheless
+        if(!giveReward && (currentSteps / maxSteps) < Math.random()) {
+            giveReward = true;
         }
-        if(!awarded)
-            player.sendMessage("Congratulations on completing " + Misc.aOrAn(difficulty.toString()) + " " + Misc.ucFirst(difficulty.toString().toLowerCase()) + " clue scroll!");
+        if(giveReward) {
+            giveReward = giveReward();
+        }
+        if(!giveReward) {
+            Item item = oldItem;
+            while(item.getId() == oldItem.getId())
+                item = Item.create(ClueScrollManager.getAll(difficulty).get(Misc.random(ClueScrollManager.getAll(difficulty).size())).getId());
+            player.getInventory().add(item);
+        }
+    }
+
+    public boolean giveReward() {
+        for( int amount = getDifficulty().ordinal() + 1; amount > 0; amount--) {
+
+        }
+        return false;
     }
 
     public Element toElement(final Document doc){

@@ -175,6 +175,7 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
             player.sendMessage("@dre@Free donator points and ArteroPK points:@blu@ http://j.mp/ytcampaign#url#");
+            player.sendMessage("@dre@Bonus active: @bla@2x Slayer points & tokens");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 

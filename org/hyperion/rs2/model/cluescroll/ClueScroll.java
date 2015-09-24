@@ -1,8 +1,5 @@
 package org.hyperion.rs2.model.cluescroll;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
@@ -14,6 +11,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClueScroll {
 
@@ -198,7 +198,9 @@ public class ClueScroll {
         Item oldItem = Item.create(id);
         if(player.getInventory().remove(oldItem) < 1)
             return;
-        double currentSteps = (double)player.getPermExtraData().getInt("clueScrollProgress") + 1;
+        double currentSteps = 0;
+        if(player.getPermExtraData().get("clueScrollProgress") != null)
+            currentSteps = (double)player.getPermExtraData().get("clueScrollProgress") + 1;
         double maxSteps = getDifficulty().ordinal() + 2;
         double minSteps = getDifficulty().ordinal();
         boolean giveReward = currentSteps > maxSteps;
@@ -215,7 +217,7 @@ public class ClueScroll {
         if(!giveReward) {
             Item item = oldItem;
             while(item.getId() == oldItem.getId())
-                item = Item.create(ClueScrollManager.getAll(difficulty).get(Misc.random2(ClueScrollManager.getAll(difficulty).size())).getId());
+                item = Item.create(ClueScrollManager.getAll(difficulty).get((int) Math.round(Math.random() * (ClueScrollManager.getAll(difficulty).size() - 1 != -1 ? ClueScrollManager.getAll(difficulty).size() - 1 : 0))).getId());
             player.sendMessage("You find another clue scroll!");
             player.getInventory().add(item);
             player.getPermExtraData().put("clueScrollProgress", currentSteps);
@@ -223,6 +225,7 @@ public class ClueScroll {
     }
 
     public boolean giveReward(final Player player) {
+        player.getPermExtraData().put("clueScrollProgress", 0.0);
         int amount = getDifficulty().ordinal() + 1;
         List<Reward> received = new ArrayList<>();
         while(amount > 0 || received.isEmpty()) {
@@ -230,7 +233,7 @@ public class ClueScroll {
                 if(received.contains(reward))
                     continue;
                 if (reward.apply(player)) {
-                    if(amount >= getDifficulty().ordinal() + 1) {
+                    if(amount <= getDifficulty().ordinal() + 1) {
                         amount--;
                         received.add(reward);
                     }

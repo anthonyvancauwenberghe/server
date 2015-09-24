@@ -5,7 +5,6 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -22,7 +21,9 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange.GEItem;
-import org.hyperion.rs2.model.content.minigame.*;
+import org.hyperion.rs2.model.content.minigame.GodWars;
+import org.hyperion.rs2.model.content.minigame.LastManStanding;
+import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -34,15 +35,20 @@ import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * A utility class for sending packets.
@@ -1254,6 +1260,24 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[rules.length + 4], "Use the command ::acceptyellrules to accept");
         sendString(QUEST_MENU_IDS[rules.length + 5], "                 these rules.");
 
+        showInterface(8134);
+        return this;
+    }
+
+    public ActionSender showWhitelist() {
+        if(BetaServerEvent.whitelist.isEmpty())
+            return this;
+        sendString(8144, "@dre@Whitelist");
+
+        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
+            sendString(QUEST_MENU_IDS[d], "");
+        }
+
+        int i = 0;
+        for (String name : BetaServerEvent.whitelist) {
+            sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + Misc.ucFirst(name.toLowerCase()));
+            i++;
+        }
         showInterface(8134);
         return this;
     }

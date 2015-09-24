@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.content.ContentTemplate;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 
-public class ClueScrollContentTemplate  {
+public class ClueScrollContentTemplate implements ContentTemplate  {
 
     public int[] getValues(final int type) {
         if (type != 1)

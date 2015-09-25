@@ -23,7 +23,7 @@ public class TestCommands {
 		if (commandStart.equalsIgnoreCase("givedp")) {
 			try {
 				final int amount = Integer.parseInt(s.substring(7).trim());
-				final int limit = Math.max(199999, player.getPoints().getDonatorPoints() + amount);
+				final int limit = Math.max(85000, player.getPoints().getDonatorPoints() + amount);
 				player.getPoints().setDonatorPoints(limit);
 				player.getActionSender().sendMessage("You give yourself some donator points.");
 			} catch(Exception e) {

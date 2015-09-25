@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.cluescroll.reward;
 
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.hyperion.rs2.model.container.bank.Bank;
@@ -24,6 +25,19 @@ public class ItemReward extends Reward{
 
     public void setId(final int id){
         this.id = id;
+    }
+
+    protected boolean give(final Player player, final int amount, final int index){
+        final Item item = Item.create(id, amount);
+        player.getActionSender().sendUpdateItem(6963, index, item);
+        final BankItem bankItem = new BankItem(0, id, amount);
+        if(player.getInventory().hasRoomFor(item)){
+            player.getInventory().add(item);
+        } else {
+            player.getBank().add(bankItem);
+            player.sendf("Your reward has been added to your bank.");
+        }
+        return true;
     }
 
     protected boolean give(final Player player, final int amount){

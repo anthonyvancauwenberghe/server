@@ -85,6 +85,9 @@ public abstract class Reward {
         return give(player, ClueScrollUtils.rand(minAmount, maxAmount));
     }
 
+    public boolean apply(final Player player, int index){return give(player, ClueScrollUtils.rand(minAmount, maxAmount), index);
+    }
+
     public boolean canGet(){
         return ClueScrollUtils.isChance(chance);
     }
@@ -116,4 +119,8 @@ public abstract class Reward {
     protected abstract void append(final Document doc, final Element root);
 
     protected abstract boolean give(final Player player, final int amount);
+
+    protected boolean give(final Player player, final int amount, int index) {
+        return false;
+    };
 }

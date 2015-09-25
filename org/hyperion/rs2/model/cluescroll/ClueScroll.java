@@ -1,5 +1,8 @@
 package org.hyperion.rs2.model.cluescroll;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
@@ -12,19 +15,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ClueScroll {
 
-    public enum Difficulty{
+    public enum Difficulty {
         EASY,
         MEDIUM,
         HARD,
         ELITE
     }
 
-    public enum DefaultRewards {
+    public enum Rewards {
         EASY(),
         MEDIUM(),
         HARD(),
@@ -32,22 +32,45 @@ public class ClueScroll {
 
         Reward[] rewards;
 
-        DefaultRewards(Reward... rewards) {
+        Rewards(Reward... rewards) {
+            this.rewards = rewards;
+        }
+    }
+
+    public enum RareRewards {
+        EASY(),
+        MEDIUM(),
+        HARD(),
+        ELITE();
+
+        Reward[] rewards;
+
+        RareRewards(Reward... rewards) {
             this.rewards = rewards;
         }
     }
 
     public List<Reward> getRewards(Difficulty difficulty) {
         List<Reward> rewards = new ArrayList<>();
-        for(DefaultRewards reward : DefaultRewards.values()) {
-            if(reward.getClass().getSimpleName().equalsIgnoreCase(difficulty.name()))
-                for(int i = 0; i < reward.rewards.length; i++)
+        for (Rewards reward : Rewards.values()) {
+            if (reward.getClass().getSimpleName().equalsIgnoreCase(difficulty.name()))
+                for (int i = 0; i < reward.rewards.length; i++)
                     rewards.add(reward.rewards[i]);
         }
         return rewards;
     }
 
-    public enum Trigger{
+    public List<Reward> getRareRewards(Difficulty difficulty) {
+        List<Reward> rewards = new ArrayList<>();
+        for (RareRewards reward : RareRewards.values()) {
+            if (reward.getClass().getSimpleName().equalsIgnoreCase(difficulty.name()))
+                for (int i = 0; i < reward.rewards.length; i++)
+                    rewards.add(reward.rewards[i]);
+        }
+        return rewards;
+    }
+
+    public enum Trigger {
         CRY(Animation.CRY),
         THINK(Animation.THINKING),
         WAVE(Animation.WAVE),
@@ -123,18 +146,23 @@ public class ClueScroll {
     private Trigger trigger;
 
     private final List<Requirement> requirements;
-    private final List<Reward> rewards;
+    private final List<Reward> normalRewards;
+    private final List<Reward> rareRewards;
 
-    public ClueScroll(final int id, final String description, final Difficulty difficulty, final Trigger trigger){
+    public ClueScroll(final int id, final String description, final Difficulty difficulty, final Trigger trigger) {
         this.id = id;
         this.description = description;
         this.difficulty = difficulty;
         this.trigger = trigger;
 
         requirements = new ArrayList<>();
-        rewards = new ArrayList<>();
-        for(Reward reward : getRewards(difficulty))
-            rewards.add(reward);
+        normalRewards = new ArrayList<>();
+        rareRewards = new ArrayList<>();
+
+        for (Reward reward : getRewards(difficulty))
+            normalRewards.add(reward);
+        for (Reward reward : getRareRewards(difficulty))
+            rareRewards.add(reward);
     }
 
     public int getId(){
@@ -171,10 +199,6 @@ public class ClueScroll {
 
     public List<Requirement> getRequirements(){
         return requirements;
-    }
-
-    public List<Reward> getRewards(){
-        return rewards;
     }
 
     public boolean hasAllRequirements(final Player player){
@@ -228,24 +252,45 @@ public class ClueScroll {
         player.getPermExtraData().put("clueScrollProgress", 0.0);
         int amount = getDifficulty().ordinal() + 1;
         List<Reward> received = new ArrayList<>();
-        while(amount > 0 || received.isEmpty()) {
-            for (final Reward reward : rewards) {
-                if(received.contains(reward))
-                    continue;
-                if (reward.apply(player)) {
-                    if(amount <= getDifficulty().ordinal() + 1) {
-                        amount--;
-                        received.add(reward);
-                    }
-                }
-                if(Misc.random(2) == 1) {
-                    amount--;
+        while(received.size() != amount) {
+            Reward item;
+            if(Misc.random(20) == 1) {
+                player.sendMessage("Entered rare loot table");
+                item = getRandomRare();
+            } else {
+                item = getRandomNormal();
+            }
+            if(item != null && !received.contains(item))
+                received.add(item);
+        }
+        for(Reward reward : received) {
+            if(reward != null)
+                reward.apply(player);
+        }
+        return false;
+    }
+
+    public Reward getRandomRare() {
+        List<Reward> possibleRewards = new ArrayList<>();
+        while(possibleRewards.isEmpty())
+            for(Reward reward : rareRewards) {
+                if(reward.canGet() && !possibleRewards.contains(reward)) {
+                    possibleRewards.add(reward);
                 }
             }
+        int randomItem = Misc.random(possibleRewards.size());
+        return possibleRewards.get(randomItem == 0 ? 1 : randomItem);
+    }
+
+    public Reward getRandomNormal() {
+        List<Reward> possibleRewards = new ArrayList<>();
+        for(Reward reward : normalRewards) {
+            if(reward.canGet() && !possibleRewards.contains(reward)) {
+                possibleRewards.add(reward);
+            }
         }
-        if(!received.isEmpty())
-            return true;
-        return false;
+        int randomItem = Misc.random(possibleRewards.size());
+        return possibleRewards.get(randomItem == 0 ? 1 : randomItem);
     }
 
     public Element toElement(final Document doc){
@@ -257,8 +302,12 @@ public class ClueScroll {
         for(final Requirement requirement : requirements)
             requirementsElement.appendChild(requirement.toElement(doc));
         final Element rewardsElement = doc.createElement("rewards");
-        for(final Reward reward : rewards)
+        /*
+        for(final Reward reward : normalRewards)
             rewardsElement.appendChild(reward.toElement(doc));
+        for(final Reward reward : rareRewards)
+            rewardsElement.appendChild(reward.toElement(doc));
+            */
         element.appendChild(ClueScrollUtils.createElement(doc, "description", description));
         element.appendChild(requirementsElement);
         element.appendChild(rewardsElement);
@@ -297,6 +346,7 @@ public class ClueScroll {
             final Requirement.Type type = Requirement.Type.valueOf(e.getAttribute("type"));
             clueScroll.requirements.add(type.parse(e));
         }
+        /*
         final Element rewardsElement = (Element) element.getElementsByTagName("rewards").item(0);
         final NodeList rewards = rewardsElement.getElementsByTagName("reward");
         for(int i = 0; i < rewards.getLength(); i++){
@@ -305,8 +355,19 @@ public class ClueScroll {
                 continue;
             final Element e = (Element) node;
             final Reward.Type type = Reward.Type.valueOf(e.getAttribute("type"));
-            clueScroll.rewards.add(type.parse(e));
+            clueScroll.normalRewards.add(type.parse(e));
         }
+        final Element rareRewardsElement = (Element) element.getElementsByTagName("rareRewards").item(0);
+        final NodeList rareRewards = rareRewardsElement.getElementsByTagName("rareReward");
+        for(int i = 0; i < rareRewards.getLength(); i++){
+            final Node node = rareRewards.item(i);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            final Element e = (Element) node;
+            final Reward.Type type = Reward.Type.valueOf(e.getAttribute("type"));
+            clueScroll.rareRewards.add(type.parse(e));
+        }
+        */
         return clueScroll;
     }
 

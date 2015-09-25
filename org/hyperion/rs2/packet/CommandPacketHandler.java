@@ -12,6 +12,8 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
+import org.hyperion.rs2.model.cluescroll.ClueScroll;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -1134,6 +1136,17 @@ public class CommandPacketHandler implements PacketHandler {
 
     private void processDeveloperCommands(final Player player,
                                           String commandStart, String s, String withCaps, String[] as) {
+
+        if(commandStart.equalsIgnoreCase("finishclue")) {
+            try {
+                final ClueScroll clue = ClueScrollManager.getInInventory(player);
+                if (clue != null)
+                    clue.apply(player);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return;
+        }
 
         if (commandStart.equalsIgnoreCase("wildyboss")) {
             if (WildernessBossEvent.currentBoss != null) {

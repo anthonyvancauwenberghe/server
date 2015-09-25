@@ -23,7 +23,7 @@ public final class ClueScrollUtils {
     }
 
     public static boolean isChance(final int chance){
-        return chance > 0 && rand(1, 100) <= chance;
+        return chance > 0 && rand(1, 1000) <= chance;
     }
 
     public static boolean dropClueScroll(Player player, NPC npc) {

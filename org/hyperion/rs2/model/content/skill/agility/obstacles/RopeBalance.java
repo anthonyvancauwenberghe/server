@@ -13,7 +13,7 @@ public class RopeBalance extends Obstacle {
                         end;
 
     public RopeBalance(int objectId, int skillXp, int levelReq, Location start, Location end, int failRate, Course course, int progress) {
-        super(objectId, 762, skillXp, levelReq, failRate, course, progress);
+        super(objectId, 762, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
     }

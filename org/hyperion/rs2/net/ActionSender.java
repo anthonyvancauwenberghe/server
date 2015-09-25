@@ -127,7 +127,7 @@ public class ActionSender {
             player.write(new PacketBuilder(208).putLEShort(j).toPacket());
             sendString(36502, "Total Kills: " + p.getKills());
             sendString(36503, "Lives Left: " + (3 - p.getDeaths()));
-            sendString(36504, "Bounty DefaultRewards: " + p.getBountyReward());
+            sendString(36504, "Bounty Rewards: " + p.getBountyReward());
             sendString(36505, "Players Left: " + LastManStanding.getLastManStanding().participants.size());
             return this;
         } else {

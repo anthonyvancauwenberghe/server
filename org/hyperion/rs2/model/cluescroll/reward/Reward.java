@@ -73,7 +73,7 @@ public abstract class Reward {
         this.maxAmount = maxAmount;
     }
 
-    public int getChance(){
+    public double getChance(){
         return chance;
     }
 
@@ -82,11 +82,25 @@ public abstract class Reward {
     }
 
     public boolean apply(final Player player){
-        return ClueScrollUtils.isChance(chance) && give(player, ClueScrollUtils.rand(minAmount, maxAmount));
+        return give(player, ClueScrollUtils.rand(minAmount, maxAmount));
+    }
+
+    public boolean canGet(){
+        return ClueScrollUtils.isChance(chance);
     }
 
     public Element toElement(final Document doc){
         final Element element = doc.createElement("reward");
+        element.setAttribute("type", type.name());
+        append(doc, element);
+        element.appendChild(ClueScrollUtils.createElement(doc, "minAmount", minAmount));
+        element.appendChild(ClueScrollUtils.createElement(doc, "maxAmount", maxAmount));
+        element.appendChild(ClueScrollUtils.createElement(doc, "chance", chance));
+        return element;
+    }
+
+    public Element toRareElement(final Document doc){
+        final Element element = doc.createElement("rareReward");
         element.setAttribute("type", type.name());
         append(doc, element);
         element.appendChild(ClueScrollUtils.createElement(doc, "minAmount", minAmount));

@@ -29,6 +29,7 @@ public class VoteRequest extends SQLRequest {
     private int bonus = -1;
     private int votingPoints = 0;
     private int streak;
+    private static String[] ignoredDays = {"25/09/2015"};
 
     /**
      * Constructs a new vote request.
@@ -221,8 +222,22 @@ public class VoteRequest extends SQLRequest {
                 currentStreak++;
                 //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
             } else if (!lastVoted.equalsIgnoreCase(FORMAT_PLAYER.format(Calendar.getInstance().getTime()))) {
-                player.sendMessage("Your voting streak has been reset!");
-                currentStreak = 0;
+                boolean ignore = false;
+                for(int i = 0; i < ignoredDays.length; i++)
+                    if(yesterday.equalsIgnoreCase(ignoredDays[i]))
+                        ignore = true;
+                if(ignore) {
+                    cal.add(Calendar.DATE, -2);
+                    String twodaysago = FORMAT_PLAYER.format(cal.getTime());
+                    if(lastVoted.equalsIgnoreCase(twodaysago))
+                        player.sendMessage("Yesterday has been ignored, so your streak has not been reset.");
+                    else
+                        ignore = false;
+                }
+                if(!ignore) {
+                    player.sendMessage("Your voting streak has been reset!");
+                    currentStreak = 0;
+                }
             }
         }
 

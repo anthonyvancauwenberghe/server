@@ -61,6 +61,13 @@ public final class ClueScrollManager {
         clue.apply(player);
     }
 
+    public static boolean isClue(int id) {
+        final ClueScroll cs = get(id);
+        if(cs != null)
+            return true;
+        return false;
+    }
+
     public static void trigger(final Player player, final ClueScroll.Trigger trigger){
         trigger(player, trigger.getId());
     }

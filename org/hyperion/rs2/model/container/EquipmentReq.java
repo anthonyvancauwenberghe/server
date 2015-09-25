@@ -231,6 +231,9 @@ public class EquipmentReq {
 			case 18357:
 				equipReqData[4] = 80;
 				return equipReqData;
+			case 18363:
+				equipReqData[Skills.DEFENCE] = 80;
+				return equipReqData;
 
 		}
 		s = s.toLowerCase().replaceAll("_", " ");

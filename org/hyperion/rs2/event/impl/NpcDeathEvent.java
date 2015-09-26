@@ -207,9 +207,9 @@ public class NpcDeathEvent extends Event {
 
                 if (kills % 1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
-                    player.sendf("For this milestone, you recieve @dre@%d@bla@ PvM Tokens", add.getCount());
-                    if (!player.getInventory().add(add))
-                        player.getBank().add(add);
+                    player.sendf("For this milestone, you recieve @dre@%d@bla@ PvM Tokens.", add.getCount());
+                    player.sendMessage("They have been added to your bank.");
+                    player.getBank().add(add);
                 }
                 //normal drops
                 if (!player.getDungeoneering().inDungeon()) {
@@ -250,15 +250,13 @@ public class NpcDeathEvent extends Event {
                         }
 
                     }
-/*
-                    if(ClueScrollUtils.dropClueScroll(player, npc)) {
+                    /*if(ClueScrollUtils.dropClueScroll(player, npc)) {
                         Item clueScroll = ClueScrollUtils.getScroll(npc);
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(), clueScroll);
                         World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
                         for (Player p : player.getRegion().getPlayers())
                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + Misc.aOrAn(clueScroll.getDefinition().getName()) + " " + clueScroll.getDefinition().getName() + ".");
-                    }
-*/
+                    }*/
 
                     if (isTask && Misc.random(1000) < 1) {
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),

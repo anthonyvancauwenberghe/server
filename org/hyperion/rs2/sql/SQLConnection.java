@@ -1,32 +1,34 @@
 package org.hyperion.rs2.sql;
 
-import java.sql.PreparedStatement;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sql.event.SQLEvent;
 import org.hyperion.rs2.sql.requests.QueryRequest;
-import org.hyperion.rs2.util.RestarterThread;
+import org.hyperion.util.Time;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author Arsen Maxyutov.
  */
 public abstract class SQLConnection extends Thread {
 
+	protected String lastQueryString = null;
+
+	public String getLastQueryString() {
+		return lastQueryString;
+	}
+
 	/**
 	 * Queue used to transfer requests from game threads to SQL thread.
 	 */
-	private Queue<SQLRequest> queue = new LinkedList<SQLRequest>();
+	protected ConcurrentLinkedQueue<SQLRequest> queue = new ConcurrentLinkedQueue<SQLRequest>();
 
 	/**
 	 * List used to hold the events in it.
@@ -59,6 +61,15 @@ public abstract class SQLConnection extends Thread {
 	protected long lastConnectionCreated = 0;
 
 	/**
+	 * Holds the time when the last query was sent.
+	 */
+	protected long lastQuery = 0;
+
+	public long getLastQuery() {
+		return lastQuery;
+	}
+
+	/**
 	 * The maximum cycle sleep time.
 	 */
 	private int max_cycle_sleep;
@@ -71,8 +82,11 @@ public abstract class SQLConnection extends Thread {
 	/**
 	 * The current cycle sleep time.
 	 */
-	private int sleep_time;
+	protected int sleep_time;
 
+	public Connection getConnection() {
+		return connection;
+	}
 
 	/**
 	 * @param name
@@ -88,40 +102,160 @@ public abstract class SQLConnection extends Thread {
 		this.sleep_time = max_cycle_sleep;
 	}
 
+	public SQLRequest peek() {
+		return queue.peek();
+	}
+
+	public int getQueueSize() {
+		return queue.size();
+	}
+
+	private boolean logged = false;
+
+	public void setLogged(boolean b) {
+		logged = b;
+	}
+
+
+	private LinkedList<StrLongObject> lastQueries = new LinkedList<StrLongObject>();
+
+	public void dumpLastQueries(String file) {
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(file));
+			for(StrLongObject lastQuery: lastQueries) {
+				out.write(new Date(lastQuery.getLongValue()).toString() + "---" + lastQuery.getStr());
+				out.newLine();
+			}
+			out.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void dumpLastQueries() {
+		dumpLastQueries("./data/dumplastqueries.log");
+	}
+
+
+
 	/**
 	 * The run method of the thread which
 	 * processes all queries and events.
 	 */
 	@Override
 	public void run() {
-		createConnection();
-		while(running) {
+		try {
+			createConnection();
+		} catch(SQLException e) {
+			System.out.println("Could not create connection..." + this.getName());
+		}
+		while (running) {
+
 			try {
-				while(connection == null || connection.isClosed()) {
+				long very_start = System.currentTimeMillis();
+				while (connection == null || connection.isClosed()) {
 					sleep(create_connection_timer);
 					createConnection();
 				}
-				SQLRequest request = queue.poll();
-				if(request != null) {
-					try {
-						request.process(this);
-					} catch(Exception e) {
-						handleException(e, request.toString());
-					}
+				int queue_size = queue.size();
+				if(logged) {
+					World.getWorld().getGUI().setStatus("About to check queue size");
+					World.getWorld().getGUI().updateQueueSizes();
 				}
-				processEvents();
-				if(queue.size() > 0) {
+
+				if(queue_size > 0) {
+					if(logged) {
+						World.getWorld().getGUI().setStatus("Finding non null E");
+					}
+					SQLRequest request = null;
+					int attempts = 0;
+					//request = queue.poll();
+					while(queue.size() > 0 && request == null && attempts < 50) {
+						/*request = queue.get(0);
+						queue.remove(0);*/
+						request = queue.poll();
+						attempts++;
+					}
+					if(logged) {
+						World.getWorld().getGUI().setStatus("About to request != null");
+					}
+					if (request != null) {
+						try {
+							if(logged) {
+								World.getWorld().getGUI().setStatus("About to process request");
+								World.getWorld().getGUI().setLastQuery(request.toString());
+								long start = System.currentTimeMillis();
+								World.getWorld().getGUI().setStart(start);
+								this.lastQueryString = request.toString();
+								request.process(this);
+
+
+								long delta = System.currentTimeMillis() - start;
+								World.getWorld().getGUI().setDelta(delta);
+
+							} else {
+								request.process(this);
+							}
+						} catch (Exception e) {
+							if(logged) {
+								World.getWorld().getGUI().setStatus("Exp caught :/");
+							}
+							handleException(e, request.toString());
+							sleep(Time.ONE_MINUTE);
+						}
+					} else {
+						if(logged) {
+							World.getWorld().getGUI().setStatus("Request was null");
+						}
+
+					}
 					sleep_time = Math.max(min_cycle_sleep, sleep_time / 2);
 				} else {
-					sleep_time = Math.min(max_cycle_sleep, sleep_time * 2);
+					if(logged) {
+						World.getWorld().getGUI().setStatus("Sleep time..");
+					}
+
+					sleep_time = Math.min(max_cycle_sleep, sleep_time * 2 + 1);
+					if (sleep_time > 0)
+						sleep(sleep_time);
 				}
-				if(sleep_time > 0)
-					sleep(sleep_time);
-			} catch(Exception e) {
+
+				if(logged) {
+					World.getWorld().getGUI().setStatus("Wanna process Events");
+				}
+
+				processEvents();
+
+				if(logged) {
+					World.getWorld().getGUI().setStatus("Finished processing events");
+				}
+
+				if (System.currentTimeMillis() - lastQuery + sleep_time > 30000) {
+					query("SELECT 1");
+				}
+			} catch (Exception e) {
+				try {
+					sleep(100);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
 				e.printStackTrace();
 			}
+
 		}
 	}
+	
+	/*public static void writeProcessLog(String query) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter("./data/sqlprocesslog.log", true));
+			bw.write(query);
+			bw.newLine();
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}*/
 
 	/**
 	 * Initiates the SQL thread, returns true if succesful, false if not.
@@ -133,15 +267,15 @@ public abstract class SQLConnection extends Thread {
 	/**
 	 * Processes all of the SQLEvents.
 	 *
-	 * @throws SQLException
+	 * @throws java.sql.SQLException
 	 */
 	private void processEvents() throws SQLException {
-		for(int i = 0; i < events.size(); i++) {
+		for (int i = 0; i < events.size(); i++) {
 			SQLEvent event = events.get(i);
-			if(! event.isRunning()) {
+			if (!event.isRunning()) {
 				events.remove(i);
-				i--;
-			} else if(event.shouldExecute()) {
+				return;
+			} else if (event.shouldExecute()) {
 				event.execute(this);
 			}
 		}
@@ -153,7 +287,7 @@ public abstract class SQLConnection extends Thread {
 	 * @param events
 	 */
 	public void submit(SQLEvent... events) {
-		for(SQLEvent event : events)
+		for (SQLEvent event : events)
 			this.events.add(event);
 	}
 
@@ -163,8 +297,16 @@ public abstract class SQLConnection extends Thread {
 	 * @param query
 	 */
 	public void offer(String query) {
-		queue.offer(new QueryRequest(query));
+		offer(new QueryRequest(query));
 	}
+
+	public void offer(String query, Object...args) {
+		query = String.format(query, args);
+		offer(query);
+	}
+
+
+	private LinkedList<String> overloadQueries = new LinkedList<String>();
 
 	/**
 	 * Offers the SQLRequest to the SQL thread.
@@ -172,13 +314,42 @@ public abstract class SQLConnection extends Thread {
 	 * @param request
 	 */
 	public void offer(SQLRequest request) {
-		if(running)
+		long now = System.currentTimeMillis();
+		StrLongObject o = new StrLongObject(request.toString(),now);
+		lastQueries.add(o);
+		if(lastQueries.size() > 100) {
+			long first = lastQueries.get(0).getLongValue();
+			if(now - first < Time.FIVE_SECONDS) {
+				dumpLastQueries();
+			}
+			lastQueries.remove(0);
+		}
+		int queueSize = queue.size();
+
+		if(queueSize > 1000) {
+			//System.out.println("QueueSize: " + queueSize + " --- " + request);
+			overloadQueries.add("QueueSize: " + queueSize + " --- " + request.toString());
+			if(overloadQueries.size() > 1000) {
+				try {
+					BufferedWriter bw = new BufferedWriter(new FileWriter("./data/overloadqueries.log",true));
+					for(String s: overloadQueries) {
+						bw.write(s);
+						bw.newLine();
+					}
+					bw.close();
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				overloadQueries.clear();
+			}
+		}
+		if (running) {
 			queue.offer(request);
-		else {
+		} else {
 			System.out.println("Processing: " + request.toString());
 			try {
 				request.process(this);
-			} catch(SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -192,10 +363,14 @@ public abstract class SQLConnection extends Thread {
 	private void handleException(Exception e, String query) {
 		System.out.println("Error in sql: " + e.getMessage());
 		String logMessage = "Epic Error: \\n  ---" + query + "---";
-		for(StackTraceElement st : e.getStackTrace()) {
+		for (StackTraceElement st : e.getStackTrace()) {
 			logMessage += st.toString() + "\\n";
 		}
 		writeLog(logMessage);
+		if(this instanceof MySQLConnection) {
+			MySQLConnection mc = (MySQLConnection) this;
+			mc.dumpLastQueries();
+		}
 	}
 
 	/**
@@ -208,7 +383,7 @@ public abstract class SQLConnection extends Thread {
 			bw.newLine();
 			bw.write(message);
 			bw.close();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -218,7 +393,7 @@ public abstract class SQLConnection extends Thread {
 	 * Changes the debugging mode.
 	 */
 	public void changeDebug() {
-		debug = ! debug;
+		debug = !debug;
 	}
 
 	/**
@@ -246,8 +421,8 @@ public abstract class SQLConnection extends Thread {
 	 */
 	public boolean isConnected() {
 		try {
-			return connection != null && ! connection.isClosed();
-		} catch(SQLException e) {
+			return connection != null && !connection.isClosed();
+		} catch (SQLException e) {
 			return false;
 		}
 	}
@@ -257,84 +432,67 @@ public abstract class SQLConnection extends Thread {
 	 *
 	 * @return
 	 */
-	protected abstract boolean createConnection();
+	protected abstract boolean createConnection() throws SQLException;
 
 	/**
 	 * A blocking method which keeps trying to make a connection until one is made.
 	 */
 	public void establishConnection() {
-		createConnection();
-		while(! isConnected()) {
+		try {
+			createConnection();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		while (!isConnected()) {
 			try {
 				sleep(create_connection_timer);
-			} catch(InterruptedException e) {
+				createConnection();
+			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} catch(SQLException e) {
+				System.out.println("Not able to connect to sql" + this.getName());
 			}
-			createConnection();
 			System.out.println("Was not able to connect to " + this.getName());
 		}
 	}
 
 	/**
+	 * Processes the formatted query string.
+	 * @param query
+	 * @param args
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet query(String query, Object...args) throws SQLException {
+		query = String.format(query, args);
+		return query(query);
+	}
+	/**
 	 * Processes the query string.
 	 *
 	 * @param s
 	 * @return
-	 * @throws SQLException
+	 * @throws java.sql.SQLException
 	 */
-	public ResultSet query(String s) throws SQLException {
-		//System.out.println(this.getName() + ":" + s);
-		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = null;
-			if(s.toLowerCase().startsWith("select")) {
-				rs = statement.executeQuery(s);
-			} else {
-				statement.executeUpdate(s);
-
-			}
-			RestarterThread.getRestarter().updateSQLTimer();
-			return rs;
-		} catch(Exception e) {
-			if(e instanceof SocketTimeoutException) {
-				System.out.println("Can't process query: " + s);
-				//e.printStackTrace();
-			} else {
-				System.out.println("Error:" + s);
-				e.printStackTrace();
-
-				handleException(e, s);
-			}
-			return null;
-		}
-	}
+	public abstract ResultSet query(String s) throws SQLException;
 
 	/**
 	 * Destroys the SQL connection.
 	 */
 	public void close() {
-		if(connection != null) {
+		if (connection != null) {
 			try {
 				connection.close();
-			} catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-    public PreparedStatement prepare(final String sql){
-        try{
-            return connection.prepareStatement(sql);
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
 	static {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

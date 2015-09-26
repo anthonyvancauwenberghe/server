@@ -18,7 +18,7 @@ public class ItemsTradeable {
         if(id == 15426 || id == 6542)
             return false;
         final ItemDefinition itemDef;
-        if((itemDef = ItemDefinition.forId(id)) != null && itemDef.getName().toLowerCase().contains("(class"))
+        if((itemDef = ItemDefinition.forId(id)) != null && (itemDef.getName().toLowerCase().contains("(class") || itemDef.getName().toLowerCase().contains("clue")))
             return false;
 		return !ArrayUtils.contains(id, untradeables());
 	}

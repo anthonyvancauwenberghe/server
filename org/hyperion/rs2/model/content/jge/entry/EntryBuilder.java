@@ -1,15 +1,17 @@
 package org.hyperion.rs2.model.content.jge.entry;
 
-import java.time.OffsetDateTime;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+
+import java.time.OffsetDateTime;
 
 /**
  * Created by Administrator on 9/24/2015.
  */
 public class EntryBuilder {
 
-    private final String playerName;
+    private final Player player;
     private final Entry.Type type;
     private final int slot;
     private final Entry.Currency currency;
@@ -17,8 +19,8 @@ public class EntryBuilder {
     private int itemQuantity;
     private int unitPrice;
 
-    public EntryBuilder(final String playerName, final Entry.Type type, final int slot, final Entry.Currency currency){
-        this.playerName = playerName;
+    public EntryBuilder(final Player player, final Entry.Type type, final int slot, final Entry.Currency currency){
+        this.player = player;
         this.type = type;
         this.slot = slot;
         this.currency = currency;
@@ -68,12 +70,20 @@ public class EntryBuilder {
         return true;
     }
 
-    public boolean decreaseItemQuantity(){
-        return itemQuantity(itemQuantity - 1);
+    public boolean decreaseItemQuantity(final int amount){
+        return itemQuantity(itemQuantity - amount);
+    }
+
+    public boolean increaseItemQuantity(final int amount){
+        return itemQuantity(itemQuantity + amount);
     }
 
     public boolean increaseItemQuantity(){
-        return itemQuantity(itemQuantity + 1);
+        return increaseItemQuantity(1);
+    }
+
+    public boolean decreaseItemQuantity(){
+        return decreaseItemQuantity(1);
     }
 
     public int unitPrice(){
@@ -114,6 +124,6 @@ public class EntryBuilder {
     }
 
     public Entry build(){
-        return new Entry(OffsetDateTime.now(), playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
+        return new Entry(OffsetDateTime.now(), player.getName(), type, slot, itemId, itemQuantity, unitPrice, currency);
     }
 }

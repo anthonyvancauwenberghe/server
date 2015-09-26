@@ -1,12 +1,12 @@
 package org.hyperion.rs2.model.content.jge.entry;
 
-import java.time.OffsetDateTime;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -105,7 +105,7 @@ public class Entry {
         return playerOpt().orElse(null);
     }
 
-    public static EntryBuilder build(final String playerName, final Type type, final int slot, final Currency currency){
-        return new EntryBuilder(playerName, type, slot, currency);
+    public static EntryBuilder build(final Player player, final Type type, final int slot, final Currency currency){
+        return new EntryBuilder(player, type, slot, currency);
     }
 }

@@ -28,7 +28,9 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.ge.Offer;
+import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
@@ -882,12 +884,24 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("selectitem")) {
-            try {
-                int itemID = Integer.valueOf(as[1]);
-                System.out.println("Selecting item: " + itemID);
-                player.getGrandExchange().setNewOffer(new Offer(itemID, 1, 1337, player.getGrandExchange().getNewOffer().getType()));
-                player.getGrandExchange().refreshNewOffer();
-            } catch (Exception e) {
+            try{
+                player.getGrandExchangeTracker().ifNewEntry(e -> {
+                    if(e.type() != Entry.Type.BUYING){
+                        player.sendf("You are not selling an item!");
+                        return;
+                    }
+                    if(e.itemId(Integer.valueOf(as[1]))){
+                        e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
+                        if(e.itemQuantity() < 1){
+                            e.itemQuantity(1);
+                            JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
+                        }
+                        JGrandExchangeInterface.NewEntry.setItem(player, e.item());
+                        JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
+                    }
+                }, "You're not building a new entry right now");
+            }catch(Exception ex){
+                ex.printStackTrace();
             }
         }
 

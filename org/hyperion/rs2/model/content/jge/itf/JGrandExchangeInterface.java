@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.content.jge.itf;
 
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
@@ -19,10 +18,10 @@ public final class JGrandExchangeInterface {
     public static final int BACK = 22723;
     public static final int DECREASE_QUANTITY = 22713;
     public static final int INCREASE_QUANTITY = 22714;
-    public static final int SET_QUANTITY_1 = 22686;
-    public static final int SET_QUANTITY_10 = 22689;
-    public static final int SET_QUANTITY_100 = 22692;
-    public static final int SET_QUANTITY_500 = 22695;
+    public static final int INCREASE_QUANTITY_1 = 22686;
+    public static final int INCREASE_QUANTITY_10 = 22689;
+    public static final int INCREASE_QUANTITY_100 = 22692;
+    public static final int INCREASE_QUANTITY_500 = 22695;
     public static final int ENTER_QUANTITY = 22698;
     public static final int DECREASE_PRICE = 22715;
     public static final int INCREASE_PRICE = 22716;
@@ -74,7 +73,7 @@ public final class JGrandExchangeInterface {
         public static void setItem(final Player player, final Item item){
             player.getActionSender().sendUpdateItems(22717, new Item[]{item});
             player.getActionSender().sendString(item != null ? item.getDefinition().getName() : "", 22673);
-            player.getActionSender().sendString(item != null ? item.getDefinition().getDescription().replace("_", " ") : "", 22673);
+            player.getActionSender().sendString(item != null ? item.getDefinition().getDescription().replace("_", " ") : "", 22674);
         }
 
         public static void setUnitPrice(final Player player, final int unitPrice, final Entry.Currency currency){
@@ -85,7 +84,7 @@ public final class JGrandExchangeInterface {
 
         public static void setTotalPrice(final Player player, final int totalPrice, final Entry.Currency currency){
             final String formatted = totalPrice > 0 && currency != null ? String.format("%,d %s", totalPrice, currency.shortName) : "";
-            player.getActionSender().sendString(formatted, 22677);
+            player.getActionSender().sendString(formatted, 22683);
         }
 
         public static void setQuantity(final Player player, final int quantity){

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.jge.tracker;
 
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
@@ -97,16 +98,13 @@ public class JGrandExchangeTracker {
     }
 
     public boolean startNewEntry(final Entry.Type type, final int slot){
-        if(buildingNewEntry()){
-            player.sendf("You are already building a new entry!");
-            return false;
-        }
+        if(buildingNewEntry())
+            nullifyNewEntry();
         if(entries.used(slot)){
             player.sendf("You can't create a new entry in this slot!");
             return false;
         }
-        activeSlot = slot;
-        newEntry = Entry.build(player.getName(), type, slot, player.hardMode() ? Entry.Currency.COINS : Entry.Currency.PK_TICKETS);
+        newEntry = Entry.build(player, type, slot, player.hardMode() ? Entry.Currency.COINS : Entry.Currency.PK_TICKETS);
         return true;
     }
 
@@ -119,10 +117,8 @@ public class JGrandExchangeTracker {
             player.sendf("You are building an entry in this slot!");
             return false;
         }
-        if(hasActiveEntry()){
-            player.sendf("You are already viewing an entry!");
-            return false;
-        }
+        if(hasActiveEntry())
+            activeSlot = -1;
         activeSlot = slot;
         return true;
     }
@@ -208,37 +204,37 @@ public class JGrandExchangeTracker {
                 return true;
             case DECREASE_QUANTITY:
                 ifNewEntry(e -> {
-                    if(e.decreaseItemQuantity())
+                    if(e.validItem() && e.decreaseItemQuantity())
                         NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before decreasing quantity");
                 return true;
             case INCREASE_QUANTITY:
                 ifNewEntry(e -> {
-                    if(e.increaseItemQuantity())
+                    if(e.validItem() && e.increaseItemQuantity())
                         NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before increasing quantity");
                 return true;
-            case SET_QUANTITY_1:
+            case INCREASE_QUANTITY_1:
                 ifNewEntry(e -> {
-                    if(e.itemQuantity(1))
+                    if(e.validItem() && e.increaseItemQuantity(1))
                         NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before setting quantity");
                 return true;
-            case SET_QUANTITY_10:
+            case INCREASE_QUANTITY_10:
                 ifNewEntry(e -> {
-                    if(e.itemQuantity(10))
+                    if(e.validItem() && e.increaseItemQuantity(10))
                         NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before setting quantity");
                 return true;
-            case SET_QUANTITY_100:
+            case INCREASE_QUANTITY_100:
                 ifNewEntry(e -> {
-                    if(e.itemQuantity(100))
+                    if(e.validItem() && e.increaseItemQuantity(100))
                         NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before setting quantity");
                 return true;
-            case SET_QUANTITY_500:
+            case INCREASE_QUANTITY_500:
                 ifNewEntry(e -> {
-                    if(e.itemQuantity(500))
+                    if(e.validItem() && e.increaseItemQuantity(500))
                         NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before setting quantity");
                 return true;
@@ -247,29 +243,25 @@ public class JGrandExchangeTracker {
                 return true;
             case DECREASE_PRICE:
                 ifNewEntry(e -> {
-                    if(e.decreaseUnitPrice())
+                    if(e.validItem() && e.decreaseUnitPrice())
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before decreasing price");
                 return true;
             case INCREASE_PRICE:
                 ifNewEntry(e -> {
-                    if(e.increaseUnitPrice())
+                    if(e.validItem() && e.increaseUnitPrice())
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before increasing price");
                 return true;
             case DECREASE_PRICE_PERCENT:
                 ifNewEntry(e -> {
-                    if(e.decreaseUnitPricePercent())
+                    if(e.validItem() && e.decreaseUnitPricePercent())
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before decreasing price");
                 return true;
             case EQUATE_PRICE:
                 ifNewEntry(e -> {
-                    if(!e.validItem()){
-                        player.sendf("Select an item first!");
-                        return;
-                    }
-                    if(e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId())))
+                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId())))
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before equating price");
                 return true;
@@ -278,7 +270,7 @@ public class JGrandExchangeTracker {
                 return true;
             case INCREASE_PRICE_PERCENT:
                 ifNewEntry(e -> {
-                    if(e.increaseUnitPricePercent())
+                    if(e.validItem() && e.increaseUnitPricePercent())
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before increasing price");
                 return true;
@@ -292,9 +284,40 @@ public class JGrandExchangeTracker {
                         player.sendf("This slot is already in use");
                         return;
                     }
+                    switch(e.type()){
+                        case BUYING: {
+                            final int max = player.getInventory().getCount(e.currency().itemId);
+                            if(e.totalPrice() > max){
+                                player.sendf("You need %,d more %s to %s %,d %s!",
+                                        e.totalPrice() - max, e.currency().shortName, e.type().singleName,
+                                        e.itemQuantity(), e.item().getDefinition().getName());
+                                return;
+                            }
+                            if(player.getInventory().remove(Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
+                                player.sendf("Something went wrong!");
+                                return;
+                            }
+                            break;
+                        }
+                        case SELLING: {
+                            final int max = player.getInventory().getCount(e.itemId());
+                            if(e.itemQuantity() > max){
+                                player.sendf("You don't have that many %s!", e.item().getDefinition().getName());
+                                return;
+                            }
+                            if(player.getInventory().remove(Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
+                                player.sendf("Something went wrong!");
+                                return;
+                            }
+                            break;
+                        }
+                    }
                     final Entry entry = newEntry.build();
                     entries.add(entry);
+                    JGrandExchange.getInstance().add(entry);
                     nullifyNewEntry();
+                    showEntries();
+                    JGrandExchange.getInstance().check(entry);
                 }, "You are not building a new entry right now!");
                 return true;
             case CANCEL:
@@ -327,7 +350,7 @@ public class JGrandExchangeTracker {
                 ifActiveEntry(e -> {
                     if(e.claims.claimProgress()){
                         player.sendf("You successfully claim your progress");
-                        if(e.finished()){
+                        if(e.cancelled || e.finished()){
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
                             showEntries();
@@ -339,7 +362,7 @@ public class JGrandExchangeTracker {
                 ifActiveEntry(e -> {
                     if(e.claims.claimReturn()){
                         player.sendf("You successfully claim your returns");
-                        if(e.finished()){
+                        if(e.cancelled || e.finished()){
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
                             showEntries();

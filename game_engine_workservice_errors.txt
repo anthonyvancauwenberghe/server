@@ -1083,3 +1083,129 @@ Fri Sep 11 17:00:52 CEST 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sat Sep 26 16:22:59 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1532)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:137)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Sep 26 16:23:29 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1532)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:137)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Sep 26 18:33:56 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1526)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:2707)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Sep 26 18:34:29 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1526)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:2707)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Sep 26 18:35:03 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1526)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:2707)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Sep 26 18:35:38 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1526)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:2707)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================
+Sat Sep 26 18:36:14 GMT+01:00 2015
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.util.NameUtils.formatNameForProtocol(NameUtils.java:72)
+	at org.hyperion.rs2.util.NameUtils.isValidName(NameUtils.java:26)
+	at org.hyperion.rs2.model.Player.getName(Player.java:1526)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.loadEntries(JGrandExchangeTracker.java:39)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.<init>(JGrandExchangeTracker.java:35)
+	at org.hyperion.rs2.model.Player.<init>(Player.java:2707)
+	at org.hyperion.rs2.GenericWorldLoader.checkLogin(GenericWorldLoader.java:257)
+	at org.hyperion.rs2.model.World$2.run(World.java:617)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

@@ -40,4 +40,8 @@ public class EntryManager {
     public void add(final Entry entry){
         entries[entry.slot] = entry;
     }
+
+    public void remove(final Entry entry){
+        entries[entry.slot] = null;
+    }
 }

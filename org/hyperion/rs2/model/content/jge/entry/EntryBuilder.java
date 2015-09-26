@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.jge.entry;
 
+import java.time.OffsetDateTime;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 
@@ -11,15 +12,22 @@ public class EntryBuilder {
     private final String playerName;
     private final Entry.Type type;
     private final int slot;
+    private final Entry.Currency currency;
     private int itemId;
     private int itemQuantity;
     private int unitPrice;
 
-    public EntryBuilder(final String playerName, final Entry.Type type, final int slot){
+    public EntryBuilder(final String playerName, final Entry.Type type, final int slot, final Entry.Currency currency){
         this.playerName = playerName;
         this.type = type;
         this.slot = slot;
+        this.currency = currency;
+
         itemId = -1;
+    }
+
+    public Entry.Currency currency(){
+        return currency;
     }
 
     public Entry.Type type(){
@@ -106,6 +114,6 @@ public class EntryBuilder {
     }
 
     public Entry build(){
-        return new Entry(playerName, type, slot, itemId, itemQuantity, unitPrice);
+        return new Entry(OffsetDateTime.now(), playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
     }
 }

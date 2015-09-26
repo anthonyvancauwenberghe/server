@@ -2104,5 +2104,13 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("openge", Rank.PLAYER){
+			public boolean execute(final Player player, final String input) throws Exception{
+				player.getGrandExchangeTracker().openInterface();
+				return true;
+			}
+		});
 	}
+
 }

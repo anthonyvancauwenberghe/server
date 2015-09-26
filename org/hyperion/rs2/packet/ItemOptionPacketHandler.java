@@ -14,6 +14,9 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
+import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -278,10 +281,24 @@ public class ItemOptionPacketHandler implements PacketHandler {
 					}
 				}
 				break;
-            case GrandExchange.INVENTORY_SELL_INTER:
-                player.getGrandExchange().setSellItem(id);
-                break;
-            case RunePouch.INVENTORY_INTERFACE:
+			case JGrandExchangeInterface.SELL_INTERFACE:
+				player.getGrandExchangeTracker().ifNewEntry(e -> {
+					if(e.type() != Entry.Type.SELLING){
+						player.sendf("You are not selling an item!");
+						return;
+					}
+					if(e.itemId(id)){
+						e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
+						if(e.itemQuantity() < 1){
+							e.itemQuantity(1);
+							JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
+						}
+						JGrandExchangeInterface.NewEntry.setItem(player, e.item());
+						JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
+					}
+				}, "You're not building a new entry right now");
+				break;
+			case RunePouch.INVENTORY_INTERFACE:
                 if(player.openedBoB)
                     BoB.deposit(player, slot, id, 1);
                 else if(slot >= 0 && slot < Inventory.SIZE) {

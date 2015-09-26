@@ -24,14 +24,22 @@ public class ProgressManager {
         return list.stream();
     }
 
-    public int total(){
+    public double quantityPercent(){
+        return totalQuantity() * 100d / entry.itemQuantity;
+    }
+
+    public int totalPrice(){
+        return totalQuantity() * entry.unitPrice;
+    }
+
+    public int totalQuantity(){
         return stream()
                 .mapToInt(p -> p.quantity)
                 .sum();
     }
 
-    public int remaining(){
-        return entry.itemQuantity - total();
+    public int remainingQuantity(){
+        return entry.itemQuantity - totalQuantity();
     }
 
     public void add(final String playerName, final int quantity, final boolean addToClaims){
@@ -41,6 +49,6 @@ public class ProgressManager {
     }
 
     public boolean completed(){
-        return total() == entry.itemQuantity;
+        return totalQuantity() == entry.itemQuantity;
     }
 }

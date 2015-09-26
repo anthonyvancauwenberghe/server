@@ -49,7 +49,7 @@ public class ClaimSlot {
     }
 
     public Item item(){
-        return Item.create(itemId, itemQuantity);
+        return valid() ? Item.create(itemId, itemQuantity) : null;
     }
 
     public static ClaimSlot createDefault(){

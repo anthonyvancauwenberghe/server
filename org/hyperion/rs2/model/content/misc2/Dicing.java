@@ -146,7 +146,7 @@ public class Dicing implements ContentTemplate {
 			player.getActionSender().sendMessage("The gambler only gambles with unspawnables.");
 			return;
 		}
-        if((item.getId() >= 13195 && item.getId() <= 13205) || item.getId() == 12747 || item.getId() == 12744 || item.getId() == 18509 || item.getId() == 19709) {
+        if((item.getId() >= 13195 && item.getId() <= 13205) || item.getId() == 12747 || item.getId() == 12744 || item.getId() == 18509 || item.getId() == 19709 || item.getDefinition().getName().replaceAll("_", " ").contains("clue scroll")) {
             player.sendMessage("The gambler doesn't know what to do with this item.");
             return;
         }

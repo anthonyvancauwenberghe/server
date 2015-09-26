@@ -43,6 +43,10 @@ public final class ClueScrollUtils {
         } else if(Rank.hasAbility(player, Rank.DONATOR)) {
             clueScrollChance *= 1.1;
         }
+
+        if(player.getSlayer().isTask(npc.getDefinition().getId()))
+            clueScrollChance *= 2;
+
         if(Misc.random(1000) <= clueScrollChance*10)
             return true;
         return false;

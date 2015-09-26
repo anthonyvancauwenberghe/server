@@ -11,3 +11,4 @@ entry-contains void, defender, vesta, statius, morrigan, spirit = pkp
 entry-id 5020-5023, 10551, 10548, 6570, 10566, 10637 = pkp
 
 entry-id 995, 12862, 0, 2412-2414, 6199, 14876-14889, 11724, 11725, 10025, 10026, 11949, 11726, 11727, 12747, 12744, 12852, 1391, 8195, 5068, 4295, 3243, 11061, 11238-11261,8851,8023-8500 = nospawn
+entry-contains clue = nospawn

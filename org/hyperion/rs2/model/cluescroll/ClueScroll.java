@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 import org.hyperion.rs2.model.cluescroll.reward.ItemReward;
 import org.hyperion.rs2.model.cluescroll.reward.Reward;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.util.Misc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -347,7 +348,7 @@ public class ClueScroll {
         int key = -1;
         if(SpawnCommand.giveSpawnables().isEmpty())
             return new ItemReward(4716, 1, 1, 1000);
-        while(SpawnCommand.giveSpawnables().get(random == 0 ? 1 : random) == null) {
+        while(SpawnCommand.giveSpawnables().get(random == 0 ? 1 : random) == null || NewGameMode.getUnitPrice(random) < 100000) {
             random = Misc.random(SpawnCommand.giveSpawnables().size());
         }
         key = (int) SpawnCommand.giveSpawnables().get(random == 0 ? 1 : random);

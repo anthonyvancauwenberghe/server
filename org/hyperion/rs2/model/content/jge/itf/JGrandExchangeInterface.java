@@ -259,9 +259,13 @@ public final class JGrandExchangeInterface {
             }
         }
 
-        public static void open(final Player player, final EntryManager entries){
+        public static void setAll(final Player player, final EntryManager entries){
             for(int slot = 0; slot < EntryManager.NUMBER_OF_SLOTS; slot++)
                 set(player, slot, entries.get(slot));
+        }
+
+        public static void open(final Player player, final EntryManager entries){
+            setAll(player, entries);
             player.getActionSender().showInterface(23670);
         }
     }

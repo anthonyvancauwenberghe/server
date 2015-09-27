@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.jge;
 
 import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 
 import java.util.*;
 import java.util.function.Function;
@@ -49,14 +50,18 @@ public class JGrandExchange {
         remove(entry, TYPE_KEY);
     }
 
-    public void check(final Entry entry){
-        final Optional<Entry> opt = stream(entry.type.opposite())
+    public void submit(final Entry submitEntry){
+        final Optional<Entry> opt = stream(submitEntry.type.opposite())
                 .filter(e -> {
-                    if(e.cancelled || e.finished() || e.itemId != entry.itemId)
+                    if(e.cancelled || e.progress.completed() || e.itemId != submitEntry.itemId)
                         return false;
-                    if(e.unitPrice > entry.unitPrice)
+                    if(e.type != submitEntry.type.opposite())
                         return false;
-                    if(e.playerName.equalsIgnoreCase(entry.playerName))
+                    if(submitEntry.type == Entry.Type.BUYING && e.unitPrice > submitEntry.unitPrice)
+                        return false;
+                    if(submitEntry.type == Entry.Type.SELLING && e.unitPrice < submitEntry.unitPrice)
+                        return false;
+                    if(e.playerName.equalsIgnoreCase(submitEntry.playerName))
                         return false;
                     //maybe some other criteria
                     return true;
@@ -65,18 +70,54 @@ public class JGrandExchange {
                 .min(Comparator.comparing(e -> e.date));
         if(!opt.isPresent())
             return;
-        final Entry matched = opt.get();
-        //fgure out how much they can buy/sell
-        switch(entry.type){
-            case BUYING: {
-                final int remaining = entry.progress.remainingQuantity();
+        final Entry matchedEntry = opt.get();
+        final int submitRemaining = submitEntry.progress.remainingQuantity();
+        final int matchedRemaining = matchedEntry.progress.remainingQuantity();
+        final int maxQuantity = submitRemaining > matchedRemaining ? matchedRemaining : submitRemaining;
+        switch(submitEntry.type){
+            case BUYING:
+                //matchedEntry = selling entry
+                submitEntry.progress.add(matchedEntry.playerName, maxQuantity);
+                submitEntry.claims.addProgress(submitEntry.itemId, maxQuantity);
+                if(submitEntry.unitPrice > matchedEntry.unitPrice)
+                    submitEntry.claims.addReturn(submitEntry.currency.itemId, submitEntry.unitPrice - matchedEntry.unitPrice);
+                matchedEntry.progress.add(submitEntry.playerName, maxQuantity);
+                matchedEntry.claims.addProgress(matchedEntry.currency.itemId, maxQuantity * matchedEntry.unitPrice);
                 break;
-            }
-            case SELLING: {
-
+            case SELLING:
+                //matchedEntry = buying entry
+                matchedEntry.progress.add(submitEntry.playerName, maxQuantity);
+                matchedEntry.claims.addProgress(submitEntry.itemId, maxQuantity);
+                if(matchedEntry.unitPrice > submitEntry.unitPrice)
+                    matchedEntry.claims.addReturn(matchedEntry.currency.itemId, matchedEntry.unitPrice - submitEntry.unitPrice);
+                submitEntry.progress.add(submitEntry.playerName, maxQuantity);
+                submitEntry.claims.addProgress(submitEntry.currency.itemId, maxQuantity * submitEntry.unitPrice);
                 break;
-            }
         }
+        submitEntry.ifPlayer(p -> {
+            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
+                    matchedEntry.playerName, matchedEntry.type.pastTense,
+                    submitEntry.item().getDefinition().getName(), maxQuantity,
+                    submitEntry.type == Entry.Type.BUYING ? "to" : "from",
+                    matchedEntry.unitPrice, submitEntry.currency.shortName);
+            if (p.getGrandExchangeTracker().activeSlot == submitEntry.slot)
+                JGrandExchangeInterface.ViewingEntry.set(p, submitEntry);
+            else
+                JGrandExchangeInterface.Entries.setAll(p, p.getGrandExchangeTracker().entries);
+        });
+        matchedEntry.ifPlayer(p -> {
+            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
+                    submitEntry.playerName, submitEntry.type.pastTense,
+                    submitEntry.item().getDefinition().getName(), maxQuantity,
+                    matchedEntry.type == Entry.Type.BUYING ? "to" : "from",
+                    matchedEntry.unitPrice, submitEntry.currency.shortName);
+            if (p.getGrandExchangeTracker().activeSlot == matchedEntry.slot)
+                JGrandExchangeInterface.ViewingEntry.set(p, matchedEntry);
+            else
+                JGrandExchangeInterface.Entries.setAll(p, p.getGrandExchangeTracker().entries);
+        });
+        if(!submitEntry.progress.completed())
+            submit(submitEntry); //what if there are other entries
     }
 
     public List<Entry> get(final Object playerOrItemId){

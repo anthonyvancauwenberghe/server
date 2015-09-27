@@ -42,10 +42,8 @@ public class ProgressManager {
         return entry.itemQuantity - totalQuantity();
     }
 
-    public void add(final String playerName, final int quantity, final boolean addToClaims){
+    public void add(final String playerName, final int quantity){
         list.add(new Progress(playerName, entry.type.opposite(), entry.unitPrice, quantity));
-        if(addToClaims)
-            entry.claims.addProgress(entry.itemId, quantity);
     }
 
     public boolean completed(){

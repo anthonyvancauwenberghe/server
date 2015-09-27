@@ -317,7 +317,7 @@ public class JGrandExchangeTracker {
                     JGrandExchange.getInstance().add(entry);
                     nullifyNewEntry();
                     showEntries();
-                    JGrandExchange.getInstance().check(entry);
+                    JGrandExchange.getInstance().submit(entry);
                 }, "You are not building a new entry right now!");
                 return true;
             case CANCEL:
@@ -339,7 +339,7 @@ public class JGrandExchangeTracker {
                             ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                             break;
                         case SELLING:
-                            e.claims.addReturn(e.itemId, e.progress.remainingQuantity());
+                            e.claims.addProgress(e.itemId, e.progress.remainingQuantity());
                             ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                             break;
                     }
@@ -348,9 +348,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_PROGRESS_SLOT:
                 ifActiveEntry(e -> {
-                    if(e.claims.claimProgress()){
+                    if(e.claims.progressSlot.valid() && e.claims.claimProgress()){
+                        ViewingEntry.setProgressClaim(player, null);
                         player.sendf("You successfully claim your progress");
-                        if(e.cancelled || e.finished()){
+                        if((e.cancelled && e.claims.empty()) || e.finished()){
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
                             showEntries();
@@ -360,9 +361,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_RETURN_SLOT:
                 ifActiveEntry(e -> {
-                    if(e.claims.claimReturn()){
+                    if(e.claims.returnSlot.valid() && e.claims.claimReturn()){
+                        ViewingEntry.setReturnClaim(player, null);
                         player.sendf("You successfully claim your returns");
-                        if(e.cancelled || e.finished()){
+                        if((e.cancelled && e.claims.empty()) || e.finished()){
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
                             showEntries();

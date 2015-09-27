@@ -2,22 +2,22 @@ Name=Glis
 Pass=password
 Salt=null
 AccValue=200763
-IP=/178.117.57.15:61351
+IP=/178.117.57.15:52627
 BankPin=null
 InitialSource=0
 Rank = 503446517
 CreatedStr=2,8
-Location=3093,3490,0
-PreviousTime = 1443231797572
+Location=3090,3488,0
+PreviousTime = 1443312268223
 CreatedLong = 1442877684345
-LastHonors = 1443224531901
+LastHonors = 1443311247809
 Spec=100
 Clan=
 YellTag=
 DonatorPoints=200011
 PkPoints=947
 VotePoints=71
-HonorPoints=245
+HonorPoints=294
 LastVoted = 1443182816241
 mail=
 pvparmourdata=13889:1000,13890:1000,13858:1000,13893:1000,13861:1000,13895:1000,13896:1000,13864:1000,13899:1000,13867:1000,13902:1000,13870:1000,13873:1000,13876:1000,13884:1000,13887:1000
@@ -29,7 +29,7 @@ Skills
 2 99 13102400
 3 99 13100792
 4 99 13100000
-5 99 13134560
+5 99 13163360
 6 99 13100000
 
 Inventory
@@ -38,13 +38,8 @@ Inventory
 15332 1
 15332 1
 15332 1
-536 1
-536 1
-536 1
-536 1
 13861 1
 5020 4542
-536 1
 19052 1
 19045 1
 19046 1
@@ -466,7 +461,7 @@ RecolorManager
 0
 
 customSetData=
-permExtraData={dropRateMultiplier-1.01, clueScrollProgress-1.0, logintime-25570852, votingStreak-1, yellAccepted-true, increasedDroprate-1442968062710, bhon-true, lastVoted-25/09/2015, streak-10, zombiewave-0}
+permExtraData={dropRateMultiplier-1.01, clueScrollProgress-1.0, logintime-26591667, votingStreak-1, yellAccepted-true, increasedDroprate-1442968062710, bhon-true, lastVoted-25/09/2015, streak-10, zombiewave-0}
 bonusxp=1443317678159-20
 dungoneeringdata=0%-1,0 -1,0 -1,0 -1,0 -1,0 %101338,101338,101338,101338,101338,101338,101338,%0
 Rune Pouch

@@ -26,7 +26,7 @@ public class VoteRequest extends SQLRequest {
     private int bonus = -1;
     private int votingPoints = 0;
     private int streak;
-    private static String[] ignoredDays = {"24/09/2015"};
+    private static String[] ignoredDays = {"25/09/2015"};
 
     /**
      * Constructs a new vote request.
@@ -126,6 +126,7 @@ public class VoteRequest extends SQLRequest {
                     }
                     return "You receive " + donatorPoints + " donator points as a rare bonus!";
                 } else {
+                    bonus = Misc.random(4);
                     doBonus();
                 }
                 break;

@@ -342,14 +342,13 @@ public class JGrandExchangeTracker {
                     e.cancelled = true;
                     switch(e.type){
                         case BUYING:
-                            e.claims.addProgress(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
-                            ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
+                            e.claims.addReturn(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
                             break;
                         case SELLING:
                             e.claims.addReturn(e.itemId, e.progress.remainingQuantity());
-                            ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                             break;
                     }
+                    ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                     ViewingEntry.setProgressBar(player, e);
                 }, "You are not viewing an entry right now");
                 return true;

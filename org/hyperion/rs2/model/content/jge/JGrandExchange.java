@@ -95,24 +95,24 @@ public class JGrandExchange {
                 break;
         }
         submitEntry.ifPlayer(p -> {
-            //p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
-            //        matchedEntry.playerName, matchedEntry.type.pastTense,
-            //        submitEntry.item().getDefinition().getName(), maxQuantity,
-            //        submitEntry.type == Entry.Type.BUYING ? "to" : "from",
-            //        submitEntry.unitPrice, submitEntry.currency.shortName);
-            p.sendf("One or more of your Grand Exchange offers have been updated!");
+            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
+                    matchedEntry.playerName, matchedEntry.type.pastTense,
+                    submitEntry.item().getDefinition().getName(), maxQuantity,
+                    submitEntry.type == Entry.Type.BUYING ? "to" : "from",
+                    submitEntry.unitPrice, submitEntry.currency.shortName);
+            //p.sendf("One or more of your Grand Exchange offers have been updated!");
             if (p.getGrandExchangeTracker().activeSlot == submitEntry.slot)
                 JGrandExchangeInterface.ViewingEntry.set(p, submitEntry);
             else
                 JGrandExchangeInterface.Entries.setAll(p, p.getGrandExchangeTracker().entries);
         });
         matchedEntry.ifPlayer(p -> {
-            //p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
-            //        submitEntry.playerName, submitEntry.type.pastTense,
-            //        submitEntry.item().getDefinition().getName(), maxQuantity,
-            //        matchedEntry.type == Entry.Type.BUYING ? "to" : "from",
-            //        submitEntry.unitPrice, submitEntry.currency.shortName);
-            p.sendf("One or more of your Grand Exchange offers have been updated!");
+            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
+                    submitEntry.playerName, submitEntry.type.pastTense,
+                    submitEntry.item().getDefinition().getName(), maxQuantity,
+                    matchedEntry.type == Entry.Type.BUYING ? "to" : "from",
+                    submitEntry.unitPrice, submitEntry.currency.shortName);
+            //p.sendf("One or more of your Grand Exchange offers have been updated!");
             if (p.getGrandExchangeTracker().activeSlot == matchedEntry.slot)
                 JGrandExchangeInterface.ViewingEntry.set(p, matchedEntry);
             else

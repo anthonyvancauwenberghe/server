@@ -342,11 +342,11 @@ public class JGrandExchangeTracker {
                     e.cancelled = true;
                     switch(e.type){
                         case BUYING:
-                            e.claims.addReturn(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
-                            ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
+                            e.claims.addProgress(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
+                            ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
                             break;
                         case SELLING:
-                            e.claims.addProgress(e.itemId, e.progress.remainingQuantity());
+                            e.claims.addReturn(e.itemId, e.progress.remainingQuantity());
                             ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                             break;
                     }

@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.util.Misc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -418,7 +419,7 @@ public class InterfaceState {
 			case "ge_set_quantity":
 				player.getGrandExchangeTracker().ifNewEntry(e -> {
 					try{
-						final int quantity = Integer.parseInt(finalResult);
+						final int quantity = Misc.expandNumber(finalResult.replace(' ', '.'));
 						if(quantity < 1){
 							player.sendf("Invalid quantity");
 							return;
@@ -426,6 +427,7 @@ public class InterfaceState {
 						if(e.itemQuantity(quantity))
 							JGrandExchangeInterface.NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
 					}catch(Exception ex){
+						ex.printStackTrace();
 						player.sendf("Invalid quantity");
 					}
 				}, "You are not building a new entry right now");
@@ -433,7 +435,7 @@ public class InterfaceState {
 			case "ge_set_price":
 				player.getGrandExchangeTracker().ifNewEntry(e -> {
 					try{
-						final int unitPrice = Integer.parseInt(finalResult);
+						final int unitPrice = Misc.expandNumber(finalResult.replace(' ', '.'));
 						if(unitPrice < 1){
 							player.sendf("Invalid price");
 							return;

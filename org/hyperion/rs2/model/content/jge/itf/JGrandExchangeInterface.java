@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
 import org.hyperion.rs2.model.content.jge.entry.EntryManager;
+import org.hyperion.util.Misc;
 
 /**
  * Created by Administrator on 9/24/2015.
@@ -78,7 +79,8 @@ public final class JGrandExchangeInterface {
 
         public static void setUnitPrice(final Player player, final int unitPrice, final Entry.Currency currency){
             final String formatted = unitPrice > 0 && currency != null ? String.format("%,d %s", unitPrice, currency.shortName) : "";
-            player.getActionSender().sendString(formatted, 22675);
+            final String shortFormatted = unitPrice > 0 && currency != null ? String.format("%s %s", Misc.shortNumber(unitPrice), currency.shortName) : "";
+            player.getActionSender().sendString(shortFormatted, 22675);
             player.getActionSender().sendString(formatted, 22677);
         }
 

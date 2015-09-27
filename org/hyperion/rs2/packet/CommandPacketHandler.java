@@ -878,33 +878,6 @@ public class CommandPacketHandler implements PacketHandler {
             player.sendMessage("Loaded punishments" + loaded);
         }
 
-        if (commandStart.equalsIgnoreCase("openge")) {
-            //player.getGrandExchange().openOffers();
-            player.getGrandExchange().openOffers();
-        }
-
-        if (commandStart.equalsIgnoreCase("selectitem")) {
-            try{
-                player.getGrandExchangeTracker().ifNewEntry(e -> {
-                    if(e.type() != Entry.Type.BUYING){
-                        player.sendf("You are not selling an item!");
-                        return;
-                    }
-                    if(e.itemId(Integer.valueOf(as[1]))){
-                        e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
-                        if(e.itemQuantity() < 1){
-                            e.itemQuantity(1);
-                            JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
-                        }
-                        JGrandExchangeInterface.NewEntry.setItem(player, e.item());
-                        JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
-                    }
-                }, "You're not building a new entry right now");
-            }catch(Exception ex){
-                ex.printStackTrace();
-            }
-        }
-
         if (commandStart.equalsIgnoreCase("startevent")) {
             try {
                 String name = as[1].replaceAll("_", " ");
@@ -2398,6 +2371,28 @@ public class CommandPacketHandler implements PacketHandler {
             if (commandStart.equals("home")) {
                 Magic.teleport(player, Edgeville.LOCATION, false);
                 return;
+            }
+
+            if (commandStart.equalsIgnoreCase("selectitem")) {
+                try{
+                    player.getGrandExchangeTracker().ifNewEntry(e -> {
+                        if(e.type() != Entry.Type.BUYING){
+                            player.sendf("You are not buying an item!");
+                            return;
+                        }
+                        if(e.itemId(Integer.valueOf(as[1]))){
+                            e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
+                            if(e.itemQuantity() < 1){
+                                e.itemQuantity(1);
+                                JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
+                            }
+                            JGrandExchangeInterface.NewEntry.setItem(player, e.item());
+                            JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
+                        }
+                    }, "You're not building a new entry right now");
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
 
             if (commandStart.equalsIgnoreCase("setlvl5")) { // remove the 5 to activate command

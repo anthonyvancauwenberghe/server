@@ -2,14 +2,14 @@ Name=Hypnotic
 Pass=abc
 Salt=null
 AccValue=45409
-IP=/109.128.18.245:61725
+IP=/109.128.18.245:62716
 BankPin=null
 InitialSource=0
 Rank = 49
 CreatedStr=2,7
-Location=3262,3280,0
+Location=3087,3491,0
 Elo=1277
-PreviousTime = 1443362166662
+PreviousTime = 1443365142802
 CreatedLong = 1439307037044
 LastHonors = 1443355905861
 Spec=100
@@ -436,7 +436,7 @@ RecolorManager
 0
 
 customSetData=
-permExtraData={logintime-10617082, votingStreak-150, loweredYellTimer-1442952904881, yellAccepted-true, yelltimur-1440621629316, wrath-true, yellReduction-0.99, bhon-true, lastVoted-22/09/2015, streak-5, zombiewave-0}
+permExtraData={logintime-11034083, votingStreak-150, loweredYellTimer-1442952904881, yellAccepted-true, yelltimur-1440621629316, wrath-true, yellReduction-0.99, bhon-true, lastVoted-22/09/2015, streak-5, zombiewave-0}
 bonusxp=
 dungoneeringdata=0%-1,0 -1,0 -1,0 -1,0 -1,0 %101338,101338,101338,101338,101338,101338,101338,%0
 Rune Pouch

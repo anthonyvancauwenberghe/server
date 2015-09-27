@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
+import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.NameUtils;
@@ -320,6 +321,7 @@ public class InterfaceState {
 			return false;
 		}
 		result = result.replaceAll("_"," ");
+		final String finalResult = result;
 		switch (string_input_listener) {
 			case "doublecharinstant":
 				if(player.doubleChar()) {
@@ -412,6 +414,36 @@ public class InterfaceState {
 					}
 				}
 
+				return true;
+			case "ge_set_quantity":
+				player.getGrandExchangeTracker().ifNewEntry(e -> {
+					try{
+						final int quantity = Integer.parseInt(finalResult);
+						if(quantity < 1){
+							player.sendf("Invalid quantity");
+							return;
+						}
+						if(e.itemQuantity(quantity))
+							JGrandExchangeInterface.NewEntry.setQuantityAndTotalPrice(player, e.itemQuantity(), e.totalPrice(), e.currency());
+					}catch(Exception ex){
+						player.sendf("Invalid quantity");
+					}
+				}, "You are not building a new entry right now");
+				return true;
+			case "ge_set_price":
+				player.getGrandExchangeTracker().ifNewEntry(e -> {
+					try{
+						final int unitPrice = Integer.parseInt(finalResult);
+						if(unitPrice < 1){
+							player.sendf("Invalid price");
+							return;
+						}
+						if(e.unitPrice(unitPrice))
+							JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
+					}catch(Exception ex){
+						player.sendf("Invalid price");
+					}
+				}, "You are not building a new entry right now");
 				return true;
 			default:
 				return false;

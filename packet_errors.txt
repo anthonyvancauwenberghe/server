@@ -67503,3 +67503,27 @@ Sat Sep 26 18:37:29 GMT+01:00 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sun Sep 27 15:05:21 GMT+01:00 2015
+	class: class java.lang.ArrayIndexOutOfBoundsException
+	message: -1
+	at org.hyperion.rs2.net.ActionSender.sendDialogue(ActionSender.java:1576)
+	at org.hyperion.rs2.model.DialogueManager.openDialogue(DialogueManager.java:1512)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.lambda$handleInterfaceInteraction$8(JGrandExchangeTracker.java:245)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker$$Lambda$59/31975627.accept(null:-1)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.ifNewEntry(JGrandExchangeTracker.java:79)
+	at org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker.handleInterfaceInteraction(JGrandExchangeTracker.java:243)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:72)
+	at org.hyperion.rs2.packet.ActionButtonPacketHandler.handle(ActionButtonPacketHandler.java:55)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:80)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.jge.tracker;
 
+import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
@@ -239,7 +240,10 @@ public class JGrandExchangeTracker {
                 }, "You must create a new entry before setting quantity");
                 return true;
             case ENTER_QUANTITY:
-
+                ifNewEntry(e -> {
+                    if (e.validItem())
+                        DialogueManager.openDialogue(player, 600);
+                }, "You are not building a new entry right now!");
                 return true;
             case DECREASE_PRICE:
                 ifNewEntry(e -> {
@@ -266,7 +270,10 @@ public class JGrandExchangeTracker {
                 }, "You must create a new entry before equating price");
                 return true;
             case ENTER_PRICE:
-
+                ifNewEntry(e -> {
+                    if (e.validItem())
+                        DialogueManager.openDialogue(player, 601);
+                }, "You are not building a new entry right now!");
                 return true;
             case INCREASE_PRICE_PERCENT:
                 ifNewEntry(e -> {

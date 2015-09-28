@@ -126,6 +126,7 @@ public class VoteRequest extends SQLRequest {
                     }
                     return "You receive " + donatorPoints + " donator points as a rare bonus!";
                 } else {
+                    bonus = Misc.random(4);
                     doBonus();
                 }
                 break;

@@ -95,6 +95,13 @@ public class World {
         return ticketManager;
     }
 
+
+    private DebugGUI gui;
+
+    public DebugGUI getGUI() {
+        return gui;
+    }
+
     /**
      * Logging class.
      */
@@ -181,10 +188,6 @@ public class World {
      * The Staff Manager
      */
     private StaffManager staffManager;
-
-    private MySQLConnection donationsSQL;
-
-    private MySQLConnection logsSQL;
 
     private MySQLConnection charsSQL;
     /**
@@ -310,6 +313,36 @@ public class World {
     }
 
 
+    private MySQLConnection donationsSQL;
+    private SQLAccessor donationsOffer;
+
+    private MySQLConnection logsSQL;
+    private SQLAccessor logsOffer;
+
+    private MySQLConnection playersSQL;
+    private SQLAccessor playersOffer;
+
+    private MySQLConnection loadingSQL;
+    private SQLAccessor loadingOffer;
+
+    private MySQLConnection importantPlayersSQL;
+    private SQLAccessor importantOffer;
+
+    public SQLAccessor getLoadingConnection() {
+        return loadingOffer;
+    }
+
+    public SQLAccessor getImportantConnection() {
+        return importantOffer;
+    }
+
+    public SQLAccessor getPlayersConnection() {
+        return playersOffer;
+    }
+
+
+
+
     public MySQLConnection getDonationsConnection() {
         return donationsSQL;
     }
@@ -360,23 +393,63 @@ public class World {
             this.eventManager = new EventManager(engine);
             this.npcManager = new NPCManager();
             this.contentManager.init();
+            this.gui = new DebugGUI();
             getWilderness().init();
             this.globalItemManager = new GlobalItemManager();
             this.staffManager = new StaffManager();
             this.loadConfiguration();
             this.registerGlobalEvents();
-            if (Server.getConfig().getBoolean("sql")) {
-                logsSQL = new LogsSQLConnection(Server.getConfig());
+
+
+
+            if (Server.getConfig().getBoolean("donationssql")) {
                 donationsSQL = new DonationsSQLConnection(Server.getConfig());
-                charsSQL = new CharactersSQLConnection(Server.getConfig());
+            } else {
+                donationsSQL = new DummyConnection();
+            }
+            if (Server.getConfig().getBoolean("logssql")) {
+
+                logsSQL = new LogsSQLConnection(Server.getConfig());
+                //logsSQL.setLogged(true);
             } else {
                 logsSQL = new DummyConnection();
-                donationsSQL = new DummyConnection();
-                charsSQL = new DummyConnection();
             }
+            if (Server.getConfig().getBoolean("playerssql")) {
+                playersSQL = new PlayersSQLConnection(Server.getConfig());
+
+                playersSQL.setPriority(Thread.MAX_PRIORITY);
+                /*loadingSQL = new SQLPlayerLoading(Server.getConfig());
+                loadingSQL.setPriority(Thread.MAX_PRIORITY);*/
+                loadingSQL = new DummyConnection();
+                importantPlayersSQL = new ImportantPlayerConnection(Server.getConfig());
+                importantPlayersSQL.setPriority(Thread.MAX_PRIORITY);
+                importantPlayersSQL.setLogged(true);
+            } else {
+                playersSQL = new DummyConnection();
+                loadingSQL = new DummyConnection();
+                importantPlayersSQL = new DummyConnection();
+            }
+			/*
+			 * SQL Accessors
+			 */
+            donationsOffer = new SQLAccessor(donationsSQL);
+            logsOffer = new SQLAccessor(logsSQL);
+            playersOffer = new SQLAccessor(playersSQL);
+            importantOffer = new SQLAccessor(importantPlayersSQL);
+            loadingOffer = new SQLAccessor(loadingSQL);
+
+			/*
+			 * Init
+			 */
             donationsSQL.init();
             logsSQL.init();
-            charsSQL.init();
+            loadingSQL.init();
+            importantPlayersSQL.init();
+            playersSQL.init();
+
+
+
+
             //LocalServerSQLConnection.init();
             //playersSQL.init();
             //banManager = new BanManager(logsSQL);

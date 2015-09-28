@@ -1,8 +1,5 @@
 package org.hyperion.rs2.model.cluescroll;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hyperion.rs2.commands.impl.SpawnCommand;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
@@ -18,6 +15,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClueScroll {
 
     public enum Difficulty {
@@ -28,8 +28,8 @@ public class ClueScroll {
     }
 
     public enum RareRewards {
-        EASY(   new ItemReward(5020, 2500, 10000, 100), //Pkt
-                new ItemReward(955, 25000, 100000, 200), //Coins for ironmen
+        EASY(   new ItemReward(5020, 2500, 5000, 100), //Pkt
+                new ItemReward(995, 25000, 100000, 200), //Coins for ironmen
                 new ItemReward(12183, 5000, 10000, 25), //Spirit shards
                 new ItemReward(15509, 1, 1, 40), //Royal crown
                 new ItemReward(16755, 1, 1, 10), //Magic box
@@ -42,13 +42,13 @@ public class ClueScroll {
                 new ItemReward(15620, 1, 1, 30), new ItemReward(15618, 1, 1, 30), new ItemReward(15622, 1, 1, 30) //Brown infinity
                 ),
         MEDIUM( new ItemReward(15332, 1, 5, 250), //Overload
-                new ItemReward(5020, 5000, 15000, 100), //Pkt
-                new ItemReward(955, 50000, 150000, 200), //Coins for ironmen
+                new ItemReward(5020, 5000, 7500, 100), //Pkt
+                new ItemReward(995, 50000, 150000, 200), //Coins for ironmen
                 new ItemReward(15511, 1, 1, 20), //Royal Amulet
                 new ItemReward(15507, 1, 1, 20), //Royal sceptre
                 new ItemReward(18747, 1, 1, 10), //Faithfull shield
                 new ItemReward(17237, 1, 1, 10), new ItemReward(17017, 1, 1, 10), new ItemReward(16755, 1, 1, 10), new ItemReward(16931, 1, 1, 10), //Celestial set
-                new ItemReward(6199, 1, 1, 40), //Mystery box
+                new ItemReward(18768, 1, 1, 40), //Mystery box
                 new ItemReward(16755, 1, 1, 20), //Magic box
                 new ItemReward(13887, 1, 1, 40), new ItemReward(13893, 1, 1, 40), //Vesta set
                 new ItemReward(15033, 1, 1, 20), new ItemReward(15034, 1, 1, 20), new ItemReward(15036, 1, 1, 20), new ItemReward(15035, 1, 1, 20), new ItemReward(15037, 1, 1, 20), new ItemReward(15038, 1, 1, 20), //War chief
@@ -56,8 +56,8 @@ public class ClueScroll {
                 new ItemReward(15614, 1, 1, 30), new ItemReward(15612, 1, 1, 30), new ItemReward(15616, 1, 1, 30) //Pink infinity
                 ),
         HARD(   new ItemReward(15332, 2, 7, 200), //Overload
-                new ItemReward(5020, 7500, 20000, 100), //Pkt
-                new ItemReward(955, 75000, 200000, 200), //Coins for ironmen
+                new ItemReward(5020, 7500, 10000, 100), //Pkt
+                new ItemReward(995, 75000, 200000, 200), //Coins for ironmen
                 new ItemReward(13663, 1, 1, 5), //Legendary ticket
                 new ItemReward(2430, 2, 20, 50), //Special restore
                 new ItemReward(15241, 1, 1, 20), //Hand cannon
@@ -67,7 +67,7 @@ public class ClueScroll {
                 new ItemReward(15505, 1, 1, 10), //Royal leggings
                 new ItemReward(15503, 1, 1, 10), //Royal shirt
                 new ItemReward(17171, 1, 1, 5), //Celestial staff
-                new ItemReward(6199, 1, 1, 50), //Mystery box
+                new ItemReward(18768, 1, 1, 50), //Mystery box
                 new ItemReward(16755, 1, 1, 40), //Magic box
                 new ItemReward(13884, 1, 1, 40), new ItemReward(13890, 1, 1, 40), //Statius
                 new ItemReward(18808, 1, 1, 20), //Double exp lamp
@@ -77,13 +77,13 @@ public class ClueScroll {
                 new ItemReward(15021, 1, 1, 20), new ItemReward(15022, 1, 1, 20), new ItemReward(15023, 1, 1, 20), new ItemReward(15024, 1, 1, 20), new ItemReward(15025, 1, 1, 20), new ItemReward(15026, 1, 1, 20) //Serjeant
                 ),
         ELITE(  new ItemReward(15332, 4, 10, 100), //Overload
-                new ItemReward(5020, 10000, 25000, 100), //Pkt
+                new ItemReward(5020, 10000, 15000, 100), //Pkt
                 new ItemReward(13898, 1, 1, 5), new ItemReward(13892, 1, 1, 5), new ItemReward(13886, 1, 1, 5), new ItemReward(13898, 1, 1, 5),//Cursed Statius
                 new ItemReward(8959, 1, 1, 5), new ItemReward(8960, 1, 1, 5), new ItemReward(8961, 1, 1, 5), new ItemReward(8962, 1, 1, 5), new ItemReward(8963, 1, 1, 5), new ItemReward(8964, 1, 1, 5), new ItemReward(8965, 1, 1, 5), //Tricorn hats
                 new ItemReward(17660, 1, 1, 5), //vig i
                 new ItemReward(11694, 1, 1, 5), //Armadyl GS
                 new ItemReward(11337, 1, 1, 5), new ItemReward(16887, 1, 1, 5), //Sag bows
-                new ItemReward(955, 100000, 2500000, 200), //Coins for ironmen
+                new ItemReward(995, 100000, 2500000, 200), //Coins for ironmen
                 new ItemReward(13663, 1, 1, 10), //Legendary ticket
                 new ItemReward(14484, 1, 1, 5), //Dragon claws
                 new ItemReward(2430, 3, 30, 50), //Special restore
@@ -91,7 +91,7 @@ public class ClueScroll {
                 new ItemReward(13109, 1, 1, 30), //Penguin Mask
                 new ItemReward(15241, 1, 1, 10), //Chaotic staff
                 new ItemReward(18357, 1, 1, 10), //Chaotic cbow
-                new ItemReward(6199, 1, 1, 60), //Mystery box
+                new ItemReward(18768, 1, 1, 60), //Mystery box
                 new ItemReward(16755, 1, 1, 40), //Magic box
                 new ItemReward(18739, 1, 1, 20), //RDK
                 new ItemReward(18740, 1, 1, 20), //BDK
@@ -118,7 +118,7 @@ public class ClueScroll {
     public List<Reward> getRareRewards(Difficulty difficulty) {
         List<Reward> rewards = new ArrayList<>();
         for (RareRewards reward : RareRewards.values()) {
-            if (reward.getClass().getSimpleName().equalsIgnoreCase(difficulty.name()))
+            if (reward.toString().equalsIgnoreCase(difficulty.name()))
                 for (int i = 0; i < reward.rewards.length; i++)
                     rewards.add(reward.rewards[i]);
         }
@@ -275,7 +275,11 @@ public class ClueScroll {
             return;
         double currentSteps = 0;
         if(player.getPermExtraData().get("clueScrollProgress") != null)
-            currentSteps = (double)player.getPermExtraData().get("clueScrollProgress") + 1;
+            try {
+                currentSteps = (Double) player.getPermExtraData().get("clueScrollProgress") + 1;
+            } catch(Exception e) {
+                currentSteps = Double.parseDouble((String)player.getPermExtraData().get("clueScrollProgress")) + 1;
+            }
         double maxSteps = getDifficulty().ordinal() + 2;
         double minSteps = getDifficulty().ordinal();
         boolean giveReward = currentSteps > maxSteps;
@@ -300,12 +304,18 @@ public class ClueScroll {
     }
 
     public boolean giveReward(final Player player) {
-        player.getPermExtraData().put("clueScrollProgress", 0.0);
-        int amount = getDifficulty().ordinal() + 1;
+        player.getPermExtraData().remove("clueScrollProgress");
+        int amount = Misc.random(getDifficulty().ordinal() + 3);
+        if(amount > 8) {
+            amount = 8;
+        }
+        if(amount < 3 || amount < getDifficulty().ordinal() + 1) {
+            amount = 3;
+        }
         List<Reward> received = new ArrayList<>();
         while(received.size() != amount) {
             Reward item;
-            if(Misc.random(20) == 1) {
+            if(Misc.random(4) == 1) {
                 player.sendMessage("Entered rare loot table");
                 item = getRandomRare();
             } else {
@@ -333,14 +343,16 @@ public class ClueScroll {
 
     public Reward getRandomRare() {
         List<Reward> possibleRewards = new ArrayList<>();
-        while(possibleRewards.isEmpty())
-            for(Reward reward : rareRewards) {
-                if(reward.canGet() && !possibleRewards.contains(reward)) {
+        int i = 0;
+        while(possibleRewards.isEmpty() && !rareRewards.isEmpty()) {
+            for (Reward reward : rareRewards) {
+                if (reward.canGet() && !possibleRewards.contains(reward)) {
                     possibleRewards.add(reward);
                 }
             }
-        int randomItem = Misc.random(possibleRewards.size());
-        return possibleRewards.get(randomItem == 0 ? 1 : randomItem);
+        }
+        int randomItem = Misc.random(possibleRewards.size() - 1);
+        return possibleRewards.get(randomItem);
     }
 
     public Reward getRandomNormal() {
@@ -348,11 +360,13 @@ public class ClueScroll {
         int key = -1;
         if(SpawnCommand.giveSpawnables().isEmpty())
             return new ItemReward(4716, 1, 1, 1000);
-        while(SpawnCommand.giveSpawnables().get(random == 0 ? 1 : random) == null || NewGameMode.getUnitPrice(random) < 100000) {
+        while(NewGameMode.getUnitPrice(random == 0 ? 1 : random) < 10000 || !SpawnCommand.giveSpawnables().containsKey(random)) {
             random = Misc.random(SpawnCommand.giveSpawnables().size());
         }
-        key = (int) SpawnCommand.giveSpawnables().get(random == 0 ? 1 : random);
-        return new ItemReward(key, 1, 1, 1000);
+        Item item = Item.create(random);
+        if(item.getDefinition().isStackable())
+            return new ItemReward(random, 1, 20, 1000);
+        return new ItemReward(random, 1, 1, 1000);
     }
 
     public Element toElement(final Document doc){

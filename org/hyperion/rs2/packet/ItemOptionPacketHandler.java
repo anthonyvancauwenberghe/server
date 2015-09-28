@@ -84,6 +84,8 @@ public class ItemOptionPacketHandler implements PacketHandler {
 	@Override
 	public void handle(Player player, Packet packet) {
 		//System.out.println(packet.getOpcode() + "");
+		if(player.needsNameChange() || player.doubleChar())
+			return;
 		switch(packet.getOpcode()) {
 			case OPTION_EAT:
 				handleEatOption(player, packet);

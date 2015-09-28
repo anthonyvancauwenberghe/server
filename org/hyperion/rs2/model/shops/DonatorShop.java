@@ -97,6 +97,10 @@ public class DonatorShop extends Shop {
 		if(player.needsNameChange() || player.doubleChar()) {
 			return;
 		}
+		long lastbuy = player.getExtraData().getLong("lastbuy");
+		if(System.currentTimeMillis() - lastbuy < 1000)
+			return;
+		player.getExtraData().put("lastbuy", System.currentTimeMillis());
 		int price = item.getCount() * getPrice(item.getId());
 		if(price <= 0 && player.getInventory().freeSlots() != 0) {
 			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");

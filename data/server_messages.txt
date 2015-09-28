@@ -1,6 +1,5 @@
 Join our teamspeak now! arteropk.typefrag.com
-Change your password every month.
 If you need help do ::reqhelp or go to support.arteropk.com
 Check out ::wiki for skillguides, item pages and more.
 Players submitting fraudulent tickets will get permanent banned.
-If you are on the Instant PK client, please download the ArteroPK one.
+If you are on the InstantPK client, please switch to the ArteroPK client.

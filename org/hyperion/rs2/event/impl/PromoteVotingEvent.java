@@ -8,7 +8,7 @@ import org.hyperion.util.Time;
 
 public class PromoteVotingEvent extends Event {
 
-	public static final long CYCLE_TIME = Time.FIVE_MINUTES;
+	public static final long CYCLE_TIME = Time.ONE_MINUTE * 2;
 
 	public PromoteVotingEvent() {
 		super(CYCLE_TIME);

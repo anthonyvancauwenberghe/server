@@ -55,6 +55,10 @@ public class DonatorShop extends Shop {
 		if(player.needsNameChange() || player.doubleChar()) {
 			return;
 		}
+		if(item.getDefinition().getName().contains("partyhat")){
+			player.sendf("You cannot sell back rare items to the shop any longer!");
+			return;
+		}
 		if(isVeblenGood(item.getId()) && player.isServerOwner()) {
 			getContainer().add(item);
 			player.getActionSender().sendUpdateItems(3823,

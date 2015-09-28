@@ -293,6 +293,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 							e.itemQuantity(1);
 							JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
 						}
+						JGrandExchangeInterface.NewEntry.setDefaultUnitPrice(player, e.unitPrice(), e.currency());
 						JGrandExchangeInterface.NewEntry.setItem(player, e.item());
 						JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
 					}

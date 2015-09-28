@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.jge.itf;
 
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
 import org.hyperion.rs2.model.content.jge.entry.EntryManager;
@@ -77,10 +78,13 @@ public final class JGrandExchangeInterface {
             player.getActionSender().sendString(item != null ? item.getDefinition().getDescription().replace("_", " ") : "", 22674);
         }
 
+        public static void setDefaultUnitPrice(final Player player, final int unitPrice, final Entry.Currency currency){
+            final String formatted = unitPrice > 0 && currency != null ? String.format("%s %s", Misc.shortNumber(unitPrice), currency.shortName) : "";
+            player.getActionSender().sendString(formatted, 22675);
+        }
+
         public static void setUnitPrice(final Player player, final int unitPrice, final Entry.Currency currency){
             final String formatted = unitPrice > 0 && currency != null ? String.format("%,d %s", unitPrice, currency.shortName) : "";
-            final String shortFormatted = unitPrice > 0 && currency != null ? String.format("%s %s", Misc.shortNumber(unitPrice), currency.shortName) : "";
-            player.getActionSender().sendString(shortFormatted, 22675);
             player.getActionSender().sendString(formatted, 22677);
         }
 
@@ -107,6 +111,7 @@ public final class JGrandExchangeInterface {
         public static void set(final Player player, final EntryBuilder entry){
             setType(player, entry != null ? entry.type() : null);
             setItem(player, entry != null ? entry.item() : null);
+            setDefaultUnitPrice(player, entry != null && entry.validItem() ? JGrandExchange.getInstance().defaultItemUnitPrice(entry.itemId()) : -1, entry != null ? entry.currency() : null);
             setUnitPrice(player, entry != null ? entry.unitPrice() : -1, entry != null ? entry.currency() : null);
             setTotalPrice(player, entry != null ? entry.totalPrice() : -1, entry != null ? entry.currency() : null);
             setQuantity(player, entry != null ? entry.itemQuantity() : -1);

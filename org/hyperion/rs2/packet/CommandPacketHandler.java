@@ -2387,6 +2387,7 @@ public class CommandPacketHandler implements PacketHandler {
                                 JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
                             }
                             JGrandExchangeInterface.NewEntry.setItem(player, e.item());
+                            JGrandExchangeInterface.NewEntry.setDefaultUnitPrice(player, e.unitPrice(), e.currency());
                             JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                         }
                     }, "You're not building a new entry right now");

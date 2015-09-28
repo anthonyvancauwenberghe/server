@@ -2,14 +2,14 @@ Name=Hypnotic
 Pass=abc
 Salt=null
 AccValue=45409
-IP=/109.128.18.245:62716
+IP=/109.128.18.245:50679
 BankPin=null
 InitialSource=0
 Rank = 49
 CreatedStr=2,7
-Location=3087,3491,0
+Location=3087,3490,0
 Elo=1277
-PreviousTime = 1443365142802
+PreviousTime = 1443391163399
 CreatedLong = 1439307037044
 LastHonors = 1443355905861
 Spec=100
@@ -19,7 +19,7 @@ Clan=
 YellTag=
 DonatorsBought=50000
 DonatorPoints=14302
-PkPoints=148451
+PkPoints=618451
 HonorPoints=74
 EP=18
 KillCount=23
@@ -31,13 +31,13 @@ elopeak=1300
 mail=
 pvparmourdata=13889:1000,13890:1000,13858:1000,13893:258,13861:1000,13895:1000,13896:806,13864:1000,13899:981,13867:1000,13902:1000,13870:1000,13873:1000,13876:1000,13884:1000,13887:264
 bhpoints=1
-npclogs=1:3,81:22,397:5,1767:5,8133:0
+npclogs=1:4,81:22,397:5,1767:5,8133:0
 
 Skills
 0 99 13130144
 1 99 13130144
-2 99 13073364
-3 99 13292942
+2 99 13083764
+3 99 13296374
 4 99 13100464
 5 99 13100000
 6 99 13476167
@@ -62,7 +62,7 @@ Inventory
 4153 1
 565 2864
 555 652
-3062 16
+5020 5263
 11259 1
 11238 1
 
@@ -436,7 +436,7 @@ RecolorManager
 0
 
 customSetData=
-permExtraData={logintime-11034083, votingStreak-150, loweredYellTimer-1442952904881, yellAccepted-true, yelltimur-1440621629316, wrath-true, yellReduction-0.99, bhon-true, lastVoted-22/09/2015, streak-5, zombiewave-0}
+permExtraData={logintime-14390743, votingStreak-150, loweredYellTimer-1442952904881, yellAccepted-true, yelltimur-1440621629316, wrath-true, yellReduction-0.99, bhon-true, lastVoted-22/09/2015, streak-5, zombiewave-0}
 bonusxp=
 dungoneeringdata=0%-1,0 -1,0 -1,0 -1,0 -1,0 %101338,101338,101338,101338,101338,101338,101338,%0
 Rune Pouch

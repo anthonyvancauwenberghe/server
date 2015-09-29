@@ -89,7 +89,7 @@ public final class JGrandExchangeInterface {
         }
 
         public static void setTotalPrice(final Player player, final int totalPrice, final Entry.Currency currency){
-            final String formatted = totalPrice > 0 && currency != null ? String.format("%,d %s", totalPrice, currency.shortName) : "";
+            final String formatted = totalPrice > 0 && currency != null ? String.format("%,d %s", totalPrice, currency.shortName) : totalPrice < 0 ? "Too high!" : "";
             player.getActionSender().sendString(formatted, 22683);
         }
 

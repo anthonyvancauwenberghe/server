@@ -355,8 +355,7 @@ public class JGrandExchangeTracker {
             case CLAIM_PROGRESS_SLOT:
                 ifActiveEntry(e -> {
                     if(e.claims.progressSlot.valid() && e.claims.claimProgress()){
-                        ViewingEntry.setProgressClaim(player, null);
-                        player.sendf("You successfully claim your progress");
+                        ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
                         if((e.cancelled && e.claims.empty()) || e.finished()){
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
@@ -368,8 +367,7 @@ public class JGrandExchangeTracker {
             case CLAIM_RETURN_SLOT:
                 ifActiveEntry(e -> {
                     if(e.claims.returnSlot.valid() && e.claims.claimReturn()){
-                        ViewingEntry.setReturnClaim(player, null);
-                        player.sendf("You successfully claim your returns");
+                        ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                         if((e.cancelled && e.claims.empty()) || e.finished()){
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);

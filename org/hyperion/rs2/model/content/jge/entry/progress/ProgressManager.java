@@ -29,7 +29,9 @@ public class ProgressManager {
     }
 
     public int totalPrice(){
-        return totalQuantity() * entry.unitPrice;
+        return stream()
+                .mapToInt(p -> p.unitPrice)
+                .sum();
     }
 
     public int totalQuantity(){
@@ -42,8 +44,8 @@ public class ProgressManager {
         return entry.itemQuantity - totalQuantity();
     }
 
-    public void add(final String playerName, final int quantity){
-        list.add(new Progress(playerName, entry.type.opposite(), entry.unitPrice, quantity));
+    public void add(final String playerName, final int unitPrice, final int quantity){
+        list.add(new Progress(playerName, entry.type.opposite(), unitPrice, quantity));
     }
 
     public boolean completed(){

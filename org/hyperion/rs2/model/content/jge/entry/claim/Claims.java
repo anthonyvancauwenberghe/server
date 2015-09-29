@@ -54,8 +54,8 @@ public class Claims {
             return true;
         }
         final Item item = slot.item();
-        final String name = String.format("%s x %,d", item.getDefinition().getName(), item.getCount());
         if(player.getInventory().hasRoomFor(item)){
+            final String name = String.format("%s x %,d", item.getDefinition().getName(), item.getCount());
             if(!player.getInventory().add(item)){
                 player.sendf("There was an error giving %s", name);
                 return false;
@@ -64,8 +64,22 @@ public class Claims {
             slot.reset();
             return true;
         }else{
-            player.sendf("Please make enough room for %s", name);
-            return false;
+            final int free = player.getInventory().freeSlots();
+            if(free < 1){
+                player.sendf("Please allow at least one free slot!");
+                return false;
+            }
+            final int quantity = free > slot.itemQuantity() ? slot.itemQuantity() : free;
+            final String name = String.format("%s x %,d", item.getDefinition().getName(), quantity);
+            if(!player.getInventory().add(Item.create(slot.itemId(), quantity))){
+                player.sendf("There was an error giving %s", name);
+                return false;
+            }
+            player.sendf("%s has been added to your inventory", name);
+            slot.add(-quantity);
+            if(slot.itemQuantity() == 0)
+                slot.reset();
+            return true;
         }
     }
 }

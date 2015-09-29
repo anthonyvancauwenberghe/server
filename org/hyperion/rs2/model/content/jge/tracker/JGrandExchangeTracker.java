@@ -300,6 +300,10 @@ public class JGrandExchangeTracker {
                                         e.itemQuantity(), e.item().getDefinition().getName());
                                 return;
                             }
+                            if(e.totalPrice() <= 0){
+                                player.sendf("Change the unit price and quantity first!");
+                                return;
+                            }
                             if(player.getInventory().remove(Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
                                 player.sendf("Something went wrong!");
                                 return;

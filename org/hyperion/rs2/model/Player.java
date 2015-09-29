@@ -372,6 +372,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private QuestTab questtab = new QuestTab(this);
 
+	private AchievementTab achievementtab = new AchievementTab(this);
+
 	private ItemDropping itemDropping = new ItemDropping();
 
 	private TriviaSettings ts = new TriviaSettings(0, false);
@@ -417,6 +419,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public QuestTab getQuestTab() {
 		return questtab;
+	}
+
+	public AchievementTab getAchievementTab() {
+		return achievementtab;
 	}
 
 	public ExtraData getExtraData() {

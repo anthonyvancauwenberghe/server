@@ -54,10 +54,10 @@ public class AchievementProgress{
     }
 
     public String getTabString(){
-        final String color = progress.values().stream().anyMatch(AchievementTaskProgress::started)
-                ? "@yel@" :
-                finished() ? "@gre@" : "@red@";
-        return color + achievement().title;
+        final String color = finished() ? "@gre@" :
+                progress.values().stream().anyMatch(AchievementTaskProgress::started) ? "@yel@" :
+                        "@red@";
+        return color + (achievement().title.length() <= 26 ? achievement().title : achievement().title.substring(0, 25).trim() + "...");
     }
 
     public void sendProgressHeader(final Player player){

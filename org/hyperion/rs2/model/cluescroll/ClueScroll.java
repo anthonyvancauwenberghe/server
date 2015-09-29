@@ -162,7 +162,7 @@ public class ClueScroll {
         PRAYER_CAPE(4979),
         MAGIC_CAPE(4939),
         COOKING_CAPE(4955),
-        WOODUCTTING_CAPE(4957),
+        WOODCUTTING_CAPE(4957),
         FLETCHING_CAPE(4937),
         FISHING_CAPE(4951),
         FIREMAKING_CAPE(4975),

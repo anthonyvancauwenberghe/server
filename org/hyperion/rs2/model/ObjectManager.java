@@ -51,8 +51,6 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 
     public static Cache cache;
 
-    private short[][][] objects = new short[5000][11000][4];
-
     /**
      * Loads the objects in the map.
      *
@@ -149,10 +147,10 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 		buf.put((byte) obj.getType());
 		buf.put((byte) obj.getRotation());*/
 
-        World.getWorld().
+        /*World.getWorld().
                 getRegionManager().
                 getRegionByLocation(obj.getLocation()).
-                getGameObjects().add(obj);
+                getGameObjects().add(obj); */
     }
 
     @Override
@@ -224,13 +222,14 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     public void addMapObject(int x, int y, int z, int id) {
-        objects[x][y][z % 4] = (short) id;
+
     }
 
     public boolean objectExist(Location loc, int id) {
-        final GameObject obj;
+       /* final GameObject obj;
         boolean object = ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
-        return objects[loc.getX() % 5000][loc.getY() % 11000][loc.getZ() % 4] == id || object;
+        return objects[loc.getX() % 5000][loc.getY() % 11000][loc.getZ() % 4] == id || object;  */
+        return true;
     }
 
    /* public void toMap() {

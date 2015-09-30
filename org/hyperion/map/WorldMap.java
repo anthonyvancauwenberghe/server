@@ -639,7 +639,7 @@ public class WorldMap {
 
         }
         System.out.println("	-Loaded " + counter + " world objects");
-        ObjectClickHandler.loaded = true;
+        //ObjectClickHandler.loaded = true;
 
         //new Thread(() -> world.getObjectMap().toMap()).start();
         //System.out.println("Highest area: "+highest);

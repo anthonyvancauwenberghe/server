@@ -6,7 +6,7 @@ import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class ExperienceReward extends Reward{
+public class ExperienceReward extends Reward {
 
     private int skill;
 

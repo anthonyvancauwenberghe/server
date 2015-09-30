@@ -1,12 +1,5 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.security.SecureRandom;
-import java.util.*;
-
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ClickType;
@@ -17,11 +10,17 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
-import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.security.SecureRandom;
+import java.util.*;
 
 /**
  * @author Arsen Maxyutov.
@@ -146,7 +145,7 @@ public class Dicing implements ContentTemplate {
 			player.getActionSender().sendMessage("The gambler only gambles with unspawnables.");
 			return;
 		}
-        if((item.getId() >= 13195 && item.getId() <= 13205) || item.getId() == 12747 || item.getId() == 12744 || item.getId() == 18509 || item.getId() == 19709) {
+        if((item.getId() >= 13195 && item.getId() <= 13205) || item.getId() == 12747 || item.getId() == 12744 || item.getId() == 18509 || item.getId() == 19709 || item.getDefinition().getName().toLowerCase().contains("clue")) {
             player.sendMessage("The gambler doesn't know what to do with this item.");
             return;
         }

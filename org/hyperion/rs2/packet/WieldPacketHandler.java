@@ -2,6 +2,7 @@ package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
@@ -55,13 +56,17 @@ public class WieldPacketHandler implements PacketHandler {
             player.getInventory().set(slot, null);
             return;
         }
+		if(ClueScrollManager.isClue(id)) {
+			ClueScrollManager.getInInventory(player).send(player);
+			return;
+		}
 		switch(interfaceId) {
 			case Inventory.INTERFACE:
 				if((player.cannotSwitch || player.duelRule[DuelRules.SWITCH.ordinal()]) && (player.duelAttackable > 0 || Duel.inDuelLocation(player))) {
 					player.getActionSender().sendMessage("You cannot switch in this duel!");
 					return;
 				}
-				//switch while duel screen is open
+						//switch while duel screen is open
 				if(player.getLocation().inDuel())
 					Duel.declineTrade(player);
 				if(slot >= 0 && slot < Inventory.SIZE) {

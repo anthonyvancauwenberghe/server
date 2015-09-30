@@ -20,15 +20,20 @@ public class YellCommand extends Command {
 
 	public static int minYellRank = 0;
 
-	private LinkedList<Player> lastYells = new LinkedList<Player>();
-
 	public YellCommand() {
 		super("yell", Rank.PLAYER);
 	}
 
 	private int getYellDelay(Player player) {
 		if(player.getPermExtraData().getLong("loweredYellTimer") >= System.currentTimeMillis() && player.getPermExtraData().getLong("loweredYellTimer") != 0) {
-			long yellReducement = player.getPermExtraData().getLong("yellReduction");
+			double yellReducement = 1.0;
+			if(player.getPermExtraData().get("yellReduction") != null) {
+				try {
+					yellReducement = Double.parseDouble((String)player.getPermExtraData().get("yellReduction"));
+				} catch(Exception e) {
+					yellReducement = (double)player.getPermExtraData().get("yellReduction");
+				}
+			}
 			if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
 				return (int)(SUPER_YELL_DELAY * yellReducement);
 			else if (Rank.hasAbility(player, Rank.DONATOR))

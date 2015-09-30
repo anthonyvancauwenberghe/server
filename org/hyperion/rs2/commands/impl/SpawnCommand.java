@@ -45,6 +45,14 @@ public class SpawnCommand extends Command {
 		super(name, Rank.PLAYER);
 	}
 
+	public static Map giveSpawnableKeywords() {
+		return keywords;
+	}
+
+	public static Map giveSpawnables() {
+		return ids;
+	}
+
 	@Override
 	public boolean execute(Player player, String input) {
 		if(! Server.SPAWN)

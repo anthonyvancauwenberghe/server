@@ -35,16 +35,16 @@ public class GrandExchange {
     public GrandExchange(Player player) {
         /** Temporary for testing **/
         this.player = player;
-        offers[0] = new Offer(11724, 7, 13500000, (byte)1);
-        offers[0].setAmountProcessed(3);
-
-        offers[3] = new Offer(4151, 20, 1250000, (byte)1);
-        offers[3].setAmountProcessed(20);
-        offers[3].getCollection().setFirstSlot(new Item(4152, 20));
-
-        offers[4] = new Offer(11696, 5, 7800000, (byte)1);
-        offers[4].setAmountProcessed(2);
-        offers[4].getCollection().setFirstSlot(new Item(11697, 2));
+//        offers[0] = new Offer(11724, 7, 13500000, (byte)1);
+//        offers[0].setAmountProcessed(3);
+//
+//        offers[3] = new Offer(4151, 20, 1250000, (byte)1);
+//        offers[3].setAmountProcessed(20);
+//        offers[3].getCollection().setFirstSlot(new Item(4152, 20));
+//
+//        offers[4] = new Offer(11696, 5, 7800000, (byte)1);
+//        offers[4].setAmountProcessed(2);
+//        offers[4].getCollection().setFirstSlot(new Item(11697, 2));
     }
 
     /**

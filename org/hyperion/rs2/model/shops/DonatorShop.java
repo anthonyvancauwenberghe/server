@@ -55,6 +55,10 @@ public class DonatorShop extends Shop {
 		if(player.needsNameChange() || player.doubleChar()) {
 			return;
 		}
+		if(item.getDefinition().getName().contains("partyhat")){
+			player.sendf("You cannot sell back rare items to the shop any longer!");
+			return;
+		}
 		if(isVeblenGood(item.getId()) && player.isServerOwner()) {
 			getContainer().add(item);
 			player.getActionSender().sendUpdateItems(3823,
@@ -97,6 +101,10 @@ public class DonatorShop extends Shop {
 		if(player.needsNameChange() || player.doubleChar()) {
 			return;
 		}
+		long lastbuy = player.getExtraData().getLong("lastbuy");
+		if(System.currentTimeMillis() - lastbuy < 1000)
+			return;
+		player.getExtraData().put("lastbuy", System.currentTimeMillis());
 		int price = item.getCount() * getPrice(item.getId());
 		if(price <= 0 && player.getInventory().freeSlots() != 0) {
 			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");

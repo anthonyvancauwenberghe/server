@@ -23,18 +23,18 @@ public final class ClueScrollUtils {
     }
 
     public static boolean isChance(final int chance){
-        return chance > 0 && rand(1, 100) <= chance;
+        return chance > 0 && rand(1, 1000) <= chance;
     }
 
     public static boolean dropClueScroll(Player player, NPC npc) {
         if(ClueScrollManager.hasClueScroll(player))
             return false;
         double clueScrollChance = 1;
-        if(npc.getDefinition().combat() >= 120) {
+        if(npc.getDefinition().combat() >= 240) {
             clueScrollChance += ((npc.getDefinition().combat() - 120)/6);
-        } else if(npc.getDefinition().combat() >= 90) {
+        } else if(npc.getDefinition().combat() >= 120) {
             clueScrollChance += ((npc.getDefinition().combat() - 90)/3);
-        } else if(npc.getDefinition().combat() >= 60) {
+        } else if(npc.getDefinition().combat() >= 80) {
             clueScrollChance += ((npc.getDefinition().combat() - 60)/3);
         }
 
@@ -43,6 +43,10 @@ public final class ClueScrollUtils {
         } else if(Rank.hasAbility(player, Rank.DONATOR)) {
             clueScrollChance *= 1.1;
         }
+
+        if(player.getSlayer().isTask(npc.getDefinition().getId()))
+            clueScrollChance *= 2;
+
         if(Misc.random(1000) <= clueScrollChance*10)
             return true;
         return false;

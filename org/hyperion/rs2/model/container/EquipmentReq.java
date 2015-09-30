@@ -60,6 +60,8 @@ public class EquipmentReq {
 			case 17339:
 			case 17215:
 			case 17317:
+			case 17061:
+
 				return 2000;
 		}
 		return 0;
@@ -228,6 +230,9 @@ public class EquipmentReq {
                 return equipReqData;
 			case 18357:
 				equipReqData[4] = 80;
+				return equipReqData;
+			case 18363:
+				equipReqData[Skills.DEFENCE] = 80;
 				return equipReqData;
 
 		}

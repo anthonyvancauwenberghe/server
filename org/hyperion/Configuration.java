@@ -36,6 +36,9 @@ public class Configuration {
 		configs.put("mail", "false");
 		configs.put("highscores", "false");
 		configs.put("spawn", "true");
+		configs.put("playerssql", "true");
+		configs.put("logssql", "true");
+		configs.put("donationssql", "true");
 	}
 
 	/**

@@ -128,6 +128,14 @@ public class Misc {
 	}
 
 	/**
+	 * @param range
+	 * @return Returns a random Integer from 1 to "range".
+	 */
+	public static int random2(int range) {
+		return (int) (java.lang.Math.random() * range) + 1;
+	}
+
+	/**
 	 * @param array1
 	 * @param array2
 	 * @returns Array1 + Array2

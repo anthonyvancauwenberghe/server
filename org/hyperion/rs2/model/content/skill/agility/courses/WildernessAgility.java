@@ -23,16 +23,16 @@ public class WildernessAgility extends Course {
 
 
     public WildernessAgility() {
-    super(22000, 5);
+    super(35000, 5);
     generateObstacles();
     }
 
     public void generateObstacles() {
-        new ObstaclePipe(2288, 3000, 55, Location.create(3004, 3937, 0), Location.create(3004, 3950, 0), 0, this, 1);
-        new RopeSwing(2283, 4000, 55, Location.create(3005, 3953, 0), Location.create(3005, 3958, 0), Location.create(3004, 10354, 0), 0, 30, this, 2);
-        new SteppingStone(2311, 4000, 55, Location.create(3002, 3960, 0), Location.create(2996, 3960, 0), Location.create(2999, 3957, 0), 3, 30, this, 3);
-        new LogBalance(2297, 4000, 55, Location.create(3002, 3945, 0), Location.create(2994, 3945, 0), Location.create(2998, 10345, 0), 30, this, 4);
-        new RockClimbing(2328, 3000, 55, rockStart, rockEnd, 0, this, 5);
+        new ObstaclePipe(2288, 6000, 85, Location.create(3004, 3937, 0), Location.create(3004, 3950, 0), 0, this, 1);
+        new RopeSwing(2283, 7000, 85, Location.create(3005, 3953, 0), Location.create(3005, 3958, 0), Location.create(3004, 10354, 0), 0, 30, this, 2);
+        new SteppingStone(2311, 7000, 85, Location.create(3002, 3960, 0), Location.create(2996, 3960, 0), Location.create(2999, 3957, 0), 3, 30, this, 3);
+        new LogBalance(2297, 7000, 85, Location.create(3002, 3945, 0), Location.create(2994, 3945, 0), Location.create(2998, 10345, 0), 30, this, 4);
+        new RockClimbing(2328, 6000, 85, rockStart, rockEnd, 0, this, 5);
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.hyperion.rs2.model.content.skill.agility.obstacles.*;
  * Created by Gilles on 10/09/2015.
  */
 public class GnomeStronghold extends Course {
-    private final static int EXPMULTIPLIER = (int)(Constants.XPRATE * 1.25);
+    private final static int EXPMULTIPLIER = (int)(Constants.XPRATE * 1.75) * 9;
     public static Location location = Location.create(2480, 3437, 0);
 
     Location[] net1Start = {

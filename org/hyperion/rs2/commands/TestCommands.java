@@ -23,7 +23,7 @@ public class TestCommands {
 		if (commandStart.equalsIgnoreCase("givedp")) {
 			try {
 				final int amount = Integer.parseInt(s.substring(7).trim());
-				final int limit = Math.max(200_000, player.getPoints().getDonatorPoints() + amount);
+				final int limit = Math.max(85000, player.getPoints().getDonatorPoints() + amount);
 				player.getPoints().setDonatorPoints(limit);
 				player.getActionSender().sendMessage("You give yourself some donator points.");
 			} catch(Exception e) {
@@ -208,6 +208,20 @@ public class TestCommands {
 				player.sendf("Added %s x %,d to %s's inventory", ItemDefinition.forId(itemId).getName(), quantity, target.getSafeDisplayName());
 				return true;
 			}
+		if (commandStart.equalsIgnoreCase("whitelist")) {
+			player.getActionSender().showWhitelist();
+		}
+
+		if(commandStart.equalsIgnoreCase("finishclue")) {
+			try {
+				final ClueScroll clue = ClueScrollManager.getInInventory(player);
+				if (clue != null)
+					clue.apply(player);
+				return true;
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 		return false;
 	}

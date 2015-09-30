@@ -1572,7 +1572,7 @@ public class CommandHandler {
                     return false;
                 }
                 player.sendf("Creation Date: " + new Date(target.getCreatedTime()));
-                player.sendf("Last HP Reward: %s", new Date(target.getLastHonorPointsReward()));
+                player.sendf("Last HP Rewards: %s", new Date(target.getLastHonorPointsReward()));
                 return true;
             }
         });

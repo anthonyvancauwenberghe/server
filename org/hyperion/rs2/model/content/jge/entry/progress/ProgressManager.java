@@ -29,9 +29,17 @@ public class ProgressManager {
     }
 
     public int totalPrice(){
-        return stream()
-                .mapToInt(p -> p.unitPrice)
-                .sum();
+        switch(entry.type){
+            case BUYING:
+                return stream()
+                        .mapToInt(p -> p.unitPrice)
+                        .sum();
+            case SELLING:
+                return totalQuantity() * entry.unitPrice;
+            default:
+                return 0;
+        }
+
     }
 
     public int totalQuantity(){

@@ -124,6 +124,11 @@ public class EntryBuilder {
     }
 
     public Entry build(){
+        if(this.itemId != -1){
+            final ItemDefinition def = ItemDefinition.forId(this.itemId);
+            if(def != null && def.isNoted() && def.getNormalId() != -1)
+                this.itemId = def.getNormalId();
+        }
         return new Entry(OffsetDateTime.now(), player.getName(), type, slot, itemId, itemQuantity, unitPrice, currency);
     }
 }

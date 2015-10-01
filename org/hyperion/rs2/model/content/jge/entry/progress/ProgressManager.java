@@ -33,7 +33,7 @@ public class ProgressManager {
             case BUYING:
                 return stream()
                         .mapToInt(p -> p.unitPrice)
-                        .sum();
+                        .sum() * totalQuantity();
             case SELLING:
                 return totalQuantity() * entry.unitPrice;
             default:

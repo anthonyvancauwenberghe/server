@@ -81,7 +81,7 @@ public class JGrandExchange {
                 submitEntry.progress.add(matchedEntry.playerName, matchedEntry.unitPrice, maxQuantity);
                 submitEntry.claims.addProgress(submitEntry.itemId, maxQuantity);
                 if(submitEntry.unitPrice > matchedEntry.unitPrice)
-                    submitEntry.claims.addReturn(submitEntry.currency.itemId, submitEntry.unitPrice - matchedEntry.unitPrice);
+                    submitEntry.claims.addReturn(submitEntry.currency.itemId, (submitEntry.unitPrice - matchedEntry.unitPrice) * maxQuantity);
                 matchedEntry.progress.add(submitEntry.playerName, matchedEntry.unitPrice, maxQuantity);
                 matchedEntry.claims.addProgress(matchedEntry.currency.itemId, maxQuantity * matchedEntry.unitPrice);
                 break;
@@ -90,7 +90,7 @@ public class JGrandExchange {
                 matchedEntry.progress.add(submitEntry.playerName, submitEntry.unitPrice, maxQuantity);
                 matchedEntry.claims.addProgress(submitEntry.itemId, maxQuantity);
                 if(matchedEntry.unitPrice > submitEntry.unitPrice)
-                    matchedEntry.claims.addReturn(matchedEntry.currency.itemId, matchedEntry.unitPrice - submitEntry.unitPrice);
+                    matchedEntry.claims.addReturn(matchedEntry.currency.itemId, (matchedEntry.unitPrice - submitEntry.unitPrice) * maxQuantity);
                 submitEntry.progress.add(matchedEntry.playerName, submitEntry.unitPrice, maxQuantity);
                 submitEntry.claims.addProgress(submitEntry.currency.itemId, maxQuantity * submitEntry.unitPrice);
                 break;

@@ -17,7 +17,6 @@ public class AchievementTab {
 
     private long lastClick;
     private int clickId;
-    private int page = 0;
 
     public AchievementTab(Player player) {
         this.player = player;
@@ -29,70 +28,67 @@ public class AchievementTab {
 
     public void resetAchievementTab() {
         for(int i = 0; i < 33; i++)
-            player.getActionSender().sendString("", 28026 + i);
+            player.getActionSender().sendString("", 32011 + i);
         updateAchievementTab();
     }
 
     public void updateAchievementTab() {
-        int j = 0;
-        for(int i = 0 + (page * 33); i < ((page + 1) * 33); i++) {
-            if(Achievements.get().size() > i) {
-                player.getActionSender().sendString(player.getAchievementTracker().progress(Achievements.get().get(i)).getTabString(), 28026 + j);
-            } else {
-                player.getActionSender().sendString("", 28026 + j);
-            }
-            j++;
+        for(int i = 0; i < Achievements.get().size(); i++) {
+            player.getActionSender().sendString(player.getAchievementTracker().progress(Achievements.get().get(i)).getTabString(), 32011 + i);
         }
-        if(page != 0)
-            player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Previous page"), 28060);
-        else
-            player.getActionSender().sendString("", 28060);
-        if(page != Achievements.get().size() / 33)
-            player.getActionSender().sendString("@or1@" + Misc.centerQuestTab("Next page"), 28061);
-        else
-            player.getActionSender().sendString("", 28061);
-        player.getActionSender().sendString("Page " + (page + 1), 28023);
+        sendAchievementPoints();
     }
 
-    public void nextPage() {
-        if(page == Achievements.get().size() / 33)
-            return;
-        page++;
-        updateAchievementTab();
+    public void sendAchievementPoints() {
+        player.getActionSender().sendString("Achievement points: 0", 32004);
     }
 
-    public void previousPage() {
-        if(page == 0)
-            return;
-        page--;
-        updateAchievementTab();
+    public static String buildPercentBar(double percentage) {
+        int bars = 0;
+        StringBuilder sb = new StringBuilder("@gre@");
+        for(; percentage > 0; percentage =- 1) {
+            sb.append("|");
+            bars++;
+        }
+        sb.append("@red@");
+        for(; bars <= 100; bars++) {
+            sb.append("|");
+        }
+        return sb.toString() + "@bla@  " + percentage + "%";
     }
 
     static {
-        for (int i = 0; i < 36; i++) {
+        for (int i = 0; i < Achievements.get().size(); i++) {
             int i2 = i;
-            ActionsManager.getManager().submit(28026 + i, new ButtonAction() {
+            ActionsManager.getManager().submit(32011 + i, new ButtonAction() {
                 @Override
                 public void handle(Player player, int id) {
-                    if(i2 < 33) {
-                        if (player.getAchievementTab().lastClick + Time.ONE_SECOND * 2 > System.currentTimeMillis() && player.getAchievementTab().clickId == 28026 + i2) {
-                            player.sendMessage("Sent to wiki");
-                        } else {
-                            player.getActionSender().sendDialogue(Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).title, ActionSender.DialogueType.MESSAGE, 1,
-                                    Animation.FacialAnimation.HAPPY,
-                                    "" + (Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.size() > 0 ? Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.get(0).desc : ""), //Line 1
-                                    "" + (Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.size() > 1 ? Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.get(1).desc : ""), //Line 2
-                                    "" + (Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.size() > 2 ? Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.get(2).desc : ""), //Line 3
-                                    "" + (Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.size() > 3 ? Achievements.get().get(i2 + (player.getAchievementTab().page * 33)).tasks.get(3).desc : "") //Line 4
-                            );
+                    if (player.getAchievementTab().lastClick + Time.ONE_SECOND * 2 > System.currentTimeMillis() && player.getAchievementTab().clickId == 32011 + i2) {
+                        player.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements:ID" + i2);
+                    } else {
+                        Achievement achievement = Achievements.get().get(i2);
+                        double average = 0;
+                        int i = 0;
+                        for(; i > achievement.tasks.size(); i++) {
+                            average += player.getAchievementTracker().taskProgress(achievement.tasks.get(i)).progressPercent();
                         }
-                        player.getAchievementTab().clickId = 28026 + i2;
-                        player.getAchievementTab().lastClick = System.currentTimeMillis();
-                    } else if(i2 == 34) {
-                        player.getAchievementTab().previousPage();
-                    } else if(i2 == 35) {
-                        player.getAchievementTab().nextPage();
+                        average /= (i + 1);
+                        player.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
+                                Animation.FacialAnimation.HAPPY,
+                                achievement.tasks.size() < 1 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
+                                achievement.tasks.size() < 2 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
+                                achievement.tasks.size() < 3 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
+                                "" + buildPercentBar(average)
+                        );
                     }
+                    player.getAchievementTab().clickId = 32011 + i2;
+                    player.getAchievementTab().lastClick = System.currentTimeMillis();
+                }
+            });
+
+            ActionsManager.getManager().submit(32002, new ButtonAction() {
+                public void handle(Player player, int id) {
+                    player.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements");
                 }
             });
         }

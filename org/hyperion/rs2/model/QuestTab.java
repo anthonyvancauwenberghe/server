@@ -30,7 +30,6 @@ public class QuestTab {
 
     private static int getClickId(int index) {
         index -= 32525;
-        System.out.println(index);
         return index;
     }
 

@@ -47,6 +47,13 @@ public class ItemInfo{
 
     }
 
+    public static class GrandExchangeBlackList extends ItemInfo {
+
+        private GrandExchangeBlackList(){
+            super("./data/ge_blacklist.txt");
+        }
+    }
+
     public static class Entry{
 
         public final String rawMsg;
@@ -83,6 +90,7 @@ public class ItemInfo{
 
     public static UnSpawnables unspawnables = new UnSpawnables();
     public static UnTradeables untradeables = new UnTradeables();
+    public static GrandExchangeBlackList geBlacklist = new GrandExchangeBlackList();
 
     private static final Pattern MSG =
             Pattern.compile("msg ([^=]+)\\s*=\\s*([^=]+)");
@@ -111,6 +119,8 @@ public class ItemInfo{
     }
 
     public Entry find(final ItemDefinition def){
+        if(def == null)
+            return null;
         if(cache.containsKey(def.getId()))
             return cache.get(def.getId());
         final Entry entry = entries.stream()
@@ -126,12 +136,16 @@ public class ItemInfo{
         return find(def) != null;
     }
 
-    public boolean check(Player player, final ItemDefinition def){
+    public boolean check(final Player player, final ItemDefinition def){
         final Entry e = find(def);
         if(e == null)
             return false;
         e.msg(player, def);
         return true;
+    }
+
+    public boolean check(final Player player, final int itemId){
+        return check(player, ItemDefinition.forId(itemId));
     }
 
     public boolean load(){
@@ -206,6 +220,7 @@ public class ItemInfo{
 
     public static boolean init(){
         return unspawnables.load()
-            && untradeables.load();
+                && untradeables.load()
+                && geBlacklist.load();
     }
 }

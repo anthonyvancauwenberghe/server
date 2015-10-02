@@ -2,11 +2,15 @@ package org.hyperion.rs2.model.content.jge.tracker;
 
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
 import org.hyperion.rs2.model.content.jge.entry.EntryManager;
+import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.iteminfo.ItemInfo;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -35,6 +39,36 @@ public class JGrandExchangeTracker {
         activeSlot = -1;
 
         loadEntries();
+    }
+
+    public void selectItem(final int itemId, final Entry.Type type){
+        ifNewEntry(e -> {
+            if(e.type() != type){
+                player.sendf("You are not %s an item!", type);
+                return;
+            }
+            final ItemDefinition definition = ItemDefinition.forId(itemId);
+            if(definition == null){
+                player.sendf("Invalid item: %d", itemId);
+                return;
+            }
+            if(ItemSpawning.canSpawn(itemId)){
+                player.sendf("Spawnables aren't allowed in the Grand Exchange!");
+                return;
+            }
+            if(ItemInfo.geBlacklist.check(player, definition))
+                return;
+            if(e.itemId(itemId)){
+                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
+                if(e.itemQuantity() < 1){
+                    e.itemQuantity(1);
+                    JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
+                }
+                JGrandExchangeInterface.NewEntry.setItem(player, e.item());
+                JGrandExchangeInterface.NewEntry.setDefaultUnitPrice(player, e.unitPrice(), e.currency());
+                JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
+            }
+        }, "You're not building a new entry right now");
     }
 
     public void loadEntries(){

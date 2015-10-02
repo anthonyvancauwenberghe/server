@@ -2375,22 +2375,7 @@ public class CommandPacketHandler implements PacketHandler {
 
             if (commandStart.equalsIgnoreCase("selectitem")) {
                 try{
-                    player.getGrandExchangeTracker().ifNewEntry(e -> {
-                        if(e.type() != Entry.Type.BUYING){
-                            player.sendf("You are not buying an item!");
-                            return;
-                        }
-                        if(e.itemId(Integer.valueOf(as[1]))){
-                            e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
-                            if(e.itemQuantity() < 1){
-                                e.itemQuantity(1);
-                                JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
-                            }
-                            JGrandExchangeInterface.NewEntry.setItem(player, e.item());
-                            JGrandExchangeInterface.NewEntry.setDefaultUnitPrice(player, e.unitPrice(), e.currency());
-                            JGrandExchangeInterface.NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
-                        }
-                    }, "You're not building a new entry right now");
+                    player.getGrandExchangeTracker().selectItem(Integer.parseInt(as[1]), Entry.Type.BUYING);
                 }catch(Exception ex){
                     ex.printStackTrace();
                 }

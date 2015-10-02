@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.jge;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
+import org.hyperion.rs2.model.iteminfo.ItemInfo;
 
 import java.util.*;
 import java.util.function.Function;
@@ -154,6 +155,7 @@ public class JGrandExchange {
     }
 
     public static void init(){
+        ItemInfo.geBlacklist.load();
         instance = new JGrandExchange();
     }
 }

@@ -2,9 +2,15 @@ package org.hyperion.rs2.model.content.jge;
 
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
+import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
+import org.hyperion.rs2.sql.MySQLConnection;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -22,10 +28,97 @@ public class JGrandExchange {
 
     public static final int DEFAULT_UNIT_PRICE = 1000;
 
+    private final MySQLConnection sql;
     private final Map<Object, List<Entry>> map;
 
-    public JGrandExchange(){
+    public JGrandExchange(final MySQLConnection sql){
+        this.sql = sql;
+
         map = new HashMap<>();
+    }
+
+    public Stream<Entry> stream(){
+        return map.values().stream()
+                .flatMap(List::stream)
+                .distinct();
+    }
+
+    public boolean insert(final Entry entry){
+        try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+            stmt.setTimestamp(1, entry.date);
+            stmt.setString(2, entry.playerName);
+            stmt.setString(3, entry.type.name());
+            stmt.setByte(4, (byte)entry.slot);
+            stmt.setShort(5, (short)entry.itemId);
+            stmt.setInt(6, entry.itemQuantity);
+            stmt.setString(7, entry.currency.name());
+            stmt.setString(8, entry.progress.toSaveString());
+            stmt.setString(9, entry.claims.toSaveString());
+            return stmt.executeUpdate() == 1;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateProgressAndClaims(final Entry entry){
+        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET progress = ?, claims = ? WHERE playerName = ? AND slot = ?")){
+            stmt.setString(1, entry.progress.toSaveString());
+            stmt.setString(2, entry.claims.toSaveString());
+            stmt.setString(3, entry.playerName);
+            stmt.setByte(4, (byte)entry.slot);
+            return stmt.executeUpdate() == 1;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateProgress(final Entry entry){
+        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET progress = ? WHERE playerName = ? AND slot = ?")){
+            stmt.setString(1, entry.progress.toSaveString());
+            stmt.setString(2, entry.playerName);
+            stmt.setByte(3, (byte)entry.slot);
+            return stmt.executeUpdate() == 1;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateClaims(final Entry entry){
+        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET claims = ? WHERE playerName = ? AND slot = ?")){
+            stmt.setString(1, entry.claims.toSaveString());
+            stmt.setString(2, entry.playerName);
+            stmt.setByte(3, (byte)entry.slot);
+            return stmt.executeUpdate() == 1;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean load(){
+        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
+            final Timestamp date = rs.getTimestamp("created");
+            final String playerName = rs.getString("playerName");
+            final Entry.Type type = Entry.Type.valueOf(rs.getString("type"));
+            final int slot = rs.getByte("slot");
+            final int itemId = rs.getShort("itemId");
+            final int itemQuantity = rs.getInt("itemQuantity");
+            final int unitPrice = rs.getInt("unitPrice");
+            final Entry.Currency currency = Entry.Currency.valueOf(rs.getString("currency"));
+            final String progress = rs.getString("progress");
+            final String claims = rs.getString("claims");
+            final Entry entry = new Entry(date, playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
+            entry.progress = ProgressManager.fromSaveString(entry, progress);
+            entry.claims = Claims.fromSaveString(entry, claims);
+            add(entry);
+            return true;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     private void add(final Entry entry, final Function<Entry, Object> key){
@@ -76,6 +169,10 @@ public class JGrandExchange {
         final int submitRemaining = submitEntry.progress.remainingQuantity();
         final int matchedRemaining = matchedEntry.progress.remainingQuantity();
         final int maxQuantity = submitRemaining > matchedRemaining ? matchedRemaining : submitRemaining;
+        final ProgressManager submitProgress = submitEntry.progress.copy();
+        final Claims submitClaims = submitEntry.claims.copy();
+        final ProgressManager matchedProgress = matchedEntry.progress.copy();
+        final Claims matchedClaims = matchedEntry.claims.copy();
         switch(submitEntry.type){
             case BUYING:
                 //matchedEntry = selling entry
@@ -95,6 +192,14 @@ public class JGrandExchange {
                 submitEntry.progress.add(matchedEntry.playerName, submitEntry.unitPrice, maxQuantity);
                 submitEntry.claims.addProgress(submitEntry.currency.itemId, maxQuantity * submitEntry.unitPrice);
                 break;
+        }
+        if(!updateProgressAndClaims(submitEntry) || !updateProgressAndClaims(matchedEntry)){
+            submitEntry.progress = submitProgress;
+            submitEntry.claims = submitClaims;
+            matchedEntry.progress = matchedProgress;
+            matchedEntry.claims = matchedClaims;
+            System.err.printf("ERROR UPDATING GE BETWEEN %s and %s%n", submitEntry.playerName, matchedEntry.playerName);
+            return;
         }
         submitEntry.ifPlayer(p -> {
             p.getGrandExchangeTracker().notifyChanges(false);
@@ -149,13 +254,12 @@ public class JGrandExchange {
     }
 
     public static JGrandExchange getInstance(){
-        if(instance == null)
-            instance = new JGrandExchange();
         return instance;
     }
 
-    public static void init(){
+    public static boolean init(final MySQLConnection sql){
         ItemInfo.geBlacklist.load();
-        instance = new JGrandExchange();
+        instance = new JGrandExchange(sql);
+        return instance.load();
     }
 }

@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.content.jge.entry.Entry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -18,6 +19,13 @@ public class ProgressManager {
         this.entry = entry;
 
         list = new ArrayList<>();
+    }
+
+    public ProgressManager copy(){
+        final ProgressManager copy = new ProgressManager(entry);
+        stream().map(Progress::copy)
+                .forEach(copy::add);
+        return copy;
     }
 
     public Stream<Progress> stream(){
@@ -53,10 +61,28 @@ public class ProgressManager {
     }
 
     public void add(final String playerName, final int unitPrice, final int quantity){
-        list.add(new Progress(playerName, entry.type.opposite(), unitPrice, quantity));
+        add(new Progress(playerName, entry.type.opposite(), unitPrice, quantity));
+    }
+
+    public void add(final Progress progress){
+        list.add(progress);
     }
 
     public boolean completed(){
         return totalQuantity() == entry.itemQuantity;
+    }
+
+    public String toSaveString(){
+        return stream()
+                .map(Progress::toSaveString)
+                .collect(Collectors.joining(","));
+    }
+
+    public static ProgressManager fromSaveString(final Entry entry, final String progress){
+        final ProgressManager manager = new ProgressManager(entry);
+        Stream.of(progress.split(","))
+                .map(Progress::fromSaveString)
+                .forEach(manager::add);
+        return manager;
     }
 }

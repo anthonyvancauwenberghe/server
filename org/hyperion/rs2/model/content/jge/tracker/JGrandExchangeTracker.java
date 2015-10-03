@@ -367,6 +367,10 @@ public class JGrandExchangeTracker {
                         }
                     }
                     final Entry entry = newEntry.build();
+                    if(!JGrandExchange.getInstance().insert(entry)){
+                        player.sendf("Please try again later!");
+                        return;
+                    }
                     entries.add(entry);
                     JGrandExchange.getInstance().add(entry);
                     nullifyNewEntry();

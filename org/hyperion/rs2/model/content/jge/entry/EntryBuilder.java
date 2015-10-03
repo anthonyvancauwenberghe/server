@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 
+import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 
 /**
@@ -129,6 +130,6 @@ public class EntryBuilder {
             if(def != null && def.isNoted() && def.getNormalId() != -1)
                 this.itemId = def.getNormalId();
         }
-        return new Entry(OffsetDateTime.now(), player.getName(), type, slot, itemId, itemQuantity, unitPrice, currency);
+        return new Entry(new Timestamp(System.currentTimeMillis()), player.getName(), type, slot, itemId, itemQuantity, unitPrice, currency);
     }
 }

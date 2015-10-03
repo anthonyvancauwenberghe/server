@@ -6,6 +6,7 @@ import org.hyperion.Server;
 import org.hyperion.data.Persistable;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
+import org.hyperion.rs2.News;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
@@ -374,6 +375,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private AchievementTab achievementtab = new AchievementTab(this);
 
+	private News news = new News(this);
+
 	private ItemDropping itemDropping = new ItemDropping();
 
 	private TriviaSettings ts = new TriviaSettings(0, false);
@@ -423,6 +426,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public AchievementTab getAchievementTab() {
 		return achievementtab;
+	}
+
+	public News getNews() {
+		return news;
 	}
 
 	public ExtraData getExtraData() {

@@ -5,6 +5,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -186,6 +187,9 @@ public class ActionSender {
 
 
         }
+        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime())
+            player.getNews().sendNewsInterface();
+
         if (WildernessBossEvent.currentBoss != null) {
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
         }

@@ -1,9 +1,6 @@
 package org.hyperion.rs2.model.content.jge.tracker;
 
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
@@ -58,6 +55,10 @@ public class JGrandExchangeTracker {
                 player.sendf("Spawnables aren't allowed in the Grand Exchange!");
                 return;
             }
+            if(!ItemsTradeable.isTradeable(itemId)){
+                player.sendf("Non-tradeables aren't allowed in the Grand Exchange");
+                return;
+            }
             if(ItemInfo.geBlacklist.check(player, definition))
                 return;
             if(e.itemId(itemId)){
@@ -109,7 +110,9 @@ public class JGrandExchangeTracker {
 
     public boolean canOpenInterface(){
         return !player.getLocation().inPvPArea()
-                && !player.getLocation().inFunPk();
+                && !player.getLocation().inFunPk()
+                && !player.getLocation().inDuel()
+                && !player.getLocation().inDungeonLobby();
     }
 
     public void openInterface(){

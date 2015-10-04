@@ -52,9 +52,10 @@ public class JGrandExchange {
             stmt.setByte(4, (byte)entry.slot);
             stmt.setShort(5, (short)entry.itemId);
             stmt.setInt(6, entry.itemQuantity);
-            stmt.setString(7, entry.currency.name());
-            stmt.setString(8, entry.progress.toSaveString());
-            stmt.setString(9, entry.claims.toSaveString());
+            stmt.setInt(7, entry.unitPrice);
+            stmt.setString(8, entry.currency.name());
+            stmt.setString(9, entry.progress.toSaveString());
+            stmt.setString(10, entry.claims.toSaveString());
             return stmt.executeUpdate() == 1;
         }catch(Exception ex){
             ex.printStackTrace();

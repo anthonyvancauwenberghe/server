@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.jge;
 
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
@@ -9,6 +10,7 @@ import org.hyperion.rs2.sql.MySQLConnection;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -44,16 +46,16 @@ public class JGrandExchange {
 
     public boolean insert(final Entry entry){
         try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
-            sql.query(String.format(
-                    "INSERT INTO ge_entries " +
-                            "(created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims) " +
-                            "VALUES ('%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s')",
-                    entry.date.toString(), entry.playerName, entry.type.name(),
-                    entry.slot, entry.itemId, entry.itemQuantity, entry.unitPrice, entry.currency.name(),
-                    entry.progress.toSaveString(), entry.claims.toSaveString()
-
-            ));
-            return true;
+            stmt.setString(1, entry.date.toString());
+            stmt.setString(2, entry.playerName);
+            stmt.setString(3, entry.type.name());
+            stmt.setByte(4, (byte)entry.slot);
+            stmt.setShort(5, (short)entry.itemId);
+            stmt.setInt(6, entry.itemQuantity);
+            stmt.setString(7, entry.currency.name());
+            stmt.setString(8, entry.progress.toSaveString());
+            stmt.setString(9, entry.claims.toSaveString());
+            return stmt.executeUpdate() == 1;
         }catch(Exception ex){
             ex.printStackTrace();
             return false;

@@ -2105,9 +2105,9 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command("openge", Rank.PLAYER){
+		submit(new Command("ge", Rank.PLAYER){
 			public boolean execute(final Player player, final String input) throws Exception{
-				player.getGrandExchangeTracker().openInterface();
+				Magic.teleport(player, Location.create(3009, 3383, 0), false);
 				return true;
 			}
 		});

@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
@@ -111,6 +112,10 @@ public class JGrandExchangeTracker {
     }
 
     public void openInterface(){
+        if(!canOpenInterface()){
+            player.sendf("You cannot use the Grand Exchange right now!");
+            return;
+        }
         Entries.open(player, entries);
     }
 
@@ -143,6 +148,10 @@ public class JGrandExchangeTracker {
     }
 
     public boolean startNewEntry(final Entry.Type type, final int slot){
+        if(!canOpenInterface()){
+            player.sendf("You cannot use the Grand Exchange right now!");
+            return false;
+        }
         if(buildingNewEntry())
             nullifyNewEntry();
         if(entries.used(slot)){
@@ -327,6 +336,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CONFIRM:
                 ifNewEntry(e -> {
+                    if(!canOpenInterface()){
+                        player.sendf("You cannot use the Grand Exchange right now!");
+                        return;
+                    }
                     if(!e.canBuild()){
                         player.sendf("Entry is not valid!");
                         return;
@@ -381,6 +394,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CANCEL:
                 ifActiveEntry(e -> {
+                    if(!canOpenInterface()){
+                        player.sendf("You cannot use the Grand Exchange right now!");
+                        return;
+                    }
                     if(e.cancelled){
                         player.sendf("This entry is already cancelled!");
                         return;
@@ -413,6 +430,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_PROGRESS_SLOT:
                 ifActiveEntry(e -> {
+                    if(!canOpenInterface()){
+                        player.sendf("You cannot use the Grand Exchange right now!");
+                        return;
+                    }
                     final Item oldProgress = e.claims.progressSlot.item();
                     if(e.claims.progressSlot.valid() && e.claims.claimProgress()){
                         ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
@@ -432,6 +453,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_RETURN_SLOT:
                 ifActiveEntry(e -> {
+                    if(!canOpenInterface()){
+                        player.sendf("You cannot use the Grand Exchange right now!");
+                        return;
+                    }
                     final Item oldReturn = e.claims.returnSlot.item();
                     if(e.claims.returnSlot.valid() && e.claims.claimReturn()){
                         ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());

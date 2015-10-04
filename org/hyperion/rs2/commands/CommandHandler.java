@@ -2111,6 +2111,14 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("reloadgeblacklist", Rank.DEVELOPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				player.sendf("Reloaded blacklist: " + ItemInfo.geBlacklist.reload());
+				return true;
+			}
+		});
 	}
 
 }

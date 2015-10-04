@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
 import org.hyperion.rs2.model.content.jge.entry.EntryManager;
+import org.hyperion.rs2.model.content.jge.entry.claim.ClaimSlot;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
@@ -391,6 +392,7 @@ public class JGrandExchangeTracker {
                         return;
                     }
                     e.cancelled = true;
+                    final Item oldReturn = e.item();
                     switch(e.type){
                         case BUYING:
                             e.claims.addReturn(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
@@ -399,15 +401,28 @@ public class JGrandExchangeTracker {
                             e.claims.addReturn(e.itemId, e.progress.remainingQuantity());
                             break;
                     }
+                    if(!JGrandExchange.getInstance().updateCancelAndClaims(e)){
+                        e.cancelled = false;
+                        e.claims.returnSlot.set(oldReturn);
+                        player.sendf("Please try again later!");
+                        return;
+                    }
                     ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                     ViewingEntry.setProgressBar(player, e);
                 }, "You are not viewing an entry right now");
                 return true;
             case CLAIM_PROGRESS_SLOT:
                 ifActiveEntry(e -> {
+                    final Item oldProgress = e.claims.progressSlot.item();
                     if(e.claims.progressSlot.valid() && e.claims.claimProgress()){
                         ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
                         if((e.cancelled && e.claims.empty()) || e.finished()){
+                            if(!JGrandExchange.getInstance().delete(e)){
+                                e.claims.progressSlot.set(oldProgress);
+                                ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
+                                player.sendf("Please try again later!");
+                                return;
+                            }
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
                             showEntries();
@@ -417,9 +432,16 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_RETURN_SLOT:
                 ifActiveEntry(e -> {
+                    final Item oldReturn = e.claims.returnSlot.item();
                     if(e.claims.returnSlot.valid() && e.claims.claimReturn()){
                         ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
                         if((e.cancelled && e.claims.empty()) || e.finished()){
+                            if(!JGrandExchange.getInstance().delete(e)){
+                                e.claims.returnSlot.set(oldReturn);
+                                ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
+                                player.sendf("Please try again later!");
+                                return;
+                            }
                             entries.remove(e);
                             JGrandExchange.getInstance().remove(e);
                             showEntries();

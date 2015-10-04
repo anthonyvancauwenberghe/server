@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.content.jge;
 
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
@@ -10,7 +9,6 @@ import org.hyperion.rs2.sql.MySQLConnection;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -44,8 +42,19 @@ public class JGrandExchange {
                 .distinct();
     }
 
+    public boolean delete(final Entry entry){
+        try(final PreparedStatement stmt = sql.prepare("DELETE FROM ge_entries WHERE playerName = ? AND slot = ?")){
+            stmt.setString(1, entry.playerName);
+            stmt.setByte(2, (byte)entry.slot);
+            return stmt.executeUpdate() == 1;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean insert(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+        try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims, cancelled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
             stmt.setString(1, entry.date.toString());
             stmt.setString(2, entry.playerName);
             stmt.setString(3, entry.type.name());
@@ -56,6 +65,20 @@ public class JGrandExchange {
             stmt.setString(8, entry.currency.name());
             stmt.setString(9, entry.progress.toSaveString());
             stmt.setString(10, entry.claims.toSaveString());
+            stmt.setBoolean(11, entry.cancelled);
+            return stmt.executeUpdate() == 1;
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateCancelAndClaims(final Entry entry){
+        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET cancelled = ?, claims = ? WHERE playerName = ? AND slot = ?")){
+            stmt.setBoolean(1, entry.cancelled);
+            stmt.setString(2, entry.claims.toSaveString());
+            stmt.setString(3, entry.playerName);
+            stmt.setByte(4, (byte)entry.slot);
             return stmt.executeUpdate() == 1;
         }catch(Exception ex){
             ex.printStackTrace();
@@ -113,7 +136,9 @@ public class JGrandExchange {
                 final Entry.Currency currency = Entry.Currency.valueOf(rs.getString("currency"));
                 final String progress = rs.getString("progress");
                 final String claims = rs.getString("claims");
+                final boolean cancelled = rs.getBoolean("cancelled");
                 final Entry entry = new Entry(date, playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
+                entry.cancelled = cancelled;
                 entry.progress = ProgressManager.fromSaveString(entry, progress);
                 entry.claims = Claims.fromSaveString(entry, claims);
                 add(entry);

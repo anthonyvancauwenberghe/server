@@ -5,6 +5,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
@@ -186,6 +187,9 @@ public class ActionSender {
 
 
         }
+        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime())
+            player.getNews().sendNewsInterface();
+
         if (WildernessBossEvent.currentBoss != null) {
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
         }
@@ -197,7 +201,7 @@ public class ActionSender {
             }
         }*/
         player.getPoints().checkDonator();
-        writeQuestTab();
+        writeTabs();
         ClanManager.clearClanChat(player);
 
         player.getPoints().loginCheck();
@@ -1024,11 +1028,6 @@ public class ActionSender {
         for (int i = 0; i < icons.length; i++) {
             sendSidebarInterface(icons[i], interfaces[i]);
         }
-        if (Server.SPAWN) {
-            sendSidebarInterface(14, 31400);
-        } else {
-            sendSidebarInterface(14, 638);
-        }
         return this;
     }
 
@@ -1036,8 +1035,9 @@ public class ActionSender {
      * Sends the c00l quest tab.
      */
 
-    public void writeQuestTab() {
+    public void writeTabs() {
         player.getQuestTab().createQuestTab();
+        player.getAchievementTab().createAchievementTab();
         sendString("Revenants (Multi)", 45614);
     }
 
@@ -1612,9 +1612,10 @@ public class ActionSender {
                 sendChatboxInterface(interfaceId - 1);
                 break;
             case MESSAGE:
-                interfaceId = 209 + text.length;
+                interfaceId = 6179;
+                sendString(6180, "" + title);
                 for (int i = 0; i < text.length; i++) {
-                    sendString(interfaceId, 0 + i, text[i]);
+                    sendString(6181 + i, "" + text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;

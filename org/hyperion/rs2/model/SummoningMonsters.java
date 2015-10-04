@@ -171,7 +171,7 @@ public class SummoningMonsters {
     }
 
     public static void openSummonTab(Player player, NPC npc) {
-        player.getActionSender().sendSidebarInterface(15, 17011);
+        player.getActionSender().sendSidebarInterface(16, 17011);
         player.getActionSender().sendNPCHead(npc.getDefinition().getId(),17027,0);
         refreshSummonTab(player,npc);
     }

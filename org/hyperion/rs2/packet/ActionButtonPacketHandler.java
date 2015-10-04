@@ -1029,7 +1029,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				break;
             case 17023: //dismiss
 				player.SummoningCounter = 0;
-                player.getActionSender().sendSidebarInterface(15, -1);
+                player.getActionSender().sendSidebarInterface(16, -1);
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
             case 17038:

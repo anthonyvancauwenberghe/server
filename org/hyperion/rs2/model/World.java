@@ -383,7 +383,7 @@ public class World {
             //playersSQL.init();
             //banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);
-            JGrandExchange.init(logsSQL);
+            System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
             //this.banManager.init();
             this.enemies = new ServerEnemies();
             SpawnCommand.init();

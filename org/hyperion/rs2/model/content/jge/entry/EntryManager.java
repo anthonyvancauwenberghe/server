@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content.jge.entry;
 
 import org.hyperion.rs2.model.Player;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -24,7 +25,7 @@ public class EntryManager {
     }
 
     public boolean anyMatch(final Predicate<Entry> match){
-        return Stream.of(entries).anyMatch(match);
+        return Stream.of(entries).filter(Objects::nonNull).anyMatch(match);
     }
 
     public boolean used(final int slot){

@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.Player;
 
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 /**
  * Created by Administrator on 9/24/2015.
@@ -130,6 +131,6 @@ public class EntryBuilder {
             if(def != null && def.isNoted() && def.getNormalId() != -1)
                 this.itemId = def.getNormalId();
         }
-        return new Entry(new Timestamp(System.currentTimeMillis()), player.getName(), type, slot, itemId, itemQuantity, unitPrice, currency);
+        return new Entry(OffsetDateTime.now(), player.getName(), type, slot, itemId, itemQuantity, unitPrice, currency);
     }
 }

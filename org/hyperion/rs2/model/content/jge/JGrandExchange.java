@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.content.jge;
 
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
@@ -10,7 +9,7 @@ import org.hyperion.rs2.sql.MySQLConnection;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -45,16 +44,16 @@ public class JGrandExchange {
 
     public boolean insert(final Entry entry){
         try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
-            stmt.setTimestamp(1, entry.date);
-            stmt.setString(2, entry.playerName);
-            stmt.setString(3, entry.type.name());
-            stmt.setByte(4, (byte)entry.slot);
-            stmt.setShort(5, (short)entry.itemId);
-            stmt.setInt(6, entry.itemQuantity);
-            stmt.setString(7, entry.currency.name());
-            stmt.setString(8, entry.progress.toSaveString());
-            stmt.setString(9, entry.claims.toSaveString());
-            return stmt.executeUpdate() == 1;
+            sql.query(String.format(
+                    "INSERT INTO ge_entries " +
+                            "(created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims) " +
+                            "VALUES ('%s', '%s', '%s', %d, %d, %d, %d, '%s', '%s', '%s')",
+                    entry.date.toString(), entry.playerName, entry.type.name(),
+                    entry.slot, entry.itemId, entry.itemQuantity, entry.unitPrice, entry.currency.name(),
+                    entry.progress.toSaveString(), entry.claims.toSaveString()
+
+            ));
+            return true;
         }catch(Exception ex){
             ex.printStackTrace();
             return false;
@@ -101,7 +100,7 @@ public class JGrandExchange {
     public boolean load(){
         try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
             while(rs.next()){
-                final Timestamp date = rs.getTimestamp("created");
+                final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
                 final String playerName = rs.getString("playerName");
                 final Entry.Type type = Entry.Type.valueOf(rs.getString("type"));
                 final int slot = rs.getByte("slot");

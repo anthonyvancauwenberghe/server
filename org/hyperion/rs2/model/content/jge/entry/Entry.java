@@ -6,8 +6,8 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -54,7 +54,7 @@ public class Entry {
         }
     }
 
-    public final Timestamp date;
+    public final OffsetDateTime date;
     public final String playerName;
     public final Type type;
     public final int slot;
@@ -69,7 +69,7 @@ public class Entry {
     public ProgressManager progress;
     public Claims claims;
 
-    public Entry(final Timestamp date, final String playerName, final Type type, final int slot, final int itemId, final int itemQuantity, final int unitPrice, final Currency currency){
+    public Entry(final OffsetDateTime date, final String playerName, final Type type, final int slot, final int itemId, final int itemQuantity, final int unitPrice, final Currency currency){
         this.date = date;
         this.playerName = playerName;
         this.type = type;

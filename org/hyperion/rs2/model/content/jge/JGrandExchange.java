@@ -100,20 +100,22 @@ public class JGrandExchange {
 
     public boolean load(){
         try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
-            final Timestamp date = rs.getTimestamp("created");
-            final String playerName = rs.getString("playerName");
-            final Entry.Type type = Entry.Type.valueOf(rs.getString("type"));
-            final int slot = rs.getByte("slot");
-            final int itemId = rs.getShort("itemId");
-            final int itemQuantity = rs.getInt("itemQuantity");
-            final int unitPrice = rs.getInt("unitPrice");
-            final Entry.Currency currency = Entry.Currency.valueOf(rs.getString("currency"));
-            final String progress = rs.getString("progress");
-            final String claims = rs.getString("claims");
-            final Entry entry = new Entry(date, playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
-            entry.progress = ProgressManager.fromSaveString(entry, progress);
-            entry.claims = Claims.fromSaveString(entry, claims);
-            add(entry);
+            while(rs.next()){
+                final Timestamp date = rs.getTimestamp("created");
+                final String playerName = rs.getString("playerName");
+                final Entry.Type type = Entry.Type.valueOf(rs.getString("type"));
+                final int slot = rs.getByte("slot");
+                final int itemId = rs.getShort("itemId");
+                final int itemQuantity = rs.getInt("itemQuantity");
+                final int unitPrice = rs.getInt("unitPrice");
+                final Entry.Currency currency = Entry.Currency.valueOf(rs.getString("currency"));
+                final String progress = rs.getString("progress");
+                final String claims = rs.getString("claims");
+                final Entry entry = new Entry(date, playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
+                entry.progress = ProgressManager.fromSaveString(entry, progress);
+                entry.claims = Claims.fromSaveString(entry, claims);
+                add(entry);
+            }
             return true;
         }catch(Exception ex){
             ex.printStackTrace();

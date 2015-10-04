@@ -10,6 +10,7 @@ import org.hyperion.rs2.model.content.jge.entry.claim.ClaimSlot;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
+import org.hyperion.rs2.model.log.LogEntry;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -394,6 +395,7 @@ public class JGrandExchangeTracker {
                     nullifyNewEntry();
                     showEntries();
                     JGrandExchange.getInstance().submit(entry);
+                    player.getLogManager().add(LogEntry.geEntryAdded(entry));
                 }, "You are not building a new entry right now!");
                 return true;
             case CANCEL:

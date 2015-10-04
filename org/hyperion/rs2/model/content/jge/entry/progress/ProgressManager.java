@@ -21,6 +21,10 @@ public class ProgressManager {
         list = new ArrayList<>();
     }
 
+    public Progress last(){
+        return list.get(list.size()-1);
+    }
+
     public ProgressManager copy(){
         final ProgressManager copy = new ProgressManager(entry);
         stream().map(Progress::copy)

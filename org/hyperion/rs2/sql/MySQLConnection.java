@@ -4,10 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -139,6 +136,15 @@ public abstract class MySQLConnection extends SQLConnection {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	public PreparedStatement prepare(final String sql){
+		try{
+			return connection.prepareStatement(sql);
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return null;
 		}
 	}
 

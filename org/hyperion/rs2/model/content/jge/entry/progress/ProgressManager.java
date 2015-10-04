@@ -80,6 +80,8 @@ public class ProgressManager {
 
     public static ProgressManager fromSaveString(final Entry entry, final String progress){
         final ProgressManager manager = new ProgressManager(entry);
+        if(progress.isEmpty())
+            return manager;
         Stream.of(progress.split(","))
                 .map(Progress::fromSaveString)
                 .forEach(manager::add);

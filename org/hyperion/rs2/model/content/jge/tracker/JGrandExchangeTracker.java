@@ -108,7 +108,8 @@ public class JGrandExchangeTracker {
     }
 
     public boolean canOpenInterface(){
-        return true;
+        return !player.getLocation().inPvPArea()
+                && !player.getLocation().inFunPk();
     }
 
     public void openInterface(){

@@ -2104,5 +2104,21 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("ge", Rank.PLAYER){
+			public boolean execute(final Player player, final String input) throws Exception{
+				Magic.teleport(player, Location.create(3009, 3383, 0), false);
+				return true;
+			}
+		});
+
+		submit(new Command("reloadgeblacklist", Rank.DEVELOPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				player.sendf("Reloaded blacklist: " + ItemInfo.geBlacklist.reload());
+				return true;
+			}
+		});
 	}
+
 }

@@ -1357,7 +1357,7 @@ public class DialogueManager {
 
 			case 403:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
-						"Unfortunately this name is already taken,","please choose an other name");
+						"Unfortunately this name is already taken,", "please choose an other name");
 				player.getInterfaceState().setNextDialogueId(0, 404);
 				break;
 			case 404:
@@ -1367,17 +1367,15 @@ public class DialogueManager {
 				break;
 			case 405:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
-						"Please remember this username very well,","@red@next time you have to log in with this new name!","Please confirm this name.");
+						"Please remember this username very well,", "@red@next time you have to log in with this new name!", "Please confirm this name.");
 				player.getInterfaceState().setNextDialogueId(0, 404);
 				break;
 			case 406:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
-						"You have entered different usernames.","Please re-enter your name.");
+						"You have entered different usernames.", "Please re-enter your name.");
 				player.getExtraData().remove("rename");
 				player.getInterfaceState().setNextDialogueId(0, 404);
 				break;
-
-
 
 			case 500:
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
@@ -1507,6 +1505,14 @@ public class DialogueManager {
 			case 542:
 				player.forceMessage("I have " + (player.getPoints().getVotingPoints() == 0 ? "no" : player.getPoints().getVotingPoints()) + " " + (player.getPoints().getVotingPoints() == 1 ? "voting point" : "voting points") + ".");
 				player.getActionSender().removeChatboxInterface();
+				break;
+			case 600:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getInterfaceState().setStringListener("ge_set_quantity");
+				break;
+			case 601:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getInterfaceState().setStringListener("ge_set_price");
 				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

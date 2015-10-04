@@ -30,7 +30,9 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.ge.Offer;
+import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
@@ -876,21 +878,6 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("reloadpunish")) {
             boolean loaded = PunishmentManager.getInstance().load();
             player.sendMessage("Loaded punishments" + loaded);
-        }
-
-        if (commandStart.equalsIgnoreCase("openge")) {
-            //player.getGrandExchange().openOffers();
-            player.getGrandExchange().openOffers();
-        }
-
-        if (commandStart.equalsIgnoreCase("selectitem")) {
-            try {
-                int itemID = Integer.valueOf(as[1]);
-                System.out.println("Selecting item: " + itemID);
-                player.getGrandExchange().setNewOffer(new Offer(itemID, 1, 1337, player.getGrandExchange().getNewOffer().getType()));
-                player.getGrandExchange().refreshNewOffer();
-            } catch (Exception e) {
-            }
         }
 
         if (commandStart.equalsIgnoreCase("startevent")) {
@@ -2397,6 +2384,14 @@ public class CommandPacketHandler implements PacketHandler {
             if (commandStart.equals("home")) {
                 Magic.teleport(player, Edgeville.LOCATION, false);
                 return;
+            }
+
+            if (commandStart.equalsIgnoreCase("selectitem")) {
+                try{
+                    player.getGrandExchangeTracker().selectItem(Integer.parseInt(as[1]), Entry.Type.BUYING);
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
             }
 
             if (commandStart.equalsIgnoreCase("setlvl5")) { // remove the 5 to activate command

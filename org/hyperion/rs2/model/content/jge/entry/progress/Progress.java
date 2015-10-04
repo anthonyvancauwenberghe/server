@@ -22,4 +22,23 @@ public class Progress {
 
         totalPrice = quantity * unitPrice;
     }
+
+    public Progress copy(){
+        return new Progress(playerName, type, unitPrice, quantity);
+    }
+
+    public String toSaveString(){
+        return String.format("%s:%s:%d:%d", playerName, type.name(), unitPrice, quantity);
+    }
+
+    public static Progress fromSaveString(final String progress){
+        final String[] split = progress.split(":");
+        return new Progress(
+                split[0],
+                Entry.Type.valueOf(split[1]),
+                Integer.parseInt(split[2]),
+                Integer.parseInt(split[3])
+        );
+    }
+
 }

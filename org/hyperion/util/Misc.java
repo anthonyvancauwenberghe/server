@@ -315,4 +315,19 @@ public class Misc {
         return String.format(format, getPercentage(remaining, original));
     }
 
+	public static int expandNumber(final String s){
+		if(s.matches("\\d+(\\.\\d+)?k"))
+			return (int)(Double.parseDouble(s.substring(0, s.length()-1)) * 1_000d);
+		else if(s.matches("\\d+(\\.\\d+)?m"))
+			return (int)(Double.parseDouble(s.substring(0, s.length()-1)) * 1_000_000d);
+		else if(s.matches("\\d+(\\.\\d+)?b"))
+			return (int)(Double.parseDouble(s.substring(0, s.length()-1)) * 1_000_000_000d);
+		else
+			return Integer.parseInt(s);
+	}
+
+	public static String formatNumber(final int number){
+		return null;
+	}
+
 }

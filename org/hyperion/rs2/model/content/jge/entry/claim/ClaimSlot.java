@@ -1,6 +1,9 @@
 package org.hyperion.rs2.model.content.jge.entry.claim;
 
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+
+import java.util.Optional;
 
 /**
  * Created by Administrator on 9/24/2015.
@@ -12,6 +15,10 @@ public class ClaimSlot {
 
     public ClaimSlot(final int itemId, final int itemQuantity){
         set(itemId, itemQuantity);
+    }
+
+    public ClaimSlot copy(){
+        return new ClaimSlot(itemId, itemQuantity);
     }
 
     public int itemId(){
@@ -41,6 +48,17 @@ public class ClaimSlot {
     public void set(final int itemId, final int itemQuantity){
         this.itemId = itemId;
         this.itemQuantity = itemQuantity;
+        if(itemId != -1){
+            final ItemDefinition def = ItemDefinition.forId(itemId);
+            if(def != null && def.isNoteable() && def.getNotedId() != -1)
+                this.itemId = def.getNotedId();
+        }
+    }
+
+    public void set(final Item item){
+        if(item != null)
+            set(item.getId(), item.getCount());
+        else reset();
     }
 
     public void reset(){
@@ -49,10 +67,22 @@ public class ClaimSlot {
     }
 
     public Item item(){
-        return Item.create(itemId, itemQuantity);
+        return valid() ? Item.create(itemId, itemQuantity) : null;
+    }
+
+    public String toSaveString(){
+        return String.format("%d:%d", itemId, itemQuantity);
     }
 
     public static ClaimSlot createDefault(){
         return new ClaimSlot(-1, 0);
+    }
+
+    public static ClaimSlot fromSaveString(final String claim){
+        final String[] split = claim.split(":");
+        return new ClaimSlot(
+                Integer.parseInt(split[0]),
+                Integer.parseInt(split[1])
+        );
     }
 }

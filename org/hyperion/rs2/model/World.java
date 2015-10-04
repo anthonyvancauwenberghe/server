@@ -42,6 +42,8 @@ import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.BountyHunterLogout;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.jge.event.PulseGrandExchangeEvent;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
@@ -454,12 +456,14 @@ public class World {
             //playersSQL.init();
             //banManager = new BanManager(logsSQL);
             PunishmentManager.init(logsSQL);
+            System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
             //this.banManager.init();
             this.enemies = new ServerEnemies();
             SpawnCommand.init();
             NewcomersLogging.getLogging().init();
             submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));
+            submit(new PulseGrandExchangeEvent());
 
             System.out.println("Loaded achievements: " + Achievements.load());
         }

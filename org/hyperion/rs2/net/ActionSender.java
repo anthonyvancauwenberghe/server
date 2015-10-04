@@ -389,6 +389,8 @@ public class ActionSender {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        player.getGrandExchangeTracker().notifyChanges(false);
     }
 
     /**

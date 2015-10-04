@@ -10,6 +10,8 @@ import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.jge.entry.progress.Progress;
 import org.hyperion.rs2.model.log.util.LogUtils;
 
 public class LogEntry implements Comparable<LogEntry>{
@@ -27,7 +29,8 @@ public class LogEntry implements Comparable<LogEntry>{
         COMMAND("command.log", "command"),
         GAMBLE("gamble.log", "gamble", "gambling", "stake"),
         YELL("yell.log", "yell"),
-        BOB("bobdrops.log", "bob drops");
+        BOB("bobdrops.log", "bob drops"),
+        GRAND_EXCHANGE("ge.log", "ge");
 
         public final String path;
         public final boolean save;
@@ -248,6 +251,22 @@ public class LogEntry implements Comparable<LogEntry>{
                         npc.getDefinition().getName(),
                         npc.getDefinition().getId(),
                         n, n >= 55 ? "Won" : "Lost")
+        );
+    }
+
+    public static LogEntry geEntryAdded(final Entry entry){
+        return new LogEntry(Category.GRAND_EXCHANGE,
+                String.format("Slot %d - %s %,d %s (%d) @ %,d %s",
+                        entry.slot, entry.type, entry.itemQuantity,
+                        entry.item().getDefinition().getName(), entry.itemId,
+                        entry.unitPrice, entry.currency
+                ));
+    }
+
+    public static LogEntry geProgress(final Progress progress){
+        return new LogEntry(Category.GRAND_EXCHANGE,
+                String.format("%s %,d by %s @ %,d each",
+                        progress.type, progress.quantity, progress.playerName, progress.unitPrice)
         );
     }
 }

@@ -371,6 +371,12 @@ public class NpcClickHandler {
 			case 285: // Robes Shop
 				ShopManager.open(player, 56);
 				break;
+			case 6528:
+			case 6529:
+			case 6530:
+			case 6531:
+				player.getGrandExchangeTracker().openInterface();
+				break;
 		}
 	}
 }

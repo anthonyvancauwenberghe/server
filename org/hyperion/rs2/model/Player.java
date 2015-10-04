@@ -10,7 +10,6 @@ import org.hyperion.rs2.News;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -21,12 +20,8 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
+import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.bank.BankField;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -39,13 +34,10 @@ import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
+import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
-import org.hyperion.rs2.model.content.misc.ItemDropping;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc.Mail;
-import org.hyperion.rs2.model.content.misc.SkillingData;
-import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
@@ -71,7 +63,10 @@ import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
 import org.hyperion.rs2.sql.SQLite;
-import org.hyperion.rs2.util.*;
+import org.hyperion.rs2.util.AccountLogger;
+import org.hyperion.rs2.util.AccountValue;
+import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -2715,5 +2710,13 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int getTreasureScroll() {
         return treasureScroll;
     }
+
+	private JGrandExchangeTracker geTracker;
+
+	public JGrandExchangeTracker getGrandExchangeTracker(){
+		if(geTracker == null)
+			geTracker = new JGrandExchangeTracker(this);
+		return geTracker;
+	}
 
 }

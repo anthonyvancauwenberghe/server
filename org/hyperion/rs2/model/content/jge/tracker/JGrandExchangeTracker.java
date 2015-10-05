@@ -111,10 +111,11 @@ public class JGrandExchangeTracker {
     }
 
     public boolean canOpenInterface(){
-        return !player.getLocation().inPvPArea()
+        return Rank.hasAbility(player, Rank.DEVELOPER)
+                || (!player.getLocation().inPvPArea()
                 && !player.getLocation().inFunPk()
                 && !player.getLocation().inDuel()
-                && !player.getLocation().inDungeonLobby();
+                && !player.getLocation().inDungeonLobby());
     }
 
     public void openInterface(){

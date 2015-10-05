@@ -73,6 +73,10 @@ public class EntryBuilder {
             final int max = player.getInventory().getCount(itemId);
             if(max > itemQuantity)
                 this.itemQuantity = max;
+        }else if(type == Entry.Type.BUYING){
+            final int max = player.getInventory().getCount(currency.itemId);
+            if(totalPrice() > max)
+                this.itemQuantity = max / unitPrice;
         }
         return true;
     }

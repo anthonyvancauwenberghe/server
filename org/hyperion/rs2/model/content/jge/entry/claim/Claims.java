@@ -1,9 +1,11 @@
 package org.hyperion.rs2.model.content.jge.entry.claim;
 
 import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.util.Misc;
 
 /**
  * Created by Administrator on 9/24/2015.
@@ -81,14 +83,15 @@ public class Claims {
                 slot.set(item);
                 return false;
             }
-            final String name = String.format("%s x %,d", item.getDefinition().getName(), item.getCount());
+            final String name = String.format(item.getCount() == 1 ? Misc.aOrAn(item.getDefinition().getName()) : item.getCount() + " " + item.getDefinition().getName() + (item.getCount() > 1 ? "s" : ""));
+            //final String name = String.format("%s x %,d", item.getDefinition().getName(), item.getCount());
             player.sendf("%s has been added to your inventory", name);
             player.getInventory().add(item);
             return true;
-        }else{
+        } else {
             final int free = player.getInventory().freeSlots();
             if(free < 1){
-                player.sendf("Please allow at least one free slot!");
+                player.sendf("You need to have at least 1 free inventory slot!");
                 return false;
             }
             final int quantity = free > slot.itemQuantity() ? slot.itemQuantity() : free;
@@ -101,7 +104,7 @@ public class Claims {
                 return false;
             }
             player.getInventory().add(Item.create(slot.itemId(), quantity));
-            final String name = String.format("%s x %,d", item.getDefinition().getName(), quantity);
+            final String name = String.format(quantity == 1 ? Misc.aOrAn(item.getDefinition().getName()) : item.getCount() + " " + item.getDefinition().getName() + (quantity > 1 ? "s" : ""));
             player.sendf("%s has been added to your inventory", name);
             return true;
         }

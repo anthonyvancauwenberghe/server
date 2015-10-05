@@ -85,7 +85,7 @@ public class JGrandExchangeTracker {
             if(alert)
                 player.sendf("Alert##Grand Exchange##One or more of your offers have been updated!");
             else
-                player.sendf("[Grand Exchange] One or more of your offers have been updated!");
+                player.sendf("One or more of your Grand Exchange offers have been updated!");
         }
 
     }

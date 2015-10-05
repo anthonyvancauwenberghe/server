@@ -118,12 +118,16 @@ public class JGrandExchangeTracker {
                 && !player.getLocation().inDungeonLobby());
     }
 
-    public void openInterface(){
+    public void openInterface(final EntryManager entries){
         if(!canOpenInterface()){
             player.sendf("You cannot use the Grand Exchange right now!");
             return;
         }
         Entries.open(player, entries);
+    }
+
+    public void openInterface(){
+        openInterface(entries);
     }
 
     public boolean buildingNewEntry(){

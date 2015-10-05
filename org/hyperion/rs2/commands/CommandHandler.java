@@ -21,6 +21,8 @@ import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.PotionDecanting;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
@@ -2116,6 +2118,56 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) throws Exception{
 				player.sendf("Reloaded blacklist: " + ItemInfo.geBlacklist.reload());
+				return true;
+			}
+		});
+
+		submit(new Command("enablege", Rank.DEVELOPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				JGrandExchange.enabled = true;
+				player.sendf("Grand Exchange is now enabled");
+				return true;
+			}
+		});
+
+		submit(new Command("disablege", Rank.DEVELOPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				JGrandExchange.enabled = false;
+				player.sendf("Grand Exchange is now disabled");
+				return true;
+			}
+		});
+
+		submit(new Command("gestats", Rank.HELPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				player.sendf("Grand Exchange is currently %s", JGrandExchange.enabled ? "@gre@enabled" : "@red@disabled");
+				player.sendf("Number of buying entries: %,d", JGrandExchange.getInstance().get(Entry.Type.BUYING).size());
+				player.sendf("Number of selling entries: %,d", JGrandExchange.getInstance().get(Entry.Type.SELLING).size());
+				return true;
+			}
+		});
+
+		submit(new Command("openge", Rank.SUPER_DONATOR){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				player.getGrandExchangeTracker().openInterface();
+				return true;
+			}
+		});
+
+		submit(new Command("viewge", Rank.DEVELOPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				final String targetName = filterInput(input).trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding player: %s", targetName);
+					return false;
+				}
+				player.getGrandExchangeTracker().openInterface(target.getGrandExchangeTracker().entries);
 				return true;
 			}
 		});

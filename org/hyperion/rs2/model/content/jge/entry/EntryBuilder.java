@@ -69,6 +69,15 @@ public class EntryBuilder {
         if(itemQuantity < 1 || itemQuantity() == itemQuantity)
             return false;
         this.itemQuantity = itemQuantity;
+        if(type == Entry.Type.SELLING){
+            final int max = player.getInventory().getCount(itemId);
+            if(max > itemQuantity)
+                this.itemQuantity = max;
+        }else if(type == Entry.Type.BUYING){
+            final int max = player.getInventory().getCount(currency.itemId);
+            if(totalPrice() > max)
+                this.itemQuantity = max / unitPrice;
+        }
         return true;
     }
 
@@ -96,6 +105,11 @@ public class EntryBuilder {
         if(unitPrice < 1 || unitPrice() == unitPrice)
             return false;
         this.unitPrice = unitPrice;
+        if(type == Entry.Type.BUYING){
+            final int max = player.getInventory().getCount(currency.itemId);
+            if(totalPrice() > max)
+                this.unitPrice = max / itemQuantity;
+        }
         return true;
     }
 

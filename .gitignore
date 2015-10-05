@@ -221,6 +221,9 @@ data/clandata.bin
 config.cfg
 .cache
 /data/characters/*.txt
+/data/characters/mergedchars/*.txt
+/data/characters/arterochars/*.txt
+/data/characters/instantchars/*.txt
 /data/characters/wiped/*.txt
 /logs/*.txt
 .idea/

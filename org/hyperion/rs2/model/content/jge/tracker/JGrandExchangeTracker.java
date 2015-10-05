@@ -63,7 +63,7 @@ public class JGrandExchangeTracker {
             if(ItemInfo.geBlacklist.check(player, definition))
                 return;
             if(e.itemId(itemId)){
-                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId()));
+                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite()));
                 if(e.itemQuantity() < 1){
                     e.itemQuantity(1);
                     JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
@@ -81,12 +81,13 @@ public class JGrandExchangeTracker {
     }
 
     public void notifyChanges(final boolean alert){
-        if(!player.getGrandExchangeTracker().entries.anyMatch(e -> !e.claims.empty()))
-            return;
-        if(alert)
-            player.sendf("Alert##Grand Exchange##One or more of your offers have been updated!");
-        else
-            player.sendf("[Grand Exchange] One or more of your offers have been updated!");
+        if(player.getGrandExchangeTracker().entries.anyMatch(e -> !e.cancelled && !e.claims.empty())){
+            if(alert)
+                player.sendf("Alert##Grand Exchange##One or more of your offers have been updated!");
+            else
+                player.sendf("One or more of your Grand Exchange offers have been updated!");
+        }
+
     }
 
     public Optional<Entry> activeEntryOpt(){
@@ -110,18 +111,23 @@ public class JGrandExchangeTracker {
     }
 
     public boolean canOpenInterface(){
-        return !player.getLocation().inPvPArea()
+        return Rank.hasAbility(player, Rank.DEVELOPER)
+                || (!player.getLocation().inPvPArea()
                 && !player.getLocation().inFunPk()
                 && !player.getLocation().inDuel()
-                && !player.getLocation().inDungeonLobby();
+                && !player.getLocation().inDungeonLobby());
     }
 
-    public void openInterface(){
+    public void openInterface(final EntryManager entries){
         if(!canOpenInterface()){
             player.sendf("You cannot use the Grand Exchange right now!");
             return;
         }
         Entries.open(player, entries);
+    }
+
+    public void openInterface(){
+        openInterface(entries);
     }
 
     public boolean buildingNewEntry(){
@@ -323,7 +329,7 @@ public class JGrandExchangeTracker {
                 return true;
             case EQUATE_PRICE:
                 ifNewEntry(e -> {
-                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId())))
+                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite())))
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before equating price");
                 return true;
@@ -341,6 +347,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CONFIRM:
                 ifNewEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;
@@ -353,6 +363,7 @@ public class JGrandExchangeTracker {
                         player.sendf("This slot is already in use");
                         return;
                     }
+                    Item taken = null;
                     switch(e.type()){
                         case BUYING: {
                             final int max = player.getInventory().getCount(e.currency().itemId);
@@ -366,7 +377,7 @@ public class JGrandExchangeTracker {
                                 player.sendf("Change the unit price and quantity first!");
                                 return;
                             }
-                            if(player.getInventory().remove(Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
+                            if(player.getInventory().remove(taken = Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
                                 player.sendf("Something went wrong!");
                                 return;
                             }
@@ -378,7 +389,7 @@ public class JGrandExchangeTracker {
                                 player.sendf("You don't have that many %s!", e.item().getDefinition().getName());
                                 return;
                             }
-                            if(player.getInventory().remove(Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
+                            if(player.getInventory().remove(taken = Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
                                 player.sendf("Something went wrong!");
                                 return;
                             }
@@ -387,6 +398,7 @@ public class JGrandExchangeTracker {
                     }
                     final Entry entry = newEntry.build();
                     if(!JGrandExchange.getInstance().insert(entry)){
+                        player.getInventory().add(taken);
                         player.sendf("Please try again later!");
                         return;
                     }
@@ -400,6 +412,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CANCEL:
                 ifActiveEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;
@@ -436,6 +452,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_PROGRESS_SLOT:
                 ifActiveEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;
@@ -459,6 +479,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_RETURN_SLOT:
                 ifActiveEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;

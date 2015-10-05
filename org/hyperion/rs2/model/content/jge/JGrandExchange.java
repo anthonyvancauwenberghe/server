@@ -20,6 +20,8 @@ import java.util.stream.Stream;
  */
 public class JGrandExchange {
 
+    public static boolean enabled = true;
+
     private static JGrandExchange instance;
 
     private static final Function<Entry, Object> ITEM_KEY = e -> e.itemId;
@@ -176,6 +178,8 @@ public class JGrandExchange {
     }
 
     public void submit(final Entry submitEntry){
+        if(!enabled)
+            return;
         final Optional<Entry> opt = stream(submitEntry.type.opposite())
                 .filter(e -> {
                     if(e.cancelled || e.progress.completed() || e.itemId != submitEntry.itemId)
@@ -273,15 +277,16 @@ public class JGrandExchange {
         return !get(playerOrItemId).isEmpty();
     }
 
-    public IntSummaryStatistics itemUnitPriceStats(final int itemId){
+    public IntSummaryStatistics itemUnitPriceStats(final int itemId, final Entry.Type type){
         return stream(itemId)
+                .filter(e -> e.type == type)
                 .mapToInt(e -> e.unitPrice)
                 .summaryStatistics();
     }
 
-    public int defaultItemUnitPrice(final int itemId){
+    public int defaultItemUnitPrice(final int itemId, final Entry.Type type){
         return contains(itemId) ?
-                (int)itemUnitPriceStats(itemId).getAverage()
+                (int)itemUnitPriceStats(itemId, type).getAverage()
                 : DEFAULT_UNIT_PRICE;
     }
 

@@ -181,7 +181,7 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/ytcampaign#url#");
+            player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 

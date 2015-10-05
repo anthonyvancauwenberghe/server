@@ -341,6 +341,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CONFIRM:
                 ifNewEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;
@@ -400,6 +404,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CANCEL:
                 ifActiveEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;
@@ -436,6 +444,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_PROGRESS_SLOT:
                 ifActiveEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;
@@ -459,6 +471,10 @@ public class JGrandExchangeTracker {
                 return true;
             case CLAIM_RETURN_SLOT:
                 ifActiveEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
                     if(!canOpenInterface()){
                         player.sendf("You cannot use the Grand Exchange right now!");
                         return;

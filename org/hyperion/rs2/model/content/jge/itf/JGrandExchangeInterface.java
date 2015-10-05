@@ -111,7 +111,7 @@ public final class JGrandExchangeInterface {
         public static void set(final Player player, final EntryBuilder entry){
             setType(player, entry != null ? entry.type() : null);
             setItem(player, entry != null ? entry.item() : null);
-            setDefaultUnitPrice(player, entry != null && entry.validItem() ? JGrandExchange.getInstance().defaultItemUnitPrice(entry.itemId(), entry.type().opposite()) : -1, entry != null ? entry.currency() : null);
+            setDefaultUnitPrice(player, entry != null && entry.validItem() ? JGrandExchange.getInstance().defaultItemUnitPrice(entry.itemId(), entry.type().opposite(), entry.currency()) : -1, entry != null ? entry.currency() : null);
             setUnitPrice(player, entry != null ? entry.unitPrice() : -1, entry != null ? entry.currency() : null);
             setTotalPrice(player, entry != null ? entry.totalPrice() : -1, entry != null ? entry.currency() : null);
             setQuantity(player, entry != null ? entry.itemQuantity() : -1);

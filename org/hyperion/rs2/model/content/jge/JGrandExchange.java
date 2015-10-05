@@ -192,6 +192,8 @@ public class JGrandExchange {
                         return false;
                     if(e.playerName.equalsIgnoreCase(submitEntry.playerName))
                         return false;
+                    if(e.currency != submitEntry.currency)
+                        return false;
                     //maybe some other criteria
                     return true;
                 })

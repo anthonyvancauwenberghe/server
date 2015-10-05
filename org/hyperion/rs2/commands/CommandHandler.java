@@ -2149,6 +2149,14 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("openge", Rank.SUPER_DONATOR){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				player.getGrandExchangeTracker().openInterface();
+				return true;
+			}
+		});
 	}
 
 }

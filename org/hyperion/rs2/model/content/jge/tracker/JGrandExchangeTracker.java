@@ -357,6 +357,7 @@ public class JGrandExchangeTracker {
                         player.sendf("This slot is already in use");
                         return;
                     }
+                    Item taken = null;
                     switch(e.type()){
                         case BUYING: {
                             final int max = player.getInventory().getCount(e.currency().itemId);
@@ -370,7 +371,7 @@ public class JGrandExchangeTracker {
                                 player.sendf("Change the unit price and quantity first!");
                                 return;
                             }
-                            if(player.getInventory().remove(Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
+                            if(player.getInventory().remove(taken = Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
                                 player.sendf("Something went wrong!");
                                 return;
                             }
@@ -382,7 +383,7 @@ public class JGrandExchangeTracker {
                                 player.sendf("You don't have that many %s!", e.item().getDefinition().getName());
                                 return;
                             }
-                            if(player.getInventory().remove(Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
+                            if(player.getInventory().remove(taken = Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
                                 player.sendf("Something went wrong!");
                                 return;
                             }
@@ -391,6 +392,7 @@ public class JGrandExchangeTracker {
                     }
                     final Entry entry = newEntry.build();
                     if(!JGrandExchange.getInstance().insert(entry)){
+                        player.getInventory().add(taken);
                         player.sendf("Please try again later!");
                         return;
                     }

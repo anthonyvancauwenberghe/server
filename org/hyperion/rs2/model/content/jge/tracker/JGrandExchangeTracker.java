@@ -81,12 +81,13 @@ public class JGrandExchangeTracker {
     }
 
     public void notifyChanges(final boolean alert){
-        if(!player.getGrandExchangeTracker().entries.anyMatch(e -> !e.claims.empty()))
-            return;
-        if(alert)
-            player.sendf("Alert##Grand Exchange##One or more of your offers have been updated!");
-        else
-            player.sendf("[Grand Exchange] One or more of your offers have been updated!");
+        if(player.getGrandExchangeTracker().entries.anyMatch(e -> !e.cancelled && !e.claims.empty())){
+            if(alert)
+                player.sendf("Alert##Grand Exchange##One or more of your offers have been updated!");
+            else
+                player.sendf("[Grand Exchange] One or more of your offers have been updated!");
+        }
+
     }
 
     public Optional<Entry> activeEntryOpt(){

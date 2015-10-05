@@ -2157,6 +2157,20 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("viewge", Rank.DEVELOPER){
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				final String targetName = filterInput(input).trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding player: %s", targetName);
+					return false;
+				}
+				player.getGrandExchangeTracker().openInterface(target.getGrandExchangeTracker().entries);
+				return true;
+			}
+		});
 	}
 
 }

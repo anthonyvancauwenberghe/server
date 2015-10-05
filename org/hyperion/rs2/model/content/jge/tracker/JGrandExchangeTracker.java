@@ -63,7 +63,7 @@ public class JGrandExchangeTracker {
             if(ItemInfo.geBlacklist.check(player, definition))
                 return;
             if(e.itemId(itemId)){
-                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite()));
+                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency()));
                 if(e.itemQuantity() < 1){
                     e.itemQuantity(1);
                     JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
@@ -111,18 +111,23 @@ public class JGrandExchangeTracker {
     }
 
     public boolean canOpenInterface(){
-        return !player.getLocation().inPvPArea()
+        return Rank.hasAbility(player, Rank.DEVELOPER)
+                || (!player.getLocation().inPvPArea()
                 && !player.getLocation().inFunPk()
                 && !player.getLocation().inDuel()
-                && !player.getLocation().inDungeonLobby();
+                && !player.getLocation().inDungeonLobby());
     }
 
-    public void openInterface(){
+    public void openInterface(final EntryManager entries){
         if(!canOpenInterface()){
             player.sendf("You cannot use the Grand Exchange right now!");
             return;
         }
         Entries.open(player, entries);
+    }
+
+    public void openInterface(){
+        openInterface(entries);
     }
 
     public boolean buildingNewEntry(){
@@ -324,7 +329,7 @@ public class JGrandExchangeTracker {
                 return true;
             case EQUATE_PRICE:
                 ifNewEntry(e -> {
-                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite())))
+                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency())))
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before equating price");
                 return true;

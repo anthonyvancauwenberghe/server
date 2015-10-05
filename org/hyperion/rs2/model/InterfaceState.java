@@ -315,7 +315,7 @@ public class InterfaceState {
 		player.getActionSender().sendEnterStringInterface();
 	}
 
-	private String string_input_listener = "";
+	public String string_input_listener = "";
 
 	public boolean receiveStringListener(String result) {
 		if (string_input_listener == null || string_input_listener.length() == 0) {

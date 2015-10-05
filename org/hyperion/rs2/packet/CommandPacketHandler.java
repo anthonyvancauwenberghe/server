@@ -1135,6 +1135,21 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
 
+        if (commandStart.equalsIgnoreCase("resetkdr")) {
+            try {
+                String name = withCaps.substring(9);
+                Player target = World.getWorld().getPlayer(name);
+                if (target != null) {
+                    target.setKillCount(0);
+                    target.setDeathCount(0);
+                } else {
+                    player.getActionSender().sendMessage("Player not online");
+                }
+            } catch (NullPointerException | StringIndexOutOfBoundsException e) {
+                return;
+            }
+        }
+
         if (commandStart.equalsIgnoreCase("wildyboss")) {
             if (WildernessBossEvent.currentBoss != null) {
                 player.setTeleportTarget(WildernessBossEvent.currentBoss.getLocation());
@@ -2044,20 +2059,7 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
 
-        if (commandStart.equalsIgnoreCase("resetkdr")) {
-            try {
-                String name = withCaps.substring(9);
-                Player target = World.getWorld().getPlayer(name);
-                if (target != null) {
-                    target.setKillCount(0);
-                    target.setDeathCount(0);
-                } else {
-                    player.getActionSender().sendMessage("Player not online");
-                }
-            } catch (NullPointerException | StringIndexOutOfBoundsException e) {
-                return;
-            }
-        }
+
         if (commandStart.equalsIgnoreCase("unlock")) {
             final String string = s.replaceAll("unlock ", "").trim();
 

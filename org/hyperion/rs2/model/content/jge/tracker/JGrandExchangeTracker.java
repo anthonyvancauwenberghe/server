@@ -63,9 +63,9 @@ public class JGrandExchangeTracker {
             if(ItemInfo.geBlacklist.check(player, definition))
                 return;
             if(e.itemId(itemId)){
-                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency()));
+                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency()), false);
                 if(e.itemQuantity() < 1){
-                    e.itemQuantity(1);
+                    e.itemQuantity(1, false);
                     JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
                 }
                 JGrandExchangeInterface.NewEntry.setItem(player, e.item());

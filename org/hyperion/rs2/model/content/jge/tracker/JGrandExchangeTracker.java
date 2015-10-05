@@ -63,7 +63,7 @@ public class JGrandExchangeTracker {
             if(ItemInfo.geBlacklist.check(player, definition))
                 return;
             if(e.itemId(itemId)){
-                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite()));
+                e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency()));
                 if(e.itemQuantity() < 1){
                     e.itemQuantity(1);
                     JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
@@ -329,7 +329,7 @@ public class JGrandExchangeTracker {
                 return true;
             case EQUATE_PRICE:
                 ifNewEntry(e -> {
-                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite())))
+                    if(e.validItem() && e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency())))
                         NewEntry.setUnitPriceAndTotalPrice(player, e.unitPrice(), e.totalPrice(), e.currency());
                 }, "You must create a new entry before equating price");
                 return true;

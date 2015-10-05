@@ -277,15 +277,16 @@ public class JGrandExchange {
         return !get(playerOrItemId).isEmpty();
     }
 
-    public IntSummaryStatistics itemUnitPriceStats(final int itemId){
+    public IntSummaryStatistics itemUnitPriceStats(final int itemId, final Entry.Type type){
         return stream(itemId)
+                .filter(e -> e.type == type)
                 .mapToInt(e -> e.unitPrice)
                 .summaryStatistics();
     }
 
-    public int defaultItemUnitPrice(final int itemId){
+    public int defaultItemUnitPrice(final int itemId, final Entry.Type type){
         return contains(itemId) ?
-                (int)itemUnitPriceStats(itemId).getAverage()
+                (int)itemUnitPriceStats(itemId, type).getAverage()
                 : DEFAULT_UNIT_PRICE;
     }
 

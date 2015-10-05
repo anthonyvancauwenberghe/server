@@ -105,7 +105,7 @@ public class Claims {
                 return false;
             }
             player.getInventory().add(Item.create(slot.itemId(), quantity));
-            final String name = String.format(quantity == 1 ? Misc.aOrAn(item.getDefinition().getName()) : item.getCount() + " " + item.getDefinition().getName() + (quantity > 1 ? "s" : ""));
+            final String name = (quantity == 1 ? Misc.aOrAn(item.getDefinition().getName()) : item.getCount()) + " " + item.getDefinition().getName() + (quantity > 1 ? "s" : "");
             player.sendf("%s has been added to your inventory", name);
             return true;
         }

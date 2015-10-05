@@ -959,7 +959,7 @@ public class ActionSender {
     public ActionSender removeAllInterfaces() {
         PacketBuilder bldr = new PacketBuilder(219);
         player.write(bldr.toPacket());
-        player.getInterfaceState().setStringListener("");
+        player.getInterfaceState().string_input_listener = ""; //remove string listeners when interface closes
         return this;
     }
 

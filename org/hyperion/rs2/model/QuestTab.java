@@ -7,6 +7,7 @@ import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -270,14 +271,16 @@ public class QuestTab {
             if (Rank.hasAbility(player, rank)) {
                 player.getActionSender().sendString((Rank.getPrimaryRank(player).equals(rank) ? "@gre@" : "@or1@") + rank.toString(), getId(i));
                 player.getActionSender().sendTooltip(getId(i), (Rank.getPrimaryRank(player).equals(rank) ? "" : "Set rank to " + rank.toString()));
+                i++;
                 if (!hasRank && rank != Rank.PLAYER)
                     hasRank = true;
             } else {
                 player.getActionSender().sendString("", getId(i));
                 player.getActionSender().sendTooltip(getId(i), "");
             }
-            i++;
         }
+        if(!hasRank)
+            player.getActionSender().sendString("", getId(36));
         player.getActionSender().sendString(!hasRank ? "" : "@yel@Available ranks", getId(35));
         player.getActionSender().sendFont(getId(35), 2);
     }
@@ -289,12 +292,20 @@ public class QuestTab {
     }
 
     static {
-        for (Rank rank : Rank.values()) {
-            ActionsManager.getManager().submit(getClickId((36 + rank.ordinal())), new ButtonAction() {
+        for(int i = 0; i < Rank.values().length; i++) {
+            final int i2 = i;
+            ActionsManager.getManager().submit(getClickId(36 + i), new ButtonAction() {
                 @Override
                 public void handle(Player player, int id) {
-                    if (Rank.hasAbility(player, rank)) {
-                        player.setPlayerRank(Rank.setPrimaryRank(player, rank));
+                    List<Rank> playerRanks = new ArrayList<>();
+                    for(Rank rank : Rank.values()) {
+                        if(Rank.hasAbility(player, rank))
+                            playerRanks.add(rank);
+                    }
+                    if(i2 >= playerRanks.size())
+                        return;
+                    if(Rank.hasAbility(player, playerRanks.get(i2))) {
+                        player.setPlayerRank(Rank.setPrimaryRank(player, playerRanks.get(i2)));
                         player.getQuestTab().sendRankInfo();
                     }
                 }

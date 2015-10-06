@@ -144,7 +144,7 @@ public class JGrandExchange {
     }
 
     public boolean load(){
-        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries WHERE")){
+        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
             while(rs.next()){
                 final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
                 final String playerName = rs.getString("playerName");

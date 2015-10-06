@@ -182,7 +182,7 @@ public class JGrandExchange {
             return;
         final Optional<Entry> opt = stream(submitEntry.type.opposite())
                 .filter(e -> {
-                    if(e.cancelled || e.progress.completed() || e.itemId != submitEntry.itemId)
+                    if(e.cancelled || e.progress.completed() || e.progress.remainingQuantity() == 0 || e.itemId != submitEntry.itemId)
                         return false;
                     if(e.type != submitEntry.type.opposite())
                         return false;

@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.jge.entry.claim;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.util.TextUtils;
@@ -77,37 +78,19 @@ public class Claims {
             return true;
         }
         final Item item = slot.item();
-        if(player.getInventory().hasRoomFor(item)){
-            slot.reset();
-            if(!JGrandExchange.getInstance().updateClaims(entry)){
-                player.sendf("Please try again later!");
-                slot.set(item);
-                return false;
-            }
-            final String name = (item.getCount() == 1 ? TextUtils.ucFirst(Misc.aOrAn(item.getDefinition().getName())) : item.getCount()) + " " + item.getDefinition().getName() + (item.getCount() > 1 ? "s" : "");
-            //final String name = String.format("%s x %,d", item.getDefinition().getName(), item.getCount());
-            player.sendf("%s has been added to your inventory", name);
-            player.getInventory().add(item);
-            return true;
-        } else {
-            final int free = player.getInventory().freeSlots();
-            if(free < 1){
-                player.sendf("You need to have at least 1 free inventory slot!");
-                return false;
-            }
-            final int quantity = free > slot.itemQuantity() ? slot.itemQuantity() : free;
-            slot.add(-quantity);
-            if(slot.itemQuantity() == 0)
-                slot.reset();
-            if(!JGrandExchange.getInstance().updateClaims(entry)){
-                player.sendf("Please try again later!");
-                slot.set(item);
-                return false;
-            }
-            player.getInventory().add(Item.create(slot.itemId(), quantity));
-            final String name = (quantity == 1 ? Misc.aOrAn(item.getDefinition().getName()) : item.getCount()) + " " + item.getDefinition().getName() + (quantity > 1 ? "s" : "");
-            player.sendf("%s has been added to your inventory", name);
-            return true;
+        final String name = (item.getCount() == 1 ? TextUtils.ucFirst(Misc.aOrAn(item.getDefinition().getName())) : item.getCount()) + " " + item.getDefinition().getName() + (item.getCount() > 1 ? "s" : "");
+        if(!player.getBank().hasRoomFor(item)){
+            player.sendf("Not enough room in your bank for %s", name);
+            return false;
         }
+        slot.reset();
+        if(!JGrandExchange.getInstance().updateClaims(entry)){
+            player.sendf("Please try again later!");
+            slot.set(item);
+            return false;
+        }
+        player.sendf("%s has been added to your bank", name);
+        player.getBank().add(new BankItem(0, item.getId(), item.getCount()));
+        return true;
     }
 }

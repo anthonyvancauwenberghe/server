@@ -26,6 +26,7 @@ public class RefreshNewsEvent extends Event {
         List<Article> news;
         news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
         news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
+        news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
 
         List<Date> dates = new ArrayList<>();
         for(Article article : news) {
@@ -59,6 +60,7 @@ public class RefreshNewsEvent extends Event {
         List<Article> news;
         news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
         news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
+        news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
 
         List<Date> dates = new ArrayList<>();
         for(Article article : news) {

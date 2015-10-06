@@ -46,7 +46,7 @@ public class JGrandExchange {
     }
 
     public boolean delete(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("DELETE FROM ge_entries WHERE playerName = ? AND slot = ?")){
+        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET active = 0 WHERE playerName = ? AND slot = ?")){
             stmt.setString(1, entry.playerName);
             stmt.setByte(2, (byte)entry.slot);
             return stmt.executeUpdate() == 1;
@@ -127,7 +127,7 @@ public class JGrandExchange {
     }
 
     public boolean load(){
-        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
+        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries WHERE active = 1")){
             while(rs.next()){
                 final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
                 final String playerName = rs.getString("playerName");
@@ -182,7 +182,7 @@ public class JGrandExchange {
             return;
         final Optional<Entry> opt = stream(submitEntry.type.opposite())
                 .filter(e -> {
-                    if(e.cancelled || e.progress.completed() || e.itemId != submitEntry.itemId)
+                    if(e.cancelled || e.progress.completed() || e.progress.remainingQuantity() == 0 || e.itemId != submitEntry.itemId)
                         return false;
                     if(e.type != submitEntry.type.opposite())
                         return false;
@@ -212,7 +212,7 @@ public class JGrandExchange {
         switch(submitEntry.type){
             case BUYING:
                 //matchedEntry = selling entry
-                submitEntry.progress.add(matchedEntry.playerName, matchedEntry.unitPrice, maxQuantity);
+                submitEntry.progress.add(matchedEntry.playerName, Math.min(matchedEntry.unitPrice, submitEntry.unitPrice), maxQuantity);
                 submitEntry.claims.addProgress(submitEntry.itemId, maxQuantity);
                 if(submitEntry.unitPrice > matchedEntry.unitPrice)
                     submitEntry.claims.addReturn(submitEntry.currency.itemId, (submitEntry.unitPrice - matchedEntry.unitPrice) * maxQuantity);
@@ -221,7 +221,7 @@ public class JGrandExchange {
                 break;
             case SELLING:
                 //matchedEntry = buying entry
-                matchedEntry.progress.add(submitEntry.playerName, submitEntry.unitPrice, maxQuantity);
+                matchedEntry.progress.add(submitEntry.playerName, Math.min(submitEntry.unitPrice, submitEntry.unitPrice), maxQuantity);
                 matchedEntry.claims.addProgress(submitEntry.itemId, maxQuantity);
                 if(matchedEntry.unitPrice > submitEntry.unitPrice)
                     matchedEntry.claims.addReturn(matchedEntry.currency.itemId, (matchedEntry.unitPrice - submitEntry.unitPrice) * maxQuantity);

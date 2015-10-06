@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class RefreshNewsEvent extends Event {
 
-    public static List<Article> latestNews = new ArrayList();
+    public static Article[] latestNews = new Article[3];
     public static long lastNewsChange = System.currentTimeMillis();
 
     public RefreshNewsEvent() {
@@ -33,23 +33,20 @@ public class RefreshNewsEvent extends Event {
             dates.add(article.getDate());
         }
         Collections.sort(dates);
-        latestNews.clear();
         for(Article article : news) {
-            if(latestNews.size() == 3)
-                break;
             if(article.getDate().equals(dates.get(dates.size() - 1))) {
-                if(!latestNews.contains(article)) {
-                    latestNews.add(article);
+                if(!latestNews[0].equals(article)) {
+                    latestNews[0] = article;
                 }
             }
             if(article.getDate().equals(dates.get(dates.size() - 2))) {
-                if(!latestNews.contains(article)) {
-                    latestNews.add(article);
+                if(!latestNews[1].equals(article)) {
+                    latestNews[1] = article;
                 }
             }
             if(article.getDate().equals(dates.get(dates.size() - 3))) {
-                if(!latestNews.contains(article)) {
-                    latestNews.add(article);
+                if(!latestNews[2].equals(article)) {
+                    latestNews[2] = article;
                 }
             }
         }
@@ -67,28 +64,25 @@ public class RefreshNewsEvent extends Event {
             dates.add(article.getDate());
         }
         Collections.sort(dates);
-        Article oldNews = latestNews.get(0);
-        latestNews.clear();
+        Article oldNews = latestNews[0];
         for(Article article : news) {
-            if(latestNews.size() == 3)
-                break;
             if(article.getDate().equals(dates.get(dates.size() - 1))) {
-                if(!latestNews.contains(article)) {
-                    latestNews.add(article);
+                if(!latestNews[0].equals(article)) {
+                    latestNews[0] = article;
                 }
             }
             if(article.getDate().equals(dates.get(dates.size() - 2))) {
-                if(!latestNews.contains(article)) {
-                    latestNews.add(article);
+                if(!latestNews[1].equals(article)) {
+                    latestNews[1] = article;
                 }
             }
             if(article.getDate().equals(dates.get(dates.size() - 3))) {
-                if(!latestNews.contains(article)) {
-                    latestNews.add(article);
+                if(!latestNews[2].equals(article)) {
+                    latestNews[2] = article;
                 }
             }
         }
-        if(!oldNews.getContent().equalsIgnoreCase(latestNews.get(0).getContent())) {
+        if(!oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
             for(Player player : World.getWorld().getPlayers()) {
                 player.sendServerMessage("There is some news! Do ::news to check it out!");
                 lastNewsChange = System.currentTimeMillis();

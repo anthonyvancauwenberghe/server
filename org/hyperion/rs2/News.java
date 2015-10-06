@@ -37,12 +37,12 @@ public class News {
     }
 
     public void sendLink() {
-        Article newspost = RefreshNewsEvent.latestNews.get(selectedPost);
+        Article newspost = RefreshNewsEvent.latestNews[selectedPost];
         player.sendMessage("l4unchur13 " + newspost.getLink());
     }
 
     public boolean sendNewsPost(int id) {
-        Article newspost = RefreshNewsEvent.latestNews.get(id);
+        Article newspost = RefreshNewsEvent.latestNews[id];
 
         if(newspost == null)
             return false;

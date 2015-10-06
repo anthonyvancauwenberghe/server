@@ -287,9 +287,22 @@ public class JGrandExchange {
     }
 
     public int defaultItemUnitPrice(final int itemId, final Entry.Type type, final Entry.Currency currency){
-        return contains(itemId) ?
-                (int)itemUnitPriceStats(itemId, type, currency).getAverage()
-                : DEFAULT_UNIT_PRICE;
+        try(final PreparedStatement stmt = sql.prepare("SELECT AVG(unitPrice) FROM ge_entries WHERE active = 0 AND itemId = ? AND type = ? AND currency = ?")){
+            stmt.setShort(1, (short)itemId);
+            stmt.setString(2, type.name());
+            stmt.setString(3, currency.name());
+            try(final ResultSet rs = stmt.executeQuery()){
+                if(!rs.next())
+                    return DEFAULT_UNIT_PRICE;
+                final int avg = (int)Math.round(rs.getDouble(1));
+                return avg < 1 ? DEFAULT_UNIT_PRICE : avg;
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+            return contains(itemId) ?
+                    (int)itemUnitPriceStats(itemId, type, currency).getAverage()
+                    : DEFAULT_UNIT_PRICE;
+        }
     }
 
     public static JGrandExchange getInstance(){

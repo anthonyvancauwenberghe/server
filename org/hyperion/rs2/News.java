@@ -15,7 +15,7 @@ import org.hyperion.rs2.util.rssfeed.Article;
 public class News {
 
     private final static int interfaceId = 36000;
-    private int selectedPost = 2;
+    private int selectedPost = 0;
 
     private Player player;
 
@@ -72,7 +72,7 @@ public class News {
         ActionsManager.getManager().submit(-29532, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.getNews().setSelectedPost(2);
+                player.getNews().setSelectedPost(0);
             }
         });
 
@@ -86,7 +86,7 @@ public class News {
         ActionsManager.getManager().submit(-29526, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.getNews().setSelectedPost(0);
+                player.getNews().setSelectedPost(2);
             }
         });
 

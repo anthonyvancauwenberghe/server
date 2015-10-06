@@ -46,7 +46,7 @@ public class JGrandExchange {
     }
 
     public boolean delete(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("DELETE FROM ge_entries WHERE playerName = ? AND slot = ?")){
+        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET active = 0 WHERE playerName = ? AND slot = ?")){
             stmt.setString(1, entry.playerName);
             stmt.setByte(2, (byte)entry.slot);
             return stmt.executeUpdate() == 1;
@@ -127,7 +127,7 @@ public class JGrandExchange {
     }
 
     public boolean load(){
-        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
+        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries WHERE active = 1")){
             while(rs.next()){
                 final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
                 final String playerName = rs.getString("playerName");

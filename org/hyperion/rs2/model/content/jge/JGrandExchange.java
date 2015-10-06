@@ -46,10 +46,27 @@ public class JGrandExchange {
     }
 
     public boolean delete(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET active = 0 WHERE playerName = ? AND slot = ?")){
-            stmt.setString(1, entry.playerName);
-            stmt.setByte(2, (byte)entry.slot);
-            return stmt.executeUpdate() == 1;
+        try(final PreparedStatement delete = sql.prepare("DELETE FROM ge_entries WHERE playerName = ? AND slot = ?")){
+            delete.setString(1, entry.playerName);
+            delete.setByte(2, (byte)entry.slot);
+            if(delete.executeUpdate() != 1)
+                return false;
+            final String progress = entry.progress.toSaveString();
+            if(progress.isEmpty())
+                return true;
+            try(final PreparedStatement insert = sql.prepare("INSERT INTO ge_history (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, cancelled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+                insert.setString(1, entry.date.toString());
+                insert.setString(2, entry.playerName);
+                insert.setString(3, entry.type.name());
+                insert.setByte(4, (byte)entry.slot);
+                insert.setShort(5, (short)entry.itemId);
+                insert.setInt(6, entry.itemQuantity);
+                insert.setInt(7, entry.unitPrice);
+                insert.setString(8, entry.currency.name());
+                insert.setString(9, progress);
+                insert.setBoolean(10, entry.cancelled);
+                return insert.executeUpdate() == 1;
+            }
         }catch(Exception ex){
             ex.printStackTrace();
             return false;
@@ -127,7 +144,7 @@ public class JGrandExchange {
     }
 
     public boolean load(){
-        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries WHERE active = 1")){
+        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries WHERE")){
             while(rs.next()){
                 final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
                 final String playerName = rs.getString("playerName");
@@ -287,7 +304,7 @@ public class JGrandExchange {
     }
 
     public int defaultItemUnitPrice(final int itemId, final Entry.Type type, final Entry.Currency currency){
-        try(final PreparedStatement stmt = sql.prepare("SELECT AVG(unitPrice) FROM ge_entries WHERE active = 0 AND itemId = ? AND type = ? AND currency = ?")){
+        try(final PreparedStatement stmt = sql.prepare("SELECT AVG(unitPrice) FROM ge_history WHERE itemId = ? AND type = ? AND currency = ?")){
             stmt.setShort(1, (short)itemId);
             stmt.setString(2, type.name());
             stmt.setString(3, currency.name());

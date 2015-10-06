@@ -51,6 +51,9 @@ public class JGrandExchange {
             delete.setByte(2, (byte)entry.slot);
             if(delete.executeUpdate() != 1)
                 return false;
+            final String progress = entry.progress.toSaveString();
+            if(progress.isEmpty())
+                return true;
             try(final PreparedStatement insert = sql.prepare("INSERT INTO ge_history (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, cancelled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
                 insert.setString(1, entry.date.toString());
                 insert.setString(2, entry.playerName);
@@ -60,7 +63,7 @@ public class JGrandExchange {
                 insert.setInt(6, entry.itemQuantity);
                 insert.setInt(7, entry.unitPrice);
                 insert.setString(8, entry.currency.name());
-                insert.setString(9, entry.progress.toSaveString());
+                insert.setString(9, progress);
                 insert.setBoolean(10, entry.cancelled);
                 return insert.executeUpdate() == 1;
             }

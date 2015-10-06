@@ -35,19 +35,13 @@ public class RefreshNewsEvent extends Event {
         Collections.sort(dates);
         for(Article article : news) {
             if(article.getDate().equals(dates.get(dates.size() - 1))) {
-                if(!latestNews[0].equals(article)) {
                     latestNews[0] = article;
-                }
             }
             if(article.getDate().equals(dates.get(dates.size() - 2))) {
-                if(!latestNews[1].equals(article)) {
                     latestNews[1] = article;
-                }
             }
             if(article.getDate().equals(dates.get(dates.size() - 3))) {
-                if(!latestNews[2].equals(article)) {
-                    latestNews[2] = article;
-                }
+                latestNews[2] = article;
             }
         }
     }
@@ -67,19 +61,13 @@ public class RefreshNewsEvent extends Event {
         Article oldNews = latestNews[0];
         for(Article article : news) {
             if(article.getDate().equals(dates.get(dates.size() - 1))) {
-                if(!latestNews[0].equals(article)) {
                     latestNews[0] = article;
-                }
             }
             if(article.getDate().equals(dates.get(dates.size() - 2))) {
-                if(!latestNews[1].equals(article)) {
                     latestNews[1] = article;
-                }
             }
             if(article.getDate().equals(dates.get(dates.size() - 3))) {
-                if(!latestNews[2].equals(article)) {
                     latestNews[2] = article;
-                }
             }
         }
         if(!oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {

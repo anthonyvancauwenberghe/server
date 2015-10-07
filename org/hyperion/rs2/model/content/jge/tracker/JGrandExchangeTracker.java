@@ -122,7 +122,7 @@ public class JGrandExchangeTracker {
         player.resetingPin = false;
         if (player.bankPin != null && !player.bankPin.equals("null")) {
             if (player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin)) {
-                BankPin.loadUpPinInterface(player);
+                BankPin.loadUpPinInterface(player, false);
                 return;
             }
         }
@@ -154,6 +154,7 @@ public class JGrandExchangeTracker {
 
     public void nullifyNewEntry(){
         newEntry = null;
+        player.sendMessage(":stopsearch:");
     }
 
     public void showEntries(){
@@ -172,6 +173,8 @@ public class JGrandExchangeTracker {
             player.sendf("You can't create a new entry in this slot!");
             return false;
         }
+        if(type == Entry.Type.BUYING)
+            player.sendMessage(":search:");
         newEntry = Entry.build(player, type, slot, player.hardMode() ? Entry.Currency.COINS : Entry.Currency.PK_TICKETS);
         return true;
     }

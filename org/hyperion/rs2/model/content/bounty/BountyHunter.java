@@ -107,11 +107,9 @@ public class BountyHunter {
         player.getBountyHunter().setPrevTarget(player.getBountyHunter().getTarget());
         player.getBountyHunter().setTarget(null);
         player.getActionSender().removeArrow();
-        player.getQuestTab().sendBHTarget();
         oldTarget.getBountyHunter().setPrevTarget(oldTarget.getBountyHunter().getTarget());
         oldTarget.getBountyHunter().setTarget(null);
         oldTarget.getActionSender().removeArrow();
-        oldTarget.getQuestTab().sendBHTarget();
 }
 	
 	public void assignTarget(Player p) {
@@ -119,7 +117,6 @@ public class BountyHunter {
             return;
 		this.target = p;
         player.getActionSender().createArrow(target);
-		player.getQuestTab().sendBHTarget();
         p.getBountyHunter().assignTarget(player);
 
 	}
@@ -159,7 +156,6 @@ public class BountyHunter {
             targ.getBountyHunter().setPrevTarget(player);
 			targ.getBountyHunter().setTarget(null);
 			targ.getActionSender().removeArrow();
-			targ.getQuestTab().sendBHTarget();
 		}
 	}
 	

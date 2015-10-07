@@ -170,7 +170,7 @@ public final class JGrandExchangeInterface {
 
         public static void setQuantityProgress(final Player player, final Entry.Type type, final int progressQuantity){
             if(type != null && progressQuantity > -1)
-                player.getActionSender().sendString(String.format("You have %s a total of %,d so far", type.pastTense, progressQuantity), 22190);
+                player.getActionSender().sendString(String.format("You have %s a total of %,d so far", type.pastTense.toLowerCase(), progressQuantity), 22190);
             else
                 player.getActionSender().sendString("", 22190);
         }

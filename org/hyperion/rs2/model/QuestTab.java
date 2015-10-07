@@ -65,7 +65,6 @@ public class QuestTab {
         sendDonatePoints();
         sendHonorPoints();
         sendBHPoints();
-        sendBHTarget();
         sendBHEnabled();
         sendBHPerks();
         sendYellEnabled();
@@ -95,9 +94,9 @@ public class QuestTab {
         player.getActionSender().sendString("", getId(16));
         player.getActionSender().sendString("@yel@Ingame Points", getId(13));
         player.getActionSender().sendFont(getId(13), 2);
-        player.getActionSender().sendString("", getId(17));
-        player.getActionSender().sendString("@yel@Bounty hunter", getId(18));
-        player.getActionSender().sendFont(getId(18), 2);
+        player.getActionSender().sendString("", getId(18));
+        player.getActionSender().sendString("@yel@Bounty hunter", getId(19));
+        player.getActionSender().sendFont(getId(19), 2);
         player.getActionSender().sendString("", getId(23));
         player.getActionSender().sendString("@yel@Locks", getId(24));
         player.getActionSender().sendFont(getId(24), 2);
@@ -187,15 +186,9 @@ public class QuestTab {
     }
 
     public void sendBHPoints() {
-        int id = getId(19);
+        int id = getId(20);
         player.getActionSender().sendString("@or1@BH points: @gre@" + player.getBountyHunter().getKills(), id);
         player.getActionSender().sendTooltip(id, "Yell BH points");
-    }
-
-    public void sendBHTarget() {
-        int id = getId(20);
-        player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), id);
-        player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), 36502);
     }
 
     public void sendBHEnabled() {

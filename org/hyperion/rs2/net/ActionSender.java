@@ -82,6 +82,8 @@ public class ActionSender {
 
     private final Map<Integer, String> sendStringStrings = new HashMap<>();
 
+    private final Map<Integer, String> sendTooltipStrings = new HashMap<>();
+
     /**
      * Creates an action sender for the specified player.
      *
@@ -746,10 +748,12 @@ public class ActionSender {
     }
 
     public ActionSender sendTooltip(int interfaceID, String tooltip) {
-        /*PacketBuilder bldr = new PacketBuilder(173, Type.VARIABLE_SHORT);
+        /*
+        PacketBuilder bldr = new PacketBuilder(173, Type.VARIABLE_SHORT);
         bldr.putRS2String(tooltip);
-        bldr.putShort(interfaceID);
-        player.write(bldr.toPacket());*/
+        bldr.putShortA(interfaceID);
+        player.write(bldr.toPacket());
+        */
         return this;
     }
 

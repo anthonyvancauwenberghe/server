@@ -150,6 +150,20 @@ public class Player extends Entity implements Persistable, Cloneable{
     }
 
 
+	/**
+	 * This is for whether the player is using the bank or the player is using the grand exchange, to open the right
+	 * interface after entering your pin.
+	 */
+	private boolean isBanking;
+
+	public void setBanking(boolean status) {
+		isBanking = status;
+	}
+
+	public boolean isBanking() {
+		return isBanking;
+	}
+
 	public NPCKillsLogger npckillLogger = new NPCKillsLogger();
 
 	public NPCKillsLogger getNPCLogs() {

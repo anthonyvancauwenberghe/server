@@ -111,17 +111,20 @@ public class JGrandExchangeTracker {
     }
 
     public boolean canOpenInterface(){
-        return Rank.hasAbility(player, Rank.DEVELOPER)
-                || (!player.getLocation().inPvPArea()
-                && !player.getLocation().inFunPk()
-                && !player.getLocation().inDuel()
-                && !player.getLocation().inDungeonLobby());
+        return Rank.hasAbility(player, Rank.DEVELOPER) || ItemSpawning.canSpawn(player, false);
     }
 
     public void openInterface(final EntryManager entries){
         if(!canOpenInterface()){
             player.sendf("You cannot use the Grand Exchange right now!");
             return;
+        }
+        player.resetingPin = false;
+        if (player.bankPin != null && !player.bankPin.equals("null")) {
+            if (player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin)) {
+                BankPin.loadUpPinInterface(player);
+                return;
+            }
         }
         Entries.open(player, entries);
     }

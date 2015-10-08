@@ -16,9 +16,6 @@ import java.util.List;
  * @author Glis                29/07/2015
  */
 public class QuestTab {
-    /**
-     * The Ids used to clear the Quest tab.
-     */
 
     private static int max_index = 0;
 

@@ -72,7 +72,7 @@ public class DonatorShop extends Shop {
 			}
 			return;
 		}
-        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603) {
+        if(item.getId() == LEGENDARY_TICKET || item.getId() == 6603 || item.getId() == 11694) {
             player.sendMessage("You cannot sell this item back to the store");
             return;
         }
@@ -203,6 +203,8 @@ public class DonatorShop extends Shop {
 	
 	public static int getValue(int itemId) {
 		switch(itemId) {
+		case 11694:	//Ags
+			return 999;
 		case 16691:  //novite full helm
 		case 17239:  //novite platebody
 		case 16669:  //novite platelegs
@@ -257,7 +259,6 @@ public class DonatorShop extends Shop {
             return 1499;
 		case 16935:  //novite rapier
 		case 18363:  //farseer kiteshield
-		case 11694:	//Ags
 			return 1199;
 			
 		}
@@ -476,7 +477,6 @@ public class DonatorShop extends Shop {
                 return 1499;
 			case 16935:  //novite rapier
 			case 18363:  //farseer kiteshield
-			case 11694:
 				return 1199;
 
 			//case 18351:
@@ -489,6 +489,7 @@ public class DonatorShop extends Shop {
 				//all chaotics are giving ppl shit tons of "don points"
 
 			case 11794:
+			case 11694://ags
 				return 999;
             //phats
 			case 1042:

@@ -21,6 +21,7 @@ public class DeviousHonorShop extends PointsShop {
 		switch(itemId) {
 			case 16887:
 			case 16337:
+			case 11694: //ags
 				return 2500;
 
 			case 17193:

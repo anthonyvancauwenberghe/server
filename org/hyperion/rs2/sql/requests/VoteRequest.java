@@ -229,16 +229,16 @@ public class VoteRequest extends SQLRequest {
                 currentStreak = 0;
             }
         }
-/*
         int todayVotes = player.getPermExtraData().getInt("todayVoted") + runelocusVotes + topgVotes + rspslistVotes;
         player.getPermExtraData().put("todayVoted", todayVotes);
-        if(todayVotes > 30) {
-            final Punishment p = Punishment.create("Server", player, Combination.of(Target.ACCOUNT, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.DAYS), "Extreme multivoting");
-            PunishmentManager.getInstance().add(p);
-            player.sendMessage("You were just banned");
+        if(todayVotes > 20 + (Misc.random(10))) {
+            player.getInventory().remove(Item.create(3062, player.getInventory().getCount(3062)));
+            player.getBank().remove(Item.create(3062, player.getBank().getCount(3062)));
+            player.getPoints().setVotingPoints(0);
+            player.sendMessage("Stop multivoting so heavily!");
+            player.getPermExtraData().put("todayVoted", 0);
             return;
         }
-        */
 
         //If the player voted for all 3 websites today he'll receive the bonus & they get the streak bonus, depending on the streak we just calculated.
         //It will also check if he didn't receive the streak yet today

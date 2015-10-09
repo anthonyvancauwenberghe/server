@@ -3,8 +3,10 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 import java.util.*;
@@ -23,6 +25,18 @@ public class RandomEvent {
     private int attempts;
     private static int MAX_ATTEMPTS = 3;
     private static int SECONDS_DEFAULT = 300;
+    private static Location[] locations = {
+            Location.create(2689, 3514, 0),
+            Location.create(2942, 3395, 0),
+            Location.create(2957, 3502, 0),
+            Location.create(3350, 3343, 0),
+            Location.create(3433, 2892, 0),
+            Location.create(3519, 3365, 0),
+            Location.create(2893, 5433, 0),
+            Location.create(3024, 9582, 0),
+            Location.create(2425, 4446, 0),
+            Location.create(3224, 3174, 0)
+    };
 
     public boolean isDoingRandom() {
         return doingRandom;
@@ -109,7 +123,7 @@ public class RandomEvent {
 
     public void randomTeleport() {
         player.getActionSender().removeChatboxInterface();
-        player.sendMessage("Todo: teleport player to random place");
+        Magic.teleport(player, locations[Misc.random(locations.length - 1)], true);
         doingRandom = false;
     }
 

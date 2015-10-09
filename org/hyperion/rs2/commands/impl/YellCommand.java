@@ -75,11 +75,12 @@ public class YellCommand extends Command {
 		input = input.replaceAll("tradereq", "").replaceAll("duelreq", "").replaceAll(":clan:", "");
 
 		long yellMilliseconds = (long)(System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur"));
+		long yellDelay = getYellDelay(player);
 
 		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
 			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
-					player.sendMessage("Please wait " + (int) ((getYellDelay(player) - yellMilliseconds) / 1000) + " seconds before yelling.");
+					player.sendMessage("Please wait " + (int) ((yellDelay - yellMilliseconds) / 1000) + " seconds before yelling.");
 					if(player.getClanName().equalsIgnoreCase(""))
 						ClanManager.joinClanChat(player, "chatting", false);
 					return false;
@@ -104,7 +105,7 @@ public class YellCommand extends Command {
 		input = TextUtils.ucFirst(input);
 		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
 			World.getWorld().submit(
-					new Event(getYellDelay(player)) {
+					new Event(yellDelay) {
 						public void execute() {
 							player.sendMessage("[B] Nab: Hey " + player.getSafeDisplayName() + ", you can yell again!");
 							stop();

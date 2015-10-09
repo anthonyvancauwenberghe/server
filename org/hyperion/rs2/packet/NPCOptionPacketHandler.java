@@ -17,6 +17,10 @@ public class NPCOptionPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
+		if(player.getRandomEvent().isDoingRandom()) {
+			player.getRandomEvent().display();
+			return;
+		}
 		switch(packet.getOpcode()) {
 			case OPTION_1:
 				handleOption1(player, packet);

@@ -23,6 +23,10 @@ public class ObjectClickHandler {
 
     public static void clickObject(Player p, int id, int x, int y, int type) {
         //System.out.println("Id " + id);
+        if(p.getRandomEvent().isDoingRandom()) {
+            p.getRandomEvent().display();
+            return;
+        }
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
         int offX = def != null ? 1 + def.getSizeX() : 3;
         int offY = def != null ? 1 + def.getSizeY() : 3;

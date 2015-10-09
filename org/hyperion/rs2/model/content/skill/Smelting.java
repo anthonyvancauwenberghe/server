@@ -110,6 +110,10 @@ public class Smelting implements ContentTemplate {
 					stop2();
 					return;
 				}
+				if(client.getRandomEvent().skillAction(2)) {
+					stop2();
+					return;
+				}
 				if(amount > 1)
 					ContentEntity.startAnimation(client, SMELTING_ANIM);
 				ContentEntity.addSkillXP(client, smeltingItem.getExperience() * Constants.XPRATE, Skills.SMITHING);

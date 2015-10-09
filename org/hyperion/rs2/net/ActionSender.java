@@ -189,7 +189,7 @@ public class ActionSender {
 
 
         }
-        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime())
+        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
             player.getNews().sendNewsInterface();
 
         if (WildernessBossEvent.currentBoss != null) {

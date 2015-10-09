@@ -78,6 +78,8 @@ public class DartMaking {
             ContentEntity.sendMessage(client, "You need a fletching level of " + dart.getLevelReq() + " to make these darts.");
             return false;
         }
+        if(client.getRandomEvent().skillAction())
+            return false;
         int am2 = ContentEntity.getItemAmount(client, 314);
         if(am2 < amount)
             amount = am2;

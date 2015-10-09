@@ -14,6 +14,8 @@ public class Flax extends Crafting{
     public static boolean pickFlax(final Player client, int id) {
         if(client.isBusy())
             return false;
+        if(client.getRandomEvent().skillAction(2))
+            return false;
         client.setBusy(true);
         ContentEntity.startAnimation(client, 2286);
         World.getWorld().submit(new Event(2000) {

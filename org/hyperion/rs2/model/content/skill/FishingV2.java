@@ -58,6 +58,10 @@ public class FishingV2 implements ContentTemplate {
 					stop2();
 					return;
 				}
+				if(player.getRandomEvent().skillAction(4)) {
+					stop2();
+					return;
+				}
 				if(! ContentEntity.isItemInBag(player, type.itemId)) {
 					ContentEntity.sendMessage(player, "You need a " + ItemDefinition.forId(type.itemId).getName() + " to fish here.");
 					stop2();

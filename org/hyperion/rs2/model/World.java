@@ -69,6 +69,7 @@ import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
+import org.hyperion.rs2.sql.requests.StaffActivityRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.*;
@@ -1037,6 +1038,8 @@ public class World {
 
                 if (!Rank.hasAbility(player, Rank.DEVELOPER))
                     getLogsConnection().offer(new AccountValuesRequest(player));
+                if (Rank.hasAbility(player, Rank.HELPER))
+                    getLogsConnection().offer(new StaffActivityRequest(player));
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();

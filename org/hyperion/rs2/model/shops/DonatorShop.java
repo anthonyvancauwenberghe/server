@@ -204,7 +204,8 @@ public class DonatorShop extends Shop {
 	public static int getValue(int itemId) {
 		switch(itemId) {
 		case 11694:	//Ags
-			return 999;
+		return 1399;
+
 		case 16691:  //novite full helm
 		case 17239:  //novite platebody
 		case 16669:  //novite platelegs
@@ -284,105 +285,6 @@ public class DonatorShop extends Shop {
 				return veblen_good[1];
 			}
 		}
-	    /*if(!donatorItems.containsKey(itemId)) {
-            //System.out.println("Doesnt contain key!: " + itemId);
-			return 0;
-		}*/
-		//System.out.println("Trying to buy id: " + new Item(itemId).getDefinition().getNormalId());
-        /*
-        switch (itemId) {
-            case 16909:
-                return 4000;
-            case 19713:
-            case 19714:
-            case 19715:
-            case 19716:
-            case 19717:
-            case 19718:
-            case 19719:
-            case 19720:
-            case 19721:
-                return 1999;
-            case 16711:
-            case 17259:
-            case 16689:
-            case 17361:
-            case 16359:
-            case 16955:
-                return 1499;
-            case 14484:
-                return 1199;
-            case 18351:
-            case 18349:
-            case 18353:
-            case 18355:
-            case 18359:
-            case 18357:
-                return 899;
-            case 1042:
-                return 949;
-            case 1038:
-            case 1040:
-            case 1044:
-            case 1046:
-            case 1048:
-
-                return 899;
-
-            case SpiritShields.DIVINE_SPIRIT_SHIELD_ID:
-                return 699;
-            case 13738:
-            case 13742:
-            case 13744:
-                return 199;
-            case 13352:
-            case 13353:
-            case 13354:
-            case 13355:
-            case 13356:
-            case 15241:
-
-            case 1050:
-            case 1053:
-            case 1055:
-            case 1057:
-                return 399;
-            case 18335:
-            case 13736:
-                return 299;
-            case 13734:
-            case 10330:
-            case 10332:
-            case 10334:
-            case 10336:
-            case 10338:
-            case 10340:
-            case 10342:
-            case 10344:
-            case 10346:
-            case 10348:
-            case 10350:
-            case 10352:
-                return 200;
-            case MysteryBox.ID:
-                return 99;
-            case 15441:
-            case 15442:
-            case 15443:
-            case 15444:
-                return 99;
-            case 2439:
-                return 5;
-            case 2431:
-            case 2430:
-            case 15332:
-            case 13883:
-            case 13879:
-                return 1;
-
-        }
-        return 0;
-        */
 		
 		if(ItemSpawning.canSpawn(itemId)) {
 			return 0;
@@ -490,7 +392,7 @@ public class DonatorShop extends Shop {
 
 			case 11794:
 			case 11694://ags
-				return 999;
+				return 1399;
             //phats
 			case 1042:
 				return 55000; //899

@@ -85,9 +85,14 @@ public class AccountValue {
 	 * @return
 	 */
 	public static int getItemValue(Item item) {
-		if(item == null)
+		if (item == null)
 			return 0;
-		return DonatorShop.getPrice(item.getId()) * item.getCount();
+		if (item.getId() == 11694) {
+			return 0;
+		}
+		else {
+			return DonatorShop.getPrice(item.getId()) * item.getCount();
+		}
 	}
 
 	static {

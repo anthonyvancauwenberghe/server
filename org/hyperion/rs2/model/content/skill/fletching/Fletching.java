@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class Fletching implements ContentTemplate {
 
-	public static int EXPMULTIPLIER = Constants.XPRATE * 10;
+	public static int EXPMULTIPLIER = Constants.XPRATE * 2;
 
 	public Fletching() {
 	}

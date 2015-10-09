@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.skill.agility;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.util.Misc;
 
 import java.util.List;
@@ -79,6 +80,8 @@ public class Obstacle {
             player.sendMessage("You need an agility level of " + levelReq + " to use this " + (course.getClass() == Shortcuts.class ? "shortcut" : this.toString().toLowerCase()) + ".");
             return false;
         }
+        if(player.getRandomEvent().skillAction())
+            return false;
         return true;
     }
 

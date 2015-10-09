@@ -112,6 +112,10 @@ public class Prayer implements ContentTemplate {
 					stop2();
 					return;
 				}
+				if(player.getRandomEvent().skillAction(4)) {
+					this.stop();
+					return;
+				}
 				ContentEntity.addSkillXP(player, fBuryXP * EXP_MULTIPLIER, 5);
 				if(! altar) {
 					ContentEntity.sendMessage(player, "You bury the bones.");

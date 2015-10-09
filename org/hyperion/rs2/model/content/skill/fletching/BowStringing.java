@@ -132,6 +132,8 @@ public class BowStringing extends LogCutting {
         World.getWorld().submit(new Event(5000) {
             @Override
             public void execute() {
+                if(client.getRandomEvent().skillAction(2))
+                    stop();
                 ContentEntity.deleteItemA(client, item.getItemId(), 1);
                 ContentEntity.deleteItemA(client, string.getItemId(), 1);
                 client.getAchievementTracker().itemSkilled(Skills.FLETCHING, item.getResultId(), 1);

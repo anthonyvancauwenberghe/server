@@ -140,6 +140,10 @@ public class RuneCrafting implements ContentTemplate {
 			final int useItemId2 = useItemId;
 			final double runeExp = r.getExp() * amount;
 			//Start the runecrafting emote.
+
+			if(client.getRandomEvent().skillAction(15)) {
+				return false;
+			}
 			client.setCanWalk(false);
 			client.setBusy(true);
             client.getExtraData().put("runecraftingtimer", 0);

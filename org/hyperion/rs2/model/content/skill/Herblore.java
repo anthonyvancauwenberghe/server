@@ -78,6 +78,9 @@ public class Herblore implements ContentTemplate {
 		Herb h = herbs.get(getIndex(herb));
 
 		if(ContentEntity.returnSkillLevel(c, 15) >= h.getLevel()) {
+			if(c.getRandomEvent().skillAction()) {
+				return;
+			}
 			ContentEntity.sendMessage(c, "You identify the herb.");
 			ContentEntity.deleteItem(c, herb, slot, 1);
 			ContentEntity.addItem(c, (h.getCleanHerb()), 1, slot);
@@ -134,6 +137,10 @@ public class Herblore implements ContentTemplate {
 					if(! c.inAction)
 						return;
 					if(amountLeft <= 0) {
+						this.stop();
+						return;
+					}
+					if(c.getRandomEvent().skillAction(3)) {
 						this.stop();
 						return;
 					}

@@ -172,6 +172,8 @@ public class LogCutting extends Fletching {
                     stop();
                     return;
                 }
+                if(client.getRandomEvent().skillAction(2))
+                    stop();
 
                 client.getAchievementTracker().itemSkilled(Skills.FLETCHING, item.getItemId(), item == cutItems.ARROW_SHAFT ? 15 : 1);
                 ContentEntity.deleteItemA(client, log.getLogId(), 1);

@@ -191,7 +191,6 @@ public class Thieving implements ContentTemplate {
 	 * Pickpocket a npc.
 	 *
 	 * @param client The {@link Player}.
-	 * @param stall  The npc.
 	 */
 
 	public void stealFromNpc(final Player client, final NPC npc) {
@@ -328,6 +327,9 @@ public class Thieving implements ContentTemplate {
 	public void pickPocketNpc(final Player player, NPC npc) {
 		if(player.cE.isFrozen())
 			return;
+		if(player.getRandomEvent().skillAction(5)) {
+			return;
+		}
 		if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())
 			return;
 		boolean isOk = false;

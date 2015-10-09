@@ -205,6 +205,10 @@ public class Smithing implements ContentTemplate {
 
 			@Override
 			public void execute() {
+				if(client.getRandomEvent().skillAction(3)) {
+					stop2();
+					return;
+				}
 				if(amm == 0) {
 					stop2();
 					return;

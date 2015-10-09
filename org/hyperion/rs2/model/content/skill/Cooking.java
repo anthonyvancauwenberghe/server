@@ -133,6 +133,10 @@ public class Cooking implements ContentTemplate {
 					stop();
 					return;
 				}
+				if(client.getRandomEvent().skillAction(2)) {
+					stop();
+					return;
+				}
 
 				amount2--;
 				ContentEntity.deleteItem(client, item);

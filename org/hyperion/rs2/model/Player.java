@@ -10,6 +10,7 @@ import org.hyperion.rs2.News;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
+import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -249,6 +250,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public AchievementTracker getAchievementTracker(){
 		return achievementTracker;
+	}
+
+	private final RandomEvent randomEvent = new RandomEvent(this);
+
+	public RandomEvent getRandomEvent() {
+		return randomEvent;
 	}
 
     private Difficulty viewingDifficulty = Difficulty.VERY_EASY;

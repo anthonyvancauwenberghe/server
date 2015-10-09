@@ -164,6 +164,8 @@ public class LeatherCrafting extends Crafting {
             c.sendMessage("You don't have any thread.");
             return false;
         }
+        if(c.getRandomEvent().skillAction(2))
+            return false;
         finishCraft(c, amm);
         return true;
     }

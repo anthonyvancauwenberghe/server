@@ -40,6 +40,11 @@ public class WalkingPacketHandler implements PacketHandler {
 		if(player.getAgility().isBusy())
 			return;
 
+		if(player.getRandomEvent().isDoingRandom()) {
+			player.getRandomEvent().display();
+			return;
+		}
+
         if(player.getExtraData().getBoolean("needpasschange")) {
             player.sendMessage("Please reset your password before continuing to play.");
             player.sendMessage("Alert##As a security precaution, please reset your password.##Type '::changepass' to open the password reset interface.");

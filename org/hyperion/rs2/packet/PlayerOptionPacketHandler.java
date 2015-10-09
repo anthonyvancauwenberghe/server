@@ -36,6 +36,10 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		}
 		if(player.getAgility().isBusy())
 			return;
+		if(player.getRandomEvent().isDoingRandom()) {
+			player.getRandomEvent().display();
+			return;
+		}
 		switch(packet.getOpcode()) {
 
 			case /*128*/ 153:
@@ -116,6 +120,8 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		final Player victim = (Player) World.getWorld().getPlayers().get(id);
 		if(victim != null) {
 			if(victim.getAgility().isBusy())
+				return;
+			if(victim.getRandomEvent().isDoingRandom())
 				return;
 			if((FightPits.teamRed.contains(player) && FightPits.teamRed.contains(victim)) ||
 					(FightPits.teamBlue.contains(player) && FightPits.teamBlue.contains(victim))) {

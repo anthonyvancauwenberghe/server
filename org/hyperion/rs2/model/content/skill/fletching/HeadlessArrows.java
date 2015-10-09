@@ -13,6 +13,8 @@ public class HeadlessArrows extends Fletching {
         if(client.isBusy()) {
             return true;
         }
+        if(client.getRandomEvent().skillAction())
+            return false;
 
         int amount = ContentEntity.getItemAmount(client, item);
 

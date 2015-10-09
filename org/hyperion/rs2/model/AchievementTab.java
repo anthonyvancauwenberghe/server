@@ -5,7 +5,6 @@ import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
-import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 /**
@@ -36,11 +35,15 @@ public class AchievementTab {
         for(int i = 0; i < Achievements.get().size(); i++) {
             player.getActionSender().sendString(player.getAchievementTracker().progress(Achievements.get().get(i)).getTabString(), 32011 + i);
         }
-        sendAchievementPoints();
+        sendAchievementCompleted();
     }
 
-    public void sendAchievementPoints() {
-        player.getActionSender().sendString("Achievement points: 0", 32004);
+    public void sendAchievementCompleted() {
+        int finished = 0;
+        for(Achievement achievement : Achievements.get().values())
+            if(player.getAchievementTracker().progress(achievement.id).finished())
+                finished++;
+        player.getActionSender().sendString("Achievement completed: " + finished + "/" + Achievements.get().size(), 32004);
     }
 
     public static String buildPercentBar(double percentage) {

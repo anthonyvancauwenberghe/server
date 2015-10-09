@@ -204,7 +204,8 @@ public class DonatorShop extends Shop {
 	public static int getValue(int itemId) {
 		switch(itemId) {
 		case 11694:	//Ags
-			return 999;
+		return 1399;
+
 		case 16691:  //novite full helm
 		case 17239:  //novite platebody
 		case 16669:  //novite platelegs
@@ -391,7 +392,7 @@ public class DonatorShop extends Shop {
 
 			case 11794:
 			case 11694://ags
-				return 1299;
+				return 1399;
             //phats
 			case 1042:
 				return 55000; //899

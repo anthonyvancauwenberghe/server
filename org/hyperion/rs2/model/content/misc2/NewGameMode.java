@@ -34,8 +34,8 @@ import java.util.stream.Stream;
 public class NewGameMode implements ContentTemplate {
 
 
-    private static final String HARD_GAME_GUIDE = "http://forums.arteropk.com/index.php/topic/10309-hard-game-mode-guide/";
-    private static final String NORMAL_GAME_GUIDE = "http://forums.arteropk.com/index.php/forum/62-golden-guides/";
+    private static final String HARD_GAME_GUIDE = "http://forums.arteropk.com/topic/10309-hard-game-mode-guide/";
+    private static final String NORMAL_GAME_GUIDE = "http://forums.arteropk.com/forum/62-golden-guides/";
 
     /**
      * Bank starter

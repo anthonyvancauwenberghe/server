@@ -23,8 +23,8 @@ public class StaffActivityRequest extends SQLRequest{
 
     public void process(final SQLConnection sql){
         final String name = player.getName().toLowerCase();
-        final long login = player.loginTime;
-        final long logout = System.currentTimeMillis();
+        final long login = player.loginTime/1000;
+        final long logout = System.currentTimeMillis()/1000;
         final long duration = logout-login;
         final String query = String.format(
                 "INSERT INTO staffactivity (name, login, logout,duration) VALUES ('%s', %d, %d, %d)",

@@ -78,9 +78,8 @@ public class RandomEvent {
             if(!answers.containsValue(number))
                 answers.put(answers.size(), number);
         }
-        if(!answers.containsValue(n1 + n2))
+        if(!answers.containsValue((n1 + n2)))
             answers.put(Misc.random(3), (n1 + n2));
-
         display();
 
     }
@@ -110,6 +109,7 @@ public class RandomEvent {
 
     public void randomTeleport() {
         player.getActionSender().removeChatboxInterface();
+        player.sendMessage("Todo: teleport player to random place");
         doingRandom = false;
     }
 

@@ -20,6 +20,13 @@ public class GodWars implements ContentTemplate {
 				player.setTeleportTarget(Location.create(3433, 2892, 0));
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
+			if (objId == 26425) {
+				if (player.getLocation().getX() == 2863) {
+					player.setTeleportTarget(player.getLocation().transform(1, 0, 4));
+				} else {
+					player.setTeleportTarget(player.getLocation().transform(-1, 0, -4));
+				}
+			}
 
 		} else if(type == 16) {
 			if(bandos.get(objId) != null)

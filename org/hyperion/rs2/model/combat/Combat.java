@@ -1203,6 +1203,8 @@ public class Combat {
             if (p != null) {
                 for (int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
+                    if (!WorldMap.checkPos(combatEntity.getAbsZ(), combatEntity.getAbsX(), combatEntity.getAbsY(), baseX + p.getX(i), baseY + p.getY(i), 1))
+                        break;
                     if ((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
                         combatEntity.getEntity().getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
                 }

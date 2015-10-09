@@ -128,11 +128,6 @@ public class CommandHandler {
 			}
 			return true;
 		}
-		/*
-		 * annoying af
-		 */
-		//if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
-			//player.getActionSender().sendMessage("Command is null.");
 		return false;
 	}
 

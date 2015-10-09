@@ -23,58 +23,37 @@ public class RefreshNewsEvent extends Event {
     }
 
     static {
+        refreshNews(false);
+    }
+
+    public static void refreshNews(boolean announce) {
         List<Article> news;
         news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
         news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
         news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
 
         List<Date> dates = new ArrayList<>();
-        for(Article article : news) {
+        for (Article article : news) {
             dates.add(article.getDate());
         }
         Collections.sort(dates);
-        for(Article article : news) {
-            if(article.getDate().equals(dates.get(dates.size() - 1))) {
-                    latestNews[0] = article;
-            }
-            if(article.getDate().equals(dates.get(dates.size() - 2))) {
-                    latestNews[1] = article;
-            }
-            if(article.getDate().equals(dates.get(dates.size() - 3))) {
-                latestNews[2] = article;
+        Article oldNews = latestNews[0];
+
+        for (Article article : news)
+            for(int i = 0; i < 3; i++)
+                if (article.getDate().equals(dates.get(dates.size() - (i + 1))))
+                    latestNews[i] = article;
+
+        if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
+            for(Player player : World.getWorld().getPlayers()) {
+                player.sendServerMessage("There is some news! Do ::news to check it out!");
+                lastNewsChange = System.currentTimeMillis();
             }
         }
     }
 
     @Override
     public void execute() throws IOException {
-        List<Article> news;
-        news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
-        news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
-        news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
-
-        List<Date> dates = new ArrayList<>();
-        for(Article article : news) {
-            dates.add(article.getDate());
-        }
-        Collections.sort(dates);
-        Article oldNews = latestNews[0];
-        for(Article article : news) {
-            if(article.getDate().equals(dates.get(dates.size() - 1))) {
-                    latestNews[0] = article;
-            }
-            if(article.getDate().equals(dates.get(dates.size() - 2))) {
-                    latestNews[1] = article;
-            }
-            if(article.getDate().equals(dates.get(dates.size() - 3))) {
-                    latestNews[2] = article;
-            }
-        }
-        if(!oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
-            for(Player player : World.getWorld().getPlayers()) {
-                player.sendServerMessage("There is some news! Do ::news to check it out!");
-                lastNewsChange = System.currentTimeMillis();
-            }
-        }
+        refreshNews(true);
     }
 }

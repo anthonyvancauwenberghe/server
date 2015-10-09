@@ -5,6 +5,11 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.bank.BankItem;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
 import org.hyperion.util.Misc;
@@ -14,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Arsen Maxyutov.
@@ -26,7 +32,6 @@ public class VoteRequest extends SQLRequest {
     private int bonus = -1;
     private int votingPoints = 0;
     private int streak;
-    private static String[] ignoredDays = {"25/09/2015"};
 
     /**
      * Constructs a new vote request.
@@ -220,37 +225,26 @@ public class VoteRequest extends SQLRequest {
                 currentStreak++;
                 //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
             } else if (!lastVoted.equalsIgnoreCase(FORMAT_PLAYER.format(Calendar.getInstance().getTime()))) {
-                boolean ignore = false;
-                int i = 0;
-                while(i < ignoredDays.length) {
-                    for (; i < ignoredDays.length; i++) {
-                        if (yesterday.equalsIgnoreCase(ignoredDays[i])) {
-                            ignore = true;
-                            break;
-                        }
-                    }
-                    if (ignore) {
-                        cal.add(Calendar.DATE, -1);
-                        String twodaysago = FORMAT_PLAYER.format(cal.getTime());
-                        if (lastVoted.equalsIgnoreCase(twodaysago)) {
-                            player.sendMessage("Yesterday has been ignored, so your streak has not been reset.");
-                            break;
-                        } else {
-                            ignore = false;
-                        }
-                    }
-                }
-                if (!ignore) {
-                    player.sendMessage("Your voting streak has been reset!");
-                    currentStreak = 0;
-                }
+                player.sendMessage("Your voting streak has been reset!");
+                currentStreak = 0;
             }
         }
+/*
+        int todayVotes = player.getPermExtraData().getInt("todayVoted") + runelocusVotes + topgVotes + rspslistVotes;
+        player.getPermExtraData().put("todayVoted", todayVotes);
+        if(todayVotes > 30) {
+            final Punishment p = Punishment.create("Server", player, Combination.of(Target.ACCOUNT, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.DAYS), "Extreme multivoting");
+            PunishmentManager.getInstance().add(p);
+            player.sendMessage("You were just banned");
+            return;
+        }
+        */
 
         //If the player voted for all 3 websites today he'll receive the bonus & they get the streak bonus, depending on the streak we just calculated.
         //It will also check if he didn't receive the streak yet today
         if (runelocus && topg && rspslist && !FORMAT_PLAYER.format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", FORMAT_PLAYER.format(Calendar.getInstance().getTime()));
+            player.getPermExtraData().put("todayVoted", 0);
             player.getAchievementTracker().voted();
             if (currentStreak >= 31) {
                 streak = 10;

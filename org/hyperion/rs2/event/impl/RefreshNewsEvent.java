@@ -28,27 +28,32 @@ public class RefreshNewsEvent extends Event {
 
     public static void refreshNews(boolean announce) {
         List<Article> news;
-        news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
-        news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
-        news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
+        try {
+            news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
+            news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
+            news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
 
-        List<Date> dates = new ArrayList<>();
-        for (Article article : news) {
-            dates.add(article.getDate());
-        }
-        Collections.sort(dates);
-        Article oldNews = latestNews[0];
-
-        for (Article article : news)
-            for(int i = 0; i < 3; i++)
-                if (article.getDate().equals(dates.get(dates.size() - (i + 1))))
-                    latestNews[i] = article;
-
-        if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
-            for(Player player : World.getWorld().getPlayers()) {
-                player.sendServerMessage("There is some news! Do ::news to check it out!");
-                lastNewsChange = System.currentTimeMillis();
+            List<Date> dates = new ArrayList<>();
+            for (Article article : news) {
+                dates.add(article.getDate());
             }
+            Collections.sort(dates);
+            Article oldNews = latestNews[0];
+
+            for (Article article : news)
+                for(int i = 0; i < 3; i++)
+                    if (article.getDate().equals(dates.get(dates.size() - (i + 1))))
+                        latestNews[i] = article;
+
+            if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
+                for(Player player : World.getWorld().getPlayers()) {
+                    player.sendServerMessage("There is some news! Do ::news to check it out!");
+                    lastNewsChange = System.currentTimeMillis();
+                }
+            }
+        } catch(Exception e) {
+            System.out.println("Could not load news.");
+            lastNewsChange = 0;
         }
     }
 

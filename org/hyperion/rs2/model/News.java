@@ -1,4 +1,4 @@
-package org.hyperion.rs2;
+package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;

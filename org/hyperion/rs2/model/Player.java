@@ -10,6 +10,7 @@ import org.hyperion.rs2.News;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
+import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
@@ -389,6 +390,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	private QuestTab questtab = new QuestTab(this);
 
+	private SpawnTab spawntab = new SpawnTab(this);
+
 	private AchievementTab achievementtab = new AchievementTab(this);
 
 	private News news = new News(this);
@@ -438,6 +441,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public QuestTab getQuestTab() {
 		return questtab;
+	}
+
+	public SpawnTab getSpawnTab() {
+		return spawntab;
 	}
 
 	public AchievementTab getAchievementTab() {

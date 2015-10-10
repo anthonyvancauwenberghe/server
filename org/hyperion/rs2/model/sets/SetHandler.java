@@ -21,7 +21,7 @@ public class SetHandler {
 			if(!ItemSpawning.canSpawn(player))
 				throw new CantSpawnSetException();
 			switch(id) {
-			case 29174:
+			case 31421:
 				if(! player.canSpawnSet())
 					throw new CantSpawnSetException();
 				if(ContentEntity.getTotalAmountOfEquipmentItems(player) == 0) {
@@ -39,7 +39,7 @@ public class SetHandler {
 					throw new ItemsEquippedException();				
 				}
 				break;
-			case 29175:
+			case 31422:
 				if(! player.canSpawnSet())
 					throw new CantSpawnSetException();
 				if(ContentEntity.getTotalAmountOfEquipmentItems(player) == 0) {
@@ -57,7 +57,7 @@ public class SetHandler {
 					throw new ItemsEquippedException();				
 				}
 				break;
-			case 29176:
+			case 31423:
 				if(! player.canSpawnSet())
 					throw new CantSpawnSetException();
 
@@ -73,7 +73,7 @@ public class SetHandler {
 					throw new ItemsEquippedException();				
 				}
 				break;
-			case 29177:
+			case 31424:
 				if(!player.canSpawnSet())
 					throw new CantSpawnSetException();
 				if(ContentEntity.getTotalAmountOfEquipmentItems(player) == 0) {
@@ -82,7 +82,7 @@ public class SetHandler {
 				} else {
 					throw new ItemsEquippedException();				
 				}
-			case 29178:
+			case 31425:
 				if(!player.canSpawnSet())
 					throw new CantSpawnSetException();
 				if(ContentEntity.getTotalAmountOfEquipmentItems(player) == 0) {
@@ -91,7 +91,7 @@ public class SetHandler {
 				} else {
 					throw new ItemsEquippedException();
 				}
-			case 29179:
+			case 31426:
 				if(! player.canSpawnSet())
 					throw new CantSpawnSetException();
 
@@ -108,7 +108,7 @@ public class SetHandler {
 				}
 				break;
 			}
-		}catch(CantSpawnSetException|ItemsEquippedException e) {
+		} catch(CantSpawnSetException|ItemsEquippedException e) {
 			player.sendMessage(e.getMessage());
 			return false;
 		}

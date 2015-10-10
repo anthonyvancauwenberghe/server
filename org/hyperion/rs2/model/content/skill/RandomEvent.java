@@ -55,11 +55,13 @@ public class RandomEvent {
     }
 
     public boolean reduceSecondsLeft(int amount) {
+        /*
         secondsLeft -= amount;
         if(secondsLeft <= 0) {
             triggerRandom(player, true);
             return true;
         }
+        */
         return false;
     }
 

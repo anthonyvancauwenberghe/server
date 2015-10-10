@@ -58,7 +58,8 @@ public class PushMessage {
 		"ur mom",
 		"ur mum",
 		"cum",
-		"retard"
+		"retard",
+		"kappa"
 	};
 	public static final String FILTER = "*********************";
 	/**

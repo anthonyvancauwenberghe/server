@@ -1934,11 +1934,18 @@ public class CommandHandler {
 		});
 
 		submit(new Command("marcusplace", Rank.MODERATOR) {
-            public boolean execute(final Player player, final String input) throws Exception {
+			public boolean execute(final Player player, final String input) throws Exception {
 				Magic.teleport(player, 1971, 5002, 0, false);
-                return false;
-            }
-        });
+				return false;
+			}
+		});
+
+		submit(new Command("darrenplace", Rank.MODERATOR) {
+			public boolean execute(final Player player, final String input) throws Exception {
+				Magic.teleport(player, 2123, 4913, 4, false);
+				return false;
+			}
+		});
 
         submit(new Command("reloaddrops", Rank.OWNER) {
             @Override

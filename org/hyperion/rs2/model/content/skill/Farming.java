@@ -284,7 +284,7 @@ public class Farming implements ContentTemplate {
 		}
 	}
 
-	public static final int MULTIPLIER = 40;
+	public static final int MULTIPLIER = 50;
 
 	public void digUp(final Player player, int x, int y) {
 		if(player.isBusy())

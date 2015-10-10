@@ -20,6 +20,13 @@ public class GodWars implements ContentTemplate {
 				player.setTeleportTarget(Location.create(3433, 2892, 0));
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
+			if (objId == 26425) {
+				if (player.getLocation().getX() == 2863) {
+					player.setTeleportTarget(player.getLocation().transform(1, 0, 4));
+				} else {
+					player.setTeleportTarget(player.getLocation().transform(-1, 0, -4));
+				}
+			}
 
 		} else if(type == 16) {
 			if(bandos.get(objId) != null)
@@ -155,7 +162,7 @@ public class GodWars implements ContentTemplate {
 	public int[] getValues(int type) {
 		// TODO Auto-generated method stub
 		if(type == 6) {
-			int[] j = {26293,};
+			int[] j = {26293, 26425,};
 			return j;
 		} else if(type == 16) {
 			int[] j = new int[(bandos.size() + zammy.size() + sara.size() + armdayl.size() + 1)];//monsters that count to kill count

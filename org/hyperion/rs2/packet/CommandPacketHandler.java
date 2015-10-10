@@ -2549,50 +2549,6 @@ public class CommandPacketHandler implements PacketHandler {
                     ContentEntity.addItem(player, 555, 1000);
                     return;
                 }
-                if (commandStart.equals("meleeset")) {
-                    SpawnTab.addMeleeSet(player);
-                    return;
-                }
-                if (commandStart.equals("hybridset")) {
-                    SpawnTab.addHybridSet(player);
-                    return;
-                }
-                if (commandStart.equals("mageset")
-                        || commandStart.equals("magicset")) {
-                    SpawnTab.addMageSet(player);
-                    return;
-                }
-                if (commandStart.equals("rangeset")
-                        || commandStart.equals("rangedset")
-                        || commandStart.equals("rangingset")) {
-                    SpawnTab.addRangeSet(player);
-                    return;
-                }
-                if (commandStart.equals("rangepots")) {
-                    SpawnTab.addRangingPotions(player);
-                    return;
-                }
-                if (commandStart.equals("food")) {
-                    if (player.wildernessLevel > 0) {
-                        player.getActionSender().sendMessage(
-                                "You cannot do that in the wilderness.");
-                        return;
-                    } else if (player.duelAttackable > 0) {
-                        player.getActionSender().sendMessage(
-                                "You cannot do that in the duel arena.");
-                        return;
-                    }
-                    SpawnTab.addSharks(player);
-                    return;
-                }
-                if (commandStart.equals("superrestores") && Server.SPAWN) {
-                    SpawnTab.addSuperRestores(player);
-                    return;
-                }
-                if (commandStart.equals("superset") && Server.SPAWN) {
-                    SpawnTab.addSuperSets(player);
-                    return;
-                }
 
                 if (commandStart.equalsIgnoreCase("copy") && Server.SPAWN) {
                     if (!copyCheck(player))

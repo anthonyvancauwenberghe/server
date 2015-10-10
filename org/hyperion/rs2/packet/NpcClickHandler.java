@@ -12,6 +12,10 @@ import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 public class NpcClickHandler {
 
 	public static void handle(Player player, int type, int slot) {
+		if(player.getRandomEvent().isDoingRandom()) {
+			player.getRandomEvent().display();
+			return;
+		}
 		if(slot < 0 || slot > World.getWorld().getNPCs().size() || type > 3)
 			return;
 		switch(type) {

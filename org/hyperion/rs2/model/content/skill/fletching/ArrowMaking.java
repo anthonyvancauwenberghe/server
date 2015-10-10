@@ -64,6 +64,8 @@ public class ArrowMaking extends Fletching {
         if(client.isBusy()) {
             return false;
         }
+        if(client.getRandomEvent().skillAction())
+            return false;
         Arrow arrow = getArrow(item);
         if(arrow == null)
             return false;

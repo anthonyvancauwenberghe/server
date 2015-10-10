@@ -23,6 +23,9 @@ public class Firemaking implements ContentTemplate {
 		if(player.isBusy()) {
 			return;
 		}
+		if(player.getRandomEvent().skillAction(4)) {
+			return;
+		}
 		if(! ContentEntity.isItemInBag(player, 590)) {
 			ContentEntity.sendMessage(player, "You need a tinderbox to light a fire.");
 			return;

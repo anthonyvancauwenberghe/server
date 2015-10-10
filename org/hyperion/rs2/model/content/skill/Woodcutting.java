@@ -188,6 +188,11 @@ public class Woodcutting implements ContentTemplate {
 					return;
 				}
 
+				if(client.getRandomEvent().skillAction(2)) {
+					stop2();
+					return;
+				}
+
 				if(cycle == - 1) {
 					cycle = fNumberOfCycles;
 				}

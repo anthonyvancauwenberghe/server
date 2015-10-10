@@ -43,7 +43,8 @@ public class Yelling {
 			"Demote",
 			"Trusted",
 			"Fuck",
-			"Slut"
+			"Slut",
+			"Kappa"
 
 	};
 	public static String isValidTitle(String s) {

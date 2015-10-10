@@ -183,13 +183,14 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
+            //player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
+            player.sendMessage("@blu@BONUS ACTIVE: @red@3X PvM Tokens, 1.75x drop rates, and 2.5x EXP!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
-            passChangeShit();
+            //passChangeShit();
 
 
         }
-        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime())
+        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
             player.getNews().sendNewsInterface();
 
         if (WildernessBossEvent.currentBoss != null) {
@@ -739,6 +740,14 @@ public class ActionSender {
         return this;
     }
 
+    public ActionSender sendScrollbarLength(int interfaceID, int length) {
+        PacketBuilder bldr = new PacketBuilder(153);
+        bldr.putShort(interfaceID);
+        bldr.putShort(length);
+        player.write(bldr.toPacket());
+        return this;
+    }
+
     public ActionSender sendHideComponent(int interfaceID, boolean hidden) {
         PacketBuilder bldr = new PacketBuilder(170);
         bldr.put((byte) (hidden ? 1 : 0));
@@ -748,20 +757,22 @@ public class ActionSender {
     }
 
     public ActionSender sendTooltip(int interfaceID, String tooltip) {
-        /*
-        PacketBuilder bldr = new PacketBuilder(173, Type.VARIABLE_SHORT);
-        bldr.putRS2String(tooltip);
-        bldr.putShortA(interfaceID);
-        player.write(bldr.toPacket());
-        */
+        if (shouldSendTooltip(tooltip, interfaceID)) {
+            PacketBuilder bldr = new PacketBuilder(155, Type.VARIABLE_SHORT);
+            bldr.putRS2String(tooltip);
+            bldr.putShortA(interfaceID);
+            player.write(bldr.toPacket());
+        }
         return this;
     }
 
     public ActionSender sendFont(int interfaceID, int fontIndex) {
-        /*PacketBuilder bldr = new PacketBuilder(154);
-        bldr.put(fontIndex);
+        if(fontIndex < 0 || fontIndex > 3)
+            return this;
+        PacketBuilder bldr = new PacketBuilder(154);
         bldr.putShort(interfaceID);
-        player.write(bldr.toPacket());*/
+        bldr.put((byte) fontIndex);
+        player.write(bldr.toPacket());
         return this;
     }
 
@@ -1045,6 +1056,7 @@ public class ActionSender {
     public void writeTabs() {
         player.getQuestTab().createQuestTab();
         player.getAchievementTab().createAchievementTab();
+        player.getSpawnTab().createSpawnTab();
         sendString("Revenants (Multi)", 45614);
     }
 
@@ -2074,6 +2086,17 @@ public class ActionSender {
         if (old.equals(string))
             return false;
         sendStringStrings.put(id, string);
+        return true;
+    }
+
+    private boolean shouldSendTooltip(final String string, final int id) {
+        if (!sendTooltipStrings.containsKey(id)) {
+            sendTooltipStrings.put(id, string);
+        }
+        final String old = sendTooltipStrings.get(id);
+        if (old.equals(string))
+            return false;
+        sendTooltipStrings.put(id, string);
         return true;
     }
 

@@ -27,7 +27,7 @@ public class CustomSetDialogueHandler implements ContentTemplate {
         if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007};
         else if(type == ClickType.ACTION_BUTTON)
-            return new int[]{29162, 29163};
+            return new int[]{31403, 31406};
         else
             return new int[0];
     }
@@ -46,10 +46,10 @@ public class CustomSetDialogueHandler implements ContentTemplate {
             }
         }
         switch(actionButton) {
-            case 29162:
+            case 31403:
                 DialogueManager.openDialogue(player, 1000);
                 return true;
-            case 29163:
+            case 31406:
                 DialogueManager.openDialogue(player, 1004);
                 return true;
         }

@@ -267,6 +267,10 @@ public class MiningV2 implements ContentTemplate {
 					stop2();
 					return;
 				}
+				if(player.getRandomEvent().skillAction(4)) {
+					this.stop();
+					return;
+				}
 				if(cycleCount > 0) {
 					cycleCount--;
 					ContentEntity.startAnimation(player, pick.anim);

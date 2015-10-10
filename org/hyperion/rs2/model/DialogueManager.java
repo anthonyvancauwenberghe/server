@@ -1514,6 +1514,12 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, -1);
 				player.getInterfaceState().setStringListener("ge_set_price");
 				break;
+			case 610:
+			case 611:
+			case 612:
+			case 613:
+				player.getRandomEvent().answer(dialogueId - 610);
+				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;

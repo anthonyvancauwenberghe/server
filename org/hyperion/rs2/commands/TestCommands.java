@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.util.Misc;
 
@@ -221,6 +222,10 @@ public class TestCommands {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
+		}
+
+		if(commandStart.equalsIgnoreCase("triggerrandom")) {
+			RandomEvent.triggerRandom(player, false);
 		}
 
 		return false;

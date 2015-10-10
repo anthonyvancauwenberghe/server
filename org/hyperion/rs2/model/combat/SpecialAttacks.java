@@ -837,9 +837,11 @@ public class SpecialAttacks {
                                     maxDamg4 = oldEntity.getPlayer().getInflictDamage(maxDamg4, player, false, Constants.MELEE);
 								oldEntity.hit((int) maxDamg4,
 										player, false, 0);
+								int maxDamg5 = SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, oldEntity.getEntity(), Combat.random((int) (newMaxDamage * 1.3)), 0, (int) (newMaxDamage * 1.3)));
+								if (oldEntity.getEntity() instanceof Player)
+									maxDamg5 = oldEntity.getPlayer().getInflictDamage(maxDamg5, player, false, Constants.MELEE);
 								if(maxDamg4 == 0)
-									oldEntity.hit(
-                                            SpiritShields.applyEffects(player.cE.getOpponent(), CombatCalculation.getCalculatedDamage(player, oldEntity.getEntity(), Combat.random((int)(newMaxDamage * 1.4)), 0,(int)(newMaxDamage * 1.4))),
+									oldEntity.hit(maxDamg5,
 											player, false, 0);
 								else
 									oldEntity.hit(

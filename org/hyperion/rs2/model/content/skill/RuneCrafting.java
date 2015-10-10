@@ -140,6 +140,10 @@ public class RuneCrafting implements ContentTemplate {
 			final int useItemId2 = useItemId;
 			final double runeExp = r.getExp() * amount;
 			//Start the runecrafting emote.
+
+			if(client.getRandomEvent().skillAction(15)) {
+				return false;
+			}
 			client.setCanWalk(false);
 			client.setBusy(true);
             client.getExtraData().put("runecraftingtimer", 0);
@@ -154,7 +158,7 @@ public class RuneCrafting implements ContentTemplate {
 					ContentEntity.addItem(client, r.getRuneId(), finalAmount);
 					client.getAchievementTracker().itemSkilled(Skills.RUNECRAFTING, r.getRuneId(), 1);
 					ContentEntity.sendMessage(client, "You craft " + finalAmount + " " + ContentEntity.getItemName(item) + "s.");
-					ContentEntity.addSkillXP(client, runeExp * Constants.XPRATE, 20);
+					ContentEntity.addSkillXP(client, runeExp * (Constants.XPRATE/2), 20);
 					// Stop the event.
 					stop2();
 				}

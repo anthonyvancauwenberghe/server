@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class FishingV2 implements ContentTemplate {
 
-	private static final int EXPMULTIPLIER = Constants.XPRATE;
+	private static final int EXPMULTIPLIER = Constants.XPRATE * 2;
 
 	private void fishType(final Player player, final FishingType type, final int x, final int y) {
 
@@ -55,6 +55,10 @@ public class FishingV2 implements ContentTemplate {
 					return;
 				}
 				if(! player.isBusy()) {
+					stop2();
+					return;
+				}
+				if(player.getRandomEvent().skillAction(2)) {
 					stop2();
 					return;
 				}

@@ -69,6 +69,14 @@ public class News {
             }
         });
 
+        CommandHandler.submit(new Command("refreshnews", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                RefreshNewsEvent.refreshNews(true);
+                return true;
+            }
+        });
+
         ActionsManager.getManager().submit(-29532, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {

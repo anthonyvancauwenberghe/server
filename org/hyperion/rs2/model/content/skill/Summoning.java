@@ -40,7 +40,7 @@ public class Summoning implements ContentTemplate {
 			return false;
 		}
 		if(ContentEntity.getItemAmount(p, POUCH) < 1) {
-			p.getActionSender().sendMessage("You need pouch for this..");
+			p.getActionSender().sendMessage("You need a pouch for this..");
 			return false;
 		}
 		if(ContentEntity.getItemAmount(p, SHARD) < shardsAmount) {
@@ -71,6 +71,10 @@ public class Summoning implements ContentTemplate {
 
 		if(useWith != POUCH) {
 			p.getActionSender().sendMessage("You cannot do this.");
+			return;
+		}
+
+		if(p.getRandomEvent().skillAction(5)) {
 			return;
 		}
 

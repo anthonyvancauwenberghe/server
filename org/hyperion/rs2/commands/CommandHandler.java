@@ -128,11 +128,6 @@ public class CommandHandler {
 			}
 			return true;
 		}
-		/*
-		 * annoying af
-		 */
-		//if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
-			//player.getActionSender().sendMessage("Command is null.");
 		return false;
 	}
 
@@ -785,14 +780,14 @@ public class CommandHandler {
 		submit(new Command("rules", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				player.getActionSender().sendWebpage("http://forums.arteropk.com/index.php/forum/28-in-game-rules/");
+				player.getActionSender().sendWebpage("http://forums.arteropk.com/forum/28-in-game-rules/");
 				return true;
 			}
 		});
 		submit(new Command("forums", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				player.getActionSender().sendWebpage("http://forums.arteropk.com/index.php/portal/");
+				player.getActionSender().sendWebpage("http://forums.arteropk.com/portal/");
 				return true;
 			}
 		});
@@ -1939,11 +1934,18 @@ public class CommandHandler {
 		});
 
 		submit(new Command("marcusplace", Rank.MODERATOR) {
-            public boolean execute(final Player player, final String input) throws Exception {
+			public boolean execute(final Player player, final String input) throws Exception {
 				Magic.teleport(player, 1971, 5002, 0, false);
-                return false;
-            }
-        });
+				return false;
+			}
+		});
+
+		submit(new Command("darrenplace", Rank.MODERATOR) {
+			public boolean execute(final Player player, final String input) throws Exception {
+				Magic.teleport(player, 2123, 4913, 4, false);
+				return false;
+			}
+		});
 
         submit(new Command("reloaddrops", Rank.OWNER) {
             @Override

@@ -60,7 +60,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 		if(World.getWorld().getContentManager()
 				.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;
-        if(button >= 29174 && button <= 29179)
+        if(button >= 31421 && button <= 31426)
 		    if(SetHandler.handleSet(player, button))
 			    return;
         if (Bank.bankButton(player, button)) {

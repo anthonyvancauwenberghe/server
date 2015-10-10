@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class QuestTab {
 
-    private static int max_index = 0;
+    private int max_index = 0;
 
-    private static int getId(int index) {
+    private int getId(int index) {
         index += 33011;
         if (index > max_index)
             max_index = index;
@@ -31,7 +31,7 @@ public class QuestTab {
         return index;
     }
 
-    private static int getNextIndex() {
+    private int getNextIndex() {
         max_index++;
         return max_index;
     }
@@ -50,8 +50,8 @@ public class QuestTab {
     public void updateQuestTab() {
         sendPlayerCount();
         sendStaffCount();
-        sendUptime();
         sendBonusSkill();
+        sendUptime();
         sendKills();
         sendDeaths();
         sendKdr();
@@ -115,17 +115,17 @@ public class QuestTab {
         player.getActionSender().sendTooltip(id, "Staff online");
     }
 
-    public void sendUptime() {
-        int id = getId(3);
-        player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : (Events.eventName == "" ? "" : "@or1@Event: @gre@" + (Events.eventName.length() > 15 ? Events.eventName.substring(0, 15) + "." : Events.eventName)), id);
-        player.getActionSender().sendTooltip(id, (Events.eventName == "" ? "" : "Teleport to event"));
-    }
-
     public void sendBonusSkill() {
-        int id = getId(4);
+        int id = getId(3);
         player.getActionSender().sendString("@or1@Bonus skill: @gre@"+ Misc.getSkillName(Skills.BONUS_SKILL), id);
         //player.getActionSender().sendString("@or1@Bonus skill: @gre@All skills", id);
         player.getActionSender().sendTooltip(id, "Bonus skill");
+    }
+
+    public void sendUptime() {
+        int id = getId(4);
+        player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : (Events.eventName == "" ? "" : "@or1@Event: @gre@" + (Events.eventName.length() > 15 ? Events.eventName.substring(0, 15) + "." : Events.eventName)), id);
+        player.getActionSender().sendTooltip(id, (Events.eventName == "" ? "" : "Teleport to event"));
     }
 
     public void sendKills() {
@@ -239,13 +239,13 @@ public class QuestTab {
     public void sendParticlesEnabled() {
         int id = getId(31);
         player.getActionSender().sendString("@or1@Toggle particles", id);
-        player.getActionSender().sendTooltip(id, "");
+        player.getActionSender().sendTooltip(id, "Toggle particles");
     }
 
     public void sendTitlesEnabled() {
         int id = getId(32);
         player.getActionSender().sendString("@or1@Toggle player titles", id);
-        player.getActionSender().sendTooltip(id, "");
+        player.getActionSender().sendTooltip(id, "Toggle player titles");
     }
 
     public void sendExpLockEnabled() {
@@ -273,6 +273,7 @@ public class QuestTab {
             player.getActionSender().sendString("", getId(36));
         player.getActionSender().sendString(!hasRank ? "" : "@yel@Available ranks", getId(35));
         player.getActionSender().sendFont(getId(35), 2);
+        player.getActionSender().sendScrollbarLength(33010, (((5 + (hasRank ? 1 : 0)) * 16) + ((i - 5) * 12)) + 8);
     }
 
     public void fillQuestTab() {
@@ -327,15 +328,6 @@ public class QuestTab {
         ActionsManager.getManager().submit(getClickId(3), new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                if (Events.eventName != "") {
-                    Events.joinEvent(player);
-                }
-            }
-        });
-
-        ActionsManager.getManager().submit(getClickId(4), new ButtonAction() {
-            @Override
-            public void handle(Player player, int id) {
                 Calendar c = Calendar.getInstance();
                 player.sendMessage("@dre@The next bonus skills will be; ");
                 int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
@@ -346,6 +338,15 @@ public class QuestTab {
                     } else {
                         player.sendMessage("@dre@" + i + ". @bla@" + Misc.getSkillName(bonusSkill));
                     }
+                }
+            }
+        });
+
+        ActionsManager.getManager().submit(getClickId(4), new ButtonAction() {
+            @Override
+            public void handle(Player player, int id) {
+                if (Events.eventName != "") {
+                    Events.joinEvent(player);
                 }
             }
         });

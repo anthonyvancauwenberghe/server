@@ -183,9 +183,10 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
+            //player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
+            player.sendMessage("@blu@BONUS ACTIVE: @red@3X PvM Tokens, 1.75x drop rates, and 2.5x EXP!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
-            passChangeShit();
+            //passChangeShit();
 
 
         }
@@ -756,10 +757,12 @@ public class ActionSender {
     }
 
     public ActionSender sendTooltip(int interfaceID, String tooltip) {
-        PacketBuilder bldr = new PacketBuilder(155, Type.VARIABLE_SHORT);
-        bldr.putRS2String(tooltip);
-        bldr.putShortA(interfaceID);
-        player.write(bldr.toPacket());
+        if (shouldSendTooltip(tooltip, interfaceID)) {
+            PacketBuilder bldr = new PacketBuilder(155, Type.VARIABLE_SHORT);
+            bldr.putRS2String(tooltip);
+            bldr.putShortA(interfaceID);
+            player.write(bldr.toPacket());
+        }
         return this;
     }
 
@@ -2083,6 +2086,17 @@ public class ActionSender {
         if (old.equals(string))
             return false;
         sendStringStrings.put(id, string);
+        return true;
+    }
+
+    private boolean shouldSendTooltip(final String string, final int id) {
+        if (!sendTooltipStrings.containsKey(id)) {
+            sendTooltipStrings.put(id, string);
+        }
+        final String old = sendTooltipStrings.get(id);
+        if (old.equals(string))
+            return false;
+        sendTooltipStrings.put(id, string);
         return true;
     }
 

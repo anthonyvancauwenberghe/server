@@ -7,11 +7,14 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Gilles on 10/10/2015.
  */
 public class PollInterface {
     private static int INTERFACE_ID = 27500;
+    private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM hh:mm");
 
     static {
         CommandHandler.submit(new Command("polls", Rank.DEVELOPER) {
@@ -111,10 +114,13 @@ public class PollInterface {
 
     public void fillInterface() {
         Poll poll = Poll.getPolls().get(Poll.getPolls().keySet().toArray()[activePoll]);
+        if(Poll.removeInactive(poll))
+            return;
         String[] content = poll.getDescription().split("\n");
         sendArrows();
         sendButtons();
         player.getActionSender().sendString(27505, poll.getQuestion());
+        player.getActionSender().sendString(27634, "Ends: " + timeFormat.format(poll.getEndDate()));
         for (int i = 0; i < content.length; i++)
             player.getActionSender().sendString(27519 + i, content[i]);
         sendPercentBar(getPercentageYes(poll.getYesVotes().size(), poll.getNoVotes().size()));
@@ -166,6 +172,11 @@ public class PollInterface {
     public void sendButtons(boolean yes, boolean no) {
         player.getActionSender().sendHideComponent(27510, yes);
         player.getActionSender().sendHideComponent(27513, no);
+        if(yes || no) {
+            player.getActionSender().sendString("You voted " + (yes ? "yes" : "no  ") + "        ", 27633);
+        } else {
+            player.getActionSender().sendString("", 27633);
+        }
     }
 
     public void voteYes() {

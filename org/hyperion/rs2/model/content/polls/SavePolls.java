@@ -26,10 +26,10 @@ public class SavePolls extends SQLRequest {
                     continue;
 
                 String query = String.format(
-                        "INSERT INTO `server`.`polls` (`index`, `question`, `explanation`, `canChange`, `active`) VALUES (%d, '%s', '%s', '%d', '1')" +
-                                " ON DUPLICATE KEY UPDATE `question` = '%s', `explanation` = '%s', `canChange` = '%d'",
-                        poll.getIndex(), poll.getQuestion(), poll.getDescription(), poll.canChange() ? 1 : 0,
-                        poll.getQuestion(), poll.getDescription(), poll.canChange() ? 1 : 0);
+                        "INSERT INTO `server`.`polls` (`index`, `question`, `explanation`, `canChange`, `active`) VALUES (%d, '%s', '%s', '%d', '%d')" +
+                                " ON DUPLICATE KEY UPDATE `question` = '%s', `explanation` = '%s', `canChange` = '%d', `active` = '%d'",
+                        poll.getIndex(), poll.getQuestion(), poll.getDescription(), poll.canChange() ? 1 : 0, poll.isActive() ? 1 : 0,
+                        poll.getQuestion(), poll.getDescription(), poll.canChange() ? 1 : 0,  poll.isActive() ? 1 : 0);
                 sql.query(query);
 
                 for (String vote : poll.getYesVotes()) {
@@ -48,6 +48,8 @@ public class SavePolls extends SQLRequest {
                     );
                     sql.query(query);
                 }
+                if(!poll.isActive())
+                    Poll.getPolls().remove(poll.getIndex());
             }
         } catch (Exception e) {
             e.printStackTrace();

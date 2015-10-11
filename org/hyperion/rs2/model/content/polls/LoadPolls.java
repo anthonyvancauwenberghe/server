@@ -27,7 +27,7 @@ public class LoadPolls extends SQLRequest {
         try {
             rs = sql.query(query);
             while (rs.next()) {
-                new Poll(rs.getInt("index"), rs.getString("question"), rs.getString("explanation"), rs.getBoolean("canChange"), true);
+                new Poll(rs.getInt("index"), rs.getString("question"), rs.getString("explanation"), rs.getTimestamp("endDate"), rs.getBoolean("canChange"), true);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -4,10 +4,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Misc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Gilles on 10/10/2015.
@@ -18,19 +15,21 @@ public class Poll {
     private List<String> yesVotes = new ArrayList<>();
     private List<String> noVotes = new ArrayList<>();
     private int index;
-    private String question;
-    private String description;
-    private boolean canChange;
+    private String question, description;
+    private Date endDate;
+    private boolean canChange, active;
 
-    public Poll(int index, String question, String description, boolean canChange) {
-        new Poll(index, question, description, canChange, false);
+    public Poll(int index, String question, String description, Date endDate, boolean canChange) {
+        new Poll(index, question, description, endDate, canChange, false);
     }
 
-    public Poll(int index, String question, String description, boolean canChange, boolean getVotes) {
+    public Poll(int index, String question, String description, Date endDate, boolean canChange, boolean getVotes) {
         this.index = index;
         this.question = question;
         this.description = description;
         this.canChange = canChange;
+        this.endDate = endDate;
+        this.active = true;
         addPoll(this.index, this);
         if (getVotes)
             World.getWorld().getLogsConnection().offer(new LoadVotes(this.index));
@@ -46,6 +45,15 @@ public class Poll {
 
     public static Map<Integer, Poll> getPolls() {
         return polls;
+    }
+
+    public static boolean removeInactive(Poll poll) {
+        if(poll.getEndDate().before(Calendar.getInstance().getTime())) {
+            poll.active = false;
+            World.getWorld().getLogsConnection().offer(new SavePolls());
+            return true;
+        }
+        return false;
     }
 
     public List<String> getYesVotes() {
@@ -72,9 +80,17 @@ public class Poll {
         return canChange;
     }
 
+    public Date getEndDate() {
+        return endDate;
+    }
+
     public void addNoVote(String playerName) {
         noVotes.add(playerName);
         World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, false));
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public void removeYesVote(String playerName) {

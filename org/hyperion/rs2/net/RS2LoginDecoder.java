@@ -1,12 +1,5 @@
 package org.hyperion.rs2.net;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
@@ -20,8 +13,6 @@ import org.hyperion.rs2.model.BanManager;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ondemand.OnDemandPool;
 import org.hyperion.rs2.net.ondemand.OnDemandRequest;
@@ -29,6 +20,12 @@ import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * Login protocol decoding class.
@@ -263,8 +260,8 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
         								public void operationComplete(IoFuture future) {
         									future.getSession().close(false);
         								}
-        							});;
-                                    in.rewind();
+        							});
+									in.rewind();
                                     return false;
                                 }
                             }
@@ -357,7 +354,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 * making it useless in the private server scene.
 					 */
 						int uid = in.getInt();
-						if (uid < 15482) {//old: 15467
+						if (uid < 15483) {//old: 15467
 							returnCode = 6;
 						}
 

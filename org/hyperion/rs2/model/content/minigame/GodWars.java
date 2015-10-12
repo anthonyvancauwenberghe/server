@@ -22,9 +22,9 @@ public class GodWars implements ContentTemplate {
 			}
 			if (objId == 26425) {
 				if (player.getLocation().getX() == 2863) {
-					player.setTeleportTarget(player.getLocation().transform(1, 0, 4));
+					player.setTeleportTarget(player.getLocation().transform(1, 0, 0));
 				} else {
-					player.setTeleportTarget(player.getLocation().transform(-1, 0, -4));
+					player.setTeleportTarget(player.getLocation().transform(-1, 0, 0));
 				}
 			}
 

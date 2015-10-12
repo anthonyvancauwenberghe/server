@@ -95,21 +95,17 @@ public class RandomEvent {
         int number2 = Misc.random(4);
         player.getRandomEvent().n1 = number1;
         player.getRandomEvent().n2 = number2;
-        player.getRandomEvent().displaySum();
-    }
-
-    public void displaySum() {
 
         answers.clear();
-        while(answers.size() <= 4) {
+
+        while(answers.size() < 4) {
             int number = Misc.random(10);
             if(!answers.containsValue(number))
                 answers.put(answers.size(), number);
         }
-        if(!answers.containsValue((n1 + n2)))
+        if(!answers.containsValue(n1 + n2))
             answers.put(Misc.random(3), (n1 + n2));
         display();
-
     }
 
     public void display() {

@@ -327,7 +327,7 @@ public class Thieving implements ContentTemplate {
 	public void pickPocketNpc(final Player player, NPC npc) {
 		if(player.cE.isFrozen())
 			return;
-		if(player.getRandomEvent().skillAction(5)) {
+		if(player.getRandomEvent().skillAction()) {
 			return;
 		}
 		if(player.getExtraData().getLong("thievingTimer") > System.currentTimeMillis())

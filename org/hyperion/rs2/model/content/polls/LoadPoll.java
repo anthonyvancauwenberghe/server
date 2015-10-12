@@ -7,12 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Gilles on 10/10/2015.
+ * Created by Gilles on 12/10/2015.
  */
-public class LoadPolls extends SQLRequest {
+public class LoadPoll extends SQLRequest {
 
-    public LoadPolls() {
+    private int poll;
+
+    public LoadPoll(int poll) {
         super(QUERY_REQUEST);
+        this.poll = poll;
     }
 
     @Override
@@ -23,12 +26,11 @@ public class LoadPolls extends SQLRequest {
         }
 
         ResultSet rs = null;
-        String query = "SELECT * FROM `polls` WHERE `active` = 1";
+        String query = "SELECT * FROM `polls` WHERE `index` = " + poll;
         try {
             rs = sql.query(query);
-            Poll.getPolls().clear();
             while (rs.next()) {
-                new Poll(rs.getInt("index"), rs.getString("question"), rs.getString("explanation"), rs.getTimestamp("endDate"), rs.getBoolean("canChange"), true);
+                new Poll(rs.getInt("index"), rs.getString("question"), rs.getString("explanation"), rs.getTimestamp("endDate"), rs.getBoolean("canChange"));
             }
         } catch (Exception ex) {
             ex.printStackTrace();

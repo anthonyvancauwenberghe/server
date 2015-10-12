@@ -58,10 +58,6 @@ public class FishingV2 implements ContentTemplate {
 					stop2();
 					return;
 				}
-				if(player.getRandomEvent().skillAction(2)) {
-					stop2();
-					return;
-				}
 				if(! ContentEntity.isItemInBag(player, type.itemId)) {
 					ContentEntity.sendMessage(player, "You need a " + ItemDefinition.forId(type.itemId).getName() + " to fish here.");
 					stop2();
@@ -97,6 +93,10 @@ public class FishingV2 implements ContentTemplate {
 							ContentEntity.sendMessage(player, "You catch a " + ItemDefinition.forId(type.fishIds[i]).getName());
 							break;
 						}
+					}
+					if(player.getRandomEvent().skillAction(6)) {
+						stop2();
+						return;
 					}
 				} else
 					ContentEntity.startAnimation(player, type.animationId);

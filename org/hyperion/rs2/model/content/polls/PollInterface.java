@@ -1,9 +1,6 @@
 package org.hyperion.rs2.model.content.polls;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 
@@ -17,13 +14,6 @@ public class PollInterface {
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM hh:mm");
 
     static {
-        CommandHandler.submit(new Command("polls", Rank.DEVELOPER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                player.getPoll().openInterface();
-                return false;
-            }
-        });
 
         ActionsManager.getManager().submit(27508, new ButtonAction() {
             @Override

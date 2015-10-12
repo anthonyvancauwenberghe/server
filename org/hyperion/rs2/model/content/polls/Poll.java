@@ -1,6 +1,9 @@
 package org.hyperion.rs2.model.content.polls;
 
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Misc;
 
@@ -20,7 +23,7 @@ public class Poll {
     private boolean canChange, active;
 
     public Poll(int index, String question, String description, Date endDate, boolean canChange) {
-        new Poll(index, question, description, endDate, canChange, false);
+        this(index, question, description, endDate, canChange, false);
     }
 
     public Poll(int index, String question, String description, Date endDate, boolean canChange, boolean getVotes) {
@@ -136,5 +139,50 @@ public class Poll {
             player.sendMessage("Your vote has been changed from yes to no.");
             return;
         }
+    }
+
+    static {
+        CommandHandler.submit(new Command("polls", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                player.getPoll().openInterface();
+                return false;
+            }
+        });
+
+        CommandHandler.submit(new Command("reloadpolls", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                World.getWorld().getLogsConnection().offer(new LoadPolls());
+                return false;
+            }
+        });
+
+        CommandHandler.submit(new Command("getresults", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                input = filterInput(input);
+                int pollId = -1;
+                try {
+                    pollId = Integer.parseInt(input);
+                } catch(Exception e) {}
+                if(pollId == -1) {
+                    player.sendMessage("Use as ::getresults POLLID");
+                    return true;
+                }
+                if(!polls.containsKey(pollId)) {
+                    World.getWorld().getLogsConnection().offer(new LoadPoll(pollId));
+                }
+                Poll poll = polls.get(pollId);
+                if(poll == null) {
+                    player.sendMessage("Poll index does not exist.");
+                    return true;
+                }
+                player.sendMessage("@dre@Question: @bla@" + poll.getQuestion());
+                player.sendMessage("@dre@Yes votes: @bla@" + poll.getYesVotes().size());
+                player.sendMessage("@dre@No votes: @bla@" + poll.getNoVotes().size());
+                return false;
+            }
+        });
     }
 }

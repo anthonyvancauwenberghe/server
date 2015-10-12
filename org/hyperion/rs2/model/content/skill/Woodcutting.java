@@ -188,7 +188,7 @@ public class Woodcutting implements ContentTemplate {
 					return;
 				}
 
-				if(client.getRandomEvent().skillAction(2)) {
+				if(client.getRandomEvent().skillAction(4)) {
 					stop2();
 					return;
 				}

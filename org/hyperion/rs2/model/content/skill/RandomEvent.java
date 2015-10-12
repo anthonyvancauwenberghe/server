@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 import java.util.*;
@@ -55,13 +56,13 @@ public class RandomEvent {
     }
 
     public boolean reduceSecondsLeft(int amount) {
-        /*
+        if(!ItemSpawning.canSpawn(player, false))
+            return false;
         secondsLeft -= amount;
         if(secondsLeft <= 0) {
             triggerRandom(player, true);
             return true;
         }
-        */
         return false;
     }
 

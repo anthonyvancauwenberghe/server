@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.DoorManager;
+import org.hyperion.rs2.model.content.polls.PollInterface;
 
 import java.io.IOException;
 
@@ -111,6 +112,10 @@ public class ObjectClickHandler {
                 break;
 
             case 9398:
+                if(!PollInterface.canVote(player)) {
+                    player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level or purchase donator", "to be able to vote.");
+                    break;
+                }
                 player.getPoll().openInterface();
                 break;
 

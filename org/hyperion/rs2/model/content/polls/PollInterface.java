@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
  * Created by Gilles on 10/10/2015.
  */
 public class PollInterface {
+
     private static int INTERFACE_ID = 27500;
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM hh:mm");
 
@@ -81,6 +82,7 @@ public class PollInterface {
     }
 
     public void openInterface() {
+        Poll.removeInactivePolls();
         if (Poll.getPolls().isEmpty()) {
             player.sendMessage("There are currently no polls going.");
             return;
@@ -104,8 +106,6 @@ public class PollInterface {
 
     public void fillInterface() {
         Poll poll = Poll.getPolls().get(Poll.getPolls().keySet().toArray()[activePoll]);
-        if(Poll.removeInactive(poll))
-            return;
         String[] content = poll.getDescription().split("\n");
         sendArrows();
         sendButtons();
@@ -192,5 +192,4 @@ public class PollInterface {
         }
         poll.addNoVote(player);
     }
-
 }

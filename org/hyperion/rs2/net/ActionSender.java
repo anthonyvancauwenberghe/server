@@ -2063,6 +2063,7 @@ public class ActionSender {
     private boolean shouldSendTooltip(final String string, final int id) {
         if (!sendTooltipStrings.containsKey(id)) {
             sendTooltipStrings.put(id, string);
+            return true;
         }
         final String old = sendTooltipStrings.get(id);
         if (old.equals(string))

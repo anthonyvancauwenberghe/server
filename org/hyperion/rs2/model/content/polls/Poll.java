@@ -50,13 +50,13 @@ public class Poll {
         return polls;
     }
 
-    public static boolean removeInactive(Poll poll) {
-        if(poll.getEndDate().before(Calendar.getInstance().getTime())) {
-            poll.active = false;
-            World.getWorld().getLogsConnection().offer(new SavePolls());
-            return true;
-        }
-        return false;
+    public static void removeInactivePolls() {
+        polls.forEach((index, poll) -> {
+            if (poll.getEndDate().before(Calendar.getInstance().getTime())) {
+                poll.active = false;
+                World.getWorld().getLogsConnection().offer(new SavePolls());
+            }
+        });
     }
 
     public List<String> getYesVotes() {
@@ -65,6 +65,10 @@ public class Poll {
 
     public List<String> getNoVotes() {
         return noVotes;
+    }
+
+    public boolean hasVoted(Player player) {
+        return (yesVotes.contains(player.getName()) || noVotes.contains(player.getName()));
     }
 
     public int getIndex() {
@@ -87,11 +91,6 @@ public class Poll {
         return endDate;
     }
 
-    public void addNoVote(String playerName) {
-        noVotes.add(playerName);
-        World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, false));
-    }
-
     public boolean isActive() {
         return active;
     }
@@ -107,6 +106,11 @@ public class Poll {
     public void addYesVote(String playerName) {
         yesVotes.add(playerName);
         World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, true));
+    }
+
+    public void addNoVote(String playerName) {
+        noVotes.add(playerName);
+        World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, false));
     }
 
     public void addNoVote(Player player) {

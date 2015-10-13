@@ -1,7 +1,6 @@
 package org.hyperion.rs2.packet;
 
 
-import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.action.impl.MiningAction;
 import org.hyperion.rs2.action.impl.MiningAction.Node;
 import org.hyperion.rs2.action.impl.ProspectingAction;
@@ -13,7 +12,6 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.DoorManager;
-import org.hyperion.rs2.model.region.Region;
 
 import java.io.IOException;
 
@@ -111,6 +109,11 @@ public class ObjectClickHandler {
                     }
                 });
                 break;
+
+            case 9398:
+                player.getPoll().openInterface();
+                break;
+
             case 2213:
             case 2214:
             case 3045:
@@ -130,9 +133,6 @@ public class ObjectClickHandler {
             case 12554:
             case 1738:
                 player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 2));
-                break;
-            case 9398:
-                //Bank.openDepositBox(player);
                 break;
             case 10230://dag ladder
                 player.setTeleportTarget(Location.create(2900, 4449, 0));

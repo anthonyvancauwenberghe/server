@@ -10,6 +10,10 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.Packet;
@@ -17,12 +21,12 @@ import org.hyperion.rs2.net.RS2CodecFactory;
 import org.hyperion.rs2.task.impl.SessionClosedTask;
 import org.hyperion.rs2.task.impl.SessionMessageTask;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Time;
 
 import java.io.File;
 import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -84,10 +88,10 @@ public class ConnectionHandler extends IoHandlerAdapter {
             p.getExtraData().put("packetCount", p.getExtraData().getInt("packetCount")+1);
             int packetCount = p.getExtraData().getInt("packetCount");
             if(packetCount > 50){
-                p.sendf("@red@PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
+                p.sendImportantMessage("PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
 				if (p.getExtraData().getInt("packetCount") > 250) {
-					long expiration_time = System.currentTimeMillis() + Time.ONE_MINUTE;
-					World.getWorld().getBanManager().moderate("Server", p, 2, true, expiration_time, "Suspected layer 7 ddos.");
+					p.getSession().close(false);
+					PunishmentManager.getInstance().add(new Punishment(p, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
 				}
 				if(packetCount > 249) {
 					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));

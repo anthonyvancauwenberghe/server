@@ -10,20 +10,15 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Gilles on 9/10/2015.
  */
 public class RandomEvent {
 
-    private Player player;
-    private int secondsLeft = SECONDS_DEFAULT;
-    private boolean doingRandom = false;
-    Map<Integer, Integer> answers = new HashMap<>();
-    private int n1, n2;
-
-    private int attempts;
     private static int MAX_ATTEMPTS = 3;
     private static int SECONDS_DEFAULT = 300;
     private static Location[] locations = {
@@ -33,18 +28,47 @@ public class RandomEvent {
             Location.create(3350, 3343, 0),
             Location.create(3433, 2892, 0),
             Location.create(3519, 3365, 0),
-            Location.create(2893, 5433, 0),
             Location.create(3024, 9582, 0),
             Location.create(2425, 4446, 0),
             Location.create(3224, 3174, 0)
     };
 
-    public boolean isDoingRandom() {
-        return doingRandom;
+    static {
+        CommandHandler.submit(new Command("triggerrandom", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                RandomEvent.triggerRandom(player, false);
+                return false;
+            }
+        });
     }
+
+    Map<Integer, Integer> answers = new HashMap<>();
+    private Player player;
+    private int secondsLeft = SECONDS_DEFAULT;
+    private boolean doingRandom = false;
+    private int n1, n2;
+    private int attempts;
 
     public RandomEvent(Player player) {
         this.player = player;
+    }
+
+    public static void triggerRandom(Player player, boolean checks) {
+        if (checks) {
+            if (player.getRandomEvent().doingRandom) {
+                player.getRandomEvent().randomTeleport();
+                return;
+            }
+        }
+        player.getRandomEvent().secondsLeft = 60 * 5;
+        player.getRandomEvent().doingRandom = true;
+        player.getRandomEvent().attempts = 0;
+        player.getRandomEvent().generateSum();
+    }
+
+    public boolean isDoingRandom() {
+        return doingRandom;
     }
 
     public boolean skillAction() {
@@ -56,7 +80,7 @@ public class RandomEvent {
     }
 
     public boolean reduceSecondsLeft(int amount) {
-        if(!ItemSpawning.canSpawn(player, false))
+        if (!ItemSpawning.canSpawn(player))
             return false;
         secondsLeft -= amount;
         if(secondsLeft <= 0) {
@@ -66,39 +90,22 @@ public class RandomEvent {
         return false;
     }
 
-    public static void triggerRandom(Player player, boolean checks) {
-        if(checks) {
-            if(player.getRandomEvent().doingRandom) {
-                player.getRandomEvent().randomTeleport();
-                return;
-            }
-        }
-        player.getRandomEvent().secondsLeft = 60 * 5;
-        player.getRandomEvent().doingRandom = true;
-        player.getRandomEvent().attempts = 0;
-        player.getRandomEvent().generateSum();
-    }
-
     public void generateSum() {
         int number1 = Misc.random(4);
         int number2 = Misc.random(4);
         player.getRandomEvent().n1 = number1;
         player.getRandomEvent().n2 = number2;
-        player.getRandomEvent().displaySum();
-    }
-
-    public void displaySum() {
 
         answers.clear();
-        while(answers.size() <= 4) {
+
+        while(answers.size() < 4) {
             int number = Misc.random(10);
             if(!answers.containsValue(number))
                 answers.put(answers.size(), number);
         }
-        if(!answers.containsValue((n1 + n2)))
+        if(!answers.containsValue(n1 + n2))
             answers.put(Misc.random(3), (n1 + n2));
         display();
-
     }
 
     public void display() {
@@ -128,15 +135,5 @@ public class RandomEvent {
         player.getActionSender().removeChatboxInterface();
         Magic.teleport(player, locations[Misc.random(locations.length - 1)], true);
         doingRandom = false;
-    }
-
-    static {
-        CommandHandler.submit(new Command("triggerrandom", Rank.DEVELOPER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                RandomEvent.triggerRandom(player, false);
-                return false;
-            }
-        });
     }
 }

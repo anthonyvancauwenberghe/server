@@ -58,8 +58,24 @@ import java.util.Properties;
  */
 public class ActionSender {
 
+    public static final int[] QUEST_MENU_IDS = {8145, 8147, 8148, 8149, 8150,
+            8151, 8152, 8153, 8154, 8155, 8156, 8157, 8158, 8159, 8160, 8161,
+            8162, 8163, 8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172,
+            8173, 8174, 8175, 8176, 8177, 8178, 8179, 8180, 8181, 8182, 8183,
+            8184, 8185, 8186, 8187, 8188, 8189, 8190, 8191, 8192, 8193, 8194,
+            8195, 12174, 12175, 12176, 12177, 12178, 12179, 12180, 12181,
+            12182, 12183, 12184, 12185, 12186, 12187, 12188, 12189, 12190,
+            12191, 12192, 12193, 12194, 12195, 12196, 12197, 12198, 12199,
+            12200, 12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208,
+            12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216, 12217,
+            12218, 12219, 12220, 12221, 12222, 12223};
+    /**
+     * Holds all the configurations (Such as Split screen,Brightness etc)
+     */
+    private static final int[][] CONFIGS = {{166, 4}, {505, 0},
+            {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
+            {503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-
     private static Date LAST_PASS_RESET;
 
     static {
@@ -70,19 +86,45 @@ public class ActionSender {
         }
     }
 
-
-    /**
-     * The player.
-     */
-    private Player player;
-
     /**
      * Map of stored frame strings
      */
 
     private final Map<Integer, String> sendStringStrings = new HashMap<>();
-
     private final Map<Integer, String> sendTooltipStrings = new HashMap<>();
+    Properties p = new Properties();
+    /**
+     * Sends a specific skill.
+     *
+     * @param i The skill to send.
+     * @return The action sender instance, for chaining.
+     */
+    int[][] text = {
+            {4004, 4005}, {4008, 4009}, {4006, 4007},
+            {4016, 4017}, {4010, 4011}, {4012, 4013},
+            {4014, 4015}, {4034, 4035}, {4038, 4039},
+            {4026, 4027}, {4032, 4033}, {4036, 4037},
+            {4024, 4025}, {4030, 4031}, {4028, 4029},
+            {4020, 4021}, {4018, 4019}, {4022, 4023},
+            {12166, 12167}, {13926, 13927}, {4152, 4153},
+            {18165, 18169}, {18166, 18170}, {18167, 18171},
+            {18168, 18172}
+            /*
+            { 4004, 4005 }, 	{ 4016, 4017 }, 	{ 4028, 4029 },
+			{ 4006, 4007 }, 	{ 4018, 4019 }, 	{ 4030, 4031 },
+			{ 4008, 4009 }, 	{ 4020, 4021 }, 	{ 4032, 4033 },
+			{ 4010, 4011 }, 	{ 4022, 4023 }, 	{ 4034, 4035 },
+			{ 4012, 4013 }, 	{ 4024, 4025 }, 	{ 4036, 4037 },
+			{ 4014, 4015 }, 	{ 4026, 4027 }, 	{ 4038, 4039 },
+			{ 4152, 4153 }, 	{ 12166, 12167 }, 	{ 13926, 13927 },
+			{ 18165, 18169 },  	{ 18166, 18170 }, 	{ 18167, 18171 },
+			{ 18168, 18172 }
+			*/
+    };
+    /**
+     * The player.
+     */
+    private Player player;
 
     /**
      * Creates an action sender for the specified player.
@@ -91,6 +133,43 @@ public class ActionSender {
      */
     public ActionSender(Player player) {
         this.player = player;
+    }
+
+    /**
+     * Sends the client configurations such as brightness.
+     *
+     * @param player
+     */
+    public static void sendClientConfigs(Player player) {
+        for (int i = 0; i < CONFIGS.length; i++) {
+            player.getActionSender().sendClientConfig(CONFIGS[i][0],
+                    CONFIGS[i][1]);
+        }
+    }
+
+    /**
+     * Sends a message to all players.
+     *
+     * @param message The message to send.
+     */
+    public static void yellMessage(String message) {
+        for (Player p : World.getWorld().getPlayers()) {
+            p.getActionSender().sendMessage(message);
+        }
+    }
+
+    /**
+     * Sends a message to all moderators.
+     *
+     * @param messages
+     */
+    public static void yellModMessage(String... messages) {
+        for (Player p : World.getWorld().getPlayers()) {
+            if (Rank.isStaffMember(p)) {
+                for (String message : messages)
+                    p.getActionSender().sendMessage(message);
+            }
+        }
     }
 
     /**
@@ -107,8 +186,6 @@ public class ActionSender {
                 .putShort(inventoryInterfaceId).toPacket());
         return this;
     }
-
-    Properties p = new Properties();
 
     private void loadIni() {
         try {
@@ -156,7 +233,6 @@ public class ActionSender {
         }
     }
 
-
     public void basicLogin() {
         player.getLogManager().add(LogEntry.login(player));
         LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
@@ -184,7 +260,7 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
             //player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
-            player.sendMessage("@blu@BONUS ACTIVE: @red@3X PvM Tokens, 1.75x drop rates, and 2.5x EXP!");
+            player.sendMessage("@dre@Bonus active: @bla@3x PvM Tokens, 1.75x drop rates, and 2.5x Experience!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             //passChangeShit();
 
@@ -216,17 +292,6 @@ public class ActionSender {
                         p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
         }
 
-
-
-	    /*
-         * if(player.isMember)
-		 * sendMessage("You currently have membership status."); else {
-		 * sendMessage
-		 * ("You currently are not a member, please donate to keep the server alive"
-		 * ); sendMessage(
-		 * "membership status is at little as $3 see www.RS2.server.org for details."
-		 * ); }
-		 */
         if (Combat.getWildLevel(player.getLocation().getX(), player
                 .getLocation().getY()) > 0) {
             sendPlayerOption("Attack", 2, 1);
@@ -444,14 +509,6 @@ public class ActionSender {
         return this;
     }
 
-    /**
-     * Holds all the configurations (Such as Split screen,Brightness etc)
-     */
-    private static final int[][] CONFIGS = {{166, 4}, {505, 0},
-            {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
-            {503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
-
-
     public ActionSender showItemInterface(final int width, final int height, final Item... items) {
         return showItemInterface("Items", width, height, items);
     }
@@ -459,18 +516,6 @@ public class ActionSender {
     public ActionSender showItemInterface(final String name, final int width, final int height, final Item... items) {
         InterfaceManager.<ItemContainer>get(10).sendItems(player, name, width, height, items);
         return this;
-    }
-
-    /**
-     * Sends the client configurations such as brightness.
-     *
-     * @param player
-     */
-    public static void sendClientConfigs(Player player) {
-        for (int i = 0; i < CONFIGS.length; i++) {
-            player.getActionSender().sendClientConfig(CONFIGS[i][0],
-                    CONFIGS[i][1]);
-        }
     }
 
     public void checkStarter() {
@@ -512,7 +557,6 @@ public class ActionSender {
         return this;
     }
 
-
     public ActionSender sendPvPLevel(boolean clear) {
         if (!clear) {
             int j = 15000;// 197,12278
@@ -540,9 +584,9 @@ public class ActionSender {
 
     public ActionSender createArrow(Entity entity) {
         if (entity instanceof Player) {
-            return createArrow(10, ((Player) entity).getIndex());
+            return createArrow(10, entity.getIndex());
         } else {
-            return createArrow(1, ((NPC) entity).getIndex());
+            return createArrow(1, entity.getIndex());
         }
     }
 
@@ -565,6 +609,42 @@ public class ActionSender {
         sendString(36504, "EP: " + getEPString());
         return this;
     }
+
+	/*
+     * public void cameraMovement(int startX, int startY,int endX, int endY, int
+	 * pixelHeight, int zoomSpeed, int movementSpeed) //Camera Movement packet -
+	 * mad turnip { int mapRegionX = (startX >> 3) - 6; int mapRegionY = (startY
+	 * >> 3) - 6; outStream.createFrame(73); outStream.writeWordA(mapRegionX +
+	 * 6); // for some reason the client outStream.writeWord(mapRegionY + 6);//
+	 * substracts 6 from those values
+	 * 
+	 * int playerSquareX = endX - (mapRegionX*8); int playerSquareY = endY -
+	 * (mapRegionY*8); outStream.createFrame(166); //rotate camera
+	 * outStream.writeByte(playerSquareX); outStream.writeByte(playerSquareY);
+	 * outStream.writeWord(pixelHeight); outStream.writeByte(zoomSpeed);
+	 * outStream.writeByte(movementSpeed);// 0 - 99 }
+	 * 
+	 * public void rotateCamera(int startX, int startY,int turnToX, int turnToY,
+	 * int pixelHeight, int zoomSpeed, int movementSpeed)//rotate camera method
+	 * - mad turnip {
+	 * 
+	 * int mapRegionX = (startX >> 3) - 6; int mapRegionY = (startY >> 3) - 6;
+	 * outStream.createFrame(73); outStream.writeWordA(mapRegionX + 6); // for
+	 * some reason the client outStream.writeWord(mapRegionY + 6);// substracts
+	 * 6 from those values
+	 * 
+	 * int playerSquareX = turnToX - (mapRegionX*8); int playerSquareY = turnToY
+	 * - (mapRegionY*8); outStream.createFrame(177); //rotate camera
+	 * outStream.writeByte(playerSquareX); outStream.writeByte(playerSquareY);
+	 * outStream.writeWord(pixelHeight); outStream.writeByte(zoomSpeed);
+	 * outStream.writeByte(movementSpeed);// 0 - 99 }
+	 * 
+	 * public void cameraReset()//reset to origional coords -mad turnip { int
+	 * mapRegionX = (absX >> 3) - 6; int mapRegionY = (absY >> 3) - 6;
+	 * outStream.createFrame(73); outStream.writeWordA(mapRegionX + 6); // for
+	 * some reason the client outStream.writeWord(mapRegionY + 6);// substracts
+	 * 6 from those values outStream.createFrame(107); //reset camera }
+	 */
 
     public ActionSender showInterfaceWalkable(int i) {
         if (player.getExtraData().getInt("walkableint") != i)
@@ -645,42 +725,6 @@ public class ActionSender {
         player.write(bldr2.toPacket());
         return this;
     }
-
-	/*
-     * public void cameraMovement(int startX, int startY,int endX, int endY, int
-	 * pixelHeight, int zoomSpeed, int movementSpeed) //Camera Movement packet -
-	 * mad turnip { int mapRegionX = (startX >> 3) - 6; int mapRegionY = (startY
-	 * >> 3) - 6; outStream.createFrame(73); outStream.writeWordA(mapRegionX +
-	 * 6); // for some reason the client outStream.writeWord(mapRegionY + 6);//
-	 * substracts 6 from those values
-	 * 
-	 * int playerSquareX = endX - (mapRegionX*8); int playerSquareY = endY -
-	 * (mapRegionY*8); outStream.createFrame(166); //rotate camera
-	 * outStream.writeByte(playerSquareX); outStream.writeByte(playerSquareY);
-	 * outStream.writeWord(pixelHeight); outStream.writeByte(zoomSpeed);
-	 * outStream.writeByte(movementSpeed);// 0 - 99 }
-	 * 
-	 * public void rotateCamera(int startX, int startY,int turnToX, int turnToY,
-	 * int pixelHeight, int zoomSpeed, int movementSpeed)//rotate camera method
-	 * - mad turnip {
-	 * 
-	 * int mapRegionX = (startX >> 3) - 6; int mapRegionY = (startY >> 3) - 6;
-	 * outStream.createFrame(73); outStream.writeWordA(mapRegionX + 6); // for
-	 * some reason the client outStream.writeWord(mapRegionY + 6);// substracts
-	 * 6 from those values
-	 * 
-	 * int playerSquareX = turnToX - (mapRegionX*8); int playerSquareY = turnToY
-	 * - (mapRegionY*8); outStream.createFrame(177); //rotate camera
-	 * outStream.writeByte(playerSquareX); outStream.writeByte(playerSquareY);
-	 * outStream.writeWord(pixelHeight); outStream.writeByte(zoomSpeed);
-	 * outStream.writeByte(movementSpeed);// 0 - 99 }
-	 * 
-	 * public void cameraReset()//reset to origional coords -mad turnip { int
-	 * mapRegionX = (absX >> 3) - 6; int mapRegionY = (absY >> 3) - 6;
-	 * outStream.createFrame(73); outStream.writeWordA(mapRegionX + 6); // for
-	 * some reason the client outStream.writeWord(mapRegionY + 6);// substracts
-	 * 6 from those values outStream.createFrame(107); //reset camera }
-	 */
 
     /*
      * public ActionSender camera3(int Xcoords, int Ycoords,int direction, int
@@ -922,35 +966,6 @@ public class ActionSender {
         return this;
     }
 
-    /**
-     * Sends a specific skill.
-     *
-     * @param i The skill to send.
-     * @return The action sender instance, for chaining.
-     */
-    int[][] text = {
-            {4004, 4005}, {4008, 4009}, {4006, 4007},
-            {4016, 4017}, {4010, 4011}, {4012, 4013},
-            {4014, 4015}, {4034, 4035}, {4038, 4039},
-            {4026, 4027}, {4032, 4033}, {4036, 4037},
-            {4024, 4025}, {4030, 4031}, {4028, 4029},
-            {4020, 4021}, {4018, 4019}, {4022, 4023},
-            {12166, 12167}, {13926, 13927}, {4152, 4153},
-            {18165, 18169}, {18166, 18170}, {18167, 18171},
-            {18168, 18172}
-            /*
-			{ 4004, 4005 }, 	{ 4016, 4017 }, 	{ 4028, 4029 },
-			{ 4006, 4007 }, 	{ 4018, 4019 }, 	{ 4030, 4031 },
-			{ 4008, 4009 }, 	{ 4020, 4021 }, 	{ 4032, 4033 },
-			{ 4010, 4011 }, 	{ 4022, 4023 }, 	{ 4034, 4035 },
-			{ 4012, 4013 }, 	{ 4024, 4025 }, 	{ 4036, 4037 },
-			{ 4014, 4015 }, 	{ 4026, 4027 }, 	{ 4038, 4039 },
-			{ 4152, 4153 }, 	{ 12166, 12167 }, 	{ 13926, 13927 },
-			{ 18165, 18169 },  	{ 18166, 18170 }, 	{ 18167, 18171 },
-			{ 18168, 18172 }
-			*/
-    };
-
     public ActionSender sendSkill(int i) {
         sendString(player.getSkills().getLevel(i) + "", text[i][0]);
         sendString(player.getSkills().getLevelForExp(i) + "", text[i][1]);
@@ -1060,7 +1075,6 @@ public class ActionSender {
         sendString("Revenants (Multi)", 45614);
     }
 
-
     /**
      * Sends a specific sidebar interface.
      *
@@ -1091,32 +1105,6 @@ public class ActionSender {
         player.write(new PacketBuilder(253, Type.VARIABLE)
                 .putRS2String(message).toPacket());
         return this;
-    }
-
-
-    /**
-     * Sends a message to all players.
-     *
-     * @param message The message to send.
-     */
-    public static void yellMessage(String message) {
-        for (Player p : World.getWorld().getPlayers()) {
-            p.getActionSender().sendMessage(message);
-        }
-    }
-
-    /**
-     * Sends a message to all moderators.
-     *
-     * @param messages
-     */
-    public static void yellModMessage(String... messages) {
-        for (Player p : World.getWorld().getPlayers()) {
-            if (Rank.isStaffMember(p)) {
-                for (String message : messages)
-                    p.getActionSender().sendMessage(message);
-            }
-        }
     }
 
     public ActionSender sendClanInfo() {
@@ -1152,18 +1140,6 @@ public class ActionSender {
                 .putByteA(priority).putRS2String(message).toPacket());
         return this;
     }
-
-    public static final int[] QUEST_MENU_IDS = {8145, 8147, 8148, 8149, 8150,
-            8151, 8152, 8153, 8154, 8155, 8156, 8157, 8158, 8159, 8160, 8161,
-            8162, 8163, 8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172,
-            8173, 8174, 8175, 8176, 8177, 8178, 8179, 8180, 8181, 8182, 8183,
-            8184, 8185, 8186, 8187, 8188, 8189, 8190, 8191, 8192, 8193, 8194,
-            8195, 12174, 12175, 12176, 12177, 12178, 12179, 12180, 12181,
-            12182, 12183, 12184, 12185, 12186, 12187, 12188, 12189, 12190,
-            12191, 12192, 12193, 12194, 12195, 12196, 12197, 12198, 12199,
-            12200, 12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208,
-            12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216, 12217,
-            12218, 12219, 12220, 12221, 12222, 12223};
 
     public ActionSender openLotteryInformation() {
         sendString(8144, Server.NAME + " Lottery information:");
@@ -1391,11 +1367,6 @@ public class ActionSender {
                 .putShortA(player.getLocation().getRegionX() + 6)
                 .putShort(player.getLocation().getRegionY() + 6).toPacket());
         return this;
-    }
-
-
-    public enum DialogueType {
-        ITEM, NPC, PLAYER, OPTION, MESSAGE, MESSAGE_MODEL_LEFT, AGILITY_LEVEL_UP, ATTACK_LEVEL_UP, COOKING_LEVEL_UP, CRAFTING_LEVEL_UP, DEFENCE_LEVEL_UP, FARMING_LEVEL_UP, FIREMAKING_LEVEL_UP, FISHING_LEVEL_UP, FLETCHING_LEVEL_UP, HERBLORE_LEVEL_UP, HITPOINT_LEVEL_UP, MAGIC_LEVEL_UP, MINING_LEVEL_UP, PRAYER_LEVEL_UP, RANGING_LEVEL_UP, RUNECRAFTING_LEVEL_UP, SLAYER_LEVEL_UP, SMITHING_LEVEL_UP, STRENGTH_LEVEL_UP, THIEVING_LEVEL_UP, WOODCUTTING_LEVEL_UP
     }
 
     public DialogueType getSkillInterface(int skill) {
@@ -1991,8 +1962,8 @@ public class ActionSender {
     public void drawHeadicon(int i, int j, int k, int l) {
         // synchronized(c) {
 		/*
-		 * c.outStream.createFrame(254); c.outStream.writeByte(i);
-		 * 
+         * c.outStream.createFrame(254); c.outStream.writeByte(i);
+		 *
 		 * if (i == 1 || i == 10) { c.outStream.writeWord(j);
 		 * c.outStream.writeWord(k); c.outStream.writeByte(l); } else {
 		 * c.outStream.writeWord(k); c.outStream.writeWord(l);
@@ -2092,6 +2063,7 @@ public class ActionSender {
     private boolean shouldSendTooltip(final String string, final int id) {
         if (!sendTooltipStrings.containsKey(id)) {
             sendTooltipStrings.put(id, string);
+            return true;
         }
         final String old = sendTooltipStrings.get(id);
         if (old.equals(string))
@@ -2282,13 +2254,6 @@ public class ActionSender {
         return this;
     }
 
-	/*
-	 * public ActionSender sendReplaceObject(int objectX, int objectY, int
-	 * NewObjectID,int Face, int ObjectType) { return
-	 * sendReplaceObject(Location.
-	 * create(objectX,objectY,0),NewObjectID,Face,ObjectType); }
-	 */
-
     public ActionSender sendReplaceObject(Location location, int NewObjectID,
                                           int Face, int ObjectType) {
         PacketBuilder playerCoord = new PacketBuilder(85);
@@ -2309,33 +2274,19 @@ public class ActionSender {
         return this;
     }
 
+	/*
+     * public ActionSender sendReplaceObject(int objectX, int objectY, int
+	 * NewObjectID,int Face, int ObjectType) { return
+	 * sendReplaceObject(Location.
+	 * create(objectX,objectY,0),NewObjectID,Face,ObjectType); }
+	 */
+
     public ActionSender sendReplaceObject(int x, int y, int NewObjectID,
                                           int Face, int ObjectType) {
         sendReplaceObject(Location.create(x, y, 0), NewObjectID, Face,
                 ObjectType);
         return this;
     }
-
-	/*
-	 * public void sendReplaceObject(Client client, int objectX, int objectY,
-	 * int NewObjectID, int Face, int ObjectType) { if(!client.isAI){
-	 * client.getOutStream().createFrame(85);
-	 * client.getOutStream().writeByteC(objectY - (client.mapRegionY * 8));
-	 * client.getOutStream().writeByteC(objectX - (client.mapRegionX * 8));
-	 * 
-	 * client.getOutStream().createFrame(101);
-	 * client.getOutStream().writeByteC((ObjectType << 2) + (Face & 3));
-	 * client.getOutStream().writeByte(0);
-	 * 
-	 * if (NewObjectID != -1) { client.getOutStream().createFrame(151);
-	 * client.getOutStream().writeByteS(0);
-	 * client.getOutStream().writeWordBigEndian(NewObjectID);
-	 * client.getOutStream().writeByteS((ObjectType << 2) + (Face & 3)); //
-	 * FACE: 0= WEST | -1 = NORTH | -2 = EAST | -3 = SOUTH // ObjectType: 0-3
-	 * wall objects, 4-8 wall decoration, 9: diag. // walls, 10-11 world
-	 * objects, 12-21: roofs, 22: floor decoration } client.flushOutStream(); }
-	 * }
-	 */
 
     public void calculateBonus() {
         player.getBonus().reset();
@@ -2390,6 +2341,27 @@ public class ActionSender {
         }
     }
 
+	/*
+     * public void sendReplaceObject(Client client, int objectX, int objectY,
+	 * int NewObjectID, int Face, int ObjectType) { if(!client.isAI){
+	 * client.getOutStream().createFrame(85);
+	 * client.getOutStream().writeByteC(objectY - (client.mapRegionY * 8));
+	 * client.getOutStream().writeByteC(objectX - (client.mapRegionX * 8));
+	 * 
+	 * client.getOutStream().createFrame(101);
+	 * client.getOutStream().writeByteC((ObjectType << 2) + (Face & 3));
+	 * client.getOutStream().writeByte(0);
+	 * 
+	 * if (NewObjectID != -1) { client.getOutStream().createFrame(151);
+	 * client.getOutStream().writeByteS(0);
+	 * client.getOutStream().writeWordBigEndian(NewObjectID);
+	 * client.getOutStream().writeByteS((ObjectType << 2) + (Face & 3)); //
+	 * FACE: 0= WEST | -1 = NORTH | -2 = EAST | -3 = SOUTH // ObjectType: 0-3
+	 * wall objects, 4-8 wall decoration, 9: diag. // walls, 10-11 world
+	 * objects, 12-21: roofs, 22: floor decoration } client.flushOutStream(); }
+	 * }
+	 */
+
     public void sendCreateObject(int id, int type, int face, Location location) {
         sendReplaceObject(location, id, face, type);
     }
@@ -2404,5 +2376,9 @@ public class ActionSender {
 
     public void destroy() {
         player = null;
+    }
+
+    public enum DialogueType {
+        ITEM, NPC, PLAYER, OPTION, MESSAGE, MESSAGE_MODEL_LEFT, AGILITY_LEVEL_UP, ATTACK_LEVEL_UP, COOKING_LEVEL_UP, CRAFTING_LEVEL_UP, DEFENCE_LEVEL_UP, FARMING_LEVEL_UP, FIREMAKING_LEVEL_UP, FISHING_LEVEL_UP, FLETCHING_LEVEL_UP, HERBLORE_LEVEL_UP, HITPOINT_LEVEL_UP, MAGIC_LEVEL_UP, MINING_LEVEL_UP, PRAYER_LEVEL_UP, RANGING_LEVEL_UP, RUNECRAFTING_LEVEL_UP, SLAYER_LEVEL_UP, SMITHING_LEVEL_UP, STRENGTH_LEVEL_UP, THIEVING_LEVEL_UP, WOODCUTTING_LEVEL_UP
     }
 }

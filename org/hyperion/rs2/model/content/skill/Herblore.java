@@ -42,7 +42,6 @@ public class Herblore implements ContentTemplate {
 	/**
 	 * Gets the index of the item
 	 *
-	 * @param item The item of which index has to be returned.
 	 */
 
 	public int getIndex(int herb) {
@@ -56,7 +55,6 @@ public class Herblore implements ContentTemplate {
 	/**
 	 * Gets the index of the item
 	 *
-	 * @param item The item of which index has to be returned.
 	 */
 
 	public int getPotionIndex(int herb) {
@@ -70,7 +68,6 @@ public class Herblore implements ContentTemplate {
 	/**
 	 * Identifies an herb
 	 *
-	 * @param c    The {@link Client}.
 	 * @param herb The herb that needs to be indentified.
 	 */
 
@@ -78,9 +75,11 @@ public class Herblore implements ContentTemplate {
 		Herb h = herbs.get(getIndex(herb));
 
 		if(ContentEntity.returnSkillLevel(c, 15) >= h.getLevel()) {
-			if(c.getRandomEvent().skillAction()) {
+			if(c.getRandomEvent().skillAction(2)) {
 				return;
 			}
+			if(c.getRandomEvent().isDoingRandom())
+				return;
 			ContentEntity.sendMessage(c, "You identify the herb.");
 			ContentEntity.deleteItem(c, herb, slot, 1);
 			ContentEntity.addItem(c, (h.getCleanHerb()), 1, slot);
@@ -94,7 +93,6 @@ public class Herblore implements ContentTemplate {
 	/**
 	 * Makes an unfinished potion
 	 *
-	 * @param client The {@link Client}.
 	 * @param herb   The herb.
 	 * @return
 	 */
@@ -191,7 +189,6 @@ public class Herblore implements ContentTemplate {
 	/**
 	 * Checks if we're using a unfinished potion with one of their second ingredients.
 	 *
-	 * @param c      The {@link Client}.
 	 * @param potion The potion we're using.
 	 * @param item   The item we're using.
 	 */
@@ -234,7 +231,6 @@ public class Herblore implements ContentTemplate {
 	/**
 	 * Ends a unfinished potion by using the 2nd ingredient on it.
 	 *
-	 * @param c      The {@link Client}.
 	 * @param potion The unfinished potion.
 	 * @param item   The 2nd ingredient.
 	 */

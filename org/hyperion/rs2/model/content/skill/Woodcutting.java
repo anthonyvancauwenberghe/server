@@ -3,12 +3,9 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.newcombat.*;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
@@ -187,8 +184,8 @@ public class Woodcutting implements ContentTemplate {
 					stop2();
 					return;
 				}
+				if(client.getRandomEvent().skillAction(6)) {
 
-				if(client.getRandomEvent().skillAction(4)) {
 					stop2();
 					return;
 				}

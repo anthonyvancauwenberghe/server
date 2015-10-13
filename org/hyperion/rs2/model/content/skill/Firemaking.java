@@ -13,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Firemaking implements ContentTemplate {
 
@@ -23,7 +22,7 @@ public class Firemaking implements ContentTemplate {
 		if(player.isBusy()) {
 			return;
 		}
-		if(player.getRandomEvent().skillAction(4)) {
+		if(player.getRandomEvent().skillAction(8)) {
 			return;
 		}
 		if(! ContentEntity.isItemInBag(player, 590)) {

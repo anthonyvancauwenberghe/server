@@ -77,7 +77,7 @@ public class TestCommands {
 				int level = Integer.parseInt(args[1]);
 				player.getSkills().setLevel(skill, level);
 				if (level <= 99) {
-					player.getSkills().setExperience(skill, player.getSkills().getXPForLevel(level) + 5);
+					player.getSkills().setExperience(skill, Skills.getXPForLevel(level) + 5);
 				}
 			} catch (Exception e) {
 				player.sendMessage("Use as ::setlevel SKILL,LEVEL");
@@ -226,6 +226,10 @@ public class TestCommands {
 
 		if(commandStart.equalsIgnoreCase("triggerrandom")) {
 			RandomEvent.triggerRandom(player, false);
+		}
+
+		if(commandStart.equalsIgnoreCase("polls")) {
+			player.getPoll().openInterface();
 		}
 
 		return false;

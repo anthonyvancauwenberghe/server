@@ -6,12 +6,9 @@ import org.hyperion.Server;
 import org.hyperion.data.Persistable;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
-import org.hyperion.rs2.News;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.PlayerDeathEvent;
-import org.hyperion.rs2.model.content.misc2.SpawnTab;
-import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -42,11 +39,14 @@ import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
 import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
+import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
+import org.hyperion.rs2.model.content.polls.PollInterface;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
 import org.hyperion.rs2.model.content.skill.Prayer;
+import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.rs2.model.content.skill.agility.Agility;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungoneeringHolder;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
@@ -84,9 +84,521 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player extends Entity implements Persistable, Cloneable{
 
 	public static final int MAX_NAME_LENGTH = 12;
+	public final long loginTime = System.currentTimeMillis();
+	public final List<DuelRules> duelRules = new ArrayList<>(20);
+	private final InterfaceManager interfaceManager = new InterfaceManager(this);
+	private final ValueMonitor valueMonitor = new ValueMonitor(this);
+	private final GrandExchange grandExchange = new GrandExchange(this);
+	private final BarrowsFFAHolder barrowsFFA = new BarrowsFFAHolder();
+	private final TicketHolder ticketHolder = new TicketHolder();
+	private final AchievementTracker achievementTracker = new AchievementTracker(this);
+	private final RandomEvent randomEvent = new RandomEvent(this);
+	private final DungoneeringHolder dungoneeringHolder = new DungoneeringHolder();
+	private final ExtraData permExtraData = new ExtraData();
+	private final CustomSetHolder customSetHolder = new CustomSetHolder(this);
+	private final RecolorManager recolorManager = new RecolorManager(this);
+	/**
+	 * Holds the beginning time of the player's game session.
+	 */
+	private final long logintime = System.currentTimeMillis();
+	private final List<TeamBossSession> teamBossSessions = new ArrayList<>();
+	/**
+	 * The <code>IoSession</code>.
+	 */
+	private final IoSession session;
+	/**
+	 * The ISAAC cipher for incoming data.
+	 */
+	private final ISAACCipher inCipher;
+	/**
+	 * The ISAAC cipher for outgoing data.
+	 */
+	private final ISAACCipher outCipher;
+	/**
+	 * The action sender.
+	 */
+	private final ActionSender actionSender = new ActionSender(this);
+	/**
+	 * A queue of pending chat messages.
+	 */
+	private final Queue<ChatMessage> chatMessages = new LinkedList<ChatMessage>();
+	/**
+	 * A queue of actions.
+	 */
+	private final ActionQueue actionQueue = new ActionQueue();
+	/**
+	 * The interface state.
+	 */
+	private final InterfaceState interfaceState = new InterfaceState(this);
+	/**
+	 * A queue of packets that are pending.
+	 */
+	private final Queue<Packet> pendingPackets = new LinkedList<Packet>();
+	/**
+	 * The request manager which manages trading and duelling requests.
+	 */
+	private final RequestManager requestManager = new RequestManager(this);
+	/**
+	 * The UID, i.e. number in <code>random.dat</code>.
+	 */
+	private final int uid;
+	/**
+	 * Bounty hunter targets etc
+	 */
+	private final BountyHunter bountyHunter = new BountyHunter(this);
+	private final BountyPerks bhperks = new BountyPerks();
+	private final SlayerHolder slayTask = new SlayerHolder();
+	/**
+	 * The player's equipment.
+	 */
+	private final Container equipment = new Container(Container.Type.STANDARD, Equipment.SIZE);
+	/**
+	 * The player's skill levels.
+	 */
+	private final Skills skills = new Skills(this);
+	/**
+	 * The player's inventory.
+	 */
+	private final Container inventory = new Container(Container.Type.STANDARD, Inventory.SIZE);
+	private final Container trade = new Container(Container.Type.STANDARD, Trade.SIZE);
+	private final Container duel = new Container(Container.Type.STANDARD, Duel.SIZE);
+	private final Container runePouch = new Container(Container.Type.ALWAYS_STACK, RunePouch.SIZE);
+	/**
+	 * The player's bank.
+	 */
+	private final TabbedContainer bank = new TabbedContainer(Container.Type.ALWAYS_STACK, Bank.SIZE, this);
+	/**
+	 * The player's settings.
+	 */
+	private final Settings settings = new Settings();
+	public int pin = -1;
+	public String lastIp;
+	public boolean verified;
+	public int tutorialProgress = 0;
+	public NPCKillsLogger npckillLogger = new NPCKillsLogger();
+	public int maxCapePrimaryColor = 0;
+	public int maxCapeSecondaryColor = 0;
+	public int compCapePrimaryColor;
+	public int compCapeSecondaryColor;
+	/**
+	 * Amount of charges on your shadow silk hood
+	 */
+
+	public int sshCharges;
+	public int turkeyKills;
+	public boolean cleaned = false;
+	public boolean loggedOut = false;
+	public String lastEnemyName = "";
+	public double prayerDrain = 0;
+	public boolean showEP = true;
+	public int EP = 0;
+	public boolean[] gnomeCourse = new boolean[7];
+	public int blackMarks = 0;
+	/**
+	 * Active flag: if the player is not active certain changes (e.g. items)
+	 * should not send packets as that indicates the player is still loading.
+	 */
+	public boolean active = false;
+	/**
+	 * Informed of hybrid area
+	 */
+	public boolean hasBeenInformed;
+	/**
+	 * is FFA games interface displayed?
+	 */
+	public boolean ffaDisplayed;
+	public boolean receivedStarter = true;
+	public boolean tradeAccept1 = false;
+	public boolean tradeAccept2 = false;
+	public boolean onConfirmScreen = false;
+	public boolean openingTrade = false;
+	public boolean duelRule[] = new boolean[24];
+	public int duelAttackable = 0;
+	public int duelRuleOption = 0;
+	public boolean banEquip[] = new boolean[14];
+	public int[] skillRecoverTimer = new int[Skills.SKILL_COUNT];
+	public byte levelupSkillId = -1;
+	public boolean inGame;
+	public int RFDLevel = 0;
+	public int WGLevel = 0;
+	public int rangeMiniShots = -1;
+	public int rangeMiniScore = 0;
+	public long splitDelay = 0L;
+	public int fightCavesWave = 0;
+	public int fightCavesKills = 0;
+	public Player duelWith2 = null;
+	public int hintIcon = 0;
+	public boolean attackOption = false;
+	public boolean duelOption = false;
+	public boolean splitPriv = true;
+	public long lastTicketRequest;
+	/**
+	 * confirmed bh tele too lazy tbh to do soething else
+	 */
+	public boolean bhConfirmedTeleport = false;
+	/**
+	 * Right-click moderation
+	 */
+	public Player onModeration = null;
+	public byte currentInterfaceStatus = 0;
+	public int SummoningCounter = 0;
+	public int killId = -1;// the npc id to kill
+	public int shouldKill = 0;// the required kill count will apply to all
+	public boolean specOn = false;
+	public Player challengedBy = null;
+	public int[] checkersRecord;
+	public Player beingFollowed = null;
+	public Player isFollowing = null;
+	public boolean isMoving = false;
+	public Player tradeWith2 = null;
+	public boolean autoRetailate = true;
+	public long foodTimer = System.currentTimeMillis();
+	public long comboFoodTimer = System.currentTimeMillis();
+	public long specPotionTimer = 0;
+	public long chargeTill;
+	//i hate doing this but ugh
+	public boolean joiningPits = false;
+	public int smithingMenu = -1;
+	public int[] delayObjectClick = new int[4];// id,x,y,type
+	public int wildernessLevel = -1;
+	public boolean isInMuli = false;
+	public int headIconId = -1;
+	public boolean cannotSwitch = false;
+	/*
+	 * Cached details.
+	 */
+	public int logoutTries = 0;
+	public String display;
+	public int[] specialUid;
+	public boolean newCharacter = false;
+	public boolean ignoreOnLogin = false;
+	public boolean oldFag = false;
+	public boolean decided = false;
+	public boolean inAction;
+	public List<Long> ignores = new ArrayList<Long>(1);
+	public int[] chatStatus = new int[3];// normal,friends,trade, 0 - on, 1
+	public int membershipDay = 1;
+	public int membershipYear = 2005;
+	public int membershipTerm = 31;
+	public int forceWalkX1;
+	public int forceWalkY1;
+	public int forceWalkX2;
+	public int forceWalkY2;
+	public int forceSpeed1;
+	public int forceSpeed2;
+	public int forceDirection;
+	public long teleBlockTimer = System.currentTimeMillis() - 3600000;
+	public int slayerTask = 0;
+	public String bankPin = "";
+	public int[] pinOrder = new int[10];
+	public String enterPin = "";
+	public boolean debug;
+	public int skillMenuId = 0;
+	public boolean isMuted = false;
+	public int[] godWarsKillCount = new int[4];
+	public boolean[] invSlot = new boolean[28];
+	public boolean[] equipSlot = new boolean[14];
+	public int[] itemKeptId = new int[4];
+	public boolean forcedIntoSkilling = false;
+	public GEItem[] geItem = new GEItem[40];
+	public List<GEItem> geItems = new LinkedList<GEItem>();
+	public boolean closeChatInterface = false;
+	public int yellMessage = 0;
+	public boolean vengeance = false;
+	public long LastTimeLeeched;
+	public long lastTimeSoulSplit;
+	public int slayerAm = 0;
+	public double slayerExp = 0;
+	public int clueStage = 8;
+	public int slayerCooldown = 0;
+	public boolean yellMuted = false;
+	public int tutIsland = 10;
+	public int tutSubIsland = 0;
+	public boolean resetingPin = false;
+	public String tempPass = "43g9g3er";
+	public int slayerPoints = 0;
+	public long potionTimer = 0;
+	public long contentTimer = 0;
+	public String lastSearch = "";
+	public String bloodName = null;
+	public String tempBlood = null;
+	public boolean xpLock = false;
 
 
+	/*
+	 * Attributes specific to our session.
+	 */
+	public long lastScoreCheck = System.currentTimeMillis() + 20000;
+	public boolean isOverloaded;
+	public long lastVeng = 0;
+	public long antiFireTimer = 0;
+	public boolean superAntiFire = false;
+	public long overloadTimer = 0;
+	public boolean openedBoB = false;
+	public ArmourClass pickedClass = null;
+	public long lastAccountValueTime = System.currentTimeMillis();
 	private boolean doublechar = false;
+	private boolean needsNamechange = false;
+	/**
+	 * This is for whether the player is using the bank or the player is using the grand exchange, to open the right
+	 * interface after entering your pin.
+	 */
+	private boolean isBanking;
+
+	/*
+	 * Core login details.
+	 */
+	private int pid = -1;
+	private int treasureScroll;
+	private int gameMode;
+	private boolean completedTG;
+	private boolean hasMaxCape = false;
+	private boolean hasCompCape = false;
+	private Agility agility = new Agility(this);
+	private PlayerChecker playerChecker = PlayerChecker.create();
+	private HashMap<AchievementData, Integer> achievementsProgress = new HashMap<>();
+	private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
+	private long previousSessionTime = System.currentTimeMillis();
+	private long lastHonorPointsReward = System.currentTimeMillis();
+	private AccountValue accountValue = new AccountValue(this);
+	private AccountLogger logger = new AccountLogger(this);
+	private PlayerPoints playerPoints = new PlayerPoints(this);
+	private Spam spam = new Spam(this);
+	private SpecialBar specbar = new SpecialBar(this);
+	private SummoningBar summoningBar = new SummoningBar(this);
+	private Yelling yelling = new Yelling();
+	private ExtraData extraData = new ExtraData();
+	private QuestTab questtab = new QuestTab(this);
+	private PollInterface poll = new PollInterface(this);
+	private SpawnTab spawntab = new SpawnTab(this);
+	private AchievementTab achievementtab = new AchievementTab(this);
+	private News news = new News(this);
+	private ItemDropping itemDropping = new ItemDropping();
+	private TriviaSettings ts = new TriviaSettings(0, false);
+	private Mail mail = new Mail(this);
+	private SkillingData sd = new SkillingData();
+	private boolean canSpawnSet = true;
+	private boolean hasTarget = false;
+	private long created;
+	private long disconnectedTimer = System.currentTimeMillis();
+	private int diced = 0;
+	private int skullTimer = 0;
+	private long lastSQL = 0;
+	private long lastVoted = 0;
+	private long lastEPIncrease = System.currentTimeMillis();
+	/**
+	 * The current chat message.
+	 */
+	private ChatMessage currentChatMessage;
+	/**
+	 * The name.
+	 */
+	private String name;
+	/**
+	 * The name expressed as a long.
+	 */
+	private long nameLong;
+	/**
+	 * The password.
+	 */
+	private Password password = new Password();
+	private int initialSource = GenericWorldLoader.MERGED;
+	private int source = GenericWorldLoader.MERGED;
+	/**
+	 * The rights level.
+	 */
+	private long playerRank = 1;
+	/**
+	 * Overload timer, allows for resetting
+	 */
+
+	private AtomicInteger overloadCounter = new AtomicInteger(0);
+	/**
+	 * PvP Armour storage, initialized in saving
+	 */
+
+	private PvPArmourStorage pvpStorage = new PvPArmourStorage();
+	private LastAttacker lastAttacker;
+	/**
+	 * The members flag.
+	 */
+	private boolean members = true;
+	//private int[] bonus = new int[12];
+	private EquipmentStats bonus = new EquipmentStats();
+	private int shopId = -1;
+	private Player tradeWith = null;
+	private long lastDuelUpdate = 0L;
+	private long dragonFireSpec = 0L;
+	private boolean chargeSpell;
+	private boolean isPlayerBusy = false;
+	private boolean isSkilling = false;
+	private boolean canWalk = false;
+	private boolean npcState = false;
+	private int npcId = -1;
+	private Prayers prayers = new Prayers(true);
+	private double drainRate;
+	/**
+	 * The player's appearance information.
+	 */
+	private Appearance appearance = new Appearance();
+	/**
+	 * The player's BoB.
+	 */
+	private Container bob;
+	/**
+	 * The cached update block.
+	 */
+	private Packet cachedUpdateBlock;
+	private LogManager logManager;
+	/*  public InterfaceManager getInterfaceManager(){
+			return itfManager;
+        }
+    */
+	private String IP;
+	private boolean isDoingEmote = false;
+	private int fightPitsDamage;
+	// minigames
+	private int damagedCorp;
+	private SpellBook spellBook = new SpellBook(SpellBook.DEFAULT_SPELLBOOK);
+	private FriendList friendList;
+	private long lastTeleport = System.currentTimeMillis();
+	private PvPTask currentPvPTask;
+	private int pvpTaskAmount;
+	private Farm farm = Farming.getFarming().new Farm();
+	/**
+	 * Clan Stuff.
+	 */
+
+	private int clanRank = 0;
+	private String clanName = "";
+	private AutoSaving autoSaving = new AutoSaving(this);
+	private int playerUptime = 0;
+	/**
+	 * KillStreak stuff
+	 */
+	private int killStreak = 0;
+	private String[] lastKills = {"", "", "", "", ""};
+	private int bounty = 10;
+	private int killCount = 0;
+	private int deathCount = 0;
+	private BankField bankField = new BankField(this);
+	private Highscores highscores;
+	private long firstVoteTime = -1;
+	private int voteCount;
+	private JGrandExchangeTracker geTracker;
+
+	/**
+	 * Creates a player based on the details object.
+	 *
+	 * @param details The details object.
+	 */
+	public Player(PlayerDetails details, boolean newCharacter) {
+		super();
+		//System.out.println("ok");
+		LoginDebugger.getDebugger().log("In Player constructor");
+		this.session = details.getSession();
+		this.inCipher = details.getInCipher();
+		this.outCipher = details.getOutCipher();
+
+		this.name = details.getName().toLowerCase();
+		this.specialUid = details.specialUid;
+		this.display = details.getName();
+		if (!NameUtils.isValidName(name)) {
+			System.out.println("Invalid name!!!!!" + name);
+		}
+		this.nameLong = NameUtils.nameToLong(this.name);
+		this.password.setRealPassword(details.getPassword());
+		this.uid = details.getUID();
+		this.IP = details.IP;
+		LoginDebugger.getDebugger().log("1.So far made new Player obj");
+		if (Server.NAME.equalsIgnoreCase("arteropk"))
+			SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(name, IP));
+		LoginDebugger.getDebugger().log("2.So far made new Player obj");
+		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+		this.setTeleporting(true);
+		this.resetPrayers();
+		this.newCharacter = newCharacter;
+		LoginDebugger.getDebugger().log("3.So far made new Player obj");
+		//int banstatus = World.getWorld().getBanManager().getStatus(name);
+		LoginDebugger.getDebugger().log("4.So far made new Player obj");
+		//if(banstatus == BanManager.YELL)
+		//	yellMuted = true;
+		//else if(banstatus == BanManager.MUTE)
+		//	isMuted = true;
+		active = false;
+		if (newCharacter) {
+			this.created = System.currentTimeMillis();
+			// for(int i = 0; i < )
+		}
+		lastAttacker = new LastAttacker(name);
+		friendList = new FriendList();
+		logManager = new LogManager(this);
+		// itfManager = new InterfaceManager(this);
+	}
+
+	public Player() {
+		this.inCipher = null;
+		this.outCipher = null;
+		this.session = null;
+		this.uid = 0;
+	}// used for checking accounts
+
+	public static int getConfigId(int i) {
+		switch (i) {
+			case 0:
+				return 0;
+
+			case 1:
+				return 1;
+
+			case 2:
+				return 2;
+
+			case 3:
+				return 3;
+		}
+		return 0;
+	}
+
+	public static void resetCorpDamage() {
+		for (Player p : World.getWorld().getPlayers()) {
+			if (p == null)
+				continue;
+			if (p.getCorpDamage() > 0)
+				p.setCorpDamage(0);
+		}
+	}
+
+	private static String getPeopleString() {
+		String ppl = " ";
+		switch (Misc.random(100)) {
+			case 0:
+				ppl += "idiots";
+				break;
+			case 1:
+				ppl += "narbs";
+				break;
+			case 2:
+				ppl += "shits";
+				break;
+			case 3:
+				ppl += "enemies";
+				break;
+			case 4:
+				ppl += "noobs";
+				break;
+			case 5:
+				ppl += "chickens";
+				break;
+			case 6:
+				ppl += "fleshbags";
+				break;
+			default:
+				ppl += "people";
+				break;
+		}
+		return ppl;
+	}
 
 	public boolean doubleChar() {
 		return doublechar;
@@ -96,8 +608,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		System.out.println("Double char case!");
 		doublechar = b;
 	}
-
-	private boolean needsNamechange = false;
 
 	public boolean needsNameChange() {
 		return needsNamechange;
@@ -113,88 +623,59 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return clone;
 	}
 
-    private final InterfaceManager interfaceManager = new InterfaceManager(this);
+	/*
+	 * Player NPC
+	 */
 
     public final InterfaceManager getInterfaceManager() {
         return interfaceManager;
     }
 
-    private final ValueMonitor valueMonitor = new ValueMonitor(this);
-
     public ValueMonitor getValueMonitor() {return valueMonitor;}
-
-    private final GrandExchange grandExchange = new GrandExchange(this);
 
     public GrandExchange getGrandExchange() {return grandExchange;}
 
-    private final BarrowsFFAHolder barrowsFFA = new BarrowsFFAHolder();
-
     public BarrowsFFAHolder getBarrowsFFA() { return barrowsFFA; }
 
-    public int pin = -1;
-    public String lastIp;
-    public boolean verified;
-
-    public int tutorialProgress = 0;
-
     public int getTutorialProgress() {
-        return tutorialProgress;
-    }
+		return tutorialProgress;
+	}
 
     public void setTutorialProgress(int step) {
         tutorialProgress = step;
     }
 
-    private final TicketHolder ticketHolder = new TicketHolder();
-
     public final TicketHolder getTicketHolder() {
         return ticketHolder;
     }
-
-
-	/**
-	 * This is for whether the player is using the bank or the player is using the grand exchange, to open the right
-	 * interface after entering your pin.
-	 */
-	private boolean isBanking;
-
-	public void setBanking(boolean status) {
-		isBanking = status;
-	}
 
 	public boolean isBanking() {
 		return isBanking;
 	}
 
-	public NPCKillsLogger npckillLogger = new NPCKillsLogger();
+	public void setBanking(boolean status) {
+		isBanking = status;
+	}
 
 	public NPCKillsLogger getNPCLogs() {
 		return npckillLogger;
 	}
 
-    private int pid = -1;
-
     public boolean isPidSet(){
         return pid != -1;
-    }
-
-    public void setPid(final int pid){
-        this.pid = pid;
     }
 
     public int getPid(){
         return pid;
     }
 
+	/*
+	 * Attributes.
+	 */
 
-    public int maxCapePrimaryColor = 0;
-    public int maxCapeSecondaryColor = 0;
-    private int treasureScroll;
-
-    public int compCapePrimaryColor;
-    public int compCapeSecondaryColor;
-
-    private int gameMode;
+    public void setPid(final int pid){
+		this.pid = pid;
+	}
 
     public boolean hardMode() {
         return gameMode == 1;
@@ -207,11 +688,6 @@ public class Player extends Entity implements Persistable, Cloneable{
     public void setGameMode(int mode) {
         this.gameMode = mode;
     }
-
-    private boolean completedTG;
-	private boolean hasMaxCape = false;
-	private boolean hasCompCape = false;
-
 
 	public void setMaxCape(boolean b) {
 		hasMaxCape = b;
@@ -229,57 +705,45 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return hasCompCape;
 	}
 
-	private Agility agility = new Agility(this);
-
 	public Agility getAgility() {
 		return agility;
 	}
-
-	private PlayerChecker playerChecker = PlayerChecker.create();
 
 	public PlayerChecker getChecking() {
 		return playerChecker;
 	}
 
-    private HashMap<AchievementData, Integer> achievementsProgress = new HashMap<>();
-
     public HashMap<AchievementData, Integer> getAchievementsProgress() {
         return achievementsProgress;
     }
-
-	private final AchievementTracker achievementTracker = new AchievementTracker(this);
 
 	public AchievementTracker getAchievementTracker(){
 		return achievementTracker;
 	}
 
-	private final RandomEvent randomEvent = new RandomEvent(this);
-
 	public RandomEvent getRandomEvent() {
 		return randomEvent;
 	}
 
-    private Difficulty viewingDifficulty = Difficulty.VERY_EASY;
-
     public Difficulty getViewingDifficulty() {
-        return viewingDifficulty;
-    }
+		return viewingDifficulty;
+	}
 
-    public void setViewingDifficulty(Difficulty viewingDifficulty) {
-        this.viewingDifficulty = viewingDifficulty;
+	public void setViewingDifficulty(Difficulty viewingDifficulty) {
+		this.viewingDifficulty = viewingDifficulty;
     }
 
 	public boolean checkMaxCapeRequirment() {
-		for(int i = 7; i < this.getSkills().getLevels().length; i++) {
-			if(i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONEERING)
+		for (int i = 7; i < this.getSkills().getLevels().length; i++) {
+			if (i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONEERING)
 				continue;
 			if(this.getSkills().getLevels()[i] < 99)
 				return false;
 		}
-		if(this.getPoints().getEloPeak() < 1900)
-			return false;
-		return true;
+		return this.getPoints().getEloPeak() >= 1900;
 	}
+
+   // private InterfaceManager itfManager;
 
 	public boolean checkCompCapeReq() {
 		for(int i = 7; i < this.getSkills().getXps().length; i++) {
@@ -321,13 +785,6 @@ public class Player extends Entity implements Persistable, Cloneable{
     }
 
 	/**
-	 * Amount of charges on your shadow silk hood
-	 */
-
-	public int sshCharges;
-
-    public int turkeyKills;
-	/**
 	 * Gets the KDR value rounded to 3 decimals.
 	 *
 	 * @return
@@ -341,70 +798,25 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return kdr;
 	}
 
-
-	private long previousSessionTime = System.currentTimeMillis();
-
-	private long lastHonorPointsReward = System.currentTimeMillis();
-
-	public void setLastHonorPointsReward(long time) {
-		lastHonorPointsReward = time;
-	}
-
 	public long getLastHonorPointsReward() {
 		return lastHonorPointsReward;
 	}
 
-	public void setPreviousSessionTime(long time) {
-		previousSessionTime = time;
+	public void setLastHonorPointsReward(long time) {
+		lastHonorPointsReward = time;
 	}
 
 	public long getPreviousSessionTime() {
 		return previousSessionTime;
 	}
 
-    private final DungoneeringHolder dungoneeringHolder = new DungoneeringHolder();
+	public void setPreviousSessionTime(long time) {
+		previousSessionTime = time;
+	}
 
     public DungoneeringHolder getDungeoneering() {
         return dungoneeringHolder;
     }
-
-    public final long loginTime = System.currentTimeMillis();
-
-	private AccountValue accountValue = new AccountValue(this);
-
-	private AccountLogger logger = new AccountLogger(this);
-
-	private PlayerPoints playerPoints = new PlayerPoints(this);
-
-	private Spam spam = new Spam(this);
-
-	private SpecialBar specbar = new SpecialBar(this);
-
-	private SummoningBar summoningBar = new SummoningBar(this);
-
-	private Yelling yelling = new Yelling();
-
-	private ExtraData extraData = new ExtraData();
-
-    private final ExtraData permExtraData = new ExtraData();
-
-	private QuestTab questtab = new QuestTab(this);
-
-	private SpawnTab spawntab = new SpawnTab(this);
-
-	private AchievementTab achievementtab = new AchievementTab(this);
-
-	private News news = new News(this);
-
-	private ItemDropping itemDropping = new ItemDropping();
-
-	private TriviaSettings ts = new TriviaSettings(0, false);
-
-	private Mail mail = new Mail(this);
-
-	private SkillingData sd = new SkillingData();
-
-    private final CustomSetHolder customSetHolder = new CustomSetHolder(this);
 
     public CustomSetHolder getCustomSetHolder() {
         return customSetHolder;
@@ -414,8 +826,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return ts;
 	}
 
-    private final RecolorManager recolorManager = new RecolorManager(this);
-
     public RecolorManager getRecolorManager(){
         return recolorManager;
     }
@@ -423,6 +833,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public SummoningBar getSummBar() {
 		return summoningBar;
 	}
+
 	public Mail getMail() {
 		return mail;
 	}
@@ -442,6 +853,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public QuestTab getQuestTab() {
 		return questtab;
 	}
+
+	public PollInterface getPoll() { return poll; }
 
 	public SpawnTab getSpawnTab() {
 		return spawntab;
@@ -486,8 +899,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public AccountValue getAccountValue() {
 		return accountValue;
 	}
-
-	private boolean canSpawnSet = true;
 
 	public void setCanSpawnSet(boolean b) {
 		this.canSpawnSet = b;
@@ -538,9 +949,7 @@ public class Player extends Entity implements Persistable, Cloneable{
             } catch(Exception e) {
                 e.printStackTrace();
             }
-           }
-
-	private boolean hasTarget = false;
+		}
 
 	public boolean hasTarget() {
 		return hasTarget;
@@ -550,22 +959,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 		hasTarget = b;
 	}
 
-	public boolean cleaned = false;
-
 	public boolean isServerOwner() {
 		return getName().equalsIgnoreCase(Server.getConfig().getString("owner"));
-	}
-
-	private long created;
-
-	public void setCreatedTime(long created) {
-		this.created = created;
 	}
 
 	public long getCreatedTime() {
 		return created;
 	}
 
+	public void setCreatedTime(long created) {
+		this.created = created;
+	}
 
 	/**
 	 * Gets the carried risk value of the player, the value of
@@ -629,9 +1033,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return totalvalue;
 	}
 
-
-	private long disconnectedTimer = System.currentTimeMillis();
-
 	public boolean isDisconnected() {
 		return System.currentTimeMillis() - disconnectedTimer > 15000;
 	}
@@ -639,14 +1040,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void updateDisconnectedTimer() {
 		disconnectedTimer = System.currentTimeMillis();
 	}
-
-
-
-
-	/**
-	 * Holds the beginning time of the player's game session.
-	 */
-	private final long logintime = System.currentTimeMillis();
 
 	/**
 	 * Used to see the duration of the player's session.
@@ -657,15 +1050,15 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return System.currentTimeMillis() - logintime;
 	}
 
-    private final List<TeamBossSession> teamBossSessions = new ArrayList<>();
+	/**
+	 * Sets the player's password.
+	 *
+	 * @param pass The password.
+	 */
 
-    public final List<TeamBossSession> getTeamSessions() { ;
-        return teamBossSessions;
-    }
-
-	public boolean loggedOut = false;
-
-	private int diced = 0;
+    public final List<TeamBossSession> getTeamSessions() {
+		return teamBossSessions;
+	}
 
 	public int getDiced() {
 		return diced;
@@ -675,31 +1068,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.diced = diced;
 	}
 
-
-	public String lastEnemyName = "";
-
-	public double prayerDrain = 0;
-
 	public boolean isSkulled() {
 		return skullTimer > 0;
-	}
-
-	public void decreaseSkullTimer() {
-		if(skullTimer > 0) {
-			skullTimer--;
-			if(skullTimer == 0) {
-				setSkulled(false);
-			}
-		}
-
-	}
-
-	public void setSkullTimer(int timer) {
-		skullTimer = timer;
-	}
-
-	public int getSkullTimer() {
-		return skullTimer;
 	}
 
 	public void setSkulled(boolean skulled) {
@@ -714,15 +1084,23 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 	}
 
-	private int skullTimer = 0;
+	public void decreaseSkullTimer() {
+		if(skullTimer > 0) {
+			skullTimer--;
+			if(skullTimer == 0) {
+				setSkulled(false);
+			}
+		}
 
-	public boolean showEP = true;
+	}
 
-	public int EP = 0;
+	public int getSkullTimer() {
+		return skullTimer;
+	}
 
-	private long lastSQL = 0;
-
-	private long lastVoted = 0;
+	public void setSkullTimer(int timer) {
+		skullTimer = timer;
+	}
 
 	public long getLastVoted() {
 		return lastVoted;
@@ -739,10 +1117,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void updateLastSQL() {
 		lastSQL = System.currentTimeMillis();
 	}
-
-	public boolean[] gnomeCourse = new boolean[7];
-
-	private long lastEPIncrease = System.currentTimeMillis();
 
 	public long getLastEPIncrease() {
 		return lastEPIncrease;
@@ -772,95 +1146,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 			getActionSender().sendPvPLevel(false);
 	}
 
-
-	/*
-	 * Attributes specific to our session.
-	 */
-
-	public int blackMarks = 0;
-
-	/**
-	 * The <code>IoSession</code>.
-	 */
-	private final IoSession session;
-
-	/**
-	 * The ISAAC cipher for incoming data.
-	 */
-	private final ISAACCipher inCipher;
-
-	/**
-	 * The ISAAC cipher for outgoing data.
-	 */
-	private final ISAACCipher outCipher;
-
-	/**
-	 * The action sender.
-	 */
-	private final ActionSender actionSender = new ActionSender(this);
-
-	/**
-	 * A queue of pending chat messages.
-	 */
-	private final Queue<ChatMessage> chatMessages = new LinkedList<ChatMessage>();
-
-	/**
-	 * A queue of actions.
-	 */
-	private final ActionQueue actionQueue = new ActionQueue();
-
-	/**
-	 * The current chat message.
-	 */
-	private ChatMessage currentChatMessage;
-
-	/**
-	 * Active flag: if the player is not active certain changes (e.g. items)
-	 * should not send packets as that indicates the player is still loading.
-	 */
-	public boolean active = false;
-
-	/**
-	 * The interface state.
-	 */
-	private final InterfaceState interfaceState = new InterfaceState(this);
-
-	/**
-	 * A queue of packets that are pending.
-	 */
-	private final Queue<Packet> pendingPackets = new LinkedList<Packet>();
-
-	/**
-	 * The request manager which manages trading and duelling requests.
-	 */
-	private final RequestManager requestManager = new RequestManager(this);
-
-	/*
-	 * Core login details.
-	 */
-
-	/**
-	 * The name.
-	 */
-	private String name;
-
-	/**
-	 * The name expressed as a long.
-	 */
-	private long nameLong;
-
-	/**
-	 * The UID, i.e. number in <code>random.dat</code>.
-	 */
-	private final int uid;
-
-	/**
-	 * The password.
-	 */
-	private Password password = new Password();
-
-	private int initialSource = GenericWorldLoader.MERGED;
-
 	public int getInitialSource() {
 		return initialSource;
 	}
@@ -868,8 +1153,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void setInitialSource(int source) {
 		this.initialSource = source;
 	}
-
-	private int source = GenericWorldLoader.MERGED;
 
 	public int getSource() {
 		return source;
@@ -879,17 +1162,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.source = source;
 	}
 
-	/**
-	 * The rights level.
-	 */
-	private long playerRank = 1;
-
-	/**
-	 * Overload timer, allows for resetting
-	 */
-
-	private AtomicInteger overloadCounter = new AtomicInteger(0);
-
 	public void resetOverloadCounter() {
 		overloadCounter.set(0);
 	}
@@ -897,67 +1169,19 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public AtomicInteger getOverloadCounter() {
 		return overloadCounter;
 	}
-	/**
-	 * PvP Armour storage, initialized in saving
-	 */
-
-	private PvPArmourStorage pvpStorage = new PvPArmourStorage();
 
 	public PvPArmourStorage getPvPStorage() {
 		return pvpStorage;
 	}
 
-	/**
-	 * Bounty hunter targets etc
-	 */
-	private final BountyHunter bountyHunter = new BountyHunter(this);
 	public BountyHunter getBountyHunter() {
 		return bountyHunter;
 	}
 
-    private final BountyPerks bhperks = new BountyPerks();
     public BountyPerks getBHPerks() {
         return bhperks;
     }
-	/**
-	 * Informed of hybrid area
-	 */
-	public boolean hasBeenInformed;
 
-	/**
-	 * is FFA games interface displayed?
-	 */
-	public boolean ffaDisplayed;
-
-
-	private LastAttacker lastAttacker;
-
-	/**
-	 * The members flag.
-	 */
-	private boolean members = true;
-
-	public boolean receivedStarter = true;
-
-	//private int[] bonus = new int[12];
-	private EquipmentStats bonus = new EquipmentStats();
-
-	private int shopId = - 1;
-
-	private Player tradeWith = null;
-
-	public boolean tradeAccept1 = false;
-	public boolean tradeAccept2 = false;
-	public boolean onConfirmScreen = false;
-	public boolean openingTrade = false;
-
-	public final List<DuelRules> duelRules = new ArrayList<>(20);
-	public boolean duelRule[] = new boolean[24];
-	public int duelAttackable = 0;
-	public int duelRuleOption = 0;
-
-	public boolean banEquip[] = new boolean[14];
-	private long lastDuelUpdate = 0L;
 	public void refreshDuelTimer() {
 		lastDuelUpdate = System.currentTimeMillis();
 	}
@@ -965,16 +1189,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean hasDuelTimer() {
 		return System.currentTimeMillis() - lastDuelUpdate < 5000;
 	}
-
-	public int[] skillRecoverTimer = new int[Skills.SKILL_COUNT];
-	public byte levelupSkillId = - 1;
-
-	public boolean inGame;
-
-	public int RFDLevel = 0;
-	public int WGLevel = 0;
-
-	private long dragonFireSpec = 0L;
 
 	public void resetDFS() {
 		dragonFireSpec = System.currentTimeMillis();
@@ -984,24 +1198,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return (System.currentTimeMillis() - dragonFireSpec) > 160000; //160 secs, 2:30
 	}
 
-	public int rangeMiniShots = - 1;
-	public int rangeMiniScore = 0;
-	public long splitDelay = 0L;
-	public int fightCavesWave = 0;
-	public int fightCavesKills = 0;
-	public Player duelWith2 = null;
-	public int hintIcon = 0;
-	public boolean attackOption = false;
-	public boolean duelOption = false;
-	public boolean splitPriv = true;
-
-	public long lastTicketRequest;
-
 	public long lastTickReq() {
 		return lastTicketRequest;
 	}
-
-    private final SlayerHolder slayTask = new SlayerHolder();
 
     public final SlayerHolder getSlayer() {
         return slayTask;
@@ -1010,44 +1209,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void refreshTickReq() {
 		this.lastTicketRequest = System.currentTimeMillis();
 	}
-	/**
-	 * confirmed bh tele too lazy tbh to do soething else
-	 */
-	public boolean bhConfirmedTeleport = false;
-	/**
-	 * Right-click moderation
-	 */
-	public Player onModeration = null;
-
-	public byte currentInterfaceStatus = 0;
-
-	public int SummoningCounter = 0;
-
-	public int killId = - 1;// the npc id to kill
-	public int shouldKill = 0;// the required kill count will apply to all
-	// minigames
-
-	public boolean specOn = false;
-
-	public Player challengedBy = null;
-	public int[] checkersRecord;
-
-    public Player beingFollowed = null;
-	public Player isFollowing = null;
-	public boolean isMoving = false;
-
-	public Player tradeWith2 = null;
-
-	public boolean autoRetailate = true;
-
-	public long foodTimer = System.currentTimeMillis();
-    public long comboFoodTimer = System.currentTimeMillis();
-	public long specPotionTimer = 0;
-    public long chargeTill;
-    private boolean chargeSpell;
-
-
-	private boolean isPlayerBusy = false;
 
 	/**
 	 * Getters/Setters for person ready to be moderated
@@ -1068,17 +1229,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 		isPlayerBusy = b;
 	}
 
-	private boolean isSkilling = false;
-
-	public void setSkilling(boolean b) {
-		isSkilling = b;
-	}
-
 	public boolean isSkilling() {
 		return isSkilling;
 	}
 
-	private boolean canWalk = false;
+	public void setSkilling(boolean b) {
+		isSkilling = b;
+	}
 
 	public boolean canWalk() {
 		return canWalk;
@@ -1087,14 +1244,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void setCanWalk(boolean b) {
 		canWalk = b;
 	}
-
-	//i hate doing this but ugh
-	public boolean joiningPits = false;
-
-	public int smithingMenu = - 1;
-
-
-	public int[] delayObjectClick = new int[4];// id,x,y,type
 
 	public boolean handleClickNow() {
 		if(delayObjectClick[3] > 0) {
@@ -1114,17 +1263,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return false;
 	}
 
-	public int wildernessLevel = - 1;
-	public boolean isInMuli = false;
-	public int headIconId = - 1;
-
-	/*
-	 * Player NPC
-	 */
-
-	private boolean npcState = false;
-	private int npcId = - 1;
-
 	public void setPNpc(int id) {
 		this.npcId = id;
 		this.npcState = id > - 1 ? true : false;
@@ -1139,14 +1277,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return npcId;
 	}
 
-	private Prayers prayers = new Prayers(true);
-
 	public Prayers getPrayers() {
 		return prayers;
 	}
-
-
-	private double drainRate;
 
 	public double getDrainRate() {
 		return drainRate;
@@ -1177,130 +1310,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 		// clears arraylist
 	}
 
-	/*
-	 * Attributes.
-	 */
-
-	/**
-	 * The player's appearance information.
-	 */
-	private Appearance appearance = new Appearance();
-
-	/**
-	 * The player's equipment.
-	 */
-	private final Container equipment = new Container(Container.Type.STANDARD, Equipment.SIZE);
-
-	/**
-	 * The player's skill levels.
-	 */
-	private final Skills skills = new Skills(this);
-
-	/**
-	 * The player's inventory.
-	 */
-	private final Container inventory = new Container(Container.Type.STANDARD, Inventory.SIZE);
-
-	private final Container trade = new Container(Container.Type.STANDARD, Trade.SIZE);
-
-	private final Container duel = new Container(Container.Type.STANDARD, Duel.SIZE);
-
-    private final Container runePouch = new Container(Container.Type.ALWAYS_STACK, RunePouch.SIZE);
-
     public Container getRunePouch() {
         return runePouch;
     }
 
-    /**
-	 * The player's bank.
-	 */
-	private final TabbedContainer bank = new TabbedContainer(Container.Type.ALWAYS_STACK, Bank.SIZE, this);
-
-	/**
-	 * The player's BoB.
-	 */
-	private Container bob;
-
-	/**
-	 * The player's settings.
-	 */
-	private final Settings settings = new Settings();
-
-	public boolean cannotSwitch = false;
-	/*
-	 * Cached details.
-	 */
-	public int logoutTries = 0;
-	/**
-	 * The cached update block.
-	 */
-	private Packet cachedUpdateBlock;
-	public String display;
-
-    private LogManager logManager;
-
-   // private InterfaceManager itfManager;
-
-    public int[] specialUid;
-
-	/**
-	 * Creates a player based on the details object.
-	 *
-	 * @param details The details object.
-	 */
-	public Player(PlayerDetails details, boolean newCharacter) {
-		super();
-		//System.out.println("ok");
-		LoginDebugger.getDebugger().log("In Player constructor");
-		this.session = details.getSession();
-		this.inCipher = details.getInCipher();
-		this.outCipher = details.getOutCipher();
-
-		this.name = details.getName().toLowerCase();
-        this.specialUid = details.specialUid;
-		this.display = details.getName();
-		if(! NameUtils.isValidName(name)) {
-			System.out.println("Invalid name!!!!!" + name);
-		}
-		this.nameLong = NameUtils.nameToLong(this.name);
-		this.password.setRealPassword(details.getPassword());
-		this.uid = details.getUID();
-		this.IP = details.IP;
-		LoginDebugger.getDebugger().log("1.So far made new Player obj");
-        if(Server.NAME.equalsIgnoreCase("arteropk"))
-		    SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(name, IP));
-		LoginDebugger.getDebugger().log("2.So far made new Player obj");
-		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
-		this.setTeleporting(true);
-		this.resetPrayers();
-		this.newCharacter = newCharacter;
-		LoginDebugger.getDebugger().log("3.So far made new Player obj");
-		//int banstatus = World.getWorld().getBanManager().getStatus(name);
-		LoginDebugger.getDebugger().log("4.So far made new Player obj");
-		//if(banstatus == BanManager.YELL)
-		//	yellMuted = true;
-		//else if(banstatus == BanManager.MUTE)
-		//	isMuted = true;
-		active = false;
-		if(newCharacter) {
-			this.created = System.currentTimeMillis();
-           // for(int i = 0; i < )
-		}
-		lastAttacker = new LastAttacker(name);
-		friendList = new FriendList();
-        logManager = new LogManager(this);
-       // itfManager = new InterfaceManager(this);
-	}
-
     public LogManager getLogManager(){
         return logManager;
     }
-
-/*  public InterfaceManager getInterfaceManager(){
-        return itfManager;
-    }
-*/
-	private String IP;
 
 	public String getFullIP() {
 		return IP;
@@ -1310,19 +1326,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return TextUtils.shortIp(IP);
 	}
 
-	public Player() {
-		this.inCipher = null;
-		this.outCipher = null;
-		this.session = null;
-		this.uid = 0;
-	}// used for checking accounts
-
-	public boolean newCharacter = false;
-
-	public boolean ignoreOnLogin = false;
-
-	public boolean oldFag = false;
-
 	public boolean isNew() {
 		return newCharacter;
 	}
@@ -1330,11 +1333,11 @@ public class Player extends Entity implements Persistable, Cloneable{
     public boolean isNewlyCreated() {
 		return getTotalOnlineTime() < Time.FIVE_MINUTES * 3;
     }
+	// friends, 2 off
 
     public long getTotalOnlineTime() {
         return getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - loginTime);
     }
-
 
 	/**
 	 * Gets the request manager.
@@ -1404,7 +1407,6 @@ public class Player extends Entity implements Persistable, Cloneable{
         return pendingPackets.size();
     }
 
-
 	/**
 	 * Gets the player's bank.
 	 *
@@ -1422,7 +1424,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public Container getBoB() {
 		return bob;
 	}
-
 
 	public void setBob(int size) {
 		bob = new Container(Container.Type.STANDARD, size);
@@ -1447,21 +1448,21 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	/**
-	 * Sets the cached update block for this cycle.
-	 *
-	 * @param cachedUpdateBlock The cached update block.
-	 */
-	public void setCachedUpdateBlock(Packet cachedUpdateBlock) {
-		this.cachedUpdateBlock = cachedUpdateBlock;
-	}
-
-	/**
 	 * Gets the cached update block.
 	 *
 	 * @return The cached update block.
 	 */
 	public Packet getCachedUpdateBlock() {
 		return cachedUpdateBlock;
+	}
+
+	/**
+	 * Sets the cached update block for this cycle.
+	 *
+	 * @param cachedUpdateBlock The cached update block.
+	 */
+	public void setCachedUpdateBlock(Packet cachedUpdateBlock) {
+		this.cachedUpdateBlock = cachedUpdateBlock;
 	}
 
 	/**
@@ -1558,10 +1559,20 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 * @return The player's name.
 	 */
 	public String getName() {
-		if(! NameUtils.isValidName(name)) {
+		if (!NameUtils.isValidName(name)) {
 			System.out.println("Glitched name at : " + this.getLocation());
 		}
 		return name;
+	}
+
+	public void setName(String playerName) {
+		if(NameUtils.isValidName(playerName)) {
+			name = playerName;
+		} else {
+			for(int i = 0; i < 100; i++) {
+				System.out.println("Trying to set name: " + playerName);
+			}
+		}
 	}
 
     public String getSafeDisplayName(){
@@ -1582,13 +1593,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	/**
-	 * Sets the player's password.
-	 *
-	 * @param pass The password.
-	 */
-
-
-	/**
 	 * Gets the player's UID.
 	 *
 	 * @return The player's UID.
@@ -1606,12 +1610,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return session;
 	}
 
-	public void setPlayerRank(long playerRank) {
-		this.playerRank = playerRank;
-	}
-
 	public long getPlayerRank() {
 		return playerRank;
+	}
+
+	public void setPlayerRank(long playerRank) {
+		this.playerRank = playerRank;
 	}
 
 	/**
@@ -1639,21 +1643,21 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	/**
-	 * Sets the active flag.
-	 *
-	 * @param active The active flag.
-	 */
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	/**
 	 * Gets the active flag.
 	 *
 	 * @return The active flag.
 	 */
 	public boolean isActive() {
 		return active;
+	}
+
+	/**
+	 * Sets the active flag.
+	 *
+	 * @param active The active flag.
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	/**
@@ -1756,6 +1760,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 			this.setDead(true);
 		}
 	}
+
 	public void heal(int hp, boolean brew) {
 		int cHp = skills.getLevel(3);
 		int j = 3;
@@ -1984,26 +1989,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		System.out.println("Calling deserializable");
 	}
 
-	public static int getConfigId(int i) {
-		switch(i) {
-			case 0:
-				return 0;
-
-			case 1:
-				return 1;
-
-			case 2:
-				return 2;
-
-			case 3:
-				return 3;
-		}
-		return 0;
-	}
-
-
-	private boolean isDoingEmote = false;
-
 	public void emoteTabPlay(Animation anim) {
 		if(isDoingEmote) {
 			getActionSender().sendMessage("You are already doing an emote.");
@@ -2039,8 +2024,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void serialize(IoBuffer buf) {// save method
 		System.out.println("Calling serialize");
 	}
-
-	public boolean decided = false;
 
 	@Override
 	public void addToRegion(Region region) {
@@ -2083,7 +2066,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	}
 
-	private int fightPitsDamage;
 	public void increasePitsDamage(int fightPitsDamage) {
 		this.fightPitsDamage += fightPitsDamage;
 	}
@@ -2096,27 +2078,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.fightPitsDamage = fightPitsDamage;
 	}
 
-	private int damagedCorp;
 	public void increaseCorpDamage(int i) {
 		damagedCorp += i;
 	}
+
 	public int getCorpDamage() {
 		return damagedCorp;
 	}
+
 	public void setCorpDamage(int i) {
 		damagedCorp = i;
 	}
-	public static void resetCorpDamage() {
-		for(Player p : World.getWorld().getPlayers()) {
-			if(p == null)
-				continue;
-			if(p.getCorpDamage() > 0)
-				p.setCorpDamage(0);
-		}
-	}
-	public boolean inAction;
-
-	private SpellBook spellBook = new SpellBook(SpellBook.DEFAULT_SPELLBOOK);
 
 	/**
 	 * Use to get the current spellbook.
@@ -2127,18 +2099,24 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return spellBook;
 	}
 
-	private FriendList friendList;
-
 	public FriendList getFriends() {
 		return friendList;
 	}
 
-	public List<Long> ignores = new ArrayList<Long>(1);
-
-	public int[] chatStatus = new int[3];// normal,friends,trade, 0 - on, 1
-	// friends, 2 off
-
-	private long lastTeleport = System.currentTimeMillis();
+	/*
+	 * public int activityPoints = 0;
+	 * 
+	 * public int getActivityPoints(){ return activityPoints; } public void
+	 * setActivityPoints(int points){ this.activityPoints = points; }
+	 * 
+	 * public void increaseplayerUptime(){ playerUptime++; increaseActivity(); }
+	 * public void increaseActivity(){ int multiplier = (playerUptime/120) + 1;
+	 * activityPoints += multiplier; if(playerUptime % 120 == 0){
+	 * getActionSender().sendMessage("@blu@You have been online for " +
+	 * playerUptime/120 + " hours! Your ActivityBonus has been increased!"); }
+	 * getActionSender().sendString("@or2@Activity Points: @gre@" +
+	 * activityPoints, 7346); }
+	 */
 
 	public void updateTeleportTimer() {
 		lastTeleport = System.currentTimeMillis();
@@ -2149,45 +2127,20 @@ public class Player extends Entity implements Persistable, Cloneable{
 	}
 
 	public boolean isMagicTeleporting() {
-		if(System.currentTimeMillis() - lastTeleport > 5000)
-			return false;
-		return true;
+		return System.currentTimeMillis() - lastTeleport <= 5000;
 	}
-
-
-	public int membershipDay = 1;
-	public int membershipYear = 2005;
-	public int membershipTerm = 31;
-
-	public int forceWalkX1;
-	public int forceWalkY1;
-	public int forceWalkX2;
-	public int forceWalkY2;
-	public int forceSpeed1;
-	public int forceSpeed2;
-	public int forceDirection;
-
-	public long teleBlockTimer = System.currentTimeMillis() - 3600000;
-
-	public int slayerTask = 0;
-
-	public String bankPin = "";
-	public int[] pinOrder = new int[10];
-	public String enterPin = "";
 
 	public void setTeleBlock(long l) {
 		// TODO Auto-generated method stub
 		teleBlockTimer = l;
 	}
-	private PvPTask currentPvPTask;
-	private int pvpTaskAmount;
-
-	public void setPvPTask(PvPTask task) {
-		currentPvPTask = task;
-	}
 
 	public PvPTask getPvPTask() {
 		return currentPvPTask;
+	}
+
+	public void setPvPTask(PvPTask task) {
+		currentPvPTask = task;
 	}
 
 	public int getPvPTaskAmount() {
@@ -2205,48 +2158,26 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public int pvpTaskToInteger() {
 		return PvPTask.toInteger(currentPvPTask);
 	}
+
 	public boolean isTeleBlocked() {
-		if(System.currentTimeMillis() > teleBlockTimer)
-			return false;
-		else
-			return true;
+		return System.currentTimeMillis() <= teleBlockTimer;
 	}
-
-	private Farm farm = Farming.getFarming().new Farm();
-
-	public boolean debug;
-
-	public int skillMenuId = 0;
-
-	public boolean isMuted = false;
-
-	public int[] godWarsKillCount = new int[4];
-
-	public boolean[] invSlot = new boolean[28];
-
-	public boolean[] equipSlot = new boolean[14];
-
-	public int[] itemKeptId = new int[4];
-
-	public boolean forcedIntoSkilling = false;
-
-	/**
-	 * Clan Stuff.
-	 */
-
-	private int clanRank = 0;
 
 	public int getClanRank() {
 		return clanRank;
 	}
 
+	public void setClanRank(int r) {
+		clanRank = r;
+	}
+	
     public boolean isClanMainOwner() {
         if(clanName == null || clanName.isEmpty())
             return false;
         Clan clan = ClanManager.clans.get(clanName);
         return clan != null && clan.getOwner().equalsIgnoreCase(getName());
     }
-
+	
 	public String getPlayersNameInClan() {
 		//System.out.println("Clanranker is " + clanRank);
         if(isClanMainOwner())
@@ -2287,12 +2218,6 @@ public class Player extends Entity implements Persistable, Cloneable{
         return "[" + rank + "] ";
     }
 
-	public void setClanRank(int r) {
-		clanRank = r;
-	}
-
-	private String clanName = "";
-
 	public String getClanName() {
 		return clanName;
 	}
@@ -2305,82 +2230,13 @@ public class Player extends Entity implements Persistable, Cloneable{
 		this.clanName = "";
 	}
 
-	public GEItem[] geItem = new GEItem[40];
-	public List<GEItem> geItems = new LinkedList<GEItem>();
-
-	public boolean closeChatInterface = false;
-
-	private AutoSaving autoSaving = new AutoSaving(this);
-
 	public AutoSaving getAutoSaving() {
 		return autoSaving;
 	}
 
-	public int yellMessage = 0;
-
-	public boolean vengeance = false;
-
-	public long LastTimeLeeched;
-	public long lastTimeSoulSplit;
-
-
-	public int slayerAm = 0;
-
-	public double slayerExp = 0;
-
-	public int clueStage = 8;
-
-	public int slayerCooldown = 0;
-
-	public boolean yellMuted = false;
-
-	public int tutIsland = 10;
-
-	public int tutSubIsland = 0;
-
-	public boolean resetingPin = false;
-
-	public String tempPass = "43g9g3er";
-
-	public int slayerPoints = 0;
-
-	public long potionTimer = 0;
-	public long contentTimer = 0;
-
-	public String lastSearch = "";
-	public String bloodName = null;
-
-	public String tempBlood = null;
-
-
-	public boolean xpLock = false;
-
-	private int playerUptime = 0;
-
 	public int getPlayerUptime() {
 		return playerUptime;
 	}
-
-	/*
-	 * public int activityPoints = 0;
-	 * 
-	 * public int getActivityPoints(){ return activityPoints; } public void
-	 * setActivityPoints(int points){ this.activityPoints = points; }
-	 * 
-	 * public void increaseplayerUptime(){ playerUptime++; increaseActivity(); }
-	 * public void increaseActivity(){ int multiplier = (playerUptime/120) + 1;
-	 * activityPoints += multiplier; if(playerUptime % 120 == 0){
-	 * getActionSender().sendMessage("@blu@You have been online for " +
-	 * playerUptime/120 + " hours! Your ActivityBonus has been increased!"); }
-	 * getActionSender().sendString("@or2@Activity Points: @gre@" +
-	 * activityPoints, 7346); }
-	 */
-	/**
-	 * KillStreak stuff
-	 */
-	private int killStreak = 0;
-	private String[] lastKills = {"", "", "", "", ""};
-	private int bounty = 10;
 
 	public int getBounty() {
 		return bounty;
@@ -2389,13 +2245,17 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public void resetBounty() {
 		bounty = 10;
 	}
-
+	
 	public void resetKillStreak() {
 		killStreak = 0;
 	}
-
+	
 	public int getKillStreak() {
 		return killStreak;
+	}
+
+    public void setKillStreak(int killStreak) {
+		this.killStreak = killStreak;
 	}
 
 	public void increaseKillStreak() {
@@ -2449,37 +2309,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 	}
 
-	private static String getPeopleString() {
-		String ppl = " ";
-		switch(Misc.random(100)) {
-			case 0:
-				ppl += "idiots";
-				break;
-			case 1:
-				ppl += "narbs";
-				break;
-			case 2:
-				ppl += "shits";
-				break;
-			case 3:
-				ppl += "enemies";
-				break;
-			case 4:
-				ppl += "noobs";
-				break;
-			case 5:
-				ppl += "chickens";
-				break;
-			case 6:
-				ppl += "fleshbags";
-				break;
-			default:
-				ppl += "people";
-				break;
-		}
-		return ppl;
-	}
-
 	public void addLastKill(String name) {
 		lastKills[0] = lastKills[1];
 		lastKills[1] = lastKills[2];
@@ -2495,13 +2324,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		return false;
 	}
-
-	private int killCount = 0;
-	private int deathCount = 0;
-	
-	public long lastScoreCheck = System.currentTimeMillis() + 20000;
-	
-
 
 	public void increaseKillCount() {
 		killCount++;
@@ -2546,7 +2368,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public ActionSender sendImportantMessage(Object... message) {
 		return sendHeadedMessage("@dre@", "[Important]", message);
 	}
-	
+
 	public ActionSender sendf(String message, Object... args) {
 		try {
 			actionSender.sendMessage(String.format(message, args));
@@ -2555,53 +2377,39 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		return getActionSender();
 	}
-	
+
 	public void increaseDeathCount() {
 		deathCount++;
 		getQuestTab().updateQuestTab();
 	}
 
-	public void setKillCount(int kc) {
-		killCount = kc;
-	}
-
-    private BankField bankField = new BankField(this);
-
-    public BankField getBankField() {
-        return bankField;
-    }
-
-    public void setDeathCount(int dc) {
-		deathCount = dc;
+	public BankField getBankField() {
+		return bankField;
 	}
 
 	public int getKillCount() {
 		return killCount;
 	}
 
+	public void setKillCount(int kc) {
+		killCount = kc;
+	}
+
 	public int getDeathCount() {
 		return deathCount;
 	}
 
-	public boolean isOverloaded;
-
-	public void setOverloaded(boolean b) {
-		isOverloaded = b;
+	public void setDeathCount(int dc) {
+		deathCount = dc;
 	}
 
 	public boolean isOverloaded() {
 		return isOverloaded;
 	}
 
-	public long lastVeng = 0;
-
-	public long antiFireTimer = 0;
-
-	public boolean superAntiFire = false;
-
-	public long overloadTimer = 0;
-
-	public boolean openedBoB = false;
+	public void setOverloaded(boolean b) {
+		isOverloaded = b;
+	}
 
 	public void resetDeathItemsVariables() {
 		for(int i = 0; i < invSlot.length; i++) {
@@ -2635,25 +2443,12 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 	}
 
-	public void setName(String playerName) {
-		if(NameUtils.isValidName(playerName)) {
-			name = playerName;
-		} else {
-			for(int i = 0; i < 100; i++) {
-				System.out.println("Trying to set name: " + playerName);
-			}
-		}
-	}
-	public ArmourClass pickedClass = null;
 	/**
 	 * Returns the PlayerRights
 	 */
 	public String getQuestTabRank() {
 		return Rank.getPrimaryRank(getPlayerRank()).toString();
 	}
-
-
-	private Highscores highscores;
 
 	/**
 	 * Gets the highscores, initializes them if needed.
@@ -2666,26 +2461,21 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return highscores;
 	}
 
-    private long firstVoteTime = -1;
-    private int voteCount;
+	public long getFirstVoteTime() {
+		return firstVoteTime;
+	}
 
     public void setFirstVoteTime(final long firstVoteTime){
         this.firstVoteTime = firstVoteTime;
     }
 
-    public long getFirstVoteTime(){
-        return firstVoteTime;
-    }
+	public int getVoteCount() {
+		return voteCount;
+	}
 
     public void setVoteCount(final int voteCount){
         this.voteCount = voteCount;
     }
-
-    public int getVoteCount(){
-        return voteCount;
-    }
-
-    public long lastAccountValueTime = System.currentTimeMillis();
 
     @SuppressWarnings("deprecation")
     public void addCharge(int seconds) {
@@ -2695,6 +2485,7 @@ public class Player extends Entity implements Persistable, Cloneable{
         date.setSeconds((date.getSeconds() + seconds));
         chargeTill = date.getTime();
     }
+
 	@Override
 	public boolean equals(Object other) {
 		if(other == null)
@@ -2707,11 +2498,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	}
 
-    public void setKillStreak(int killStreak) {
-        this.killStreak = killStreak;
-    }
-
-    /** Does the player have a active charge?*/
+	/** Does the player have a active charge?*/
     public boolean hasCharge() {
     return chargeSpell || chargeTill > System.currentTimeMillis();
     }
@@ -2719,8 +2506,9 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int getTurkeyKills() {
         return turkeyKills;
     }
-    public void setTurkeyKills(int turkeyKills) {
-        this.turkeyKills = turkeyKills;
+
+	public void setTurkeyKills(int turkeyKills) {
+		this.turkeyKills = turkeyKills;
     }
 
     public void completeTGEvent(boolean b) {
@@ -2738,8 +2526,6 @@ public class Player extends Entity implements Persistable, Cloneable{
     public int getTreasureScroll() {
         return treasureScroll;
     }
-
-	private JGrandExchangeTracker geTracker;
 
 	public JGrandExchangeTracker getGrandExchangeTracker(){
 		if(geTracker == null)

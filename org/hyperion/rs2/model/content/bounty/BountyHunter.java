@@ -1,22 +1,20 @@
 package org.hyperion.rs2.model.content.bounty;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.hyperion.rs2.model.GlobalItem;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.util.Misc;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BountyHunter {
 
@@ -37,13 +35,13 @@ public class BountyHunter {
         TIER_10(100);
 
 
-        private static final Map<Integer, Emblem> EMBLEM_MAP = Stream.of(values()).collect(Collectors.toMap(e -> e.id, Function.<Emblem>identity()));;
+        private static final Map<Integer, Emblem> EMBLEM_MAP = Stream.of(values()).collect(Collectors.toMap(e -> e.id, Function.<Emblem>identity()));
 
         private static final int BASE_ID = 13195;
 
         private final int reward;
         private final int id;
-        private Emblem(final int multiplier) {
+        Emblem(final int multiplier) {
             this.reward = multiplier * BASE_POINTS;
             this.id = ordinal() + BASE_ID;
         }
@@ -100,22 +98,29 @@ public class BountyHunter {
 		}
 	}
 
+    public void sendBHTarget() {
+        player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), 36502);
+    }
+
     public void clearTarget() {
         if(player.getBountyHunter().getTarget() == null)
             return;
         Player oldTarget = target;
-        player.getBountyHunter().setPrevTarget(player.getBountyHunter().getTarget());
-        player.getBountyHunter().setTarget(null);
+        setPrevTarget(player.getBountyHunter().getTarget());
+        setTarget(null);
         player.getActionSender().removeArrow();
+        sendBHTarget();
         oldTarget.getBountyHunter().setPrevTarget(oldTarget.getBountyHunter().getTarget());
         oldTarget.getBountyHunter().setTarget(null);
         oldTarget.getActionSender().removeArrow();
+        oldTarget.getBountyHunter().sendBHTarget();
 }
 	
 	public void assignTarget(Player p) {
         if(target == p)
             return;
 		this.target = p;
+        sendBHTarget();
         player.getActionSender().createArrow(target);
         p.getBountyHunter().assignTarget(player);
 
@@ -153,6 +158,7 @@ public class BountyHunter {
 		final Player targ = player.getBountyHunter().getTarget();
 		if(targ != null) {
             BountyHunterLogout.playerLogout(player);
+            targ.getBountyHunter().sendBHTarget();
             targ.getBountyHunter().setPrevTarget(player);
 			targ.getBountyHunter().setTarget(null);
 			targ.getActionSender().removeArrow();

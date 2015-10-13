@@ -3,8 +3,6 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.impl.RefreshNewsEvent;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.rs2.util.rssfeed.Article;

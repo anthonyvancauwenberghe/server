@@ -65,7 +65,7 @@ public class EventManager {
 				if(remaining <= 0) {
 					remaining = 0;
 				}
-				System.out.printf("Submitting event %s with delay %,d MS%n", event.getClass().getName(), remaining);
+				System.out.printf("Submitting event %s again with delay %,d MS%n", event.getClass().getName(), remaining);
 				submit(event, remaining);
 			}
 		}, delay, TimeUnit.MILLISECONDS);

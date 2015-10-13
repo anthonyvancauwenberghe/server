@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.polls;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.rs2.packet.ButtonAction;
 
@@ -72,13 +73,17 @@ public class PollInterface {
         this.player = player;
     }
 
-    public static int getPercentageYes(int votesYes, int votesNo) {
+    private static int getPercentageYes(int votesYes, int votesNo) {
 
         if (votesYes == 0)
             return 0;
         if (votesNo == 0)
             return 100;
         return (int) (votesYes * 100f / votesNo);
+    }
+
+    public static boolean canVote(Player player) {
+        return (player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR);
     }
 
     public void openInterface() {

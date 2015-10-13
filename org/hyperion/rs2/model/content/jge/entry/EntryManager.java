@@ -24,6 +24,15 @@ public class EntryManager {
         entries = new Entry[NUMBER_OF_SLOTS];
     }
 
+    public Stream<Entry> stream(){
+        return Stream.of(entries)
+                .filter(Objects::nonNull);
+    }
+
+    public Stream<Entry> stream(final Predicate<Entry> filter){
+        return stream().filter(filter);
+    }
+
     public boolean anyMatch(final Predicate<Entry> match){
         return Stream.of(entries).filter(Objects::nonNull).anyMatch(match);
     }

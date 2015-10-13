@@ -40,6 +40,10 @@ public class Punishment {
         this(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
     }
 
+    public Punishment(final Player victim, final Combination combination, final Time time, final String reason){
+        this("Server", victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
+    }
+
     public PunishmentHolder getHolder(){
         return PunishmentManager.getInstance().get(getVictimName());
     }
@@ -306,5 +310,9 @@ public class Punishment {
 
     public static Punishment create(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason){
         return new Punishment(issuer, victim, combination, time, reason);
+    }
+
+    public static Punishment create(final Player victim, final Combination combination, final Time time, final String reason){
+        return new Punishment(victim, combination, time, reason);
     }
 }

@@ -9,9 +9,9 @@ import java.sql.SQLException;
 /**
  * Created by Gilles on 10/10/2015.
  */
-public class LoadPolls extends SQLRequest {
+public class LoadAllPolls extends SQLRequest {
 
-    public LoadPolls() {
+    public LoadAllPolls() {
         super(QUERY_REQUEST);
     }
 

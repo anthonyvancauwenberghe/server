@@ -157,7 +157,7 @@ public class Poll {
         CommandHandler.submit(new Command("reloadpolls", Rank.DEVELOPER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                World.getWorld().getLogsConnection().offer(new LoadPolls());
+                World.getWorld().getLogsConnection().offer(new LoadAllPolls());
                 return false;
             }
         });

@@ -298,7 +298,7 @@ public class JGrandExchange {
 
     public IntSummaryStatistics itemUnitPriceStats(final int itemId, final Entry.Type type, final Entry.Currency currency){
         return stream(itemId)
-                .filter(e -> e.type == type && e.currency == currency)
+                .filter(e -> !e.cancelled && e.type == type && e.currency == currency)
                 .mapToInt(e -> e.unitPrice)
                 .summaryStatistics();
     }

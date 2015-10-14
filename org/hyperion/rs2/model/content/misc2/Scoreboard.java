@@ -58,6 +58,7 @@ public class Scoreboard implements ContentTemplate {
 		lastupdate = System.currentTimeMillis();
 		LinkedList<ScoreboardPlayer> fullList = new LinkedList<ScoreboardPlayer>();
 		for(Player player : World.getWorld().getPlayers()) {
+			if(player != null)
 			fullList.add(new ScoreboardPlayer(player.getName(), player.getBounty()));
 		}
 		toplist = top(fullList, TOP_SIZE);

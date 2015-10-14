@@ -173,7 +173,7 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     public void update(GameObject obj) {
         for (Player p : World.getWorld().getPlayers()) {
             if (p == null)
-                return;
+                continue;
                 if (obj == null)
                     return;
             if (obj.isVisible(p.getLocation())) {

@@ -47,7 +47,7 @@ public class EventManager {
 		engine.scheduleLogic(new Runnable() {
 			public void run() {
 				long start = System.currentTimeMillis();
-				System.out.println("Starting event: " + event.getClass().getName());
+				//System.out.println("Starting event: " + event.getClass().getName());
 				if(event.isRunning()) { // this must be false, however
 					try {
 
@@ -59,13 +59,13 @@ public class EventManager {
 					return;
 				}
 				long elapsed = System.currentTimeMillis() - start;
-				System.out.printf("Finished event %s in %,d MS%n", event.getClass().getName(), elapsed);
+				//System.out.printf("Finished event %s in %,d MS%n", event.getClass().getName(), elapsed);
 				//ServerTimeManager.getSingleton().add(event.getName(), elapsed);
 				long remaining = event.getDelay() - elapsed;
 				if(remaining <= 0) {
 					remaining = 0;
 				}
-				System.out.printf("Submitting event %s again with delay %,d MS%n", event.getClass().getName(), remaining);
+				//System.out.printf("Submitting event %s again with delay %,d MS%n", event.getClass().getName(), remaining);
 				submit(event, remaining);
 			}
 		}, delay, TimeUnit.MILLISECONDS);

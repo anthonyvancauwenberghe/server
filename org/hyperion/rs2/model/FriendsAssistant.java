@@ -45,6 +45,8 @@ public class FriendsAssistant {
         if(p == null)
             return;
 		for(Player c : World.getWorld().getPlayers()) {
+			if(c == null)
+				continue;
 			if(c.getNameAsLong() == to) {
 				try {
 					sendPM(c, p.getNameAsLong(), chatText, chatTextSize, (int) Rank.getPrimaryRankIndex(p));
@@ -73,6 +75,8 @@ public class FriendsAssistant {
 
 	public static void updateList(Player p, long friend) {
 		for(Player c : World.getWorld().getPlayers()) {
+			if(c == null)
+				continue;
 			if(c.getNameAsLong() == friend && c.chatStatus[1] != 2 && (c.getFriends().contains(p.getNameAsLong()) || c.chatStatus[1] == 0) && ! isIgnore(c, p.getNameAsLong())) {
 				//sure there online send the packet
 				if (!p.isHidden())

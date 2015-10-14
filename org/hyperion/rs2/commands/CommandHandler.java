@@ -2145,10 +2145,26 @@ public class CommandHandler {
 		submit(new Command("gestats", Rank.HELPER){
 			@Override
 			public boolean execute(Player player, String input) throws Exception{
+				input = filterInput(input).trim();
 				player.sendf("Grand Exchange is currently %s", JGrandExchange.enabled ? "@gre@enabled" : "@red@disabled");
-				player.sendf("Number of buying entries: %,d", JGrandExchange.getInstance().get(Entry.Type.BUYING).size());
-				player.sendf("Number of selling entries: %,d", JGrandExchange.getInstance().get(Entry.Type.SELLING).size());
-				return true;
+				if(input.matches("\\d{1,5}")){
+					final int itemId = Integer.parseInt(input);
+					final ItemDefinition def = ItemDefinition.forId(itemId);
+					if(def == null){
+						player.sendf("Invalid item id: %d", itemId);
+						return false;
+					}
+					final IntSummaryStatistics buyStats = JGrandExchange.getInstance().itemUnitPriceStats(itemId, Entry.Type.BUYING, Entry.Currency.PK_TICKETS);
+					final IntSummaryStatistics sellStats = JGrandExchange.getInstance().itemUnitPriceStats(itemId, Entry.Type.SELLING, Entry.Currency.PK_TICKETS);
+					player.sendf("Grand Exchange Stats for %s (%d)", def.getProperName(), def.getId());
+					player.sendf("%,d Buying: %,d | %1.2f | %,d", buyStats.getCount(), buyStats.getMin(), buyStats.getAverage(), buyStats.getMax());
+					player.sendf("%,d Selling: %,d | %1.2f | %,d", sellStats.getCount(), sellStats.getMin(), sellStats.getAverage(), sellStats.getMax());
+					return true;
+				}else{
+					player.sendf("Number of buying entries: %,d", JGrandExchange.getInstance().get(Entry.Type.BUYING).size());
+					player.sendf("Number of selling entries: %,d", JGrandExchange.getInstance().get(Entry.Type.SELLING).size());
+					return true;
+				}
 			}
 		});
 

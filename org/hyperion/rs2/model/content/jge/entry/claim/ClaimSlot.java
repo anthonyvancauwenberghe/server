@@ -48,11 +48,6 @@ public class ClaimSlot {
     public void set(final int itemId, final int itemQuantity){
         this.itemId = itemId;
         this.itemQuantity = itemQuantity;
-        if(itemId != -1){
-            final ItemDefinition def = ItemDefinition.forId(itemId);
-            if(def != null && def.isNoteable() && def.getNotedId() != -1)
-                this.itemId = def.getNotedId();
-        }
     }
 
     public void set(final Item item){

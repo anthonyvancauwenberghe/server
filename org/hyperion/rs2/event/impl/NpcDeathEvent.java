@@ -342,7 +342,7 @@ public class NpcDeathEvent extends Event {
                 return Optional.of(new NPCKillReward(25, 200, 7));
         }
         if (WildernessBossEvent.isWildernessBoss(id))
-            return Optional.of(new NPCKillReward(100, 600, 30));
+            return Optional.of(new NPCKillReward(200, 700, 30));
         return Optional.empty();
     }
 

@@ -145,8 +145,8 @@ public class WalkingPacketHandler implements PacketHandler {
 			path[i][1] += firstY;
             //System.out.printf("Steps: %d FirstX: %d FirstY: %d Path WalkX: %d Path WalkY: %d", i, firstX, firstY, path[i][0], path[i][1]);
             try {
-				if (!WorldMap.checkPos(player.getLocation().getZ(), player.getLocation().getX(), player.getLocation().getY(), path[i][0], path[i][1], 0))
-					break;
+				//if (!WorldMap.checkPos(player.getLocation().getZ(), player.getLocation().getX(), player.getLocation().getY(), path[i][0], path[i][1], 0))
+				//	break;
 			}catch(final Exception ex) {
 
             }

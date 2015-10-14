@@ -45,6 +45,7 @@ public class EntityListIterator<E extends Entity> implements Iterator<E> {
 	 */
 	public EntityListIterator(EntityList<E> entityList) {
 		this.entityList = entityList;
+
 		entities = entityList.toArray(new Entity[0]);
 		size = entities.length;
 	}
@@ -61,6 +62,9 @@ public class EntityListIterator<E extends Entity> implements Iterator<E> {
 			throw new NoSuchElementException();
 		}
 		lastIndex = cursor++;
+		if(entities[lastIndex] == null) {
+			System.out.println("Null is next()");
+		}
 		return (E) entities[lastIndex];
 	}
 

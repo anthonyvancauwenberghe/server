@@ -63,7 +63,7 @@ public class EntityListIterator<E extends Entity> implements Iterator<E> {
 		}
 		lastIndex = cursor++;
 		if(entities[lastIndex] == null) {
-			System.out.println("Null is next()");
+			System.out.println("Null is next() ");
 		}
 		return (E) entities[lastIndex];
 	}

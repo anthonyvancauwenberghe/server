@@ -44,25 +44,25 @@ public class PvMStore extends CurrencyShop{
         switch(id) {
             case 13870: //morrigan body
             case 13858: //zuriel's body
-                return 80;
+                return 45;
             case 13861: //zuriel's bottom
             case 13873: //morrigans chaps
-                return 60;
+                return 35;
             case 13864: //zuriel's hood
             case 13876: //morrigan coif
-                return 30;
+                return 20;
             case 13884: //stat body
-                return 400;
+                return 180;
             case 13890: //stat legs
-                return 350;
+                return 145;
             case 13896: //stat helm
-                return 150;
+                return 80;
             case 13902: //stat hammer
-                return 800;
+                return 450;
             case 13887: //vesta chain
             case 13893: //vesta legs
             case 13905: //vesta spear
-                return 500;
+                return 250;
             case 17652:
                 return 3;
             case 13115:

@@ -76,14 +76,17 @@ public class UpdateEvent extends Event {
 			}
 		}
 		World.getWorld().npcsWaitingList.clear();
-		List<Task> tickTasks = new ArrayList<Task>(npcscount + playercount);
+		List<Task> npcTickTasks = new ArrayList<>(npcscount);
+		List<Task> npcResetTasks = new ArrayList<>(npcscount);
+
+		List<Task> tickTasks = new ArrayList<Task>(playercount);
 		List<Task> updateTasks = new ArrayList<Task>(playercount);
 		List<Task> resetTasks = new ArrayList<Task>(npcscount + playercount);
 
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try {
-				tickTasks.add(new NPCTickTask(npc));
-				resetTasks.add(new NPCResetTask(npc));
+				npcTickTasks.add(new NPCTickTask(npc));
+				npcResetTasks.add(new NPCResetTask(npc));
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
@@ -124,6 +127,9 @@ public class UpdateEvent extends Event {
 		Task updateTask = new ParallelTask(updateTasks);
 		Task resetTask = new ParallelTask(resetTasks);
 
-		World.getWorld().submit(new ConsecutiveTask(tickTask, updateTask, resetTask));
+		Task npcTickTask = new ConsecutiveTask(npcTickTasks);
+		Task npcResetTask = new ParallelTask(npcResetTasks);
+
+		World.getWorld().submit(new ConsecutiveTask(tickTask, npcTickTask, updateTask, resetTask, npcResetTask));
 	}
 }

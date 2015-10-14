@@ -120,6 +120,8 @@ public class PlayersSQLConnection extends MySQLConnection {
 
 	@Override
 	public boolean init() {
+		if (!Server.getConfig().getBoolean("sql"))
+			return false;
 		establishConnection();
 		this.start();
 		return true;

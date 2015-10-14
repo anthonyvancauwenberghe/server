@@ -19,6 +19,8 @@ public class CharFilesCleaner implements Runnable {
 	@Override
 	public void run() {
 		File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
+		if(files == null)
+			return;
 		System.out.println("Started char files cleaner! Files count: " + files.length);
 		final long currentTime = System.currentTimeMillis();
 		for(File file : files) {

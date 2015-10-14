@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.hyperion.Configuration;
+import org.hyperion.Server;
 
 public class ImportantPlayerConnection extends MySQLConnection {
 
@@ -16,6 +17,8 @@ public class ImportantPlayerConnection extends MySQLConnection {
 
     @Override
     public boolean init() {
+		if (!Server.getConfig().getBoolean("sql"))
+			return false;
         establishConnection();
         this.start();
         return true;

@@ -280,7 +280,11 @@ public class Dicing implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
         try {
-            final List<String> lines = Files.readAllLines(new File("./data/dontopkp.txt").toPath());
+			File dontoPkp = new File("./data/dontopkp.txt");
+			if(!dontoPkp.exists()) {
+				dontoPkp.createNewFile();
+			}
+            final List<String> lines = Files.readAllLines(dontoPkp.toPath());
             for(String s : lines) {
                 final String[] split = s.split(":");
                 pkpValues.put(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
@@ -289,7 +293,11 @@ public class Dicing implements ContentTemplate {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         try {
-            final List<String> lines = Files.readAllLines(new File("./data/diceclans.txt").toPath());
+			File diceClanFile = new File("./data/diceclans.txt");
+			if(!diceClanFile.exists()) {
+				diceClanFile.createNewFile();
+			}
+			final List<String> lines = Files.readAllLines(diceClanFile.toPath());
             for(String s : lines) {
                 if(!diceClans.contains(s))
                     diceClans.add(s);

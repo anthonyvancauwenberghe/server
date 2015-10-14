@@ -22,7 +22,8 @@ public class Course implements ContentTemplate {
 
     private static List<Obstacle> obstacles = new ArrayList();
     private static List obstacleId = new ArrayList();
-
+    public Course() {
+    }
     public Course(int courseBonusExp, int maxCourseProgress) {
         this.courseBonusExp = courseBonusExp;
         this.maxCourseProgress = maxCourseProgress;

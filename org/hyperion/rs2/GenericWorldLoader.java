@@ -181,9 +181,9 @@ public class GenericWorldLoader implements WorldLoader {
 						}
 					} else {
 						//Artero Login
-						System.out.println("Checking Artero login");
+						//System.out.println("Checking Artero login");
 						String passStr = MergedSaving.getArteroPass(name);
-						System.out.println("Correct pass is : " + passStr);
+						//System.out.println("Correct pass is : " + passStr);
 						if(passStr != null && passStr.equalsIgnoreCase(pd.getPassword())) {
 							source = ARTERO;
 							/*
@@ -212,7 +212,7 @@ public class GenericWorldLoader implements WorldLoader {
 						//If Artero login didn't work try Instant
 						if(code == LoginResult.INVALID_USER_OR_PASS) {
 							if(MergedSaving.existsInstant(name)) {
-								System.out.println("Couldn't login to priority acc, try secondary");
+								//System.out.println("Couldn't login to priority acc, try secondary");
 								Password pass = MergedSaving.getInstantPass(pd.getName());
 								if(pass.getSalt() != null && !pass.getSalt().equalsIgnoreCase("null")) {
 									//Encrypt pd pass

@@ -449,17 +449,21 @@ public class World {
             //LocalServerSQLConnection.init();
             //playersSQL.init();
             //banManager = new BanManager(logsSQL);
-            PunishmentManager.init(logsSQL);
-            System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
+            if (Server.getConfig().getBoolean("sql")) {
+                PunishmentManager.init(logsSQL);
+                System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
+                submit(new PunishmentExpirationEvent());
+                System.out.println("Loaded achievements: " + Achievements.load());
+                submit(new PulseGrandExchangeEvent());
+                NewcomersLogging.getLogging().init();
+                SpawnCommand.init();
+            }
             //this.banManager.init();
             this.enemies = new ServerEnemies();
-            SpawnCommand.init();
-            NewcomersLogging.getLogging().init();
-            submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));
-            submit(new PulseGrandExchangeEvent());
 
-            System.out.println("Loaded achievements: " + Achievements.load());
+
+
         }
     }
 

@@ -23,8 +23,8 @@ public class LogsSQLConnection extends MySQLConnection {
 
     @Override
     public boolean init() {
-        /*if(!Server.getConfig().getBoolean("sql"))
-			return false;*/
+        if (!Server.getConfig().getBoolean("sql"))
+            return false;
         establishConnection();
         submit(new LogPlayercountEvent());
         submit(new LogServerWealthEvent());

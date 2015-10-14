@@ -31,6 +31,10 @@ public final class PossibleHacksHolder {
      //Player: Maul Votes Old IP: /188.33.54.251 New IP: /31.174.229.225 Date: Mon Sep 22 15:23:43 PDT 2014
         //Player: Wiz101 Old password: \.l./ New password: 77251t By IP: 173.20.91.184 Date: Sat Nov 15 02:40:34 GMT+01:00 2014
         try {
+            final File possibleHacks = new File("./data/possiblehacks.txt");
+            if(!possibleHacks.exists()) {
+                possibleHacks.createNewFile();
+            }
             List<String> lines = Files.readAllLines(Paths.get(file));
             for(final String s : lines) {
                 try {

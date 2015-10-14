@@ -119,6 +119,8 @@ public abstract class Shop {
 
 	public void updatePlayers() {
 		for(Player player : World.getWorld().getPlayers()) {
+			if(player == null)
+				continue;
 			if(this.id == player.getShopId()) {
 				player.getActionSender().sendUpdateItems(SHOP_INTERFACE_ID, container.toArray());
 			}

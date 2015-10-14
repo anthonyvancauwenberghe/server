@@ -15,11 +15,14 @@ public class ModerationOverride {
 	 * Sends moderation dialogue allowing for easy punishment
 	 */
 	public static final void sendModerationOptions(final Player player, final Player other) {
-		player.setModeration(other);
-        final ModerationInterface itf = InterfaceManager.<ModerationInterface>get(12);
-        player.write(itf.show(other.getName()));
-        itf.show(player);
-		DialogueManager.openDialogue(player, 136);
+		if(player != null && other != null) {
+
+			player.setModeration(other);
+			final ModerationInterface itf = InterfaceManager.<ModerationInterface>get(12);
+			player.write(itf.show(other.getName()));
+			itf.show(player);
+			DialogueManager.openDialogue(player, 136);
+		}
 	}
 
 	public static final boolean canModerate(final Player p) {

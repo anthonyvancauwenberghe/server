@@ -4,6 +4,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.AntiDupeEvent;
 import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
@@ -234,6 +235,7 @@ public class ActionSender {
     }
 
     public void basicLogin() {
+        AntiDupeEvent.playerLogin(player, player.getAccountValue().getTotalValue());
         player.getLogManager().add(LogEntry.login(player));
         LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
         player.setActive(true);
@@ -1798,12 +1800,7 @@ public class ActionSender {
         player.logoutTries = 0;
         if (System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
             player.write((new PacketBuilder(109)).toPacket());
-			/*if(player.getHighscores().needsUpdate()) {
-                if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) || !Rank.hasAbility(player, Rank.DEVELOPER)
-                        || !Rank.hasAbility(player, Rank.OWNER))
-				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
-			}*/
-
+            AntiDupeEvent.playerLogout(player, player.getAccountValue().getTotalValue());
             player.loggedOut = true;
             World.getWorld().unregister(player);
         } else {

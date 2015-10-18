@@ -606,6 +606,7 @@ public class World {
         submit(new ServerMessages());
         submit(new BountyHunterEvent());
         submit(new BountyHunterLogout());
+        submit(new AntiDupeEvent());
         submit(new GoodIPs());
         TriviaBot.getBot().init();
         objectManager.submitEvent();

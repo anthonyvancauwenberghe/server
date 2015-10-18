@@ -74,7 +74,6 @@ public class PollInterface {
     }
 
     private static int getPercentageYes(int votesYes, int votesNo) {
-
         if (votesYes == 0)
             return 0;
         if (votesNo == 0)

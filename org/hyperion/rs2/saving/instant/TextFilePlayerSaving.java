@@ -106,6 +106,7 @@ public class TextFilePlayerSaving extends InstantPlayerSaving {
 				}
 			}
 			in.close();
+			World.getWorld().getSQLSaving().load(player);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

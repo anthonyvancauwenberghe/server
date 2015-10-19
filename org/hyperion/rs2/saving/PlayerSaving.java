@@ -90,12 +90,12 @@ public class PlayerSaving {
 	/**
 	 * Holds all the SaveObjects meant for loading.
 	 */
-	private final Map<String, SaveObject> saveData;
+	protected final Map<String, SaveObject> saveData;
 
 	/**
 	 * The collection of SaveObjects meant for iteration.
 	 */
-	private final List<SaveObject> saveList;
+	protected final List<SaveObject> saveList;
 
 	/**
 	 * The PlayerSaving singleton.

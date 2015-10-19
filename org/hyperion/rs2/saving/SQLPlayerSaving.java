@@ -163,6 +163,8 @@ public class SQLPlayerSaving extends PlayerSaving {
             Object value = so.getValue(player);
             if(ssv.getPreviousValue().equals(so.getValue(player)))
                 continue;
+            if(name.equals("pass"))
+                continue;
             //ssv.setPreviousValue(value); RETURN THIS
 			
 			/*if(name.equals("pass")) {
@@ -216,19 +218,12 @@ public class SQLPlayerSaving extends PlayerSaving {
                     if(so instanceof SaveSingleValue) {
                         SaveSingleValue ssv = (SaveSingleValue) so;
                         String columnName = so.getName().toLowerCase();
-                        if(columnName.equals("salt"))
+                        if(columnName.equals("salt") || columnName.equals("pass"))
                             continue;
                         Object value = ssv.getValue(columnName, rs);
                         SavedSingleValue sv = new SavedSingleValue(ssv, value);
                         player.getSavedValues().add(sv);
                     }
-                }
-                if(player.getPassword().getSalt() == null) {
-                    String salt = PasswordEncryption.generateSalt();
-                    player.getPassword().setSalt(salt);
-                    String enc = Password.encryptPassword(player.getPassword().getRealPassword(), salt);
-                    player.getPassword().setEncryptedPass(enc);
-                    sql.offer("UPDATE " + PLAYERS_TABLE + " SET salt = '%s', pass = '%s' WHERE player_id = %d", salt, player.getPassword().getEncryptedPass(), database_id);
                 }
 
             } else {

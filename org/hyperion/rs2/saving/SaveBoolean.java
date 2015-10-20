@@ -1,10 +1,12 @@
 package org.hyperion.rs2.saving;
 
-import org.hyperion.rs2.model.Player;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.hyperion.rs2.model.Player;
 
 public abstract class SaveBoolean extends SaveSingleValue {
 
@@ -15,6 +17,11 @@ public abstract class SaveBoolean extends SaveSingleValue {
 	 */
 	public SaveBoolean(String name) {
 		super(name);
+	}
+
+	@Override
+	public void setSingleValue(Player player, Object value) {
+		setValue(player, (Boolean) value);
 	}
 
 	/**
@@ -31,6 +38,7 @@ public abstract class SaveBoolean extends SaveSingleValue {
 	 * @param player
 	 * @return the value
 	 */
+	@Override
 	public abstract Boolean getValue(Player player);
 
 
@@ -38,12 +46,12 @@ public abstract class SaveBoolean extends SaveSingleValue {
 
 	@Override
 	public boolean save(Player player, BufferedWriter writer) throws IOException {
-		boolean value = (Boolean) getValue(player);
-		if(value != getDefaultValue()) {
-			writer.write(getName() + "=" + value);
-			return true;
-		}
-		return false;
+		boolean value = getValue(player);
+		//if(value != getDefaultValue()) { 
+		writer.write(getName() + "=" + value);
+		return true;
+		//} 
+		//return false;
 	}
 
 
@@ -51,6 +59,12 @@ public abstract class SaveBoolean extends SaveSingleValue {
 	public void load(Player player, String values, BufferedReader reader) throws IOException {
 		boolean value = Boolean.parseBoolean(values);
 		setValue(player, value);
+	}
+
+
+	@Override
+	public Boolean getValue(String columnName, ResultSet rs) throws SQLException {
+		return rs.getBoolean(columnName);
 	}
 
 }

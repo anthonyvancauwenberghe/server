@@ -4,6 +4,7 @@ import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.polls.Poll;
+import org.hyperion.rs2.model.content.polls.PollInterface;
 import org.hyperion.rs2.sql.requests.VoteRequest;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -24,7 +25,7 @@ public class PromoteEvent extends Event {
 				if(Poll.getPolls().size() > 0) {
 					boolean hasVoted = true;
 					for (Poll poll : Poll.getPolls().values()) {
-						if (poll.hasVoted(player))
+						if (poll.hasVoted(player) || !PollInterface.canVote(player))
 							continue;
 						hasVoted = false;
 						break;

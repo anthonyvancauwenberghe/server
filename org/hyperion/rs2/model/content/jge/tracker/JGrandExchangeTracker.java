@@ -1,12 +1,10 @@
 package org.hyperion.rs2.model.content.jge.tracker;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
 import org.hyperion.rs2.model.content.jge.entry.EntryManager;
-import org.hyperion.rs2.model.content.jge.entry.claim.ClaimSlot;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
@@ -359,6 +357,44 @@ public class JGrandExchangeTracker {
                         if(!JGrandExchange.enabled){
                             player.sendf("The Grand Exchange has been temporarily disabled");
                             return;
+
+                ifNewEntry(e -> {
+                    if(!JGrandExchange.enabled){
+                        player.sendf("The Grand Exchange has been temporarily disabled");
+                        return;
+                    }
+                    if(!canOpenInterface()){
+                        player.sendf("You cannot use the Grand Exchange right now!");
+                        return;
+                    }
+                    if(!e.canBuild()){
+                        player.sendf("Entry is not valid!");
+                        return;
+                    }
+                    if(entries.used(e.slot())){
+                        player.sendf("This slot is already in use");
+                        return;
+                    }
+                    Item taken = null;
+                    switch(e.type()){
+                        case BUYING: {
+                            final int max = player.getInventory().getCount(e.currency().itemId);
+                            if(e.totalPrice() > max){
+                                player.sendf("You need %,d more %s to %s %,d %s!",
+                                        e.totalPrice() - max, e.currency().shortName.toLowerCase(), e.type().singleName.toLowerCase(),
+                                        e.itemQuantity(), e.item().getDefinition().getName());
+                                return;
+                            }
+                            if(e.totalPrice() <= 0){
+                                player.sendf("Change the unit price and quantity first!");
+                                return;
+                            }
+                            if(player.getInventory().remove(taken = Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
+                                player.sendf("Something went wrong!");
+                                return;
+                            }
+                            player.getExpectedValues().removeItemFromInventory("Grand Exchange", taken);
+                            break;
                         }
                         if(!canOpenInterface()){
                             player.sendf("You cannot use the Grand Exchange right now!");
@@ -404,6 +440,9 @@ public class JGrandExchangeTracker {
                                 }
                                 break;
                             }
+                            player.getExpectedValues().removeItemFromInventory("Grand Exchange", taken);
+                            break;
+
                         }
                         final Entry entry = newEntry.build();
                         if(!JGrandExchange.getInstance().insert(entry)){

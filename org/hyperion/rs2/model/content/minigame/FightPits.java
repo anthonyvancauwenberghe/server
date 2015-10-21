@@ -1,34 +1,30 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.bank.BankItem;
+import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.ClickId;
+import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
+import org.hyperion.rs2.util.PushMessage;
+import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.SpellBook;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.*;
-import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
-import org.hyperion.rs2.util.PushMessage;
-import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
 
 public class FightPits implements ContentTemplate {
 	
@@ -61,31 +57,22 @@ public class FightPits implements ContentTemplate {
 	
 	//random items given to any class at start of game
 	public static final List<Integer> list = Arrays.asList(
-		new Integer[]{6585, 1712, 1731, 7462, 7461, 7460, 7459, 7458, 3024, 6685, 15330}
-	);
+			6585, 1712, 1731, 7462, 7461, 7460, 7459, 7458, 3024, 6685, 15330);
 	
-	private static List<Integer> arrows = Arrays.asList(new Integer[]{
-			11212, 892, 890, 888
-	});
+	private static List<Integer> arrows = Arrays.asList(11212, 892, 890, 888);
 	
 	//list storing random items for each class
 	@SuppressWarnings("serial")
 	public static final List<List<Integer>> classItems = new ArrayList<List<Integer>>() {
 			{
 				//mage
-				add(Arrays.asList(new Integer[] {
-					6731, 2579, 6920, 3040
-				}));
+				add(Arrays.asList(6731, 2579, 6920, 3040));
 				
 				//melee
-				add(Arrays.asList(new Integer[] {
-					6735, 6737, 11732, 3105, 4131, 1305, 11696, 11700, 1725
-				}));
+				add(Arrays.asList(6735, 6737, 11732, 3105, 4131, 1305, 11696, 11700, 1725));
 				
 				//range
-				add(Arrays.asList(new Integer[] {
-					11235, 2577, 2444, 6733
-				}));
+				add(Arrays.asList(11235, 2577, 2444, 6733));
 			}
 	};
 	
@@ -734,7 +721,8 @@ public class FightPits implements ContentTemplate {
 					if(Misc.random(60 * size) == 1) { //if 10 chance is 1/80 in total (half players each have chance of 1/400)
 						Item reward = Item.create(random(rewardItems));
 						player1.sendMessage("You receive a "+reward.getDefinition().getName());
-						PushMessage.pushGlobalMessage("@gre@[Loot] " + player1.getSafeDisplayName()+ " has just received a "+reward.getDefinition().getName()+" from fight pits!");
+						player1.getExpectedValues().addItemtoInventory("Fight pits reward", reward);
+						PushMessage.pushGlobalMessage("@gre@[Loot] " + player1.getSafeDisplayName() + " has just received a " + reward.getDefinition().getName() + " from fight pits!");
 						player1.getInventory().add(reward);
 					}
 				}

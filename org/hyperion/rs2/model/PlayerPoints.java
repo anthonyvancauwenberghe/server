@@ -1,14 +1,14 @@
 package org.hyperion.rs2.model;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.hyperion.Server;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerPoints {
 
@@ -137,6 +137,7 @@ public class PlayerPoints {
                 System.out.println("Error saving donor points change: " + ex);
             }
         }
+        player.getExpectedValues().changeDeltaOther("Donator points added", amount);
         player.sendServerMessage("You have been given " + amount + " donator points.");
         player.getQuestTab().sendDonatePoints();
     }
@@ -162,6 +163,7 @@ public class PlayerPoints {
     }
 
     public void setDonatorPoints(int am) {
+        player.getExpectedValues().changeDeltaOther("Donator points set", am - donatorPoints);
         donatorPoints = am;
         player.getQuestTab().sendDonatePoints();
     }
@@ -182,6 +184,7 @@ public class PlayerPoints {
      * @param points
      */
     public void setVotingPoints(int points) {
+        player.getExpectedValues().changeDeltaOther("Voting points set", points - votingPoints);
         votingPoints = points;
         player.getQuestTab().sendVotePoints();
     }
@@ -194,6 +197,7 @@ public class PlayerPoints {
             toAdd += Misc.random(maxpoints) + 1;
         }
         votingPoints += toAdd;
+        player.getExpectedValues().changeDeltaOther("Voting points added", toAdd);
         player.sendServerMessage("Your voting points have been increased by " +
                 toAdd + ", you now have " + votingPoints + " voting points!");
         player.getQuestTab().sendVotePoints();

@@ -741,6 +741,7 @@ public class CommandHandler {
 					return false;
 				}
 				target.getInventory().add(Item.create(itemId, quantity));
+				target.getExpectedValues().addItemtoInventory("Spawning", Item.create(itemId, quantity));
 				player.sendf("Added %s x %,d to %s's inventory", ItemDefinition.forId(itemId).getName(), quantity, targetName);
 				return true;
 			}

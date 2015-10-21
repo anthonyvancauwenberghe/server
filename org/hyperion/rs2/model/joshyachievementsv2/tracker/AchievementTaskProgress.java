@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
@@ -13,10 +14,10 @@ public class AchievementTaskProgress{
 
     public int progress;
 
-    public Date startDate;
-    public Date finishDate;
+    public Timestamp startDate;
+    public Timestamp finishDate;
 
-    public AchievementTaskProgress(final int achievementId, final int taskId, final int progress, final Date startDate, final Date finishDate){
+    public AchievementTaskProgress(final int achievementId, final int taskId, final int progress, final Timestamp startDate, final Timestamp finishDate){
         this.achievementId = achievementId;
         this.taskId = taskId;
         this.progress = progress;
@@ -44,11 +45,11 @@ public class AchievementTaskProgress{
     }
 
     public void startNow(){
-        startDate = new Date();
+        startDate = new Timestamp(System.currentTimeMillis());
     }
 
     public void finishNow(){
-        finishDate = new Date();
+        finishDate = new Timestamp(System.currentTimeMillis());
     }
 
     public boolean finished(){
@@ -71,11 +72,11 @@ public class AchievementTaskProgress{
     }
 
     public void sendProgress(final Player player, final boolean star){
-        player.sendf("[@blu@Task #%d@bla@%s] @blu@%,d@bla@ / @red@%,d@bla@ | @gre@%1.2f%%@bla@ Complete",
-                taskId,
-                (star ? "@red@*@bla@" : ""),
+        player.sendf("@dre@Achievement progress%s - %,d/%,d %s",
+                (star ? "@yel@*@bla@" : ""),
                 progress,
-                task().threshold, progressPercent());
+                task().threshold,
+                task().desc);
     }
 
 }

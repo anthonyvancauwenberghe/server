@@ -584,6 +584,8 @@ public class Duel {
             player.getActionSender().sendString(6840, (new StringBuilder()).append("").append(player.getName()).toString());
 
             player.getInventory();
+			player.getExpectedValues().stake(opponent.getDuel().getItems(), true);
+			opponent.getExpectedValues().stake(opponent.getDuel().getItems(), false);
             Container.transfer(player.getDuel(), player.getInventory());//jet is a dumbass
 
             player.getInventory();

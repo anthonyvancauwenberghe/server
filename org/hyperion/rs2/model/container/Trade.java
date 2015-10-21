@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.container;
 
-import org.hyperion.rs2.event.impl.AntiDupeEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -68,7 +67,6 @@ public class Trade {
 		}
 		//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": opened a trade with: "+player2.getName());
 		//World.getWorld().getAbuseHandler().cacheMessage(player2,player2.getName()+": opened a trade with: "+player.getName());
-		AntiDupeEvent.startMonitoring(player, player.getTrader(), player.getAccountValue().getTotalValue(), player.getTrader().getAccountValue().getTotalValue());
         player.openingTrade = true;
 		player2.openingTrade = true;
 		player.setTradeWith(player2);
@@ -419,13 +417,16 @@ public class Trade {
                     )
             );
             player.getTrader().getLogManager().add(
-                    LogEntry.trade(
-                            player.getName(),
-                            player.getTrader().getName(),
-                            player.getTrade().toArray(),
-                            player.getTrader().getTrade().toArray()
-                    )
-            );
+					LogEntry.trade(
+							player.getName(),
+							player.getTrader().getName(),
+							player.getTrade().toArray(),
+							player.getTrader().getTrade().toArray()
+					)
+			);
+			player.getExpectedValues().trade(player.getTrader().getTrade().getItems(), player.getTrade().getItems());
+			player.getTrader().getExpectedValues().trade(player.getTrade().getItems(), player.getTrader().getTrade().getItems());
+
 		Container.transfer(player.getTrader().getTrade(), player.getInventory());
 		Container.transfer(player.getTrade(), player.getTrader().getInventory());
 		//World.getWorld().getWorldLoader().savePlayer(player, "trade");
@@ -441,7 +442,6 @@ public class Trade {
             player.sendf("Trade accepted", player.getTrader().getSafeDisplayName());
             player.getTrader().sendf("Trade accepted", player.getSafeDisplayName());
             declineTrade(player);
-			AntiDupeEvent.stopMonitoring(player, player.getTrader(), player.getAccountValue().getTotalValue(), player.getTrader().getAccountValue().getTotalValue());
 	}
     }
 

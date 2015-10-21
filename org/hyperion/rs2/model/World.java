@@ -1,5 +1,16 @@
 package org.hyperion.rs2.model;
 
+import java.io.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.logging.Logger;
+
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
@@ -8,7 +19,11 @@ import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.PathTest;
-import org.hyperion.rs2.*;
+import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.GameEngine;
+import org.hyperion.rs2.GenericWorldLoader;
+import org.hyperion.rs2.HostGateway;
+import org.hyperion.rs2.WorldLoader;
 import org.hyperion.rs2.WorldLoader.LoginResult;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -38,6 +53,7 @@ import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.sql.AchievementsSql;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -52,6 +68,7 @@ import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
 import org.hyperion.rs2.saving.SQLPlayerSaving;
 import org.hyperion.rs2.sql.*;
+import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.sql.requests.StaffActivityRequest;
@@ -59,15 +76,6 @@ import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.BlockingExecutorService;
-
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.logging.Logger;
 
 //import org.hyperion.rs2.login.LoginServerWorldLoader;
 
@@ -451,21 +459,18 @@ public class World {
             //LocalServerSQLConnection.init();
             //playersSQL.init();
             //banManager = new BanManager(logsSQL);
-            if (Server.getConfig().getBoolean("sql")) {
-                PunishmentManager.init(logsSQL);
-                System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
-                submit(new PunishmentExpirationEvent());
-                System.out.println("Loaded achievements: " + Achievements.load());
-                submit(new PulseGrandExchangeEvent());
-                NewcomersLogging.getLogging().init();
-                SpawnCommand.init();
-            }
+            AchievementsSql.sql = logsSQL;
+            PunishmentManager.init(logsSQL);
+            System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
             //this.banManager.init();
             this.enemies = new ServerEnemies();
+            SpawnCommand.init();
+            NewcomersLogging.getLogging().init();
+            submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));
+            submit(new PulseGrandExchangeEvent());
 
-
-
+            System.out.println("Loaded achievements: " + Achievements.load());
         }
     }
 
@@ -615,6 +620,7 @@ public class World {
         submit(new BountyHunterLogout());
         submit(new AntiDupeEvent());
         submit(new GoodIPs());
+        submit(new AntiDupeEvent());
         TriviaBot.getBot().init();
         objectManager.submitEvent();
         //FFARandom.initialize();

@@ -96,14 +96,15 @@ public class AchievementTab {
     }
 
     public static String buildPercentBar(double percentage) {
+        int rounded = (int)percentage;
         int bars = 0;
         StringBuilder sb = new StringBuilder("@gre@");
-        for(; percentage > 0; percentage =- 1) {
+        for(; rounded > 0; rounded -= 1) {
             sb.append("|");
             bars++;
         }
         sb.append("@red@");
-        for(; bars <= 100; bars++) {
+        for(; bars <= 99; bars++) {
             sb.append("|");
         }
         return sb.toString() + "@bla@  " + percentage + "%";
@@ -137,12 +138,7 @@ public class AchievementTab {
                         if (player.getAchievementTab().lastClick + Time.ONE_SECOND * 2 > System.currentTimeMillis() && player.getAchievementTab().clickId == START_INDEX + i2) {
                             player.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements:ID" + achievement.id);
                         } else {
-                            double average = 0;
-                            int i = 0;
-                            for (; i > achievement.tasks.size(); i++) {
-                                average += player.getAchievementTracker().taskProgress(achievement.tasks.get(i)).progressPercent();
-                            }
-                            average /= (i + 1);
+                            double average = player.getAchievementTracker().progress(achievement).progressPercent();
                             player.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
                                     Animation.FacialAnimation.HAPPY,
                                     achievement.tasks.size() < 1 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),

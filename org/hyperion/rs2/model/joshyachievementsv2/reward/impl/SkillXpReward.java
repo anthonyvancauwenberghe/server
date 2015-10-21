@@ -17,7 +17,7 @@ public class SkillXpReward implements Reward{
     public void reward(final Player player){
         final String name = Skills.SKILL_NAME[skill];
         final int current = player.getSkills().getExperience(skill);
-        final int max = Math.max(current + xp, Skills.MAXIMUM_EXP);
+        final int max = Math.min(current + xp, Skills.MAXIMUM_EXP);
         final int gained = max - current;
         if(gained == 0){
             player.sendf("You already have the maximum XP in %s!", name);

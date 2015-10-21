@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.content.jge.entry.claim;
 
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
@@ -91,6 +90,7 @@ public class Claims {
         }
         player.sendf("%s has been added to your bank", name);
         player.getBank().add(new BankItem(0, item.getId(), item.getCount()));
+        player.getExpectedValues().addItemtoInventory("Grand Exchange", item);
         return true;
     }
 }

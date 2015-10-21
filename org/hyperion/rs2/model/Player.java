@@ -380,6 +380,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private AccountValue accountValue = new AccountValue(this);
 	private AccountLogger logger = new AccountLogger(this);
 	private PlayerPoints playerPoints = new PlayerPoints(this);
+	private ExpectedValues expectedValues = new ExpectedValues(this);
 	private Spam spam = new Spam(this);
 	private SpecialBar specbar = new SpecialBar(this);
 	private SummoningBar summoningBar = new SummoningBar(this);
@@ -909,6 +910,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return playerPoints;
 	}
 
+	public ExpectedValues getExpectedValues() {
+		return expectedValues;
+	}
+
 	public AccountLogger getLogging() {
 		return logger;
 	}
@@ -1071,6 +1076,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	 * Sets the player's password.
 	 *
 	 */
+
 
     public final List<TeamBossSession> getTeamSessions() {
 		return teamBossSessions;
@@ -2548,5 +2554,15 @@ public class Player extends Entity implements Persistable, Cloneable{
 			geTracker = new JGrandExchangeTracker(this);
 		return geTracker;
 	}
+
+	public int getStartValue() {
+		return startValue;
+	}
+
+	public void setStartValue(int value) {
+		this.startValue = value;
+	}
+
+	private int startValue = -1;
 
 }

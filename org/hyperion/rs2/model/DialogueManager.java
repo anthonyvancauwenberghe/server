@@ -4,11 +4,9 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.EP.EPExchange;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
@@ -24,6 +22,8 @@ import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
+import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.transport.TeleTabs;
 import org.hyperion.rs2.model.sets.SetData;
 import org.hyperion.rs2.model.sets.SetUtility;
@@ -33,7 +33,6 @@ import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -949,6 +948,7 @@ public class DialogueManager {
 					if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709)
 						continue;
 
+					player.getExpectedValues().removeItemFromInventory("Emptying", item);
 					player.getInventory().remove(item);
 
 				}
@@ -1037,7 +1037,7 @@ public class DialogueManager {
 					return;
 				for(int i = 0; i < skillData.length; i++) {
 					player.getSkills().setLevel(skillData[i][0], skillData[i][1]);
-					player.getSkills().setExperience(skillData[i][0], player.getSkills().getXPForLevel(skillData[i][1]));
+					player.getSkills().setExperience(skillData[i][0], Skills.getXPForLevel(skillData[i][1]));
 				}
                 player.resetPrayers();
                 SetUtility.getInstantSet(player, SetData.getPureSet());
@@ -1077,7 +1077,7 @@ public class DialogueManager {
 					return;
 				for(int i = 0; i < skillDataZ.length; i++) {
 					player.getSkills().setLevel(skillDataZ[i][0], skillDataZ[i][1]);
-					player.getSkills().setExperience(skillDataZ[i][0], player.getSkills().getXPForLevel(skillDataZ[i][1]));
+					player.getSkills().setExperience(skillDataZ[i][0], Skills.getXPForLevel(skillDataZ[i][1]));
 				}
 				SetUtility.getInstantSet(player, SetData.getZerkSet());
 				SetUtility.addSetOfItems(player, SetData.getZerkItems());

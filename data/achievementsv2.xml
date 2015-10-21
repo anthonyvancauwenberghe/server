@@ -184,7 +184,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="9" title="Targetted">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="9" title="Targetted">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask" desc="Get 10 Bounty Hunter kills" id="0" preTaskId="0" threshold="10">
@@ -203,7 +203,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="10" title="Win Fight Pits 5 Times">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="10" title="Adept pitmaster">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.FightPitsTask" desc="WIN Fight Pits 5 times" id="0" preTaskId="0" result="WIN" threshold="5">
@@ -239,7 +239,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="12" title="pls love slayer">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="12" title="Pls love slayer">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SlayerTask" desc="Complete 5 slayer tasks" id="0" preTaskId="0" threshold="5">
@@ -256,7 +256,7 @@
     <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="13" title="Obtain The Axes">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 20 Morrigan's throwing axe from NPCS" from="NPC" id="0" preTaskId="0" threshold="20">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 20 Morrigan's throwing axe from monster drops" from="NPC" id="0" preTaskId="0" threshold="20">
                 <items>
                     <item id="13883"/>
                 </items>
@@ -276,7 +276,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="14" title="Kill The Wyrms">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="14" title="Kill dem Wyrms">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 10 Ice Strykewyrm" id="0" preTaskId="0" threshold="10">
@@ -292,7 +292,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="15" title="Mithril">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="15" title="Mithril is the new gold">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 15 Mithril ore through Mining" id="0" preTaskId="0" skill="14" threshold="15">
@@ -362,7 +362,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="17" title="Win Fight Pits 25 Times">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="17" title="Pits for days">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.FightPitsTask" desc="WIN Fight Pits 25 times" id="0" preTaskId="0" result="WIN" threshold="25">
@@ -375,10 +375,10 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="18" title="Bury 25 Dragon Bones Inside a Dungeon">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="18" title="Dungeons and dragons">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 25 Dragon bones through Prayer" id="0" preTaskId="0" skill="5" threshold="25">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Bury 25 Dragon Bones inside of a dungeon" id="0" preTaskId="0" skill="5" threshold="25">
                 <items>
                     <item id="536"/>
                     <item id="17676"/>
@@ -395,7 +395,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="19" title="Must...KILL...ALL">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="19" title="Must...Kill...ALL">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask" desc="Get 25 Bounty Hunter kills" id="0" preTaskId="0" threshold="25">
@@ -411,10 +411,10 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="20" title="Obtain 10 Soul Talismans By Killing Monsters">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="20" title="Your soul is mine">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 10 Soul talisman from NPCS" from="NPC" id="0" preTaskId="0" threshold="10">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 10 Soul talisman from monster drops" from="NPC" id="0" preTaskId="0" threshold="10">
                 <items>
                     <item id="1460"/>
                 </items>
@@ -440,7 +440,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="22" title="Kill 250 Other Players">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="22" title="All shall fall">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask" desc="Kill 250 players" id="0" preTaskId="0" threshold="250">
@@ -453,7 +453,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="23" title="Complete 50 Barrows Trips">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="23" title="Digging up graves">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.BarrowsTripTask" desc="Complete 50 Barrows trips" id="0" preTaskId="0" threshold="50">
@@ -494,10 +494,10 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="25" title="Cut 4 Ruby">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="25" title="Red rocks">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 250 Ruby through Crafting" id="0" preTaskId="0" skill="12" threshold="250">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 250 rubys through Crafting" id="0" preTaskId="0" skill="12" threshold="250">
                 <items>
                     <item id="1603"/>
                 </items>
@@ -526,7 +526,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="27" title="Make 1,500 Mithril Arrows From Scratch">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="27" title="Arrows fo dayz">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100 Logs through Woodcutting" id="0" preTaskId="0" skill="8" threshold="100">
@@ -629,7 +629,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="29" title="Kill the Revenants">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="29" title="Ghosty animals">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 5 Revenant Dark Beast" id="0" preTaskId="0" threshold="5">
@@ -690,10 +690,10 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="30" title="???MYSTERY???">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="30" title="Rocktails for everyone">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 200 Rocktail from PLAYERS" from="PLAYER" id="0" preTaskId="0" threshold="200">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 200 Rocktail from players" from="PLAYER" id="0" preTaskId="0" threshold="200">
                 <items>
                     <item id="15272"/>
                 </items>
@@ -758,7 +758,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="33" title="Complete 250 Barrows trips">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="33" title="Grave raider">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.BarrowsTripTask" desc="Complete 250 Barrows trips" id="0" preTaskId="0" threshold="250">
@@ -800,7 +800,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="36" title="Only one way to get to the top.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="36" title="Only way to the top">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.VoteTask" desc="Vote 250 times" id="0" preTaskId="0" threshold="250">
@@ -813,10 +813,10 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="37" title="Mine the runite wildy rock 500 times">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="37" title="This is what I trained for">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 500 Runite ore through Mining" id="0" preTaskId="0" skill="14" threshold="500">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Mine 500 runite in the wilderness" id="0" preTaskId="0" skill="14" threshold="500">
                 <items>
                     <item id="451"/>
                 </items>
@@ -850,10 +850,10 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="39" title="Get the ring.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="39" title="Get the ring">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 1 Adamant c'bow (u) from NPCS" from="NPC" id="0" preTaskId="0" threshold="1">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 1 Adamant c'bow (u) from monster drops" from="NPC" id="0" preTaskId="0" threshold="1">
                 <items>
                     <item id="9463"/>
                 </items>
@@ -1008,7 +1008,12 @@
     </achievement>
     <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="46" title="Complete dem taskz">
         <instructions/>
-        <tasks/>
+        <tasks>
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SlayerTask" desc="Complete 20 slayer tasks" id="0" preTaskId="0" threshold="20">
+                <npcs/>
+                <constraints/>
+            </task>
+        </tasks>
         <rewards>
             <reward class="org.hyperion.rs2.model.joshyachievementsv2.reward.impl.SkillXpReward">
                 <skill id="18" xp="5000000"/>
@@ -1676,7 +1681,7 @@
         </tasks>
         <rewards/>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="60" title="Kill 5 players.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="60" title="5 down">
         <interval interval="1" unit="HOURS"/>
         <instructions/>
         <tasks>
@@ -1690,7 +1695,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="61" title="Kill 5 players with a dragon mace.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="61" title="Fear the mace">
         <interval interval="2" unit="DAYS"/>
         <instructions/>
         <tasks>
@@ -1713,7 +1718,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="62" title="Kill 10 players with a crossbow.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="62" title="Crossbow to the face">
         <interval interval="6" unit="HOURS"/>
         <instructions/>
         <tasks>
@@ -1749,7 +1754,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="63" title="Vote once.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="63" title="Voting for noobs">
         <interval interval="12" unit="HOURS"/>
         <instructions/>
         <tasks>
@@ -1766,11 +1771,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="64" title="Kill 1 Bounty Hunter Target.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="64" title="Dead or alive">
         <interval interval="12" unit="HOURS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask" desc="Get 1 Bounty Hunter kills" id="0" preTaskId="0" threshold="1">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask" desc="Get 1 Bounty Hunter kill" id="0" preTaskId="0" threshold="1">
                 <constraints/>
             </task>
         </tasks>
@@ -1780,11 +1785,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="65" title="Kill one of the Wilderness Bosses.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="65" title="Me and my team">
         <interval interval="1" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 1 Night-gazer Khighorahk or Unholy Cursebearer or Bal'lak the Pummeller or Bulwark Beast" id="0" preTaskId="0" threshold="1">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 1 Wilderness boss" id="0" preTaskId="0" threshold="1">
                 <npcs>
                     <npc id="9725"/>
                     <npc id="9726"/>
@@ -1899,7 +1904,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="66" title="Make 10 Extreme Potion Sets.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="66" title="Extremes for me">
         <interval interval="7" unit="DAYS"/>
         <instructions/>
         <tasks>
@@ -1940,11 +1945,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="67" title="Get a killstreak of 10.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="67" title="10 in a row">
         <interval interval="7" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillstreakTask" desc="Get a 10 killstreak" id="0" preTaskId="0" threshold="10">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillstreakTask" desc="Get a killstreak of 10" id="0" preTaskId="0" threshold="10">
                 <constraints/>
             </task>
         </tasks>
@@ -1954,11 +1959,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="68" title="Kill a total of 25 Bosses.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="68" title="Elite monster killer">
         <interval interval="7" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 25 General Graardor or K'ril Tsutsaroth or Avatar of Destruction or Chaos Elemental or Corporeal Beast or Bork or TzTok-Jad or King Black Dragon or Giant Mole or Night-gazer Khighorahk or Bal'lak the Pummeller or Unholy Cursebearer or Bulwark Beast" id="0" preTaskId="0" threshold="25">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 25 bosses" id="0" preTaskId="0" threshold="25">
                 <npcs>
                     <npc id="6260"/>
                     <npc id="6203"/>
@@ -2079,11 +2084,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="69" title="Kill 3 players around ::multipk.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="69" title="3 at once">
         <interval interval="3" unit="HOURS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask" desc="Kill 3 players" id="0" preTaskId="0" threshold="3">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask" desc="Kill 3 players around ::multipk" id="0" preTaskId="0" threshold="3">
                 <constraints>
                     <constraint class="org.hyperion.rs2.model.joshyachievementsv2.constraint.impl.LocationConstraint" desc="Between location (3258, 3630) and (3672, 3672)">
                         <area height="-1">
@@ -2100,11 +2105,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="70" title="Kill 10 players in Deeper Wilderness.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="70" title="Time to go deep">
         <interval interval="6" unit="HOURS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask" desc="Kill 10 players" id="0" preTaskId="0" threshold="10">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask" desc="Kill 10 players in Deep Wilderness" id="0" preTaskId="0" threshold="10">
                 <constraints>
                     <constraint class="org.hyperion.rs2.model.joshyachievementsv2.constraint.impl.WildLevelConstraint" desc="In wild at least level 35">
                         <wild maxLevel="-1" minLevel="35"/>
@@ -2118,7 +2123,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="71" title="Mine 10 Runite Ores in the Wilderness.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="71" title="You gotta start somewhere">
         <interval interval="1" unit="DAYS"/>
         <instructions/>
         <tasks>
@@ -2139,7 +2144,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="72" title="Complete 1 Slayer Task.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="72" title="My first task">
         <interval interval="1" unit="DAYS"/>
         <instructions/>
         <tasks>
@@ -2158,7 +2163,7 @@
         <interval interval="7" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task accumulative="false" class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlaceBountyTask" desc="Place a single bounty of 1,573 PKP" id="0" preTaskId="0" threshold="1573">
+            <task accumulative="false" class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlaceBountyTask" desc="Place a single bounty of 1,337 PKP" id="0" preTaskId="0" threshold="1337">
                 <constraints/>
             </task>
         </tasks>
@@ -2168,7 +2173,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="74" title="Kill players for a combined total of 1000 bounty.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="74" title="Bounty hunter">
         <interval interval="1" unit="DAYS"/>
         <instructions/>
         <tasks>
@@ -2182,11 +2187,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="75" title="Kill 50 Ice StrykeWyrms in the Wilderness.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="75" title="Worm squishing">
         <interval interval="3" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 50 Ice Strykewyrm" id="0" preTaskId="0" threshold="50">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 50 Ice Strykewyrm in the wilderness" id="0" preTaskId="0" threshold="50">
                 <npcs>
                     <npc id="9463"/>
                 </npcs>
@@ -2231,11 +2236,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="MEDIUM" id="78" title="Win 1 game of Fight Pits.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="78" title="Pits noob">
         <interval interval="6" unit="HOURS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.FightPitsTask" desc="WIN Fight Pits 1 times" id="0" preTaskId="0" result="WIN" threshold="1">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.FightPitsTask" desc="WIN Fight Pits 1 time" id="0" preTaskId="0" result="WIN" threshold="1">
                 <constraints/>
             </task>
         </tasks>
@@ -2245,11 +2250,11 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="79" title="Collect 250 PvM Tokens.">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="79" title="Monster tokens">
         <interval interval="5" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 250 PvM Token from NPCS" from="NPC" id="0" preTaskId="0" threshold="250">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 250 PvM Token from monster drops" from="NPC" id="0" preTaskId="0" threshold="250">
                 <items>
                     <item id="17564"/>
                 </items>

@@ -1,8 +1,5 @@
 package org.hyperion.rs2.model;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.EP.EPDrops;
@@ -14,14 +11,16 @@ import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author SaosinHax
  */
 public class DeathDrops {
 	
-	public static final List<Integer> FOOD = Arrays.asList(new Integer[] {
-		391, 15272, 385	
-	});
+	public static final List<Integer> FOOD = Arrays.asList(391, 15272, 385);
 	
 	private static boolean dontDrop(Player player) {
 		return dontDropRank(player.getPlayerRank()) || player.getLocation().inFunPk();
@@ -72,6 +71,7 @@ public class DeathDrops {
 
 		final Item[] dropped = droppingItems.toArray(new Item[droppingItems.size()]);
 
+		player.getExpectedValues().deathDrop(dropped);
         player.getLogManager().add(LogEntry.death(player, killer, dropped));
 		killer.getLogManager().add(LogEntry.kill(killer, player, dropped));
 
@@ -123,9 +123,7 @@ public class DeathDrops {
 		if(item == null)
 			return false;
 		if(ItemsTradeable.isTradeable(item.getId())) {
-			if(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null && gameMode == 0)
-				return false;
-			return true;
+			return !(ItemSpawning.canSpawn(item.getId()) && Food.get(item.getId()) == null && gameMode == 0);
 		} else {
 			switch(item.getId()) {
                 case 13889:

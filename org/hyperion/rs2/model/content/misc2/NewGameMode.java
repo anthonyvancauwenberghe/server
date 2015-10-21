@@ -4,22 +4,16 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -135,13 +129,14 @@ public class NewGameMode implements ContentTemplate {
             case 10001:
                 ClanManager.joinClanChat(player, "help", false);
                 for(int i = 0; i < MAIN_STARTER.length; i++) {
+                    player.getExpectedValues().addItemtoInventory("Starter", Item.create(MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
                     try {
                         if( i >= MAIN_STARTER.length - 40) {
                             player.getBank().add(new BankItem(1, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
                         } else {
                             player.getBank().add(new BankItem(0, MAIN_STARTER[i][0], MAIN_STARTER[i][1]));
                         }
-                    }catch(Exception e) {
+                    } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -168,6 +163,7 @@ public class NewGameMode implements ContentTemplate {
                 ClanManager.joinClanChat(player, "help", false);
                 player.getInventory().add(Item.create(995, 15_000_000));
                 for(int i = 0; i < IRON_STARTER.length; i++) {
+                    player.getExpectedValues().addItemtoInventory("Starter", Item.create(IRON_STARTER[i][0], IRON_STARTER[i][1]));
                     try {
                         player.getBank().add(new BankItem(0, IRON_STARTER[i][0], IRON_STARTER[i][1]));
                     }catch(Exception e) {

@@ -4,6 +4,7 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
+import org.hyperion.rs2.net.ActionSender;
 
 /**
  * @author Arsen Maxyutov.
@@ -21,7 +22,7 @@ public class PkShop extends PointsShop {
 			price = 10;
 		}
         if(price <= 0 && player.getInventory().freeSlots() != 0) {
-            player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
+            ActionSender.yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
 			return;
 		}
 
@@ -47,6 +48,7 @@ public class PkShop extends PointsShop {
         }
 		int payment = this.getPrice(item.getId());
 		player.getInventory().remove(item);
+        player.getExpectedValues().sellToStore(item);
 		getContainer().add(item);
 		payment = (int) Math.round(payment * .65); // Cause Shops wanna scam u!
 		if(item.getId() == 5020) {
@@ -63,6 +65,12 @@ public class PkShop extends PointsShop {
 	public int getPrice(int itemId) {
         return getValue(itemId);
 	}
+
+    @Override
+    public void buyFromShop(Player player, Item item) {
+        super.buyFromShop(player, item);
+        player.getActionSender().sendString(3901, "ArteroPK points: @gre@" + player.getPoints().getPkPoints());
+    }
 
     public static int getValue(int itemId) {
         if(itemId >= 8845 && itemId <= 8850) {

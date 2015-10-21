@@ -78,7 +78,9 @@ public class PollInterface {
             return 0;
         if (votesNo == 0)
             return 100;
-        return (int) (votesYes * 100f / votesNo);
+        if(votesYes == votesNo)
+            return 50;
+        return (int) ((votesYes * 100f) / (votesNo + votesYes));
     }
 
     public static boolean canVote(Player player) {
@@ -115,19 +117,21 @@ public class PollInterface {
         sendButtons();
         player.getActionSender().sendString(27505, poll.getQuestion());
         player.getActionSender().sendString(27634, "Ends: " + timeFormat.format(poll.getEndDate()));
-        for (int i = 0; i < content.length; i++)
+        int i = 0;
+        for (; i < content.length; i++)
             player.getActionSender().sendString(27519 + i, content[i]);
+        for (; i < 6; i++)
+            player.getActionSender().sendString(27519 + i, "");
         sendPercentBar(getPercentageYes(poll.getYesVotes().size(), poll.getNoVotes().size()));
     }
 
     public void sendPercentBar(int percentYes) {
-        int i = 0;
+        int i = 99;
         player.getActionSender().sendString(27630, percentYes + "%");
-        int percentNo = 100 - percentYes;
-        for (; i < percentNo; i++) {
+        for (; i >= percentYes; i--) {
             player.getActionSender().sendHideComponent(27529 + i, true);
         }
-        for (; i < 100; i++) {
+        for (; i >= 0; i--) {
             player.getActionSender().sendHideComponent(27529 + i, false);
         }
     }

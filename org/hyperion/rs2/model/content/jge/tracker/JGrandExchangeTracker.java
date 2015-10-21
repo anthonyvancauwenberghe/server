@@ -353,11 +353,6 @@ public class JGrandExchangeTracker {
                 return true;
             case CONFIRM:
                 synchronized(ACTIONS_LOCK){
-                    ifNewEntry(e -> {
-                        if(!JGrandExchange.enabled){
-                            player.sendf("The Grand Exchange has been temporarily disabled");
-                            return;
-
                 ifNewEntry(e -> {
                     if(!JGrandExchange.enabled){
                         player.sendf("The Grand Exchange has been temporarily disabled");
@@ -376,45 +371,12 @@ public class JGrandExchangeTracker {
                         return;
                     }
                     Item taken = null;
-                    switch(e.type()){
-                        case BUYING: {
-                            final int max = player.getInventory().getCount(e.currency().itemId);
-                            if(e.totalPrice() > max){
-                                player.sendf("You need %,d more %s to %s %,d %s!",
-                                        e.totalPrice() - max, e.currency().shortName.toLowerCase(), e.type().singleName.toLowerCase(),
-                                        e.itemQuantity(), e.item().getDefinition().getName());
-                                return;
-                            }
-                            if(e.totalPrice() <= 0){
-                                player.sendf("Change the unit price and quantity first!");
-                                return;
-                            }
-                            if(player.getInventory().remove(taken = Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
-                                player.sendf("Something went wrong!");
-                                return;
-                            }
-                            player.getExpectedValues().removeItemFromInventory("Grand Exchange", taken);
-                            break;
-                        }
-                        if(!canOpenInterface()){
-                            player.sendf("You cannot use the Grand Exchange right now!");
-                            return;
-                        }
-                        if(!e.canBuild()){
-                            player.sendf("Entry is not valid!");
-                            return;
-                        }
-                        if(entries.used(e.slot())){
-                            player.sendf("This slot is already in use");
-                            return;
-                        }
-                        Item taken = null;
                         switch(e.type()){
                             case BUYING: {
                                 final int max = player.getInventory().getCount(e.currency().itemId);
                                 if(e.totalPrice() > max){
                                     player.sendf("You need %,d more %s to %s %,d %s!",
-                                            e.totalPrice() - max, e.currency().shortName, e.type().singleName,
+                                            e.totalPrice() - max, e.currency().shortName.toLowerCase(), e.type().singleName.toLowerCase(),
                                             e.itemQuantity(), e.item().getDefinition().getName());
                                     return;
                                 }
@@ -426,23 +388,22 @@ public class JGrandExchangeTracker {
                                     player.sendf("Something went wrong!");
                                     return;
                                 }
+                                player.getExpectedValues().addItemtoInventory("Grand Exchange", taken);
                                 break;
                             }
                             case SELLING: {
                                 final int max = player.getInventory().getCount(e.itemId());
                                 if(e.itemQuantity() > max){
-                                    player.sendf("You don't have that many %s!", e.item().getDefinition().getName());
+                                    player.sendf("You don't have that many %ss!", e.item().getDefinition().getName());
                                     return;
                                 }
                                 if(player.getInventory().remove(taken = Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
                                     player.sendf("Something went wrong!");
                                     return;
                                 }
+                                player.getExpectedValues().removeItemFromInventory("Grand Exchange", taken);
                                 break;
                             }
-                            player.getExpectedValues().removeItemFromInventory("Grand Exchange", taken);
-                            break;
-
                         }
                         final Entry entry = newEntry.build();
                         if(!JGrandExchange.getInstance().insert(entry)){

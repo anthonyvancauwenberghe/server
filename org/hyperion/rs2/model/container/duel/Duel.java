@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.container.duel;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.AntiDupeEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
@@ -482,7 +481,6 @@ public class Duel {
 	}
 
 	public static void startDueling(final Player player) {
-		AntiDupeEvent.startMonitoring(player, player.getTrader(), player.getAccountValue().getTotalValue(), player.getTrader().getAccountValue().getTotalValue());
 		//player.getLogging().log("Duel started with " + player.getTrader().getName());
 		if(! player.getLocation().isWithinDistance(player.getTrader().getLocation(), 10))
 			return;
@@ -608,8 +606,6 @@ public class Duel {
             player.getActionSender().showInterface(6733);
         else
             declineTrade(player);
-
-		AntiDupeEvent.stopMonitoring(player, player.getTrader(), player.getAccountValue().getTotalValue(), player.getTrader().getAccountValue().getTotalValue());
 	}
 
 	public static void finishFullyDuel(Player player) {

@@ -106,6 +106,7 @@ public class TextFilePlayerSaving extends InstantPlayerSaving {
 				}
 			}
 			in.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -61,6 +61,7 @@ public class DonatorShop extends Shop {
 		}
 		if(isVeblenGood(item.getId()) && player.isServerOwner()) {
 			getContainer().add(item);
+			player.getExpectedValues().sellToStore(item);
 			player.getActionSender().sendUpdateItems(3823,
 					player.getInventory().toArray());
 			updatePlayers();
@@ -83,6 +84,7 @@ public class DonatorShop extends Shop {
 		}
 		int payment = item.getCount() * price;
 		payment *= RESELL_RATE;
+		player.getExpectedValues().sellToStore(item);
 		player.getInventory().remove(item);
 		getContainer().add(item);
 		if(payment > 0) {
@@ -107,12 +109,13 @@ public class DonatorShop extends Shop {
 		player.getExtraData().put("lastbuy", System.currentTimeMillis());
 		int price = item.getCount() * getPrice(item.getId());
 		if(price <= 0 && player.getInventory().freeSlots() != 0) {
-			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
+			ActionSender.yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
 			return;
 		}
 		if(player.getPoints().getDonatorPoints() >= price) {
 			player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() - price);
 			this.getContainer().remove(item);
+			player.getExpectedValues().buyFromStore(item);
 			player.getInventory().add(item);
 			String query = "INSERT INTO donatorshop(username,item_id,item_count,boughtvalue) "
 					+ "VALUES('" + player.getName().toLowerCase() + "'," + item.getId() + "," + item.getCount() + "," + price + ")";
@@ -146,7 +149,7 @@ public class DonatorShop extends Shop {
 	public void valueBuyItem(Player player, Item item) {
 		int price = getPrice(item.getId());
 		if(price <= 0) {
-			player.getActionSender().yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
+			ActionSender.yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the donator store.");
 			return;
 		}
 		String message = "The shop will sell a '@dre@"

@@ -30,6 +30,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
@@ -259,7 +260,7 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@dre@[FREE] DONATOR POINTS & PK TICKETS: @blu@ http://j.mp/youtubecamp#url#");
+            player.sendMessage("@dre@[Free]@bla@ Donator points & Pk tickets: @blu@ http://j.mp/youtubecamp#url#");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             //passChangeShit();
 
@@ -316,6 +317,7 @@ public class ActionSender {
             else
                 sendPlayerOption("null", 5, 0);
         }
+        //player.getAchievementTracker().load();
         sendSidebarInterfaces();
         // GodWars.godWars.checkGodWarsInterface(player);
         if (player.getSpellBook().isAncient()) {
@@ -1060,6 +1062,10 @@ public class ActionSender {
         for (int i = 0; i < icons.length; i++) {
             sendSidebarInterface(icons[i], interfaces[i]);
         }
+        if(!AchievementTracker.active() || player.getAchievementTracker().errorLoading) {
+            sendSidebarInterface(14, 31400);
+            sendSidebarInterface(15, -1);
+        }
         return this;
     }
 
@@ -1798,12 +1804,6 @@ public class ActionSender {
         player.logoutTries = 0;
         if (System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
             player.write((new PacketBuilder(109)).toPacket());
-			/*if(player.getHighscores().needsUpdate()) {
-                if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) || !Rank.hasAbility(player, Rank.DEVELOPER)
-                        || !Rank.hasAbility(player, Rank.OWNER))
-				World.getWorld().getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
-			}*/
-
             player.loggedOut = true;
             World.getWorld().unregister(player);
         } else {

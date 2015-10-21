@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.shops;
 
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 
@@ -51,6 +52,12 @@ public class DungeoneeringStore extends PointsShop {
                 return 100_000;
         }
         return 50_000;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void buyFromShop(Player player, Item item) {
+        super.buyFromShop(player, item);
+        player.getActionSender().sendString(3901, "Dungeoneering tokens: @gre@" + player.getDungeoneering().getTokens());
     }
 
     @Override

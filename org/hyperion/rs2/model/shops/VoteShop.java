@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.shops;
 
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.misc2.MysteryBox;
@@ -91,6 +92,12 @@ public class VoteShop extends PointsShop {
 				return 8;
 		}
 		return 5000;
+	}
+
+	@Override
+	public void buyFromShop(Player player, Item item) {
+		super.buyFromShop(player, item);
+		player.getActionSender().sendString(3901, "Voting points: @gre@" + player.getPoints().getVotingPoints());
 	}
 
 	@Override

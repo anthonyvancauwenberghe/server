@@ -48,7 +48,8 @@ public class TasksIO extends IOManager<Task, Tasks, TasksIO.TaskIO>{
             final int threshold = intAttr(root, "threshold");
             final int preTaskId = intAttr(root, "preTaskId");
             final T task = decodeTask(root, id, threshold);
-            task.preTaskId = preTaskId;
+            if(preTaskId != 0)
+                task.preTaskId = preTaskId;
             final Constraints constraints = IO.constraints.in(root);
             task.constraints.list.addAll(constraints.list);
             return task;

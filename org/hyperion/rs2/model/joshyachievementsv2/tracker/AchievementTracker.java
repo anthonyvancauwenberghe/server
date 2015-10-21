@@ -3,27 +3,39 @@ package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.sql.AchievementsSql;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.*;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class AchievementTracker {
 
-    public static boolean active = true;
+    private static boolean active = false;
 
     private final Player player;
     private final Map<Integer, AchievementProgress> progress;
+
+    public boolean errorLoading;
 
     public AchievementTracker(final Player player) {
         this.player = player;
 
         progress = new TreeMap<>();
+    }
+
+    public void load(){
+        final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
+        if(taskProgress == null){
+            errorLoading = true;
+            player.sendf("Error loading achievement data! You'll be notified when they are active again.");
+            return;
+        }
+        taskProgress.forEach(
+                atp -> progress(atp.achievementId).add(atp)
+        );
     }
 
     public void sendInfo(final Achievement a) {
@@ -73,16 +85,43 @@ public class AchievementTracker {
     }
 
     private boolean canDoTask(final Task task) {
-        return !taskProgress(task).finished()
-                && (!task.hasPreTask() || taskProgress(task.preTask()).finished());
+        if(taskProgress(task).finished()){
+            player.debugMessage("canDoTask#task progress is finished: " + task.desc);
+            return false;
+        }
+        if(task.hasPreTask() && !taskProgress(task.preTask()).finished()){
+            player.debugMessage("canDoTask#preTask is not finished: " + task.desc);
+            return false;
+        }
+        return true;
     }
 
     private Optional<Task> findAvailableTask(final Class<? extends Task> clazz, final Predicate<Task> pred, final int progress) {
         return Achievements.get().streamTasks(clazz)
+                .filter(t -> {
+                    if(!pred.test(t))
+                        return false;
+                    if(!canDoTask(t)){
+                        player.debugMessage("Can't do task: " + t.desc);
+                        return false;
+                    }
+                    if(!t.canProgress(taskProgress(t).progress, progress)){
+                        player.debugMessage("Can't progress: " + t.desc);
+                        return false;
+                    }
+                    if(!t.constraints.constrained(player)){
+                        player.debugMessage("Not constrained: " + t.desc);
+                        return false;
+                    }
+                    player.debugMessage("Match: " + t.desc);
+                    return true;
+                })
+                .min(Comparator.comparingInt(t -> t.threshold));
+        /*return Achievements.get().streamTasks(clazz)
                 .filter(pred.and(this::canDoTask)
                         .and(t -> t.canProgress(taskProgress(t).progress, progress))
                         .and(t -> t.constraints.constrained(player)))
-                .min(Comparator.comparingInt(t -> t.threshold));
+                .min(Comparator.comparingInt(t -> t.threshold));*/
     }
 
     private Optional<Task> findAvailableTask(final Task.Filter filter, final int progress) {
@@ -90,7 +129,7 @@ public class AchievementTracker {
     }
 
     private void progress(final Task.Filter filter, final int progress) {
-        if (!active)
+        if (!active || errorLoading)
             return;
         findAvailableTask(filter, progress)
                 .ifPresent(t -> progress(t, progress));
@@ -101,17 +140,30 @@ public class AchievementTracker {
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())
             return; //this shouldnt happen but just to be safe
+        final boolean shouldInsert = !atp.started();
         if (!atp.started())
             atp.startNow();
+        final int oldProgress = atp.progress;
         atp.progress(progress);
+        if(!(shouldInsert ? AchievementsSql.insertTaskProgress(player, atp) : AchievementsSql.updateTaskProgress(player, atp))){
+            if(shouldInsert)
+                atp.startDate = null;
+            atp.progress = oldProgress;
+            return;
+        }
         ap.sendProgressHeader(player);
         atp.sendProgress(player, true);
         if (atp.taskFinished()) {
             atp.finishNow();
-            player.sendf("[@blu@Achievement Task Complete@bla@] @red@%s@bla@! Congratulations!", task.desc);
+            if(!AchievementsSql.updateTaskProgress(player, atp)){
+                atp.finishDate = null;
+                return;
+            }
+            player.sendLootMessage("Achievement", String.format("Task '%s' complete! Congratulations!", task.desc));
             if (ap.tasksFinished()) {
-                player.sendf("[@blu@Achievement Complete@bla@] @red@%s@bla@! Congratulations!", ap.achievement().title);
+                player.sendLootMessage("Achievement", String.format("%s complete! Congratulations!", ap.achievement().title));
                 ap.achievement().rewards.reward(player);
+                player.getAchievementTab().updateAchievementTab();
             }
         }
         //updateInterface(ap.achievement());
@@ -195,5 +247,14 @@ public class AchievementTracker {
 
     public void dungFloorCompleted(final DungeoneeringFloorsTask.Difficulty difficulty, final DungeoneeringFloorsTask.Size size) {
         progress(DungeoneeringFloorsTask.filter(difficulty, size), 1);
+    }
+
+    public static void active(final boolean active){
+        AchievementTracker.active = active;
+        //hide n show appropriate interface
+    }
+
+    public static boolean active(){
+        return active;
     }
 }

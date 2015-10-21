@@ -17,22 +17,16 @@ public class FriendsAssistant {
 		sendStatus(p, 2);
 	}
 
-	public static void refreshGlobalList(Player p, boolean offline) {//login method, send all players onlinefor everyone else not u
-		if(p.chatStatus[1] == 2)
-			return;
+	public static void refreshGlobalList(Player p, boolean offline) {//login method, send all players online for everyone else not u
 		for(Player c : World.getWorld().getPlayers()) {
-			if(c == null || c.chatStatus[1] == 2 || c == p)
+			if(c == null || c == p)
 				continue;
-			if(c.getFriends().contains(p.getNameAsLong()) && ! isIgnore(p, c.getNameAsLong())) {
-				boolean add = true;
-				if(p.chatStatus[1] == 1)
-					if(! p.getFriends().contains(c.getNameAsLong()))
-						add = false;
-				if(add)
-					if(! offline && !p.isHidden())
-						sendPlayerOnline(c, p.getNameAsLong(), 10);
-					else
-						sendPlayerOnline(c, p.getNameAsLong(), 0);
+			if(c.getFriends().contains(p.getNameAsLong()) && !isIgnore(p, c.getNameAsLong())) {
+				if((p.chatStatus[1] == 1 && !p.getFriends().contains(c.getNameAsLong())) || offline || p.isHidden() || c.chatStatus[1] == 2) {
+					sendPlayerOnline(c, p.getNameAsLong(), 0);
+					continue;
+				}
+				sendPlayerOnline(c, p.getNameAsLong(), 10);
 			}
 		}
 	}
@@ -92,12 +86,25 @@ public class FriendsAssistant {
 	public static void addFriend(Player p, long friend) {
 		p.getFriends().add(friend);
 		updateList(p, friend);
+		refreshGlobalList(p, false);
+	}
+
+	public static void removeFriend(Player p, long friend) {
+		p.getFriends().remove(friend);
+		refreshGlobalList(p, false);
 	}
 
 
 	public static void addIgnore(Player p, long friend) {
 		p.ignores.add(friend);
 		updateList(p, friend);
+		refreshGlobalList(p, false);
+	}
+
+	public static void removeIgnore(Player p, long friend) {
+		p.ignores.remove(friend);
+		updateList(p, friend);
+		refreshGlobalList(p, false);
 	}
 
 

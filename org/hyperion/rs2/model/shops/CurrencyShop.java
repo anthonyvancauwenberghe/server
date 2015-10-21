@@ -34,9 +34,12 @@ public class CurrencyShop extends Shop {
         }
 		int payment = calculateUnitSellPrice(item) * item.getCount();
 		player.getInventory().remove(item);
+		player.getExpectedValues().sellToStore(item);
 		getContainer().add(item);
-		if(payment > 0)
+		if(payment > 0) {
 			player.getInventory().add(new Item(currency, payment));
+			player.getExpectedValues().addItemtoInventory("Selling to store", Item.create(currency, payment));
+		}
 		player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 		updatePlayers();
 	}
@@ -61,7 +64,9 @@ public class CurrencyShop extends Shop {
 		int price = calculateUnitBuyPrice(item) * item.getCount();
 		if(coins.getCount() >= price) {
 			player.getInventory().remove(new Item(currency, price));
+			player.getExpectedValues().removeItemFromInventory("Buying from store", Item.create(currency, price));
 			this.getContainer().remove(item);
+			player.getExpectedValues().buyFromStore(item);
 			player.getInventory().add(item);
 			player.getActionSender().sendUpdateItems(3823,
 					player.getInventory().toArray());

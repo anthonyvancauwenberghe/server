@@ -3,7 +3,6 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -107,6 +106,7 @@ public class GlobalItemManager {
                     player.sendMessage("You cannot pick up this item as it belongs to another game mode");
                     return;
                 }
+				player.getExpectedValues().pickupItem(globalItem.getItem());
 				globalItems.remove(globalItem);
                 if(item != 2422) {
                     player.getLogManager().add(LogEntry.pickupItem(globalItem));

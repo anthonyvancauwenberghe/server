@@ -176,6 +176,7 @@ public class Dicing implements ContentTemplate {
 		dicer.forceMessage("Rolling...");
 		final int count = item.getCount();
 		final int id = item.getId();
+		player.getExpectedValues().removeItemFromInventory("Gambling", item);
 		player.getInventory().remove(new Item(item.getId(), item.getCount()));
 		World.getWorld().submit(new Event(2000, "checked") {
 			@Override
@@ -200,6 +201,8 @@ public class Dicing implements ContentTemplate {
                     r = Misc.random(54);
                 if(itemvalue > 10_000)
                     r = Misc.random(75);
+				if(item.getId() == 19323 || item.getId() == 19325)
+					r = Misc.random(56);
 
                 player.getActionSender().sendMessage("The gambler rolled " + r + " with his dice.");
                 dicer.forceMessage(r + "!");
@@ -213,8 +216,10 @@ public class Dicing implements ContentTemplate {
 					}
                     if(toPkp)
                         player.getInventory().add(Item.create(5020, pkpValues.get(id) * 2 * amount));
-                    else
-                        player.getInventory().add(new Item(id, amount*2));
+                    else {
+						player.getExpectedValues().addItemtoInventory("Gambling", new Item(id, amount * 2));
+						player.getInventory().add(new Item(id, amount * 2));
+					}
 					player.getActionSender().sendMessage("You have won the item!");
 					player.setDiced(player.getDiced() + itemvalue);
 					query = "INSERT INTO dicing(username,item_id,item_count,win_value) "

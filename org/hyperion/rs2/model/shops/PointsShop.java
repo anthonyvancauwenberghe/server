@@ -31,6 +31,7 @@ public abstract class PointsShop extends Shop {
 		if(getPointsAmount(player) >= price) {
 			setPointsAmount(player, getPointsAmount(player) - price);
 			this.getContainer().remove(item);
+			player.getExpectedValues().buyFromStore(item);
 			player.getInventory().add(item);
 			player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 			updatePlayers();

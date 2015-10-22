@@ -323,7 +323,7 @@ public class SQLPlayerSaving extends PlayerSaving {
         }
         int index = 1;
         for (SaveSingleValue ssv : savingFields) {
-            if (ssv instanceof SaveString) {
+            if (ssv instanceof SaveString && ssv!=null && player!=null) {
                 createPlayer.setString(index, ssv.getValue(player).toString());
             } else if (ssv instanceof SaveBoolean) {
                 if ((Boolean) ssv.getValue(player)) {

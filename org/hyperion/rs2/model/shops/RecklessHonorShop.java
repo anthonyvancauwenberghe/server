@@ -44,6 +44,7 @@ public class RecklessHonorShop extends PointsShop {
 			player.getActionSender().sendMessage("You need at least " + requiredHonors + " honor points to buy this item.");
 		} else {
 			super.buyFromShop(player, item);
+			player.getActionSender().sendString(3901, "Honor points: @gre@" + player.getPoints().getHonorPoints());
 		}
 	}
 }

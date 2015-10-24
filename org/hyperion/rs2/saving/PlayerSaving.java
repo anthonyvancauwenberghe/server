@@ -1,32 +1,24 @@
 package org.hyperion.rs2.saving;
 
-import java.io.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Appearance;
-import org.hyperion.rs2.model.FriendList;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
 import org.hyperion.rs2.saving.impl.*;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * This class holds all the PlayerSaving logic and settings.
@@ -90,12 +82,12 @@ public class PlayerSaving {
 	/**
 	 * Holds all the SaveObjects meant for loading.
 	 */
-	private final Map<String, SaveObject> saveData;
+	protected final Map<String, SaveObject> saveData;
 
 	/**
 	 * The collection of SaveObjects meant for iteration.
 	 */
-	private final List<SaveObject> saveList;
+	protected final List<SaveObject> saveList;
 
 	/**
 	 * The PlayerSaving singleton.
@@ -177,6 +169,7 @@ public class PlayerSaving {
 		saveList.add(new SaveBHPerks("bhperks"));
 		saveList.add(new SaveSSHCharges("sshcharges"));
 		saveList.add(new SaveNPCKills("npclogs"));
+		saveList.add(new SaveAccountValue("accountValue"));
 		// Containers, skills etc
 		saveList.add(new SaveSkills("Skills"));
 		saveList.add(new SaveInventory("Inventory"));
@@ -672,6 +665,7 @@ public class PlayerSaving {
                     return;
                 }
 			}
+			World.getWorld().getSQLSaving().load(player);
 			in.close();
 			player.getHighscores();
 		} catch(IOException e) {

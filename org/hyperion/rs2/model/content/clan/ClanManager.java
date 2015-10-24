@@ -8,10 +8,9 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Dicing;
-import org.hyperion.rs2.util.IoBufferUtils;
+import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
 
 import java.io.*;
 import java.util.HashMap;
@@ -83,10 +82,8 @@ public class ClanManager {
 
 
     public static boolean existsClan(String name) {
-		if(clans.get(name.toLowerCase()) != null)
-			return true;
-		return false;
-	}
+        return clans.get(name.toLowerCase()) != null;
+    }
 
 	public static void joinClanChat(Player player, long name) {
 		String clanName;
@@ -170,6 +167,7 @@ public class ClanManager {
         if(player.isClanMainOwner())
             displayRank = "[O] ";
 		//message = "[@blu@" + TextUtils.titleCase(player.getClanName()) + "@bla@] " + displayRank + player.getSafeDisplayName() + ": @dre@" + TextUtils.ucFirst(message.toLowerCase().replaceAll("@", ""));
+        player.getLogManager().add(LogEntry.clanchat(player.getClanName(), message));
         message = ""+displayRank+player.getSafeDisplayName() + ":"+TextUtils.ucFirst(message.replaceAll("@", "") + ":clan:");
 		if(player.getClanName() == "") {
 			player.sendClanMessage("You need to join a clan chat before you can send messages.");

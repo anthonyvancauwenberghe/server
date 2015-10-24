@@ -49,6 +49,7 @@ public class VoteRewardBox implements ContentTemplate {
 		if(rewardItem == null) {
 			rewardItem = new Item(CHEAP_ITEMS[Misc.random(CHEAP_ITEMS.length - 1)], 1);
 		}
+		player.getExpectedValues().addItemtoInventory(Item.create(10025).getDefinition().getProperName() + " reward", rewardItem);
 		player.getInventory().add(rewardItem);
 	}
 

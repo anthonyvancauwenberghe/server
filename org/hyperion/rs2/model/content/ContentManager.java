@@ -60,6 +60,8 @@ public class ContentManager {
 						}
 					} catch(Exception e) {
 						System.out.println("Failed to load content: " + cls);
+						e.printStackTrace();
+
 					}
 				}
 			}

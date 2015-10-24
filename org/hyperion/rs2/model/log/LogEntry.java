@@ -1,18 +1,15 @@
 package org.hyperion.rs2.model.log;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import org.hyperion.rs2.model.GlobalItem;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.progress.Progress;
 import org.hyperion.rs2.model.log.util.LogUtils;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public class LogEntry implements Comparable<LogEntry>{
 
@@ -30,19 +27,20 @@ public class LogEntry implements Comparable<LogEntry>{
         GAMBLE("gamble.log", "gamble", "gambling", "stake"),
         YELL("yell.log", "yell"),
         BOB("bobdrops.log", "bob drops"),
-        GRAND_EXCHANGE("ge.log", "ge");
+        GRAND_EXCHANGE("ge.log", "ge"),
+        CLANCHAT("cc.log", "cc");
 
         public final String path;
         public final boolean save;
         public final List<String> names;
 
-        private Category(final String path, final boolean save, final String... names){
+        Category(final String path, final boolean save, final String... names){
             this.path = path;
             this.save = save;
             this.names = Arrays.asList(names);
         }
 
-        private Category(final String path, final String... names){
+        Category(final String path, final String... names){
             this(path, true, names);
         }
 
@@ -111,6 +109,10 @@ public class LogEntry implements Comparable<LogEntry>{
 
     public static LogEntry yell(final String msg){
         return new LogEntry(Category.YELL, msg);
+    }
+
+    public static LogEntry clanchat(final String clanname, final String msg){
+        return new LogEntry(Category.CLANCHAT, clanname + ": " + msg);
     }
 
     public static LogEntry privateChat(final String from, final String to, final String msg){

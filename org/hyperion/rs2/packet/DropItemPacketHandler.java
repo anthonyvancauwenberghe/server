@@ -1,10 +1,6 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.net.Packet;
 
@@ -40,11 +36,12 @@ public class DropItemPacketHandler implements PacketHandler {
 			player.getActionSender().sendMessage("Please confirm you want to drop this item by dropping it again.");
 			return;
 		}
+		player.getExpectedValues().dropItem(toRemove);
 		if(Rank.hasAbility(player, Rank.MODERATOR))
 			World.getWorld().getGlobalItemManager().dropItem(player, itemId, itemSlot);
 		else {
 			player.getInventory().remove(toRemove);
-		    player.getActionSender().sendMessage("Your item dissapears.");
+		    player.getActionSender().sendMessage("Your item disappears.");
         }
 		player.getDropping().reset();
 

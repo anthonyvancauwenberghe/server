@@ -64,6 +64,7 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
+import org.hyperion.rs2.saving.SavedSingleValue;
 import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.util.AccountLogger;
 import org.hyperion.rs2.util.AccountValue;
@@ -82,6 +83,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Graham Edgecombe
  */
 public class Player extends Entity implements Persistable, Cloneable{
+
+	private int databaseId = -1;
+
+	public int getDatabaseId() {
+		return databaseId;
+	}
+
+	public void setDatabaseId(int id) {
+		databaseId = id;
+	}
+
+	private LinkedList<SavedSingleValue> savedValues = new LinkedList<SavedSingleValue>();
+
+	public LinkedList<SavedSingleValue> getSavedValues() {
+		return savedValues;
+	}
 
 	public static final int MAX_NAME_LENGTH = 12;
 	public final long loginTime = System.currentTimeMillis();
@@ -363,6 +380,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private AccountValue accountValue = new AccountValue(this);
 	private AccountLogger logger = new AccountLogger(this);
 	private PlayerPoints playerPoints = new PlayerPoints(this);
+	private ExpectedValues expectedValues = new ExpectedValues(this);
 	private Spam spam = new Spam(this);
 	private SpecialBar specbar = new SpecialBar(this);
 	private SummoningBar summoningBar = new SummoningBar(this);
@@ -892,6 +910,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return playerPoints;
 	}
 
+	public ExpectedValues getExpectedValues() {
+		return expectedValues;
+	}
+
 	public AccountLogger getLogging() {
 		return logger;
 	}
@@ -1053,8 +1075,8 @@ public class Player extends Entity implements Persistable, Cloneable{
 	/**
 	 * Sets the player's password.
 	 *
-	 * @param pass The password.
 	 */
+
 
     public final List<TeamBossSession> getTeamSessions() {
 		return teamBossSessions;
@@ -2532,5 +2554,15 @@ public class Player extends Entity implements Persistable, Cloneable{
 			geTracker = new JGrandExchangeTracker(this);
 		return geTracker;
 	}
+
+	public int getStartValue() {
+		return startValue;
+	}
+
+	public void setStartValue(int value) {
+		this.startValue = value;
+	}
+
+	private int startValue = -1;
 
 }

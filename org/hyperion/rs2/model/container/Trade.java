@@ -1,10 +1,6 @@
 package org.hyperion.rs2.model.container;
 
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.ItemsTradeable;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TradeChecker;
@@ -421,13 +417,16 @@ public class Trade {
                     )
             );
             player.getTrader().getLogManager().add(
-                    LogEntry.trade(
-                            player.getName(),
-                            player.getTrader().getName(),
-                            player.getTrade().toArray(),
-                            player.getTrader().getTrade().toArray()
-                    )
-            );
+					LogEntry.trade(
+							player.getName(),
+							player.getTrader().getName(),
+							player.getTrade().toArray(),
+							player.getTrader().getTrade().toArray()
+					)
+			);
+			player.getExpectedValues().trade(player.getTrader().getTrade().getItems(), player.getTrade().getItems());
+			player.getTrader().getExpectedValues().trade(player.getTrade().getItems(), player.getTrader().getTrade().getItems());
+
 		Container.transfer(player.getTrader().getTrade(), player.getInventory());
 		Container.transfer(player.getTrade(), player.getTrader().getInventory());
 		//World.getWorld().getWorldLoader().savePlayer(player, "trade");

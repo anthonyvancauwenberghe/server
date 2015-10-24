@@ -1,12 +1,10 @@
 package org.hyperion.rs2.model.content.jge.tracker;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
 import org.hyperion.rs2.model.content.jge.entry.EntryManager;
-import org.hyperion.rs2.model.content.jge.entry.claim.ClaimSlot;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
@@ -22,6 +20,8 @@ import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.*;
  * Created by Administrator on 9/23/2015.
  */
 public class JGrandExchangeTracker {
+
+    private static final Object ACTIONS_LOCK = new Object();
 
     public final Player player;
 
@@ -352,6 +352,7 @@ public class JGrandExchangeTracker {
                 }, "You must create a new entry before increasing price");
                 return true;
             case CONFIRM:
+                synchronized(ACTIONS_LOCK){
                 ifNewEntry(e -> {
                     if(!JGrandExchange.enabled){
                         player.sendf("The Grand Exchange has been temporarily disabled");
@@ -370,145 +371,154 @@ public class JGrandExchangeTracker {
                         return;
                     }
                     Item taken = null;
-                    switch(e.type()){
-                        case BUYING: {
-                            final int max = player.getInventory().getCount(e.currency().itemId);
-                            if(e.totalPrice() > max){
-                                player.sendf("You need %,d more %s to %s %,d %s!",
-                                        e.totalPrice() - max, e.currency().shortName, e.type().singleName,
-                                        e.itemQuantity(), e.item().getDefinition().getName());
-                                return;
+                        switch(e.type()){
+                            case BUYING: {
+                                final int max = player.getInventory().getCount(e.currency().itemId);
+                                if(e.totalPrice() > max){
+                                    player.sendf("You need %,d more %s to %s %,d %s!",
+                                            e.totalPrice() - max, e.currency().shortName.toLowerCase(), e.type().singleName.toLowerCase(),
+                                            e.itemQuantity(), e.item().getDefinition().getName());
+                                    return;
+                                }
+                                if(e.totalPrice() <= 0){
+                                    player.sendf("Change the unit price and quantity first!");
+                                    return;
+                                }
+                                if(player.getInventory().remove(taken = Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
+                                    player.sendf("Something went wrong!");
+                                    return;
+                                }
+                                player.getExpectedValues().addItemtoInventory("Grand Exchange", taken);
+                                break;
                             }
-                            if(e.totalPrice() <= 0){
-                                player.sendf("Change the unit price and quantity first!");
-                                return;
+                            case SELLING: {
+                                final int max = player.getInventory().getCount(e.itemId());
+                                if(e.itemQuantity() > max){
+                                    player.sendf("You don't have that many %ss!", e.item().getDefinition().getName());
+                                    return;
+                                }
+                                if(player.getInventory().remove(taken = Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
+                                    player.sendf("Something went wrong!");
+                                    return;
+                                }
+                                player.getExpectedValues().removeItemFromInventory("Grand Exchange", taken);
+                                break;
                             }
-                            if(player.getInventory().remove(taken = Item.create(e.currency().itemId, e.totalPrice())) != e.totalPrice()){
-                                player.sendf("Something went wrong!");
-                                return;
-                            }
-                            break;
                         }
-                        case SELLING: {
-                            final int max = player.getInventory().getCount(e.itemId());
-                            if(e.itemQuantity() > max){
-                                player.sendf("You don't have that many %s!", e.item().getDefinition().getName());
-                                return;
-                            }
-                            if(player.getInventory().remove(taken = Item.create(e.itemId(), e.itemQuantity())) != e.itemQuantity()){
-                                player.sendf("Something went wrong!");
-                                return;
-                            }
-                            break;
+                        final Entry entry = newEntry.build();
+                        if(!JGrandExchange.getInstance().insert(entry)){
+                            player.getInventory().add(taken);
+                            player.sendf("Please try again later!");
+                            return;
                         }
-                    }
-                    final Entry entry = newEntry.build();
-                    if(!JGrandExchange.getInstance().insert(entry)){
-                        player.getInventory().add(taken);
-                        player.sendf("Please try again later!");
-                        return;
-                    }
-                    entries.add(entry);
-                    JGrandExchange.getInstance().add(entry);
-                    nullifyNewEntry();
-                    showEntries();
-                    JGrandExchange.getInstance().submit(entry);
-                    player.getLogManager().add(LogEntry.geEntryAdded(entry));
-                }, "You are not building a new entry right now!");
+                        entries.add(entry);
+                        JGrandExchange.getInstance().add(entry);
+                        nullifyNewEntry();
+                        showEntries();
+                        JGrandExchange.getInstance().submit(entry);
+                        player.getLogManager().add(LogEntry.geEntryAdded(entry));
+                    }, "You are not building a new entry right now!");
+                }
                 return true;
             case CANCEL:
-                ifActiveEntry(e -> {
-                    if(!JGrandExchange.enabled){
-                        player.sendf("The Grand Exchange has been temporarily disabled");
-                        return;
-                    }
-                    if(!canOpenInterface()){
-                        player.sendf("You cannot use the Grand Exchange right now!");
-                        return;
-                    }
-                    if(e.cancelled){
-                        player.sendf("This entry is already cancelled!");
-                        return;
-                    }
-                    if(e.progress.completed()){
-                        if(e.claims.empty())
+                synchronized(ACTIONS_LOCK){
+                    ifActiveEntry(e -> {
+                        if(!JGrandExchange.enabled){
+                            player.sendf("The Grand Exchange has been temporarily disabled");
                             return;
-                        player.sendf("This entry is already completed!");
-                        return;
-                    }
-                    e.cancelled = true;
-                    final Item oldReturn = e.item();
-                    switch(e.type){
-                        case BUYING:
-                            e.claims.addReturn(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
-                            break;
-                        case SELLING:
-                            e.claims.addReturn(e.itemId, e.progress.remainingQuantity());
-                            break;
-                    }
-                    if(!JGrandExchange.getInstance().updateCancelAndClaims(e)){
-                        e.cancelled = false;
-                        e.claims.returnSlot.set(oldReturn);
-                        player.sendf("Please try again later!");
-                        return;
-                    }
-                    ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
-                    ViewingEntry.setProgressBar(player, e);
-                }, "You are not viewing an entry right now");
+                        }
+                        if(!canOpenInterface()){
+                            player.sendf("You cannot use the Grand Exchange right now!");
+                            return;
+                        }
+                        if(e.cancelled){
+                            player.sendf("This entry is already cancelled!");
+                            return;
+                        }
+                        if(e.progress.completed()){
+                            if(e.claims.empty())
+                                return;
+                            player.sendf("This entry is already completed!");
+                            return;
+                        }
+                        e.cancelled = true;
+                        final Item oldReturn = e.item();
+                        switch(e.type){
+                            case BUYING:
+                                e.claims.addReturn(e.currency.itemId, e.progress.remainingQuantity() * e.unitPrice);
+                                break;
+                            case SELLING:
+                                e.claims.addReturn(e.itemId, e.progress.remainingQuantity());
+                                break;
+                        }
+                        if(!JGrandExchange.getInstance().updateCancelAndClaims(e)){
+                            e.cancelled = false;
+                            e.claims.returnSlot.set(oldReturn);
+                            player.sendf("Please try again later!");
+                            return;
+                        }
+                        ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
+                        ViewingEntry.setProgressBar(player, e);
+                    }, "You are not viewing an entry right now");
+                }
                 return true;
             case CLAIM_PROGRESS_SLOT:
-                ifActiveEntry(e -> {
-                    if(!JGrandExchange.enabled){
-                        player.sendf("The Grand Exchange has been temporarily disabled");
-                        return;
-                    }
-                    if(!canOpenInterface()){
-                        player.sendf("You cannot use the Grand Exchange right now!");
-                        return;
-                    }
-                    final Item oldProgress = e.claims.progressSlot.item();
-                    if(e.claims.progressSlot.valid() && e.claims.claimProgress()){
-                        ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
-                        if((e.cancelled && e.claims.empty()) || e.finished()){
-                            if(!JGrandExchange.getInstance().delete(e)){
-                                e.claims.progressSlot.set(oldProgress);
-                                ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
-                                player.sendf("Please try again later!");
-                                return;
-                            }
-                            entries.remove(e);
-                            JGrandExchange.getInstance().remove(e);
-                            showEntries();
+                synchronized(ACTIONS_LOCK){
+                    ifActiveEntry(e -> {
+                        if(!JGrandExchange.enabled){
+                            player.sendf("The Grand Exchange has been temporarily disabled");
+                            return;
                         }
-                    }
-                }, "You are not viewing an entry right now");
+                        if(!canOpenInterface()){
+                            player.sendf("You cannot use the Grand Exchange right now!");
+                            return;
+                        }
+                        final Item oldProgress = e.claims.progressSlot.item();
+                        if(e.claims.progressSlot.valid() && e.claims.claimProgress()){
+                            ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
+                            if((e.cancelled && e.claims.empty()) || e.finished()){
+                                if(!JGrandExchange.getInstance().delete(e)){
+                                    e.claims.progressSlot.set(oldProgress);
+                                    ViewingEntry.setProgressClaim(player, e.claims.progressSlot.item());
+                                    player.sendf("Please try again later!");
+                                    return;
+                                }
+                                entries.remove(e);
+                                JGrandExchange.getInstance().remove(e);
+                                showEntries();
+                            }
+                        }
+                    }, "You are not viewing an entry right now");
+                }
                 return true;
             case CLAIM_RETURN_SLOT:
-                ifActiveEntry(e -> {
-                    if(!JGrandExchange.enabled){
-                        player.sendf("The Grand Exchange has been temporarily disabled");
-                        return;
-                    }
-                    if(!canOpenInterface()){
-                        player.sendf("You cannot use the Grand Exchange right now!");
-                        return;
-                    }
-                    final Item oldReturn = e.claims.returnSlot.item();
-                    if(e.claims.returnSlot.valid() && e.claims.claimReturn()){
-                        ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
-                        if((e.cancelled && e.claims.empty()) || e.finished()){
-                            if(!JGrandExchange.getInstance().delete(e)){
-                                e.claims.returnSlot.set(oldReturn);
-                                ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
-                                player.sendf("Please try again later!");
-                                return;
-                            }
-                            entries.remove(e);
-                            JGrandExchange.getInstance().remove(e);
-                            showEntries();
+                synchronized(ACTIONS_LOCK){
+                    ifActiveEntry(e -> {
+                        if(!JGrandExchange.enabled){
+                            player.sendf("The Grand Exchange has been temporarily disabled");
+                            return;
                         }
-                    }
-                }, "You are not viewing an entry right now");
+                        if(!canOpenInterface()){
+                            player.sendf("You cannot use the Grand Exchange right now!");
+                            return;
+                        }
+                        final Item oldReturn = e.claims.returnSlot.item();
+                        if(e.claims.returnSlot.valid() && e.claims.claimReturn()){
+                            ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
+                            if((e.cancelled && e.claims.empty()) || e.finished()){
+                                if(!JGrandExchange.getInstance().delete(e)){
+                                    e.claims.returnSlot.set(oldReturn);
+                                    ViewingEntry.setReturnClaim(player, e.claims.returnSlot.item());
+                                    player.sendf("Please try again later!");
+                                    return;
+                                }
+                                entries.remove(e);
+                                JGrandExchange.getInstance().remove(e);
+                                showEntries();
+                            }
+                        }
+                    }, "You are not viewing an entry right now");
+                }
                 return true;
             case VIEW_BACK:
                 showEntries();

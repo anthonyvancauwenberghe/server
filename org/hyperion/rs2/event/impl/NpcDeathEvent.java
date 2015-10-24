@@ -191,7 +191,7 @@ public class NpcDeathEvent extends Event {
                         {
                             GlobalItem globalItem5 = new GlobalItem(
                                     player, x, y, z,
-                                    new Item(PvMStore.TOKEN, tokens * 3)
+                                    new Item(PvMStore.TOKEN, tokens)
                             );
                             if (player.getInventory().freeSlots() < 1 || !player.getInventory().contains(16638))
                                 World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
@@ -215,7 +215,7 @@ public class NpcDeathEvent extends Event {
                 if (!player.getDungeoneering().inDungeon()) {
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                     if (npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
-                        int chance = isTask ? 666 : 666;
+                        int chance = isTask ? 750 : 1000;
                         if (npc.getDefinition().getId() == 8349 && player.getLocation().inPvPArea())
                             chance = 500;
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())

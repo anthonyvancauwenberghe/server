@@ -124,7 +124,7 @@ public class Smelting implements ContentTemplate {
 				if(Combat.random(1) == 0 && item == 2351) {
 					ContentEntity.sendMessage(client, "You fail to remove the iron bar form the piercing hot furnace.");
 				} else {
-					client.getAchievementTracker().itemSkilled(Skills.MINING, item, 1);
+					client.getAchievementTracker().itemSkilled(Skills.SMITHING, item, 1);
 					ContentEntity.addItem(client, item, 1);
 				}
 				amount--;

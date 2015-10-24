@@ -35,6 +35,8 @@ public abstract class Task{
         this.threshold = threshold;
 
         constraints = new Constraints();
+
+        preTaskId = -1;
     }
 
     public boolean canProgress(final int currentProgress, final int progress){

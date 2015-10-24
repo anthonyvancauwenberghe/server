@@ -195,7 +195,7 @@ public class JGrandExchange {
     }
 
     public void submit(final Entry submitEntry){
-        if(!enabled)
+        if(!enabled || submitEntry.cancelled || submitEntry.progress.completed() || submitEntry.progress.remainingQuantity() == 0)
             return;
         final Optional<Entry> opt = stream(submitEntry.type.opposite())
                 .filter(e -> {

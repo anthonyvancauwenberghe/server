@@ -176,6 +176,7 @@ public class Dicing implements ContentTemplate {
 		dicer.forceMessage("Rolling...");
 		final int count = item.getCount();
 		final int id = item.getId();
+		player.getExpectedValues().removeItemFromInventory("Gambling", item);
 		player.getInventory().remove(new Item(item.getId(), item.getCount()));
 		World.getWorld().submit(new Event(2000, "checked") {
 			@Override
@@ -200,6 +201,8 @@ public class Dicing implements ContentTemplate {
                     r = Misc.random(54);
                 if(itemvalue > 10_000)
                     r = Misc.random(75);
+				if(item.getId() == 19323 || item.getId() == 19325)
+					r = Misc.random(56);
 
                 player.getActionSender().sendMessage("The gambler rolled " + r + " with his dice.");
                 dicer.forceMessage(r + "!");
@@ -213,8 +216,10 @@ public class Dicing implements ContentTemplate {
 					}
                     if(toPkp)
                         player.getInventory().add(Item.create(5020, pkpValues.get(id) * 2 * amount));
-                    else
-                        player.getInventory().add(new Item(id, amount*2));
+                    else {
+						player.getExpectedValues().addItemtoInventory("Gambling", new Item(id, amount * 2));
+						player.getInventory().add(new Item(id, amount * 2));
+					}
 					player.getActionSender().sendMessage("You have won the item!");
 					player.setDiced(player.getDiced() + itemvalue);
 					query = "INSERT INTO dicing(username,item_id,item_count,win_value) "
@@ -280,7 +285,11 @@ public class Dicing implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
         try {
-            final List<String> lines = Files.readAllLines(new File("./data/dontopkp.txt").toPath());
+			File dontoPkp = new File("./data/dontopkp.txt");
+			if(!dontoPkp.exists()) {
+				dontoPkp.createNewFile();
+			}
+            final List<String> lines = Files.readAllLines(dontoPkp.toPath());
             for(String s : lines) {
                 final String[] split = s.split(":");
                 pkpValues.put(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
@@ -289,7 +298,11 @@ public class Dicing implements ContentTemplate {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         try {
-            final List<String> lines = Files.readAllLines(new File("./data/diceclans.txt").toPath());
+			File diceClanFile = new File("./data/diceclans.txt");
+			if(!diceClanFile.exists()) {
+				diceClanFile.createNewFile();
+			}
+			final List<String> lines = Files.readAllLines(diceClanFile.toPath());
             for(String s : lines) {
                 if(!diceClans.contains(s))
                     diceClans.add(s);

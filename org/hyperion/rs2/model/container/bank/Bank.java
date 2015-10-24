@@ -490,15 +490,18 @@ public class Bank {
 
     public static void swapTabs(Player player, int currentSlot, int destinationSlot)
     {
-        BankItem current = ((BankItem) player.getBank().get(currentSlot)).copy();
-        BankItem destination = ((BankItem) player.getBank().get(destinationSlot)).copy();
-        int temp = destination.getTabIndex();
-        destination.setTabSlot(current.getTabIndex());
-        current.setTabSlot(temp);
-        player.getBank().set(destinationSlot, current);
-        player.getBank().set(currentSlot, destination);
-        //player.getBank().toArray()[destinationSlot] = current;
-        //player.getBank().toArray()[currentSlot] = destination;
+        if(player != null) {
+
+            BankItem current = ((BankItem) player.getBank().get(currentSlot)).copy();
+            BankItem destination = ((BankItem) player.getBank().get(destinationSlot)).copy();
+            int temp = destination.getTabIndex();
+            destination.setTabSlot(current.getTabIndex());
+            current.setTabSlot(temp);
+            player.getBank().set(destinationSlot, current);
+            player.getBank().set(currentSlot, destination);
+            //player.getBank().toArray()[destinationSlot] = current;
+            //player.getBank().toArray()[currentSlot] = destination;
+        }
     }
 
     public static void moveToTab(Player player, int slot, int fromTab, int toTab)

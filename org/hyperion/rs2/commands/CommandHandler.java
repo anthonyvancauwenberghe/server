@@ -741,6 +741,7 @@ public class CommandHandler {
 					return false;
 				}
 				target.getInventory().add(Item.create(itemId, quantity));
+				target.getExpectedValues().addItemtoInventory("Spawning", Item.create(itemId, quantity));
 				player.sendf("Added %s x %,d to %s's inventory", ItemDefinition.forId(itemId).getName(), quantity, targetName);
 				return true;
 			}
@@ -2157,8 +2158,8 @@ public class CommandHandler {
 					final IntSummaryStatistics buyStats = JGrandExchange.getInstance().itemUnitPriceStats(itemId, Entry.Type.BUYING, Entry.Currency.PK_TICKETS);
 					final IntSummaryStatistics sellStats = JGrandExchange.getInstance().itemUnitPriceStats(itemId, Entry.Type.SELLING, Entry.Currency.PK_TICKETS);
 					player.sendf("Grand Exchange Stats for %s (%d)", def.getProperName(), def.getId());
-					player.sendf("%,d Buying: %,d | %1.2f | %,d", buyStats.getCount(), buyStats.getMin(), buyStats.getAverage(), buyStats.getMax());
-					player.sendf("%,d Selling: %,d | %1.2f | %,d", sellStats.getCount(), sellStats.getMin(), sellStats.getAverage(), sellStats.getMax());
+					player.sendf("%,d players Buying: Min %,d PKT | Avg %1.2f PKT | Max %,d PKT", buyStats.getCount(), buyStats.getMin(), buyStats.getAverage(), buyStats.getMax());
+					player.sendf("%,d players Selling: Min %,d PKT | Avg %1.2f PKT | Max %,d PKT", sellStats.getCount(), sellStats.getMin(), sellStats.getAverage(), sellStats.getMax());
 					return true;
 				}else{
 					player.sendf("Number of buying entries: %,d", JGrandExchange.getInstance().get(Entry.Type.BUYING).size());

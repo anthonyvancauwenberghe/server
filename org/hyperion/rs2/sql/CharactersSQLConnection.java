@@ -1,6 +1,7 @@
 package org.hyperion.rs2.sql;
 
 import org.hyperion.Configuration;
+import org.hyperion.Server;
 
 public class CharactersSQLConnection extends MySQLConnection{
 
@@ -10,6 +11,8 @@ public class CharactersSQLConnection extends MySQLConnection{
     }
 
     public boolean init(){
+        if (!Server.getConfig().getBoolean("sql"))
+            return false;
         establishConnection();
         start();
         return true;

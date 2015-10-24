@@ -117,6 +117,8 @@ public class LeatherCrafting extends Crafting {
 
     public static boolean craftLeather(final Player c, final int item) {
         try {
+            if(c.isBusy())
+                return true;
             Leather l = getLeather(item);
             if(l == null) {
                 return true;

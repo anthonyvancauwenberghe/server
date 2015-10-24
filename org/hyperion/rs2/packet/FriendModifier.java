@@ -37,11 +37,15 @@ public class FriendModifier implements PacketHandler {
 			String name = NameUtils.longToName(nameLong);
 			String ownerName = Server.getConfig().getString("owner");
 
+			final Player playerTo = World.getWorld().getPlayer(name);
+			if((playerTo.chatStatus[1] == 2 && !Rank.isStaffMember(player)) || playerTo == null)
+				return;
+
 			if(name.equalsIgnoreCase(ownerName)) {
 				Player owner = World.getWorld().getPlayer(ownerName);
 				if(!Rank.isStaffMember(player) && !Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
 					if(owner != null) {
-						if(! owner.getFriends().contains(player.getNameAsLong())) {
+						if(!owner.getFriends().contains(player.getNameAsLong())) {
 							player.getActionSender().sendMessage("You cannot send PM's to " + ownerName);
 							return;
 						}
@@ -59,15 +63,19 @@ public class FriendModifier implements PacketHandler {
 			FriendsAssistant.addFriend(player, g);
 		} else if(packet.getOpcode() == FRIEND_REMOVE) {
 			long friend = packet.getLong();
-			player.getFriends().remove(friend);
-
+			FriendsAssistant.removeFriend(player, friend);
 		} else if(packet.getOpcode() == IGNORE_ADD) {
 			long g = packet.getLong();
 			FriendsAssistant.addIgnore(player, g);
-
 		} else if(packet.getOpcode() == IGNORE_REMOVE) {
 			long g = packet.getLong();
-			//FriendsAssistant.removeIgnore(player,g);
+			FriendsAssistant.removeIgnore(player, g);
+		} else if(packet.getOpcode() == UPDATE_CHAT_OPTIONS) {
+			player.chatStatus[0] = packet.get();
+			player.chatStatus[1] = packet.get();
+			player.chatStatus[2] = packet.get();
+			System.out.println("Friendstatus: " + player.chatStatus[1]);
+			FriendsAssistant.refreshGlobalList(player, player.chatStatus[1] == 2);
 		}
 	}
 

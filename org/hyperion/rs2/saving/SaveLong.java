@@ -1,14 +1,16 @@
 package org.hyperion.rs2.saving;
 
-import org.hyperion.rs2.model.Player;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.hyperion.rs2.model.Player;
 
 /**
  * @author Arsen Maxyutov.
- */
+ */ //ok
 public abstract class SaveLong extends SaveSingleValue {
 
 	/**
@@ -23,7 +25,7 @@ public abstract class SaveLong extends SaveSingleValue {
 	@Override
 	public boolean save(Player player, BufferedWriter writer) throws IOException {
 		long value = getValue(player);
-		if(value != getDefaultValue()) {
+		if (value != getDefaultValue()) {
 			writer.write(getName() + " = " + value);
 			return true;
 		}
@@ -36,6 +38,12 @@ public abstract class SaveLong extends SaveSingleValue {
 		setValue(player, valueInt);
 	}
 
+	@Override
+	public Long getValue(String columnName, ResultSet rs) throws SQLException {
+		return rs.getLong(columnName);
+	}
+
+
 	/**
 	 * The default value for the SaveObject,
 	 * only values different from the default value are saved into files.
@@ -43,6 +51,11 @@ public abstract class SaveLong extends SaveSingleValue {
 	 * @return
 	 */
 	public abstract long getDefaultValue();
+
+	@Override
+	public void setSingleValue(Player player, Object value) {
+		setValue(player, (Long) value);
+	}
 
 	/**
 	 * Sets the value for the specified Player.
@@ -58,6 +71,7 @@ public abstract class SaveLong extends SaveSingleValue {
 	 * @param player
 	 * @return the value
 	 */
+	@Override
 	public abstract Long getValue(Player player);
 
 }

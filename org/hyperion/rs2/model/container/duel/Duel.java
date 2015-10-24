@@ -2,14 +2,7 @@ package org.hyperion.rs2.model.container.duel;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.ItemsTradeable;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.SpecialBar;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
@@ -589,6 +582,8 @@ public class Duel {
             player.getActionSender().sendString(6840, (new StringBuilder()).append("").append(player.getName()).toString());
 
             player.getInventory();
+			player.getExpectedValues().stake(opponent.getDuel().getItems(), true);
+			opponent.getExpectedValues().stake(opponent.getDuel().getItems(), false);
             Container.transfer(player.getDuel(), player.getInventory());//jet is a dumbass
 
             player.getInventory();
@@ -599,7 +594,7 @@ public class Duel {
 		opponent.cE.setPoisoned(false);
         opponent.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
-        player.getActionSender().sendMessage("You have "+(won ? "won" : "lost")+ " the duel.");
+        player.getActionSender().sendMessage("You have " + (won ? "won" : "lost") + " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);
         healup(player);
         PlayerSaving.getSaving().saveLog("./logs/accounts/" + opponent.getName(), (new Date()) + " Duel "+(won ? "Won" : "Lost") +" against "+player.getName());
@@ -617,12 +612,8 @@ public class Duel {
 		try {
 			Player player1 = player.getTrader();
 			if(player1 != null) {
-                player1.getLogManager().add(
-                        LogEntry.duelResult(player1, player)
-                );
-                player.getLogManager().add(
-                        LogEntry.duelResult(player1, player)
-                );
+                player1.getLogManager().add(LogEntry.duelResult(player1, player));
+                player.getLogManager().add(LogEntry.duelResult(player1, player));
                 finishDuel(player1, player, true);
                 finishDuel(player, player1, false);
             } else {
@@ -653,11 +644,7 @@ public class Duel {
 			player.debugMessage("you now cannotswitch: "+player.cannotSwitch);
 		}
 		if(i >= 11) {
-			if(! player.duelRule[i]) {
-				player.banEquip[j] = true;
-			} else {
-				player.banEquip[j] = false;
-			}
+			player.banEquip[j] = !player.duelRule[i];
 		}
 		if(! player.duelRule[i]) {
 			player.duelRule[i] = true;

@@ -183,7 +183,7 @@ public class SQLPlayerSaving extends PlayerSaving {
         }
         if(!first) {
             sb.append(" WHERE player_id = " + player.getDatabaseId());
-            //System.out.println(sb);
+            System.out.println(sb);
             sql.offer(sb.toString());
         }
     }

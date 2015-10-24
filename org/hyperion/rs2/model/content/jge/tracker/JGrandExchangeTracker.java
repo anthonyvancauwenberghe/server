@@ -43,28 +43,28 @@ public class JGrandExchangeTracker {
 
     public void selectItem(final int itemId, final Entry.Type type){
         ifNewEntry(e -> {
-            if(e.type() != type){
+            if (e.type() != type) {
                 player.sendf("You are not %s an item!", type);
                 return;
             }
             final ItemDefinition definition = ItemDefinition.forId(itemId);
-            if(definition == null){
+            if (definition == null) {
                 player.sendf("Invalid item: %d", itemId);
                 return;
             }
-            if(ItemSpawning.canSpawn(itemId)){
+            if (ItemSpawning.canSpawn(itemId)) {
                 player.sendf("Spawnables aren't allowed in the Grand Exchange!");
                 return;
             }
-            if(!ItemsTradeable.isTradeable(itemId)){
+            if (!ItemsTradeable.isTradeable(itemId)) {
                 player.sendf("Non-tradeables aren't allowed in the Grand Exchange");
                 return;
             }
-            if(ItemInfo.geBlacklist.check(player, definition))
+            if (ItemInfo.geBlacklist.check(player, definition))
                 return;
-            if(e.itemId(itemId)){
+            if (e.itemId(itemId)) {
                 e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency()), false);
-                if(e.itemQuantity() < 1){
+                if (e.itemQuantity() < 1) {
                     e.itemQuantity(1, false);
                     JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
                 }
@@ -525,5 +525,50 @@ public class JGrandExchangeTracker {
                 return true;
             default: return false;
         }
+    }
+
+
+    public static boolean isGrandExchangeAction(int id) {
+        switch(id) {
+            case SLOT_1_BUY:
+            case SLOT_1_SELL:
+            case SLOT_1_VIEW:
+            case SLOT_2_BUY:
+            case SLOT_2_SELL:
+            case SLOT_2_VIEW:
+            case SLOT_3_BUY:
+            case SLOT_3_SELL:
+            case SLOT_3_VIEW:
+            case SLOT_4_BUY:
+            case SLOT_4_SELL:
+            case SLOT_4_VIEW:
+            case SLOT_5_BUY:
+            case SLOT_5_SELL:
+            case SLOT_5_VIEW:
+            case SLOT_6_BUY:
+            case SLOT_6_SELL:
+            case SLOT_6_VIEW:
+            case BACK:
+            case DECREASE_QUANTITY:
+            case INCREASE_QUANTITY:
+            case INCREASE_QUANTITY_1:
+            case INCREASE_QUANTITY_10:
+            case INCREASE_QUANTITY_100:
+            case INCREASE_QUANTITY_500:
+            case ENTER_QUANTITY:
+            case DECREASE_PRICE:
+            case INCREASE_PRICE:
+            case DECREASE_PRICE_PERCENT:
+            case EQUATE_PRICE:
+            case ENTER_PRICE:
+            case INCREASE_PRICE_PERCENT:
+            case CONFIRM:
+            case CANCEL:
+            case CLAIM_PROGRESS_SLOT:
+            case CLAIM_RETURN_SLOT:
+            case VIEW_BACK:
+            return true;
+        }
+            return false;
     }
 }

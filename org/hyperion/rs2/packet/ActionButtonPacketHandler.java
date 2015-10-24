@@ -16,8 +16,10 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
+import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.sets.SetHandler;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.sql.requests.GrandExchangeRequest;
 
 import java.util.LinkedList;
 
@@ -69,8 +71,11 @@ public class ActionButtonPacketHandler implements PacketHandler {
         if(AchievementHandler.achievementButton(player, button)) {
             return;
         }
-		if(player.getGrandExchangeTracker().handleInterfaceInteraction(button))
+		if(JGrandExchangeTracker.isGrandExchangeAction(button)) {
+			World.getWorld().getLogsConnection().offer(new GrandExchangeRequest(player, button));
 			return;
+		}
+
 		switch(button) {
 			case 28887:
 				player.getActionSender().removeAllInterfaces();

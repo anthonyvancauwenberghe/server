@@ -81,7 +81,7 @@ public class ActionSender {
 
     static {
         try {
-            LAST_PASS_RESET = dateFormat.parse("10-09-2015");
+            LAST_PASS_RESET = dateFormat.parse("24-10-2015");
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -262,7 +262,7 @@ public class ActionSender {
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
             player.sendMessage("@dre@[Free]@bla@ Donator points & Pk tickets: @blu@ http://j.mp/youtubecamp#url#");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
-            //passChangeShit();
+            passChangeShit();
 
 
         }

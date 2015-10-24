@@ -14,7 +14,7 @@ import java.util.Date;
 public class Article {
     private Date date;
     private String title, link, content;
-
+//test
     public Article(Date date, String link, String title, String content) {
         this.date = date;
         this.link = link;

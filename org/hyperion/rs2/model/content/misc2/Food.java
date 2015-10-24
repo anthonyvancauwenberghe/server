@@ -185,7 +185,7 @@ public class Food implements ContentTemplate {
 
 				player.getSpecBar().increment(SpecialBar.FULL / 2);
 				player.getSpecBar().sendSpecAmount();
-				player.specPotionTimer = System.currentTimeMillis();;
+				player.specPotionTimer = System.currentTimeMillis();
 				break;
             case 17652:
                 if(player.getExtraData().get(PrayerRenwalEvent.KEY) != null) {
@@ -217,6 +217,7 @@ public class Food implements ContentTemplate {
 			else
 				ContentEntity.startAnimation(player, ANIMATION_DRINK_ID);
 
+		player.getExpectedValues().removeItemFromInventory("Potion drinking", Item.create(id));
 		ContentEntity.deleteItem(player, id, slot, 1);
 
 		if(foodItem.getNewId() != - 1) {

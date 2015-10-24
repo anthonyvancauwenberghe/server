@@ -5,11 +5,6 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.SQLRequest;
 import org.hyperion.util.Misc;
@@ -19,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Arsen Maxyutov.
@@ -186,8 +180,6 @@ public class VoteRequest extends SQLRequest {
                 if (rs.getDate("timestamp").toString().equalsIgnoreCase(FORMAT_SQL.format(Calendar.getInstance().getTime()).toString())) {
                     if (rs.getByte("runelocus") == 1)
                         runelocus = true;
-                    if (rs.getByte("topg") == 1)
-                        topg = true;
                     if (rs.getByte("rspslist") == 1)
                         rspslist = true;
                 } else {
@@ -242,7 +234,7 @@ public class VoteRequest extends SQLRequest {
 
         //If the player voted for all 3 websites today he'll receive the bonus & they get the streak bonus, depending on the streak we just calculated.
         //It will also check if he didn't receive the streak yet today
-        if (runelocus && topg && rspslist && !FORMAT_PLAYER.format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
+        if (runelocus && rspslist && !FORMAT_PLAYER.format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", FORMAT_PLAYER.format(Calendar.getInstance().getTime()));
             player.getPermExtraData().put("todayVoted", 0);
             player.getAchievementTracker().voted();
@@ -276,16 +268,14 @@ public class VoteRequest extends SQLRequest {
             if (!runelocus)
                 sb.append("Runelocus & ");
             if (!rspslist)
-                sb.append("RSPSList & ");
-            if (!topg)
-                sb.append("TopG");
+                sb.append("RSPSList");
             if (sb.toString().endsWith(" & ")) {
                 sb.replace(sb.length() - 3, sb.length(), "");
             }
             sb.append(".");
         }
 
-        if (!runelocus || !rspslist || !topg) {
+        if (!runelocus || !rspslist) {
             player.sendf(
                     "Alert##Thank you for voting!##You received %d voting point(s)##Remember to vote on all 3 sites to %s streak!##%s",
                     votingPoints, currentStreak != 0 ? "keep your" : "get a", sb.toString());

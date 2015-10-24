@@ -5,7 +5,6 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.net.ActionSender;
 
 public class Tutorial implements ContentTemplate {
@@ -20,10 +19,13 @@ public class Tutorial implements ContentTemplate {
         }
     }
 
+    public static Item[] rewards = {new Item(15273, 100), new Item(6570), new Item(10551)};
+
     public static void giveReward(Player player) {
-        player.getInventory().add(new Item(15273, 100));
-        player.getInventory().add(new Item(6570));
-        player.getInventory().add(new Item(10551));
+        for(Item item : rewards) {
+            player.getExpectedValues().addItemtoInventory("Tutorial", item);
+            player.getInventory().add(item);
+        }
     }
 
     @Override

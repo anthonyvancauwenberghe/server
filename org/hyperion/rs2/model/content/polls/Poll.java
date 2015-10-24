@@ -80,7 +80,7 @@ public class Poll {
     }
 
     public String getDescription() {
-        return Misc.wrapString(description, 45);
+        return Misc.wrapString(description, 40);
     }
 
     public boolean canChange() {

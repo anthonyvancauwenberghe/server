@@ -124,7 +124,7 @@ public class QuestTab {
 
     public void sendUptime() {
         int id = getId(4);
-        player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : (Events.eventName == "" ? "" : "@or1@Event: @gre@" + (Events.eventName.length() > 15 ? Events.eventName.substring(0, 15) + "." : Events.eventName)), id);
+        player.getActionSender().sendString((Rank.hasAbility(player, Rank.ADMINISTRATOR) && Events.eventName == "") ? "@or1@Uptime: @gre@" + Server.getUptime() : (Events.eventName == "" ? "" : "@or1@Event: @gre@" + (Events.eventName.length() > 20 ? Events.eventName.substring(0, 20) + "." : Events.eventName)), id);
         player.getActionSender().sendTooltip(id, (Events.eventName == "" ? "" : "Teleport to event"));
     }
 

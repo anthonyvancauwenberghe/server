@@ -56,7 +56,6 @@ import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
 import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.SQLUtils;
 import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.sql.requests.QueryRequest;
@@ -830,7 +829,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input)
 					throws Exception {
-				PlayerSaving.getSaving().saveSQL(player);
+				//PlayerSaving.getSaving().saveSQL(player);
 				return false;
 			}
 

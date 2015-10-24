@@ -3,7 +3,6 @@ package org.hyperion.rs2.saving;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Inventory;
@@ -665,7 +664,7 @@ public class PlayerSaving {
                     return;
                 }
 			}
-			World.getWorld().getSQLSaving().load(player);
+			//World.getWorld().getSQLSaving().load(player);
 			in.close();
 			player.getHighscores();
 		} catch(IOException e) {

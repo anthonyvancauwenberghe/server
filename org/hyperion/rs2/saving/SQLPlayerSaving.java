@@ -1,26 +1,16 @@
 package org.hyperion.rs2.saving;
 
+import org.hyperion.rs2.model.Password;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.sql.SQLConnection;
+import org.hyperion.rs2.util.PasswordEncryption;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.container.Container.Type;
-import org.hyperion.rs2.net.LoginDebugger;
-import org.hyperion.rs2.saving.SavedSingleValue;
-import org.hyperion.rs2.sql.SQLConnection;
-import org.hyperion.rs2.sql.SQLRequest;
-import org.hyperion.rs2.util.PasswordEncryption;
 
 /**
  *
@@ -131,6 +121,7 @@ public class SQLPlayerSaving extends PlayerSaving {
      * @return
      */
     public boolean save(Player player) {
+        /*
         long start = System.nanoTime();
         try {
             saveSingleValues(player);
@@ -140,6 +131,7 @@ public class SQLPlayerSaving extends PlayerSaving {
         long delta = System.nanoTime() - start;
         if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
             System.out.println("Save Delta: " + delta + " nanoseconds.");
+            */
         return true;
     }
 

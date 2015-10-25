@@ -892,7 +892,9 @@ public class ActionSender {
 
                         final IPChange change = (IPChange) hack;
 
-                        String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
+                        String shortest = change.ip;
+                        shortest = shortest.replaceAll("/", "");
+                        shortest = shortest.substring(0, shortest.indexOf(".", shortest.indexOf(".") + 1));
                         if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
 
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
@@ -902,7 +904,9 @@ public class ActionSender {
                             break;
                         }
 
-                        shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
+                        shortest = change.newIp;
+                        shortest = shortest.replaceAll("/", "");
+                        shortest = shortest.substring(0, shortest.indexOf(".", shortest.indexOf(".") + 1));
 
                         if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
 

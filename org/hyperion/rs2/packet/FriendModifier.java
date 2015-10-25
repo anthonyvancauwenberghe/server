@@ -38,7 +38,8 @@ public class FriendModifier implements PacketHandler {
 			String ownerName = Server.getConfig().getString("owner");
 
 			final Player playerTo = World.getWorld().getPlayer(name);
-			if((playerTo.chatStatus[1] == 2 && !Rank.isStaffMember(player)) || playerTo == null || playerTo.chatStatus==null)
+			//null check b4 use
+			if (playerTo == null || playerTo.chatStatus == null || (playerTo.chatStatus[1] == 2 && !Rank.isStaffMember(player)))
 				return;
 
 			if(name.equalsIgnoreCase(ownerName)) {

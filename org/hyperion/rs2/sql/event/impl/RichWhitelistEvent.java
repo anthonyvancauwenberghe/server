@@ -29,6 +29,7 @@ public class RichWhitelistEvent extends SQLEvent {
         if(!enabled)
             this.stop();
         sql.offer(new RichWhitelistRequest());
+        super.updateStartTime();
     }
 
     static {

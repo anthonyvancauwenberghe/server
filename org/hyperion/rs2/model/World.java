@@ -66,7 +66,7 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.saving.SQLPlayerSaving;
+//import org.hyperion.rs2.saving.SQLPlayerSaving;
 import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
@@ -453,7 +453,7 @@ public class World {
             playersSQL.init();
 
 
-            sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
+            //sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
 
 
             //LocalServerSQLConnection.init();
@@ -474,9 +474,9 @@ public class World {
         }
     }
 
-    private SQLPlayerSaving sqlSaving;
+   /* private SQLPlayerSaving sqlSaving;
 
-    public SQLPlayerSaving getSQLSaving() {
+   public SQLPlayerSaving getSQLSaving() {
         return sqlSaving;
     }
 	/*

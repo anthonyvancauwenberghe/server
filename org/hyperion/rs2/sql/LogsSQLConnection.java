@@ -30,7 +30,7 @@ public class LogsSQLConnection extends MySQLConnection {
         establishConnection();
         submit(new LogPlayercountEvent());
         submit(new LogServerWealthEvent());
-        offer(new LoadAllPolls());
+        //offer(new LoadAllPolls());
         if(Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             submit(new BetaServerEvent());
             offer(new BetaRequest());

@@ -23,7 +23,7 @@ public class SpecialAreaHolder {
         map = new HashMap<>();
         map.put("purepk", new PurePk());
         map.put("newgamepk", new NewGamePK());
-        //map.put("hybrid", new HybridZone());
+        map.put("hybrid", new HybridZone());
         map.put("ospk", new OSPK());
 
         for(final Map.Entry<String, SpecialArea> area : map.entrySet()) {

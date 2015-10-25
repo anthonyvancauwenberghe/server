@@ -16,7 +16,6 @@ import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
@@ -1419,7 +1418,7 @@ public class Magic {
 	
 	public static void goTo13s(final Player player) {
 		if(canGoTo13s(player)) {
-			teleport(player, HybridZone.LOCATION, false);
+			SpecialAreaHolder.get("hybrid").ifPresent(area -> area.enter(player));
 		} else {
 			player.sendImportantMessage("You have to be on the Ancient Spellbooks to go to 13s");
 			player.sendImportantMessage("You cannot bring Divine or Elysian Spirit Shields with you here");

@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class HybridZone extends NIGGERUZ {
 
-    public static final Location LOCATION = Location.create(2975, 3604, 4);
-
     private final Point cornerSW = new Point(2970, 3605),
     cornerNE = new Point(2983, 3616);
 

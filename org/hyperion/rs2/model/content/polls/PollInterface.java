@@ -91,6 +91,8 @@ public class PollInterface {
     }
 
     public void openInterface() {
+        if(!enabled)
+            return;
         Poll.removeInactivePolls();
         if (Poll.getPolls().isEmpty()) {
             player.sendMessage("There are currently no polls going.");

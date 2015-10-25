@@ -19,20 +19,20 @@ public class ClanWarHolder {
 
     public enum ClanWarRule {
 
-        NO_REJOIN{
+        NO_REJOIN(1) {
             @Override
             public boolean join(final Player player, final ClanWarHolder holder) {
                 return holder.hasDied(player);
             }
         },
-        NEW_MEMBERS_ALLOWED {
+        NEW_MEMBERS_ALLOWED(1 << 1) {
             @Override
             public boolean join(final Player player, final ClanWarHolder holder) {
                 return super.join(player, holder) && holder.inOriginal(player);
             }
 
         },
-        DROP_ITEMS_ON_DEATH {
+        DROP_ITEMS_ON_DEATH(1 << 2) {
             @Override
             public boolean leave(final Player player, final ClanWarHolder holder) {
                 if(player.isDead()) {
@@ -42,12 +42,37 @@ public class ClanWarHolder {
             }
         };
 
+        private final int removeMask;
+        private final int bitmask;
+
+        ClanWarRule(int bitmask, int... removeMasks) {
+            this.bitmask = bitmask;
+            int r = 0;
+            if (removeMasks != null) {
+                for (int i : removeMasks) {
+                    r |= i;
+                }
+            }
+            this.removeMask = r;
+
+        }
+
         public boolean join(final Player player, final ClanWarHolder holder) {
             return !holder.getWar().started();
         }
 
         public boolean leave(final Player player, final ClanWarHolder holder) {
             return true;
+        }
+
+        public int addRule(int flag) {
+            flag |= bitmask;
+            flag &= ~removeMask;
+            return flag;
+        }
+
+        public int removeRule(int flag) {
+            return flag & ~bitmask;
         }
 
     }

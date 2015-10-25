@@ -340,7 +340,7 @@ public class Location {
 		return x >= 3072 && y >= 3519 && x <= 3108 && y <= 3543;
 	}
 	public boolean disabledRange() {
-		return ((HybridZone)SpecialAreaHolder.get("hybrid").get()).inTheWild(this);
+		return HybridZone.LOCATION.distance(this) < 25;
 	}
 	public static boolean inAttackableArea(Player player) {
 		if(player == null || player.cE == null)

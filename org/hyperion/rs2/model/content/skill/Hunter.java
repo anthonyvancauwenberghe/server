@@ -236,9 +236,6 @@ public class Hunter implements ContentTemplate {
 							caught++;
 							p.getExtraData().put("impscaught", caught);
 							p.getActionSender().sendMessage("You have now caught " + caught + " implings!");
-							if(caught == 20) {
-								p.getActionSender().sendMessage("You can now go to Santa to receive your reward!");
-							}
 							addItem(p, NpcId);
 							addExp(p, NpcId);
 						}

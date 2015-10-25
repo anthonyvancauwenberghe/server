@@ -67,12 +67,12 @@ public class HunterNpcs {
 			}
 		}
 		if(caughtImp != null) {
-			caughtImp.setDead(true);
-			caughtImp.isHidden(true);
-			caughtImp.destroy();
 			synchronized(imps) {
 				imps.remove(caughtImp);
 			}
+			caughtImp.setDead(true);
+			caughtImp.isHidden(true);
+			caughtImp.destroy();
 			return true;
 		}
 		return false;

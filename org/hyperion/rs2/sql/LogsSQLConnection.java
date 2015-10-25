@@ -2,7 +2,6 @@ package org.hyperion.rs2.sql;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
-import org.hyperion.rs2.model.content.polls.LoadAllPolls;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.event.impl.LogPlayercountEvent;
 import org.hyperion.rs2.sql.event.impl.LogServerWealthEvent;

@@ -6,7 +6,9 @@ import org.hyperion.rs2.model.content.polls.LoadAllPolls;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.event.impl.LogPlayercountEvent;
 import org.hyperion.rs2.sql.event.impl.LogServerWealthEvent;
+import org.hyperion.rs2.sql.event.impl.RichWhitelistEvent;
 import org.hyperion.rs2.sql.requests.BetaRequest;
+import org.hyperion.rs2.sql.requests.RichWhitelistRequest;
 
 public class LogsSQLConnection extends MySQLConnection {
 
@@ -33,6 +35,8 @@ public class LogsSQLConnection extends MySQLConnection {
             submit(new BetaServerEvent());
             offer(new BetaRequest());
         }
+        submit(new RichWhitelistEvent());
+        offer(new RichWhitelistRequest());
         start();
         return true;
     }

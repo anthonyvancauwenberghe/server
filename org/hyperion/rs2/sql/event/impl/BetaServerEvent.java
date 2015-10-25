@@ -22,7 +22,6 @@ public class BetaServerEvent extends SQLEvent {
 
     public BetaServerEvent(){
         super(Time.FIVE_MINUTES);
-        System.out.println("BETA EVENT HAS STARTED. SERVER IS IN BETA MODE.");
     }
 
 

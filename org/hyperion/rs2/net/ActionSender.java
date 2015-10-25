@@ -35,9 +35,15 @@ import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
+import org.hyperion.rs2.sql.event.impl.RichWhitelistEvent;
 import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
@@ -51,6 +57,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A utility class for sending packets.
@@ -491,6 +498,21 @@ public class ActionSender {
                 player.getSession().close(false);
 
             betaChanges();
+        } else if(player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 50000) {
+            boolean whitelisted = false;
+            for (String name : RichWhitelistEvent.whitelist) {
+                if (player.getName().equalsIgnoreCase(name)) {
+                    whitelisted = true;
+                    break;
+                }
+            }
+            if (!whitelisted) {
+                PlayerSaving.getSaving().saveLog("./logs/abuse/hacks.log", new Date() + " Suspected hacker " + player.getSafeDisplayName());
+                Punishment punishment = new Punishment(player, Combination.of(Target.SPECIAL, org.hyperion.rs2.model.punishment.Type.BAN), org.hyperion.rs2.model.punishment.Time.create(365, TimeUnit.DAYS), "Suspected hacking");
+                punishment.apply();
+                PunishmentManager.getInstance().add(punishment);
+                punishment.insert();
+            }
         }
 
         if (player.doubleChar()) {

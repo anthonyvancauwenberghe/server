@@ -81,7 +81,7 @@ public class ActionSender {
 
     static {
         try {
-            LAST_PASS_RESET = dateFormat.parse("24-10-2015");
+            LAST_PASS_RESET = dateFormat.parse("26-10-2015");
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -922,11 +922,11 @@ public class ActionSender {
                     player.sendMessage("No unlock reason found!");
             }
 
-        } else if (player.getInitialSource() == GenericWorldLoader.ARTERO && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
-           /* player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
+        } else if (player.getInitialSource() == GenericWorldLoader.MERGED && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+            player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);
-            InterfaceManager.get(6).show(player);*/
+            InterfaceManager.get(6).show(player);
         }
     }
 

@@ -453,7 +453,7 @@ public class World {
             playersSQL.init();
 
 
-            sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
+            //sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
 
 
             //LocalServerSQLConnection.init();

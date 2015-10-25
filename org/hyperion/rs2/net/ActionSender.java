@@ -497,7 +497,7 @@ public class ActionSender {
                 player.getSession().close(false);
 
             betaChanges();
-        } else if(player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000) {
+        } else if(player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000 && RichWhitelistEvent.enabled) {
             boolean whitelisted = false;
             for (String name : RichWhitelistEvent.whitelist) {
                 if (player.getName().equalsIgnoreCase(name)) {

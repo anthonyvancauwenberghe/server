@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.content.polls;
 
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.packet.ActionsManager;
@@ -12,6 +14,7 @@ import java.text.SimpleDateFormat;
  */
 public class PollInterface {
 
+    private static boolean enabled = true;
     private static int INTERFACE_ID = 27500;
     private static SimpleDateFormat timeFormat = new SimpleDateFormat("dd/MM hh:mm");
 
@@ -88,6 +91,8 @@ public class PollInterface {
     }
 
     public void openInterface() {
+        if(!enabled)
+            return;
         Poll.removeInactivePolls();
         if (Poll.getPolls().isEmpty()) {
             player.sendMessage("There are currently no polls going.");
@@ -199,5 +204,24 @@ public class PollInterface {
             return;
         }
         poll.addNoVote(player);
+    }
+
+    static {
+        CommandHandler.submit(new Command("disablepolls") {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                PollInterface.enabled = false;
+                player.sendMessage("Polls are now disabled.");
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("enablepolls") {
+            @Override
+            public boolean execute(Player player, String input) throws Exception {
+                PollInterface.enabled = true;
+                player.sendMessage("Polls are now enabled.");
+                return true;
+            }
+        });
     }
 }

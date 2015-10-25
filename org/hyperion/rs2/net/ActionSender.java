@@ -890,7 +890,7 @@ public class ActionSender {
     public void passChangeShit() {
 
         if (player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")
-                && player.getCreatedTime() < LAST_PASS_RESET.getTime() && player.getInitialSource() == GenericWorldLoader.ARTERO) {
+                && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
             player.getExtraData().put("cantchangepass", true);
 
             if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
@@ -914,7 +914,8 @@ public class ActionSender {
 
                         final IPChange change = (IPChange) hack;
 
-                        String shortest = change.ip.substring(change.ip.indexOf("."), change.ip.indexOf(".") + 1);
+                        String shortest = change.ip.trim();
+                        shortest = shortest.substring(1, shortest.indexOf(".", shortest.indexOf(".") + 1));
                         if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
 
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
@@ -924,7 +925,8 @@ public class ActionSender {
                             break;
                         }
 
-                        shortest = change.newIp.substring(change.newIp.indexOf("."), change.newIp.indexOf(".") + 1);
+                        shortest = change.newIp.trim();
+                        shortest = shortest.substring(1, shortest.indexOf(".", shortest.indexOf(".") + 1));
 
                         if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
 
@@ -944,7 +946,7 @@ public class ActionSender {
                     player.sendMessage("No unlock reason found!");
             }
 
-        } else if (player.getInitialSource() == GenericWorldLoader.MERGED && player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+        } else if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);

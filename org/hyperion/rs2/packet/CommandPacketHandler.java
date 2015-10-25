@@ -732,7 +732,7 @@ public class CommandPacketHandler implements PacketHandler {
             player.getPoints().setEloRating(rating);
         }
         if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("spece")) {
-            String targetName = s.substring(6).trim();
+            String targetName = s.substring(7).trim();
             boolean found = false;
 
             if (tooCool4School.contains(targetName.toLowerCase())) {

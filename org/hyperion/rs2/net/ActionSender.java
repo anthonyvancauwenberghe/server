@@ -2,7 +2,6 @@ package org.hyperion.rs2.net;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.RefreshNewsEvent;
@@ -498,7 +497,7 @@ public class ActionSender {
                 player.getSession().close(false);
 
             betaChanges();
-        } else if(player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 50000) {
+        } else if(player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000) {
             boolean whitelisted = false;
             for (String name : RichWhitelistEvent.whitelist) {
                 if (player.getName().equalsIgnoreCase(name)) {

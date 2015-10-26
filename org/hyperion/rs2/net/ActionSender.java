@@ -87,7 +87,7 @@ public class ActionSender {
 
     static {
         try {
-            LAST_PASS_RESET = dateFormat.parse("25-10-2015");
+            LAST_PASS_RESET = dateFormat.parse("26-10-2015");
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

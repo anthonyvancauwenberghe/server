@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class RichWhitelistEvent extends SQLEvent {
 
-    public static boolean enabled = true;
+    public static boolean enabled = false;
     public static List<String> whitelist = new ArrayList();
 
     public RichWhitelistEvent(){

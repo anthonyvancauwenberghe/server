@@ -266,7 +266,7 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            player.sendMessage("@dre@[Free]@bla@ Donator points & Pk tickets: @blu@ http://j.mp/youtubecamp#url#");
+            player.sendMessage("@dre@Halloween event: @bla@2x Experience, 1.5x PvM tokens & 1.5x Dung tokens!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 

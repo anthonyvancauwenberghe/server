@@ -185,7 +185,7 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if (tokens <= 0)
-                        tokens = Misc.random(12) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
+                        tokens = Misc.random(9/*12*/) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
                     if (tokens > 0 && npc.getDefinition().getId() != 5399) {
 
                         {
@@ -207,7 +207,7 @@ public class NpcDeathEvent extends Event {
 
                 if (kills % 1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
-                    player.sendf("For this milestone, you recieve @dre@%d@bla@ PvM Tokens", add.getCount());
+                    player.sendf("For this milestone, you receive @dre@%d@bla@ PvM Tokens", add.getCount());
                     if (!player.getInventory().add(add))
                         player.getBank().add(add);
                 }

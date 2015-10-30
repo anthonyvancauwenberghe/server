@@ -350,7 +350,7 @@ public class Skills {
      * @return The level.
      */
     public int getLevel(int skill) {
-        return (int) levels[skill];
+        return levels[skill];
     }
 
     /**
@@ -547,7 +547,7 @@ public class Skills {
             player.getPermExtraData().remove("doubleExperience");
         }
 
-        if (skill == BONUS_SKILL)
+        if (/*skill == BONUS_SKILL*/true)
             exp *= 2;
         else if (skill > 6 && player.getPermExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getPermExtraData().getLong("doubleExperience") != 0)
             exp *= 2;

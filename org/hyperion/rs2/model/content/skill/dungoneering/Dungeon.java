@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.DungeoneeringFloorsTask;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -92,7 +91,7 @@ public class Dungeon {
             final int xp = (int) ((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
             int tokens = xp / 30;
             player.getSkills().addExperience(Skills.DUNGEONEERING, xp);
-            player.getDungeoneering().setTokens(player.getDungeoneering().getTokens() + tokens);
+            player.getDungeoneering().setTokens(player.getDungeoneering().getTokens() + (int)(tokens * 1.5));
 
             player.getAchievementTracker().dungFloorCompleted(DungeoneeringFloorsTask.Difficulty.valueOf(difficulty.name()),
                     DungeoneeringFloorsTask.Size.valueOf(size.name()));

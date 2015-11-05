@@ -43,9 +43,13 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.cmd.*;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
@@ -68,6 +72,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -2186,6 +2191,99 @@ public class CommandHandler {
 					return false;
 				}
 				player.getGrandExchangeTracker().openInterface(target.getGrandExchangeTracker().entries);
+				return true;
+			}
+		});
+
+		submit(new Command("setverifycode", Rank.DEVELOPER){
+			public boolean execute(final Player player, final String input) throws Exception {
+				final String[] split = filterInput(input).trim().split(",");
+				if(split.length != 2){
+					player.sendf("::setverifycode target,code (code is trimmed so don't worry about leading and trailing spaces after comma)");
+					return false;
+				}
+				final String targetName = split[0].trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding player: %s", targetName);
+					return false;
+				}
+				final String code = split[1].trim();
+				if(code.isEmpty()){
+					player.sendf("Code cannot be empty! use ::removeverifycode player_name to remove code");
+					return false;
+				}
+				target.verificationCode = code;
+				player.sendf("%s now has a veriification code of: %s", target.getName(), code);
+				return true;
+			}
+		});
+
+		submit(new Command("getverifycode", Rank.DEVELOPER){
+			public boolean execute(final Player player, final String input) throws Exception {
+				final String targetName = filterInput(input).trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding %s", targetName);
+					return false;
+				}
+				if(target.verificationCode == null || target.verificationCode.isEmpty()){
+					player.sendf("%s does not have a verification code", target.getName());
+					return false;
+				}
+				player.sendf("%s has a verification code of: %s", target.getName(), target.verificationCode);
+				return true;
+			}
+		});
+
+		submit(new Command("removeverifycode", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				final String targetName = filterInput(input).trim();
+				final Player target = World.getWorld().getPlayer(targetName);
+				if(target == null){
+					player.sendf("Error finding %s", targetName);
+					return false;
+				}
+				if(target.verificationCode == null || target.verificationCode.isEmpty()){
+					player.sendf("%s does not have a verification code", target.getName());
+					return false;
+				}
+				target.verificationCode = "";
+				player.sendf("Removed %s's verification code", target.getName());
+				return true;
+			}
+		});
+
+		submit(new Command("verify", Rank.PLAYER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				final String code = filterInput(input).trim();
+				if(player.verificationCode == null || player.verificationCode.isEmpty()){
+					player.sendf("You don't have a verification code - you can request one from an administrator");
+					return false;
+				}
+				if(player.verificationCodeEntered){
+					player.sendf("You are already verified");
+					return false;
+				}
+				if(!player.verificationCode.equals(code)){
+					player.sendf("Invalid verification code");
+					if(--player.verificationCodeAttemptsLeft == 0){
+						for(final Target target : new Target[]{Target.IP, Target.MAC, Target.SPECIAL}){
+							final Punishment ban = Punishment.create("Server", player, Combination.of(target, Type.BAN), Time.create(1, TimeUnit.DAYS), "Too many failed verification attempts");
+							PunishmentManager.getInstance().add(ban);
+							ban.apply();
+							ban.insert();
+						}
+						return true;
+					}else{
+						player.sendf("You have %,d attempts left to verify", player.verificationCodeAttemptsLeft);
+						return false;
+					}
+				}
+				player.sendf("Successfully verified");
+				player.verificationCodeEntered = true;
 				return true;
 			}
 		});

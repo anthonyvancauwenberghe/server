@@ -15,8 +15,10 @@ public class SaveVerifyCode extends SaveString{
     }
 
     @Override
-    public void setValue(final Player player, final String value) {
+    public void setValue(final Player player, String value) {
+        if(value == null || value.equalsIgnoreCase("null"))
+            value = "";
         player.verificationCode = value;
-        player.verificationCodeEntered = value == null || value.isEmpty();
+        player.verificationCodeEntered = value.isEmpty();
     }
 }

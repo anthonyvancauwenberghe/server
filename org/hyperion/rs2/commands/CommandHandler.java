@@ -2195,7 +2195,7 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command("setverifycode", Rank.DEVELOPER){
+		submit(new Command("setverifycode", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String[] split = filterInput(input).trim().split(",");
 				if(split.length != 2){
@@ -2206,6 +2206,10 @@ public class CommandHandler {
 				final Player target = World.getWorld().getPlayer(targetName);
 				if(target == null){
 					player.sendf("Error finding player: %s", targetName);
+					return false;
+				}
+				if(Rank.isStaffMember(target) && !Rank.hasAbility(player, Rank.DEVELOPER)){
+					player.sendf("You can't do this on staff members");
 					return false;
 				}
 				final String code = split[1].trim();
@@ -2219,12 +2223,16 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command("getverifycode", Rank.DEVELOPER){
+		submit(new Command("getverifycode", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String targetName = filterInput(input).trim();
 				final Player target = World.getWorld().getPlayer(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
+					return false;
+				}
+				if(Rank.isStaffMember(target) && !Rank.hasAbility(player, Rank.DEVELOPER)){
+					player.sendf("You can't do this on staff members");
 					return false;
 				}
 				if(target.verificationCode == null || target.verificationCode.isEmpty()){
@@ -2236,13 +2244,17 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command("removeverifycode", Rank.DEVELOPER){
+		submit(new Command("removeverifycode", Rank.ADMINISTRATOR){
 			@Override
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String targetName = filterInput(input).trim();
 				final Player target = World.getWorld().getPlayer(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
+					return false;
+				}
+				if(Rank.isStaffMember(target) && !Rank.hasAbility(player, Rank.DEVELOPER)){
+					player.sendf("You can't do this on staff members");
 					return false;
 				}
 				if(target.verificationCode == null || target.verificationCode.isEmpty()){

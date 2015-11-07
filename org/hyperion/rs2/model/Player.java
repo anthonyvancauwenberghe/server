@@ -2566,6 +2566,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private int startValue = -1;
 
 	public String verificationCode = "";
-	public boolean verificationCodeEntered;
+	public boolean verificationCodeEntered = truet;
 	public int verificationCodeAttemptsLeft = 3;
 }

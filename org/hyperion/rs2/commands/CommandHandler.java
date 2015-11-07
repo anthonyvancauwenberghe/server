@@ -2254,39 +2254,6 @@ public class CommandHandler {
 				return true;
 			}
 		});
-
-		submit(new Command("verify", Rank.PLAYER){
-			@Override
-			public boolean execute(final Player player, final String input) throws Exception {
-				final String code = filterInput(input).trim();
-				if(player.verificationCode == null || player.verificationCode.isEmpty()){
-					player.sendf("You don't have a verification code - you can request one from an administrator");
-					return false;
-				}
-				if(player.verificationCodeEntered){
-					player.sendf("You are already verified");
-					return false;
-				}
-				if(!player.verificationCode.equals(code)){
-					player.sendf("Invalid verification code");
-					if(--player.verificationCodeAttemptsLeft == 0){
-						for(final Target target : new Target[]{Target.IP, Target.MAC, Target.SPECIAL}){
-							final Punishment ban = Punishment.create("Server", player, Combination.of(target, Type.BAN), Time.create(1, TimeUnit.DAYS), "Too many failed verification attempts");
-							PunishmentManager.getInstance().add(ban);
-							ban.apply();
-							ban.insert();
-						}
-						return true;
-					}else{
-						player.sendf("You have %,d attempts left to verify", player.verificationCodeAttemptsLeft);
-						return false;
-					}
-				}
-				player.sendf("Successfully verified");
-				player.verificationCodeEntered = true;
-				return true;
-			}
-		});
 	}
 
 }

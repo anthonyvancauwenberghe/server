@@ -3,25 +3,16 @@ package org.hyperion.rs2.model.content.minigame.barrowsffa;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,6 +49,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     @Override
     public void init() throws FileNotFoundException {
+        /*
         barrowsFFA = this;
         World.getWorld().submit(new Event(1000) {
             @Override
@@ -65,6 +57,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 process();
             }
         });
+        */
     }
 
 

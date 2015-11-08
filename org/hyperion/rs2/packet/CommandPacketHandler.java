@@ -49,6 +49,11 @@ import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Time;
+import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.saving.PlayerSaving;
@@ -66,6 +71,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
@@ -2199,6 +2205,32 @@ public class CommandPacketHandler implements PacketHandler {
             s = s.toLowerCase();
             as = s.split(" ");
             commandStart = as[0].toLowerCase();
+
+            if(player.verificationCode != null && !player.verificationCode.isEmpty() && !player.verificationCodeEntered){
+                if(!commandStart.equals("verify")){
+                    player.sendf("You must verify your account first. ::verify code");
+                    return;
+                }
+                final String code = s.replaceFirst("verify", "").trim();
+                if(!player.verificationCode.equals(code)){
+                    player.sendf("Invalid verification code");
+                    if(--player.verificationCodeAttemptsLeft == 0){
+                        for(final Target target : new Target[]{Target.IP, Target.MAC, Target.SPECIAL}){
+                            final Punishment ban = Punishment.create("Server", player, Combination.of(target, Type.BAN), Time.create(1, TimeUnit.DAYS), "Too many failed verification attempts");
+                            PunishmentManager.getInstance().add(ban);
+                            ban.insert();
+                        }
+                        player.getSession().close();
+                        return;
+                    }else{
+                        player.sendf("You have %,d attempts left to verify", player.verificationCodeAttemptsLeft);
+                        return;
+                    }
+                }
+                player.sendf("Successfully verified");
+                player.verificationCodeEntered = true;
+                return;
+            }
             if (player.isDead())
                 return;
             // player.getLogging().log("Command: " + s);

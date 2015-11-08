@@ -467,8 +467,12 @@ public class ActionSender {
 
         player.getGrandExchangeTracker().notifyChanges(false);
 
-        if(player.verificationCode != null && !player.verificationCode.isEmpty())
-            player.sendf("Please verify your account. ::verify (code)");
+        if(player.verificationCode != null && !player.verificationCode.isEmpty()){
+            if(player.getLocation().inPvPArea())
+                player.verificationCodeEntered = true;
+            else
+                player.sendf("Please verify your account. ::verify (code)");
+        }
     }
 
     /**

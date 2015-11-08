@@ -268,7 +268,7 @@ public class MiningV2 implements ContentTemplate {
 					return;
 				}
 				if(player.getRandomEvent().skillAction(4)) {
-					this.stop();
+					this.stop2();
 					return;
 				}
 				if(cycleCount > 0) {

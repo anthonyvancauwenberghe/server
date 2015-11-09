@@ -46,7 +46,6 @@ public class PushMessage {
 	private final static String[] BAD = {
 		"bitch",
 		"asshole",
-		"ass",
 		"fucker",
 		"fuck",
 		"fuc",

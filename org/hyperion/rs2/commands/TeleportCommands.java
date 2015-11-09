@@ -153,7 +153,7 @@ public class TeleportCommands {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
                         return false;
                     }
-                    if(Rank.getPrimaryRank(target).ordinal() > Rank.getPrimaryRank(player).ordinal()) {
+                    if(!Rank.hasAbility(player, Rank.getPrimaryRank(target))) {
                         player.getActionSender().sendMessage("This player has a higher rank than you, you cannot teleport to them.");
                         target.getActionSender().sendMessage(player.getSafeDisplayName()+" tried teleporting you to them, you should ask them what they want.");
                         return false;

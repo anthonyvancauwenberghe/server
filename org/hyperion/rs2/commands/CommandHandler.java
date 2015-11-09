@@ -2218,7 +2218,9 @@ public class CommandHandler {
 					return false;
 				}
 				target.verificationCode = code;
-				player.sendf("%s now has a veriification code of: %s", target.getName(), code);
+				player.sendf("%s now has a verification code of: %s", target.getName(), code);
+				target.sendf("Your verification code is: %s", code);
+				target.sendf("Upon login you will need to \"::verify %s\" in order to unlock your account", code);
 				return true;
 			}
 		});
@@ -2263,6 +2265,7 @@ public class CommandHandler {
 				}
 				target.verificationCode = "";
 				player.sendf("Removed %s's verification code", target.getName());
+				target.sendf("Your verification code has been removed");
 				return true;
 			}
 		});

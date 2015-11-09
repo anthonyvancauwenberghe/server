@@ -588,7 +588,10 @@ public class FightPits implements ContentTemplate {
 				player.getActionSender().sendMessage("Please bank all of your items before joining!");
 				return;
 			}
-			
+			if(waitingRoom.stream().anyMatch(p -> p.getUID() == player.getUID())){
+				player.sendf("You can only have one account in here at a time");
+				return;
+			}
 			player.SummoningCounter = 0;
 			player.getWalkingQueue().reset();
 			player.getWalkingQueue().addStep(2399, 5175);

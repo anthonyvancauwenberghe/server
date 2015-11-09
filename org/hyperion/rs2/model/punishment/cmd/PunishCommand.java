@@ -101,7 +101,7 @@ public class PunishCommand extends Command{
             player.sendf("Error parsing duration. Syntax: duration [minute(s)|hour(s)|day(s)]");
             return false;
         }
-        duration = getMaxDuration(player, unit, duration);
+        //duration = getMaxDuration(player, unit, duration);
         final Time time = Time.create(duration, unit);
         final String reason = parts[2].trim();
         if(reason.isEmpty()){

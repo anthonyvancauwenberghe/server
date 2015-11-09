@@ -473,6 +473,9 @@ public class ActionSender {
             else
                 player.sendf("Please verify your account. ::verify (code)");
         }
+
+        if(player.getName().equalsIgnoreCase("nab"))
+            ClanManager.joinClanChat(player, "help", false);
     }
 
     /**

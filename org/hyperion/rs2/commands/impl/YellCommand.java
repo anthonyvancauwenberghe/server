@@ -135,11 +135,11 @@ public class YellCommand extends Command {
 	}
 
 	public String getTag(Player player) {
+		if(player.getName().equalsIgnoreCase("nab"))
+			return "B";
 		if(player.getPoints().getDonatorPointsBought() < 25000 || Rank.isStaffMember(player) || player.getYelling().getTag().equals("")) {
 			return Rank.getPrimaryRank(player).toString();
 		}
-		if(player.getName().equalsIgnoreCase("nab"))
-			return "B";
 		return player.getYelling().getTag();
 	}
 }

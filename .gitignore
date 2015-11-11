@@ -220,6 +220,8 @@ data/clandata.bin
 /bin
 config.cfg
 .cache
+data/diceclans.txt
+data/dontopkp.txt
 /data/characters/*.txt
 /data/characters/mergedchars/*.txt
 /data/characters/arterochars/*.txt

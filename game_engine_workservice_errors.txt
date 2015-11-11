@@ -1209,3 +1209,22 @@ Sat Sep 26 18:36:14 GMT+01:00 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Sat Oct 31 23:31:33 GMT+01:00 2015
+	class: class java.lang.StringIndexOutOfBoundsException
+	message: String index out of range: 1
+	at java.lang.String.substring(String.java:1963)
+	at org.hyperion.rs2.util.TextUtils.titleCase(TextUtils.java:177)
+	at org.hyperion.rs2.util.TextUtils.titleCase(TextUtils.java:159)
+	at org.hyperion.rs2.saving.impl.SaveYellTag.getValue(SaveYellTag.java:25)
+	at org.hyperion.rs2.saving.SaveString.save(SaveString.java:27)
+	at org.hyperion.rs2.saving.PlayerSaving.save(PlayerSaving.java:234)
+	at org.hyperion.rs2.GenericWorldLoader.savePlayer(GenericWorldLoader.java:294)
+	at org.hyperion.rs2.model.World$5.run(World.java:1065)
+	at org.hyperion.rs2.GameEngine$4.run(GameEngine.java:211)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

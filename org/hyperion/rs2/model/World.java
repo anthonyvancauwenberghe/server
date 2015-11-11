@@ -1038,7 +1038,7 @@ public class World {
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
 
-        BarrowsFFA.barrowsFFA.exit(player);
+       // BarrowsFFA.barrowsFFA.exit(player);
 
         // logger.info("Unregistered player : " + player + " [online=" +
         // players.size() + "]");

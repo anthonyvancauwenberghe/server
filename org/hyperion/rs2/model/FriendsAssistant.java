@@ -60,9 +60,9 @@ public class FriendsAssistant {
         final String text = TextUtils.pmText(chatTextSize, chatText);
         final String fromName = NameUtils.longToName(from);
         final Player fromPlayer = World.getWorld().getPlayer(fromName);
-		if(LogEntry.privateChat(fromName, p.getName(), text) !=null) {
-			fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
-		}
+		if(fromPlayer == null)
+			return;
+		fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
         p.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
         p.write(new PacketBuilder(196, Type.VARIABLE).putLong(from).putInt(lastChatId++).put((byte) rights).put(chatText, 0, chatTextSize).toPacket());
 	}

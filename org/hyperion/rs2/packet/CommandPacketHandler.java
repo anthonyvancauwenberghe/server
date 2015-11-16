@@ -49,11 +49,7 @@ import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
-import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.saving.PlayerSaving;
@@ -795,8 +791,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("checkhax")) {
             try {
-                String r = findCharString(s.substring(8).trim(), "Rank")
-                        .replaceAll("=", "").replaceAll("Rank", "").trim();
+                String r = findCharString(s.substring(8).trim(), "Rank").replaceAll("=", "").replaceAll("Rank", "").trim();
                 long rank = Long.parseLong(r);
                 if (Rank.hasAbility(rank, Rank.getPrimaryRank(player))) {
                     player.getActionSender().sendMessage("This does not work on staff with a higher or the same rank!");

@@ -142,8 +142,8 @@ public class AchievementTab {
                                 player.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
                                         Animation.FacialAnimation.HAPPY,
                                         achievement.tasks.size() < 1 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
-                                        achievement.tasks.size() < 2 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
-                                        achievement.tasks.size() < 3 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
+                                        achievement.tasks.size() < 2 ? achievement.tasks.get(0).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
+                                        achievement.tasks.size() < 3 ? achievement.tasks.get(1).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
                                         "" + buildPercentBar(average)
                                 );
                             }

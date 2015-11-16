@@ -927,7 +927,7 @@ public class DialogueManager {
 					player.getActionSender().sendDialogue("Sir", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT,
 							"I've assigned you "+player.getPvPTaskAmount()+" "+PvPTask.toString(player.getPvPTask())+"s to kill!");
 				} else {
-					player.getActionSender().sendDialogue("Sir", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT, 
+					player.getActionSender().sendDialogue("Sir", DialogueType.NPC, npc.getDefinition().getId() , FacialAnimation.DEFAULT,
 							"You still have "+player.getPvPTaskAmount()+" "+PvPTask.toString(player.getPvPTask())+"s to kill!");
 				}
 				player.getInterfaceState().setNextDialogueId(0, - 1); //exit

@@ -91,7 +91,7 @@ public class Dungeon {
             final int xp = (int) ((difficulty.xp * multiplier) * death_penalty * size_multi * team_penalty);
             int tokens = xp / 30;
             player.getSkills().addExperience(Skills.DUNGEONEERING, xp);
-            player.getDungeoneering().setTokens(player.getDungeoneering().getTokens());
+            player.getDungeoneering().setTokens(player.getDungeoneering().getTokens() + tokens);
 
             player.getAchievementTracker().dungFloorCompleted(DungeoneeringFloorsTask.Difficulty.valueOf(difficulty.name()),
                     DungeoneeringFloorsTask.Size.valueOf(size.name()));

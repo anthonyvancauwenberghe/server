@@ -43,13 +43,9 @@ import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.cmd.*;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
@@ -72,7 +68,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -1489,12 +1484,26 @@ public class CommandHandler {
         submit(new ViewChallengesCommand());
         submit(new CreateChallengeCommand());
 
-        submit(new Command("a3place", Rank.MODERATOR){
-            public boolean execute(final Player player, final String input){
-                Magic.teleport(player, 3108, 3159, 3, false);
-                return true;
-            }
-        });
+		submit(new Command("a3place", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 3108, 3159, 3, false);
+				return true;
+			}
+		});
+
+		submit(new Command("seanplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 3292, 3163, 2, false);
+				return true;
+			}
+		});
+
+		submit(new Command("joshplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 1891, 4523, 2, false);
+				return true;
+			}
+		});
 
         submit(new Command("getskill", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){

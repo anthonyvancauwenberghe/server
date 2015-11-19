@@ -61,7 +61,7 @@ public class GenericWorldLoader implements WorldLoader {
 					Password pass = MergedSaving.getMainPass(name);
 					if(pass.getRealPassword() == null)
 						code = LoginResult.INVALID_USER_OR_PASS;
-					else if (!pass.getRealPassword().equalsIgnoreCase(EncryptionStandard.encrypt(pd.getPassword(), Server.getCharFileEncryption().getKey()))) {
+					else if (!pass.getRealPassword().equalsIgnoreCase(/*EncryptionStandard.encrypt(*/pd.getPassword()))/*)*/ {
 						code = LoginResult.INVALID_USER_OR_PASS;
 					} else {
 						//MEANS everything went very well

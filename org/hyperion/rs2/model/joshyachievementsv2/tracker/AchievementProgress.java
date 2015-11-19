@@ -55,7 +55,7 @@ public class AchievementProgress{
 
     public String getTabString(){
         String color = "@red@";
-        System.out.println("progress size: " + progress.size());
+        //System.out.println("progress size: " + progress.size());
         if(progress.values().stream().anyMatch(atp -> atp.started() || atp.progress > 0))
             color = "@or1@";
         if(finished())

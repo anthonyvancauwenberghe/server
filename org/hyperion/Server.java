@@ -114,6 +114,7 @@ public class Server {
      * @param args The command line arguments.
      */
     public static void main(String[] args) throws Exception {
+        /*
         Console console = System.console();
         if (console == null) {
             logger.log(Level.WARNING, "Using default password.");
@@ -130,7 +131,7 @@ public class Server {
                 }
             }
         }
-
+*/
         long start = System.currentTimeMillis();
         new Thread(new CharFilesCleaner()).start();
         System.out.println("-- Starting " + NAME + "  -- " + UPDATE);

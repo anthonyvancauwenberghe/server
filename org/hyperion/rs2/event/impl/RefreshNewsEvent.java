@@ -8,12 +8,20 @@ import org.hyperion.rs2.util.rssfeed.ReadRss;
 import org.hyperion.util.Time;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Gilles on 2/10/2015.
  */
 public class RefreshNewsEvent extends Event {
+
+    static class NewsComparator implements Comparator<Article> {
+        @Override
+        public int compare(Article o1, Article o2) {
+            return o1.getDate().compareTo(o2.getDate());
+        }
+    }
 
     public static Article[] latestNews = new Article[3];
     public static long lastNewsChange = System.currentTimeMillis();
@@ -32,18 +40,12 @@ public class RefreshNewsEvent extends Event {
             news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
             news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
             news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
-
-            List<Date> dates = new ArrayList<>();
-            for (Article article : news) {
-                dates.add(article.getDate());
-            }
-            Collections.sort(dates);
+            news.sort(new NewsComparator().reversed());
             Article oldNews = latestNews[0];
 
-            for (Article article : news)
-                for(int i = 0; i < 3; i++)
-                    if (article.getDate().equals(dates.get(dates.size() - (i + 1))))
-                        latestNews[i] = article;
+            for(int i = 0; i < 3; i++) {
+                latestNews[i] = news.get(i);
+            }
 
             if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
                 for(Player player : World.getWorld().getPlayers()) {

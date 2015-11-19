@@ -14,7 +14,7 @@
                 <constraints>
                     <constraint class="org.hyperion.rs2.model.joshyachievementsv2.constraint.impl.LocationConstraint" desc="Between location (3265, 3299) and (3255, 3255)">
                         <area height="-1">
-                            <min x="3255" y="3255"/>
+                            <min x="3240" y="3255"/>
                             <max x="3265" y="3299"/>
                         </area>
                     </constraint>
@@ -54,22 +54,6 @@
         <rewards>
             <reward class="org.hyperion.rs2.model.joshyachievementsv2.reward.impl.ItemReward">
                 <item id="10551" preferInventory="false" quantity="1"/>
-            </reward>
-        </rewards>
-    </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="EASY" id="3" title="Farmer">
-        <instructions/>
-        <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 10 Weeds through Farming" id="0" preTaskId="0" skill="19" threshold="10">
-                <items>
-                    <item id="6055"/>
-                </items>
-                <constraints/>
-            </task>
-        </tasks>
-        <rewards>
-            <reward class="org.hyperion.rs2.model.joshyachievementsv2.reward.impl.SkillXpReward">
-                <skill id="19" xp="28000"/>
             </reward>
         </rewards>
     </achievement>
@@ -869,7 +853,7 @@
     <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="HARD" id="40" title="Master Thief">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000,000 Coins through Thieving" id="0" preTaskId="0" skill="17" threshold="100000000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 10,000,000 Coins through Thieving" id="0" preTaskId="0" skill="17" threshold="10000000">
                 <items>
                     <item id="617"/>
                     <item id="995"/>

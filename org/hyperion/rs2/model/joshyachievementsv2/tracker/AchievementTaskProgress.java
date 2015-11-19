@@ -53,10 +53,10 @@ public class AchievementTaskProgress{
     }
 
     public boolean finished(){
-        return startDate != null
+        return /*startDate != null
                 && finishDate != null
                 && finishDate.after(startDate)
-                && taskFinished();
+                &&*/ taskFinished();
     }
 
     public boolean taskFinished(){

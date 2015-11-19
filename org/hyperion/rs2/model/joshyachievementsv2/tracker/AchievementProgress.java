@@ -54,9 +54,12 @@ public class AchievementProgress{
     }
 
     public String getTabString(){
-        final String color = finished() ? "@gre@" :
-                progress.values().stream().anyMatch(AchievementTaskProgress::started) ? "@or1@" :
-                        "@red@";
+        String color = "@red@";
+        System.out.println("progress size: " + progress.size());
+        if(progress.values().stream().anyMatch(atp -> atp.started() || atp.progress > 0))
+            color = "@or1@";
+        if(finished())
+            color = "@gre@";
         return color + (achievement().title.length() <= 26 ? achievement().title : achievement().title.substring(0, 25).trim() + "...");
     }
 

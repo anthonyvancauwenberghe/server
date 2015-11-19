@@ -38,7 +38,7 @@ public class JGrandExchangeTracker {
 
         activeSlot = -1;
 
-        loadEntries();
+        //loadEntries();
     }
 
     public void selectItem(final int itemId, final Entry.Type type){

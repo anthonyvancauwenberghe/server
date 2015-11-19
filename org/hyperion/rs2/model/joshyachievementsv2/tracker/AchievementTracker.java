@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class AchievementTracker {
 
-    private static boolean active = false;
+    private static boolean active = true;
 
     private final Player player;
     private final Map<Integer, AchievementProgress> progress;
@@ -163,9 +163,9 @@ public class AchievementTracker {
             if (ap.tasksFinished()) {
                 player.sendLootMessage("Achievement", String.format("%s complete! Congratulations!", ap.achievement().title));
                 ap.achievement().rewards.reward(player);
-                player.getAchievementTab().updateAchievementTab();
             }
         }
+        player.getAchievementTab().updateAchievementTab();
         //updateInterface(ap.achievement());
     }
 

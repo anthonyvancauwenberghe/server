@@ -40,16 +40,13 @@ import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.cmd.*;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
@@ -72,7 +69,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jack Daniels.
@@ -1489,12 +1485,26 @@ public class CommandHandler {
         submit(new ViewChallengesCommand());
         submit(new CreateChallengeCommand());
 
-        submit(new Command("a3place", Rank.MODERATOR){
-            public boolean execute(final Player player, final String input){
-                Magic.teleport(player, 3108, 3159, 3, false);
-                return true;
-            }
-        });
+		submit(new Command("a3place", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 3108, 3159, 3, false);
+				return true;
+			}
+		});
+
+		submit(new Command("seanplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 3292, 3163, 2, false);
+				return true;
+			}
+		});
+
+		submit(new Command("joshplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 1891, 4523, 2, false);
+				return true;
+			}
+		});
 
         submit(new Command("getskill", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
@@ -2266,6 +2276,32 @@ public class CommandHandler {
 				target.verificationCode = "";
 				player.sendf("Removed %s's verification code", target.getName());
 				target.sendf("Your verification code has been removed");
+				return true;
+			}
+		});
+
+		submit(new Command("enableach", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(AchievementTracker.active()){
+					player.sendf("Achievements are already active");
+					return false;
+				}
+				AchievementTracker.active(true);
+				player.sendf("Achievements are now activated");
+				return true;
+			}
+		});
+
+		submit(new Command("disableach", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(!AchievementTracker.active()){
+					player.sendf("Achievements are already inactive");
+					return false;
+				}
+				AchievementTracker.active(false);
+				player.sendf("Achievements are now deactivated");
 				return true;
 			}
 		});

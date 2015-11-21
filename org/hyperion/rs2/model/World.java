@@ -451,7 +451,7 @@ public class World {
 
             //LocalServerSQLConnection.init();
             //playersSQL.init();
-            //banManager = new BanManager(logsSQL);
+            banManager = new BanManager(logsSQL);
             AchievementsSql.sql = logsSQL;
             PunishmentManager.init(logsSQL);
             System.out.println("Initialized GE: " + JGrandExchange.init(playersSQL));

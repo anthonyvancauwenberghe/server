@@ -32,6 +32,7 @@ public class VoteRewardBox implements ContentTemplate {
 		if(player.getInventory().getCount(ID) <= 0)
 			return;
 		if(player.getInventory().remove(new Item(i)) > 0) {
+			player.getAchievementTracker().itemOpened(ID);
 			addReward(player);
 		}
 	}

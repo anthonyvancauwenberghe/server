@@ -40,6 +40,7 @@ import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
@@ -2275,6 +2276,32 @@ public class CommandHandler {
 				target.verificationCode = "";
 				player.sendf("Removed %s's verification code", target.getName());
 				target.sendf("Your verification code has been removed");
+				return true;
+			}
+		});
+
+		submit(new Command("enableach", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(AchievementTracker.active()){
+					player.sendf("Achievements are already active");
+					return false;
+				}
+				AchievementTracker.active(true);
+				player.sendf("Achievements are now activated");
+				return true;
+			}
+		});
+
+		submit(new Command("disableach", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(!AchievementTracker.active()){
+					player.sendf("Achievements are already inactive");
+					return false;
+				}
+				AchievementTracker.active(false);
+				player.sendf("Achievements are now deactivated");
 				return true;
 			}
 		});

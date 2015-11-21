@@ -132,24 +132,23 @@ public class AchievementTab {
                 List<Achievement> list = achievements.get(difficulty.ordinal());
                 for (Achievement achievement : list) {
                     int i2 = i;
-                    ActionsManager.getManager().submit(START_INDEX + i, new ButtonAction() {
-                        @Override
-                        public void handle(Player player, int id) {
-                            if (player.getAchievementTab().lastClick + Time.ONE_SECOND * 2 > System.currentTimeMillis() && player.getAchievementTab().clickId == START_INDEX + i2) {
-                                player.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements:ID" + achievement.id);
-                            } else {
-                                double average = player.getAchievementTracker().progress(achievement).progressPercent();
-                                player.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
-                                        Animation.FacialAnimation.HAPPY,
-                                        achievement.tasks.size() < 1 ? "" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
-                                        achievement.tasks.size() < 2 ? achievement.tasks.get(0).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
-                                        achievement.tasks.size() < 3 ? achievement.tasks.get(1).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
-                                        "" + buildPercentBar(average)
-                                );
-                            }
-                            player.getAchievementTab().clickId = START_INDEX + i2;
-                            player.getAchievementTab().lastClick = System.currentTimeMillis();
+                    ActionsManager.getManager().submit(START_INDEX + i, (player1, id) -> {
+                        if(achievement == null)
+                            return;
+                        if (player1.getAchievementTab().lastClick + Time.ONE_SECOND * 2 > System.currentTimeMillis() && player1.getAchievementTab().clickId == START_INDEX + i2) {
+                            player1.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements:ID" + achievement.id);
+                        } else {
+                            double average = player1.getAchievementTracker().progress(achievement).progressPercent();
+                            player1.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
+                                    Animation.FacialAnimation.HAPPY,
+                                    achievement.tasks.size() < 1 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
+                                    achievement.tasks.size() < 2 ? achievement.tasks.get(0).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
+                                    achievement.tasks.size() < 3 ? achievement.tasks.get(1).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
+                                    "" + buildPercentBar(average)
+                            );
                         }
+                        player1.getAchievementTab().clickId = START_INDEX + i2;
+                        player1.getAchievementTab().lastClick = System.currentTimeMillis();
                     });
                     i++;
                 }

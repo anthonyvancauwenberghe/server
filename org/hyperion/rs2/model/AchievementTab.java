@@ -26,12 +26,14 @@ public class AchievementTab {
     public enum difficulty {
         EASY,
         MEDIUM,
-        HARD
+        HARD,
+        ELITE
     }
 
     static List<Achievement> easy = new LinkedList<>();
     static List<Achievement> medium = new LinkedList<>();
     static List<Achievement> hard = new LinkedList<>();
+    static List<Achievement> elite = new LinkedList<>();
     static Map<Integer, List> achievements = new HashMap<>();
 
     public AchievementTab(Player player) {
@@ -50,6 +52,7 @@ public class AchievementTab {
         sendEasyAchievements();
         sendMediumAchievements();
         sendHardAchievements();
+        sendEliteAchievements();
         player.getActionSender().sendScrollbarLength(32010, (Achievements.get().size() + difficulty.values().length + 1) * 14 );
         sendAchievementCompleted();
     }
@@ -90,6 +93,10 @@ public class AchievementTab {
         sendAchievements("hard");
     }
 
+    public void sendEliteAchievements() {
+        sendAchievements("elite");
+    }
+
     public void sendAchievementCompleted() {
         int finished = 0;
         for(Achievement achievement : Achievements.get().values())
@@ -125,9 +132,13 @@ public class AchievementTab {
                 if (achievement.difficulty == Achievement.Difficulty.HARD) {
                     hard.add(achievement);
                 }
+                if (achievement.difficulty == Achievement.Difficulty.ELITE) {
+                    elite.add(achievement);
+                }
                 achievements.put(0, easy);
                 achievements.put(1, medium);
                 achievements.put(2, hard);
+                achievements.put(3, elite);
             }
 
             int i = 1;

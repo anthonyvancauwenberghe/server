@@ -2,14 +2,15 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.sql.AchievementsSql;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.packet.ActionsManager;
-import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Gilles on 29/09/2015.
@@ -144,8 +145,8 @@ public class AchievementTab {
                             player1.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
                                     Animation.FacialAnimation.HAPPY,
                                     achievement.tasks.size() < 1 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
-                                    achievement.tasks.size() < 2 ? achievement.tasks.get(0).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
-                                    achievement.tasks.size() < 3 ? achievement.tasks.get(1).constraints.list.isEmpty() ? "" : "Double click achievement title for more info" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
+                                    achievement.tasks.size() < 2 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
+                                    achievement.tasks.size() < 3 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
                                     "" + buildPercentBar(average)
                             );
                         }

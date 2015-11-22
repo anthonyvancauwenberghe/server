@@ -322,7 +322,7 @@ public class ActionSender {
             else
                 sendPlayerOption("null", 5, 0);
         }
-        //player.getAchievementTracker().load();
+        player.getAchievementTracker().load();
         sendSidebarInterfaces();
         // GodWars.godWars.checkGodWarsInterface(player);
         if (player.getSpellBook().isAncient()) {

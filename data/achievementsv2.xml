@@ -2238,7 +2238,7 @@
         <interval interval="5" unit="DAYS"/>
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 250 PvM Token from monster drops" from="NPC" id="0" preTaskId="0" threshold="250">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask" desc="Pickup 12500 PvM Token from monster drops" from="NPC" id="0" preTaskId="0" threshold="250">
                 <items>
                     <item id="17564"/>
                 </items>

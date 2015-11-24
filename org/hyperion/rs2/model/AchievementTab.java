@@ -54,14 +54,11 @@ public class AchievementTab {
         int startIndex = achievements.entrySet().stream().filter(entry -> !entry.getKey().equals(difficulty) && entry.getKey().ordinal() < difficulty.ordinal()).mapToInt(entry -> entry.getValue().size()).sum() + (difficulty.ordinal() * 2);
         
         if(startIndex > 0) {
-            player.getActionSender().sendString(START_INDEX + startIndex - 1, "");
-            player.getActionSender().sendTooltip(START_INDEX + startIndex - 1, "");
+            player.getActionSender().sendString(START_INDEX + startIndex - 1, "").sendTooltip(START_INDEX + startIndex - 1, "");
         }
-        player.getActionSender().sendString(START_INDEX + startIndex, "@or1@" + Misc.ucFirst(difficulty.toString()));
-        player.getActionSender().sendFont(START_INDEX + startIndex++, 2);
+        player.getActionSender().sendString(START_INDEX + startIndex, "@or1@" + Misc.ucFirst(difficulty.toString())).sendFont(START_INDEX + startIndex++, 2);
         for(Achievement achievement : currentAchievements) {
-            player.getActionSender().sendString(player.getAchievementTracker().progress(achievement).getTabString(), START_INDEX + startIndex);
-            player.getActionSender().sendTooltip(START_INDEX + startIndex++, achievement.title);
+            player.getActionSender().sendString(player.getAchievementTracker().progress(achievement).getTabString(), START_INDEX + startIndex).sendTooltip(START_INDEX + startIndex++, achievement.title);
         }
     }
 

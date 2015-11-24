@@ -60,11 +60,15 @@ public class AchievementProgress{
             color = "@or1@";
         if(finished())
             color = "@gre@";
-        return color + (achievement().title.length() <= 26 ? achievement().title : achievement().title.substring(0, 25).trim() + "...");
+        return color + getShortTitle();
+    }
+
+    public String getShortTitle(){
+        return (achievement().title.length() <= 26 ? achievement().title : achievement().title.substring(0, 25).trim() + "...");
     }
 
     public void sendProgressHeader(final Player player){
-        player.sendf("@dre@Achievement progress: %s %1.2%", achievement().title, progress());
+        player.sendf("@dre@Achievement progress: %s %1.2%", getShortTitle(), progress());
     }
 
     public void sendAllTaskProgressHeaders(final Player player){

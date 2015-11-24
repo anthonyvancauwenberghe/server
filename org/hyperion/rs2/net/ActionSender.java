@@ -284,6 +284,7 @@ public class ActionSender {
                 player.getAchievementsProgress().put(AchievementData.values()[i], 0);
             }
         }*/
+        player.getAchievementTracker().load();
         player.getPoints().checkDonator();
         writeTabs();
         ClanManager.clearClanChat(player);
@@ -322,7 +323,6 @@ public class ActionSender {
             else
                 sendPlayerOption("null", 5, 0);
         }
-        player.getAchievementTracker().load();
         sendSidebarInterfaces();
         // GodWars.godWars.checkGodWarsInterface(player);
         if (player.getSpellBook().isAncient()) {

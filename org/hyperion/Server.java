@@ -1,17 +1,17 @@
 package org.hyperion;
 
+import javafx.application.Application;
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.security.CharFileEncryption;
-import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
+import org.monitor.domain.Controller;
 
-import java.io.Console;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,6 +70,8 @@ public class Server {
      */
     private static CharFileEncryption charFileEncryption;
 
+    private static Controller guiController;
+
     /**
      * Server uptime.
      *
@@ -114,6 +116,9 @@ public class Server {
      * @param args The command line arguments.
      */
     public static void main(String[] args) throws Exception {
+        Application.launch(Controller.class);
+    }
+    public static World launchServer() {
         /*
         Console console = System.console();
         if (console == null) {
@@ -156,6 +161,7 @@ public class Server {
         RestarterThread.getRestarter();
         //SQL.getSQL();
         //ShopManager.dumpShops();
+        return World.getWorld();
     }
 
 }

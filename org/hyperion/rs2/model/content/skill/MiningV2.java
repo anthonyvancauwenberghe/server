@@ -51,7 +51,7 @@ public class MiningV2 implements ContentTemplate {
 				6/*value*/
 		),
 		DRAGON(15259,
-				60,
+				99,
 				12188,
 				7
 		);
@@ -279,7 +279,10 @@ public class MiningV2 implements ContentTemplate {
 					ContentEntity.startAnimation(player, - 1);
 					player.getAchievementTracker().itemSkilled(Skills.MINING, rock.oreId, 1);
 					ContentEntity.addItem(player, rock.oreId);
-					ContentEntity.addSkillXP(player, rock.xp * EXPMULTIPLIER, Skills.MINING);
+					int xp = rock.xp * EXPMULTIPLIER;
+					if(pick == Pickaxe.DRAGON)
+						xp *= 1.1;
+					ContentEntity.addSkillXP(player, xp, Skills.MINING);
 					if(rock.respawn > 0 && rockId != 2491) {
 						if(Edgeville.LOCATION.distance(Location.create(x, y, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(x, y, 0)) > 70) {
 							final GameObject blank_rock = new GameObject(GameObjectDefinition.forId(450), l, 10, 0);

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class AchievementTracker {
 
-    private static boolean active = false;
+    private static boolean active = true;
 
     private final Player player;
     private final Map<Integer, AchievementProgress> progress;

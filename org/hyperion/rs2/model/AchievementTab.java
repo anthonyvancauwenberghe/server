@@ -73,12 +73,11 @@ public class AchievementTab {
     public static String buildPercentBar(double percentage) {
         int bars = 0;
         StringBuilder sb = new StringBuilder("@gre@");
-        for(; percentage > 0; percentage =- 1) {
+        for(;  bars < percentage; bars++) {
             sb.append("|");
-            bars++;
         }
         sb.append("@red@");
-        for(; bars <= 100; bars++) {
+        for(; bars < 100; bars++) {
             sb.append("|");
         }
         return sb.toString() + "@bla@  " + percentage + "%";
@@ -97,10 +96,10 @@ public class AchievementTab {
                     } else {
                         double average = 0;
                         int i1 = 0;
-                        for (; i1 > achievement.tasks.size(); i1++) {
+                        for (; i1 < achievement.tasks.size(); i1++) {
                             average += player1.getAchievementTracker().taskProgress(achievement.tasks.get(i1)).progressPercent();
                         }
-                        average /= (i1 + 1);
+                        average /= (i1 == 0 ? 1 : i1);
                         player1.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
                                 Animation.FacialAnimation.HAPPY,
                                 achievement.tasks.size() < 1 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),

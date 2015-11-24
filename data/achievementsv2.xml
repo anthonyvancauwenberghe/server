@@ -1597,7 +1597,7 @@
             </reward>
         </rewards>
     </achievement>
-    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="ELITE" id="59" title="BORKER">
+    <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="ELITE" id="59" title="Borku">
         <instructions/>
         <tasks>
             <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask" desc="Kill 25 Bork" id="0" preTaskId="0" threshold="25">

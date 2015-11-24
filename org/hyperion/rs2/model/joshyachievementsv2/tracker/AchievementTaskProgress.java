@@ -71,12 +71,16 @@ public class AchievementTaskProgress{
         return achievement().tasks.get(taskId);
     }
 
+    public String getShortDesc(){
+        return (task().desc.length() <= 26 ? task().desc : task().desc.substring(0, 25).trim() + "...");
+    }
+
     public void sendProgress(final Player player, final boolean star){
         player.sendf("@dre@Achievement progress%s - %,d/%,d %s",
                 (star ? "@yel@*@bla@" : ""),
                 progress,
                 task().threshold,
-                task().desc);
+                getShortDesc());
     }
 
 }

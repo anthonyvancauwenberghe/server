@@ -113,7 +113,7 @@ public class AchievementTracker {
                         player.debugMessage("Not constrained: " + t.desc);
                         return false;
                     }
-                    player.debugMessage("Match: " + t.desc);
+                    System.out.printf("match: %s (%d, achievement id: %d)%n", t.desc, t.id, t.achievementId);
                     return true;
                 })
                 .min(Comparator.comparingInt(t -> t.threshold));
@@ -136,6 +136,7 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
+        System.out.printf("progressing task: %s (%d, achievement id %d)%n", task.desc, task.id, task.achievementId);
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())

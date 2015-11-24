@@ -53,7 +53,7 @@ public class AchievementTab {
         sendMediumAchievements();
         sendHardAchievements();
         sendEliteAchievements();
-        player.getActionSender().sendScrollbarLength(32010, (Achievements.get().size() + difficulty.values().length + 1) * 14 );
+        player.getActionSender().sendScrollbarLength(32010, (Achievements.get().size() * 14) + (difficulty.values().length * 40) + 120);
         sendAchievementCompleted();
     }
 

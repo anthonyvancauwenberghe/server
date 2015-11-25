@@ -187,7 +187,6 @@ public class PlayerSaving {
         saveList.add(new SaveEmblemPoints("emblemPoints"));
 
         saveList.add(new SaveRecolorManager());
-        saveList.add(new SaveCustomSet());
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
         saveList.add(new SaveBonusXP());
@@ -196,7 +195,6 @@ public class PlayerSaving {
         saveList.add(new SaveDungeoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));
         saveList.add(new SaveTutorialProgress("tutorial"));
-        //saveList.add(new SaveAchievements("Achievements"));
 		saveList.add(new SaveVerifyCode());
     }
 

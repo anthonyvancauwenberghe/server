@@ -388,6 +388,15 @@ public class Container {
 		return - 1;
 	}
 
+	public Item[] getCopiedItems() {
+		Item[] it = new Item[items.length];
+		for(int i = 0; i < it.length; i++) {
+			if(items[i] != null)
+				it[i] = items[i].copy();
+		}
+		return it;
+	}
+
 	/**
 	 * Sets an item.
 	 *
@@ -708,10 +717,7 @@ public class Container {
 			for(int i = 0; i < items.length; i++) {
 				if(items[i] != null && items[i].getId() == item.getId()) {
 					int totalCount = item.getCount() + items[i].getCount();
-					if(totalCount >= Constants.MAX_ITEMS || totalCount < 1) {
-						return false;
-					}
-					return true;
+					return !(totalCount >= Constants.MAX_ITEMS || totalCount < 1);
 				}
 			}
 			int slot = freeSlot();

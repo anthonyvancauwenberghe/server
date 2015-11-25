@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -71,11 +73,9 @@ public class CustomSetDialogueHandler implements ContentTemplate {
             case 1001:
             case 1002:
             case 1003:
-                final boolean saved = player.getCustomSetHolder().save(dialogueId - 1001);
-                if(!saved)
-                    player.getActionSender().sendMessage("You cannot save into that slot!");
+                player.getCustomSetHolder().addCustomSet(dialogueId - 1000);
                 player.getActionSender().removeChatboxInterface();
-                return saved;
+                return true;
             case 1004:
                 player.getActionSender().sendDialogue("Are you sure?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
                         "Load slot 1",
@@ -88,11 +88,9 @@ public class CustomSetDialogueHandler implements ContentTemplate {
             case 1005:
             case 1006:
             case 1007:
-                final boolean apply = player.getCustomSetHolder().apply(dialogueId - 1005);
-                if(!apply)
-                    player.sendMessage("Trouble loading instant set!");
+                player.getCustomSetHolder().equipCustomSet(dialogueId - 1004);
                 player.getActionSender().removeChatboxInterface();
-                return apply;
+                return true;
         }
         return false;
     }

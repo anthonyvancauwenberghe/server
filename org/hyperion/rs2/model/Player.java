@@ -56,7 +56,6 @@ import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
-import org.hyperion.rs2.model.sets.CustomSetHolder;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
@@ -112,7 +111,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private final RandomEvent randomEvent = new RandomEvent(this);
 	private final DungoneeringHolder dungoneeringHolder = new DungoneeringHolder();
 	private final ExtraData permExtraData = new ExtraData();
-	private final CustomSetHolder customSetHolder = new CustomSetHolder(this);
+	private final org.hyperion.rs2.model.sets.newsets.CustomSetHolder customSetHolder = new org.hyperion.rs2.model.sets.newsets.CustomSetHolder(this);
 	private final RecolorManager recolorManager = new RecolorManager(this);
 	/**
 	 * Holds the beginning time of the player's game session.
@@ -836,7 +835,7 @@ public class Player extends Entity implements Persistable, Cloneable{
         return dungoneeringHolder;
     }
 
-    public CustomSetHolder getCustomSetHolder() {
+    public org.hyperion.rs2.model.sets.newsets.CustomSetHolder getCustomSetHolder() {
         return customSetHolder;
     }
 

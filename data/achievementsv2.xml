@@ -1346,7 +1346,7 @@
     <achievement class="org.hyperion.rs2.model.joshyachievementsv2.Achievement" difficulty="ELITE" id="50" title="TOME OF FROST">
         <instructions/>
         <tasks>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 110,000 Rune essence through Mining" id="0" preTaskId="0" skill="14" threshold="110000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 55,000 Rune essence through Mining" id="0" preTaskId="0" skill="14" threshold="55000">
                 <items>
                     <item id="1436"/>
                     <item id="15482"/>
@@ -1354,7 +1354,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Air rune through Runecrafting" id="1" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Air rune through Runecrafting" id="1" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="556"/>
                     <item id="6422"/>
@@ -1365,7 +1365,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Mind rune through Runecrafting" id="2" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Mind rune through Runecrafting" id="2" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="558"/>
                     <item id="6436"/>
@@ -1374,7 +1374,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Water rune through Runecrafting" id="3" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Water rune through Runecrafting" id="3" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="555"/>
                     <item id="6424"/>
@@ -1385,7 +1385,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Earth rune through Runecrafting" id="4" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Earth rune through Runecrafting" id="4" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="557"/>
                     <item id="6426"/>
@@ -1394,7 +1394,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Fire rune through Runecrafting" id="5" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Fire rune through Runecrafting" id="5" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="554"/>
                     <item id="6428"/>
@@ -1405,7 +1405,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Body rune through Runecrafting" id="6" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Body rune through Runecrafting" id="6" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="559"/>
                     <item id="6438"/>
@@ -1413,14 +1413,14 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Cosmic rune through Runecrafting" id="7" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Cosmic rune through Runecrafting" id="7" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="564"/>
                     <item id="17789"/>
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Chaos rune through Runecrafting" id="8" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Chaos rune through Runecrafting" id="8" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="562"/>
                     <item id="6430"/>
@@ -1430,14 +1430,14 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Nature rune through Runecrafting" id="9" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Nature rune through Runecrafting" id="9" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="561"/>
                     <item id="17791"/>
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Law rune through Runecrafting" id="10" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Law rune through Runecrafting" id="10" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="563"/>
                     <item id="6434"/>
@@ -1445,7 +1445,7 @@
                 </items>
                 <constraints/>
             </task>
-            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 200,000 Death rune through Runecrafting" id="11" preTaskId="0" skill="20" threshold="200000">
+            <task class="org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask" desc="Obtain 100,000 Death rune through Runecrafting" id="11" preTaskId="0" skill="20" threshold="100000">
                 <items>
                     <item id="560"/>
                     <item id="6432"/>

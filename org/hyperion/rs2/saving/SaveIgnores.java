@@ -16,15 +16,23 @@ public class SaveIgnores extends SaveObject {
 	@Override
 	public boolean save(Player player, BufferedWriter writer)
 			throws IOException {
-		// TODO Auto-generated method stub
-		return false;
+		writer.write(getName());
+		writer.newLine();
+		for(long ignore : player.getIgnores().toArray()) {
+			writer.write(ignore + "");
+			writer.newLine();
+		}
+		return true;
 	}
 
 	@Override
 	public void load(Player player, String values, BufferedReader reader)
 			throws IOException {
-		// TODO Auto-generated method stub
-
+		String line;
+		while((line = reader.readLine()).length() > 0) {
+			long ignore = Long.parseLong(line);
+			player.getIgnores().add(ignore);
+		}
 	}
 
 }

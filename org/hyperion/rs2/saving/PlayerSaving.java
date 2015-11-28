@@ -176,6 +176,7 @@ public class PlayerSaving {
 		saveList.add(new SaveEquipment("Equip"));
 		saveList.add(new SaveLook("Look"));
 		saveList.add(new SaveFriends("Friends"));
+		saveList.add(new SaveIgnores("Ignores"));
 
         saveList.add(new SaveMaxCapePrimaryColor());
         saveList.add(new SaveMaxCapeSecondaryColor());

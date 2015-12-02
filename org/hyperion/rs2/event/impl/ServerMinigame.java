@@ -1,9 +1,10 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.util.Misc;
@@ -16,7 +17,7 @@ public class ServerMinigame extends Event {
     }
 
     public static final CountDownEventBuilder[] builders = new CountDownEventBuilder[]{
-            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", () -> FightPits.startEvent(), true),
+            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", FightPits::startEvent, true),
             new CountDownEventBuilder("Hybridding", "hybrid", false),
             new CountDownEventBuilder("OldSchool PK", "ospk", false),
             new CountDownEventBuilder("Pure Pking", "purepk", false),
@@ -55,7 +56,7 @@ public class ServerMinigame extends Event {
         }
 
         public CountDownEventBuilder(final String name, final String command, final SpecialArea area, boolean safe) {
-            this(name, command, area.getDefaultLocation(), "5x Pk points for 30 minutes", () -> area.createEvent(), safe);
+            this(name, command, area.getDefaultLocation(), "5x Pk points for 30 minutes", area::createEvent, safe);
         }
 
         public CountDownEventBuilder(final String name, final String command, final Location location, final String msg, Runnable run, final boolean safe) {

@@ -21,7 +21,7 @@ public class FriendsAssistant {
 		for(Player c : World.getWorld().getPlayers()) {
 			if(c == null || c == p)
 				continue;
-			if(c.getFriends().contains(p.getNameAsLong()) && !isIgnore(p, c.getNameAsLong())) {
+			if(c.getFriends().contains(p.getNameAsLong()) && !p.getIgnores().contains(c.getNameAsLong())) {
 				if((p.chatStatus[1] == 1 && !p.getFriends().contains(c.getNameAsLong())) || offline || p.isHidden() || c.chatStatus[1] == 2) {
 					sendPlayerOnline(c, p.getNameAsLong(), 0);
 					continue;
@@ -71,7 +71,7 @@ public class FriendsAssistant {
 		for(Player c : World.getWorld().getPlayers()) {
 			if(c == null)
 				continue;
-			if(c.getNameAsLong() == friend && c.chatStatus[1] != 2 && (c.getFriends().contains(p.getNameAsLong()) || c.chatStatus[1] == 0) && ! isIgnore(c, p.getNameAsLong())) {
+			if(c.getNameAsLong() == friend && c.chatStatus[1] != 2 && (c.getFriends().contains(p.getNameAsLong()) || c.chatStatus[1] == 0) && !p.getIgnores().contains(c.getNameAsLong())) {
 				//sure there online send the packet
 				if (!p.isHidden())
 					sendPlayerOnline(p, c.getNameAsLong(), 10);
@@ -95,14 +95,14 @@ public class FriendsAssistant {
 	}
 
 
-	public static void addIgnore(Player p, long friend) {
-		p.ignores.add(friend);
-		updateList(p, friend);
+	public static void addIgnore(Player p, long ignore) {
+		p.getIgnores().add(ignore);
+		updateList(p, ignore);
 		refreshGlobalList(p, false);
 	}
 
 	public static void removeIgnore(Player p, long friend) {
-		p.ignores.remove(friend);
+		p.getIgnores().remove(friend);
 		updateList(p, friend);
 		refreshGlobalList(p, false);
 	}
@@ -110,15 +110,6 @@ public class FriendsAssistant {
 
 	public static void sendStatus(Player p, int status) {
 		p.write(new PacketBuilder(221).put((byte) status).toPacket());
-	}
-
-
-	public static boolean isIgnore(Player p, long ingore) {
-		for(long ingore2 : p.ignores) {
-			if(ingore == ingore2)
-				return true;
-		}
-		return false;
 	}
 
 

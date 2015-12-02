@@ -1,9 +1,9 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.Events;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Time;
 
 import java.io.IOException;
@@ -39,11 +39,7 @@ public class CountDownEvent extends Event {
             this.stop();
 		}
         if(counter%10 == 0) {
-            for(NPC npc : World.getWorld().getNPCs()) {
-                if(npc != null)
-                    npc.forceMessage(name + " event in " + counter + " seconds! Go to " + command + " for " + message + "!");
-
-            }
+            World.getWorld().getNPCs().stream().filter(npc -> npc != null && npc.summoned == false).forEach(npc -> npc.forceMessage(name + " event in " + counter + " seconds! Go to " + command + " for " + message + "!"));
         }
 
 

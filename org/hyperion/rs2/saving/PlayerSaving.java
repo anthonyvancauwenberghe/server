@@ -176,6 +176,7 @@ public class PlayerSaving {
 		saveList.add(new SaveEquipment("Equip"));
 		saveList.add(new SaveLook("Look"));
 		saveList.add(new SaveFriends("Friends"));
+		saveList.add(new SaveIgnores("Ignores"));
 
         saveList.add(new SaveMaxCapePrimaryColor());
         saveList.add(new SaveMaxCapeSecondaryColor());
@@ -187,7 +188,6 @@ public class PlayerSaving {
         saveList.add(new SaveEmblemPoints("emblemPoints"));
 
         saveList.add(new SaveRecolorManager());
-        saveList.add(new SaveCustomSet());
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
         saveList.add(new SaveBonusXP());
@@ -196,7 +196,6 @@ public class PlayerSaving {
         saveList.add(new SaveDungeoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));
         saveList.add(new SaveTutorialProgress("tutorial"));
-        //saveList.add(new SaveAchievements("Achievements"));
 		saveList.add(new SaveVerifyCode());
     }
 

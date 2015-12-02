@@ -56,7 +56,7 @@ import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
-import org.hyperion.rs2.model.sets.CustomSetHolder;
+import org.hyperion.rs2.model.shops.IgnoreList;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
@@ -112,7 +112,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private final RandomEvent randomEvent = new RandomEvent(this);
 	private final DungoneeringHolder dungoneeringHolder = new DungoneeringHolder();
 	private final ExtraData permExtraData = new ExtraData();
-	private final CustomSetHolder customSetHolder = new CustomSetHolder(this);
+	private final org.hyperion.rs2.model.sets.newsets.CustomSetHolder customSetHolder = new org.hyperion.rs2.model.sets.newsets.CustomSetHolder(this);
 	private final RecolorManager recolorManager = new RecolorManager(this);
 	/**
 	 * Holds the beginning time of the player's game session.
@@ -292,7 +292,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public boolean oldFag = false;
 	public boolean decided = false;
 	public boolean inAction;
-	public List<Long> ignores = new ArrayList<Long>(1);
 	public int[] chatStatus = new int[3];// normal,friends,trade, 0 - on, 1
 	public int membershipDay = 1;
 	public int membershipYear = 2005;
@@ -479,6 +478,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private int damagedCorp;
 	private SpellBook spellBook = new SpellBook(SpellBook.DEFAULT_SPELLBOOK);
 	private FriendList friendList;
+	private IgnoreList ignoreList;
 	private long lastTeleport = System.currentTimeMillis();
 	private PvPTask currentPvPTask;
 	private int pvpTaskAmount;
@@ -550,6 +550,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 		}
 		lastAttacker = new LastAttacker(name);
 		friendList = new FriendList();
+		ignoreList = new IgnoreList();
 		logManager = new LogManager(this);
 		// itfManager = new InterfaceManager(this);
 	}
@@ -836,7 +837,7 @@ public class Player extends Entity implements Persistable, Cloneable{
         return dungoneeringHolder;
     }
 
-    public CustomSetHolder getCustomSetHolder() {
+    public org.hyperion.rs2.model.sets.newsets.CustomSetHolder getCustomSetHolder() {
         return customSetHolder;
     }
 
@@ -2123,6 +2124,10 @@ public class Player extends Entity implements Persistable, Cloneable{
 
 	public FriendList getFriends() {
 		return friendList;
+	}
+
+	public IgnoreList getIgnores() {
+		return ignoreList;
 	}
 
 	/*

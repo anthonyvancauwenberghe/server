@@ -159,10 +159,6 @@ public class Item {
 		return id == item.id;
 	}
 
-	public Item copy() {
-		return new Item(id, count);
-	}
-
 	@Override
 	public String toString() {
 		return Item.class.getName() + " [id=" + id + ", count=" + count + "]";

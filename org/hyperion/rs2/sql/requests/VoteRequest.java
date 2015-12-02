@@ -237,6 +237,7 @@ public class VoteRequest extends SQLRequest {
         if (runelocus && rspslist && !FORMAT_PLAYER.format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)) {
             player.getPermExtraData().put("lastVoted", FORMAT_PLAYER.format(Calendar.getInstance().getTime()));
             player.getPermExtraData().put("todayVoted", 0);
+            player.getAchievementTracker().voted();
             if (currentStreak >= 31) {
                 streak = 10;
             } else if (currentStreak >= 14) {
@@ -298,7 +299,6 @@ public class VoteRequest extends SQLRequest {
             player.getBank().add(new BankItem(0, 3062, votingPoints));
             player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
         }
-        player.getAchievementTracker().voted(votingPoints);
         player.setLastVoted(System.currentTimeMillis());
         player.getPermExtraData().put("votingStreak", currentStreak);
         votingPoints = 0;

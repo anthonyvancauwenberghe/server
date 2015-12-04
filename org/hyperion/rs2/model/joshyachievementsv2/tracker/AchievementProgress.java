@@ -109,7 +109,7 @@ public class AchievementProgress{
     public String info(){
         final String color = progressColor();
         final double percent = progressPercent();
-        return String.format("Achievement @blu@%d @bla@%s | %s%s%%", achievement().id, achievement().shortTitle, color, percent);
+        return String.format("Achievement @blu@%d @bla@| %s | %s%s%%", achievement().id, achievement().shortTitle, color, percent);
     }
 
     public boolean shouldSendInfoFor(final int taskId){

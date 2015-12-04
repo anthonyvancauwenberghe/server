@@ -65,14 +65,4 @@ public final class Achievements{
     public static boolean load(){
         return (instance = IO.achievements.load()) != null;
     }
-
-    static {
-        CommandHandler.submit(new Command("reloadachs") {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                load();
-                return true;
-            }
-        });
-    }
 }

@@ -103,14 +103,14 @@ public class AchievementTaskProgress{
         final double percent = progressPercent();
         final boolean finished = taskFinished();
         if(task.hasPreTask())
-            info.add(String.format("> T@blu@%d @bla@(@red@*@blu@%d@bla@)| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
+            info.add(String.format("> T@blu@%d @bla@(@red@*@blu@%d@bla@) %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
         else
-            info.add(String.format("> T@blu@%d @bla@| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
+            info.add(String.format("> T@blu@%d @bla@%s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
         if(startDate != null)
-            info.add(String.format("> T@blu@%d @bla@* Started: @blu@%s @bla@| %s", task.number, startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
+            info.add(String.format("> T@blu@%d @bla@Started: @blu@%s @bla@| %s", task.number, startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
         if(!finished){
             for(final Constraint c : task.constraints.list)
-                info.add(String.format("> T@blu@%d @bla@* [%sX@bla@] %s", task.number, c.constrainedColor(player), c.shortDesc()));
+                info.add(String.format("> T@blu@%d @bla@[%sX@bla@] %s", task.number, c.constrainedColor(player), c.shortDesc()));
         }
         return info;
     }

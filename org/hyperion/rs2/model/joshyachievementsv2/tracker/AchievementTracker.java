@@ -144,7 +144,10 @@ public class AchievementTracker {
         if (!atp.started())
             atp.startNow();
         final int oldProgress = atp.progress;
-        atp.progress(progress);
+        if(task instanceof KillstreakTask)
+            atp.progress = progress;
+        else
+            atp.progress(progress);
         if(!(shouldInsert ? AchievementsSql.insertTaskProgress(player, atp) : AchievementsSql.updateTaskProgress(player, atp))){
             if(shouldInsert)
                 atp.startDate = null;

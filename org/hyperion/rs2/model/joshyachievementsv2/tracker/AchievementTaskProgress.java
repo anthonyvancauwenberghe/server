@@ -103,7 +103,7 @@ public class AchievementTaskProgress{
         final double percent = progressPercent();
         final boolean finished = taskFinished();
         if(task.hasPreTask())
-            info.add(String.format("Task @blu@%d @bla@(>@blu@%d)| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
+            info.add(String.format("Task @blu@%d @bla@(>@blu@%d@bla@)| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
         else
             info.add(String.format("Task @blu@%d @bla@| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
         if(startDate != null)

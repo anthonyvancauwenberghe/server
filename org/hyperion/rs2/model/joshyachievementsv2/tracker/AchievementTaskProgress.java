@@ -110,7 +110,7 @@ public class AchievementTaskProgress{
             info.add(String.format("> * Started: @blu@%s @bla@| %s", startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
         if(!finished){
             for(final Constraint c : task.constraints.list)
-                info.add(String.format(" * [%sX@bla@] %s", c.constrainedColor(player), c.shortDesc()));
+                info.add(String.format("> * [%sX@bla@] %s", c.constrainedColor(player), c.shortDesc()));
         }
         return info;
     }

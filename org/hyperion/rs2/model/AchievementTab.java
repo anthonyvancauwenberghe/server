@@ -2,6 +2,9 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementProgress;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTaskProgress;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.util.Misc;
@@ -152,14 +155,24 @@ public class AchievementTab {
                         if (player1.getAchievementTab().lastClick + Time.ONE_SECOND * 2 > System.currentTimeMillis() && player1.getAchievementTab().clickId == START_INDEX + i2) {
                             player1.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements:ID" + achievement.id);
                         } else {
-                            double average = player1.getAchievementTracker().progress(achievement).progressPercent();
-                            player1.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
-                                    Animation.FacialAnimation.HAPPY,
-                                    achievement.tasks.size() < 1 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
-                                    achievement.tasks.size() < 2 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
-                                    achievement.tasks.size() < 3 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
-                                    "" + buildPercentBar(average)
-                            );
+//                            double average = player1.getAchievementTracker().progress(achievement).progressPercent();
+//                            player1.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
+//                                    Animation.FacialAnimation.HAPPY,
+//                                    achievement.tasks.size() < 1 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(0)).progress + "/" + achievement.tasks.get(0).threshold + (achievement.tasks.get(0).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(0).desc : ""),
+//                                    achievement.tasks.size() < 2 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(1)).progress + "/" + achievement.tasks.get(1).threshold + (achievement.tasks.get(1).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(1).desc : ""),
+//                                    achievement.tasks.size() < 3 ? "" : "@dre@" + player1.getAchievementTracker().taskProgress(achievement.tasks.get(2)).progress + "/" + achievement.tasks.get(2).threshold + (achievement.tasks.get(2).desc.length() < 70 ? "@bla@ " + achievement.tasks.get(2).desc : ""),
+//                                    "" + buildPercentBar(average)
+//                            );
+                            final AchievementProgress ap = player1.getAchievementTracker().progress(achievement);
+                            player1.sendf(ap.info());
+                            if(!ap.finished()){
+                                for(int tid = 0; tid < achievement.tasks.size(); tid++){
+                                    final AchievementTaskProgress atp = ap.progress(tid);
+                                    if(ap.shouldSendInfoFor(tid))
+                                        for(final String info : atp.info(player1))
+                                            player1.sendf(info);
+                                }
+                            }
                         }
                         player1.getAchievementTab().clickId = START_INDEX + i2;
                         player1.getAchievementTab().lastClick = System.currentTimeMillis();

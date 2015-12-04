@@ -1,10 +1,14 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraint;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 
 public class AchievementTaskProgress{
@@ -34,6 +38,15 @@ public class AchievementTaskProgress{
         if(progress > task().threshold)
             progress = task().threshold;
         return progress;
+    }
+
+    public String progressColor(){
+        if(finished())
+            return "@gre@";
+        else if(progress > 0)
+            return "@or1@";
+        else
+            return "@red@";
     }
 
     public double progressPercent(){
@@ -77,6 +90,23 @@ public class AchievementTaskProgress{
                 progress,
                 task().threshold,
                 task().desc);
+    }
+
+    public List<String> info(final Player player){
+        final List<String> info = new ArrayList<>();
+        final Task task = task();
+        final String color = progressColor();
+        final double percent = progressPercent();
+        final boolean finished = taskFinished();
+        info.add(String.format("Task #%d: %s%s @bla@| %s%,d/%,d @bla@| %s%1.2f%%", task.number, color, task.shortDesc(), color, progress, task.threshold, color, percent));
+        info.add(String.format("Started: %s | Finished: %s", startDate != null ? "@blu@"+startDate : "---", finishDate != null ? "@blu@"+finishDate : "---"));
+        if(!finished){
+            for(final Constraint c : task.constraints.list)
+                info.add(String.format(" - %s%s", c.constrainedColor(player), c.shortDesc()));
+            if(task.hasPreTask())
+                info.add(String.format("Depends on Task #%d", task.preTask().number));
+        }
+        return info;
     }
 
 }

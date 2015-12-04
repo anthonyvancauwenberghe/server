@@ -24,15 +24,21 @@ public abstract class Task{
     public final int id;
     public final int threshold;
 
+    public final int number;
+
     public String desc;
 
     public final Constraints constraints;
 
     public int preTaskId;
 
+    private String shortDesc;
+
     protected Task(final int id, final int threshold){
         this.id = id;
         this.threshold = threshold;
+
+        number = id;
 
         constraints = new Constraints();
 
@@ -53,5 +59,11 @@ public abstract class Task{
 
     public Task preTask(){
         return Achievements.get().get(achievementId).tasks.get(preTaskId);
+    }
+
+    public String shortDesc(){
+        if(shortDesc == null)
+            shortDesc = desc.length() <= 70 ? desc : (desc.substring(0, 70) + "...");
+        return shortDesc;
     }
 }

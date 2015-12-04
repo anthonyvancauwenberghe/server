@@ -21,6 +21,8 @@ public class Achievement{
     public final Tasks tasks;
     public final Rewards rewards;
 
+    public final String shortTitle;
+
     public Achievement(final int id, final Difficulty difficulty, final String title, final Interval interval, final Instructions instructions, final Tasks tasks, final Rewards rewards){
         this.id = id;
         this.difficulty = difficulty;
@@ -29,5 +31,7 @@ public class Achievement{
         this.instructions = instructions;
         this.tasks = tasks;
         this.rewards = rewards;
+
+        shortTitle = title.length() <= 26 ? title : (title.substring(0, 26) + "...");
     }
 }

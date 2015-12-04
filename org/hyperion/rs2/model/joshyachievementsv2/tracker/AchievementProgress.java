@@ -53,6 +53,15 @@ public class AchievementProgress{
                     .allMatch(AchievementTaskProgress::finished);
     }
 
+    public String progressColor(){
+        if(finished())
+            return "@gre@";
+        else if(progress.values().stream().anyMatch(atp -> atp.started() || atp.progress > 0))
+            return "@or1@";
+        else
+            return "@red@";
+    }
+
     public String getTabString(){
         String color = "@red@";
         //System.out.println("progress size: " + progress.size());
@@ -74,5 +83,19 @@ public class AchievementProgress{
 
     public double progressPercent(){
         return progress() * 100d / achievement().tasks.threshold;
+    }
+
+    public String info(){
+        final String color = progressColor();
+        final double percent = progressPercent();
+        return String.format("%s%s @bla@| %s%1.2f%%", color, achievement().shortTitle, color, percent);
+    }
+
+    public boolean shouldSendInfoFor(final int taskId){
+        final AchievementTaskProgress atp = progress(taskId);
+        if(atp == null)
+            return false;
+        //was going to do some checks here..
+        return true;
     }
 }

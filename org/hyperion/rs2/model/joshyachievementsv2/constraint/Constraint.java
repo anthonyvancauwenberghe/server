@@ -8,6 +8,10 @@ public interface Constraint {
 
     String desc();
 
+    default String shortDesc(){
+        return desc().length() <= 70 ? desc() : (desc().substring(0, 70) + "...");
+    }
+
     default String constrainedColor(final Player player){
         if(constrained(player))
             return "@gre@";

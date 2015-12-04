@@ -103,9 +103,9 @@ public class AchievementTaskProgress{
         final double percent = progressPercent();
         final boolean finished = taskFinished();
         if(task.hasPreTask())
-            info.add(String.format("> @blu@%d @bla@(@red@*@blu@%d@bla@)| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
+            info.add(String.format("> T@blu@%d @bla@(@red@*@blu@%d@bla@)| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
         else
-            info.add(String.format("> @blu@%d @bla@| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
+            info.add(String.format("> T@blu@%d @bla@| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
         if(startDate != null)
             info.add(String.format("> * Started: @blu@%s @bla@| %s", startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
         if(!finished){

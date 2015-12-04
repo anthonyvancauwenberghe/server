@@ -93,7 +93,7 @@ public class AchievementTaskProgress{
                 (star ? "@yel@*@bla@" : ""),
                 progress,
                 task().threshold,
-                getShortDesc());
+                task().shortDesc());
     }
 
     public List<String> info(final Player player){

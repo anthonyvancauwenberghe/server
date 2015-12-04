@@ -38,7 +38,7 @@ public abstract class Task{
         this.id = id;
         this.threshold = threshold;
 
-        number = id;
+        number = id+1;
 
         constraints = new Constraints();
 

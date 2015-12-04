@@ -165,7 +165,7 @@ public class AchievementTab {
 //                                    "" + buildPercentBar(average)
 //                            );
                             final AchievementProgress ap = player1.getAchievementTracker().progress(achievement);
-                            player1.sendf(ap.info());
+                            player1.sendMessage(ap.info());
                             if(ap.finished()){
                                 final Timestamp start = ap.firstStart();
                                 final Timestamp finish = ap.lastFinish();

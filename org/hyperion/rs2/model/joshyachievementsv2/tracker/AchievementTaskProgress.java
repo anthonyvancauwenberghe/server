@@ -102,14 +102,15 @@ public class AchievementTaskProgress{
         final String color = progressColor();
         final double percent = progressPercent();
         final boolean finished = taskFinished();
-        info.add(String.format("Task @blu@%d @bla@| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
+        if(task.hasPreTask())
+            info.add(String.format("Task @blu@%d @bla@(>@blu@%d)| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
+        else
+            info.add(String.format("Task @blu@%d @bla@| %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
         if(startDate != null)
             info.add(String.format(" * Started: @blu@%s @bla@| %s", startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
         if(!finished){
             for(final Constraint c : task.constraints.list)
                 info.add(String.format(" * [%sX@bla@] %s", c.constrainedColor(player), c.shortDesc()));
-            if(task.hasPreTask())
-                info.add(String.format(" * Depends on Task @blu@%d", task.preTask().number));
         }
         return info;
     }

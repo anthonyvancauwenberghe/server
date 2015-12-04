@@ -103,7 +103,8 @@ public class AchievementTaskProgress{
         final double percent = progressPercent();
         final boolean finished = taskFinished();
         info.add(String.format("Task #%d: %s%s @bla@| %s%,d/%,d @bla@| %s%1.2f%%", task.number, color, task.shortDesc(), color, progress, task.threshold, color, percent));
-        info.add(String.format("Started: %s @bla@| Finished: %s", startDate != null ? "@blu@"+startDate : "---", finishDate != null ? "@blu@"+finishDate : "---"));
+        if(startDate != null)
+            info.add(String.format("Started: %s @bla@| Finished: %s", startDate != null ? "@blu@"+startDate : "---", finishDate != null ? "@blu@"+finishDate : "---"));
         if(!finished){
             for(final Constraint c : task.constraints.list)
                 info.add(String.format(" - %s%s", c.constrainedColor(player), c.shortDesc()));

@@ -278,7 +278,7 @@ public class Farming implements ContentTemplate {
 			player.getSkills().addExperience(Skills.FARMING, serverPlant.xp * MULTIPLIER);
 			player.getActionSender().sendMessage("You harvest the plant.");
 			for(Item item : serverPlant.items) {
-				player.getAchievementTracker().itemSkilled(Skills.FARMING, item.getId(), 1);
+				player.getAchievementTracker().itemSkilled(Skills.FARMING, item.getId(), item.getCount());
 				player.getInventory().add(item);
 			}
 		}

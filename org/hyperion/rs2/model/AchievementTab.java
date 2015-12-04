@@ -10,6 +10,7 @@ import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -165,12 +166,17 @@ public class AchievementTab {
 //                            );
                             final AchievementProgress ap = player1.getAchievementTracker().progress(achievement);
                             player1.sendf(ap.info());
-                            if(!ap.finished()){
+                            if(ap.finished()){
+                                final Timestamp start = ap.firstStart();
+                                final Timestamp finish = ap.lastFinish();
+                                if(start != null && finish != null)
+                                    player1.sendf("Started: @blu@%s @bla@| Finished: @blu@%s", start, finish);
+                            }else{
                                 for(int tid = 0; tid < achievement.tasks.size(); tid++){
                                     final AchievementTaskProgress atp = ap.progress(tid);
                                     if(ap.shouldSendInfoFor(tid))
                                         for(final String info : atp.info(player1))
-                                            player1.sendf(info);
+                                            player1.sendMessage(info);
                                 }
                             }
                         }

@@ -1,6 +1,9 @@
 package org.hyperion.rs2.model.content.specialareas.impl;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.pf.Point;
@@ -16,8 +19,7 @@ import java.util.List;
  */
 public class HybridZone extends NIGGERUZ {
 
-    private final Point cornerSW = new Point(2970, 3605),
-    cornerNE = new Point(2983, 3616);
+    private final Point cornerSW = new Point(2970, 3605), cornerNE = new Point(2983, 3616);
 
 
     public HybridZone() {
@@ -32,37 +34,36 @@ public class HybridZone extends NIGGERUZ {
 
     public void check(final Player player) {
         final String enter = canEnter(player);
-        if(inTheWild(player.getLocation()) && enter.length() > 1) {
+        if(inTheWild(player.getLocation()) && enter.length() > 1){
             exit(player);
             player.sendMessage(enter);
         }
     }
 
 
-    public String canEnter(Player player) {
-            final Item shield = player.getEquipment().get(Equipment.SLOT_SHIELD);
-            if(shield != null && (shield.getId() == 13740 || shield.getId() == 13744))
-                return "You cannot bring divines to this area";
-            if(!player.getSpellBook().isAncient())
-                return "You must be on ancients to be here";
+    public String canEnter(final Player player) {
+        final Item shield = player.getEquipment().get(Equipment.SLOT_SHIELD);
+        if(shield != null && (shield.getId() == 13740 || shield.getId() == 13744))
+            return "You cannot bring divines to this area";
+        if(!player.getSpellBook().isAncient())
+            return "You must be on ancients to be here";
         return "";
     }
 
     @Override
     public void initObjects(final List<GameObject> list) {
 
-        for(int x = cornerSW.getX() ;x <= cornerNE.getX(); x++) {
-            if(x != 2976 && x != 2977 )
+        for(int x = cornerSW.getX(); x <= cornerNE.getX(); x++){
+            if(x != 2976 && x != 2977)
                 list.add(new GameObject(DEFINITION, Location.create(x, cornerSW.getY(), height), 10, 2, false));
             list.add(new GameObject(DEFINITION, Location.create(x, cornerNE.getY(), height), 10, 0, false));
         }
 
-        for(int y = cornerSW.getY(); y < cornerNE.getY(); y++) {
+        for(int y = cornerSW.getY(); y < cornerNE.getY(); y++){
             list.add(new GameObject(DEFINITION, Location.create(cornerNE.getX(), y, height), 10, 1, false));
             list.add(new GameObject(DEFINITION, Location.create(cornerSW.getX(), y, height), 10, 3, false));
 
         }
-
 
 
     }
@@ -73,12 +74,11 @@ public class HybridZone extends NIGGERUZ {
     }
 
     @Override
-    public boolean inArea(int x, int y, int z) {
-        return z == height &&
-                (x > cornerSW.getX() && y >= cornerSW.getY() && x <= cornerNE.getX() && y <= cornerNE.getY()) ;  //To change body of implemented methods use File | Settings | File Templates.
+    public boolean inArea(final int x, final int y, final int z) {
+        return z == height && (x > cornerSW.getX() && y >= cornerSW.getY() && x <= cornerNE.getX() && y <= cornerNE.getY());  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public boolean inTheWild(Location l) {
+    public boolean inTheWild(final Location l) {
         return l.getZ() == height && l.inPvPArea();
     }
 

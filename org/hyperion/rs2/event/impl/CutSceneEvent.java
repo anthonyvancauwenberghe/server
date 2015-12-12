@@ -12,33 +12,32 @@ import org.hyperion.rs2.model.Player;
 
 public class CutSceneEvent extends Event {
 
-	private Entity entity;
+    private final Entity entity;
+    public int timer = 99;
 
-	/**
-	 * Creates the death event for the specified entity.
-	 *
-	 * @param entity The player or npc whose death has just happened.
-	 */
-	public CutSceneEvent(Entity entity) {
-		super(500);
-		this.entity = entity;
-	}
+    /**
+     * Creates the death event for the specified entity.
+     *
+     * @param entity The player or npc whose death has just happened.
+     */
+    public CutSceneEvent(final Entity entity) {
+        super(500);
+        this.entity = entity;
+    }
 
-	public int timer = 99;
-
-	@Override
-	public void execute() {
-		if(entity instanceof Player) {
-			Player player = (Player) entity;
-			if(timer == 99) {
-				player.getActionSender().cameraMovement(3222, 3219, 3237, 3219, 200, 0, 1);
-			} else if(timer == 1) {
-				//player.getActionSender().cameraReset();
-				player.getActionSender().rotateCamera(3222, 3219, 3237, 3219, 200, 0, 1);
-			}
-			timer--;
-	        /*if(timer == 99){
-				player.getActionSender().cameraMovement(3222, 3219,3237,3219,200,0,1);
+    @Override
+    public void execute() {
+        if(entity instanceof Player){
+            final Player player = (Player) entity;
+            if(timer == 99){
+                player.getActionSender().cameraMovement(3222, 3219, 3237, 3219, 200, 0, 1);
+            }else if(timer == 1){
+                //player.getActionSender().cameraReset();
+                player.getActionSender().rotateCamera(3222, 3219, 3237, 3219, 200, 0, 1);
+            }
+            timer--;
+            /*if(timer == 99){
+                player.getActionSender().cameraMovement(3222, 3219,3237,3219,200,0,1);
 			} else if(timer == 60){
 				player.getActionSender().cameraReset();
 				player.getActionSender().cameraMovement(3237,3219,3238,3201,200,0,1);
@@ -47,7 +46,7 @@ public class CutSceneEvent extends Event {
 				player.getActionSender().cameraMovement(3238,3201,3250,3192,200,0,1);
 			}
 			timer--;*/
-		}
-	}
+        }
+    }
 
 }

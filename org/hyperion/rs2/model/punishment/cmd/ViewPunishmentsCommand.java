@@ -14,11 +14,11 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
  */
 public class ViewPunishmentsCommand extends Command {
 
-    public ViewPunishmentsCommand(){
+    public ViewPunishmentsCommand() {
         super("viewpunishments", Rank.HELPER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         String issuerName = filterInput(input);
 
         if(issuerName.startsWith("@")){

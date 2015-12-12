@@ -1,24 +1,24 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import com.mysql.jdbc.TimeUtil;
-import javafx.util.converter.PercentageStringConverter;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Damage;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
-import org.hyperion.rs2.model.content.ClickType;
-import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Percentage;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.shops.PvMStore;
-import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.awt.*;
-import java.io.IOException;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -29,17 +29,16 @@ import java.util.concurrent.TimeUnit;
  * Time: 8:15 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Bork  {
+public class Bork {
 
     private static final String KEY = "borkevent";
     private static final String TIME_KEY = "borktime";
 
     private static final Location TELEPORT_LOCATION = Location.create(3555, 9947, 0);
     private static final Location BORK_LOCATION = Location.create(3564, 9959, 0);
-    private static final Point[] MINION_LOCATIONS = {
-            new Point(3551, 9938), new Point(3563, 9941), new Point(3547, 9957)
-    };
-    private static final long DELAY = Time.TEN_HOURS/2L;
+    private static final Point[] MINION_LOCATIONS = {new Point(3551, 9938), new Point(3563, 9941),
+            new Point(3547, 9957)};
+    private static final long DELAY = Time.TEN_HOURS / 2L;
 
     private static final int INTERFACE_ID = 6568;
     private static final int[] CHILD_IDS = {6569, 6570, 6572, 6664};
@@ -48,16 +47,16 @@ public class Bork  {
         CommandHandler.submit(new Command("bork", Rank.PLAYER) {
 
             public boolean execute(final Player player, final String input) {
-                long delay;
-                if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
+                final long delay;
+                if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY){
                     player.sendf("You must wait %d more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
                     return true;
-                } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 6)  {
+                }else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 6){
                     player.sendf("You need at least 6 hours of online time to attempt Bork");
                     return true;
                 }
 
-                if(!ItemSpawning.canSpawn(player)) {
+                if(!ItemSpawning.canSpawn(player)){
                     player.sendMessage("You can't start bork here");
                     return false;
 
@@ -82,6 +81,26 @@ public class Bork  {
         });
     }
 
+    public static boolean doDeath(final Player player) {
+        if(player.getExtraData().get(KEY) == null){
+            return false;
+        }
+        ((BorkEvent) player.getExtraData().get(KEY)).giveReward(false);
+        ((BorkEvent) player.getExtraData().get(KEY)).stop();
+        player.setTeleportTarget(Edgeville.LOCATION, false);
+        return true;
+    }
+
+    public static boolean handleBorkDeath(final Player player, final NPC npc) {
+        if(player.getExtraData().get(KEY) == null || npc.getDefinition().getId() != BorkAndMinions.BORK_ID){
+            return false;
+        }
+        ((BorkEvent) player.getExtraData().get(KEY)).giveReward(true);
+        ((BorkEvent) player.getExtraData().get(KEY)).stop();
+        player.setTeleportTarget(Edgeville.LOCATION, false);
+        return true;
+
+    }
 
     private static final class BorkEvent extends Event {
         private static final double PKP_MULTIPLIER = 5;
@@ -106,30 +125,29 @@ public class Bork  {
             player.getExtraData().put(KEY, this);
             player.getActionSender().sendString(CHILD_IDS[0], "Kill BORK");
             //for(; i < CHILD_IDS.length; i++)
-                //player.getActionSender().sendString(CHILD_IDS[i], "");
+            //player.getActionSender().sendString(CHILD_IDS[i], "");
             final int height = player.getIndex() * 4;
-            npcs.add(World.getWorld().getNPCManager().addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1));
-            for(int i = 0; i<3; i++)
+            npcs.add(World.getWorld().getNPCManager().addNPC(BORK_LOCATION.transform(0, 0, height), BorkAndMinions.BORK_ID, -1));
+            for(int i = 0; i < 3; i++)
                 npcs.add(World.getWorld().getNPCManager().addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1));
 
 
         }
 
         @Override
-        public void execute()  {
+        public void execute() {
             if(time > 0)
                 time--;
             updateInterface();
         }
 
-        public void giveReward(boolean kill) {
-            int percentIncrease = (int)percentIncrease();
-            int tokens = (int)(percentIncrease * TOKEN_MULTIPLIER);
-            int pkt = (int)(percentIncrease * PKP_MULTIPLIER/2);
-            if(!kill)
-            {
-                pkt = pkt/3;
-                tokens = tokens/3;
+        public void giveReward(final boolean kill) {
+            final int percentIncrease = (int) percentIncrease();
+            int tokens = (int) (percentIncrease * TOKEN_MULTIPLIER);
+            int pkt = (int) (percentIncrease * PKP_MULTIPLIER / 2);
+            if(!kill){
+                pkt = pkt / 3;
+                tokens = tokens / 3;
                 player.sendMessage("You did not manage to defeat bork.");
             }
             player.getBank().add(Item.create(PvMStore.TOKEN, tokens));
@@ -158,8 +176,8 @@ public class Bork  {
             player.getExtraData().put("cantteleport", false);
             player.getExtraData().remove(KEY);
             //kill all npcs
-            for(NPC npc : npcs) {
-                if(!npc.isDead()) {
+            for(final NPC npc : npcs){
+                if(!npc.isDead()){
                     npc.serverKilled = true;
                     npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
                 }
@@ -168,29 +186,7 @@ public class Bork  {
             npcs.clear();
 
 
-
         }
-
-    }
-
-    public static boolean doDeath(final Player player) {
-        if(player.getExtraData().get(KEY) == null) {
-            return false;
-        }
-        ((BorkEvent)player.getExtraData().get(KEY)).giveReward(false);
-        ((BorkEvent)player.getExtraData().get(KEY)).stop();
-        player.setTeleportTarget(Edgeville.LOCATION, false);
-        return true;
-    }
-
-    public static boolean handleBorkDeath(final Player player, final NPC npc) {
-        if(player.getExtraData().get(KEY) == null || npc.getDefinition().getId() != BorkAndMinions.BORK_ID) {
-            return false;
-        }
-        ((BorkEvent)player.getExtraData().get(KEY)).giveReward(true);
-        ((BorkEvent)player.getExtraData().get(KEY)).stop();
-        player.setTeleportTarget(Edgeville.LOCATION, false);
-        return true;
 
     }
 }

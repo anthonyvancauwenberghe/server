@@ -11,34 +11,34 @@ import java.sql.SQLException;
  */
 public class LoadPoll extends SQLRequest {
 
-    private int poll;
+    private final int poll;
 
-    public LoadPoll(int poll) {
+    public LoadPoll(final int poll) {
         super(QUERY_REQUEST);
         this.poll = poll;
     }
 
     @Override
-    public void process(SQLConnection sql) throws SQLException {
-        if (!sql.isConnected()) {
+    public void process(final SQLConnection sql) throws SQLException {
+        if(!sql.isConnected()){
             System.out.println("Ingame polls are not loaded.");
             return;
         }
 
         ResultSet rs = null;
-        String query = "SELECT * FROM `polls` WHERE `index` = " + poll;
-        try {
+        final String query = "SELECT * FROM `polls` WHERE `index` = " + poll;
+        try{
             rs = sql.query(query);
-            while (rs.next()) {
+            while(rs.next()){
                 new Poll(rs.getInt("index"), rs.getString("question"), rs.getString("explanation"), rs.getTimestamp("endDate"), rs.getBoolean("canChange"));
             }
-        } catch (Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
+        }finally{
+            if(rs != null){
+                try{
                     rs.close();
-                } catch (SQLException e) {
+                }catch(final SQLException e){
                     e.printStackTrace();
                 }
             }

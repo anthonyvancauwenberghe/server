@@ -11,18 +11,19 @@ public class Percentage {
     }
 
     public double toDouble(final double min) {
-        return remaining/total * (100.0-min) + min;
+        return remaining / total * (100.0 - min) + min;
     }
+
     public double toDouble() {
         return toDouble(0);
     }
 
-    public String toString(int places, double min) {
-        final String format = new StringBuilder("%.").append(places).append("f").toString();
+    public String toString(final int places, final double min) {
+        final String format = "%." + places + "f";
         return String.format(format, toDouble(min));
     }
 
-    public String toString(int places) {
+    public String toString(final int places) {
         return toString(places, 0);
     }
 

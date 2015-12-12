@@ -11,93 +11,93 @@ import org.hyperion.rs2.model.Player;
  */
 public abstract class Action extends Event {
 
-	/**
-	 * A queue policy determines when the clients should queue up actions.
-	 *
-	 * @author Graham Edgecombe
-	 */
-	public enum QueuePolicy {
+    /**
+     * The <code>Player</code> associated with this ActionEvent.
+     */
+    private final Player player;
 
-		/**
-		 * This indicates actions will always be queued.
-		 */
-		ALWAYS,
+    /**
+     * Creates a new ActionEvent.
+     *
+     * @param player The player.
+     * @param delay  The initial delay.
+     */
+    public Action(final Player player, final long delay) { //Testing Action
+        super(delay);
+        this.player = player;
+    }
 
-		/**
-		 * This indicates actions will never be queued.
-		 */
-		NEVER,
+    /**
+     * Gets the player.
+     *
+     * @return The player.
+     */
+    public Player getPlayer() {
+        return player;
+    }
 
-	}
+    /**
+     * Gets the queue policy of this action.
+     *
+     * @return The queue policy of this action.
+     */
+    public abstract QueuePolicy getQueuePolicy();
 
-	/**
-	 * A queue policy determines whether the action can occur while walking.
-	 *
-	 * @author Graham Edgecombe
-	 * @author Brett Russell
-	 */
-	public enum WalkablePolicy {
+    /**
+     * Gets the WalkablePolicy of this action.
+     *
+     * @return The walkable policy of this action.
+     */
+    public abstract WalkablePolicy getWalkablePolicy();
 
-		/**
-		 * This indicates actions may occur while walking.
-		 */
-		WALKABLE,
+    @Override
+    public void stop() {
+        super.stop();
+        player.getActionQueue().processNextAction();
+    }
 
-		/**
-		 * This indicates actions cannot occur while walking.
-		 */
-		NON_WALKABLE,
+    /**
+     * A queue policy determines when the clients should queue up actions.
+     *
+     * @author Graham Edgecombe
+     */
+    public enum QueuePolicy {
 
-		/**
-		 * This indicates actions can continue while following.
-		 */
-		FOLLOW,
+        /**
+         * This indicates actions will always be queued.
+         */
+        ALWAYS,
 
-	}
+        /**
+         * This indicates actions will never be queued.
+         */
+        NEVER,
 
-	/**
-	 * The <code>Player</code> associated with this ActionEvent.
-	 */
-	private Player player;
+    }
 
-	/**
-	 * Creates a new ActionEvent.
-	 *
-	 * @param player The player.
-	 * @param delay  The initial delay.
-	 */
-	public Action(Player player, long delay) { //Testing Action
-		super(delay);
-		this.player = player;
-	}
+    /**
+     * A queue policy determines whether the action can occur while walking.
+     *
+     * @author Graham Edgecombe
+     * @author Brett Russell
+     */
+    public enum WalkablePolicy {
 
-	/**
-	 * Gets the player.
-	 *
-	 * @return The player.
-	 */
-	public Player getPlayer() {
-		return player;
-	}
+        /**
+         * This indicates actions may occur while walking.
+         */
+        WALKABLE,
 
-	/**
-	 * Gets the queue policy of this action.
-	 *
-	 * @return The queue policy of this action.
-	 */
-	public abstract QueuePolicy getQueuePolicy();
+        /**
+         * This indicates actions cannot occur while walking.
+         */
+        NON_WALKABLE,
 
-	/**
-	 * Gets the WalkablePolicy of this action.
-	 *
-	 * @return The walkable policy of this action.
-	 */
-	public abstract WalkablePolicy getWalkablePolicy();
+        /**
+         * This indicates actions can continue while following.
+         */
+        FOLLOW,
 
-	@Override
-	public void stop() {
-		super.stop();
-		player.getActionQueue().processNextAction();
-	}
+    }
 
 }

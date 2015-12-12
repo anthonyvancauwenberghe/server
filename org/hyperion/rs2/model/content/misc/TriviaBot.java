@@ -20,312 +20,302 @@ import java.util.List;
  */
 public class TriviaBot {
 
-	/**
-	 * Prefix for all messages done by TriviaBot.
-	 */
-	private static final String TITLE = "[@whi@TriviaBot@bla@] ";
+    /**
+     * Prefix for all messages done by TriviaBot.
+     */
+    private static final String TITLE = "[@whi@TriviaBot@bla@] ";
 
-	/**
-	 * The cycle time.
-	 */
-	private static final int CYCLE_TIME = 1 * 60 * 1000; //1 Min
+    /**
+     * The cycle time.
+     */
+    private static final int CYCLE_TIME = 1 * 60 * 1000; //1 Min
+    /**
+     * All answers shouldn't contain any of the Strings below to be considered as valid.
+     */
+    private static final String[] NOT_ALLOWED_WORDS = {"@", "arsen", "cock", "faggot", "fuck", "suck", "dick", "vagina",
+            "dildo", "nigger", "black", "pooper", "penis", "nigga", "shit", "c0ck", "nigga", "ass", "boobs",};
+    /**
+     * Max amount of characters a question can be.
+     */
+    private static final int QUESTION_MAX_LENGTH = 45;
+    private static final List<Question> questions = new ArrayList<Question>();
+    /**
+     * TriviaBot singleton.
+     */
+    private static final TriviaBot bot = new TriviaBot();
+    /**
+     * LinkedLists to hold data for the TriviaBot. The names are self-explanatory.
+     */
+    private final List<String> currentAnswers = new LinkedList<String>();
+    private final List<String> attemptedAnswers = new LinkedList<String>();
+    /**
+     * The current Question.
+     */
+    private String currentQuestion;
+    /**
+     * The speed counter.
+     */
+    private int speedCounter = 0;
+    /**
+     * The ID of the last question.
+     */
+    private int lastQuestionID = 0;
+    /**
+     * The event that updates the question every <code>CYCLETIME</code>.
+     */
+    private final Event TRIVIA_EVENT = new Event(CYCLE_TIME) {
+        @Override
+        public void execute() {
+            updateQuestion();
+        }
+    };
 
-	/**
-	 * Max amount of characters a question can be.
-	 */
-	private static int QUESTION_MAX_LENGTH = 45;
+    /**
+     * Accessor for the TriviaBot.
+     *
+     * @return the triviabot.
+     */
+    public static TriviaBot getBot() {
+        return bot;
+    }
 
-	/**
-	 * LinkedLists to hold data for the TriviaBot. The names are self-explanatory.
-	 */
-	private List<String> currentAnswers = new LinkedList<String>();
-	private List<String> attemptedAnswers = new LinkedList<String>();
-	private static List<Question> questions = new ArrayList<Question>();
+    /**
+     * Loads all <code>Question</code> objects into the memory.
+     */
+    public static void loadQuestions() {
+        try{
+            questions.clear();
+            final BufferedReader r = new BufferedReader(new FileReader("./data/questions.txt"));
+            String s = "";
+            final LinkedList<String> answers = new LinkedList<String>();
+            String question = "";
+            while((s = r.readLine()) != null){
+                if(s.startsWith("<question>")){
+                    if(answers.size() > 0){
+                        questions.add(new Question(question, answers));
+                        answers.clear();
+                    }
+                    s = s.replace("<question>", "");
+                    question = s;
+                }else if(s.startsWith("<answer>")){
+                    s = s.replace("<answer>", "");
+                    answers.add(s.toLowerCase());
+                }
+            }
+            if(answers.size() > 0){
+                questions.add(new Question(question, answers));
+                answers.clear();
+            }
+            r.close();
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * The current Question.
-	 */
-	private String currentQuestion;
+    /**
+     * Initialized the TriviaBot.
+     */
+    public void init() {
+        loadQuestions();
+        updateQuestion();
+        World.getWorld().submit(TRIVIA_EVENT);
+        CommandHandler.submit(new Command("answer", Rank.PLAYER) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                final String answer = input.replace("answer ", "");
+                TriviaBot.getBot().sayAnswer(player, answer);
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("howmanytrivia", Rank.MODERATOR) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                player.getActionSender().sendMessage("There are currently " + TriviaBot.getBot().getPlayersAmount() + " people playing");
+                return true;
+            }
+        });
+    }
 
-	/**
-	 * The speed counter.
-	 */
-	private int speedCounter = 0;
+    /**
+     * Sets the speed counter.
+     *
+     * @param counter
+     */
+    public void setSpeedCounter(final int counter) {
+        speedCounter = counter;
+    }
 
-	/**
-	 * The ID of the last question.
-	 */
-	private int lastQuestionID = 0;
+    /**
+     * Use to get the amount of questions in the memory.
+     *
+     * @returns the amount of questions.
+     */
+    public int getQuestionsAmount() {
+        return questions.size();
+    }
 
-	/**
-	 * All answers shouldn't contain any of the Strings below to be considered as valid.
-	 */
-	private static final String[] NOT_ALLOWED_WORDS = {
-			"@", "arsen", "cock", "faggot", "fuck", "suck", "dick", "vagina", "dildo", "nigger", "black",
-			"pooper", "penis", "nigga", "shit", "c0ck", "nigga", "ass", "boobs",
-	};
+    /**
+     * Use to get the amount of trivia players.
+     *
+     * @returns the amount of trivia players.
+     */
+    public int getPlayersAmount() {
+        int counter = 0;
+        for(final Player p : World.getWorld().getPlayers()){
+            if(p.getTrivia().isEnabled())
+                counter++;
+        }
+        return counter;
+    }
 
-	/**
-	 * The event that updates the question every <code>CYCLETIME</code>.
-	 */
-	private final Event TRIVIA_EVENT = new Event(CYCLE_TIME) {
-		@Override
-		public void execute() {
-			updateQuestion();
-		}
-	};
+    /**
+     * Use to get the current question.
+     *
+     * @returns the current question
+     */
+    public String getQuestion() {
+        return currentQuestion;
+    }
 
-	/**
-	 * TriviaBot singleton.
-	 */
-	private static TriviaBot bot = new TriviaBot();
+    /**
+     * Sets a new question.
+     *
+     * @param ID
+     */
+    private void setQuestion(final int ID) {
+        currentQuestion = questions.get(ID).getQuestion();
+        lastQuestionID = ID;
+        resetAnswers();
+        for(int i = 0; i < questions.get(ID).getAnswers().length; i++){
+            currentAnswers.add(questions.get(ID).getAnswers()[i]);
+        }
+        if(currentQuestion.length() < 45)
+            yellMessage("New question: @dre@" + currentQuestion);
+        else{
+            yellMessage("@dre@New question: ");
+            yellMessage("@dre@" + currentQuestion);
+        }
+    }
 
-	/**
-	 * Accessor for the TriviaBot.
-	 *
-	 * @return the triviabot.
-	 */
-	public static TriviaBot getBot() {
-		return bot;
-	}
+    /**
+     * Resets the answers.
+     */
+    public void resetAnswers() {
+        currentAnswers.clear();
+        attemptedAnswers.clear();
+    }
 
-	/**
-	 * Initialized the TriviaBot.
-	 */
-	public void init() {
-		loadQuestions();
-		updateQuestion();
-		World.getWorld().submit(TRIVIA_EVENT);
-		CommandHandler.submit(new Command("answer", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				String answer = input.replace("answer ", "");
-				TriviaBot.getBot().sayAnswer(player, answer);
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("howmanytrivia", Rank.MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("There are currently "
-						+ TriviaBot.getBot().getPlayersAmount() + " people playing");
-				return true;
-			}
-		});
-	}
+    /**
+     * This method makes the player answer on a question with the specified <code>answer</code>
+     *
+     * @param p
+     * @param answer
+     */
+    public void sayAnswer(final Player p, final String answer) {
+        if(!p.getTrivia().canAnswer()){
+            p.getActionSender().sendMessage("You have already answered a few seconds ago.");
+            return;
+        }
+        for(final String s : NOT_ALLOWED_WORDS){
+            if(answer.toLowerCase().contains(s)){
+                p.getActionSender().sendMessage("Your answer contains unacceptable language.");
+                return;
+            }
+        }
+        if(currentQuestion.equals("")){
+            p.getActionSender().sendMessage("There is currently no question.");
+            return;
+        }
+        for(final String a : currentAnswers){
+            if(answer.equalsIgnoreCase(a)){
+                rightAnswer(p);
+                return;
+            }
+        }
+        attemptedAnswers.add(answer);
+        p.getActionSender().sendMessage("You haven't answered the question correctly.");
+        if(Math.random() > 0.96){
+            yellMessage("There are currently " + getPlayersAmount() + " people playing Trivia.");
+        }
+        p.getTrivia().updateTimer();
+    }
 
-	/**
-	 * Sets the speed counter.
-	 *
-	 * @param counter
-	 */
-	public void setSpeedCounter(int counter) {
-		speedCounter = counter;
-	}
+    /**
+     * This method is called whenever a player has answered
+     * a question correctly.
+     *
+     * @param p
+     */
+    private void rightAnswer(final Player p) {
+        yellMessage("Player @dre@" + p.getSafeDisplayName() + "@bla@ has answered my question correctly.");
+        if(currentAnswers.size() == 1){
+            yellMessage("The answer was: @dre@" + currentAnswers.get(0));
+        }else{
+            yellMessage("One of the answers was: @dre@" + currentAnswers.get(0));
+        }
+        yellMessage("He has been rewarded " + Server.NAME + " points. The question will soon be updated.");
+        String wrongAnswers = "";
+        for(final String s : attemptedAnswers){
+            if(wrongAnswers.length() > 80)
+                break;
+            wrongAnswers += s + ", ";
+        }
+        try{
+            wrongAnswers = wrongAnswers.substring(0, wrongAnswers.lastIndexOf(","));
+        }catch(final Exception e){
+        }
+        if(!wrongAnswers.isEmpty())
+            yellMessage("Wrong answers were: @dre@" + wrongAnswers);
+        currentQuestion = "";
+        resetAnswers();
+        addReward(p);
+        if(speedCounter > 0){
+            World.getWorld().submit(new Event(2000) {
+                public void execute() {
+                    updateQuestion();
+                    speedCounter--;
+                    this.stop();
+                }
+            });
+        }
+    }
 
-	/**
-	 * Use to get the amount of questions in the memory.
-	 *
-	 * @returns the amount of questions.
-	 */
-	public int getQuestionsAmount() {
-		return questions.size();
-	}
+    /**
+     * Updates the current question.
+     */
+    public void updateQuestion() {
+        TriviaSettings.resetAllTimers();
+        int r = Misc.random(questions.size() - 1);
+        if(Math.random() > 0.5){
+            final int r2 = Misc.random(questions.size() - 1);
+            r = Math.max(r, r2);
+        }
+        while(r == lastQuestionID || questions.get(r).getQuestion().length() > QUESTION_MAX_LENGTH){
+            r = Misc.random(questions.size() - 1);
+        }
+        setQuestion(r);
+    }
 
-	/**
-	 * Use to get the amount of trivia players.
-	 *
-	 * @returns the amount of trivia players.
-	 */
-	public int getPlayersAmount() {
-		int counter = 0;
-		for(Player p : World.getWorld().getPlayers()) {
-			if(p.getTrivia().isEnabled())
-				counter++;
-		}
-		return counter;
-	}
+    /**
+     * Rewards the player when answering a question correctly.
+     *
+     * @param player
+     */
+    private void addReward(final Player player) {
+        player.getPoints().increasePkPoints(Misc.random(getPlayersAmount() * 2) + 1);
+    }
 
-	/**
-	 * Use to get the current question.
-	 *
-	 * @returns the current question
-	 */
-	public String getQuestion() {
-		return currentQuestion;
-	}
-
-	/**
-	 * Resets the answers.
-	 */
-	public void resetAnswers() {
-		currentAnswers.clear();
-		attemptedAnswers.clear();
-	}
-
-	/**
-	 * This method makes the player answer on a question with the specified <code>answer</code>
-	 *
-	 * @param p
-	 * @param answer
-	 */
-	public void sayAnswer(Player p, String answer) {
-		if(! p.getTrivia().canAnswer()) {
-			p.getActionSender().sendMessage("You have already answered a few seconds ago.");
-			return;
-		}
-		for(String s : NOT_ALLOWED_WORDS) {
-			if(answer.toLowerCase().contains(s)) {
-				p.getActionSender().sendMessage("Your answer contains unacceptable language.");
-				return;
-			}
-		}
-		if(currentQuestion.equals("")) {
-			p.getActionSender().sendMessage("There is currently no question.");
-			return;
-		}
-		for(String a : currentAnswers) {
-			if(answer.equalsIgnoreCase(a)) {
-				rightAnswer(p);
-				return;
-			}
-		}
-		attemptedAnswers.add(answer);
-		p.getActionSender().sendMessage("You haven't answered the question correctly.");
-		if(Math.random() > 0.96) {
-			yellMessage("There are currently " + getPlayersAmount() + " people playing Trivia.");
-		}
-		p.getTrivia().updateTimer();
-	}
-
-	/**
-	 * This method is called whenever a player has answered
-	 * a question correctly.
-	 *
-	 * @param p
-	 */
-	private void rightAnswer(Player p) {
-		yellMessage("Player @dre@" + p.getSafeDisplayName() + "@bla@ has answered my question correctly.");
-		if(currentAnswers.size() == 1) {
-			yellMessage("The answer was: @dre@" + currentAnswers.get(0));
-		} else {
-			yellMessage("One of the answers was: @dre@" + currentAnswers.get(0));
-		}
-		yellMessage("He has been rewarded " + Server.NAME + " points. The question will soon be updated.");
-		String wrongAnswers = "";
-		for(String s : attemptedAnswers) {
-			if(wrongAnswers.length() > 80)
-				break;
-			wrongAnswers += s + ", ";
-		}
-		try {
-			wrongAnswers = wrongAnswers.substring(0, wrongAnswers.lastIndexOf(","));
-		} catch(Exception e){}
-		if(!wrongAnswers.isEmpty())
-			yellMessage("Wrong answers were: @dre@" + wrongAnswers);
-		currentQuestion = "";
-		resetAnswers();
-		addReward(p);
-		if(speedCounter > 0) {
-			World.getWorld().submit(new Event(2000) {
-				public void execute() {
-					updateQuestion();
-					speedCounter--;
-					this.stop();
-				}
-			});
-		}
-	}
-
-	/**
-	 * Updates the current question.
-	 */
-	public void updateQuestion() {
-		TriviaSettings.resetAllTimers();
-		int r = Misc.random(questions.size() - 1);
-		if(Math.random() > 0.5) {
-			int r2 = Misc.random(questions.size() - 1);
-			r = Math.max(r, r2);
-		}
-		while(r == lastQuestionID || questions.get(r).getQuestion().length() > QUESTION_MAX_LENGTH) {
-			r = Misc.random(questions.size() - 1);
-		}
-		setQuestion(r);
-	}
-
-	/**
-	 * Sets a new question.
-	 *
-	 * @param ID
-	 */
-	private void setQuestion(int ID) {
-		currentQuestion = questions.get(ID).getQuestion();
-		lastQuestionID = ID;
-		resetAnswers();
-		for(int i = 0; i < questions.get(ID).getAnswers().length; i++) {
-			currentAnswers.add(questions.get(ID).getAnswers()[i]);
-		}
-		if(currentQuestion.length() < 45)
-			yellMessage("New question: @dre@" + currentQuestion);
-		else {
-			yellMessage("@dre@New question: ");
-			yellMessage("@dre@" + currentQuestion);
-		}
-	}
-
-	/**
-	 * Rewards the player when answering a question correctly.
-	 *
-	 * @param player
-	 */
-	private void addReward(Player player) {
-		player.getPoints().increasePkPoints(Misc.random(getPlayersAmount() * 2) + 1);
-	}
-
-	/**
-	 * Yells a message to all players with Trivia enabled.
-	 *
-	 * @param message
-	 */
-	private void yellMessage(String message) {
-		for(Player p : World.getWorld().getPlayers()) {
-			if(p.getTrivia().isEnabled())
-				p.getActionSender().sendMessage(TITLE + message);
-		}
-	}
-
-	/**
-	 * Loads all <code>Question</code> objects into the memory.
-	 */
-	public static void loadQuestions() {
-		try {
-			questions.clear();
-			BufferedReader r = new BufferedReader(new FileReader("./data/questions.txt"));
-			String s = "";
-			LinkedList<String> answers = new LinkedList<String>();
-			String question = "";
-			while((s = r.readLine()) != null) {
-				if(s.startsWith("<question>")) {
-					if(answers.size() > 0) {
-						questions.add(new Question(question, answers));
-						answers.clear();
-					}
-					s = s.replace("<question>", "");
-					question = s;
-				} else if(s.startsWith("<answer>")) {
-					s = s.replace("<answer>", "");
-					answers.add(s.toLowerCase());
-				}
-			}
-			if(answers.size() > 0) {
-				questions.add(new Question(question, answers));
-				answers.clear();
-			}
-			r.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * Yells a message to all players with Trivia enabled.
+     *
+     * @param message
+     */
+    private void yellMessage(final String message) {
+        for(final Player p : World.getWorld().getPlayers()){
+            if(p.getTrivia().isEnabled())
+                p.getActionSender().sendMessage(TITLE + message);
+        }
+    }
 
 
 }

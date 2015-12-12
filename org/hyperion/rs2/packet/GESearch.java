@@ -7,19 +7,19 @@ import org.hyperion.rs2.util.NameUtils;
 
 public class GESearch implements PacketHandler {
 
-	@Override
-	public void handle(Player player, Packet packet) {
-		Long message = packet.getLong();
-		String itemName = "";
-		try {
-			itemName = NameUtils.longToName(message);
-		} catch(Exception e) {
-			return;
-		}
-		if(itemName.equals(player.lastSearch))
-			return;
-		player.lastSearch = itemName;
-		GrandExchangeV2.searchGE(player, itemName);
-	}
+    @Override
+    public void handle(final Player player, final Packet packet) {
+        final Long message = packet.getLong();
+        String itemName = "";
+        try{
+            itemName = NameUtils.longToName(message);
+        }catch(final Exception e){
+            return;
+        }
+        if(itemName.equals(player.lastSearch))
+            return;
+        player.lastSearch = itemName;
+        GrandExchangeV2.searchGE(player, itemName);
+    }
 
 }

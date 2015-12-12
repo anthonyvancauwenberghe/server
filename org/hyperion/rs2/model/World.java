@@ -8,14 +8,36 @@ import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.PathTest;
-import org.hyperion.rs2.*;
+import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.GameEngine;
+import org.hyperion.rs2.GenericWorldLoader;
+import org.hyperion.rs2.HostGateway;
+import org.hyperion.rs2.WorldLoader;
 import org.hyperion.rs2.WorldLoader.LoginResult;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.SpawnCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.EventManager;
-import org.hyperion.rs2.event.impl.*;
+import org.hyperion.rs2.event.impl.AntiDupeEvent;
+import org.hyperion.rs2.event.impl.BankersFacing;
+import org.hyperion.rs2.event.impl.CleanupEvent;
+import org.hyperion.rs2.event.impl.DisconnectEvent;
+import org.hyperion.rs2.event.impl.EPEvent;
+import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.HunterEvent;
+import org.hyperion.rs2.event.impl.NpcCombatEvent;
+import org.hyperion.rs2.event.impl.NpcDeathEvent;
+import org.hyperion.rs2.event.impl.PlayerCombatEvent;
+import org.hyperion.rs2.event.impl.PlayerEvent1Second;
+import org.hyperion.rs2.event.impl.PlayerEvent36Seconds;
+import org.hyperion.rs2.event.impl.PlayerStatsEvent;
+import org.hyperion.rs2.event.impl.PromoteEvent;
+import org.hyperion.rs2.event.impl.RefreshNewsEvent;
+import org.hyperion.rs2.event.impl.ServerMessages;
+import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.event.impl.UpdateEvent;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.login.LoginServerConnector;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Trade;
@@ -50,20 +72,36 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.sql.*;
+import org.hyperion.rs2.sql.DebugGUI;
+import org.hyperion.rs2.sql.DonationsSQLConnection;
+import org.hyperion.rs2.sql.DummyConnection;
+import org.hyperion.rs2.sql.ImportantPlayerConnection;
+import org.hyperion.rs2.sql.LogsSQLConnection;
+import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sql.PlayersSQLConnection;
+import org.hyperion.rs2.sql.SQLAccessor;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.sql.requests.StaffActivityRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
-import org.hyperion.rs2.util.*;
+import org.hyperion.rs2.util.ConfigurationParser;
+import org.hyperion.rs2.util.EntityList;
+import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.rs2.util.NewcomersLogging;
+import org.hyperion.rs2.util.Restart;
 import org.hyperion.util.BlockingExecutorService;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -82,140 +120,113 @@ import java.util.logging.Logger;
 public class World {
 
     public static final double PLAYER_MULTI = 1.20;
+    /**
+     * Logging class.
+     */
+    private static final Logger logger = Logger.getLogger(World.class.getName());
+    /**
+     * World instance.
+     */
+    private static final World world = new World();
+
+    static {
+        CommandHandler.submit(new Command("npcssize", Rank.PLAYER) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                player.getActionSender().sendMessage("Npcs: " + getWorld().getNPCs().size());
+                player.getActionSender().sendMessage("Waiting list: " + getWorld().npcsWaitingList.size());
+                return true;
+            }
+        });
+    }
 
     /**
      * Ticket Manager - no fuckin shit
      */
 
     private final TicketManager ticketManager = new TicketManager();
-
-    public final TicketManager getTicketManager() {
-        return ticketManager;
-    }
-
-
-    private DebugGUI gui;
-
-    public DebugGUI getGUI() {
-        return gui;
-    }
-
-    /**
-     * Logging class.
-     */
-    private static final Logger logger = Logger
-            .getLogger(World.class.getName());
-
-    /**
-     * World instance.
-     */
-    private static final World world = new World();
-
-    /**
-     * Gets the world instance.
-     *
-     * @return The world instance.
-     */
-    public static World getWorld() {
-        return world;
-    }
-
+    private final BountyHandler bountyHandler = new BountyHandler();
+    private final ConcurrentHashMap<String, Object> propertyMap = new ConcurrentHashMap<>();
     /**
      * An executor service which handles background loading tasks.
      */
-    private BlockingExecutorService backgroundLoader = new BlockingExecutorService(
-            Executors.newSingleThreadExecutor());
-
-
-    /**
-     * The game engine.
-     */
-    private GameEngine engine;
-
-    /**
-     * The event manager.
-     */
-    private EventManager eventManager;
-
-    /**
-     * The current loader implementation.
-     */
-    private WorldLoader loader;
-
+    private final BlockingExecutorService backgroundLoader = new BlockingExecutorService(Executors.newSingleThreadExecutor());
     /**
      * A list of connected players.
      */
-    private EntityList<Player> players = new EntityList<Player>(
-            Constants.MAX_PLAYERS);
-
+    private final EntityList<Player> players = new EntityList<Player>(Constants.MAX_PLAYERS);
+    /**
+     * The region manager.
+     */
+    private final RegionManager regionManager = new RegionManager();
+    private final ContentManager contentManager = new ContentManager();
     /**
      * A list of active NPCs.
      */
     public EntityList<NPC> npcs = new EntityList<NPC>(Constants.MAX_NPCS);
-
     public LinkedList<NPC> npcsWaitingList = new LinkedList<NPC>();
-
+    public int worldmapobjects = 10331; // 10331, 5116
+    @SuppressWarnings("unchecked")
+    public Map<BlockPoint, DirectionCollection>[] World_Objects = new Hashtable[worldmapobjects];
+    public int updateTimer = -1;
+    public PathTest pathTest = new PathTest();
+    private DebugGUI gui;
+    /**
+     * The game engine.
+     */
+    private GameEngine engine;
+    /**
+     * The event manager.
+     */
+    private EventManager eventManager;
+    /**
+     * The current loader implementation.
+     */
+    private WorldLoader loader;
     /**
      * The game object manager.
      */
     private ObjectManager objectManager;
-
     /**
      * The login server connector.
      */
     private LoginServerConnector connector;
-
-    /**
-     * The region manager.
-     */
-    private RegionManager regionManager = new RegionManager();
-
     /**
      * Global Item Manager, for drops
      */
     private GlobalItemManager globalItemManager;
-
-    private ContentManager contentManager = new ContentManager();
-
     /**
      * The NPC Manager
      */
     private NPCManager npcManager;
-
     /**
      * The Staff Manager
      */
     private StaffManager staffManager;
-
     private MySQLConnection charsSQL;
     /**
      * The Ban Manager
      */
     private BanManager banManager;
-
-    private final BountyHandler bountyHandler = new BountyHandler();
-
     private ServerEnemies enemies;
-
-    private final ConcurrentHashMap<String, Object> propertyMap = new ConcurrentHashMap<>();
-
-    public void putProperty(String key, Object value) {
-        propertyMap.put(key, value);
-    }
-
-    public <T> T getProperty(String key) {
-        if (propertyMap.containsKey(key)) {
-            return (T) propertyMap.get(key);
-        }
-        return null;
-    }
-
+    private Wilderness wilderness = null;
+    private MySQLConnection donationsSQL;
+    private SQLAccessor donationsOffer;
+    private MySQLConnection logsSQL;
+    private SQLAccessor logsOffer;
+    private MySQLConnection playersSQL;
+    private SQLAccessor playersOffer;
+    private MySQLConnection loadingSQL;
+    private SQLAccessor loadingOffer;
+    private MySQLConnection importantPlayersSQL;
+    private SQLAccessor importantOffer;
+    private boolean updateInProgress = false;
 
     /**
      * Creates the world and begins background loading tasks.
      */
     public World() {
-        try {
+        try{
             /*
              * backgroundLoader.submit(new Callable<Object>() {
 			 *
@@ -223,8 +234,8 @@ public class World {
 			 * new ObjectManager(); objectManager.load(); DoorManager.init();
 			 * return null; } });
 			 */
-			/*
-			 * backgroundLoader.submit(new Callable<Object>() {
+            /*
+             * backgroundLoader.submit(new Callable<Object>() {
 			 *
 			 * @Override public Object call() throws Exception {
 			 * ItemDefinition.init(); //NPCDefinition.init(); for(int i = 0; i <
@@ -237,7 +248,7 @@ public class World {
             objectManager.load();
             DoorManager.init();
 
-            for (int i = 0; i < worldmapobjects; i++) {
+            for(int i = 0; i < worldmapobjects; i++){
                 World_Objects[i] = null;
                 World_Objects[i] = new Hashtable<BlockPoint, DirectionCollection>();
             }
@@ -248,14 +259,14 @@ public class World {
             // org.hyperion.map.Region.load();
             new Lottery();
 
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
             public void run() {
-                for (Player player : players) {
+                for(final Player player : players){
                     loader.savePlayer(player, "allsave");
                 }
                 System.out.println("Saved all players!");
@@ -263,9 +274,68 @@ public class World {
         });
     }
 
-    public int worldmapobjects = 10331; // 10331, 5116
-    @SuppressWarnings("unchecked")
-    public Map<BlockPoint, DirectionCollection>[] World_Objects = new Hashtable[worldmapobjects];
+    /**
+     * Gets the world instance.
+     *
+     * @return The world instance.
+     */
+    public static World getWorld() {
+        return world;
+    }
+
+    public static void writeError(final String filename, final Exception ex) {
+        try{
+            final BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true));
+            bw.write(new Date().toString());
+            bw.newLine();
+            if(ex.getCause() != null){
+                bw.write("	cause: " + ex.getCause().toString());
+                bw.newLine();
+            }
+            if(ex.getClass() != null){
+                bw.write("	class: " + ex.getClass().toString());
+                bw.newLine();
+            }
+            if(ex.getMessage() != null){
+                bw.write("	message: " + ex.getMessage());
+                bw.newLine();
+            }
+            if(ex.getStackTrace() == null)
+                ex.fillInStackTrace();
+            if(ex.getStackTrace() != null){
+                for(final StackTraceElement s : ex.getStackTrace()){
+                    bw.write("	at " + s.getClassName() + "." + s.getMethodName() + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+                    bw.newLine();
+                }
+            }
+            bw.newLine();
+            bw.write("================================");
+            bw.newLine();
+            bw.flush();
+            bw.close();
+        }catch(final Exception ez){
+            ez.printStackTrace();
+        }
+    }
+
+    public final TicketManager getTicketManager() {
+        return ticketManager;
+    }
+
+    public DebugGUI getGUI() {
+        return gui;
+    }
+
+    public void putProperty(final String key, final Object value) {
+        propertyMap.put(key, value);
+    }
+
+    public <T> T getProperty(final String key) {
+        if(propertyMap.containsKey(key)){
+            return (T) propertyMap.get(key);
+        }
+        return null;
+    }
 
     /**
      * Gets the login server connector.
@@ -302,33 +372,19 @@ public class World {
         return staffManager;
     }
 
-    private Wilderness wilderness = null;
-
     public Wilderness getWilderness() {
-        if (wilderness == null)
+        if(wilderness == null)
             wilderness = new Wilderness();
         return wilderness;
     }
 
-
-    private MySQLConnection donationsSQL;
-    private SQLAccessor donationsOffer;
-
-    private MySQLConnection logsSQL;
-    private SQLAccessor logsOffer;
-
-    private MySQLConnection playersSQL;
-    private SQLAccessor playersOffer;
-
-    private MySQLConnection loadingSQL;
-    private SQLAccessor loadingOffer;
-
-    private MySQLConnection importantPlayersSQL;
-    private SQLAccessor importantOffer;
-
     public SQLAccessor getLoadingConnection() {
         return loadingOffer;
     }
+
+	/*public PlayersSQLConnection getPlayersConnection() {
+        return playersSQL;
+	}*/
 
     public SQLAccessor getImportantConnection() {
         return importantOffer;
@@ -337,9 +393,6 @@ public class World {
     public SQLAccessor getPlayersConnection() {
         return playersOffer;
     }
-
-
-
 
     public MySQLConnection getDonationsConnection() {
         return donationsSQL;
@@ -353,21 +406,22 @@ public class World {
         return charsSQL;
     }
 
-	/*public PlayersSQLConnection getPlayersConnection() {
-		return playersSQL;
-	}*/
+   /* private SQLPlayerSaving sqlSaving;
+
+   public SQLPlayerSaving getSQLSaving() {
+        return sqlSaving;
+    }
+	/*
+	 * Writes an error to a file
+	 */
 
     public ServerEnemies getEnemies() {
         return enemies;
     }
 
-    private boolean updateInProgress = false;
-
     public boolean updateInProgress() {
         return updateInProgress;
     }
-
-    public int updateTimer = -1;
 
     /**
      * Initialises the world: loading configuration and registering global
@@ -380,13 +434,10 @@ public class World {
      * @throws InstantiationException if a class could not be created.
      * @throws IllegalStateException  if the world is already initialised.
      */
-    public void init(GameEngine engine) throws IOException,
-            ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
-        if (this.engine != null) {
-            throw new IllegalStateException(
-                    "The world has already been initialised.");
-        } else {
+    public void init(final GameEngine engine) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        if(this.engine != null){
+            throw new IllegalStateException("The world has already been initialised.");
+        }else{
             this.engine = engine;
             this.eventManager = new EventManager(engine);
             this.npcManager = new NPCManager();
@@ -399,20 +450,19 @@ public class World {
             this.registerGlobalEvents();
 
 
-
-            if (Server.getConfig().getBoolean("donationssql")) {
+            if(Server.getConfig().getBoolean("donationssql")){
                 donationsSQL = new DonationsSQLConnection(Server.getConfig());
-            } else {
+            }else{
                 donationsSQL = new DummyConnection();
             }
-            if (Server.getConfig().getBoolean("logssql")) {
+            if(Server.getConfig().getBoolean("logssql")){
 
                 logsSQL = new LogsSQLConnection(Server.getConfig());
                 //logsSQL.setLogged(true);
-            } else {
+            }else{
                 logsSQL = new DummyConnection();
             }
-            if (Server.getConfig().getBoolean("playerssql")) {
+            if(Server.getConfig().getBoolean("playerssql")){
                 playersSQL = new PlayersSQLConnection(Server.getConfig());
 
                 playersSQL.setPriority(Thread.MAX_PRIORITY);
@@ -422,7 +472,7 @@ public class World {
                 importantPlayersSQL = new ImportantPlayerConnection(Server.getConfig());
                 importantPlayersSQL.setPriority(Thread.MAX_PRIORITY);
                 importantPlayersSQL.setLogged(true);
-            } else {
+            }else{
                 playersSQL = new DummyConnection();
                 loadingSQL = new DummyConnection();
                 importantPlayersSQL = new DummyConnection();
@@ -467,53 +517,6 @@ public class World {
         }
     }
 
-   /* private SQLPlayerSaving sqlSaving;
-
-   public SQLPlayerSaving getSQLSaving() {
-        return sqlSaving;
-    }
-	/*
-	 * Writes an error to a file
-	 */
-
-    public static void writeError(String filename, Exception ex) {
-        try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filename,
-                    true));
-            bw.write(new Date().toString());
-            bw.newLine();
-            if (ex.getCause() != null) {
-                bw.write("	cause: " + ex.getCause().toString());
-                bw.newLine();
-            }
-            if (ex.getClass() != null) {
-                bw.write("	class: " + ex.getClass().toString());
-                bw.newLine();
-            }
-            if (ex.getMessage() != null) {
-                bw.write("	message: " + ex.getMessage());
-                bw.newLine();
-            }
-            if (ex.getStackTrace() == null)
-                ex.fillInStackTrace();
-            if (ex.getStackTrace() != null) {
-                for (StackTraceElement s : ex.getStackTrace()) {
-                    bw.write("	at " + s.getClassName() + "."
-                            + s.getMethodName() + "(" + s.getFileName() + ":"
-                            + s.getLineNumber() + ")");
-                    bw.newLine();
-                }
-            }
-            bw.newLine();
-            bw.write("================================");
-            bw.newLine();
-            bw.flush();
-            bw.close();
-        } catch (Exception ez) {
-            ez.printStackTrace();
-        }
-    }
-
     /**
      * Loads server configuration.
      *
@@ -522,46 +525,40 @@ public class World {
      * @throws IllegalAccessException if a class could not be accessed.
      * @throws InstantiationException if a class could not be created.
      */
-    public void loadConfiguration() throws IOException, ClassNotFoundException,
-            InstantiationException, IllegalAccessException {
-        FileInputStream fis = new FileInputStream("data/configuration.cfg");
-        try {
-            ConfigurationParser p = new ConfigurationParser(fis);
-            Map<String, String> mappings = p.getMappings();
-			/*
+    public void loadConfiguration() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        final FileInputStream fis = new FileInputStream("data/configuration.cfg");
+        try{
+            final ConfigurationParser p = new ConfigurationParser(fis);
+            final Map<String, String> mappings = p.getMappings();
+            /*
 			 * Worldloader configuration.
 			 */
-            if (mappings.containsKey("worldLoader")) {
-                String worldLoaderClass = mappings.get("worldLoader");
-                Class<?> loader = Class.forName(worldLoaderClass);
+            if(mappings.containsKey("worldLoader")){
+                final String worldLoaderClass = mappings.get("worldLoader");
+                final Class<?> loader = Class.forName(worldLoaderClass);
                 this.loader = (WorldLoader) loader.newInstance();
                 System.out.println("WorldLoader set to : " + worldLoaderClass);
-            } else {
+            }else{
                 this.loader = new GenericWorldLoader();
                 System.out.println("WorldLoader is set to default");
             }
-            Map<String, Map<String, String>> complexMappings = p
-                    .getComplexMappings();
-			/*
+            final Map<String, Map<String, String>> complexMappings = p.getComplexMappings();
+            /*
 			 * Packets configuration.
 			 */
-            if (complexMappings.containsKey("packetHandlers")) {
-                Map<Class<?>, Object> loadedHandlers = new HashMap<Class<?>, Object>();
-                for (Map.Entry<String, String> handler : complexMappings.get(
-                        "packetHandlers").entrySet()) {
-                    int id = Integer.parseInt(handler.getKey());
-                    Class<?> handlerClass = Class.forName(handler.getValue());
-                    Object handlerInstance;
-                    if (loadedHandlers.containsKey(handlerClass)) {
-                        handlerInstance = loadedHandlers.get(loadedHandlers
-                                .get(handlerClass));
-                    } else {
+            if(complexMappings.containsKey("packetHandlers")){
+                final Map<Class<?>, Object> loadedHandlers = new HashMap<Class<?>, Object>();
+                for(final Map.Entry<String, String> handler : complexMappings.get("packetHandlers").entrySet()){
+                    final int id = Integer.parseInt(handler.getKey());
+                    final Class<?> handlerClass = Class.forName(handler.getValue());
+                    final Object handlerInstance;
+                    if(loadedHandlers.containsKey(handlerClass)){
+                        handlerInstance = loadedHandlers.get(loadedHandlers.get(handlerClass));
+                    }else{
                         handlerInstance = handlerClass.newInstance();
                     }
-                    PacketManager.getPacketManager().bind(id,
-                            (PacketHandler) handlerInstance);
-                    logger.fine("Bound " + handler.getValue() + " to opcode : "
-                            + id);
+                    PacketManager.getPacketManager().bind(id, (PacketHandler) handlerInstance);
+                    logger.fine("Bound " + handler.getValue() + " to opcode : " + id);
                 }
             }
 			/*if (loader instanceof LoginServerWorldLoader) {
@@ -570,15 +567,12 @@ public class World {
 				connector.connect(mappings.get("nodePassword"),
 						Integer.parseInt(mappings.get("nodeId")));
 			}*/
-        } finally {
+        }finally{
             fis.close();
         }
     }
 
-    public PathTest pathTest = new PathTest();
-
-    public boolean isWalkAble(int height, int absX, int absY, int toAbsX,
-                              int toAbsY, int check) {
+    public boolean isWalkAble(final int height, final int absX, final int absY, final int toAbsX, final int toAbsY, final int check) {
         // return WorldMap.isWalkAble(height, absX, absY, toAbsX, toAbsY,
         // check);
         return WorldMap.checkPos(height, absX, absY, toAbsX, toAbsY, check);
@@ -625,8 +619,8 @@ public class World {
      *
      * @param event The event to submit.
      */
-    public void submit(Event event) {
-        if (eventManager == null || event == null)
+    public void submit(final Event event) {
+        if(eventManager == null || event == null)
             return;
         this.eventManager.submit(event);
     }
@@ -636,7 +630,7 @@ public class World {
      *
      * @param task The task to submit.
      */
-    public void submit(Task task) {
+    public void submit(final Task task) {
         this.engine.pushTask(task);
     }
 
@@ -671,13 +665,13 @@ public class World {
         return npcManager;
     }
 
-    public ContentManager getContentManager() {
-        return contentManager;
-    }
-
 	/*
 	 * public ReportAbuse getAbuseHandler(){ return abuse; }
 	 */
+
+    public ContentManager getContentManager() {
+        return contentManager;
+    }
 
     /**
      * Loads a player's game in the work service.
@@ -692,39 +686,38 @@ public class World {
                 int code = code2;
                 LoginDebugger.getDebugger().log("Code : " + code);
                 LoginResult lr = null;
-                if (isPlayerOnline(pd.getName())) {
+                if(isPlayerOnline(pd.getName())){
                     LoginDebugger.getDebugger().log("About to code 5");
                     code = 5;
-                } else {
+                }else{
                     LoginDebugger.getDebugger().log("Pre checking");
                     lr = loader.checkLogin(pd);
                     LoginDebugger.getDebugger().log("Checked login");
-                    if (code == 0) {
+                    if(code == 0){
                         code = lr.getReturnCode();
                         LoginDebugger.getDebugger().log("Code is 0 so..");
                     }
-                    if (code == 2 || code == 8) {
+                    if(code == 2 || code == 8){
                         lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
                         LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
                     }
                     LoginDebugger.getDebugger().log("4. Checking loader login");
                 }
-                if (!NameUtils.isValidName(pd.getName())) {
+                if(!NameUtils.isValidName(pd.getName())){
                     code = 11;
                 }
                 LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
-                if (code != 2 && code != 8) {
+                if(code != 2 && code != 8){
                     LoginDebugger.getDebugger().log("Packetbuilder code");
-                    PacketBuilder bldr = new PacketBuilder();
+                    final PacketBuilder bldr = new PacketBuilder();
                     bldr.put((byte) code);
-                    pd.getSession().write(bldr.toPacket())
-                            .addListener(new IoFutureListener<IoFuture>() {
-                                @Override
-                                public void operationComplete(IoFuture future) {
-                                    future.getSession().close(false);
-                                }
-                            });
-                } else {
+                    pd.getSession().write(bldr.toPacket()).addListener(new IoFutureListener<IoFuture>() {
+                        @Override
+                        public void operationComplete(final IoFuture future) {
+                            future.getSession().close(false);
+                        }
+                    });
+                }else{
 
                     loader.loadPlayer(lr.getPlayer());
                     // lr.getPlayer().getActionSender().sendLogin();
@@ -735,14 +728,13 @@ public class World {
         });
     }
 
-    public void resetPlayersNpcs(Player player) {
-        for (int i = 1; i <= npcs.size(); i++) {
-            if (npcs.get(i) != null) {
-                NPC npc = (NPC) npcs.get(i);
-                if (npc.ownerId == player.getIndex()
-                        && player.cE.summonedNpc != npc) {
+    public void resetPlayersNpcs(final Player player) {
+        for(int i = 1; i <= npcs.size(); i++){
+            if(npcs.get(i) != null){
+                final NPC npc = (NPC) npcs.get(i);
+                if(npc.ownerId == player.getIndex() && player.cE.summonedNpc != npc){
                     npc.serverKilled = true;
-                    if (!npc.isDead()) {
+                    if(!npc.isDead()){
                         World.getWorld().unregister(npc);
                     }
                     npc.setDead(true);
@@ -753,12 +745,12 @@ public class World {
 
     }
 
-    public void resetSummoningNpcs(Player player) {
-        NPC npc = player.cE.summonedNpc;
-        if (npc == null)
+    public void resetSummoningNpcs(final Player player) {
+        final NPC npc = player.cE.summonedNpc;
+        if(npc == null)
             return;
         npc.serverKilled = true;
-        if (!npc.isDead()) {
+        if(!npc.isDead()){
             submit(new NpcDeathEvent(npc));
         }
         npc.setDead(true);
@@ -769,10 +761,10 @@ public class World {
     }
 
     public void resetNpcs() {
-        for (int i = 1; i <= npcs.size(); i++) {
-            if (npcs.get(i) != null) {
-                NPC npc = (NPC) npcs.get(i);
-                if (!npc.isDead()) {
+        for(int i = 1; i <= npcs.size(); i++){
+            if(npcs.get(i) != null){
+                final NPC npc = (NPC) npcs.get(i);
+                if(!npc.isDead()){
                     npc.serverKilled = true;
                     submit(new NpcDeathEvent(npc));
                 }
@@ -788,14 +780,13 @@ public class World {
      *
      * @param n The npc to register.
      */
-    public void register(NPC n) {
+    public void register(final NPC n) {
         npcs.add(n);
     }
 
-    public void removeFromWaiting(NPC npc) {
+    public void removeFromWaiting(final NPC npc) {
         // TODO LOOK AT THIS CODE, IT MAY HAVE TO BE MODIFIED
-        Region region = World.getWorld().getRegionManager()
-                .getRegionByLocation(npc.getLocation());
+        final Region region = World.getWorld().getRegionManager().getRegionByLocation(npc.getLocation());
         region.addNpc(npc);
         npc.setLocation(npc.getSpawnLocation());
         register(npc);
@@ -806,7 +797,7 @@ public class World {
      *
      * @param npc The npc to unregister.
      */
-    public void unregister(NPC npc) {
+    public void unregister(final NPC npc) {
         // System.out.println("unregistering npc");
 		/*
 		 * Player b = null; try { b.activityPoints = 2; } catch(Exception e){
@@ -832,27 +823,24 @@ public class World {
             player.getPassword().setEncryptedPass(enc);
         }*/
         int returnCode = 2;
-        if (returnCode == 2) {
-            if (!players.add(player)) {
+        if(returnCode == 2){
+            if(!players.add(player)){
                 returnCode = 7;
-                LoginDebugger.getDebugger().log(
-                        "Could not register player " + player.getName());
+                LoginDebugger.getDebugger().log("Could not register player " + player.getName());
             }
         }
         final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
-        if (holder != null) {
-            for (final Punishment p : holder.getPunishments()) {
+        if(holder != null){
+            for(final Punishment p : holder.getPunishments()){
                 p.getCombination().getType().apply(player);
                 p.send(player, false);
             }
-        } else {
-            for (final PunishmentHolder h : PunishmentManager.getInstance().getHolders()) {
-                if (player.getName().equalsIgnoreCase(h.getVictimName())) //skip acc punishments ^ wouldve been previously applied
+        }else{
+            for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
+                if(player.getName().equalsIgnoreCase(h.getVictimName())) //skip acc punishments ^ wouldve been previously applied
                     continue;
-                for (final Punishment p : h.getPunishments()) {
-                    if ((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
-                            || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())
-                            || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))) {
+                for(final Punishment p : h.getPunishments()){
+                    if((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP())) || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID()) || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))){
                         p.getCombination().getType().apply(player);
                         p.send(player, false);
                     }
@@ -861,23 +849,22 @@ public class World {
             }
         }
         final int fReturnCode = returnCode;
-        PacketBuilder bldr = new PacketBuilder();
+        final PacketBuilder bldr = new PacketBuilder();
         bldr.put((byte) returnCode);
         bldr.put((byte) Rank.getPrimaryRankIndex(player));
         bldr.put((byte) 0);
-        player.getSession().write(bldr.toPacket())
-                .addListener(new IoFutureListener<IoFuture>() {
-                    @Override
-                    public void operationComplete(IoFuture future) {
-                        if (fReturnCode != 2) {
-                            player.getSession().close(false);
-                        } else {
-                            player.getActionSender().sendLogin();
-                            //PlayerFiles.saveGame(player);
-                        }
-                    }
-                });
-        if (returnCode == 2) {
+        player.getSession().write(bldr.toPacket()).addListener(new IoFutureListener<IoFuture>() {
+            @Override
+            public void operationComplete(final IoFuture future) {
+                if(fReturnCode != 2){
+                    player.getSession().close(false);
+                }else{
+                    player.getActionSender().sendLogin();
+                    //PlayerFiles.saveGame(player);
+                }
+            }
+        });
+        if(returnCode == 2){
             // logger.info("Registered player : " + player + " [online=" +
             // players.size() + "]");
             // System.out.println("Registered player : " + player.getName() +
@@ -914,8 +901,8 @@ public class World {
     public boolean isPlayerOnline(String name) {
         LoginDebugger.getDebugger().log("Checking online players!");
         name = NameUtils.formatName(name);
-        for (Player player : players) {
-            if (player != null && player.getName().equalsIgnoreCase(name)) {
+        for(final Player player : players){
+            if(player != null && player.getName().equalsIgnoreCase(name)){
                 return true;
             }
         }
@@ -930,8 +917,8 @@ public class World {
      */
     public Player getPlayer(String name) {
         name = NameUtils.formatName(name);
-        for (Player player : players) {
-            if (player.getName().equalsIgnoreCase(name) && !player.isHidden()) { //yes
+        for(final Player player : players){
+            if(player.getName().equalsIgnoreCase(name) && !player.isHidden()){ //yes
                 return player;
             }
         }
@@ -943,15 +930,15 @@ public class World {
      *
      * @param session The session that is about to be closed
      */
-    public boolean gracefullyExitSession(IoSession session) {
-        if (session.containsAttribute("player")) {
-            try {
-                Player p = (Player) session.getAttribute("player");
-                if (p != null) {
+    public boolean gracefullyExitSession(final IoSession session) {
+        if(session.containsAttribute("player")){
+            try{
+                final Player p = (Player) session.getAttribute("player");
+                if(p != null){
                     unregister(p);
                     return true;
                 }
-            } catch (ClassCastException e) {
+            }catch(final ClassCastException e){
                 System.err.println("Session attribute \"player\" was not a player");
             }
         }
@@ -968,12 +955,12 @@ public class World {
 		 * Combat.resetAttack(player.cE); final long xlog =
 		 * System.currentTimeMillis();
 		 */
-        if (System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
+        if(System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
             return;
         player.getExtraData().put("lastUnregister", System.currentTimeMillis());
-        if (System.currentTimeMillis() - player.cE.lastHit >= 10000 && !player.isDead() && !player.isBusy() && player.duelAttackable < 1) {
+        if(System.currentTimeMillis() - player.cE.lastHit >= 10000 && !player.isDead() && !player.isBusy() && player.duelAttackable < 1){
             unregister2(player);
-        } else {
+        }else{
             submit(new Event(20000) {
                 @Override
                 public void execute() {
@@ -988,7 +975,7 @@ public class World {
 
     public void unregister2(final Player player) {
         //auto save upon being called.
-        if (player.getLogging() != null)
+        if(player.getLogging() != null)
             //player.getLogging().log("Logging out");
             Combat.logoutReset(player.cE);
         player.getDungeoneering().fireOnLogout(player);
@@ -1001,22 +988,21 @@ public class World {
         player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.loginTime));
         player.getTicketHolder().fireOnLogout();
 
-        try {
+        try{
             ClanManager.leaveChat(player, false, false);
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
         // if(Server.dedi)
         // HighscoreConnection.updateHighscores(player.getName(),
         // ""+player.getRights().toInteger(), player.getSkills().getExps());
-        if (player.duelAttackable <= 0) {
+        if(player.duelAttackable <= 0){
             Duel.declineTrade(player);
-        } else {
+        }else{
             Duel.finishFullyDuel(player);
-            player.setLocation(Location.create(3360 + Combat.random(17),
-                    3274 + Combat.random(3), 0));
+            player.setLocation(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0));
         }
-        if (LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+        if(LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())){
             LastManStanding.getLastManStanding().leaveGame(player, true);
         }
         Trade.declineTrade(player);
@@ -1031,7 +1017,7 @@ public class World {
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
 
-       // BarrowsFFA.barrowsFFA.exit(player);
+        // BarrowsFFA.barrowsFFA.exit(player);
 
         // logger.info("Unregistered player : " + player + " [online=" +
         // players.size() + "]");
@@ -1040,24 +1026,22 @@ public class World {
         engine.submitWork(new Runnable() {
             public void run() {
 
-                if (!Rank.hasAbility(player, Rank.DEVELOPER))
+                if(!Rank.hasAbility(player, Rank.DEVELOPER))
                     getLogsConnection().offer(new AccountValuesRequest(player));
-                if (Rank.hasAbility(player, Rank.HELPER))
+                if(Rank.hasAbility(player, Rank.HELPER))
                     getLogsConnection().offer(new StaffActivityRequest(player));
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
-                long dp = player.getAccountValue().getTotalValue();
-                long pkp = player.getAccountValue().getPkPointValue();
-                if (player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
-                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
-                            "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(),
-                            dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
-                if (player.verified)
+                final long dp = player.getAccountValue().getTotalValue();
+                final long pkp = player.getAccountValue().getPkPointValue();
+                if(player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
+                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " + "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(), dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
+                if(player.verified)
                     loader.savePlayer(player, "world save");
                 resetSummoningNpcs(player);
-                if (World.getWorld().getLoginServerConnector() != null) {
+                if(World.getWorld().getLoginServerConnector() != null){
                     World.getWorld().getLoginServerConnector().disconnected(player.getName());
                 }
                 player.destroy();
@@ -1069,7 +1053,7 @@ public class World {
                 // player.getSession().removeAttribute("player");
             }
         });
-        if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
+        if(!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
             getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
@@ -1078,7 +1062,7 @@ public class World {
      *
      * @param t The exception.
      */
-    public void handleError(Throwable t) {
+    public void handleError(final Throwable t) {
         logger.severe("An error occurred in an executor service! The server will be halted immediately.");
         t.printStackTrace();
         // System.exit(1);
@@ -1092,12 +1076,12 @@ public class World {
         return bountyHandler;
     }
 
-    public void update(int time, final String reason) {
+    public void update(final int time, final String reason) {
         //if(updateInProgress)
         //return;
         updateTimer = time; //modifies timer regardless
         updateInProgress = true;
-        for (Player p : getPlayers()) {
+        for(final Player p : getPlayers()){
             p.getActionSender().sendUpdate();
         }
         submit(new Event(1000) {
@@ -1105,16 +1089,16 @@ public class World {
             public void execute() {
                 System.out.println("Seconds left: " + updateTimer);
                 updateTimer--;
-                if (!updateInProgress)
+                if(!updateInProgress)
                     this.stop();
-                if (updateTimer == 0) {
-                    for (Player p : getPlayers()) {
+                if(updateTimer == 0){
+                    for(final Player p : getPlayers()){
                         Trade.declineTrade(p);
                     }
-                    for (final Dungeon dungeon : Dungeon.activeDungeons) {
-                        try {
+                    for(final Dungeon dungeon : Dungeon.activeDungeons){
+                        try{
                             dungeon.complete();
-                        } catch (final Exception ex) {
+                        }catch(final Exception ex){
 
                         }
                     }
@@ -1127,18 +1111,5 @@ public class World {
 
     public void stopUpdate() {
         updateInProgress = false;
-    }
-
-    static {
-        CommandHandler.submit(new Command("npcssize", Rank.PLAYER) {
-            @Override
-            public boolean execute(Player player, String input) {
-                player.getActionSender().sendMessage(
-                        "Npcs: " + getWorld().getNPCs().size());
-                player.getActionSender().sendMessage(
-                        "Waiting list: " + getWorld().npcsWaitingList.size());
-                return true;
-            }
-        });
     }
 }

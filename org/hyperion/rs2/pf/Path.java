@@ -10,34 +10,34 @@ import java.util.LinkedList;
  */
 public class Path {
 
-	/**
-	 * The queue of points.
-	 */
-	private Deque<Point> tiles = new LinkedList<Point>();
+    /**
+     * The queue of points.
+     */
+    private final Deque<Point> tiles = new LinkedList<Point>();
 
-	/**
-	 * Creates an empty path.
-	 */
-	public Path() {
+    /**
+     * Creates an empty path.
+     */
+    public Path() {
 
-	}
+    }
 
-	/**
-	 * Adds a point onto the queue.
-	 *
-	 * @param p The point to add.
-	 */
-	public void addPoint(Point p) {
-		tiles.addFirst(p);
-	}
+    /**
+     * Adds a point onto the queue.
+     *
+     * @param p The point to add.
+     */
+    public void addPoint(final Point p) {
+        tiles.addFirst(p);
+    }
 
-	/**
-	 * Gets the deque backing this path.
-	 *
-	 * @return The deque backing this path.
-	 */
-	public Deque<Point> getPoints() {
-		return tiles;
-	}
+    /**
+     * Gets the deque backing this path.
+     *
+     * @return The deque backing this path.
+     */
+    public Deque<Point> getPoints() {
+        return tiles;
+    }
 
 }

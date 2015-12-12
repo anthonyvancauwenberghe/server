@@ -4,10 +4,10 @@ public enum Difficulty {
 
     VERY_EASY(4, "Very Easy"), EASY(2, "Easy"), MEDIUM(5, "Medium"), HARD(3, "Hard"), VERY_HARD(4, "Very Hard"), LEGENDARY(2, "Legendary");
 
-    private int numberOfAchievements;
-    private String name;
+    private final int numberOfAchievements;
+    private final String name;
 
-    Difficulty(int numberOfAchievements, String name) {
+    Difficulty(final int numberOfAchievements, final String name) {
         this.numberOfAchievements = numberOfAchievements;
         this.name = name;
     }
@@ -16,6 +16,8 @@ public enum Difficulty {
         return numberOfAchievements;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
 }

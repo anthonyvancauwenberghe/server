@@ -13,45 +13,45 @@ import org.hyperion.rs2.model.container.ContainerListener;
  */
 public class InterfaceContainerListener implements ContainerListener {
 
-	/**
-	 * The player.
-	 */
-	private Player player;
+    /**
+     * The player.
+     */
+    private final Player player;
 
-	/**
-	 * The interface id.
-	 */
-	private int interfaceId;
+    /**
+     * The interface id.
+     */
+    private final int interfaceId;
 
-	/**
-	 * Creates the container listener.
-	 *
-	 * @param player      The player.
-	 * @param interfaceId The interface id.
-	 */
-	public InterfaceContainerListener(Player player, int interfaceId) {
-		this.player = player;
-		this.interfaceId = interfaceId;
-	}
+    /**
+     * Creates the container listener.
+     *
+     * @param player      The player.
+     * @param interfaceId The interface id.
+     */
+    public InterfaceContainerListener(final Player player, final int interfaceId) {
+        this.player = player;
+        this.interfaceId = interfaceId;
+    }
 
-	@Override
-	public void itemChanged(Container container, int slot) {
-		Item item = container.get(slot);
-		player.getActionSender().sendUpdateItem(interfaceId, slot, item);
-	}
+    @Override
+    public void itemChanged(final Container container, final int slot) {
+        final Item item = container.get(slot);
+        player.getActionSender().sendUpdateItem(interfaceId, slot, item);
+    }
 
-	@Override
-	public void itemsChanged(Container container) {
-		player.getActionSender().sendUpdateItems(interfaceId, container.toArray());
-	}
+    @Override
+    public void itemsChanged(final Container container) {
+        player.getActionSender().sendUpdateItems(interfaceId, container.toArray());
+    }
 
-	@Override
-	public void itemsChanged(Container container, int[] slots) {
-		player.getActionSender().sendUpdateItems(interfaceId, slots, container.toArray());
-	}
-	
-	public void sendOther(Player viewed) {
-		player.getActionSender().sendUpdateItems(interfaceId, viewed.getInventory().toArray());
-	}
+    @Override
+    public void itemsChanged(final Container container, final int[] slots) {
+        player.getActionSender().sendUpdateItems(interfaceId, slots, container.toArray());
+    }
+
+    public void sendOther(final Player viewed) {
+        player.getActionSender().sendUpdateItems(interfaceId, viewed.getInventory().toArray());
+    }
 
 }

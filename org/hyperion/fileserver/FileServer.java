@@ -26,21 +26,15 @@ public class FileServer {
      * The JAGGRAB port to listen on.
      */
     public static final int JAGGRAB_PORT = getJaggrabPort();
-
-    public static int getJaggrabPort() {
-        return 43595;
-    }
-
-    /**
-     * Logger instance.
-     */
-    //private static final Logger logger = Logger.getLogger(FileServer.class.getName());
-
     /**
      * The <code>IoAcceptor</code> instance.
      */
     private final IoAcceptor jaggrabAcceptor = new NioSocketAcceptor();
 
+    /**
+     * Logger instance.
+     */
+    //private static final Logger logger = Logger.getLogger(FileServer.class.getName());
     /**
      * The <code>IoAcceptor</code> instance.
      */
@@ -52,6 +46,10 @@ public class FileServer {
     public FileServer() {
         jaggrabAcceptor.setHandler(new ConnectionHandler(Type.JAGGRAB));
         httpAcceptor.setHandler(new ConnectionHandler(Type.HTTP));
+    }
+
+    public static int getJaggrabPort() {
+        return 43595;
     }
 
     /**

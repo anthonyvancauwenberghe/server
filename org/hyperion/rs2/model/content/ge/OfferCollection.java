@@ -10,9 +10,10 @@ public class OfferCollection {
     private Item firstSlot;
     private Item secondSlot;
 
-    public OfferCollection() {}
+    public OfferCollection() {
+    }
 
-    public OfferCollection(Item firstSlot, Item secondSlot) {
+    public OfferCollection(final Item firstSlot, final Item secondSlot) {
         this.firstSlot = firstSlot;
         this.secondSlot = secondSlot;
     }
@@ -21,15 +22,15 @@ public class OfferCollection {
         return firstSlot;
     }
 
+    public void setFirstSlot(final Item item) {
+        this.firstSlot = item;
+    }
+
     public Item getSecondSlot() {
         return secondSlot;
     }
 
-    public void setFirstSlot(Item item) {
-        this.firstSlot = item;
-    }
-
-    public void setSecondSlot(Item item) {
+    public void setSecondSlot(final Item item) {
         this.secondSlot = item;
     }
 

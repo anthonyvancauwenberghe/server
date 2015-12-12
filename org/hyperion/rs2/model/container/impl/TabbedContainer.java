@@ -8,62 +8,62 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
  * Created by User on 3/20/2015.
  */
 public class TabbedContainer extends Container {
 
-    private Player player;
+    private final Player player;
 
-    public TabbedContainer(Type type, int capacity, Player player) {
+    public TabbedContainer(final Type type, final int capacity, final Player player) {
         super(type, capacity);
         this.player = player;
     }
 
     public boolean add(Item item) {
-        if(item == null) {
-            return false;        }
-        BankItem bankItem;
+        if(item == null){
+            return false;
+        }
+        final BankItem bankItem;
         if(!(item instanceof BankItem))
             item = item.toBankItem(0);
         bankItem = (BankItem) item;
-        int here = bankItem.getTabIndex();
+        final int here = bankItem.getTabIndex();
         if(bankItem.getId() < 0)
             return false;
         if(bankItem.getDefinition().isNoted())
             bankItem.setID(bankItem.getDefinition().getNormalId());
-        if(bankItem.getDefinition().isStackable() || getType().equals(Type.ALWAYS_STACK)) {
-            for(int i = 0; i < getItems().length; i++) {
-                if(getItems()[i] != null && getItems()[i].getId() == bankItem.getId()) {
-                    int totalCount = bankItem.getCount() + getItems()[i].getCount();
-                    long fuck_all_count = BigInteger.valueOf(bankItem.getCount()).add(BigInteger.valueOf(getItems()[i].getCount())).longValueExact();
-                    if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1) {
+        if(bankItem.getDefinition().isStackable() || getType().equals(Type.ALWAYS_STACK)){
+            for(int i = 0; i < getItems().length; i++){
+                if(getItems()[i] != null && getItems()[i].getId() == bankItem.getId()){
+                    final int totalCount = bankItem.getCount() + getItems()[i].getCount();
+                    final long fuck_all_count = BigInteger.valueOf(bankItem.getCount()).add(BigInteger.valueOf(getItems()[i].getCount())).longValueExact();
+                    if(fuck_all_count >= Constants.MAX_ITEMS || totalCount < 1){
                         return false;
                     }
 
-                    BankItem newBankItem = new BankItem(((BankItem)get(i)).getTabIndex(), getItems()[i].getId(), getItems()[i].getCount() + bankItem.getCount());
+                    final BankItem newBankItem = new BankItem(((BankItem) get(i)).getTabIndex(), getItems()[i].getId(), getItems()[i].getCount() + bankItem.getCount());
                     set(i, newBankItem);
                     return true;
                 }
             }
             return insert(bankItem, -1);
-        } else {
+        }else{
             System.out.println("check2");
-            int slots = freeSlots();
-            if(slots >= bankItem.getCount()) {
-                boolean b = isFiringEvents();
+            final int slots = freeSlots();
+            if(slots >= bankItem.getCount()){
+                final boolean b = isFiringEvents();
                 setFiringEvents(false);
-                try {
-                    for (int i = 0; i < bankItem.getCount(); i++) {
+                try{
+                    for(int i = 0; i < bankItem.getCount(); i++){
                         set(freeSlot(), new BankItem(bankItem.getTabIndex(), bankItem.getId(), 1));
                     }
                     return true;
-                } finally {
+                }finally{
                     setFiringEvents(b);
                 }
-            } else {
+            }else{
                 return false;
             }
         }
@@ -72,15 +72,15 @@ public class TabbedContainer extends Container {
     public synchronized boolean insert(final BankItem bankItem, int slot) {
         if(slot == -1 && size() == Bank.SIZE)
             return false;
-        int tabAmount = player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
+        final int tabAmount = player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
         if(tabAmount >= 350)
             return false;
-        if(slot == -1) {
+        if(slot == -1){
             slot = player.getBankField().getOffset(bankItem.getTabIndex()) + tabAmount;
         }
         final Item[] old = items.clone();
-        for(int i = 0 ; i < old.length; i++ ){
-            if ( i < slot)
+        for(int i = 0; i < old.length; i++){
+            if(i < slot)
                 set(i, old[i]);
             else if(i == slot)
                 set(i, null);
@@ -89,9 +89,9 @@ public class TabbedContainer extends Container {
 
         }
 
-        if (slot == -1 || slot >= Bank.SIZE) {
+        if(slot == -1 || slot >= Bank.SIZE){
             return false;
-        } else {
+        }else{
             set(slot, bankItem);
             return true;
         }
@@ -104,30 +104,30 @@ public class TabbedContainer extends Container {
      * @param item          The item to remove.
      * @return The number of items removed.
      */
-    public int remove(int preferredSlot, Item item) {
+    public int remove(final int preferredSlot, final Item item) {
         int removed = 0;
-        if(item == null || item.getDefinition() == null) {
+        if(item == null || item.getDefinition() == null){
             //System.out.println("Container null , PLEASE FIX MARTIN!");
             return removed;
         }
         //if(item.getCount() == 0)
         //	return 0;
-        if(item.getDefinition().isStackable() || getType().equals(Type.ALWAYS_STACK)) {
-            int slot = getSlotById(item.getId());
-            if(slot == - 1)
+        if(item.getDefinition().isStackable() || getType().equals(Type.ALWAYS_STACK)){
+            final int slot = getSlotById(item.getId());
+            if(slot == -1)
                 return removed;
-            BankItem stack = (BankItem)get(slot);
-            if(stack.getCount() > item.getCount()) {
+            final BankItem stack = (BankItem) get(slot);
+            if(stack.getCount() > item.getCount()){
                 removed = item.getCount();
                 set(slot, new Item(stack.getId(), stack.getCount() - item.getCount()));
-            } else {
-                int tab = stack.getTabIndex();
+            }else{
+                final int tab = stack.getTabIndex();
                 removed = stack.getCount();
-                boolean b = isFiringEvents();
+                final boolean b = isFiringEvents();
                 setFiringEvents(false);
                 set(slot, null);
                 shift();
-                if (player.getBankField().getTabAmounts()[tab] <= 0) {
+                if(player.getBankField().getTabAmounts()[tab] <= 0){
                     Bank.collapse(player, tab + 1, tab);
                     fireItemsChanged();
                     Bank.viewTab(player, 0);
@@ -137,22 +137,22 @@ public class TabbedContainer extends Container {
                 setFiringEvents(b);
 
             }
-        } else {
-            for(int i = 0; i < item.getCount(); i++) {
+        }else{
+            for(int i = 0; i < item.getCount(); i++){
                 int slot = getSlotById(item.getId());
-                if(slot == - 1)
+                if(slot == -1)
                     continue;
-                if(i == 0 && preferredSlot != - 1) {
-                    Item inSlot = get(preferredSlot);
-                    if(inSlot.getId() == item.getId()) {
+                if(i == 0 && preferredSlot != -1){
+                    final Item inSlot = get(preferredSlot);
+                    if(inSlot.getId() == item.getId()){
                         slot = preferredSlot;
                     }
                 }
-                if(slot != - 1) {
+                if(slot != -1){
                     removed++;
                     set(slot, null);
                     shift();
-                } else {
+                }else{
                     break;
                 }
             }
@@ -160,23 +160,23 @@ public class TabbedContainer extends Container {
         return removed;
     }
 
-     @Override
-     public void set(int slot, Item item) {
-         int tab = player.getBankField().getTabForSlot(slot);
-         if(!(item instanceof BankItem) && item != null)
-             item = item.toBankItem(player.getBankField().getTabForSlot(slot));
-         boolean fire = isFiringEvents();
-         items[slot] = item;
-         if(fire)
+    @Override
+    public void set(final int slot, Item item) {
+        final int tab = player.getBankField().getTabForSlot(slot);
+        if(!(item instanceof BankItem) && item != null)
+            item = item.toBankItem(player.getBankField().getTabForSlot(slot));
+        final boolean fire = isFiringEvents();
+        items[slot] = item;
+        if(fire)
             fireItemsChanged();
 
-     }
+    }
 
 
     @Override
-    public Item get(int slot) {
-        Item item = super.get(slot);
-        if(item != null && !(item instanceof BankItem)) {
+    public Item get(final int slot) {
+        final Item item = super.get(slot);
+        if(item != null && !(item instanceof BankItem)){
             return item.toBankItem(player.getBankField().getTabForSlot(slot));
         }
         return item;

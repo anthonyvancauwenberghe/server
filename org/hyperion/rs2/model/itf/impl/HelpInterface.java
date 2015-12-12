@@ -16,6 +16,17 @@ public class HelpInterface extends Interface {
 
     private static final int ID = 3;
 
+    static {
+        CommandHandler.submit(new Command("checktickets", Rank.HELPER) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                World.getWorld().getTicketManager().display(player);
+                player.write(Interface.createStatePacket(SHOW, ID));
+                return true;
+            }
+        });
+    }
+
     public HelpInterface() {
         super(ID);
     }
@@ -27,23 +38,12 @@ public class HelpInterface extends Interface {
 
         final TicketManager manager = World.getWorld().getTicketManager();
 
-        System.out.println("ID is: "+id);
+        System.out.println("ID is: " + id);
         if(state == 0)
             manager.assist(player, id);
         else
             manager.remove(manager.forId(id));
 
-    }
-
-    static {
-        CommandHandler.submit(new Command("checktickets", Rank.HELPER) {
-            @Override
-            public boolean execute(final Player player, final String input) {
-                World.getWorld().getTicketManager().display(player);
-                player.write(Interface.createStatePacket(SHOW, ID));
-                return true;
-            }
-        });
     }
 
 

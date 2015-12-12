@@ -5,7 +5,7 @@ import org.hyperion.rs2.saving.SaveInteger;
 
 public class SaveTurkeyKills extends SaveInteger {
 
-    public SaveTurkeyKills(String name) {
+    public SaveTurkeyKills(final String name) {
         super(name);
         // TODO Auto-generated constructor stub
     }
@@ -15,13 +15,14 @@ public class SaveTurkeyKills extends SaveInteger {
         // TODO Auto-generated method stub
         return 0;
     }
+
     @Override
-    public void setValue(Player player, int value) {
+    public void setValue(final Player player, final int value) {
         player.setTurkeyKills(value);
     }
 
     @Override
-    public Integer getValue(Player player) {
+    public Integer getValue(final Player player) {
         return player.getTurkeyKills();
     }
 

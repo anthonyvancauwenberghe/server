@@ -33,321 +33,314 @@ import java.util.logging.Logger;
  */
 public class LoginServerConnector extends IoHandlerAdapter {
 
-	/**
-	 * Logger instance.
-	 */
-	private static final Logger logger = Logger.getLogger(LoginServerConnector.class.getName());
+    /**
+     * Logger instance.
+     */
+    private static final Logger logger = Logger.getLogger(LoginServerConnector.class.getName());
 
-	/**
-	 * The connector.
-	 */
-	private IoConnector connector = new NioSocketConnector();
+    /**
+     * The connector.
+     */
+    private final IoConnector connector = new NioSocketConnector();
 
-	/**
-	 * The login server address.
-	 */
-	private String address;
+    /**
+     * The login server address.
+     */
+    private final String address;
+    /**
+     * Check login results.
+     */
+    private final Map<String, Integer> checkLoginResults = new HashMap<String, Integer>();
+    /**
+     * Player load results.
+     */
+    private final Map<String, IoBuffer> playerLoadResults = new HashMap<String, IoBuffer>();
+    /**
+     * Player save results.
+     */
+    private final Map<String, Boolean> playerSaveResults = new HashMap<String, Boolean>();
+    /**
+     * The login server password.
+     */
+    private String password;
+    /**
+     * The world server node id.
+     */
+    private int node;
+    /**
+     * The client session.
+     */
+    private IoSession session;
+    /**
+     * Authenticated flag.
+     */
+    private boolean authenticated = false;
 
-	/**
-	 * The login server password.
-	 */
-	private String password;
+    /**
+     * Creates the login server connector.
+     *
+     * @param address The address of the login server.
+     */
+    public LoginServerConnector(final String address) {
+        this.address = address;
+        connector.setHandler(this);
+    }
 
-	/**
-	 * The world server node id.
-	 */
-	private int node;
+    /**
+     * Checks if the client is connected.
+     *
+     * @return <code>true</code> if so, <code>false</code> if not.
+     */
+    public boolean isConnected() {
+        return session != null && session.isConnected();
+    }
 
-	/**
-	 * The client session.
-	 */
-	private IoSession session;
+    /**
+     * Checks if the client is authenticated.
+     *
+     * @return <code>true</code> if so, <code>false</code> if not.
+     */
+    public boolean isAuthenticated() {
+        return isConnected() && authenticated;
+    }
 
-	/**
-	 * Authenticated flag.
-	 */
-	private boolean authenticated = false;
+    /**
+     * Connects to the server.
+     *
+     * @param password The password.
+     * @param node     The node id.
+     */
+    public void connect(final String password, final int node) {
+        this.password = password;
+        this.node = node;
+        logger.info("Connecting to login server : " + address + ":" + CommonConstants.LOGIN_PORT + "...");
+        final ConnectFuture cf = connector.connect(new InetSocketAddress(address, CommonConstants.LOGIN_PORT));
+        cf.awaitUninterruptibly();
+        if(!cf.isConnected() && (session == null || !session.isConnected())){
+            logger.severe("Connection to login server failed. Retrying...");
+            // this stops stack overflow errors
+            World.getWorld().getEngine().submitLogic(new Runnable() {
+                public void run() {
+                    World.getWorld().getLoginServerConnector().connect(password, node);
+                }
+            });
+        }else{
+            this.session = cf.getSession();
+            logger.info("Connected.");
+            session.getFilterChain().addFirst("protocolCodecFilter", new ProtocolCodecFilter(new LoginCodecFactory()));
+            // create and send auth packet
+            final IoBuffer buf = IoBuffer.allocate(16);
+            buf.setAutoExpand(true);
+            buf.putShort((short) node);
+            IoBufferUtils.putRS2String(buf, password);
+            buf.flip();
+            this.session.write(new LoginPacket(LoginPacket.AUTH, buf));
+        }
+    }
 
-	/**
-	 * Creates the login server connector.
-	 *
-	 * @param address The address of the login server.
-	 */
-	public LoginServerConnector(String address) {
-		this.address = address;
-		connector.setHandler(this);
-	}
+    @Override
+    public void exceptionCaught(final IoSession session, final Throwable throwable) throws Exception {
+        session.close(false);
+        throwable.printStackTrace();
+    }
 
-	/**
-	 * Checks if the client is connected.
-	 *
-	 * @return <code>true</code> if so, <code>false</code> if not.
-	 */
-	public boolean isConnected() {
-		return session != null && session.isConnected();
-	}
+    @Override
+    public void messageReceived(final IoSession session, final Object in) throws Exception {
+        read((LoginPacket) in);
+    }
 
-	/**
-	 * Checks if the client is authenticated.
-	 *
-	 * @return <code>true</code> if so, <code>false</code> if not.
-	 */
-	public boolean isAuthenticated() {
-		return isConnected() && authenticated;
-	}
+    /**
+     * Write a packet.
+     *
+     * @param packet The packet to write.
+     */
+    public void write(final LoginPacket packet) {
+        if(!this.isConnected()){
+            session.write(packet);
+        }else{
+            throw new IllegalStateException("Not connected.");
+        }
+    }
 
-	/**
-	 * Connects to the server.
-	 *
-	 * @param password The password.
-	 * @param node     The node id.
-	 */
-	public void connect(final String password, final int node) {
-		this.password = password;
-		this.node = node;
-		logger.info("Connecting to login server : " + address + ":" + CommonConstants.LOGIN_PORT + "...");
-		ConnectFuture cf = connector.connect(new InetSocketAddress(address, CommonConstants.LOGIN_PORT));
-		cf.awaitUninterruptibly();
-		if(! cf.isConnected() && (session == null || ! session.isConnected())) {
-			logger.severe("Connection to login server failed. Retrying...");
-			// this stops stack overflow errors
-			World.getWorld().getEngine().submitLogic(new Runnable() {
-				public void run() {
-					World.getWorld().getLoginServerConnector().connect(password, node);
-				}
-			});
-		} else {
-			this.session = cf.getSession();
-			logger.info("Connected.");
-			session.getFilterChain().addFirst("protocolCodecFilter", new ProtocolCodecFilter(new LoginCodecFactory()));
-			// create and send auth packet
-			IoBuffer buf = IoBuffer.allocate(16);
-			buf.setAutoExpand(true);
-			buf.putShort((short) node);
-			IoBufferUtils.putRS2String(buf, password);
-			buf.flip();
-			this.session.write(new LoginPacket(LoginPacket.AUTH, buf));
-		}
-	}
+    /**
+     * Read and process a packet.
+     *
+     * @param packet The packet to read.
+     */
+    private void read(final LoginPacket packet) {
+        final IoBuffer payload = packet.getPayload();
+        switch(packet.getOpcode()){
+            case LoginPacket.AUTH_RESPONSE:{
+                final int code = payload.getUnsigned();
+                if(code == 0){
+                    authenticated = true;
+                    logger.info("Authenticated as node : World-" + node + ".");
+                }else{
+                    session.close(false);
+                    logger.severe("Login server authentication error : " + code + ". Check your password and node id.");
+                }
+                break;
+            }
+            case LoginPacket.CHECK_LOGIN_RESPONSE:{
+                final String name = IoBufferUtils.getRS2String(payload);
+                final int returnCode = payload.getUnsigned();
+                synchronized(checkLoginResults){
+                    checkLoginResults.put(name, returnCode);
+                    checkLoginResults.notifyAll();
+                }
+                break;
+            }
+            case LoginPacket.LOAD_RESPONSE:{
+                final String name = IoBufferUtils.getRS2String(payload);
+                final int returnCode = payload.getUnsigned();
+                if(returnCode == 1){
+                    final int dataLength = payload.getUnsignedShort();
+                    final byte[] data = new byte[dataLength];
+                    payload.get(data);
+                    final IoBuffer dataBuffer = IoBuffer.allocate(dataLength);
+                    dataBuffer.put(data);
+                    dataBuffer.flip();
+                    synchronized(playerLoadResults){
+                        playerLoadResults.put(name, dataBuffer);
+                        playerLoadResults.notifyAll();
+                    }
+                }else{
+                    synchronized(playerLoadResults){
+                        playerLoadResults.put(name, null);
+                        playerLoadResults.notifyAll();
+                    }
+                }
+                break;
+            }
+            case LoginPacket.SAVE_RESPONSE:{
+                final String name = IoBufferUtils.getRS2String(payload);
+                final int success = payload.getUnsigned();
+                synchronized(playerSaveResults){
+                    playerSaveResults.put(name, success == 1 ? Boolean.TRUE : Boolean.FALSE);
+                    playerSaveResults.notifyAll();
+                }
+                break;
+            }
+        }
+    }
 
-	@Override
-	public void exceptionCaught(IoSession session, Throwable throwable) throws Exception {
-		session.close(false);
-		throwable.printStackTrace();
-	}
+    @Override
+    public void sessionClosed(final IoSession session) throws Exception {
+        if(this.session == session){
+            logger.info("Disconnected. Retrying...");
+            connect(password, node);
+            this.session = null;
+        }
+    }
 
-	@Override
-	public void messageReceived(IoSession session, Object in) throws Exception {
-		read((LoginPacket) in);
-	}
+    /**
+     * Checks the login of a player.
+     *
+     * @param pd The player details.
+     * @return The login result.
+     */
+    public LoginResult checkLogin(final PlayerDetails pd) {
+        final IoBuffer buf = IoBuffer.allocate(16);
+        buf.setAutoExpand(true);
+        IoBufferUtils.putRS2String(buf, pd.getName());
+        IoBufferUtils.putRS2String(buf, pd.getPassword());
+        buf.flip();
+        session.write(new LoginPacket(LoginPacket.CHECK_LOGIN, buf));
+        synchronized(checkLoginResults){
+            while(!checkLoginResults.containsKey(NameUtils.formatNameForProtocol(pd.getName()))){
+                try{
+                    checkLoginResults.wait();
+                }catch(final InterruptedException e){
+                    continue;
+                }
+            }
+            final int code = checkLoginResults.remove(NameUtils.formatNameForProtocol(pd.getName()));
+            if(code == 2){
+                return new LoginResult(code, new Player(pd, false));
+            }else{
+                return new LoginResult(code);
+            }
+        }
+    }
 
-	/**
-	 * Write a packet.
-	 *
-	 * @param packet The packet to write.
-	 */
-	public void write(LoginPacket packet) {
-		if(! this.isConnected()) {
-			session.write(packet);
-		} else {
-			throw new IllegalStateException("Not connected.");
-		}
-	}
+    /**
+     * Loads a player.
+     *
+     * @param player The player.
+     * @return <code>true</code> on success, <code>false</code> on error.
+     */
+    public boolean loadPlayer(final Player player) {
+        final IoBuffer buf = IoBuffer.allocate(16);
+        buf.setAutoExpand(true);
+        IoBufferUtils.putRS2String(buf, NameUtils.formatNameForProtocol(player.getName()));
+        buf.flip();
+        session.write(new LoginPacket(LoginPacket.LOAD, buf));
+        synchronized(playerLoadResults){
+            while(!playerLoadResults.containsKey(NameUtils.formatNameForProtocol(player.getName()))){
+                try{
+                    playerLoadResults.wait();
+                }catch(final InterruptedException e){
+                    continue;
+                }
+            }
+            final IoBuffer playerData = playerLoadResults.remove(NameUtils.formatNameForProtocol(player.getName()));
+            if(playerData == null){
+                return false;
+            }else{
 
-	/**
-	 * Read and process a packet.
-	 *
-	 * @param packet The packet to read.
-	 */
-	private void read(LoginPacket packet) {
-		final IoBuffer payload = packet.getPayload();
-		switch(packet.getOpcode()) {
-			case LoginPacket.AUTH_RESPONSE: {
-				int code = payload.getUnsigned();
-				if(code == 0) {
-					authenticated = true;
-					logger.info("Authenticated as node : World-" + node + ".");
-				} else {
-					session.close(false);
-					logger.severe("Login server authentication error : " + code + ". Check your password and node id.");
-				}
-				break;
-			}
-			case LoginPacket.CHECK_LOGIN_RESPONSE: {
-				String name = IoBufferUtils.getRS2String(payload);
-				int returnCode = payload.getUnsigned();
-				synchronized(checkLoginResults) {
-					checkLoginResults.put(name, returnCode);
-					checkLoginResults.notifyAll();
-				}
-				break;
-			}
-			case LoginPacket.LOAD_RESPONSE: {
-				String name = IoBufferUtils.getRS2String(payload);
-				int returnCode = payload.getUnsigned();
-				if(returnCode == 1) {
-					int dataLength = payload.getUnsignedShort();
-					byte[] data = new byte[dataLength];
-					payload.get(data);
-					IoBuffer dataBuffer = IoBuffer.allocate(dataLength);
-					dataBuffer.put(data);
-					dataBuffer.flip();
-					synchronized(playerLoadResults) {
-						playerLoadResults.put(name, dataBuffer);
-						playerLoadResults.notifyAll();
-					}
-				} else {
-					synchronized(playerLoadResults) {
-						playerLoadResults.put(name, null);
-						playerLoadResults.notifyAll();
-					}
-				}
-				break;
-			}
-			case LoginPacket.SAVE_RESPONSE: {
-				String name = IoBufferUtils.getRS2String(payload);
-				int success = payload.getUnsigned();
-				synchronized(playerSaveResults) {
-					playerSaveResults.put(name, success == 1 ? Boolean.TRUE : Boolean.FALSE);
-					playerSaveResults.notifyAll();
-				}
-				break;
-			}
-		}
-	}
+                if(MergedSaving.existsMain(player.getName())){
+                    PlayerSaving.getSaving().load(player, MergedSaving.MERGED_DIR);
+                }else{
+                    player.deserialize(playerData, false);
+                }
+                System.out.println("Login server loaded player's file");
+            }
+        }
+        return true;
+    }
 
-	@Override
-	public void sessionClosed(IoSession session) throws Exception {
-		if(this.session == session) {
-			logger.info("Disconnected. Retrying...");
-			connect(password, node);
-			this.session = null;
-		}
-	}
+    /**
+     * Saves a player.
+     *
+     * @param player The player.
+     * @return <code>true</code> on success, <code>false</code> on error.
+     */
+    public boolean savePlayer(final Player player) {
+        final IoBuffer buf = IoBuffer.allocate(16);
+        buf.setAutoExpand(true);
+        IoBufferUtils.putRS2String(buf, NameUtils.formatNameForProtocol(player.getName()));
+        final IoBuffer data = IoBuffer.allocate(1024);
+        data.setAutoExpand(true);
+        //player.serialize(data);
+        PlayerFiles.saveGame(player);
+        data.flip();
+        buf.putShort((short) data.remaining());
+        buf.put(data);
+        buf.flip();
+        session.write(new LoginPacket(LoginPacket.SAVE, buf));
+        synchronized(playerSaveResults){
+            while(!playerSaveResults.containsKey(NameUtils.formatNameForProtocol(player.getName()))){
+                try{
+                    playerSaveResults.wait();
+                }catch(final InterruptedException e){
+                    continue;
+                }
+            }
+            return playerSaveResults.remove(NameUtils.formatNameForProtocol(player.getName())).booleanValue();
+        }
+    }
 
-	/**
-	 * Check login results.
-	 */
-	private Map<String, Integer> checkLoginResults = new HashMap<String, Integer>();
-
-	/**
-	 * Player load results.
-	 */
-	private Map<String, IoBuffer> playerLoadResults = new HashMap<String, IoBuffer>();
-
-	/**
-	 * Player save results.
-	 */
-	private Map<String, Boolean> playerSaveResults = new HashMap<String, Boolean>();
-
-	/**
-	 * Checks the login of a player.
-	 *
-	 * @param pd The player details.
-	 * @return The login result.
-	 */
-	public LoginResult checkLogin(PlayerDetails pd) {
-		IoBuffer buf = IoBuffer.allocate(16);
-		buf.setAutoExpand(true);
-		IoBufferUtils.putRS2String(buf, pd.getName());
-		IoBufferUtils.putRS2String(buf, pd.getPassword());
-		buf.flip();
-		session.write(new LoginPacket(LoginPacket.CHECK_LOGIN, buf));
-		synchronized(checkLoginResults) {
-			while(! checkLoginResults.containsKey(NameUtils.formatNameForProtocol(pd.getName()))) {
-				try {
-					checkLoginResults.wait();
-				} catch(InterruptedException e) {
-					continue;
-				}
-			}
-			int code = checkLoginResults.remove(NameUtils.formatNameForProtocol(pd.getName()));
-			if(code == 2) {
-				return new LoginResult(code, new Player(pd, false));
-			} else {
-				return new LoginResult(code);
-			}
-		}
-	}
-
-	/**
-	 * Loads a player.
-	 *
-	 * @param player The player.
-	 * @return <code>true</code> on success, <code>false</code> on error.
-	 */
-	public boolean loadPlayer(Player player) {
-		IoBuffer buf = IoBuffer.allocate(16);
-		buf.setAutoExpand(true);
-		IoBufferUtils.putRS2String(buf, NameUtils.formatNameForProtocol(player.getName()));
-		buf.flip();
-		session.write(new LoginPacket(LoginPacket.LOAD, buf));
-		synchronized(playerLoadResults) {
-			while(! playerLoadResults.containsKey(NameUtils.formatNameForProtocol(player.getName()))) {
-				try {
-					playerLoadResults.wait();
-				} catch(InterruptedException e) {
-					continue;
-				}
-			}
-			IoBuffer playerData = playerLoadResults.remove(NameUtils.formatNameForProtocol(player.getName()));
-			if(playerData == null) {
-				return false;
-			} else {
-
-				if(MergedSaving.existsMain(player.getName())) {
-					PlayerSaving.getSaving().load(player, MergedSaving.MERGED_DIR);
-				} else {
-					player.deserialize(playerData, false);
-				}
-				System.out.println("Login server loaded player's file");
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Saves a player.
-	 *
-	 * @param player The player.
-	 * @return <code>true</code> on success, <code>false</code> on error.
-	 */
-	public boolean savePlayer(Player player) {
-		IoBuffer buf = IoBuffer.allocate(16);
-		buf.setAutoExpand(true);
-		IoBufferUtils.putRS2String(buf, NameUtils.formatNameForProtocol(player.getName()));
-		IoBuffer data = IoBuffer.allocate(1024);
-		data.setAutoExpand(true);
-		//player.serialize(data);
-		PlayerFiles.saveGame(player);
-		data.flip();
-		buf.putShort((short) data.remaining());
-		buf.put(data);
-		buf.flip();
-		session.write(new LoginPacket(LoginPacket.SAVE, buf));
-		synchronized(playerSaveResults) {
-			while(! playerSaveResults.containsKey(NameUtils.formatNameForProtocol(player.getName()))) {
-				try {
-					playerSaveResults.wait();
-				} catch(InterruptedException e) {
-					continue;
-				}
-			}
-			return playerSaveResults.remove(NameUtils.formatNameForProtocol(player.getName())).booleanValue();
-		}
-	}
-
-	/**
-	 * Sends a notification of player disconnection to the login server.
-	 *
-	 * @param name The player name.
-	 */
-	public void disconnected(String name) {
-		IoBuffer buf = IoBuffer.allocate(16);
-		buf.setAutoExpand(true);
-		IoBufferUtils.putRS2String(buf, NameUtils.formatNameForProtocol(name));
-		buf.flip();
-		session.write(new LoginPacket(LoginPacket.DISCONNECT, buf));
-	}
+    /**
+     * Sends a notification of player disconnection to the login server.
+     *
+     * @param name The player name.
+     */
+    public void disconnected(final String name) {
+        final IoBuffer buf = IoBuffer.allocate(16);
+        buf.setAutoExpand(true);
+        IoBufferUtils.putRS2String(buf, NameUtils.formatNameForProtocol(name));
+        buf.flip();
+        session.write(new LoginPacket(LoginPacket.DISCONNECT, buf));
+    }
 
 }

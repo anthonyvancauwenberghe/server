@@ -10,31 +10,31 @@ import org.hyperion.rs2.model.Location;
  */
 public class DumbPathFinder implements PathFinder {
 
-	@Override
-	public Path findPath(Location location, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY) {
-		int stepX = 0, stepY = 0;
-		if(srcX > dstX && map.getTile(dstX, srcY).isEasternTraversalPermitted() && map.getTile(srcX, srcY).isWesternTraversalPermitted()) {
-			stepX = - 1;
-		} else if(srcX < dstX && map.getTile(dstX, srcY).isWesternTraversalPermitted() && map.getTile(srcX, srcY).isEasternTraversalPermitted()) {
-			stepX = 1;
-		}
-		if(srcY > dstY && map.getTile(srcX, dstY).isNorthernTraversalPermitted() && map.getTile(srcX, srcY).isSouthernTraversalPermitted()) {
-			stepY = - 1;
-		} else if(srcY < dstY && map.getTile(srcX, dstY).isSouthernTraversalPermitted() && map.getTile(srcX, srcY).isNorthernTraversalPermitted()) {
-			stepY = 1;
-		}
-		if(stepX != 0 || stepY != 0) {
-			Path p = new Path();
-			//p.addPoint(new Point(srcX, srcY));
-			p.addPoint(new Point(stepX, stepY));
-			return p;
-		}
-		return null;
-	}
+    @Override
+    public Path findPath(final Location location, final int radius, final TileMap map, final int srcX, final int srcY, final int dstX, final int dstY) {
+        int stepX = 0, stepY = 0;
+        if(srcX > dstX && map.getTile(dstX, srcY).isEasternTraversalPermitted() && map.getTile(srcX, srcY).isWesternTraversalPermitted()){
+            stepX = -1;
+        }else if(srcX < dstX && map.getTile(dstX, srcY).isWesternTraversalPermitted() && map.getTile(srcX, srcY).isEasternTraversalPermitted()){
+            stepX = 1;
+        }
+        if(srcY > dstY && map.getTile(srcX, dstY).isNorthernTraversalPermitted() && map.getTile(srcX, srcY).isSouthernTraversalPermitted()){
+            stepY = -1;
+        }else if(srcY < dstY && map.getTile(srcX, dstY).isSouthernTraversalPermitted() && map.getTile(srcX, srcY).isNorthernTraversalPermitted()){
+            stepY = 1;
+        }
+        if(stepX != 0 || stepY != 0){
+            final Path p = new Path();
+            //p.addPoint(new Point(srcX, srcY));
+            p.addPoint(new Point(stepX, stepY));
+            return p;
+        }
+        return null;
+    }
 
 	
 	/*public boolean canWalk(TileMap map, int srcX, int srcY, int dstX, int dstY){
-	    int i = 0;
+        int i = 0;
 		if(srcX > dstY && map.getTile(srcX, dstY).isSouthernTraversalPermitted()) {
 			i++;
 		} else if(srcX > dstY && map.getTile(srcX, dstY).isNorthernTraversalPermitted()) {

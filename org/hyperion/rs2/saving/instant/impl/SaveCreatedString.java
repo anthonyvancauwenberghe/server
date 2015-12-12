@@ -7,22 +7,21 @@ import java.util.Date;
 
 public class SaveCreatedString extends SaveString {
 
-	public SaveCreatedString(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveCreatedString(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public void setValue(Player player, String value) {
+    @Override
+    public void setValue(final Player player, final String value) {
 
-	}
+    }
 
-	@Override
-	public String getValue(Player player) {
-		Date date = new Date(player.getCreatedTime());
-		@SuppressWarnings("deprecation")
-		String value = date.getDay() + "," + date.getMonth();
-		return value;
-	}
+    @Override
+    public String getValue(final Player player) {
+        final Date date = new Date(player.getCreatedTime());
+        @SuppressWarnings("deprecation") final String value = date.getDay() + "," + date.getMonth();
+        return value;
+    }
 
 }

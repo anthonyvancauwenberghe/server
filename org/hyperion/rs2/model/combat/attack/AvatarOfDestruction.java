@@ -1,8 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -18,11 +21,13 @@ import java.util.Arrays;
  */
 public class AvatarOfDestruction implements Attack {
 
+    public static final int MAX_DAMAGE = 45;
+
     public static void loadDefinitions() {
         final int[] bonus = new int[10];
         Arrays.fill(bonus, 350);
-        NPCDefinition.getDefinitions()[8596] =
-                NPCDefinition.create(8596, 1200, 505, bonus, 11199, 11198, new int[]{11197}, 3, "Avatar of Destruction", 120);
+        NPCDefinition.getDefinitions()[8596] = NPCDefinition.create(8596, 1200, 505, bonus, 11199, 11198, new int[]{
+                11197}, 3, "Avatar of Destruction", 120);
     }
 
     @Override
@@ -35,28 +40,26 @@ public class AvatarOfDestruction implements Attack {
         return new int[]{8596};  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public static final int MAX_DAMAGE = 45;
-
     @Override
-    public int handleAttack(NPC n, CombatEntity attack) {
+    public int handleAttack(final NPC n, final CombatEntity attack) {
         if(attack == null)
             return 1;
-        if(n.cE.predictedAtk > System.currentTimeMillis()) {
+        if(n.cE.predictedAtk > System.currentTimeMillis()){
             return 6;
         }
         n.getCombat().doAtkEmote();
-        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(n)) {
-            int hitType = Combat.random(1);
+        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(n)){
+            final int hitType = Combat.random(1);
             int tempDamage = CombatCalculation.getCalculatedDamage(n, player, Combat.random(MAX_DAMAGE), hitType, MAX_DAMAGE);
             if(player.getLocation().distance(n.getLocation()) == 1)
                 tempDamage = 80;
             Combat.npcAttack(n, player.getCombat(), tempDamage, 300, hitType);
-            player.getSkills().detractLevel(Skills.PRAYER, tempDamage/5);
+            player.getSkills().detractLevel(Skills.PRAYER, tempDamage / 5);
 
         }
         n.cE.predictedAtk = System.currentTimeMillis() + 3000;
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
-        if(distance <= 10) {
+        final int distance = attack.getEntity().getLocation().distance(n.getLocation());
+        if(distance <= 10){
             return 5;
         }
         return 0;

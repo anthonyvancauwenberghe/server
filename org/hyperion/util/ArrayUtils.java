@@ -1,6 +1,5 @@
 package org.hyperion.util;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -16,11 +15,11 @@ import java.util.stream.Stream;
 public final class ArrayUtils {
 
 
-    public static <T> boolean contains(T needle, T... array) {
+    public static <T> boolean contains(final T needle, final T... array) {
         return contains(Predicate.isEqual(needle), array);
     }
 
-    public static <T> boolean contains(Predicate<? super T> predicate, T... array) {
+    public static <T> boolean contains(final Predicate<? super T> predicate, final T... array) {
         return Stream.of(array).filter(Objects::nonNull).anyMatch(predicate);
     }
 

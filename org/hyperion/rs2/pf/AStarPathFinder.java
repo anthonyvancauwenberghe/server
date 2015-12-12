@@ -14,285 +14,279 @@ import java.util.Set;
  */
 public class AStarPathFinder implements PathFinder {
 
-	/**
-	 * The cost of moving in a straight line.
-	 */
-	private static final int COST_STRAIGHT = 10;
+    /**
+     * The cost of moving in a straight line.
+     */
+    private static final int COST_STRAIGHT = 10;
+    private final Set<Node> closed = new HashSet<Node>();
+    private final Set<Node> open = new HashSet<Node>();
+    private Node current;
+    private Node[][] nodes;
 
-	/**
-	 * Represents a node used by the A* algorithm.
-	 *
-	 * @author Graham Edgecombe
-	 */
-	private static class Node implements Comparable<Node> {
+    @Override
+    public Path findPath(final Location location, final int radius, final TileMap map, final int srcX, final int srcY, final int dstX, final int dstY) {
+        if(dstX < 0 || dstY < 0 || dstX >= map.getWidth() || dstY >= map.getHeight()){
+            return null; // out of range
+        }
 
-		/**
-		 * The parent node.
-		 */
-		private Node parent;
+        nodes = new Node[map.getWidth()][map.getHeight()];
+        for(int x = 0; x < map.getWidth(); x++){
+            for(int y = 0; y < map.getHeight(); y++){
+                nodes[x][y] = new Node(x, y);
+            }
+        }
 
-		/**
-		 * The cost.
-		 */
-		private int cost;
+        open.add(nodes[srcX][srcY]);
 
-		/**
-		 * The heuristic.
-		 */
-		private int heuristic;
+        while(open.size() > 0){
+            current = getLowestCost();
+            if(current == nodes[dstX][dstY]){
+                break;
+            }
+            open.remove(current);
+            closed.add(current);
 
-		/**
-		 * The depth.
-		 */
-		private int depth;
+            final int x = current.getX();
+            final int y = current.getY();
 
-		/**
-		 * The x coordinate.
-		 */
-		private final int x;
+            // north west
+            if(x > 0 && map.getTile(x - 1, y).isEasternTraversalPermitted() && map.getTile(x, y).isWesternTraversalPermitted()){
+                if(y < (map.getHeight() - 1) && map.getTile(x, y + 1).isSouthernTraversalPermitted() && map.getTile(x, y).isNorthernTraversalPermitted()){
+                    final Node n = nodes[x - 1][y + 1];
+                    examineNode(n);
+                }
+            }
+            // north east
+            if(x < (map.getWidth() - 1) && map.getTile(x + 1, y).isWesternTraversalPermitted() && map.getTile(x, y).isEasternTraversalPermitted()){
+                if(y < (map.getHeight() - 1) && map.getTile(x, y + 1).isSouthernTraversalPermitted() && map.getTile(x, y).isNorthernTraversalPermitted()){
+                    final Node n = nodes[x + 1][y + 1];
+                    examineNode(n);
+                }
+            }
+            // south west
+            if(y > 0 && map.getTile(x, y - 1).isNorthernTraversalPermitted() && map.getTile(x, y).isSouthernTraversalPermitted()){
+                if(x > 0 && map.getTile(x - 1, y).isEasternTraversalPermitted() && map.getTile(x, y).isWesternTraversalPermitted()){
+                    final Node n = nodes[x - 1][y - 1];
+                    examineNode(n);
+                }
+            }
+            // south east
+            if(y > 0 && map.getTile(x, y - 1).isNorthernTraversalPermitted() && map.getTile(x, y).isSouthernTraversalPermitted()){
+                if(x < (map.getWidth() - 1) && map.getTile(x + 1, y).isWesternTraversalPermitted() && map.getTile(x, y).isEasternTraversalPermitted()){
+                    final Node n = nodes[x + 1][y - 1];
+                    examineNode(n);
+                }
+            }
+            // west
+            if(x > 0 && map.getTile(x - 1, y).isEasternTraversalPermitted() && map.getTile(x, y).isWesternTraversalPermitted()){
+                final Node n = nodes[x - 1][y];
+                examineNode(n);
+            }
+            // east
+            if(x < (map.getWidth() - 1) && map.getTile(x + 1, y).isWesternTraversalPermitted() && map.getTile(x, y).isEasternTraversalPermitted()){
+                final Node n = nodes[x + 1][y];
+                examineNode(n);
+            }
+            // south
+            if(y > 0 && map.getTile(x, y - 1).isNorthernTraversalPermitted() && map.getTile(x, y).isSouthernTraversalPermitted()){
+                final Node n = nodes[x][y - 1];
+                examineNode(n);
+            }
+            // north
+            if(y < (map.getHeight() - 1) && map.getTile(x, y + 1).isSouthernTraversalPermitted() && map.getTile(x, y).isNorthernTraversalPermitted()){
+                final Node n = nodes[x][y + 1];
+                examineNode(n);
+            }
+        }
 
-		/**
-		 * The y coordinate.
-		 */
-		private final int y;
+        if(nodes[dstX][dstY].getParent() == null){
+            return null;
+        }
 
-		/**
-		 * Creates a node.
-		 *
-		 * @param x The x coordinate.
-		 * @param y The y coordinate.
-		 */
-		public Node(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+        final Path p = new Path();
+        Node n = nodes[dstX][dstY];
+        while(n != nodes[srcX][srcY]){
+            p.addPoint(new Point(n.getX() + location.getX() - radius, n.getY() + location.getY() - radius));
+            n = n.getParent();
+        }
+        p.addPoint(new Point(srcX + location.getX() - radius, srcY + location.getY() - radius));
 
-		/**
-		 * Sets the parent.
-		 *
-		 * @param parent The parent.
-		 */
-		public void setParent(Node parent) {
-			this.parent = parent;
-		}
+        return p;
+    }
 
-		/**
-		 * Gets the parent node.
-		 *
-		 * @return The parent node.
-		 */
-		public Node getParent() {
-			return parent;
-		}
+    private Node getLowestCost() {
+        Node curLowest = null;
+        for(final Node n : open){
+            if(curLowest == null){
+                curLowest = n;
+            }else{
+                if(n.getCost() < curLowest.getCost()){
+                    curLowest = n;
+                }
+            }
+        }
+        return curLowest;
+    }
 
-		public void setCost(int cost) {
-			this.cost = cost;
-		}
+    private void examineNode(final Node n) {
+        final int heuristic = estimateDistance(current, n);
+        final int nextStepCost = current.getCost() + heuristic;
+        if(nextStepCost < n.getCost()){
+            open.remove(n);
+            closed.remove(n);
+        }
+        if(!open.contains(n) && !closed.contains(n)){
+            n.setParent(current);
+            n.setCost(nextStepCost);
+            open.add(n);
+        }
+    }
 
-		public int getCost() {
-			return cost;
-		}
+    /**
+     * Estimates a distance between the two points.
+     *
+     * @param src The source node.
+     * @param dst The distance node.
+     * @return The distance.
+     */
+    public int estimateDistance(final Node src, final Node dst) {
+        final int deltaX = src.getX() - dst.getX();
+        final int deltaY = src.getY() - dst.getY();
+        return (Math.abs(deltaX) + Math.abs(deltaY)) * COST_STRAIGHT;
+    }
 
-		/**
-		 * Gets the X coordinate.
-		 *
-		 * @return The X coordinate.
-		 */
-		public int getX() {
-			return x;
-		}
+    /**
+     * Represents a node used by the A* algorithm.
+     *
+     * @author Graham Edgecombe
+     */
+    private static class Node implements Comparable<Node> {
 
-		/**
-		 * Gets the Y coordinate.
-		 *
-		 * @return The Y coordinate.
-		 */
-		public int getY() {
-			return y;
-		}
+        /**
+         * The x coordinate.
+         */
+        private final int x;
+        /**
+         * The y coordinate.
+         */
+        private final int y;
+        /**
+         * The parent node.
+         */
+        private Node parent;
+        /**
+         * The cost.
+         */
+        private int cost;
+        /**
+         * The heuristic.
+         */
+        private int heuristic;
+        /**
+         * The depth.
+         */
+        private int depth;
 
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + cost;
-			result = prime * result + depth;
-			result = prime * result + heuristic;
-			result = prime * result
-					+ ((parent == null) ? 0 : parent.hashCode());
-			result = prime * result + x;
-			result = prime * result + y;
-			return result;
-		}
+        /**
+         * Creates a node.
+         *
+         * @param x The x coordinate.
+         * @param y The y coordinate.
+         */
+        public Node(final int x, final int y) {
+            this.x = x;
+            this.y = y;
+        }
 
-		@Override
-		public boolean equals(Object obj) {
-			if(this == obj)
-				return true;
-			if(obj == null)
-				return false;
-			if(getClass() != obj.getClass())
-				return false;
-			Node other = (Node) obj;
-			if(cost != other.cost)
-				return false;
-			if(depth != other.depth)
-				return false;
-			if(heuristic != other.heuristic)
-				return false;
-			if(parent == null) {
-				if(other.parent != null)
-					return false;
-			} else if(! parent.equals(other.parent))
-				return false;
-			if(x != other.x)
-				return false;
-			if(y != other.y)
-				return false;
-			return true;
-		}
+        /**
+         * Gets the parent node.
+         *
+         * @return The parent node.
+         */
+        public Node getParent() {
+            return parent;
+        }
 
-		@Override
-		public int compareTo(Node arg0) {
-			return cost - arg0.cost;
-		}
+        /**
+         * Sets the parent.
+         *
+         * @param parent The parent.
+         */
+        public void setParent(final Node parent) {
+            this.parent = parent;
+        }
 
-	}
+        public int getCost() {
+            return cost;
+        }
 
-	private Node current;
-	private Node[][] nodes;
-	private Set<Node> closed = new HashSet<Node>();
-	private Set<Node> open = new HashSet<Node>();
+        public void setCost(final int cost) {
+            this.cost = cost;
+        }
 
-	@Override
-	public Path findPath(Location location, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY) {
-		if(dstX < 0 || dstY < 0 || dstX >= map.getWidth() || dstY >= map.getHeight()) {
-			return null; // out of range
-		}
+        /**
+         * Gets the X coordinate.
+         *
+         * @return The X coordinate.
+         */
+        public int getX() {
+            return x;
+        }
 
-		nodes = new Node[map.getWidth()][map.getHeight()];
-		for(int x = 0; x < map.getWidth(); x++) {
-			for(int y = 0; y < map.getHeight(); y++) {
-				nodes[x][y] = new Node(x, y);
-			}
-		}
+        /**
+         * Gets the Y coordinate.
+         *
+         * @return The Y coordinate.
+         */
+        public int getY() {
+            return y;
+        }
 
-		open.add(nodes[srcX][srcY]);
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + cost;
+            result = prime * result + depth;
+            result = prime * result + heuristic;
+            result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+            result = prime * result + x;
+            result = prime * result + y;
+            return result;
+        }
 
-		while(open.size() > 0) {
-			current = getLowestCost();
-			if(current == nodes[dstX][dstY]) {
-				break;
-			}
-			open.remove(current);
-			closed.add(current);
+        @Override
+        public boolean equals(final Object obj) {
+            if(this == obj)
+                return true;
+            if(obj == null)
+                return false;
+            if(getClass() != obj.getClass())
+                return false;
+            final Node other = (Node) obj;
+            if(cost != other.cost)
+                return false;
+            if(depth != other.depth)
+                return false;
+            if(heuristic != other.heuristic)
+                return false;
+            if(parent == null){
+                if(other.parent != null)
+                    return false;
+            }else if(!parent.equals(other.parent))
+                return false;
+            if(x != other.x)
+                return false;
+            if(y != other.y)
+                return false;
+            return true;
+        }
 
-			int x = current.getX(), y = current.getY();
+        @Override
+        public int compareTo(final Node arg0) {
+            return cost - arg0.cost;
+        }
 
-			// north west
-			if(x > 0 && map.getTile(x - 1, y).isEasternTraversalPermitted() && map.getTile(x, y).isWesternTraversalPermitted()) {
-				if(y < (map.getHeight() - 1) && map.getTile(x, y + 1).isSouthernTraversalPermitted() && map.getTile(x, y).isNorthernTraversalPermitted()) {
-					Node n = nodes[x - 1][y + 1];
-					examineNode(n);
-				}
-			}
-			// north east
-			if(x < (map.getWidth() - 1) && map.getTile(x + 1, y).isWesternTraversalPermitted() && map.getTile(x, y).isEasternTraversalPermitted()) {
-				if(y < (map.getHeight() - 1) && map.getTile(x, y + 1).isSouthernTraversalPermitted() && map.getTile(x, y).isNorthernTraversalPermitted()) {
-					Node n = nodes[x + 1][y + 1];
-					examineNode(n);
-				}
-			}
-			// south west
-			if(y > 0 && map.getTile(x, y - 1).isNorthernTraversalPermitted() && map.getTile(x, y).isSouthernTraversalPermitted()) {
-				if(x > 0 && map.getTile(x - 1, y).isEasternTraversalPermitted() && map.getTile(x, y).isWesternTraversalPermitted()) {
-					Node n = nodes[x - 1][y - 1];
-					examineNode(n);
-				}
-			}
-			// south east
-			if(y > 0 && map.getTile(x, y - 1).isNorthernTraversalPermitted() && map.getTile(x, y).isSouthernTraversalPermitted()) {
-				if(x < (map.getWidth() - 1) && map.getTile(x + 1, y).isWesternTraversalPermitted() && map.getTile(x, y).isEasternTraversalPermitted()) {
-					Node n = nodes[x + 1][y - 1];
-					examineNode(n);
-				}
-			}
-			// west
-			if(x > 0 && map.getTile(x - 1, y).isEasternTraversalPermitted() && map.getTile(x, y).isWesternTraversalPermitted()) {
-				Node n = nodes[x - 1][y];
-				examineNode(n);
-			}
-			// east
-			if(x < (map.getWidth() - 1) && map.getTile(x + 1, y).isWesternTraversalPermitted() && map.getTile(x, y).isEasternTraversalPermitted()) {
-				Node n = nodes[x + 1][y];
-				examineNode(n);
-			}
-			// south
-			if(y > 0 && map.getTile(x, y - 1).isNorthernTraversalPermitted() && map.getTile(x, y).isSouthernTraversalPermitted()) {
-				Node n = nodes[x][y - 1];
-				examineNode(n);
-			}
-			// north
-			if(y < (map.getHeight() - 1) && map.getTile(x, y + 1).isSouthernTraversalPermitted() && map.getTile(x, y).isNorthernTraversalPermitted()) {
-				Node n = nodes[x][y + 1];
-				examineNode(n);
-			}
-		}
-
-		if(nodes[dstX][dstY].getParent() == null) {
-			return null;
-		}
-
-		Path p = new Path();
-		Node n = nodes[dstX][dstY];
-		while(n != nodes[srcX][srcY]) {
-			p.addPoint(new Point(n.getX() + location.getX() - radius, n.getY() + location.getY() - radius));
-			n = n.getParent();
-		}
-		p.addPoint(new Point(srcX + location.getX() - radius, srcY + location.getY() - radius));
-
-		return p;
-	}
-
-	private Node getLowestCost() {
-		Node curLowest = null;
-		for(Node n : open) {
-			if(curLowest == null) {
-				curLowest = n;
-			} else {
-				if(n.getCost() < curLowest.getCost()) {
-					curLowest = n;
-				}
-			}
-		}
-		return curLowest;
-	}
-
-	private void examineNode(Node n) {
-		int heuristic = estimateDistance(current, n);
-		int nextStepCost = current.getCost() + heuristic;
-		if(nextStepCost < n.getCost()) {
-			open.remove(n);
-			closed.remove(n);
-		}
-		if(! open.contains(n) && ! closed.contains(n)) {
-			n.setParent(current);
-			n.setCost(nextStepCost);
-			open.add(n);
-		}
-	}
-
-	/**
-	 * Estimates a distance between the two points.
-	 *
-	 * @param src The source node.
-	 * @param dst The distance node.
-	 * @return The distance.
-	 */
-	public int estimateDistance(Node src, Node dst) {
-		int deltaX = src.getX() - dst.getX();
-		int deltaY = src.getY() - dst.getY();
-		return (Math.abs(deltaX) + Math.abs(deltaY)) * COST_STRAIGHT;
-	}
+    }
 
 }

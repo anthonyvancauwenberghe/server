@@ -17,13 +17,13 @@ public class RichWhitelistRequest extends SQLRequest {
     }
 
     @Override
-    public void process(SQLConnection sql) throws SQLException {
+    public void process(final SQLConnection sql) throws SQLException {
         if(!RichWhitelistEvent.enabled)
             return;
-        ResultSet rs = sql.query("SELECT name FROM accountvalues where value > 50000 or pkvalue > 500000");
-        if (rs != null) {
-            while (rs.next()) {
-                String name = rs.getString("name");
+        final ResultSet rs = sql.query("SELECT name FROM accountvalues where value > 50000 or pkvalue > 500000");
+        if(rs != null){
+            while(rs.next()){
+                final String name = rs.getString("name");
                 if(!name.isEmpty() && !RichWhitelistEvent.whitelist.contains(name))
                     RichWhitelistEvent.whitelist.add(name);
             }

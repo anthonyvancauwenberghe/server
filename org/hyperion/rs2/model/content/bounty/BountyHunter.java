@@ -21,82 +21,56 @@ public class BountyHunter {
 
     public static final int BASE_POINTS = 5;
     private static final int DP_SPLIT = 850;
-
-    private enum Emblem {
-        TIER_1(1),
-        TIER_2(2),
-        TIER_3(4),
-        TIER_4(8),
-        TIER_5(15),
-        TIER_6(25),
-        TIER_7(35),
-        TIER_8(50),
-        TIER_9(70),
-        TIER_10(100);
-
-
-        private static final Map<Integer, Emblem> EMBLEM_MAP = Stream.of(values()).collect(Collectors.toMap(e -> e.id, Function.<Emblem>identity()));
-
-        private static final int BASE_ID = 13195;
-
-        private final int reward;
-        private final int id;
-        Emblem(final int multiplier) {
-            this.reward = multiplier * BASE_POINTS;
-            this.id = ordinal() + BASE_ID;
-        }
-
-        private Emblem upgrade() {
-            return ordinal() == values().length - 1 ? this : values()[ordinal() + 1];
-        }
-
-        public static Emblem getBest(final Container inventory) {
-            for(int i = values().length - 1; i >= 0; i--) {
-                if(inventory.contains(values()[i].id))
-                    return values()[i];
-            }
-            return null;
-        }
-
-        public static Emblem forId(int id) {
-            return EMBLEM_MAP.get(id);
-        }
-
-        private static List<Item> getEmblems(final Container inventory) {
-            return Stream.of(inventory.toArray()).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).collect(Collectors.toList());
-        }
-
-        private static int getTotalVal(final Item[] items) {
-            return Stream.of(items).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).mapToInt(item -> forId(item.getId()).reward).sum();
-        }
-    }
-
+    private final Player player;
     private int bhPoints = 0;
     private int emblemPoints = 0;
-	private final Player player;
-	private Player target;
+    private Player target;
     private Player prevTarget;
     private boolean enabled = true;
+
+    public BountyHunter(final Player player) {
+        this.player = player;
+    }
+
+    public static boolean applicable(final Player player) {
+        if(player == null)
+            return false;
+        return player.getBountyHunter().target == null && applicable2(player);
+    }
+
+    public static boolean applicable2(final Player player) {
+        if(player == null)
+            return false;
+        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY()) && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+    }
+
+    public static void fireLogout(final Player player) {
+        final Player targ = player.getBountyHunter().getTarget();
+        if(targ != null){
+            BountyHunterLogout.playerLogout(player);
+            targ.getBountyHunter().sendBHTarget();
+            targ.getBountyHunter().setPrevTarget(player);
+            targ.getBountyHunter().setTarget(null);
+            targ.getActionSender().removeArrow();
+        }
+    }
 
     public Player getPrevTarget() {
         return prevTarget;
     }
 
-    public void setPrevTarget(Player prevTarget) {
+    public void setPrevTarget(final Player prevTarget) {
         this.prevTarget = prevTarget;
     }
 
-    public BountyHunter(Player player) {
-		this.player = player;
-	}
-	
-	public void findTarget() {
-		for(final Player p : World.getWorld().getPlayers()) {
-			if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p) || p.equals(prevTarget)) continue;
-			    assignTarget(p);
-			break;
-		}
-	}
+    public void findTarget() {
+        for(final Player p : World.getWorld().getPlayers()){
+            if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p) || p.equals(prevTarget))
+                continue;
+            assignTarget(p);
+            break;
+        }
+    }
 
     public void sendBHTarget() {
         player.getActionSender().sendString("@or1@Target: @gre@" + (player.getBountyHunter().getTarget() != null ? player.getBountyHunter().getTarget().getSafeDisplayName() : "None"), 36502);
@@ -105,7 +79,7 @@ public class BountyHunter {
     public void clearTarget() {
         if(player.getBountyHunter().getTarget() == null)
             return;
-        Player oldTarget = target;
+        final Player oldTarget = target;
         setPrevTarget(player.getBountyHunter().getTarget());
         setTarget(null);
         player.getActionSender().removeArrow();
@@ -114,88 +88,64 @@ public class BountyHunter {
         oldTarget.getBountyHunter().setTarget(null);
         oldTarget.getActionSender().removeArrow();
         oldTarget.getBountyHunter().sendBHTarget();
-}
-	
-	public void assignTarget(Player p) {
+    }
+
+    public void assignTarget(final Player p) {
         if(target == p)
             return;
-		this.target = p;
+        this.target = p;
         sendBHTarget();
         player.getActionSender().createArrow(target);
         p.getBountyHunter().assignTarget(player);
 
-	}
-	
-	public boolean levelCheck(Player p) {
-		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getLocation().getZ() == p.getLocation().getZ() && player.getUID() != p.getUID();
-	}
-	
-	public boolean wildLevelCheck(final Player opp) {
-		final int oppLevel = Combat.getWildLevel(opp.cE.getAbsX(), opp.cE.getAbsY(), opp.cE.getAbsZ());
-		final int playerLevel = Combat.getWildLevel(player.cE.getAbsX(), player.cE.getAbsY(), player.cE.getAbsZ());
-		return (oppLevel < 10 && playerLevel < 10) || (oppLevel >= 10 && playerLevel >= 10);
-	}
-	
-	private boolean wealthCheck(final Player opp) {
-		final int accValue = player.getAccountValue().getTotalValue();
-		final int oppAccValue = opp.getAccountValue().getTotalValue();
-		return (oppAccValue < DP_SPLIT && accValue < DP_SPLIT) || (accValue >= DP_SPLIT && oppAccValue >= DP_SPLIT);
-	}
-
-    public static boolean applicable(Player player) {
-        if(player == null)
-            return false;
-        return player.getBountyHunter().target == null && applicable2(player);
     }
 
-    public static boolean applicable2(Player player) {
-        if(player == null)
-            return false;
-        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY()) && player.getPermExtraData().getBoolean("bhon") && !BountyHunterLogout.isBlocked(player);
+    public boolean levelCheck(final Player p) {
+        return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getLocation().getZ() == p.getLocation().getZ() && player.getUID() != p.getUID();
     }
-	
-	public static void fireLogout(final Player player) {
-		final Player targ = player.getBountyHunter().getTarget();
-		if(targ != null) {
-            BountyHunterLogout.playerLogout(player);
-            targ.getBountyHunter().sendBHTarget();
-            targ.getBountyHunter().setPrevTarget(player);
-			targ.getBountyHunter().setTarget(null);
-			targ.getActionSender().removeArrow();
-		}
-	}
-	
-	public void handleBHKill(final Player opp) {
-		if(!opp.equals(target)) return;
+
+    public boolean wildLevelCheck(final Player opp) {
+        final int oppLevel = Combat.getWildLevel(opp.cE.getAbsX(), opp.cE.getAbsY(), opp.cE.getAbsZ());
+        final int playerLevel = Combat.getWildLevel(player.cE.getAbsX(), player.cE.getAbsY(), player.cE.getAbsZ());
+        return (oppLevel < 10 && playerLevel < 10) || (oppLevel >= 10 && playerLevel >= 10);
+    }
+
+    private boolean wealthCheck(final Player opp) {
+        final int accValue = player.getAccountValue().getTotalValue();
+        final int oppAccValue = opp.getAccountValue().getTotalValue();
+        return (oppAccValue < DP_SPLIT && accValue < DP_SPLIT) || (accValue >= DP_SPLIT && oppAccValue >= DP_SPLIT);
+    }
+
+    public void handleBHKill(final Player opp) {
+        if(!opp.equals(target))
+            return;
         if(opp.getSkills().getCombatLevel() < 80 || player.getSkills().getCombatLevel() < 80)
             return;
-		player.sendPkMessage("You now have " + incrementAndGet() + " BH points!");
-		handleBHDrops(opp);
+        player.sendPkMessage("You now have " + incrementAndGet() + " BH points!");
+        handleBHDrops(opp);
         player.getAchievementTracker().bountyHunterKill();
-		for(Player p : new Player[]{player, opp}) {
-			p.getBountyHunter().target = null;
-			p.getActionSender().createArrow(10, -1);
-			p.getQuestTab().updateQuestTab();
-		}
+        for(final Player p : new Player[]{player, opp}){
+            p.getBountyHunter().target = null;
+            p.getActionSender().createArrow(10, -1);
+            p.getQuestTab().updateQuestTab();
+        }
         final List<Item> emblems = Emblem.getEmblems(opp.getInventory());
-        for(final Item item : emblems) {
+        for(final Item item : emblems){
             player.getBank().add(new BankItem(0, item.getId(), opp.getInventory().remove(item)));
             player.sendMessage("A " + Emblem.forId(item.getId()).toString() + " emblem has been added to your bank.");
         }
-	}
-	
-	public void handleBHDrops(final Player opp) {
-        GlobalItem gI = new GlobalItem(player, opp.getLocation().getX(),
-                opp.getLocation().getY(), opp.getLocation().getZ(),
-                Item.create(Emblem.BASE_ID, 1));
+    }
+
+    public void handleBHDrops(final Player opp) {
+        final GlobalItem gI = new GlobalItem(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), Item.create(Emblem.BASE_ID, 1));
         World.getWorld().getGlobalItemManager().newDropItem(player, gI);
         upgradeEmblem();
-	}
+    }
 
     private void upgradeEmblem() {
         final Container inventory = player.getInventory();
         final Emblem best = Emblem.getBest(inventory);
-        if(best != null) {
+        if(best != null){
             final int slot = inventory.getSlotById(best.id);
             inventory.remove(slot, Item.create(best.id));
             inventory.add(Item.create(best.upgrade().id), slot);
@@ -209,7 +159,7 @@ public class BountyHunter {
     public void exchangeEmblems() {
         final List<Item> toSubtract = Emblem.getEmblems(player.getInventory());
         final int toAdd = Emblem.getTotalVal(toSubtract.toArray(new Item[toSubtract.size()]));
-        for(Item item : toSubtract) {
+        for(final Item item : toSubtract){
             player.getInventory().remove(item);
         }
         emblemPoints += toAdd;
@@ -227,19 +177,19 @@ public class BountyHunter {
         return bhPoints;
     }
 
-    public int incrementAndGet() {
-        return ++bhPoints;
-    }
-
     public void setKills(final int kills) {
         this.bhPoints = kills;
+    }
+
+    public int incrementAndGet() {
+        return ++bhPoints;
     }
 
     public Player getTarget() {
         return target;
     }
 
-    public void setTarget(Player target) {
+    public void setTarget(final Player target) {
         this.target = target;
     }
 
@@ -250,5 +200,53 @@ public class BountyHunter {
     public int setEmblemPoints(final int points) {
         return emblemPoints = points;
     }
-	
+
+    private enum Emblem {
+        TIER_1(1),
+        TIER_2(2),
+        TIER_3(4),
+        TIER_4(8),
+        TIER_5(15),
+        TIER_6(25),
+        TIER_7(35),
+        TIER_8(50),
+        TIER_9(70),
+        TIER_10(100);
+
+
+        private static final int BASE_ID = 13195;
+        private final int reward;
+        private final int id;
+        private static final Map<Integer, Emblem> EMBLEM_MAP = Stream.of(values()).collect(Collectors.toMap(e -> e.id, Function.<Emblem>identity()));
+
+        Emblem(final int multiplier) {
+            this.reward = multiplier * BASE_POINTS;
+            this.id = ordinal() + BASE_ID;
+        }
+
+        public static Emblem getBest(final Container inventory) {
+            for(int i = values().length - 1; i >= 0; i--){
+                if(inventory.contains(values()[i].id))
+                    return values()[i];
+            }
+            return null;
+        }
+
+        public static Emblem forId(final int id) {
+            return EMBLEM_MAP.get(id);
+        }
+
+        private static List<Item> getEmblems(final Container inventory) {
+            return Stream.of(inventory.toArray()).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).collect(Collectors.toList());
+        }
+
+        private static int getTotalVal(final Item[] items) {
+            return Stream.of(items).filter(Objects::nonNull).filter(item -> forId(item.getId()) != null).mapToInt(item -> forId(item.getId()).reward).sum();
+        }
+
+        private Emblem upgrade() {
+            return ordinal() == values().length - 1 ? this : values()[ordinal() + 1];
+        }
+    }
+
 }

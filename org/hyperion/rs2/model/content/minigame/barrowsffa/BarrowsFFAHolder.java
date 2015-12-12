@@ -41,7 +41,7 @@ public class BarrowsFFAHolder {
 
     public boolean die(final Player killer) {
         killStreak = 0;
-        int b;
+        final int b;
         killer.getPoints().increasePkPoints(b = getBounty(), false);
         killer.sendf("You just received %d PKP as a bounty!", b);
         return --lives <= 0;
@@ -53,8 +53,8 @@ public class BarrowsFFAHolder {
      */
     public boolean kill(final Player other) {
         kills++;
-        if(++killStreak > 5) {
-            if(killStreak%5 == 0)
+        if(++killStreak > 5){
+            if(killStreak % 5 == 0)
                 lives++;
             return true;
         }
@@ -68,7 +68,7 @@ public class BarrowsFFAHolder {
     }
 
     public int getBounty() {
-        int bounty = (kills - lives) * 5 + killStreak * 10 + 5;
+        final int bounty = (kills - lives) * 5 + killStreak * 10 + 5;
         return bounty < 0 ? 0 : bounty;
     }
 
@@ -91,7 +91,6 @@ public class BarrowsFFAHolder {
     public BarrowSet getBarrowSet() {
         return set;
     }
-
 
 
 }

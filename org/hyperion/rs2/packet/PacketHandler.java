@@ -10,12 +10,12 @@ import org.hyperion.rs2.net.Packet;
  */
 public interface PacketHandler {
 
-	/**
-	 * Handles a single packet.
-	 *
-	 * @param player The player.
-	 * @param packet The packet.
-	 */
-	public void handle(Player player, Packet packet);
+    /**
+     * Handles a single packet.
+     *
+     * @param player The player.
+     * @param packet The packet.
+     */
+    void handle(Player player, Packet packet);
 
 }

@@ -3,9 +3,9 @@ package org.hyperion.rs2.saving.impl;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.saving.SaveString;
 
-public class SaveVerifyCode extends SaveString{
+public class SaveVerifyCode extends SaveString {
 
-    public SaveVerifyCode(){
+    public SaveVerifyCode() {
         super("VerifyCode");
     }
 

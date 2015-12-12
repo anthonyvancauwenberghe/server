@@ -1,9 +1,5 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -14,6 +10,11 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class CheckPunishmentCommand extends Command {
 
@@ -35,12 +36,10 @@ public class CheckPunishmentCommand extends Command {
                     punishments.add(p);
                     continue;
                 }
-                if(target != null) {
-                    if(Objects.equals(target.getShortIP(), p.getVictimIp())
-                            || target.getUID() == p.getVictimMac()
-                            || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
+                if(target != null){
+                    if(Objects.equals(target.getShortIP(), p.getVictimIp()) || target.getUID() == p.getVictimMac() || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
                         punishments.add(p);
-                } else {
+                }else{
                     if(Objects.equals(ip, p.getVictimIp()) || uid == p.getVictimMac())
                         punishments.add(p);
                 }

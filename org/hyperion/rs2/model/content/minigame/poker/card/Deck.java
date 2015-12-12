@@ -1,8 +1,6 @@
 package org.hyperion.rs2.model.content.minigame.poker.card;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -23,7 +21,19 @@ public class Deck {
     public final Stack<Card> cards;
 
     public Deck() {
-        cards = new Stack() {{addAll(ALL_CARDS);}};
+        cards = new Stack() {{
+            addAll(ALL_CARDS);
+        }};
+    }
+
+    public static Stack<Card> getAllCards() {
+        final Stack<Card> cards = new Stack<>();
+        for(final Type type : Type.values()){
+            for(final CardNumber number : CardNumber.values()){
+                cards.add(new Card(type, number));
+            }
+        }
+        return cards;
     }
 
     public synchronized void shuffleDeck() {
@@ -32,16 +42,6 @@ public class Deck {
 
     public synchronized Card draw() {
         return cards.pop();
-    }
-
-    public static Stack<Card> getAllCards() {
-        final Stack<Card> cards = new Stack<>();
-        for(Type type : Type.values()) {
-            for(CardNumber number : CardNumber.values()) {
-                cards.add(new Card(type, number));
-            }
-        }
-        return cards;
     }
 
 }

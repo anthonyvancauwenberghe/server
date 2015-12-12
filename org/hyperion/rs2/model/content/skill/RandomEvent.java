@@ -19,44 +19,37 @@ import java.util.Map;
  */
 public class RandomEvent {
 
-    private static int MAX_ATTEMPTS = 3;
-    private static int SECONDS_DEFAULT = 300;
-    private static Location[] locations = {
-            Location.create(2689, 3514, 0),
-            Location.create(2942, 3395, 0),
-            Location.create(2957, 3502, 0),
-            Location.create(3350, 3343, 0),
-            Location.create(3433, 2892, 0),
-            Location.create(3519, 3365, 0),
-            Location.create(3024, 9582, 0),
-            Location.create(2425, 4446, 0),
-            Location.create(3224, 3174, 0)
-    };
+    private static final int MAX_ATTEMPTS = 3;
+    private static final int SECONDS_DEFAULT = 300;
+    private static final Location[] locations = {Location.create(2689, 3514, 0), Location.create(2942, 3395, 0),
+            Location.create(2957, 3502, 0), Location.create(3350, 3343, 0), Location.create(3433, 2892, 0),
+            Location.create(3519, 3365, 0), Location.create(3024, 9582, 0), Location.create(2425, 4446, 0),
+            Location.create(3224, 3174, 0)};
 
     static {
         CommandHandler.submit(new Command("triggerrandom", Rank.DEVELOPER) {
             @Override
-            public boolean execute(Player player, String input) throws Exception {
+            public boolean execute(final Player player, final String input) throws Exception {
                 RandomEvent.triggerRandom(player, false);
                 return false;
             }
         });
     }
 
+    private final Player player;
     Map<Integer, Integer> answers = new HashMap<>();
-    private Player player;
     private int secondsLeft = SECONDS_DEFAULT;
     private boolean doingRandom = false;
     private int n1, n2;
     private int attempts;
 
-    public RandomEvent(Player player) {
+    public RandomEvent(final Player player) {
         this.player = player;
     }
 
-    public static void triggerRandom(Player player, boolean checks) {
-        if (checks) {
-            if (player.getRandomEvent().doingRandom) {
+    public static void triggerRandom(final Player player, final boolean checks) {
+        if(checks){
+            if(player.getRandomEvent().doingRandom){
                 player.getRandomEvent().randomTeleport();
                 return;
             }
@@ -75,15 +68,15 @@ public class RandomEvent {
         return skillAction(10);
     }
 
-    public boolean skillAction(int amount) {
+    public boolean skillAction(final int amount) {
         return reduceSecondsLeft(Misc.random(amount));
     }
 
-    public boolean reduceSecondsLeft(int amount) {
-        if (!ItemSpawning.canSpawn(player))
+    public boolean reduceSecondsLeft(final int amount) {
+        if(!ItemSpawning.canSpawn(player))
             return false;
         secondsLeft -= amount;
-        if(secondsLeft <= 0) {
+        if(secondsLeft <= 0){
             triggerRandom(player, true);
             return true;
         }
@@ -91,15 +84,15 @@ public class RandomEvent {
     }
 
     public void generateSum() {
-        int number1 = Misc.random(4);
-        int number2 = Misc.random(4);
+        final int number1 = Misc.random(4);
+        final int number2 = Misc.random(4);
         player.getRandomEvent().n1 = number1;
         player.getRandomEvent().n2 = number2;
 
         answers.clear();
 
-        while(answers.size() < 4) {
-            int number = Misc.random(10);
+        while(answers.size() < 4){
+            final int number = Misc.random(10);
             if(!answers.containsValue(number))
                 answers.put(answers.size(), number);
         }
@@ -116,9 +109,9 @@ public class RandomEvent {
         player.getInterfaceState().setNextDialogueId(3, 613);
     }
 
-    public void answer(int answer) {
+    public void answer(final int answer) {
         attempts++;
-        if(answers.get(answer) != (n1 + n2)) {
+        if(answers.get(answer) != (n1 + n2)){
             if(attempts != MAX_ATTEMPTS)
                 player.getRandomEvent().generateSum();
             else

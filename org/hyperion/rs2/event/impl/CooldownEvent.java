@@ -12,26 +12,26 @@ import org.hyperion.rs2.model.EntityCooldowns.CooldownFlags;
 
 public class CooldownEvent extends Event {
 
-	private Entity entity;
+    private final Entity entity;
 
-	private CooldownFlags cooldown;
+    private final CooldownFlags cooldown;
 
-	/**
-	 * Creates a cooldown event for a single CooldownFlag.
-	 *
-	 * @param entity   The entity for whom we are expiring a cooldown.
-	 * @param duration The length of the cooldown.
-	 */
-	public CooldownEvent(Entity entity, CooldownFlags cooldown, int duration) {
-		super(duration);
-		this.entity = entity;
-		this.cooldown = cooldown;
-	}
+    /**
+     * Creates a cooldown event for a single CooldownFlag.
+     *
+     * @param entity   The entity for whom we are expiring a cooldown.
+     * @param duration The length of the cooldown.
+     */
+    public CooldownEvent(final Entity entity, final CooldownFlags cooldown, final int duration) {
+        super(duration);
+        this.entity = entity;
+        this.cooldown = cooldown;
+    }
 
-	@Override
-	public void execute() {
-		entity.getEntityCooldowns().set(cooldown, false);
-		this.stop();
-	}
+    @Override
+    public void execute() {
+        entity.getEntityCooldowns().set(cooldown, false);
+        this.stop();
+    }
 
 }

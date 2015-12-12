@@ -7,17 +7,17 @@ import java.sql.SQLException;
 
 public class KeepConnectionAliveEvent extends SQLEvent {
 
-	public static final long DELAY = 20000;
+    public static final long DELAY = 20000;
 
-	public KeepConnectionAliveEvent() {
-		super(DELAY);
-	}
+    public KeepConnectionAliveEvent() {
+        super(DELAY);
+    }
 
-	@Override
-	public void execute(SQLConnection sql) throws SQLException {
-		sql.query("SELECT * FROM donator WHERE row = 1");
-		super.updateStartTime();
-	}
+    @Override
+    public void execute(final SQLConnection sql) throws SQLException {
+        sql.query("SELECT * FROM donator WHERE row = 1");
+        super.updateStartTime();
+    }
 
 
 }

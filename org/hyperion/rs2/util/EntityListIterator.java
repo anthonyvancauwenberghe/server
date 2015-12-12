@@ -13,67 +13,64 @@ import java.util.NoSuchElementException;
  */
 public class EntityListIterator<E extends Entity> implements Iterator<E> {
 
-	/**
-	 * The entities.
-	 */
-	private Entity[] entities;
+    /**
+     * The entities.
+     */
+    private final Entity[] entities;
 
-	/**
-	 * The entity list.
-	 */
-	private EntityList<E> entityList;
+    /**
+     * The entity list.
+     */
+    private final EntityList<E> entityList;
+    /**
+     * The size of the list.
+     */
+    private final int size;
+    /**
+     * The previous index.
+     */
+    private int lastIndex = -1;
+    /**
+     * The current index.
+     */
+    private int cursor = 0;
 
-	/**
-	 * The previous index.
-	 */
-	private int lastIndex = - 1;
+    /**
+     * Creates an entity list iterator.
+     *
+     * @param entityList The entity list.
+     */
+    public EntityListIterator(final EntityList<E> entityList) {
+        this.entityList = entityList;
 
-	/**
-	 * The current index.
-	 */
-	private int cursor = 0;
+        entities = entityList.toArray(new Entity[entityList.size()]);
+        size = entities.length;
+    }
 
-	/**
-	 * The size of the list.
-	 */
-	private int size;
+    @Override
+    public boolean hasNext() {
+        return cursor < size;
+    }
 
-	/**
-	 * Creates an entity list iterator.
-	 *
-	 * @param entityList The entity list.
-	 */
-	public EntityListIterator(EntityList<E> entityList) {
-		this.entityList = entityList;
+    @SuppressWarnings("unchecked")
+    @Override
+    public E next() {
+        if(!hasNext()){
+            throw new NoSuchElementException();
+        }
+        lastIndex = cursor++;
+        if(entities[lastIndex] == null){
+            System.out.println("Null is next() ");
+        }
+        return (E) entities[lastIndex];
+    }
 
-		entities = entityList.toArray(new Entity[0]);
-		size = entities.length;
-	}
-
-	@Override
-	public boolean hasNext() {
-		return cursor < size;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public E next() {
-		if(! hasNext()) {
-			throw new NoSuchElementException();
-		}
-		lastIndex = cursor++;
-		if(entities[lastIndex] == null) {
-			System.out.println("Null is next() ");
-		}
-		return (E) entities[lastIndex];
-	}
-
-	@Override
-	public void remove() {
-		if(lastIndex == - 1) {
-			throw new IllegalStateException();
-		}
-		entityList.remove(entities[lastIndex]);
-	}
+    @Override
+    public void remove() {
+        if(lastIndex == -1){
+            throw new IllegalStateException();
+        }
+        entityList.remove(entities[lastIndex]);
+    }
 
 }

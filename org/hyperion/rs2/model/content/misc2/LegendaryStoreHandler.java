@@ -19,11 +19,10 @@ import org.hyperion.rs2.util.TextUtils;
  */
 public class LegendaryStoreHandler implements ContentTemplate {
 
-    private static final int
-        RIGOUR_SCROLL = 18839, AUGURY_SCROLL = 18344, WRATH_SCROLL = 18950;
+    private static final int RIGOUR_SCROLL = 18839, AUGURY_SCROLL = 18344, WRATH_SCROLL = 18950;
 
     @Override
-    public int[] getValues(int type) {
+    public int[] getValues(final int type) {
         if(type == ClickType.NPC_OPTION1)
             return new int[]{2790};
         else if(type == ClickType.EAT)
@@ -32,20 +31,20 @@ public class LegendaryStoreHandler implements ContentTemplate {
     }
 
     @Override
-    public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+    public boolean npcOptionOne(final Player player, final int npcId, final int npcLocationX, final int npcLocationY, final int npcSlot) {
         ShopManager.open(player, 79);
         return true;
     }
 
     @Override
-    public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
-        if(interfaceId == Inventory.INTERFACE) {
-            if(player.getInventory().remove(slot, Item.create(id, 1)) == 1) {
-                if(id == AUGURY_SCROLL) {
+    public boolean itemOptionOne(final Player player, final int id, final int slot, final int interfaceId) {
+        if(interfaceId == Inventory.INTERFACE){
+            if(player.getInventory().remove(slot, Item.create(id, 1)) == 1){
+                if(id == AUGURY_SCROLL){
                     player.getPermExtraData().put("augury", true);
-                } else if(id == RIGOUR_SCROLL) {
+                }else if(id == RIGOUR_SCROLL){
                     player.getPermExtraData().put("rigour", true);
-                } else if(id == WRATH_SCROLL) {
+                }else if(id == WRATH_SCROLL){
                     player.getPermExtraData().put("wrath", true);
                 }
                 PlayerSaving.getSaving().save(player);

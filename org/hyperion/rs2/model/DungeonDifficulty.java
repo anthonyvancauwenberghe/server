@@ -1,16 +1,7 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.combat.attack.RevAttack;
-import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,16 +12,19 @@ import java.util.List;
  */
 
 public enum DungeonDifficulty {
-    EASY(500, 2, 5, 0, 13_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882, 2883}, 1, 5338, 299, 255, 32, 449, 5595, 196, 119, 1677, 2627, 4940, 4693, 112, 78, 2630),
-    MEDIUM(1000,2, 8, 45, 45_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{6692, 6691, 6690, 6689, 6688, 3200},  51,52,53, 55, 82, 83,941, 1582, 1583, 49, 2741),
-    HARD(5000,2, 10, 80, 100_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203, 6222, 8349}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 1592, 1591, 1590, 54, 84, 2743, 5253);
+    EASY(500, 2, 5, 0, 13_000, Time.ONE_MINUTE * 3, new int[]{2881, 2882,
+            2883}, 1, 5338, 299, 255, 32, 449, 5595, 196, 119, 1677, 2627, 4940, 4693, 112, 78, 2630),
+    MEDIUM(1000, 2, 8, 45, 45_000, Time.FIVE_MINUTES + Time.ONE_MINUTE, new int[]{6692, 6691, 6690, 6689, 6688,
+            3200}, 51, 52, 53, 55, 82, 83, 941, 1582, 1583, 49, 2741),
+    HARD(5000, 2, 10, 80, 100_000, Time.TEN_MINUTES, new int[]{6260, 6247, 6203, 6222,
+            8349}, 6252, 6248, 6250, 6208, 6204, 6206, 6223, 6225, 6227, 1592, 1591, 1590, 54, 84, 2743, 5253);
 
 
     public final int min_level, spawns, rooms, xp, coins;
-    private final int[] monsters, bosses;
     public final long time;
+    private final int[] monsters, bosses;
 
-    private DungeonDifficulty(final int coins ,final int spawns, final int rooms,  final int min_level, final int xp, final long time, final int[] bosses, final int... monsters) {
+    DungeonDifficulty(final int coins, final int spawns, final int rooms, final int min_level, final int xp, final long time, final int[] bosses, final int... monsters) {
         this.coins = coins;
         this.min_level = min_level;
         this.spawns = spawns;
@@ -58,7 +52,8 @@ public enum DungeonDifficulty {
         public final int size;
         public final double multiplier;
         public final double multi_time;
-        private DungeonSize(final int size, final double multiplier, final double multi) {
+
+        DungeonSize(final int size, final double multiplier, final double multi) {
             this.size = size;
             this.multiplier = multiplier;
             this.multi_time = multi;

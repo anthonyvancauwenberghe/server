@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -23,7 +25,7 @@ public class CustomSetDialogueHandler implements ContentTemplate {
     }
 
     @Override
-    public int[] getValues(int type) {
+    public int[] getValues(final int type) {
         if(type == ClickType.DIALOGUE_MANAGER)
             return new int[]{1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007};
         else if(type == ClickType.ACTION_BUTTON)
@@ -32,20 +34,19 @@ public class CustomSetDialogueHandler implements ContentTemplate {
             return new int[0];
     }
 
-    public boolean actionButton(Player player, int actionButton) {
-        if(!ItemSpawning.canSpawn(player)) {
+    public boolean actionButton(final Player player, final int actionButton) {
+        if(!ItemSpawning.canSpawn(player)){
             player.getActionSender().sendMessage("You cannot spawn items in the wilderness.");
             return false;
         }
 
-        if(player.bankPin != null && !player.bankPin.equals("null")) {
-            if ((player.bankPin.length() >= 4 && !player.bankPin
-                    .equals(player.enterPin))) {
+        if(player.bankPin != null && !player.bankPin.equals("null")){
+            if((player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin))){
                 player.sendMessage("You must enter your bank pin before spawning a custom set");
                 return false;
             }
         }
-        switch(actionButton) {
+        switch(actionButton){
             case 31403:
                 DialogueManager.openDialogue(player, 1000);
                 return true;
@@ -57,13 +58,10 @@ public class CustomSetDialogueHandler implements ContentTemplate {
     }
 
     @Override
-    public boolean dialogueAction(Player player, int dialogueId) {
-        switch(dialogueId) {
+    public boolean dialogueAction(final Player player, final int dialogueId) {
+        switch(dialogueId){
             case 1000:
-                player.getActionSender().sendDialogue("Are you sure?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
-                        "Save slot 1",
-                        "Save slot 2",
-                        "Save slot 3");
+                player.getActionSender().sendDialogue("Are you sure?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, "Save slot 1", "Save slot 2", "Save slot 3");
                 player.getInterfaceState().setNextDialogueId(0, 1001);
                 player.getInterfaceState().setNextDialogueId(1, 1002);
                 player.getInterfaceState().setNextDialogueId(2, 1003);
@@ -77,10 +75,7 @@ public class CustomSetDialogueHandler implements ContentTemplate {
                 player.getActionSender().removeChatboxInterface();
                 return saved;
             case 1004:
-                player.getActionSender().sendDialogue("Are you sure?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
-                        "Load slot 1",
-                        "Load slot 2",
-                        "Load slot 3");
+                player.getActionSender().sendDialogue("Are you sure?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, "Load slot 1", "Load slot 2", "Load slot 3");
                 player.getInterfaceState().setNextDialogueId(0, 1005);
                 player.getInterfaceState().setNextDialogueId(1, 1006);
                 player.getInterfaceState().setNextDialogueId(2, 1007);

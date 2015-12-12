@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill.crafting;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.ArrayUtils;
 
@@ -18,63 +18,14 @@ import java.util.List;
 
 public class Crafting implements ContentTemplate {
 
+    public final static int EXPMULTIPLIER = 3 * Constants.XPRATE;
+    private final int[] craftingTools = {LeatherCrafting.needle, GemCutting.chisel};
+
     public Crafting() {
     }
 
-    public final static int EXPMULTIPLIER = 3 * Constants.XPRATE;
-
-    public boolean attemptCraft(Player c, int useItem, int slot1, int onItem, int slot2) {
-        if(onItem == GemCutting.chisel) {
-            onItem = useItem;
-            slot2 = slot1;
-            useItem = GemCutting.chisel;
-        }
-        if(onItem == LeatherCrafting.needle) {
-            onItem = useItem;
-            useItem = LeatherCrafting.needle;
-        }
-        if(useItem == GemCutting.chisel)
-            return GemCutting.cutGem(c, onItem, slot2);
-        else if(useItem == LeatherCrafting.needle)
-            return LeatherCrafting.craftLeather(c, onItem);
-        return false;
-    }
-
-    private int[] craftingTools = {LeatherCrafting.needle, GemCutting.chisel};
-
-    @Override
-    public int[] getValues(int type) {
-        if(type == 13) {
-            List<Integer> j = new ArrayList();
-            for(GemCutting.Gem gem : GemCutting.Gem.values()) {
-                j.add(gem.getGemId());
-            }
-            for(LeatherCrafting.Leather leather : LeatherCrafting.Leather.values()) {
-                j.add(leather.getItemId());
-            }
-            for(LeatherCrafting.Leather_Item leatherItem : LeatherCrafting.Leather_Item.values()) {
-                j.add(leatherItem.getItemId());
-            }
-            for(int i = 0; i < craftingTools.length; i++) {
-                j.add(craftingTools[i]);
-            }
-            return ArrayUtils.fromList(j);
-        }
-        if(type == 7) {
-            //Flax
-            int[] j = {2646, 2644};
-            return j;
-        }
-        if(type == 14) {
-            //Spinning wheel
-            int[] j = {1779};
-            return j;
-        }
-        return null;
-    }
-
     public static boolean clickInterface(final Player client, final int id) {
-        switch(id) {
+        switch(id){
             case 8909:
             case 8889:
             case 8949:
@@ -158,17 +109,65 @@ public class Crafting implements ContentTemplate {
         return false;
     }
 
+    public boolean attemptCraft(final Player c, int useItem, final int slot1, int onItem, int slot2) {
+        if(onItem == GemCutting.chisel){
+            onItem = useItem;
+            slot2 = slot1;
+            useItem = GemCutting.chisel;
+        }
+        if(onItem == LeatherCrafting.needle){
+            onItem = useItem;
+            useItem = LeatherCrafting.needle;
+        }
+        if(useItem == GemCutting.chisel)
+            return GemCutting.cutGem(c, onItem, slot2);
+        else if(useItem == LeatherCrafting.needle)
+            return LeatherCrafting.craftLeather(c, onItem);
+        return false;
+    }
+
+    @Override
+    public int[] getValues(final int type) {
+        if(type == 13){
+            final List<Integer> j = new ArrayList();
+            for(final GemCutting.Gem gem : GemCutting.Gem.values()){
+                j.add(gem.getGemId());
+            }
+            for(final LeatherCrafting.Leather leather : LeatherCrafting.Leather.values()){
+                j.add(leather.getItemId());
+            }
+            for(final LeatherCrafting.Leather_Item leatherItem : LeatherCrafting.Leather_Item.values()){
+                j.add(leatherItem.getItemId());
+            }
+            for(int i = 0; i < craftingTools.length; i++){
+                j.add(craftingTools[i]);
+            }
+            return ArrayUtils.fromList(j);
+        }
+        if(type == 7){
+            //Flax
+            final int[] j = {2646, 2644};
+            return j;
+        }
+        if(type == 14){
+            //Spinning wheel
+            final int[] j = {1779};
+            return j;
+        }
+        return null;
+    }
+
     @Override
     public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int itemSlot2) {
-        if(type == 13) {
+        if(type == 13){
             return attemptCraft(client, id, slot, itemId2, itemSlot2);
         }
-        if(type == 7) {
+        if(type == 7){
             if(id == 2644)
                 return Flax.spinFlax(client, id);
             return Flax.pickFlax(client, id);
         }
-        if(type == 14) {
+        if(type == 14){
             return Flax.spinFlax(client, id);
         }
         return false;

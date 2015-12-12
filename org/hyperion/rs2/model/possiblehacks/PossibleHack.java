@@ -30,10 +30,10 @@ public abstract class PossibleHack {
     public abstract String toString();
 
     public String dateString() {
-        try {
+        try{
             final Date date = DEFAULT.parse(this.date);
             return FORMAT.format(date);
-        } catch (ParseException e) {
+        }catch(final ParseException e){
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return "";

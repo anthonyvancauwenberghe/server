@@ -17,12 +17,12 @@ public class SavePermExtraData extends SaveString {
     }
 
     @Override
-    public void setValue(Player player, String value) {
+    public void setValue(final Player player, final String value) {
         player.getPermExtraData().parse(value);
     }
 
     @Override
-    public String getValue(Player player) {
+    public String getValue(final Player player) {
         return player.getPermExtraData().getSaveableString();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

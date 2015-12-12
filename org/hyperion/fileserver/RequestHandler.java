@@ -39,54 +39,54 @@ public class RequestHandler {
      * @param request The request.
      * @return The response.
      */
-    public static synchronized Response handle(Request request) {
-        if (cache == null) {
-            try {
+    public static synchronized Response handle(final Request request) {
+        if(cache == null){
+            try{
                 cache = new Cache(new File("./data/cache/"));
-            } catch (Exception e) {
+            }catch(final Exception e){
                 throw new RuntimeException(e);
             }
         }
         String path = request.getPath();
-        if (path.equals("/")) {
+        if(path.equals("/")){
             path = "/index.html";
         }
-        String mime = getMimeType(path);
-        try {
-            if (crcTable == null) {
+        final String mime = getMimeType(path);
+        try{
+            if(crcTable == null){
                 crcTable = calculateCrcTable();
             }
-            if (path.startsWith("/crc")) {
+            if(path.startsWith("/crc")){
                 return new Response(crcTable.asReadOnlyBuffer(), mime);
-            } else if (path.startsWith("/title")) {
+            }else if(path.startsWith("/title")){
                 return new Response(cache.getFile(0, 1).getBytes(), mime);
-            } else if (path.startsWith("/config")) {
+            }else if(path.startsWith("/config")){
                 return new Response(cache.getFile(0, 2).getBytes(), mime);
-            } else if (path.startsWith("/interface")) {
+            }else if(path.startsWith("/interface")){
                 return new Response(cache.getFile(0, 3).getBytes(), mime);
-            } else if (path.startsWith("/media")) {
+            }else if(path.startsWith("/media")){
                 return new Response(cache.getFile(0, 4).getBytes(), mime);
-            } else if (path.startsWith("/versionlist")) {
+            }else if(path.startsWith("/versionlist")){
                 return new Response(cache.getFile(0, 5).getBytes(), mime);
-            } else if (path.startsWith("/textures")) {
+            }else if(path.startsWith("/textures")){
                 return new Response(cache.getFile(0, 6).getBytes(), mime);
-            } else if (path.startsWith("/wordenc")) {
+            }else if(path.startsWith("/wordenc")){
                 return new Response(cache.getFile(0, 7).getBytes(), mime);
-            } else if (path.startsWith("/sounds")) {
+            }else if(path.startsWith("/sounds")){
                 return new Response(cache.getFile(0, 8).getBytes(), mime);
             }
             path = new File(FILES_DIRECTORY + path).getAbsolutePath();
-            if (!path.startsWith(FILES_DIRECTORY)) {
+            if(!path.startsWith(FILES_DIRECTORY)){
                 return null;
             }
-            RandomAccessFile f = new RandomAccessFile(path, "r");
-            try {
-                MappedByteBuffer data = f.getChannel().map(MapMode.READ_ONLY, 0, f.length());
+            final RandomAccessFile f = new RandomAccessFile(path, "r");
+            try{
+                final MappedByteBuffer data = f.getChannel().map(MapMode.READ_ONLY, 0, f.length());
                 return new Response(data, mime);
-            } finally {
+            }finally{
                 f.close();
             }
-        } catch (IOException ex) {
+        }catch(final IOException ex){
             return null;
         }
     }
@@ -94,8 +94,8 @@ public class RequestHandler {
 	/*
      * The following code is where it downloads the /crc file from JAGGRAB.
 	 */
-	/*
-	DataInputStream datainputstream = method132("crc" + (int)(Math.random() * 99999999D) + "-" + 317);
+    /*
+    DataInputStream datainputstream = method132("crc" + (int)(Math.random() * 99999999D) + "-" + 317);
     Class30_Sub2_Sub2 class30_sub2_sub2 = new Class30_Sub2_Sub2(new byte[40], 891);
     datainputstream.readFully(class30_sub2_sub2.aByteArray1405, 0, 40);
     datainputstream.close();
@@ -279,8 +279,8 @@ public class RequestHandler {
      */
     private static ByteBuffer calculateCrcTable() throws IOException {
         final CRC32 crc = new CRC32();
-        int[] checksums = new int[9];
-		
+        final int[] checksums = new int[9];
+
 		/*
 		 * Set the first checksum. As 0 is the CRC table itself (which we are
 		 * calculating!), this is set to the client version instead.
@@ -290,8 +290,8 @@ public class RequestHandler {
 		/*
 		 * Calculate the checksums.
 		 */
-        for (int i = 1; i < checksums.length; i++) {
-            byte[] file = cache.getFile(0, i).getBytes(); // each of these maps to the files above
+        for(int i = 1; i < checksums.length; i++){
+            final byte[] file = cache.getFile(0, i).getBytes(); // each of these maps to the files above
             crc.reset();
             crc.update(file, 0, file.length);
             checksums[i] = (int) crc.getValue();
@@ -305,15 +305,15 @@ public class RequestHandler {
 		/*
 		 * Calculate the hash from every checksum.
 		 */
-        for (int i = 0; i < checksums.length; i++) {
+        for(int i = 0; i < checksums.length; i++){
             hash = (hash << 1) + checksums[i];
         }
 		
 		/*
 		 * And write the table to a bytebuffer.
 		 */
-        ByteBuffer bb = ByteBuffer.allocate(4 * (checksums.length + 1));
-        for (int i = 0; i < checksums.length; i++) {
+        final ByteBuffer bb = ByteBuffer.allocate(4 * (checksums.length + 1));
+        for(int i = 0; i < checksums.length; i++){
             bb.putInt(checksums[i]);
         }
         bb.putInt(hash);
@@ -327,11 +327,11 @@ public class RequestHandler {
      * @param path The path to the file.
      * @return The mime type.
      */
-    private static String getMimeType(String path) {
+    private static String getMimeType(final String path) {
         String mime = "application/octect-stream";
-        if (path.endsWith(".htm") || path.endsWith(".html")) {
+        if(path.endsWith(".htm") || path.endsWith(".html")){
             mime = "text/html";
-        } else if (path.endsWith(".jar")) {
+        }else if(path.endsWith(".jar")){
             mime = "application/java-archive";
         }
         return mime;

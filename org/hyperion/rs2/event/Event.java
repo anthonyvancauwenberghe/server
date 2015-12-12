@@ -10,79 +10,77 @@ import java.io.IOException;
  */
 public abstract class Event {
 
-	private final String name;
+    private final String name;
+    /**
+     * The delay, in milliseconds.
+     */
+    private long delay;
+    /**
+     * The running flag.
+     */
+    private boolean running = true;
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * Creates an event with the specified delay.
+     *
+     * @param delay The delay.
+     */
+    public Event(final long delay, final String name) {
+        this.delay = delay;
+        this.name = name;
+    }
 
-	/**
-	 * The delay, in milliseconds.
-	 */
-	private long delay;
+    public Event(final long delay) {
+        this.delay = delay;
+        this.name = this.getClass().getSimpleName();
+    }
 
-	/**
-	 * The running flag.
-	 */
-	private boolean running = true;
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Creates an event with the specified delay.
-	 *
-	 * @param delay The delay.
-	 */
-	public Event(long delay, String name) {
-		this.delay = delay;
-		this.name = name;
-	}
+    /**
+     * Gets the event delay.
+     *
+     * @return The delay, in milliseconds.
+     */
+    public long getDelay() {
+        return delay;
+    }
 
-	public Event(long delay) {
-		this.delay = delay;
-		this.name = this.getClass().getSimpleName();
-	}
+    /**
+     * Sets the event delay.
+     *
+     * @param delay The delay to set.
+     * @throws IllegalArgumentException if the delay is negative.
+     */
+    public void setDelay(final long delay) {
+        if(delay < 0){
+            throw new IllegalArgumentException("Delay must be positive.");
+        }
+        this.delay = delay;
+    }
 
-	/**
-	 * Gets the event delay.
-	 *
-	 * @return The delay, in milliseconds.
-	 */
-	public long getDelay() {
-		return delay;
-	}
+    /**
+     * Checks if the event is running.
+     *
+     * @return <code>true</code> if the event is still running, <code>false</code> if not.
+     */
+    public boolean isRunning() {
+        return running;
+    }
 
-	/**
-	 * Sets the event delay.
-	 *
-	 * @param delay The delay to set.
-	 * @throws IllegalArgumentException if the delay is negative.
-	 */
-	public void setDelay(long delay) {
-		if(delay < 0) {
-			throw new IllegalArgumentException("Delay must be positive.");
-		}
-		this.delay = delay;
-	}
+    /**
+     * Stops the event from running in the future.
+     */
+    public void stop() {
+        running = false;
+    }
 
-	/**
-	 * Checks if the event is running.
-	 *
-	 * @return <code>true</code> if the event is still running, <code>false</code> if not.
-	 */
-	public boolean isRunning() {
-		return running;
-	}
-
-	/**
-	 * Stops the event from running in the future.
-	 */
-	public void stop() {
-		running = false;
-	}
-
-	/**
-	 * The execute method is called when the event is run. The general contract
-	 * of the execute method is that it may take any action whatsoever.
-	 */
-	public abstract void execute() throws IOException;//when deadlocking , it doesnt run this ok hold on
+    /**
+     * The execute method is called when the event is run. The general contract
+     * of the execute method is that it may take any action whatsoever.
+     */
+    public abstract void execute() throws IOException;//when deadlocking , it doesnt run this ok hold on
 
 }

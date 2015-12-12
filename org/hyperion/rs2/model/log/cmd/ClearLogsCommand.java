@@ -5,18 +5,17 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.util.PlayerFiles;
 
 /**
  * Created by Jet on 12/18/2014.
  */
 public class ClearLogsCommand extends Command {
 
-    public ClearLogsCommand(){
+    public ClearLogsCommand() {
         super("clearlogs", Rank.DEVELOPER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String targetName = filterInput(input).trim();
         if(!MergedSaving.exists(targetName)){
             player.sendf("%s does not exist", targetName);

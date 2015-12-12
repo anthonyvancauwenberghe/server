@@ -5,25 +5,25 @@ import org.hyperion.rs2.saving.SaveInteger;
 
 public class SaveBandosKills extends SaveInteger {
 
-	public SaveBandosKills(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveBandosKills(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public int getDefaultValue() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getDefaultValue() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public void setValue(Player player, int value) {
-		player.godWarsKillCount[0] = value;
-	}
+    @Override
+    public void setValue(final Player player, final int value) {
+        player.godWarsKillCount[0] = value;
+    }
 
-	@Override
-	public Integer getValue(Player player) {
-		return player.godWarsKillCount[0];
-	}
+    @Override
+    public Integer getValue(final Player player) {
+        return player.godWarsKillCount[0];
+    }
 
 }

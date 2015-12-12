@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.model.content.ContentTemplate;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay

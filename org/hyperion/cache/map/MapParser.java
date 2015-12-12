@@ -9,39 +9,39 @@ import org.hyperion.cache.Cache;
  */
 public class MapParser {
 
-	/**
-	 * The cache.
-	 */
-	//private Cache cache;
+    /**
+     * The cache.
+     */
+    //private Cache cache;
 
-	/**
-	 * The area id.
-	 */
-	//private int area;
+    /**
+     * The area id.
+     */
+    //private int area;
 
-	/**
-	 * The map listener.
-	 */
-	//private MapListener listener;
+    /**
+     * The map listener.
+     */
+    //private MapListener listener;
 
-	/**
-	 * Creates the map parser.
-	 *
-	 * @param cache    The cache.
-	 * @param area     The area id.
-	 * @param listener The listener.
-	 */
-	public MapParser(Cache cache, int area, MapListener listener) {
-		//this.cache = cache;
-		//this.area = area;
-		//this.listener = listener;
-	}
+    /**
+     * Creates the map parser.
+     *
+     * @param cache    The cache.
+     * @param area     The area id.
+     * @param listener The listener.
+     */
+    public MapParser(final Cache cache, final int area, final MapListener listener) {
+        //this.cache = cache;
+        //this.area = area;
+        //this.listener = listener;
+    }
 
-	/**
-	 * Parses the map file.
-	 */
-	public void parse() {
+    /**
+     * Parses the map file.
+     */
+    public void parse() {
 
-	}
+    }
 
 }

@@ -19,15 +19,15 @@ public class SaveAchievements extends SaveObject {
      *
      * @param
      */
-    public SaveAchievements(String name) {
+    public SaveAchievements(final String name) {
         super(name);
         // TODO Auto-generated constructor stub
     }
 
-    public boolean save(Player player, BufferedWriter writer) throws IOException {
+    public boolean save(final Player player, final BufferedWriter writer) throws IOException {
         writer.write(getName());
         writer.newLine();
-        for(int i = 0; i < AchievementData.values().length; i++) {
+        for(int i = 0; i < AchievementData.values().length; i++){
             if(player.getAchievementsProgress().get(AchievementData.values()[i]) == null)
                 writer.write(0 + "");
             else
@@ -37,11 +37,11 @@ public class SaveAchievements extends SaveObject {
         return false;
     }
 
-    public void load(Player player, String values, BufferedReader reader) throws IOException {
+    public void load(final Player player, final String values, final BufferedReader reader) throws IOException {
         String line;
         int index = 0;
-        while((line = reader.readLine()).length() > 0) {
-            int value = Integer.parseInt(line);
+        while((line = reader.readLine()).length() > 0){
+            final int value = Integer.parseInt(line);
             player.getAchievementsProgress().put(AchievementData.values()[index++], value);
         }
     }

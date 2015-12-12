@@ -5,20 +5,20 @@ import org.hyperion.rs2.model.combat.weapons.SpecialWeapon;
 
 public class StaffOfLight extends Staff implements SpecialWeapon {
 
-	public StaffOfLight(int id) {
-		super(id);
-	}
+    public StaffOfLight(final int id) {
+        super(id);
+    }
 
-	@Override
-	public boolean specialAttack(Player player) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean specialAttack(final Player player) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public int getSpecialDrain(Player player) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getSpecialDrain(final Player player) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 }

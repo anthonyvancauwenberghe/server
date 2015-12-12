@@ -13,7 +13,7 @@ import org.hyperion.rs2.model.container.Container;
  */
 public class DungeoneeringStore extends PointsShop {
 
-    public DungeoneeringStore(int id, String name, Container container) {
+    public DungeoneeringStore(final int id, final String name, final Container container) {
         super(id, name, container);
     }
 
@@ -24,8 +24,8 @@ public class DungeoneeringStore extends PointsShop {
     }
 
     @Override
-    public int getPrice(int itemId) {
-        switch(itemId) {
+    public int getPrice(final int itemId) {
+        switch(itemId){
             case 17985:
             case 17986:
             case 17987:
@@ -55,18 +55,18 @@ public class DungeoneeringStore extends PointsShop {
     }
 
     @Override
-    public void buyFromShop(Player player, Item item) {
+    public void buyFromShop(final Player player, final Item item) {
         super.buyFromShop(player, item);
         player.getActionSender().sendString(3901, "Dungeoneering tokens: @gre@" + player.getDungeoneering().getTokens());
     }
 
     @Override
-    protected int getPointsAmount(Player player) {
+    protected int getPointsAmount(final Player player) {
         return player.getDungeoneering().getTokens();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    protected void setPointsAmount(Player player, int value) {
+    protected void setPointsAmount(final Player player, final int value) {
         player.getDungeoneering().setTokens(value);
     }
 

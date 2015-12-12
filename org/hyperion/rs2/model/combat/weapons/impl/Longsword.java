@@ -10,23 +10,23 @@ import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
  */
 public class Longsword extends Weapon {
 
-	/**
-	 * The longsword weapon animations.
-	 */
-	public static final WeaponAnimations WEAPON_ANIMATIONS = Server.OLD_SCHOOL ? new WeaponAnimations(808, 819, 824, 451, 404) : WeaponAnimations.DEFAULT_ANIMS;
+    /**
+     * The longsword weapon animations.
+     */
+    public static final WeaponAnimations WEAPON_ANIMATIONS = Server.OLD_SCHOOL ? new WeaponAnimations(808, 819, 824, 451, 404) : WeaponAnimations.DEFAULT_ANIMS;
 
-	/**
-	 * The longsword weapon speed.
-	 */
-	public static final int WEAPON_SPEED = 3000;
+    /**
+     * The longsword weapon speed.
+     */
+    public static final int WEAPON_SPEED = 3000;
 
-	/**
-	 * Constructs a new longsword for the specified id.
-	 *
-	 * @param id
-	 */
-	public Longsword(int id) {
-		super(id, Constants.MELEETYPE, WEAPON_SPEED, false, false, WEAPON_ANIMATIONS);
-	}
+    /**
+     * Constructs a new longsword for the specified id.
+     *
+     * @param id
+     */
+    public Longsword(final int id) {
+        super(id, Constants.MELEETYPE, WEAPON_SPEED, false, false, WEAPON_ANIMATIONS);
+    }
 
 }

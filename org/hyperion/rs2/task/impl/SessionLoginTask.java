@@ -12,23 +12,23 @@ import org.hyperion.rs2.task.Task;
  */
 public class SessionLoginTask implements Task {
 
-	/**
-	 * The player.
-	 */
-	private Player player;
+    /**
+     * The player.
+     */
+    private final Player player;
 
-	/**
-	 * Creates the session login task.
-	 *
-	 * @param player The player that logged in.
-	 */
-	public SessionLoginTask(Player player) {
-		this.player = player;
-	}
+    /**
+     * Creates the session login task.
+     *
+     * @param player The player that logged in.
+     */
+    public SessionLoginTask(final Player player) {
+        this.player = player;
+    }
 
-	@Override
-	public void execute(GameEngine context) {
-		World.getWorld().register(player);
-	}
+    @Override
+    public void execute(final GameEngine context) {
+        World.getWorld().register(player);
+    }
 
 }

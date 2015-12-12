@@ -23,9 +23,8 @@ public class ClanWar {
     }
 
     public long secondsRemaining() {
-        return (start - System.currentTimeMillis())/1000L;
+        return (start - System.currentTimeMillis()) / 1000L;
     }
-
 
 
 }

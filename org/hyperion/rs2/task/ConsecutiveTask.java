@@ -2,6 +2,7 @@ package org.hyperion.rs2.task;
 
 import org.hyperion.rs2.GameEngine;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,33 +13,31 @@ import java.util.List;
  */
 public class ConsecutiveTask implements Task {
 
-	/**
-	 * The tasks.
-	 */
-	private List<Task> tasks;
+    /**
+     * The tasks.
+     */
+    private final List<Task> tasks;
 
-	/**
-	 * Creates the consecutive task.
-	 *
-	 * @param tasks The child tasks to execute.
-	 */
-	public ConsecutiveTask(Task... tasks) {
-		List<Task> taskList = new LinkedList<Task>();
-		for(Task task : tasks) {
-			taskList.add(task);
-		}
-		this.tasks = taskList;
-	}
+    /**
+     * Creates the consecutive task.
+     *
+     * @param tasks The child tasks to execute.
+     */
+    public ConsecutiveTask(final Task... tasks) {
+        final List<Task> taskList = new LinkedList<Task>();
+        Collections.addAll(taskList, tasks);
+        this.tasks = taskList;
+    }
 
-	public ConsecutiveTask(List<Task> tasks) {
-		this.tasks = tasks;
-	}
+    public ConsecutiveTask(final List<Task> tasks) {
+        this.tasks = tasks;
+    }
 
-	@Override
-	public void execute(GameEngine context) {
-		for(Task task : tasks) {
-			task.execute(context);
-		}
-	}
+    @Override
+    public void execute(final GameEngine context) {
+        for(final Task task : tasks){
+            task.execute(context);
+        }
+    }
 
 }

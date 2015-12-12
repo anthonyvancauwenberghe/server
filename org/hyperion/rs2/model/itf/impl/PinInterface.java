@@ -18,38 +18,40 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Jet on 1/29/2015.
  */
-public class PinInterface extends Interface{
+public class PinInterface extends Interface {
 
+    public static final int ID = 9;
     private static final int ALLOWED_ATTEMPTS = 3;
-
     private static final int SET_PIN = 1;
     private static final int ENTER_PIN = 2;
     private static final int INVALID_PIN = 3;
     private static final int ENTER_LATER = 4;
 
-    public static final int ID = 9;
-
-    public PinInterface(){
+    public PinInterface() {
         super(ID);
     }
 
-    public void set(final Player player){
+    public static PinInterface get() {
+        return InterfaceManager.get(ID);
+    }
+
+    public void set(final Player player) {
         player.write(createDataBuilder().put((byte) SET_PIN).toPacket());
         show(player);
     }
 
-    public void enter(final Player player){
-        player.write(createDataBuilder().put((byte)ENTER_PIN).toPacket());
+    public void enter(final Player player) {
+        player.write(createDataBuilder().put((byte) ENTER_PIN).toPacket());
         show(player);
     }
 
-    public void handle(final Player player, final Packet pkt){
+    public void handle(final Player player, final Packet pkt) {
         final int id = pkt.get();
         switch(id){
             case SET_PIN:
                 final int pin = pkt.getInt();
                 if(pin < 1){
-                    player.write(createDataBuilder().put((byte)INVALID_PIN).toPacket());
+                    player.write(createDataBuilder().put((byte) INVALID_PIN).toPacket());
                     return;
                 }
                 player.pin = pin;
@@ -60,16 +62,10 @@ public class PinInterface extends Interface{
             case ENTER_PIN:
                 final int enteredPin = pkt.getInt();
                 if(enteredPin != player.pin){
-                    player.write(createDataBuilder().put((byte)INVALID_PIN).toPacket());
+                    player.write(createDataBuilder().put((byte) INVALID_PIN).toPacket());
                     player.getExtraData().put("pin_attempts", player.getExtraData().getInt("pin_attempts") + 1);
                     if(player.getExtraData().getInt("pin_attempts") > ALLOWED_ATTEMPTS){
-                        final Punishment p = Punishment.create(
-                                "Server Pin",
-                                player,
-                                Combination.of(Target.ACCOUNT, Type.BAN),
-                                Time.create(30, TimeUnit.SECONDS),
-                                "Too many invalid PIN attempts"
-                        );
+                        final Punishment p = Punishment.create("Server Pin", player, Combination.of(Target.ACCOUNT, Type.BAN), Time.create(30, TimeUnit.SECONDS), "Too many invalid PIN attempts");
                         p.apply();
                         PunishmentManager.getInstance().add(p);
                         for(final Player pl : World.getWorld().getPlayers()){
@@ -94,9 +90,5 @@ public class PinInterface extends Interface{
             default:
                 System.out.println("invalid id");
         }
-    }
-
-    public static PinInterface get(){
-        return InterfaceManager.get(ID);
     }
 }

@@ -53,18 +53,18 @@ public enum Color {
 
     public final int color;
 
-    private Color(final int color){
+    Color(final int color) {
         this.color = color;
     }
 
-    public String toString(){
-        return super.toString().replace("_", "");
-    }
-
-    public static Color byName(final String name){
+    public static Color byName(final String name) {
         for(final Color c : values())
             if(c.toString().equalsIgnoreCase(name))
                 return c;
         return null;
+    }
+
+    public String toString() {
+        return super.toString().replace("_", "");
     }
 }

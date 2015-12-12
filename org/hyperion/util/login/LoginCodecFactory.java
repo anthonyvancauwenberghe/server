@@ -12,24 +12,24 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
  */
 public class LoginCodecFactory implements ProtocolCodecFactory {
 
-	/**
-	 * The login encoder.
-	 */
-	private static final LoginEncoder ENCODER = new LoginEncoder();
+    /**
+     * The login encoder.
+     */
+    private static final LoginEncoder ENCODER = new LoginEncoder();
 
-	/**
-	 * The login decoder.
-	 */
-	private LoginDecoder decoder = new LoginDecoder();
+    /**
+     * The login decoder.
+     */
+    private final LoginDecoder decoder = new LoginDecoder();
 
-	@Override
-	public ProtocolDecoder getDecoder(IoSession arg0) throws Exception {
-		return decoder;
-	}
+    @Override
+    public ProtocolDecoder getDecoder(final IoSession arg0) throws Exception {
+        return decoder;
+    }
 
-	@Override
-	public ProtocolEncoder getEncoder(IoSession arg0) throws Exception {
-		return ENCODER;
-	}
+    @Override
+    public ProtocolEncoder getEncoder(final IoSession arg0) throws Exception {
+        return ENCODER;
+    }
 
 }

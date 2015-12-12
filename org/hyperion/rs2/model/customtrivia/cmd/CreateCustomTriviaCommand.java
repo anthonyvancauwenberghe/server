@@ -7,13 +7,13 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.customtrivia.CustomTrivia;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 
-public class CreateCustomTriviaCommand extends Command{
+public class CreateCustomTriviaCommand extends Command {
 
-    public CreateCustomTriviaCommand(){
+    public CreateCustomTriviaCommand() {
         super("createtrivia", Rank.COMMUNITY_MANAGER);
     }
 
-    public boolean execute(final Player player, final String input) throws Exception{
+    public boolean execute(final Player player, final String input) throws Exception {
         final String line = filterInput(input).trim();
         final String[] parts = line.split(",");
         if(parts.length != 4 && parts.length != 3){

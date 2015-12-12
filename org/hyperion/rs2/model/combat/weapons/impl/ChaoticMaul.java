@@ -11,9 +11,9 @@ public class ChaoticMaul extends Weapon {
 
     public static final int WEAPON_SPEED = 4200;
 
-    public static final WeaponAnimations WEAPON_ANIMATIONS = new WeaponAnimations(13217,13218,18320,13055,13054);
+    public static final WeaponAnimations WEAPON_ANIMATIONS = new WeaponAnimations(13217, 13218, 18320, 13055, 13054);
 
-    public ChaoticMaul(int id) {
+    public ChaoticMaul(final int id) {
         super(id, Constants.MELEE, WEAPON_SPEED, true, false, WEAPON_ANIMATIONS);
     }
 }

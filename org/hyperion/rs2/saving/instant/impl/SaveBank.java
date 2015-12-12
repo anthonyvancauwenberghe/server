@@ -8,34 +8,34 @@ import org.hyperion.rs2.saving.instant.SaveContainer;
 
 public class SaveBank extends SaveContainer {
 
-	/**
-	 * Constructs a new SaveBank.
-	 *
-	 * @param name
-	 */
-	public SaveBank(String name) {
-		super(name);
-	}
+    /**
+     * Constructs a new SaveBank.
+     *
+     * @param name
+     */
+    public SaveBank(final String name) {
+        super(name);
+    }
 
-	@Override
-	public Container getContainer(Player player) {
-		return player.getBank();
-	}
+    @Override
+    public Container getContainer(final Player player) {
+        return player.getBank();
+    }
 
 
-	@Override
-	public void loadItem(Player player, Item item, int slot) {
-		if(this.transferedPkItem(item)) {
-			player.getBank().add(item.toBankItem(0));
-			return;
-		}
-		int pkp = this.getPkValue(item);
-		int tickets = pkp/130;
-		if(tickets > 0) {
-			player.getBank().add(new Item(5020, tickets));
-		}
-		if(ItemSpawning.canSpawn(item.getId()))
-			player.getBank().add(item.toBankItem(0));
-	}
+    @Override
+    public void loadItem(final Player player, final Item item, final int slot) {
+        if(this.transferedPkItem(item)){
+            player.getBank().add(item.toBankItem(0));
+            return;
+        }
+        final int pkp = this.getPkValue(item);
+        final int tickets = pkp / 130;
+        if(tickets > 0){
+            player.getBank().add(new Item(5020, tickets));
+        }
+        if(ItemSpawning.canSpawn(item.getId()))
+            player.getBank().add(item.toBankItem(0));
+    }
 
 }

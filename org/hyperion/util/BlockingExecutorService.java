@@ -6,7 +6,14 @@ import org.hyperion.rs2.util.PlayerFiles;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * An <code>ExecutorService</code> that waits for all its events to finish
@@ -16,139 +23,139 @@ import java.util.concurrent.*;
  */
 public class BlockingExecutorService implements ExecutorService {
 
-	/**
-	 * The service backing this service.
-	 */
-	private ExecutorService service;
+    /**
+     * The service backing this service.
+     */
+    private final ExecutorService service;
 
-	/**
-	 * A list of pending tasks.
-	 */
-	private BlockingQueue<Future<?>> pendingTasks = new LinkedBlockingQueue<Future<?>>();
+    /**
+     * A list of pending tasks.
+     */
+    private final BlockingQueue<Future<?>> pendingTasks = new LinkedBlockingQueue<Future<?>>();
 
-	/**
-	 * Creates the executor service.
-	 *
-	 * @param service The service backing this service.
-	 */
-	public BlockingExecutorService(ExecutorService service) {
-		this.service = service;
-	}
+    /**
+     * Creates the executor service.
+     *
+     * @param service The service backing this service.
+     */
+    public BlockingExecutorService(final ExecutorService service) {
+        this.service = service;
+    }
 
-	/**
-	 * Waits for pending tasks to complete.
-	 *
-	 * @throws ExecutionException if an error in a task occurred.
-	 */
-	public void waitForPendingTasks() throws ExecutionException {
-		while(pendingTasks.size() > 0) {
-			if(isShutdown()) {
-				return;
-			}
-			try {
-				pendingTasks.take().get();
-			} catch(InterruptedException e) {
-				continue;
-			} catch(OutOfMemoryError e) {
-				System.out.println("OUTOFMEMORY DAFUQ!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				for(Player player : World.getWorld().getPlayers()) {
-					PlayerFiles.saveGame(player);
-				}
-				System.exit(0);
-			} catch(Exception e) {
-				e.printStackTrace();
-				continue;
-			}
-		}
-	}
+    /**
+     * Waits for pending tasks to complete.
+     *
+     * @throws ExecutionException if an error in a task occurred.
+     */
+    public void waitForPendingTasks() throws ExecutionException {
+        while(pendingTasks.size() > 0){
+            if(isShutdown()){
+                return;
+            }
+            try{
+                pendingTasks.take().get();
+            }catch(final InterruptedException e){
+                continue;
+            }catch(final OutOfMemoryError e){
+                System.out.println("OUTOFMEMORY DAFUQ!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                for(final Player player : World.getWorld().getPlayers()){
+                    PlayerFiles.saveGame(player);
+                }
+                System.exit(0);
+            }catch(final Exception e){
+                e.printStackTrace();
+                continue;
+            }
+        }
+    }
 
-	/**
-	 * Gets the number of pending tasks.
-	 *
-	 * @return The number of pending tasks.
-	 */
-	public int getPendingTaskAmount() {
-		return pendingTasks.size();
-	}
+    /**
+     * Gets the number of pending tasks.
+     *
+     * @return The number of pending tasks.
+     */
+    public int getPendingTaskAmount() {
+        return pendingTasks.size();
+    }
 
-	@Override
-	public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-		return service.awaitTermination(timeout, unit);
-	}
+    @Override
+    public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
+        return service.awaitTermination(timeout, unit);
+    }
 
-	@Override
-	public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
-		List<Future<T>> futures = service.invokeAll(tasks);
-		for(Future<?> future : futures) {
-			pendingTasks.add(future);
-		}
-		return futures;
-	}
+    @Override
+    public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) throws InterruptedException {
+        final List<Future<T>> futures = service.invokeAll(tasks);
+        for(final Future<?> future : futures){
+            pendingTasks.add(future);
+        }
+        return futures;
+    }
 
-	@Override
-	public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
-		List<Future<T>> futures = service.invokeAll(tasks, timeout, unit);
-		for(Future<?> future : futures) {
-			pendingTasks.add(future);
-		}
-		return futures;
-	}
+    @Override
+    public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException {
+        final List<Future<T>> futures = service.invokeAll(tasks, timeout, unit);
+        for(final Future<?> future : futures){
+            pendingTasks.add(future);
+        }
+        return futures;
+    }
 
-	@Override
-	public <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
-		return service.invokeAny(tasks);
-	}
+    @Override
+    public <T> T invokeAny(final Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
+        return service.invokeAny(tasks);
+    }
 
-	@Override
-	public <T> T invokeAny(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-		return service.invokeAny(tasks, timeout, unit);
-	}
+    @Override
+    public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        return service.invokeAny(tasks, timeout, unit);
+    }
 
-	@Override
-	public boolean isShutdown() {
-		return service.isShutdown();
-	}
+    @Override
+    public boolean isShutdown() {
+        return service.isShutdown();
+    }
 
-	@Override
-	public boolean isTerminated() {
-		return service.isTerminated();
-	}
+    @Override
+    public boolean isTerminated() {
+        return service.isTerminated();
+    }
 
-	@Override
-	public void shutdown() {
-		service.shutdown();
-	}
+    @Override
+    public void shutdown() {
+        service.shutdown();
+    }
 
-	@Override
-	public List<Runnable> shutdownNow() {
-		return service.shutdownNow();
-	}
+    @Override
+    public List<Runnable> shutdownNow() {
+        return service.shutdownNow();
+    }
 
-	@Override
-	public <T> Future<T> submit(Callable<T> task) {
-		Future<T> future = service.submit(task);
-		pendingTasks.add(future);
-		return future;
-	}
+    @Override
+    public <T> Future<T> submit(final Callable<T> task) {
+        final Future<T> future = service.submit(task);
+        pendingTasks.add(future);
+        return future;
+    }
 
-	@Override
-	public Future<?> submit(Runnable task) {
-		Future<?> future = service.submit(task);
-		pendingTasks.add(future);
-		return future;
-	}
+    @Override
+    public Future<?> submit(final Runnable task) {
+        final Future<?> future = service.submit(task);
+        pendingTasks.add(future);
+        return future;
+    }
 
-	@Override
-	public <T> Future<T> submit(Runnable task, T result) {
-		Future<T> future = service.submit(task, result);
-		pendingTasks.add(future);
-		return future;
-	}
+    @Override
+    public <T> Future<T> submit(final Runnable task, final T result) {
+        final Future<T> future = service.submit(task, result);
+        pendingTasks.add(future);
+        return future;
+    }
 
-	@Override
-	public void execute(Runnable command) {
-		service.execute(command);
-	}
+    @Override
+    public void execute(final Runnable command) {
+        service.execute(command);
+    }
 
 }
 

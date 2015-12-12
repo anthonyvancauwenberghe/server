@@ -7,7 +7,7 @@ import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Misc;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ public class RoomDefinition {
     public static final RoomDefinition START_ROOM;
 
     static {
-        START_ROOM = new RoomDefinition(2908, 9913, 2917, 9912, Arrays.asList(new Point[]{new Point(2910, 9907)}));
+        START_ROOM = new RoomDefinition(2908, 9913, 2917, 9912, Arrays.asList(new Point(2910, 9907)));
         ROOM_DEFINITIONS_LIST.remove(START_ROOM);
     }
 
@@ -36,7 +36,7 @@ public class RoomDefinition {
     public final int x_end, y_end;
     public final List<Point> spawnLocations;
 
-    public RoomDefinition(final int x, final int y, int x_end, int y_end, List<Point> spawnLocations) {
+    public RoomDefinition(final int x, final int y, final int x_end, final int y_end, final List<Point> spawnLocations) {
         this.x = x;
         this.y = y;
         this.x_end = x_end;
@@ -47,8 +47,60 @@ public class RoomDefinition {
         World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2477), Location.create(x_end, y_end, 0), 10, 0));
     }
 
+    public static void load() {
+        try{
+            final File f = new File("./data/roomdef.bin");
+            final InputStream is = new FileInputStream(f);
+            final IoBuffer buf = IoBuffer.allocate(1024);
+            buf.setAutoExpand(true);
+            while(true){
+                final byte[] temp = new byte[1024];
+                final int read = is.read(temp, 0, temp.length);
+                if(read == -1){
+                    break;
+                }else{
+                    buf.put(temp, 0, read);
+                }
+            }
+            buf.flip();
+            int defs = 0;
+            while(buf.hasRemaining()){
+                try{
+                    final int x = buf.getUnsignedShort();
+                    final int y = buf.getUnsignedShort();
+                    final int x_end = buf.getUnsignedShort();
+                    final int y_end = buf.getUnsignedShort();
+
+                    final int locs = buf.getUnsigned();
+
+                    final List<Point> points = new ArrayList<>();
+                    for(int i = 0; i < locs; i++){
+                        points.add(new Point(buf.getUnsignedShort(), buf.getUnsignedShort()));
+                    }
+
+                    new RoomDefinition(x, y, x_end, y_end, points);
+                    defs++;
+                }catch(final Exception ex){
+
+                }
+            }
+
+            System.out.println("Loaded " + defs + " Room Definitions");
+        }catch(final Exception ex){
+
+        }
+    }
+
+    public static RoomDefinition rand() {
+        return ROOM_DEFINITIONS_LIST.get(Misc.random(ROOM_DEFINITIONS_LIST.size() - 1));
+    }
+
+    public static RoomDefinition getStartRoom() {
+        return START_ROOM;
+    }
+
     public final Room getRoom(final Dungeon dungeon, final int loop_around) {
-        return new Room(dungeon, this, dungeon.heightLevel * (int)Math.pow(4, loop_around));
+        return new Room(dungeon, this, dungeon.heightLevel * (int) Math.pow(4, loop_around));
     }
 
     public Point randomLoc() {
@@ -65,66 +117,13 @@ public class RoomDefinition {
         buffer.putShort((short) x_end);
         buffer.putShort((short) y_end);
 
-        buffer.put((byte)spawnLocations.size());
+        buffer.put((byte) spawnLocations.size());
 
-        for(final Point entries : spawnLocations) {
+        for(final Point entries : spawnLocations){
             buffer.putShort((short) entries.x);
             buffer.putShort((short) entries.y);
         }
 
-    }
-
-    public static void load() {
-        try {
-            File f = new File("./data/roomdef.bin");
-            InputStream is = new FileInputStream(f);
-            IoBuffer buf = IoBuffer.allocate(1024);
-            buf.setAutoExpand(true);
-            while(true) {
-                byte[] temp = new byte[1024];
-                int read = is.read(temp, 0, temp.length);
-                if(read == - 1) {
-                    break;
-                } else {
-                    buf.put(temp, 0, read);
-                }
-            }
-            buf.flip();
-            int defs = 0;
-            while(buf.hasRemaining()) {
-                try {
-                    int x = buf.getUnsignedShort();
-                    int y = buf.getUnsignedShort();
-                    int x_end = buf.getUnsignedShort();
-                    int y_end = buf.getUnsignedShort();
-
-                    int locs = buf.getUnsigned();
-
-                    final List<Point> points = new ArrayList<>();
-                    for(int i = 0; i < locs; i++) {
-                        points.add(new Point(buf.getUnsignedShort(), buf.getUnsignedShort()));
-                    }
-
-                    new RoomDefinition(x, y, x_end, y_end, points);
-                    defs++;
-                } catch(Exception ex) {
-
-                }
-            }
-
-            System.out.println("Loaded "+defs+" Room Definitions");
-        }catch(final Exception ex) {
-
-        }
-    }
-
-
-    public static RoomDefinition rand() {
-        return ROOM_DEFINITIONS_LIST.get(Misc.random(ROOM_DEFINITIONS_LIST.size() - 1));
-    }
-
-    public static RoomDefinition getStartRoom() {
-        return START_ROOM;
     }
 
 

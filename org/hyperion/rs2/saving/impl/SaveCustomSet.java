@@ -10,7 +10,7 @@ import org.hyperion.rs2.saving.SaveString;
  * Time: 4:35 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveCustomSet extends SaveString  {
+public class SaveCustomSet extends SaveString {
 
     public SaveCustomSet() {
         super("customSetData");
@@ -18,12 +18,12 @@ public class SaveCustomSet extends SaveString  {
 
 
     @Override
-    public void setValue(Player player, String value) {
+    public void setValue(final Player player, final String value) {
         player.getCustomSetHolder().parse(value);
     }
 
     @Override
-    public String getValue(Player player) {
+    public String getValue(final Player player) {
         return player.getCustomSetHolder().toString();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

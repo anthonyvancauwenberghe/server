@@ -8,27 +8,27 @@ package org.hyperion.cache;
  */
 public class InvalidCacheException extends Exception {
 
-	/**
-	 * The serial version unique id.
-	 */
-	private static final long serialVersionUID = 6238347561608460220L;
+    /**
+     * The serial version unique id.
+     */
+    private static final long serialVersionUID = 6238347561608460220L;
 
-	/**
-	 * Creates the invalid cache exception.
-	 *
-	 * @param s The reason.
-	 */
-	public InvalidCacheException(String s) {
-		super(s);
-	}
+    /**
+     * Creates the invalid cache exception.
+     *
+     * @param s The reason.
+     */
+    public InvalidCacheException(final String s) {
+        super(s);
+    }
 
-	/**
-	 * Creates the invalid cache exception.
-	 *
-	 * @param ex The parent exception.
-	 */
-	public InvalidCacheException(Exception ex) {
-		super(ex);
-	}
+    /**
+     * Creates the invalid cache exception.
+     *
+     * @param ex The parent exception.
+     */
+    public InvalidCacheException(final Exception ex) {
+        super(ex);
+    }
 
 }

@@ -24,29 +24,29 @@ public class ConnectionHandler extends IoHandlerAdapter {
     /**
      * The type of handler we are.
      */
-    private Type type;
+    private final Type type;
 
     /**
      * Creates the handler.
      *
      * @param type The type of handler.
      */
-    public ConnectionHandler(Type type) {
+    public ConnectionHandler(final Type type) {
         this.type = type;
     }
 
     @Override
-    public void exceptionCaught(IoSession session, Throwable throwable) throws Exception {
+    public void exceptionCaught(final IoSession session, final Throwable throwable) throws Exception {
         logger.log(Level.SEVERE, "Error while handling request.", throwable);
     }
 
     @Override
-    public void messageReceived(IoSession session, Object in) throws Exception {
+    public void messageReceived(final IoSession session, final Object in) throws Exception {
         ((UpdateSession) session.getAttribute("session")).readLine((String) in);
     }
 
     @Override
-    public void sessionOpened(IoSession session) throws Exception {
+    public void sessionOpened(final IoSession session) throws Exception {
         session.getFilterChain().addFirst("textFilter", new ProtocolCodecFilter(new TextLineCodecFactory()));
         session.setAttribute("session", new UpdateSession(type, session));
     }

@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
-import java.util.concurrent.TimeUnit;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -15,23 +14,52 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.sql.requests.GetSpecialUID;
-import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.util.Misc;
 
-public class PunishCommand extends Command{
+import java.util.concurrent.TimeUnit;
+
+public class PunishCommand extends Command {
 
     private final Combination combination;
 
-    public PunishCommand(final String name, final Combination combination, final Rank rank){
+    public PunishCommand(final String name, final Combination combination, final Rank rank) {
         super(name, rank);
         this.combination = combination;
     }
 
-    public PunishCommand(final String name, final Target target, final Type type, final Rank rank){
+    public PunishCommand(final String name, final Target target, final Type type, final Rank rank) {
         this(name, Combination.of(target, type), rank);
     }
 
-    public boolean execute(final Player player, final String input){
+    public static long getMaxDuration(final Player player, final TimeUnit unit, final long original) {
+        long duration = 2;
+        switch(Rank.getPrimaryRank(player)){
+            case HELPER:
+                duration = 7;
+                break;
+            case MODERATOR:
+                duration = 14;
+                break;
+            case GLOBAL_MODERATOR:
+                duration = 21;
+                break;
+            case COMMUNITY_MANAGER:
+            case HEAD_MODERATOR:
+                duration = 28;
+                break;
+            case ADMINISTRATOR:
+                duration = 56;
+                break;
+            case DEVELOPER:
+            case OWNER:
+                duration = 1000;
+                break;
+        }
+        duration = unit.convert(duration, TimeUnit.DAYS);
+        return original > duration ? duration : original;
+    }
+
+    public boolean execute(final Player player, final String input) {
         final String[] parts = filterInput(input).split(",");
         if(parts.length != 3){
             player.sendf("Incorrect syntax. Usage: ::%s NAME,DURATION [minutes|hours|days],REASON", getKey());
@@ -49,19 +77,19 @@ public class PunishCommand extends Command{
         }
         String ip = victim != null ? victim.getShortIP() : CommandPacketHandler.findCharString(victimName, "IP");
         if(ip.contains("="))//
-            ip = ip.substring(ip.indexOf('/')+1, ip.indexOf(':'));//
+            ip = ip.substring(ip.indexOf('/') + 1, ip.indexOf(':'));//
         String macStr = victim != null ? Integer.toString(victim.getUID()) : CommandPacketHandler.findCharString(victimName, "Mac");
         if(macStr.contains("="))//
-            macStr = macStr.substring(macStr.indexOf('=')+1).trim();//
-        int mac;
+            macStr = macStr.substring(macStr.indexOf('=') + 1).trim();//
+        final int mac;
         try{
             mac = Integer.parseInt(macStr);
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Unable to punish %s: No MAC address found", Misc.ucFirst(victimName.toLowerCase()));
             return false;
         }
         final int[] specialUid = victim != null ? victim.specialUid : new int[20];
-        if(combination.getTarget() == Target.SPECIAL && victim == null) {
+        if(combination.getTarget() == Target.SPECIAL && victim == null){
             World.getWorld().getLogsConnection().offer(new GetSpecialUID(victimName, specialUid));
         }
         final String[] durationParts = parts[1].split(" +");
@@ -97,7 +125,7 @@ public class PunishCommand extends Command{
                     duration *= 36524;
                 }
             }
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Error parsing duration. Syntax: duration [minute(s)|hour(s)|day(s)]");
             return false;
         }
@@ -129,34 +157,6 @@ public class PunishCommand extends Command{
             punishment.insert();
         }
         return true;
-    }
-
-    public static long getMaxDuration(Player player, TimeUnit unit, long original) {
-        long duration = 2;
-        switch(Rank.getPrimaryRank(player)) {
-            case HELPER:
-                duration = 7;
-                break;
-            case MODERATOR:
-                duration = 14;
-                break;
-            case GLOBAL_MODERATOR:
-                duration = 21;
-                break;
-            case COMMUNITY_MANAGER:
-            case HEAD_MODERATOR:
-                duration = 28;
-                break;
-            case ADMINISTRATOR:
-                duration = 56;
-                break;
-            case DEVELOPER:
-            case OWNER:
-                duration = 1000;
-                break;
-        }
-        duration = unit.convert(duration, TimeUnit.DAYS);
-        return original > duration ? duration : original;
     }
 
 }

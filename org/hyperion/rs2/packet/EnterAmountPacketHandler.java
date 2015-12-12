@@ -10,13 +10,13 @@ import org.hyperion.rs2.net.Packet;
  */
 public class EnterAmountPacketHandler implements PacketHandler {
 
-	@Override
-	public void handle(Player player, Packet packet) {
-		int amount = packet.getInt();
-		//player.getLogging().log("Entered amount : " + amount);
-		if(player.getInterfaceState().isEnterAmountInterfaceOpen()) {
-			player.getInterfaceState().closeEnterAmountInterface(amount);
-		}
-	}
+    @Override
+    public void handle(final Player player, final Packet packet) {
+        final int amount = packet.getInt();
+        //player.getLogging().log("Entered amount : " + amount);
+        if(player.getInterfaceState().isEnterAmountInterfaceOpen()){
+            player.getInterfaceState().closeEnterAmountInterface(amount);
+        }
+    }
 
 }

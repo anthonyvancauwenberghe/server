@@ -12,13 +12,10 @@ public class Card {
     public final Type type;
     public final CardNumber number;
 
-    public Card(Type type, CardNumber number) {
+    public Card(final Type type, final CardNumber number) {
         this.type = type;
         this.number = number;
     }
-
-
-
 
 
 }

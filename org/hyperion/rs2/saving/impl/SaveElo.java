@@ -6,25 +6,25 @@ import org.hyperion.rs2.saving.SaveInteger;
 
 public class SaveElo extends SaveInteger {
 
-	public SaveElo(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveElo(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public int getDefaultValue() {
-		return EloRating.DEFAULT_ELO_START_RATING;
-	}
+    @Override
+    public int getDefaultValue() {
+        return EloRating.DEFAULT_ELO_START_RATING;
+    }
 
-	@Override
-	public void setValue(Player player, int value) {
-		player.getPoints().setEloRating(value);
-	}
+    @Override
+    public void setValue(final Player player, final int value) {
+        player.getPoints().setEloRating(value);
+    }
 
-	@Override
-	public Integer getValue(Player player) {
-		return player.getPoints().getEloRating();
-	}
+    @Override
+    public Integer getValue(final Player player) {
+        return player.getPoints().getEloRating();
+    }
 
 
 }

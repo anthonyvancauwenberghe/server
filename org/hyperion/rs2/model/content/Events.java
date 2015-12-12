@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.content.minigame.LastManStanding;
 
 /**
  * Created by Allen Kinzalow on 4/8/2015.
- *
+ * <p>
  * Current Global Event
  */
 public class Events {
@@ -44,7 +44,7 @@ public class Events {
         eventStartTime = 0;
         eventTimeTillStart = 0;
         eventLocation = null;
-        for(Player player : World.getWorld().getPlayers()) {
+        for(final Player player : World.getWorld().getPlayers()){
             player.getActionSender().sendString("cancel", 32456);
         }
     }
@@ -53,28 +53,28 @@ public class Events {
         return eventStartTime != 0;
     }
 
-    public static void fireNewEvent(String name, boolean safe, int timeTillStart, Location location) {
+    public static void fireNewEvent(final String name, final boolean safe, final int timeTillStart, final Location location) {
         eventName = name;
         eventSafe = safe;
         eventTimeTillStart = timeTillStart;
         eventStartTime = System.currentTimeMillis();
         eventLocation = location;
-        for(Player player : World.getWorld().getPlayers()) {
+        for(final Player player : World.getWorld().getPlayers()){
             player.getQuestTab().sendUptime();
             player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }
 
-    public static void joinEvent(Player player) {
-        if(eventLocation == null || !isEventActive()) {
+    public static void joinEvent(final Player player) {
+        if(eventLocation == null || !isEventActive()){
             player.getActionSender().sendMessage("There was an error joining this event, try again later.");
             player.getActionSender().sendString("cancel", 32456);
             return;
         }
-        if(LastManStanding.getLastManStanding().canJoin) {
+        if(LastManStanding.getLastManStanding().canJoin){
             LastManStanding.getLastManStanding().enterLobby(player);
             Magic.teleport(player, LastManStanding.getRandomLocation(), false);
-        } else {
+        }else{
             Magic.teleport(player, eventLocation, false);
         }
         player.getActionSender().sendString("cancel", 32456);

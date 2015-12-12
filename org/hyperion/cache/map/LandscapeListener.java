@@ -10,11 +10,11 @@ import org.hyperion.rs2.model.GameObject;
  */
 public interface LandscapeListener {
 
-	/**
-	 * Handles actions when an object is parsed.
-	 *
-	 * @param obj The object that was parsed.
-	 */
-	public void objectParsed(GameObject obj);
+    /**
+     * Handles actions when an object is parsed.
+     *
+     * @param obj The object that was parsed.
+     */
+    void objectParsed(GameObject obj);
 
 }

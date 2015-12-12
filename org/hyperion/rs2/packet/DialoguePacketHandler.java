@@ -6,11 +6,11 @@ import org.hyperion.rs2.model.Player;
 
 public class DialoguePacketHandler implements PacketHandler {
 
-	@Override
-	public void handle(Player player, org.hyperion.rs2.net.Packet packet) {
-		// TODO Auto-generated method stub
-		//player.getLogging().log("Opened dialogue");
-		DialogueManager.openDialogue(player, player.getInterfaceState().getNextDialogueId(0));
-	}
+    @Override
+    public void handle(final Player player, final org.hyperion.rs2.net.Packet packet) {
+        // TODO Auto-generated method stub
+        //player.getLogging().log("Opened dialogue");
+        DialogueManager.openDialogue(player, player.getInterfaceState().getNextDialogueId(0));
+    }
 
 }

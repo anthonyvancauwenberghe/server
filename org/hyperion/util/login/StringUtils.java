@@ -10,12 +10,12 @@ package org.hyperion.util.login;
 public class StringUtils {
 
     public static String substring(final String original, final String start, final String end) {
-        try {
+        try{
             int endIndex = original.indexOf(end);
             if(end.equals("TO_THE_END"))
                 endIndex = original.length();
             return original.substring(original.indexOf(start) + start.length(), endIndex);
-        } catch (Exception e){
+        }catch(final Exception e){
             //e.printStackTrace();
             return original;
         }

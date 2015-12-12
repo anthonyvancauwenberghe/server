@@ -9,29 +9,29 @@ import org.hyperion.cache.index.Index;
  */
 public class StandardIndex extends Index {
 
-	/**
-	 * The file.
-	 */
-	private int file;
+    /**
+     * The file.
+     */
+    private final int file;
 
-	/**
-	 * Creates the index.
-	 *
-	 * @param identifier The identifier.
-	 * @param file       The file.
-	 */
-	public StandardIndex(int identifier, int file) {
-		super(identifier);
-		this.file = file;
-	}
+    /**
+     * Creates the index.
+     *
+     * @param identifier The identifier.
+     * @param file       The file.
+     */
+    public StandardIndex(final int identifier, final int file) {
+        super(identifier);
+        this.file = file;
+    }
 
-	/**
-	 * Gets the file.
-	 *
-	 * @return The file.
-	 */
-	public int getFile() {
-		return file;
-	}
+    /**
+     * Gets the file.
+     *
+     * @return The file.
+     */
+    public int getFile() {
+        return file;
+    }
 
 }

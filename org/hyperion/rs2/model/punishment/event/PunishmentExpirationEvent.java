@@ -1,28 +1,27 @@
 package org.hyperion.rs2.model.punishment.event;
 
-import java.util.Iterator;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Time;
+
+import java.util.Iterator;
 
 public class PunishmentExpirationEvent extends Event {
 
-    public PunishmentExpirationEvent(){
+    public PunishmentExpirationEvent() {
         super(Time.TEN_SECONDS);
     }
 
-    public void execute(){
+    public void execute() {
         for(final PunishmentHolder holder : PunishmentManager.getInstance().getHolders()){
             final Iterator<Punishment> itr = holder.getPunishments().iterator();
             while(itr.hasNext()){
                 final Punishment punishment = itr.next();
                 if(!punishment.getTime().isExpired()){
                     if(!punishment.isApplied()){
-                        if(punishment.apply() && punishment.getVictim() != null) {
+                        if(punishment.apply() && punishment.getVictim() != null){
                             punishment.getVictim().sendf("Your %s did not expire!", punishment.getCombination());
                             punishment.send(punishment.getVictim(), true);
                         }

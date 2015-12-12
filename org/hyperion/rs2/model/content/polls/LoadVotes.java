@@ -11,37 +11,37 @@ import java.sql.SQLException;
  */
 public class LoadVotes extends SQLRequest {
 
-    private Poll poll;
+    private final Poll poll;
 
-    public LoadVotes(int pollIndex) {
+    public LoadVotes(final int pollIndex) {
         super(QUERY_REQUEST);
         this.poll = Poll.getPoll(pollIndex);
     }
 
     @Override
-    public void process(SQLConnection sql) throws SQLException {
-        if (!sql.isConnected()) {
+    public void process(final SQLConnection sql) throws SQLException {
+        if(!sql.isConnected()){
             return;
         }
 
         ResultSet rs = null;
-        String query = "SELECT * FROM `pollvotes` WHERE `poll` = " + poll.getIndex();
-        try {
+        final String query = "SELECT * FROM `pollvotes` WHERE `poll` = " + poll.getIndex();
+        try{
             rs = sql.query(query);
-            while (rs.next()) {
-                if (rs.getBoolean("answer")) {
+            while(rs.next()){
+                if(rs.getBoolean("answer")){
                     poll.addYesVote(rs.getString("playerName"));
                     continue;
                 }
                 poll.addNoVote(rs.getString("playerName"));
             }
-        } catch (Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
+        }finally{
+            if(rs != null){
+                try{
                     rs.close();
-                } catch (SQLException e) {
+                }catch(final SQLException e){
                     e.printStackTrace();
                 }
             }

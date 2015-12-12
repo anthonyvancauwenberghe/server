@@ -6,15 +6,15 @@ import org.hyperion.util.Time;
 
 public class PlayerStatsEvent extends Event {
 
-	public static final long DELAY = Time.FIFTEEN_SECONDS;
+    public static final long DELAY = Time.FIFTEEN_SECONDS;
 
-	public PlayerStatsEvent() {
-		super(DELAY);
-	}
+    public PlayerStatsEvent() {
+        super(DELAY);
+    }
 
-	@Override
-	public void execute() {
-		Server.getStats().print();
-	}
+    @Override
+    public void execute() {
+        Server.getStats().print();
+    }
 
 }

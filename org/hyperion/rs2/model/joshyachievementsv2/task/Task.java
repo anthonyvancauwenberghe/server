@@ -1,69 +1,64 @@
 package org.hyperion.rs2.model.joshyachievementsv2.task;
 
-import java.util.function.Predicate;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraints;
 
-public abstract class Task{
+import java.util.function.Predicate;
 
-    public static class Filter<T extends Task> implements Predicate<T>{
-
-        public final Class<T> clazz;
-
-        public Filter(final Class<T> clazz){
-            this.clazz = clazz;
-        }
-
-        public boolean test(final T t){
-            return t.getClass().equals(clazz);
-        }
-    }
-
-    public int achievementId;
+public abstract class Task {
 
     public final int id;
     public final int threshold;
-
     public final int number;
-
-    public String desc;
-
     public final Constraints constraints;
-
+    public int achievementId;
+    public String desc;
     public int preTaskId;
-
     private String shortDesc;
 
-    protected Task(final int id, final int threshold){
+    protected Task(final int id, final int threshold) {
         this.id = id;
         this.threshold = threshold;
 
-        number = id+1;
+        number = id + 1;
 
         constraints = new Constraints();
 
         preTaskId = -1;
     }
 
-    public boolean canProgress(final int currentProgress, final int progress){
+    public boolean canProgress(final int currentProgress, final int progress) {
         return true;
     }
 
-    public boolean finished(final int progress){
+    public boolean finished(final int progress) {
         return progress >= threshold;
     }
 
-    public boolean hasPreTask(){
+    public boolean hasPreTask() {
         return preTask() != null;
     }
 
-    public Task preTask(){
+    public Task preTask() {
         return Achievements.get().get(achievementId).tasks.get(preTaskId);
     }
 
-    public String shortDesc(){
+    public String shortDesc() {
         if(shortDesc == null)
             shortDesc = desc.length() <= 70 ? desc : (desc.substring(0, 70) + "...");
         return shortDesc;
+    }
+
+    public static class Filter<T extends Task> implements Predicate<T> {
+
+        public final Class<T> clazz;
+
+        public Filter(final Class<T> clazz) {
+            this.clazz = clazz;
+        }
+
+        public boolean test(final T t) {
+            return t.getClass().equals(clazz);
+        }
     }
 }

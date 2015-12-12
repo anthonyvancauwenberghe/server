@@ -5,19 +5,19 @@ package org.hyperion.rs2.model.content.ge;
  */
 public class Offer {
 
+    private final byte type;
     private int itemId;
     private int quantity;
     private int price;
     private int amountProcessed;
-    private byte type;
     private boolean cancelled = false;
     private OfferCollection collection;
 
-    public Offer(byte type) {
+    public Offer(final byte type) {
         this.type = type;
     }
 
-    public Offer(int itemId, int quantity, int price, byte type) {
+    public Offer(final int itemId, final int quantity, final int price, final byte type) {
         this.itemId = itemId;
         this.quantity = quantity;
         this.price = price;
@@ -30,12 +30,28 @@ public class Offer {
         return itemId;
     }
 
+    public void setItemId(final int itemId) {
+        this.itemId = itemId;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
+    public void setQuantity(int quantity) {
+        if(quantity <= 0)
+            quantity = 1;
+        this.quantity = quantity;
+    }
+
     public int getPrice() {
         return price;
+    }
+
+    public void setPrice(int price) {
+        if(price <= 0)
+            price = 1;
+        this.price = price;
     }
 
     public int getCost() {
@@ -54,42 +70,38 @@ public class Offer {
         return amountProcessed;
     }
 
-    public void setItemId(int itemId) { this.itemId = itemId; }
+    public void setAmountProcessed(final int amountProcessed) {
+        this.amountProcessed = amountProcessed;
+        if(this.amountProcessed > quantity)
+            this.amountProcessed = quantity;
+    }
 
     public void increaseQuantity() {
         quantity++;
     }
-    public void decreaseQuantity() {quantity--;}
 
-    public void increasePrice() {price++;}
+    public void decreaseQuantity() {
+        quantity--;
+    }
+
+    public void increasePrice() {
+        price++;
+    }
+
     public void decreasePrice() {
-        if(price - 1 <= 0) {
+        if(price - 1 <= 0){
             price = 1;
             return;
         }
         price--;
     }
 
-    public void setPrice(int price){
-        if(price <= 0)
-            price = 1;
-        this.price = price;
-    }
-    public void setQuantity(int quantity){
-        if(quantity <= 0)
-            quantity = 1;
-        this.quantity = quantity;
+    public void addPrice(final int add) {
+        this.price += add;
     }
 
-    public void addPrice(int add) {
-        this.price+=add;
-    }
-    public void addQuantity(int add) {this.quantity+=add;}
-
-    public void setAmountProcessed(int amountProcessed) {
-        this.amountProcessed = amountProcessed;
-        if(this.amountProcessed > quantity)
-            this.amountProcessed = quantity;
+    public void addQuantity(final int add) {
+        this.quantity += add;
     }
 
     public void increaseAmountProcessed() {
@@ -98,7 +110,7 @@ public class Offer {
             this.amountProcessed = quantity;
     }
 
-    public void addAmountProcessed(int amount) {
+    public void addAmountProcessed(final int amount) {
         this.amountProcessed += amount;
         if(this.amountProcessed > quantity)
             this.amountProcessed = quantity;
@@ -112,7 +124,7 @@ public class Offer {
         return cancelled;
     }
 
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 

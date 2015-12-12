@@ -7,7 +7,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.skill.FishingV2;
 import org.hyperion.util.Misc;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +20,14 @@ import java.util.List;
  */
 public class Room {
 
-    private final List<NPC> npcs = new ArrayList<>();
     public final List<NPC> events = new ArrayList<>();
-
-    private Room child, parent;
-    boolean initialized;
-    public boolean boss, must_clear;
-
     public final Dungeon dungeon;
     public final RoomDefinition definition;
+    private final List<NPC> npcs = new ArrayList<>();
+    public boolean boss, must_clear;
     public int heightLevel;
+    boolean initialized;
+    private Room child, parent;
 
     public Room(final Dungeon dungeon, final RoomDefinition def, final int heightLevel) {
         this.dungeon = dungeon;
@@ -38,19 +36,19 @@ public class Room {
     }
 
     public boolean cleared() {
-        for(final NPC npc : npcs) {
+        for(final NPC npc : npcs){
             if(!npc.isDead())
                 return false;
         }
         return initialized;
     }
 
-    public Room getChild(){
+    public Room getChild() {
         return child;
     }
 
     public void setChild(final Room child) {
-                this.child = child;
+        this.child = child;
     }
 
     public Room getParent() {
@@ -65,17 +63,17 @@ public class Room {
         if(initialized)
             return;
         initialized = true;
-        int npcCount = boss ? 1 : ((1 + Misc.random(dungeon.difficulty.spawns + dungeon.teamSize)));
+        final int npcCount = boss ? 1 : ((1 + Misc.random(dungeon.difficulty.spawns + dungeon.teamSize)));
         must_clear = Misc.random(10) < 7;
-        for(int i = 0; i < npcCount; i++) {
+        for(int i = 0; i < npcCount; i++){
             final Point loc = definition.randomLoc();
             final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
             npc.agressiveDis = 10;
             npcs.add(npc);
         }
 
-        if(Misc.random(7) == 0) {
-            switch(Misc.random(2)) {
+        if(Misc.random(7) == 0){
+            switch(Misc.random(2)){
                 default:
                     final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), FishingV2.FISHING_SPOTS[Misc.random(FishingV2.FISHING_SPOTS.length - 1)], -1);
                     events.add(npc);
@@ -103,14 +101,14 @@ public class Room {
     }
 
     public void destroy() {
-        for(NPC npc : npcs) {
-            if(!npc.isDead()) {
+        for(final NPC npc : npcs){
+            if(!npc.isDead()){
                 npc.serverKilled = true;
                 npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
             }
         }
-        for(NPC npc : events) {
-            if(!npc.isDead()) {
+        for(final NPC npc : events){
+            if(!npc.isDead()){
                 npc.serverKilled = true;
                 npc.inflictDamage(new Damage.Hit(npc.health, Damage.HitType.NORMAL_DAMAGE, 0), null);
             }

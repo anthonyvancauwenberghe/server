@@ -12,16 +12,16 @@ import java.util.StringJoiner;
 
 public class Punishment {
 
-    private String issuer;
     private final String victim;
     private final String victimIp;
     private final int victimMac;
     private final int[] victimSpecialUid;
     private final Combination combination;
     private final Time time;
+    private String issuer;
     private String reason;
 
-    public Punishment(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] victimSpecialUid, final Combination combination, final Time time, final String reason){
+    public Punishment(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] victimSpecialUid, final Combination combination, final Time time, final String reason) {
         this.issuer = issuer;
         this.victim = victim;
         this.victimIp = victimIp;
@@ -32,41 +32,51 @@ public class Punishment {
         this.reason = reason;
     }
 
-    public Punishment(final Player issuer, final String victim, final String victimIp, final int victimMac, final int[] victimSpecialUid, final Combination combination, final Time time, final String reason){
+    public Punishment(final Player issuer, final String victim, final String victimIp, final int victimMac, final int[] victimSpecialUid, final Combination combination, final Time time, final String reason) {
         this(issuer.getName(), victim, victimIp, victimMac, victimSpecialUid, combination, time, reason);
     }
 
-    public Punishment(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason){
+    public Punishment(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason) {
         this(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
     }
 
-    public Punishment(final Player victim, final Combination combination, final Time time, final String reason){
+    public Punishment(final Player victim, final Combination combination, final Time time, final String reason) {
         this("Server", victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
     }
 
-    public PunishmentHolder getHolder(){
+    public static Punishment create(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason) {
+        return new Punishment(issuer, victim, victimIp, victimMac, specialUid, combination, time, reason);
+    }
+
+    public static Punishment create(final String issuer, final Player victim, final Combination combination, final Time time, final String reason) {
+        return create(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
+    }
+
+    public static Punishment create(final Player issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason) {
+        return new Punishment(issuer.getName(), victim, victimIp, victimMac, specialUid, combination, time, reason);
+    }
+
+    public static Punishment create(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason) {
+        return new Punishment(issuer, victim, combination, time, reason);
+    }
+
+    public static Punishment create(final Player victim, final Combination combination, final Time time, final String reason) {
+        return new Punishment(victim, combination, time, reason);
+    }
+
+    public PunishmentHolder getHolder() {
         return PunishmentManager.getInstance().get(getVictimName());
     }
 
-    public boolean matches(final Player player){
-        return getVictimName().equalsIgnoreCase(player.getName())
-                || getVictimIp().equals(player.getShortIP())
-                || getVictimMac() == player.getUID();
+    public boolean matches(final Player player) {
+        return getVictimName().equalsIgnoreCase(player.getName()) || getVictimIp().equals(player.getShortIP()) || getVictimMac() == player.getUID();
     }
 
-    public void send(final Player player, final boolean alert){
+    public void send(final Player player, final boolean alert) {
         final Player issuer = getIssuer();
         final String issuerName = issuer != null ? issuer.getSafeDisplayName() : getIssuerName();
         if(alert){
-            player.sendf(
-                    "Alert##%s %s - Issued By %s (%s)##%s##Expires: %s",
-                    TextUtils.titleCase(getVictimName()),
-                    getCombination().toString().toLowerCase(),
-                    TextUtils.titleCase(issuerName),
-                    getTime().toString().toLowerCase(),
-                    TextUtils.titleCase(getReason()),
-                    getTime().isExpired() ? "now" : getTime().getExpirationDateStamp()
-            );
+            player.sendf("Alert##%s %s - Issued By %s (%s)##%s##Expires: %s", TextUtils.titleCase(getVictimName()), getCombination().toString().toLowerCase(), TextUtils.titleCase(issuerName), getTime().toString().toLowerCase(), TextUtils.titleCase(getReason()), getTime().isExpired() ? "now" : getTime().getExpirationDateStamp());
         }else{
             player.sendf("@dre@----------------------------------------------------------------------------------------");
             player.sendf("@dre@%s's %s@bla@ - Issued By @dre@%s@bla@ (@dre@%s@bla@)", TextUtils.titleCase(getVictimName()), getCombination().toString().toLowerCase(), TextUtils.titleCase(issuerName), getTime().toString().toLowerCase());
@@ -79,7 +89,7 @@ public class Punishment {
         }
     }
 
-    public boolean apply(){
+    public boolean apply() {
         final Player victim = getVictim();
         if(victim != null){
             getCombination().apply(victim);
@@ -113,7 +123,7 @@ public class Punishment {
         return applied;
     }
 
-    public boolean isApplied(){
+    public boolean isApplied() {
         final Player victim = getVictim();
         if(victim != null)
             return getCombination().isApplied(victim);
@@ -138,7 +148,7 @@ public class Punishment {
         return true;
     }
 
-    public boolean unapply(){
+    public boolean unapply() {
         final Player victim = getVictim();
         if(victim != null){
             getCombination().unapply(victim);
@@ -166,153 +176,98 @@ public class Punishment {
         return unapplied;
     }
 
-    public String getIssuerName(){
+    public String getIssuerName() {
         return issuer;
     }
 
-    public void setIssuerName(final String issuer){
+    public void setIssuerName(final String issuer) {
         this.issuer = issuer;
     }
 
-    public void setIssuer(final Player issuer){
-        setIssuerName(issuer.getName());
-    }
-
-    public Player getIssuer(){
+    public Player getIssuer() {
         return World.getWorld().getPlayer(getIssuerName());
     }
 
-    public String getVictimName(){
+    public void setIssuer(final Player issuer) {
+        setIssuerName(issuer.getName());
+    }
+
+    public String getVictimName() {
         return victim;
     }
 
-    public Player getVictim(){
+    public Player getVictim() {
         return World.getWorld().getPlayer(getVictimName());
     }
 
-    public String getVictimIp(){
+    public String getVictimIp() {
         return victimIp;
     }
 
-    public int getVictimMac(){
+    public int getVictimMac() {
         return victimMac;
     }
 
-    public int[] getVictimSpecialUid(){
+    public int[] getVictimSpecialUid() {
         return victimSpecialUid;
     }
 
-    public String getVictimSpecialUidAsString(){
+    public String getVictimSpecialUidAsString() {
         final StringJoiner joiner = new StringJoiner(",");
         for(final int n : getVictimSpecialUid())
             joiner.add(Integer.toString(n));
         return joiner.toString();
     }
 
-    public Combination getCombination(){
+    public Combination getCombination() {
         return combination;
     }
 
-    public Time getTime(){
+    public Time getTime() {
         return time;
     }
 
-    public String getReason(){
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(final String reason){
+    public void setReason(final String reason) {
         this.reason = reason;
     }
 
-    public void insert(final MySQLConnection connection){
-        final String query = String.format(
-                "INSERT INTO punishments (issuer, victim, ip, mac, specialUid, target, type, time, duration, unit, reason, active)" +
-                        " VALUES ('%s', '%s', '%s', %d, '%s', '%s', '%s', %d, %d, '%s', '%s', 1)",
-                getIssuerName(),
-                getVictimName(),
-                getVictimIp(),
-                getVictimMac(),
-                getVictimSpecialUidAsString(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name(),
-                getTime().getStartTime(),
-                getTime().getDuration(),
-                getTime().getUnit().name(),
-                getReason()
-        );
+    public void insert(final MySQLConnection connection) {
+        final String query = String.format("INSERT INTO punishments (issuer, victim, ip, mac, specialUid, target, type, time, duration, unit, reason, active)" + " VALUES ('%s', '%s', '%s', %d, '%s', '%s', '%s', %d, %d, '%s', '%s', 1)", getIssuerName(), getVictimName(), getVictimIp(), getVictimMac(), getVictimSpecialUidAsString(), getCombination().getTarget().name(), getCombination().getType().name(), getTime().getStartTime(), getTime().getDuration(), getTime().getUnit().name(), getReason());
         connection.offer(query);
     }
 
-    public void insert(){
+    public void insert() {
         insert(PunishmentManager.getInstance().getConnection());
     }
 
-    public void update(final MySQLConnection connection){
-        final String query = String.format(
-                "UPDATE punishments SET issuer = '%s', time = %d, duration = %d, unit = '%s', reason = '%s' WHERE victim = '%s' AND target = '%s' AND type = '%s'",
-                getIssuerName(),
-                getTime().getStartTime(),
-                getTime().getDuration(),
-                getTime().getUnit().name(),
-                getReason(),
-                getVictimName(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name()
-        );
+    public void update(final MySQLConnection connection) {
+        final String query = String.format("UPDATE punishments SET issuer = '%s', time = %d, duration = %d, unit = '%s', reason = '%s' WHERE victim = '%s' AND target = '%s' AND type = '%s'", getIssuerName(), getTime().getStartTime(), getTime().getDuration(), getTime().getUnit().name(), getReason(), getVictimName(), getCombination().getTarget().name(), getCombination().getType().name());
         connection.offer(query);
     }
 
-    public void update(){
+    public void update() {
         update(PunishmentManager.getInstance().getConnection());
     }
 
-    public void setActive(final MySQLConnection connection, final boolean isActive){
-        final String query = String.format(
-                "UPDATE punishments SET active = %d WHERE victim = '%s' AND target = '%s' AND type = '%s'",
-                isActive ? 1 : 0,
-                getVictimName(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name()
-        );
+    public void setActive(final MySQLConnection connection, final boolean isActive) {
+        final String query = String.format("UPDATE punishments SET active = %d WHERE victim = '%s' AND target = '%s' AND type = '%s'", isActive ? 1 : 0, getVictimName(), getCombination().getTarget().name(), getCombination().getType().name());
         connection.offer(query);
     }
 
-    public void setActive(final boolean isActive){
+    public void setActive(final boolean isActive) {
         setActive(PunishmentManager.getInstance().getConnection(), isActive);
     }
 
-    public void delete(final MySQLConnection connection){
-        final String query = String.format(
-                "DELETE FROM punishments WHERE victim = '%s' AND target = '%s' AND type = '%s'",
-                getVictimName(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name()
-        );
+    public void delete(final MySQLConnection connection) {
+        final String query = String.format("DELETE FROM punishments WHERE victim = '%s' AND target = '%s' AND type = '%s'", getVictimName(), getCombination().getTarget().name(), getCombination().getType().name());
         connection.offer(query);
     }
 
-    public void delete(){
+    public void delete() {
         delete(PunishmentManager.getInstance().getConnection());
-    }
-
-    public static Punishment create(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason){
-        return new Punishment(issuer, victim, victimIp, victimMac, specialUid, combination, time, reason);
-    }
-
-    public static Punishment create(final String issuer, final Player victim, final Combination combination, final Time time, final String reason){
-        return create(issuer, victim.getName(), victim.getShortIP(), victim.getUID(), victim.specialUid, combination, time, reason);
-    }
-
-    public static Punishment create(final Player issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason){
-        return new Punishment(issuer.getName(), victim, victimIp, victimMac, specialUid, combination, time, reason);
-    }
-
-    public static Punishment create(final Player issuer, final Player victim, final Combination combination, final Time time, final String reason){
-        return new Punishment(issuer, victim, combination, time, reason);
-    }
-
-    public static Punishment create(final Player victim, final Combination combination, final Time time, final String reason){
-        return new Punishment(victim, combination, time, reason);
     }
 }

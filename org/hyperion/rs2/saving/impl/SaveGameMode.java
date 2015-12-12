@@ -23,12 +23,12 @@ public class SaveGameMode extends SaveInteger {
     }
 
     @Override
-    public void setValue(Player player, int value) {
+    public void setValue(final Player player, final int value) {
         player.setGameMode(value);
     }
 
     @Override
-    public Integer getValue(Player player) {
+    public Integer getValue(final Player player) {
         return player.getGameMode();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

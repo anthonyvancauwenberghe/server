@@ -18,87 +18,84 @@ import java.util.logging.Logger;
  */
 public class ScriptManager {
 
-	/**
-	 * The singleton of this class.
-	 */
-	private static final ScriptManager INSTANCE = new ScriptManager();
+    /**
+     * The singleton of this class.
+     */
+    private static final ScriptManager INSTANCE = new ScriptManager();
+    /**
+     * The logger for this manager.
+     */
+    private final Logger logger = Logger.getLogger(this.toString());
+    /**
+     * The ScriptEngineManager.
+     */
+    private final ScriptEngineManager mgr;
 
-	/**
-	 * Gets the ScriptManager singleton.
-	 *
-	 * @return The ScriptManager singleton.
-	 */
-	public static ScriptManager getScriptManager() {
-		return INSTANCE;
-	}
+    /**
+     * The JavaScript Engine.
+     */
+    private final ScriptEngine jsEngine;
 
-	/**
-	 * The ScriptEngineManager.
-	 */
-	private ScriptEngineManager mgr;
+    /**
+     * Creates the script manager.
+     */
+    private ScriptManager() {
+        mgr = new ScriptEngineManager();
+        jsEngine = mgr.getEngineByName("JavaScript");
+        //logger.info("Loading scripts...");
+        System.out.println("Scripts successfuly Loaded.");
+    }
 
-	/**
-	 * The JavaScript Engine.
-	 */
-	private ScriptEngine jsEngine;
+    /**
+     * Gets the ScriptManager singleton.
+     *
+     * @return The ScriptManager singleton.
+     */
+    public static ScriptManager getScriptManager() {
+        return INSTANCE;
+    }
 
-	/**
-	 * The logger for this manager.
-	 */
-	private final Logger logger = Logger.getLogger(this.toString());
+    /**
+     * Invokes a JavaScript function.
+     *
+     * @param identifier The identifier of the function.
+     * @param args       The function arguments.
+     */
+    public void invoke(final String identifier, final Object... args) {
+        final Invocable invEngine = (Invocable) jsEngine;
+        try{
+            invEngine.invokeFunction(identifier, args);
+        }catch(final NoSuchMethodException ex){
+            logger.log(Level.WARNING, "No such method: " + identifier, ex);
+        }catch(final ScriptException ex){
+            logger.log(Level.WARNING, "ScriptException thrown!", ex);
+        }
+    }
 
-	/**
-	 * Creates the script manager.
-	 */
-	private ScriptManager() {
-		mgr = new ScriptEngineManager();
-		jsEngine = mgr.getEngineByName("JavaScript");
-		//logger.info("Loading scripts...");
-		System.out.println("Scripts successfuly Loaded.");
-	}
-
-	/**
-	 * Invokes a JavaScript function.
-	 *
-	 * @param identifier The identifier of the function.
-	 * @param args       The function arguments.
-	 */
-	public void invoke(String identifier, Object... args) {
-		Invocable invEngine = (Invocable) jsEngine;
-		try {
-			invEngine.invokeFunction(identifier, args);
-		} catch(NoSuchMethodException ex) {
-			logger.log(Level.WARNING, "No such method: " + identifier, ex);
-		} catch(ScriptException ex) {
-			logger.log(Level.WARNING, "ScriptException thrown!", ex);
-		}
-	}
-
-	/**
-	 * Loads JavaScript files into the JavaScript ScriptEngine from the argued
-	 * path.
-	 *
-	 * @param dirPath The path of the directory to load the JavaScript source files
-	 *                from.
-	 */
-	public void loadScripts(String dirPath) {
-		File dir = new File(dirPath);
-		if(dir.exists() && dir.isDirectory()) {
-			File[] children = dir.listFiles();
-			for(File child : children) {
-				if(child.isFile() && child.getName().endsWith(".js"))
-					try {
-						jsEngine.eval(new InputStreamReader(
-								new FileInputStream(child)));
-					} catch(ScriptException ex) {
-						logger.log(Level.SEVERE, "Unable to load script!", ex);
-					} catch(FileNotFoundException ex) {
-						logger.log(Level.SEVERE, "Unable to find script!", ex);
-					}
-				else if(child.isDirectory())
-					loadScripts(child.getPath());
-			}
-		}
-	}
+    /**
+     * Loads JavaScript files into the JavaScript ScriptEngine from the argued
+     * path.
+     *
+     * @param dirPath The path of the directory to load the JavaScript source files
+     *                from.
+     */
+    public void loadScripts(final String dirPath) {
+        final File dir = new File(dirPath);
+        if(dir.exists() && dir.isDirectory()){
+            final File[] children = dir.listFiles();
+            for(final File child : children){
+                if(child.isFile() && child.getName().endsWith(".js"))
+                    try{
+                        jsEngine.eval(new InputStreamReader(new FileInputStream(child)));
+                    }catch(final ScriptException ex){
+                        logger.log(Level.SEVERE, "Unable to load script!", ex);
+                    }catch(final FileNotFoundException ex){
+                        logger.log(Level.SEVERE, "Unable to find script!", ex);
+                    }
+                else if(child.isDirectory())
+                    loadScripts(child.getPath());
+            }
+        }
+    }
 
 }

@@ -3,28 +3,26 @@ package org.hyperion.rs2.model.content.skill.agility.courses;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.skill.agility.Course;
-import org.hyperion.rs2.model.content.skill.agility.obstacles.*;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.LogBalance;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.ObstaclePipe;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.RockClimbing;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.RopeSwing;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.SteppingStone;
 
 /**
  * Created by Gilles on 11/09/2015.
  */
 public class WildernessAgility extends Course {
 
-    private Location[] rockStart = {
-            Location.create(2995, 3937, 0),
-            Location.create(2994, 3937, 0),
-            Location.create(2993, 3937, 0)
-    };
-    private Location[] rockEnd = {
-            Location.create(2995, 3933, 0),
-            Location.create(2994, 3933, 0),
-            Location.create(2993, 3933, 0)
-    };
+    private final Location[] rockStart = {Location.create(2995, 3937, 0), Location.create(2994, 3937, 0),
+            Location.create(2993, 3937, 0)};
+    private final Location[] rockEnd = {Location.create(2995, 3933, 0), Location.create(2994, 3933, 0),
+            Location.create(2993, 3933, 0)};
 
 
     public WildernessAgility() {
-    super(35000, 5);
-    generateObstacles();
+        super(35000, 5);
+        generateObstacles();
     }
 
     public void generateObstacles() {
@@ -36,7 +34,7 @@ public class WildernessAgility extends Course {
     }
 
     @Override
-    public void progressCourse(Player player, int progress) {
+    public void progressCourse(final Player player, final int progress) {
         player.getAgility().progressWildernessCourse(progress, this);
     }
 

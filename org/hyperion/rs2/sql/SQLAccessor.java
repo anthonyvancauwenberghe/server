@@ -1,29 +1,29 @@
 package org.hyperion.rs2.sql;
 
+import org.hyperion.rs2.sql.requests.QueryRequest;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.hyperion.rs2.sql.requests.QueryRequest;
-
 public class SQLAccessor {
 
-    private MySQLConnection sql;
+    private final MySQLConnection sql;
 
-    public SQLAccessor(MySQLConnection sql) {
+    public SQLAccessor(final MySQLConnection sql) {
         this.sql = sql;
     }
 
-    public void offer(String query) {
+    public void offer(final String query) {
         offer(new QueryRequest(query));
     }
 
-    public void offer(String query, Object...arguments) {
-        String str = String.format(query, arguments);
+    public void offer(final String query, final Object... arguments) {
+        final String str = String.format(query, arguments);
         offer(str);
     }
 
-    public void offer(SQLRequest request) {
+    public void offer(final SQLRequest request) {
         sql.offer(request);
     }
 
@@ -43,21 +43,21 @@ public class SQLAccessor {
         return sql.isRunning();
     }
 
-    public ResultSet select(String query) throws SQLException {
-        if(query.toLowerCase().startsWith("select")) {
+    public ResultSet select(final String query) throws SQLException {
+        if(query.toLowerCase().startsWith("select")){
             return sql.query(query);
         }
         return null;
     }
 
-    public ResultSet delete(String query) throws SQLException {
-        if(query.toLowerCase().startsWith("delete")) {
+    public ResultSet delete(final String query) throws SQLException {
+        if(query.toLowerCase().startsWith("delete")){
             return sql.query(query);
         }
         return null;
     }
 
-    public PreparedStatement prepareStatement(String query) throws SQLException {
+    public PreparedStatement prepareStatement(final String query) throws SQLException {
         return sql.getConnection().prepareStatement(query);
     }
 }

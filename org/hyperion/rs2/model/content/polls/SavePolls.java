@@ -15,43 +15,31 @@ public class SavePolls extends SQLRequest {
     }
 
     @Override
-    public void process(SQLConnection sql) throws SQLException {
-        if (!sql.isConnected()) {
+    public void process(final SQLConnection sql) throws SQLException {
+        if(!sql.isConnected()){
             return;
         }
-        try {
-            for (int i = 0; i < Poll.getPolls().size(); i++) {
-                Poll poll = Poll.getPolls().get(Poll.getPolls().keySet().toArray()[i]);
-                if (poll == null)
+        try{
+            for(int i = 0; i < Poll.getPolls().size(); i++){
+                final Poll poll = Poll.getPolls().get(Poll.getPolls().keySet().toArray()[i]);
+                if(poll == null)
                     continue;
 
-                String query = String.format(
-                        "INSERT INTO `server`.`polls` (`index`, `canChange`, `active`) VALUES (%d, '%s', '%s', '%d', '%d')" +
-                                " ON DUPLICATE KEY UPDATE `active` = '%d'",
-                        poll.getIndex(), poll.canChange() ? 1 : 0, poll.isActive() ? 1 : 0,
-                        poll.isActive() ? 1 : 0);
+                String query = String.format("INSERT INTO `server`.`polls` (`index`, `canChange`, `active`) VALUES (%d, '%s', '%s', '%d', '%d')" + " ON DUPLICATE KEY UPDATE `active` = '%d'", poll.getIndex(), poll.canChange() ? 1 : 0, poll.isActive() ? 1 : 0, poll.isActive() ? 1 : 0);
                 sql.query(query);
 
-                for (String vote : poll.getYesVotes()) {
-                    query = String.format(
-                            "INSERT INTO `server`.`pollvotes` (`playerName`, `poll`, `answer`) VALUES ('%s', '%d', '1')" +
-                                    "ON DUPLICATE KEY UPDATE answer = '1'",
-                            vote, poll.getIndex()
-                    );
+                for(final String vote : poll.getYesVotes()){
+                    query = String.format("INSERT INTO `server`.`pollvotes` (`playerName`, `poll`, `answer`) VALUES ('%s', '%d', '1')" + "ON DUPLICATE KEY UPDATE answer = '1'", vote, poll.getIndex());
                     sql.query(query);
                 }
-                for (String vote : poll.getNoVotes()) {
-                    query = String.format(
-                            "INSERT INTO `server`.`pollvotes` (`playerName`, `poll`, `answer`) VALUES ('%s', '%d', '0')" +
-                                    "ON DUPLICATE KEY UPDATE answer = '0'",
-                            vote, poll.getIndex()
-                    );
+                for(final String vote : poll.getNoVotes()){
+                    query = String.format("INSERT INTO `server`.`pollvotes` (`playerName`, `poll`, `answer`) VALUES ('%s', '%d', '0')" + "ON DUPLICATE KEY UPDATE answer = '0'", vote, poll.getIndex());
                     sql.query(query);
                 }
                 if(!poll.isActive())
                     Poll.getPolls().remove(poll.getIndex());
             }
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
             return;
         }

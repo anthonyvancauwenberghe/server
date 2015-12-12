@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.content.misc2.teamboss;
 
-import org.hyperion.rs2.model.content.ClickId;
-import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -16,12 +14,13 @@ import java.io.FileNotFoundException;
 public class TeamBossHandler implements ContentTemplate {
 
     @Override
-    public void init() throws FileNotFoundException {;
+    public void init() throws FileNotFoundException {
+        ;
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public int[] getValues(int type) {
+    public int[] getValues(final int type) {
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 

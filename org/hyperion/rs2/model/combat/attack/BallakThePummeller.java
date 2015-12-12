@@ -1,7 +1,12 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Damage;
+import org.hyperion.rs2.model.Graphic;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -10,11 +15,10 @@ import java.io.IOException;
 
 public class BallakThePummeller implements Attack {
 
-    private long specialDelay;
-
     private static final int MAX_MELEE_DAMAGE = 60;
     private static final int MAX_MAGIC_DAMAGE = 45;
     private static final int MAX_RANGE_DAMAGE = 51;
+    private long specialDelay;
 
     @Override
     public String getName() {
@@ -23,15 +27,15 @@ public class BallakThePummeller implements Attack {
 
     @Override
     public int[] npcIds() {
-        return new int[] {10141};
+        return new int[]{10141};
     }
 
-    private void handleFlames(NPC npc) {
+    private void handleFlames(final NPC npc) {
         npc.forceMessage("BUUUUUUURRRRRRRRRNNNNNNNN!");
         npc.cE.doAnim(13605);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
-            int unlucky = Combat.random(1);
-            if(unlucky == 0) {
+        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)){
+            final int unlucky = Combat.random(1);
+            if(unlucky == 0){
                 player.playGraphics(Graphic.create(1393));
                 player.forceMessage("OUCH!");
                 Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player.cE.getEntity(), Combat.random(MAX_MAGIC_DAMAGE), 2, MAX_MAGIC_DAMAGE), 1100, 2);
@@ -39,12 +43,12 @@ public class BallakThePummeller implements Attack {
         }
     }
 
-    private void handleHealthSap(NPC npc) {
+    private void handleHealthSap(final NPC npc) {
         npc.forceMessage("GIVE ME LIFE!");
         npc.cE.doAnim(13606);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)){
             player.playGraphics(Graphic.create(336));
-            int damage = Combat.random(30);
+            final int damage = Combat.random(30);
             Combat.npcRangeAttack(npc, player.cE, 165, 0, false);
             player.inflictDamage(new Damage.Hit(damage, null, 7));
             if(npc.health < npc.maxHealth)
@@ -52,20 +56,21 @@ public class BallakThePummeller implements Attack {
         }
     }
 
-    private void handleFireSpell(NPC npc) {
+    private void handleFireSpell(final NPC npc) {
         npc.forceMessage("FEEL THE HEAT!");
         npc.cE.doAnim(13604);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
-            int fireGfx = 1154;
+        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)){
+            final int fireGfx = 1154;
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player.cE.getEntity(), Combat.random(MAX_RANGE_DAMAGE), 1, MAX_RANGE_DAMAGE), 1500, 1);
             player.cE.doGfx(fireGfx);
             player.getActionSender().sendMessage("@dre@Your body started burning alive!");
             World.getWorld().submit(new Event(2000) {
                 int burnTicks = Combat.random(3) + 2;
+
                 @Override
                 public void execute() throws IOException {
-                    if(burnTicks <= 0) {
+                    if(burnTicks <= 0){
                         this.stop();
                         return;
                     }
@@ -84,16 +89,16 @@ public class BallakThePummeller implements Attack {
     }
 
     @Override
-    public int handleAttack(NPC n, CombatEntity attack) {
-        if(attack == null) {
+    public int handleAttack(final NPC n, final CombatEntity attack) {
+        if(attack == null){
             return 1;
-        } else if(n.cE.predictedAtk > System.currentTimeMillis()) {
+        }else if(n.cE.predictedAtk > System.currentTimeMillis()){
             return 6;
         }
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
-        if(specialDelay <= System.currentTimeMillis()) {
-            int special = Combat.random(2);
-            switch (special) {
+        final int distance = attack.getEntity().getLocation().distance(n.getLocation());
+        if(specialDelay <= System.currentTimeMillis()){
+            final int special = Combat.random(2);
+            switch(special){
                 case 0:
                     handleFlames(n);
                     break;
@@ -108,14 +113,14 @@ public class BallakThePummeller implements Attack {
             n.cE.predictedAtk = System.currentTimeMillis() + 3000;
             return 5;
         }
-        if (n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 2)) {
+        if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 2)){
             n.getCombat().doAtkEmote();
             Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MELEE_DAMAGE), 0, MAX_MELEE_DAMAGE), 200, 0);
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;
             return 5;
-        } else if(distance <= 8) {
+        }else if(distance <= 8){
             return 0;
-        } else {
+        }else{
             return 1;
         }
     }

@@ -6,22 +6,22 @@ import org.hyperion.rs2.saving.SaveString;
 
 public class SaveClan extends SaveString {
 
-	public SaveClan(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveClan(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public void setValue(Player player, String value) {
-		if(value == null || value.length() < 1)
-			return;
-		ClanManager.joinClanChat(player, value, true);
-	}
+    @Override
+    public void setValue(final Player player, final String value) {
+        if(value == null || value.length() < 1)
+            return;
+        ClanManager.joinClanChat(player, value, true);
+    }
 
-	@Override
-	public String getValue(Player player) {
-		// TODO Auto-generated method stub
-		return player.getClanName();
-	}
+    @Override
+    public String getValue(final Player player) {
+        // TODO Auto-generated method stub
+        return player.getClanName();
+    }
 
 }

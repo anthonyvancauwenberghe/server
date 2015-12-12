@@ -10,25 +10,25 @@ import org.hyperion.util.Misc;
 
 public class AllToMeCommand extends Command {
 
-	public AllToMeCommand(String startsWith, Rank... rights) {
-		super(startsWith, rights);
-	}
+    public AllToMeCommand(final String startsWith, final Rank... rights) {
+        super(startsWith, rights);
+    }
 
-	@Override
-	public boolean execute(Player player, String input) {
-		for(final Player otherPlayer : World.getWorld().getPlayers()) {
-			if(player == otherPlayer)
-				continue;
-			final int x = player.getLocation().getX() + Misc.random(3);
-			final int y = player.getLocation().getY() + Misc.random(3);
-			World.getWorld().submit(new Event(Misc.random(10000)) {
-				public void execute() {
-					Magic.teleport(otherPlayer, x, y, 0, true);
+    @Override
+    public boolean execute(final Player player, final String input) {
+        for(final Player otherPlayer : World.getWorld().getPlayers()){
+            if(player == otherPlayer)
+                continue;
+            final int x = player.getLocation().getX() + Misc.random(3);
+            final int y = player.getLocation().getY() + Misc.random(3);
+            World.getWorld().submit(new Event(Misc.random(10000)) {
+                public void execute() {
+                    Magic.teleport(otherPlayer, x, y, 0, true);
                     this.stop();
-				}
-			});
-		}
-		return true;
-	}
+                }
+            });
+        }
+        return true;
+    }
 
 }

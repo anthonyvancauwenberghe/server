@@ -8,33 +8,32 @@ import org.hyperion.util.Misc;
 
 public class RandomTeleportEvent extends Event {
 
-	public static final int DELAY = 3000;
+    public static final int DELAY = 3000;
 
-	public static final int TELEPORTS_AMOUNT = 20;
+    public static final int TELEPORTS_AMOUNT = 20;
 
-	private Player player;
+    private final Player player;
+    private int counter = 0;
 
-	public RandomTeleportEvent(Player player) {
-		super(DELAY);
-		this.player = player;
-	}
+    public RandomTeleportEvent(final Player player) {
+        super(DELAY);
+        this.player = player;
+    }
 
-	private int counter = 0;
-
-	@Override
-	public void execute() {
-		Player randomPlayer = null;
-		EntityList<Player> list = World.getWorld().getPlayers();
-		while(randomPlayer == null) {
-			int randIndex = Misc.random(list.size() - 1);
-			randomPlayer = (Player) list.get(randIndex);
-		}
-		player.setTeleportTarget(randomPlayer.getLocation());
-		counter++;
-		if(counter >= TELEPORTS_AMOUNT) {
-			this.stop();
-		}
-	}
+    @Override
+    public void execute() {
+        Player randomPlayer = null;
+        final EntityList<Player> list = World.getWorld().getPlayers();
+        while(randomPlayer == null){
+            final int randIndex = Misc.random(list.size() - 1);
+            randomPlayer = (Player) list.get(randIndex);
+        }
+        player.setTeleportTarget(randomPlayer.getLocation());
+        counter++;
+        if(counter >= TELEPORTS_AMOUNT){
+            this.stop();
+        }
+    }
 
 
 }

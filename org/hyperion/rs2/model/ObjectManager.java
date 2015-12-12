@@ -3,27 +3,20 @@ package org.hyperion.rs2.model;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
 import org.hyperion.cache.InvalidCacheException;
-import org.hyperion.cache.index.impl.MapIndex;
 import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.map.LandscapeListener;
-import org.hyperion.cache.map.LandscapeParser;
 import org.hyperion.cache.obj.ObjectDefinitionListener;
 import org.hyperion.cache.obj.ObjectDefinitionParser;
-import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.packet.ObjectClickHandler;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.hyperion.rs2.model.Location.create;
 
@@ -39,17 +32,17 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
      */
     //private static final Logger logger = Logger.getLogger(ObjectManager.class.getName());
 
+    public static Cache cache;
+    private final List<GameObject> globalObjects = new LinkedList<GameObject>();
     /**
      * The number of definitions loaded.
      */
     private int definitionCount = 0;
-
     /**
      * The count of objects loaded.
      */
     private int objectCount = 0;
-
-    public static Cache cache;
+    //private IoBuffer buf = null;
 
     /**
      * Loads the objects in the map.
@@ -59,21 +52,21 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
      */
     public void load() throws IOException, InvalidCacheException {
         cache = new Cache(new File("./data/cache/"));
-        try {
+        try{
             /*OutputStream os = new FileOutputStream("data/itemdefnew.bin");
             buf = IoBuffer.allocate(1024);
 			buf.setAutoExpand(true);*/
             //logger.info("Loading definitions...");
-            StandardIndex[] defIndices = cache.getIndexTable().getObjectDefinitionIndices();
+            final StandardIndex[] defIndices = cache.getIndexTable().getObjectDefinitionIndices();
             new ObjectDefinitionParser(cache, defIndices, this).parse();
             System.out.println("Loaded " + definitionCount + " object definitions.");
-            BufferedReader br = new BufferedReader(new FileReader("./data/objspawns.cfg"));
+            final BufferedReader br = new BufferedReader(new FileReader("./data/objspawns.cfg"));
             String s;
-            while ((s = br.readLine()) != null) {
-                try {
-                    String parts[] = s.replace("spawn = ", "").split("\t");
+            while((s = br.readLine()) != null){
+                try{
+                    final String[] parts = s.replace("spawn = ", "").split("\t");
                     globalObjects.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Location.create(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])), Integer.parseInt(parts[5]), Integer.parseInt(parts[4])));
-                } catch (Exception e) {
+                }catch(final Exception e){
                     e.printStackTrace();
                 }
             }
@@ -97,22 +90,22 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
             globalObjects.add(new GameObject(GameObjectDefinition.forId(2157), create(2957, 3195, 0), 10, 0));
             globalObjects.add(OSPK.loadObjects());
             OSPK.loadObjects(); // portal
-            if (!Server.SPAWN) {
-                for (int i = 0; i < 4; i++) {
+            if(!Server.SPAWN){
+                for(int i = 0; i < 4; i++){
                     globalObjects.add(new GameObject(GameObjectDefinition.forId(4875 + i), create(3084, 3496 + i, 0), 10, 0));
                 }
             }
 
 
-            for (SpecialArea area : SpecialAreaHolder.getAreas()) {
-                if (area instanceof NIGGERUZ)
+            for(final SpecialArea area : SpecialAreaHolder.getAreas()){
+                if(area instanceof NIGGERUZ)
                     ((NIGGERUZ) area).initObjects(globalObjects);
             }
 
 
-            try {
+            try{
                 Class.forName("org.hyperion.rs2.model.World");
-            } catch (ClassNotFoundException e) {
+            }catch(final ClassNotFoundException e){
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
@@ -127,17 +120,16 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
 			os.write(data);
 			os.flush();
 			os.close();*/
-        } finally {
+        }finally{
             //cache.close();
         }
 
 
     }
-    //private IoBuffer buf = null;
 
     @Override
-    public void objectParsed(GameObject obj) {
-        if (obj == null)
+    public void objectParsed(final GameObject obj) {
+        if(obj == null)
             return;
         objectCount++;
         /*buf.putShort((short) obj.getDefinition().getId());
@@ -154,41 +146,39 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
     }
 
     @Override
-    public void objectDefinitionParsed(GameObjectDefinition def) {
+    public void objectDefinitionParsed(final GameObjectDefinition def) {
         definitionCount++;
         GameObjectDefinition.addDefinition(def);
     }
 
-    private List<GameObject> globalObjects = new LinkedList<GameObject>();
-
-    public void addObject(GameObject obj) {
+    public void addObject(final GameObject obj) {
         globalObjects.add(obj);
         update(obj);
     }
 
-    public void removeObject(GameObject obj) {
+    public void removeObject(final GameObject obj) {
         globalObjects.remove(obj);
     }
 
-    public void update(GameObject obj) {
-        for (Player p : World.getWorld().getPlayers()) {
-                if (obj == null) {
-                    System.out.println("Object is null!");
-                    return;
-                }
-                if (p == null){
-                    System.out.println("Player is null!");
-                    continue;
-                }
-            if (obj.isVisible(p.getLocation())) {
+    public void update(final GameObject obj) {
+        for(final Player p : World.getWorld().getPlayers()){
+            if(obj == null){
+                System.out.println("Object is null!");
+                return;
+            }
+            if(p == null){
+                System.out.println("Player is null!");
+                continue;
+            }
+            if(obj.isVisible(p.getLocation())){
                 p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
             }
         }
     }
 
-    public void load(Player p) {
-        for (GameObject obj : globalObjects) {
-            if (obj.isVisible(p.getLocation())) {
+    public void load(final Player p) {
+        for(final GameObject obj : globalObjects){
+            if(obj.isVisible(p.getLocation())){
                 p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
 
             }
@@ -210,30 +200,30 @@ public class ObjectManager implements LandscapeListener, ObjectDefinitionListene
         }); */
     }
 
-    public void replace(GameObject obj, GameObject obj2) {
+    public void replace(final GameObject obj, final GameObject obj2) {
         removeObject(obj);
         update(obj2);
 
     }
 
-    public GameObject getObjectAt(int x, int y, int z) {
+    public GameObject getObjectAt(final int x, final int y, final int z) {
         final Location loc = Location.create(x, y, z);
         return getObjectAt(loc);
     }
 
-    public GameObject getObjectAt(Location loc) {
-        for (GameObject object : globalObjects) {
-            if (object.isAt(loc))
+    public GameObject getObjectAt(final Location loc) {
+        for(final GameObject object : globalObjects){
+            if(object.isAt(loc))
                 return object;
         }
         return null;
     }
 
-    public void addMapObject(int x, int y, int z, int id) {
+    public void addMapObject(final int x, final int y, final int z, final int id) {
 
     }
 
-    public boolean objectExist(Location loc, int id) {
+    public boolean objectExist(final Location loc, final int id) {
        /* final GameObject obj;
         boolean object = ((obj = getObjectAt(loc)) != null && obj.getDefinition().getId() == id);
         return objects[loc.getX() % 5000][loc.getY() % 11000][loc.getZ() % 4] == id || object;  */

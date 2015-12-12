@@ -7,24 +7,24 @@ import org.hyperion.rs2.model.World;
 
 public class ScreenshotCommand extends Command {
 
-	public ScreenshotCommand() {
-		super("takexshot", Rank.ADMINISTRATOR);
-	}
+    public ScreenshotCommand() {
+        super("takexshot", Rank.ADMINISTRATOR);
+    }
 
-	@Override
-	public boolean execute(Player player, String input) {
-		input = filterInput(input);
-		try {
-			Player victim = World.getWorld().getPlayer(input);
-			if(victim != null) {
-				victim.getActionSender().sendMessage("script778877");
-				player.getActionSender().sendMessage("Sent!");
-			} else {
-				player.getActionSender().sendMessage("Offline");
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
+    @Override
+    public boolean execute(final Player player, String input) {
+        input = filterInput(input);
+        try{
+            final Player victim = World.getWorld().getPlayer(input);
+            if(victim != null){
+                victim.getActionSender().sendMessage("script778877");
+                player.getActionSender().sendMessage("Sent!");
+            }else{
+                player.getActionSender().sendMessage("Offline");
+            }
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+        return true;
+    }
 }

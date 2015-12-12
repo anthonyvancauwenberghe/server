@@ -36,23 +36,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConnectionHandler extends IoHandlerAdapter {
 
-	public static HashMap<String, Object> blackList = new HashMap<String, Object>();
-
-
-	/**
-	 * The <code>GameEngine</code> instance.
-	 */
-	private final GameEngine engine = World.getWorld().getEngine();
-
-	/**
-	 * The debugger.
-	 */
-	private static final ConnectionDebugger debugger = new ConnectionDebugger();
-
-	public static final File LOG_FILE = new File("./logs/closedsession.log");
-
-	/*private static void logStackTrace(String username, Location location) {
-	    List<String> logs = new LinkedList<String>();
+    public static final File LOG_FILE = new File("./logs/closedsession.log");
+    /**
+     * The debugger.
+     */
+    private static final ConnectionDebugger debugger = new ConnectionDebugger();
+    private static final Location lastLocation = Location.create(0, 0, 0);
+    /*private static void logStackTrace(String username, Location location) {
+        List<String> logs = new LinkedList<String>();
 		int distance = location.distance(lastLocation);
 		lastLocation = location;
 		logs.add(Time.getGMTDate() + "\t" + username + " closed session, distance: " + distance + "\n");
@@ -63,49 +54,60 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		}
 		PlayerSaving.getSaving().saveLog(LOG_FILE, logs);
 	}*/
+    private static final LinkedList<Long> lastLogouts = new LinkedList<Long>();
+    public static HashMap<String, Object> blackList = new HashMap<String, Object>();
 
-	private static Location lastLocation = Location.create(0, 0, 0);
+    static {
+        CommandHandler.submit(new Command("dumpconnlogs", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                debugger.dumpLogs();
+                return true;
+            }
+        });
+    }
 
-	private static LinkedList<Long> lastLogouts = new LinkedList<Long>();
+    /**
+     * The <code>GameEngine</code> instance.
+     */
+    private final GameEngine engine = World.getWorld().getEngine();
 
-	@Override
-	public void exceptionCaught(IoSession session, Throwable throwable)
-			throws Exception {
-		Object playerobject = session.getAttribute("player");
-		if(playerobject != null) {
-			Player player = (Player) playerobject;
+    @Override
+    public void exceptionCaught(final IoSession session, final Throwable throwable) throws Exception {
+        final Object playerobject = session.getAttribute("player");
+        if(playerobject != null){
+            final Player player = (Player) playerobject;
             World.getWorld().unregister(player);
-		} else
+        }else
             session.close(true);
-	}
+    }
 
-	@Override
-	public void messageReceived(IoSession session, Object message)
-			throws Exception {
+    @Override
+    public void messageReceived(final IoSession session, final Object message) throws Exception {
         final Player p = (Player) session.getAttribute("player");
         if(p != null){
-            p.getExtraData().put("packetsRead", p.getExtraData().getInt("packetsRead")+1);
-            p.getExtraData().put("packetCount", p.getExtraData().getInt("packetCount")+1);
-            int packetCount = p.getExtraData().getInt("packetCount");
+            p.getExtraData().put("packetsRead", p.getExtraData().getInt("packetsRead") + 1);
+            p.getExtraData().put("packetCount", p.getExtraData().getInt("packetCount") + 1);
+            final int packetCount = p.getExtraData().getInt("packetCount");
             if(packetCount > 50){
                 p.sendImportantMessage("PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
-				if (p.getExtraData().getInt("packetCount") > 250) {
-					p.getSession().close(false);
-					PunishmentManager.getInstance().add(new Punishment(p, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
-				}
-				if(packetCount > 249) {
-					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
-					session.close(false);
-				}
+                if(p.getExtraData().getInt("packetCount") > 250){
+                    p.getSession().close(false);
+                    PunishmentManager.getInstance().add(new Punishment(p, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
+                }
+                if(packetCount > 249){
+                    System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
+                    session.close(false);
+                }
                 return;
             }
         }
         engine.pushTask(new SessionMessageTask(session, (Packet) message));
-	}
+    }
 
-	@Override
-	public void sessionClosed(IoSession session) throws Exception {
-		/*long currentTime = System.currentTimeMillis();
+    @Override
+    public void sessionClosed(final IoSession session) throws Exception {
+        /*long currentTime = System.currentTimeMillis();
 		if(currentTime - lastLogouts.get(0) < 5000) {
 			Object playerobject = session.getAttribute("player");
 			if (playerobject != null) {
@@ -121,50 +123,36 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		if(lastLogouts.size() > 20) {
 			lastLogouts.remove(0);
 		}*/
-		engine.pushTask(new SessionClosedTask(session));
-	}
+        engine.pushTask(new SessionClosedTask(session));
+    }
 
-	@Override
-	public void sessionIdle(IoSession session, IdleStatus status)
-			throws Exception {
-		Object playerobject = session.getAttribute("player");
-		if(playerobject != null) {
-			Player player = (Player) playerobject;
-			System.out.println("Connection closed because its idle "
-					+ player.getName());
-			World.getWorld().unregister(player);
-		} else
-			session.close(false);
-	}
+    @Override
+    public void sessionIdle(final IoSession session, final IdleStatus status) throws Exception {
+        final Object playerobject = session.getAttribute("player");
+        if(playerobject != null){
+            final Player player = (Player) playerobject;
+            System.out.println("Connection closed because its idle " + player.getName());
+            World.getWorld().unregister(player);
+        }else
+            session.close(false);
+    }
 
-	@Override
-	public void sessionOpened(IoSession session) throws Exception {
-		// System.out.println("Session opened!");
-		SocketAddress remoteAddress = session.getRemoteAddress();
-		String remoteIp = remoteAddress.toString();
-		String ip = remoteIp.split(":")[0];
-		String shortIp = TextUtils.shortIp(remoteIp);
-		if(! HostGateway.canEnter(shortIp)) {
-			System.out.println("Cant enter hostgateway: " + shortIp);
-			session.close(true);
-			return;
-		}
-		LoginDebugger.getDebugger().log("\n Connection opened: " + remoteIp);
-		session.setAttribute("remote", remoteAddress);
-		session.getFilterChain().addFirst("protocol",
-				new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
-		// engine.pushTask(new SessionOpenedTask(session));
-	}
-
-	static {
-		CommandHandler
-				.submit(new Command("dumpconnlogs", Rank.ADMINISTRATOR) {
-					@Override
-					public boolean execute(Player player, String input) {
-						debugger.dumpLogs();
-						return true;
-					}
-				});
-	}
+    @Override
+    public void sessionOpened(final IoSession session) throws Exception {
+        // System.out.println("Session opened!");
+        final SocketAddress remoteAddress = session.getRemoteAddress();
+        final String remoteIp = remoteAddress.toString();
+        final String ip = remoteIp.split(":")[0];
+        final String shortIp = TextUtils.shortIp(remoteIp);
+        if(!HostGateway.canEnter(shortIp)){
+            System.out.println("Cant enter hostgateway: " + shortIp);
+            session.close(true);
+            return;
+        }
+        LoginDebugger.getDebugger().log("\n Connection opened: " + remoteIp);
+        session.setAttribute("remote", remoteAddress);
+        session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
+        // engine.pushTask(new SessionOpenedTask(session));
+    }
 
 }

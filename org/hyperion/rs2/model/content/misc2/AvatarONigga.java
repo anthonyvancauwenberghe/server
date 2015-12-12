@@ -23,7 +23,7 @@ public class AvatarONigga implements ContentTemplate {
 
 
     @Override
-    public int[] getValues(int type) {
+    public int[] getValues(final int type) {
         if(type == ClickType.NPC_OPTION1)
             return new int[]{NPC_ID};  //To change body of implemented methods use File | Settings | File Templates.
         else if(type == ClickType.DIALOGUE_MANAGER)
@@ -32,7 +32,7 @@ public class AvatarONigga implements ContentTemplate {
     }
 
     @Override
-    public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+    public boolean npcOptionOne(final Player player, final int npcId, final int npcLocationX, final int npcLocationY, final int npcSlot) {
 
         DialogueManager.openDialogue(player, 1889);
 
@@ -40,28 +40,25 @@ public class AvatarONigga implements ContentTemplate {
     }
 
     @Override
-    public boolean dialogueAction(Player player, int dialogueId) {
+    public boolean dialogueAction(final Player player, final int dialogueId) {
 
-        switch(dialogueId) {
+        switch(dialogueId){
             case 1889:
-                player.getActionSender().sendDialogue("Zoo keeper", ActionSender.DialogueType.NPC, NPC_ID, Animation.FacialAnimation.HAPPY,
-                        "I've managed to capture the avatar of destruction!", "I'll lead you to him for a small fee of 100 pkp");
+                player.getActionSender().sendDialogue("Zoo keeper", ActionSender.DialogueType.NPC, NPC_ID, Animation.FacialAnimation.HAPPY, "I've managed to capture the avatar of destruction!", "I'll lead you to him for a small fee of 100 pkp");
                 player.getInterfaceState().setNextDialogueId(0, 1890);
                 break;
             case 1890:
-                player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION, NPC_ID, Animation.FacialAnimation.HAPPY,
-                        "Yes, sounds interesting!", "No");
+                player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION, NPC_ID, Animation.FacialAnimation.HAPPY, "Yes, sounds interesting!", "No");
                 player.getInterfaceState().setNextDialogueId(0, 1891);
                 player.getInterfaceState().setNextDialogueId(1, -1);
                 break;
             case 1891:
-                if(player.getPoints().getPkPoints() > 100) {
+                if(player.getPoints().getPkPoints() > 100){
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 100);
                     Magic.teleport(player, Location.create(2661, 9634, 0), false);
                     player.getActionSender().removeChatboxInterface();
-                } else {
-                    player.getActionSender().sendDialogue("Zoo keeper", ActionSender.DialogueType.NPC, NPC_ID, Animation.FacialAnimation.HAPPY,
-                            "I don't let people go on credit!", "Talk to me when you have the points");
+                }else{
+                    player.getActionSender().sendDialogue("Zoo keeper", ActionSender.DialogueType.NPC, NPC_ID, Animation.FacialAnimation.HAPPY, "I don't let people go on credit!", "Talk to me when you have the points");
                     player.getInterfaceState().setNextDialogueId(0, -1);
                 }
 

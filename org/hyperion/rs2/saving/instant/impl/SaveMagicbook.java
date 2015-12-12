@@ -6,23 +6,23 @@ import org.hyperion.rs2.saving.instant.SaveInteger;
 
 public class SaveMagicbook extends SaveInteger {
 
-	public SaveMagicbook(String name) {
-		super(name);
-	}
+    public SaveMagicbook(final String name) {
+        super(name);
+    }
 
-	@Override
-	public int getDefaultValue() {
-		return SpellBook.DEFAULT_SPELLBOOK;
-	}
+    @Override
+    public int getDefaultValue() {
+        return SpellBook.DEFAULT_SPELLBOOK;
+    }
 
-	@Override
-	public void setValue(Player player, int value) {
-		player.getSpellBook().changeSpellBook(value);
-	}
+    @Override
+    public void setValue(final Player player, final int value) {
+        player.getSpellBook().changeSpellBook(value);
+    }
 
-	@Override
-	public Integer getValue(Player player) {
-		return player.getSpellBook().toInteger();
-	}
+    @Override
+    public Integer getValue(final Player player) {
+        return player.getSpellBook().toInteger();
+    }
 
 }

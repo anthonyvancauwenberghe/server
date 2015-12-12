@@ -1,7 +1,12 @@
 package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.GlobalItem;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -14,268 +19,256 @@ import java.io.FileNotFoundException;
  * @author Arsen Maxyutov.
  */
 public class WarriorsGuild implements ContentTemplate {
-	/**
-	 * Npc Ids of Cyclops..
-	 */
-	public static final int[] CYCLOPSIDS = {4291, 4292};
+    /**
+     * Npc Ids of Cyclops..
+     */
+    public static final int[] CYCLOPSIDS = {4291, 4292};
 
-	/**
-	 * The tokens we're rewarded through all games in Warriors Guild.
-	 */
+    /**
+     * The tokens we're rewarded through all games in Warriors Guild.
+     */
 
-	public static final int TOKENS = 8851;
+    public static final int TOKENS = 8851;
 
-	/**
-	 * Set of all the Armour items used for the Animation Room. (Bronze - Rune)
-	 * {helm, chest, legs}
-	 */
+    /**
+     * Set of all the Armour items used for the Animation Room. (Bronze - Rune)
+     * {helm, chest, legs}
+     */
 
-	private static final int[][] ARMOUR_SET = {
-			{1155, 1117, 1075}, //Bronze 0
-			{1153, 1115, 1067}, //Iron 1
-			{1157, 1119, 1069}, //Steel 2
-			{1165, 1125, 1077}, //Black 3
-			{1159, 1121, 1071}, //Mithril 4
-			{1161, 1123, 1073}, //Adamant 5
-			{1163, 1127, 1079}, //Rune 6
-	};
+    private static final int[][] ARMOUR_SET = {{1155, 1117, 1075}, //Bronze 0
+            {1153, 1115, 1067}, //Iron 1
+            {1157, 1119, 1069}, //Steel 2
+            {1165, 1125, 1077}, //Black 3
+            {1159, 1121, 1071}, //Mithril 4
+            {1161, 1123, 1073}, //Adamant 5
+            {1163, 1127, 1079}, //Rune 6
+    };
 
-	/**
-	 * Set of all the animated Armour, with indexes corresponding with the
-	 * indexes from the 2-d array above.
-	 */
-	private static final int[] ANIMATED_ARMOURS = {
-			4278, // Animated Bronze Armour
-			4279, // Animated Iron Armour
-			4280, // Animated Steel Armour
-			4281, // Animated Black Armour
-			4282, // Animated Mithril Armour
-			4283, // Animated Adamant Armour
-			4284, // Animated Rune Armour
-	};
+    /**
+     * Set of all the animated Armour, with indexes corresponding with the
+     * indexes from the 2-d array above.
+     */
+    private static final int[] ANIMATED_ARMOURS = {4278, // Animated Bronze Armour
+            4279, // Animated Iron Armour
+            4280, // Animated Steel Armour
+            4281, // Animated Black Armour
+            4282, // Animated Mithril Armour
+            4283, // Animated Adamant Armour
+            4284, // Animated Rune Armour
+    };
 
-	private static int getAmountForId(int id) {
-		for(int i = 0; i < ANIMATED_ARMOURS.length; i++) {
-			if(id == ANIMATED_ARMOURS[i]) {
-				return 10 * (i + 1);
-			}
-		}
-		return 0;
-	}
+    private static int getAmountForId(final int id) {
+        for(int i = 0; i < ANIMATED_ARMOURS.length; i++){
+            if(id == ANIMATED_ARMOURS[i]){
+                return 10 * (i + 1);
+            }
+        }
+        return 0;
+    }
 
-	private static int[] getArmourIdsArray() {
-		int[] armarray = new int[21];
-		int count = 0;
-		for(int i = 0; i < ARMOUR_SET.length; i++) {
-			for(int j = 0; j < ARMOUR_SET[i].length; j++) {
-				armarray[count++] = ARMOUR_SET[i][j];
-			}
-		}
-		return armarray;
-	}
+    private static int[] getArmourIdsArray() {
+        final int[] armarray = new int[21];
+        int count = 0;
+        for(int i = 0; i < ARMOUR_SET.length; i++){
+            for(int j = 0; j < ARMOUR_SET[i].length; j++){
+                armarray[count++] = ARMOUR_SET[i][j];
+            }
+        }
+        return armarray;
+    }
 
-	private static int[] getNeededItems(int id) {
-		for(int i = 0; i < ARMOUR_SET.length; i++) {
-			for(int j = 0; j < ARMOUR_SET[i].length; j++) {
-				if(id == ARMOUR_SET[i][j]) {
-					return ARMOUR_SET[i];
-				}
-			}
-		}
-		return null;
-	}
+    private static int[] getNeededItems(final int id) {
+        for(int i = 0; i < ARMOUR_SET.length; i++){
+            for(int j = 0; j < ARMOUR_SET[i].length; j++){
+                if(id == ARMOUR_SET[i][j]){
+                    return ARMOUR_SET[i];
+                }
+            }
+        }
+        return null;
+    }
 
-	private static int getType(int id) {
-		for(int i = 0; i < ARMOUR_SET.length; i++) {
-			for(int j = 0; j < ARMOUR_SET[i].length; j++) {
-				if(id == ARMOUR_SET[i][j]) {
-					return i;
-				}
-			}
-		}
-		return - 1;
-	}
+    private static int getType(final int id) {
+        for(int i = 0; i < ARMOUR_SET.length; i++){
+            for(int j = 0; j < ARMOUR_SET[i].length; j++){
+                if(id == ARMOUR_SET[i][j]){
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 
-	private static int[] getIdsForNpcId(int npcId) {
-		for(int i = 0; i < ANIMATED_ARMOURS.length; i++) {
-			if(ANIMATED_ARMOURS[i] == npcId) {
-				return ARMOUR_SET[i];
-			}
-		}
-		return null;
-	}
+    private static int[] getIdsForNpcId(final int npcId) {
+        for(int i = 0; i < ANIMATED_ARMOURS.length; i++){
+            if(ANIMATED_ARMOURS[i] == npcId){
+                return ARMOUR_SET[i];
+            }
+        }
+        return null;
+    }
 
-	private static int getDefenderId(Player player) {
-		if(hasDef(player, 13351))
-			return 13351;
-		else if(hasDef(player, 8850))
-			return 13351;
-		else if(hasDef(player, 8849))
-			return 8850;
-		else if (hasDef(player, 8848))
-			return 8849;
-		else if(hasDef(player, 8847))
-			return 8848;
-		else if(hasDef(player, 8846))
-			return 8847;
-		else if(hasDef(player, 8845))
-			return 8846;
-		else if(hasDef(player, 8844))
-			return 8845;
-		return 8844;
-	}
-	private static boolean hasDef(Player player, int id) {
-		return player.getInventory().contains(id) || player.getEquipment().contains(id);
-	}
-	public static boolean enterCyclopsRoom(final Player p) {
-		if(p.getLocation().getX() > 2846)
-			return true;
-		if(! (ContentEntity.getItemAmount(p, TOKENS) >= 100)) {
-			p.getActionSender().sendMessage("You need at least 100 tokens to enter this room!");
-			return false;
-		}
-		World.getWorld().submit(new Event(60000) {
-			public void execute() {
-				if(inCyclopsRoom(p)) {
-					if(ContentEntity.deleteItemA(p, TOKENS, 10)) {
-						p.getActionSender().sendMessage("10 tokens disappear from your inventory.");
-					} else {
-						Magic.teleport(p, 2843, 3540, 2, true);
-						p.getActionSender().sendMessage("You ran out of tokens!");
-					}
-				} else {
-					this.stop();
-				}
-			}
-		});
-		return true;
-	}
+    private static int getDefenderId(final Player player) {
+        if(hasDef(player, 13351))
+            return 13351;
+        else if(hasDef(player, 8850))
+            return 13351;
+        else if(hasDef(player, 8849))
+            return 8850;
+        else if(hasDef(player, 8848))
+            return 8849;
+        else if(hasDef(player, 8847))
+            return 8848;
+        else if(hasDef(player, 8846))
+            return 8847;
+        else if(hasDef(player, 8845))
+            return 8846;
+        else if(hasDef(player, 8844))
+            return 8845;
+        return 8844;
+    }
 
-	/**
-	 * @return Whether the Player is in the Cyclops Room or not
-	 */
-	public static boolean inCyclopsRoom(Player p) {
-		if(p.getLocation().getZ() != 2)
-			return false;
-		if(p.getLocation().getX() >= 2838 && p.getLocation().getX() <= 2875) {
-			if(p.getLocation().getY() >= 3543 && p.getLocation().getY() <= 3556) {
-				return true;
-			}
-		}
-		if(p.getLocation().getX() >= 2847 && p.getLocation().getX() <= 2875) {
-			if(p.getLocation().getY() >= 3534 && p.getLocation().getY() <= 3542) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private static boolean hasDef(final Player player, final int id) {
+        return player.getInventory().contains(id) || player.getEquipment().contains(id);
+    }
 
-	@Override
-	public boolean clickObject(Player player, int type, int a, int x, int y,
-	                           int d) {
-		if(type == 6) {
-			if(a == 1738 || a == 12554 || a == 3537)
-				player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 2));
-			else if(a == 15638)
-				player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 0));
-			else if(a == 15641 || a == 15644) {
-				if(! enterCyclopsRoom(player)) {
-					return true;
-				}
-			}
-			return false;
-		}
-		if(type == 14 && y == 15621) {
-			int[] needed = getNeededItems(a);
-			for(int i = 0; i < needed.length; i++) {
-				if(ContentEntity.getItemAmount(player, needed[i]) <= 0) {
-					player.getActionSender().sendMessage("You need to have all armor pieces to summon a warrior!");
-					return false;
-				}
-			}
+    public static boolean enterCyclopsRoom(final Player p) {
+        if(p.getLocation().getX() > 2846)
+            return true;
+        if(!(ContentEntity.getItemAmount(p, TOKENS) >= 100)){
+            p.getActionSender().sendMessage("You need at least 100 tokens to enter this room!");
+            return false;
+        }
+        World.getWorld().submit(new Event(60000) {
+            public void execute() {
+                if(inCyclopsRoom(p)){
+                    if(ContentEntity.deleteItemA(p, TOKENS, 10)){
+                        p.getActionSender().sendMessage("10 tokens disappear from your inventory.");
+                    }else{
+                        Magic.teleport(p, 2843, 3540, 2, true);
+                        p.getActionSender().sendMessage("You ran out of tokens!");
+                    }
+                }else{
+                    this.stop();
+                }
+            }
+        });
+        return true;
+    }
 
-			for(int i = 1; i <= World.getWorld().npcs.size(); i++) {
-				if(World.getWorld().npcs.get(i) != null) {
-					NPC npc = (NPC) World.getWorld().npcs.get(i);
-					if (npc.ownerId == player.getIndex() && player.cE.summonedNpc != npc) {
-						npc.forceMessage("I'm not done with you " + player.getSafeDisplayName() + "!");
-						return false;
-					}
-				}
-			}
+    /**
+     * @return Whether the Player is in the Cyclops Room or not
+     */
+    public static boolean inCyclopsRoom(final Player p) {
+        if(p.getLocation().getZ() != 2)
+            return false;
+        if(p.getLocation().getX() >= 2838 && p.getLocation().getX() <= 2875){
+            if(p.getLocation().getY() >= 3543 && p.getLocation().getY() <= 3556){
+                return true;
+            }
+        }
+        if(p.getLocation().getX() >= 2847 && p.getLocation().getX() <= 2875){
+            if(p.getLocation().getY() >= 3534 && p.getLocation().getY() <= 3542){
+                return true;
+            }
+        }
+        return false;
+    }
 
-			for(int i = 0; i < needed.length; i++) {
-				ContentEntity.deleteItem(player, needed[i]);
-			}
-			NPC n = spawnNpc(ANIMATED_ARMOURS[getType(a)], Location.create(2855, 3541, 0), player);
-			n.forceMessage("I'm coming for you " + player.getSafeDisplayName() + "!");
-		}
-		if(type == 16) {
-			if(a == CYCLOPSIDS[0] || a == CYCLOPSIDS[1]) {
-				int r = 20;
-				if(player.getEquipment().get(Equipment.SLOT_RING) != null)
-					if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 2572)
-						r = 10;
+    @Override
+    public boolean clickObject(final Player player, final int type, final int a, final int x, final int y, final int d) {
+        if(type == 6){
+            if(a == 1738 || a == 12554 || a == 3537)
+                player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 2));
+            else if(a == 15638)
+                player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 0));
+            else if(a == 15641 || a == 15644){
+                if(!enterCyclopsRoom(player)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        if(type == 14 && y == 15621){
+            final int[] needed = getNeededItems(a);
+            for(int i = 0; i < needed.length; i++){
+                if(ContentEntity.getItemAmount(player, needed[i]) <= 0){
+                    player.getActionSender().sendMessage("You need to have all armor pieces to summon a warrior!");
+                    return false;
+                }
+            }
 
-				if(Misc.random(r) == 0) {
-					GlobalItem defender = new GlobalItem(
-							player, x, y, player.getLocation().getZ(),
-							new Item(getDefenderId(player), 1)
-					);
-					World.getWorld().getGlobalItemManager().newDropItem(player, defender);
-					if(player.WGLevel < 7) {
-						player.WGLevel++;
-					}
-				}
-			} else {
-				GlobalItem[] DropItems = new GlobalItem[4];
-				int[] ArmourIds = getIdsForNpcId(a);
-				DropItems[0] = new GlobalItem(
-						player, x, y, player.getLocation().getZ(),
-						new Item(TOKENS, getAmountForId(a)));
+            for(int i = 1; i <= World.getWorld().npcs.size(); i++){
+                if(World.getWorld().npcs.get(i) != null){
+                    final NPC npc = (NPC) World.getWorld().npcs.get(i);
+                    if(npc.ownerId == player.getIndex() && player.cE.summonedNpc != npc){
+                        npc.forceMessage("I'm not done with you " + player.getSafeDisplayName() + "!");
+                        return false;
+                    }
+                }
+            }
 
-				for(int i = 1; i < 4; i++) {
-					DropItems[i] = new GlobalItem(
-							player, x, y, player.getLocation().getZ(),
-							new Item(ArmourIds[i - 1], 1));
-				}
-				for(int i = 0; i < DropItems.length; i++) {
-					World.getWorld().getGlobalItemManager().newDropItem(player, DropItems[i]);
-				}
-			}
-		}
-		return false;
-	}
+            for(int i = 0; i < needed.length; i++){
+                ContentEntity.deleteItem(player, needed[i]);
+            }
+            final NPC n = spawnNpc(ANIMATED_ARMOURS[getType(a)], Location.create(2855, 3541, 0), player);
+            n.forceMessage("I'm coming for you " + player.getSafeDisplayName() + "!");
+        }
+        if(type == 16){
+            if(a == CYCLOPSIDS[0] || a == CYCLOPSIDS[1]){
+                int r = 20;
+                if(player.getEquipment().get(Equipment.SLOT_RING) != null)
+                    if(player.getEquipment().get(Equipment.SLOT_RING).getId() == 2572)
+                        r = 10;
 
-	public NPC spawnNpc(int npcId, Location location, Player player) {
-		NPC npc = World
-				.getWorld()
-				.getNPCManager()
-				.addNPC(location.getX(), location.getY(), location.getZ(),
-						npcId, - 1);
-		npc.agressiveDis = 10;
-		npc.ownerId = player.getIndex();
-		return npc;
-	}
+                if(Misc.random(r) == 0){
+                    final GlobalItem defender = new GlobalItem(player, x, y, player.getLocation().getZ(), new Item(getDefenderId(player), 1));
+                    World.getWorld().getGlobalItemManager().newDropItem(player, defender);
+                    if(player.WGLevel < 7){
+                        player.WGLevel++;
+                    }
+                }
+            }else{
+                final GlobalItem[] DropItems = new GlobalItem[4];
+                final int[] ArmourIds = getIdsForNpcId(a);
+                DropItems[0] = new GlobalItem(player, x, y, player.getLocation().getZ(), new Item(TOKENS, getAmountForId(a)));
 
-	@Override
-	public void init() throws FileNotFoundException {
+                for(int i = 1; i < 4; i++){
+                    DropItems[i] = new GlobalItem(player, x, y, player.getLocation().getZ(), new Item(ArmourIds[i - 1], 1));
+                }
+                for(int i = 0; i < DropItems.length; i++){
+                    World.getWorld().getGlobalItemManager().newDropItem(player, DropItems[i]);
+                }
+            }
+        }
+        return false;
+    }
 
-	}
+    public NPC spawnNpc(final int npcId, final Location location, final Player player) {
+        final NPC npc = World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), location.getZ(), npcId, -1);
+        npc.agressiveDis = 10;
+        npc.ownerId = player.getIndex();
+        return npc;
+    }
 
-	@Override
-	public int[] getValues(int type) {
-		if(type == 16) {
-			return Misc.mergeArrays(CYCLOPSIDS, ANIMATED_ARMOURS);
-		}
-		if(type == 6) {
-			int[] a1 = {1738, 15638, 15641, 15644};
-			return a1;
-		}
-		if(type == 14) {
-			return getArmourIdsArray();
-		}
-		return null;
-	}
+    @Override
+    public void init() throws FileNotFoundException {
+
+    }
+
+    @Override
+    public int[] getValues(final int type) {
+        if(type == 16){
+            return Misc.mergeArrays(CYCLOPSIDS, ANIMATED_ARMOURS);
+        }
+        if(type == 6){
+            final int[] a1 = {1738, 15638, 15641, 15644};
+            return a1;
+        }
+        if(type == 14){
+            return getArmourIdsArray();
+        }
+        return null;
+    }
 
 }

@@ -7,16 +7,16 @@ import org.hyperion.rs2.net.ActionSender;
 
 public class StaffYellCommand extends Command {
 
-	public StaffYellCommand(String startsWith, Rank... rights) {
-		super(startsWith, rights);
-	}
+    public StaffYellCommand(final String startsWith, final Rank... rights) {
+        super(startsWith, rights);
+    }
 
-	@Override
-	public boolean execute(Player player, String input) throws Exception {
-		input = filterInput(input);
-		ActionSender.yellModMessage("@mag@[Staff][" + player.getName() + "]: " + input);
-		return true;
-	}
+    @Override
+    public boolean execute(final Player player, String input) throws Exception {
+        input = filterInput(input);
+        ActionSender.yellModMessage("@mag@[Staff][" + player.getName() + "]: " + input);
+        return true;
+    }
 
 
 }

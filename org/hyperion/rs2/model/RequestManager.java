@@ -8,103 +8,101 @@ package org.hyperion.rs2.model;
 public class RequestManager {
 
 
-	/**
-	 * Represents the different types of request.
-	 *
-	 * @author Graham Edgecombe
-	 */
-	public enum RequestType {
+    /**
+     * The current request type.
+     */
+    private RequestType requestType;
 
-		/**
-		 * A trade request.
-		 */
-		TRADE("tradereq"),
+    /**
+     * Creates the request manager.
+     *
+     * @param player The player whose requests the manager is managing.
+     */
+    public RequestManager(final Player player) {
+        //this.player = player;
+    }
 
-		/**
-		 * A duel request.
-		 */
-		DUEL("duelreq");
+    public RequestType getRequestType() {
+        return requestType;
+    }
 
-		/**
-		 * The client-side name of the request.
-		 */
-		private String clientName;
+    /**
+     * The current 'acquaintance'.
+     */
+    //private Player acquaintance;
+    public void setRequestType(final RequestType r) {
+        requestType = r;
+    }
 
-		/**
-		 * Creates a type of request.
-		 *
-		 * @param clientName The name of the request client-side.
-		 */
-		private RequestType(String clientName) {
-			this.clientName = clientName;
-		}
+    /**
+     * Represents the different types of request.
+     *
+     * @author Graham Edgecombe
+     */
+    public enum RequestType {
 
-		/**
-		 * Gets the client name.
-		 *
-		 * @return The client name.
-		 */
-		public String getClientName() {
-			return clientName;
-		}
+        /**
+         * A trade request.
+         */
+        TRADE("tradereq"),
 
-		public void setClientName(String s) {
-			clientName = s;
-		}
+        /**
+         * A duel request.
+         */
+        DUEL("duelreq");
 
-	}
+        /**
+         * The client-side name of the request.
+         */
+        private String clientName;
 
-	/**
-	 * Holds the different states the manager can be in.
-	 *
-	 * @author Graham Edgecombe
-	 */
-	public enum RequestState {
+        /**
+         * Creates a type of request.
+         *
+         * @param clientName The name of the request client-side.
+         */
+        RequestType(final String clientName) {
+            this.clientName = clientName;
+        }
 
-		/**
-		 * Nobody has offered a request.
-		 */
-		NORMAL,
+        /**
+         * Gets the client name.
+         *
+         * @return The client name.
+         */
+        public String getClientName() {
+            return clientName;
+        }
 
-		/**
-		 * Somebody has offered some kind of request.
-		 */
-		REQUESTED,
+        public void setClientName(final String s) {
+            clientName = s;
+        }
 
-		/**
-		 * The player is participating in an existing request of this type, so
-		 * cannot accept new requests at all.
-		 */
-		PARTICIPATING;
+    }
 
-	}
+    /**
+     * Holds the different states the manager can be in.
+     *
+     * @author Graham Edgecombe
+     */
+    public enum RequestState {
 
+        /**
+         * Nobody has offered a request.
+         */
+        NORMAL,
 
-	/**
-	 * The current request type.
-	 */
-	private RequestType requestType;
+        /**
+         * Somebody has offered some kind of request.
+         */
+        REQUESTED,
 
-	/**
-	 * The current 'acquaintance'.
-	 */
-	//private Player acquaintance;
+        /**
+         * The player is participating in an existing request of this type, so
+         * cannot accept new requests at all.
+         */
+        PARTICIPATING;
 
-	/**
-	 * Creates the request manager.
-	 *
-	 * @param player The player whose requests the manager is managing.
-	 */
-	public RequestManager(Player player) {
-		//this.player = player;
-	}
-
-	public void setRequestType(RequestType r) {
-		requestType = r;
-	}
-
-	public RequestType getRequestType() {
-		return requestType;
-	}
+    }
 
 }

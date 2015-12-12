@@ -7,7 +7,13 @@ import org.hyperion.rs2.action.impl.ProspectingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
@@ -20,55 +26,55 @@ public class ObjectClickHandler {
 
     public static boolean loaded = false;
 
-    public static void clickObject(Player p, int id, int x, int y, int type) {
+    public static void clickObject(final Player p, final int id, final int x, final int y, final int type) {
         //System.out.println("Id " + id);
-        if(p.getRandomEvent().isDoingRandom()) {
+        if(p.getRandomEvent().isDoingRandom()){
             p.getRandomEvent().display();
             return;
         }
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
-        int offX = def != null ? 1 + def.getSizeX() : 3;
-        int offY = def != null ? 1 + def.getSizeY() : 3;
-        if (!canClick(offX, offY, x, y, p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ())) {
+        final int offX = def != null ? 1 + def.getSizeX() : 3;
+        final int offY = def != null ? 1 + def.getSizeY() : 3;
+        if(!canClick(offX, offY, x, y, p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ())){
             p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
             return;
         }
 
 
-        if (Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
+        if(Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
             p.getActionSender().sendMessage("Clicked object: " + id);
-        if (World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, -1))
+        if(World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, -1))
             return;
-        if (type == 1) {
+        if(type == 1){
             objectClickOne(p, id, x, y);
-        } else if (type == 2) {
+        }else if(type == 2){
             objectClickTwo(p, id, x, y);
         }
     }
 
     public static void objectClickOne(final Player player, final int id, final int x, final int y) {
-        if (id > GameObjectDefinition.MAX_DEFINITIONS || id < 0)
+        if(id > GameObjectDefinition.MAX_DEFINITIONS || id < 0)
             return;
-        Location loc = Location.create(x, y, player.getLocation().getZ());
-        if (DoorManager.handleDoor(player, loc, id))
+        final Location loc = Location.create(x, y, player.getLocation().getZ());
+        if(DoorManager.handleDoor(player, loc, id))
             return;
 
-        if (loaded && !objectExist(id, x, y, player.getLocation().getZ()) && !slipObject(id)) {
+        if(loaded && !objectExist(id, x, y, player.getLocation().getZ()) && !slipObject(id)){
             return;
         }
         // woodcutting
-        Tree tree = Tree.forId(id);
-        if (tree != null && player.getLocation().isWithinInteractionDistance(loc)) {
+        final Tree tree = Tree.forId(id);
+        if(tree != null && player.getLocation().isWithinInteractionDistance(loc)){
             player.getActionQueue().addAction(new WoodcuttingAction(player, loc, tree));
         }
         // mining
-        Node node = Node.forId(id);
-        if (node != null && player.getLocation().isWithinInteractionDistance(loc)) {
+        final Node node = Node.forId(id);
+        if(node != null && player.getLocation().isWithinInteractionDistance(loc)){
             player.getActionQueue().addAction(new MiningAction(player, loc, node));
         }
-        switch (id) {
+        switch(id){
             case 2471:
-                if (player.isInCombat()) {
+                if(player.isInCombat()){
                     player.getActionSender().sendMessage("You cannot enter while in combat!");
                     break;
                 }
@@ -92,9 +98,9 @@ public class ObjectClickHandler {
                 World.getWorld().submit(new Event(100) {
                     @Override
                     public void execute() {
-                        if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
+                        if(player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
                             player.setTeleportTarget(Location.create(2647, 9557, 0));
-                        if (player.getLocation().getX() == 2647 && player.getLocation().getY() == 9557)
+                        if(player.getLocation().getX() == 2647 && player.getLocation().getY() == 9557)
                             player.setTeleportTarget(Location.create(2649, 9562, 0));
                         this.stop();
                     }
@@ -112,7 +118,7 @@ public class ObjectClickHandler {
                 break;
 
             case 9398:
-                if(!PollInterface.canVote(player)) {
+                if(!PollInterface.canVote(player)){
                     player.sendMessage("You need at least 1,800 PvP Rating peak, 1800 total level or purchase donator", "to be able to vote.");
                     break;
                 }
@@ -149,10 +155,10 @@ public class ObjectClickHandler {
                 player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() - 6396), 0));
                 break;
             case 1755:
-                if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
+                if(Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0){
                     player.playAnimation(Animation.create(828));
                     player.setTeleportTarget(Location.create(3005, 3962, 0));
-                } else {
+                }else{
                     player.playAnimation(Animation.create(828));
                     player.setTeleportTarget(Location.create(2884, 3396, 0));
                 }
@@ -166,12 +172,12 @@ public class ObjectClickHandler {
                 player.setTeleportTarget(Location.create(3005, 10362, 0));
                 break;
             case 26384:
-                if (player.godWarsKillCount[0] < 40) {
+                if(player.godWarsKillCount[0] < 40){
                     player.getActionSender().sendMessage("You need to slay 40 Bandos monsters to pass.");
                     return;
                 }
                 player.godWarsKillCount[0] = 0;
-                if (player.getLocation().getY() != 5333 || player.getLocation().getX() < 2850 || player.getLocation().getX() > 2851)
+                if(player.getLocation().getY() != 5333 || player.getLocation().getX() < 2850 || player.getLocation().getX() > 2851)
                     break;
                 player.face(Location.create(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), y, 2));
                 player.playAnimation(Animation.create(7002));
@@ -198,13 +204,13 @@ public class ObjectClickHandler {
                 Magic.teleport(player, 3429, 3538, 0, false);
                 break;
             case 26303:
-                if (player.godWarsKillCount[3] >= 40) {
+                if(player.godWarsKillCount[3] >= 40){
                     player.godWarsKillCount[3] = 0;
-                    if (player.getLocation().getY() <= 5269)
+                    if(player.getLocation().getY() <= 5269)
                         player.setTeleportTarget(Location.create(2872, (player.getLocation().getY() + 10), 2));
                     else
                         player.setTeleportTarget(Location.create(2872, (player.getLocation().getY() - 10), 2));
-                } else {
+                }else{
                     player.getActionSender().sendMessage("You need to slay 40 Armdayl monsters to pass.");
                     return;
                 }
@@ -255,14 +261,14 @@ public class ObjectClickHandler {
         }
     }
 
-    public static void objectClickTwo(Player player, int id, int x, int y) {
-        Location loc = Location.create(x, y, player.getLocation().getZ());
-        Node node = Node.forId(id);
-        if (node != null && player.getLocation().isWithinInteractionDistance(loc)) {
+    public static void objectClickTwo(final Player player, final int id, final int x, final int y) {
+        final Location loc = Location.create(x, y, player.getLocation().getZ());
+        final Node node = Node.forId(id);
+        if(node != null && player.getLocation().isWithinInteractionDistance(loc)){
             player.getActionQueue().addAction(new ProspectingAction(player, loc, node));
             return;
         }
-        switch (id) {
+        switch(id){
             case 2213:
             case 2214:
             case 3045:
@@ -284,13 +290,13 @@ public class ObjectClickHandler {
     }
 
 
-    public static boolean canClick(int offsetX, int offsetY, int toLocX, int toLocY, int fromLocX, int fromLocY, int height) {
-        int deltaX = Math.abs(toLocX - fromLocX);
-        int deltaY = Math.abs(toLocY - fromLocY);
+    public static boolean canClick(final int offsetX, final int offsetY, final int toLocX, final int toLocY, final int fromLocX, final int fromLocY, final int height) {
+        final int deltaX = Math.abs(toLocX - fromLocX);
+        final int deltaY = Math.abs(toLocY - fromLocY);
         return ((deltaX <= offsetX && deltaY <= offsetY) || (deltaX <= offsetY && deltaY <= offsetX));
     }
 
-    public static boolean objectExist(int id, int x, int y, int height) {
+    public static boolean objectExist(final int id, final int x, final int y, final int height) {
         final Location location = Location.create(x, y, height);
         return World.getWorld().getObjectMap().objectExist(location, id);
 
@@ -298,10 +304,10 @@ public class ObjectClickHandler {
 
     public static boolean slipObject(final int id) {
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
-        if (def == null || def.getName() == null)
+        if(def == null || def.getName() == null)
             return false;
 
-        String name = def.getName().toLowerCase();
+        final String name = def.getName().toLowerCase();
         return name.contains("ladder") || name.contains("gate") || name.contains("door") || name.contains("stair");
     }
 

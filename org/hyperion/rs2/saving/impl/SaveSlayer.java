@@ -12,17 +12,17 @@ import org.hyperion.rs2.saving.SaveString;
  */
 public class SaveSlayer extends SaveString {
 
-    public SaveSlayer(String name) {
+    public SaveSlayer(final String name) {
         super(name);
     }
 
     @Override
-    public void setValue(Player player, String value) {
+    public void setValue(final Player player, final String value) {
         player.getSlayer().load(value);
     }
 
     @Override
-    public String getValue(Player player) {
+    public String getValue(final Player player) {
         return player.getSlayer().toString();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

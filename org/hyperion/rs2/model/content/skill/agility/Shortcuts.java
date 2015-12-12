@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill.agility;
 
 import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.content.skill.agility.obstacles.*;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.ObstaclePipe;
 
 /**
  * Created by Gilles on 11/09/2015.

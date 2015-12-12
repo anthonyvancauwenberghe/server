@@ -7,26 +7,79 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Misc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Gilles on 10/10/2015.
  */
 public class Poll {
-    private static Map<Integer, Poll> polls = new HashMap<>();
+    private static final Map<Integer, Poll> polls = new HashMap<>();
 
-    private List<String> yesVotes = new ArrayList<>();
-    private List<String> noVotes = new ArrayList<>();
-    private int index;
-    private String question, description;
-    private Date endDate;
-    private boolean canChange, active;
+    static {
+        CommandHandler.submit(new Command("polls", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(final Player player, final String input) throws Exception {
+                player.getPoll().openInterface();
+                return false;
+            }
+        });
 
-    public Poll(int index, String question, String description, Date endDate, boolean canChange) {
+        CommandHandler.submit(new Command("reloadpolls", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(final Player player, final String input) throws Exception {
+                World.getWorld().getLogsConnection().offer(new LoadAllPolls());
+                return false;
+            }
+        });
+
+        CommandHandler.submit(new Command("getresults", Rank.DEVELOPER) {
+            @Override
+            public boolean execute(final Player player, String input) throws Exception {
+                input = filterInput(input);
+                int pollId = -1;
+                try{
+                    pollId = Integer.parseInt(input);
+                }catch(final Exception e){
+                }
+                if(pollId == -1){
+                    player.sendMessage("Use as ::getresults POLLID");
+                    return true;
+                }
+                if(!polls.containsKey(pollId)){
+                    World.getWorld().getLogsConnection().offer(new LoadPoll(pollId));
+                }
+                final Poll poll = polls.get(pollId);
+                if(poll == null){
+                    player.sendMessage("Poll index does not exist.");
+                    return true;
+                }
+                player.sendMessage("@dre@Question: @bla@" + poll.getQuestion());
+                player.sendMessage("@dre@Yes votes: @bla@" + poll.getYesVotes().size());
+                player.sendMessage("@dre@No votes: @bla@" + poll.getNoVotes().size());
+                return false;
+            }
+        });
+    }
+
+    private final List<String> yesVotes = new ArrayList<>();
+    private final List<String> noVotes = new ArrayList<>();
+    private final int index;
+    private final String question;
+    private final String description;
+    private final Date endDate;
+    private final boolean canChange;
+    private boolean active;
+
+    public Poll(final int index, final String question, final String description, final Date endDate, final boolean canChange) {
         this(index, question, description, endDate, canChange, false);
     }
 
-    public Poll(int index, String question, String description, Date endDate, boolean canChange, boolean getVotes) {
+    public Poll(final int index, final String question, final String description, final Date endDate, final boolean canChange, final boolean getVotes) {
         this.index = index;
         this.question = question;
         this.description = description;
@@ -34,15 +87,15 @@ public class Poll {
         this.endDate = endDate;
         this.active = true;
         addPoll(this.index, this);
-        if (getVotes)
+        if(getVotes)
             World.getWorld().getLogsConnection().offer(new LoadVotes(this.index));
     }
 
-    public static void addPoll(int index, Poll poll) {
+    public static void addPoll(final int index, final Poll poll) {
         polls.put(index, poll);
     }
 
-    public static Poll getPoll(int index) {
+    public static Poll getPoll(final int index) {
         return polls.get(index);
     }
 
@@ -52,7 +105,7 @@ public class Poll {
 
     public static void removeInactivePolls() {
         polls.forEach((index, poll) -> {
-            if (poll.getEndDate().before(Calendar.getInstance().getTime())) {
+            if(poll.getEndDate().before(Calendar.getInstance().getTime())){
                 poll.active = false;
                 World.getWorld().getLogsConnection().offer(new SavePolls());
             }
@@ -67,7 +120,7 @@ public class Poll {
         return noVotes;
     }
 
-    public boolean hasVoted(Player player) {
+    public boolean hasVoted(final Player player) {
         return (yesVotes.contains(player.getName()) || noVotes.contains(player.getName()));
     }
 
@@ -95,98 +148,53 @@ public class Poll {
         return active;
     }
 
-    public void removeYesVote(String playerName) {
+    public void removeYesVote(final String playerName) {
         yesVotes.remove(playerName);
     }
 
-    public void removeNoVote(String playerName) {
+    public void removeNoVote(final String playerName) {
         noVotes.remove(playerName);
     }
 
-    public void addYesVote(String playerName) {
+    public void addYesVote(final String playerName) {
         yesVotes.add(playerName);
         World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, true));
     }
 
-    public void addNoVote(String playerName) {
+    public void addNoVote(final String playerName) {
         noVotes.add(playerName);
         World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, false));
     }
 
-    public void addNoVote(Player player) {
-        if (noVotes.contains(player.getName()))
+    public void addNoVote(final Player player) {
+        if(noVotes.contains(player.getName()))
             return;
         player.sendMessage("You have cast a vote for no.");
         addNoVote(player.getName());
         World.getWorld().getLogsConnection().offer(new SaveVote(player.getName(), index, false));
     }
 
-    public void addYesVote(Player player) {
-        if (yesVotes.contains(player.getName()))
+    public void addYesVote(final Player player) {
+        if(yesVotes.contains(player.getName()))
             return;
         player.sendMessage("You have cast a vote for yes.");
         addYesVote(player.getName());
         World.getWorld().getLogsConnection().offer(new SaveVote(player.getName(), index, true));
     }
 
-    public void changeVote(Player player) {
-        String playerName = player.getName();
-        if (noVotes.contains(playerName)) {
+    public void changeVote(final Player player) {
+        final String playerName = player.getName();
+        if(noVotes.contains(playerName)){
             removeNoVote(playerName);
             addYesVote(playerName);
             player.sendMessage("Your vote has been changed from no to yes.");
             return;
         }
-        if (yesVotes.contains(playerName)) {
+        if(yesVotes.contains(playerName)){
             removeYesVote(playerName);
             addNoVote(playerName);
             player.sendMessage("Your vote has been changed from yes to no.");
             return;
         }
-    }
-
-    static {
-        CommandHandler.submit(new Command("polls", Rank.DEVELOPER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                player.getPoll().openInterface();
-                return false;
-            }
-        });
-
-        CommandHandler.submit(new Command("reloadpolls", Rank.DEVELOPER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                World.getWorld().getLogsConnection().offer(new LoadAllPolls());
-                return false;
-            }
-        });
-
-        CommandHandler.submit(new Command("getresults", Rank.DEVELOPER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                input = filterInput(input);
-                int pollId = -1;
-                try {
-                    pollId = Integer.parseInt(input);
-                } catch(Exception e) {}
-                if(pollId == -1) {
-                    player.sendMessage("Use as ::getresults POLLID");
-                    return true;
-                }
-                if(!polls.containsKey(pollId)) {
-                    World.getWorld().getLogsConnection().offer(new LoadPoll(pollId));
-                }
-                Poll poll = polls.get(pollId);
-                if(poll == null) {
-                    player.sendMessage("Poll index does not exist.");
-                    return true;
-                }
-                player.sendMessage("@dre@Question: @bla@" + poll.getQuestion());
-                player.sendMessage("@dre@Yes votes: @bla@" + poll.getYesVotes().size());
-                player.sendMessage("@dre@No votes: @bla@" + poll.getNoVotes().size());
-                return false;
-            }
-        });
     }
 }

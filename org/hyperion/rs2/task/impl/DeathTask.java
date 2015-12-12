@@ -10,12 +10,12 @@ import org.hyperion.rs2.task.Task;
  */
 public class DeathTask implements Task {
 
-	@Override
-	public void execute(GameEngine context) {
-		if(context.isRunning()) {
-			System.out.println("SHUTTING DOWN GAME ENGINE");
-			context.stop();
-		}
-	}
+    @Override
+    public void execute(final GameEngine context) {
+        if(context.isRunning()){
+            System.out.println("SHUTTING DOWN GAME ENGINE");
+            context.stop();
+        }
+    }
 
 }

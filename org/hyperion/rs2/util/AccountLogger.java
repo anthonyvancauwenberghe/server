@@ -18,151 +18,146 @@ import java.util.Map;
 
 public class AccountLogger {
 
-	public static final String DUPERS_FILE = "./dupers.txt";
+    public static final String DUPERS_FILE = "./dupers.txt";
 
-	public static final int MAX_SAVED_STATUSES = 40;
+    public static final int MAX_SAVED_STATUSES = 40;
+    private static final Map<String, Object> dupers = new HashMap<String, Object>();
 
-	private Player player;
+    static {
+        try{
+            final BufferedReader in = new BufferedReader(new FileReader(DUPERS_FILE));
+            String line;
+            while((line = in.readLine()) != null){
+                dupers.put(line.toLowerCase(), new Object());
+                System.out.println("Duper added: " + line);
+            }
+            in.close();
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+        CommandHandler.submit(new Command("setwatched", Rank.MODERATOR) {
 
-	private LinkedList<Status> lastStatuses;
+            @Override
+            public boolean execute(final Player player, String input) {
+                input = filterInput(input);
+                dupers.put(input, new Object());
+                final Player duper = World.getWorld().getPlayer(input);
+                if(duper != null){
+                    duper.getLogging().setWatched(true);
+                }
+                try{
+                    final BufferedWriter out = new BufferedWriter(new FileWriter(DUPERS_FILE, true));
+                    out.write(input);
+                    out.newLine();
+                    out.close();
+                }catch(final Exception e){
+                    e.printStackTrace();
+                }
+                return true;
+            }
 
-	private boolean watched = false;
+        });
+    }
 
-	public AccountLogger(Player player) {
-		this.player = player;
-		lastStatuses = new LinkedList<Status>();
-	}
+    private final Player player;
+    private final LinkedList<Status> lastStatuses;
+    private boolean watched = false;
 
+    public AccountLogger(final Player player) {
+        this.player = player;
+        lastStatuses = new LinkedList<Status>();
+    }
 
-	public void setWatched(boolean watched) {
-		this.watched = watched;
-	}
+    /**
+     * Checks if a player is considered as suspicious and should be logged.
+     *
+     * @param player
+     * @return
+     */
+    public static boolean isSuspicious(final Player player) {
+        return (dupers.containsKey(player.getName().toLowerCase()));
+    }
 
-	/**
-	 * Logs the given line which should represent an action.
-	 * This only happens after the account value of an account has been modified.
-	 *
-	 * @param line
-	 */
-	public void log(String line) {
-		log(line, false);
-	}
+    public void setWatched(final boolean watched) {
+        this.watched = watched;
+    }
 
-	public void log(String line, boolean forced) {
-		try {
-			int value = player.getAccountValue().getTotalValue();
-			/*
-			 * oh god!
+    /**
+     * Logs the given line which should represent an action.
+     * This only happens after the account value of an account has been modified.
+     *
+     * @param line
+     */
+    public void log(final String line) {
+        log(line, false);
+    }
+
+    public void log(final String line, final boolean forced) {
+        try{
+            final int value = player.getAccountValue().getTotalValue();
+            /*
+             * oh god!
 			 */
-			if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-				//player.getActionSender().sendMessage("Acc value: " + value);
-			}
-			Status new_status = new Status(value, line);
-			if(lastStatuses.size() == 0) {
-				lastStatuses.add(new_status);
-				return;
-			}
-			Status last_status = lastStatuses.getLast();
-			lastStatuses.add(new_status);
-			if(lastStatuses.size() > MAX_SAVED_STATUSES)
-				lastStatuses.poll();
-			int change = new_status.value - last_status.value;
-			if(forced || watched) {
-				write(new_status, change);
-			} else if(change > 10000) {
-				for(Status status : lastStatuses) {
-					write(status, status.value);
-				}
-				lastStatuses.clear();
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+            if(Rank.hasAbility(player, Rank.ADMINISTRATOR)){
+                //player.getActionSender().sendMessage("Acc value: " + value);
+            }
+            final Status new_status = new Status(value, line);
+            if(lastStatuses.size() == 0){
+                lastStatuses.add(new_status);
+                return;
+            }
+            final Status last_status = lastStatuses.getLast();
+            lastStatuses.add(new_status);
+            if(lastStatuses.size() > MAX_SAVED_STATUSES)
+                lastStatuses.poll();
+            final int change = new_status.value - last_status.value;
+            if(forced || watched){
+                write(new_status, change);
+            }else if(change > 10000){
+                for(final Status status : lastStatuses){
+                    write(status, status.value);
+                }
+                lastStatuses.clear();
+            }
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void write(final Status status, final int change) {
+        final String query = "INSERT INTO actions (username,diff,status) VALUES('" + player.getName().toLowerCase() + "'," + change + ",'" +
+                status.toString().replaceAll("'", "") + "')";
+        World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+        //SQLite.getDatabase().submitQuery(query);
+    }
+
+    public static class Status {
+
+        protected String line;
+
+        protected int value;
+
+        protected Date date;
 
 
-	private void write(final Status status, int change) {
-		String query = "INSERT INTO actions (username,diff,status) VALUES('" + player.getName().toLowerCase() + "'," + change + ",'" +
-				status.toString().replaceAll("'", "") + "')";
-		World.getWorld().getLogsConnection().offer(new QueryRequest(query));
-		//SQLite.getDatabase().submitQuery(query);
-	}
+        public Status(final int value, final String line) {
+            this.value = value;
+            this.line = line;
+            date = new Date();
+        }
 
-	/**
-	 * Checks if a player is considered as suspicious and should be logged.
-	 *
-	 * @param player
-	 * @return
-	 */
-	public static boolean isSuspicious(Player player) {
-		return (dupers.containsKey(player.getName().toLowerCase()));
-	}
+        @Override
+        public boolean equals(final Object o) {
+            if(o instanceof Status){
+                final Status other = (Status) o;
+                return line.equals(other.line) && value == other.value;
+            }
+            return false;
+        }
 
-	private static Map<String, Object> dupers = new HashMap<String, Object>();
-
-	static {
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(DUPERS_FILE));
-			String line;
-			while((line = in.readLine()) != null) {
-				dupers.put(line.toLowerCase(), new Object());
-				System.out.println("Duper added: " + line);
-			}
-			in.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		CommandHandler.submit(new Command("setwatched", Rank.MODERATOR) {
-
-			@Override
-			public boolean execute(Player player, String input) {
-				input = filterInput(input);
-				dupers.put(input, new Object());
-				Player duper = World.getWorld().getPlayer(input);
-				if(duper != null) {
-					duper.getLogging().setWatched(true);
-				}
-				try {
-					BufferedWriter out = new BufferedWriter(new FileWriter(DUPERS_FILE, true));
-					out.write(input);
-					out.newLine();
-					out.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-				return true;
-			}
-
-		});
-	}
-
-	public static class Status {
-
-		protected String line;
-
-		protected int value;
-
-		protected Date date;
-
-
-		public Status(int value, String line) {
-			this.value = value;
-			this.line = line;
-			date = new Date();
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			if(o instanceof Status) {
-				Status other = (Status) o;
-				return line.equals(other.line) && value == other.value;
-			}
-			return false;
-		}
-
-		@Override
-		public String toString() {
-			return date.toString() + " : " + value + " : " + line;
-		}
-	}
+        @Override
+        public String toString() {
+            return date.toString() + " : " + value + " : " + line;
+        }
+    }
 }

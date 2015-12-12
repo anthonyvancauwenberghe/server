@@ -5,8 +5,8 @@ public class ItemAnimsDumper {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
-	    /*int id = 13879;
+	public static void main(final String[] args) {
+		/*int id = 13879;
 		String name = "morrigan's javelin";
 		int standid = WeaponAnimManager.getStandAnimation(id);
 		int walkid = WeaponAnimManager.getWalkAnimation(id);

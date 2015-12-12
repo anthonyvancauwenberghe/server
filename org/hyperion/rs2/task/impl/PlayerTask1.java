@@ -10,9 +10,9 @@ import org.hyperion.rs2.task.Task;
  */
 public class PlayerTask1 implements Task {
 
-	@Override
-	public void execute(GameEngine context) {
+    @Override
+    public void execute(final GameEngine context) {
 
 
-	}
+    }
 }

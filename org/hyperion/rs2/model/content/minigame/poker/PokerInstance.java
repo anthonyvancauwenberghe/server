@@ -16,12 +16,12 @@ public class PokerInstance {
 
     public Card[] cards = new Card[2];
 
-    public PokerInstance(int chips) {
+    public PokerInstance(final int chips) {
         this.chips = new PokerHolder(chips);
     }
 
     public void deal(final Deck deck) {
-        for(int i = 0 ; i < cards.length; i++) {
+        for(int i = 0; i < cards.length; i++){
             cards[i] = deck.draw();
         }
     }

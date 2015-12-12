@@ -15,15 +15,15 @@ public class CleanVotesEvent extends SQLRequest {
     }
 
     @Override
-    public void process(SQLConnection sql) throws SQLException {
-        if (!sql.isConnected()) {
+    public void process(final SQLConnection sql) throws SQLException {
+        if(!sql.isConnected()){
             return;
         }
 
-        try {
+        try{
             sql.query("DELETE FROM waitingVotes WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 14 DAY)");
             sql.query("DELETE FROM waitingVotes WHERE runelocus = 0 AND rspslist = 0 AND topg = 0");
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
     }

@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import java.io.FileNotFoundException;
-
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
@@ -14,6 +12,8 @@ import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
+import java.io.FileNotFoundException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay
@@ -22,43 +22,43 @@ import org.hyperion.rs2.model.content.ContentTemplate;
  * To change this template use File | Settings | File Templates.
  */
 public class SummoningBoBs implements ContentTemplate {
-	
+
 
     private static final int PACK_YAK_SCROLL = 12435;
 
     @Override
-    public boolean clickObject(Player player, int type, int useItem, int itemUsedSlot, int onItem, int slot) {
-        if(type == ClickType.NPC_OPTION1) {
-            if(player.getCombat().getFamiliar() != null) {
-                NPC npc = (NPC)World.getWorld().getNPCs().get(slot);
-                player.debugMessage("Npc ownerid "+npc.ownerId+" npc id "+useItem);
+    public boolean clickObject(final Player player, final int type, final int useItem, final int itemUsedSlot, final int onItem, final int slot) {
+        if(type == ClickType.NPC_OPTION1){
+            if(player.getCombat().getFamiliar() != null){
+                final NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+                player.debugMessage("Npc ownerid " + npc.ownerId + " npc id " + useItem);
                 if(npc.ownerId < 1)
                     return false;
-                if(npc.ownerId != player.getIndex()) {
+                if(npc.ownerId != player.getIndex()){
                     player.sendMessage("This is not your familiar.");
                     return false;
                 }
                 player.playAnimation(Animation.create(7270));
-                if(player.getBoB() != null) {
-                   int index2 = - 1;
-                    for(Item item : player.getBoB().toArray()) {
-                        if (item == null)
+                if(player.getBoB() != null){
+                    int index2 = -1;
+                    for(final Item item : player.getBoB().toArray()){
+                        if(item == null)
                             continue;
                         index2++;
-                            BoB.withdraw(player, index2, item.getId(), item.getCount());
+                        BoB.withdraw(player, index2, item.getId(), item.getCount());
                         if(player.getInventory().freeSlots() == 0)
                             break;
                     }
                 }
                 return true;
             }
-        } else if(type == ClickType.ITEM_ON_ITEM){
-            if(player.getCombat().getFamiliar() != null && !player.isDead() && player.cE.getFamiliar().getDefinition().getId() == SummonType.PACKYAK.npcId && useItem == PACK_YAK_SCROLL) {
-            	SummoningSpecial.preformSpecial(player, new PackYak(onItem, slot));
+        }else if(type == ClickType.ITEM_ON_ITEM){
+            if(player.getCombat().getFamiliar() != null && !player.isDead() && player.cE.getFamiliar().getDefinition().getId() == SummonType.PACKYAK.npcId && useItem == PACK_YAK_SCROLL){
+                SummoningSpecial.preformSpecial(player, new PackYak(onItem, slot));
             }
-        } else if (type == ClickType.EAT) {
-            if(useItem == 15262) {
-                if(player.getInventory().remove(Item.create(useItem)) >= 1) {
+        }else if(type == ClickType.EAT){
+            if(useItem == 15262){
+                if(player.getInventory().remove(Item.create(useItem)) >= 1){
                     player.getInventory().add(Item.create(18016, 10000));
                 }
             }
@@ -72,11 +72,12 @@ public class SummoningBoBs implements ContentTemplate {
     }
 
     @Override
-    public int[] getValues(int type) {
-    	if(type == ClickType.NPC_OPTION1)
-    		return org.hyperion.rs2.model.content.skill.Summoning.BoBids;
-    	else if(type == ClickType.ITEM_ON_ITEM)
-    		return new int[]{PACK_YAK_SCROLL};  //To change body of implemented methods use File | Settings | File Templates.
+    public int[] getValues(final int type) {
+        if(type == ClickType.NPC_OPTION1)
+            return org.hyperion.rs2.model.content.skill.Summoning.BoBids;
+        else if(type == ClickType.ITEM_ON_ITEM)
+            return new int[]{
+                    PACK_YAK_SCROLL};  //To change body of implemented methods use File | Settings | File Templates.
         else
             return new int[]{15262};
     }

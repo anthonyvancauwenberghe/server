@@ -13,34 +13,34 @@ public class WeaponAnimManager {
     /**
      * @return the walking animation for that weapon
      */
-    public static int getWalkAnimation(Player player, int id) {
-        Weapon weapon = Weapon.forId(id);
+    public static int getWalkAnimation(final Player player, final int id) {
+        final Weapon weapon = Weapon.forId(id);
         return weapon.getWalkAnimation(player);
     }
 
     /**
      * @return the standing animation for that weapon
      */
-    public static int getStandAnimation(Player player, int id) {
-        Weapon weapon = Weapon.forId(id);
+    public static int getStandAnimation(final Player player, final int id) {
+        final Weapon weapon = Weapon.forId(id);
         return weapon.getStandAnimation(player);
     }
 
     /**
      * @return the running animation for that weapon
      */
-    public static int getRunAnimation(Player player, int id) {
-        Weapon weapon = Weapon.forId(id);
+    public static int getRunAnimation(final Player player, final int id) {
+        final Weapon weapon = Weapon.forId(id);
         return weapon.getRunAnimation(player);
     }
 
     /**
      * @return the attacking animation for that weapon
      */
-    public static int getAttackAnimation(Player player, int id, int type) {
-        Weapon weapon = Weapon.forId(id);
-	    /*System.out.println("Weapon id: " + id);
-		int idx = weapon.getStandAnimation(player);
+    public static int getAttackAnimation(final Player player, final int id, final int type) {
+        final Weapon weapon = Weapon.forId(id);
+        /*System.out.println("Weapon id: " + id);
+        int idx = weapon.getStandAnimation(player);
 		System.out.println("Atk id: " + idx + " for wep id: " + id);*/
         return weapon.getAttackAnimation(player);
     }
@@ -48,15 +48,15 @@ public class WeaponAnimManager {
     /**
      * @return the defend animation for that weapon
      */
-    public static int getDefendAnimation(Player player, int id, int shield) {
-        if (id == 15486 && shield == 6889 || shield == 3842 || shield == 3841) //todo more
+    public static int getDefendAnimation(final Player player, final int id, final int shield) {
+        if(id == 15486 && shield == 6889 || shield == 3842 || shield == 3841) //todo more
             return 12806; //if the shield is mage book+ sol equip
         if(shield >= 8844 && shield <= 8850)
             return 4177;
-        if(shield != - 1) {
+        if(shield != -1){
             return 1156;
         }
-        Weapon weapon = Weapon.forId(id);
+        final Weapon weapon = Weapon.forId(id);
         return weapon.getDefendAnimation(player);
     }
 
@@ -65,13 +65,13 @@ public class WeaponAnimManager {
      * @param s2 the name of the weapon being equiped
      * @return the speed of the weapon
      */
-    public static int getSpeed(String s2, int weaponId) {//this method was written in a certain way order is quite important!
-        switch(weaponId) {
+    public static int getSpeed(final String s2, final int weaponId) {//this method was written in a certain way order is quite important!
+        switch(weaponId){
             case 15241:
                 return 5400;
             case 18353:
             case 4153:
-	    case 17646:
+            case 17646:
             case 16425:
             case 4718:
             case 16909:
@@ -85,7 +85,7 @@ public class WeaponAnimManager {
             case 19784:
                 return 2400;
         }
-        String s = s2.toLowerCase();
+        final String s = s2.toLowerCase();
         if(s.startsWith("unarmed"))
             return 3000;
         else if(s.contains("korasi"))
@@ -102,12 +102,12 @@ public class WeaponAnimManager {
             return 3600;
         else if(s.startsWith("karil"))
             return 2400;
-        else if(s.contains("staff")) {
+        else if(s.contains("staff")){
             if(s.contains("zamarok") || s.contains("guthix") || s.contains("saradomian") || s.contains("slayer") || s.contains("ancient"))
                 return 2400;
             else
                 return 3000;
-        } else if(s.contains("bow")) {
+        }else if(s.contains("bow")){
             if(s.contains("composite") || s.equals("seercull"))
                 return 3000;
             else if(s.contains("ogre"))
@@ -116,14 +116,14 @@ public class WeaponAnimManager {
                 return 5400;
             else if(s.contains("long") || s.contains("cross"))
                 return 3600;
-            else if(s.contains("short") || s.contains("hunt") || s.contains("karils") || s.contains("sword")) {
+            else if(s.contains("short") || s.contains("hunt") || s.contains("karils") || s.contains("sword")){
                 return 1800;
             }
 
             return 3000;
-        } else if(s.contains("rapier")) {
+        }else if(s.contains("rapier")){
             return 2400;
-        } else if(s.contains("dagger"))
+        }else if(s.contains("dagger"))
             return 2400;
         else if(s.contains("godsword"))
             return 3600;

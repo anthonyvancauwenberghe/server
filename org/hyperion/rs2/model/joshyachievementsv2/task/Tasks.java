@@ -6,39 +6,39 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-public class Tasks{
+public class Tasks {
 
     private final Map<Integer, Task> map;
 
     public int threshold;
 
-    public Tasks(final Collection<Task> collection){
+    public Tasks(final Collection<Task> collection) {
         map = new TreeMap<>();
 
         collection.forEach(this::add);
     }
 
-    public Tasks(){
+    public Tasks() {
         this(new ArrayList<>());
     }
 
-    public Task get(final int id){
+    public Task get(final int id) {
         return map.get(id);
     }
 
-    public int size(){
+    public int size() {
         return map.size();
     }
 
-    public Collection<Task> values(){
+    public Collection<Task> values() {
         return map.values();
     }
 
-    public Stream<Task> stream(){
+    public Stream<Task> stream() {
         return values().stream();
     }
 
-    public void add(final Task task){
+    public void add(final Task task) {
         map.put(task.id, task);
         threshold += task.threshold;
     }

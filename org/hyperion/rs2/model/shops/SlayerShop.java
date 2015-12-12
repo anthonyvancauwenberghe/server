@@ -12,8 +12,26 @@ import org.hyperion.rs2.model.container.Equipment;
  * To change this template use File | Settings | File Templates.
  */
 public class SlayerShop extends PointsShop {
-    public SlayerShop(int id, String name, Container container) {
+    public static final int SLAYER_HELM = 13263, FOCUS_SIGHT = 15490, HEX_CREST = 15488, FULL_HELM = 15492;
+
+    public SlayerShop(final int id, final String name, final Container container) {
         super(id, name, container);
+    }
+
+    public static boolean isFullHelm(final Player player) {
+        return player.getEquipment().getItemId(Equipment.SLOT_HELM) == 15492;
+    }
+
+    public static boolean hasHex(final Player player) {
+        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 15488;
+    }
+
+    public static boolean hasFocus(final Player player) {
+        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 15490;
+    }
+
+    public static boolean hasHelm(final Player player) {
+        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 13263;
     }
 
     @Override
@@ -21,12 +39,9 @@ public class SlayerShop extends PointsShop {
         return "Slayer Points";  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-
-
-    public static final int SLAYER_HELM = 13263, FOCUS_SIGHT = 15490, HEX_CREST = 15488, FULL_HELM = 15492;
     @Override
-    public int getPrice(int itemId) {
-        switch(itemId) {
+    public int getPrice(final int itemId) {
+        switch(itemId){
             case 15490:
             case 15488:
                 return 300;
@@ -47,29 +62,13 @@ public class SlayerShop extends PointsShop {
     }
 
     @Override
-    protected int getPointsAmount(Player player) {
+    protected int getPointsAmount(final Player player) {
         return player.getSlayer().getSlayerPoints();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    protected void setPointsAmount(Player player, int value) {
+    protected void setPointsAmount(final Player player, final int value) {
         player.getSlayer().setPoints(value);
-    }
-
-    public static boolean isFullHelm(final Player player) {
-        return player.getEquipment().getItemId(Equipment.SLOT_HELM)== 15492;
-    }
-
-    public static boolean hasHex(final Player player) {
-        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 15488;
-    }
-
-    public static boolean hasFocus(final Player player) {
-        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM)== 15490;
-    }
-
-    public static boolean hasHelm(final Player player) {
-        return isFullHelm(player) || player.getEquipment().getItemId(Equipment.SLOT_HELM) == 13263;
     }
 
 

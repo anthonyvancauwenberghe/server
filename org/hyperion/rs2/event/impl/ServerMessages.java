@@ -22,10 +22,10 @@ public class ServerMessages extends Event {
 
     private static int currentIndex;
 
-    static{
+    static {
         load();
 
-        CommandHandler.submit(new Command("reloadmessages", Rank.ADMINISTRATOR){
+        CommandHandler.submit(new Command("reloadmessages", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) {
                 player.getActionSender().sendMessage("Reloading server messages...");
                 MESSAGES.clear();
@@ -37,8 +37,8 @@ public class ServerMessages extends Event {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("savemessages", Rank.ADMINISTRATOR){
-            public boolean execute(final Player player, final String input){
+        CommandHandler.submit(new Command("savemessages", Rank.ADMINISTRATOR) {
+            public boolean execute(final Player player, final String input) {
                 player.getActionSender().sendMessage("Saving server messages...");
                 if(!save()){
                     player.getActionSender().sendMessage("Error saving messages");
@@ -48,29 +48,29 @@ public class ServerMessages extends Event {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("removemessage", Rank.ADMINISTRATOR){
-            public boolean execute(final Player player, final String input){
-               try{
-                   final int index = Integer.parseInt(input.split(" +")[1].trim());
-                   if(index < 0 || index > size()-1){
-                       player.getActionSender().sendMessage(String.format("Index out of bounds: [0, %d]", size()-1));
-                       return false;
-                   }
-                   final String message = get(index);
-                   if(!remove(message)){
-                       player.getActionSender().sendMessage("Error removing message at index: " + index);
-                       return false;
-                   }
-                   player.getActionSender().sendMessage(String.format("[Removed Message] Index %d: %s", index, message));
-                   return true;
-               }catch(Exception ex){
-                   player.getActionSender().sendMessage("Syntax: ::removemessage index");
-                   return false;
-               }
+        CommandHandler.submit(new Command("removemessage", Rank.ADMINISTRATOR) {
+            public boolean execute(final Player player, final String input) {
+                try{
+                    final int index = Integer.parseInt(input.split(" +")[1].trim());
+                    if(index < 0 || index > size() - 1){
+                        player.getActionSender().sendMessage(String.format("Index out of bounds: [0, %d]", size() - 1));
+                        return false;
+                    }
+                    final String message = get(index);
+                    if(!remove(message)){
+                        player.getActionSender().sendMessage("Error removing message at index: " + index);
+                        return false;
+                    }
+                    player.getActionSender().sendMessage(String.format("[Removed Message] Index %d: %s", index, message));
+                    return true;
+                }catch(final Exception ex){
+                    player.getActionSender().sendMessage("Syntax: ::removemessage index");
+                    return false;
+                }
             }
         });
-        CommandHandler.submit(new Command("listmessages", Rank.ADMINISTRATOR){
-            public boolean execute(final Player player, final String input){
+        CommandHandler.submit(new Command("listmessages", Rank.ADMINISTRATOR) {
+            public boolean execute(final Player player, final String input) {
                 player.getActionSender().sendMessage(String.format("@blu@%d@bla@ Server Messages", size()));
                 for(int i = 0; i < size(); i++)
                     player.getActionSender().sendMessage(String.format("[Index @blu@%s@bla@] @whi@%s", i, get(i)));
@@ -78,12 +78,12 @@ public class ServerMessages extends Event {
             }
         });
     }
-	
-	public ServerMessages() {
-		super(250000);
-	}
 
-    public static boolean load(){
+    public ServerMessages() {
+        super(250000);
+    }
+
+    public static boolean load() {
         if(!FILE.exists())
             return false;
         Scanner input = null;
@@ -96,7 +96,7 @@ public class ServerMessages extends Event {
                 MESSAGES.add(line);
             }
             return true;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }finally{
@@ -105,7 +105,7 @@ public class ServerMessages extends Event {
         }
     }
 
-    public static boolean save(){
+    public static boolean save() {
         BufferedWriter writer = null;
         try{
             if(!FILE.exists())
@@ -116,7 +116,7 @@ public class ServerMessages extends Event {
                 writer.newLine();
             }
             return true;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }finally{
@@ -124,60 +124,60 @@ public class ServerMessages extends Event {
                 try{
                     writer.flush();
                     writer.close();
-                }catch(Exception ex){
+                }catch(final Exception ex){
                     ex.printStackTrace();
                 }
             }
         }
     }
-    
-    public static int size(){
+
+    public static int size() {
         return MESSAGES.size();
     }
 
-    public static int indexOf(final String message){
+    public static int indexOf(final String message) {
         for(int i = 0; i < size(); i++)
             if(MESSAGES.get(i).equalsIgnoreCase(message))
                 return i;
         return -1;
     }
 
-    public static boolean contains(final String message){
+    public static boolean contains(final String message) {
         return indexOf(message) != -1;
     }
 
-    public static List<String> get(){
+    public static List<String> get() {
         return MESSAGES;
     }
-    
-    public static String get(final int i){
+
+    public static String get(final int i) {
         return MESSAGES.get(i);
     }
 
-    public static boolean remove(final String message){
+    public static boolean remove(final String message) {
         return MESSAGES.remove(message) && save();
     }
 
-    public static boolean add(final String message){
+    public static boolean add(final String message) {
         return MESSAGES.add(message) && save();
     }
-	
-	public void execute() {
+
+    public void execute() {
         if(MESSAGES.isEmpty())
             return;
-		try {
-			if(currentIndex == size() || currentIndex > size())
+        try{
+            if(currentIndex == size() || currentIndex > size())
                 currentIndex = 0;
-			final String message = MESSAGES.get(currentIndex++);
-			for(Player p : World.getWorld().getPlayers())
-				if(p != null)
+            final String message = MESSAGES.get(currentIndex++);
+            for(final Player p : World.getWorld().getPlayers())
+                if(p != null)
                     if(!p.getName().equalsIgnoreCase("Ferry"))
-					    p.sendServerMessage(message);
-		} catch(final Exception e) {
-			e.printStackTrace();
-			this.stop();
-		}
-	}
-	
-	
+                        p.sendServerMessage(message);
+        }catch(final Exception e){
+            e.printStackTrace();
+            this.stop();
+        }
+    }
+
+
 }

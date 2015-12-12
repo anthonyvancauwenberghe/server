@@ -5,23 +5,23 @@ import org.hyperion.rs2.saving.SaveLong;
 
 public class SaveLastVoted extends SaveLong {
 
-	public SaveLastVoted(String name) {
-		super(name);
-	}
+    public SaveLastVoted(final String name) {
+        super(name);
+    }
 
-	@Override
-	public long getDefaultValue() {
-		return 0;
-	}
+    @Override
+    public long getDefaultValue() {
+        return 0;
+    }
 
-	@Override
-	public void setValue(Player player, long value) {
-		player.setLastVoted(value); //
-	}
+    @Override
+    public void setValue(final Player player, final long value) {
+        player.setLastVoted(value); //
+    }
 
-	@Override
-	public Long getValue(Player player) {
-		return player.getLastVoted();
-	}
+    @Override
+    public Long getValue(final Player player) {
+        return player.getLastVoted();
+    }
 
 }

@@ -1,25 +1,67 @@
 package org.hyperion.rs2.model.content.skill.agility;
 
-import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.content.skill.RandomEvent;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.util.Misc;
-
-import java.util.List;
 
 /**
  * Created by Gilles on 10/09/2015.
  */
 public class Obstacle {
 
-    protected int   objectId,
-                    animId,
-                    skillXp,
-                    levelReq,
-                    failRate,
-                    progress;
+    protected int objectId, animId, skillXp, levelReq, failRate, progress;
     protected Course course;
+
+    public Obstacle(final int objectId, final int animId, final int levelReq, final int skillXp, final int failRate, final Course course, final int progress) {
+        if(failRate > 100 || failRate < 0){
+            this.failRate = 0;
+            return;
+        }else{
+            this.failRate = failRate;
+        }
+        if(levelReq > 99 || levelReq < 0){
+            this.levelReq = 0;
+        }else{
+            this.levelReq = levelReq;
+        }
+        this.objectId = objectId;
+        this.animId = animId;
+        this.skillXp = skillXp;
+        this.course = course;
+        this.progress = progress;
+        course.addObstacle(this);
+    }
+
+    public static void reset(final Player player) {
+        player.setBusy(false);
+        player.getAgility().setBusy(false);
+        player.getWalkingQueue().setRunningToggled(true);
+        player.getAppearance().setWalkAnim(0x337); //default walk animation
+        player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
+    }
+
+    public static Location calculateMiddle(final Location start, final Location end) {
+        int middleX = start.getX();
+        int middleY = start.getY();
+
+        if(start.getX() != end.getX()){
+            if(start.getX() > end.getX())
+                middleX = start.getX() - start.distance(end) / 2;
+            else
+                middleX = start.getX() + start.distance(end) / 2;
+        }
+        if(start.getY() != end.getY()){
+            if(start.getY() > end.getY())
+                middleY = start.getY() - start.distance(end) / 2;
+            else
+                middleY = start.getY() + start.distance(end) / 2;
+        }
+        return Location.create(middleX, middleY, start.getZ());
+    }
 
     public int getObjectId() {
         return objectId;
@@ -49,34 +91,14 @@ public class Obstacle {
         return course;
     }
 
-    public Obstacle(int objectId, int animId, int levelReq, int skillXp, int failRate, Course course, int progress) {
-        if(failRate > 100 || failRate < 0) {
-            this.failRate = 0;
-            return;
-        } else {
-            this.failRate = failRate;
-        }
-        if(levelReq > 99 || levelReq < 0) {
-            this.levelReq = 0;
-        } else {
-            this.levelReq = levelReq;
-        }
-        this.objectId = objectId;
-        this.animId = animId;
-        this.skillXp = skillXp;
-        this.course = course;
-        this.progress = progress;
-        course.addObstacle(this);
-    }
-
-    public boolean overCome(Player player) {
-        if(player == null) {
+    public boolean overCome(final Player player) {
+        if(player == null){
             return false;
         }
-        if(player.isBusy()) {
+        if(player.isBusy()){
             return false;
         }
-        if(player.getSkills().getLevel(Skills.AGILITY) < levelReq) {
+        if(player.getSkills().getLevel(Skills.AGILITY) < levelReq){
             player.sendMessage("You need an agility level of " + levelReq + " to use this " + (course.getClass() == Shortcuts.class ? "shortcut" : this.toString().toLowerCase()) + ".");
             return false;
         }
@@ -85,20 +107,20 @@ public class Obstacle {
         return true;
     }
 
-    public void executeObject(Player player) {
+    public void executeObject(final Player player) {
         executeObject(player, "", "");
     }
 
-    public void executeObject(Player player, int failRate) {
+    public void executeObject(final Player player, final int failRate) {
         executeObject(player, "", "");
     }
 
-    public void executeObject(Player player, String succeedMessage, String failMessage) {
+    public void executeObject(final Player player, final String succeedMessage, final String failMessage) {
         player.setBusy(true);
         player.getAgility().setBusy(true);
-        if(failRate != 0) {
+        if(failRate != 0){
             failRate -= ((player.getSkills().getLevel(Skills.AGILITY) - levelReq) / 2) * 10;
-            if(Misc.random(1000) <= failRate) {
+            if(Misc.random(1000) <= failRate){
                 fail(player, 0, failMessage);
                 return;
             }
@@ -106,7 +128,7 @@ public class Obstacle {
         succeed(player, 0, succeedMessage);
     }
 
-    public void succeed(Player player, int tick, String message) {
+    public void succeed(final Player player, final int tick, final String message) {
         World.getWorld().submit(new Event(tick * 600) {
             @Override
             public void execute() {
@@ -122,7 +144,7 @@ public class Obstacle {
         });
     }
 
-    public void fail(Player player, int tick, String message) {
+    public void fail(final Player player, final int tick, final String message) {
         World.getWorld().submit(new Event(tick * 600) {
             @Override
             public void execute() {
@@ -134,38 +156,10 @@ public class Obstacle {
         });
     }
 
-    public static void reset(Player player) {
-        player.setBusy(false);
-        player.getAgility().setBusy(false);
-        player.getWalkingQueue().setRunningToggled(true);
-        player.getAppearance().setWalkAnim(0x337); //default walk animation
-        player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
-    }
-
-    public static Location calculateMiddle(Location start, Location end) {
-        int middleX = start.getX();
-        int middleY = start.getY();
-
-        if(start.getX() != end.getX()) {
-            if(start.getX() > end.getX())
-                middleX = start.getX() - start.distance(end)/2;
-            else
-                middleX = start.getX() + start.distance(end)/2;
-        }
-        if(start.getY() != end.getY()) {
-            if(start.getY() > end.getY())
-                middleY = start.getY() - start.distance(end)/2;
-            else
-                middleY = start.getY() + start.distance(end)/2;
-        }
-        return Location.create(middleX, middleY, start.getZ());
-    }
-
     @Override
     public String toString() {
         return Misc.ucFirst(this.getClass().getSimpleName().toLowerCase());
     }
-
 
 
 }

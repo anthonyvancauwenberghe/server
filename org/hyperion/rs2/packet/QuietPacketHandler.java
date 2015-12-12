@@ -10,9 +10,9 @@ import org.hyperion.rs2.net.Packet;
  */
 public class QuietPacketHandler implements PacketHandler {
 
-	@Override
-	public void handle(Player player, Packet packet) {
-		player.updateDisconnectedTimer();
-	}
+    @Override
+    public void handle(final Player player, final Packet packet) {
+        player.updateDisconnectedTimer();
+    }
 
 }

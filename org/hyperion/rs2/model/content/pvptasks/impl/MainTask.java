@@ -6,10 +6,10 @@ import org.hyperion.rs2.model.newcombat.Skills;
 
 public class MainTask extends PvPTask {
 
-	@Override
-	public boolean isTask(Player p, Player o) {
-		return p.getPvPTask() != null && p.getPvPTask() instanceof MainTask && 
-				o.getSkills().getRealLevels()[Skills.DEFENCE] >= 80;
-	}
+    @Override
+    public boolean isTask(final Player p, final Player o) {
+        return p.getPvPTask() != null && p.getPvPTask() instanceof MainTask &&
+                o.getSkills().getRealLevels()[Skills.DEFENCE] >= 80;
+    }
 
 }

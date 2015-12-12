@@ -8,32 +8,32 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 public class SaveEquipment extends SaveContainer {
 
-	public SaveEquipment(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveEquipment(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public Container getContainer(Player player) {
-		return player.getEquipment();
-	}
+    @Override
+    public Container getContainer(final Player player) {
+        return player.getEquipment();
+    }
 
-	@Override
-	public void loadItem(Player player, Item item, int slot) {
-		if(this.transferedPkItem(item)) {
-			slot = Equipment.getType(item).getSlot();
-			player.getEquipment().set(slot, item);
-			return;
-		}
-		int pkp = this.getPkValue(item);
-		int tickets = pkp/130;
-		if(tickets > 0) {
-			player.getBank().add(new Item(5020, tickets));
-		}
-		if(ItemSpawning.canSpawn(item.getId())) {
-			slot = Equipment.getType(item).getSlot();
-			player.getEquipment().set(slot, item);
-		}
-	}
+    @Override
+    public void loadItem(final Player player, final Item item, int slot) {
+        if(this.transferedPkItem(item)){
+            slot = Equipment.getType(item).getSlot();
+            player.getEquipment().set(slot, item);
+            return;
+        }
+        final int pkp = this.getPkValue(item);
+        final int tickets = pkp / 130;
+        if(tickets > 0){
+            player.getBank().add(new Item(5020, tickets));
+        }
+        if(ItemSpawning.canSpawn(item.getId())){
+            slot = Equipment.getType(item).getSlot();
+            player.getEquipment().set(slot, item);
+        }
+    }
 
 }

@@ -3,15 +3,7 @@ package org.hyperion.rs2.model.joshyachievementsv2;
 import org.hyperion.rs2.model.joshyachievementsv2.reward.Rewards;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Tasks;
 
-public class Achievement{
-
-    public enum Difficulty{
-
-        EASY,
-        MEDIUM,
-        HARD,
-        ELITE;
-    }
+public class Achievement {
 
     public final int id;
     public final Difficulty difficulty;
@@ -20,10 +12,9 @@ public class Achievement{
     public final Instructions instructions;
     public final Tasks tasks;
     public final Rewards rewards;
-
     public final String shortTitle;
 
-    public Achievement(final int id, final Difficulty difficulty, final String title, final Interval interval, final Instructions instructions, final Tasks tasks, final Rewards rewards){
+    public Achievement(final int id, final Difficulty difficulty, final String title, final Interval interval, final Instructions instructions, final Tasks tasks, final Rewards rewards) {
         this.id = id;
         this.difficulty = difficulty;
         this.title = title;
@@ -33,5 +24,13 @@ public class Achievement{
         this.rewards = rewards;
 
         shortTitle = title.length() <= 26 ? title : (title.substring(0, 26) + "...");
+    }
+
+    public enum Difficulty {
+
+        EASY,
+        MEDIUM,
+        HARD,
+        ELITE;
     }
 }

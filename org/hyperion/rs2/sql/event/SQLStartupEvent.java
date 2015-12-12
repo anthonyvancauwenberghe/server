@@ -4,5 +4,5 @@ import org.hyperion.rs2.sql.SQLConnection;
 
 public abstract class SQLStartupEvent {
 
-	public abstract void run(SQLConnection sql);
+    public abstract void run(SQLConnection sql);
 }

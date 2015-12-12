@@ -1,30 +1,30 @@
 package org.hyperion.rs2.saving.instant;
 
 public class SavedSingleValue {
-	
-	private SaveSingleValue sv;
-	
-	private Object previousValue;
-	
-	public SavedSingleValue(SaveSingleValue sv, Object value) {
-		this.setSavedSingleValue(sv);
-		this.setPreviousValue(value);
-	}
 
-	public Object getPreviousValue() {
-		return previousValue;
-	}
+    private SaveSingleValue sv;
 
-	public void setPreviousValue(Object previousValue) {
-		this.previousValue = previousValue;
-	}
+    private Object previousValue;
 
-	public SaveSingleValue getSavedSingleValue() {
-		return sv;
-	}
+    public SavedSingleValue(final SaveSingleValue sv, final Object value) {
+        this.setSavedSingleValue(sv);
+        this.setPreviousValue(value);
+    }
 
-	public void setSavedSingleValue(SaveSingleValue sv) {
-		this.sv = sv;
-	}
-	
+    public Object getPreviousValue() {
+        return previousValue;
+    }
+
+    public void setPreviousValue(final Object previousValue) {
+        this.previousValue = previousValue;
+    }
+
+    public SaveSingleValue getSavedSingleValue() {
+        return sv;
+    }
+
+    public void setSavedSingleValue(final SaveSingleValue sv) {
+        this.sv = sv;
+    }
+
 }

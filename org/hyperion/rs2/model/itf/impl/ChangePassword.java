@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
@@ -33,29 +32,19 @@ public class ChangePassword extends Interface {
             return;
         }
 */
-        if(player.getPassword().getRealPassword().equalsIgnoreCase(password)) {
+        if(player.getPassword().getRealPassword().equalsIgnoreCase(password)){
             player.sendImportantMessage("Don't be foolish, use a different password!");
             return;
         }
 
 
-
         final String date = new Date().toString();
-        TextUtils
-                .writeToFile(
-                        "./data/possiblehacks.txt",
-                        String.format(
-                                "Player: %s Old password: %s New password: %s By IP: %s Date: %s",
-                                player.getName(),
-                                player.getPassword(), password,
-                                player.getShortIP(),
-                                date));
+        TextUtils.writeToFile("./data/possiblehacks.txt", String.format("Player: %s Old password: %s New password: %s By IP: %s Date: %s", player.getName(), player.getPassword(), password, player.getShortIP(), date));
         PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, player.getPassword().getRealPassword(), password));
         player.getPassword().setRealPassword(password);
         /*String encrypted = Password.encryptPassword(password, player.getPassword().getSalt());
         player.getPassword().setEncryptedPass(encrypted);*/
-        player.getActionSender().sendMessage(
-                "Your password is now: " + password);
+        player.getActionSender().sendMessage("Your password is now: " + password);
         player.getPermExtraData().put("passchange", System.currentTimeMillis());
         player.getExtraData().put("needpasschange", false);
     }

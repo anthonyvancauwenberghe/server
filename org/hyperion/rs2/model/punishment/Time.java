@@ -1,9 +1,7 @@
 package org.hyperion.rs2.model.punishment;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 public class Time {
@@ -16,81 +14,89 @@ public class Time {
 
     private boolean expired;
 
-    public Time(final long startTime, final long duration, final TimeUnit unit){
+    public Time(final long startTime, final long duration, final TimeUnit unit) {
         this.startTime = startTime;
 
         set(duration, unit);
     }
 
-    public Time(final long duration, final TimeUnit unit){
+    public Time(final long duration, final TimeUnit unit) {
         this(System.currentTimeMillis(), duration, unit);
     }
 
-    public long getStartTime(){
+    public static Time create(final long startTime, final long duration, final TimeUnit unit) {
+        return new Time(startTime, duration, unit);
+    }
+
+    public static Time create(final long duration, final TimeUnit unit) {
+        return new Time(duration, unit);
+    }
+
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(final long startTime){
+    public void setStartTime(final long startTime) {
         this.startTime = startTime;
     }
 
-    public Date getStartDate(){
+    public Date getStartDate() {
         return new Date(getStartTime());
     }
 
-    public String getStartDateStamp(){
+    public String getStartDateStamp() {
         return DATE_FORMAT.format(getStartDate());
     }
 
-    public long getDuration(){
+    public long getDuration() {
         return duration;
     }
 
-    public long getDuration(final TimeUnit unit){
+    public long getDuration(final TimeUnit unit) {
         return unit.convert(getDuration(), getUnit());
     }
 
-    public TimeUnit getUnit(){
+    public TimeUnit getUnit() {
         return unit;
     }
 
-    public void set(final long duration, final TimeUnit unit){
+    public void set(final long duration, final TimeUnit unit) {
         this.duration = duration;
         this.unit = unit;
     }
 
-    public void set(final long duration){
+    public void set(final long duration) {
         set(duration, unit);
     }
 
-    public void set(final Time time){
+    public void set(final Time time) {
         set(time.getDuration(), time.getUnit());
     }
 
-    public long getExpirationTime(){
+    public long getExpirationTime() {
         return getStartTime() + getDuration(TimeUnit.MILLISECONDS);
     }
 
-    public Date getExpirationDate(){
+    public Date getExpirationDate() {
         return new Date(getExpirationTime());
     }
 
-    public String getExpirationDateStamp(){
+    public String getExpirationDateStamp() {
         return DATE_FORMAT.format(getExpirationDate());
     }
 
-    public void setExpired(final boolean expired){
-        this.expired = expired;
-    }
-
-    public boolean isExpired(){
+    public boolean isExpired() {
         return expired || System.currentTimeMillis() > getExpirationTime();
     }
 
-    public String getRemainingTimeStamp(){
+    public void setExpired(final boolean expired) {
+        this.expired = expired;
+    }
+
+    public String getRemainingTimeStamp() {
         if(isExpired())
             return "----";
-        long remaining = getExpirationTime() - System.currentTimeMillis();
+        final long remaining = getExpirationTime() - System.currentTimeMillis();
         long seconds = remaining / 1000;
         long minutes = seconds / 60;
         seconds -= minutes * 60;
@@ -100,7 +106,7 @@ public class Time {
         hours -= days * 24;
         long weeks = days / 7;
         days -= weeks * 7;
-        long years = weeks / 52;
+        final long years = weeks / 52;
         weeks -= years * 52;
         final StringBuilder bldr = new StringBuilder();
         if(years > 0)
@@ -118,15 +124,7 @@ public class Time {
         return bldr.toString();
     }
 
-    public String toString(){
+    public String toString() {
         return String.format("%,d %s", getDuration(), getUnit());
-    }
-
-    public static Time create(final long startTime, final long duration, final TimeUnit unit){
-        return new Time(startTime, duration, unit);
-    }
-
-    public static Time create(final long duration, final TimeUnit unit){
-        return new Time(duration, unit);
     }
 }

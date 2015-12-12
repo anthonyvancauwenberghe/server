@@ -21,7 +21,7 @@ public abstract class SpecialArea {
 
     public void check(final Player player) {
         final String enter = canEnter(player);
-        if(inArea(player) && enter.length() > 1) {
+        if(inArea(player) && enter.length() > 1){
             exit(player);
             player.sendImportantMessage(enter);
         }
@@ -29,8 +29,9 @@ public abstract class SpecialArea {
 
     public void enter(final Player player) {
         final String enter = canEnter(player);
-        if(enter.length() > 2)  player.sendMessage(enter);
-        else {
+        if(enter.length() > 2)
+            player.sendMessage(enter);
+        else{
             player.sendMessage("For better switching use the lite client: @blu@ http://play.arteropk.com#url#");
             Magic.teleport(player, getDefaultLocation(), false);
         }
@@ -64,11 +65,20 @@ public abstract class SpecialArea {
     }
 
     public abstract boolean canSpawn();
+
     public abstract boolean isPkArea();
+
     public abstract Location getDefaultLocation();
 
-    public boolean inArea(final Player player) { return inArea(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());}
-    public boolean wildInterface() { return false; }
+    public boolean inArea(final Player player) {
+        return inArea(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+    }
+
+    public boolean wildInterface() {
+        return false;
+    }
+
     public abstract boolean inArea(final int x, final int y, final int z);
+
     public abstract String canEnter(final Player player);
 }

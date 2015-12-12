@@ -1,15 +1,26 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Prayers;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
+import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.util.ArrayUtils;
 import org.hyperion.util.Misc;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,30 +31,30 @@ import java.util.*;
  */
 public class RevAttack implements Attack {
 
-    public String getName() {
-        return "";
-    }
-
-    static List<NPCDrop> drops = new ArrayList<>();
-
     private static final Map<Integer, NPCDefinition> revs;
     private static final int[] revIds;
+    static List<NPCDrop> drops = new ArrayList<>();
 
     static {
         final int[] bonus = new int[10];
         Arrays.fill(bonus, 400);
         revs = new HashMap<>();
         int id = 6692;
-        revs.put(id, NPCDefinition.create(id--, 500, 126, bonus, 7442, 7443, new int[]{7441, 7508, 7522}, 1, "Revenant Knight", 50));
-        revs.put(id, NPCDefinition.create(id--, 500, 120, bonus, 7468, 7469, new int[]{7467, 7515, 7514}, 1, "Revenant Dark Beast", 49));
-        revs.put(id, NPCDefinition.create(id--, 450, 105, bonus, 7412, 7413, new int[]{7411, 7505, 7518}, 2, "Revenant Ork", 48));
-        revs.put(id, NPCDefinition.create(id--, 420, 98, bonus, 7475, 7476, new int[]{7474, 7498, 7512}, 2, "Revenant Demon", 47));
-        revs.put(id, NPCDefinition.create(id--, 410, 90, bonus, 7461, 7462, new int[]{7460, 7515, 7501}, 2, "Revenant Hellhound", 45));
+        revs.put(id, NPCDefinition.create(id--, 500, 126, bonus, 7442, 7443, new int[]{7441, 7508,
+                7522}, 1, "Revenant Knight", 50));
+        revs.put(id, NPCDefinition.create(id--, 500, 120, bonus, 7468, 7469, new int[]{7467, 7515,
+                7514}, 1, "Revenant Dark Beast", 49));
+        revs.put(id, NPCDefinition.create(id--, 450, 105, bonus, 7412, 7413, new int[]{7411, 7505,
+                7518}, 2, "Revenant Ork", 48));
+        revs.put(id, NPCDefinition.create(id--, 420, 98, bonus, 7475, 7476, new int[]{7474, 7498,
+                7512}, 2, "Revenant Demon", 47));
+        revs.put(id, NPCDefinition.create(id--, 410, 90, bonus, 7461, 7462, new int[]{7460, 7515,
+                7501}, 2, "Revenant Hellhound", 45));
         revIds = ArrayUtils.fromInteger(revs.keySet().toArray(new Integer[revs.keySet().size()]));
 
-        for (final NPCDefinition def : revs.values()) {
-            if (def != null) {
-                for (final int i : PvPArmourStorage.getArmours())
+        for(final NPCDefinition def : revs.values()){
+            if(def != null){
+                for(final int i : PvPArmourStorage.getArmours())
                     def.getDrops().add(NPCDrop.create(i, 1, 1, (int) (Math.pow(def.combat(), 1.9) / 1000)));
 
             }
@@ -62,6 +73,9 @@ public class RevAttack implements Attack {
         return revs.get(id);
     }
 
+    public String getName() {
+        return "";
+    }
 
     @Override
     public int[] npcIds() {
@@ -69,14 +83,14 @@ public class RevAttack implements Attack {
     }
 
     @Override
-    public int handleAttack(NPC n, CombatEntity attack) {
-        if (n.cE.predictedAtk > System.currentTimeMillis()) {
+    public int handleAttack(final NPC n, final CombatEntity attack) {
+        if(n.cE.predictedAtk > System.currentTimeMillis()){
             //System.out.println("Predicted attack waiting.");
             return 6;//we dont want to reset attack but just wait another 500ms or so...
         }
         final int distance = n.getLocation().distance(attack.getEntity().getLocation());
-        if (Misc.random(5) == 1 && n.health < n.maxHealth / 2) {
-            if (attack._getPlayer().isPresent() && attack.getPlayer().getDungeoneering().inDungeon())
+        if(Misc.random(5) == 1 && n.health < n.maxHealth / 2){
+            if(attack._getPlayer().isPresent() && attack.getPlayer().getDungeoneering().inDungeon())
                 return 5;
             n.health += 18;
             n.cE.predictedAtk = System.currentTimeMillis() + 2400;
@@ -89,52 +103,52 @@ public class RevAttack implements Attack {
 
         final Entity entity = attack.getEntity();
 
-        if (attack.getEntity() instanceof Player) {
+        if(attack.getEntity() instanceof Player){
 
             final Player player = attack.getPlayer();
-            if (player == null)
+            if(player == null)
                 return 1;
             hasPrayMagic = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE);
             hasPrayMelee = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE);
             hasPrayRange = player.getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED) || player.getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE);
 
-            if (!player.isSkulled() && player.cE.getOpponent() != null && player.cE.getOpponent().equals(n.cE)) {
+            if(!player.isSkulled() && player.cE.getOpponent() != null && player.cE.getOpponent().equals(n.cE)){
                 player.setSkulled(true);
             }
         }
 
-        if (distance > 10) {
+        if(distance > 10){
             n.cE.setOpponent(null);
             return 1;
-        } else if (distance > 8)
+        }else if(distance > 8)
             return 0;
-        else if (distance > 2) {
-            if (hasPrayMagic)
+        else if(distance > 2){
+            if(hasPrayMagic)
                 handleRangeAttack(n, entity);
-            else if (hasPrayRange)
+            else if(hasPrayRange)
                 handleMagicAttack(n, entity);
-            else {
-                if (Misc.random(1) == 0)
+            else{
+                if(Misc.random(1) == 0)
                     handleRangeAttack(n, entity);
                 else
                     handleMagicAttack(n, entity);
 
             }
-        } else {
-            if (hasPrayMelee) {
-                if (Misc.random(1) == 0) {
+        }else{
+            if(hasPrayMelee){
+                if(Misc.random(1) == 0){
                     handleRangeAttack(n, entity);
-                } else {
+                }else{
                     handleMagicAttack(n, entity);
                 }
-            } else if (hasPrayMagic) {
-                if (Misc.random(1) == 0) {
+            }else if(hasPrayMagic){
+                if(Misc.random(1) == 0){
                     handleRangeAttack(n, entity);
-                } else {
+                }else{
                     handleMeleeAttack(n, entity);
                 }
-            } else {
-                switch (Misc.random(2)) {
+            }else{
+                switch(Misc.random(2)){
                     case Constants.MELEE:
                         handleMeleeAttack(n, entity);
                         break;
@@ -150,15 +164,15 @@ public class RevAttack implements Attack {
         return 5;
     }
 
-    public void handleMagicAttack(NPC n, Entity attack) {
+    public void handleMagicAttack(final NPC n, final Entity attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(1));
         final int maxHit = n.getDefinition().combat() / 5;
-        int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MAGE, maxHit);
+        final int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MAGE, maxHit);
         //attack.cE.hit(Combat.random(maxHit), n, false, Constants.MAGE);
-        if (Misc.random(8) == 1 && attack.cE.canBeFrozen()) {
+        if(Misc.random(8) == 1 && attack.cE.canBeFrozen()){
             attack.cE.doGfx(1279);
             attack.cE.setFreezeTimer(10000);
-            if (attack instanceof Player)
+            if(attack instanceof Player)
                 ((Player) attack).sendMessage("You have been frozen!");
         }
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
@@ -170,11 +184,11 @@ public class RevAttack implements Attack {
 
     }
 
-    public void handleRangeAttack(NPC n, Entity attack) {
+    public void handleRangeAttack(final NPC n, final Entity attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
         final int maxHit = (int) (n.getDefinition().combat() / 4);
-        int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.RANGE, maxHit);
+        final int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.RANGE, maxHit);
 
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 
@@ -185,10 +199,10 @@ public class RevAttack implements Attack {
 
     }
 
-    public void handleMeleeAttack(NPC n, Entity attack) {
+    public void handleMeleeAttack(final NPC n, final Entity attack) {
         n.cE.doAnim(n.getDefinition().getAtkEmote(0));
         final int maxHit = n.getDefinition().combat() / 6;
-        int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MELEE, maxHit);
+        final int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.MELEE, maxHit);
         Combat.npcAttack(n, attack.getCombat(), damage, 300, Constants.MELEE);
         n.cE.predictedAtk = System.currentTimeMillis() + 1800L;
     }

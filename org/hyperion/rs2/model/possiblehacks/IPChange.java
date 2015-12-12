@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.possiblehacks;
 
-import org.hyperion.util.Misc;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay

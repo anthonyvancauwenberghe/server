@@ -6,167 +6,164 @@ package org.hyperion.rs2.model.combat;
  */
 public class Spell {
 
-	private final int magicLevel;
-	private final int spellId;
-	private final int exp;
-	private final int maxHit;
-	private final int castAnim;
-	private final int startGfx;
-	private final int moveGfx;
-	private final int endGfx;
-	private final int hpDrain;
-	private final int firstRune;
-	private final int firstAmount;
-	private final int secondRune;
-	private final int secondAmount;
-	private final int thirdRune;
-	private final int thirdAmount;
-	private final int fourthRune;
-	private final int fourthAmount;
-	private final int freeze;
-	private final int poison;
-	private final int reduceAttack;
-	private final int staffRequired;
-	private final boolean multi;
+    private final int magicLevel;
+    private final int spellId;
+    private final int exp;
+    private final int maxHit;
+    private final int castAnim;
+    private final int startGfx;
+    private final int moveGfx;
+    private final int endGfx;
+    private final int hpDrain;
+    private final int firstRune;
+    private final int firstAmount;
+    private final int secondRune;
+    private final int secondAmount;
+    private final int thirdRune;
+    private final int thirdAmount;
+    private final int fourthRune;
+    private final int fourthAmount;
+    private final int freeze;
+    private final int poison;
+    private final int reduceAttack;
+    private final int staffRequired;
+    private final boolean multi;
 
-	public int getMagicLevel() {
-		return magicLevel;
-	}
+    /**
+     * @param magicLevel   The required Magic Level
+     * @param spellId      The Spell Id
+     * @param exp          The experience given when casting
+     * @param maxHit       The max hit
+     * @param castAnim     The animation done when casting the spell
+     * @param startGfx     The gfx done when casting the spell
+     * @param moveGfx      The gfx which is moving
+     * @param endGfx       The gfx done on opponent
+     * @param hpDrain      The hp drained
+     * @param firstRune
+     * @param firstAmount
+     * @param secondRune
+     * @param secondAmount
+     * @param thirdRune
+     * @param thirdAmount
+     * @param fourthRune
+     * @param fourthAmount
+     * @param freeze       The amount of time that this spell freezes the opponent
+     * @param poison
+     * @param reduceAttack
+     * @param staff        Required	Id of staff which is required to cast this spell
+     * @param multi        True is this is a multi spell
+     */
+    public Spell(final int magicLevel, final int spellId, final int exp, final int maxHit, final int castAnim, final int startGfx, final int moveGfx, final int endGfx, final int hpDrain, final int firstRune, final int firstAmount, final int secondRune, final int secondAmount, final int thirdRune, final int thirdAmount, final int fourthRune, final int fourthAmount, final int freeze, final int poison, final int reduceAttack, final int staffRequired, final boolean multi) {
+        this.magicLevel = magicLevel;
+        this.spellId = spellId;
+        this.exp = exp;
+        this.maxHit = Math.max(maxHit, 0);
+        this.castAnim = castAnim;
+        this.startGfx = startGfx;
+        this.moveGfx = moveGfx;
+        this.endGfx = endGfx;
+        this.hpDrain = hpDrain;
+        this.firstRune = firstRune;
+        this.firstAmount = firstAmount;
+        this.secondRune = secondRune;
+        this.secondAmount = secondAmount;
+        this.thirdRune = thirdRune;
+        this.thirdAmount = thirdAmount;
+        this.fourthRune = fourthRune;
+        this.fourthAmount = fourthAmount;
+        this.freeze = freeze;
+        this.poison = poison;
+        this.reduceAttack = reduceAttack;
+        this.staffRequired = staffRequired;
+        this.multi = multi;
+    }
 
-	public int getSpellId() {
-		return spellId;
-	}
+    public int getMagicLevel() {
+        return magicLevel;
+    }
 
-	public int getExp() {
-		return exp;
-	}
+    public int getSpellId() {
+        return spellId;
+    }
 
-	public int getMaxHit() {
-		return maxHit;
-	}
+    public int getExp() {
+        return exp;
+    }
 
-	public int getCastAnim() {
-		return castAnim;
-	}
+    public int getMaxHit() {
+        return maxHit;
+    }
 
-	public int getStartGfx() {
-		return startGfx;
-	}
+    public int getCastAnim() {
+        return castAnim;
+    }
 
-	public int getMoveGfx() {
-		return moveGfx;
-	}
+    public int getStartGfx() {
+        return startGfx;
+    }
 
-	public int getEndGfx() {
-		return endGfx;
-	}
+    public int getMoveGfx() {
+        return moveGfx;
+    }
 
-	public int getHpDrain() {
-		return hpDrain;
-	}
+    public int getEndGfx() {
+        return endGfx;
+    }
 
-	public int getFirstRune() {
-		return firstRune;
-	}
+    public int getHpDrain() {
+        return hpDrain;
+    }
 
-	public int getFirstAmount() {
-		return firstAmount;
-	}
+    public int getFirstRune() {
+        return firstRune;
+    }
 
-	public int getSecondRune() {
-		return secondRune;
-	}
+    public int getFirstAmount() {
+        return firstAmount;
+    }
 
-	public int getSecondAmount() {
-		return secondAmount;
-	}
+    public int getSecondRune() {
+        return secondRune;
+    }
 
-	public int getThirdRune() {
-		return thirdRune;
-	}
+    public int getSecondAmount() {
+        return secondAmount;
+    }
 
-	public int getThirdAmount() {
-		return thirdAmount;
-	}
+    public int getThirdRune() {
+        return thirdRune;
+    }
 
-	public int getFourthRune() {
-		return fourthRune;
-	}
+    public int getThirdAmount() {
+        return thirdAmount;
+    }
 
-	public int getFourthAmount() {
-		return fourthAmount;
-	}
+    public int getFourthRune() {
+        return fourthRune;
+    }
 
-	public int getFreeze() {
-		return freeze;
-	}
+    public int getFourthAmount() {
+        return fourthAmount;
+    }
 
-	public int getPoison() {
-		return poison;
-	}
+    public int getFreeze() {
+        return freeze;
+    }
 
-	public int getReduceAttack() {
-		return reduceAttack;
-	}
+    public int getPoison() {
+        return poison;
+    }
 
-	public int getStaffRequired() {
-		return staffRequired;
-	}
+    public int getReduceAttack() {
+        return reduceAttack;
+    }
 
-	public boolean isMulti() {
-		return multi;
-	}
+    public int getStaffRequired() {
+        return staffRequired;
+    }
 
-	/**
-	 * @param magicLevel   The required Magic Level
-	 * @param spellId      The Spell Id
-	 * @param exp          The experience given when casting
-	 * @param maxHit       The max hit
-	 * @param castAnim     The animation done when casting the spell
-	 * @param startGfx     The gfx done when casting the spell
-	 * @param moveGfx      The gfx which is moving
-	 * @param endGfx       The gfx done on opponent
-	 * @param hpDrain      The hp drained
-	 * @param firstRune
-	 * @param firstAmount
-	 * @param secondRune
-	 * @param secondAmount
-	 * @param thirdRune
-	 * @param thirdAmount
-	 * @param fourthRune
-	 * @param fourthAmount
-	 * @param freeze       The amount of time that this spell freezes the opponent
-	 * @param poison
-	 * @param reduceAttack
-	 * @param staff        Required	Id of staff which is required to cast this spell
-	 * @param multi        True is this is a multi spell
-	 */
-	public Spell(int magicLevel, int spellId, int exp, int maxHit, int castAnim, int startGfx,
-	             int moveGfx, int endGfx, int hpDrain, int firstRune, int firstAmount, int secondRune, int secondAmount,
-	             int thirdRune, int thirdAmount, int fourthRune, int fourthAmount, int freeze, int poison,
-	             int reduceAttack, int staffRequired, boolean multi) {
-		this.magicLevel = magicLevel;
-		this.spellId = spellId;
-		this.exp = exp;
-		this.maxHit = Math.max(maxHit, 0);
-		this.castAnim = castAnim;
-		this.startGfx = startGfx;
-		this.moveGfx = moveGfx;
-		this.endGfx = endGfx;
-		this.hpDrain = hpDrain;
-		this.firstRune = firstRune;
-		this.firstAmount = firstAmount;
-		this.secondRune = secondRune;
-		this.secondAmount = secondAmount;
-		this.thirdRune = thirdRune;
-		this.thirdAmount = thirdAmount;
-		this.fourthRune = fourthRune;
-		this.fourthAmount = fourthAmount;
-		this.freeze = freeze;
-		this.poison = poison;
-		this.reduceAttack = reduceAttack;
-		this.staffRequired = staffRequired;
-		this.multi = multi;
-	}
+    public boolean isMulti() {
+        return multi;
+    }
 
 }

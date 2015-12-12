@@ -2,12 +2,15 @@ package org.hyperion.rs2.model.content.specialareas;
 
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.OSPK;
-import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.rs2.model.content.specialareas.impl.NewGamePK;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +29,7 @@ public class SpecialAreaHolder {
         map.put("hybrid", new HybridZone());
         map.put("ospk", new OSPK());
 
-        for(final Map.Entry<String, SpecialArea> area : map.entrySet()) {
+        for(final Map.Entry<String, SpecialArea> area : map.entrySet()){
             CommandHandler.submit(area.getValue().command(area.getKey()));
         }
     }
@@ -43,7 +46,7 @@ public class SpecialAreaHolder {
         return map.values();
     }
 
-    public static void put(final String command, final SpecialArea area, boolean cmd) {
+    public static void put(final String command, final SpecialArea area, final boolean cmd) {
         map.put(command, area);
         if(cmd)
             CommandHandler.submit(area.command(command));

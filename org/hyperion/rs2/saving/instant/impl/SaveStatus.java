@@ -9,7 +9,7 @@ import org.hyperion.rs2.saving.instant.SaveInteger;
  */
 public class SaveStatus extends SaveInteger {
 
-    public SaveStatus(String name) {
+    public SaveStatus(final String name) {
         super(name);
         // TODO Auto-generated constructor stub
     }
@@ -21,7 +21,7 @@ public class SaveStatus extends SaveInteger {
     }
 
     @Override
-    public void setValue(Player player, int value) {
+    public void setValue(final Player player, final int value) {
         if(value == 2)
             Rank.addAbility(player, Rank.SUPER_DONATOR);
         if(value == 1)
@@ -29,7 +29,7 @@ public class SaveStatus extends SaveInteger {
     }
 
     @Override
-    public Integer getValue(Player player) {
+    public Integer getValue(final Player player) {
         return 0;
     }
 

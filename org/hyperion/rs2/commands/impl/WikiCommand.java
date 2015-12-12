@@ -25,25 +25,26 @@ public class WikiCommand extends Command {
     private static final Map<String, String> KEY_TO_URL = new HashMap<>();
 
     static {
-        try(final BufferedReader reader = new BufferedReader(new FileReader("./data/wikilinks.txt"))) {
-            for(String line = ""; (line = reader.readLine()) != null;) {
-                if(line.isEmpty()) break;
-                String[] split = line.split("-");
+        try(final BufferedReader reader = new BufferedReader(new FileReader("./data/wikilinks.txt"))){
+            for(String line = ""; (line = reader.readLine()) != null; ){
+                if(line.isEmpty())
+                    break;
+                final String[] split = line.split("-");
                 KEY_TO_URL.put(split[0], split[1]);
             }
-        } catch(Exception e) {
+        }catch(final Exception e){
 
         }
 
         CommandHandler.submit(new Command("wikishortcut", Rank.MODERATOR) {
             @Override
-            public boolean execute(Player player, String input) throws Exception {
+            public boolean execute(final Player player, final String input) throws Exception {
                 final String[] args = filterInput(input).split(",");
                 KEY_TO_URL.put(args[0], args[1]);
-                try (final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/wikilinks.txt", true))) {
-                    writer.write(args[0]+"-"+args[1]);
+                try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/wikilinks.txt", true))){
+                    writer.write(args[0] + "-" + args[1]);
                     writer.newLine();
-                } catch(Exception e) {
+                }catch(final Exception e){
 
                 }
                 return true;
@@ -59,12 +60,10 @@ public class WikiCommand extends Command {
         String key = filterInput(input);
         if(KEY_TO_URL.containsKey(key))
             key = KEY_TO_URL.get(key);
-        String site = TextUtils.titleCase(key).replace(" ", "%20");
+        final String site = TextUtils.titleCase(key).replace(" ", "%20");
         player.sendf("l4unchur13 http://www.arteropk.wikia.com/wiki/%s", site);
         return true;
     }
-
-
 
 
 }

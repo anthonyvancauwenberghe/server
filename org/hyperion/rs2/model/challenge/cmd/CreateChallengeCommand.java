@@ -9,36 +9,36 @@ import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-public class CreateChallengeCommand extends Command{
+public class CreateChallengeCommand extends Command {
 
-    public CreateChallengeCommand(){
+    public CreateChallengeCommand() {
         super("createchallenge", Rank.COMMUNITY_MANAGER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String line = filterInput(input).trim();
         final int i = line.indexOf(',');
         if(i == -1){
             player.sendf("Incorrect syntax: ::createchallenge length,id (amount");
             return false;
         }
-        int length;
+        final int length;
         try{
             length = Integer.parseInt(line.substring(0, i).trim());
             if(length < 15 || length > 70)
                 throw new Exception();
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Enter a valid length (15-70)");
             return false;
         }
-        final String[] itemParts = line.substring(i+1).trim().split(" +");
-        int id;
+        final String[] itemParts = line.substring(i + 1).trim().split(" +");
+        final int id;
         int amount = 1;
         try{
             id = Integer.parseInt(itemParts[0].trim());
             if(itemParts.length == 2)
                 amount = Integer.parseInt(itemParts[1].trim());
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Error parsing prize");
             return false;
         }

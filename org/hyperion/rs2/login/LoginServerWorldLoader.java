@@ -2,8 +2,8 @@ package org.hyperion.rs2.login;
 
 /**
  * A <code>WorldLoader</code> which loads from the login server.
- * @author Graham Edgecombe
  *
+ * @author Graham Edgecombe
  */
 /*public class LoginServerWorldLoader implements WorldLoader {
 

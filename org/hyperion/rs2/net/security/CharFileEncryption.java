@@ -10,16 +10,16 @@ public class CharFileEncryption {
 
     private final Key key;
 
-    public CharFileEncryption(String password) {
+    public CharFileEncryption(final String password) {
         this.key = convertPassword(password);
+    }
+
+    public static Key convertPassword(final String password) {
+        final Key aesKey = new SecretKeySpec(password.getBytes(), "AES");
+        return aesKey;
     }
 
     public Key getKey() {
         return key;
-    }
-
-    public static Key convertPassword(String password) {
-        Key aesKey = new SecretKeySpec(password.getBytes(), "AES");
-        return aesKey;
     }
 }

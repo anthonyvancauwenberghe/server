@@ -8,16 +8,16 @@ package org.hyperion.map.pathfinding;
  * @author Kevin Glass
  */
 public class ClosestHeuristic implements AStarHeuristic {
-	/**
-	 * @see AStarHeuristic#getCost(TileBasedMap, Mover, int, int, int, int)
-	 */
-	public float getCost(TileBasedMap map, int x, int y, int tx, int ty) {
-		float dx = tx - x;
-		float dy = ty - y;
+    /**
+     * @see AStarHeuristic#getCost(TileBasedMap, Mover, int, int, int, int)
+     */
+    public float getCost(final TileBasedMap map, final int x, final int y, final int tx, final int ty) {
+        final float dx = tx - x;
+        final float dy = ty - y;
 
-		float result = (float) (Math.sqrt((dx * dx) + (dy * dy)));
+        final float result = (float) (Math.sqrt((dx * dx) + (dy * dy)));
 
-		return result;
-	}
+        return result;
+    }
 
 }

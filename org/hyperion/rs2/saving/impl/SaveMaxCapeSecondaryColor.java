@@ -6,21 +6,21 @@ import org.hyperion.rs2.saving.SaveInteger;
 /**
  * Created by Jet on 10/9/2014.
  */
-public class SaveMaxCapeSecondaryColor extends SaveInteger{
+public class SaveMaxCapeSecondaryColor extends SaveInteger {
 
-    public SaveMaxCapeSecondaryColor(){
+    public SaveMaxCapeSecondaryColor() {
         super("maxCapeSecondaryColor");
     }
 
-    public int getDefaultValue(){
+    public int getDefaultValue() {
         return 0;
     }
 
-    public void setValue(final Player player, final int value){
+    public void setValue(final Player player, final int value) {
         player.maxCapeSecondaryColor = value == -1 ? 0 : value;
     }
 
-    public Integer getValue(final Player player){
+    public Integer getValue(final Player player) {
         return player.maxCapeSecondaryColor;
     }
 }

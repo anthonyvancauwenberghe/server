@@ -16,39 +16,39 @@ import org.hyperion.rs2.model.Player;
  */
 public abstract class DestructionAction extends Action {
 
-	/**
-	 * Creates the destruction action for the specified player.
-	 *
-	 * @param player The player to create the action for.
-	 */
-	public DestructionAction(Player player) {
-		super(player, 0);
-	}
+    /**
+     * Creates the destruction action for the specified player.
+     *
+     * @param player The player to create the action for.
+     */
+    public DestructionAction(final Player player) {
+        super(player, 0);
+    }
 
-	@Override
-	public QueuePolicy getQueuePolicy() {
-		return QueuePolicy.NEVER;
-	}
+    @Override
+    public QueuePolicy getQueuePolicy() {
+        return QueuePolicy.NEVER;
+    }
 
-	@Override
-	public WalkablePolicy getWalkablePolicy() {
-		return WalkablePolicy.WALKABLE;
-	}
+    @Override
+    public WalkablePolicy getWalkablePolicy() {
+        return WalkablePolicy.WALKABLE;
+    }
 
-	/**
-	 * Gets the destruction delay.
-	 *
-	 * @return The delay between consecutive destructions.
-	 */
-	public abstract long getDestructionDelay();
+    /**
+     * Gets the destruction delay.
+     *
+     * @return The delay between consecutive destructions.
+     */
+    public abstract long getDestructionDelay();
 
-	@Override
-	public void execute() {
-		if(this.getDelay() == 0) {
-			this.setDelay(getDestructionDelay());
-		} else {
+    @Override
+    public void execute() {
+        if(this.getDelay() == 0){
+            this.setDelay(getDestructionDelay());
+        }else{
 
-		}
-	}
+        }
+    }
 
 }

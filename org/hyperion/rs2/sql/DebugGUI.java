@@ -1,5 +1,15 @@
 package org.hyperion.rs2.sql;
 
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,47 +17,45 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Map;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.net.LoginDebugger;
-
 public class DebugGUI extends JFrame implements ActionListener {
 
-    private JLabel status1 = new JLabel("Loading...");
-    private JLabel status2 = new JLabel("Loading...");
-    private JLabel status3 = new JLabel("Loading...");
+    static {
+        CommandHandler.submit(new Command("showgui", Rank.ADMINISTRATOR) {
 
-    private JLabel lastQuery = new JLabel("Last query...");
+            @Override
+            public boolean execute(final Player player, final String input) throws Exception {
+                World.getWorld().getGUI().setShow(true);
+                return false;
+            }
 
-    private JLabel lastStart = new JLabel("Last start...");
+        });
+        CommandHandler.submit(new Command("hidegui", Rank.ADMINISTRATOR) {
 
-    private JLabel delta = new JLabel("Last delta...");
+            @Override
+            public boolean execute(final Player player, final String input) throws Exception {
+                World.getWorld().getGUI().setShow(false);
+                return false;
+            }
 
-    private JLabel playersQueue = new JLabel("Players Queue...");
-    private JLabel loadingQueue = new JLabel("Loading Queue...");
-    private JLabel importantQueue = new JLabel("Important Queue...");
-    private JLabel logsQueue = new JLabel("Logs Queue...");
-
-    private JButton btnDumpLogins = new JButton("Dump logins");
-
-    private JButton btnDumpThreads = new JButton("Dump threads");
-
-    private boolean show = false;
-
-    public void setShow(boolean b) {
-        show = b;
+        });
     }
 
+    private final JLabel status1 = new JLabel("Loading...");
+    private final JLabel status2 = new JLabel("Loading...");
+    private final JLabel status3 = new JLabel("Loading...");
+    private final JLabel lastQuery = new JLabel("Last query...");
+    private final JLabel lastStart = new JLabel("Last start...");
+    private final JLabel delta = new JLabel("Last delta...");
+    private final JLabel playersQueue = new JLabel("Players Queue...");
+    private final JLabel loadingQueue = new JLabel("Loading Queue...");
+    private final JLabel importantQueue = new JLabel("Important Queue...");
+    private final JLabel logsQueue = new JLabel("Logs Queue...");
+    private final JButton btnDumpLogins = new JButton("Dump logins");
+    private final JButton btnDumpThreads = new JButton("Dump threads");
+    private boolean show = false;
+
     public DebugGUI() {
-        this.setMinimumSize(new Dimension(600,250));
+        this.setMinimumSize(new Dimension(600, 250));
         this.add(status1);
         this.add(status2);
         this.add(status3);
@@ -69,86 +77,62 @@ public class DebugGUI extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    public void setStatus(String status) {
+    public void setShow(final boolean b) {
+        show = b;
+    }
+
+    public void setStatus(final String status) {
         //System.out.println("Updating status to: " + status);
-        if(show) {
-            String text3 = status3.getText();
-            String text2 = status2.getText();
+        if(show){
+            final String text3 = status3.getText();
+            final String text2 = status2.getText();
             status1.setText(text2);
             status2.setText(text3);
             status3.setText(status);
         }
     }
 
-    public void setLastQuery(String query) {
+    public void setLastQuery(final String query) {
         if(show)
             this.lastQuery.setText("Last query: " + query);
     }
 
-    public void setStart(long start) {
+    public void setStart(final long start) {
         if(show)
             this.lastStart.setText("Start: " + start);
     }
 
-    public void setDelta(long delta) {
+    public void setDelta(final long delta) {
         if(delta < 300)
             return;
         if(show)
             this.delta.setText("Delta: " + delta);
     }
 
-
     public void updateQueueSizes() {
-        World world = World.getWorld();
+        final World world = World.getWorld();
         this.logsQueue.setText("Logs queue: " + World.getWorld().getLogsConnection().getQueueSize() + "  -- " + world.getLogsConnection().getLastQueryString());
         this.playersQueue.setText("Players Queue: " + World.getWorld().getPlayersConnection().getQueueSize() + " -- " + world.getPlayersConnection().getLastQueryString());
-        this.importantQueue.setText("Important Queue: "  + World.getWorld().getImportantConnection().getQueueSize() + " -- " + world.getImportantConnection().getLastQueryString());
+        this.importantQueue.setText("Important Queue: " + World.getWorld().getImportantConnection().getQueueSize() + " -- " + world.getImportantConnection().getLastQueryString());
         this.loadingQueue.setText("Loading Queue: " + World.getWorld().getLoadingConnection().getQueueSize() + " -- " + world.getLoadingConnection().getLastQueryString());
     }
 
-
-
-    static {
-        CommandHandler.submit(new Command("showgui", Rank.ADMINISTRATOR) {
-
-            @Override
-            public boolean execute(Player player, String input)
-                    throws Exception {
-                World.getWorld().getGUI().setShow(true);
-                return false;
-            }
-
-        });
-        CommandHandler.submit(new Command("hidegui", Rank.ADMINISTRATOR) {
-
-            @Override
-            public boolean execute(Player player, String input)
-                    throws Exception {
-                World.getWorld().getGUI().setShow(false);
-                return false;
-            }
-
-        });
-    }
-
-
-
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
         //LoginDebugger.getLoadDebugger().dumpLogs();
-        try {
+        try{
             System.out.println(e.getActionCommand());
-            if(e.getActionCommand().equals("threads")) {
-                Map<Thread, StackTraceElement[]> allStackTraces = Thread.getAllStackTraces();
-                BufferedWriter out = new BufferedWriter(new FileWriter("./data/threaddump.log",true));
-                for(Map.Entry<Thread, StackTraceElement[]> entry: allStackTraces.entrySet()) {
-                    Thread thread = entry.getKey();
-                    StackTraceElement[] traces = entry.getValue();
-                    String name = thread.getName().toLowerCase();
-                    if(name.contains("sql") || name.contains("singlethreadexecutor")) {
+            if(e.getActionCommand().equals("threads")){
+                final Map<Thread, StackTraceElement[]> allStackTraces = Thread.getAllStackTraces();
+                final BufferedWriter out = new BufferedWriter(new FileWriter("./data/threaddump.log", true));
+                for(final Map.Entry<Thread, StackTraceElement[]> entry : allStackTraces.entrySet()){
+                    final Thread thread = entry.getKey();
+                    final StackTraceElement[] traces = entry.getValue();
+                    final String name = thread.getName().toLowerCase();
+                    if(name.contains("sql") || name.contains("singlethreadexecutor")){
                         out.write("Thread: " + thread.getName());
                         out.newLine();
-                        for(StackTraceElement trace: traces) {
+                        for(final StackTraceElement trace : traces){
                             out.write(trace.toString());
                             out.newLine();
                         }
@@ -158,10 +142,10 @@ public class DebugGUI extends JFrame implements ActionListener {
                 }
                 out.close();
                 System.out.println("Dumped thread stack!");
-            } else if(e.getActionCommand().equals("logins")) {
-               // LoginDebugger.getLoadDebugger().dumpLogs();
+            }else if(e.getActionCommand().equals("logins")){
+                // LoginDebugger.getLoadDebugger().dumpLogs();
             }
-        } catch(Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
         }
     }

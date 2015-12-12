@@ -18,7 +18,7 @@ public class ModerationInterface extends Interface {
     }
 
     @Override
-    public void handle(Player player, Packet pkt) {
+    public void handle(final Player player, final Packet pkt) {
 
     }
 

@@ -1,18 +1,22 @@
 package org.hyperion.rs2.util.rssfeed;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.XMLEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.XMLEvent;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class ReadRss {
     static final String ITEM = "item";
@@ -23,15 +27,15 @@ public class ReadRss {
     static final DateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzzzz", Locale.getDefault());
     static XMLEvent event;
 
-    public static List<Article> readFeed(String feedUrl) {
-        URL url;
-        try {
+    public static List<Article> readFeed(final String feedUrl) {
+        final URL url;
+        try{
             url = new URL(feedUrl);
-        } catch (MalformedURLException e) {
+        }catch(final MalformedURLException e){
             throw new RuntimeException(e);
         }
-        List<Article> articles = new ArrayList<>();
-        try {
+        final List<Article> articles = new ArrayList<>();
+        try{
             boolean isFeedHeader = true;
             // Set header values initial to the empty string
             String title = "";
@@ -40,19 +44,18 @@ public class ReadRss {
             String date = "";
 
             // First create a new XMLInputFactory
-            XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+            final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             // Setup a new eventReader
-            InputStream in = read(url);
-            XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
+            final InputStream in = read(url);
+            final XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
             // read the XML document
-            while (eventReader.hasNext()) {
-                 event = eventReader.nextEvent();
-                if (event.isStartElement()) {
-                    String localPart = event.asStartElement().getName()
-                            .getLocalPart();
-                    switch (localPart) {
+            while(eventReader.hasNext()){
+                event = eventReader.nextEvent();
+                if(event.isStartElement()){
+                    final String localPart = event.asStartElement().getName().getLocalPart();
+                    switch(localPart){
                         case ITEM:
-                            if (isFeedHeader) {
+                            if(isFeedHeader){
                                 isFeedHeader = false;
                             }
                             event = eventReader.nextEvent();
@@ -70,41 +73,40 @@ public class ReadRss {
                             date = getCharacterData(eventReader);
                             break;
                     }
-                } else if (event.isEndElement()) {
-                    if (event.asEndElement().getName().getLocalPart() == (ITEM)) {
+                }else if(event.isEndElement()){
+                    if(Objects.equals(event.asEndElement().getName().getLocalPart(), ITEM)){
                         Date formattedDate = Calendar.getInstance().getTime();
-                        try {
-                             formattedDate = format.parse(date);
-                        } catch(Exception e) {
+                        try{
+                            formattedDate = format.parse(date);
+                        }catch(final Exception e){
                             e.printStackTrace();
                         }
-                        Article message = new Article(formattedDate, link, title, description);
+                        final Article message = new Article(formattedDate, link, title, description);
                         articles.add(message);
                         event = eventReader.nextEvent();
                         continue;
                     }
                 }
             }
-        } catch (XMLStreamException e) {
+        }catch(final XMLStreamException e){
             throw new RuntimeException(e);
         }
         return articles;
     }
 
-    private static String getCharacterData(XMLEventReader eventReader)
-            throws XMLStreamException {
+    private static String getCharacterData(final XMLEventReader eventReader) throws XMLStreamException {
         String result = "";
         event = eventReader.nextEvent();
-        if (event instanceof Characters) {
+        if(event instanceof Characters){
             result = event.asCharacters().getData();
         }
         return result;
     }
 
-    private static InputStream read(URL url) {
-        try {
+    private static InputStream read(final URL url) {
+        try{
             return url.openStream();
-        } catch (IOException e) {
+        }catch(final IOException e){
             throw new RuntimeException(e);
         }
     }

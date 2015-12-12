@@ -1,6 +1,12 @@
 package org.hyperion.rs2.model.content.jge.tracker;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.BankPin;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.ItemsTradeable;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.EntryBuilder;
@@ -14,7 +20,46 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.*;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.BACK;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.CANCEL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.CLAIM_PROGRESS_SLOT;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.CLAIM_RETURN_SLOT;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.CONFIRM;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.DECREASE_PRICE;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.DECREASE_PRICE_PERCENT;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.DECREASE_QUANTITY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.ENTER_PRICE;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.ENTER_QUANTITY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.EQUATE_PRICE;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.Entries;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_PRICE;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_PRICE_PERCENT;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_QUANTITY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_QUANTITY_1;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_QUANTITY_10;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_QUANTITY_100;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.INCREASE_QUANTITY_500;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.NewEntry;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_1_BUY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_1_SELL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_1_VIEW;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_2_BUY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_2_SELL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_2_VIEW;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_3_BUY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_3_SELL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_3_VIEW;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_4_BUY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_4_SELL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_4_VIEW;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_5_BUY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_5_SELL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_5_VIEW;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_6_BUY;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_6_SELL;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.SLOT_6_VIEW;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.VIEW_BACK;
+import static org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface.ViewingEntry;
 
 /**
  * Created by Administrator on 9/23/2015.
@@ -31,7 +76,7 @@ public class JGrandExchangeTracker {
 
     private EntryBuilder newEntry;
 
-    public JGrandExchangeTracker(final Player player){
+    public JGrandExchangeTracker(final Player player) {
         this.player = player;
 
         entries = new EntryManager(player);
@@ -41,30 +86,74 @@ public class JGrandExchangeTracker {
         loadEntries();
     }
 
-    public void selectItem(final int itemId, final Entry.Type type){
+    public static boolean isGrandExchangeAction(final int id) {
+        switch(id){
+            case SLOT_1_BUY:
+            case SLOT_1_SELL:
+            case SLOT_1_VIEW:
+            case SLOT_2_BUY:
+            case SLOT_2_SELL:
+            case SLOT_2_VIEW:
+            case SLOT_3_BUY:
+            case SLOT_3_SELL:
+            case SLOT_3_VIEW:
+            case SLOT_4_BUY:
+            case SLOT_4_SELL:
+            case SLOT_4_VIEW:
+            case SLOT_5_BUY:
+            case SLOT_5_SELL:
+            case SLOT_5_VIEW:
+            case SLOT_6_BUY:
+            case SLOT_6_SELL:
+            case SLOT_6_VIEW:
+            case BACK:
+            case DECREASE_QUANTITY:
+            case INCREASE_QUANTITY:
+            case INCREASE_QUANTITY_1:
+            case INCREASE_QUANTITY_10:
+            case INCREASE_QUANTITY_100:
+            case INCREASE_QUANTITY_500:
+            case ENTER_QUANTITY:
+            case DECREASE_PRICE:
+            case INCREASE_PRICE:
+            case DECREASE_PRICE_PERCENT:
+            case EQUATE_PRICE:
+            case ENTER_PRICE:
+            case INCREASE_PRICE_PERCENT:
+            case CONFIRM:
+            case CANCEL:
+            case CLAIM_PROGRESS_SLOT:
+            case CLAIM_RETURN_SLOT:
+            case VIEW_BACK:
+                return true;
+        }
+        return false;
+    }
+
+    public void selectItem(final int itemId, final Entry.Type type) {
         ifNewEntry(e -> {
-            if (e.type() != type) {
+            if(e.type() != type){
                 player.sendf("You are not %s an item!", type);
                 return;
             }
             final ItemDefinition definition = ItemDefinition.forId(itemId);
-            if (definition == null) {
+            if(definition == null){
                 player.sendf("Invalid item: %d", itemId);
                 return;
             }
-            if (ItemSpawning.canSpawn(itemId)) {
+            if(ItemSpawning.canSpawn(itemId)){
                 player.sendf("Spawnables aren't allowed in the Grand Exchange!");
                 return;
             }
-            if (!ItemsTradeable.isTradeable(itemId)) {
+            if(!ItemsTradeable.isTradeable(itemId)){
                 player.sendf("Non-tradeables aren't allowed in the Grand Exchange");
                 return;
             }
-            if (ItemInfo.geBlacklist.check(player, definition))
+            if(ItemInfo.geBlacklist.check(player, definition))
                 return;
-            if (e.itemId(itemId)) {
+            if(e.itemId(itemId)){
                 e.unitPrice(JGrandExchange.getInstance().defaultItemUnitPrice(e.itemId(), e.type().opposite(), e.currency()), false);
-                if (e.itemQuantity() < 1) {
+                if(e.itemQuantity() < 1){
                     e.itemQuantity(1, false);
                     JGrandExchangeInterface.NewEntry.setQuantity(player, e.itemQuantity());
                 }
@@ -75,12 +164,11 @@ public class JGrandExchangeTracker {
         }, "You're not building a new entry right now");
     }
 
-    public void loadEntries(){
-        JGrandExchange.getInstance().get(player.getName().toLowerCase())
-                .forEach(entries::add);
+    public void loadEntries() {
+        JGrandExchange.getInstance().get(player.getName().toLowerCase()).forEach(entries::add);
     }
 
-    public void notifyChanges(final boolean alert){
+    public void notifyChanges(final boolean alert) {
         if(player.getGrandExchangeTracker().entries.anyMatch(e -> !e.cancelled && !e.claims.empty())){
             if(alert)
                 player.sendf("Alert##Grand Exchange##One or more of your offers have been updated!");
@@ -90,19 +178,19 @@ public class JGrandExchangeTracker {
 
     }
 
-    public Optional<Entry> activeEntryOpt(){
+    public Optional<Entry> activeEntryOpt() {
         return Optional.ofNullable(activeEntry());
     }
 
-    public Entry activeEntry(){
+    public Entry activeEntry() {
         return activeSlot != -1 ? entries.get(activeSlot) : null;
     }
 
-    public boolean hasActiveEntry(){
+    public boolean hasActiveEntry() {
         return activeEntry() != null;
     }
 
-    public void ifActiveEntry(final Consumer<Entry> action, final String fmt, final String... args){
+    public void ifActiveEntry(final Consumer<Entry> action, final String fmt, final String... args) {
         final Entry activeEntry = activeEntry();
         if(activeEntry != null)
             action.accept(activeEntry);
@@ -110,18 +198,18 @@ public class JGrandExchangeTracker {
             player.sendf(fmt, args);
     }
 
-    public boolean canOpenInterface(){
+    public boolean canOpenInterface() {
         return Rank.hasAbility(player, Rank.DEVELOPER) || ItemSpawning.canSpawn(player, false);
     }
 
-    public void openInterface(final EntryManager entries){
+    public void openInterface(final EntryManager entries) {
         if(!canOpenInterface()){
             player.sendf("You cannot use the Grand Exchange right now!");
             return;
         }
         player.resetingPin = false;
-        if (player.bankPin != null && !player.bankPin.equals("null")) {
-            if (player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin)) {
+        if(player.bankPin != null && !player.bankPin.equals("null")){
+            if(player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin)){
                 BankPin.loadUpPinInterface(player, false);
                 return;
             }
@@ -129,40 +217,40 @@ public class JGrandExchangeTracker {
         Entries.open(player, entries);
     }
 
-    public void openInterface(){
+    public void openInterface() {
         openInterface(entries);
     }
 
-    public boolean buildingNewEntry(){
+    public boolean buildingNewEntry() {
         return newEntry != null;
     }
 
-    public void ifNewEntry(final Consumer<EntryBuilder> action, final String fmt, final Object... args){
+    public void ifNewEntry(final Consumer<EntryBuilder> action, final String fmt, final Object... args) {
         if(newEntry != null)
             action.accept(newEntry);
         else
             player.sendf(fmt, args);
     }
 
-    public boolean ifNewEntry(final Predicate<EntryBuilder> condition){
+    public boolean ifNewEntry(final Predicate<EntryBuilder> condition) {
         return newEntry != null && condition.test(newEntry);
     }
 
-    public EntryBuilder newEntry(){
+    public EntryBuilder newEntry() {
         return newEntry;
     }
 
-    public void nullifyNewEntry(){
+    public void nullifyNewEntry() {
         newEntry = null;
         player.sendMessage(":stopsearch:");
     }
 
-    public void showEntries(){
+    public void showEntries() {
         activeSlot = -1;
         openInterface();
     }
 
-    public boolean startNewEntry(final Entry.Type type, final int slot){
+    public boolean startNewEntry(final Entry.Type type, final int slot) {
         if(!canOpenInterface()){
             player.sendf("You cannot use the Grand Exchange right now!");
             return false;
@@ -179,7 +267,7 @@ public class JGrandExchangeTracker {
         return true;
     }
 
-    public boolean view(final int slot){
+    public boolean view(final int slot) {
         if(entries.empty(slot)){
             player.sendf("Nothing to view at this slot!");
             return false;
@@ -194,7 +282,7 @@ public class JGrandExchangeTracker {
         return true;
     }
 
-    public boolean handleInterfaceInteraction(final int id){
+    public boolean handleInterfaceInteraction(final int id) {
         switch(id){
             case SLOT_1_BUY:
                 if(startNewEntry(Entry.Type.BUYING, 0))
@@ -311,7 +399,7 @@ public class JGrandExchangeTracker {
                 return true;
             case ENTER_QUANTITY:
                 ifNewEntry(e -> {
-                    if (e.validItem())
+                    if(e.validItem())
                         DialogueManager.openDialogue(player, 600);
                 }, "You are not building a new entry right now!");
                 return true;
@@ -341,7 +429,7 @@ public class JGrandExchangeTracker {
                 return true;
             case ENTER_PRICE:
                 ifNewEntry(e -> {
-                    if (e.validItem())
+                    if(e.validItem())
                         DialogueManager.openDialogue(player, 601);
                 }, "You are not building a new entry right now!");
                 return true;
@@ -353,31 +441,29 @@ public class JGrandExchangeTracker {
                 return true;
             case CONFIRM:
                 synchronized(ACTIONS_LOCK){
-                ifNewEntry(e -> {
-                    if(!JGrandExchange.enabled){
-                        player.sendf("The Grand Exchange has been temporarily disabled");
-                        return;
-                    }
-                    if(!canOpenInterface()){
-                        player.sendf("You cannot use the Grand Exchange right now!");
-                        return;
-                    }
-                    if(!e.canBuild()){
-                        player.sendf("Entry is not valid!");
-                        return;
-                    }
-                    if(entries.used(e.slot())){
-                        player.sendf("This slot is already in use");
-                        return;
-                    }
-                    Item taken = null;
+                    ifNewEntry(e -> {
+                        if(!JGrandExchange.enabled){
+                            player.sendf("The Grand Exchange has been temporarily disabled");
+                            return;
+                        }
+                        if(!canOpenInterface()){
+                            player.sendf("You cannot use the Grand Exchange right now!");
+                            return;
+                        }
+                        if(!e.canBuild()){
+                            player.sendf("Entry is not valid!");
+                            return;
+                        }
+                        if(entries.used(e.slot())){
+                            player.sendf("This slot is already in use");
+                            return;
+                        }
+                        Item taken = null;
                         switch(e.type()){
-                            case BUYING: {
+                            case BUYING:{
                                 final int max = player.getInventory().getCount(e.currency().itemId);
                                 if(e.totalPrice() > max){
-                                    player.sendf("You need %,d more %s to %s %,d %s!",
-                                            e.totalPrice() - max, e.currency().shortName.toLowerCase(), e.type().singleName.toLowerCase(),
-                                            e.itemQuantity(), e.item().getDefinition().getName());
+                                    player.sendf("You need %,d more %s to %s %,d %s!", e.totalPrice() - max, e.currency().shortName.toLowerCase(), e.type().singleName.toLowerCase(), e.itemQuantity(), e.item().getDefinition().getName());
                                     return;
                                 }
                                 if(e.totalPrice() <= 0){
@@ -391,7 +477,7 @@ public class JGrandExchangeTracker {
                                 player.getExpectedValues().addItemtoInventory("Grand Exchange", taken);
                                 break;
                             }
-                            case SELLING: {
+                            case SELLING:{
                                 final int max = player.getInventory().getCount(e.itemId());
                                 if(e.itemQuantity() > max){
                                     player.sendf("You don't have that many %ss!", e.item().getDefinition().getName());
@@ -523,52 +609,8 @@ public class JGrandExchangeTracker {
             case VIEW_BACK:
                 showEntries();
                 return true;
-            default: return false;
+            default:
+                return false;
         }
-    }
-
-
-    public static boolean isGrandExchangeAction(int id) {
-        switch(id) {
-            case SLOT_1_BUY:
-            case SLOT_1_SELL:
-            case SLOT_1_VIEW:
-            case SLOT_2_BUY:
-            case SLOT_2_SELL:
-            case SLOT_2_VIEW:
-            case SLOT_3_BUY:
-            case SLOT_3_SELL:
-            case SLOT_3_VIEW:
-            case SLOT_4_BUY:
-            case SLOT_4_SELL:
-            case SLOT_4_VIEW:
-            case SLOT_5_BUY:
-            case SLOT_5_SELL:
-            case SLOT_5_VIEW:
-            case SLOT_6_BUY:
-            case SLOT_6_SELL:
-            case SLOT_6_VIEW:
-            case BACK:
-            case DECREASE_QUANTITY:
-            case INCREASE_QUANTITY:
-            case INCREASE_QUANTITY_1:
-            case INCREASE_QUANTITY_10:
-            case INCREASE_QUANTITY_100:
-            case INCREASE_QUANTITY_500:
-            case ENTER_QUANTITY:
-            case DECREASE_PRICE:
-            case INCREASE_PRICE:
-            case DECREASE_PRICE_PERCENT:
-            case EQUATE_PRICE:
-            case ENTER_PRICE:
-            case INCREASE_PRICE_PERCENT:
-            case CONFIRM:
-            case CANCEL:
-            case CLAIM_PROGRESS_SLOT:
-            case CLAIM_RETURN_SLOT:
-            case VIEW_BACK:
-            return true;
-        }
-            return false;
     }
 }

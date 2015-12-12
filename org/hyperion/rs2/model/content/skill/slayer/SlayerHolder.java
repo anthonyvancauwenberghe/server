@@ -1,9 +1,5 @@
 package org.hyperion.rs2.model.content.skill.slayer;
 
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.content.ContentEntity;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay
@@ -28,11 +24,12 @@ public class SlayerHolder {
     }
 
     public int killedTask(final int npcid) {
-        if(task == null) return 0;
-        if(isTask(npcid)) {
-            if(--taskAmount == 0) {
+        if(task == null)
+            return 0;
+        if(isTask(npcid)){
+            if(--taskAmount == 0){
                 totalTasks++;
-                slayerPoints += (int)((task.getDifficulty().getSlayerPoints() + handleTotalTasks()));
+                slayerPoints += (int) ((task.getDifficulty().getSlayerPoints() + handleTotalTasks()));
             }
             return task.getXP();
         }
@@ -59,36 +56,37 @@ public class SlayerHolder {
     }
 
     public int handleTotalTasks() {
-        int pointsToAdd =0;
-        if(totalTasks%250 == 0)
+        int pointsToAdd = 0;
+        if(totalTasks % 250 == 0)
             pointsToAdd = 180;
-        else if(totalTasks%100 == 0)
+        else if(totalTasks % 100 == 0)
             pointsToAdd = 100;
-        else if(totalTasks %50 == 0)
+        else if(totalTasks % 50 == 0)
             pointsToAdd = 50;
-        else if(totalTasks%10 == 0)
+        else if(totalTasks % 10 == 0)
             pointsToAdd = 20;
         return pointsToAdd;
 
     }
 
     public void load(final String string) {
-        try {
+        try{
             final String[] split = string.split(",");
             task = SlayerTask.load(Integer.parseInt(split[0]));
             taskAmount = Integer.parseInt(split[1]);
             slayerPoints = Integer.parseInt(split[2]);
             totalTasks = Integer.parseInt(split[3]);
-        } catch (Exception e) { //fail safe
+        }catch(final Exception e){ //fail safe
             e.printStackTrace();
         }
     }
 
-    public void setPoints(int value) {
+    public void setPoints(final int value) {
         slayerPoints = value;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return String.format("%d,%d,%d,%d", task == null ? -1 : task.getId(), taskAmount, slayerPoints, totalTasks);
     }
 

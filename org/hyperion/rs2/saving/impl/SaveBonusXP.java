@@ -19,20 +19,20 @@ public class SaveBonusXP extends SaveString {
 
 
     @Override
-    public void setValue(Player player, String value) {
-        try {
+    public void setValue(final Player player, final String value) {
+        try{
             player.getSkills().setBonusXP(Skills.CurrentBonusXP.load(value));
             player.getSkills().getBonusXP().ifPresent(bonus -> {
-                    if(bonus.running())
-                        player.sendf("You have @red@%s@bla@ remaining for your bonus in @red@%s", bonus.timeRemaining(), Skills.SKILL_NAME[bonus.getSkill()]);
+                if(bonus.running())
+                    player.sendf("You have @red@%s@bla@ remaining for your bonus in @red@%s", bonus.timeRemaining(), Skills.SKILL_NAME[bonus.getSkill()]);
             });
-        }catch(final Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
         }
     }
 
     @Override
-    public String getValue(Player player) {
+    public String getValue(final Player player) {
         if(player.getSkills().getBonusXP().isPresent())
             return player.getSkills().getBonusXP().get().toString();
         return "";

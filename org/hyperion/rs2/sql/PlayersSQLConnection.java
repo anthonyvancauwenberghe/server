@@ -2,7 +2,6 @@ package org.hyperion.rs2.sql;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
-import org.hyperion.rs2.sql.event.impl.RewardTopVotersEvent;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -13,49 +12,26 @@ import java.util.LinkedList;
 
 public class PlayersSQLConnection extends MySQLConnection {
 
-	public PlayersSQLConnection(Configuration config) {
+	private final LinkedList<String> list = new LinkedList<String>();
+
+
+	public PlayersSQLConnection(final Configuration config) {
 		super("PlayersMySQL", config.getString("playersurl"), config.getString("playersuser"), config.getString("playerspass"), 5000, 500, 0);
 	}
 
-
-	private LinkedList<String> list = new LinkedList<String>();
-
-	private void checkString(String query) {
-		list.add(query);
-		if(list.size() >= 1000) {
-			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter("./data/playersql.log", true));
-				for(String s: list) {
-					out.write(s);
-					out.newLine();
-				}
-				out.close();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			list.clear();
-		}
-	}
-
-	public ResultSet query(String s) throws SQLException {
-		/*if(s.toLowerCase().contains("insert into"))
-			checkString(s);*/
-		return super.query(s);
-	}
-
-	public static void main(String... args) throws IOException, SQLException {
-		PlayersSQLConnection conn = new PlayersSQLConnection(Server.getConfig());
+	public static void main(final String... args) throws IOException, SQLException {
+		final PlayersSQLConnection conn = new PlayersSQLConnection(Server.getConfig());
 		conn.init();
 		conn.startupQueries();
 		//Code reading from .sql file and inserting in SQLite
-		/* 
+		/*
 		BufferedReader in = new BufferedReader(new FileReader("C:/Users/Saosin Hax/Desktop/SQLite/dump.sql"));
 		String line;
 		String insertLine = "";
 		System.out.println(DB_FILE_NAME);
 		LinkedList<String> queries = new LinkedList<String>();
 		while((line = in.readLine()) != null) {
-			
+
 			line = line.replaceAll("`", "");
 			line = line.replaceAll("ENGINE=MyISAM DEFAULT CHARSET=latin1", "");
 			line = line.replaceAll("IF NOT EXISTS", "");
@@ -70,7 +46,7 @@ public class PlayersSQLConnection extends MySQLConnection {
 					line = line.replaceAll("`", "");
 					line = line.replaceAll("ENGINE=MyISAM DEFAULT CHARSET=latin1", "");
 					line = line.replaceAll("IF NOT EXISTS", "");
-					
+
 					sb.append(line);
 					if(line.endsWith(";")) {
 						//System.out.println(sb.toString());
@@ -94,6 +70,29 @@ public class PlayersSQLConnection extends MySQLConnection {
 		}
 		long delta = System.currentTimeMillis() - start;
 		*/
+	}
+
+	private void checkString(final String query) {
+		list.add(query);
+		if(list.size() >= 1000){
+			try{
+				final BufferedWriter out = new BufferedWriter(new FileWriter("./data/playersql.log", true));
+				for(final String s : list){
+					out.write(s);
+					out.newLine();
+				}
+				out.close();
+			}catch(final Exception e){
+				e.printStackTrace();
+			}
+			list.clear();
+		}
+	}
+
+	public ResultSet query(final String s) throws SQLException {
+		/*if(s.toLowerCase().contains("insert into"))
+			checkString(s);*/
+		return super.query(s);
 	}
 
 	public boolean startupQueries() {
@@ -120,7 +119,7 @@ public class PlayersSQLConnection extends MySQLConnection {
 
 	@Override
 	public boolean init() {
-		if (!Server.getConfig().getBoolean("sql"))
+		if(!Server.getConfig().getBoolean("sql"))
 			return false;
 		establishConnection();
 		this.start();

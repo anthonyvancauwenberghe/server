@@ -5,31 +5,10 @@ import java.util.List;
 
 public final class BountyPerks {
 
-    public static final void main(String[] args) {
-    }
-
-    public static enum Perk {
-        SPEC_RESTORE(2),
-        VENG_REDUCTION(2),
-        PRAY_LEECH(2);
-
-        final int maxLevel;
-
-        private Perk(final int maxLevel) {
-            this.maxLevel = maxLevel;
-        }
-
-        public int getFlag(int level) {
-            return 1 << (ordinal() + level * 3);
-        }
-        
-        public String toString() {
-        	return super.toString().substring(0, super.toString().indexOf("_"));
-        }
-
-    }
-
     private int perks = 0;
+
+    public static final void main(final String[] args) {
+    }
 
     public void setPerk(final int perks) {
         this.perks = perks;
@@ -40,9 +19,9 @@ public final class BountyPerks {
     }
 
     public int hasPerk(final Perk perk) {
-        for (int level = perk.maxLevel; level >= 0; level--) {
-            int flag = perk.getFlag(level);
-            if ((flag & perks) == flag)
+        for(int level = perk.maxLevel; level >= 0; level--){
+            final int flag = perk.getFlag(level);
+            if((flag & perks) == flag)
                 return level;
         }
         return -1;
@@ -53,7 +32,7 @@ public final class BountyPerks {
     }
 
     public void addFlags(final Perk... perks) {
-        for (Perk p : perks)
+        for(final Perk p : perks)
             addFlag(p.getFlag(hasPerk(p) + 1));
     }
 
@@ -62,14 +41,14 @@ public final class BountyPerks {
     }
 
     public boolean removeFlag(final Perk perk, final int level) {
-        if (hasPerk(perk.getFlag(level))) {
+        if(hasPerk(perk.getFlag(level))){
             perks &= ~perk.getFlag(level);
             return true;
         }
         return false;
     }
 
-    public void upgradePerk(Perk perk) {
+    public void upgradePerk(final Perk perk) {
         final int oldLevel = hasPerk(perk);
         if(oldLevel + 1 > perk.maxLevel)
             return;
@@ -80,20 +59,20 @@ public final class BountyPerks {
 
     public int calculateTotalPerks() {
         int totalPerks = 0;
-        for(final Perk perk : getPerks()) {
+        for(final Perk perk : getPerks()){
             totalPerks += hasPerk(perk) + 1;
         }
         return totalPerks;
     }
-    
+
     public int calcNextPerkCost() {
-    	return (int)(25 + Math.pow(2, calculateTotalPerks()));
+        return (int) (25 + Math.pow(2, calculateTotalPerks()));
     }
 
     public List<Perk> getPerks() {
-        List<Perk> playerperks = new ArrayList<>();
-        for (Perk perk : Perk.values()) {
-            if (hasPerk(perk) >= 0)
+        final List<Perk> playerperks = new ArrayList<>();
+        for(final Perk perk : Perk.values()){
+            if(hasPerk(perk) >= 0)
                 playerperks.add(perk);
         }
         return playerperks;
@@ -101,14 +80,35 @@ public final class BountyPerks {
 
     public String toString() {
         final StringBuilder builder = new StringBuilder("[");
-        for (final Perk perk : getPerks()) {
+        for(final Perk perk : getPerks()){
             builder.append(perk.toString()).append("(");
-            for(int i = -1; i < hasPerk(perk); i++) {
+            for(int i = -1; i < hasPerk(perk); i++){
                 builder.append("I");
             }
             builder.append(")").append(",");
         }
         builder.append("]");
         return builder.toString();
+    }
+
+    public enum Perk {
+        SPEC_RESTORE(2),
+        VENG_REDUCTION(2),
+        PRAY_LEECH(2);
+
+        final int maxLevel;
+
+        Perk(final int maxLevel) {
+            this.maxLevel = maxLevel;
+        }
+
+        public int getFlag(final int level) {
+            return 1 << (ordinal() + level * 3);
+        }
+
+        public String toString() {
+            return super.toString().substring(0, super.toString().indexOf("_"));
+        }
+
     }
 }

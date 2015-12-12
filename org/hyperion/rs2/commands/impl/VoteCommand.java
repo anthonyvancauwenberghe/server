@@ -15,11 +15,11 @@ public class VoteCommand extends Command {
     }
 
     @Override
-    public boolean execute(Player player, String input) throws Exception {
-        try {
+    public boolean execute(final Player player, final String input) throws Exception {
+        try{
 
             player.getActionSender().sendWebpage("http://vote.arteropk.com/index.php?toplist_id=0&username=" + player.getName());
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
         return true;

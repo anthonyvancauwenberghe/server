@@ -10,13 +10,13 @@ import org.hyperion.rs2.task.Task;
  */
 public class BankersFacingTask implements Task {
 
-	@Override
-	public void execute(GameEngine context) {
-		context.submitWork(new Runnable() {
-			public void run() {
+    @Override
+    public void execute(final GameEngine context) {
+        context.submitWork(new Runnable() {
+            public void run() {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
 }

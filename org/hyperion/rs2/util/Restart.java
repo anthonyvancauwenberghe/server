@@ -11,32 +11,32 @@ import java.util.Date;
 
 public class Restart {
 
-	public static final File LOG_FILE = new File("./data/restarts.log");
+    public static final File LOG_FILE = new File("./data/restarts.log");
 
-	public Restart(String reason) {
-		writeLog(reason);
-	}
+    public Restart(final String reason) {
+        writeLog(reason);
+    }
 
-	public void execute() {
-		for(Player player : World.getWorld().getPlayers()) {
-			Trade.declineTrade(player);
-			PlayerFiles.saveGame(player);
-		}
-		System.exit(0);
-	}
+    public void execute() {
+        for(final Player player : World.getWorld().getPlayers()){
+            Trade.declineTrade(player);
+            PlayerFiles.saveGame(player);
+        }
+        System.exit(0);
+    }
 
-	private void writeLog(String reason) {
-		for(int i = 0; i < 10; i++) {
-			System.out.println("Restarting server: " + reason);
-		}
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(LOG_FILE, true));
-			bw.write(new Date() + "\t" + reason);
-			bw.newLine();
-			bw.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    private void writeLog(final String reason) {
+        for(int i = 0; i < 10; i++){
+            System.out.println("Restarting server: " + reason);
+        }
+        try{
+            final BufferedWriter bw = new BufferedWriter(new FileWriter(LOG_FILE, true));
+            bw.write(new Date() + "\t" + reason);
+            bw.newLine();
+            bw.close();
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

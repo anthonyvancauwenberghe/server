@@ -20,22 +20,10 @@ public class RichWhitelistEvent extends SQLEvent {
     public static boolean enabled = false;
     public static List<String> whitelist = new ArrayList();
 
-    public RichWhitelistEvent(){
-        super(Time.ONE_MINUTE);
-    }
-
-    @Override
-    public void execute(SQLConnection sql) throws SQLException {
-        if(!enabled)
-            this.stop();
-        sql.offer(new RichWhitelistRequest());
-        super.updateStartTime();
-    }
-
     static {
         CommandHandler.submit(new Command("disablerichevent") {
             @Override
-            public boolean execute(Player player, String input) throws Exception {
+            public boolean execute(final Player player, final String input) throws Exception {
                 enabled = false;
                 player.sendMessage("Rich check event is now disabled.");
                 return true;
@@ -43,11 +31,23 @@ public class RichWhitelistEvent extends SQLEvent {
         });
         CommandHandler.submit(new Command("enablerichevent") {
             @Override
-            public boolean execute(Player player, String input) throws Exception {
+            public boolean execute(final Player player, final String input) throws Exception {
                 enabled = true;
                 player.sendMessage("Rich check event is now enabled.");
                 return true;
             }
         });
+    }
+
+    public RichWhitelistEvent() {
+        super(Time.ONE_MINUTE);
+    }
+
+    @Override
+    public void execute(final SQLConnection sql) throws SQLException {
+        if(!enabled)
+            this.stop();
+        sql.offer(new RichWhitelistRequest());
+        super.updateStartTime();
     }
 }

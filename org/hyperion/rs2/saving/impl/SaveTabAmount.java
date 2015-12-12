@@ -23,12 +23,12 @@ public class SaveTabAmount extends SaveInteger {
     }
 
     @Override
-    public void setValue(Player player, int value) {
+    public void setValue(final Player player, final int value) {
         player.getBankField().setTabAmount(value);
     }
 
     @Override
-    public Integer getValue(Player player) {
+    public Integer getValue(final Player player) {
         return player.getBankField().getTabAmount();
     }
 

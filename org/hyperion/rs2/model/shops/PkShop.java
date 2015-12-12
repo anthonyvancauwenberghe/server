@@ -11,72 +11,15 @@ import org.hyperion.rs2.net.ActionSender;
  */
 public class PkShop extends PointsShop {
 
-	public PkShop(int id, String name, Container container) {
-		super(id, name, container);
-	}
-
-	@Override
-	public void valueSellItem(Player player, Item item) {
-		int price = (int) Math.round(getPrice(item.getId()) * .65);
-		if(item.getId() == 5020) {
-			price = 10;
-		}
-        if(price <= 0 && player.getInventory().freeSlots() != 0) {
-            ActionSender.yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
-			return;
-		}
-
-        if(item.getId() == LEGENDARY_TICKET) {
-            player.sendMessage("You cannot sell this back to the shop");
-            return;
-        }
-
-		String message = "The shop will buy a '@dre@"
-				+ item.getDefinition().getProperName() + "@bla@' for " + price + " PK points.";
-		if(price == 1) {
-			message = message.replace("points", "point");
-		}
-
-		player.getActionSender().sendMessage(message);
-	}
-
-	@Override
-	public void sellToShop(Player player, Item item) {
-        if(item.getId() == LEGENDARY_TICKET) {
-            player.sendMessage("You cannot sell this back to the shop");
-            return;
-        }
-		int payment = this.getPrice(item.getId());
-		player.getInventory().remove(item);
-        player.getExpectedValues().sellToStore(item);
-		getContainer().add(item);
-		payment = (int) Math.round(payment * .65); // Cause Shops wanna scam u!
-		if(item.getId() == 5020) {
-			payment = 10;
-		}
-		payment = payment * item.getCount();
-		if(payment > 0)
-			player.getPoints().setPkPoints(player.getPoints().getPkPoints() + payment);
-		player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
-		updatePlayers();
-	}
-
-	@Override
-	public int getPrice(int itemId) {
-        return getValue(itemId);
-	}
-
-    @Override
-    public void buyFromShop(Player player, Item item) {
-        super.buyFromShop(player, item);
-        player.getActionSender().sendString(3901, "ArteroPK points: @gre@" + player.getPoints().getPkPoints());
+    public PkShop(final int id, final String name, final Container container) {
+        super(id, name, container);
     }
 
-    public static int getValue(int itemId) {
-        if(itemId >= 8845 && itemId <= 8850) {
+    public static int getValue(final int itemId) {
+        if(itemId >= 8845 && itemId <= 8850){
             return (itemId - 8844) * 100;
         }
-        switch(itemId) {
+        switch(itemId){
             case 13663:
                 return 100_000;
             case 15486:
@@ -126,23 +69,78 @@ public class PkShop extends PointsShop {
         return 5000;
     }
 
+    @Override
+    public void valueSellItem(final Player player, final Item item) {
+        int price = (int) Math.round(getPrice(item.getId()) * .65);
+        if(item.getId() == 5020){
+            price = 10;
+        }
+        if(price <= 0 && player.getInventory().freeSlots() != 0){
+            ActionSender.yellModMessage("@dre@" + player.getSafeDisplayName() + " found a unbuyable item in the PK store.");
+            return;
+        }
 
-	@Override
-	public String getPointsName() {
-		return Server.NAME + " Points";
-	}
+        if(item.getId() == LEGENDARY_TICKET){
+            player.sendMessage("You cannot sell this back to the shop");
+            return;
+        }
+
+        String message = "The shop will buy a '@dre@" + item.getDefinition().getProperName() + "@bla@' for " + price + " PK points.";
+        if(price == 1){
+            message = message.replace("points", "point");
+        }
+
+        player.getActionSender().sendMessage(message);
+    }
+
+    @Override
+    public void sellToShop(final Player player, final Item item) {
+        if(item.getId() == LEGENDARY_TICKET){
+            player.sendMessage("You cannot sell this back to the shop");
+            return;
+        }
+        int payment = this.getPrice(item.getId());
+        player.getInventory().remove(item);
+        player.getExpectedValues().sellToStore(item);
+        getContainer().add(item);
+        payment = (int) Math.round(payment * .65); // Cause Shops wanna scam u!
+        if(item.getId() == 5020){
+            payment = 10;
+        }
+        payment = payment * item.getCount();
+        if(payment > 0)
+            player.getPoints().setPkPoints(player.getPoints().getPkPoints() + payment);
+        player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
+        updatePlayers();
+    }
+
+    @Override
+    public int getPrice(final int itemId) {
+        return getValue(itemId);
+    }
+
+    @Override
+    public void buyFromShop(final Player player, final Item item) {
+        super.buyFromShop(player, item);
+        player.getActionSender().sendString(3901, "ArteroPK points: @gre@" + player.getPoints().getPkPoints());
+    }
+
+    @Override
+    public String getPointsName() {
+        return Server.NAME + " Points";
+    }
 
 
-	@Override
-	protected int getPointsAmount(Player player) {
-		return player.getPoints().getPkPoints();
-	}
+    @Override
+    protected int getPointsAmount(final Player player) {
+        return player.getPoints().getPkPoints();
+    }
 
 
-	@Override
-	protected void setPointsAmount(Player player, int value) {
-		player.getPoints().setPkPoints(value);
-	}
+    @Override
+    protected void setPointsAmount(final Player player, final int value) {
+        player.getPoints().setPkPoints(value);
+    }
 
 
 }

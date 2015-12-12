@@ -5,9 +5,26 @@ import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.sql.AchievementsSql;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
-import org.hyperion.rs2.model.joshyachievementsv2.task.impl.*;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.BarrowsTripTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.BountyHunterKillTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.DungeoneeringFloorsTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.FightPitsTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.ItemOpenTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillForBountyTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.KillstreakTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.NpcKillTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PickupItemTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlaceBountyTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.PlayerKillTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.SkillItemTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.SlayerTask;
+import org.hyperion.rs2.model.joshyachievementsv2.task.impl.VoteTask;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -26,16 +43,23 @@ public class AchievementTracker {
         progress = new TreeMap<>();
     }
 
-    public void load(){
+    public static void active(final boolean active) {
+        AchievementTracker.active = active;
+        //hide n show appropriate interface
+    }
+
+    public static boolean active() {
+        return active;
+    }
+
+    public void load() {
         final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
         if(taskProgress == null){
             errorLoading = true;
             player.sendf("Error loading achievement data! You'll be notified when they are active again.");
             return;
         }
-        taskProgress.forEach(
-                atp -> progress(atp.achievementId).add(atp)
-        );
+        taskProgress.forEach(atp -> progress(atp.achievementId).add(atp));
     }
 
     public void sendInfo(final Achievement a) {
@@ -47,7 +71,7 @@ public class AchievementTracker {
 
     public void sendInfo(final int achievementId) {
         final Achievement achievement = Achievements.get().get(achievementId);
-        if (achievement != null)
+        if(achievement != null)
             sendInfo(achievement);
     }
 
@@ -56,8 +80,7 @@ public class AchievementTracker {
     }
 
     public Stream<AchievementTaskProgress> streamAvailableTaskProgress() {
-        return progress.values().stream()
-                .flatMap(AchievementProgress::streamAvailableProgress);
+        return progress.values().stream().flatMap(AchievementProgress::streamAvailableProgress);
     }
 
     public AchievementProgress progress(final int achievementId) {
@@ -97,26 +120,24 @@ public class AchievementTracker {
     }
 
     private Optional<Task> findAvailableTask(final Class<? extends Task> clazz, final Predicate<Task> pred, final int progress) {
-        return Achievements.get().streamTasks(clazz)
-                .filter(t -> {
-                    if(!pred.test(t))
-                        return false;
-                    if(!canDoTask(t)){
-                        player.debugMessage("Can't do task: " + t.desc);
-                        return false;
-                    }
-                    if(!t.canProgress(taskProgress(t).progress, progress)){
-                        player.debugMessage("Can't progress: " + t.desc);
-                        return false;
-                    }
-                    if(!t.constraints.constrained(player)){
-                        player.debugMessage("Not constrained: " + t.desc);
-                        return false;
-                    }
-                    System.out.printf("match: %s (%d, achievement id: %d)%n", t.desc, t.id, t.achievementId);
-                    return true;
-                })
-                .min(Comparator.comparingInt(t -> t.threshold));
+        return Achievements.get().streamTasks(clazz).filter(t -> {
+            if(!pred.test(t))
+                return false;
+            if(!canDoTask(t)){
+                player.debugMessage("Can't do task: " + t.desc);
+                return false;
+            }
+            if(!t.canProgress(taskProgress(t).progress, progress)){
+                player.debugMessage("Can't progress: " + t.desc);
+                return false;
+            }
+            if(!t.constraints.constrained(player)){
+                player.debugMessage("Not constrained: " + t.desc);
+                return false;
+            }
+            System.out.printf("match: %s (%d, achievement id: %d)%n", t.desc, t.id, t.achievementId);
+            return true;
+        }).min(Comparator.comparingInt(t -> t.threshold));
         /*return Achievements.get().streamTasks(clazz)
                 .filter(pred.and(this::canDoTask)
                         .and(t -> t.canProgress(taskProgress(t).progress, progress))
@@ -129,20 +150,19 @@ public class AchievementTracker {
     }
 
     private void progress(final Task.Filter filter, final int progress) {
-        if (!active || errorLoading)
+        if(!active || errorLoading)
             return;
-        findAvailableTask(filter, progress)
-                .ifPresent(t -> progress(t, progress));
+        findAvailableTask(filter, progress).ifPresent(t -> progress(t, progress));
     }
 
     private void progress(final Task task, final int progress) {
         System.out.printf("progressing task: %s (%d, achievement id %d)%n", task.desc, task.id, task.achievementId);
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
-        if (ap.finished() || atp.finished())
+        if(ap.finished() || atp.finished())
             return; //this shouldnt happen but just to be safe
         final boolean shouldInsert = !atp.started();
-        if (!atp.started())
+        if(!atp.started())
             atp.startNow();
         final int oldProgress = atp.progress;
         if(task instanceof KillstreakTask)
@@ -157,14 +177,14 @@ public class AchievementTracker {
         }
         ap.sendProgressHeader(player);
         atp.sendProgress(player, true);
-        if (atp.taskFinished()) {
+        if(atp.taskFinished()){
             atp.finishNow();
             if(!AchievementsSql.updateTaskProgress(player, atp)){
                 atp.finishDate = null;
                 return;
             }
             player.sendLootMessage("Achievement", String.format("Task '%s' complete! Congratulations!", task.desc));
-            if (ap.tasksFinished()) {
+            if(ap.tasksFinished()){
                 player.sendLootMessage("Achievement", String.format("%s complete! Congratulations!", ap.achievement().title));
                 ap.achievement().rewards.reward(player);
             }
@@ -213,7 +233,7 @@ public class AchievementTracker {
         progress(NpcKillTask.filter(npcId), 1);
     }
 
-    public void playerKill(){
+    public void playerKill() {
         progress(PlayerKillTask.filter(), 1);
     }
 
@@ -251,14 +271,5 @@ public class AchievementTracker {
 
     public void dungFloorCompleted(final DungeoneeringFloorsTask.Difficulty difficulty, final DungeoneeringFloorsTask.Size size) {
         progress(DungeoneeringFloorsTask.filter(difficulty, size), 1);
-    }
-
-    public static void active(final boolean active){
-        AchievementTracker.active = active;
-        //hide n show appropriate interface
-    }
-
-    public static boolean active(){
-        return active;
     }
 }

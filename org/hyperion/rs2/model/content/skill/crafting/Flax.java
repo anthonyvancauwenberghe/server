@@ -9,9 +9,9 @@ import org.hyperion.rs2.model.content.ContentEntity;
 /**
  * Created by Gilles on 8/09/2015.
  */
-public class Flax extends Crafting{
+public class Flax extends Crafting {
 
-    public static boolean pickFlax(final Player client, int id) {
+    public static boolean pickFlax(final Player client, final int id) {
         if(client.isBusy())
             return false;
         if(client.getRandomEvent().skillAction(2))
@@ -21,7 +21,7 @@ public class Flax extends Crafting{
         World.getWorld().submit(new Event(2000) {
             @Override
             public void execute() {
-                if(!client.isBusy()) {
+                if(!client.isBusy()){
                     this.stop();
                     return;
                 }
@@ -33,7 +33,7 @@ public class Flax extends Crafting{
         return true;
     }
 
-    public static boolean spinFlax(final Player client, int id) {
+    public static boolean spinFlax(final Player client, final int id) {
         ContentEntity.startAnimation(client, 894);
         client.setBusy(true);
         World.getWorld().submit(new Event(2000) {
@@ -41,14 +41,14 @@ public class Flax extends Crafting{
 
             @Override
             public void execute() {
-                if(ContentEntity.isItemInBag(client, 1779) && amount > 0 && client.isBusy()) {
+                if(ContentEntity.isItemInBag(client, 1779) && amount > 0 && client.isBusy()){
                     ContentEntity.startAnimation(client, 894);
                     ContentEntity.deleteItemA(client, 1779, 1);
                     ContentEntity.addItem(client, 1777, 1);
                     ContentEntity.sendMessage(client, "You spin the flax into a bow String.");
                     ContentEntity.addSkillXP(client, 15 * Crafting.EXPMULTIPLIER, Skills.CRAFTING);
                     amount--;
-                } else
+                }else
                     this.stop();
             }
 

@@ -20,18 +20,18 @@ public class BetaServerEvent extends SQLEvent {
     public static final List<String> toTest = new ArrayList();
     public static final List<String> testCommands = new ArrayList();
 
-    public BetaServerEvent(){
+    public BetaServerEvent() {
         super(Time.FIVE_MINUTES);
     }
 
 
-    public void execute(SQLConnection sql) throws SQLException {
-        if(Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+    public void execute(final SQLConnection sql) throws SQLException {
+        if(Server.NAME.equalsIgnoreCase("ArteroBeta")){
             //First query will get the whitelist
             ResultSet rs = sql.query("SELECT * FROM whitelist");
-            if (rs != null) {
-                while (rs.next()) {
-                    String name = rs.getString("name");
+            if(rs != null){
+                while(rs.next()){
+                    final String name = rs.getString("name");
                     if(!name.isEmpty() && !whitelist.contains(name))
                         whitelist.add(name);
                 }
@@ -40,22 +40,22 @@ public class BetaServerEvent extends SQLEvent {
 
             //Second query gets the active changelog
             rs = sql.query("SELECT * FROM updates WHERE active = 1");
-            if (rs != null) {
-                while (rs.next()) {
+            if(rs != null){
+                while(rs.next()){
                     //Adds the changelog entries
-                    String changelogEntries[] = rs.getString("changelog").split("#");
-                    for(String entry : changelogEntries)
+                    final String[] changelogEntries = rs.getString("changelog").split("#");
+                    for(final String entry : changelogEntries)
                         if(!changes.contains(entry) && !entry.equalsIgnoreCase(""))
                             changes.add(entry);
                     //Adds the toTest entries
-                    String testEntries[] = rs.getString("toTest").split("#");
-                    for(String test : testEntries)
+                    final String[] testEntries = rs.getString("toTest").split("#");
+                    for(final String test : testEntries)
                         if(!toTest.contains(test) && !test.equalsIgnoreCase(""))
                             toTest.add(test);
                     //Adds the test command entries
-                    String testCommandEntries[] = rs.getString("testCommands").split("#");
-                    for(String command : testCommandEntries)
-                        if(!testCommands.contains(command) && !command.equalsIgnoreCase("") )
+                    final String[] testCommandEntries = rs.getString("testCommands").split("#");
+                    for(final String command : testCommandEntries)
+                        if(!testCommands.contains(command) && !command.equalsIgnoreCase(""))
                             testCommands.add(command);
                 }
                 rs.close();

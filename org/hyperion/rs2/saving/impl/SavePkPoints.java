@@ -5,25 +5,25 @@ import org.hyperion.rs2.saving.SaveInteger;
 
 public class SavePkPoints extends SaveInteger {
 
-	public SavePkPoints(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SavePkPoints(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public int getDefaultValue() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int getDefaultValue() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public void setValue(Player player, int value) {
-		player.getPoints().setPkPoints(value);
-	}
+    @Override
+    public void setValue(final Player player, final int value) {
+        player.getPoints().setPkPoints(value);
+    }
 
-	@Override
-	public Integer getValue(Player player) {
-		return player.getPoints().getPkPoints();
-	}
+    @Override
+    public Integer getValue(final Player player) {
+        return player.getPoints().getPkPoints();
+    }
 
 }

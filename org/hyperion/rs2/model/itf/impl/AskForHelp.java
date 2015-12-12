@@ -4,7 +4,6 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.Packet;
@@ -15,6 +14,16 @@ import org.hyperion.rs2.net.Packet;
 public class AskForHelp extends Interface {
 
     private static final int ID = 2;
+
+    static {
+        CommandHandler.submit(new Command("reqhelp", Rank.PLAYER) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                player.write(Interface.createStatePacket(SHOW, ID));
+                return true;
+            }
+        });
+    }
 
     public AskForHelp() {
         super(ID);
@@ -27,21 +36,11 @@ public class AskForHelp extends Interface {
         final Rank rank = TicketManager.convert(pkt.getByte());
 
 
-        if(player.getTicketHolder().canMakeTicket()) {
+        if(player.getTicketHolder().canMakeTicket()){
             player.getTicketHolder().create(player.getName(), title, text, rank);
             player.sendMessage("You successfully submit your ticket");
-        } else
+        }else
             player.sendMessage("You can only create a ticket once every 60 seconds");
 
-    }
-
-    static {
-        CommandHandler.submit(new Command("reqhelp", Rank.PLAYER) {
-            @Override
-            public boolean execute(final Player player, final String input) {
-                player.write(Interface.createStatePacket(SHOW, ID));
-                return true;
-            }
-        });
     }
 }

@@ -10,16 +10,15 @@ import java.util.Date;
  */
 public class StaffLogger {
 
-	public static final File LOG_FILE = new File("./logs/stafflog.log");
+    public static final File LOG_FILE = new File("./logs/stafflog.log");
+    private static final StaffLogger singleton = new StaffLogger();
 
-	public static StaffLogger getLogger() {
-		return singleton;
-	}
+    public static StaffLogger getLogger() {
+        return singleton;
+    }
 
-	private static StaffLogger singleton = new StaffLogger();
+    public void log(final String line) {
 
-	public void log(String line) {
-
-		PlayerSaving.getSaving().saveLog(LOG_FILE, new Date() + "\t" + line);
-	}
+        PlayerSaving.getSaving().saveLog(LOG_FILE, new Date() + "\t" + line);
+    }
 }

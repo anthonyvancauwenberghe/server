@@ -19,7 +19,7 @@ public class NameItemInterface extends Interface {
 
 
     @Override
-    public void handle(Player player, Packet pkt) {
+    public void handle(final Player player, final Packet pkt) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

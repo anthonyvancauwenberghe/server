@@ -13,28 +13,28 @@ import java.util.logging.Logger;
  */
 public class SessionOpenedTask implements Task {
 
-	/**
-	 * The logger class.
-	 */
-	private static final Logger logger = Logger.getLogger(SessionOpenedTask.class.getName());
+    /**
+     * The logger class.
+     */
+    private static final Logger logger = Logger.getLogger(SessionOpenedTask.class.getName());
 
-	/**
-	 * The session.
-	 */
-	private IoSession session;
+    /**
+     * The session.
+     */
+    private final IoSession session;
 
-	/**
-	 * Creates the session opened task.
-	 *
-	 * @param session The session.
-	 */
-	public SessionOpenedTask(IoSession session) {
-		this.session = session;
-	}
+    /**
+     * Creates the session opened task.
+     *
+     * @param session The session.
+     */
+    public SessionOpenedTask(final IoSession session) {
+        this.session = session;
+    }
 
-	@Override
-	public void execute(GameEngine context) {
-		logger.fine("Session opened : " + session.getRemoteAddress());
-	}
+    @Override
+    public void execute(final GameEngine context) {
+        logger.fine("Session opened : " + session.getRemoteAddress());
+    }
 
 }

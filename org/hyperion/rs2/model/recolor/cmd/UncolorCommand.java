@@ -5,13 +5,13 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.recolor.Recolor;
 
-public class UncolorCommand extends Command{
+public class UncolorCommand extends Command {
 
-    public UncolorCommand(){
+    public UncolorCommand() {
         super("uncolor", Rank.DEVELOPER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String line = filterInput(input).trim();
         try{
             final int id = Integer.parseInt(line);
@@ -22,7 +22,7 @@ public class UncolorCommand extends Command{
             for(final Recolor recolor : player.getRecolorManager().remove(id))
                 player.sendf("Removed recolor for " + recolor.toReadableString());
             return true;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Incorrect syntax. Usage: ::uncolor item_id");
             return false;
         }

@@ -1,6 +1,5 @@
 package org.hyperion.rs2.util;
 
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.saving.MergedSaving;
 
 import java.io.BufferedReader;
@@ -12,69 +11,69 @@ import java.io.FileReader;
  */
 public class CharFilesCleaner implements Runnable {
 
-	public static final long INACTIVE_PERIOD = 1000L * 60 * 60 * 24 * 60;
+    public static final long INACTIVE_PERIOD = 1000L * 60 * 60 * 24 * 60;
 
-	private int counter = 0;
+    private int counter = 0;
 
-	@Override
-	public void run() {
-		File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
-		if(files == null)
-			return;
-		System.out.println("Started char files cleaner! Files count: " + files.length);
-		final long currentTime = System.currentTimeMillis();
-		for(File file : files) {
-			if(currentTime - file.lastModified() > (INACTIVE_PERIOD * 3L)) {
-				Character character = new Character(file);
-				if(character.shouldDelete()) {
-					file.delete();
-					counter++;
-				}
-			}
-		}
-		System.out.println("Char files cleaned: " + counter);
-	}
+    @Override
+    public void run() {
+        final File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
+        if(files == null)
+            return;
+        System.out.println("Started char files cleaner! Files count: " + files.length);
+        final long currentTime = System.currentTimeMillis();
+        for(final File file : files){
+            if(currentTime - file.lastModified() > (INACTIVE_PERIOD * 3L)){
+                final Character character = new Character(file);
+                if(character.shouldDelete()){
+                    file.delete();
+                    counter++;
+                }
+            }
+        }
+        System.out.println("Char files cleaned: " + counter);
+    }
 
 }
 
 class Character {
 
 
-	private boolean donator = false;
-	private boolean hasrights = false;
+    private boolean donator = false;
+    private boolean hasrights = false;
 
-	public boolean isDonator() {
-		return donator;
-	}
+    public Character(final File file) {
+        try{
+            final BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            while((line = br.readLine()) != null){
+                if(line.startsWith("Rights") && !line.equalsIgnoreCase("Rights=0")){
+                    hasrights = true;
+                    break;
+                }else if(line.startsWith("DonatorsBought") && !line.equalsIgnoreCase("DonatorsBought=0")){
+                    donator = true;
+                    break;
+                }
+                if(line.startsWith("Skills"))
+                    break;
+            }
+            br.close();
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+    }
 
-	public boolean hasRights() {
-		return hasrights;
-	}
+    public boolean isDonator() {
+        return donator;
+    }
 
-	public boolean shouldDelete() {
-		if(donator || hasrights)
-			return false;
-		return true;
-	}
+    public boolean hasRights() {
+        return hasrights;
+    }
 
-	public Character(File file) {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line;
-			while((line = br.readLine()) != null) {
-				if(line.startsWith("Rights") && ! line.equalsIgnoreCase("Rights=0")) {
-					hasrights = true;
-					break;
-				} else if(line.startsWith("DonatorsBought") && ! line.equalsIgnoreCase("DonatorsBought=0")) {
-					donator = true;
-					break;
-				}
-				if(line.startsWith("Skills"))
-					break;
-			}
-			br.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public boolean shouldDelete() {
+        if(donator || hasrights)
+            return false;
+        return true;
+    }
 }

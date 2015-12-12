@@ -10,11 +10,11 @@ import org.hyperion.rs2.model.Tile;
  */
 public interface MapListener {
 
-	/**
-	 * Handles action when a tile is parsed.
-	 *
-	 * @param tile The tile.
-	 */
-	public void tileParsed(Tile tile);
+    /**
+     * Handles action when a tile is parsed.
+     *
+     * @param tile The tile.
+     */
+    void tileParsed(Tile tile);
 
 }

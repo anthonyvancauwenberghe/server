@@ -8,12 +8,11 @@ import java.io.IOException;
 
 public class PulseGrandExchangeEvent extends Event {
 
-    public PulseGrandExchangeEvent(){
+    public PulseGrandExchangeEvent() {
         super(15 * Time.ONE_MINUTE);
     }
 
-    public void execute() throws IOException{
-        JGrandExchange.getInstance().stream()
-                .forEach(JGrandExchange.getInstance()::submit);
+    public void execute() throws IOException {
+        JGrandExchange.getInstance().stream().forEach(JGrandExchange.getInstance()::submit);
     }
 }

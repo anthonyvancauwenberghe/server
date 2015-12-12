@@ -1,29 +1,15 @@
 package org.hyperion.rs2.model.joshyachievementsv2.task.impl;
 
-import java.util.List;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.utils.AchievementUtils;
 
-public class ItemOpenTask extends Task{
+import java.util.List;
 
-    private static class MyFilter extends Filter<ItemOpenTask>{
-
-        private final int itemId;
-
-        private MyFilter(final int itemId){
-            super(ItemOpenTask.class);
-            this.itemId = itemId;
-        }
-
-        public boolean test(final ItemOpenTask t){
-            return super.test(t)
-                    && t.itemIds.contains(itemId);
-        }
-    }
+public class ItemOpenTask extends Task {
 
     public final List<Integer> itemIds;
 
-    public ItemOpenTask(final int id, final List<Integer> itemIds, final int quantity){
+    public ItemOpenTask(final int id, final List<Integer> itemIds, final int quantity) {
         super(id, quantity);
         this.itemIds = itemIds;
 
@@ -32,7 +18,21 @@ public class ItemOpenTask extends Task{
         desc = String.format("Open %,d %s", quantity, itemsJoined);
     }
 
-    public static Filter<ItemOpenTask> filter(final int itemId){
+    public static Filter<ItemOpenTask> filter(final int itemId) {
         return new MyFilter(itemId);
+    }
+
+    private static class MyFilter extends Filter<ItemOpenTask> {
+
+        private final int itemId;
+
+        private MyFilter(final int itemId) {
+            super(ItemOpenTask.class);
+            this.itemId = itemId;
+        }
+
+        public boolean test(final ItemOpenTask t) {
+            return super.test(t) && t.itemIds.contains(itemId);
+        }
     }
 }

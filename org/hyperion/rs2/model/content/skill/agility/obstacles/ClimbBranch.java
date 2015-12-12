@@ -12,21 +12,21 @@ import org.hyperion.rs2.model.content.skill.agility.Obstacle;
  * Created by Gilles on 11/09/2015.
  */
 public class ClimbBranch extends Obstacle {
-    private Location[] start;
-    private Location end;
+    private final Location[] start;
+    private final Location end;
 
-    public ClimbBranch(int objectId, int skillXp, int levelReq, Location[] start, Location end, int failRate, Course course, int progress) {
+    public ClimbBranch(final int objectId, final int skillXp, final int levelReq, final Location[] start, final Location end, final int failRate, final Course course, final int progress) {
         super(objectId, 828, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
     }
 
     @Override
-    public boolean overCome(Player player) {
+    public boolean overCome(final Player player) {
         if(!super.overCome(player))
             return false;
-        for(int i = 0; i < start.length; i++) {
-            if(player.getLocation().getX() == start[i].getX() && player.getLocation().getY() == start[i].getY()) {
+        for(int i = 0; i < start.length; i++){
+            if(player.getLocation().getX() == start[i].getX() && player.getLocation().getY() == start[i].getY()){
                 executeObject(player);
             }
         }
@@ -34,7 +34,7 @@ public class ClimbBranch extends Obstacle {
     }
 
     @Override
-    public void succeed(Player player, int tick, String message) {
+    public void succeed(final Player player, final int tick, final String message) {
         super.succeed(player, 1, message);
         player.playAnimation(Animation.create(animId));
         World.getWorld().submit(new Event(700) {

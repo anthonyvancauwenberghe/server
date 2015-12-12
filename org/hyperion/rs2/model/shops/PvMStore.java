@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 
@@ -12,11 +11,10 @@ import org.hyperion.rs2.model.container.Container;
  * Time: 4:46 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PvMStore extends CurrencyShop{
-
-    private static final int DEFAULT_PRICE = 5000;
+public class PvMStore extends CurrencyShop {
 
     public static final int TOKEN = 17564;
+    private static final int DEFAULT_PRICE = 5000;
 
 
     /**
@@ -24,24 +22,25 @@ public class PvMStore extends CurrencyShop{
      * @param name
      * @param container
      */
-    public PvMStore(int id, String name, Container container) {
+    public PvMStore(final int id, final String name, final Container container) {
         super(id, name, container, TOKEN, false);
     }
 
     @Override
-    public void valueSellItem(Player player, Item item) {
+    public void valueSellItem(final Player player, final Item item) {
     }
 
     @Override
-    public void sellToShop(Player player, Item item) {
+    public void sellToShop(final Player player, final Item item) {
         player.sendMessage("You cannot sell to this shop!");
     }
 
     @Override
-    public int getSpecialPrice(Item item) {
-        if(item == null) throw new IllegalArgumentException("Null item");
+    public int getSpecialPrice(final Item item) {
+        if(item == null)
+            throw new IllegalArgumentException("Null item");
         final int id = item.getId();
-        switch(id) {
+        switch(id){
             case 13870: //morrigan body
             case 13858: //zuriel's body
                 return 45;

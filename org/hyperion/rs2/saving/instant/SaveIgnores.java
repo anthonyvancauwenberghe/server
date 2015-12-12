@@ -8,23 +8,21 @@ import java.io.IOException;
 
 public class SaveIgnores extends SaveObject {
 
-	public SaveIgnores(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveIgnores(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public boolean save(Player player, BufferedWriter writer)
-			throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean save(final Player player, final BufferedWriter writer) throws IOException {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public void load(Player player, String values, BufferedReader reader)
-			throws IOException {
-		// TODO Auto-generated method stub
+    @Override
+    public void load(final Player player, final String values, final BufferedReader reader) throws IOException {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
 }

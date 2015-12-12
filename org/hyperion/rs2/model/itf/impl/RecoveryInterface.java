@@ -1,46 +1,31 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import java.sql.PreparedStatement;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.sql.SQLConnection;
-import org.hyperion.rs2.sql.requests.QueryRequest;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.hyperion.util.Time;
 
 /**
  * Created by Jet on 1/2/2015.
  */
 public class RecoveryInterface extends Interface {
 
-    private static final String[] QUESTIONS = {
-            "What is your first name?",
-            "What is your last name?",
-            "What is your mother's maiden name?",
-            "What is your birth date?",
-            "What is your first pet's name?",
-            "What is your mother's name?",
-            "What is your father's name?",
-            "What is your bestfriend's name?",
-            "What is your dog's name?",
-            "What is your cat's name?",
-            "What is your hamster's name?"
-    };
-
     public static final int ID = 1;
-
+    private static final String[] QUESTIONS = {"What is your first name?", "What is your last name?",
+            "What is your mother's maiden name?", "What is your birth date?", "What is your first pet's name?",
+            "What is your mother's name?", "What is your father's name?", "What is your bestfriend's name?",
+            "What is your dog's name?", "What is your cat's name?", "What is your hamster's name?"};
     private static final int ERROR = 1;
 
-    public RecoveryInterface(){
+    public RecoveryInterface() {
         super(ID);
     }
 
-    public void handle(final Player player, final Packet pkt){
+    public static RecoveryInterface get() {
+        return InterfaceManager.get(ID);
+    }
+
+    public void handle(final Player player, final Packet pkt) {
         final String email = pkt.getRS2String().trim();
         final int question1Idx = pkt.getByte();
         final String answer1 = pkt.getRS2String().trim();
@@ -105,11 +90,7 @@ public class RecoveryInterface extends Interface {
         });*/
     }
 
-    private boolean isValidIndex(final int idx){
+    private boolean isValidIndex(final int idx) {
         return idx > -1 && idx < QUESTIONS.length;
-    }
-
-    public static RecoveryInterface get(){
-        return InterfaceManager.get(ID);
     }
 }

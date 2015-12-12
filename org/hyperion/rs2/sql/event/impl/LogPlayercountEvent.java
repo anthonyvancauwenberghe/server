@@ -10,20 +10,20 @@ import java.sql.SQLException;
 
 public class LogPlayercountEvent extends SQLEvent {
 
-	public static final long DELAY = Time.ONE_MINUTE;
+    public static final long DELAY = Time.ONE_MINUTE;
 
-	public LogPlayercountEvent() {
-		super(DELAY);
-	}
+    public LogPlayercountEvent() {
+        super(DELAY);
+    }
 
-	@Override
-	public void execute(SQLConnection sql) throws SQLException {
-		if (Server.getUptime().minutesUptime() >= 20) {
-			int playerCount = World.getWorld().getPlayers().size();
-			int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
-			sql.query("INSERT INTO playercount(count,staffonline) VALUES(" + playerCount +"," + staffOnline + ")");
-		}
-		super.updateStartTime();
-	}
+    @Override
+    public void execute(final SQLConnection sql) throws SQLException {
+        if(Server.getUptime().minutesUptime() >= 20){
+            final int playerCount = World.getWorld().getPlayers().size();
+            final int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
+            sql.query("INSERT INTO playercount(count,staffonline) VALUES(" + playerCount + "," + staffOnline + ")");
+        }
+        super.updateStartTime();
+    }
 
 }

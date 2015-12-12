@@ -16,9 +16,266 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ClueScroll {
+
+    private final List<Requirement> requirements;
+    private final List<Reward> rareRewards;
+    private int id;
+    private String description;
+    private Difficulty difficulty;
+    private Trigger trigger;
+    public ClueScroll(final int id, final String description, final Difficulty difficulty, final Trigger trigger) {
+        this.id = id;
+        this.description = description;
+        this.difficulty = difficulty;
+        this.trigger = trigger;
+
+        requirements = new ArrayList<>();
+        rareRewards = new ArrayList<>();
+
+        for(final Reward reward : getRareRewards(difficulty))
+            rareRewards.add(reward);
+    }
+
+    public static ClueScroll parse(final Element element) {
+        final int id = Integer.parseInt(element.getAttribute("id"));
+        final Difficulty difficulty = Difficulty.valueOf(element.getAttribute("difficulty"));
+        final Trigger trigger = Trigger.valueOf(element.getAttribute("trigger"));
+        final String description = element.getElementsByTagName("description").item(0).getTextContent();
+        final ClueScroll clueScroll = new ClueScroll(id, description, difficulty, trigger);
+        final Element requirementsElement = (Element) element.getElementsByTagName("requirements").item(0);
+        final NodeList requirements = requirementsElement.getElementsByTagName("requirement");
+        for(int i = 0; i < requirements.getLength(); i++){
+            final Node node = requirements.item(i);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            final Element e = (Element) node;
+            final Requirement.Type type = Requirement.Type.valueOf(e.getAttribute("type"));
+            clueScroll.requirements.add(type.parse(e));
+        }
+        /*
+        final Element rewardsElement = (Element) element.getElementsByTagName("rewards").item(0);
+        final NodeList rewards = rewardsElement.getElementsByTagName("reward");
+        for(int i = 0; i < rewards.getLength(); i++){
+            final Node node = rewards.item(i);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            final Element e = (Element) node;
+            final Reward.Type type = Reward.Type.valueOf(e.getAttribute("type"));
+            clueScroll.normalRewards.add(type.parse(e));
+        }
+        final Element rareRewardsElement = (Element) element.getElementsByTagName("rareRewards").item(0);
+        final NodeList rareRewards = rareRewardsElement.getElementsByTagName("rareReward");
+        for(int i = 0; i < rareRewards.getLength(); i++){
+            final Node node = rareRewards.item(i);
+            if(node.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            final Element e = (Element) node;
+            final Reward.Type type = Reward.Type.valueOf(e.getAttribute("type"));
+            clueScroll.rareRewards.add(type.parse(e));
+        }
+        */
+        return clueScroll;
+    }
+
+    public List<Reward> getRareRewards(final Difficulty difficulty) {
+        final List<Reward> rewards = new ArrayList<>();
+        for(final RareRewards reward : RareRewards.values()){
+            if(reward.toString().equalsIgnoreCase(difficulty.name()))
+                Collections.addAll(rewards, reward.rewards);
+        }
+        return rewards;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(final Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Trigger getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(final Trigger trigger) {
+        this.trigger = trigger;
+    }
+
+    public List<Requirement> getRequirements() {
+        return requirements;
+    }
+
+    public boolean hasAllRequirements(final Player player) {
+        for(final Requirement req : requirements)
+            if(!req.apply(player))
+                return false;
+        return true;
+    }
+
+    public void send(final Player player) {
+        final String[] lines = Misc.wrapString(description.replaceAll("<br>", "\n"), 50).split("\n");
+        player.getActionSender().openQuestInterface(String.format("@dre@%s Clue Scroll", Misc.ucFirst(difficulty.toString().toLowerCase())), lines);
+        if(player.debug){
+            player.sendf("trigger: %s", trigger);
+            for(final Requirement req : requirements)
+                player.sendf(req.toString());
+        }
+    }
+
+    public void apply(final Player player) {
+        final Item oldItem = Item.create(id);
+        if(player.getInventory().remove(oldItem) < 1)
+            return;
+        double currentSteps = 0;
+        if(player.getPermExtraData().get("clueScrollProgress") != null)
+            try{
+                currentSteps = (Double) player.getPermExtraData().get("clueScrollProgress") + 1;
+            }catch(final Exception e){
+                currentSteps = Double.parseDouble((String) player.getPermExtraData().get("clueScrollProgress")) + 1;
+            }
+        final double maxSteps = getDifficulty().ordinal() + 2;
+        final double minSteps = getDifficulty().ordinal();
+        boolean giveReward = currentSteps > maxSteps;
+        final double random = Math.random();
+        final double number = currentSteps / maxSteps;
+        if(currentSteps >= minSteps){
+            if(!giveReward && (number) > random){
+                giveReward = true;
+            }
+        }
+        if(giveReward){
+            giveReward = giveReward(player);
+        }
+        if(!giveReward){
+            Item item = oldItem;
+            while(item.getId() == oldItem.getId())
+                item = Item.create(ClueScrollManager.getAll(difficulty).get((int) Math.round(Math.random() * (ClueScrollManager.getAll(difficulty).size() - 1 != -1 ? ClueScrollManager.getAll(difficulty).size() - 1 : 0))).getId());
+            player.sendMessage("You find another clue scroll!");
+            player.getInventory().add(item);
+            player.getPermExtraData().put("clueScrollProgress", currentSteps);
+        }
+    }
+
+    public boolean giveReward(final Player player) {
+        player.getPermExtraData().remove("clueScrollProgress");
+        int amount = Misc.random(getDifficulty().ordinal() + 3);
+        if(amount > 8){
+            amount = 8;
+        }
+        if(amount < 3 || amount < getDifficulty().ordinal() + 1){
+            amount = 3;
+        }
+        final List<Reward> received = new ArrayList<>();
+        while(received.size() != amount){
+            final Reward item;
+            if(Misc.random(4) == 1){
+                player.sendMessage("Entered rare loot table");
+                item = getRandomRare();
+            }else{
+                item = getRandomNormal();
+            }
+            if(item != null && !received.contains(item))
+                received.add(item);
+        }
+        for(int i = 0; i <= 8; i++){
+            player.getActionSender().sendUpdateItem(6963, i, null);
+        }
+        int i = 0;
+        for(final Reward reward : received){
+            if(reward != null)
+                if(reward.getType() == Reward.Type.ITEM){
+                    reward.apply(player, i);
+                    i++;
+                }else{
+                    reward.apply(player);
+                }
+        }
+        player.getActionSender().showInterface(6960);
+        return true;
+    }
+
+    public Reward getRandomRare() {
+        final List<Reward> possibleRewards = new ArrayList<>();
+        final int i = 0;
+        while(possibleRewards.isEmpty() && !rareRewards.isEmpty()){
+            for(final Reward reward : rareRewards){
+                if(reward.canGet() && !possibleRewards.contains(reward)){
+                    possibleRewards.add(reward);
+                }
+            }
+        }
+        final int randomItem = Misc.random(possibleRewards.size() - 1);
+        return possibleRewards.get(randomItem);
+    }
+
+    public Reward getRandomNormal() {
+        int random = Misc.random(SpawnCommand.giveSpawnables().size());
+        final int key = -1;
+        if(SpawnCommand.giveSpawnables().isEmpty())
+            return new ItemReward(4716, 1, 1, 1000);
+        while(NewGameMode.getUnitPrice(random == 0 ? 1 : random) < 10000 || !SpawnCommand.giveSpawnables().containsKey(random)){
+            random = Misc.random(SpawnCommand.giveSpawnables().size());
+        }
+        final Item item = Item.create(random);
+        if(item.getDefinition().isStackable())
+            return new ItemReward(random, 1, 20, 1000);
+        return new ItemReward(random, 1, 1, 1000);
+    }
+
+    public Element toElement(final Document doc) {
+        final Element element = doc.createElement("cluescroll");
+        element.setAttribute("id", Integer.toString(id));
+        element.setAttribute("difficulty", difficulty.name());
+        element.setAttribute("trigger", trigger.name());
+        final Element requirementsElement = doc.createElement("requirements");
+        for(final Requirement requirement : requirements)
+            requirementsElement.appendChild(requirement.toElement(doc));
+        final Element rewardsElement = doc.createElement("rewards");
+        /*
+        for(final Reward reward : normalRewards)
+            rewardsElement.appendChild(reward.toElement(doc));
+        for(final Reward reward : rareRewards)
+            rewardsElement.appendChild(reward.toElement(doc));
+            */
+        element.appendChild(ClueScrollUtils.createElement(doc, "description", description));
+        element.appendChild(requirementsElement);
+        element.appendChild(rewardsElement);
+        return element;
+    }
+
+    public boolean equals(final Object o) {
+        if(o == null || !(o instanceof ClueScroll))
+            return false;
+        if(o == this)
+            return true;
+        final ClueScroll cs = (ClueScroll) o;
+        return cs.id == id && cs.description.equals(description) && cs.difficulty == difficulty && cs.trigger == trigger;
+    }
+
+    public String toString() {
+        return Integer.toString(id);
+    }
 
     public enum Difficulty {
         EASY,
@@ -28,7 +285,7 @@ public class ClueScroll {
     }
 
     public enum RareRewards {
-        EASY(   new ItemReward(5020, 2500, 5000, 100), //Pkt
+        EASY(new ItemReward(5020, 2500, 5000, 100), //Pkt
                 new ItemReward(995, 25000, 100000, 200), //Coins for ironmen
                 new ItemReward(12183, 5000, 10000, 25), //Spirit shards
                 new ItemReward(15509, 1, 1, 40), //Royal crown
@@ -40,8 +297,8 @@ public class ClueScroll {
                 new ItemReward(15608, 1, 1, 30), new ItemReward(15606, 1, 1, 30), new ItemReward(15610, 1, 1, 30), //Blue infinity
                 new ItemReward(15614, 1, 1, 30), new ItemReward(15612, 1, 1, 30), new ItemReward(15616, 1, 1, 30), //Pink infinity
                 new ItemReward(15620, 1, 1, 30), new ItemReward(15618, 1, 1, 30), new ItemReward(15622, 1, 1, 30) //Brown infinity
-                ),
-        MEDIUM( new ItemReward(15332, 1, 5, 250), //Overload
+        ),
+        MEDIUM(new ItemReward(15332, 1, 5, 250), //Overload
                 new ItemReward(5020, 5000, 7500, 100), //Pkt
                 new ItemReward(995, 50000, 150000, 200), //Coins for ironmen
                 new ItemReward(15511, 1, 1, 20), //Royal Amulet
@@ -54,8 +311,8 @@ public class ClueScroll {
                 new ItemReward(15033, 1, 1, 20), new ItemReward(15034, 1, 1, 20), new ItemReward(15036, 1, 1, 20), new ItemReward(15035, 1, 1, 20), new ItemReward(15037, 1, 1, 20), new ItemReward(15038, 1, 1, 20), //War chief
                 new ItemReward(15021, 1, 1, 20), new ItemReward(15022, 1, 1, 20), new ItemReward(15023, 1, 1, 20), new ItemReward(15024, 1, 1, 20), new ItemReward(15025, 1, 1, 20), new ItemReward(15026, 1, 1, 20), //Serjeant
                 new ItemReward(15614, 1, 1, 30), new ItemReward(15612, 1, 1, 30), new ItemReward(15616, 1, 1, 30) //Pink infinity
-                ),
-        HARD(   new ItemReward(15332, 2, 7, 200), //Overload
+        ),
+        HARD(new ItemReward(15332, 2, 7, 200), //Overload
                 new ItemReward(5020, 7500, 10000, 100), //Pkt
                 new ItemReward(995, 75000, 200000, 200), //Coins for ironmen
                 new ItemReward(13663, 1, 1, 5), //Legendary ticket
@@ -75,8 +332,8 @@ public class ClueScroll {
                 new ItemReward(15507, 1, 1, 20), //Royal sceptre
                 new ItemReward(15033, 1, 1, 20), new ItemReward(15034, 1, 1, 20), new ItemReward(15036, 1, 1, 20), new ItemReward(15035, 1, 1, 20), new ItemReward(15037, 1, 1, 20), new ItemReward(15038, 1, 1, 20), //War chief
                 new ItemReward(15021, 1, 1, 20), new ItemReward(15022, 1, 1, 20), new ItemReward(15023, 1, 1, 20), new ItemReward(15024, 1, 1, 20), new ItemReward(15025, 1, 1, 20), new ItemReward(15026, 1, 1, 20) //Serjeant
-                ),
-        ELITE(  new ItemReward(15332, 4, 10, 100), //Overload
+        ),
+        ELITE(new ItemReward(15332, 4, 10, 100), //Overload
                 new ItemReward(5020, 10000, 15000, 100), //Pkt
                 new ItemReward(13898, 1, 1, 5), new ItemReward(13892, 1, 1, 5), new ItemReward(13886, 1, 1, 5), new ItemReward(13898, 1, 1, 5),//Cursed Statius
                 new ItemReward(8959, 1, 1, 5), new ItemReward(8960, 1, 1, 5), new ItemReward(8961, 1, 1, 5), new ItemReward(8962, 1, 1, 5), new ItemReward(8963, 1, 1, 5), new ItemReward(8964, 1, 1, 5), new ItemReward(8965, 1, 1, 5), //Tricorn hats
@@ -106,23 +363,13 @@ public class ClueScroll {
                 new ItemReward(18357, 1, 1, 10), //Chaotic cbow
                 new ItemReward(15033, 1, 1, 20), new ItemReward(15034, 1, 1, 20), new ItemReward(15036, 1, 1, 20), new ItemReward(15035, 1, 1, 20), new ItemReward(15037, 1, 1, 20), new ItemReward(15038, 1, 1, 20), //War chief
                 new ItemReward(15021, 1, 1, 20), new ItemReward(15022, 1, 1, 20), new ItemReward(15023, 1, 1, 20), new ItemReward(15024, 1, 1, 20), new ItemReward(15025, 1, 1, 20), new ItemReward(15026, 1, 1, 20) //Serjeant
-                );
+        );
 
         Reward[] rewards;
 
-        RareRewards(Reward... rewards) {
+        RareRewards(final Reward... rewards) {
             this.rewards = rewards;
         }
-    }
-
-    public List<Reward> getRareRewards(Difficulty difficulty) {
-        List<Reward> rewards = new ArrayList<>();
-        for (RareRewards reward : RareRewards.values()) {
-            if (reward.toString().equalsIgnoreCase(difficulty.name()))
-                for (int i = 0; i < reward.rewards.length; i++)
-                    rewards.add(reward.rewards[i]);
-        }
-        return rewards;
     }
 
     public enum Trigger {
@@ -182,269 +429,17 @@ public class ClueScroll {
 
         private final int id;
 
-        private Trigger(final int id){
+        Trigger(final int id) {
             this.id = id;
         }
 
-        private Trigger(final Animation anim){
+        Trigger(final Animation anim) {
             this(anim.getId());
         }
 
-        public int getId(){
+        public int getId() {
             return id;
         }
-    }
-
-    private int id;
-    private String description;
-    private Difficulty difficulty;
-    private Trigger trigger;
-
-    private final List<Requirement> requirements;
-    private final List<Reward> rareRewards;
-
-    public ClueScroll(final int id, final String description, final Difficulty difficulty, final Trigger trigger) {
-        this.id = id;
-        this.description = description;
-        this.difficulty = difficulty;
-        this.trigger = trigger;
-
-        requirements = new ArrayList<>();
-        rareRewards = new ArrayList<>();
-
-        for (Reward reward : getRareRewards(difficulty))
-            rareRewards.add(reward);
-    }
-
-    public int getId(){
-        return id;
-    }
-
-    public void setId(final int id){
-        this.id = id;
-    }
-
-    public String getDescription(){
-        return description;
-    }
-
-    public void setDescription(final String description){
-        this.description = description;
-    }
-
-    public Difficulty getDifficulty(){
-        return difficulty;
-    }
-
-    public void setDifficulty(final Difficulty difficulty){
-        this.difficulty = difficulty;
-    }
-
-    public Trigger getTrigger(){
-        return trigger;
-    }
-
-    public void setTrigger(final Trigger trigger){
-        this.trigger = trigger;
-    }
-
-    public List<Requirement> getRequirements(){
-        return requirements;
-    }
-
-    public boolean hasAllRequirements(final Player player){
-        for(final Requirement req : requirements)
-            if(!req.apply(player))
-                return false;
-        return true;
-    }
-
-    public void send(final Player player){
-        final String[] lines = Misc.wrapString(description.replaceAll("<br>", "\n"), 50).split("\n");
-        player.getActionSender().openQuestInterface(String.format("@dre@%s Clue Scroll", Misc.ucFirst(difficulty.toString().toLowerCase())), lines);
-        if(player.debug) {
-            player.sendf("trigger: %s", trigger);
-            for(final Requirement req : requirements)
-                player.sendf(req.toString());
-        }
-    }
-
-    public void apply(final Player player){
-        Item oldItem = Item.create(id);
-        if(player.getInventory().remove(oldItem) < 1)
-            return;
-        double currentSteps = 0;
-        if(player.getPermExtraData().get("clueScrollProgress") != null)
-            try {
-                currentSteps = (Double) player.getPermExtraData().get("clueScrollProgress") + 1;
-            } catch(Exception e) {
-                currentSteps = Double.parseDouble((String)player.getPermExtraData().get("clueScrollProgress")) + 1;
-            }
-        double maxSteps = getDifficulty().ordinal() + 2;
-        double minSteps = getDifficulty().ordinal();
-        boolean giveReward = currentSteps > maxSteps;
-        double random = Math.random();
-        double number = currentSteps / maxSteps;
-        if(currentSteps >= minSteps) {
-            if (!giveReward && (number) > random) {
-                giveReward = true;
-            }
-        }
-        if(giveReward) {
-            giveReward = giveReward(player);
-        }
-        if(!giveReward) {
-            Item item = oldItem;
-            while(item.getId() == oldItem.getId())
-                item = Item.create(ClueScrollManager.getAll(difficulty).get((int) Math.round(Math.random() * (ClueScrollManager.getAll(difficulty).size() - 1 != -1 ? ClueScrollManager.getAll(difficulty).size() - 1 : 0))).getId());
-            player.sendMessage("You find another clue scroll!");
-            player.getInventory().add(item);
-            player.getPermExtraData().put("clueScrollProgress", currentSteps);
-        }
-    }
-
-    public boolean giveReward(final Player player) {
-        player.getPermExtraData().remove("clueScrollProgress");
-        int amount = Misc.random(getDifficulty().ordinal() + 3);
-        if(amount > 8) {
-            amount = 8;
-        }
-        if(amount < 3 || amount < getDifficulty().ordinal() + 1) {
-            amount = 3;
-        }
-        List<Reward> received = new ArrayList<>();
-        while(received.size() != amount) {
-            Reward item;
-            if(Misc.random(4) == 1) {
-                player.sendMessage("Entered rare loot table");
-                item = getRandomRare();
-            } else {
-                item = getRandomNormal();
-            }
-            if(item != null && !received.contains(item))
-                received.add(item);
-        }
-        for(int i = 0; i <= 8; i++) {
-            player.getActionSender().sendUpdateItem(6963, i, null);
-        }
-        int i = 0;
-        for(Reward reward : received) {
-            if(reward != null)
-                if(reward.getType() == Reward.Type.ITEM) {
-                    reward.apply(player, i);
-                    i++;
-                } else {
-                    reward.apply(player);
-                }
-        }
-        player.getActionSender().showInterface(6960);
-        return true;
-    }
-
-    public Reward getRandomRare() {
-        List<Reward> possibleRewards = new ArrayList<>();
-        int i = 0;
-        while(possibleRewards.isEmpty() && !rareRewards.isEmpty()) {
-            for (Reward reward : rareRewards) {
-                if (reward.canGet() && !possibleRewards.contains(reward)) {
-                    possibleRewards.add(reward);
-                }
-            }
-        }
-        int randomItem = Misc.random(possibleRewards.size() - 1);
-        return possibleRewards.get(randomItem);
-    }
-
-    public Reward getRandomNormal() {
-        int random = Misc.random(SpawnCommand.giveSpawnables().size());
-        int key = -1;
-        if(SpawnCommand.giveSpawnables().isEmpty())
-            return new ItemReward(4716, 1, 1, 1000);
-        while(NewGameMode.getUnitPrice(random == 0 ? 1 : random) < 10000 || !SpawnCommand.giveSpawnables().containsKey(random)) {
-            random = Misc.random(SpawnCommand.giveSpawnables().size());
-        }
-        Item item = Item.create(random);
-        if(item.getDefinition().isStackable())
-            return new ItemReward(random, 1, 20, 1000);
-        return new ItemReward(random, 1, 1, 1000);
-    }
-
-    public Element toElement(final Document doc){
-        final Element element = doc.createElement("cluescroll");
-        element.setAttribute("id", Integer.toString(id));
-        element.setAttribute("difficulty", difficulty.name());
-        element.setAttribute("trigger", trigger.name());
-        final Element requirementsElement = doc.createElement("requirements");
-        for(final Requirement requirement : requirements)
-            requirementsElement.appendChild(requirement.toElement(doc));
-        final Element rewardsElement = doc.createElement("rewards");
-        /*
-        for(final Reward reward : normalRewards)
-            rewardsElement.appendChild(reward.toElement(doc));
-        for(final Reward reward : rareRewards)
-            rewardsElement.appendChild(reward.toElement(doc));
-            */
-        element.appendChild(ClueScrollUtils.createElement(doc, "description", description));
-        element.appendChild(requirementsElement);
-        element.appendChild(rewardsElement);
-        return element;
-    }
-
-    public boolean equals(final Object o){
-        if(o == null || !(o instanceof ClueScroll))
-            return false;
-        if(o == this)
-            return true;
-        final ClueScroll cs = (ClueScroll) o;
-        return cs.id == id
-                && cs.description.equals(description)
-                && cs.difficulty == difficulty
-                && cs.trigger == trigger;
-    }
-
-    public String toString(){
-        return Integer.toString(id);
-    }
-
-    public static ClueScroll parse(final Element element){
-        final int id = Integer.parseInt(element.getAttribute("id"));
-        final Difficulty difficulty = Difficulty.valueOf(element.getAttribute("difficulty"));
-        final Trigger trigger = Trigger.valueOf(element.getAttribute("trigger"));
-        final String description = element.getElementsByTagName("description").item(0).getTextContent();
-        final ClueScroll clueScroll = new ClueScroll(id, description, difficulty, trigger);
-        final Element requirementsElement = (Element) element.getElementsByTagName("requirements").item(0);
-        final NodeList requirements = requirementsElement.getElementsByTagName("requirement");
-        for(int i = 0; i < requirements.getLength(); i++){
-            final Node node = requirements.item(i);
-            if(node.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-            final Element e = (Element) node;
-            final Requirement.Type type = Requirement.Type.valueOf(e.getAttribute("type"));
-            clueScroll.requirements.add(type.parse(e));
-        }
-        /*
-        final Element rewardsElement = (Element) element.getElementsByTagName("rewards").item(0);
-        final NodeList rewards = rewardsElement.getElementsByTagName("reward");
-        for(int i = 0; i < rewards.getLength(); i++){
-            final Node node = rewards.item(i);
-            if(node.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-            final Element e = (Element) node;
-            final Reward.Type type = Reward.Type.valueOf(e.getAttribute("type"));
-            clueScroll.normalRewards.add(type.parse(e));
-        }
-        final Element rareRewardsElement = (Element) element.getElementsByTagName("rareRewards").item(0);
-        final NodeList rareRewards = rareRewardsElement.getElementsByTagName("rareReward");
-        for(int i = 0; i < rareRewards.getLength(); i++){
-            final Node node = rareRewards.item(i);
-            if(node.getNodeType() != Node.ELEMENT_NODE)
-                continue;
-            final Element e = (Element) node;
-            final Reward.Type type = Reward.Type.valueOf(e.getAttribute("type"));
-            clueScroll.rareRewards.add(type.parse(e));
-        }
-        */
-        return clueScroll;
     }
 
 }

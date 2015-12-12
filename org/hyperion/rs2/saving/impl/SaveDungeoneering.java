@@ -17,16 +17,16 @@ public class SaveDungeoneering extends SaveString {
     }
 
     @Override
-    public void setValue(Player player, String value) {
-        try {
+    public void setValue(final Player player, final String value) {
+        try{
             player.getDungeoneering().load(value);
-        }catch(final Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
         }
     }
 
     @Override
-    public String getValue(Player player) {
+    public String getValue(final Player player) {
         return player.getDungeoneering().save();  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

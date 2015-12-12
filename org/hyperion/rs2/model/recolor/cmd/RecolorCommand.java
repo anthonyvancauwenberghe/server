@@ -5,13 +5,13 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.recolor.Recolor;
 
-public class RecolorCommand extends Command{
+public class RecolorCommand extends Command {
 
-    public RecolorCommand(){
+    public RecolorCommand() {
         super("recolor", Rank.DEVELOPER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String line = filterInput(input).trim();
         try{
             final Recolor recolor = Recolor.parse(line);
@@ -24,7 +24,7 @@ public class RecolorCommand extends Command{
             }
             player.getRecolorManager().add(recolor);
             player.sendf("Added recolor for %s", recolor.toReadableString());
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Error parsing your recolor: " + line);
             player.sendf("Syntax: ::recolor item_id [fill/replace/checkered] colors...");
             player.sendf("Example: ::recolor 1333 fill dragonstone");

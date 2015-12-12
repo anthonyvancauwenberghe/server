@@ -10,11 +10,11 @@ import org.hyperion.rs2.model.GameObjectDefinition;
  */
 public interface ObjectDefinitionListener {
 
-	/**
-	 * Called when an object definition is parsed.
-	 *
-	 * @param def The definition that was parsed.
-	 */
-	public void objectDefinitionParsed(GameObjectDefinition def);
+    /**
+     * Called when an object definition is parsed.
+     *
+     * @param def The definition that was parsed.
+     */
+    void objectDefinitionParsed(GameObjectDefinition def);
 
 }

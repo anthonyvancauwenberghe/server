@@ -8,18 +8,18 @@ import java.sql.SQLException;
 
 public class GlitchRequest extends SQLRequest {
 
-	private Player player;
+    private Player player;
 
-	private String message;
+    private String message;
 
-	public GlitchRequest(String Player, String message) {
-		super(SQLRequest.LOW_PRIORITY_REQUEST);
-	}
+    public GlitchRequest(final String Player, final String message) {
+        super(SQLRequest.LOW_PRIORITY_REQUEST);
+    }
 
-	@Override
-	public void process(SQLConnection sql) throws SQLException {
-		String query = "INSERT INTO glitchers(name,message) VALUES ('" + player.getName().toLowerCase() + "','" + message + "')";
-		sql.query(query);
-	}
+    @Override
+    public void process(final SQLConnection sql) throws SQLException {
+        final String query = "INSERT INTO glitchers(name,message) VALUES ('" + player.getName().toLowerCase() + "','" + message + "')";
+        sql.query(query);
+    }
 
 }

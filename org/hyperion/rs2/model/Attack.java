@@ -4,10 +4,10 @@ import org.hyperion.rs2.model.combat.CombatEntity;
 
 public interface Attack {
 
-	public String getName();
+    String getName();
 
-	public int[] npcIds();
+    int[] npcIds();
 
-	public int handleAttack(NPC n, CombatEntity attack);
+    int handleAttack(NPC n, CombatEntity attack);
 
 }

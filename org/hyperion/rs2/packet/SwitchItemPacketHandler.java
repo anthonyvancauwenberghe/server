@@ -3,9 +3,8 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.content.checkers.GameHandler;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.net.Packet;
 
 /**
@@ -15,60 +14,59 @@ import org.hyperion.rs2.net.Packet;
  */
 public class SwitchItemPacketHandler implements PacketHandler {
 
-	@Override
-    public void handle(Player player, Packet packet) {
+    @Override
+    public void handle(final Player player, final Packet packet) {
         final int interfaceId = packet.getLEShortA();
         final int fromTab = packet.getByte() + 88;
         final int fromSlot = packet.getLEShortA();
         int toSlot = packet.getLEShort();
-        if(toSlot < 0) {
+        if(toSlot < 0){
             toSlot += 15485;
         }
-        if (!player.getBankField().isBanking()) {
+        if(!player.getBankField().isBanking()){
             player.getInterfaceState().interfaceClosed();
         }
-        if ((interfaceId >= -15448) && (interfaceId <= -15440)) {
-            if (player.getBankField().isSearching()) {
+        if((interfaceId >= -15448) && (interfaceId <= -15440)){
+            if(player.getBankField().isSearching()){
                 player.sendMessage("You cannot use this feature while searching!");
                 return;
             }
-            if ((fromTab > 8) || (fromTab < 0)) {
+            if((fromTab > 8) || (fromTab < 0)){
                 return;
             }
-            int tab = (interfaceId + 15448);
-            if(tab >= player.getBankField().getTabAmount()) {
+            final int tab = (interfaceId + 15448);
+            if(tab >= player.getBankField().getTabAmount()){
                 player.getActionSender().removeAllInterfaces();
                 DialogueManager.openDialogue(player, 6500);
                 return;
             }
 
 
-            int currentOffset = player.getBankField().getOffset(fromTab);
-            int destinationOffset = player.getBankField().getOffset(tab);
-            if (tab != fromTab) {
-                if (toSlot >= player.getBankField().getTabAmounts()[tab]) {
+            final int currentOffset = player.getBankField().getOffset(fromTab);
+            final int destinationOffset = player.getBankField().getOffset(tab);
+            if(tab != fromTab){
+                if(toSlot >= player.getBankField().getTabAmounts()[tab]){
                     Bank.moveToTab(player, fromSlot, fromTab, tab);
                     return;
                 }
-                if (player.getBankField().isInserting()) {
+                if(player.getBankField().isInserting()){
                     player.sendMessage("@blu@Inserting function to be implemented...");
-                } else {
+                }else{
                     Bank.swapTabs(player, fromSlot + currentOffset, toSlot + destinationOffset);
                 }
                 return;
             }
-            if (fromSlot == toSlot) {
+            if(fromSlot == toSlot){
                 return;
             }
-            if ((toSlot >= player.getBankField().getTabAmounts()[tab])
-                    || (fromSlot >= player.getBankField().getTabAmounts()[tab])) {
+            if((toSlot >= player.getBankField().getTabAmounts()[tab]) || (fromSlot >= player.getBankField().getTabAmounts()[tab])){
                 return;
             }
-            boolean bankFiringEvents = player.getBank().isFiringEvents();
+            final boolean bankFiringEvents = player.getBank().isFiringEvents();
             player.getBank().setFiringEvents(false);
-            if (player.getBankField().isInserting()) {
+            if(player.getBankField().isInserting()){
                 Bank.insert(player, fromSlot + currentOffset, toSlot + destinationOffset);
-            } else {
+            }else{
                 Bank.swap(player, fromSlot + currentOffset, toSlot + destinationOffset);
             }
 
@@ -76,14 +74,14 @@ public class SwitchItemPacketHandler implements PacketHandler {
             player.getBank().shift();
             return;
         }
-        if ((interfaceId >= (-15485)) && (interfaceId <= (-15477))) {
-            if (player.getBankField().isSearching()) {
+        if((interfaceId >= (-15485)) && (interfaceId <= (-15477))){
+            if(player.getBankField().isSearching()){
                 player.sendMessage("You cannot use this feature while searching!");
                 return;
             }
-            int toTab = interfaceId + (15485);
+            final int toTab = interfaceId + (15485);
 
-            if(toTab >= player.getBankField().getTabAmount()) {
+            if(toTab >= player.getBankField().getTabAmount()){
                 player.getActionSender().removeAllInterfaces();
                 DialogueManager.openDialogue(player, 6500);
                 return;
@@ -92,11 +90,10 @@ public class SwitchItemPacketHandler implements PacketHandler {
             Bank.moveToTab(player, fromSlot, fromTab, toTab);
             return;
         }
-        if ((interfaceId == Inventory.INTERFACE) || (interfaceId == 5064)) {
-            if ((fromSlot < 28) && (toSlot < 28)) {
-                Item dest = player.getInventory().get(toSlot);
-                player.getInventory()
-                        .set(toSlot, player.getInventory().get(fromSlot));
+        if((interfaceId == Inventory.INTERFACE) || (interfaceId == 5064)){
+            if((fromSlot < 28) && (toSlot < 28)){
+                final Item dest = player.getInventory().get(toSlot);
+                player.getInventory().set(toSlot, player.getInventory().get(fromSlot));
                 player.getInventory().set(fromSlot, dest);
             }
         }

@@ -45,17 +45,17 @@ public class LightAGS extends Godsword {
      *
      * @param id
      */
-    public LightAGS(int id) {
+    public LightAGS(final int id) {
         super(id);
     }
 
     @Override
-    public boolean specialAttack(Player player) {
+    public boolean specialAttack(final Player player) {
         return true;
     }
 
     @Override
-    public int getSpecialDrain(Player player) {
+    public int getSpecialDrain(final Player player) {
         return SPECIAL_DRAIN;
     }
 

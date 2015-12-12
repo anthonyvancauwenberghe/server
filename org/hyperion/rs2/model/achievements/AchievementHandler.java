@@ -7,44 +7,44 @@ import java.util.ArrayList;
 
 public class AchievementHandler {
 
-    public static boolean achievementButton(Player player, int buttonId) {
+    public static boolean achievementButton(final Player player, final int buttonId) {
         if(true)
             return false;
-        for (int i = 29457; i <= 29462; i++) {
-            if(buttonId == i) {
-                Difficulty newDifficulty = Difficulty.values()[i - 29457];
+        for(int i = 29457; i <= 29462; i++){
+            if(buttonId == i){
+                final Difficulty newDifficulty = Difficulty.values()[i - 29457];
                 AchievementHandler.openInterface(player, newDifficulty, true);
                 player.setViewingDifficulty(newDifficulty);
                 return true;
             }
         }
-        if(buttonId > 28885 && buttonId < 28950) {
-            AchievementData achievementData = getAchievementByDifficulty(player.getViewingDifficulty()).get(buttonId - 28886);
+        if(buttonId > 28885 && buttonId < 28950){
+            final AchievementData achievementData = getAchievementByDifficulty(player.getViewingDifficulty()).get(buttonId - 28886);
             player.getActionSender().sendString(28883, achievementData.getName() + " Guide");
             loadInformation(player, achievementData);
-            if (achievementData.getSteps() > 1)
+            if(achievementData.getSteps() > 1)
                 player.getActionSender().sendString(28989, "Current Progress: " + player.getAchievementsProgress().get(achievementData) + "/" + achievementData.getSteps());
             return true;
         }
         return false;
     }
 
-    private static ArrayList<AchievementData> getAchievementByDifficulty(Difficulty difficulty) {
-        ArrayList<AchievementData> achievements = new ArrayList<>();
-        for(AchievementData achievementData : AchievementData.values()) {
+    private static ArrayList<AchievementData> getAchievementByDifficulty(final Difficulty difficulty) {
+        final ArrayList<AchievementData> achievements = new ArrayList<>();
+        for(final AchievementData achievementData : AchievementData.values()){
             if(achievementData.getDifficulty() == difficulty)
                 achievements.add(achievementData);
         }
         return achievements;
     }
 
-    public static void openInterface(Player player, Difficulty difficulty, boolean refresh) {
+    public static void openInterface(final Player player, final Difficulty difficulty, final boolean refresh) {
         if(true)
             return;
         clearInterface(player);
-        ArrayList<AchievementData> achievements = getAchievementByDifficulty(difficulty);
+        final ArrayList<AchievementData> achievements = getAchievementByDifficulty(difficulty);
         int interfaceId = 28886;
-        for(AchievementData achievementData : achievements) {
+        for(final AchievementData achievementData : achievements){
             player.getActionSender().sendString(interfaceId, getTextColor(player.getAchievementsProgress().get(achievementData), achievementData.getSteps()) + achievementData.getName());
             interfaceId++;
         }
@@ -53,20 +53,20 @@ public class AchievementHandler {
             player.getActionSender().showInterface(28880);
     }
 
-    private static void clearInterface(Player player) {
-        for(int i = 28989; i < 29014; i++) {
+    private static void clearInterface(final Player player) {
+        for(int i = 28989; i < 29014; i++){
             player.getActionSender().sendString(i, "");
         }
-        for(int i = 29402; i < 29409; i++) {
+        for(int i = 29402; i < 29409; i++){
             player.getActionSender().sendString(i, "");
         }
-        for(int i = 28886; i <= 28886 + player.getAchievementsProgress().size(); i++) {
+        for(int i = 28886; i <= 28886 + player.getAchievementsProgress().size(); i++){
             player.getActionSender().sendString(i, "");
         }
         player.getActionSender().sendString(28883, "Achievement Guide");
     }
 
-    private static String getTextColor(int currentStep, int steps) {
+    private static String getTextColor(final int currentStep, final int steps) {
         if(currentStep == 0)
             return "@red@";
         else if(currentStep > 0 && currentStep < steps)
@@ -77,38 +77,39 @@ public class AchievementHandler {
 
     /**
      * Progresses every achievement of this type.
+     *
      * @param player Player player
-     * @param type Type type of achievement.
+     * @param type   Type type of achievement.
      */
-    public static void progressAchievement(Player player, String type) {
+    public static void progressAchievement(final Player player, final String type) {
         if(true)
             return;
-        for(int i = 0; i < AchievementData.values().length; i++) {
-            AchievementData achievementData = AchievementData.values()[i];
-            if(achievementData.getType() == null) {
-                if(achievementData.getName().equals(type)) {
+        for(int i = 0; i < AchievementData.values().length; i++){
+            final AchievementData achievementData = AchievementData.values()[i];
+            if(achievementData.getType() == null){
+                if(achievementData.getName().equals(type)){
                     progress(achievementData, player);
                     return;
                 }
-            } else if(achievementData.getType().equals(type)) {
+            }else if(achievementData.getType().equals(type)){
                 progress(achievementData, player);
             }
         }
     }
 
-    private static void loadInformation(Player player, AchievementData achievementData) {
-        for(int i = 28989; i < achievementData.getInstructions().length + 28989; i++) {
+    private static void loadInformation(final Player player, final AchievementData achievementData) {
+        for(int i = 28989; i < achievementData.getInstructions().length + 28989; i++){
             player.getActionSender().sendString(i, achievementData.getInstructions()[i - 28989]);
         }
-        for(int i = 29402; i < achievementData.getRewards().length + 29402; i++) {
+        for(int i = 29402; i < achievementData.getRewards().length + 29402; i++){
             player.getActionSender().sendString(i, achievementData.getRewards()[i - 29402]);
         }
     }
 
-    private static void progress(AchievementData achievementData, Player player) {
+    private static void progress(final AchievementData achievementData, final Player player) {
         if(player.getAchievementsProgress().get(achievementData) == achievementData.getSteps())
             return;
-        switch(achievementData.getType()) {
+        switch(achievementData.getType()){
             case "Total":
                 player.getAchievementsProgress().put(achievementData, player.getSkills().getTotalLevel() + player.getSkills().getLevel(Skills.CONSTRUCTION));
                 break;

@@ -16,44 +16,37 @@ import java.util.List;
  */
 public class RefreshNewsEvent extends Event {
 
-    static class NewsComparator implements Comparator<Article> {
-        @Override
-        public int compare(Article o1, Article o2) {
-            return o1.getDate().compareTo(o2.getDate());
-        }
-    }
-
     public static Article[] latestNews = new Article[3];
     public static long lastNewsChange = System.currentTimeMillis();
-
-    public RefreshNewsEvent() {
-        super(Time.ONE_MINUTE * 10);
-    }
 
     static {
         refreshNews(false);
     }
 
-    public static void refreshNews(boolean announce) {
-        List<Article> news;
-        try {
+    public RefreshNewsEvent() {
+        super(Time.ONE_MINUTE * 10);
+    }
+
+    public static void refreshNews(final boolean announce) {
+        final List<Article> news;
+        try{
             news = ReadRss.readFeed("http://forums.arteropk.com/forum/10-news.xml");
             news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/12-updates.xml"));
             news.addAll(ReadRss.readFeed("http://forums.arteropk.com/forum/58-tweaks/.xml"));
             news.sort(new NewsComparator().reversed());
-            Article oldNews = latestNews[0];
+            final Article oldNews = latestNews[0];
 
-            for(int i = 0; i < 3; i++) {
+            for(int i = 0; i < 3; i++){
                 latestNews[i] = news.get(i);
             }
 
-            if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
-                for(Player player : World.getWorld().getPlayers()) {
+            if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())){
+                for(final Player player : World.getWorld().getPlayers()){
                     player.sendServerMessage("There is some news! Do ::news to check it out!");
                     lastNewsChange = System.currentTimeMillis();
                 }
             }
-        } catch(Exception e) {
+        }catch(final Exception e){
             System.out.println("Could not load news.");
             lastNewsChange = 0;
         }
@@ -62,5 +55,12 @@ public class RefreshNewsEvent extends Event {
     @Override
     public void execute() throws IOException {
         refreshNews(true);
+    }
+
+    static class NewsComparator implements Comparator<Article> {
+        @Override
+        public int compare(final Article o1, final Article o2) {
+            return o1.getDate().compareTo(o2.getDate());
+        }
     }
 }

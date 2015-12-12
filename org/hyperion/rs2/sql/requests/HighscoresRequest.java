@@ -15,58 +15,57 @@ import java.sql.SQLException;
 
 public class HighscoresRequest extends SQLRequest {
 
-	/**
-	 * The highscores table name.
-	 */
-	public static final String HIGHSCORES_TABLE = Server.getConfig().getString("hstable");
+    /**
+     * The highscores table name.
+     */
+    public static final String HIGHSCORES_TABLE = Server.getConfig().getString("hstable");
 
-	private Highscores highscores;
+    static {
+        CommandHandler.submit(new Command("saveallhighscores", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(final Player player, final String input) {
+                player.getActionSender().sendMessage("Saving highscores");
+                for(final Player p : World.getWorld().getPlayers()){
+                    if(p.getHighscores().needsUpdate()){
+                        World.getWorld().getLogsConnection().offer(new HighscoresRequest(p.getHighscores()));
+                    }
+                }
+                return true;
+            }
+        });
+    }
 
-	public HighscoresRequest(Highscores highscores) {
-		super(SQLRequest.QUERY_REQUEST);
-		this.highscores = highscores;
-	}
+    private final Highscores highscores;
 
-	@Override
-	public void process(SQLConnection sql) throws SQLException {
-		ResultSet rs = sql.query("SELECT * FROM " + HIGHSCORES_TABLE + " WHERE Name = '" + highscores.getName() + "'");
-		if(rs != null && rs.next()) {
-			sql.query(highscores.getUpdateQuery());
-		} else {
-			sql.query(highscores.getInsertQuery());
-		}
-	}
+    public HighscoresRequest(final Highscores highscores) {
+        super(SQLRequest.QUERY_REQUEST);
+        this.highscores = highscores;
+    }
 
+    public static void main(final String... args) {
+        final int[] exps = new int[Highscores.SKILLS_COLUMN_NAMES.length];
+        exps[10] = 1337;
+        final Highscores highscores = new Highscores(null, "graham", 100, exps, 100, 100);
+        final StringBuilder sb = new StringBuilder();
+        sb.append("INSERT INTO ").append(HIGHSCORES_TABLE).append(" (");
+        for(final String skill : Highscores.SKILLS_COLUMN_NAMES){
+            sb.append(skill).append(",");
+        }
+        sb.append("Total,Overall,elo,Name) VALUES (");
+        for(final int exp : highscores.getExps()){
+            sb.append(exp).append(",");
+        }
+        sb.append(highscores.getTotalLevel()).append(",").append(highscores.getOverallExp()).append(",").append(highscores.getElo()).append(",'").append(highscores.getName()).append("')");
+        System.out.println(sb.toString());
+    }
 
-	public static void main(String... args) {
-		int[] exps = new int[Highscores.SKILLS_COLUMN_NAMES.length];
-		exps[10] = 1337;
-		Highscores highscores = new Highscores(null, "graham", 100, exps, 100, 100);
-		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO " + HIGHSCORES_TABLE + " (");
-		for(String skill : Highscores.SKILLS_COLUMN_NAMES) {
-			sb.append(skill).append(",");
-		}
-		sb.append("Total,Overall,elo,Name) VALUES (");
-		for(int exp : highscores.getExps()) {
-			sb.append(exp).append(",");
-		}
-		sb.append(highscores.getTotalLevel() + "," + highscores.getOverallExp() + "," + highscores.getElo() + ",'" + highscores.getName() + "')");
-		System.out.println(sb.toString());
-	}
-
-	static {
-		CommandHandler.submit(new Command("saveallhighscores", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("Saving highscores");
-				for(Player p : World.getWorld().getPlayers()) {
-					if(p.getHighscores().needsUpdate()) {
-						World.getWorld().getLogsConnection().offer(new HighscoresRequest(p.getHighscores()));
-					}
-				}
-				return true;
-			}
-		});
-	}
+    @Override
+    public void process(final SQLConnection sql) throws SQLException {
+        final ResultSet rs = sql.query("SELECT * FROM " + HIGHSCORES_TABLE + " WHERE Name = '" + highscores.getName() + "'");
+        if(rs != null && rs.next()){
+            sql.query(highscores.getUpdateQuery());
+        }else{
+            sql.query(highscores.getInsertQuery());
+        }
+    }
 }

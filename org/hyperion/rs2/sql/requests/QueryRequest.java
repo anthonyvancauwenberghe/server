@@ -10,31 +10,31 @@ import java.sql.SQLException;
  */
 public class QueryRequest extends SQLRequest {
 
-	/**
-	 * The query to be processed.
-	 */
-	private String query;
+    /**
+     * The query to be processed.
+     */
+    private final String query;
 
-	/**
-	 * Constructs a new QueryRequest with the specified query.
-	 *
-	 * @param query
-	 */
-	public QueryRequest(String query) {
-		super(SQLRequest.QUERY_REQUEST);
-		this.query = query;
-	}
+    /**
+     * Constructs a new QueryRequest with the specified query.
+     *
+     * @param query
+     */
+    public QueryRequest(final String query) {
+        super(SQLRequest.QUERY_REQUEST);
+        this.query = query;
+    }
 
-	/**
-	 * Processes the query.
-	 */
-	@Override
-	public void process(SQLConnection sql) throws SQLException {
-		sql.query(query);
-	}
+    /**
+     * Processes the query.
+     */
+    @Override
+    public void process(final SQLConnection sql) throws SQLException {
+        sql.query(query);
+    }
 
-	@Override
-	public String toString() {
-		return query;
-	}
+    @Override
+    public String toString() {
+        return query;
+    }
 }

@@ -3,12 +3,14 @@ package org.hyperion.rs2.model.shops;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,10 +28,10 @@ public class LegendaryStore extends CurrencyShop {
      * @param name
      * @param container
      */
-    public LegendaryStore(int id, String name, Container container) {
+    public LegendaryStore(final int id, final String name, final Container container) {
         super(id, name, container, 13663, false);
-        for(final ThirdAgeSet set : ThirdAgeSet.values()) {
-            for(final Integer piece : set.ids) {
+        for(final ThirdAgeSet set : ThirdAgeSet.values()){
+            for(final Integer piece : set.ids){
                 addStaticItem(Item.create(piece));
                 container.add(Item.create(piece));
             }
@@ -41,16 +43,17 @@ public class LegendaryStore extends CurrencyShop {
                 final File file = new File("./data/legendaryshop.txt");
                 if(!file.exists())
                     file.createNewFile();
-                try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))){
                     if(!file.exists())
                         file.createNewFile();
-                    for(final Item item : container.toArray()) {
-                        if(item == null) continue;
-                        int price = getSpecialPrice(item);
+                    for(final Item item : container.toArray()){
+                        if(item == null)
+                            continue;
+                        final int price = getSpecialPrice(item);
                         writer.write(String.format("[%s]: PRICE: %d PKP: %,d DP: %,d", item.getDefinition().getName(), price, price * 100_000, price * 1000));
                         writer.newLine();
                     }
-                } catch(final Exception ex) {
+                }catch(final Exception ex){
                     ex.printStackTrace();
                 }
                 this.stop();
@@ -58,17 +61,21 @@ public class LegendaryStore extends CurrencyShop {
         });
     }
 
+    private static final Piece of(final int id, final int price) {
+        return new Piece(id, price);
+    }
+
     @Override
-    public int getSpecialPrice(Item item) {
+    public int getSpecialPrice(final Item item) {
         if(ItemSpawning.canSpawn(item.getId()))
             return 0;
-        for(final ThirdAgeSet set : ThirdAgeSet.values()) {
-            for(final Piece piece : set.pieces) {
+        for(final ThirdAgeSet set : ThirdAgeSet.values()){
+            for(final Piece piece : set.pieces){
                 if(piece.id == item.getId())
                     return piece.price;
             }
         }
-        switch(item.getId()) {
+        switch(item.getId()){
             //ringmaster
             case 17662:
                 return 15;
@@ -94,46 +101,42 @@ public class LegendaryStore extends CurrencyShop {
         return 5000;
     }
 
-    private static final Piece of(final int id, final int price) {
-        return new Piece(id, price);
-    }
-
     public enum ThirdAgeSet {
-        DRUIDIC(Constants.DEFLECT,
-        of(19308, 30), of(19311, 25), of(19314, 40),
-                of(19317, 35), of(19320, 30)),
+        DRUIDIC(Constants.DEFLECT, of(19308, 30), of(19311, 25), of(19314, 40), of(19317, 35), of(19320, 30)),
         MELEE(Constants.MELEE, of(10350, 7), of(10352, 6), of(10348, 10), of(10346, 8)),
         RANGE(Constants.RANGE, of(10330, 8), of(10332, 7), of(10334, 8), of(10336, 5)),
         MAGE(Constants.MAGE, of(10342, 8), of(10344, 5), of(10338, 10), of(10340, 8));
 
-        private final Piece[]  pieces;
         public final int type;
+        private final Piece[] pieces;
         private final List<Integer> ids;
-        private ThirdAgeSet(final int type, final Piece... pieces) {
+
+        ThirdAgeSet(final int type, final Piece... pieces) {
             this.pieces = pieces;
             this.type = type;
             this.ids = Stream.of(pieces).map(p -> p.id).collect(Collectors.toList());
 
         }
 
-        public boolean has(final Container container) {
-            int piececount = 0;
-            for(final Item item : container.toArray()) {
-                if(item == null) continue;
-                if(ids.contains(item.getId()))
-                    piececount++;
-            }
-            return pieces.length == piececount;
-        }
-
         public static ThirdAgeSet setFor(int type) {
             if(type > 5)
                 type -= 5;
-            for(final ThirdAgeSet set : values()) {
+            for(final ThirdAgeSet set : values()){
                 if(type == set.type)
                     return set;
             }
             return MELEE;
+        }
+
+        public boolean has(final Container container) {
+            int piececount = 0;
+            for(final Item item : container.toArray()){
+                if(item == null)
+                    continue;
+                if(ids.contains(item.getId()))
+                    piececount++;
+            }
+            return pieces.length == piececount;
         }
     }
 
@@ -146,8 +149,6 @@ public class LegendaryStore extends CurrencyShop {
             this.price = price;
         }
     }
-
-
 
 
 }

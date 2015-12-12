@@ -5,27 +5,26 @@ import java.util.Map;
 
 public class WeaponManager {
 
-	private Map<Integer, Weapon> weapons = new HashMap<Integer, Weapon>();
+    private static final WeaponManager manager = new WeaponManager();
+    private final Map<Integer, Weapon> weapons = new HashMap<Integer, Weapon>();
 
-	private static final WeaponManager manager = new WeaponManager();
+    private WeaponManager() {
 
-	public static WeaponManager getManager() {
-		return manager;
-	}
+    }
 
-	public Weapon get(int id) {
-		return weapons.get(id);
-	}
+    public static WeaponManager getManager() {
+        return manager;
+    }
 
-	public void put(int id, Weapon weapon) {
-		weapons.put(id, weapon);
-	}
+    public Weapon get(final int id) {
+        return weapons.get(id);
+    }
 
-	public int size() {
-		return weapons.size();
-	}
+    public void put(final int id, final Weapon weapon) {
+        weapons.put(id, weapon);
+    }
 
-	private WeaponManager() {
-
-	}
+    public int size() {
+        return weapons.size();
+    }
 }

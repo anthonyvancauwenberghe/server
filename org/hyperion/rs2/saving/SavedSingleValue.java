@@ -6,7 +6,7 @@ public class SavedSingleValue {
 
     private Object previousValue;
 
-    public SavedSingleValue(SaveSingleValue sv, Object value) {
+    public SavedSingleValue(final SaveSingleValue sv, final Object value) {
         this.setSavedSingleValue(sv);
         this.setPreviousValue(value);
     }
@@ -15,7 +15,7 @@ public class SavedSingleValue {
         return previousValue;
     }
 
-    public void setPreviousValue(Object previousValue) {
+    public void setPreviousValue(final Object previousValue) {
         this.previousValue = previousValue;
     }
 
@@ -23,7 +23,7 @@ public class SavedSingleValue {
         return sv;
     }
 
-    public void setSavedSingleValue(SaveSingleValue sv) {
+    public void setSavedSingleValue(final SaveSingleValue sv) {
         this.sv = sv;
     }
 

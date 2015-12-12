@@ -14,36 +14,33 @@ import java.util.Map;
  */
 public class BountyHunterLogout extends Event {
 
+    private static final Object LOCK = new Object();
+    private static final int LOGOUT_LIMIT = 2;
+    private static final Map<String, Integer> logoutsInWild = new HashMap<>();
+    private static final List<Player> blocked = new ArrayList();
     public BountyHunterLogout() {
         super(Time.ONE_MINUTE * 20);
     }
 
-    private static final Object LOCK = new Object();
-
-    private static final int LOGOUT_LIMIT = 2;
-
-    private static Map<String, Integer> logoutsInWild = new HashMap<>();
-    private static List<Player> blocked = new ArrayList();
-
-    public static void addLogout(Player player) {
-        synchronized (LOCK) {
+    public static void addLogout(final Player player) {
+        synchronized(LOCK){
             logoutsInWild.put(player.getName(), logoutsInWild.getOrDefault(player.getName(), 0) + 1);
         }
     }
 
-    public static boolean isBlocked(Player player) {
-        synchronized (LOCK) {
+    public static boolean isBlocked(final Player player) {
+        synchronized(LOCK){
 
-             if(player == null)
+            if(player == null)
                 return false;
             return blocked.contains(player);
         }
     }
 
-    public static void playerLogout(Player player) {
-        synchronized (LOCK) {
+    public static void playerLogout(final Player player) {
+        synchronized(LOCK){
             addLogout(player);
-            if(logoutsInWild.getOrDefault(player.getName(), 0) >= LOGOUT_LIMIT) {
+            if(logoutsInWild.getOrDefault(player.getName(), 0) >= LOGOUT_LIMIT){
                 if(!blocked.contains(player))
                     blocked.add(player);
             }
@@ -51,7 +48,7 @@ public class BountyHunterLogout extends Event {
     }
 
     public void execute() {
-        synchronized (LOCK) {
+        synchronized(LOCK){
             logoutsInWild.clear();
             blocked.clear();
             System.out.println("Bounty hunter blocklist has been reset.");

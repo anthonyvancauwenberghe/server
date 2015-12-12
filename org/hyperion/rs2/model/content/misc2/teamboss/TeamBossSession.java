@@ -1,24 +1,31 @@
 package org.hyperion.rs2.model.content.misc2.teamboss;
 
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay
  * Date: 12/19/14
  * Time: 1:07 PM
- *
+ * <p>
  * To change this template use File | Settings | File Templates.
  */
 public abstract class TeamBossSession {
 
-    private static List<TeamBossSession> sessions = new ArrayList<>();
+    private static final List<TeamBossSession> sessions = new ArrayList<>();
 
     protected final List<NPC> npcs;
     protected final List<Player> players;
@@ -42,7 +49,7 @@ public abstract class TeamBossSession {
     }
 
     public final void handlePlayerDeath(final Player player) {
-        if(players.remove(player))  {
+        if(players.remove(player)){
             if(players.isEmpty())
                 destroySession();
             player.getTeamSessions().remove(this);
@@ -66,7 +73,7 @@ public abstract class TeamBossSession {
     }
 
     public final void check() {
-        for(final Iterator<Player> it = players.iterator(); it.hasNext();) {
+        for(final Iterator<Player> it = players.iterator(); it.hasNext(); ){
             final Player p = it.next();
             if(p.isDead() || !getArea().inArea(p))
                 it.remove();
@@ -74,9 +81,11 @@ public abstract class TeamBossSession {
     }
 
     public abstract void handleReward();
+
     public abstract SpecialArea getArea();
 
-    public void sendHome(final Player player) {;
+    public void sendHome(final Player player) {
+        ;
         player.setTeleportTarget(Edgeville.LOCATION);
     }
 

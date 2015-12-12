@@ -7,92 +7,59 @@ import org.w3c.dom.Element;
 
 public abstract class Reward {
 
-    public enum Type{
-        ITEM{
-            public ItemReward parse(final Element element){
-                return ItemReward.parse(element);
-            }
-
-            public ItemReward createDefault(){
-                return new ItemReward(1, 1, 1, 1);
-            }
-        },
-        POINTS{
-            public PointsReward parse(final Element element){
-                return PointsReward.parse(element);
-            }
-
-            public PointsReward createDefault(){
-                return new PointsReward(PointsReward.Type.PK_POINTS, 1, 1, 1);
-            }
-        },
-        EXPERIENCE{
-            public ExperienceReward parse(final Element element){
-                return ExperienceReward.parse(element);
-            }
-
-            public ExperienceReward createDefault(){
-                return new ExperienceReward(0, 1, 1, 1);
-            }
-        };
-
-        public abstract Reward parse(final Element element);
-
-        public abstract Reward createDefault();
-    }
-
     private final Type type;
     private int minAmount;
     private int maxAmount;
     private int chance;
 
-    protected Reward(final Type type, final int minAmount, final int maxAmount, final int chance){
+    protected Reward(final Type type, final int minAmount, final int maxAmount, final int chance) {
         this.type = type;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
         this.chance = chance;
     }
 
-    public Type getType(){
+    public Type getType() {
         return type;
     }
 
-    public int getMinAmount(){
+    public int getMinAmount() {
         return minAmount;
     }
 
-    public void setMinAmount(final int minAmount){
+    public void setMinAmount(final int minAmount) {
         this.minAmount = minAmount;
     }
 
-    public int getMaxAmount(){
+    public int getMaxAmount() {
         return maxAmount;
     }
 
-    public void setMaxAmount(final int maxAmount){
+    public void setMaxAmount(final int maxAmount) {
         this.maxAmount = maxAmount;
     }
 
-    public double getChance(){
+    public double getChance() {
         return chance;
     }
 
-    public void setChance(final int chance){
+    public void setChance(final int chance) {
         this.chance = chance;
     }
 
-    public boolean apply(final Player player){
+    public boolean apply(final Player player) {
         return give(player, ClueScrollUtils.rand(minAmount, maxAmount));
     }
 
-    public boolean apply(final Player player, int index){return give(player, ClueScrollUtils.rand(minAmount, maxAmount), index);
+    public boolean apply(final Player player, final int index) {
+        return give(player, ClueScrollUtils.rand(minAmount, maxAmount), index);
     }
 
-    public boolean canGet(){
+    public boolean canGet() {
         return ClueScrollUtils.isChance(chance);
     }
 
-    public Element toElement(final Document doc){
+    public Element toElement(final Document doc) {
         final Element element = doc.createElement("reward");
         element.setAttribute("type", type.name());
         append(doc, element);
@@ -102,7 +69,7 @@ public abstract class Reward {
         return element;
     }
 
-    public Element toRareElement(final Document doc){
+    public Element toRareElement(final Document doc) {
         final Element element = doc.createElement("rareReward");
         element.setAttribute("type", type.name());
         append(doc, element);
@@ -112,7 +79,7 @@ public abstract class Reward {
         return element;
     }
 
-    public String toString(){
+    public String toString() {
         return String.format("%s [%,d, %,d] @ %d%%", type.name(), minAmount, maxAmount, chance);
     }
 
@@ -120,7 +87,43 @@ public abstract class Reward {
 
     protected abstract boolean give(final Player player, final int amount);
 
-    protected boolean give(final Player player, final int amount, int index) {
+    protected boolean give(final Player player, final int amount, final int index) {
         return false;
-    };
+    }
+
+    public enum Type {
+        ITEM {
+            public ItemReward parse(final Element element) {
+                return ItemReward.parse(element);
+            }
+
+            public ItemReward createDefault() {
+                return new ItemReward(1, 1, 1, 1);
+            }
+        },
+        POINTS {
+            public PointsReward parse(final Element element) {
+                return PointsReward.parse(element);
+            }
+
+            public PointsReward createDefault() {
+                return new PointsReward(PointsReward.Type.PK_POINTS, 1, 1, 1);
+            }
+        },
+        EXPERIENCE {
+            public ExperienceReward parse(final Element element) {
+                return ExperienceReward.parse(element);
+            }
+
+            public ExperienceReward createDefault() {
+                return new ExperienceReward(0, 1, 1, 1);
+            }
+        };
+
+        public abstract Reward parse(final Element element);
+
+        public abstract Reward createDefault();
+    }
+
+    ;
 }

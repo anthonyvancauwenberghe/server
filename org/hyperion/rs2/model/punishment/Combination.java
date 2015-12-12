@@ -7,32 +7,36 @@ public class Combination {
     private final Target target;
     private final Type type;
 
-    public Combination(final Target target, final Type type){
+    public Combination(final Target target, final Type type) {
         this.target = target;
         this.type = type;
     }
 
-    public void apply(final Player player){
+    public static Combination of(final Target target, final Type type) {
+        return new Combination(target, type);
+    }
+
+    public void apply(final Player player) {
         getTarget().apply(player, getType());
     }
 
-    public boolean isApplied(final Player player){
+    public boolean isApplied(final Player player) {
         return getTarget().isApplied(player, getType());
     }
 
-    public void unapply(final Player player){
+    public void unapply(final Player player) {
         getTarget().unapply(player, getType());
     }
 
-    public Target getTarget(){
+    public Target getTarget() {
         return target;
     }
 
-    public Type getType(){
+    public Type getType() {
         return type;
     }
 
-    public boolean equals(final Object o){
+    public boolean equals(final Object o) {
         if(o == null)
             return false;
         if(o == this)
@@ -43,15 +47,11 @@ public class Combination {
         return c.target == target && c.type == type;
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return getTarget().hashCode() * getType().hashCode();
     }
 
-    public String toString(){
+    public String toString() {
         return String.format("%s %s", target, type);
-    }
-
-    public static Combination of(final Target target, final Type type){
-        return new Combination(target, type);
     }
 }

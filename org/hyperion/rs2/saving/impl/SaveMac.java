@@ -8,21 +8,21 @@ import org.hyperion.rs2.saving.SaveInteger;
  */
 public class SaveMac extends SaveInteger {
 
-    public SaveMac(){
+    public SaveMac() {
         super("Mac");
     }
 
-    public Integer getValue(final Player player){
+    public Integer getValue(final Player player) {
         if(player.getExtraData().getBoolean("cantdoshit"))
             return player.getExtraData().getInt("olduid");
         return player.getUID();
     }
 
-    public int getDefaultValue(){
+    public int getDefaultValue() {
         return -1;
     }
 
-    public void setValue(final Player player, final int value){
+    public void setValue(final Player player, final int value) {
         player.getExtraData().put("olduid", value);
         if(value != player.getUID())
             player.getExtraData().put("diffuid", true);

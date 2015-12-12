@@ -2,11 +2,7 @@ package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.util.Misc;
-import org.hyperion.util.Time;
 
 import java.io.FileNotFoundException;
 
@@ -14,35 +10,35 @@ public class VotingBox implements ContentTemplate {
 
     public static final int ID = 3062;
 
-    private static int counter = 0;
+    private static final int counter = 0;
 
-    public static void cleanPlayer(Player player) {
-        if (player.getInventory() != null)
-            for (Item item : player.getInventory().toArray()) {
+    public static void cleanPlayer(final Player player) {
+        if(player.getInventory() != null)
+            for(final Item item : player.getInventory().toArray()){
                 checkItem(item);
             }
-        if (player.getBank() != null)
-            for (Item item : player.getBank().toArray()) {
+        if(player.getBank() != null)
+            for(final Item item : player.getBank().toArray()){
                 checkItem(item);
             }
-        if (player.getEquipment() != null)
-            for (Item item : player.getEquipment().toArray()) {
+        if(player.getEquipment() != null)
+            for(final Item item : player.getEquipment().toArray()){
                 checkItem(item);
             }
-        if (player.getBoB() != null)
-            for (Item item : player.getBoB().toArray()) {
+        if(player.getBoB() != null)
+            for(final Item item : player.getBoB().toArray()){
                 checkItem(item);
             }
     }
 
-    private static void checkItem(Item item) {
-        if (item == null)
+    private static void checkItem(final Item item) {
+        if(item == null)
             return;
         /**
          * I think this deletes all the strange boxes upon initialization? That's no good - already unspawnable
          */
         /*if(item.getId() == ID) {
-			item.setId(1);
+            item.setId(1);
 			counter += item.getCount();
 			System.out.println("Deleted : " + counter);
 		}*/
@@ -50,9 +46,8 @@ public class VotingBox implements ContentTemplate {
 
 
     @Override
-    public boolean clickObject(Player player, int type, int a, int b, int c,
-                               int d) {
-        if (a == ID && player.getInventory().remove(new Item(ID, 1)) > 0) {
+    public boolean clickObject(final Player player, final int type, final int a, final int b, final int c, final int d) {
+        if(a == ID && player.getInventory().remove(new Item(ID, 1)) > 0){
             player.getAchievementTracker().itemOpened(ID);
             player.getPoints().increaseVotingPoints(1);
             player.getPoints().increaseDonatorPoints(1, false);
@@ -67,8 +62,8 @@ public class VotingBox implements ContentTemplate {
     }
 
     @Override
-    public int[] getValues(int type) {
-        if (type == 1)
+    public int[] getValues(final int type) {
+        if(type == 1)
             return new int[]{ID};
         return null;
     }

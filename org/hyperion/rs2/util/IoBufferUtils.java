@@ -11,48 +11,48 @@ import java.nio.ByteBuffer;
  */
 public class IoBufferUtils {
 
-	/**
-	 * Reads a RuneScape string from a buffer.
-	 *
-	 * @param buf The buffer.
-	 * @return The string.
-	 */
-	public static String getRS2String(IoBuffer buf) {
-		StringBuilder bldr = new StringBuilder();
-		byte b;
-		while(buf.hasRemaining() && (b = buf.get()) != 10) {
-			bldr.append((char) b);
-		}
-		return bldr.toString();
-	}
+    /**
+     * Reads a RuneScape string from a buffer.
+     *
+     * @param buf The buffer.
+     * @return The string.
+     */
+    public static String getRS2String(final IoBuffer buf) {
+        final StringBuilder bldr = new StringBuilder();
+        byte b;
+        while(buf.hasRemaining() && (b = buf.get()) != 10){
+            bldr.append((char) b);
+        }
+        return bldr.toString();
+    }
 
-	public static String getRS2String(ByteBuffer buf) {
-		StringBuilder bldr = new StringBuilder();
-		byte b;
-		while(buf.hasRemaining() && (b = buf.get()) != 10) {
-			bldr.append((char) b);
-		}
-		return bldr.toString();
-	}
+    public static String getRS2String(final ByteBuffer buf) {
+        final StringBuilder bldr = new StringBuilder();
+        byte b;
+        while(buf.hasRemaining() && (b = buf.get()) != 10){
+            bldr.append((char) b);
+        }
+        return bldr.toString();
+    }
 
-	/**
-	 * Writes a RuneScape string to a buffer.
-	 *
-	 * @param buf    The buffer.
-	 * @param string The string.
-	 */
-	public static void putRS2String(IoBuffer buf, String string) {
-		for(char c : string.toCharArray()) {
-			buf.put((byte) c);
-		}
-		buf.put((byte) 10);
-	}
+    /**
+     * Writes a RuneScape string to a buffer.
+     *
+     * @param buf    The buffer.
+     * @param string The string.
+     */
+    public static void putRS2String(final IoBuffer buf, final String string) {
+        for(final char c : string.toCharArray()){
+            buf.put((byte) c);
+        }
+        buf.put((byte) 10);
+    }
 
-	public static void putRS2String(ByteBuffer buf, String string) {
-		for(char c : string.toCharArray()) {
-			buf.put((byte) c);
-		}
-		buf.put((byte) 10);
-	}
+    public static void putRS2String(final ByteBuffer buf, final String string) {
+        for(final char c : string.toCharArray()){
+            buf.put((byte) c);
+        }
+        buf.put((byte) 10);
+    }
 
 }

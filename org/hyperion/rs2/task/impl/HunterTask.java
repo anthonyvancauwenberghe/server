@@ -8,14 +8,14 @@ import org.hyperion.rs2.task.Task;
  */
 public class HunterTask implements Task {
 
-	@Override
-	public void execute(GameEngine context) {
-		context.submitWork(new Runnable() {
-			public void run() {
-				//System.out.println("I run dis code");
+    @Override
+    public void execute(final GameEngine context) {
+        context.submitWork(new Runnable() {
+            public void run() {
+                //System.out.println("I run dis code");
 
-			}
-		});
-	}
+            }
+        });
+    }
 
 }

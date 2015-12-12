@@ -8,69 +8,69 @@ package org.hyperion.rs2.model.region;
  */
 public class RegionCoordinates {
 
-	/**
-	 * X coordinate.
-	 */
-	private int x;
+    /**
+     * X coordinate.
+     */
+    private final int x;
 
-	/**
-	 * Y coordinate.
-	 */
-	private int y;
+    /**
+     * Y coordinate.
+     */
+    private final int y;
 
-	/**
-	 * Creates the region coordinate.
-	 *
-	 * @param x The x coordinate.
-	 * @param y The y coordinate.
-	 */
-	public RegionCoordinates(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
+    /**
+     * Creates the region coordinate.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     */
+    public RegionCoordinates(final int x, final int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-	/**
-	 * Gets the x coordinate.
-	 *
-	 * @return The x coordinate.
-	 */
-	public int getX() {
-		return x;
-	}
+    /**
+     * Gets the x coordinate.
+     *
+     * @return The x coordinate.
+     */
+    public int getX() {
+        return x;
+    }
 
-	/**
-	 * Gets the y coordinate.
-	 *
-	 * @return The y coordinate.
-	 */
-	public int getY() {
-		return y;
-	}
+    /**
+     * Gets the y coordinate.
+     *
+     * @return The y coordinate.
+     */
+    public int getY() {
+        return y;
+    }
 
-	@Override
-	public int hashCode() {
-		return 1000 * x + y;
-	}
+    @Override
+    public int hashCode() {
+        return 1000 * x + y;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) {
-			return true;
-		}
-		if(obj == null) {
-			return false;
-		}
-		if(getClass() != obj.getClass()) {
-			return false;
-		}
-		RegionCoordinates other = (RegionCoordinates) obj;
-		if(x != other.x) {
-			return false;
-		}
-		if(y != other.y) {
-			return false;
-		}
-		return true;
-	}
+    @Override
+    public boolean equals(final Object obj) {
+        if(this == obj){
+            return true;
+        }
+        if(obj == null){
+            return false;
+        }
+        if(getClass() != obj.getClass()){
+            return false;
+        }
+        final RegionCoordinates other = (RegionCoordinates) obj;
+        if(x != other.x){
+            return false;
+        }
+        if(y != other.y){
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -5,24 +5,24 @@ import org.hyperion.rs2.saving.SaveBoolean;
 
 public class SaveAutoRetaliate extends SaveBoolean {
 
-	public SaveAutoRetaliate(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveAutoRetaliate(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public void setValue(Player player, boolean value) {
-		player.autoRetailate = value;
-	}
+    @Override
+    public void setValue(final Player player, final boolean value) {
+        player.autoRetailate = value;
+    }
 
-	@Override
-	public Boolean getValue(Player player) {
-		return player.autoRetailate;
-	}
+    @Override
+    public Boolean getValue(final Player player) {
+        return player.autoRetailate;
+    }
 
-	@Override
-	public boolean getDefaultValue() {
-		return true;
-	}
+    @Override
+    public boolean getDefaultValue() {
+        return true;
+    }
 
 }

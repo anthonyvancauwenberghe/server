@@ -2,21 +2,21 @@ package org.hyperion.rs2.model.content.misc;
 
 public class ScoreboardPlayer {
 
-	private String name;
+    private final String name;
 
-	private int bounty;
+    private final int bounty;
 
-	public ScoreboardPlayer(String name, int bounty) {
-		this.name = name;
-		this.bounty = bounty;
-	}
+    public ScoreboardPlayer(final String name, final int bounty) {
+        this.name = name;
+        this.bounty = bounty;
+    }
 
-	public int getBounty() {
-		return bounty;
-	}
+    public int getBounty() {
+        return bounty;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
 }

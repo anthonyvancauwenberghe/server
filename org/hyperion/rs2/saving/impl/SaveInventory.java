@@ -6,18 +6,18 @@ import org.hyperion.rs2.saving.SaveContainer;
 
 public class SaveInventory extends SaveContainer {
 
-	public SaveInventory(String name) {
-		super(name);
-	}
+    public SaveInventory(final String name) {
+        super(name);
+    }
 
-	@Override
-	public Item[] getContainer(Player player) {
-		return player.getInventory().toArray();
-	}
+    @Override
+    public Item[] getContainer(final Player player) {
+        return player.getInventory().toArray();
+    }
 
-	@Override
-	public void loadItem(Player player, Item item) {
-		player.getInventory().add(item);
-	}
+    @Override
+    public void loadItem(final Player player, final Item item) {
+        player.getInventory().add(item);
+    }
 
 }

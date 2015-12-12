@@ -5,7 +5,31 @@ import org.hyperion.rs2.model.Player;
 
 public class PotionDecanting {
 
-    private static enum Potion {
+    public static void decantPotions(final Player player) {
+        for(final Potion potion : Potion.values()){
+            final int[] potionIndex = {potion.getPotion1(), potion.getPotion2(), potion.getPotion3()};
+            int doseCount = 0;
+            for(int i = 0; i < potionIndex.length; i++){
+                if(player.getInventory().contains(potionIndex[i])){
+                    final int count = player.getInventory().getCount(potionIndex[i]);
+                    doseCount += (i + 1) * count;
+                    for(int j = 0; j < count; j++){
+                        player.getInventory().remove(player.getInventory().getById(potionIndex[i]));
+                    }
+                }
+            }
+            while(doseCount >= 4){
+                player.getInventory().add(new Item(potion.getPotion4(), 1));
+                doseCount -= 4;
+            }
+            if(doseCount > 0){
+                player.getInventory().add(new Item(potionIndex[doseCount - 1], 1));
+            }
+        }
+        player.sendMessage("You have mixed all of your potions.");
+    }
+
+    private enum Potion {
 
         PRAYER(2434, 139, 141, 143),
         RANGING(2444, 169, 171, 173),
@@ -26,9 +50,12 @@ public class PotionDecanting {
         SUPER_PRAYER(15328, 15329, 15330, 15331),
         OVERLOAD(15332, 15333, 15334, 15335);
 
-        private int potion1, potion2, potion3, potion4;
+        private final int potion1;
+        private final int potion2;
+        private final int potion3;
+        private final int potion4;
 
-        private Potion(final int potion4, final int potion3, final int potion2, final int potion1) {
+        Potion(final int potion4, final int potion3, final int potion2, final int potion1) {
             this.potion1 = potion1;
             this.potion2 = potion2;
             this.potion3 = potion3;
@@ -51,30 +78,6 @@ public class PotionDecanting {
             return potion4;
         }
 
-    }
-
-    public static void decantPotions(Player player) {
-        for(Potion potion : Potion.values()) {
-            final int[] potionIndex = {potion.getPotion1(), potion.getPotion2(), potion.getPotion3()};
-            int doseCount = 0;
-            for(int i = 0; i < potionIndex.length; i++) {
-                if(player.getInventory().contains(potionIndex[i])) {
-                    int count = player.getInventory().getCount(potionIndex[i]);
-                    doseCount += (i + 1) * count;
-                    for(int j = 0; j < count; j++) {
-                        player.getInventory().remove(player.getInventory().getById(potionIndex[i]));
-                    }
-                }
-            }
-            while (doseCount >= 4) {
-                player.getInventory().add(new Item(potion.getPotion4(), 1));
-                doseCount -= 4;
-            }
-            if (doseCount > 0) {
-                player.getInventory().add(new Item(potionIndex[doseCount - 1], 1));
-            }
-        }
-        player.sendMessage("You have mixed all of your potions.");
     }
 
 }

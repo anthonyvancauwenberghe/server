@@ -1,14 +1,11 @@
 package org.hyperion.rs2.model.content.skill.agility;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.util.ArrayUtils;
 import org.hyperion.util.Misc;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +14,21 @@ import java.util.List;
  */
 public class Course implements ContentTemplate {
 
-    private int courseBonusExp,
-                maxCourseProgress;
+    private static final List<Obstacle> obstacles = new ArrayList();
+    private static final List obstacleId = new ArrayList();
+    private int courseBonusExp, maxCourseProgress;
 
-    private static List<Obstacle> obstacles = new ArrayList();
-    private static List obstacleId = new ArrayList();
     public Course() {
     }
-    public Course(int courseBonusExp, int maxCourseProgress) {
+
+    public Course(final int courseBonusExp, final int maxCourseProgress) {
         this.courseBonusExp = courseBonusExp;
         this.maxCourseProgress = maxCourseProgress;
+    }
+
+    public static void addObstacle(final Obstacle obstacle) {
+        obstacles.add(obstacle);
+        obstacleId.add(obstacle.objectId);
     }
 
     public int getMaxCourseProgress() {
@@ -37,11 +39,11 @@ public class Course implements ContentTemplate {
         return courseBonusExp;
     }
 
-    public void progressCourse(Player player, int progress) {
+    public void progressCourse(final Player player, final int progress) {
     }
 
     @Override
-    public int[] getValues(int type) {
+    public int[] getValues(final int type) {
         if(type == ContentManager.OBJECT_CLICK1){
             return ArrayUtils.fromList(obstacleId);
         }
@@ -49,20 +51,15 @@ public class Course implements ContentTemplate {
     }
 
     @Override
-    public boolean clickObject(Player player, int type, int objId, int x, int y, int d) {
+    public boolean clickObject(final Player player, final int type, final int objId, final int x, final int y, final int d) {
         boolean found = false;
-        for(int i = 0; i < obstacles.size(); i++) {
-            if (objId == obstacles.get(i).objectId) {
+        for(int i = 0; i < obstacles.size(); i++){
+            if(objId == obstacles.get(i).objectId){
                 obstacles.get(i).overCome(player);
                 found = true;
             }
         }
         return found;
-    }
-
-    public static void addObstacle(Obstacle obstacle) {
-        obstacles.add(obstacle);
-        obstacleId.add(obstacle.objectId);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
 import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.punishment.Combination;
@@ -10,22 +9,21 @@ import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.util.PushMessage;
 
 public class UnPunishCommand extends Command {
 
     private final Combination combination;
 
-    public UnPunishCommand(final String name, final Combination combination, final Rank rank){
+    public UnPunishCommand(final String name, final Combination combination, final Rank rank) {
         super(name, rank);
         this.combination = combination;
     }
 
-    public UnPunishCommand(final String name, final Target target, final Type type, final Rank rank){
+    public UnPunishCommand(final String name, final Target target, final Type type, final Rank rank) {
         this(name, Combination.of(target, type), rank);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String victim = filterInput(input);
         final PunishmentHolder holder = PunishmentManager.getInstance().get(victim);
         if(holder == null){

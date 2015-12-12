@@ -4,25 +4,13 @@ import org.hyperion.rs2.model.color.Color;
 
 public class Pattern {
 
-    public enum Type{
-        FILL, REPLACE, CHECKERED, SOLID
-    }
-
     private final Type type;
 
-    protected Pattern(final Type type){
+    protected Pattern(final Type type) {
         this.type = type;
     }
 
-    public Type getType(){
-        return type;
-    }
-
-    public String toString(){
-        return type.toString();
-    }
-
-    public static Pattern create(final Type type, final int... colors){
+    public static Pattern create(final Type type, final int... colors) {
         switch(type){
             case FILL:
             case SOLID:
@@ -35,16 +23,16 @@ public class Pattern {
         }
     }
 
-    public static Pattern parse(final String line){
+    public static Pattern parse(final String line) {
         final int i = line.indexOf(' ');
         final Type type = Type.valueOf(line.substring(0, i).trim().toUpperCase());
-        final String[] colorParts = line.substring(i+1).split(" ");
+        final String[] colorParts = line.substring(i + 1).split(" ");
         final int[] colors = new int[colorParts.length];
         for(int x = 0; x < colors.length; x++){
             final String part = colorParts[x].trim();
             try{
                 colors[x] = Integer.parseInt(part);
-            }catch(Exception ex){
+            }catch(final Exception ex){
                 final Color c = Color.byName(part);
                 if(c == null)
                     return null;
@@ -52,5 +40,17 @@ public class Pattern {
             }
         }
         return create(type, colors);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public String toString() {
+        return type.toString();
+    }
+
+    public enum Type {
+        FILL, REPLACE, CHECKERED, SOLID
     }
 }

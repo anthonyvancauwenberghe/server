@@ -4,63 +4,37 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.skill.agility.Course;
-import org.hyperion.rs2.model.content.skill.agility.obstacles.*;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.ClimbBranch;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.ClimbNet;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.LogBalance;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.ObstaclePipe;
+import org.hyperion.rs2.model.content.skill.agility.obstacles.RopeBalance;
 
 /**
  * Created by Gilles on 10/09/2015.
  */
 public class GnomeStronghold extends Course {
-    private final static int EXPMULTIPLIER = (int)(Constants.XPRATE * 1.75) * 9;
+    private final static int EXPMULTIPLIER = (int) (Constants.XPRATE * 1.75) * 9;
     public static Location location = Location.create(2480, 3437, 0);
 
-    Location[] net1Start = {
-            Location.create(2476, 3426, 0),
-            Location.create(2475, 3426, 0),
-            Location.create(2474, 3426, 0),
-            Location.create(2473, 3426, 0),
-            Location.create(2472, 3426, 0),
-            Location.create(2471, 3426, 0)
-    };
-    Location[] net1End = {
-            Location.create(2476, 3424, 1),
-            Location.create(2475, 3424, 1),
-            Location.create(2474, 3424, 1),
-            Location.create(2473, 3424, 1),
-            Location.create(2472, 3424, 1),
-            Location.create(2471, 3424, 1)
-    };
-    Location[] net2Start = {
-            Location.create(2483, 3425, 0),
-            Location.create(2484, 3425, 0),
-            Location.create(2485, 3425, 0),
-            Location.create(2486, 3425, 0),
-            Location.create(2487, 3425, 0),
-            Location.create(2488, 3425, 0),
-    };
-    Location[] net2End = {
-            Location.create(2483, 3427, 0),
-            Location.create(2484, 3427, 0),
-            Location.create(2485, 3427, 0),
-            Location.create(2486, 3427, 0),
-            Location.create(2487, 3427, 0),
-            Location.create(2488, 3427, 0)
-    };
-    Location[] branch1Start = {
-            Location.create(2474, 3422, 1),
-            Location.create(2473, 3423, 1),
-            Location.create(2472, 3422, 1)
-    };
-    Location[] branch2Start = {
-            Location.create(2486, 3420, 2),
-            Location.create(2485, 3419, 2),
-            Location.create(2486, 3418, 2)
-    };
-    Location[] branch3Start = {
-            Location.create(2486, 3420, 2),
-            Location.create(2486, 3418, 2),
-            Location.create(2487, 3421, 2),
-            Location.create(2488, 3420, 2),
-    };
+    Location[] net1Start = {Location.create(2476, 3426, 0), Location.create(2475, 3426, 0),
+            Location.create(2474, 3426, 0), Location.create(2473, 3426, 0), Location.create(2472, 3426, 0),
+            Location.create(2471, 3426, 0)};
+    Location[] net1End = {Location.create(2476, 3424, 1), Location.create(2475, 3424, 1),
+            Location.create(2474, 3424, 1), Location.create(2473, 3424, 1), Location.create(2472, 3424, 1),
+            Location.create(2471, 3424, 1)};
+    Location[] net2Start = {Location.create(2483, 3425, 0), Location.create(2484, 3425, 0),
+            Location.create(2485, 3425, 0), Location.create(2486, 3425, 0), Location.create(2487, 3425, 0),
+            Location.create(2488, 3425, 0),};
+    Location[] net2End = {Location.create(2483, 3427, 0), Location.create(2484, 3427, 0),
+            Location.create(2485, 3427, 0), Location.create(2486, 3427, 0), Location.create(2487, 3427, 0),
+            Location.create(2488, 3427, 0)};
+    Location[] branch1Start = {Location.create(2474, 3422, 1), Location.create(2473, 3423, 1),
+            Location.create(2472, 3422, 1)};
+    Location[] branch2Start = {Location.create(2486, 3420, 2), Location.create(2485, 3419, 2),
+            Location.create(2486, 3418, 2)};
+    Location[] branch3Start = {Location.create(2486, 3420, 2), Location.create(2486, 3418, 2),
+            Location.create(2487, 3421, 2), Location.create(2488, 3420, 2),};
 
     public GnomeStronghold() {
         super(60 * EXPMULTIPLIER, 7);
@@ -80,7 +54,7 @@ public class GnomeStronghold extends Course {
     }
 
     @Override
-    public void progressCourse(Player player, int progress) {
+    public void progressCourse(final Player player, final int progress) {
         player.getAgility().progressGnomeCourse(progress, this);
     }
 

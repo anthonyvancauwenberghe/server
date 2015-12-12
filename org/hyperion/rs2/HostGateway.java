@@ -33,80 +33,80 @@ import java.util.Map;
  */
 public class HostGateway {
 
-	/**
-	 * The maximum amount of connections per host.
-	 */
-	public static final int MAX_CONNECTIONS_PER_HOST = 500;
+    /**
+     * The maximum amount of connections per host.
+     */
+    public static final int MAX_CONNECTIONS_PER_HOST = 500;
 
-	/**
-	 * Used to keep track of hosts and their amount of connections.
-	 */
-	private static Map<String, Integer> map = new HashMap<String, Integer>();
+    /**
+     * Used to keep track of hosts and their amount of connections.
+     */
+    private static final Map<String, Integer> map = new HashMap<String, Integer>();
 
-	/**
-	 * Checks the host into the gateway.
-	 *
-	 * @param ip the host
-	 * @return true if the host can connect, false if it has reached the maximum
-	 * amount of connections
-	 */
-	public static boolean canEnter(String ip) {
-		Integer amount = map.get(ip);
-		if(amount == null) {
-			return true;
-		}
-		return amount <= MAX_CONNECTIONS_PER_HOST;
-	}
+    static {
+        CommandHandler.submit(new Command("debuggateway", Rank.PLAYER) {
 
-	/**
-	 * Checks the host into the gateway.
-	 *
-	 * @param ip the host
-	 * @return true if the host can connect, false if it has reached the maximum
-	 * amount of connections
-	 */
-	public static void enter(String ip) {
-		Integer amount = map.get(ip);
-		if(amount == null) {
-			map.put(ip, 1);
-		} else {
-			map.put(ip, amount + 1);
-		}
-	}
+            @Override
+            public boolean execute(final Player player, final String input) {
+                final String ip = player.getShortIP();
+                final Integer amount = map.get(ip);
+                if(amount == null){
+                    player.getActionSender().sendMessage("Amount is 0");
+                }else{
+                    player.getActionSender().sendMessage("Amount is " + amount);
+                }
+                return true;
+            }
 
-	/**
-	 * Unchecks the host from the gateway.
-	 *
-	 * @param ip the host
-	 */
-	public static void exit(String ip) {
-		if(map.get(ip) == null)
-			return;
-		Integer amount = map.get(ip);
-		if(amount != null) {
-			if(amount == 1)
-				map.remove(ip);
-			else
-				map.put(ip, amount - 1);
-		}
-	}
+        });
+    }
 
-	static {
-		CommandHandler.submit(new Command("debuggateway", Rank.PLAYER) {
+    /**
+     * Checks the host into the gateway.
+     *
+     * @param ip the host
+     * @return true if the host can connect, false if it has reached the maximum
+     * amount of connections
+     */
+    public static boolean canEnter(final String ip) {
+        final Integer amount = map.get(ip);
+        if(amount == null){
+            return true;
+        }
+        return amount <= MAX_CONNECTIONS_PER_HOST;
+    }
 
-			@Override
-			public boolean execute(Player player, String input) {
-				String ip = player.getShortIP();
-				Integer amount = map.get(ip);
-				if(amount == null) {
-					player.getActionSender().sendMessage("Amount is 0");
-				} else {
-					player.getActionSender().sendMessage("Amount is " + amount);
-				}
-				return true;
-			}
+    /**
+     * Checks the host into the gateway.
+     *
+     * @param ip the host
+     * @return true if the host can connect, false if it has reached the maximum
+     * amount of connections
+     */
+    public static void enter(final String ip) {
+        final Integer amount = map.get(ip);
+        if(amount == null){
+            map.put(ip, 1);
+        }else{
+            map.put(ip, amount + 1);
+        }
+    }
 
-		});
-	}
+    /**
+     * Unchecks the host from the gateway.
+     *
+     * @param ip the host
+     */
+    public static void exit(final String ip) {
+        if(map.get(ip) == null)
+            return;
+        final Integer amount = map.get(ip);
+        if(amount != null){
+            if(amount == 1)
+                map.remove(ip);
+            else
+                map.put(ip, amount - 1);
+        }
+    }
 
 }

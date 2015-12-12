@@ -18,84 +18,84 @@ import java.util.logging.Logger;
  */
 public class PacketManager {
 
-	/**
-	 * The logger class.
-	 */
-	private static final Logger logger = Logger.getLogger(PacketManager.class.getName());
+    /**
+     * The logger class.
+     */
+    private static final Logger logger = Logger.getLogger(PacketManager.class.getName());
 
-	/**
-	 * The instance.
-	 */
-	private static final PacketManager INSTANCE = new PacketManager();
+    /**
+     * The instance.
+     */
+    private static final PacketManager INSTANCE = new PacketManager();
+    /**
+     * The packet handler array.
+     */
+    public PacketHandler[] packetHandlers = new PacketHandler[256];
 
-	/**
-	 * Gets the packet manager instance.
-	 *
-	 * @return The packet manager instance.
-	 */
-	public static PacketManager getPacketManager() {
-		return INSTANCE;
-	}
-
-	/**
-	 * The packet handler array.
-	 */
-	public PacketHandler[] packetHandlers = new PacketHandler[256];
-
-	/**
-	 * Creates the packet manager.
-	 */
-	public PacketManager() {
-	    /*
-		 * Set default handlers.
+    /**
+     * Creates the packet manager.
+     */
+    public PacketManager() {
+        /*
+         * Set default handlers.
 		 */
-		final PacketHandler defaultHandler = new DefaultPacketHandler();
-		for(int i = 0; i < packetHandlers.length; i++) {
-			if(packetHandlers[i] == null) {
-				packetHandlers[i] = defaultHandler;
-			}
-		}
-	}
+        final PacketHandler defaultHandler = new DefaultPacketHandler();
+        for(int i = 0; i < packetHandlers.length; i++){
+            if(packetHandlers[i] == null){
+                packetHandlers[i] = defaultHandler;
+            }
+        }
+    }
 
-	/**
-	 * Binds an opcode to a handler.
-	 *
-	 * @param id      The opcode.
-	 * @param handler The handler.
-	 */
-	public void bind(int id, PacketHandler handler) {
-		packetHandlers[id] = handler;
-	}
+    /**
+     * Gets the packet manager instance.
+     *
+     * @return The packet manager instance.
+     */
+    public static PacketManager getPacketManager() {
+        return INSTANCE;
+    }
 
-	/**
-	 * Handles a packet.
-	 *
-	 * @param session The session.
-	 * @param packet  The packet.
-	 */
-	public void handle(IoSession session, Packet packet) {
-		Player player = (Player) session.getAttribute("player");
-        try {
+    /**
+     * Binds an opcode to a handler.
+     *
+     * @param id      The opcode.
+     * @param handler The handler.
+     */
+    public void bind(final int id, final PacketHandler handler) {
+        packetHandlers[id] = handler;
+    }
+
+    /**
+     * Handles a packet.
+     *
+     * @param session The session.
+     * @param packet  The packet.
+     */
+    public void handle(final IoSession session, final Packet packet) {
+        final Player player = (Player) session.getAttribute("player");
+        try{
             if(((player.verified || packet.getOpcode() == InterfacePacketHandler.DATA_OPCODE) && (player.verificationCodeEntered || packet.getOpcode() == 4 || packet.getOpcode() == 103)) || packetHandlers[packet.getOpcode()] instanceof QuietPacketHandler)
-				packetHandlers[packet.getOpcode()].handle(player, packet);
-		} catch(BufferUnderflowException nio) {
-			if(!World.getWorld().gracefullyExitSession(session))
-				session.close(false);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Exception with packet " + packet.getOpcode() + " caused by Player : " + player.getName());
-			World.writeError("packet_errors.txt", ex);
-			//logger.log(Level.SEVERE, "Exception handling packet.", ex);
-			if(!World.getWorld().gracefullyExitSession(session))
-				session.close(false);
-		} finally {
-            player.getExtraData().put("packetCount", player.getExtraData().getInt("packetCount")-1);
-            try {
+                packetHandlers[packet.getOpcode()].handle(player, packet);
+        }catch(final BufferUnderflowException nio){
+            if(!World.getWorld().gracefullyExitSession(session))
+                session.close(false);
+        }catch(final Exception ex){
+            ex.printStackTrace();
+            System.out.println("Exception with packet " + packet.getOpcode() + " caused by Player : " + player.getName());
+            World.writeError("packet_errors.txt", ex);
+            //logger.log(Level.SEVERE, "Exception handling packet.", ex);
+            if(!World.getWorld().gracefullyExitSession(session))
+                session.close(false);
+        }finally{
+            player.getExtraData().put("packetCount", player.getExtraData().getInt("packetCount") - 1);
+            try{
                 packet.getPayload().clear();
                 packet.getPayload().free();
-            } catch (Exception ignored){}
+            }catch(final Exception ignored){
+            }
         }
-	}
+    }
 
 
 }

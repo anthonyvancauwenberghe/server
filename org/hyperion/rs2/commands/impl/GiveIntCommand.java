@@ -7,11 +7,11 @@ import org.hyperion.rs2.model.World;
 
 public abstract class GiveIntCommand extends Command {
 
-    public GiveIntCommand(final String name, final Rank rank){
+    public GiveIntCommand(final String name, final Rank rank) {
         super(name, rank);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String line = filterInput(input);
         final int i = line.indexOf(',');
         if(i == -1){
@@ -24,11 +24,11 @@ public abstract class GiveIntCommand extends Command {
             player.sendf("Unable to find player: %s", name);
             return false;
         }
-        final String valueStr = line.substring(i+1).trim();
-        int value;
+        final String valueStr = line.substring(i + 1).trim();
+        final int value;
         try{
             value = Integer.parseInt(valueStr);
-        }catch(Exception ex){
+        }catch(final Exception ex){
             player.sendf("Enter a valid integer");
             return false;
         }

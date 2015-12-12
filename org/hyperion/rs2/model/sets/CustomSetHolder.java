@@ -2,7 +2,6 @@ package org.hyperion.rs2.model.sets;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +12,15 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
  */
 public class CustomSetHolder {
 
-    public static void main(String args[]) {
-        CustomSetHolder holder = new CustomSetHolder(null);
+    private final CustomSet[] sets = new CustomSet[3];
+    private final Player player;
+
+    public CustomSetHolder(final Player player) {
+        this.player = player;
+    }
+
+    public static void main(final String[] args) {
+        final CustomSetHolder holder = new CustomSetHolder(null);
 
         holder.sets[0] = CustomSet.rand();
         holder.sets[1] = CustomSet.rand();
@@ -25,19 +31,11 @@ public class CustomSetHolder {
         System.out.println(holder.toString());
     }
 
-    private final CustomSet[] sets = new CustomSet[3];
-
-    private final Player player;
-
-    public CustomSetHolder(final Player player) {
-        this.player = player;
-    }
-
     /**
      * tries to assign a custom set slot from the player's current gear
      */
 
-    public boolean save(int slot) {
+    public boolean save(final int slot) {
         final boolean save = player != null && slot < getSlotCount();
         if(save)
             sets[slot] = CustomSet.fromGear(player.getInventory(), player.getEquipment());
@@ -49,18 +47,21 @@ public class CustomSetHolder {
      */
 
     private int getSlotCount() {
-        if(Rank.hasAbility(player, Rank.SUPER_DONATOR)) return 3;
-        else if(Rank.hasAbility(player, Rank.DONATOR)) return 2;
-        else return 1;
+        if(Rank.hasAbility(player, Rank.SUPER_DONATOR))
+            return 3;
+        else if(Rank.hasAbility(player, Rank.DONATOR))
+            return 2;
+        else
+            return 1;
     }
 
-    public boolean apply(int slot) {
-        if(player == null || sets[slot] == null) {
+    public boolean apply(final int slot) {
+        if(player == null || sets[slot] == null){
             return false;
         }
-        try {
+        try{
             return sets[slot].apply(player);
-        } catch(final Exception exception) {
+        }catch(final Exception exception){
             exception.printStackTrace();
             return false;
         }
@@ -76,21 +77,20 @@ public class CustomSetHolder {
     }
 
     public void parse(final String read) {
-        try {
-           if(read == null || read.length() < 10)
-               return;
+        try{
+            if(read == null || read.length() < 10)
+                return;
             final String parts[] = read.split("NEW_SET");
-            for(int i = 1; i < parts.length; i++)  {
-                try {
-                    sets[i-1] = CustomSet.fromString(parts[i]);
-                }catch(Exception ex) {
+            for(int i = 1; i < parts.length; i++){
+                try{
+                    sets[i - 1] = CustomSet.fromString(parts[i]);
+                }catch(final Exception ex){
                 }
             }
-        }catch(Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
     }
-
 
 
 }

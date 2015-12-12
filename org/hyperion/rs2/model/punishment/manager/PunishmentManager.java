@@ -1,13 +1,5 @@
 package org.hyperion.rs2.model.punishment.manager;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import org.hyperion.rs2.model.punishment.Combination;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -17,6 +9,15 @@ import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.sql.MySQLConnection;
 import org.hyperion.rs2.util.TextUtils;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 public final class PunishmentManager {
 
     private static PunishmentManager instance;
@@ -24,22 +25,31 @@ public final class PunishmentManager {
     private final MySQLConnection connection;
     private final Map<String, PunishmentHolder> holders;
 
-    private PunishmentManager(final MySQLConnection connection){
+    private PunishmentManager(final MySQLConnection connection) {
         this.connection = connection;
 
         holders = new HashMap<>();
     }
 
-    public MySQLConnection getConnection(){
+    public static void init(final MySQLConnection connection) {
+        instance = new PunishmentManager(connection);
+        instance.load();
+    }
+
+    public static PunishmentManager getInstance() {
+        return instance;
+    }
+
+    public MySQLConnection getConnection() {
         return connection;
     }
 
-    public boolean load(){
+    public boolean load() {
         ResultSet rs = null;
         try{
             rs = connection.query("SELECT * FROM punishments WHERE active = 1");
             while(rs.next()){
-                try {
+                try{
                     final String issuer = rs.getString("issuer");
                     final String victim = rs.getString("victim");
                     final String ip = rs.getString("ip");
@@ -58,31 +68,27 @@ public final class PunishmentManager {
                     final long duration = rs.getLong("duration");
                     final TimeUnit unit = TimeUnit.valueOf(rs.getString("unit"));
                     final String reason = rs.getString("reason");
-                    final Punishment p = Punishment.create(
-                            issuer, victim, ip, mac, specialUid,
-                            Combination.of(target, type),
-                            Time.create(startTime, duration, unit),
-                            reason
-                    );
+                    final Punishment p = Punishment.create(issuer, victim, ip, mac, specialUid, Combination.of(target, type), Time.create(startTime, duration, unit), reason);
                     add(p);
-                }catch(final Exception ex) {
+                }catch(final Exception ex){
                     ex.printStackTrace();
                 }
             }
             return true;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }finally{
             if(rs != null){
                 try{
                     rs.close();
-                }catch(Exception ex){}
+                }catch(final Exception ex){
+                }
             }
         }
     }
 
-    public void add(final Punishment p){
+    public void add(final Punishment p) {
         PunishmentHolder holder = get(p.getVictimName());
         if(holder == null){
             holder = PunishmentHolder.create(p.getVictimName(), p.getVictimIp());
@@ -91,15 +97,15 @@ public final class PunishmentManager {
         holder.add(p);
     }
 
-    public void add(final PunishmentHolder p){
+    public void add(final PunishmentHolder p) {
         holders.put(p.getVictimName().toLowerCase(), p);
     }
 
-    public PunishmentHolder get(final String victim){
+    public PunishmentHolder get(final String victim) {
         return holders.get(victim.toLowerCase());
     }
 
-    public List<Punishment> getByIp(final String ip){
+    public List<Punishment> getByIp(final String ip) {
         final List<Punishment> list = new ArrayList<>();
         for(final PunishmentHolder holder : getHolders())
             for(final Punishment p : holder.getPunishments())
@@ -108,7 +114,7 @@ public final class PunishmentManager {
         return list;
     }
 
-    public List<Punishment> getByMac(final int mac){
+    public List<Punishment> getByMac(final int mac) {
         final List<Punishment> list = new ArrayList<>();
         for(final PunishmentHolder holder : getHolders())
             for(final Punishment p : holder.getPunishments())
@@ -117,11 +123,11 @@ public final class PunishmentManager {
         return list;
     }
 
-    public boolean isBanned(final String name, final String ip, final int mac, final int[] specialUid){
+    public boolean isBanned(final String name, final String ip, final int mac, final int[] specialUid) {
         return findBan(name, ip, mac, specialUid) != null;
     }
 
-    public Punishment findBan(final String name, final String ip, final int mac, final int[] specialUid){
+    public Punishment findBan(final String name, final String ip, final int mac, final int[] specialUid) {
         if(name != null){
             final PunishmentHolder holder = get(name);
             if(holder != null){
@@ -140,7 +146,7 @@ public final class PunishmentManager {
                     return p;
                 if(mac != -1 && p.getCombination().getTarget() == Target.MAC && mac == p.getVictimMac())
                     return p;
-                if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid()))  {
+                if(specialUid != null && p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(specialUid, p.getVictimSpecialUid())){
                     TextUtils.writeToFile("./data/specialUidStops.txt", "Special UID ban stopped: " + name);
                     return p;
                 }
@@ -149,20 +155,11 @@ public final class PunishmentManager {
         return null;
     }
 
-    public boolean contains(final String victim){
+    public boolean contains(final String victim) {
         return get(victim) != null;
     }
 
-    public Collection<PunishmentHolder> getHolders(){
+    public Collection<PunishmentHolder> getHolders() {
         return holders.values();
-    }
-
-    public static void init(final MySQLConnection connection){
-        instance = new PunishmentManager(connection);
-        instance.load();
-    }
-
-    public static PunishmentManager getInstance(){
-        return instance;
     }
 }

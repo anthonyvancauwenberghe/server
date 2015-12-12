@@ -5,27 +5,27 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 
 public enum MassEvent {
-	INSTANCE;
+    INSTANCE;
 
-	public static final MassEvent getSingleton() {
-		return INSTANCE;
-	}
+    MassEvent() {
+    }
 
-	public final void executeEvent(final EventBuilder e) {
-		World.getWorld().submit(new Event(e.getDelay()) {
-			public void execute() {
-				if(e.checkStop())
-					this.stop();
-				for(Player p : World.getWorld().getPlayers())
-					e.execute(p);
-				if(e.getDelay() == 0)
-					EventBuilder.stopEvent(e);
-			}
-		});
-	}
+    public static final MassEvent getSingleton() {
+        return INSTANCE;
+    }
 
-	private MassEvent() {
-	}
+    public final void executeEvent(final EventBuilder e) {
+        World.getWorld().submit(new Event(e.getDelay()) {
+            public void execute() {
+                if(e.checkStop())
+                    this.stop();
+                for(final Player p : World.getWorld().getPlayers())
+                    e.execute(p);
+                if(e.getDelay() == 0)
+                    EventBuilder.stopEvent(e);
+            }
+        });
+    }
 }
 
 

@@ -14,43 +14,43 @@ import org.hyperion.rs2.model.container.Equipment;
  */
 public class EquipmentContainerListener implements ContainerListener {
 
-	/**
-	 * The player.
-	 */
-	private Player player;
+    /**
+     * The player.
+     */
+    private final Player player;
 
-	/**
-	 * Creates the container listener.
-	 *
-	 * @param player The player.
-	 */
-	public EquipmentContainerListener(Player player) {
-		this.player = player;
-	}
+    /**
+     * Creates the container listener.
+     *
+     * @param player The player.
+     */
+    public EquipmentContainerListener(final Player player) {
+        this.player = player;
+    }
 
-	@Override
-	public void itemChanged(Container container, int slot) {
+    @Override
+    public void itemChanged(final Container container, final int slot) {
 
-		player.getActionSender().calculateBonus();
-		player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
-		if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
-			player.cE.setAtkSpeed(2400);
-	}
+        player.getActionSender().calculateBonus();
+        player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+        if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
+            player.cE.setAtkSpeed(2400);
+    }
 
-	@Override
-	public void itemsChanged(Container container) {
-		player.getActionSender().calculateBonus();
-		player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
-		if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
-			player.cE.setAtkSpeed(2400);
-	}
+    @Override
+    public void itemsChanged(final Container container) {
+        player.getActionSender().calculateBonus();
+        player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+        if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
+            player.cE.setAtkSpeed(2400);
+    }
 
-	@Override
-	public void itemsChanged(Container container, int[] slots) {
-		player.getActionSender().calculateBonus();
-		player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
-		if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
-			player.cE.setAtkSpeed(2400);
-	}
+    @Override
+    public void itemsChanged(final Container container, final int[] slots) {
+        player.getActionSender().calculateBonus();
+        player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
+        if(player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
+            player.cE.setAtkSpeed(2400);
+    }
 
 }

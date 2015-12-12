@@ -7,7 +7,7 @@ import org.hyperion.rs2.saving.SaveInteger;
  * Created by Gilles on 20/10/2015.
  */
 public class SaveAccountValue extends SaveInteger {
-    public SaveAccountValue(String name) {
+    public SaveAccountValue(final String name) {
         super(name);
     }
 
@@ -17,12 +17,12 @@ public class SaveAccountValue extends SaveInteger {
     }
 
     @Override
-    public void setValue(Player player, int value) {
+    public void setValue(final Player player, final int value) {
         player.setStartValue(value);
     }
 
     @Override
-    public Integer getValue(Player player) {
+    public Integer getValue(final Player player) {
         return player.getAccountValue().getTotalValueWithoutPointsAndGE();
     }
 }

@@ -3,7 +3,7 @@ package org.hyperion.rs2.model.joshyachievementsv2.constraint.impl;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraint;
 
-public class LocationConstraint implements Constraint{
+public class LocationConstraint implements Constraint {
 
     public final int minX;
     public final int minY;
@@ -15,7 +15,7 @@ public class LocationConstraint implements Constraint{
 
     private final String desc;
 
-    public LocationConstraint(final int minX, final int minY, final int maxX, final int maxY, final int height){
+    public LocationConstraint(final int minX, final int minY, final int maxX, final int maxY, final int height) {
         this.minX = minX;
         this.minY = minY;
         this.maxX = maxX;
@@ -28,15 +28,13 @@ public class LocationConstraint implements Constraint{
             desc = String.format("Between location (%d, %d) and (%d, %d)", minX, minY, maxX, maxY);
     }
 
-    public boolean constrained(final Player player){
+    public boolean constrained(final Player player) {
         final int x = player.getLocation().getX();
         final int y = player.getLocation().getY();
-        return (height == -1 || player.getLocation().getZ() == height)
-                && x >= minX && y >= minY
-                && x <= maxX && y <= maxY;
+        return (height == -1 || player.getLocation().getZ() == height) && x >= minX && y >= minY && x <= maxX && y <= maxY;
     }
 
-    public String desc(){
+    public String desc() {
         return desc;
     }
 }

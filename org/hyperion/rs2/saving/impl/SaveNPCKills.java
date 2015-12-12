@@ -5,22 +5,22 @@ import org.hyperion.rs2.saving.SaveString;
 
 public class SaveNPCKills extends SaveString {
 
-	public SaveNPCKills(String name) {
-		super(name);
-	}
+    public SaveNPCKills(final String name) {
+        super(name);
+    }
 
-	@Override
-	public void setValue(Player player, String value) {
-		try {
-			player.getNPCLogs().edit(value);
-		} catch(Exception e) {
-			System.err.print("Failed to load npc kills logger for "+player.getName());
-		}
-	}
+    @Override
+    public void setValue(final Player player, final String value) {
+        try{
+            player.getNPCLogs().edit(value);
+        }catch(final Exception e){
+            System.err.print("Failed to load npc kills logger for " + player.getName());
+        }
+    }
 
-	@Override
-	public String getValue(Player player) {
-		return player.getNPCLogs().toString();
-	}
-	
+    @Override
+    public String getValue(final Player player) {
+        return player.getNPCLogs().toString();
+    }
+
 }

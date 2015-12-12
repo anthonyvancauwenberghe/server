@@ -11,14 +11,14 @@ import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
  * To change this template use File | Settings | File Templates.
  */
 public final class BountyPerkHandler {
-	
+
     public static void handleSpecialPerk(final Player player) {
         final int level = player.getBHPerks().hasPerk(Perk.SPEC_RESTORE);
         if(level < 0)
             return;
-        player.getSpecBar().increment((int)(10 * Math.pow(2, level)));
-		player.getSpecBar().sendSpecAmount();
-		player.getSpecBar().sendSpecBar();
+        player.getSpecBar().increment((int) (10 * Math.pow(2, level)));
+        player.getSpecBar().sendSpecAmount();
+        player.getSpecBar().sendSpecBar();
 
     }
 
@@ -35,29 +35,29 @@ public final class BountyPerkHandler {
         final int level = attacker.getBHPerks().hasPerk(Perk.PRAY_LEECH);
         if(level < 0)
             return;
-        if(opponent != null)  {
-            int toDrain = (int)(hit * .1);
+        if(opponent != null){
+            int toDrain = (int) (hit * .1);
             toDrain *= Math.pow(1.6, level);
             if(!opponent.equals(attacker.getBountyHunter().getTarget()))
-            	toDrain = toDrain/3;
+                toDrain = toDrain / 3;
             opponent.getSkills().detractLevel(5, toDrain);
         }
 
     }
-    
+
     public static void upgrade(final Player player, final Perk perk) {
-    	if(player.getBHPerks().hasPerk(perk) >= perk.maxLevel) {
-    		player.sendMessage("You already have the maximum level for this perk!");
-    		player.getActionSender().removeChatboxInterface();
-    		return;
-    	}
-		if(player.getBountyHunter().getKills() >= player.getBHPerks().calcNextPerkCost()) {
-			player.getBountyHunter().setKills(player.getBountyHunter().getKills() - player.getBHPerks().calcNextPerkCost());
-			player.getBHPerks().upgradePerk(perk);
-			player.getQuestTab().updateQuestTab();
-		} else {
-			player.sendMessage("You don't have enough BH points for this!");
-		}
-		player.getActionSender().removeChatboxInterface();
+        if(player.getBHPerks().hasPerk(perk) >= perk.maxLevel){
+            player.sendMessage("You already have the maximum level for this perk!");
+            player.getActionSender().removeChatboxInterface();
+            return;
+        }
+        if(player.getBountyHunter().getKills() >= player.getBHPerks().calcNextPerkCost()){
+            player.getBountyHunter().setKills(player.getBountyHunter().getKills() - player.getBHPerks().calcNextPerkCost());
+            player.getBHPerks().upgradePerk(perk);
+            player.getQuestTab().updateQuestTab();
+        }else{
+            player.sendMessage("You don't have enough BH points for this!");
+        }
+        player.getActionSender().removeChatboxInterface();
     }
 }

@@ -22,10 +22,8 @@ public class PrayerRenwalEvent extends Event {
     public static final String KEY = "renewalactive";
 
     private static final int PER_CYCLE = 2;
-
-    public int totalRenewal = 300;
-
     private final Player player;
+    public int totalRenewal = 300;
 
     public PrayerRenwalEvent(final Player player) {
         super(2500);
@@ -36,7 +34,7 @@ public class PrayerRenwalEvent extends Event {
 
     @Override
     public void execute() throws IOException {
-        if(!player.getSession().isConnected()) {
+        if(!player.getSession().isConnected()){
             stop();
         }
 
@@ -49,11 +47,12 @@ public class PrayerRenwalEvent extends Event {
 
         totalRenewal -= PER_CYCLE;
 
-        if(totalRenewal <= 0) {
+        if(totalRenewal <= 0){
             stop();
         }
 
     }
+
     @Override
     public void stop() {
         super.stop();

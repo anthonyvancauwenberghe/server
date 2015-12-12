@@ -23,53 +23,50 @@ import java.util.logging.Logger;
 public class Server {
 
     /**
+     * The update version.
+     */
+    public static final double UPDATE = 6.72;
+    public static final boolean DEBUG_CLEAN = false;
+    public static final boolean DEBUG = false;
+    public static final java.io.OutputStream OUTPUT = System.out;
+    public static final java.io.OutputStream ERR = System.err;
+    /**
      * The server configuration.
      */
     private static final Configuration config = new Configuration();
-
     /**
      * The old school flag.
      */
     public static final boolean OLD_SCHOOL = config.getBoolean("oldschool");
-
     /**
      * The server name.
      */
     public static final String NAME = config.getString("name");
-
     /**
      * The spawn server flag.
      */
     public static final boolean SPAWN = config.getBoolean("spawn");
-
-    /**
-     * The update version.
-     */
-    public static final double UPDATE = 6.72;
-
-
-    public static final boolean DEBUG_CLEAN = false;
     /**
      * Server uptime instance
      */
     private static final Uptime uptime = new Uptime();
-
     /**
      * The server statistics.
      */
     private static final ServerStatistics stats = new ServerStatistics();
-
     /**
      * Logger instance
      */
     private static final Logger logger = Logger.getLogger(Server.class.getName());
-
-
+    private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
+    /**
+     * Last server vote claim
+     */
+    public static long lastServerVote = 0L;
     /**
      * The Encryption instance, holding the used key on startup.
      */
     private static CharFileEncryption charFileEncryption;
-
     private static Controller guiController;
 
     /**
@@ -93,31 +90,19 @@ public class Server {
         return charFileEncryption;
     }
 
-
-    public static final boolean DEBUG = false;
-
     public static final boolean inDebug() {
         return DEBUG;
     }
-
-    public static final java.io.OutputStream OUTPUT = System.out;
-    public static final java.io.OutputStream ERR = System.err;
-
-    /**
-     * Last server vote claim
-     */
-    public static long lastServerVote = 0L;
-
-    private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
 
     /**
      * The entry point of the application.
      *
      * @param args The command line arguments.
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         Application.launch(Controller.class);
     }
+
     public static World launchServer() {
         /*
         Console console = System.console();
@@ -137,12 +122,12 @@ public class Server {
             }
         }
 */
-        long start = System.currentTimeMillis();
+        final long start = System.currentTimeMillis();
         new Thread(new CharFilesCleaner()).start();
         System.out.println("-- Starting " + NAME + "  -- " + UPDATE);
         System.out.println("Spawn server: " + SPAWN);
         World.getWorld(); // this starts off background loading
-        try {
+        try{
             //new FileServer().bind().start();
 
             new RS2Server().start();
@@ -151,9 +136,9 @@ public class Server {
             PossibleHacksHolder.init();
             RoomDefinition.load();
             ClanManager.load();
-//			ItemInfo.init();
+            //			ItemInfo.init();
             System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
-        } catch (Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
             logger.log(Level.SEVERE, "Error starting Hyperion.", ex);
             System.exit(1);

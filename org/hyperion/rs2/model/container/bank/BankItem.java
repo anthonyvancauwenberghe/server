@@ -6,7 +6,7 @@ public class BankItem extends Item {
 
     private int tabIndex;
 
-    public BankItem(int tabSlot, int itemId, int amount) {
+    public BankItem(final int tabSlot, final int itemId, final int amount) {
         super(itemId, amount);
         setTabSlot(tabSlot);
     }
@@ -19,11 +19,11 @@ public class BankItem extends Item {
         return new BankItem(tabIndex, getId(), getCount());
     }
 
-    public void setID(int itemID) {
+    public void setID(final int itemID) {
         setId(itemID);
     }
 
-    public void setTabSlot(int tabSlot) {
+    public void setTabSlot(final int tabSlot) {
         this.tabIndex = tabSlot;
     }
 

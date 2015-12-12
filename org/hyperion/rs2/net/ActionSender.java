@@ -7,9 +7,19 @@ import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.DeathDrops;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.EquipmentStats;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Palette;
 import org.hyperion.rs2.model.Palette.PaletteTile;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -65,30 +75,25 @@ import java.util.concurrent.TimeUnit;
  */
 public class ActionSender {
 
-    public static final int[] QUEST_MENU_IDS = {8145, 8147, 8148, 8149, 8150,
-            8151, 8152, 8153, 8154, 8155, 8156, 8157, 8158, 8159, 8160, 8161,
-            8162, 8163, 8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172,
-            8173, 8174, 8175, 8176, 8177, 8178, 8179, 8180, 8181, 8182, 8183,
-            8184, 8185, 8186, 8187, 8188, 8189, 8190, 8191, 8192, 8193, 8194,
-            8195, 12174, 12175, 12176, 12177, 12178, 12179, 12180, 12181,
-            12182, 12183, 12184, 12185, 12186, 12187, 12188, 12189, 12190,
-            12191, 12192, 12193, 12194, 12195, 12196, 12197, 12198, 12199,
-            12200, 12201, 12202, 12203, 12204, 12205, 12206, 12207, 12208,
-            12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216, 12217,
-            12218, 12219, 12220, 12221, 12222, 12223};
+    public static final int[] QUEST_MENU_IDS = {8145, 8147, 8148, 8149, 8150, 8151, 8152, 8153, 8154, 8155, 8156, 8157,
+            8158, 8159, 8160, 8161, 8162, 8163, 8164, 8165, 8166, 8167, 8168, 8169, 8170, 8171, 8172, 8173, 8174, 8175,
+            8176, 8177, 8178, 8179, 8180, 8181, 8182, 8183, 8184, 8185, 8186, 8187, 8188, 8189, 8190, 8191, 8192, 8193,
+            8194, 8195, 12174, 12175, 12176, 12177, 12178, 12179, 12180, 12181, 12182, 12183, 12184, 12185, 12186,
+            12187, 12188, 12189, 12190, 12191, 12192, 12193, 12194, 12195, 12196, 12197, 12198, 12199, 12200, 12201,
+            12202, 12203, 12204, 12205, 12206, 12207, 12208, 12209, 12210, 12211, 12212, 12213, 12214, 12215, 12216,
+            12217, 12218, 12219, 12220, 12221, 12222, 12223};
     /**
      * Holds all the configurations (Such as Split screen,Brightness etc)
      */
-    private static final int[][] CONFIGS = {{166, 4}, {505, 0},
-            {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
+    private static final int[][] CONFIGS = {{166, 4}, {505, 0}, {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
             {503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private static Date LAST_PASS_RESET;
 
     static {
-        try {
+        try{
             LAST_PASS_RESET = dateFormat.parse("03-11-2015");
-        } catch (ParseException e) {
+        }catch(final ParseException e){
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
@@ -106,16 +111,10 @@ public class ActionSender {
      * @param i The skill to send.
      * @return The action sender instance, for chaining.
      */
-    int[][] text = {
-            {4004, 4005}, {4008, 4009}, {4006, 4007},
-            {4016, 4017}, {4010, 4011}, {4012, 4013},
-            {4014, 4015}, {4034, 4035}, {4038, 4039},
-            {4026, 4027}, {4032, 4033}, {4036, 4037},
-            {4024, 4025}, {4030, 4031}, {4028, 4029},
-            {4020, 4021}, {4018, 4019}, {4022, 4023},
-            {12166, 12167}, {13926, 13927}, {4152, 4153},
-            {18165, 18169}, {18166, 18170}, {18167, 18171},
-            {18168, 18172}
+    int[][] text = {{4004, 4005}, {4008, 4009}, {4006, 4007}, {4016, 4017}, {4010, 4011}, {4012, 4013}, {4014, 4015},
+            {4034, 4035}, {4038, 4039}, {4026, 4027}, {4032, 4033}, {4036, 4037}, {4024, 4025}, {4030, 4031},
+            {4028, 4029}, {4020, 4021}, {4018, 4019}, {4022, 4023}, {12166, 12167}, {13926, 13927}, {4152, 4153},
+            {18165, 18169}, {18166, 18170}, {18167, 18171}, {18168, 18172}
             /*
             { 4004, 4005 }, 	{ 4016, 4017 }, 	{ 4028, 4029 },
 			{ 4006, 4007 }, 	{ 4018, 4019 }, 	{ 4030, 4031 },
@@ -126,8 +125,7 @@ public class ActionSender {
 			{ 4152, 4153 }, 	{ 12166, 12167 }, 	{ 13926, 13927 },
 			{ 18165, 18169 },  	{ 18166, 18170 }, 	{ 18167, 18171 },
 			{ 18168, 18172 }
-			*/
-    };
+			*/};
     /**
      * The player.
      */
@@ -138,7 +136,7 @@ public class ActionSender {
      *
      * @param player The player to create the action sender for.
      */
-    public ActionSender(Player player) {
+    public ActionSender(final Player player) {
         this.player = player;
     }
 
@@ -147,10 +145,9 @@ public class ActionSender {
      *
      * @param player
      */
-    public static void sendClientConfigs(Player player) {
-        for (int i = 0; i < CONFIGS.length; i++) {
-            player.getActionSender().sendClientConfig(CONFIGS[i][0],
-                    CONFIGS[i][1]);
+    public static void sendClientConfigs(final Player player) {
+        for(int i = 0; i < CONFIGS.length; i++){
+            player.getActionSender().sendClientConfig(CONFIGS[i][0], CONFIGS[i][1]);
         }
     }
 
@@ -159,8 +156,8 @@ public class ActionSender {
      *
      * @param message The message to send.
      */
-    public static void yellMessage(String message) {
-        for (Player p : World.getWorld().getPlayers()) {
+    public static void yellMessage(final String message) {
+        for(final Player p : World.getWorld().getPlayers()){
             p.getActionSender().sendMessage(message);
         }
     }
@@ -170,10 +167,10 @@ public class ActionSender {
      *
      * @param messages
      */
-    public static void yellModMessage(String... messages) {
-        for (Player p : World.getWorld().getPlayers()) {
-            if (Rank.isStaffMember(p)) {
-                for (String message : messages)
+    public static void yellModMessage(final String... messages) {
+        for(final Player p : World.getWorld().getPlayers()){
+            if(Rank.isStaffMember(p)){
+                for(final String message : messages)
                     p.getActionSender().sendMessage(message);
             }
         }
@@ -186,56 +183,54 @@ public class ActionSender {
      * @param inventoryInterfaceId The inventory interface id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendInterfaceInventory(int interfaceId,
-                                               int inventoryInterfaceId) {
+    public ActionSender sendInterfaceInventory(final int interfaceId, final int inventoryInterfaceId) {
         player.getInterfaceState().interfaceOpened(interfaceId);
-        player.write(new PacketBuilder(248).putShortA(interfaceId)
-                .putShort(inventoryInterfaceId).toPacket());
+        player.write(new PacketBuilder(248).putShortA(interfaceId).putShort(inventoryInterfaceId).toPacket());
         return this;
     }
 
     private void loadIni() {
-        try {
+        try{
             p.load(new FileInputStream("./Announcements.ini"));
-        } catch (FileNotFoundException e) {
+        }catch(final FileNotFoundException e){
             System.out.println("Announcements file was not found.");
-        } catch (IOException e) {
+        }catch(final IOException e){
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public ActionSender sendLastManStandingStatus(boolean status) {
-        if (status) {
-            Participant p = LastManStanding.getLastManStanding().participants.get(player.getName());
-            if (p == null)
+    public ActionSender sendLastManStandingStatus(final boolean status) {
+        if(status){
+            final Participant p = LastManStanding.getLastManStanding().participants.get(player.getName());
+            if(p == null)
                 return null;
-            int j = 36500;
+            final int j = 36500;
             player.write(new PacketBuilder(208).putLEShort(j).toPacket());
             sendString(36502, "Total Kills: " + p.getKills());
             sendString(36503, "Lives Left: " + (3 - p.getDeaths()));
             sendString(36504, "Bounty Rewards: " + p.getBountyReward());
             sendString(36505, "Players Left: " + LastManStanding.getLastManStanding().participants.size());
             return this;
-        } else {
+        }else{
             player.write(new PacketBuilder(208).putLEShort(-1).toPacket());
             return this;
         }
     }
 
     public void loadAnnouncements() {
-        try {
+        try{
             loadIni();
-            if (p.getProperty("announcement1").length() > 0) {
+            if(p.getProperty("announcement1").length() > 0){
                 sendMessage(p.getProperty("announcement1"));
             }
-            if (p.getProperty("announcement2").length() > 0) {
+            if(p.getProperty("announcement2").length() > 0){
                 sendMessage(p.getProperty("announcement2"));
             }
-            if (p.getProperty("announcement3").length() > 0) {
+            if(p.getProperty("announcement3").length() > 0){
                 sendMessage(p.getProperty("announcement3"));
             }
-        } catch (Exception e) {
+        }catch(final Exception e){
             System.out.println("Unable to load announcements.");
         }
     }
@@ -247,21 +242,21 @@ public class ActionSender {
         player.isHidden(false);
         player.getActionSender().sendString(38760, player.getSummBar().getAmount() + "");
         sendDetails();
-        if (LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+        if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())){
             Magic.teleport(player, Edgeville.LOCATION, true);
         }
-        if (player.isNew()) {
+        if(player.isNew()){
             player.getInventory().add(Item.create(15707));
             player.sendMessage("@bla@Welcome to @dre@ArteroPK.");
             player.sendMessage("Questions? Visit @whi@::support@bla@ or use the 'Request Help' button.");
             player.sendMessage("Do not forget to @whi@::vote@bla@ and @whi@::donate@bla@ to keep the server alive.");
             player.sendMessage("");
             player.sendImportantMessage("10x decaying PK points boost active for the first 100 minutes!");
-        } else {
-            if (!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
+        }else{
+            if(!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
                 player.getInventory().add(Item.create(15707));
-            if (player.getTutorialProgress() != 28) {
-                if (player.getTutorialProgress() >= 17 && player.getTutorialProgress() <= 20)
+            if(player.getTutorialProgress() != 28){
+                if(player.getTutorialProgress() >= 17 && player.getTutorialProgress() <= 20)
                     Magic.teleport(player, Edgeville.LOCATION, true, false);
                 player.setTutorialProgress(28);
             }
@@ -274,7 +269,7 @@ public class ActionSender {
         if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
             player.getNews().sendNewsInterface();
 
-        if (WildernessBossEvent.currentBoss != null) {
+        if(WildernessBossEvent.currentBoss != null){
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
         }
         /* This is for when we add new achievements.
@@ -290,79 +285,71 @@ public class ActionSender {
         ClanManager.clearClanChat(player);
 
         player.getPoints().loginCheck();
-        if (Rank.getPrimaryRank(player).ordinal() >= Rank.HELPER.ordinal() && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-            String rank = Rank.getPrimaryRank(player).toString();
-            for (Player p : World.getWorld().getPlayers())
-                if (p != null)
-                    if (!p.getPermExtraData().getBoolean("disabledStaffMessages"))
+        if(Rank.getPrimaryRank(player).ordinal() >= Rank.HELPER.ordinal() && !Rank.hasAbility(player, Rank.DEVELOPER)){
+            final String rank = Rank.getPrimaryRank(player).toString();
+            for(final Player p : World.getWorld().getPlayers())
+                if(p != null)
+                    if(!p.getPermExtraData().getBoolean("disabledStaffMessages"))
                         p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
         }
 
-        if (Combat.getWildLevel(player.getLocation().getX(), player
-                .getLocation().getY()) > 0) {
+        if(Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0){
             sendPlayerOption("Attack", 2, 1);
             player.attackOption = true;
-        } else {
+        }else{
             sendPlayerOption("null", 2, 1);
         }
-        if (!player.getPermExtraData().getBoolean("tradeoption"))
+        if(!player.getPermExtraData().getBoolean("tradeoption"))
             sendPlayerOption("Trade", 4, 0);
-        if (!player.getPermExtraData().getBoolean("followoption"))
+        if(!player.getPermExtraData().getBoolean("followoption"))
             sendPlayerOption("Follow", 3, 0);
-        if (!player.getPermExtraData().getBoolean("profileoption"))
+        if(!player.getPermExtraData().getBoolean("profileoption"))
             sendPlayerOption("View profile", 6, 0);
-        if (player.getLocation().getX() >= 3353
-                && player.getLocation().getY() >= 3264
-                && player.getLocation().getX() <= 3385
-                && player.getLocation().getY() <= 3283) {
+        if(player.getLocation().getX() >= 3353 && player.getLocation().getY() >= 3264 && player.getLocation().getX() <= 3385 && player.getLocation().getY() <= 3283){
             sendPlayerOption("Challenge", 5, 0);
             player.duelOption = true;
-        } else {
-            if (Rank.hasAbility(player, Rank.MODERATOR) && !player.getLocation().inDuel())
+        }else{
+            if(Rank.hasAbility(player, Rank.MODERATOR) && !player.getLocation().inDuel())
                 sendPlayerOption("Moderate", 5, 0);
             else
                 sendPlayerOption("null", 5, 0);
         }
         sendSidebarInterfaces();
         // GodWars.godWars.checkGodWarsInterface(player);
-        if (player.getSpellBook().isAncient()) {
+        if(player.getSpellBook().isAncient()){
             player.getActionSender().sendSidebarInterface(6, 12855);
-        } else if (player.getSpellBook().isRegular()) {
+        }else if(player.getSpellBook().isRegular()){
             player.getActionSender().sendSidebarInterface(6, 1151);
-        } else if (player.getSpellBook().isLunars()) {
+        }else if(player.getSpellBook().isLunars()){
             player.getActionSender().sendSidebarInterface(6, 29999);
         }
-        if (!player.getPrayers().isDefaultPrayerbook()) {
+        if(!player.getPrayers().isDefaultPrayerbook()){
             player.getActionSender().sendSidebarInterface(5, 22500);
-        } else {
+        }else{
             player.getActionSender().sendSidebarInterface(5, 5608);
         }
         player.getWalkingQueue().setRunningToggled(true);
         sendMapRegion();
         // World.getWorld().getGlobalItemManager().displayItems(player);
-        InterfaceContainerListener interfacecontainerlistener = new InterfaceContainerListener(
-                player, 3214);
+        final InterfaceContainerListener interfacecontainerlistener = new InterfaceContainerListener(player, 3214);
         player.getInventory().addListener(interfacecontainerlistener);
         player.getSpecBar().sendSpecBar();
         player.getSpecBar().sendSpecAmount();
 
         player.getActionSender().sendClientConfig(115, 0);// rests bank noting
-        InterfaceContainerListener interfacecontainerlistener1 = new InterfaceContainerListener(
-                player, 1688);
+        final InterfaceContainerListener interfacecontainerlistener1 = new InterfaceContainerListener(player, 1688);
         player.getEquipment().addListener(interfacecontainerlistener1);
-        player.getEquipment().addListener(
-                new EquipmentContainerListener(player));
+        player.getEquipment().addListener(new EquipmentContainerListener(player));
         player.getEquipment().addListener(new WeaponContainerListener(player));
         sendClientConfigs(player);
 
         // player.calculateMemberShip();
 
         player.startUpEvents();
-        if (player.fightCavesWave > 0) {
-            World.getWorld().getContentManager()
-                    .handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
+        if(player.fightCavesWave > 0){
+            World.getWorld().getContentManager().handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
         }
-        if (player.isNew()) {
+        if(player.isNew()){
             DialogueManager.openDialogue(player, 10000);
         }
         sendSkills();
@@ -404,8 +391,8 @@ public class ActionSender {
         sendString(30117, "Player Killing Teleport"); // Needed
         sendString(30118, "Teleports you to the wilderness.");
 
-        int[] lunarids = {30138, 30146, 30162, 30170, 30226, 30234};
-        for (int i = 0; i < lunarids.length; i++) {
+        final int[] lunarids = {30138, 30146, 30162, 30170, 30226, 30234};
+        for(int i = 0; i < lunarids.length; i++){
             sendString(lunarids[i] + 3, "Not in use.");
             sendString(lunarids[i] + 4, "Not in use.");
         }
@@ -414,11 +401,11 @@ public class ActionSender {
         sendString(29178, "@or1@Zerk Set");
         sendString(29179, "@or1@Welfare Hybrid Set");
         AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
-/**
- * OVL BUG
- */
-        for (int i = 0; i < 7; i++) {
-            if (player.getSkills().getLevel(i) >= 119 && i != 3 && i != 5)
+        /**
+         * OVL BUG
+         */
+        for(int i = 0; i < 7; i++){
+            if(player.getSkills().getLevel(i) >= 119 && i != 3 && i != 5)
                 player.getSkills().setLevel(i, 99);
         }
         /**
@@ -427,31 +414,31 @@ public class ActionSender {
 
         player.checkCapes();
 
-        if (player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
+        if(player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381){
             sendMessage("script~x123");
         }
 
         // player.getInterfaceManager().show(RecoveryInterface.ID);
-        if (Rank.isStaffMember(player))
+        if(Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
 
-        if (player.pin == -1) {
+        if(player.pin == -1){
             player.verified = true;
             //PinInterface.get().set(player);
             //sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/11966-updates-1302015/");
-        } else if (!player.getShortIP().equals(player.lastIp)) {
+        }else if(!player.getShortIP().equals(player.lastIp)){
             player.verified = true;
             //PinInterface.get().enter(player);
-        } else {
+        }else{
             player.verified = true;
         }
 
-        try {
-            if (MergedSaving.existsBackup(player.getName())) {
-                String currentPass = player.getPassword().getRealPassword();
-                String oldPass = MergedSaving.getBackupPass(player.getName()).getRealPassword();
-                if (currentPass != null && oldPass != null) {
-                    if (currentPass.equalsIgnoreCase(oldPass)) {
+        try{
+            if(MergedSaving.existsBackup(player.getName())){
+                final String currentPass = player.getPassword().getRealPassword();
+                final String oldPass = MergedSaving.getBackupPass(player.getName()).getRealPassword();
+                if(currentPass != null && oldPass != null){
+                    if(currentPass.equalsIgnoreCase(oldPass)){
                         //Force player to change pass.
                         player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
                         player.setTeleportTarget(Edgeville.LOCATION);
@@ -460,7 +447,7 @@ public class ActionSender {
                     }
                 }
             }
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
 
@@ -483,55 +470,55 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendLogin() {
-        if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+        if(Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")){
             boolean has = false;
-            for (String ipz : GoodIPs.GOODS) {
-                if (player.getShortIP().startsWith(ipz)) {
+            for(final String ipz : GoodIPs.GOODS){
+                if(player.getShortIP().startsWith(ipz)){
                     has = true;
                     break;
                 }
             }
             if(!has && player.getName().equalsIgnoreCase("wh1p") && player.getUID() == 1329920918)
                 has = true;
-            if (!has)
+            if(!has)
                 player.getSession().close(false);
 
-        } else if (Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+        }else if(Server.NAME.equalsIgnoreCase("ArteroBeta")){
             boolean whitelisted = false;
-            for (String name : BetaServerEvent.whitelist) {
-                if (player.getName().equalsIgnoreCase(name)) {
+            for(final String name : BetaServerEvent.whitelist){
+                if(player.getName().equalsIgnoreCase(name)){
                     whitelisted = true;
                     break;
                 }
             }
-            if (!whitelisted)
+            if(!whitelisted)
                 player.getSession().close(false);
 
             betaChanges();
-        } else if((player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000) && RichWhitelistEvent.enabled) {
+        }else if((player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000) && RichWhitelistEvent.enabled){
             boolean whitelisted = false;
-            for (String name : RichWhitelistEvent.whitelist) {
-                if (player.getName().equalsIgnoreCase(name)) {
+            for(final String name : RichWhitelistEvent.whitelist){
+                if(player.getName().equalsIgnoreCase(name)){
                     whitelisted = true;
                     break;
                 }
             }
-            if (!whitelisted) {
+            if(!whitelisted){
                 PlayerSaving.getSaving().saveLog("./logs/abuse/hacks.log", new Date() + " Suspected hacker " + player.getSafeDisplayName());
-                Punishment punishment = new Punishment(player, Combination.of(Target.SPECIAL, org.hyperion.rs2.model.punishment.Type.BAN), org.hyperion.rs2.model.punishment.Time.create(365, TimeUnit.DAYS), "Suspected hacking");
+                final Punishment punishment = new Punishment(player, Combination.of(Target.SPECIAL, org.hyperion.rs2.model.punishment.Type.BAN), org.hyperion.rs2.model.punishment.Time.create(365, TimeUnit.DAYS), "Suspected hacking");
                 punishment.apply();
                 PunishmentManager.getInstance().add(punishment);
                 punishment.insert();
             }
         }
 
-        if (player.doubleChar()) {
+        if(player.doubleChar()){
             basicLogin();
             player.setTeleportTarget(Location.create(3000, 3400, 0));
             DialogueManager.openDialogue(player, 500);
             return this;
         }
-        if (player.needsNameChange()) {
+        if(player.needsNameChange()){
             basicLogin();
             player.setTeleportTarget(Location.create(3000, 3400, 0));
             DialogueManager.openDialogue(player, 400);
@@ -552,61 +539,53 @@ public class ActionSender {
     }
 
     public void checkStarter() {
-        if (Server.SPAWN) {
-            player.getActionSender()
-                    .sendMessage(
-                            "To spawn Items use the commands ::item, ::spawn or ::pickup e.g. ::item 4151 2");
-            player.getActionSender()
-                    .sendMessage(
-                            "To change Levels use the commands ::atk, ::attk, ::attack, ::mage, ::magic, e.g. ::pray 95");
-            player.getActionSender()
-                    .sendMessage(
-                            "To find item ids use the ::nameitem command , e.g. ::nameitem armadyl");
-            player.getActionSender().sendMessage(
-                    "To find the complete command list , visit " + Server.NAME
-                            + ".com/commands.php");
+        if(Server.SPAWN){
+            player.getActionSender().sendMessage("To spawn Items use the commands ::item, ::spawn or ::pickup e.g. ::item 4151 2");
+            player.getActionSender().sendMessage("To change Levels use the commands ::atk, ::attk, ::attack, ::mage, ::magic, e.g. ::pray 95");
+            player.getActionSender().sendMessage("To find item ids use the ::nameitem command , e.g. ::nameitem armadyl");
+            player.getActionSender().sendMessage("To find the complete command list , visit " + Server.NAME + ".com/commands.php");
         }
         Starter.giveStarter(player);
     }
 
-    public ActionSender sendMultiZone(int i) {
+    public ActionSender sendMultiZone(final int i) {
         player.write(new PacketBuilder(61).put((byte) i).toPacket());
         return this;
     }
 
-    public ActionSender sendWildLevel(int i) {
+    public ActionSender sendWildLevel(final int i) {
         int j = 36500;// 197,12278
-        if (i == -1)
+        if(i == -1)
             j = i;
         player.write(new PacketBuilder(208).putLEShort(j).toPacket());
 
-        if (i != -1) {
+        if(i != -1){
             sendString(199, "Level: " + i);// wild levle
         }
-        if (i != -1) {
+        if(i != -1){
             sendEP2();
             sendString(36505, "Killstreak: @red@" + player.getKillStreak());
         }
         return this;
     }
 
-    public ActionSender sendPvPLevel(boolean clear) {
-        if (!clear) {
-            int j = 15000;// 197,12278
-            int combatLevel = player.getSkills().getCombatLevel();
-            int min_combat = Math.max(combatLevel - player.wildernessLevel, 3);
-            int max_combat = Math.min(combatLevel + player.wildernessLevel, 126);
+    public ActionSender sendPvPLevel(final boolean clear) {
+        if(!clear){
+            final int j = 15000;// 197,12278
+            final int combatLevel = player.getSkills().getCombatLevel();
+            final int min_combat = Math.max(combatLevel - player.wildernessLevel, 3);
+            final int max_combat = Math.min(combatLevel + player.wildernessLevel, 126);
             player.write(new PacketBuilder(208).putLEShort(j).toPacket());
             sendString(199, min_combat + "-" + max_combat);// wild levle
             sendEP();
             return this;
-        } else {
+        }else{
             player.write(new PacketBuilder(208).putLEShort(-1).toPacket());
             return this;
         }
     }
 
-    public ActionSender createArrow(int type, int id) {
+    public ActionSender createArrow(final int type, final int id) {
         player.write(new PacketBuilder(254).put((byte) type).putShort(id).putTriByte(0).toPacket());
         return this;
     }
@@ -615,18 +594,18 @@ public class ActionSender {
         return createArrow(10, -1);
     }
 
-    public ActionSender createArrow(Entity entity) {
-        if (entity instanceof Player) {
+    public ActionSender createArrow(final Entity entity) {
+        if(entity instanceof Player){
             return createArrow(10, entity.getIndex());
-        } else {
+        }else{
             return createArrow(1, entity.getIndex());
         }
     }
 
     public String getEPString() {
-        if (player.EP < 30)
+        if(player.EP < 30)
             return ("@red@" + player.EP + "%");
-        if (player.EP < 60)
+        if(player.EP < 60)
             return ("@ora@" + player.EP + "%");
         else
             return ("@gre@" + player.EP + "%");
@@ -679,34 +658,33 @@ public class ActionSender {
 	 * 6 from those values outStream.createFrame(107); //reset camera }
 	 */
 
-    public ActionSender showInterfaceWalkable(int i) {
-        if (player.getExtraData().getInt("walkableint") != i)
+    public ActionSender showInterfaceWalkable(final int i) {
+        if(player.getExtraData().getInt("walkableint") != i)
             player.write(new PacketBuilder(208).putLEShort(i).toPacket());
         player.getExtraData().put("walkableint", i);
         return this;
     }
 
-    public ActionSender setViewingSidebar(int sideIcon) {
+    public ActionSender setViewingSidebar(final int sideIcon) {
         player.write(new PacketBuilder(106).putByteC(sideIcon).toPacket());
         return this;
     }
 
-    public ActionSender cameraMovement(int startX, int startY, int endX,
-                                       int endY, int pixelHeight, int zoomSpeed, int movementSpeed) // Camera
+    public ActionSender cameraMovement(final int startX, final int startY, final int endX, final int endY, final int pixelHeight, final int zoomSpeed, final int movementSpeed) // Camera
     // Movement
     // packet
     // -
     // mad
     // turnip
     {
-        int mapRegionX = (startX >> 3) - 6;
-        int mapRegionY = (startY >> 3) - 6;
-        PacketBuilder bldr = new PacketBuilder(73);
+        final int mapRegionX = (startX >> 3) - 6;
+        final int mapRegionY = (startY >> 3) - 6;
+        final PacketBuilder bldr = new PacketBuilder(73);
         bldr.putShortA(mapRegionX + 6); // for some reason the client
         bldr.putShort(mapRegionY + 6);// substracts 6 from those values
 
-        int playerSquareX = endX - (mapRegionX * 8);
-        int playerSquareY = endY - (mapRegionY * 8);
+        final int playerSquareX = endX - (mapRegionX * 8);
+        final int playerSquareY = endY - (mapRegionY * 8);
 
 		/*
          * PacketBuilder bldr3 = new PacketBuilder(166); bldr3.put((byte)
@@ -715,7 +693,7 @@ public class ActionSender {
 		 * bldr3.put((byte) 0);
 		 */
 
-        PacketBuilder bldr2 = new PacketBuilder(166); // move camera
+        final PacketBuilder bldr2 = new PacketBuilder(166); // move camera
         bldr2.put((byte) playerSquareX);//
         bldr2.put((byte) playerSquareY);
         bldr2.putShort(pixelHeight); // pixel height, it will increase to
@@ -730,8 +708,7 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender rotateCamera(int startX, int startY, int turnToX,
-                                     int turnToY, int pixelHeight, int zoomSpeed, int movementSpeed)// rotate
+    public ActionSender rotateCamera(final int startX, final int startY, final int turnToX, final int turnToY, final int pixelHeight, final int zoomSpeed, final int movementSpeed)// rotate
     // camera
     // method
     // -
@@ -739,15 +716,15 @@ public class ActionSender {
     // turnip
     {
 
-        int mapRegionX = (startX >> 3) - 6;
-        int mapRegionY = (startY >> 3) - 6;
-        PacketBuilder bldr = new PacketBuilder(73);
+        final int mapRegionX = (startX >> 3) - 6;
+        final int mapRegionY = (startY >> 3) - 6;
+        final PacketBuilder bldr = new PacketBuilder(73);
         bldr.putShortA(mapRegionX + 6); // for some reason the client
         bldr.putShort(mapRegionY + 6);// substracts 6 from those values
 
-        int playerSquareX = turnToX - (mapRegionX * 8);
-        int playerSquareY = turnToY - (mapRegionY * 8);
-        PacketBuilder bldr2 = new PacketBuilder(177); // rotate camera
+        final int playerSquareX = turnToX - (mapRegionX * 8);
+        final int playerSquareY = turnToY - (mapRegionY * 8);
+        final PacketBuilder bldr2 = new PacketBuilder(177); // rotate camera
         bldr2.put((byte) playerSquareX);
         bldr2.put((byte) playerSquareY);
         bldr2.putShort(pixelHeight);
@@ -783,9 +760,9 @@ public class ActionSender {
      */
     public ActionSender cameraReset()// reset to origional coords -mad turnip
     {
-        int mapRegionX = (player.getLocation().getX() >> 3) - 6;
-        int mapRegionY = (player.getLocation().getY() >> 3) - 6;
-        PacketBuilder bldr = new PacketBuilder(73);
+        final int mapRegionX = (player.getLocation().getX() >> 3) - 6;
+        final int mapRegionY = (player.getLocation().getY() >> 3) - 6;
+        final PacketBuilder bldr = new PacketBuilder(73);
         bldr.putShortA(mapRegionX + 6); // for some reason the client
         bldr.putShort(mapRegionY + 6);// substracts 6 from those values
 
@@ -798,13 +775,13 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender shakeScreen(int verticleAmount, int verticleSpeed, int horizontalAmount, int horizontalSpeed, long time) {
-        PacketBuilder bldr = new PacketBuilder(35);
+    public ActionSender shakeScreen(final int verticleAmount, final int verticleSpeed, final int horizontalAmount, final int horizontalSpeed, final long time) {
+        final PacketBuilder bldr = new PacketBuilder(35);
         bldr.put((byte) verticleAmount);
         bldr.put((byte) verticleSpeed);
         bldr.put((byte) horizontalAmount);
         bldr.put((byte) horizontalSpeed);
-        if (time > -1) {
+        if(time > -1){
             World.getWorld().submit(new Event(time) {
                 @Override
                 public void execute() throws IOException {
@@ -817,25 +794,25 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendScrollbarLength(int interfaceID, int length) {
-        PacketBuilder bldr = new PacketBuilder(153);
+    public ActionSender sendScrollbarLength(final int interfaceID, final int length) {
+        final PacketBuilder bldr = new PacketBuilder(153);
         bldr.putShort(interfaceID);
         bldr.putShort(length);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendHideComponent(int interfaceID, boolean hidden) {
-        PacketBuilder bldr = new PacketBuilder(170);
+    public ActionSender sendHideComponent(final int interfaceID, final boolean hidden) {
+        final PacketBuilder bldr = new PacketBuilder(170);
         bldr.put((byte) (hidden ? 1 : 0));
         bldr.putShort(interfaceID);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendTooltip(int interfaceID, String tooltip) {
-        if (shouldSendTooltip(tooltip, interfaceID)) {
-            PacketBuilder bldr = new PacketBuilder(155, Type.VARIABLE_SHORT);
+    public ActionSender sendTooltip(final int interfaceID, final String tooltip) {
+        if(shouldSendTooltip(tooltip, interfaceID)){
+            final PacketBuilder bldr = new PacketBuilder(155, Type.VARIABLE_SHORT);
             bldr.putRS2String(tooltip);
             bldr.putShortA(interfaceID);
             player.write(bldr.toPacket());
@@ -843,24 +820,24 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendFont(int interfaceID, int fontIndex) {
+    public ActionSender sendFont(final int interfaceID, final int fontIndex) {
         if(fontIndex < 0 || fontIndex > 3)
             return this;
-        PacketBuilder bldr = new PacketBuilder(154);
+        final PacketBuilder bldr = new PacketBuilder(154);
         bldr.putShort(interfaceID);
         bldr.put((byte) fontIndex);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendInterfaceSpriteDim(int interfaceID, int width, int height) {
-        if (width <= 0 || height <= 0)
+    public ActionSender sendInterfaceSpriteDim(final int interfaceID, int width, int height) {
+        if(width <= 0 || height <= 0)
             return this;
-        if (width > 100)
+        if(width > 100)
             width = 100;
-        if (height > 100)
+        if(height > 100)
             height = 100;
-        PacketBuilder bldr = new PacketBuilder(172);
+        final PacketBuilder bldr = new PacketBuilder(172);
         bldr.putShort(interfaceID);
         bldr.put((byte) width);
         bldr.put((byte) height);
@@ -874,19 +851,18 @@ public class ActionSender {
      * @param palette The palette of map regions.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendConstructMapRegion(Palette palette) {
+    public ActionSender sendConstructMapRegion(final Palette palette) {
         player.setLastKnownRegion(player.getLocation());
-        PacketBuilder bldr = new PacketBuilder(241, Type.VARIABLE_SHORT);
+        final PacketBuilder bldr = new PacketBuilder(241, Type.VARIABLE_SHORT);
         bldr.putShortA(player.getLocation().getRegionY() + 6);
         bldr.startBitAccess();
-        for (int z = 0; z < 4; z++) {
-            for (int x = 0; x < 13; x++) {
-                for (int y = 0; y < 13; y++) {
-                    PaletteTile tile = palette.getTile(x, y, z);
+        for(int z = 0; z < 4; z++){
+            for(int x = 0; x < 13; x++){
+                for(int y = 0; y < 13; y++){
+                    final PaletteTile tile = palette.getTile(x, y, z);
                     bldr.putBits(1, tile != null ? 1 : 0);
-                    if (tile != null) {
-                        bldr.putBits(26, tile.getX() << 14 | tile.getY() << 3
-                                | tile.getZ() << 24 | tile.getRotation() << 1);
+                    if(tile != null){
+                        bldr.putBits(26, tile.getX() << 14 | tile.getY() << 3 | tile.getZ() << 24 | tile.getRotation() << 1);
                     }
                 }
             }
@@ -899,26 +875,25 @@ public class ActionSender {
 
     public void passChangeShit() {
 
-        if (player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")
-                && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+        if(player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid") && player.getCreatedTime() < LAST_PASS_RESET.getTime()){
             player.getExtraData().put("cantchangepass", true);
 
-            if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
+            if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()){
 
                 player.getExtraData().put("cantdoshit", true);
 
                 player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
 
 
-                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+                final SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
                 boolean found = false;
 
-                for (final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
-                    if (hack instanceof IPChange) {
-                        try {
-                            if (format.parse(hack.date).after(LAST_PASS_RESET))
+                for(final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())){
+                    if(hack instanceof IPChange){
+                        try{
+                            if(format.parse(hack.date).after(LAST_PASS_RESET))
                                 continue;
-                        } catch (Exception e) {
+                        }catch(final Exception e){
                             e.printStackTrace();
                         }
 
@@ -926,7 +901,7 @@ public class ActionSender {
 
                         String shortest = change.ip.trim();
                         shortest = shortest.substring(1, shortest.indexOf(".", shortest.indexOf(".") + 1));
-                        if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+                        if(player.getShortIP().toLowerCase().startsWith(shortest.trim())){
 
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                             player.getExtraData().put("cantdoshit", false);
@@ -938,7 +913,7 @@ public class ActionSender {
                         shortest = change.newIp.trim();
                         shortest = shortest.substring(1, shortest.indexOf(".", shortest.indexOf(".") + 1));
 
-                        if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
+                        if(player.getShortIP().toLowerCase().startsWith(shortest.trim())){
 
                             player.sendMessage("@blu@Found reason to unlock! Unlocked account");
                             player.getExtraData().put("cantdoshit", false);
@@ -952,11 +927,11 @@ public class ActionSender {
 
                 }
 
-                if (!found)
+                if(!found)
                     player.sendMessage("No unlock reason found!");
             }
 
-        } else if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+        }else if(player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")){
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);
@@ -975,9 +950,7 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendDetails() {
-        player.write(new PacketBuilder(249)
-                .putByteA(player.isMembers() ? 1 : 0)
-                .putLEShortA(player.getIndex()).toPacket());
+        player.write(new PacketBuilder(249).putByteA(player.isMembers() ? 1 : 0).putLEShortA(player.getIndex()).toPacket());
         player.write(new PacketBuilder(107).toPacket());
         return this;
     }
@@ -988,23 +961,23 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendSkills() {
-        for (int i = 0; i < Skills.SKILL_COUNT; i++) {
+        for(int i = 0; i < Skills.SKILL_COUNT; i++){
             sendSkill(i);
         }
         return this;
     }
 
-    public ActionSender showInterface(int i) {
-        PacketBuilder bldr = new PacketBuilder(97);
+    public ActionSender showInterface(final int i) {
+        final PacketBuilder bldr = new PacketBuilder(97);
         bldr.putShort(i);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendSkill(int i) {
+    public ActionSender sendSkill(final int i) {
         sendString(player.getSkills().getLevel(i) + "", text[i][0]);
         sendString(player.getSkills().getLevelForExp(i) + "", text[i][1]);
-        PacketBuilder packetbuilder = new PacketBuilder(134);
+        final PacketBuilder packetbuilder = new PacketBuilder(134);
         packetbuilder.put((byte) i);
         packetbuilder.putInt1(player.getSkills().getExperience(i));
         packetbuilder.put((byte) player.getSkills().getLevel(i));
@@ -1022,22 +995,22 @@ public class ActionSender {
     }
 
     public ActionSender removeAllInterfaces() {
-        PacketBuilder bldr = new PacketBuilder(219);
+        final PacketBuilder bldr = new PacketBuilder(219);
         player.write(bldr.toPacket());
         player.getInterfaceState().string_input_listener = ""; //remove string listeners when interface closes
         return this;
     }
 
-    public ActionSender sendFrame171(int i, int j) {
-        PacketBuilder bldr = new PacketBuilder(171);
+    public ActionSender sendFrame171(final int i, final int j) {
+        final PacketBuilder bldr = new PacketBuilder(171);
         bldr.put((byte) i);
         bldr.putShort(j);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender packet70(int id1, int id2, int id3) {
-        PacketBuilder bldr = new PacketBuilder(70);
+    public ActionSender packet70(final int id1, final int id2, final int id3) {
+        final PacketBuilder bldr = new PacketBuilder(70);
         bldr.putShort(id1);
         bldr.putLEShort(id2);
         bldr.putLEShort(id3);
@@ -1045,21 +1018,21 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender follow(int id, int type) {
+    public ActionSender follow(final int id, final int type) {
         //System.out.println("Follow id : " + id);
-        if (GodWars.inGodwars(player))
+        if(GodWars.inGodwars(player))
             return this;
-        if (player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
+        if(player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
             return this;
-        if (player.isFollowing == null) {
+        if(player.isFollowing == null){
             player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
-            if (player.isFollowing == null) // if the player index returns null player, shouldn't be following
+            if(player.isFollowing == null) // if the player index returns null player, shouldn't be following
                 return this;
             player.isFollowing.beingFollowed = player;
             Combat.follow(player.cE, player.isFollowing.cE);
             // System.out.println("Follow method");
-			/*
-			 * PacketBuilder bldr = new PacketBuilder(175); bldr.putShort(id);
+            /*
+             * PacketBuilder bldr = new PacketBuilder(175); bldr.putShort(id);
 			 * bldr.put((byte)type); bldr.putShort(10);
 			 * player.write(bldr.toPacket());
 			 */
@@ -1069,17 +1042,17 @@ public class ActionSender {
 
     public ActionSender resetFollow() {
         // System.out.println("Resetting follow");
-        if (player.isFollowing != null) {
+        if(player.isFollowing != null){
             player.isFollowing.beingFollowed = null;
             player.isFollowing = null;
-            PacketBuilder bldr = new PacketBuilder(173);
+            final PacketBuilder bldr = new PacketBuilder(173);
             player.write(bldr.toPacket());
         }
         return this;
     }
 
-    public ActionSender sendPacket164(int i) {
-        PacketBuilder bldr = new PacketBuilder(164);
+    public ActionSender sendPacket164(final int i) {
+        final PacketBuilder bldr = new PacketBuilder(164);
         bldr.putLEShort(i);
         player.write(bldr.toPacket());
         return this;
@@ -1093,10 +1066,10 @@ public class ActionSender {
     public ActionSender sendSidebarInterfaces() {
         final int[] icons = Constants.SIDEBAR_INTERFACES[0];
         final int[] interfaces = Constants.SIDEBAR_INTERFACES[1];
-        for (int i = 0; i < icons.length; i++) {
+        for(int i = 0; i < icons.length; i++){
             sendSidebarInterface(icons[i], interfaces[i]);
         }
-        if(!AchievementTracker.active() || player.getAchievementTracker().errorLoading) {
+        if(!AchievementTracker.active() || player.getAchievementTracker().errorLoading){
             sendSidebarInterface(14, 31400);
             sendSidebarInterface(15, -1);
         }
@@ -1121,15 +1094,14 @@ public class ActionSender {
      * @param interfaceId The interface id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendSidebarInterface(int icon, int interfaceId) {
+    public ActionSender sendSidebarInterface(final int icon, final int interfaceId) {
         // System.out.println("Icon : " + icon + " InfID " + interfaceId);
-        player.write(new PacketBuilder(71).putShort(interfaceId).putByteA(icon)
-                .toPacket());
+        player.write(new PacketBuilder(71).putShort(interfaceId).putByteA(icon).toPacket());
         return this;
     }
 
-    public ActionSender sendWebpage(String url) {
-        if (!Server.OLD_SCHOOL)
+    public ActionSender sendWebpage(final String url) {
+        if(!Server.OLD_SCHOOL)
             sendMessage("l4unchur13 " + url);
         return this;
     }
@@ -1140,65 +1112,52 @@ public class ActionSender {
      * @param message The message to send.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendMessage(String message) {
-        player.write(new PacketBuilder(253, Type.VARIABLE)
-                .putRS2String(message).toPacket());
+    public ActionSender sendMessage(final String message) {
+        player.write(new PacketBuilder(253, Type.VARIABLE).putRS2String(message).toPacket());
         return this;
     }
 
     public ActionSender sendClanInfo() {
-        if (ClanManager.clans.get(player.getClanName()) == null)
+        if(ClanManager.clans.get(player.getClanName()) == null)
             return this;
-        player.write(new PacketBuilder(217, Type.VARIABLE)
-                .putRS2String(player.getSafeDisplayName())
-                .putRS2String("has joined clan chat.")
-                .putRS2String(
-                        TextUtils.ucFirst(ClanManager.clans.get(player.getClanName()).getName().toLowerCase()))
-                .putShort(2).toPacket());
+        player.write(new PacketBuilder(217, Type.VARIABLE).putRS2String(player.getSafeDisplayName()).putRS2String("has joined clan chat.").putRS2String(TextUtils.ucFirst(ClanManager.clans.get(player.getClanName()).getName().toLowerCase())).putShort(2).toPacket());
         return this;
     }
 
-    public ActionSender addClanMember(String playerName) {
-        if (ClanManager.clans.get(player.getClanName()) == null)
+    public ActionSender addClanMember(final String playerName) {
+        if(ClanManager.clans.get(player.getClanName()) == null)
             return this;
-        player.write(new PacketBuilder(216, Type.VARIABLE).putRS2String(
-                playerName).toPacket());
+        player.write(new PacketBuilder(216, Type.VARIABLE).putRS2String(playerName).toPacket());
         return this;
     }
 
-    public ActionSender removeClanMember(String playerName) {
-        if (ClanManager.clans.get(player.getClanName()) == null)
+    public ActionSender removeClanMember(final String playerName) {
+        if(ClanManager.clans.get(player.getClanName()) == null)
             return this;
-        player.write(new PacketBuilder(213, Type.VARIABLE).putRS2String(
-                playerName).toPacket());
+        player.write(new PacketBuilder(213, Type.VARIABLE).putRS2String(playerName).toPacket());
         return this;
     }
 
-    public ActionSender sendPlayerOption(String message, int slot, int priority) {
-        player.write(new PacketBuilder(104, Type.VARIABLE).putByteC(slot)
-                .putByteA(priority).putRS2String(message).toPacket());
+    public ActionSender sendPlayerOption(final String message, final int slot, final int priority) {
+        player.write(new PacketBuilder(104, Type.VARIABLE).putByteC(slot).putByteA(priority).putRS2String(message).toPacket());
         return this;
     }
 
     public ActionSender openLotteryInformation() {
         sendString(8144, Server.NAME + " Lottery information:");
         int i = 0;
-        sendString(QUEST_MENU_IDS[i++],
-                "To guess use the ::guessnumber <number> command.");
+        sendString(QUEST_MENU_IDS[i++], "To guess use the ::guessnumber <number> command.");
         sendString(QUEST_MENU_IDS[i++], "Every guess costs 1 donator point.");
-        sendString(QUEST_MENU_IDS[i++],
-                "The random number you have to guess is");
+        sendString(QUEST_MENU_IDS[i++], "The random number you have to guess is");
         sendString(QUEST_MENU_IDS[i++], "a number from 0 to 5000.");
-        sendString(QUEST_MENU_IDS[i++],
-                "If you can guess the number correctly,");
-        sendString(QUEST_MENU_IDS[i++],
-                " you will be rewarded 2000 donator points.");
+        sendString(QUEST_MENU_IDS[i++], "If you can guess the number correctly,");
+        sendString(QUEST_MENU_IDS[i++], " you will be rewarded 2000 donator points.");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
-        for (; i < QUEST_MENU_IDS.length; i++) {
+        for(; i < QUEST_MENU_IDS.length; i++){
             sendString(QUEST_MENU_IDS[i], "");
         }
         showInterface(8134);
@@ -1208,18 +1167,12 @@ public class ActionSender {
     public ActionSender openRules() {
         sendString(8144, Server.NAME + " rules:");
         int i = 0;
-        sendString(QUEST_MENU_IDS[i++],
-                "-Autotypers must be at least at 5 sec, Yell autotypers");
-        sendString(QUEST_MENU_IDS[i++],
-                "must be at least at 15 sec, otherwise MUTE.");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Trading DeviousPK Items or accounts for");
-        sendString(QUEST_MENU_IDS[i++],
-                "RSGP or Real Money = IPBAN + account reset.");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Advertising other websites or servers = IPBAN");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Advertising any kind of virus = IPBAN");
+        sendString(QUEST_MENU_IDS[i++], "-Autotypers must be at least at 5 sec, Yell autotypers");
+        sendString(QUEST_MENU_IDS[i++], "must be at least at 15 sec, otherwise MUTE.");
+        sendString(QUEST_MENU_IDS[i++], "-Trading DeviousPK Items or accounts for");
+        sendString(QUEST_MENU_IDS[i++], "RSGP or Real Money = IPBAN + account reset.");
+        sendString(QUEST_MENU_IDS[i++], "-Advertising other websites or servers = IPBAN");
+        sendString(QUEST_MENU_IDS[i++], "-Advertising any kind of virus = IPBAN");
         sendString(QUEST_MENU_IDS[i++], "-Abusing bugs = IPBAN");
         sendString(QUEST_MENU_IDS[i++], "-Moderator impersonating = BAN");
         sendString(QUEST_MENU_IDS[i++], "-Scamming is not allowed! = BAN");
@@ -1229,7 +1182,7 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
-        for (; i < QUEST_MENU_IDS.length; i++) {
+        for(; i < QUEST_MENU_IDS.length; i++){
             sendString(QUEST_MENU_IDS[i], "");
         }
         showInterface(8134);
@@ -1237,30 +1190,29 @@ public class ActionSender {
     }
 
     public ActionSender openPlayersInterface() {
-        sendString(8144, "@dre@Players Online: "
-                + (int) (World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
+        sendString(8144, "@dre@Players Online: " + (int) (World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
         int i = 0;
         int r = 0;
         Player p3 = null;
 
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
+        for(int d = 0; d < QUEST_MENU_IDS.length; d++){
             sendString(QUEST_MENU_IDS[d], "");
         }
-        for (; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
-            if (i >= 99) {
+        for(; (i + 1) <= World.getWorld().getPlayers().size(); i++){
+            if(i >= 99){
                 sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getWorld().getPlayers().size() * World.PLAYER_MULTI) - 98) + " players");
                 break;
             }
-            if (World.getWorld().getPlayers().get((i + 1)) != null) {
+            if(World.getWorld().getPlayers().get((i + 1)) != null){
                 p3 = (Player) World.getWorld().getPlayers().get((i + 1));
-                if (p3.isHidden())
+                if(p3.isHidden())
                     continue;
-                String s = p3.getSafeDisplayName();
+                final String s = p3.getSafeDisplayName();
 
-                if (s.isEmpty())
+                if(s.isEmpty())
                     continue;
 
-                String s1 = "@dre@" + (r + 1) + ". @bla@" + s;
+                final String s1 = "@dre@" + (r + 1) + ". @bla@" + s;
 
                 sendString(QUEST_MENU_IDS[r], s1);
                 r++;
@@ -1271,21 +1223,16 @@ public class ActionSender {
     }
 
     public ActionSender yellRules() {
-        String[] rules = {
-                "Use the clanchat 'Chatting' for everyday chatting",
-                "No flaming",
-                "No luring",
-                "No spamming",
-                "Be respectful"
-        };
+        final String[] rules = {"Use the clanchat 'Chatting' for everyday chatting", "No flaming", "No luring",
+                "No spamming", "Be respectful"};
 
         sendString(8144, "@dre@Yell rules");
 
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
+        for(int d = 0; d < QUEST_MENU_IDS.length; d++){
             sendString(QUEST_MENU_IDS[d], "");
         }
 
-        for (int i = 0; i < rules.length; i++) {
+        for(int i = 0; i < rules.length; i++){
             sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + rules[i]);
         }
 
@@ -1303,12 +1250,12 @@ public class ActionSender {
             return this;
         sendString(8144, "@dre@Whitelist");
 
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
+        for(int d = 0; d < QUEST_MENU_IDS.length; d++){
             sendString(QUEST_MENU_IDS[d], "");
         }
 
         int i = 0;
-        for (String name : BetaServerEvent.whitelist) {
+        for(final String name : BetaServerEvent.whitelist){
             sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + Misc.ucFirst(name.toLowerCase()));
             i++;
         }
@@ -1317,17 +1264,17 @@ public class ActionSender {
     }
 
     public ActionSender betaChanges() {
-        if (BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
+        if(BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
             return this;
         sendString(8144, "@dre@Beta server");
 
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
+        for(int d = 0; d < QUEST_MENU_IDS.length; d++){
             sendString(QUEST_MENU_IDS[d], "");
         }
 
         int i = 0;
         sendString(QUEST_MENU_IDS[i++], "@dre@Changelog");
-        for (String change : BetaServerEvent.changes) {
+        for(final String change : BetaServerEvent.changes){
             sendString(QUEST_MENU_IDS[i], "- " + change);
             i++;
         }
@@ -1335,7 +1282,7 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[i++], "");
 
         sendString(QUEST_MENU_IDS[i++], "@dre@Things to test");
-        for (String test : BetaServerEvent.toTest) {
+        for(final String test : BetaServerEvent.toTest){
             sendString(QUEST_MENU_IDS[i], "- " + test);
             i++;
         }
@@ -1343,7 +1290,7 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[i++], "");
 
         sendString(QUEST_MENU_IDS[i++], "@dre@Test commands for this phase");
-        for (String cmd : BetaServerEvent.testCommands) {
+        for(final String cmd : BetaServerEvent.testCommands){
             sendString(QUEST_MENU_IDS[i], "::" + cmd);
             i++;
         }
@@ -1356,39 +1303,39 @@ public class ActionSender {
      * @param items to display
      * @return chain
      */
-    public ActionSender displayItems(Item... items) {
+    public ActionSender displayItems(final Item... items) {
         sendString(8144, "@dre@Item search");
         int i = 0;
-        for (; i < items.length; i++) {
+        for(; i < items.length; i++){
             sendString(QUEST_MENU_IDS[i], items[i].getDefinition().getName() + " - " + items[i].getDefinition().getId());
         }
-        for (; i < QUEST_MENU_IDS.length; i++) {
+        for(; i < QUEST_MENU_IDS.length; i++){
             sendString(QUEST_MENU_IDS[i], "");
         }
         showInterface(8134);
         return this;
     }
 
-    public ActionSender openItemsKeptOnDeathInterface(Player player) {
+    public ActionSender openItemsKeptOnDeathInterface(final Player player) {
         sendString(8144, "@dre@Items kept on death");
-        java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
+        final java.util.List<Item> itemList = DeathDrops.itemsKeptOnDeath(player, false, true);
         int i = 0;
-        for (; i < itemList.size(); i++)
+        for(; i < itemList.size(); i++)
             sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + itemList.get(i).getDefinition().getName());
-        for (; i < QUEST_MENU_IDS.length; i++) {
+        for(; i < QUEST_MENU_IDS.length; i++){
             sendString(QUEST_MENU_IDS[i], "");
         }
         return showInterface(8134);
     }
 
-    public ActionSender openQuestInterface(String title, String[] messages) {
+    public ActionSender openQuestInterface(final String title, final String[] messages) {
         int i = 0;
         sendString(8144, title);
-        for (; i < messages.length; i++) {
-            if (messages[i] != null)
+        for(; i < messages.length; i++){
+            if(messages[i] != null)
                 sendString(QUEST_MENU_IDS[i], messages[i]);
         }
-        for (; i < QUEST_MENU_IDS.length; i++) {
+        for(; i < QUEST_MENU_IDS.length; i++){
             sendString(QUEST_MENU_IDS[i], "");
         }
         showInterface(8134);
@@ -1402,52 +1349,50 @@ public class ActionSender {
      */
     public ActionSender sendMapRegion() {
         player.setLastKnownRegion(player.getLocation());
-        player.write(new PacketBuilder(73)
-                .putShortA(player.getLocation().getRegionX() + 6)
-                .putShort(player.getLocation().getRegionY() + 6).toPacket());
+        player.write(new PacketBuilder(73).putShortA(player.getLocation().getRegionX() + 6).putShort(player.getLocation().getRegionY() + 6).toPacket());
         return this;
     }
 
-    public DialogueType getSkillInterface(int skill) {
-        if (skill == Skills.AGILITY)
+    public DialogueType getSkillInterface(final int skill) {
+        if(skill == Skills.AGILITY)
             return DialogueType.AGILITY_LEVEL_UP;
-        else if (skill == Skills.ATTACK)
+        else if(skill == Skills.ATTACK)
             return DialogueType.ATTACK_LEVEL_UP;
-        else if (skill == Skills.COOKING)
+        else if(skill == Skills.COOKING)
             return DialogueType.COOKING_LEVEL_UP;
-        else if (skill == Skills.CRAFTING)
+        else if(skill == Skills.CRAFTING)
             return DialogueType.CRAFTING_LEVEL_UP;
-        else if (skill == Skills.DEFENCE)
+        else if(skill == Skills.DEFENCE)
             return DialogueType.DEFENCE_LEVEL_UP;
-        else if (skill == Skills.FARMING)
+        else if(skill == Skills.FARMING)
             return DialogueType.FARMING_LEVEL_UP;
-        else if (skill == Skills.FIREMAKING)
+        else if(skill == Skills.FIREMAKING)
             return DialogueType.FIREMAKING_LEVEL_UP;
-        else if (skill == Skills.FISHING)
+        else if(skill == Skills.FISHING)
             return DialogueType.FISHING_LEVEL_UP;
-        else if (skill == Skills.FLETCHING)
+        else if(skill == Skills.FLETCHING)
             return DialogueType.FLETCHING_LEVEL_UP;
-        else if (skill == Skills.HERBLORE)
+        else if(skill == Skills.HERBLORE)
             return DialogueType.HERBLORE_LEVEL_UP;
-        else if (skill == Skills.HITPOINTS)
+        else if(skill == Skills.HITPOINTS)
             return DialogueType.HITPOINT_LEVEL_UP;
-        else if (skill == Skills.MAGIC)
+        else if(skill == Skills.MAGIC)
             return DialogueType.MAGIC_LEVEL_UP;
-        else if (skill == Skills.MINING)
+        else if(skill == Skills.MINING)
             return DialogueType.MINING_LEVEL_UP;
-        else if (skill == Skills.PRAYER)
+        else if(skill == Skills.PRAYER)
             return DialogueType.PRAYER_LEVEL_UP;
-        else if (skill == Skills.RANGED)
+        else if(skill == Skills.RANGED)
             return DialogueType.RANGING_LEVEL_UP;
-        else if (skill == Skills.RUNECRAFTING)
+        else if(skill == Skills.RUNECRAFTING)
             return DialogueType.RUNECRAFTING_LEVEL_UP;
-        else if (skill == Skills.SLAYER)
+        else if(skill == Skills.SLAYER)
             return DialogueType.SLAYER_LEVEL_UP;
-        else if (skill == Skills.SMITHING)
+        else if(skill == Skills.SMITHING)
             return DialogueType.SMITHING_LEVEL_UP;
-        else if (skill == Skills.STRENGTH)
+        else if(skill == Skills.STRENGTH)
             return DialogueType.STRENGTH_LEVEL_UP;
-        else if (skill == Skills.THIEVING)
+        else if(skill == Skills.THIEVING)
             return DialogueType.THIEVING_LEVEL_UP;
         else
             return DialogueType.WOODCUTTING_LEVEL_UP;
@@ -1460,9 +1405,8 @@ public class ActionSender {
      * @param interfaceId The interface id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendPlayerHead(int interfaceId) {
-        player.getSession().write(
-                new PacketBuilder(185).putLEShortA(interfaceId).toPacket());
+    public ActionSender sendPlayerHead(final int interfaceId) {
+        player.getSession().write(new PacketBuilder(185).putLEShortA(interfaceId).toPacket());
         return this;
     }
 
@@ -1473,10 +1417,8 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
 
-    public ActionSender sendInterfaceAnimation(int emoteId, int interfaceId) {
-        player.getSession().write(
-                new PacketBuilder(200).putShort(interfaceId).putShort(emoteId)
-                        .toPacket());
+    public ActionSender sendInterfaceAnimation(final int emoteId, final int interfaceId) {
+        player.getSession().write(new PacketBuilder(200).putShort(interfaceId).putShort(emoteId).toPacket());
         return this;
     }
 
@@ -1488,16 +1430,14 @@ public class ActionSender {
      * @param childId     The child id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendNPCHead(int npcId, int interfaceId, int childId) {
+    public ActionSender sendNPCHead(final int npcId, final int interfaceId, final int childId) {
         //sendPlayerHead(interfaceId);
-        player.getSession().write(new
-                PacketBuilder(75).putLEShortA(npcId).putLEShortA(interfaceId).toPacket());
+        player.getSession().write(new PacketBuilder(75).putLEShortA(npcId).putLEShortA(interfaceId).toPacket());
         return this;
     }
 
-    public ActionSender sendChatboxInterface(int interfaceId) {
-        player.getSession().write(
-                new PacketBuilder(164).putLEShort(interfaceId).toPacket());
+    public ActionSender sendChatboxInterface(final int interfaceId) {
+        player.getSession().write(new PacketBuilder(164).putLEShort(interfaceId).toPacket());
         return this;
     }
 
@@ -1505,31 +1445,24 @@ public class ActionSender {
      * Sends the combat level in the weapon interface.
      */
     public void sendCombatLevel() {
-        sendString(19999, "Combat Level: "
-                + player.getSkills().getCombatLevel());
+        sendString(19999, "Combat Level: " + player.getSkills().getCombatLevel());
     }
 
-    public void levelUp(int skill) {
-        for (int i = 0; i < 5; i++) {
+    public void levelUp(final int skill) {
+        for(int i = 0; i < 5; i++){
             player.getInterfaceState().setNextDialogueId(i, -1);
         }
         sendCombatLevel();
-        sendDialogue("Congratulations", getSkillInterface(skill), 1,
-                FacialAnimation.HAPPY, "Congratulations, you just advanced a "
-                + Skills.SKILL_NAME[skill] + " level!", "Your "
-                + Skills.SKILL_NAME[skill] + " level is now "
-                + player.getSkills().getLevelForExp(skill) + ".");
-        sendMessage("Congratulations, you just advanced a "
-                + Skills.SKILL_NAME[skill] + " level.");
-        if (skill > 6) {
-            if (!player.forcedIntoSkilling)
-                if (!ClanManager.existsClan("skilling")
-                        || !ClanManager.clans.get("skilling").isFull())
+        sendDialogue("Congratulations", getSkillInterface(skill), 1, FacialAnimation.HAPPY, "Congratulations, you just advanced a " + Skills.SKILL_NAME[skill] + " level!", "Your " + Skills.SKILL_NAME[skill] + " level is now " + player.getSkills().getLevelForExp(skill) + ".");
+        sendMessage("Congratulations, you just advanced a " + Skills.SKILL_NAME[skill] + " level.");
+        if(skill > 6){
+            if(!player.forcedIntoSkilling)
+                if(!ClanManager.existsClan("skilling") || !ClanManager.clans.get("skilling").isFull())
                     ClanManager.joinClanChat(player, "skilling", false);
                 else
                     ClanManager.joinClanChat(player, "skilling2", false);
             player.forcedIntoSkilling = true;
-            if (player.getSkills().getLevelForExp(skill) % 10 == 0) {
+            if(player.getSkills().getLevelForExp(skill) % 10 == 0){
                 player.getPoints().increasePkPoints(20);
             }
         }
@@ -1567,33 +1500,31 @@ public class ActionSender {
         player.getWalkingQueue().finish();
     }
 
-    private int getForceDirection(int x, int y, int finishX, int finishY) {
+    private int getForceDirection(final int x, final int y, final int finishX, final int finishY) {
         //north
-        if (finishY > y)
+        if(finishY > y)
             return 0;
             //south
-        else if (finishY < y)
+        else if(finishY < y)
             return 2;
         //east
-        if (finishX > x)
+        if(finishX > x)
             return 1;
             //west
-        else if (finishX < x)
+        else if(finishX < x)
             return 3;
         //default - north
         return 0;
     }
 
-    public ActionSender sendDialogue(String title, DialogueType dialogueType,
-                                     int entityId, FacialAnimation animation, String... text) {
+    public ActionSender sendDialogue(final String title, final DialogueType dialogueType, final int entityId, final FacialAnimation animation, final String... text) {
         int interfaceId = -1;
-        int[] interfaceIds;
-        switch (dialogueType) {
+        final int[] interfaceIds;
+        switch(dialogueType){
             case ITEM:
                 sendInterfaceModel(307, 200, entityId);
                 sendString(307, title);
-                player.getSession().write(
-                        new PacketBuilder(164).putLEShort(306).toPacket());
+                player.getSession().write(new PacketBuilder(164).putLEShort(306).toPacket());
                 /**
                  *      c.getPA().sendFrame126(text, 308);
                  c.getPA().sendFrame246(307, 200, item);
@@ -1604,38 +1535,36 @@ public class ActionSender {
                 interfaceIds = new int[]{4883, 4888, 4894, 4901};
                 interfaceId = interfaceIds[text.length - 1];
                 sendNPCHead(entityId, interfaceId, 0);
-                sendInterfaceAnimation(animation.getAnimation().getId(),
-                        interfaceId);
+                sendInterfaceAnimation(animation.getAnimation().getId(), interfaceId);
                 sendString(interfaceId, 1, title);
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId + 2, i, text[i]);
                 }
                 sendChatboxInterface(interfaceId - 1);
                 break;
 
             case PLAYER:
-                if (text.length > 4 || text.length < 1) {
+                if(text.length > 4 || text.length < 1){
                     return this;
                 }
                 interfaceIds = new int[]{969, 974, 980, 987};
                 interfaceId = interfaceIds[text.length - 1];
                 sendPlayerHead(interfaceId);
-                sendInterfaceAnimation(animation.getAnimation().getId(),
-                        interfaceId);
+                sendInterfaceAnimation(animation.getAnimation().getId(), interfaceId);
                 sendString(interfaceId, 1, title);
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 2 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId - 1);
                 break;
             case OPTION:
-                if (text.length > 5 || text.length < 2) {
+                if(text.length > 5 || text.length < 2){
                     return this;
                 }
                 interfaceIds = new int[]{-1, 2460, 2470, 8208, 8220};
                 interfaceId = interfaceIds[text.length - 1];
                 sendString(interfaceId, 0, title);
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId - 1);
@@ -1643,14 +1572,14 @@ public class ActionSender {
             case MESSAGE:
                 interfaceId = 6179;
                 sendString(6180, "" + title);
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(6181 + i, "" + text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case MESSAGE_MODEL_LEFT:
                 interfaceId = 519;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 player.getActionSender().sendInterfaceModel(519, 130, entityId);
@@ -1658,84 +1587,84 @@ public class ActionSender {
                 break;
             case AGILITY_LEVEL_UP:
                 interfaceId = 4277;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case ATTACK_LEVEL_UP:
                 interfaceId = 6247;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case COOKING_LEVEL_UP:
                 interfaceId = 6226;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case CRAFTING_LEVEL_UP:
                 interfaceId = 6263;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case DEFENCE_LEVEL_UP:
                 interfaceId = 6253;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case FARMING_LEVEL_UP:
                 interfaceId = 162;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case FIREMAKING_LEVEL_UP:
                 interfaceId = 4282;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case FISHING_LEVEL_UP:
                 interfaceId = 6258;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case FLETCHING_LEVEL_UP:
                 interfaceId = 6231;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case HERBLORE_LEVEL_UP:
                 interfaceId = 6237;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case HITPOINT_LEVEL_UP:
                 interfaceId = 6216;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case MAGIC_LEVEL_UP:
                 interfaceId = 6211;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
@@ -1748,7 +1677,7 @@ public class ActionSender {
                 break;
             case PRAYER_LEVEL_UP:
                 interfaceId = 6242;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
@@ -1765,28 +1694,28 @@ public class ActionSender {
                 break;
             case RUNECRAFTING_LEVEL_UP:
                 interfaceId = 4267;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case SLAYER_LEVEL_UP:
                 interfaceId = 12122;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case SMITHING_LEVEL_UP:
                 interfaceId = 6221;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
                 break;
             case STRENGTH_LEVEL_UP:
                 interfaceId = 6206;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
@@ -1803,7 +1732,7 @@ public class ActionSender {
                 break;
             case WOODCUTTING_LEVEL_UP:
                 interfaceId = 4272;
-                for (int i = 0; i < text.length; i++) {
+                for(int i = 0; i < text.length; i++){
                     sendString(interfaceId, 1 + i, text[i]);
                 }
                 sendChatboxInterface(interfaceId);
@@ -1818,29 +1747,31 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendLogout() {
-        if (player.loggedOut) return this;
-        if (player.duelAttackable > 0 && player.logoutTries < 10) {
-            if (player.logoutTries == 0) ;
+        if(player.loggedOut)
+            return this;
+        if(player.duelAttackable > 0 && player.logoutTries < 10){
+            if(player.logoutTries == 0)
+                ;
             player.getActionSender().sendMessage("If you really want to logout here spam the logout button 10 times!");
             player.logoutTries++;
             return this;
         }
-        if (player.logoutTries >= 10 && player.logoutTries < 20 && player.duelAttackable > 0) {
-            if (player.logoutTries == 10)
+        if(player.logoutTries >= 10 && player.logoutTries < 20 && player.duelAttackable > 0){
+            if(player.logoutTries == 10)
                 player.getActionSender().sendMessage("How about another 10 times?");
             player.logoutTries++;
             return this;
         }
-        if (player.logoutTries >= 20 && player.duelAttackable > 0) {
+        if(player.logoutTries >= 20 && player.duelAttackable > 0){
             player.getActionSender().sendMessage("Nah");
             return this;
         }
         player.logoutTries = 0;
-        if (System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
+        if(System.currentTimeMillis() - player.cE.lastHit >= 10000L){
             player.write((new PacketBuilder(109)).toPacket());
             player.loggedOut = true;
             World.getWorld().unregister(player);
-        } else {
+        }else{
             sendMessage("You must be out of combat 10 seconds before you logout.");
         }
         return this;
@@ -1853,21 +1784,21 @@ public class ActionSender {
      * @param items       The items.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendUpdateItems(int interfaceId, Item[] items) {
-        PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
+    public ActionSender sendUpdateItems(final int interfaceId, final Item[] items) {
+        final PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
         bldr.putShort(interfaceId);
         bldr.putShort(items.length);
-        for (Item item : items) {
-            if (item != null) {
-                int count = item.getCount();
-                if (count > 254) {
+        for(final Item item : items){
+            if(item != null){
+                final int count = item.getCount();
+                if(count > 254){
                     bldr.put((byte) 255);
                     bldr.putInt2(count);
-                } else {
+                }else{
                     bldr.put((byte) count);
                 }
                 bldr.putLEShortA(item.getId() + 1);
-            } else {
+            }else{
                 bldr.put((byte) 0);
                 bldr.putLEShortA(0);
             }
@@ -1876,21 +1807,21 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendUpdateItems(int interfaceId, GEItem[] items) {
-        PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
+    public ActionSender sendUpdateItems(final int interfaceId, final GEItem[] items) {
+        final PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
         bldr.putShort(interfaceId);
         bldr.putShort(items.length);
-        for (GEItem item : items) {
-            if (item != null) {
-                int count = item.getItem().getCount();
-                if (count > 254) {
+        for(final GEItem item : items){
+            if(item != null){
+                final int count = item.getItem().getCount();
+                if(count > 254){
                     bldr.put((byte) 255);
                     bldr.putInt2(count);
-                } else {
+                }else{
                     bldr.put((byte) count);
                 }
                 bldr.putLEShortA(item.getItem().getId() + 1);
-            } else {
+            }else{
                 bldr.put((byte) 0);
                 bldr.putLEShortA(0);
             }
@@ -1899,21 +1830,21 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendUpdateSmith(int interfaceId, int[][] items) {
-        PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
+    public ActionSender sendUpdateSmith(final int interfaceId, final int[][] items) {
+        final PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
         bldr.putShort(interfaceId);
         bldr.putShort(items.length);
-        for (int i = 0; i < items.length; i++) {
-            if (items[i][0] > 0) {
-                int count = items[i][1];
-                if (count > 254) {
+        for(int i = 0; i < items.length; i++){
+            if(items[i][0] > 0){
+                final int count = items[i][1];
+                if(count > 254){
                     bldr.put((byte) 255);
                     bldr.putInt2(count);
-                } else {
+                }else{
                     bldr.put((byte) count);
                 }
                 bldr.putLEShortA(items[i][0] + 1);
-            } else {
+            }else{
                 bldr.put((byte) 0);
                 bldr.putLEShortA(0);
             }
@@ -1930,19 +1861,19 @@ public class ActionSender {
      * @param item        The item.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendUpdateItem(int interfaceId, int slot, Item item) {
-        PacketBuilder bldr = new PacketBuilder(34, Type.VARIABLE_SHORT);
+    public ActionSender sendUpdateItem(final int interfaceId, final int slot, final Item item) {
+        final PacketBuilder bldr = new PacketBuilder(34, Type.VARIABLE_SHORT);
         bldr.putShort(interfaceId).putSmart(slot);
-        if (item != null) {
+        if(item != null){
             bldr.putShort(item.getId() + 1);
-            int count = item.getCount();
-            if (count > 254) {
+            final int count = item.getCount();
+            if(count > 254){
                 bldr.put((byte) 255);
                 bldr.putInt(count);
-            } else {
+            }else{
                 bldr.put((byte) count);
             }
-        } else {
+        }else{
             bldr.putShort(0);
             bldr.put((byte) 0);
         }
@@ -1959,23 +1890,21 @@ public class ActionSender {
      * @param items       The item array.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendUpdateItems(int interfaceId, int[] slots,
-                                        Item[] items) {
-        PacketBuilder bldr = new PacketBuilder(34, Type.VARIABLE_SHORT)
-                .putShort(interfaceId);
-        for (int i = 0; i < slots.length; i++) {
-            Item item = items[slots[i]];
+    public ActionSender sendUpdateItems(final int interfaceId, final int[] slots, final Item[] items) {
+        final PacketBuilder bldr = new PacketBuilder(34, Type.VARIABLE_SHORT).putShort(interfaceId);
+        for(int i = 0; i < slots.length; i++){
+            final Item item = items[slots[i]];
             bldr.putSmart(slots[i]);
-            if (item != null) {
+            if(item != null){
                 bldr.putShort(item.getId() + 1);
-                int count = item.getCount();
-                if (count > 254) {
+                final int count = item.getCount();
+                if(count > 254){
                     bldr.put((byte) 255);
                     bldr.putInt(count);
-                } else {
+                }else{
                     bldr.put((byte) count);
                 }
-            } else {
+            }else{
                 bldr.putShort(0);
                 bldr.put((byte) 0);
             }
@@ -1992,7 +1921,7 @@ public class ActionSender {
      * @Param k - Keep this set as 0
      * @Param l - Keep this set as 0
      */
-    public void drawHeadicon(int i, int j, int k, int l) {
+    public void drawHeadicon(final int i, final int j, final int k, final int l) {
         // synchronized(c) {
 		/*
          * c.outStream.createFrame(254); c.outStream.writeByte(i);
@@ -2021,9 +1950,8 @@ public class ActionSender {
      * @param top  Flag which indicates the item should be placed at the top.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendInteractionOption(String option, int slot,
-                                              boolean top) {
-        PacketBuilder bldr = new PacketBuilder(104, Type.VARIABLE);
+    public ActionSender sendInteractionOption(final String option, final int slot, final boolean top) {
+        final PacketBuilder bldr = new PacketBuilder(104, Type.VARIABLE);
         bldr.put((byte) -slot);
         bldr.putByteA(top ? (byte) 0 : (byte) 1);
         bldr.putRS2String(option);
@@ -2031,19 +1959,19 @@ public class ActionSender {
         return this;
     }
 
-    public void sendClientConfig(int id, int state) {
-        if (state < 255) {
-            PacketBuilder bldr = new PacketBuilder(36);
+    public void sendClientConfig(final int id, final int state) {
+        if(state < 255){
+            final PacketBuilder bldr = new PacketBuilder(36);
             bldr.putLEShort(id);
             bldr.put((byte) state);
             player.write(bldr.toPacket());
-        } else {
+        }else{
             sendClientConfig2(id, state);
         }
     }
 
-    public void sendClientConfig2(int id, int state) {
-        PacketBuilder bldr = new PacketBuilder(87);
+    public void sendClientConfig2(final int id, final int state) {
+        final PacketBuilder bldr = new PacketBuilder(87);
         bldr.putLEShort(id);
         bldr.putInt1(state);
         player.write(bldr.toPacket());
@@ -2055,26 +1983,26 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendUpdate() {
-        PacketBuilder bldr = new PacketBuilder(114);
+        final PacketBuilder bldr = new PacketBuilder(114);
         bldr.putLEShort(World.getWorld().updateTimer * 50 / 30);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendString(int id, String string) {
-        if (!sendFrame126String(string, id))
+    public ActionSender sendString(final int id, final String string) {
+        if(!sendFrame126String(string, id))
             return this;
-        PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
+        final PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
         bldr.putRS2String(string);
         bldr.putShortA(id);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendString(String string, int id) {
-        if (!sendFrame126String(string, id))
+    public ActionSender sendString(final String string, final int id) {
+        if(!sendFrame126String(string, id))
             return this;
-        PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
+        final PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
         bldr.putRS2String(string);
         bldr.putShortA(id);
         player.write(bldr.toPacket());
@@ -2082,78 +2010,66 @@ public class ActionSender {
     }
 
     private boolean sendFrame126String(final String string, final int id) {
-        if (!sendStringStrings.containsKey(id)) {
+        if(!sendStringStrings.containsKey(id)){
             sendStringStrings.put(id, string);
             return true;
         }
         final String old = sendStringStrings.get(id);
-        if (old.equals(string))
+        if(old.equals(string))
             return false;
         sendStringStrings.put(id, string);
         return true;
     }
 
     private boolean shouldSendTooltip(final String string, final int id) {
-        if (!sendTooltipStrings.containsKey(id)) {
+        if(!sendTooltipStrings.containsKey(id)){
             sendTooltipStrings.put(id, string);
             return true;
         }
         final String old = sendTooltipStrings.get(id);
-        if (old.equals(string))
+        if(old.equals(string))
             return false;
         sendTooltipStrings.put(id, string);
         return true;
     }
 
-    public ActionSender sendString(int id, int offset, String string) {
-        PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
+    public ActionSender sendString(final int id, final int offset, final String string) {
+        final PacketBuilder bldr = new PacketBuilder(126, Type.VARIABLE_SHORT);
         bldr.putRS2String(string);
         bldr.putShortA(id + offset);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public void createGlobalProjectile(int casterY, int casterX, int offsetY,
-                                       int offsetX, int angle, int speed, int gfxMoving, int startHeight,
-                                       int endHeight, int lockon, int time, int slope) {
-        if (player == null)
+    public void createGlobalProjectile(final int casterY, final int casterX, final int offsetY, final int offsetX, final int angle, final int speed, final int gfxMoving, final int startHeight, final int endHeight, final int lockon, final int time, final int slope) {
+        if(player == null)
             return;
         // synchronized(player.getLocalPlayers()) {
-        for (Player p : player.getLocalPlayers()) {
-            p.getActionSender().createProjectile(casterY, casterX, offsetY,
-                    offsetX, angle, speed, gfxMoving, startHeight, endHeight,
-                    lockon, time, slope);
+        for(final Player p : player.getLocalPlayers()){
+            p.getActionSender().createProjectile(casterY, casterX, offsetY, offsetX, angle, speed, gfxMoving, startHeight, endHeight, lockon, time, slope);
         }
         // }
-        createProjectile(casterY, casterX, offsetY, offsetX, angle, speed,
-                gfxMoving, startHeight, endHeight, lockon, time, slope);
+        createProjectile(casterY, casterX, offsetY, offsetX, angle, speed, gfxMoving, startHeight, endHeight, lockon, time, slope);
     }
 
-    public void createGlobalProjectile(int casterY, int casterX, int offsetY,
-                                       int offsetX, int angle, int speed, int gfxMoving, int startHeight,
-                                       int endHeight, int lockon, int slope) {
-        if (gfxMoving < 1)
+    public void createGlobalProjectile(final int casterY, final int casterX, final int offsetY, final int offsetX, final int angle, final int speed, final int gfxMoving, final int startHeight, final int endHeight, final int lockon, final int slope) {
+        if(gfxMoving < 1)
             return;
-        if (player == null)
+        if(player == null)
             return;
-        for (Player p : player.getLocalPlayers()) {
-            p.getActionSender().createProjectile(casterY, casterX, offsetY,
-                    offsetX, angle, speed, gfxMoving, startHeight, endHeight,
-                    lockon, slope);
+        for(final Player p : player.getLocalPlayers()){
+            p.getActionSender().createProjectile(casterY, casterX, offsetY, offsetX, angle, speed, gfxMoving, startHeight, endHeight, lockon, slope);
         }
-        createProjectile(casterY, casterX, offsetY, offsetX, angle, speed,
-                gfxMoving, startHeight, endHeight, lockon, slope);
+        createProjectile(casterY, casterX, offsetY, offsetX, angle, speed, gfxMoving, startHeight, endHeight, lockon, slope);
     }
 
-    public ActionSender createPlayersObjectAnim(int casterX, int casterY, int animationID, int tileObjectType, int orientation) {
-        try {
+    public ActionSender createPlayersObjectAnim(final int casterX, final int casterY, final int animationID, final int tileObjectType, final int orientation) {
+        try{
             final PacketBuilder builder = new PacketBuilder(85);
-            builder.putByteC((casterY - (player.getLastKnownRegion()
-                    .getRegionY() * 8)));
-            builder.putByteC((casterX - (player.getLastKnownRegion()
-                    .getRegionX() * 8)));
-            int x = 0;
-            int y = 0;
+            builder.putByteC((casterY - (player.getLastKnownRegion().getRegionY() * 8)));
+            builder.putByteC((casterX - (player.getLastKnownRegion().getRegionX() * 8)));
+            final int x = 0;
+            final int y = 0;
             final PacketBuilder objectAnim = new PacketBuilder(160);
             objectAnim.putByteS((byte) (((x & 7) << 4) + (y & 7)));
             objectAnim.putByteS((byte) ((tileObjectType << 2) + (orientation & 3)));
@@ -2161,23 +2077,19 @@ public class ActionSender {
 
             player.write(builder.toPacket());
             player.write(objectAnim.toPacket());
-        } catch (Exception e) {
+        }catch(final Exception e){
             e.printStackTrace();
         }
         return this;
     }
 
-    public void createProjectile(int casterY, int casterX, int offsetY,
-                                 int offsetX, int angle, int speed, int gfxMoving, int startHeight,
-                                 int endHeight, int lockon, int time, int slope) {
-        if (player.getLastKnownRegion() == null)
+    public void createProjectile(final int casterY, final int casterX, final int offsetY, final int offsetX, final int angle, final int speed, final int gfxMoving, final int startHeight, final int endHeight, final int lockon, final int time, final int slope) {
+        if(player.getLastKnownRegion() == null)
             return;
-        PacketBuilder playerCoord = new PacketBuilder(85);
-        playerCoord.putByteC((casterY - (player.getLastKnownRegion()
-                .getRegionY() * 8)) - 2);
-        playerCoord.putByteC((casterX - (player.getLastKnownRegion()
-                .getRegionX() * 8)) - 3);
-		/*
+        final PacketBuilder playerCoord = new PacketBuilder(85);
+        playerCoord.putByteC((casterY - (player.getLastKnownRegion().getRegionY() * 8)) - 2);
+        playerCoord.putByteC((casterX - (player.getLastKnownRegion().getRegionX() * 8)) - 3);
+        /*
 		 * System.out.println("Time is : " + time);
 		 * System.out.println("Speed is : " + speed);
 		 * System.out.println("cY is : " + casterY);
@@ -2188,14 +2100,10 @@ public class ActionSender {
 		 * System.out.println("startHeight is : " + startHeight);
 		 * System.out.println("endHeight is : " + endHeight);
 		 */
-        PacketBuilder projectile = new PacketBuilder(117).put((byte) angle)
-                .put((byte) offsetY).put((byte) offsetX).putShort(lockon)
-                .putShort(gfxMoving).put((byte) startHeight)
-                .put((byte) endHeight)
+        final PacketBuilder projectile = new PacketBuilder(117).put((byte) angle).put((byte) offsetY).put((byte) offsetX).putShort(lockon).putShort(gfxMoving).put((byte) startHeight).put((byte) endHeight)
 
-                .putShort(time/* 51/*delay */).putShort(speed)
-                .put((byte) slope/* slope */).put((byte) 64/*
-														 * offset value on
+                .putShort(time/* 51/*delay */).putShort(speed).put((byte) slope/* slope */).put((byte) 64/*
+                                                         * offset value on
 														 * player tile
 														 */);
 
@@ -2203,23 +2111,15 @@ public class ActionSender {
         player.write(projectile.toPacket());
     }
 
-    public void createProjectile(int casterY, int casterX, int offsetY,
-                                 int offsetX, int angle, int speed, int gfxMoving, int startHeight,
-                                 int endHeight, int lockon, int slope) {
-        if (player.getLastKnownRegion() == null)
+    public void createProjectile(final int casterY, final int casterX, final int offsetY, final int offsetX, final int angle, final int speed, final int gfxMoving, final int startHeight, final int endHeight, final int lockon, final int slope) {
+        if(player.getLastKnownRegion() == null)
             return;
-        PacketBuilder playerCoord = new PacketBuilder(85);
-        playerCoord.putByteC((casterY - (player.getLastKnownRegion()
-                .getRegionY() * 8)) - 2);
-        playerCoord.putByteC((casterX - (player.getLastKnownRegion()
-                .getRegionX() * 8)) - 3);
+        final PacketBuilder playerCoord = new PacketBuilder(85);
+        playerCoord.putByteC((casterY - (player.getLastKnownRegion().getRegionY() * 8)) - 2);
+        playerCoord.putByteC((casterX - (player.getLastKnownRegion().getRegionX() * 8)) - 3);
 
-        PacketBuilder projectile = new PacketBuilder(117).put((byte) angle)
-                .put((byte) offsetY).put((byte) offsetX).putShort(lockon)
-                .putShort(gfxMoving).put((byte) startHeight)
-                .put((byte) endHeight).putShort(51/* delay */).putShort(speed)
-                .put((byte) slope/* slope */).put((byte) 64/*
-														 * offset value on
+        final PacketBuilder projectile = new PacketBuilder(117).put((byte) angle).put((byte) offsetY).put((byte) offsetX).putShort(lockon).putShort(gfxMoving).put((byte) startHeight).put((byte) endHeight).putShort(51/* delay */).putShort(speed).put((byte) slope/* slope */).put((byte) 64/*
+                                                         * offset value on
 														 * player tile
 														 */);
 
@@ -2227,13 +2127,11 @@ public class ActionSender {
         player.write(projectile.toPacket());
     }
 
-    public void sendStillGraphics(int id, int heightS, int y, int x, int timeBCS) {
-        PacketBuilder playerCoord = new PacketBuilder(85);
-        playerCoord
-                .putByteC((y - (player.getLastKnownRegion().getRegionY() * 8)));
-        playerCoord
-                .putByteC((x - (player.getLastKnownRegion().getRegionX() * 8)));
-        PacketBuilder graphic = new PacketBuilder(4);
+    public void sendStillGraphics(final int id, final int heightS, final int y, final int x, final int timeBCS) {
+        final PacketBuilder playerCoord = new PacketBuilder(85);
+        playerCoord.putByteC((y - (player.getLastKnownRegion().getRegionY() * 8)));
+        playerCoord.putByteC((x - (player.getLastKnownRegion().getRegionX() * 8)));
+        final PacketBuilder graphic = new PacketBuilder(4);
         graphic.put((byte) 0);
         graphic.putShort(id);
         graphic.put((byte) heightS);
@@ -2243,30 +2141,30 @@ public class ActionSender {
         player.write(graphic.toPacket());
     }
 
-    public void createGlobalItem(Location location, Item item) {
-        PacketBuilder packetbuilder = new PacketBuilder(85);
+    public void createGlobalItem(final Location location, final Item item) {
+        final PacketBuilder packetbuilder = new PacketBuilder(85);
         packetbuilder.putByteC(location.getLocalY(player.getLastKnownRegion()));
         packetbuilder.putByteC(location.getLocalX(player.getLastKnownRegion()));
         player.write(packetbuilder.toPacket());
-        PacketBuilder packetbuilder1 = new PacketBuilder(44);
+        final PacketBuilder packetbuilder1 = new PacketBuilder(44);
         packetbuilder1.putLEShortA(item.getId());
         packetbuilder1.putShort(item.getCount());
         packetbuilder1.put((byte) 0);
         player.write(packetbuilder1.toPacket());
     }
 
-    public void removeGlobalItem(Item item, Location location) {
+    public void removeGlobalItem(final Item item, final Location location) {
         removeGlobalItem(item.getId(), location);
     }
 
-    public void removeGlobalItem(int id, Location location) {
-        if (player.getLastKnownRegion() == null)
+    public void removeGlobalItem(final int id, final Location location) {
+        if(player.getLastKnownRegion() == null)
             return;
-        PacketBuilder packetbuilder = new PacketBuilder(85);
+        final PacketBuilder packetbuilder = new PacketBuilder(85);
         packetbuilder.putByteC(location.getLocalY(player.getLastKnownRegion()));
         packetbuilder.putByteC(location.getLocalX(player.getLastKnownRegion()));
         player.write(packetbuilder.toPacket());
-        PacketBuilder packetbuilder1 = new PacketBuilder(156);
+        final PacketBuilder packetbuilder1 = new PacketBuilder(156);
         packetbuilder1.putByteS((byte) 0);
         packetbuilder1.putShort(id);
         player.write(packetbuilder1.toPacket());
@@ -2280,26 +2178,25 @@ public class ActionSender {
      * @param model The model id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendInterfaceModel(int id, int zoom, int model) {
-        PacketBuilder bldr = new PacketBuilder(246);
+    public ActionSender sendInterfaceModel(final int id, final int zoom, final int model) {
+        final PacketBuilder bldr = new PacketBuilder(246);
         bldr.putLEShort(id).putShort(zoom).putShort(model);
         player.write(bldr.toPacket());
         return this;
     }
 
-    public ActionSender sendReplaceObject(Location location, int NewObjectID,
-                                          int Face, int ObjectType) {
-        PacketBuilder playerCoord = new PacketBuilder(85);
+    public ActionSender sendReplaceObject(final Location location, final int NewObjectID, final int Face, final int ObjectType) {
+        final PacketBuilder playerCoord = new PacketBuilder(85);
         playerCoord.putByteC(location.getLocalY(player.getLastKnownRegion()));
         playerCoord.putByteC(location.getLocalX(player.getLastKnownRegion()));
         player.write(playerCoord.toPacket());
         // were did u add it well i did a major for loop but just to test
-        PacketBuilder object = new PacketBuilder(101);
+        final PacketBuilder object = new PacketBuilder(101);
         object.putByteC((byte) ((ObjectType << 2) + (Face & 3)));
         object.put((byte) 0);
         player.write(object.toPacket());
 
-        PacketBuilder object2 = new PacketBuilder(151);
+        final PacketBuilder object2 = new PacketBuilder(151);
         object2.putByteS((byte) 0);
         object2.putLEShort(NewObjectID);
         object2.putByteS((byte) ((ObjectType << 2) + (Face & 3)));
@@ -2314,62 +2211,60 @@ public class ActionSender {
 	 * create(objectX,objectY,0),NewObjectID,Face,ObjectType); }
 	 */
 
-    public ActionSender sendReplaceObject(int x, int y, int NewObjectID,
-                                          int Face, int ObjectType) {
-        sendReplaceObject(Location.create(x, y, 0), NewObjectID, Face,
-                ObjectType);
+    public ActionSender sendReplaceObject(final int x, final int y, final int NewObjectID, final int Face, final int ObjectType) {
+        sendReplaceObject(Location.create(x, y, 0), NewObjectID, Face, ObjectType);
         return this;
     }
 
     public void calculateBonus() {
         player.getBonus().reset();
-        Item items[] = player.getEquipment().toArray();
+        final Item[] items = player.getEquipment().toArray();
         player.cE.setWeaponPoison(0);
-        for (int i = 0; i < items.length; i++) {
-            try {
-                if (items[i] == null)
+        for(int i = 0; i < items.length; i++){
+            try{
+                if(items[i] == null)
                     continue;
 
-                if (i == Equipment.SLOT_ARROWS) {
-                    if (CombatAssistant.getCombatStyle(player.getEquipment()) == org.hyperion.rs2.model.combat.Constants.RANGEDWEPSTYPE) {
-                        if (player.cE.getWeaponPoison() != 2) {
-                            if (items[i].getDefinition().getName().contains("(p+"))
+                if(i == Equipment.SLOT_ARROWS){
+                    if(CombatAssistant.getCombatStyle(player.getEquipment()) == org.hyperion.rs2.model.combat.Constants.RANGEDWEPSTYPE){
+                        if(player.cE.getWeaponPoison() != 2){
+                            if(items[i].getDefinition().getName().contains("(p+"))
                                 player.cE.setWeaponPoison(2);
-                            else if (items[i].getDefinition().getName().contains("(p)"))
+                            else if(items[i].getDefinition().getName().contains("(p)"))
                                 player.cE.setWeaponPoison(1);
                         }
                     }
-                } else {
-                    if (player.cE.getWeaponPoison() != 2) {
-                        if (items[i].getDefinition().getName().contains("(p+"))
+                }else{
+                    if(player.cE.getWeaponPoison() != 2){
+                        if(items[i].getDefinition().getName().contains("(p+"))
                             player.cE.setWeaponPoison(2);
-                        else if (items[i].getDefinition().getName().contains("(p)"))
+                        else if(items[i].getDefinition().getName().contains("(p)"))
                             player.cE.setWeaponPoison(1);
                     }
                 }
 
-                int[] bonus = items[i].getDefinition().getBonus();
-                for (int k = 0; k < EquipmentStats.SIZE; k++) {
+                final int[] bonus = items[i].getDefinition().getBonus();
+                for(int k = 0; k < EquipmentStats.SIZE; k++){
                     player.getBonus().add(k, bonus[k]);
                 }
-            } catch (Exception e) {
+            }catch(final Exception e){
                 System.out.println("Exception with item: " + items[i].getId());
                 e.printStackTrace();
             }
         }
-        for (int i = 0; i < EquipmentStats.SIZE; i++) {
-            String text;
+        for(int i = 0; i < EquipmentStats.SIZE; i++){
+            final String text;
             int offset = 0;
-            int bonus = player.getBonus().get(i);
-            if (bonus >= 0) {
+            final int bonus = player.getBonus().get(i);
+            if(bonus >= 0){
                 text = Constants.BONUS_NAME[i] + ": +" + bonus;
-            } else {
+            }else{
                 text = Constants.BONUS_NAME[i] + ": " + bonus;
             }
-            if (i >= 10) {
+            if(i >= 10){
                 offset = 1;
             }
-            int interfaceid = 1675 + i + offset;
+            final int interfaceid = 1675 + i + offset;
             sendString(interfaceid, text);
         }
     }
@@ -2395,15 +2290,15 @@ public class ActionSender {
 	 * }
 	 */
 
-    public void sendCreateObject(int id, int type, int face, Location location) {
+    public void sendCreateObject(final int id, final int type, final int face, final Location location) {
         sendReplaceObject(location, id, face, type);
     }
 
-    public void sendCreateObject(int x, int y, int id, int type, int face) {
+    public void sendCreateObject(final int x, final int y, final int id, final int type, final int face) {
         sendReplaceObject(x, y, id, face, type);
     }
 
-    public void sendDestroyObject(int type, int face, Location location) {
+    public void sendDestroyObject(final int type, final int face, final Location location) {
         sendReplaceObject(location, 6951, face, type);
     }
 

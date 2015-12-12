@@ -10,8 +10,8 @@ public class WeaponAnimManager2 {
     /**
      * @return the walking animation for that weapon
      */
-    public static int getWalkAnimation(int weapon) {
-        switch(weapon) {
+    public static int getWalkAnimation(final int weapon) {
+        switch(weapon){
             case 15241:
                 return 12154;
             case 6528:
@@ -75,7 +75,7 @@ public class WeaponAnimManager2 {
             case 4734:
                 return 2076;
             case 4153:
-	    case 17646:
+            case 17646:
                 return 1663;
             case 4718:
             case 4886:
@@ -107,8 +107,8 @@ public class WeaponAnimManager2 {
     /**
      * @return the standing animation for that weapon
      */
-    public static int getStandAnimation(int weapon) {
-        switch(weapon) {
+    public static int getStandAnimation(final int weapon) {
+        switch(weapon){
             case 15241:
                 return 12155;
             case 837:
@@ -201,8 +201,8 @@ public class WeaponAnimManager2 {
     /**
      * @return the runing animation for that weapon
      */
-    public static int getRunAnimation(int weapon) {
-        switch(weapon) {
+    public static int getRunAnimation(final int weapon) {
+        switch(weapon){
             case 15241:
                 return 12154;
             case 837:
@@ -262,8 +262,8 @@ public class WeaponAnimManager2 {
     /**
      * @return the attacking animation for that weapon
      */
-    public static int getAttackAnimation(int weapon, int type) {
-        switch(weapon) {
+    public static int getAttackAnimation(final int weapon, final int type) {
+        switch(weapon){
             case 15241:
                 return 12153;
             case 16955://rapiers
@@ -409,8 +409,8 @@ public class WeaponAnimManager2 {
                 return 7041;
             case 10887:
                 return 5865;
-	    /*if (type == 2 || type == 1)
-			return 7041;
+        /*if (type == 2 || type == 1)
+            return 7041;
 		if (type == 3)
 			return 7048;
 		if (type == 4)
@@ -429,13 +429,13 @@ public class WeaponAnimManager2 {
     /**
      * @return the defend animation for that weapon
      */
-    public static int getDefendAnimation(int weapon, int shield) {
+    public static int getDefendAnimation(final int weapon, final int shield) {
         if(shield >= 8844 && shield <= 8850)
             return 4177;
-        if(shield != - 1) {
+        if(shield != -1){
             return 1156;
         }
-        switch(weapon) {
+        switch(weapon){
             case 15486://staff of light
                 return 12806;
             case 15241:
@@ -493,8 +493,8 @@ public class WeaponAnimManager2 {
      * @param s2 the name of the weapon being equiped
      * @return the speed of the weapon
      */
-    public static int getSpeed(String s2, int weaponId) {//this method was written in a certain way order is quite important!
-        switch(weaponId) {
+    public static int getSpeed(final String s2, final int weaponId) {//this method was written in a certain way order is quite important!
+        switch(weaponId){
             case 15241:
                 return 5400;
             case 18353:
@@ -512,7 +512,7 @@ public class WeaponAnimManager2 {
             case 19784:
                 return 2400;
         }
-        String s = s2.toLowerCase();
+        final String s = s2.toLowerCase();
         if(s.startsWith("unarmed"))
             return 3000;
         else if(s.contains("korasi"))
@@ -529,12 +529,12 @@ public class WeaponAnimManager2 {
             return 3600;
         else if(s.startsWith("karil"))
             return 2400;
-        else if(s.contains("staff")) {
+        else if(s.contains("staff")){
             if(s.contains("zamarok") || s.contains("guthix") || s.contains("saradomian") || s.contains("slayer") || s.contains("ancient"))
                 return 2400;
             else
                 return 3000;
-        } else if(s.contains("bow")) {
+        }else if(s.contains("bow")){
             if(s.contains("composite") || s.equals("seercull"))
                 return 3000;
             else if(s.contains("ogre"))
@@ -543,12 +543,12 @@ public class WeaponAnimManager2 {
                 return 5400;
             else if(s.contains("long") || s.contains("cross"))
                 return 3600;
-            else if(s.contains("short") || s.contains("hunt") || s.contains("karils") || s.contains("sword")) {
+            else if(s.contains("short") || s.contains("hunt") || s.contains("karils") || s.contains("sword")){
                 return 1800;
             }
 
             return 3000;
-        } else if(s.contains("dagger"))
+        }else if(s.contains("dagger"))
             return 2400;
         else if(s.contains("godsword"))
             return 3600;

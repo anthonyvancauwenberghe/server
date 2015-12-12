@@ -5,20 +5,20 @@ import org.hyperion.rs2.saving.instant.SaveString;
 
 public class SaveSalt extends SaveString {
 
-	public SaveSalt(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+    public SaveSalt(final String name) {
+        super(name);
+        // TODO Auto-generated constructor stub
+    }
 
-	@Override
-	public void setValue(Player player, String value) {
-		player.getPassword().setSalt(value);
-		//System.out.println("Setting salt: " + value);
-	}
+    @Override
+    public void setValue(final Player player, final String value) {
+        player.getPassword().setSalt(value);
+        //System.out.println("Setting salt: " + value);
+    }
 
-	@Override
-	public String getValue(Player player) {
-		return player.getPassword().getSalt();
-	}
+    @Override
+    public String getValue(final Player player) {
+        return player.getPassword().getSalt();
+    }
 
 }

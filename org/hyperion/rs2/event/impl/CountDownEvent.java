@@ -1,9 +1,10 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.Events;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Time;
 
 import java.io.IOException;
@@ -16,30 +17,30 @@ public class CountDownEvent extends Event {
     final Location location;
     final String message;
     final boolean safe;
-	
-	public CountDownEvent(ServerMinigame.CountDownEventBuilder builder) {
-		super(1000);
+    private int counter = 120; //2 minutes
+
+    public CountDownEvent(final ServerMinigame.CountDownEventBuilder builder) {
+        super(1000);
         this.name = builder.name;
         this.command = builder.command;
         this.location = builder.location;
         this.run = builder.run;
         this.message = builder.message;
         this.safe = builder.safe;
-	}
-	
-	private int counter = 120; //2 minutes
-	public void execute() {
-		if(counter == 120) {
-			Events.fireNewEvent(name, safe, counter, location);
+    }
+
+    public void execute() {
+        if(counter == 120){
+            Events.fireNewEvent(name, safe, counter, location);
             World.getWorld().getPlayers().stream().forEach(p -> p.sendServerMessage(name + " event is starting in 2 minutes!"));
-		}
-		if(--counter == 0) {
-			run.run();
+        }
+        if(--counter == 0){
+            run.run();
             World.getWorld().submit(new ResetEvent());
             this.stop();
-		}
-        if(counter%10 == 0) {
-            for(NPC npc : World.getWorld().getNPCs()) {
+        }
+        if(counter % 10 == 0){
+            for(final NPC npc : World.getWorld().getNPCs()){
                 if(npc != null)
                     npc.forceMessage(name + " event in " + counter + " seconds! Go to " + command + " for " + message + "!");
 
@@ -47,7 +48,7 @@ public class CountDownEvent extends Event {
         }
 
 
-	}
+    }
 
     private static final class ResetEvent extends Event {
         public ResetEvent() {

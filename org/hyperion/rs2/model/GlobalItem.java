@@ -1,43 +1,39 @@
 package org.hyperion.rs2.model;
 
 public class GlobalItem {
-	private Location location;
+    public Player owner;
+    public long createdTime = System.currentTimeMillis();
+    public boolean itemHidden = true;
+    private Location location;
+    private Item item;
 
-	private Item item;
+    public GlobalItem(final Player player, final int x, final int y, final int z, final Item item) {
+        location = Location.create(x, y, z);
+        this.item = item;
+        this.owner = player;
+    }
 
-	public GlobalItem(Player player, int x, int y, int z, Item item) {
-		location = Location.create(x, y, z);
-		this.item = item;
-		this.owner = player;
-	}
+    public GlobalItem(final Player player, final Location loc, final Item item) {
+        location = loc;
+        this.item = item;
+        this.owner = player;
+    }
 
-	public void destroy() {
-		owner = null;
-		item = null;
-		location = null;
-	}
+    public void destroy() {
+        owner = null;
+        item = null;
+        location = null;
+    }
 
-	public GlobalItem(Player player, Location loc, Item item) {
-		location = loc;
-		this.item = item;
-		this.owner = player;
-	}
+    public Location getLocation() {
+        return location;
+    }
 
-	public Player owner;
+    public Item getItem() {
+        return item;
+    }
 
-	public Location getLocation() {
-		return location;
-	}
-
-	public Item getItem() {
-		return item;
-	}
-
-	public void setNewItem(Item item) {
-		this.item = item;
-	}
-
-	public long createdTime = System.currentTimeMillis();
-
-	public boolean itemHidden = true;
+    public void setNewItem(final Item item) {
+        this.item = item;
+    }
 }

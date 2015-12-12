@@ -13,36 +13,34 @@ public class BankContainerListener implements ContainerListener {
 
     private final Player player;
 
-    public BankContainerListener(Player player)
-    {
+    public BankContainerListener(final Player player) {
         this.player = Objects.requireNonNull(player);
     }
 
     @Override
-    public void itemChanged(Container c, int slot) {
-        TabbedContainer container = (TabbedContainer) c;
-        int tab = player.getBankField().getTabForSlot(slot);
-        if (slot > Byte.MAX_VALUE) {
+    public void itemChanged(final Container c, final int slot) {
+        final TabbedContainer container = (TabbedContainer) c;
+        final int tab = player.getBankField().getTabForSlot(slot);
+        if(slot > Byte.MAX_VALUE){
             itemsChanged(container);
-        } else {
-            player.getActionSender().sendUpdateItem(Bank.BANK_INVENTORY_INTERFACE + tab, slot
-                    - player.getBankField().getOffset(tab), container.get(slot));
+        }else{
+            player.getActionSender().sendUpdateItem(Bank.BANK_INVENTORY_INTERFACE + tab, slot - player.getBankField().getOffset(tab), container.get(slot));
         }
     }
 
     @Override
-    public void itemsChanged(Container container, int[] slots) {
+    public void itemsChanged(final Container container, final int[] slots) {
 
     }
 
     @Override
-    public void itemsChanged(Container container) {
-        if (!player.getBankField().isSearching()) {
+    public void itemsChanged(final Container container) {
+        if(!player.getBankField().isSearching()){
             int tab = 0;
-            for (; tab < player.getBankField().getTabAmount(); tab++) {
-                int from = player.getBankField().getOffset(tab);
-                int to = from + player.getBankField().getTabAmounts()[tab];
-                Item[] items = Arrays.copyOf(Arrays.copyOfRange(player.getBank().toArray(), from, to), Bank.SIZE);
+            for(; tab < player.getBankField().getTabAmount(); tab++){
+                final int from = player.getBankField().getOffset(tab);
+                final int to = from + player.getBankField().getTabAmounts()[tab];
+                final Item[] items = Arrays.copyOf(Arrays.copyOfRange(player.getBank().toArray(), from, to), Bank.SIZE);
                 player.getActionSender().sendUpdateItems(Bank.BANK_INVENTORY_INTERFACE + tab, items);
             }
         }

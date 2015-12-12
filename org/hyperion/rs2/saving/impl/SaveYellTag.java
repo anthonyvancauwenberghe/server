@@ -9,19 +9,19 @@ import org.hyperion.rs2.util.TextUtils;
  */
 public class SaveYellTag extends SaveString {
 
-    public SaveYellTag(String name) {
+    public SaveYellTag(final String name) {
         super(name);
     }
 
     @Override
-    public void setValue(Player player, String value) {
+    public void setValue(final Player player, final String value) {
         if(value != null && !value.isEmpty())
             player.getYelling().setYellTitle(value);
     }
 
     @Override
-    public String getValue(Player player) {
-        String tag = player.getYelling().getTag();
+    public String getValue(final Player player) {
+        final String tag = player.getYelling().getTag();
         return TextUtils.titleCase(tag);
     }
 }

@@ -2,14 +2,12 @@ package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.rs2.model.Player;
 
-import java.util.Comparator;
-
 /**
  * Created by Scott Perretta on 4/12/2015.
  */
 public class Participant implements Comparable<Participant> {
 
-    private Player player;
+    private final Player player;
 
     private int deaths;
 
@@ -17,7 +15,7 @@ public class Participant implements Comparable<Participant> {
 
     private int bountyReward;
 
-    public Participant(Player player, int deaths, int kills) {
+    public Participant(final Player player, final int deaths, final int kills) {
         this.player = player;
         this.deaths = deaths;
         this.kills = kills;
@@ -32,7 +30,7 @@ public class Participant implements Comparable<Participant> {
         return deaths;
     }
 
-    public void addDeaths(int amount) {
+    public void addDeaths(final int amount) {
         deaths += amount;
     }
 
@@ -40,11 +38,11 @@ public class Participant implements Comparable<Participant> {
         return kills;
     }
 
-    public void addKills(int amount) {
+    public void addKills(final int amount) {
         kills += amount;
     }
 
-    public void increaseBountyReward(int amount) {
+    public void increaseBountyReward(final int amount) {
         bountyReward += amount;
     }
 
@@ -53,7 +51,7 @@ public class Participant implements Comparable<Participant> {
     }
 
     @Override
-    public int compareTo(Participant p) {
+    public int compareTo(final Participant p) {
         return this.getKills() < p.getKills() ? -1 : this.getKills() > p.getKills() ? 1 : 0;
     }
 

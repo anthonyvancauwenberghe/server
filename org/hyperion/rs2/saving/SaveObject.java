@@ -11,48 +11,47 @@ import java.io.IOException;
  */
 public abstract class SaveObject {
 
-	/**
-	 * The name identifier of the SaveObject.
-	 */
-	private String name;
+    /**
+     * The name identifier of the SaveObject.
+     */
+    private final String name;
 
-	/**
-	 * Constructs a new SaveObject with the specified name.
-	 *
-	 * @param name
-	 */
-	public SaveObject(String name) {
-		this.name = name;
-	}
+    /**
+     * Constructs a new SaveObject with the specified name.
+     *
+     * @param name
+     */
+    public SaveObject(final String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Gets the name of the SaveObject.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Gets the name of the SaveObject.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
 
-	/**
-	 * Saves the SaveObject to the Player's file.
-	 *
-	 * @param player
-	 * @param writer
-	 * @throws IOException
-	 */
-	public abstract boolean save(Player player, BufferedWriter writer) throws IOException;
+    /**
+     * Saves the SaveObject to the Player's file.
+     *
+     * @param player
+     * @param writer
+     * @throws IOException
+     */
+    public abstract boolean save(Player player, BufferedWriter writer) throws IOException;
 
-	/**
-	 * Loads a SaveObject from the Player's file.
-	 *
-	 * @param player
-	 * @param values
-	 * @param reader
-	 * @throws IOException
-	 */
-	public abstract void load(Player player, String values, BufferedReader reader)
-			throws IOException;
+    /**
+     * Loads a SaveObject from the Player's file.
+     *
+     * @param player
+     * @param values
+     * @param reader
+     * @throws IOException
+     */
+    public abstract void load(Player player, String values, BufferedReader reader) throws IOException;
 
 }

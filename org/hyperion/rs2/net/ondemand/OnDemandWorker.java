@@ -15,45 +15,45 @@ import java.util.concurrent.BlockingQueue;
  */
 public class OnDemandWorker implements Runnable {
 
-	/**
-	 * The cache instance.
-	 */
-	private Cache cache;
+    /**
+     * The cache instance.
+     */
+    private final Cache cache;
 
-	/**
-	 * The array of request queues.
-	 */
-	private BlockingQueue<OnDemandRequest>[] queues;
+    /**
+     * The array of request queues.
+     */
+    private final BlockingQueue<OnDemandRequest>[] queues;
 
-	/**
-	 * Creates the ondemand worker.
-	 *
-	 * @param queues The array of request queues.
-	 * @throws FileNotFoundException if the cache could not be found.
-	 * @throws InvalidCacheException if the cache is invalid.
-	 */
-	public OnDemandWorker(BlockingQueue<OnDemandRequest>[] queues) throws FileNotFoundException, InvalidCacheException {
-		this.cache = new Cache(new File("./data/cache/"));
-		this.queues = queues;
-	}
+    /**
+     * Creates the ondemand worker.
+     *
+     * @param queues The array of request queues.
+     * @throws FileNotFoundException if the cache could not be found.
+     * @throws InvalidCacheException if the cache is invalid.
+     */
+    public OnDemandWorker(final BlockingQueue<OnDemandRequest>[] queues) throws FileNotFoundException, InvalidCacheException {
+        this.cache = new Cache(new File("./data/cache/"));
+        this.queues = queues;
+    }
 
-	@Override
-	public void run() {
-		while(true) {
-			for(BlockingQueue<OnDemandRequest> activeQueue : queues) {
-				OnDemandRequest request;
-				while((request = activeQueue.poll()) != null) {
-					request.service(cache);
-				}
-			}
-			synchronized(OnDemandPool.getOnDemandPool()) {
-				try {
-					OnDemandPool.getOnDemandPool().wait();
-				} catch(InterruptedException e) {
-					continue;
-				}
-			}
-		}
-	}
+    @Override
+    public void run() {
+        while(true){
+            for(final BlockingQueue<OnDemandRequest> activeQueue : queues){
+                OnDemandRequest request;
+                while((request = activeQueue.poll()) != null){
+                    request.service(cache);
+                }
+            }
+            synchronized(OnDemandPool.getOnDemandPool()){
+                try{
+                    OnDemandPool.getOnDemandPool().wait();
+                }catch(final InterruptedException e){
+                    continue;
+                }
+            }
+        }
+    }
 
 }

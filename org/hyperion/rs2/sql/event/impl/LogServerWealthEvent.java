@@ -13,7 +13,7 @@ public class LogServerWealthEvent extends SQLEvent {
         super(DELAY);
     }
 
-    public void execute(SQLConnection con) throws SQLException {
+    public void execute(final SQLConnection con) throws SQLException {
         con.query("INSERT INTO serverwealth (value,pkvalue,activevalue,activepkvalue) \n" +
                 "VALUES ((\n" +
                 "SELECT SUM(value) FROM accountvalues WHERE value>100 AND name<>'thomas' AND name<>'rwt bank' ),\n" +

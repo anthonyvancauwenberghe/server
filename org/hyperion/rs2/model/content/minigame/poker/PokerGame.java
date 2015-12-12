@@ -4,7 +4,6 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.minigame.poker.card.Deck;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

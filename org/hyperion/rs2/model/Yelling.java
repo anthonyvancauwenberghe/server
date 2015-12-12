@@ -5,102 +5,77 @@ import org.hyperion.rs2.commands.CommandHandler;
 
 public class Yelling {
 
-	public static final String[] COLOUR_SUFFICES = {
-			"369", "mon", "red", "gre", "blu", "yel", "cya", "mag", "whi", "bla", "lre", "dre", "dbl", "or1", "or2", "or3", "gr1", "gr2", "gr3", "str", "end"
-	};
+    public static final String[] COLOUR_SUFFICES = {"369", "mon", "red", "gre", "blu", "yel", "cya", "mag", "whi",
+            "bla", "lre", "dre", "dbl", "or1", "or2", "or3", "gr1", "gr2", "gr3", "str", "end"};
+    private static final String UNAVAILABLE_TAGS[] = {"Owner", "Mod", "Admin", "Staff", "Manager", "Creator",
+            "Distributor", "Sell", "Buy", "Spawn", "Sucks", "Hate", "Flame", "Bitch", "Nigga", "Hoe", "Whore", "Scam",
+            "Shit", "Demote", "Trusted", "Fuck", "Slut", "Kappa"
 
-	private String yellTitle = "";
+    };
 
-	private boolean yellEnabled = true;
+    static {
+        CommandHandler.submit(new Command("testcolors", Rank.PLAYER) {
 
-	private boolean yellColoursEnabled = true;
+            @Override
+            public boolean execute(final Player player, final String input) throws Exception {
+                for(final String suffix : COLOUR_SUFFICES){
+                    player.getActionSender().sendMessage("@" + suffix + "@[Owner][Graham]:Testing message :" + suffix);
+                }
+                return false;
+            }
 
-	private long yellTimer = 0;
+        });
+    }
 
-	public void setYellTitle(String s) {
-		yellTitle = s;
-	}
-	private static final String UNAVAILABLE_TAGS[] = {
-			"Owner",
-			"Mod",
-			"Admin",
-			"Staff",
-			"Manager",
-			"Creator",
-			"Distributor",
-			"Sell",
-			"Buy",
-			"Spawn",
-			"Sucks",
-			"Hate",
-			"Flame",
-			"Bitch",
-			"Nigga",
-			"Hoe",
-			"Whore",
-			"Scam",
-			"Shit",
-			"Demote",
-			"Trusted",
-			"Fuck",
-			"Slut",
-			"Kappa"
+    private String yellTitle = "";
+    private boolean yellEnabled = true;
+    private boolean yellColoursEnabled = true;
+    private long yellTimer = 0;
 
-	};
-	public static String isValidTitle(String s) {
-		StringBuilder errorMessage = new StringBuilder("").append("You cannot have ");
-		if(s.contains("@"))
-			errorMessage.append("@s, ");
-		for(String wrong : UNAVAILABLE_TAGS) {
-			if(s.toLowerCase().contains(wrong.toLowerCase()))
-				errorMessage.append(wrong).append(", ");
-		}
-		if(errorMessage.toString().length() > 18) {
-			errorMessage.append(" in your tag");
-			return errorMessage.toString();
-		} else
-			return "";
-	}
-	
-	public String getTag() {
-		return yellTitle;
-	}
-	public void updateYellTimer() {
-		yellTimer = System.currentTimeMillis();
-	}
+    public static String isValidTitle(final String s) {
+        final StringBuilder errorMessage = new StringBuilder("").append("You cannot have ");
+        if(s.contains("@"))
+            errorMessage.append("@s, ");
+        for(final String wrong : UNAVAILABLE_TAGS){
+            if(s.toLowerCase().contains(wrong.toLowerCase()))
+                errorMessage.append(wrong).append(", ");
+        }
+        if(errorMessage.toString().length() > 18){
+            errorMessage.append(" in your tag");
+            return errorMessage.toString();
+        }else
+            return "";
+    }
 
-	public void setYellEnabled(boolean b) {
-		yellEnabled = b;
-	}
+    public void setYellTitle(final String s) {
+        yellTitle = s;
+    }
 
-	public void setYellColoursEnabled(boolean b) {
-		yellColoursEnabled = b;
-	}
+    public String getTag() {
+        return yellTitle;
+    }
 
-	public boolean isYellEnabled() {
-		return yellEnabled;
-	}
+    public void updateYellTimer() {
+        yellTimer = System.currentTimeMillis();
+    }
 
-	public boolean isYellColoursEnabled() {
-		return yellColoursEnabled;
-	}
+    public boolean isYellEnabled() {
+        return yellEnabled;
+    }
 
-	public long getYellTimer() {
-		return yellTimer;
-	}
+    public void setYellEnabled(final boolean b) {
+        yellEnabled = b;
+    }
 
-	static {
-		CommandHandler.submit(new Command("testcolors", Rank.PLAYER) {
+    public boolean isYellColoursEnabled() {
+        return yellColoursEnabled;
+    }
 
-			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				for(String suffix : COLOUR_SUFFICES) {
-					player.getActionSender().sendMessage("@" + suffix + "@[Owner][Graham]:Testing message :" + suffix);
-				}
-				return false;
-			}
+    public void setYellColoursEnabled(final boolean b) {
+        yellColoursEnabled = b;
+    }
 
-		});
-	}
+    public long getYellTimer() {
+        return yellTimer;
+    }
 }

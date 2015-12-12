@@ -16,27 +16,27 @@ public class LoadAllPolls extends SQLRequest {
     }
 
     @Override
-    public void process(SQLConnection sql) throws SQLException {
-        if (!sql.isConnected()) {
+    public void process(final SQLConnection sql) throws SQLException {
+        if(!sql.isConnected()){
             System.out.println("Ingame polls are not loaded.");
             return;
         }
 
         ResultSet rs = null;
-        String query = "SELECT * FROM `polls` WHERE `active` = 1";
-        try {
+        final String query = "SELECT * FROM `polls` WHERE `active` = 1";
+        try{
             rs = sql.query(query);
             Poll.getPolls().clear();
-            while (rs.next()) {
+            while(rs.next()){
                 new Poll(rs.getInt("index"), rs.getString("question"), rs.getString("explanation"), rs.getTimestamp("endDate"), rs.getBoolean("canChange"), true);
             }
-        } catch (Exception ex) {
+        }catch(final Exception ex){
             ex.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
+        }finally{
+            if(rs != null){
+                try{
                     rs.close();
-                } catch (SQLException e) {
+                }catch(final SQLException e){
                     e.printStackTrace();
                 }
             }

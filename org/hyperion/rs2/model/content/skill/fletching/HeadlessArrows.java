@@ -9,8 +9,8 @@ import org.hyperion.rs2.model.content.ContentEntity;
  */
 public class HeadlessArrows extends Fletching {
 
-    public static boolean createHeadlessArrows(Player client, int item) {
-        if(client.isBusy()) {
+    public static boolean createHeadlessArrows(final Player client, final int item) {
+        if(client.isBusy()){
             return true;
         }
         if(client.getRandomEvent().skillAction())
@@ -18,8 +18,8 @@ public class HeadlessArrows extends Fletching {
 
         int amount = ContentEntity.getItemAmount(client, item);
 
-        if(ContentEntity.freeSlots(client) >= 1) {
-            int am2 = ContentEntity.getItemAmount(client, 314);
+        if(ContentEntity.freeSlots(client) >= 1){
+            final int am2 = ContentEntity.getItemAmount(client, 314);
             if(am2 < amount)
                 amount = am2;
             client.getAchievementTracker().itemSkilled(Skills.FLETCHING, 53, amount > 15 ? 15 : amount);
@@ -28,9 +28,8 @@ public class HeadlessArrows extends Fletching {
             ContentEntity.addItem(client, 53, amount > 15 ? 15 : amount);
             ContentEntity.addSkillXP(client, 15 * EXPMULTIPLIER, 9);
             ContentEntity.sendMessage(client, "You make some headless arrows.");
-        } else {
-            ContentEntity.sendMessage(client,
-                    "You have no space in your inventory");
+        }else{
+            ContentEntity.sendMessage(client, "You have no space in your inventory");
         }
         return true;
     }

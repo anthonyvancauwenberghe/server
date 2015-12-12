@@ -12,35 +12,35 @@ import org.hyperion.rs2.task.Task;
  */
 public class PlayerResetTask implements Task {
 
-	/**
-	 * The player to reset.
-	 */
-	private Player player;
+    /**
+     * The player to reset.
+     */
+    private final Player player;
 
-	/**
-	 * Creates a reset task.
-	 *
-	 * @param player The player to reset.
-	 */
-	public PlayerResetTask(Player player) {
-		this.player = player;
-	}
+    /**
+     * Creates a reset task.
+     *
+     * @param player The player to reset.
+     */
+    public PlayerResetTask(final Player player) {
+        this.player = player;
+    }
 
-	@Override
-	public void execute(GameEngine context) {
-		if(player.getUpdateFlags().get(UpdateFlag.HIT_3)) {
-			player.getUpdateFlags().reset();
-			player.getDamage().setHit1(player.getDamage().getHit3());
-			player.getUpdateFlags().flag(UpdateFlag.HIT);
-		} else
-			player.getUpdateFlags().reset();
-		player.setTeleporting(false);
-		//player.resetTeleportTarget();
-		player.setMapRegionChanging(false);
-		if(player.cE != null)
-			player.cE.isDoingAtk = false;
-		player.resetCachedUpdateBlock();
-		player.reset();
-	}
+    @Override
+    public void execute(final GameEngine context) {
+        if(player.getUpdateFlags().get(UpdateFlag.HIT_3)){
+            player.getUpdateFlags().reset();
+            player.getDamage().setHit1(player.getDamage().getHit3());
+            player.getUpdateFlags().flag(UpdateFlag.HIT);
+        }else
+            player.getUpdateFlags().reset();
+        player.setTeleporting(false);
+        //player.resetTeleportTarget();
+        player.setMapRegionChanging(false);
+        if(player.cE != null)
+            player.cE.isDoingAtk = false;
+        player.resetCachedUpdateBlock();
+        player.reset();
+    }
 
 }

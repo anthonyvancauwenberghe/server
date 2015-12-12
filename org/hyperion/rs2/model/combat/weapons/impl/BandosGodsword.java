@@ -4,20 +4,20 @@ import org.hyperion.rs2.model.Player;
 
 public class BandosGodsword extends Godsword {
 
-	public static final int WEAPON_ID = 11696;
+    public static final int WEAPON_ID = 11696;
 
-	public BandosGodsword(int id) {
-		super(id);
-	}
+    public BandosGodsword(final int id) {
+        super(id);
+    }
 
-	@Override
-	public boolean specialAttack(Player player) {
-		return false;
-	}
+    @Override
+    public boolean specialAttack(final Player player) {
+        return false;
+    }
 
-	@Override
-	public int getSpecialDrain(Player player) {
-		return 0;
-	}
+    @Override
+    public int getSpecialDrain(final Player player) {
+        return 0;
+    }
 
 }

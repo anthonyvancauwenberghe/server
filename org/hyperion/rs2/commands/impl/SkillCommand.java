@@ -7,26 +7,26 @@ import org.hyperion.rs2.model.Skills;
 
 public class SkillCommand extends Command {
 
-	public SkillCommand() {
-		super("skill", Rank.OWNER);
-	}
+    public SkillCommand() {
+        super("skill", Rank.OWNER);
+    }
 
-	@Override
-	public boolean execute(Player player, String input) {
-		input = filterInput(input);
-		String parts[] = input.split(" ");
-		try {
-			int skillId = Integer.parseInt(parts[0]);
-			int lvl = Integer.parseInt(parts[1]);
-			if(lvl > 20)
-				return false;
-			player.getSkills().setLevel(skillId, lvl);
-			String message = Skills.SKILL_NAME[skillId] + " level is temp boosted to " + lvl;
-			player.getActionSender().sendMessage(message);
-		} catch(Exception exception1) {
-			player.getActionSender().sendMessage("Syntax is ::skill [skill] [lvl].");
-		}
-		return true;
-	}
+    @Override
+    public boolean execute(final Player player, String input) {
+        input = filterInput(input);
+        final String[] parts = input.split(" ");
+        try{
+            final int skillId = Integer.parseInt(parts[0]);
+            final int lvl = Integer.parseInt(parts[1]);
+            if(lvl > 20)
+                return false;
+            player.getSkills().setLevel(skillId, lvl);
+            final String message = Skills.SKILL_NAME[skillId] + " level is temp boosted to " + lvl;
+            player.getActionSender().sendMessage(message);
+        }catch(final Exception exception1){
+            player.getActionSender().sendMessage("Syntax is ::skill [skill] [lvl].");
+        }
+        return true;
+    }
 
 }

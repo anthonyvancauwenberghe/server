@@ -7,11 +7,11 @@ import org.hyperion.rs2.model.challenge.ChallengeManager;
 
 public class ViewChallengesCommand extends Command {
 
-    public ViewChallengesCommand(){
+    public ViewChallengesCommand() {
         super("viewchallenges", Rank.PLAYER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         ChallengeManager.send(player, false);
         return true;
     }

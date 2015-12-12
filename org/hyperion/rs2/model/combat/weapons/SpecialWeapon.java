@@ -7,20 +7,20 @@ import org.hyperion.rs2.model.Player;
  */
 public interface SpecialWeapon {
 
-	/**
-	 * Makes the specified player do a special attack.
-	 *
-	 * @param attacker
-	 * @param opponent
-	 * @return true if succesful, false if not.
-	 */
-	public abstract boolean specialAttack(final Player player);
+    /**
+     * Makes the specified player do a special attack.
+     *
+     * @param attacker
+     * @param opponent
+     * @return true if succesful, false if not.
+     */
+    boolean specialAttack(final Player player);
 
-	/**
-	 * Gets the special drain for a Special weapon.
-	 *
-	 * @param player
-	 * @return
-	 */
-	public abstract int getSpecialDrain(final Player player);
+    /**
+     * Gets the special drain for a Special weapon.
+     *
+     * @param player
+     * @return
+     */
+    int getSpecialDrain(final Player player);
 }

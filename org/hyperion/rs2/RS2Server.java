@@ -17,84 +17,82 @@ import java.util.concurrent.ExecutionException;
  */
 public class RS2Server {
 
-	/**
-	 * The version.
-	 */
-	public static final int VERSION = Server.getConfig().getInteger("version");
+    /**
+     * The version.
+     */
+    public static final int VERSION = Server.getConfig().getInteger("version");
 
-	/**
-	 * The port to listen on.
-	 */
-	public static final int PORT = Server.getConfig().getInteger("port");
+    /**
+     * The port to listen on.
+     */
+    public static final int PORT = Server.getConfig().getInteger("port");
+    /**
+     * The <code>GameEngine</code> instance.
+     */
+    private static final GameEngine engine = new GameEngine();
+    /**
+     * The <code>IoAcceptor</code> instance.
+     */
+    private final IoAcceptor acceptor = new NioSocketAcceptor();
 
-	/**
-	 * The <code>IoAcceptor</code> instance.
-	 */
-	private final IoAcceptor acceptor = new NioSocketAcceptor();
+    /**
+     * Creates the server and the <code>GameEngine</code> and initializes the
+     * <code>World</code>.
+     *
+     * @throws IOException            if an I/O error occurs loading the world.
+     * @throws ClassNotFoundException if a class the world loads was not found.
+     * @throws IllegalAccessException if a class loaded by the world was not accessible.
+     * @throws InstantiationException if a class loaded by the world was not created.
+     */
+    public RS2Server() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        World.getWorld().init(engine);
+        acceptor.setHandler(new ConnectionHandler());
+        //acceptor.getFilterChain().addFirst("throttleFilter", new ConnectionThrottleFilter());
+    }
 
-	/**
-	 * The <code>GameEngine</code> instance.
-	 */
-	private static final GameEngine engine = new GameEngine();
+    /**
+     * Gets the <code>GameEngine</code>.
+     *
+     * @return The game engine.
+     */
+    public static GameEngine getEngine() {
+        return engine;
+    }
 
-	/**
-	 * Creates the server and the <code>GameEngine</code> and initializes the
-	 * <code>World</code>.
-	 *
-	 * @throws IOException            if an I/O error occurs loading the world.
-	 * @throws ClassNotFoundException if a class the world loads was not found.
-	 * @throws IllegalAccessException if a class loaded by the world was not accessible.
-	 * @throws InstantiationException if a class loaded by the world was not created.
-	 */
-	public RS2Server() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		World.getWorld().init(engine);
-		acceptor.setHandler(new ConnectionHandler());
-		//acceptor.getFilterChain().addFirst("throttleFilter", new ConnectionThrottleFilter());
-	}
+    /**
+     * Binds the server to the specified port.
+     *
+     * @param port The port to bind to.
+     * @return The server instance, for chaining.
+     * @throws IOException
+     */
+    public RS2Server bind(final int port) throws IOException {
+        //logger.info("Binding to port : " + port + "...");
+        acceptor.bind(new InetSocketAddress(port));
+        return this;
+    }
 
-	/**
-	 * Binds the server to the specified port.
-	 *
-	 * @param port The port to bind to.
-	 * @return The server instance, for chaining.
-	 * @throws IOException
-	 */
-	public RS2Server bind(int port) throws IOException {
-		//logger.info("Binding to port : " + port + "...");
-		acceptor.bind(new InetSocketAddress(port));
-		return this;
-	}
-
-	/**
-	 * Starts the <code>GameEngine</code>.
-	 *
-	 * @throws ExecutionException if an error occured during background loading.
-	 */
-	public void start() throws ExecutionException {
-		try {
-			//ScriptManager.getScriptManager().loadScripts(Constants.SCRIPTS_DIRECTORY);
-			if(World.getWorld().getBackgroundLoader().getPendingTaskAmount() > 0) {
-				//logger.info("Waiting for pending background loading tasks...");
-				World.getWorld().getBackgroundLoader().waitForPendingTasks();
-			}
-			World.getWorld().getBackgroundLoader().shutdown();
-			engine.start();
-			bind(PORT);
-			//logger.info("Ready");
-			System.out.println("--" + Server.NAME + " Loaded in " + (System.currentTimeMillis() - Uptime.SERVER_STARTUP) + "ms --");
-			//TextUtils.printItemNames();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Gets the <code>GameEngine</code>.
-	 *
-	 * @return The game engine.
-	 */
-	public static GameEngine getEngine() {
-		return engine;
-	}
+    /**
+     * Starts the <code>GameEngine</code>.
+     *
+     * @throws ExecutionException if an error occured during background loading.
+     */
+    public void start() throws ExecutionException {
+        try{
+            //ScriptManager.getScriptManager().loadScripts(Constants.SCRIPTS_DIRECTORY);
+            if(World.getWorld().getBackgroundLoader().getPendingTaskAmount() > 0){
+                //logger.info("Waiting for pending background loading tasks...");
+                World.getWorld().getBackgroundLoader().waitForPendingTasks();
+            }
+            World.getWorld().getBackgroundLoader().shutdown();
+            engine.start();
+            bind(PORT);
+            //logger.info("Ready");
+            System.out.println("--" + Server.NAME + " Loaded in " + (System.currentTimeMillis() - Uptime.SERVER_STARTUP) + "ms --");
+            //TextUtils.printItemNames();
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

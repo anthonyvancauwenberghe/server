@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -9,15 +7,18 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RemovePunishmentCommand extends Command {
 
     private static final String IP_REGEX = "\\d+\\.\\d+\\.\\d+\\.\\d+";
 
-    public RemovePunishmentCommand(){
+    public RemovePunishmentCommand() {
         super("removepunishment", Rank.DEVELOPER);
     }
 
-    public boolean execute(final Player player, final String input){
+    public boolean execute(final Player player, final String input) {
         final String target = filterInput(input).trim();
         final List<Punishment> punishments = new ArrayList<>();
         if(target.matches(IP_REGEX)){
@@ -27,7 +28,7 @@ public class RemovePunishmentCommand extends Command {
             try{
                 final int mac = Integer.parseInt(macStr);
                 punishments.addAll(PunishmentManager.getInstance().getByMac(mac));
-            }catch(Exception ex){
+            }catch(final Exception ex){
                 player.sendf("Invalid mac: " + macStr);
                 return false;
             }

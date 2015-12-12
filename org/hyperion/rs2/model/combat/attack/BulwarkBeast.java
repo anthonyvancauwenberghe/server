@@ -1,16 +1,27 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Damage;
+import org.hyperion.rs2.model.Graphic;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 
 public class BulwarkBeast implements Attack {
 
-    private long specialDelay;
-
     private static final int MAX_MELEE_DAMAGE = 65;
     private static final int MAX_QUAKE_DAMAGE = 30;
+    private long specialDelay;
+
+    public static void handleRecoil(final Player player, final int damage) {
+        if(damage > 2){
+            player.inflictDamage(new Damage.Hit((int) (damage * .34), Damage.HitType.NORMAL_DAMAGE, 0));
+            player.playGraphics(Graphic.create(2101));
+        }
+    }
 
     @Override
     public String getName() {
@@ -19,20 +30,13 @@ public class BulwarkBeast implements Attack {
 
     @Override
     public int[] npcIds() {
-        return new int[] {10106};
+        return new int[]{10106};
     }
 
-    public static void handleRecoil(Player player, int damage) {
-        if(damage > 2) {
-            player.inflictDamage(new Damage.Hit((int) (damage * .34), Damage.HitType.NORMAL_DAMAGE, 0));
-            player.playGraphics(Graphic.create(2101));
-        }
-    }
-
-    private void handleQuakeEffect(NPC npc) {
+    private void handleQuakeEffect(final NPC npc) {
         npc.forceMessage("GGUUUUUUUAAAAAAAAHHHHHHHH!");
         npc.cE.doAnim(13003);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)){
             int type = Combat.random(1) + 1;
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player, Combat.random(MAX_QUAKE_DAMAGE), type, MAX_QUAKE_DAMAGE), 2000, type);
             type = Combat.random(1) + 1;
@@ -43,28 +47,28 @@ public class BulwarkBeast implements Attack {
         }
     }
 
-    private void handleHealthEffect(NPC npc) {
+    private void handleHealthEffect(final NPC npc) {
         npc.forceMessage("YUUUUUMMMMMMM!");
         npc.cE.doAnim(13002);
-        int healthToAdd = Combat.random(25 * World.getWorld().getRegionManager().getLocalPlayers(npc).size()) + 25;
-        if(npc.health + healthToAdd > npc.maxHealth) {
+        final int healthToAdd = Combat.random(25 * World.getWorld().getRegionManager().getLocalPlayers(npc).size()) + 25;
+        if(npc.health + healthToAdd > npc.maxHealth){
             npc.health = npc.maxHealth;
-        } else {
+        }else{
             npc.health += healthToAdd;
         }
         npc.cE.doGfx(2544);
     }
 
     @Override
-    public int handleAttack(NPC n, CombatEntity attack) {
-        if(attack == null) {
+    public int handleAttack(final NPC n, final CombatEntity attack) {
+        if(attack == null){
             return 1;
-        } else if(n.cE.predictedAtk > System.currentTimeMillis()) {
+        }else if(n.cE.predictedAtk > System.currentTimeMillis()){
             return 6;
         }
-        if(specialDelay <= System.currentTimeMillis()) {
-            int special = Combat.random(1);
-            switch(special) {
+        if(specialDelay <= System.currentTimeMillis()){
+            final int special = Combat.random(1);
+            switch(special){
                 case 0:
                     handleHealthEffect(n);
                     break;
@@ -76,15 +80,15 @@ public class BulwarkBeast implements Attack {
             n.cE.predictedAtk = System.currentTimeMillis() + 3000;
             return 5;
         }
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
-        if (n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 2)) {
+        final int distance = attack.getEntity().getLocation().distance(n.getLocation());
+        if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 2)){
             n.getCombat().doAtkEmote();
             Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MELEE_DAMAGE), 0, MAX_MELEE_DAMAGE), 200, 0);
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;
             return 5;
-        } else if(distance <= 8) {
+        }else if(distance <= 8){
             return 0;
-        } else {
+        }else{
             return 1;
         }
     }

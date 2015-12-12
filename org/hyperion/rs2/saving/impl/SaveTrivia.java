@@ -6,23 +6,23 @@ import org.hyperion.rs2.saving.SaveBoolean;
 
 public class SaveTrivia extends SaveBoolean {
 
-	public SaveTrivia(String name) {
-		super(name);
-	}
+    public SaveTrivia(final String name) {
+        super(name);
+    }
 
-	@Override
-	public void setValue(Player player, boolean value) {
-		player.getTrivia().setEnabled(value);
-	}
+    @Override
+    public void setValue(final Player player, final boolean value) {
+        player.getTrivia().setEnabled(value);
+    }
 
-	@Override
-	public Boolean getValue(Player player) {
-		return player.getTrivia().isEnabled();
-	}
+    @Override
+    public Boolean getValue(final Player player) {
+        return player.getTrivia().isEnabled();
+    }
 
-	@Override
-	public boolean getDefaultValue() {
-		return TriviaSettings.DEFAULT_ENABLED;
-	}
+    @Override
+    public boolean getDefaultValue() {
+        return TriviaSettings.DEFAULT_ENABLED;
+    }
 
 }

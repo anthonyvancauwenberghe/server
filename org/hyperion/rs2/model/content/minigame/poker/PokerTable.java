@@ -20,7 +20,7 @@ public class PokerTable {
     public PokerGame game;
     private Map<Player, PokerInstance> players;
 
-    public PokerTable(int ante, int minChips, int maxChips) {
+    public PokerTable(final int ante, final int minChips, final int maxChips) {
         this.ante = ante;
         this.minChips = minChips;
         this.maxChips = maxChips;

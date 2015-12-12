@@ -6,7 +6,7 @@ public class StrLongObject {
 
     private long longValue;
 
-    public StrLongObject(String str, long integer) {
+    public StrLongObject(final String str, final long integer) {
         this.setStr(str);
         this.setLongValue(integer);
     }
@@ -15,7 +15,7 @@ public class StrLongObject {
         return str;
     }
 
-    public void setStr(String str) {
+    public void setStr(final String str) {
         this.str = str;
     }
 
@@ -23,7 +23,7 @@ public class StrLongObject {
         return longValue;
     }
 
-    public void setLongValue(long longValue) {
+    public void setLongValue(final long longValue) {
         this.longValue = longValue;
     }
 

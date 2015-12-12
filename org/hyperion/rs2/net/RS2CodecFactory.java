@@ -12,53 +12,48 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
  */
 public class RS2CodecFactory implements ProtocolCodecFactory {
 
-	/**
-	 * The login decoder.
-	 */
-	private static final RS2LoginDecoder LOGIN_DECODER = new RS2LoginDecoder();
+    /**
+     * The login codec factory.
+     */
+    public static final RS2CodecFactory LOGIN = new RS2CodecFactory(false);
+    /**
+     * The game codec factory.
+     */
+    public static final RS2CodecFactory GAME = new RS2CodecFactory(true);
+    /**
+     * The login decoder.
+     */
+    private static final RS2LoginDecoder LOGIN_DECODER = new RS2LoginDecoder();
+    /**
+     * The game decoder.
+     */
+    private static final RS2Decoder DECODER = new RS2Decoder();
+    /**
+     * The encoder.
+     */
+    private static final RS2Encoder ENCODER = new RS2Encoder();
+    /**
+     * Login complete flag.
+     */
+    private final boolean loginComplete;
 
-	/**
-	 * The game decoder.
-	 */
-	private static final RS2Decoder DECODER = new RS2Decoder();
+    /**
+     * Creates the codec factory.
+     *
+     * @param loginComplete Login complete flag.
+     */
+    private RS2CodecFactory(final boolean loginComplete) {
+        this.loginComplete = loginComplete;
+    }
 
-	/**
-	 * The encoder.
-	 */
-	private static final RS2Encoder ENCODER = new RS2Encoder();
+    @Override
+    public ProtocolDecoder getDecoder(final IoSession session) throws Exception {
+        return loginComplete ? DECODER : LOGIN_DECODER;
+    }
 
-	/**
-	 * The login codec factory.
-	 */
-	public static final RS2CodecFactory LOGIN = new RS2CodecFactory(false);
-
-	/**
-	 * The game codec factory.
-	 */
-	public static final RS2CodecFactory GAME = new RS2CodecFactory(true);
-
-	/**
-	 * Login complete flag.
-	 */
-	private boolean loginComplete;
-
-	/**
-	 * Creates the codec factory.
-	 *
-	 * @param loginComplete Login complete flag.
-	 */
-	private RS2CodecFactory(boolean loginComplete) {
-		this.loginComplete = loginComplete;
-	}
-
-	@Override
-	public ProtocolDecoder getDecoder(IoSession session) throws Exception {
-		return loginComplete ? DECODER : LOGIN_DECODER;
-	}
-
-	@Override
-	public ProtocolEncoder getEncoder(IoSession session) throws Exception {
-		return ENCODER;
-	}
+    @Override
+    public ProtocolEncoder getEncoder(final IoSession session) throws Exception {
+        return ENCODER;
+    }
 
 }

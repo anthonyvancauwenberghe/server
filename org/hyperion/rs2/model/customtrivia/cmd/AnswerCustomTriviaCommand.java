@@ -5,13 +5,13 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 
-public class AnswerCustomTriviaCommand extends Command{
+public class AnswerCustomTriviaCommand extends Command {
 
-    public AnswerCustomTriviaCommand(){
+    public AnswerCustomTriviaCommand() {
         super("answertrivia", Rank.PLAYER);
     }
 
-    public boolean execute(final Player player, final String input) throws Exception{
+    public boolean execute(final Player player, final String input) throws Exception {
         final String answer = filterInput(input).trim();
         if(answer.isEmpty())
             return false;

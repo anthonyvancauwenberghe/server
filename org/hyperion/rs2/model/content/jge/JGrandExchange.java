@@ -11,7 +11,14 @@ import org.hyperion.rs2.sql.MySQLConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -20,35 +27,39 @@ import java.util.stream.Stream;
  */
 public class JGrandExchange {
 
-    public static boolean enabled = true;
-
-    private static JGrandExchange instance;
-
+    public static final int DEFAULT_UNIT_PRICE = 1000;
     private static final Function<Entry, Object> ITEM_KEY = e -> e.itemId;
     private static final Function<Entry, Object> PLAYER_KEY = e -> e.playerName;
     private static final Function<Entry, Object> TYPE_KEY = e -> e.type;
-
-    public static final int DEFAULT_UNIT_PRICE = 1000;
-
+    public static boolean enabled = true;
+    private static JGrandExchange instance;
     private final MySQLConnection sql;
     private final Map<Object, List<Entry>> map;
 
-    public JGrandExchange(final MySQLConnection sql){
+    public JGrandExchange(final MySQLConnection sql) {
         this.sql = sql;
 
         map = new HashMap<>();
     }
 
-    public Stream<Entry> stream(){
-        return map.values().stream()
-                .flatMap(List::stream)
-                .distinct();
+    public static JGrandExchange getInstance() {
+        return instance;
     }
 
-    public boolean delete(final Entry entry){
+    public static boolean init(final MySQLConnection sql) {
+        ItemInfo.geBlacklist.load();
+        instance = new JGrandExchange(sql);
+        return instance.load();
+    }
+
+    public Stream<Entry> stream() {
+        return map.values().stream().flatMap(List::stream).distinct();
+    }
+
+    public boolean delete(final Entry entry) {
         try(final PreparedStatement delete = sql.prepare("DELETE FROM ge_entries WHERE playerName = ? AND slot = ?")){
             delete.setString(1, entry.playerName);
-            delete.setByte(2, (byte)entry.slot);
+            delete.setByte(2, (byte) entry.slot);
             if(delete.executeUpdate() != 1)
                 return false;
             final String progress = entry.progress.toSaveString();
@@ -58,8 +69,8 @@ public class JGrandExchange {
                 insert.setString(1, entry.date.toString());
                 insert.setString(2, entry.playerName);
                 insert.setString(3, entry.type.name());
-                insert.setByte(4, (byte)entry.slot);
-                insert.setShort(5, (short)entry.itemId);
+                insert.setByte(4, (byte) entry.slot);
+                insert.setShort(5, (short) entry.itemId);
                 insert.setInt(6, entry.itemQuantity);
                 insert.setInt(7, entry.unitPrice);
                 insert.setString(8, entry.currency.name());
@@ -67,19 +78,19 @@ public class JGrandExchange {
                 insert.setBoolean(10, entry.cancelled);
                 return insert.executeUpdate() == 1;
             }
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    public boolean insert(final Entry entry){
+    public boolean insert(final Entry entry) {
         try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims, cancelled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
             stmt.setString(1, entry.date.toString());
             stmt.setString(2, entry.playerName);
             stmt.setString(3, entry.type.name());
-            stmt.setByte(4, (byte)entry.slot);
-            stmt.setShort(5, (short)entry.itemId);
+            stmt.setByte(4, (byte) entry.slot);
+            stmt.setShort(5, (short) entry.itemId);
             stmt.setInt(6, entry.itemQuantity);
             stmt.setInt(7, entry.unitPrice);
             stmt.setString(8, entry.currency.name());
@@ -87,63 +98,63 @@ public class JGrandExchange {
             stmt.setString(10, entry.claims.toSaveString());
             stmt.setBoolean(11, entry.cancelled);
             return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    public boolean updateCancelAndClaims(final Entry entry){
+    public boolean updateCancelAndClaims(final Entry entry) {
         try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET cancelled = ?, claims = ? WHERE playerName = ? AND slot = ?")){
             stmt.setBoolean(1, entry.cancelled);
             stmt.setString(2, entry.claims.toSaveString());
             stmt.setString(3, entry.playerName);
-            stmt.setByte(4, (byte)entry.slot);
+            stmt.setByte(4, (byte) entry.slot);
             return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    public boolean updateProgressAndClaims(final Entry entry){
+    public boolean updateProgressAndClaims(final Entry entry) {
         try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET progress = ?, claims = ? WHERE playerName = ? AND slot = ?")){
             stmt.setString(1, entry.progress.toSaveString());
             stmt.setString(2, entry.claims.toSaveString());
             stmt.setString(3, entry.playerName);
-            stmt.setByte(4, (byte)entry.slot);
+            stmt.setByte(4, (byte) entry.slot);
             return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    public boolean updateProgress(final Entry entry){
+    public boolean updateProgress(final Entry entry) {
         try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET progress = ? WHERE playerName = ? AND slot = ?")){
             stmt.setString(1, entry.progress.toSaveString());
             stmt.setString(2, entry.playerName);
-            stmt.setByte(3, (byte)entry.slot);
+            stmt.setByte(3, (byte) entry.slot);
             return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    public boolean updateClaims(final Entry entry){
+    public boolean updateClaims(final Entry entry) {
         try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET claims = ? WHERE playerName = ? AND slot = ?")){
             stmt.setString(1, entry.claims.toSaveString());
             stmt.setString(2, entry.playerName);
-            stmt.setByte(3, (byte)entry.slot);
+            stmt.setByte(3, (byte) entry.slot);
             return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    public boolean load(){
+    public boolean load() {
         try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
             while(rs.next()){
                 final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
@@ -164,58 +175,55 @@ public class JGrandExchange {
                 add(entry);
             }
             return true;
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
             return false;
         }
     }
 
-    private void add(final Entry entry, final Function<Entry, Object> key){
+    private void add(final Entry entry, final Function<Entry, Object> key) {
         final Object k = key.apply(entry);
         map.putIfAbsent(k, new ArrayList<>());
         map.get(k).add(entry);
     }
 
-    private void remove(final Entry entry, final Function<Entry, Object> key){
+    private void remove(final Entry entry, final Function<Entry, Object> key) {
         final Object k = key.apply(entry);
         if(map.containsKey(k))
             map.get(k).remove(entry);
     }
 
-    public void add(final Entry entry){
+    public void add(final Entry entry) {
         add(entry, ITEM_KEY);
         add(entry, PLAYER_KEY);
         add(entry, TYPE_KEY);
     }
 
-    public void remove(final Entry entry){
+    public void remove(final Entry entry) {
         remove(entry, ITEM_KEY);
         remove(entry, PLAYER_KEY);
         remove(entry, TYPE_KEY);
     }
 
-    public void submit(final Entry submitEntry){
+    public void submit(final Entry submitEntry) {
         if(!enabled || submitEntry.cancelled || submitEntry.progress.completed() || submitEntry.progress.remainingQuantity() == 0)
             return;
-        final Optional<Entry> opt = stream(submitEntry.type.opposite())
-                .filter(e -> {
-                    if(e.cancelled || e.progress.completed() || e.progress.remainingQuantity() == 0 || e.itemId != submitEntry.itemId)
-                        return false;
-                    if(e.type != submitEntry.type.opposite())
-                        return false;
-                    if(submitEntry.type == Entry.Type.BUYING && e.unitPrice > submitEntry.unitPrice)
-                        return false;
-                    if(submitEntry.type == Entry.Type.SELLING && e.unitPrice < submitEntry.unitPrice)
-                        return false;
-                    if(e.playerName.equalsIgnoreCase(submitEntry.playerName))
-                        return false;
-                    if(e.currency != submitEntry.currency)
-                        return false;
-                    //maybe some other criteria
-                    return true;
-                })
-                .sorted(Comparator.comparingInt(e -> e.unitPrice))
-                .min(Comparator.comparing(e -> e.date));
+        final Optional<Entry> opt = stream(submitEntry.type.opposite()).filter(e -> {
+            if(e.cancelled || e.progress.completed() || e.progress.remainingQuantity() == 0 || e.itemId != submitEntry.itemId)
+                return false;
+            if(e.type != submitEntry.type.opposite())
+                return false;
+            if(submitEntry.type == Entry.Type.BUYING && e.unitPrice > submitEntry.unitPrice)
+                return false;
+            if(submitEntry.type == Entry.Type.SELLING && e.unitPrice < submitEntry.unitPrice)
+                return false;
+            if(e.playerName.equalsIgnoreCase(submitEntry.playerName))
+                return false;
+            if(e.currency != submitEntry.currency)
+                return false;
+            //maybe some other criteria
+            return true;
+        }).sorted(Comparator.comparingInt(e -> e.unitPrice)).min(Comparator.comparing(e -> e.date));
         if(!opt.isPresent())
             return;
         final Entry matchedEntry = opt.get();
@@ -257,12 +265,12 @@ public class JGrandExchange {
         submitEntry.ifPlayer(p -> {
             p.getGrandExchangeTracker().notifyChanges(false);
             p.getLogManager().add(LogEntry.geProgress(submitEntry.progress.last()));
-//            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
-//                    matchedEntry.playerName, matchedEntry.type.pastTense,
-//                    submitEntry.item().getDefinition().getName(), maxQuantity,
-//                    submitEntry.type == Entry.Type.BUYING ? "to" : "from",
-//                    submitEntry.unitPrice, submitEntry.currency.shortName);
-            if (p.getGrandExchangeTracker().activeSlot == submitEntry.slot)
+            //            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
+            //                    matchedEntry.playerName, matchedEntry.type.pastTense,
+            //                    submitEntry.item().getDefinition().getName(), maxQuantity,
+            //                    submitEntry.type == Entry.Type.BUYING ? "to" : "from",
+            //                    submitEntry.unitPrice, submitEntry.currency.shortName);
+            if(p.getGrandExchangeTracker().activeSlot == submitEntry.slot)
                 JGrandExchangeInterface.ViewingEntry.set(p, submitEntry);
             else
                 JGrandExchangeInterface.Entries.setAll(p, p.getGrandExchangeTracker().entries);
@@ -270,12 +278,12 @@ public class JGrandExchange {
         matchedEntry.ifPlayer(p -> {
             p.getGrandExchangeTracker().notifyChanges(false);
             p.getLogManager().add(LogEntry.geProgress(matchedEntry.progress.last()));
-//            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
-//                    submitEntry.playerName, submitEntry.type.pastTense,
-//                    submitEntry.item().getDefinition().getName(), maxQuantity,
-//                    matchedEntry.type == Entry.Type.BUYING ? "to" : "from",
-//                    submitEntry.unitPrice, submitEntry.currency.shortName);
-            if (p.getGrandExchangeTracker().activeSlot == matchedEntry.slot)
+            //            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
+            //                    submitEntry.playerName, submitEntry.type.pastTense,
+            //                    submitEntry.item().getDefinition().getName(), maxQuantity,
+            //                    matchedEntry.type == Entry.Type.BUYING ? "to" : "from",
+            //                    submitEntry.unitPrice, submitEntry.currency.shortName);
+            if(p.getGrandExchangeTracker().activeSlot == matchedEntry.slot)
                 JGrandExchangeInterface.ViewingEntry.set(p, matchedEntry);
             else
                 JGrandExchangeInterface.Entries.setAll(p, p.getGrandExchangeTracker().entries);
@@ -284,51 +292,36 @@ public class JGrandExchange {
             submit(submitEntry); //what if there are other entries
     }
 
-    public List<Entry> get(final Object playerOrItemId){
+    public List<Entry> get(final Object playerOrItemId) {
         return map.getOrDefault(playerOrItemId, Collections.emptyList());
     }
 
-    public Stream<Entry> stream(final Object playerOrItemId){
+    public Stream<Entry> stream(final Object playerOrItemId) {
         return get(playerOrItemId).stream();
     }
 
-    public boolean contains(final Object playerOrItemId){
+    public boolean contains(final Object playerOrItemId) {
         return !get(playerOrItemId).isEmpty();
     }
 
-    public IntSummaryStatistics itemUnitPriceStats(final int itemId, final Entry.Type type, final Entry.Currency currency){
-        return stream(itemId)
-                .filter(e -> !e.cancelled && e.type == type && e.currency == currency)
-                .mapToInt(e -> e.unitPrice)
-                .summaryStatistics();
+    public IntSummaryStatistics itemUnitPriceStats(final int itemId, final Entry.Type type, final Entry.Currency currency) {
+        return stream(itemId).filter(e -> !e.cancelled && e.type == type && e.currency == currency).mapToInt(e -> e.unitPrice).summaryStatistics();
     }
 
-    public int defaultItemUnitPrice(final int itemId, final Entry.Type type, final Entry.Currency currency){
+    public int defaultItemUnitPrice(final int itemId, final Entry.Type type, final Entry.Currency currency) {
         try(final PreparedStatement stmt = sql.prepare("SELECT AVG(unitPrice) FROM ge_history WHERE itemId = ? AND type = ? AND currency = ?")){
-            stmt.setShort(1, (short)itemId);
+            stmt.setShort(1, (short) itemId);
             stmt.setString(2, type.name());
             stmt.setString(3, currency.name());
             try(final ResultSet rs = stmt.executeQuery()){
                 if(!rs.next())
                     return DEFAULT_UNIT_PRICE;
-                final int avg = (int)Math.round(rs.getDouble(1));
+                final int avg = (int) Math.round(rs.getDouble(1));
                 return avg < 1 ? DEFAULT_UNIT_PRICE : avg;
             }
-        }catch(Exception ex){
+        }catch(final Exception ex){
             ex.printStackTrace();
-            return contains(itemId) ?
-                    (int)itemUnitPriceStats(itemId, type, currency).getAverage()
-                    : DEFAULT_UNIT_PRICE;
+            return contains(itemId) ? (int) itemUnitPriceStats(itemId, type, currency).getAverage() : DEFAULT_UNIT_PRICE;
         }
-    }
-
-    public static JGrandExchange getInstance(){
-        return instance;
-    }
-
-    public static boolean init(final MySQLConnection sql){
-        ItemInfo.geBlacklist.load();
-        instance = new JGrandExchange(sql);
-        return instance.load();
     }
 }

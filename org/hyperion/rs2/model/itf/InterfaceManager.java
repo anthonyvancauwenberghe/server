@@ -1,8 +1,17 @@
 package org.hyperion.rs2.model.itf;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.content.itfactivation.ChangeMaxCape;
-import org.hyperion.rs2.model.itf.impl.*;
+import org.hyperion.rs2.model.itf.impl.AskForHelp;
+import org.hyperion.rs2.model.itf.impl.ChangePassword;
+import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
+import org.hyperion.rs2.model.itf.impl.HelpInterface;
+import org.hyperion.rs2.model.itf.impl.ItemContainer;
+import org.hyperion.rs2.model.itf.impl.ModerationInterface;
+import org.hyperion.rs2.model.itf.impl.NameItemInterface;
+import org.hyperion.rs2.model.itf.impl.PendingRequests;
+import org.hyperion.rs2.model.itf.impl.PinInterface;
+import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
+import org.hyperion.rs2.model.itf.impl.RecoveryInterface;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -60,9 +69,9 @@ public final class InterfaceManager {
     }
 
     protected void setActive(final Interface itf, final boolean active) {
-        if (itf == null)
+        if(itf == null)
             return;
-        if (active)
+        if(active)
             activeMap.put(itf.getId(), itf);
         else
             activeMap.remove(itf.getId());
@@ -70,7 +79,7 @@ public final class InterfaceManager {
 
     public void show(final int id, final int additionalFlags) {
         final Interface itf = get(id);
-        if (itf == null)
+        if(itf == null)
             return;
         itf.show(player, additionalFlags);
     }
@@ -81,7 +90,7 @@ public final class InterfaceManager {
 
     public void hide(final int id, final int additionalFlags) {
         final Interface itf = get(id);
-        if (itf == null)
+        if(itf == null)
             return;
         itf.hide(player, additionalFlags);
     }

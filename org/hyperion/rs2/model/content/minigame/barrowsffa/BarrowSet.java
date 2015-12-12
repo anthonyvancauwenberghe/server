@@ -4,9 +4,8 @@ package org.hyperion.rs2.model.content.minigame.barrowsffa;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Equipment;
-import static org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA.DIALOGUE_ID;
 
-import java.util.stream.Stream;
+import static org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA.DIALOGUE_ID;
 
 public enum BarrowSet {
     DHAROK(DIALOGUE_ID + 1, Item.create(4716), Item.create(4718), Item.create(4720), Item.create(4722)),
@@ -21,18 +20,9 @@ public enum BarrowSet {
     private final Item[] items;
     private final int dialogueId; //dialogue id for picking the set
 
-    private BarrowSet(int dialogueAction ,final Item... ids) {
+    BarrowSet(final int dialogueAction, final Item... ids) {
         this.items = ids;
         this.dialogueId = dialogueAction;
-    }
-
-    public void equip(final Player player) {
-        int i = 0;
-        for(; i < 4; i++) {
-            player.getEquipment().set(Equipment.getType(items[i]).getSlot(), Item.create(items[i].getId()));
-        }
-        for(; i < items.length; i++)
-            player.getInventory().add(Item.create(items[i].getId(), items[i].getCount()));
     }
 
     public static BarrowSet forDialogue(final int id) {
@@ -40,6 +30,15 @@ public enum BarrowSet {
             if(set.dialogueId == id)
                 return set;
         return null;
+    }
+
+    public void equip(final Player player) {
+        int i = 0;
+        for(; i < 4; i++){
+            player.getEquipment().set(Equipment.getType(items[i]).getSlot(), Item.create(items[i].getId()));
+        }
+        for(; i < items.length; i++)
+            player.getInventory().add(Item.create(items[i].getId(), items[i].getCount()));
     }
 
 

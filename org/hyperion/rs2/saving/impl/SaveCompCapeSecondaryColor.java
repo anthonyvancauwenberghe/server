@@ -8,19 +8,19 @@ import org.hyperion.rs2.saving.SaveInteger;
  */
 public class SaveCompCapeSecondaryColor extends SaveInteger {
 
-    public SaveCompCapeSecondaryColor(){
+    public SaveCompCapeSecondaryColor() {
         super("compCapeSecondaryColor");
     }
 
-    public int getDefaultValue(){
+    public int getDefaultValue() {
         return 0;
     }
 
-    public void setValue(final Player player, final int value){
+    public void setValue(final Player player, final int value) {
         player.compCapeSecondaryColor = value == -1 ? 0 : value;
     }
 
-    public Integer getValue(final Player player){
+    public Integer getValue(final Player player) {
         return player.compCapeSecondaryColor;
     }
 }

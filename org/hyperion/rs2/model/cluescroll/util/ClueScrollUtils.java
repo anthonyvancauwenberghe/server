@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model.cluescroll.util;
 
-import java.util.Random;
-
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
@@ -12,55 +10,58 @@ import org.hyperion.util.Misc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.util.Random;
+
 public final class ClueScrollUtils {
 
     private static final Random RAND = new Random();
 
-    private ClueScrollUtils(){}
+    private ClueScrollUtils() {
+    }
 
-    public static int rand(final int min, final int max){
+    public static int rand(final int min, final int max) {
         return min + RAND.nextInt(max - min + 1);
     }
 
-    public static boolean isChance(final int chance){
+    public static boolean isChance(final int chance) {
         return chance > 0 && rand(1, 1000) <= chance;
     }
 
-    public static boolean dropClueScroll(Player player, NPC npc) {
+    public static boolean dropClueScroll(final Player player, final NPC npc) {
         if(ClueScrollManager.hasClueScroll(player))
             return false;
         double clueScrollChance = 1;
-        if(npc.getDefinition().combat() >= 240) {
-            clueScrollChance += ((npc.getDefinition().combat() - 120)/6);
-        } else if(npc.getDefinition().combat() >= 120) {
-            clueScrollChance += ((npc.getDefinition().combat() - 90)/3);
-        } else if(npc.getDefinition().combat() >= 80) {
-            clueScrollChance += ((npc.getDefinition().combat() - 60)/3);
+        if(npc.getDefinition().combat() >= 240){
+            clueScrollChance += ((npc.getDefinition().combat() - 120) / 6);
+        }else if(npc.getDefinition().combat() >= 120){
+            clueScrollChance += ((npc.getDefinition().combat() - 90) / 3);
+        }else if(npc.getDefinition().combat() >= 80){
+            clueScrollChance += ((npc.getDefinition().combat() - 60) / 3);
         }
 
-        if(Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
+        if(Rank.hasAbility(player, Rank.SUPER_DONATOR)){
             clueScrollChance *= 1.25;
-        } else if(Rank.hasAbility(player, Rank.DONATOR)) {
+        }else if(Rank.hasAbility(player, Rank.DONATOR)){
             clueScrollChance *= 1.1;
         }
 
         if(player.getSlayer().isTask(npc.getDefinition().getId()))
             clueScrollChance *= 2;
 
-        if(Misc.random(1000) <= clueScrollChance*10)
+        if(Misc.random(1000) <= clueScrollChance * 10)
             return true;
         return false;
     }
 
-    public static Item getScroll(NPC npc) {
+    public static Item getScroll(final NPC npc) {
         Item item = null;
-        if(npc.combatLevel >= 200) {
+        if(npc.combatLevel >= 200){
             item = Item.create(getRandomElite().getId(), 1);
-        } else if(npc.combatLevel >= 110) {
+        }else if(npc.combatLevel >= 110){
             item = Item.create(getRandomHard().getId(), 1);
-        } else if(npc.combatLevel >= 70) {
+        }else if(npc.combatLevel >= 70){
             item = Item.create(getRandomMedium().getId(), 1);
-        } else {
+        }else{
             item = Item.create(getRandomEasy().getId(), 1);
         }
         return item;
@@ -82,21 +83,21 @@ public final class ClueScrollUtils {
         return getRandom(ClueScroll.Difficulty.ELITE);
     }
 
-    public static ClueScroll getRandom(ClueScroll.Difficulty difficulty) {
+    public static ClueScroll getRandom(final ClueScroll.Difficulty difficulty) {
         return ClueScrollManager.getAll(difficulty).get(Misc.random(ClueScrollManager.getAll(difficulty).size() - 1));
     }
 
-    public static Element createElement(final Document doc, final String tag, final Object content){
+    public static Element createElement(final Document doc, final String tag, final Object content) {
         final Element element = doc.createElement(tag);
         element.setTextContent(content.toString());
         return element;
     }
 
-    public static String getString(final Element root, final String tag){
+    public static String getString(final Element root, final String tag) {
         return root.getElementsByTagName(tag).item(0).getTextContent();
     }
 
-    public static Integer getInteger(final Element root, final String tag){
+    public static Integer getInteger(final Element root, final String tag) {
         return Integer.parseInt(getString(root, tag));
     }
 }

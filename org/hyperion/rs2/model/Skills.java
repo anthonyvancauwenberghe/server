@@ -7,9 +7,11 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 
 /**
@@ -477,6 +479,22 @@ public class Skills {
         return 0;
     }
 
+
+    public int getTotal99s() {
+        int count = 0;
+        for (int i = 7; i < levels.length; i++) {
+            if (levels[i] == 99) count++;
+        }
+        return count;
+    }
+
+    public void reward99(int total) {
+        int reward = (int) (Math.pow(1.3, total) * 100);
+        player.getPoints().increaseDonatorPoints(reward, false);
+        player.getPoints().increasePkPoints(reward * 35, false);
+        player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 35, total);
+    }
+
     /**
      * Gets experience.
      *
@@ -577,6 +595,7 @@ public class Skills {
             player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
             if (getLevel(skill) == 99) {
                 player.checkCapes();
+                reward99(getTotal99s());
             }
         }
         player.getActionSender().sendSkill(skill);

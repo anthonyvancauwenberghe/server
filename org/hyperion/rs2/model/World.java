@@ -453,7 +453,7 @@ public class World {
             //playersSQL.init();
             banManager = new BanManager(logsSQL);
             AchievementsSql.sql = logsSQL;
-            PunishmentManager.init(logsSQL);
+            PunishmentManager.init(donationsSQL);
             System.out.println("Initialized GE: " + JGrandExchange.init(playersSQL));
             //this.banManager.init();
             this.enemies = new ServerEnemies();
@@ -1073,8 +1073,8 @@ public class World {
             }
         });
         if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            if (Server.getConfig().getBoolean("donationssql"))
-                getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
+            if (Server.getConfig().getBoolean("logssql"))
+                getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**

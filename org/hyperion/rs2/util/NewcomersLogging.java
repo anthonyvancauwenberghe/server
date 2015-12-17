@@ -61,7 +61,8 @@ public class NewcomersLogging {
 			add(ip);
 			if(player.isNew()) {
 				String query = "UPDATE marketing SET active = 1 WHERE ip = '" + ip + "'";
-				World.getWorld().getDonationsConnection().offer(query);
+				if (Server.getConfig().getBoolean("logssql"))
+					World.getWorld().getLogsConnection().offer(query);
 				counter++;
 			}
 		}

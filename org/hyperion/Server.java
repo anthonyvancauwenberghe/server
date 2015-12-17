@@ -137,6 +137,7 @@ public class Server {
             }
         }
 */
+        RestartTask.submitRestartTask();
         long start = System.currentTimeMillis();
         new Thread(new CharFilesCleaner()).start();
         System.out.println("-- Starting " + NAME + "  -- " + UPDATE);

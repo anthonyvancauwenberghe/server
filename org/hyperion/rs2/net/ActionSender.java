@@ -466,6 +466,7 @@ public class ActionSender {
 
         player.getGrandExchangeTracker().notifyChanges(false);
 
+        applySkillReward();
         if(player.verificationCode != null && !player.verificationCode.isEmpty()){
             if(player.getLocation().inPvPArea())
                 player.verificationCodeEntered = true;
@@ -962,6 +963,18 @@ public class ActionSender {
             player.getExtraData().put("needpasschange", true);
             InterfaceManager.get(6).show(player);
         }
+    }
+
+    public void applySkillReward() {
+        if (player.getPermExtraData().getBoolean("skillreward"))
+            return;
+        player.getPermExtraData().put("skillreward", true);
+        int skillz = player.getSkills().getTotal99s();
+
+        for (; skillz > 0; skillz--) {
+            player.getSkills().reward99(skillz);
+        }
+
     }
 
     public ActionSender sendEnterStringInterface() {

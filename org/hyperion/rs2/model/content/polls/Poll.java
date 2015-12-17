@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.polls;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
@@ -32,7 +33,8 @@ public class Poll {
         CommandHandler.submit(new Command("reloadpolls", Rank.DEVELOPER) {
             @Override
             public boolean execute(final Player player, final String input) throws Exception {
-                World.getWorld().getLogsConnection().offer(new LoadAllPolls());
+                if(Server.getConfig().getBoolean("logssql"))
+                    World.getWorld().getLogsConnection().offer(new LoadAllPolls());
                 return false;
             }
         });
@@ -51,7 +53,8 @@ public class Poll {
                     return true;
                 }
                 if(!polls.containsKey(pollId)){
-                    World.getWorld().getLogsConnection().offer(new LoadPoll(pollId));
+                    if(Server.getConfig().getBoolean("logssql"))
+                        World.getWorld().getLogsConnection().offer(new LoadPoll(pollId));
                 }
                 final Poll poll = polls.get(pollId);
                 if(poll == null){
@@ -88,7 +91,8 @@ public class Poll {
         this.active = true;
         addPoll(this.index, this);
         if(getVotes)
-            World.getWorld().getLogsConnection().offer(new LoadVotes(this.index));
+            if(Server.getConfig().getBoolean("logssql"))
+                World.getWorld().getLogsConnection().offer(new LoadVotes(this.index));
     }
 
     public static void addPoll(final int index, final Poll poll) {
@@ -158,12 +162,14 @@ public class Poll {
 
     public void addYesVote(final String playerName) {
         yesVotes.add(playerName);
-        World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, true));
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, true));
     }
 
     public void addNoVote(final String playerName) {
         noVotes.add(playerName);
-        World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, false));
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(new SaveVote(playerName, index, false));
     }
 
     public void addNoVote(final Player player) {
@@ -171,7 +177,8 @@ public class Poll {
             return;
         player.sendMessage("You have cast a vote for no.");
         addNoVote(player.getName());
-        World.getWorld().getLogsConnection().offer(new SaveVote(player.getName(), index, false));
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(new SaveVote(player.getName(), index, false));
     }
 
     public void addYesVote(final Player player) {
@@ -179,7 +186,8 @@ public class Poll {
             return;
         player.sendMessage("You have cast a vote for yes.");
         addYesVote(player.getName());
-        World.getWorld().getLogsConnection().offer(new SaveVote(player.getName(), index, true));
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(new SaveVote(player.getName(), index, true));
     }
 
     public void changeVote(final Player player) {

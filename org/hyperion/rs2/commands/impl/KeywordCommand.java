@@ -1,5 +1,6 @@
 package org.hyperion.rs2.commands.impl;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -63,7 +64,8 @@ public class KeywordCommand extends Command {
      */
     private void save(final String keyword, final int id) throws Exception {
         final SQLRequest request = new QueryRequest("INSERT INTO `keywords`(`keyword`, `id`) VALUES ('" + keyword + "'," + id + ")");
-        World.getWorld().getLogsConnection().offer(request);
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(request);
     }
 
 

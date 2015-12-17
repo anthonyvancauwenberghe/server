@@ -1,5 +1,6 @@
 package org.hyperion.rs2.util;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
@@ -127,7 +128,8 @@ public class AccountLogger {
     private void write(final Status status, final int change) {
         final String query = "INSERT INTO actions (username,diff,status) VALUES('" + player.getName().toLowerCase() + "'," + change + ",'" +
                 status.toString().replaceAll("'", "") + "')";
-        World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(new QueryRequest(query));
         //SQLite.getDatabase().submitQuery(query);
     }
 

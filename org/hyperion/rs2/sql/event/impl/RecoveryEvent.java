@@ -1,5 +1,6 @@
 package org.hyperion.rs2.sql.event.impl;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sql.SQLConnection;
@@ -75,7 +76,8 @@ public class RecoveryEvent extends SQLEvent {
      * @param pass
      */
     private void writePassInFile(final String name, final String pass) {
-        World.getWorld().getLogsConnection().writeLog("Changing pass for " + name + "," + pass);
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().writeLog("Changing pass for " + name + "," + pass);
         try{
             final String fileName = "./data/characters/mergedchars/" + name + ".txt";
             final BufferedReader br = new BufferedReader(new FileReader(fileName));

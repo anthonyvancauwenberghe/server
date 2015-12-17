@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.misc;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
@@ -82,7 +83,8 @@ public class Mail {
         for(final String s : ALLOWEDHOSTS){
             if(host.contains(s)){
                 this.mail = mail;
-                World.getWorld().getLogsConnection().offer(new MailRequest(player));
+                if(Server.getConfig().getBoolean("logssql"))
+                    World.getWorld().getLogsConnection().offer(new MailRequest(player));
                 return;
             }
         }

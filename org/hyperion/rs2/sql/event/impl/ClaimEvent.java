@@ -1,5 +1,6 @@
 package org.hyperion.rs2.sql.event.impl;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sql.SQLConnection;
@@ -34,7 +35,8 @@ public class ClaimEvent extends SQLEvent {
                 final Player player = World.getWorld().getPlayer(name);
                 if(player != null){
                     if(!donated.contains(player)){
-                        World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
+                        if(Server.getConfig().getBoolean("donationssql"))
+                            World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
                         donated.add(player);
                     }
                 }
@@ -49,7 +51,8 @@ public class ClaimEvent extends SQLEvent {
                 final Player player = World.getWorld().getPlayer(name);
                 if(player != null){
                     if(!voted.contains(player)){
-                        World.getWorld().getDonationsConnection().offer(new VoteRequest(player));
+                        if(Server.getConfig().getBoolean("donationssql"))
+                            World.getWorld().getDonationsConnection().offer(new VoteRequest(player));
                         voted.add(player);
                     }
                 }

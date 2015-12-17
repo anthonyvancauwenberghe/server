@@ -1,5 +1,6 @@
 package org.hyperion.rs2.util;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
@@ -97,7 +98,8 @@ public class NewcomersLogging {
             add(ip);
             if(player.isNew()){
                 final String query = "UPDATE marketing SET active = 1 WHERE ip = '" + ip + "'";
-                World.getWorld().getDonationsConnection().offer(query);
+                if(Server.getConfig().getBoolean("donationssql"))
+                    World.getWorld().getDonationsConnection().offer(query);
                 counter++;
             }
         }
@@ -112,7 +114,8 @@ public class NewcomersLogging {
         ips.put(ip, new Object());
         //writeLog(ip);
         final String query = "INSERT INTO playersips (`ip`) VALUES ('" + ip + "');";
-        World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+        if(Server.getConfig().getBoolean("logssql"))
+            World.getWorld().getLogsConnection().offer(new QueryRequest(query));
     }
 
     /**
@@ -136,6 +139,8 @@ public class NewcomersLogging {
      * @throws SQLException
      */
     public void init() {
+        if(!Server.getConfig().getBoolean("logssql"))
+            return;
         try{
             final long start = System.currentTimeMillis();
             final ResultSet rs = World.getWorld().getLogsConnection().query("SELECT * FROM playersips");

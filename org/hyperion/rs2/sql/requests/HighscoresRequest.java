@@ -27,7 +27,8 @@ public class HighscoresRequest extends SQLRequest {
                 player.getActionSender().sendMessage("Saving highscores");
                 for(final Player p : World.getWorld().getPlayers()){
                     if(p.getHighscores().needsUpdate()){
-                        World.getWorld().getLogsConnection().offer(new HighscoresRequest(p.getHighscores()));
+                        if(Server.getConfig().getBoolean("logssql"))
+                            World.getWorld().getLogsConnection().offer(new HighscoresRequest(p.getHighscores()));
                     }
                 }
                 return true;

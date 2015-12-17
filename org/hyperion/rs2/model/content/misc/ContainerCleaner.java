@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.misc;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -108,7 +109,8 @@ public class ContainerCleaner {
             final int deleted_value = deleted_amount * DonatorShop.getPrice(item.getId());
             if(deleted_value > 0){
                 final String query = "INSERT INTO cleanings(username, item_id, item_count, deleted_value) VALUES('" + name + "'," + item.getId() + "," + deleted_amount + "," + deleted_value + ")";
-                World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+                if(Server.getConfig().getBoolean("logssql"))
+                    World.getWorld().getLogsConnection().offer(new QueryRequest(query));
             }
             //	item.setCount(max_amount);
         }

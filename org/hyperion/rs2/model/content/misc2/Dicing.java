@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.misc2;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Entity;
 import org.hyperion.rs2.model.Graphic;
@@ -245,7 +246,8 @@ public class Dicing implements ContentTemplate {
                     query = "INSERT INTO dicing(username,item_id,item_count,win_value) " + "VALUES('" + player.getName().toLowerCase() + "'," + id + "," + count + "," + -1 * itemvalue + ")";
                 }
                 if(itemvalue > 0){
-                    World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+                    if(Server.getConfig().getBoolean("logssql"))
+                        World.getWorld().getLogsConnection().offer(new QueryRequest(query));
                 }
                 PlayerSaving.getSaving().save(player);
                 //System.out.println("Wins: " + wins + ", loses: " + loses);

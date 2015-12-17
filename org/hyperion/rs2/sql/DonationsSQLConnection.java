@@ -46,7 +46,8 @@ public class DonationsSQLConnection extends MySQLConnection {
                     player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
                     return false;
                 }
-                World.getWorld().getDonationsConnection().offer(new VoteRequest(player));
+                if(Server.getConfig().getBoolean("donationssql"))
+                    World.getWorld().getDonationsConnection().offer(new VoteRequest(player));
                 player.getExtraData().put("lastsql", System.currentTimeMillis());
                 return true;
             }
@@ -59,7 +60,8 @@ public class DonationsSQLConnection extends MySQLConnection {
                     player.getActionSender().sendMessage("You may only use this command every 20 seconds!");
                     return false;
                 }
-                World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
+                if(Server.getConfig().getBoolean("donationssql"))
+                    World.getWorld().getDonationsConnection().offer(new DonationRequest(player));
                 player.getExtraData().put("lastsql", System.currentTimeMillis());
                 return true;
             }

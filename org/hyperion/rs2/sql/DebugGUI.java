@@ -119,7 +119,7 @@ public class DebugGUI extends JFrame implements ActionListener {
             @Override
             public boolean execute(Player player, String input)
                     throws Exception {
-                World.getWorld().getGUI().setShow(true);
+//                World.getWorld().getGUI().setShow(true);
                 return false;
             }
 
@@ -129,7 +129,7 @@ public class DebugGUI extends JFrame implements ActionListener {
             @Override
             public boolean execute(Player player, String input)
                     throws Exception {
-                World.getWorld().getGUI().setShow(false);
+//                World.getWorld().getGUI().setShow(false);
                 return false;
             }
 

@@ -94,11 +94,11 @@ public class World {
     }
 
 
-    private DebugGUI gui;
-
-    public DebugGUI getGUI() {
-        return gui;
-    }
+//    private DebugGUI gui;
+//
+//    public DebugGUI getGUI() {
+//        return gui;
+//    }
 
     /**
      * Logging class.
@@ -391,7 +391,7 @@ public class World {
             this.eventManager = new EventManager(engine);
             this.npcManager = new NPCManager();
             this.contentManager.init();
-            this.gui = new DebugGUI();
+//            this.gui = new DebugGUI();
             getWilderness().init();
             this.globalItemManager = new GlobalItemManager();
             this.staffManager = new StaffManager();

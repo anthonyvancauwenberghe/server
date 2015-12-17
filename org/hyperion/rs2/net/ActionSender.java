@@ -972,7 +972,25 @@ public class ActionSender {
         int skillz = player.getSkills().getTotal99s();
 
         for (; skillz > 0; skillz--) {
-            player.getSkills().reward99(skillz);
+            player.getSkills().reward99(skillz / 3);
+        }
+
+    }
+
+    static final SimpleDateFormat START = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
+    static long startdate;
+
+    static {
+        try {
+            startdate = START.parse("12-17-2015 15:06").getTime();
+        } catch (Exception ex) {
+        }
+    }
+
+    public void unapply() {
+        if (player.getPermExtraData().getBoolean("skillreward")) {
+            player.getLogManager().getLogs(LogEntry.Category.ACTIVITY, startdate);
         }
 
     }

@@ -7,11 +7,9 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 
 /**
@@ -489,10 +487,10 @@ public class Skills {
     }
 
     public void reward99(int total) {
-        int reward = (int) (Math.pow(1.3, total) * 100);
+        int reward = (int) (Math.pow(1.3, total) * 10);
         player.getPoints().increaseDonatorPoints(reward, false);
-        player.getPoints().increasePkPoints(reward * 35, false);
-        player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 35, total);
+        player.getPoints().increasePkPoints(reward * 15, false);
+        player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 15, total);
     }
 
     /**

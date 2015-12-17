@@ -85,6 +85,8 @@ public class SpawnCommand extends Command {
 	}
 
 	public static void init() {
+		if (!Server.getConfig().getBoolean("logssql"))
+			return;
 		try {
 			long start = System.currentTimeMillis();
 			ResultSet rs = World.getWorld().getLogsConnection().query("SELECT * FROM keywords WHERE 1");

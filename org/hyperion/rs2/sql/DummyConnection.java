@@ -1,5 +1,7 @@
 package org.hyperion.rs2.sql;
 
+import org.hyperion.rs2.sql.event.SQLEvent;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -38,5 +40,10 @@ public class DummyConnection extends MySQLConnection {
 	 */
 	public void offer(SQLRequest request) {
 		System.out.println("Query:" + request.toString());
+	}
+
+	@Override
+	public void submit(final SQLEvent... events) {
+		System.out.println("not submitting events, count: " + events.length);
 	}
 }

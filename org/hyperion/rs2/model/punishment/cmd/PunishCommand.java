@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
 import java.util.concurrent.TimeUnit;
+
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -62,7 +64,8 @@ public class PunishCommand extends Command{
         }
         final int[] specialUid = victim != null ? victim.specialUid : new int[20];
         if(combination.getTarget() == Target.SPECIAL && victim == null) {
-            World.getWorld().getLogsConnection().offer(new GetSpecialUID(victimName, specialUid));
+            if (Server.getConfig().getBoolean("logssql"))
+                World.getWorld().getLogsConnection().offer(new GetSpecialUID(victimName, specialUid));
         }
         final String[] durationParts = parts[1].split(" +");
 

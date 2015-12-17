@@ -1,5 +1,6 @@
 package org.hyperion.rs2.packet;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
@@ -72,7 +73,8 @@ public class ActionButtonPacketHandler implements PacketHandler {
             return;
         }
 		if(JGrandExchangeTracker.isGrandExchangeAction(button)) {
-			World.getWorld().getLogsConnection().offer(new GrandExchangeRequest(player, button));
+			if (Server.getConfig().getBoolean("logssql"))
+				World.getWorld().getLogsConnection().offer(new GrandExchangeRequest(player, button));
 			return;
 		}
 

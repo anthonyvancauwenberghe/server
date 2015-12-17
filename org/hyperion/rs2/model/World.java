@@ -869,9 +869,9 @@ public class World {
                 .addListener(new IoFutureListener<IoFuture>() {
                     @Override
                     public void operationComplete(IoFuture future) {
-                        if (fReturnCode != 2) {
+                        if(fReturnCode != 2){
                             player.getSession().close(false);
-                        } else {
+                        }else{
                             player.getActionSender().sendLogin();
                             //PlayerFiles.saveGame(player);
                         }
@@ -1041,9 +1041,11 @@ public class World {
             public void run() {
 
                 if (!Rank.hasAbility(player, Rank.DEVELOPER))
-                    getLogsConnection().offer(new AccountValuesRequest(player));
+                    if (Server.getConfig().getBoolean("logssql"))
+                        getLogsConnection().offer(new AccountValuesRequest(player));
                 if (Rank.hasAbility(player, Rank.HELPER))
-                    getLogsConnection().offer(new StaffActivityRequest(player));
+                    if (Server.getConfig().getBoolean("logssql"))
+                        getLogsConnection().offer(new StaffActivityRequest(player));
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
@@ -1051,7 +1053,8 @@ public class World {
                 long dp = player.getAccountValue().getTotalValue();
                 long pkp = player.getAccountValue().getPkPointValue();
                 if (player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
-                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
+                    if (Server.getConfig().getBoolean("logssql"))
+                        World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
                             "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(),
                             dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
                 if (player.verified)
@@ -1070,7 +1073,8 @@ public class World {
             }
         });
         if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
+            if (Server.getConfig().getBoolean("donationssql"))
+                getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**

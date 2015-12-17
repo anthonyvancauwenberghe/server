@@ -118,7 +118,8 @@ public class CommandHandler {
 					int staffCommandValue = staffCommand ? 1 : 0;
 					String query = "INSERT INTO commands(username,command,staffcommand,input) "
 							+ "VALUES('" + player.getName().toLowerCase() + "','" + key + "'," + staffCommandValue + ",'" + SQLUtils.checkInput(input) + "')";
-					World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+					if (Server.getConfig().getBoolean("logssql"))
+						World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 				}
 
 			} catch(Exception e) {

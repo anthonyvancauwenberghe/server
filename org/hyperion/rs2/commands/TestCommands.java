@@ -98,7 +98,8 @@ public class TestCommands {
 		if (commandStart.equalsIgnoreCase("vote")) {
 			try {
 
-				World.getWorld().getLogsConnection().query(
+				if (Server.getConfig().getBoolean("logssql"))
+					World.getWorld().getLogsConnection().query(
 						String.format("INSERT INTO `server`.`waitingvotes` " +
 										"(`index`, `fakeUsername`, `realUsername`, `runelocus`, `topg`, `rspslist`, " +
 										"`runelocusProcessed`, `topgProcessed`, `rspslistProcessed`, `processed`, `timestamp`) " +
@@ -143,7 +144,8 @@ public class TestCommands {
 
 		if (commandStart.equalsIgnoreCase("whitelistadd") && (player.getName().equalsIgnoreCase("nigga") || player.getName().equalsIgnoreCase("Glis") || player.getName().equalsIgnoreCase("Seven"))) {
 			try {
-				World.getWorld().getLogsConnection().query(String.format("INSERT INTO server.whitelist (name) VALUES ('%s')", s.substring(13).trim()));
+				if (Server.getConfig().getBoolean("logssql"))
+					World.getWorld().getLogsConnection().query(String.format("INSERT INTO server.whitelist (name) VALUES ('%s')", s.substring(13).trim()));
 				BetaServerEvent.whitelist.add(s.substring(13).trim());
 				player.sendMessage(Misc.formatPlayerName(s.substring(13).trim()) + " has been successfully added to the whitelist.");
 			} catch(Exception e) {
@@ -154,7 +156,8 @@ public class TestCommands {
 
 		if (commandStart.equalsIgnoreCase("whitelistremove") && (player.getName().equalsIgnoreCase("nigga") || player.getName().equalsIgnoreCase("Glis") || player.getName().equalsIgnoreCase("Seven"))) {
 			try {
-				World.getWorld().getLogsConnection().query(String.format("DELETE FROM `server`.`whitelist` WHERE whitelist.name = '%s'", s.substring(15).trim()));
+				if (Server.getConfig().getBoolean("logssql"))
+					World.getWorld().getLogsConnection().query(String.format("DELETE FROM `server`.`whitelist` WHERE whitelist.name = '%s'", s.substring(15).trim()));
 				BetaServerEvent.whitelist.remove(s.substring(15).trim());
 				player.sendMessage(Misc.formatPlayerName(s.substring(15).trim()) + " has been successfully removed from the whitelist.");
 			} catch(Exception e) {

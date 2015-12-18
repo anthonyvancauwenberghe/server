@@ -217,7 +217,7 @@ public class NpcDeathEvent extends Event {
                     if (npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                         int chance = isTask ? 750 : 1000;
                         if (npc.getDefinition().getId() == 8349 && player.getLocation().inPvPArea())
-                            chance = 500;
+                            chance = 750;
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
                         if (player.getPermExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {

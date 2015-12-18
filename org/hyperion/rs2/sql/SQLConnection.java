@@ -159,13 +159,13 @@ public abstract class SQLConnection extends Thread {
 				}
 				int queue_size = queue.size();
 				if(logged) {
-					World.getWorld().getGUI().setStatus("About to check queue size");
-					World.getWorld().getGUI().updateQueueSizes();
+//					World.getWorld().getGUI().setStatus("About to check queue size");
+//					World.getWorld().getGUI().updateQueueSizes();
 				}
 
 				if(queue_size > 0) {
 					if(logged) {
-						World.getWorld().getGUI().setStatus("Finding non null E");
+//						World.getWorld().getGUI().setStatus("Finding non null E");
 					}
 					SQLRequest request = null;
 					int attempts = 0;
@@ -177,42 +177,42 @@ public abstract class SQLConnection extends Thread {
 						attempts++;
 					}
 					if(logged) {
-						World.getWorld().getGUI().setStatus("About to request != null");
+//						World.getWorld().getGUI().setStatus("About to request != null");
 					}
 					if (request != null) {
 						try {
 							if(logged) {
-								World.getWorld().getGUI().setStatus("About to process request");
-								World.getWorld().getGUI().setLastQuery(request.toString());
+//								World.getWorld().getGUI().setStatus("About to process request");
+//								World.getWorld().getGUI().setLastQuery(request.toString());
 								long start = System.currentTimeMillis();
-								World.getWorld().getGUI().setStart(start);
+//								World.getWorld().getGUI().setStart(start);
 								this.lastQueryString = request.toString();
 								request.process(this);
 
 
 								long delta = System.currentTimeMillis() - start;
-								World.getWorld().getGUI().setDelta(delta);
+//								World.getWorld().getGUI().setDelta(delta);
 
 							} else {
 								request.process(this);
 							}
 						} catch (Exception e) {
 							if(logged) {
-								World.getWorld().getGUI().setStatus("Exp caught :/");
+//								World.getWorld().getGUI().setStatus("Exp caught :/");
 							}
 							handleException(e, request.toString());
 							sleep(Time.ONE_MINUTE);
 						}
 					} else {
 						if(logged) {
-							World.getWorld().getGUI().setStatus("Request was null");
+//							World.getWorld().getGUI().setStatus("Request was null");
 						}
 
 					}
 					sleep_time = Math.max(min_cycle_sleep, sleep_time / 2);
 				} else {
 					if(logged) {
-						World.getWorld().getGUI().setStatus("Sleep time..");
+//						World.getWorld().getGUI().setStatus("Sleep time..");
 					}
 
 					sleep_time = Math.min(max_cycle_sleep, sleep_time * 2 + 1);
@@ -221,13 +221,13 @@ public abstract class SQLConnection extends Thread {
 				}
 
 				if(logged) {
-					World.getWorld().getGUI().setStatus("Wanna process Events");
+//					World.getWorld().getGUI().setStatus("Wanna process Events");
 				}
 
 				processEvents();
 
 				if(logged) {
-					World.getWorld().getGUI().setStatus("Finished processing events");
+//					World.getWorld().getGUI().setStatus("Finished processing events");
 				}
 
 				if (System.currentTimeMillis() - lastQuery + sleep_time > 30000) {

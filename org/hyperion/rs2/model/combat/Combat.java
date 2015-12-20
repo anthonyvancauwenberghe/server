@@ -101,6 +101,7 @@ public class Combat {
             } else {
                 if (combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected())
                     return false;
+                combatEntity.getOpponent().lastHit = System.currentTimeMillis();
                 return processNpcCombat(combatEntity, distance);
             }
 
@@ -581,9 +582,12 @@ public class Combat {
             return true;
         final CombatEntity opponent = combatEntity.getOpponent();
         opponent.lastHit = System.currentTimeMillis();
+
         int delay = 300 + distance * 200;
         //Auto kill ring :p
         if (combatEntity.getEntity() instanceof Player) {
+            if (opponent.getNPC() != null)
+                opponent.getNPC().lastAttacker = combatEntity.getPlayer().getName();
             Player player = ((Player) combatEntity.getEntity());
             if (player.getEquipment().contains(4657)) {
                 if (Rank.hasAbility(player, Rank.OWNER)) {
@@ -972,12 +976,19 @@ public class Combat {
                     if (!combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
                         return "I am already in combat";
                 }
-            } else if (opponent.getOpponent() != null && opponent.getOpponent() != combatEntity)
+            } else {
                 if (type.equalsIgnoreCase("NPC")) {
-                    return "This monster is already in combat...";
-                } else {
+                    NPC npc = opponent.getNPC();
+                    if (combatEntity.getPlayer() != null) {
+                        if (System.currentTimeMillis() - npc.getCombat().lastHit < 5000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
+                            return "This monster is already in combat";
+                    } else if (opponent.getOpponent() != combatEntity)
+                        return "blablabla";
+                    return "1";
+                } else if (opponent.getOpponent() != null && opponent.getOpponent() != combatEntity) {
                     return "This " + type + " is already in combat...";
                 }
+            }
         }
         if (combatEntity.getEntity() instanceof Player
                 && opponent.getEntity() instanceof Player) {

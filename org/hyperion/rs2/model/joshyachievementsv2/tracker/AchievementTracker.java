@@ -27,7 +27,7 @@ public class AchievementTracker {
     }
 
     public void load(){
-        final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
+        /*final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
         if(taskProgress == null){
             errorLoading = true;
             player.sendf("Error loading achievement data! You'll be notified when they are active again.");
@@ -36,6 +36,7 @@ public class AchievementTracker {
         taskProgress.forEach(
                 atp -> progress(atp.achievementId).add(atp)
         );
+*/
     }
 
     public void sendInfo(final Achievement a) {

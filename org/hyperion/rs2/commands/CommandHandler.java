@@ -786,6 +786,14 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("moneymaking", Rank.PLAYER) {
+			@Override
+			public boolean execute(Player player, String input) {
+				player.getActionSender().sendWebpage("http://forums.arteropk.com/topic/23523-money-making-guide/");
+				return true;
+			}
+		});
 		submit(new Command("forums", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {

@@ -39,7 +39,6 @@ public class VoteShop extends PointsShop {
             case 15019:
             case 15018:
 				return 20;
-			case 19780:
             case 17017:
                 return 50;
 			case 15220: // Imbued rings
@@ -90,6 +89,8 @@ public class VoteShop extends PointsShop {
                 return 3;
 			case 2890:
 				return 8;
+			case 19780:
+				return 70;
 		}
 		return 5000;
 	}

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
@@ -27,16 +28,18 @@ public class AchievementTracker {
     }
 
     public void load(){
-        /*final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
-        if(taskProgress == null){
-            errorLoading = true;
-            player.sendf("Error loading achievement data! You'll be notified when they are active again.");
-            return;
+        if (Server.getConfig().getBoolean("logssql")) {
+            final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
+            if (taskProgress == null) {
+                errorLoading = true;
+                player.sendf("Error loading achievement data! You'll be notified when they are active again.");
+                return;
+            }
+            taskProgress.forEach(
+                    atp -> progress(atp.achievementId).add(atp)
+            );
         }
-        taskProgress.forEach(
-                atp -> progress(atp.achievementId).add(atp)
-        );
-*/
+
     }
 
     public void sendInfo(final Achievement a) {

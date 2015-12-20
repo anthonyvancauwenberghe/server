@@ -7,7 +7,7 @@ public abstract class Db {
 
     private final DbConfig config;
 
-    protected DBI dbi;
+    public DBI dbi;
 
     public Db(final DbConfig config) {
         this.config = config;

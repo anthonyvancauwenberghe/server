@@ -313,8 +313,12 @@ public class WalkingQueue {
                     .getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
             if(! player.duelOption) {
 				if(player.getLocation().inDuel()) {
+
 					player.getActionSender()
 							.sendPlayerOption("Challenge", 5, 0);
+					if (player.getNpcState()) {
+						player.setPNpc(-1);
+					}
 					player.duelOption = true;
 				}
 			} else if(!player.getLocation().inDuel()) {
@@ -331,6 +335,9 @@ public class WalkingQueue {
 					player.getActionSender().sendPlayerOption("Attack", 2, 0);
 					player.setCanSpawnSet(false);
 					player.attackOption = true;
+					if (player.getNpcState()) {
+						player.setPNpc(-1);
+					}
 					if(player.isOverloaded())
 						OverloadFactory.applyBoosts(player);
 				}

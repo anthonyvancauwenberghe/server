@@ -80,9 +80,15 @@ public class Combat {
              * Run seperate code depending on whether the combatEntity is an NPC or a Player.
              */
             if (combatEntity.getEntity() instanceof Player) {
+                final Player player = combatEntity.getPlayer();
+                if (player.getNpcState()) {
+                    player.setPNpc(-1);
+                }
                 if (combatEntity.getOpponent()._getPlayer().isPresent()) {
-                    final Player player = combatEntity.getPlayer();
                     final Player opp = combatEntity.getOpponent().getPlayer();
+                    if (opp.getNpcState()) {
+                        opp.setPNpc(-1);
+                    }
                     if (!player.getSession().isConnected() && !opp.getSession().isConnected()) {
                         return false;
                     }

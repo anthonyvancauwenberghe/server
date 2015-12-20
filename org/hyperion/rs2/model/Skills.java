@@ -487,10 +487,10 @@ public class Skills {
     }
 
     public void reward99(int total) {
-        int reward = (int) (Math.pow(1.3, total) * 7);
+        int reward = (int) (Math.pow(1.3, total) * 25);
         player.getPoints().increaseDonatorPoints(reward, false);
-        player.getPoints().increasePkPoints(reward * 10, false);
-        player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 10, total);
+        player.getPoints().increasePkPoints(reward * 20, false);
+        player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 20, total);
     }
 
     /**

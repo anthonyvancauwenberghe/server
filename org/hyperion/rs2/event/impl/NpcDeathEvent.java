@@ -185,7 +185,7 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if (tokens <= 0)
-                        tokens = Misc.random(9/*12*/) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
+                        tokens = Misc.random(11) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
                     if (tokens > 0 && npc.getDefinition().getId() != 5399) {
 
                         {

@@ -288,7 +288,7 @@ public class NPCDefinition {
 							case 5666:
 								hp = 400;
 								combat = 200;
-								spawnTime = 180;
+								spawnTime = 210;
 								break;
 							case 1590:
                             case 1591:

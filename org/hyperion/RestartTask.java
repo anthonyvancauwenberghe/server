@@ -1,6 +1,7 @@
 package org.hyperion;
 
 import org.hyperion.rs2.model.World;
+import org.hyperion.util.Time;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,9 @@ public class RestartTask extends TimerTask {
 
     @Override
     public void run() {
-        System.out.println("Daily restart task submitted.");
-        World.getWorld().update(120, "Automatic daily restart.");
+        if (Server.getUptime().millisUptime() > (Time.ONE_HOUR * 5)) {
+            System.out.println("Daily restart task submitted.");
+            World.getWorld().update(120, "Automatic daily restart.");
+        } else submitRestartTask();
     }
 }

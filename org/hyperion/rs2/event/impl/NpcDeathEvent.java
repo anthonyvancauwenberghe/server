@@ -204,7 +204,7 @@ public class NpcDeathEvent extends Event {
                 final int kills = player.getNPCLogs().log(npc);
                 if (npc.getDefinition().getId() == 5666) {
                     borkKillers.add(player.getName());
-                    if (borkKillers.size() == 3)
+                    if (borkKillers.size() == 6)
                         borkKillers.removeFirst();
                 }
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");

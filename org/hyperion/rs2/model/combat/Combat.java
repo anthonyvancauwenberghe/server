@@ -22,6 +22,7 @@ import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 /**
  * @authors Martin and Arsen
@@ -982,7 +983,8 @@ public class Combat {
                 if (type.equalsIgnoreCase("NPC")) {
                     NPC npc = opponent.getNPC();
                     if (combatEntity.getPlayer() != null) {
-                        if (npc.getDefinition().getId() == 5666 && NpcDeathEvent.borkKillers.contains(combatEntity.getPlayer().getName()))
+                        if (npc.getDefinition().getId() == 5666 &&
+                                (System.currentTimeMillis() - NpcDeathEvent.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < Time.FIVE_MINUTES))
                             return "Let someone else try killing barrelchest!";
                         if (System.currentTimeMillis() - npc.getCombat().lastHit < 9000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
                             return "This monster is already in combat";

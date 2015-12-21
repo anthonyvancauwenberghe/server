@@ -13,9 +13,7 @@ import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.PvMStore;
 import org.hyperion.util.Misc;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
@@ -24,6 +22,8 @@ import java.util.Optional;
  */
 
 public class NpcDeathEvent extends Event {
+
+    public static LinkedList<String> borkKillers = new LinkedList<>();
 
 
     public static int npcIdForDoubleDrops;
@@ -202,6 +202,11 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);
+                if (npc.getDefinition().getId() == 5666) {
+                    borkKillers.add(player.getName());
+                    if (borkKillers.size() == 3)
+                        borkKillers.removeFirst();
+                }
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
                 player.getAchievementTracker().npcKill(npc.getDefinition().getId());
 

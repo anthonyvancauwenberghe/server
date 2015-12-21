@@ -4,6 +4,7 @@ import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.map.pathfinding.PathfinderV2;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
@@ -160,6 +161,7 @@ public class Combat {
                 // if it worked remove the spell :)
                 combatEntity.deleteSpellAttack();
                 combatEntity.predictedAtk = System.currentTimeMillis() + 2500;
+
                 // combatEntity.predictedAtk =
                 // System.currentTimeMillis()+2000;
                 // spell hit etc
@@ -980,6 +982,8 @@ public class Combat {
                 if (type.equalsIgnoreCase("NPC")) {
                     NPC npc = opponent.getNPC();
                     if (combatEntity.getPlayer() != null) {
+                        if (npc.getDefinition().getId() == 5666 && NpcDeathEvent.borkKillers.contains(combatEntity.getPlayer().getName()))
+                            return "Let someone else try killing barrelchest!";
                         if (System.currentTimeMillis() - npc.getCombat().lastHit < 5000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
                             return "This monster is already in combat";
                     } else if (opponent.getOpponent() != combatEntity)

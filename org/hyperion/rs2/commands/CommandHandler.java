@@ -404,6 +404,13 @@ public class CommandHandler {
 				return true;
 			}
 		});
+		submit(new Command("barrelchest", Rank.PLAYER) {
+			@Override
+			public boolean execute(Player player, String input) {
+				Magic.teleport(player, 2801, 4723, 0, false);
+				return true;
+			}
+		});
 		submit(new Command("npc", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {

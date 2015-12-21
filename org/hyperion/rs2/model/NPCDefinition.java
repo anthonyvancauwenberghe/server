@@ -49,7 +49,7 @@ public class NPCDefinition {
 		return drops;
 	}
 
-	private int spawnTime = 30;
+	private int spawnTime = 60;
 	private int combat = 3;
 	private int maxHp = 0;
 	private String name = "null";

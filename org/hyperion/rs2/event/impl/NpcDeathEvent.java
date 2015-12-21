@@ -131,6 +131,7 @@ public class NpcDeathEvent extends Event {
             npc.setTeleportTarget(npc.getSpawnLocation(), false);
             if (npc.npcDeathTimer != -1) {
                 timer = 10 + npc.npcDeathTimer;
+                killer.debugMessage("Time to wait: " + timer);
                 npc.isHidden(true);
             } else {
                 npc.isHidden(true);

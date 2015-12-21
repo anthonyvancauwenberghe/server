@@ -984,7 +984,7 @@ public class Combat {
                     if (combatEntity.getPlayer() != null) {
                         if (npc.getDefinition().getId() == 5666 && NpcDeathEvent.borkKillers.contains(combatEntity.getPlayer().getName()))
                             return "Let someone else try killing barrelchest!";
-                        if (System.currentTimeMillis() - npc.getCombat().lastHit < 5000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
+                        if (System.currentTimeMillis() - npc.getCombat().lastHit < 9000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
                             return "This monster is already in combat";
                     } else if (opponent.getOpponent() != combatEntity)
                         return "blablabla";

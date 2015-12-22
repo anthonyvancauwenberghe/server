@@ -259,16 +259,16 @@ public class PlayerDeathEvent extends Event {
 							killer.getAchievementTracker().playerKill();
 							//AchievementHandler.progressAchievement(player, "Kill");
                             killer.addLastKill(player.getName());
-                            int pkpIncrease = (int)Math.pow(player.getKillCount(), 0.4);
-                            if(pkpIncrease > 40)
-                                pkpIncrease = 40;
+							int pkpIncrease = (int) Math.pow(player.getKillCount(), .8);
+							if (pkpIncrease > 400)
+								pkpIncrease = 400;
 
-							int pointsToAdd = ((int)((player.wildernessLevel/4 + player.getBounty())) + pkpIncrease);
+							int pointsToAdd = ((int) ((player.wildernessLevel / 2 + player.getBounty())) + pkpIncrease);
 
                             for(SpecialArea area: SpecialAreaHolder.getAreas()) {
                                 if(area.inEvent() && area.inArea(player))
-                                    pointsToAdd *= 5;
-                            }
+									pointsToAdd *= 4;
+							}
 							if(player.getKillStreak() >= 6) {
                                 AchievementHandler.progressAchievement(player, "Killstreak");
 								for(Player p : World.getWorld().getPlayers())

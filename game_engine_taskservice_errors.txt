@@ -1579,18 +1579,3 @@ Sun Nov 29 19:37:14 CET 2015
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
-Sun Dec 20 18:53:17 CET 2015
-	class: class java.util.ConcurrentModificationException
-	at java.util.LinkedHashMap$LinkedHashIterator.nextNode(LinkedHashMap.java:711)
-	at java.util.LinkedHashMap$LinkedKeyIterator.next(LinkedHashMap.java:734)
-	at org.hyperion.rs2.task.impl.PlayerUpdateTask.execute(PlayerUpdateTask.java:97)
-	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
-	at org.hyperion.rs2.task.ParallelTask$1.run(ParallelTask.java:44)
-	at org.hyperion.rs2.GameEngine$3.run(GameEngine.java:190)
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-	at java.lang.Thread.run(Thread.java:745)
-
-================================

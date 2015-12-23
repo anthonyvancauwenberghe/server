@@ -13,6 +13,7 @@ import java.util.List;
 public class CheckPendingDonationsTask implements Task {
 
     private final Player player;
+    private final double MULTIPLIER=1.5;
 
     public CheckPendingDonationsTask(final Player player) {
         this.player = player;
@@ -62,10 +63,11 @@ public class CheckPendingDonationsTask implements Task {
                 player.sendf("You don't have any pending donations! Type ::donate to donate");
             return;
         }
-        player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + totalPoints);
+        player.getPoints().setDonatorPoints( (int) Math.round(player.getPoints().getDonatorPoints() + totalPoints*MULTIPLIER));
         player.getPoints().setDonatorsBought(player.getPoints().getDonatorPointsBought() + totalPoints);
         player.getQuestTab().sendDonatePoints();
         player.sendf("Alert##Thank you for donating $%,d##%,d donator points have been added to your account", totalDollars, totalPoints);
+        player.sendf("CHRISTMAS SPECIAL! You received an extra " + (MULTIPLIER-1)*100 + "% Donator Points for christmas!");
         check(player, Donation.DP_FOR_DONATOR, Rank.DONATOR);
         check(player, Donation.DP_FOR_SUPER_DONATOR, Rank.SUPER_DONATOR);
         if(processedCount != donations.size()){

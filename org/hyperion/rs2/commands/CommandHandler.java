@@ -932,7 +932,28 @@ public class CommandHandler {
                        return true;
                    }
                });
+		submit(new Command("thread", Rank.PLAYER) {
+			@Override
+			public boolean execute(Player player, String input) {
+				try{
+					final int threadNumber = Integer.parseInt(filterInput(input));
+					if(threadNumber < 1){
+						player.getActionSender().sendMessage("Enter a valid topic id.");
+						return false;
+					}
+					else if (threadNumber > Integer.MAX_VALUE)
+						return false;
+					else {
+						player.getActionSender().sendWebpage("http://forums.arteropk.com/index.php?showtopic=" + threadNumber );
+						return true;
+					}
+				} catch(Exception ex) {
+					player.getActionSender().sendMessage("Enter a valid topic id.");
+					return false;
+				}
 
+			}
+		});
         submit(new Command("buyrocktails", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
                 try{

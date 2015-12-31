@@ -563,7 +563,7 @@ public class Skills {
             player.getPermExtraData().remove("doubleExperience");
         }
 
-        if (skill == BONUS_SKILL)
+        if(true || skill == BONUS_SKILL) //REMOVE true || to disable double xp
             exp *= 2;
         else if (skill > 6 && player.getPermExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getPermExtraData().getLong("doubleExperience") != 0)
             exp *= 2;

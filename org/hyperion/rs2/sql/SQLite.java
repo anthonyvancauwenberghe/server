@@ -1,5 +1,14 @@
 package org.hyperion.rs2.sql;
 
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.LoginDebugger;
+import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Time;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,14 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.net.LoginDebugger;
-import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Time;
 
 /**
  * @author Arsen Max.
@@ -245,6 +246,21 @@ public class SQLite {
 					}
 					return true;
 				}
+			}
+		});
+		CommandHandler.submit(new Command("removealts", Rank.DEVELOPER) {
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				final String ip = filterInput(input).trim();
+				if(!ip.matches("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}")){
+					player.sendf("ip must be in the format nnn.nnn.nnn.nnn");
+					return false;
+				}
+				synchronized(SQLite.getDatabase()){
+					final int removed = SQLite.getDatabase().statement.executeUpdate("DELETE FROM playerips WHERE ip = '" + ip + "'");
+					player.sendf("Removed %,d alts matching ip: %s", removed, ip);
+				}
+				return true;
 			}
 		});
 		CommandHandler.submit(new Command("wipealts", Rank.OWNER) {

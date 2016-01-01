@@ -2,13 +2,48 @@ package org.hyperion.rs2.commands;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.*;
+import org.hyperion.rs2.commands.impl.AllToMeCommand;
+import org.hyperion.rs2.commands.impl.DemoteCommand;
+import org.hyperion.rs2.commands.impl.EpicRapeCommand;
+import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
+import org.hyperion.rs2.commands.impl.GiveIntCommand;
+import org.hyperion.rs2.commands.impl.KeywordCommand;
+import org.hyperion.rs2.commands.impl.LvlCommand;
+import org.hyperion.rs2.commands.impl.PromoteCommand;
+import org.hyperion.rs2.commands.impl.RapeCommand;
+import org.hyperion.rs2.commands.impl.RecordingCommand;
+import org.hyperion.rs2.commands.impl.RestartServerCommand;
+import org.hyperion.rs2.commands.impl.ScreenshotCommand;
+import org.hyperion.rs2.commands.impl.SendiCommand;
+import org.hyperion.rs2.commands.impl.SkillCommand;
+import org.hyperion.rs2.commands.impl.SpawnCommand;
+import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
+import org.hyperion.rs2.commands.impl.VoteCommand;
+import org.hyperion.rs2.commands.impl.WikiCommand;
+import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Ban;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.PlayerPoints;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.SpecialBar;
+import org.hyperion.rs2.model.SpellBook;
+import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.color.Color;
@@ -46,7 +81,12 @@ import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.cmd.*;
+import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
+import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
@@ -68,7 +108,19 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Jack Daniels.
@@ -2339,6 +2391,18 @@ public class CommandHandler {
 				}
 				AchievementTracker.active(false);
 				player.sendf("Achievements are now deactivated");
+				return true;
+			}
+		});
+
+		submit(new Command("suicide", Rank.PLAYER) {
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(!player.getLocation().inFunPk()){
+					player.sendf("You can only use the suicide command at funpk!");
+					return false;
+				}
+				player.cE.hit(player.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
 				return true;
 			}
 		});

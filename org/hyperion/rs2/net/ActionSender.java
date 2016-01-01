@@ -413,7 +413,7 @@ public class ActionSender {
         sendString(29177, "@or1@Pure Set");
         sendString(29178, "@or1@Zerk Set");
         sendString(29179, "@or1@Welfare Hybrid Set");
-        //        AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
+        AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
 /**
  * OVL BUG
  */

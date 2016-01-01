@@ -130,6 +130,7 @@ public class Farming implements ContentTemplate {
 	}
 
 	public void refreshFarmObjects(Player player) {
+	/*
 		for(Object object : player.getFarm().rakePatches.values().toArray()) {
 			RakePatch rpatch = (RakePatch) object;
 			Patch patch = unRakedPatches.get(rpatch.unRakedObjId);
@@ -143,6 +144,7 @@ public class Farming implements ContentTemplate {
 				player.getActionSender().sendReplaceObject(plant.x + offset(serverPlant.type), plant.y + offset(serverPlant.type), serverPlant.normalStages[plant.stage], 0, 10);
 			}
 		}
+		*/
 	}
 
 	public static void deserialize(IoBuffer buf, Player player) {//load method

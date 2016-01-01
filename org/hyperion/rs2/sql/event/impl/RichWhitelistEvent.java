@@ -3,6 +3,7 @@ package org.hyperion.rs2.sql.event.impl;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.sql.SQLConnection;
 import org.hyperion.rs2.sql.event.SQLEvent;
 import org.hyperion.rs2.sql.requests.RichWhitelistRequest;
@@ -33,7 +34,7 @@ public class RichWhitelistEvent extends SQLEvent {
     }
 
     static {
-        CommandHandler.submit(new Command("disablerichevent") {
+        CommandHandler.submit(new Command("disablerichevent", Rank.DEVELOPER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 enabled = false;
@@ -41,7 +42,7 @@ public class RichWhitelistEvent extends SQLEvent {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("enablerichevent") {
+        CommandHandler.submit(new Command("enablerichevent", Rank.DEVELOPER) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 enabled = true;

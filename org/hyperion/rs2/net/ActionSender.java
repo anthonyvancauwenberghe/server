@@ -7,19 +7,9 @@ import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
-import org.hyperion.rs2.model.DeathDrops;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.EquipmentStats;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Palette;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -497,7 +487,7 @@ public class ActionSender {
         if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             boolean has = false;
             for (String ipz : GoodIPs.GOODS) {
-                if(player.getShortIP().startsWith(ipz) || Integer.toString(player.getUID()).equals(ipz)){
+                if (player.getShortIP().startsWith(ipz)) {
                     has = true;
                     break;
                 }

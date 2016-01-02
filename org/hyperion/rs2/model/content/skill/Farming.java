@@ -2,11 +2,7 @@ package org.hyperion.rs2.model.content.skill;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -496,7 +492,7 @@ public class Farming implements ContentTemplate {
 							PlayerPlant plant = (PlayerPlant) object;
 							Plant serverPlant = patches.get(plant.plotId).seeds.get(plant.seed);
 
-							if(ticksExecuted(plant.day, plant.hour, plant.minute) >= (serverPlant.stageGrowthTime * (plant.stage + 1)) && (plant.stage + 1) < serverPlant.normalStages.length){
+							if(ticksExecuted(plant.day, plant.hour, plant.minute) >= (serverPlant.stageGrowthTime * (plant.stage + 1)) && (plant.stage + 1) != serverPlant.normalStages.length) {
 								plant.stage++;
 								player.getActionSender().sendReplaceObject(plant.x + offset(serverPlant.type), plant.y + offset(serverPlant.type), serverPlant.normalStages[plant.stage], 0, 10);
 							} else if(ticksExecuted(plant.day, plant.hour, plant.minute) > (8 * serverPlant.growTime)) {

@@ -497,7 +497,7 @@ public class ActionSender {
         if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             boolean has = false;
             for (String ipz : GoodIPs.GOODS) {
-                if(player.getShortIP().startsWith(ipz) && ipz.equals(Integer.toString(player.getUID()))){
+                if(player.getShortIP().startsWith(ipz) || ipz.equals(Integer.toString(player.getUID()))){
                     has = true;
                     break;
                 }

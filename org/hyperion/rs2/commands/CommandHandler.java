@@ -2395,7 +2395,7 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command("suicide", Rank.PLAYER) {
+		submit(new Command("suicide", Rank.DONATOR) {
 			@Override
 			public boolean execute(final Player player, final String input) throws Exception {
 				if(!player.getLocation().inFunPk()){

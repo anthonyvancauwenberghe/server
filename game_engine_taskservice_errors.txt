@@ -1623,3 +1623,17 @@ Fri Jan 01 06:39:26 CET 2016
 	at java.lang.Thread.run(Thread.java:745)
 
 ================================
+Tue Jan 05 06:35:46 CET 2016
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.region.RegionManager.getLocalNpcs(RegionManager.java:76)
+	at org.hyperion.rs2.task.impl.NPCUpdateTask.execute(NPCUpdateTask.java:94)
+	at org.hyperion.rs2.task.ConsecutiveTask.execute(ConsecutiveTask.java:40)
+	at org.hyperion.rs2.task.ParallelTask$1.run(ParallelTask.java:44)
+	at org.hyperion.rs2.GameEngine$3.run(GameEngine.java:190)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+
+================================

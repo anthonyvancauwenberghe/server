@@ -134,7 +134,7 @@ public class Farming implements ContentTemplate {
 	}
 
 	public void refreshFarmObjects(Player player) {
-	/*
+
 		for(Object object : player.getFarm().rakePatches.values().toArray()) {
 			RakePatch rpatch = (RakePatch) object;
 			Patch patch = unRakedPatches.get(rpatch.unRakedObjId);
@@ -148,7 +148,7 @@ public class Farming implements ContentTemplate {
 				player.getActionSender().sendReplaceObject(plant.x + offset(serverPlant.type), plant.y + offset(serverPlant.type), serverPlant.normalStages[plant.stage], 0, 10);
 			}
 		}
-		*/
+
 	}
 
 	public static void deserialize(IoBuffer buf, Player player) {//load method
@@ -498,7 +498,7 @@ public class Farming implements ContentTemplate {
 
 							if(ticksExecuted(plant.day, plant.hour, plant.minute) >= (serverPlant.stageGrowthTime * (plant.stage + 1)) && (plant.stage + 1) < serverPlant.normalStages.length){
 								plant.stage++;
-								//player.getActionSender().sendReplaceObject(plant.x + offset(serverPlant.type), plant.y + offset(serverPlant.type), serverPlant.normalStages[plant.stage], 0, 10);
+								player.getActionSender().sendReplaceObject(plant.x + offset(serverPlant.type), plant.y + offset(serverPlant.type), serverPlant.normalStages[plant.stage], 0, 10);
 							} else if(ticksExecuted(plant.day, plant.hour, plant.minute) > (8 * serverPlant.growTime)) {
 								//plant dies
 								plant.dead = true;

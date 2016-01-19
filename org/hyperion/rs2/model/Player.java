@@ -406,7 +406,7 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private PollInterface poll = new PollInterface(this);
 	private SpawnTab spawntab = new SpawnTab(this);
 	private AchievementTab achievementtab = new AchievementTab(this);
-	private News news = new News(this);
+	//private News news = new News(this);
 	private ItemDropping itemDropping = new ItemDropping();
 	private TriviaSettings ts = new TriviaSettings(0, false);
 	private Mail mail = new Mail(this);
@@ -895,9 +895,9 @@ public class Player extends Entity implements Persistable, Cloneable{
 		return achievementtab;
 	}
 
-	public News getNews() {
-		return news;
-	}
+	//public News getNews() {
+		//return news;
+	//}
 
 	public ExtraData getExtraData() {
 		return extraData;

@@ -2,13 +2,48 @@ package org.hyperion.rs2.commands;
 
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.*;
+import org.hyperion.rs2.commands.impl.AllToMeCommand;
+import org.hyperion.rs2.commands.impl.DemoteCommand;
+import org.hyperion.rs2.commands.impl.EpicRapeCommand;
+import org.hyperion.rs2.commands.impl.GiveDonatorPointsCommand;
+import org.hyperion.rs2.commands.impl.GiveIntCommand;
+import org.hyperion.rs2.commands.impl.KeywordCommand;
+import org.hyperion.rs2.commands.impl.LvlCommand;
+import org.hyperion.rs2.commands.impl.PromoteCommand;
+import org.hyperion.rs2.commands.impl.RapeCommand;
+import org.hyperion.rs2.commands.impl.RecordingCommand;
+import org.hyperion.rs2.commands.impl.RestartServerCommand;
+import org.hyperion.rs2.commands.impl.ScreenshotCommand;
+import org.hyperion.rs2.commands.impl.SendiCommand;
+import org.hyperion.rs2.commands.impl.SkillCommand;
+import org.hyperion.rs2.commands.impl.SpawnCommand;
+import org.hyperion.rs2.commands.impl.ViewPacketActivityCommand;
+import org.hyperion.rs2.commands.impl.VoteCommand;
+import org.hyperion.rs2.commands.impl.WikiCommand;
+import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Ban;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.NPCDrop;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.PlayerPoints;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.SpecialBar;
+import org.hyperion.rs2.model.SpellBook;
+import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
 import org.hyperion.rs2.model.color.Color;
@@ -40,16 +75,18 @@ import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
+import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
 import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.cmd.*;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.MyPunishmentsCommand;
+import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.RemovePunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.ViewPunishmentsCommand;
 import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
 import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
@@ -71,8 +108,19 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Jack Daniels.
@@ -122,7 +170,8 @@ public class CommandHandler {
 					int staffCommandValue = staffCommand ? 1 : 0;
 					String query = "INSERT INTO commands(username,command,staffcommand,input) "
 							+ "VALUES('" + player.getName().toLowerCase() + "','" + key + "'," + staffCommandValue + ",'" + SQLUtils.checkInput(input) + "')";
-					World.getWorld().getLogsConnection().offer(new QueryRequest(query));
+					if (Server.getConfig().getBoolean("logssql"))
+						World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 				}
 
 			} catch(Exception e) {
@@ -404,6 +453,13 @@ public class CommandHandler {
 				int[] parts = getIntArray(input);
 				World.getWorld().getNPCManager().addNPC(player.getLocation(),
 						parts[0], -1);
+				return true;
+			}
+		});
+		submit(new Command("barrelchest", Rank.PLAYER) {
+			@Override
+			public boolean execute(Player player, String input) {
+				Magic.teleport(player, 2801, 4723, 0, false);
 				return true;
 			}
 		});
@@ -789,6 +845,14 @@ public class CommandHandler {
 				return true;
 			}
 		});
+
+		submit(new Command("moneymaking", Rank.PLAYER) {
+			@Override
+			public boolean execute(Player player, String input) {
+				player.getActionSender().sendWebpage("http://forums.arteropk.com/topic/23523-money-making-guide/");
+				return true;
+			}
+		});
 		submit(new Command("forums", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -920,7 +984,28 @@ public class CommandHandler {
                        return true;
                    }
                });
+		submit(new Command("thread", Rank.PLAYER) {
+			@Override
+			public boolean execute(Player player, String input) {
+				try{
+					final int threadNumber = Integer.parseInt(filterInput(input));
+					if(threadNumber < 1){
+						player.getActionSender().sendMessage("Enter a valid topic id.");
+						return false;
+					}
+					else if (threadNumber > Integer.MAX_VALUE)
+						return false;
+					else {
+						player.getActionSender().sendWebpage("http://forums.arteropk.com/index.php?showtopic=" + threadNumber );
+						return true;
+					}
+				} catch(Exception ex) {
+					player.getActionSender().sendMessage("Enter a valid topic id.");
+					return false;
+				}
 
+			}
+		});
         submit(new Command("buyrocktails", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
                 try{
@@ -1489,12 +1574,26 @@ public class CommandHandler {
         submit(new ViewChallengesCommand());
         submit(new CreateChallengeCommand());
 
-        submit(new Command("a3place", Rank.MODERATOR){
-            public boolean execute(final Player player, final String input){
-                Magic.teleport(player, 3108, 3159, 3, false);
-                return true;
-            }
-        });
+		submit(new Command("a3place", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 3108, 3159, 3, false);
+				return true;
+			}
+		});
+
+		submit(new Command("seanplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 3292, 3163, 2, false);
+				return true;
+			}
+		});
+
+		submit(new Command("joshplace", Rank.MODERATOR){
+			public boolean execute(final Player player, final String input){
+				Magic.teleport(player, 1891, 4523, 2, false);
+				return true;
+			}
+		});
 
         submit(new Command("getskill", Rank.ADMINISTRATOR){
             public boolean execute(final Player player, final String input){
@@ -2266,6 +2365,44 @@ public class CommandHandler {
 				target.verificationCode = "";
 				player.sendf("Removed %s's verification code", target.getName());
 				target.sendf("Your verification code has been removed");
+				return true;
+			}
+		});
+
+		submit(new Command("enableach", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(AchievementTracker.active()){
+					player.sendf("Achievements are already active");
+					return false;
+				}
+				AchievementTracker.active(true);
+				player.sendf("Achievements are now activated");
+				return true;
+			}
+		});
+
+		submit(new Command("disableach", Rank.DEVELOPER){
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(!AchievementTracker.active()){
+					player.sendf("Achievements are already inactive");
+					return false;
+				}
+				AchievementTracker.active(false);
+				player.sendf("Achievements are now deactivated");
+				return true;
+			}
+		});
+
+		submit(new Command("suicide", Rank.DONATOR) {
+			@Override
+			public boolean execute(final Player player, final String input) throws Exception {
+				if(!player.getLocation().inFunPk()){
+					player.sendf("You can only use the suicide command at funpk!");
+					return false;
+				}
+				player.cE.hit(player.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
 				return true;
 			}
 		});

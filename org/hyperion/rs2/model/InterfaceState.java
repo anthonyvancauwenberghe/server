@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
@@ -337,7 +338,8 @@ public class InterfaceState {
 						boolean success = MergedSaving.renameInstant(player.getName(), result);
 						if(success) {
 							System.out.println("Successfully renamed instant file");
-							World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + player.getName() + "', " + player.getSource() + ",'renamed instant file to: " + result + "')");
+							if (Server.getConfig().getBoolean("logssql"))
+								World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + player.getName() + "', " + player.getSource() + ",'renamed instant file to: " + result + "')");
 							player.getSession().close(false);
 						} else {
 							System.out.println("Failed to rename instant file");
@@ -361,7 +363,8 @@ public class InterfaceState {
 						boolean success = MergedSaving.renameArtero(player.getName(), result);
 						if(success) {
 							System.out.println("Succesfully renamed artero file");
-							World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + player.getName() + "', " + player.getSource() + ",'renamed artero file to: " + result + "')");
+							if (Server.getConfig().getBoolean("logssql"))
+								World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + player.getName() + "', " + player.getSource() + ",'renamed artero file to: " + result + "')");
 							player.getSession().close(false);
 						} else {
 							System.out.println("Failed to rename artero file");
@@ -398,9 +401,11 @@ public class InterfaceState {
 									player.getActionSender().sendMessage("@blu@You've changed your name to: " + result);
 									player.setNeedsNameChange(false);
 									MergedSaving.save(player);
-									World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + initialName + "', " + player.getSource() + ",'changed name to: " + result + "')");
+									if (Server.getConfig().getBoolean("logssql"))
+										World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + initialName + "', " + player.getSource() + ",'changed name to: " + result + "')");
 								} else {
-									World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + initialName + "', " + player.getSource() + ",'failed change name to: " + result + "')");
+									if (Server.getConfig().getBoolean("logssql"))
+										World.getWorld().getLogsConnection().offer("INSERT INTO mergelogs(username, source, message) VALUES('" + initialName + "', " + player.getSource() + ",'failed change name to: " + result + "')");
 								}
 								player.getSession().close(false);
 							} else {

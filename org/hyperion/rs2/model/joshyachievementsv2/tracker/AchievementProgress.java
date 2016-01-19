@@ -1,11 +1,14 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+
+import java.sql.Timestamp;
 
 public class AchievementProgress{
 
@@ -19,6 +22,20 @@ public class AchievementProgress{
 
         achievement().tasks.stream()
                 .forEach(t -> add(new AchievementTaskProgress(achievementId, t.id)));
+    }
+
+    public Timestamp firstStart(){
+        return streamAvailableProgress()
+                .min(Comparator.comparing(atp -> atp.startDate))
+                .map(atp -> atp.startDate)
+                .orElse(null);
+    }
+
+    public Timestamp lastFinish(){
+        return streamAvailableProgress()
+                .max(Comparator.comparing(atp -> atp.finishDate))
+                .map(atp -> atp.finishDate)
+                .orElse(null);
     }
 
     public Achievement achievement(){
@@ -50,18 +67,34 @@ public class AchievementProgress{
 
     public boolean tasksFinished(){
         return progress.values().stream()
-                    .allMatch(AchievementTaskProgress::finished);
+                .allMatch(AchievementTaskProgress::finished);
+    }
+
+    public String progressColor(){
+        if(finished())
+            return "@gre@";
+        else if(progress.values().stream().anyMatch(atp -> atp.started() || atp.progress > 0))
+            return "@or1@";
+        else
+            return "@red@";
     }
 
     public String getTabString(){
-        final String color = finished() ? "@gre@" :
-                progress.values().stream().anyMatch(AchievementTaskProgress::started) ? "@or1@" :
-                        "@red@";
-        return color + (achievement().title.length() <= 26 ? achievement().title : achievement().title.substring(0, 25).trim() + "...");
+        String color = "@red@";
+        //System.out.println("progress size: " + progress.size());
+        if(progress.values().stream().anyMatch(atp -> atp.started() || atp.progress > 0))
+            color = "@or1@";
+        if(finished())
+            color = "@gre@";
+        return color + getShortTitle();
+    }
+
+    public String getShortTitle(){
+        return (achievement().title.length() <= 26 ? achievement().title : achievement().title.substring(0, 25).trim() + "...");
     }
 
     public void sendProgressHeader(final Player player){
-        player.sendf("@dre@Achievement progress: %s %1.2%", achievement().title, progress());
+        player.sendf("@dre@Achievement progress: %s %1.2%", getShortTitle(), progress());
     }
 
     public void sendAllTaskProgressHeaders(final Player player){
@@ -71,5 +104,19 @@ public class AchievementProgress{
 
     public double progressPercent(){
         return progress() * 100d / achievement().tasks.threshold;
+    }
+
+    public String info(){
+        final String color = progressColor();
+        final double percent = progressPercent();
+        return String.format("Achievement @blu@%d @bla@| %s | %s%s%%", achievement().id, achievement().shortTitle, color, percent);
+    }
+
+    public boolean shouldSendInfoFor(final int taskId){
+        final AchievementTaskProgress atp = progress(taskId);
+        if(atp == null)
+            return false;
+        //was going to do some checks here..
+        return true;
     }
 }

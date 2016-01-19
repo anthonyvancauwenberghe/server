@@ -1,11 +1,5 @@
 package org.hyperion.rs2.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.mina.core.buffer.IoBuffer;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.combat.attack.AvatarOfDestruction;
@@ -13,6 +7,12 @@ import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
 import org.hyperion.rs2.model.combat.attack.GodWarsBandos;
 import org.hyperion.rs2.model.combat.attack.RevAttack;
 import org.hyperion.rs2.util.IoBufferUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>Represents a type of NPC.</p>
@@ -283,8 +283,14 @@ public class NPCDefinition {
                             case 50:
                                 hp = 950;
                                 combat = 350;
-                                break;
-                            case 1590:
+								spawnTime = 250;
+								break;
+							case 5666:
+								hp = 400;
+								combat = 200;
+								spawnTime = 180;
+								break;
+							case 1590:
                             case 1591:
                                 hp *= 3;
                                 combat *= 1.15;

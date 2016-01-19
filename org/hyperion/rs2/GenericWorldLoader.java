@@ -1,22 +1,21 @@
 package org.hyperion.rs2;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-
-import org.hyperion.rs2.WorldLoader.LoginResult;
-import org.hyperion.rs2.model.BanManager;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.LoginDebugger;
+import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 /**
  * An implementation of the <code>WorldLoader</code> class that saves players
@@ -62,7 +61,7 @@ public class GenericWorldLoader implements WorldLoader {
 					Password pass = MergedSaving.getMainPass(name);
 					if(pass.getRealPassword() == null)
 						code = LoginResult.INVALID_USER_OR_PASS;
-					else if (!pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
+					else if (!pass.getRealPassword().equalsIgnoreCase(/*EncryptionStandard.encrypt(*/pd.getPassword()))/*)*/ {
 						code = LoginResult.INVALID_USER_OR_PASS;
 					} else {
 						//MEANS everything went very well

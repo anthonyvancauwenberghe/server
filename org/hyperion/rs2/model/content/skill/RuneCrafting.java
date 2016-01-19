@@ -156,7 +156,7 @@ public class RuneCrafting implements ContentTemplate {
 				public void execute() {
 					ContentEntity.deleteItemAll(client, useItemId2, 1);
 					ContentEntity.addItem(client, r.getRuneId(), finalAmount);
-					client.getAchievementTracker().itemSkilled(Skills.RUNECRAFTING, r.getRuneId(), 1);
+					client.getAchievementTracker().itemSkilled(Skills.RUNECRAFTING, r.getRuneId(), finalAmount);
 					ContentEntity.sendMessage(client, "You craft " + finalAmount + " " + ContentEntity.getItemName(item) + "s.");
 					ContentEntity.addSkillXP(client, runeExp * (Constants.XPRATE/2), 20);
 					// Stop the event.

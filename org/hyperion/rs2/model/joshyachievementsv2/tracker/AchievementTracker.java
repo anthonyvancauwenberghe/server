@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
@@ -27,15 +28,18 @@ public class AchievementTracker {
     }
 
     public void load(){
-        final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
-        if(taskProgress == null){
-            errorLoading = true;
-            player.sendf("Error loading achievement data! You'll be notified when they are active again.");
-            return;
+        if (Server.getConfig().getBoolean("logssql")) {
+            final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
+            if (taskProgress == null) {
+                errorLoading = true;
+                player.sendf("Error loading achievement data! You'll be notified when they are active again.");
+                return;
+            }
+            taskProgress.forEach(
+                    atp -> progress(atp.achievementId).add(atp)
+            );
         }
-        taskProgress.forEach(
-                atp -> progress(atp.achievementId).add(atp)
-        );
+
     }
 
     public void sendInfo(final Achievement a) {
@@ -113,7 +117,7 @@ public class AchievementTracker {
                         player.debugMessage("Not constrained: " + t.desc);
                         return false;
                     }
-                    player.debugMessage("Match: " + t.desc);
+                    System.out.printf("match: %s (%d, achievement id: %d)%n", t.desc, t.id, t.achievementId);
                     return true;
                 })
                 .min(Comparator.comparingInt(t -> t.threshold));
@@ -136,6 +140,7 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
+        System.out.printf("progressing task: %s (%d, achievement id %d)%n", task.desc, task.id, task.achievementId);
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())
@@ -144,7 +149,10 @@ public class AchievementTracker {
         if (!atp.started())
             atp.startNow();
         final int oldProgress = atp.progress;
-        atp.progress(progress);
+        if(task instanceof KillstreakTask)
+            atp.progress = progress;
+        else
+            atp.progress(progress);
         if(!(shouldInsert ? AchievementsSql.insertTaskProgress(player, atp) : AchievementsSql.updateTaskProgress(player, atp))){
             if(shouldInsert)
                 atp.startDate = null;
@@ -163,9 +171,9 @@ public class AchievementTracker {
             if (ap.tasksFinished()) {
                 player.sendLootMessage("Achievement", String.format("%s complete! Congratulations!", ap.achievement().title));
                 ap.achievement().rewards.reward(player);
-                player.getAchievementTab().updateAchievementTab();
             }
         }
+        player.getAchievementTab().updateAchievementTab();
         //updateInterface(ap.achievement());
     }
 

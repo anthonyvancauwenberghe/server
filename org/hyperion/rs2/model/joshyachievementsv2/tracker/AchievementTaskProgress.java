@@ -1,10 +1,14 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
+import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraint;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 
 public class AchievementTaskProgress{
@@ -36,6 +40,15 @@ public class AchievementTaskProgress{
         return progress;
     }
 
+    public String progressColor(){
+        if(finished())
+            return "@gre@";
+        else if(progress > 0)
+            return "@or1@";
+        else
+            return "@red@";
+    }
+
     public double progressPercent(){
         return progress * 100d / task().threshold;
     }
@@ -53,10 +66,10 @@ public class AchievementTaskProgress{
     }
 
     public boolean finished(){
-        return startDate != null
+        return /*startDate != null
                 && finishDate != null
                 && finishDate.after(startDate)
-                && taskFinished();
+                &&*/ taskFinished();
     }
 
     public boolean taskFinished(){
@@ -71,12 +84,35 @@ public class AchievementTaskProgress{
         return achievement().tasks.get(taskId);
     }
 
+    public String getShortDesc(){
+        return (task().desc.length() <= 26 ? task().desc : task().desc.substring(0, 25).trim() + "...");
+    }
+
     public void sendProgress(final Player player, final boolean star){
         player.sendf("@dre@Achievement progress%s - %,d/%,d %s",
                 (star ? "@yel@*@bla@" : ""),
                 progress,
                 task().threshold,
-                task().desc);
+                task().shortDesc());
+    }
+
+    public List<String> info(final Player player){
+        final List<String> info = new ArrayList<>();
+        final Task task = task();
+        final String color = progressColor();
+        final double percent = progressPercent();
+        final boolean finished = taskFinished();
+        if(task.hasPreTask())
+            info.add(String.format("> T@blu@%d @bla@(@red@*@blu@%d@bla@) %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
+        else
+            info.add(String.format("> T@blu@%d @bla@%s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
+        if(startDate != null)
+            info.add(String.format("> T@blu@%d @bla@Started: @blu@%s @bla@| %s", task.number, startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
+        if(!finished){
+            for(final Constraint c : task.constraints.list)
+                info.add(String.format("> T@blu@%d @bla@[%sX@bla@] %s", task.number, c.constrainedColor(player), c.shortDesc()));
+        }
+        return info;
     }
 
 }

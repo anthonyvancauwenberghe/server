@@ -309,8 +309,10 @@ public class Magic {
 			}
 		}
 
-            opp.lastHit = System.currentTimeMillis();
-            if(spell.isMulti())
+			if (opp.getNPC() != null)
+				opp.getNPC().lastAttacker = attacker.getPlayer().getName();
+			opp.lastHit = System.currentTimeMillis();
+			if(spell.isMulti())
                 AtkBonus *= 0.9;
 		int deltaBonus = AtkBonus - DefBonus;
 		int toAdd = Misc.random(deltaBonus / 3);

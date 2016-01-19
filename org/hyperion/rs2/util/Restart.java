@@ -18,11 +18,16 @@ public class Restart {
 	}
 
 	public void execute() {
-		for(Player player : World.getWorld().getPlayers()) {
-			Trade.declineTrade(player);
-			PlayerFiles.saveGame(player);
+		try {
+			for (Player player : World.getWorld().getPlayers()) {
+				Trade.declineTrade(player);
+				PlayerFiles.saveGame(player);
+			}
+			Runtime.getRuntime().exec("cmd /c start run.bat");
+			System.exit(0);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		System.exit(0);
 	}
 
 	private void writeLog(String reason) {

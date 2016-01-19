@@ -53,6 +53,7 @@ public class VotingBox implements ContentTemplate {
     public boolean clickObject(Player player, int type, int a, int b, int c,
                                int d) {
         if (a == ID && player.getInventory().remove(new Item(ID, 1)) > 0) {
+            player.getAchievementTracker().itemOpened(ID);
             player.getPoints().increaseVotingPoints(1);
             player.getPoints().increaseDonatorPoints(1, false);
         }

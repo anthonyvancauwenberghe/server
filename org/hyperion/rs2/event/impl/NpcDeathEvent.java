@@ -13,9 +13,7 @@ import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.PvMStore;
 import org.hyperion.util.Misc;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
@@ -24,6 +22,8 @@ import java.util.Optional;
  */
 
 public class NpcDeathEvent extends Event {
+
+    public static Map<String, Long> borkKillers = new HashMap<>();
 
 
     public static int npcIdForDoubleDrops;
@@ -130,7 +130,10 @@ public class NpcDeathEvent extends Event {
             }
             npc.setTeleportTarget(npc.getSpawnLocation(), false);
             if (npc.npcDeathTimer != -1) {
-                timer = 10 + npc.npcDeathTimer;
+                if (npc.getDefinition().getId() == 5666)
+                    timer = 10 + 190;
+                else timer = 10 + 60;
+                // killer.debugMessage("Time to wait: " + timer);
                 npc.isHidden(true);
             } else {
                 npc.isHidden(true);
@@ -185,7 +188,7 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if (tokens <= 0)
-                        tokens = Misc.random(9/*12*/) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
+                        tokens = Misc.random(11) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
                     if (tokens > 0 && npc.getDefinition().getId() != 5399) {
 
                         {
@@ -202,6 +205,8 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);
+                if (npc.getDefinition().getId() == 5666)
+                    borkKillers.put(player.getName(), System.currentTimeMillis());
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
                 player.getAchievementTracker().npcKill(npc.getDefinition().getId());
 
@@ -217,7 +222,7 @@ public class NpcDeathEvent extends Event {
                     if (npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                         int chance = isTask ? 750 : 1000;
                         if (npc.getDefinition().getId() == 8349 && player.getLocation().inPvPArea())
-                            chance = 500;
+                            chance = 750;
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
                         if (player.getPermExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {

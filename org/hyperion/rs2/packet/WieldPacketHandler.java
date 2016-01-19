@@ -56,6 +56,10 @@ public class WieldPacketHandler implements PacketHandler {
             player.getInventory().set(slot, null);
             return;
         }
+		if (id == 19773) {
+			player.setPNpc(6747 + Misc.random(2));
+			player.getCombat().doGfx(310);
+		}
 		if(ClueScrollManager.isClue(id)) {
 			ClueScrollManager.getInInventory(player).send(player);
 			return;

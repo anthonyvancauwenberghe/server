@@ -1,21 +1,19 @@
 package org.hyperion;
 
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.hyperion.cache.Cache;
-import org.hyperion.cache.index.impl.MapIndex;
-import org.hyperion.cache.map.LandscapeParser;
-import org.hyperion.fileserver.FileServer;
+import javafx.application.Application;
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
+import org.hyperion.rs2.net.security.CharFileEncryption;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
+import org.monitor.domain.Controller;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A class to start both the file and game servers.
@@ -66,6 +64,14 @@ public class Server {
      */
     private static final Logger logger = Logger.getLogger(Server.class.getName());
 
+
+    /**
+     * The Encryption instance, holding the used key on startup.
+     */
+    private static CharFileEncryption charFileEncryption;
+
+    private static Controller guiController;
+
     /**
      * Server uptime.
      *
@@ -83,6 +89,10 @@ public class Server {
         return stats;
     }
 
+    public static CharFileEncryption getCharFileEncryption() {
+        return charFileEncryption;
+    }
+
 
     public static final boolean DEBUG = false;
 
@@ -98,14 +108,37 @@ public class Server {
      */
     public static long lastServerVote = 0L;
 
+    private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
+
     /**
      * The entry point of the application.
      *
      * @param args The command line arguments.
      */
     public static void main(String[] args) throws Exception {
+        Application.launch(Controller.class);
+    }
+    public static World launchServer() {
+        /*
+        Console console = System.console();
+        if (console == null) {
+            logger.log(Level.WARNING, "Using default password.");
+            charFileEncryption = new CharFileEncryption("Glis1234Glis1234");
+        } else {
+            boolean correctPass = false;
+            while(!correctPass) {
+                char passwordArray[] = console.readPassword("Enter password: ");
+                charFileEncryption = new CharFileEncryption(String.valueOf(passwordArray));
+                if(EncryptionStandard.encrypt("randomstring", charFileEncryption.getKey()).equals(checkString)) {
+                    correctPass = true;
+                } else {
+                    System.out.println("Password incorrect.");
+                }
+            }
+        }
+*/
+        RestartTask.submitRestartTask();
         long start = System.currentTimeMillis();
-        //new Thread(new LogsCleaner()).start();
         new Thread(new CharFilesCleaner()).start();
         System.out.println("-- Starting " + NAME + "  -- " + UPDATE);
         System.out.println("Spawn server: " + SPAWN);
@@ -129,6 +162,7 @@ public class Server {
         RestarterThread.getRestarter();
         //SQL.getSQL();
         //ShopManager.dumpShops();
+        return World.getWorld();
     }
 
 }

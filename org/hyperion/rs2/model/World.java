@@ -1,16 +1,5 @@
 package org.hyperion.rs2.model;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.logging.Logger;
-
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
@@ -30,7 +19,25 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.SpawnCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.EventManager;
-import org.hyperion.rs2.event.impl.*;
+import org.hyperion.rs2.event.impl.AntiDupeEvent;
+import org.hyperion.rs2.event.impl.BankersFacing;
+import org.hyperion.rs2.event.impl.CleanupEvent;
+import org.hyperion.rs2.event.impl.DisconnectEvent;
+import org.hyperion.rs2.event.impl.EPEvent;
+import org.hyperion.rs2.event.impl.GoodIPs;
+import org.hyperion.rs2.event.impl.HunterEvent;
+import org.hyperion.rs2.event.impl.NpcCombatEvent;
+import org.hyperion.rs2.event.impl.NpcDeathEvent;
+import org.hyperion.rs2.event.impl.PlayerCombatEvent;
+import org.hyperion.rs2.event.impl.PlayerEvent1Second;
+import org.hyperion.rs2.event.impl.PlayerEvent36Seconds;
+import org.hyperion.rs2.event.impl.PlayerStatsEvent;
+import org.hyperion.rs2.event.impl.PromoteEvent;
+import org.hyperion.rs2.event.impl.RefreshNewsEvent;
+import org.hyperion.rs2.event.impl.ServerMessages;
+import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.event.impl.UpdateEvent;
+import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.login.LoginServerConnector;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Trade;
@@ -47,7 +54,6 @@ import org.hyperion.rs2.model.content.jge.event.PulseGrandExchangeEvent;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
@@ -66,16 +72,41 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-//import org.hyperion.rs2.saving.SQLPlayerSaving;
-import org.hyperion.rs2.sql.*;
-import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
+import org.hyperion.rs2.sql.DonationsSQLConnection;
+import org.hyperion.rs2.sql.DummyConnection;
+import org.hyperion.rs2.sql.ImportantPlayerConnection;
+import org.hyperion.rs2.sql.LogsSQLConnection;
+import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sql.PlayersSQLConnection;
+import org.hyperion.rs2.sql.SQLAccessor;
+import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.sql.requests.StaffActivityRequest;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
-import org.hyperion.rs2.util.*;
+import org.hyperion.rs2.util.ConfigurationParser;
+import org.hyperion.rs2.util.EntityList;
+import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.rs2.util.NewcomersLogging;
+import org.hyperion.rs2.util.Restart;
 import org.hyperion.util.BlockingExecutorService;
+
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.logging.Logger;
+
+//import org.hyperion.rs2.saving.SQLPlayerSaving;
 
 //import org.hyperion.rs2.login.LoginServerWorldLoader;
 
@@ -101,11 +132,11 @@ public class World {
     }
 
 
-    private DebugGUI gui;
-
-    public DebugGUI getGUI() {
-        return gui;
-    }
+//    private DebugGUI gui;
+//
+//    public DebugGUI getGUI() {
+//        return gui;
+//    }
 
     /**
      * Logging class.
@@ -398,7 +429,7 @@ public class World {
             this.eventManager = new EventManager(engine);
             this.npcManager = new NPCManager();
             this.contentManager.init();
-            this.gui = new DebugGUI();
+//            this.gui = new DebugGUI();
             getWilderness().init();
             this.globalItemManager = new GlobalItemManager();
             this.staffManager = new StaffManager();
@@ -458,10 +489,10 @@ public class World {
 
             //LocalServerSQLConnection.init();
             //playersSQL.init();
-            //banManager = new BanManager(logsSQL);
+            banManager = new BanManager(logsSQL);
             AchievementsSql.sql = logsSQL;
-            PunishmentManager.init(logsSQL);
-            System.out.println("Initialized GE: " + JGrandExchange.init(logsSQL));
+            PunishmentManager.init(donationsSQL);
+            System.out.println("Initialized GE: " + JGrandExchange.init(playersSQL));
             //this.banManager.init();
             this.enemies = new ServerEnemies();
             SpawnCommand.init();
@@ -867,6 +898,8 @@ public class World {
                 }
             }
         }
+        if(Server.NAME.equalsIgnoreCase("arteropk") && !Rank.hasAbility(player, Rank.DEVELOPER))
+            SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(player.getName(), player.getFullIP()));
         final int fReturnCode = returnCode;
         PacketBuilder bldr = new PacketBuilder();
         bldr.put((byte) returnCode);
@@ -876,9 +909,9 @@ public class World {
                 .addListener(new IoFutureListener<IoFuture>() {
                     @Override
                     public void operationComplete(IoFuture future) {
-                        if (fReturnCode != 2) {
+                        if(fReturnCode != 2){
                             player.getSession().close(false);
-                        } else {
+                        }else{
                             player.getActionSender().sendLogin();
                             //PlayerFiles.saveGame(player);
                         }
@@ -1048,9 +1081,11 @@ public class World {
             public void run() {
 
                 if (!Rank.hasAbility(player, Rank.DEVELOPER))
-                    getLogsConnection().offer(new AccountValuesRequest(player));
+                    if (Server.getConfig().getBoolean("logssql"))
+                        getLogsConnection().offer(new AccountValuesRequest(player));
                 if (Rank.hasAbility(player, Rank.HELPER))
-                    getLogsConnection().offer(new StaffActivityRequest(player));
+                    if (Server.getConfig().getBoolean("logssql"))
+                        getLogsConnection().offer(new StaffActivityRequest(player));
 
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
@@ -1058,7 +1093,8 @@ public class World {
                 long dp = player.getAccountValue().getTotalValue();
                 long pkp = player.getAccountValue().getPkPointValue();
                 if (player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
-                    World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
+                    if (Server.getConfig().getBoolean("logssql"))
+                        World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
                             "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(),
                             dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
                 if (player.verified)
@@ -1077,7 +1113,8 @@ public class World {
             }
         });
         if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            getDonationsConnection().offer(new HighscoresRequest(player.getHighscores()));
+            if (Server.getConfig().getBoolean("logssql"))
+                getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**

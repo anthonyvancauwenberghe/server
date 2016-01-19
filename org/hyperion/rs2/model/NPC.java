@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 
@@ -15,6 +16,7 @@ import org.hyperion.rs2.model.shops.LegendaryStore;
  * @author Graham Edgecombe
  */
 public class NPC extends Entity {
+
 
 	/**
 	 * The definition.
@@ -44,6 +46,10 @@ public class NPC extends Entity {
 		spawnLocation = loc;
 		isHidden(false);
 	}
+
+
+	public String lastAttacker = "";
+
 
 	private final Location spawnLocation;
 

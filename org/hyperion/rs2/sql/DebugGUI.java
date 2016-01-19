@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
@@ -100,10 +101,14 @@ public class DebugGUI extends JFrame implements ActionListener {
 
     public void updateQueueSizes() {
         World world = World.getWorld();
-        this.logsQueue.setText("Logs queue: " + World.getWorld().getLogsConnection().getQueueSize() + "  -- " + world.getLogsConnection().getLastQueryString());
-        this.playersQueue.setText("Players Queue: " + World.getWorld().getPlayersConnection().getQueueSize() + " -- " + world.getPlayersConnection().getLastQueryString());
-        this.importantQueue.setText("Important Queue: "  + World.getWorld().getImportantConnection().getQueueSize() + " -- " + world.getImportantConnection().getLastQueryString());
-        this.loadingQueue.setText("Loading Queue: " + World.getWorld().getLoadingConnection().getQueueSize() + " -- " + world.getLoadingConnection().getLastQueryString());
+        if (Server.getConfig().getBoolean("logssql"))
+            this.logsQueue.setText("Logs queue: " + World.getWorld().getLogsConnection().getQueueSize() + "  -- " + world.getLogsConnection().getLastQueryString());
+        if (Server.getConfig().getBoolean("playerssql"))
+            this.playersQueue.setText("Players Queue: " + World.getWorld().getPlayersConnection().getQueueSize() + " -- " + world.getPlayersConnection().getLastQueryString());
+        if (Server.getConfig().getBoolean("playerssql"))
+            this.importantQueue.setText("Important Queue: "  + World.getWorld().getImportantConnection().getQueueSize() + " -- " + world.getImportantConnection().getLastQueryString());
+        if (Server.getConfig().getBoolean("playerssql"))
+            this.loadingQueue.setText("Loading Queue: " + World.getWorld().getLoadingConnection().getQueueSize() + " -- " + world.getLoadingConnection().getLastQueryString());
     }
 
 
@@ -114,7 +119,7 @@ public class DebugGUI extends JFrame implements ActionListener {
             @Override
             public boolean execute(Player player, String input)
                     throws Exception {
-                World.getWorld().getGUI().setShow(true);
+//                World.getWorld().getGUI().setShow(true);
                 return false;
             }
 
@@ -124,7 +129,7 @@ public class DebugGUI extends JFrame implements ActionListener {
             @Override
             public boolean execute(Player player, String input)
                     throws Exception {
-                World.getWorld().getGUI().setShow(false);
+//                World.getWorld().getGUI().setShow(false);
                 return false;
             }
 

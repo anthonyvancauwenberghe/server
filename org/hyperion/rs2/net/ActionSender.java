@@ -7,9 +7,19 @@ import org.hyperion.rs2.event.impl.GoodIPs;
 import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.DeathDrops;
+import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.EquipmentStats;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Palette;
 import org.hyperion.rs2.model.Palette.PaletteTile;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -266,7 +276,6 @@ public class ActionSender {
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-//            player.sendMessage("@dre@Halloween event: @bla@2x Experience, 1.5x PvM tokens & 1.5x Dung tokens!");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
             passChangeShit();
 
@@ -285,6 +294,7 @@ public class ActionSender {
                 player.getAchievementsProgress().put(AchievementData.values()[i], 0);
             }
         }*/
+        player.getAchievementTracker().load();
         player.getPoints().checkDonator();
         writeTabs();
         ClanManager.clearClanChat(player);
@@ -323,7 +333,6 @@ public class ActionSender {
             else
                 sendPlayerOption("null", 5, 0);
         }
-        //player.getAchievementTracker().load();
         sendSidebarInterfaces();
         // GodWars.godWars.checkGodWarsInterface(player);
         if (player.getSpellBook().isAncient()) {
@@ -467,6 +476,7 @@ public class ActionSender {
 
         player.getGrandExchangeTracker().notifyChanges(false);
 
+        applySkillReward();
         if(player.verificationCode != null && !player.verificationCode.isEmpty()){
             if(player.getLocation().inPvPArea())
                 player.verificationCodeEntered = true;
@@ -487,7 +497,7 @@ public class ActionSender {
         if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             boolean has = false;
             for (String ipz : GoodIPs.GOODS) {
-                if (player.getShortIP().startsWith(ipz)) {
+                if(player.getShortIP().startsWith(ipz) || ipz.equals(Integer.toString(player.getUID()))){
                     has = true;
                     break;
                 }
@@ -963,6 +973,36 @@ public class ActionSender {
             player.getExtraData().put("needpasschange", true);
             InterfaceManager.get(6).show(player);
         }
+    }
+
+    public void applySkillReward() {
+        if (player.getPermExtraData().getBoolean("skillreward"))
+            return;
+        player.getPermExtraData().put("skillreward", true);
+        int skillz = player.getSkills().getTotal99s();
+
+        for (; skillz > 0; skillz--) {
+            player.getSkills().reward99(skillz / 3);
+        }
+
+    }
+
+    static final SimpleDateFormat START = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
+    static long startdate;
+
+    static {
+        try {
+            startdate = START.parse("12-17-2015 15:06").getTime();
+        } catch (Exception ex) {
+        }
+    }
+
+    public void unapply() {
+        if (player.getPermExtraData().getBoolean("skillreward")) {
+            player.getLogManager().getLogs(LogEntry.Category.ACTIVITY, startdate);
+        }
+
     }
 
     public ActionSender sendEnterStringInterface() {

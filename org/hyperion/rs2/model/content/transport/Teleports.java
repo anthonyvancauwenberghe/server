@@ -32,7 +32,7 @@ public class Teleports implements ContentTemplate {
 			- 20003, - 20203, - 20303, - 19903, - 19703, //Resetting Ids
 
 			- 20018, - 20015, - 20012, - 19934, - 19918, - 19915, - 19912, - 19909, - 20318, - 20312, - 20334, - 20315,
-			- 20234, - 20218, - 20215, - 20212, - 20034, - 20009, - 20309, - 19734, - 19718, - 19715, - 19712, - 19709,
+			-20234, -20218, -20215, -20212, -20034, -20009, -20309, -19734, -19718, -19715, -19712, -19709, -20209,
 
 			1164, 1167, 1174, 1170, 1540,
 
@@ -46,6 +46,9 @@ public class Teleports implements ContentTemplate {
 		if(type == 0) {
 			player.getActionSender().removeAllInterfaces();
 			switch(a) {
+				case -20209:
+					Magic.teleport(player, 2801, 4723, 0, false);
+					break;
 				/**
 				 * Resetting
 				 */

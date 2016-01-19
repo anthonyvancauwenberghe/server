@@ -4,6 +4,7 @@ import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.map.pathfinding.PathfinderV2;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
@@ -21,6 +22,7 @@ import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 /**
  * @authors Martin and Arsen
@@ -80,9 +82,15 @@ public class Combat {
              * Run seperate code depending on whether the combatEntity is an NPC or a Player.
              */
             if (combatEntity.getEntity() instanceof Player) {
+                final Player player = combatEntity.getPlayer();
+                if (player.getNpcState()) {
+                    player.setPNpc(-1);
+                }
                 if (combatEntity.getOpponent()._getPlayer().isPresent()) {
-                    final Player player = combatEntity.getPlayer();
                     final Player opp = combatEntity.getOpponent().getPlayer();
+                    if (opp.getNpcState()) {
+                        opp.setPNpc(-1);
+                    }
                     if (!player.getSession().isConnected() && !opp.getSession().isConnected()) {
                         return false;
                     }
@@ -95,6 +103,7 @@ public class Combat {
             } else {
                 if (combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected())
                     return false;
+                combatEntity.getOpponent().lastHit = System.currentTimeMillis();
                 return processNpcCombat(combatEntity, distance);
             }
 
@@ -153,6 +162,7 @@ public class Combat {
                 // if it worked remove the spell :)
                 combatEntity.deleteSpellAttack();
                 combatEntity.predictedAtk = System.currentTimeMillis() + 2500;
+
                 // combatEntity.predictedAtk =
                 // System.currentTimeMillis()+2000;
                 // spell hit etc
@@ -575,9 +585,12 @@ public class Combat {
             return true;
         final CombatEntity opponent = combatEntity.getOpponent();
         opponent.lastHit = System.currentTimeMillis();
+
         int delay = 300 + distance * 200;
         //Auto kill ring :p
         if (combatEntity.getEntity() instanceof Player) {
+            if (opponent.getNPC() != null)
+                opponent.getNPC().lastAttacker = combatEntity.getPlayer().getName();
             Player player = ((Player) combatEntity.getEntity());
             if (player.getEquipment().contains(4657)) {
                 if (Rank.hasAbility(player, Rank.OWNER)) {
@@ -966,12 +979,22 @@ public class Combat {
                     if (!combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
                         return "I am already in combat";
                 }
-            } else if (opponent.getOpponent() != null && opponent.getOpponent() != combatEntity)
+            } else {
                 if (type.equalsIgnoreCase("NPC")) {
-                    return "This monster is already in combat...";
-                } else {
+                    NPC npc = opponent.getNPC();
+                    if (combatEntity.getPlayer() != null) {
+                        if (npc.getDefinition().getId() == 5666 &&
+                                (System.currentTimeMillis() - NpcDeathEvent.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < (Time.ONE_MINUTE * 3)))
+                            return "Let someone else try killing barrelchest!";
+                        if (System.currentTimeMillis() - npc.getCombat().lastHit < 9000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
+                            return "This monster is already in combat";
+                    } else if (opponent.getOpponent() != combatEntity)
+                        return "blablabla";
+                    return "1";
+                } else if (opponent.getOpponent() != null && opponent.getOpponent() != combatEntity) {
                     return "This " + type + " is already in combat...";
                 }
+            }
         }
         if (combatEntity.getEntity() instanceof Player
                 && opponent.getEntity() instanceof Player) {

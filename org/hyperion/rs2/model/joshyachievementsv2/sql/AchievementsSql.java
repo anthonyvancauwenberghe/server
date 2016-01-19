@@ -30,7 +30,7 @@ public final class AchievementsSql {
             stmt.setString(5, atp.startDate != null ? atp.startDate.toString() : null);
             stmt.setString(6, atp.finishDate != null ? atp.finishDate.toString() : null);
             return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
+        } catch(Exception ex){
             ex.printStackTrace();
             return false;
         }

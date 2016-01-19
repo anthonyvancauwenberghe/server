@@ -229,7 +229,7 @@ public class Smithing implements ContentTemplate {
 							SMITHING_FRAME[type][k][3]);
 					ContentEntity.addItem(client, itemId,
 							SMITHING_FRAME[type][k][1]);
-					client.getAchievementTracker().itemSkilled(Skills.SMITHING, SMITHING_FRAME[type][k][1], 1);
+					client.getAchievementTracker().itemSkilled(Skills.SMITHING, itemId, SMITHING_FRAME[type][k][1]);
 					/*
 					 * stop3(); } public void stop3() { this.stop(); } });
 					 */

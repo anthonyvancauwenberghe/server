@@ -272,8 +272,8 @@ public class ActionSender {
 
 
         }
-        if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
-            player.getNews().sendNewsInterface();
+        //if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
+          //  player.getNews().sendNewsInterface();
 
         if (WildernessBossEvent.currentBoss != null) {
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");

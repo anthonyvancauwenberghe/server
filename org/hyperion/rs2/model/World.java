@@ -637,7 +637,7 @@ public class World {
         submit(new EPEvent());
         // submit(new SummoningEvent());
         submit(new HunterEvent());
-        submit(new RefreshNewsEvent());
+       // submit(new RefreshNewsEvent());
         // abuse.start();
         submit(new DisconnectEvent());
         //submit(new EventDebuggingEvent());

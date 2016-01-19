@@ -63,4 +63,5 @@ public class RefreshNewsEvent extends Event {
     public void execute() throws IOException {
         //refreshNews(true);
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author Arsen Maxyutov.
  */
-public class Configuration {
+public class Configuration {//SOMECHANGE
 
 	/**
 	 * The file from which the configurations are loaded.

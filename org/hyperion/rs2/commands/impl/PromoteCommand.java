@@ -26,8 +26,8 @@ public class PromoteCommand extends Command {
 				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.MODERATOR));
 				player.getActionSender().sendMessage(input + " has been promoted to moderator");
 			} else {
-				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.HELPER));
-				player.getActionSender().sendMessage(input + " has been promoted to helper");
+				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.MODERATOR));
+				player.getActionSender().sendMessage(input + " has been promoted to moderator");
 			}
 			return true;
 		} else {

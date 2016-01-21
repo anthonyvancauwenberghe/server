@@ -61,6 +61,7 @@ public class RefreshNewsEvent extends Event {
 
     @Override
     public void execute() throws IOException {
-        refreshNews(true);
+        //refreshNews(true);
     }
+
 }

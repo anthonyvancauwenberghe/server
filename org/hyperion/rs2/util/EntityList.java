@@ -204,7 +204,8 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 				try {
 					array[ptr++] = entities[i];
 				}catch(ArrayIndexOutOfBoundsException e) {
-					System.err.println("SEVERE ERROR: Cannot generate entity array!");
+					System.err.println("SEVERE ERROR: Cannot generate entity array! Restarting Server");
+					World.getWorld().update(120 , "Error entity array");
 					return array;
 				}
 			}

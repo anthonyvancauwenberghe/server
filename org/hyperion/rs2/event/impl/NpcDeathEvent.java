@@ -23,7 +23,7 @@ import java.util.*;
 
 public class NpcDeathEvent extends Event {
 
-    public static LinkedList<String> borkKillers = new LinkedList<>();
+    public static Map<String, Long> borkKillers = new HashMap<>();
 
 
     public static int npcIdForDoubleDrops;
@@ -130,7 +130,10 @@ public class NpcDeathEvent extends Event {
             }
             npc.setTeleportTarget(npc.getSpawnLocation(), false);
             if (npc.npcDeathTimer != -1) {
-                timer = 10 + npc.npcDeathTimer;
+                if (npc.getDefinition().getId() == 5666)
+                    timer = 10 + 190;
+                else timer = 10 + 60;
+                // killer.debugMessage("Time to wait: " + timer);
                 npc.isHidden(true);
             } else {
                 npc.isHidden(true);
@@ -185,7 +188,7 @@ public class NpcDeathEvent extends Event {
                     }
 
                     if (tokens <= 0)
-                        tokens = Misc.random(9/*12*/) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
+                        tokens = Misc.random(11) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
                     if (tokens > 0 && npc.getDefinition().getId() != 5399) {
 
                         {
@@ -202,11 +205,8 @@ public class NpcDeathEvent extends Event {
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);
-                if (npc.getDefinition().getId() == 5666) {
-                    borkKillers.add(player.getName());
-                    if (borkKillers.size() == 3)
-                        borkKillers.removeFirst();
-                }
+                if (npc.getDefinition().getId() == 5666)
+                    borkKillers.put(player.getName(), System.currentTimeMillis());
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
                 player.getAchievementTracker().npcKill(npc.getDefinition().getId());
 

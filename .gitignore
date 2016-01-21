@@ -18,7 +18,8 @@ local.properties
 .settings/
 .loadpath
 .rar
-
+lib/
+libs/
 
 # External tool builders
 .externalToolBuilders/

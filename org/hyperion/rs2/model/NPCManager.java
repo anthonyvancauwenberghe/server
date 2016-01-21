@@ -56,7 +56,7 @@ public class NPCManager {
 								.getNPCManager()
 								.addNPC(Integer.valueOf(valuesArray[1]),
 										Integer.valueOf(valuesArray[2]),
-										Integer.valueOf(valuesArray[3]), id, 60);
+										Integer.valueOf(valuesArray[3]), id, -10);
 						TextUtils.writeToFile(
 								"./data/spawns.cfg",
 								"spawn = " + id + "	" + l.getX() + "	"
@@ -115,7 +115,7 @@ public class NPCManager {
 					 */
 					NPC npc = addNPC(Integer.valueOf(valuesArray[1]),
 							Integer.valueOf(valuesArray[2]),
-							Integer.valueOf(valuesArray[3]), id, 60);
+							Integer.valueOf(valuesArray[3]), id, -10);
 					if(Integer.valueOf(valuesArray[6]) > 5)
 						npc.walkToXMax = Integer.valueOf(valuesArray[6]);
 					if(Integer.valueOf(valuesArray[4]) > 5)

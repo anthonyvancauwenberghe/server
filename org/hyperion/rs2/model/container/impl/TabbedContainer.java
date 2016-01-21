@@ -32,6 +32,10 @@ public class TabbedContainer extends Container {
         int here = bankItem.getTabIndex();
         if(bankItem.getId() < 0)
             return false;
+        if (bankItem.getDefinition() == null) {
+            System.err.println("BankItem: " + bankItem.getId() + " has no definition");
+            return true;
+        }
         if(bankItem.getDefinition().isNoted())
             bankItem.setID(bankItem.getDefinition().getNormalId());
         if(bankItem.getDefinition().isStackable() || getType().equals(Type.ALWAYS_STACK)) {

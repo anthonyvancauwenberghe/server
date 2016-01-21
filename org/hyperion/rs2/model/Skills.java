@@ -487,7 +487,8 @@ public class Skills {
     }
 
     public void reward99(int total) {
-        int reward = (int) (Math.pow(1.3, total) * 25);
+        //int reward = (int) (Math.pow(1.3, total) * 25);
+		int reward = 0;
         player.getPoints().increaseDonatorPoints(reward, false);
         player.getPoints().increasePkPoints(reward * 20, false);
         player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 20, total);
@@ -593,7 +594,7 @@ public class Skills {
             player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
             if (getLevel(skill) == 99) {
                 player.checkCapes();
-                reward99(getTotal99s());
+                //reward99(getTotal99s());
             }
         }
         player.getActionSender().sendSkill(skill);

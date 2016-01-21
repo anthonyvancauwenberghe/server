@@ -11,7 +11,7 @@ import org.hyperion.rs2.util.rssfeed.Article;
  * Created by Gilles on 2/10/2015.
  */
 public class News {
-
+/*
     private final static int interfaceId = 36000;
     private int selectedPost = 0;
 
@@ -40,7 +40,7 @@ public class News {
     }
 
     public boolean sendNewsPost(int id) {
-        Article newspost = RefreshNewsEvent.latestNews[id];
+       // Article newspost = RefreshNewsEvent.latestNews[id];
 
         if(newspost == null)
             return false;
@@ -78,21 +78,21 @@ public class News {
         ActionsManager.getManager().submit(-29532, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.getNews().setSelectedPost(0);
+               // player.getNews().setSelectedPost(0);
             }
         });
 
         ActionsManager.getManager().submit(-29529, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.getNews().setSelectedPost(1);
+               // player.getNews().setSelectedPost(1);
             }
         });
 
         ActionsManager.getManager().submit(-29526, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.getNews().setSelectedPost(2);
+                //player.getNews().setSelectedPost(2);
             }
         });
 
@@ -120,8 +120,9 @@ public class News {
         ActionsManager.getManager().submit(-29516, new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                player.getNews().sendLink();
+               // player.getNews().sendLink();
             }
         });
     }
+    */
 }

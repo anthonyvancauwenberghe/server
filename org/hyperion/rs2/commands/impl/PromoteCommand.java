@@ -22,11 +22,11 @@ public class PromoteCommand extends Command {
 			} else if(Rank.hasAbility(promoted, Rank.MODERATOR) && Rank.hasAbility(player, Rank.DEVELOPER)) {
 				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.HEAD_MODERATOR));
 				player.getActionSender().sendMessage(input + " has been promoted to head moderator");
-			} else if(Rank.hasAbility(promoted, Rank.HELPER) && Rank.hasAbility(player, Rank.DEVELOPER)) {
+			} else if(Rank.hasAbility(promoted, Rank.HELPER) && Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
 				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.MODERATOR));
 				player.getActionSender().sendMessage(input + " has been promoted to moderator");
 			} else {
-				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.MODERATOR));
+				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.HELPER));
 				player.getActionSender().sendMessage(input + " has been promoted to moderator");
 			}
 			return true;

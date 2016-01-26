@@ -576,13 +576,18 @@ public class CommandHandler {
             }
         });
 
-		submit(new Command("update", Rank.ADMINISTRATOR) {
+		submit(new Command("update", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
 				try {
-					int time = parts[0];
-					World.getWorld().update(time, "Owner request");
+					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
+						int time = parts[0];
+						World.getWorld().update(time, player.getName() + "Restart Request");
+					}
+					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.MODERATOR ) ) {
+						World.getWorld().update(120, player.getName() + "Restart Request");
+					}
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use command as ::update <seconds>");
 				}

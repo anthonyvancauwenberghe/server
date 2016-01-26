@@ -576,16 +576,16 @@ public class CommandHandler {
             }
         });
 
-		submit(new Command("update", Rank.MODERATOR) {
+		submit(new Command("update", Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
 				try {
+					int time = parts[0];
 					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
-						int time = parts[0];
 						World.getWorld().update(time, player.getName() + "Restart Request");
 					}
-					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.MODERATOR ) ) {
+					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.HEAD_MODERATOR ) ) {
 						World.getWorld().update(120, player.getName() + "Restart Request");
 					}
 				} catch(Exception e) {
@@ -612,17 +612,19 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("update", Rank.DEVELOPER) {
+		submit(new Command("update", Rank.HEAD_MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				String[] parts = input.split(" ");
 				try {
 					int time = Integer.parseInt(parts[0]);
-					/**
-					 * Should be able to update the timer
-					 */
-					World.getWorld().update(time, "Owner request");
+					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
+						World.getWorld().update(time, player.getName() + "Restart Request");
+					}
+					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.HEAD_MODERATOR ) ) {
+						World.getWorld().update(120, player.getName() + "Restart Request");
+					}
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use command as ::update <seconds>");
 				}

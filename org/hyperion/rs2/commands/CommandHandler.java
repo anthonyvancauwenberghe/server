@@ -576,7 +576,7 @@ public class CommandHandler {
             }
         });
 
-		submit(new Command("update", Rank.DEVELOPER) {
+		submit(new Command("update", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);

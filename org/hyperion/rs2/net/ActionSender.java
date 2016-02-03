@@ -4,22 +4,11 @@ import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
-import org.hyperion.rs2.model.DeathDrops;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.EquipmentStats;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Palette;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -30,7 +19,6 @@ import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchange.GEItem;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
@@ -287,13 +275,7 @@ public class ActionSender {
         if (WildernessBossEvent.currentBoss != null) {
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
         }
-        /* This is for when we add new achievements.
-         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
-            int start = player.getAchievementsProgress().size();
-            for(int i = start; i < AchievementData.values().length; i++) {
-                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
-            }
-        }*/
+
         player.getAchievementTracker().load();
         player.getPoints().checkDonator();
         writeTabs();
@@ -1908,29 +1890,6 @@ public class ActionSender {
                     bldr.put((byte) count);
                 }
                 bldr.putLEShortA(item.getId() + 1);
-            } else {
-                bldr.put((byte) 0);
-                bldr.putLEShortA(0);
-            }
-        }
-        player.write(bldr.toPacket());
-        return this;
-    }
-
-    public ActionSender sendUpdateItems(int interfaceId, GEItem[] items) {
-        PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
-        bldr.putShort(interfaceId);
-        bldr.putShort(items.length);
-        for (GEItem item : items) {
-            if (item != null) {
-                int count = item.getItem().getCount();
-                if (count > 254) {
-                    bldr.put((byte) 255);
-                    bldr.putInt2(count);
-                } else {
-                    bldr.put((byte) count);
-                }
-                bldr.putLEShortA(item.getItem().getId() + 1);
             } else {
                 bldr.put((byte) 0);
                 bldr.putLEShortA(0);

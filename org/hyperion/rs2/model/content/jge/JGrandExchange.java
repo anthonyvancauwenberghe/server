@@ -6,11 +6,8 @@ import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sqlv2.DbHub;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -30,12 +27,9 @@ public class JGrandExchange {
 
     public static final int DEFAULT_UNIT_PRICE = 1000;
 
-    private final MySQLConnection sql;
     private final Map<Object, List<Entry>> map;
 
-    public JGrandExchange(final MySQLConnection sql){
-        this.sql = sql;
-
+    public JGrandExchange(){
         map = new HashMap<>();
     }
 
@@ -46,128 +40,35 @@ public class JGrandExchange {
     }
 
     public boolean delete(final Entry entry){
-        try(final PreparedStatement delete = sql.prepare("DELETE FROM ge_entries WHERE playerName = ? AND slot = ?")){
-            delete.setString(1, entry.playerName);
-            delete.setByte(2, (byte)entry.slot);
-            if(delete.executeUpdate() != 1)
-                return false;
-            final String progress = entry.progress.toSaveString();
-            if(progress.isEmpty())
-                return true;
-            try(final PreparedStatement insert = sql.prepare("INSERT INTO ge_history (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, cancelled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
-                insert.setString(1, entry.date.toString());
-                insert.setString(2, entry.playerName);
-                insert.setString(3, entry.type.name());
-                insert.setByte(4, (byte)entry.slot);
-                insert.setShort(5, (short)entry.itemId);
-                insert.setInt(6, entry.itemQuantity);
-                insert.setInt(7, entry.unitPrice);
-                insert.setString(8, entry.currency.name());
-                insert.setString(9, progress);
-                insert.setBoolean(10, entry.cancelled);
-                return insert.executeUpdate() == 1;
-            }
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+        return DbHub.getPlayerDb().getGrandExchange().delete(entry);
     }
 
     public boolean insert(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("INSERT INTO ge_entries (created, playerName, type, slot, itemId, itemQuantity, unitPrice, currency, progress, claims, cancelled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
-            stmt.setString(1, entry.date.toString());
-            stmt.setString(2, entry.playerName);
-            stmt.setString(3, entry.type.name());
-            stmt.setByte(4, (byte)entry.slot);
-            stmt.setShort(5, (short)entry.itemId);
-            stmt.setInt(6, entry.itemQuantity);
-            stmt.setInt(7, entry.unitPrice);
-            stmt.setString(8, entry.currency.name());
-            stmt.setString(9, entry.progress.toSaveString());
-            stmt.setString(10, entry.claims.toSaveString());
-            stmt.setBoolean(11, entry.cancelled);
-            return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+        return DbHub.getPlayerDb().getGrandExchange().insert(entry);
     }
 
     public boolean updateCancelAndClaims(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET cancelled = ?, claims = ? WHERE playerName = ? AND slot = ?")){
-            stmt.setBoolean(1, entry.cancelled);
-            stmt.setString(2, entry.claims.toSaveString());
-            stmt.setString(3, entry.playerName);
-            stmt.setByte(4, (byte)entry.slot);
-            return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+        return DbHub.getPlayerDb().getGrandExchange().updateCancelAndClaims(entry);
     }
 
     public boolean updateProgressAndClaims(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET progress = ?, claims = ? WHERE playerName = ? AND slot = ?")){
-            stmt.setString(1, entry.progress.toSaveString());
-            stmt.setString(2, entry.claims.toSaveString());
-            stmt.setString(3, entry.playerName);
-            stmt.setByte(4, (byte)entry.slot);
-            return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+        return DbHub.getPlayerDb().getGrandExchange().updateProgressAndClaims(entry);
     }
 
     public boolean updateProgress(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET progress = ? WHERE playerName = ? AND slot = ?")){
-            stmt.setString(1, entry.progress.toSaveString());
-            stmt.setString(2, entry.playerName);
-            stmt.setByte(3, (byte)entry.slot);
-            return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+        return DbHub.getPlayerDb().getGrandExchange().updateProgress(entry);
     }
 
     public boolean updateClaims(final Entry entry){
-        try(final PreparedStatement stmt = sql.prepare("UPDATE ge_entries SET claims = ? WHERE playerName = ? AND slot = ?")){
-            stmt.setString(1, entry.claims.toSaveString());
-            stmt.setString(2, entry.playerName);
-            stmt.setByte(3, (byte)entry.slot);
-            return stmt.executeUpdate() == 1;
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
+        return DbHub.getPlayerDb().getGrandExchange().updateClaims(entry);
     }
 
     public boolean load(){
-        try(final ResultSet rs = sql.query("SELECT * FROM ge_entries")){
-            while(rs.next()){
-                final OffsetDateTime date = OffsetDateTime.parse(rs.getString("created"));
-                final String playerName = rs.getString("playerName");
-                final Entry.Type type = Entry.Type.valueOf(rs.getString("type"));
-                final int slot = rs.getByte("slot");
-                final int itemId = rs.getShort("itemId");
-                final int itemQuantity = rs.getInt("itemQuantity");
-                final int unitPrice = rs.getInt("unitPrice");
-                final Entry.Currency currency = Entry.Currency.valueOf(rs.getString("currency"));
-                final String progress = rs.getString("progress");
-                final String claims = rs.getString("claims");
-                final boolean cancelled = rs.getBoolean("cancelled");
-                final Entry entry = new Entry(date, playerName, type, slot, itemId, itemQuantity, unitPrice, currency);
-                entry.cancelled = cancelled;
-                entry.progress = ProgressManager.fromSaveString(entry, progress);
-                entry.claims = Claims.fromSaveString(entry, claims);
-                add(entry);
-            }
-            return true;
-        }catch(Exception ex){
-            ex.printStackTrace();
+        List<Entry> entryList = DbHub.getPlayerDb().getGrandExchange().load();
+        if(entryList == null)
             return false;
-        }
+        entryList.forEach(this::add);
+        return true;
     }
 
     private void add(final Entry entry, final Function<Entry, Object> key){
@@ -304,31 +205,17 @@ public class JGrandExchange {
     }
 
     public int defaultItemUnitPrice(final int itemId, final Entry.Type type, final Entry.Currency currency){
-        try(final PreparedStatement stmt = sql.prepare("SELECT AVG(unitPrice) FROM ge_history WHERE itemId = ? AND type = ? AND currency = ?")){
-            stmt.setShort(1, (short)itemId);
-            stmt.setString(2, type.name());
-            stmt.setString(3, currency.name());
-            try(final ResultSet rs = stmt.executeQuery()){
-                if(!rs.next())
-                    return DEFAULT_UNIT_PRICE;
-                final int avg = (int)Math.round(rs.getDouble(1));
-                return avg < 1 ? DEFAULT_UNIT_PRICE : avg;
-            }
-        }catch(Exception ex){
-            ex.printStackTrace();
-            return contains(itemId) ?
-                    (int)itemUnitPriceStats(itemId, type, currency).getAverage()
-                    : DEFAULT_UNIT_PRICE;
-        }
+        final int avg = (int)Math.round(DbHub.getPlayerDb().getGrandExchange().averagePrice(itemId, type, currency));
+        return avg < 1 ? DEFAULT_UNIT_PRICE : avg;
     }
 
     public static JGrandExchange getInstance(){
         return instance;
     }
 
-    public static boolean init(final MySQLConnection sql){
+    public static boolean init(){
         ItemInfo.geBlacklist.load();
-        instance = new JGrandExchange(sql);
+        instance = new JGrandExchange();
         return instance.load();
     }
 }

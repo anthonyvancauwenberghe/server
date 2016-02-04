@@ -1,13 +1,11 @@
 package org.hyperion.rs2;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.LoginDebugger;
-import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
@@ -254,7 +252,7 @@ public class GenericWorldLoader implements WorldLoader {
 			//System.out.println("Creating new player");
 			LoginDebugger.getDebugger().log("About to make new player in GWL");
 			player = new Player(pd, newcharacter);
-			//System.out.println("Loaded player");
+
 			player.setSource(source);
 			if(source == GenericWorldLoader.ARTERO || source == GenericWorldLoader.INSTANT) {
 				player.setInitialSource(source);

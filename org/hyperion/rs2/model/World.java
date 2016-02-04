@@ -44,6 +44,7 @@ import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.region.RegionManager;
+import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
@@ -52,7 +53,6 @@ import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.sql.requests.StaffActivityRequest;
-import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.ConfigurationParser;
@@ -60,6 +60,7 @@ import org.hyperion.rs2.util.EntityList;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.Restart;
 import org.hyperion.util.BlockingExecutorService;
+import org.hyperion.util.Misc;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -210,6 +211,12 @@ public class World {
             return (T) propertyMap.get(key);
         }
         return null;
+    }
+
+    private final static Set<String> unlockedPlayers = new HashSet<>();
+
+    public static Set<String> getUnlockedPlayers() {
+        return unlockedPlayers;
     }
 
 
@@ -450,7 +457,7 @@ public class World {
 
             //sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
 
-            DbHub.initDefault();
+            //DbHub.initDefault();
 
             //LocalServerSQLConnection.init();
             //playersSQL.init();
@@ -685,52 +692,43 @@ public class World {
      * @param pd The player's details.
      */
     public void load(final PlayerDetails pd, final int code2) {
-        // System.out.println("Load method in World");
-        engine.submitWork(new Runnable() {
-            public void run() {
-                LoginDebugger.getDebugger().log("4. Playerdetails received: " + pd.getName());
-                int code = code2;
-                LoginDebugger.getDebugger().log("Code : " + code);
-                LoginResult lr = null;
-                if (isPlayerOnline(pd.getName())) {
-                    LoginDebugger.getDebugger().log("About to code 5");
-                    code = 5;
-                } else {
-                    LoginDebugger.getDebugger().log("Pre checking");
-                    lr = loader.checkLogin(pd);
-                    LoginDebugger.getDebugger().log("Checked login");
-                    if (code == 0) {
-                        code = lr.getReturnCode();
-                        LoginDebugger.getDebugger().log("Code is 0 so..");
-                    }
-                    if (code == 2 || code == 8) {
-                        lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
-                        LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
-                    }
-                    LoginDebugger.getDebugger().log("4. Checking loader login");
+        engine.submitWork(() -> {
+            LoginDebugger.getDebugger().log("4. Playerdetails received: " + pd.getName());
+            int code = code2;
+            LoginDebugger.getDebugger().log("Code : " + code);
+            LoginResult lr = null;
+            if (isPlayerOnline(pd.getName())) {
+                LoginDebugger.getDebugger().log("About to code 5");
+                code = 5;
+            } else {
+                LoginDebugger.getDebugger().log("Pre checking");
+                lr = loader.checkLogin(pd);
+                LoginDebugger.getDebugger().log("Checked login");
+                if (code == 0) {
+                    code = lr.getReturnCode();
+                    LoginDebugger.getDebugger().log("Code is 0 so..");
                 }
-                if (!NameUtils.isValidName(pd.getName())) {
-                    code = 11;
+                if (code == 2 || code == 8) {
+                    lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
+                    LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
                 }
-                LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
-                if (code != 2 && code != 8) {
-                    LoginDebugger.getDebugger().log("Packetbuilder code");
-                    PacketBuilder bldr = new PacketBuilder();
-                    bldr.put((byte) code);
-                    pd.getSession().write(bldr.toPacket())
-                            .addListener(new IoFutureListener<IoFuture>() {
-                                @Override
-                                public void operationComplete(IoFuture future) {
-                                    future.getSession().close(false);
-                                }
-                            });
-                } else {
+                LoginDebugger.getDebugger().log("4. Checking loader login");
+            }
+            if (!NameUtils.isValidName(pd.getName())) {
+                code = 11;
+            }
+            LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
+            if (code != 2 && code != 8) {
+                LoginDebugger.getDebugger().log("Packetbuilder code");
+                PacketBuilder bldr = new PacketBuilder();
+                bldr.put((byte) code);
+                pd.getSession().write(bldr.toPacket())
+                        .addListener(future -> future.getSession().close(false));
+            } else {
 
-                    loader.loadPlayer(lr.getPlayer());
-                    // lr.getPlayer().getActionSender().sendLogin();
-                    LoginDebugger.getDebugger().log("7. Loaded Player in World");
-                    engine.pushTask(new SessionLoginTask(lr.getPlayer()));
-                }
+                loader.loadPlayer(lr.getPlayer());
+                LoginDebugger.getDebugger().log("7. Loaded Player in World");
+                engine.pushTask(new SessionLoginTask(lr.getPlayer()));
             }
         });
     }
@@ -837,6 +835,20 @@ public class World {
                 returnCode = 7;
                 LoginDebugger.getDebugger().log(
                         "Could not register player " + player.getName());
+            }
+        }
+        //TODO REMOVE THIS AFTER ISSUES ARE OVER
+        if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+            if (player.getAccountValue().getTotalValue() > 150000) {
+                System.out.println("Declining session for " + player.getName() + " because too rich.");
+                returnCode = 12;
+            }
+            if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && getUnlockedPlayers().contains(player.getName().toLowerCase())) {
+                String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
+                String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
+                if (!currentCutIp.equals(previousCutIp)) {
+                    returnCode = 12;
+                }
             }
         }
         final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
@@ -1143,6 +1155,17 @@ public class World {
                         "Npcs: " + getWorld().getNPCs().size());
                 player.getActionSender().sendMessage(
                         "Waiting list: " + getWorld().npcsWaitingList.size());
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("unlock", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String playerName = filterInput(input);
+                if(playerName == null)
+                    throw new Exception();
+                getUnlockedPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+                player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
                 return true;
             }
         });

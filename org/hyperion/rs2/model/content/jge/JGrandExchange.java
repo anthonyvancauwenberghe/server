@@ -214,6 +214,8 @@ public class JGrandExchange {
     }
 
     public static boolean init(){
+        if(!DbHub.initialized())
+            return false;
         ItemInfo.geBlacklist.load();
         instance = new JGrandExchange();
         return instance.load();

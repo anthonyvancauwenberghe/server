@@ -408,8 +408,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
 						String pass = IoBufferUtils.getRS2String(in);
 						LoginDebugger.getDebugger().log("3. Login packet: " + name + "," + pass + "," + remoteIp);
-						//System.out.println("username: "+name+" pass: "+pass+" macId "+macId);
-						//logger.info("Login request : username=" + name + " password=" + pass);
 					
 					/*
 					 * And setup the ISAAC cipher which is used to encrypt and

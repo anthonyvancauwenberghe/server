@@ -81,11 +81,11 @@ public class ActionSender {
             {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
             {503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private static Date LAST_PASS_RESET;
+    public static Date LAST_PASS_RESET;
 
     static {
         try {
-            LAST_PASS_RESET = dateFormat.parse("03-11-2015");
+            LAST_PASS_RESET = dateFormat.parse("04-02-2016");
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -221,23 +221,6 @@ public class ActionSender {
         }
     }
 
-    public void loadAnnouncements() {
-        try {
-            loadIni();
-            if (p.getProperty("announcement1").length() > 0) {
-                sendMessage(p.getProperty("announcement1"));
-            }
-            if (p.getProperty("announcement2").length() > 0) {
-                sendMessage(p.getProperty("announcement2"));
-            }
-            if (p.getProperty("announcement3").length() > 0) {
-                sendMessage(p.getProperty("announcement3"));
-            }
-        } catch (Exception e) {
-            System.out.println("Unable to load announcements.");
-        }
-    }
-
     public void basicLogin() {
         player.getLogManager().add(LogEntry.login(player));
         LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
@@ -269,8 +252,6 @@ public class ActionSender {
 
 
         }
-        //if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
-          //  player.getNews().sendNewsInterface();
 
         if (WildernessBossEvent.currentBoss != null) {
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
@@ -426,17 +407,7 @@ public class ActionSender {
         // player.getInterfaceManager().show(RecoveryInterface.ID);
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
-
-        if (player.pin == -1) {
-            player.verified = true;
-            //PinInterface.get().set(player);
-            //sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/11966-updates-1302015/");
-        } else if (!player.getShortIP().equals(player.lastIp)) {
-            player.verified = true;
-            //PinInterface.get().enter(player);
-        } else {
-            player.verified = true;
-        }
+        player.verified = true;
 
         try {
             if (MergedSaving.existsBackup(player.getName())) {

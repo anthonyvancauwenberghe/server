@@ -4,7 +4,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.util.Arrays;
@@ -225,75 +225,20 @@ public class Punishment {
         this.reason = reason;
     }
 
-    public void insert(final MySQLConnection connection){
-        final String query = String.format(
-                "INSERT INTO punishments (issuer, victim, ip, mac, specialUid, target, type, time, duration, unit, reason, active)" +
-                        " VALUES ('%s', '%s', '%s', %d, '%s', '%s', '%s', %d, %d, '%s', '%s', 1)",
-                getIssuerName(),
-                getVictimName(),
-                getVictimIp(),
-                getVictimMac(),
-                getVictimSpecialUidAsString(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name(),
-                getTime().getStartTime(),
-                getTime().getDuration(),
-                getTime().getUnit().name(),
-                getReason()
-        );
-        connection.offer(query);
-    }
-
     public void insert(){
-        insert(PunishmentManager.getInstance().getConnection());
-    }
-
-    public void update(final MySQLConnection connection){
-        final String query = String.format(
-                "UPDATE punishments SET issuer = '%s', time = %d, duration = %d, unit = '%s', reason = '%s' WHERE victim = '%s' AND target = '%s' AND type = '%s'",
-                getIssuerName(),
-                getTime().getStartTime(),
-                getTime().getDuration(),
-                getTime().getUnit().name(),
-                getReason(),
-                getVictimName(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name()
-        );
-        connection.offer(query);
+        DbHub.getGameDb().getPunishment().insert(this);
     }
 
     public void update(){
-        update(PunishmentManager.getInstance().getConnection());
-    }
-
-    public void setActive(final MySQLConnection connection, final boolean isActive){
-        final String query = String.format(
-                "UPDATE punishments SET active = %d WHERE victim = '%s' AND target = '%s' AND type = '%s'",
-                isActive ? 1 : 0,
-                getVictimName(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name()
-        );
-        connection.offer(query);
+        DbHub.getGameDb().getPunishment().update(this);
     }
 
     public void setActive(final boolean isActive){
-        setActive(PunishmentManager.getInstance().getConnection(), isActive);
-    }
-
-    public void delete(final MySQLConnection connection){
-        final String query = String.format(
-                "DELETE FROM punishments WHERE victim = '%s' AND target = '%s' AND type = '%s'",
-                getVictimName(),
-                getCombination().getTarget().name(),
-                getCombination().getType().name()
-        );
-        connection.offer(query);
+        DbHub.getGameDb().getPunishment().setActive(this, isActive);
     }
 
     public void delete(){
-        delete(PunishmentManager.getInstance().getConnection());
+        DbHub.getGameDb().getPunishment().delete(this);
     }
 
     public static Punishment create(final String issuer, final String victim, final String victimIp, final int victimMac, final int[] specialUid, final Combination combination, final Time time, final String reason){

@@ -29,6 +29,10 @@ public class AchievementTracker {
     public void load(){
         if(!active)
             return;
+        if(!DbHub.getPlayerDb().enabled()) {
+            active = false;
+            return;
+        }
         final List<AchievementTaskProgress> taskProgress = DbHub.getPlayerDb().getAchievements().loadTaskProgress(player);
         if (taskProgress == null) {
             errorLoading = true;
@@ -254,7 +258,6 @@ public class AchievementTracker {
 
     public static void active(final boolean active){
         AchievementTracker.active = active;
-        //hide n show appropriate interface
     }
 
     public static boolean active(){

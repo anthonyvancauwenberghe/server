@@ -1,85 +1,31 @@
 package org.hyperion.rs2.model.punishment.manager;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import org.hyperion.rs2.model.punishment.Combination;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
-import org.hyperion.rs2.sql.MySQLConnection;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.util.*;
 
 public final class PunishmentManager {
 
     private static PunishmentManager instance;
-
-    private final MySQLConnection connection;
     private final Map<String, PunishmentHolder> holders;
 
-    private PunishmentManager(final MySQLConnection connection){
-        this.connection = connection;
-
+    private PunishmentManager(){
         holders = new HashMap<>();
     }
 
-    public MySQLConnection getConnection(){
-        return connection;
-    }
-
     public boolean load(){
-        ResultSet rs = null;
-        try{
-            rs = connection.query("SELECT * FROM punishments WHERE active = 1");
-            while(rs.next()){
-                try {
-                    final String issuer = rs.getString("issuer");
-                    final String victim = rs.getString("victim");
-                    final String ip = rs.getString("ip");
-                    final int mac = rs.getInt("mac");
-                    final String specialUidText = rs.getString("specialUid");
-                    final String[] specialUidParts = specialUidText == null ? new String[0] : specialUidText.split(",");
-                    int[] specialUid = null;
-                    if(specialUidParts.length == 20){
-                        specialUid = new int[20];
-                        for(int i = 0; i < 20; i++)
-                            specialUid[i] = Integer.parseInt(specialUidParts[i]);
-                    }
-                    final Target target = Target.valueOf(rs.getString("target"));
-                    final Type type = Type.valueOf(rs.getString("type"));
-                    final long startTime = rs.getLong("time");
-                    final long duration = rs.getLong("duration");
-                    final TimeUnit unit = TimeUnit.valueOf(rs.getString("unit"));
-                    final String reason = rs.getString("reason");
-                    final Punishment p = Punishment.create(
-                            issuer, victim, ip, mac, specialUid,
-                            Combination.of(target, type),
-                            Time.create(startTime, duration, unit),
-                            reason
-                    );
-                    add(p);
-                }catch(final Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            return true;
-        }catch(Exception ex){
-            ex.printStackTrace();
+        if(!DbHub.getGameDb().enabled())
             return false;
-        }finally{
-            if(rs != null){
-                try{
-                    rs.close();
-                }catch(Exception ex){}
-            }
-        }
+        List<Punishment> punishments = DbHub.getGameDb().getPunishment().load();
+        if(punishments.isEmpty() || punishments.isEmpty())
+            return false;
+        punishments.forEach(this::add);
+        return true;
     }
 
     public void add(final Punishment p){
@@ -157,8 +103,8 @@ public final class PunishmentManager {
         return holders.values();
     }
 
-    public static void init(final MySQLConnection connection){
-        instance = new PunishmentManager(connection);
+    public static void init(){
+        instance = new PunishmentManager();
         instance.load();
     }
 

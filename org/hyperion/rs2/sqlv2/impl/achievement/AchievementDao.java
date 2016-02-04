@@ -16,7 +16,7 @@ import java.util.List;
 @RegisterMapper(AchievementMapper.class)
 public interface AchievementDao extends SqlDao {
 
-    @SqlQuery("INSERT INTO achievement_data (playerName, achievementId, taskId, progress, startTime, finishTime) VALUES (:playerName, :achievementId, :taskId, :progress, :startTime, :finishTime)")
+    @SqlUpdate("INSERT INTO achievement_data (playerName, achievementId, taskId, progress, startTime, finishTime) VALUES (:playerName, :achievementId, :taskId, :progress, :startTime, :finishTime)")
     int insertProgress(@Bind("playerName") final String playerName, @Bind("achievementId") final int achievementId, @Bind("taskId") final int taskId, @Bind("progress") final int progress, @Bind("startTime") final Timestamp startTime, @Bind("finishTime") final Timestamp finishTime);
 
     @SqlUpdate("UPDATE achievement_data SET progress = :progress, startTime = :startTime, finishTime = :finishTime WHERE playerName = :playerName AND achievementId = :achievementId AND taskId = :taskId")

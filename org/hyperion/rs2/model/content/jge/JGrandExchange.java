@@ -64,6 +64,8 @@ public class JGrandExchange {
     }
 
     public boolean load(){
+        if(!DbHub.getPlayerDb().enabled())
+            return false;
         List<Entry> entryList = DbHub.getPlayerDb().getGrandExchange().load();
         if(entryList == null)
             return false;

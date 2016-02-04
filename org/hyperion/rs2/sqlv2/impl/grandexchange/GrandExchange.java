@@ -37,7 +37,7 @@ public class GrandExchange extends SqlDaoManager<GrandExchangeDao> {
 
     public boolean updateProgress(final Entry entry) {
         try(final GrandExchangeDao dao = open()) {
-            return dao.updateProgress(entry.claims.toSaveString(), entry.playerName, (byte)entry.slot) == 1;
+            return dao.updateProgress(entry.progress.toSaveString(), entry.playerName, (byte)entry.slot) == 1;
         } catch(Exception ex) {
             if (DbConfig.consoleDebug)
                 ex.printStackTrace();
@@ -47,7 +47,7 @@ public class GrandExchange extends SqlDaoManager<GrandExchangeDao> {
 
     public boolean updateProgressAndClaims(final Entry entry) {
         try(final GrandExchangeDao dao = open()) {
-            return dao.updateProgressAndClaims(entry.claims.toSaveString(), entry.claims.toSaveString(), entry.playerName, (byte)entry.slot) == 1;
+            return dao.updateProgressAndClaims(entry.progress.toSaveString(), entry.claims.toSaveString(), entry.playerName, (byte)entry.slot) == 1;
         } catch(Exception ex) {
             if (DbConfig.consoleDebug)
                 ex.printStackTrace();
@@ -87,11 +87,12 @@ public class GrandExchange extends SqlDaoManager<GrandExchangeDao> {
 
     public double averagePrice(final int itemId, final Entry.Type type, final Entry.Currency currency) {
         try(final GrandExchangeDao dao = open()) {
-            return dao.averagePrice(itemId, type.name(), currency.name());
+            List<Integer> valueList = dao.averagePrice(itemId, type.name(), currency.name());
+            return valueList.stream().mapToInt(Integer::intValue).average().orElse(1000.0);
         } catch(Exception ex) {
             if (DbConfig.consoleDebug)
                 ex.printStackTrace();
-            return -1;
+            return 1000.0;
         }
     }
 }

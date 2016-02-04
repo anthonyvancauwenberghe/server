@@ -53,6 +53,7 @@ import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.sql.requests.StaffActivityRequest;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.ConfigurationParser;
@@ -389,12 +390,9 @@ public class World {
      * @throws InstantiationException if a class could not be created.
      * @throws IllegalStateException  if the world is already initialised.
      */
-    public void init(GameEngine engine) throws IOException,
-            ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+    public void init(GameEngine engine) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (this.engine != null) {
-            throw new IllegalStateException(
-                    "The world has already been initialised.");
+            throw new IllegalStateException("The world has already been initialised.");
         } else {
             this.engine = engine;
             this.eventManager = new EventManager(engine);
@@ -454,17 +452,10 @@ public class World {
             importantPlayersSQL.init();
             playersSQL.init();
 
+            DbHub.initDefault();
+            PunishmentManager.init();
 
-            //sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
-
-            //DbHub.initDefault();
-
-            //LocalServerSQLConnection.init();
-            //playersSQL.init();
-            banManager = new BanManager(logsSQL);
-            PunishmentManager.init(donationsSQL);
             System.out.println("Initialized GE: " + JGrandExchange.init());
-            //this.banManager.init();
             this.enemies = new ServerEnemies();
             submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));

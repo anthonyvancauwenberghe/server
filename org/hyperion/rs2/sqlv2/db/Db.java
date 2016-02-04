@@ -18,8 +18,7 @@ public abstract class Db {
     }
 
     public boolean enabled() {
-        //return config.enabled();
-        return true;
+        return config.enabled();
     }
 
     public void init() {

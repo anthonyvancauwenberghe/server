@@ -1,15 +1,14 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraint;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AchievementTaskProgress{
 

@@ -29,7 +29,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
 
     public boolean updateTaskProgress(final Player player, final AchievementTaskProgress atp) {
         try(final AchievementDao dao = open()){
-            return dao.updateProgress(player.getName().toLowerCase().replace("_", " "), atp.achievementId, atp.taskId, atp.progress, atp.startDate, atp.finishDate) == 1;
+            return dao.updateProgress(player.getName().toLowerCase().replace("_", " "), atp.achievementId, atp.taskId, atp.progress, atp.startDate == null ? null : atp.startDate.toString(), atp.finishDate == null ? null : atp.finishDate.toString()) == 1;
         } catch(Exception ex) {
             if (DbConfig.consoleDebug)
                 ex.printStackTrace();
@@ -39,7 +39,9 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
 
     public boolean insertTaskProgress(final Player player, final AchievementTaskProgress atp){
         try(final AchievementDao dao = open()){
-            return dao.insertProgress(player.getName().toLowerCase().replace("_", " "), atp.achievementId, atp.taskId, atp.progress, atp.startDate, atp.finishDate) == 1;
+            System.out.println(atp.startDate);
+            System.out.println(atp.finishDate);
+            return dao.insertProgress(player.getName().toLowerCase().replace("_", " "), atp.achievementId, atp.taskId, atp.progress, atp.startDate == null ? null : atp.startDate.toString(), atp.finishDate == null ? null : atp.finishDate.toString()) == 1;
         } catch(Exception ex) {
             if (DbConfig.consoleDebug)
                 ex.printStackTrace();

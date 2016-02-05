@@ -2,10 +2,8 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementProgress;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTaskProgress;
-import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -57,7 +55,7 @@ public class AchievementTab {
         sendMediumAchievements();
         sendHardAchievements();
         sendEliteAchievements();
-        player.getActionSender().sendScrollbarLength(32010, (Achievements.get().size() + difficulty.values().length + 1) * 14 );
+        player.getActionSender().sendScrollbarLength(32010, (Achievements.get().size() + (difficulty.values().length * 2)) * 16 );
         sendAchievementCompleted();
     }
 

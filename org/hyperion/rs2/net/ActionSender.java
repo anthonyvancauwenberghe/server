@@ -443,8 +443,6 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendLogin() {
-        if(!Rank.isStaffMember(player))
-            player.getSession().close(false);
         if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
             boolean has = false;
             for (String ipz : GoodIPs.GOODS) {

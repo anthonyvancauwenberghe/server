@@ -834,13 +834,15 @@ public class World {
                 System.out.println("Declining session for " + player.getName() + " because too rich.");
                 returnCode = 12;
             }
-            if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && getUnlockedPlayers().contains(player.getName().toLowerCase())) {
+            if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
                 String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
                 String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
                 if (!currentCutIp.equals(previousCutIp)) {
                     returnCode = 12;
                 }
             }
+            if(player.isNew())
+                player.getPermExtraData().put("passchange", System.currentTimeMillis());
         }
         final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
         if (holder != null) {

@@ -1167,7 +1167,7 @@ public class World {
                 return true;
             }
         });
-        CommandHandler.submit(new Command("unlockrich", Rank.ADMINISTRATOR) {
+        CommandHandler.submit(new Command("unlockrich", Rank.HEAD_MODERATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception{
                 String playerName = filterInput(input);

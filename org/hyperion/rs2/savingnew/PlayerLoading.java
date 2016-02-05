@@ -31,7 +31,11 @@ public class PlayerLoading {
                     JsonElement element = reader.get(ioData.toString());
                     if(element == null)
                         return;
-                    ioData.loadValue(player, element, builder);
+                    try {
+                        ioData.loadValue(player, element, builder);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } catch (Exception e) {

@@ -109,14 +109,13 @@ public enum SlayerTask {
     private final List<Integer> ids = new ArrayList<>();
     private static final int EXP_MULTIPLIER = 14;
 
-    private SlayerTask(final int index,final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
+    SlayerTask(final int index, final Difficulty difficulty, final int slayerLevel, final int slayerXP, final int... ids) {
         this.difficulty = difficulty;
         this.slayerLevel = slayerLevel;
         this.slayerXP = slayerXP * EXP_MULTIPLIER;
         this.index = index;
         for(int i : ids)
-            this.ids.add(i
-            );
+            this.ids.add(i);
     }
 
     public Difficulty getDifficulty() { return difficulty; }
@@ -131,7 +130,7 @@ public enum SlayerTask {
         else return forLevel(slayerLevel);
     }
 
-    static enum Difficulty {
+    enum Difficulty {
         EASY(10, 40, 0, 4),
         MEDIUM(20, 80, 26, 6),
         DIFFICULT(40, 100, 50, 7),
@@ -139,7 +138,7 @@ public enum SlayerTask {
         ELITE(5, 10, 99, 8);
 
         private final int minAmount, maxAmount, slayerLevel, slayerPoints;
-        private Difficulty(final int minAmount, final int maxAmount, final int slayerLevel, final int slayerPoints) {
+        Difficulty(final int minAmount, final int maxAmount, final int slayerLevel, final int slayerPoints) {
             this.minAmount = minAmount;
             this.maxAmount = maxAmount;
             this.slayerLevel = slayerLevel;

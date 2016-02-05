@@ -138,6 +138,10 @@ public class Skills {
         return levels;
     }
 
+    public void setLevels(int[] levels) {
+        this.levels = levels;
+    }
+
     /**
      * The experience array.
      */
@@ -506,6 +510,10 @@ public class Skills {
 
     public int[] getExps() {
         return exps;
+    }
+
+    public void setExps(int[] exps) {
+        this.exps = exps;
     }
 
     /**

@@ -31,6 +31,8 @@ public class PlayerSaving {
             Gson builder = new GsonBuilder().setPrettyPrinting().create();
             JsonObject object = new JsonObject();
             Arrays.stream(IOData.VALUES).forEach(ioData -> {
+                if(!ioData.shouldSave(player))
+                    return;
                 JsonElement toSave = ioData.saveValue(player, builder);
                 if(toSave.isJsonPrimitive()) {
                     JsonPrimitive toSavePrimitive = (JsonPrimitive)toSave;

@@ -38,7 +38,6 @@ import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
 import org.hyperion.rs2.sql.event.impl.RichWhitelistEvent;
-import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
@@ -335,7 +334,6 @@ public class ActionSender {
             DialogueManager.openDialogue(player, 10000);
         }
         sendSkills();
-        NewcomersLogging.getLogging().loginCheck(player);
         sendString(1300, "City Teleport");
         sendString(1301, "Teleports you to any city.");
         sendString(1325, "Training Teleports");

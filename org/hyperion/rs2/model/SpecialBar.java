@@ -6,7 +6,7 @@ public class SpecialBar {
 	public static final int EMPTY = 0;
 	public static final int CYCLE_INCREMENT = FULL / 10;
 
-	private int amount;
+	private int amount = FULL;
 
 	private Player player;
 

@@ -118,6 +118,7 @@ public class Server {
     public static void main(String[] args) throws Exception {
         Application.launch(Controller.class);
     }
+
     public static World launchServer() {
         /*
         Console console = System.console();
@@ -136,7 +137,35 @@ public class Server {
                 }
             }
         }
-*/
+
+        File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
+        System.out.println("Started converting char files, count: " + files.length);
+        final long currentTime = System.currentTimeMillis();
+        for(File file : files) {
+            Player player = new Player();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String line;
+                while((line = br.readLine()) != null) {
+                    if(line.startsWith("Mac=")) {
+                        player.setUid(line.replaceAll("Mac=", "").trim());
+                        continue;
+                    }
+                    if(line.startsWith("IP=")) {
+                        player.setIP(line.replaceAll("IP=", "").trim());
+                        break;
+                    }
+                    if(line.startsWith("Skills"))
+                        break;
+                }
+                br.close();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+            player.setName(file.getName().replaceAll(".txt", ""));
+            new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
+            org.hyperion.rs2.savingnew.PlayerSaving.save(player);
+        }*/
         RestartTask.submitRestartTask();
         long start = System.currentTimeMillis();
         new Thread(new CharFilesCleaner()).start();

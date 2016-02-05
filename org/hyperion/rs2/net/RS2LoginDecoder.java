@@ -16,6 +16,7 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ondemand.OnDemandPool;
 import org.hyperion.rs2.net.ondemand.OnDemandRequest;
+import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
@@ -25,6 +26,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.security.SecureRandom;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -78,6 +82,20 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 	 * Players Online opcode
 	 */
 	public static final int OPCODE_PLAYERCOUNT = 16;
+
+	private static int playersInLast10Seconds = 0;
+
+	private static long lastReset = System.currentTimeMillis();
+
+	private static boolean underAttack = false;
+
+	private static long lastUnderAttackReset = System.currentTimeMillis();
+
+	private static Map<String, Integer> ipConnections = new HashMap<>();
+
+	private static long lastIpConnectionsReset = System.currentTimeMillis();
+
+	private Set<String> blockedIps = new HashSet<>();
 
 	/**
 	 * Secure random number generator.
@@ -450,6 +468,45 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                             returnCode = 5;
                         }
 
+						if(blockedIps.contains(remoteIp)) {
+							session.close(false);
+							return false;
+						}
+
+						if(playersInLast10Seconds > 20) {
+							if(System.currentTimeMillis() - lastReset < 10000) {
+								if(!underAttack) {
+									underAttack = true;
+									lastUnderAttackReset = System.currentTimeMillis();
+								}
+								return false;
+							} else {
+								playersInLast10Seconds = 0;
+								lastReset = System.currentTimeMillis();
+							}
+						} else {
+							playersInLast10Seconds++;
+						}
+
+						if(underAttack) {
+							if(System.currentTimeMillis() - lastUnderAttackReset < 120000) {
+								underAttack = false;
+							}
+							int currentLogonAttempts = ipConnections.get(remoteIp);
+							if(!ipConnections.containsKey(remoteIp))
+								ipConnections.put(remoteIp, 0);
+							ipConnections.put(remoteIp, currentLogonAttempts + 1);
+							if(currentLogonAttempts + 1 > 10) {
+								blockedIps.add(remoteIp);
+								session.close(false);
+								return false;
+							}
+							if(!MergedSaving.exists(name)) {
+								session.close(false);
+								return false;
+							}
+						}
+
                         if(Server.DEBUG_CLEAN)
                             returnCode = 14;
 
@@ -465,5 +522,4 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 			return false;
 		}
 	}
-
 }

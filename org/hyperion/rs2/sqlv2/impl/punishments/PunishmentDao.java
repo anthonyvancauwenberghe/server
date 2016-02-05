@@ -21,7 +21,7 @@ public interface PunishmentDao extends SqlDao {
     void insert(@Bind("issuer") final String issues, @Bind("victim") final String victim, @Bind("ip") final String ip, @Bind("mac") final int mac, @Bind("specialUid") final String specialUid, @Bind("target") final String target, @Bind("type") final String type, @Bind("time") final long time, @Bind("duration") final long duration, @Bind("unit") final String unit, @Bind("reason") final String reason);
 
     @SqlUpdate("UPDATE punishments SET issuer = :issuer, time = :time, duration = :duration, unit = :unit, reason = :reason WHERE victim = :victim AND target = :target AND type = :type")
-    void update(@Bind("issues") final String issues, @Bind("time") final long time, @Bind("duration") final long duration, @Bind("unit") final String unit, @Bind("reason") final String reason, @Bind("victim") final String victim, @Bind("target") final String target, @Bind("type") final String type);
+    void update(@Bind("issuer") final String issues, @Bind("time") final long time, @Bind("duration") final long duration, @Bind("unit") final String unit, @Bind("reason") final String reason, @Bind("victim") final String victim, @Bind("target") final String target, @Bind("type") final String type);
 
     @SqlUpdate("UPDATE punishments SET active = :active WHERE victim = :victim AND target = :target AND type = :type")
     void setActive(@Bind("active") final boolean active, @Bind("victim") final String victim, @Bind("target") final String target, @Bind("type") final String type);

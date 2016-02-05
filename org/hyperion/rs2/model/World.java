@@ -52,7 +52,6 @@ import org.hyperion.rs2.packet.PacketHandler;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
-import org.hyperion.rs2.sql.requests.HighscoresRequest;
 import org.hyperion.rs2.sql.requests.StaffActivityRequest;
 import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
@@ -150,8 +149,7 @@ public class World {
     /**
      * A list of connected players.
      */
-    private EntityList<Player> players = new EntityList<Player>(
-            Constants.MAX_PLAYERS);
+    private EntityList<Player> players = new EntityList<Player>(Constants.MAX_PLAYERS);
 
     /**
      * A list of active NPCs.
@@ -409,8 +407,6 @@ public class World {
             this.staffManager = new StaffManager();
             this.loadConfiguration();
             this.registerGlobalEvents();
-
-
 
             if (Server.getConfig().getBoolean("donationssql")) {
                 donationsSQL = new DonationsSQLConnection(Server.getConfig());
@@ -1056,13 +1052,6 @@ public class World {
         players.remove(player);
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
-
-       // BarrowsFFA.barrowsFFA.exit(player);
-
-        // logger.info("Unregistered player : " + player + " [online=" +
-        // players.size() + "]");
-        // System.out.println("Unregistered player : " + player.getName() +
-        // " [online=" + players.size() + "]");
         engine.submitWork(new Runnable() {
             public void run() {
 
@@ -1076,13 +1065,6 @@ public class World {
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
-                long dp = player.getAccountValue().getTotalValue();
-                long pkp = player.getAccountValue().getPkPointValue();
-                if (player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
-                    if (Server.getConfig().getBoolean("logssql"))
-                        World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
-                            "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(),
-                            dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
                 if (player.verified)
                     loader.savePlayer(player, "world save");
                 resetSummoningNpcs(player);
@@ -1098,9 +1080,6 @@ public class World {
                 // player.getSession().removeAttribute("player");
             }
         });
-        if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            if (Server.getConfig().getBoolean("logssql"))
-                getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**

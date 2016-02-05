@@ -89,13 +89,11 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
 	private static boolean underAttack = false;
 
-	private static long lastUnderAttackReset = System.currentTimeMillis();
-
 	private static Map<String, Integer> ipConnections = new HashMap<>();
 
-	private static long lastIpConnectionsReset = System.currentTimeMillis();
+	private static long lastUnderAttackReset = System.currentTimeMillis();
 
-	private Set<String> blockedIps = new HashSet<>();
+	private static Set<String> blockedIps = new HashSet<>();
 
 	/**
 	 * Secure random number generator.
@@ -476,6 +474,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						if(playersInLast10Seconds > 20) {
 							if(System.currentTimeMillis() - lastReset < 10000) {
 								if(!underAttack) {
+									System.out.println("WENT IN UNDER ATTACK MODE");
 									underAttack = true;
 									lastUnderAttackReset = System.currentTimeMillis();
 								}
@@ -490,7 +489,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
 						if(underAttack) {
 							if(System.currentTimeMillis() - lastUnderAttackReset < 120000) {
+								System.out.println("FINISHED UNDER ATTACK MODE");
 								underAttack = false;
+								ipConnections.clear();
+								blockedIps.clear();
 							}
 							int currentLogonAttempts = ipConnections.get(remoteIp);
 							if(!ipConnections.containsKey(remoteIp))

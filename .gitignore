@@ -20,6 +20,8 @@ local.properties
 .rar
 lib/
 libs/
+*.bat
+data\bugchars\*
 
 # External tool builders
 .externalToolBuilders/

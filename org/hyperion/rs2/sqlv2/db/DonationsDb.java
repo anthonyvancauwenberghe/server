@@ -29,6 +29,6 @@ public class DonationsDb extends Db {
         votes = new Votes(this);
 
         CommandHandler.submit(new VotedCommand());
-        CommandHandler.submit(new DonatedCommand());
+        CommandHandler.submit(new DonatedCommand("donated"), new DonatedCommand("getpoints"));
     }
 }

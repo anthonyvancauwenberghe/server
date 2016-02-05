@@ -139,7 +139,6 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
-        System.out.printf("progressing task: %s (%d, achievement id %d)%n", task.desc, task.id, task.achievementId);
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())

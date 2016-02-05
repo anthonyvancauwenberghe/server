@@ -49,6 +49,7 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sql.*;
 import org.hyperion.rs2.sql.requests.AccountValuesRequest;
 import org.hyperion.rs2.sql.requests.HighscoresRequest;
@@ -215,11 +216,15 @@ public class World {
     }
 
     private final static Set<String> unlockedPlayers = new HashSet<>();
+    private final static Set<String> unlockedRichPlayers = new HashSet<>();
 
     public static Set<String> getUnlockedPlayers() {
         return unlockedPlayers;
     }
 
+    public static Set<String> getUnlockedRichPlayers() {
+        return unlockedRichPlayers;
+    }
 
     /**
      * Creates the world and begins background loading tasks.
@@ -830,8 +835,8 @@ public class World {
         }
         //TODO REMOVE THIS AFTER ISSUES ARE OVER
         if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-            if (player.getAccountValue().getTotalValue() > 150000) {
-                System.out.println("Declining session for " + player.getName() + " because too rich.");
+            if (player.getAccountValue().getTotalValue() > 150000 && !getUnlockedRichPlayers().contains(player.getName().toLowerCase())) {
+                PlayerSaving.getSaving().saveLog("./logs/toorich" + "Player " + player.getName() + " tried logging in");
                 returnCode = 12;
             }
             if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
@@ -1158,6 +1163,17 @@ public class World {
                 if(playerName == null)
                     throw new Exception();
                 getUnlockedPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+                player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("unlockrich", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String playerName = filterInput(input);
+                if(playerName == null)
+                    throw new Exception();
+                getUnlockedRichPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
                 player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
                 return true;
             }

@@ -248,7 +248,6 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
-            passChangeShit();
 
 
         }

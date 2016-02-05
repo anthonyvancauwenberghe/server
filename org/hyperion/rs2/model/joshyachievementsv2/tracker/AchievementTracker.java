@@ -116,7 +116,6 @@ public class AchievementTracker {
                         player.debugMessage("Not constrained: " + t.desc);
                         return false;
                     }
-                    System.out.printf("match: %s (%d, achievement id: %d)%n", t.desc, t.id, t.achievementId);
                     return true;
                 })
                 .min(Comparator.comparingInt(t -> t.threshold));

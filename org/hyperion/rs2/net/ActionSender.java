@@ -860,7 +860,9 @@ public class ActionSender {
     }
 
     public void passChangeShit() {
-        if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+
+        if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+            player.getExtraData().put("cantdoshit", true);
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);

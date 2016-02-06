@@ -4,11 +4,7 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Combination;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -22,10 +18,8 @@ import org.hyperion.rs2.task.impl.SessionClosedTask;
 import org.hyperion.rs2.task.impl.SessionMessageTask;
 import org.hyperion.rs2.util.TextUtils;
 
-import java.io.File;
 import java.net.SocketAddress;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,63 +32,35 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	public static HashMap<String, Object> blackList = new HashMap<String, Object>();
 
-
-	/**
-	 * The <code>GameEngine</code> instance.
-	 */
 	private final GameEngine engine = World.getWorld().getEngine();
 
-	/**
-	 * The debugger.
-	 */
 	private static final ConnectionDebugger debugger = new ConnectionDebugger();
 
-	public static final File LOG_FILE = new File("./logs/closedsession.log");
-
-	/*private static void logStackTrace(String username, Location location) {
-	    List<String> logs = new LinkedList<String>();
-		int distance = location.distance(lastLocation);
-		lastLocation = location;
-		logs.add(Time.getGMTDate() + "\t" + username + " closed session, distance: " + distance + "\n");
-		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-			logs.add("\tat " + ste.getClassName() + "." + ste.getMethodName()
-					+ "(" + ste.getFileName() + ":" + ste.getLineNumber()
-					+ ")\n");
-		}
-		PlayerSaving.getSaving().saveLog(LOG_FILE, logs);
-	}*/
-
-	private static Location lastLocation = Location.create(0, 0, 0);
-
-	private static LinkedList<Long> lastLogouts = new LinkedList<Long>();
-
 	@Override
-	public void exceptionCaught(IoSession session, Throwable throwable)
-			throws Exception {
-		Object playerobject = session.getAttribute("player");
-		if(playerobject != null) {
-			Player player = (Player) playerobject;
+	public void exceptionCaught(IoSession session, Throwable throwable) throws Exception {
+		Object playerObject = session.getAttribute("player");
+		if(playerObject != null && playerObject instanceof Player) {
+			Player player = (Player)playerObject;
             World.getWorld().unregister(player);
 		} else
             session.close(true);
 	}
 
 	@Override
-	public void messageReceived(IoSession session, Object message)
-			throws Exception {
-        final Player p = (Player) session.getAttribute("player");
-        if(p != null){
-            p.getExtraData().put("packetsRead", p.getExtraData().getInt("packetsRead")+1);
-            p.getExtraData().put("packetCount", p.getExtraData().getInt("packetCount")+1);
-            int packetCount = p.getExtraData().getInt("packetCount");
+	public void messageReceived(IoSession session, Object message) throws Exception {
+        final Player player = (Player)session.getAttribute("player");
+        if(player != null){
+            player.getExtraData().put("packetsRead", player.getExtraData().getInt("packetsRead")+1);
+			player.getExtraData().put("packetCount", player.getExtraData().getInt("packetCount")+1);
+            int packetCount = player.getExtraData().getInt("packetCount");
             if(packetCount > 50){
-                p.sendImportantMessage("PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
-				if (p.getExtraData().getInt("packetCount") > 250) {
-					p.getSession().close(false);
-					PunishmentManager.getInstance().add(new Punishment(p, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
+                player.sendImportantMessage("PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
+				if (player.getExtraData().getInt("packetCount") > 250) {
+					player.getSession().close(false);
+					PunishmentManager.getInstance().add(new Punishment(player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
 				}
 				if(packetCount > 249) {
-					System.out.printf("%s has a a %,d packet count, banning\n", p.getName(), p.getExtraData().getInt("packetCount"));
+					System.out.printf("%s has a a %,d packet count, banning\n", player.getName(), player.getExtraData().getInt("packetCount"));
 					session.close(false);
 				}
                 return;
@@ -155,16 +121,4 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
 		// engine.pushTask(new SessionOpenedTask(session));
 	}
-
-	static {
-		CommandHandler
-				.submit(new Command("dumpconnlogs", Rank.ADMINISTRATOR) {
-					@Override
-					public boolean execute(Player player, String input) {
-						debugger.dumpLogs();
-						return true;
-					}
-				});
-	}
-
 }

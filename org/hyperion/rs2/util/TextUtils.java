@@ -212,7 +212,7 @@ public class TextUtils {
 				}
 			}
 			if(valid) {
-				bldr.append((char) c);
+				bldr.append(c);
 			}
 		}
 		return bldr.toString();
@@ -227,9 +227,7 @@ public class TextUtils {
 	}
 
 	public static void writeToFile(File file, String... lines) {
-		BufferedWriter bw = null;
-		try {
-			bw = new BufferedWriter(new FileWriter(file, true));
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
 			for(String line : lines) {
 				bw.write(line);
 				bw.newLine();

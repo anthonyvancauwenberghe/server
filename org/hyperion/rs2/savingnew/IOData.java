@@ -112,7 +112,7 @@ public enum IOData {
     BANK_PIN {
         @Override
         public boolean shouldSave(Player player) {
-            return !player.bankPin.equals("");
+            return player.bankPin != null && !player.bankPin.equals("") && !player.bankPin.equals("null");
         }
 
         @Override
@@ -1034,6 +1034,11 @@ public enum IOData {
     };
 
     public final static IOData[] VALUES = values();
+    private final static String CHAR_FILE_PATH = "./data/characters";
+
+    public static String getCharFilePath() {
+        return CHAR_FILE_PATH;
+    }
 
     public boolean shouldSave(Player player) {
         return true;

@@ -11,8 +11,6 @@ import org.hyperion.rs2.WorldLoader.LoginResult;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PlayerFiles;

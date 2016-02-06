@@ -16,7 +16,7 @@ import java.util.Arrays;
  */
 public class PlayerSaving {
     public static void save(Player player) {
-        Path path = Paths.get("./data/characters", player.getName().toLowerCase() + ".json");
+        Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 
         if (!file.getParentFile().exists()) {

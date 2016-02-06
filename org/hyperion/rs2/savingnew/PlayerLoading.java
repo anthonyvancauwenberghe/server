@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class PlayerLoading {
     public static void loadPlayer(Player player) {
-        Path path = Paths.get("./data/characters", player.getName().toLowerCase() + ".json");
+        Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 
         if (!file.exists()) {
@@ -41,5 +41,10 @@ public class PlayerLoading {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean playerExists(String playerName) {
+        File file = new File(IOData.getCharFilePath(), playerName.toLowerCase() + ".json");
+        return file.exists();
     }
 }

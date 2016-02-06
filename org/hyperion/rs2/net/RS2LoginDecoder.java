@@ -9,14 +9,13 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.hyperion.Server;
 import org.hyperion.rs2.ConnectionHandler;
-import org.hyperion.rs2.model.BanManager;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ondemand.OnDemandPool;
 import org.hyperion.rs2.net.ondemand.OnDemandRequest;
-import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
@@ -107,11 +106,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 			0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
 	};
 
-	/**
-	 * The ban manager.
-	 */
-	private static BanManager banmanager = World.getWorld().getBanManager();
-
 	private static int invalidLogins = 0;
 
 	private static HashMap<String, Long> loginAttempts = new HashMap<String, Long>();
@@ -119,8 +113,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 	@Override
 	protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
 		synchronized(session) {
-			int state = (Integer) session.getAttribute("state", STATE_OPCODE);
-			LoginDebugger.getDebugger().log("Remote: " + session.getRemoteAddress() + ", state: " + state);
+			int state = (Integer)session.getAttribute("state", STATE_OPCODE);
 			switch(state) {
 				case STATE_UPDATE:
 					if(in.remaining() >= 4) {
@@ -504,7 +497,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 									session.close(false);
 									return false;
 								}
-								if(!MergedSaving.exists(name)) {
+								if(!PlayerSaving.playerExists(name)) {
 									session.close(false);
 									return false;
 								}

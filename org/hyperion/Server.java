@@ -2,16 +2,22 @@ package org.hyperion;
 
 import javafx.application.Application;
 import org.hyperion.rs2.RS2Server;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.security.CharFileEncryption;
+import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
 import org.monitor.domain.Controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -137,35 +143,10 @@ public class Server {
                 }
             }
         }
-
+*/
         File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
         System.out.println("Started converting char files, count: " + files.length);
         final long currentTime = System.currentTimeMillis();
-        for(File file : files) {
-            Player player = new Player();
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String line;
-                while((line = br.readLine()) != null) {
-                    if(line.startsWith("Mac=")) {
-                        player.setUid(line.replaceAll("Mac=", "").trim());
-                        continue;
-                    }
-                    if(line.startsWith("IP=")) {
-                        player.setIP(line.replaceAll("IP=", "").trim());
-                        break;
-                    }
-                    if(line.startsWith("Skills"))
-                        break;
-                }
-                br.close();
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-            player.setName(file.getName().replaceAll(".txt", ""));
-            new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
-            org.hyperion.rs2.savingnew.PlayerSaving.save(player);
-        }*/
         RestartTask.submitRestartTask();
         long start = System.currentTimeMillis();
         new Thread(new CharFilesCleaner()).start();
@@ -183,6 +164,35 @@ public class Server {
             ClanManager.load();
 //			ItemInfo.init();
             System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
+
+            for(File file : files) {
+                String ip = null;
+                int uid = 0;
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line;
+                    while((line = br.readLine()) != null) {
+                        if(line.startsWith("Mac=")) {
+                            uid = Integer.parseInt(line.replaceAll("Mac=", "").trim());
+                            continue;
+                        }
+                        if(line.startsWith("IP=")) {
+                            ip = line.replaceAll("IP=", "").trim();
+                            break;
+                        }
+                        if(line.startsWith("Skills"))
+                            break;
+                    }
+                    br.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+                Player player = new Player(uid);
+                player.setIP(ip);
+                player.setName(file.getName().replaceAll(".txt", ""));
+                new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
+                org.hyperion.rs2.savingnew.PlayerSaving.save(player);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.log(Level.SEVERE, "Error starting Hyperion.", ex);

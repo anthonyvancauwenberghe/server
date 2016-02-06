@@ -51011,3 +51011,43 @@ Fri Feb 05 16:00:29 CET 2016
 	at java.lang.Thread.run(null:-1)
 
 ================================
+Fri Feb 05 22:33:55 CET 2016
+	class: class java.util.ConcurrentModificationException
+	at java.util.HashMap$HashIterator.nextNode(null:-1)
+	at java.util.HashMap$ValueIterator.next(null:-1)
+	at org.hyperion.rs2.model.World.register(World.java:863)
+	at org.hyperion.rs2.task.impl.SessionLoginTask.execute(SessionLoginTask.java:31)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(null:-1)
+	at java.util.concurrent.FutureTask.run(null:-1)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(null:-1)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null:-1)
+	at java.lang.Thread.run(null:-1)
+
+================================
+Sat Feb 06 01:01:30 CET 2016
+	class: class java.lang.NullPointerException
+	at org.hyperion.rs2.model.Rank.isStaffMember(Rank.java:168)
+	at org.hyperion.rs2.model.content.ticket.TicketManager.getSizeForPlayer(TicketManager.java:46)
+	at org.hyperion.rs2.model.content.ticket.TicketManager.refreshSizeForStaff(TicketManager.java:59)
+	at org.hyperion.rs2.model.content.ticket.TicketManager.remove(TicketManager.java:71)
+	at org.hyperion.rs2.model.content.ticket.TicketHolder.fireOnLogout(TicketHolder.java:41)
+	at org.hyperion.rs2.model.World.unregister2(World.java:1018)
+	at org.hyperion.rs2.model.World.unregister(World.java:991)
+	at org.hyperion.rs2.model.World.gracefullyExitSession(World.java:967)
+	at org.hyperion.rs2.net.PacketManager.handle(PacketManager.java:89)
+	at org.hyperion.rs2.task.impl.SessionMessageTask.execute(SessionMessageTask.java:40)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(null:-1)
+	at java.util.concurrent.FutureTask.run(null:-1)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(null:-1)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null:-1)
+	at java.lang.Thread.run(null:-1)
+
+================================

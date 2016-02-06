@@ -11,8 +11,8 @@ public class DonatedCommand extends Command {
 
     private static final long DELAY = Time.ONE_SECOND * 20;
 
-    public DonatedCommand() {
-        super("donated", Rank.PLAYER);
+    public DonatedCommand(String command) {
+        super(command, Rank.PLAYER);
     }
 
     @Override

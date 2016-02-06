@@ -64,8 +64,7 @@ public class PlayerSaving {
 	/**
 	 * The single thread work service used for queued saving.
 	 */
-	private final ExecutorService saveThread = Executors
-			.newSingleThreadExecutor();
+	private final ExecutorService saveThread = Executors.newSingleThreadExecutor();
 
 	/**
 	 * Holds all the SaveObjects meant for loading.

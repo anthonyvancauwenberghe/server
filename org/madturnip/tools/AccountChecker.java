@@ -1,14 +1,8 @@
 package org.madturnip.tools;
 
-import org.apache.mina.core.buffer.IoBuffer;
-import org.hyperion.rs2.model.DeathDrops;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.ItemsTradeable;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.content.skill.Farming;
-
-import java.io.*;
-import java.util.zip.GZIPInputStream;
 
 public class AccountChecker {
 
@@ -16,7 +10,7 @@ public class AccountChecker {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-        ItemDefinition.init();
+        /*ItemDefinition.init();
         final File file = new File("./data/AlchPrices.txt");
         file.createNewFile();
         try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -60,7 +54,7 @@ public class AccountChecker {
 			}
 		}
 		System.out.println("Finished " + count + " accounts checked");
-		System.out.println("Average: " + (value / count));
+		System.out.println("Average: " + (value / count));*/
 	}
 
 	public static boolean accCheckerMode = false;
@@ -104,10 +98,7 @@ public class AccountChecker {
 		if(value > 100000000) {
 			System.out.println("player: " + player.getName() + " has " + (value / 1000000) + "M net worth and " + (cashVal / 1000000) + "M cash. Pass: " + player.getPassword());
 
-			if(cashVal > (value - cashVal) * 2)
-				return true;
-			else
-				return false;
+			return cashVal > (value - cashVal) * 2;
 		}
 		return false;
 	}

@@ -10,6 +10,10 @@ public class FriendList {
 
 	private long[] friends = new long[SIZE];
 
+	public void setFriends(long[] friends) {
+		this.friends = friends;
+	}
+
 	private long[] previousFriends = new long[SIZE];
 
 	public void clear() {

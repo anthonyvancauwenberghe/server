@@ -142,10 +142,7 @@ public class Appearance {
 				hands,
 				legs,
 				feet,
-				beard,
-				standAnim,
-				walkAnim,
-				runAnim
+				beard
 		};
 	}
 

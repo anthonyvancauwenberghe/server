@@ -34,7 +34,6 @@ public class KeywordCommand extends Command {
 						return false;
 					}
 					SpawnCommand.setKeyword(keyword, id);
-					save(keyword, id);
 					return false;
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Command could not be parsed.");
@@ -44,21 +43,10 @@ public class KeywordCommand extends Command {
 		try {
 			int id = Integer.parseInt(parts[1]);
 			SpawnCommand.setKeyword(keyword, id);
-			save(keyword, id);
 		} catch(Exception e) {
 			player.getActionSender().sendMessage("Command could not be parsed.");
 		}
 		return true;
-	}
-
-	/**
-	 * Saves the command to the <code>SAVE_FILE</code>.
-	 *
-	 * @param keyword
-	 * @param id
-	 * @throws Exception
-	 */
-	private void save(String keyword, int id) throws Exception {
 	}
 
 

@@ -146,8 +146,7 @@ public class World {
     /**
      * A list of connected players.
      */
-    private EntityList<Player> players = new EntityList<Player>(
-            Constants.MAX_PLAYERS);
+    private EntityList<Player> players = new EntityList<Player>(Constants.MAX_PLAYERS);
 
     /**
      * A list of active NPCs.
@@ -734,24 +733,33 @@ public class World {
             }
         }
         //TODO REMOVE THIS AFTER ISSUES ARE OVER
-        if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-            if (player.getAccountValue().getTotalValue() > 150000 && !getUnlockedRichPlayers().contains(player.getName().toLowerCase())) {
-                PlayerSaving.getSaving().saveLog("./logs/toorich" + "Player " + player.getName() + " tried logging in");
-                returnCode = 12;
+        boolean has = false;
+        for (String ipz : GoodIPs.GOODS) {
+            if (player.getShortIP().startsWith(ipz) || ipz.equals(Integer.toString(player.getUID()))) {
+                has = true;
+                break;
             }
-            if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
-                try {
-                    String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
-                    String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
-                    if (!currentCutIp.equals(previousCutIp)) {
-                        returnCode = 12;
-                    }
-                } catch(Exception e) {
+        }
+        if (!has) {
+            if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+                if (player.getAccountValue().getTotalValue() > 150000 && !getUnlockedRichPlayers().contains(player.getName().toLowerCase())) {
+                    PlayerSaving.getSaving().saveLog("./logs/toorich" + "Player " + player.getName() + " tried logging in");
                     returnCode = 12;
                 }
+                if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
+                    try {
+                        String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
+                        String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
+                        if (!currentCutIp.equals(previousCutIp)) {
+                            returnCode = 12;
+                        }
+                    } catch (Exception e) {
+                        returnCode = 12;
+                    }
+                }
+                if (player.isNew())
+                    player.getPermExtraData().put("passchange", System.currentTimeMillis());
             }
-            if(player.isNew())
-                player.getPermExtraData().put("passchange", System.currentTimeMillis());
         }
         final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
         if (holder != null) {
@@ -944,13 +952,6 @@ public class World {
         players.remove(player);
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
-
-       // BarrowsFFA.barrowsFFA.exit(player);
-
-        // logger.info("Unregistered player : " + player + " [online=" +
-        // players.size() + "]");
-        // System.out.println("Unregistered player : " + player.getName() +
-        // " [online=" + players.size() + "]");
         engine.submitWork(new Runnable() {
             public void run() {
                 player.getLogManager().add(LogEntry.logout(player));
@@ -1055,6 +1056,19 @@ public class World {
                     throw new Exception();
                 getUnlockedRichPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
                 player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("changeip", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String[] parts = filterInput(input).split(",");
+                if(parts.length < 2)
+                    throw new Exception();
+                if(org.hyperion.rs2.savingnew.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
+                    player.getActionSender().sendMessage(Misc.formatPlayerName(parts[0]) + "'s IP has been changed to " + parts[1]);
+                else
+                    player.getActionSender().sendMessage("IP could not be changed.");
                 return true;
             }
         });

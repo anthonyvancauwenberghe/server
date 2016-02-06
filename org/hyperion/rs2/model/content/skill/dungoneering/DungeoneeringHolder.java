@@ -15,10 +15,10 @@ import java.util.stream.Stream;
  * Time: 8:51 AM
  * To change this template use File | Settings | File Templates.
  */
-public class DungoneeringHolder {
+public class DungeoneeringHolder {
 
     public static void main(final String[] strings) {
-        final DungoneeringHolder holder = new DungoneeringHolder();
+        final DungeoneeringHolder holder = new DungeoneeringHolder();
         holder.bind(Item.create(4151, 1), 0);
         holder.bind(Item.create(8856, 1), 0);
 
@@ -27,7 +27,7 @@ public class DungoneeringHolder {
 
         System.out.println(holder.save());
 
-        final DungoneeringHolder h2 = new DungoneeringHolder();
+        final DungeoneeringHolder h2 = new DungeoneeringHolder();
 
         h2.load(holder.save());
 
@@ -48,7 +48,7 @@ public class DungoneeringHolder {
        }
     }
 
-    public DungoneeringHolder() {
+    public DungeoneeringHolder() {
         Arrays.fill(combatXPs, Skills.EXPERIENCE_PER_LEVEL[50] + 5);
     }
 

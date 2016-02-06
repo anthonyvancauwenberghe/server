@@ -1,18 +1,16 @@
 package org.hyperion.rs2.saving;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.saving.instant.InstantPlayerSaving;
-import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.util.Time;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MergedSaving {
 

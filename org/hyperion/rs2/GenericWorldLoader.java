@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -287,7 +288,7 @@ public class GenericWorldLoader implements WorldLoader {
 		}
 		TextUtils.writeToFile(file, String.format("[%s]%s has logged out info: %s",
 				new Date(System.currentTimeMillis()).toString(), player.getName(), info));
-		org.hyperion.rs2.savingnew.PlayerSaving.save(player);
+		PlayerSaving.getSaving().save(player);
 		return true;
 	}
 

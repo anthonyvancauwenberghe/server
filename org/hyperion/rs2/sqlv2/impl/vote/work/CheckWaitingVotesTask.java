@@ -152,26 +152,27 @@ public class CheckWaitingVotesTask implements Task {
         try(final VoteDao dao = DbHub.getDonationsDb().votes().open()){
             for(final WaitingVote vote : votes){
                 if(!vote.processed()){
+                    if(!DbHub.getDonationsDb().votes().process(dao, vote))
+                        continue;
                     if(vote.runelocus() && !vote.runelocusProcessed()){
-                        runelocusVotes += 2;
-                        DbHub.getDonationsDb().votes().processRunelocus(dao, vote);
+                        if( DbHub.getDonationsDb().votes().processRunelocus(dao, vote))
+                            runelocusVotes += 2;
                     }
                     if(vote.topg() && !vote.topgProcessed()){
-                        topgVotes++;
-                        DbHub.getDonationsDb().votes().processTopg(dao, vote);
+                        if(DbHub.getDonationsDb().votes().processTopg(dao, vote))
+                            topgVotes++;
                     }
                     if(vote.rspslist() && !vote.rspslistProcessed()){
-                        rspslistVotes++;
-                        DbHub.getDonationsDb().votes().processRspslist(dao, vote);
+                        if(DbHub.getDonationsDb().votes().processRspslist(dao, vote))
+                            rspslistVotes++;
                     }
-                    DbHub.getDonationsDb().votes().process(dao, vote);
                 }
-                if(vote.date().toString().equalsIgnoreCase(FORMAT_SQL.format(Calendar.getInstance().getTime()).toString())){
+                if(vote.date().toString().equalsIgnoreCase(FORMAT_SQL.format(Calendar.getInstance().getTime()))){
                     if(vote.runelocus())
                         runelocus = true;
                     if(vote.rspslist())
                         rspslist = true;
-                }else{
+                } else {
                     DbHub.getDonationsDb().votes().delete(dao, vote);
                 }
             }

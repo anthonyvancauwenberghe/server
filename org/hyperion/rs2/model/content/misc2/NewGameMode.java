@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.util.Misc;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -117,14 +118,21 @@ public class NewGameMode implements ContentTemplate {
         return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    private final static String[] answers = {
+            "@blu@Begin tutorial:@bla@ You will receive a '@dre@Fire Cape@bla@' upon completion.",
+            "@blu@Skip tutorial:@bla@ You will not receive the tutorial reward."
+    };
+
     @Override
     public boolean dialogueAction(Player player, int dialogueId) {
         switch(dialogueId) {
             case 10000:
-                player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
-                        "@blu@Begin tutorial:@bla@ You will receive a '@dre@Fire Cape@bla@' upon completion.", "@blu@Skip tutorial:@bla@ You will not receive the tutorial reward.");
-                player.getInterfaceState().setNextDialogueId(0, 10002);
-                player.getInterfaceState().setNextDialogueId(1, 10003);
+                int random = Misc.random(1);
+                String answer1 = answers[random];
+                String answer2 = answers[random == 1 ? 0 : 1];
+                player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, answer1, answer2);
+                player.getInterfaceState().setNextDialogueId(random, 10002);
+                player.getInterfaceState().setNextDialogueId(random == 1 ? 0 : 1, 10003);
                 return true;
             case 10001:
                 ClanManager.joinClanChat(player, "help", false);

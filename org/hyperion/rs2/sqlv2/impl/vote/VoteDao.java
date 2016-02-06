@@ -14,16 +14,16 @@ public interface VoteDao extends SqlDao {
     @SqlQuery("SELECT * FROM waitingVotes WHERE realUsername = :playerName")
     List<WaitingVote> waiting(@Bind("playerName") final String playerName);
 
-    @SqlUpdate("UPDATE waitingVotes SET runelocusProcessed = 1 WHERE 'index' = :index")
+    @SqlUpdate("UPDATE waitingVotes SET runelocusProcessed = 1 WHERE `index` = :index")
     int processRunelocus(@Bind("index") final int index);
 
-    @SqlUpdate("UPDATE waitingVotes SET topgProcessed = 1 WHERE 'index' = :index")
+    @SqlUpdate("UPDATE waitingVotes SET topgProcessed = 1 WHERE `index` = :index")
     int processTopg(@Bind("index") final int index);
 
-    @SqlUpdate("UPDATE waitingVotes SET rspslistProcessed = 1 WHERE 'index' = :index")
+    @SqlUpdate("UPDATE waitingVotes SET rspslistProcessed = 1 WHERE `index` = :index")
     int processRspslist(@Bind("index") final int index);
 
-    @SqlUpdate("UPDATE waitingVotes SET processed = 1 WHERE 'index' = :index")
+    @SqlUpdate("UPDATE waitingVotes SET processed = 1 WHERE `index` = :index")
     int process(@Bind("index") final int index);
 
     @SqlUpdate("DELETE FROM waitingVotes WHERE 'index' = :index")

@@ -9,7 +9,6 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.hyperion.Server;
 import org.hyperion.rs2.ConnectionHandler;
-import org.hyperion.rs2.model.BanManager;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -106,11 +105,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 	private static final byte[] INITIAL_RESPONSE = new byte[]{
 			0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0
 	};
-
-	/**
-	 * The ban manager.
-	 */
-	private static BanManager banmanager = World.getWorld().getBanManager();
 
 	private static int invalidLogins = 0;
 

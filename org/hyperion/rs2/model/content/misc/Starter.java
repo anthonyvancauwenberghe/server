@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.SpellBook;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.StarterLogging;
 import org.hyperion.util.Misc;
 
@@ -212,7 +211,7 @@ public class Starter {
 	}
 
 	public static void giveStarter(Player player) {
-		String ip = NewcomersLogging.formatIp(player.getFullIP());
+		String ip = player.getFullIP().split(":")[0].replace("/", "");
 		long lastStarter = StarterLogging.getLogging().lastStarterReceived(ip);
 		if(System.currentTimeMillis() - lastStarter > StarterLogging.STARTER_MAX_DELAY) {
 			ContentEntity.addItem(player, 995, Server.SPAWN ? 25000000 : 5000000);

@@ -19,11 +19,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.container.Trade;
+import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankField;
 import org.hyperion.rs2.model.container.bank.BankItem;
@@ -40,16 +36,11 @@ import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
-import org.hyperion.rs2.model.content.misc.ItemDropping;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc.Mail;
-import org.hyperion.rs2.model.content.misc.SkillingData;
-import org.hyperion.rs2.model.content.misc.TriviaSettings;
+import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.model.content.misc2.SpawnTab;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
-import org.hyperion.rs2.model.content.polls.PollInterface;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.Farming;
 import org.hyperion.rs2.model.content.skill.Farming.Farm;
@@ -80,17 +71,8 @@ import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -403,7 +385,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	private Yelling yelling = new Yelling();
 	private ExtraData extraData = new ExtraData();
 	private QuestTab questtab = new QuestTab(this);
-	private PollInterface poll = new PollInterface(this);
 	private SpawnTab spawntab = new SpawnTab(this);
 	private AchievementTab achievementtab = new AchievementTab(this);
 	//private News news = new News(this);
@@ -884,8 +865,6 @@ public class Player extends Entity implements Persistable, Cloneable{
 	public QuestTab getQuestTab() {
 		return questtab;
 	}
-
-	public PollInterface getPoll() { return poll; }
 
 	public SpawnTab getSpawnTab() {
 		return spawntab;

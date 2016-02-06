@@ -1,10 +1,7 @@
 package org.hyperion.rs2.saving.impl;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.saving.SaveInteger;
-import org.hyperion.rs2.sql.requests.QueryRequest;
 
 public class SaveVotePoints extends SaveInteger {
 
@@ -22,10 +19,6 @@ public class SaveVotePoints extends SaveInteger {
 	@Override
 	public void setValue(Player player, int value) {
 		if(value > 6000) {
-			String query = "INSERT INTO glitchers(name,message) VALUES ('" + player.getName().toLowerCase() + "','votepoints glitch:" +
-					value + "')";
-			if (Server.getConfig().getBoolean("logssql"))
-				World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 			value = 0;
 		}
 		player.getPoints().setVotingPoints(value);

@@ -50,10 +50,6 @@ import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
 import org.hyperion.rs2.saving.PlayerSaving;
-import org.hyperion.rs2.sql.*;
-import org.hyperion.rs2.sql.requests.AccountValuesRequest;
-import org.hyperion.rs2.sql.requests.HighscoresRequest;
-import org.hyperion.rs2.sql.requests.StaffActivityRequest;
 import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
@@ -192,12 +188,6 @@ public class World {
      */
     private StaffManager staffManager;
 
-    private MySQLConnection charsSQL;
-    /**
-     * The Ban Manager
-     */
-    private BanManager banManager;
-
     private final BountyHandler bountyHandler = new BountyHandler();
 
     private ServerEnemies enemies;
@@ -325,49 +315,6 @@ public class World {
         return wilderness;
     }
 
-
-    private MySQLConnection donationsSQL;
-    private SQLAccessor donationsOffer;
-
-    private MySQLConnection logsSQL;
-    private SQLAccessor logsOffer;
-
-    private MySQLConnection playersSQL;
-    private SQLAccessor playersOffer;
-
-    private MySQLConnection loadingSQL;
-    private SQLAccessor loadingOffer;
-
-    private MySQLConnection importantPlayersSQL;
-    private SQLAccessor importantOffer;
-
-    public SQLAccessor getLoadingConnection() {
-        return loadingOffer;
-    }
-
-    public SQLAccessor getImportantConnection() {
-        return importantOffer;
-    }
-
-    public SQLAccessor getPlayersConnection() {
-        return playersOffer;
-    }
-
-
-
-
-    public MySQLConnection getDonationsConnection() {
-        return donationsSQL;
-    }
-
-    public MySQLConnection getLogsConnection() {
-        return logsSQL;
-    }
-
-    public MySQLConnection getCharactersConnection() {
-        return charsSQL;
-    }
-
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;
 	}*/
@@ -409,53 +356,6 @@ public class World {
             this.staffManager = new StaffManager();
             this.loadConfiguration();
             this.registerGlobalEvents();
-
-
-
-            if (Server.getConfig().getBoolean("donationssql")) {
-                donationsSQL = new DonationsSQLConnection(Server.getConfig());
-            } else {
-                donationsSQL = new DummyConnection();
-            }
-            if (Server.getConfig().getBoolean("logssql")) {
-
-                logsSQL = new LogsSQLConnection(Server.getConfig());
-                //logsSQL.setLogged(true);
-            } else {
-                logsSQL = new DummyConnection();
-            }
-            if (Server.getConfig().getBoolean("playerssql")) {
-                playersSQL = new PlayersSQLConnection(Server.getConfig());
-
-                playersSQL.setPriority(Thread.MAX_PRIORITY);
-                /*loadingSQL = new SQLPlayerLoading(Server.getConfig());
-                loadingSQL.setPriority(Thread.MAX_PRIORITY);*/
-                loadingSQL = new DummyConnection();
-                importantPlayersSQL = new ImportantPlayerConnection(Server.getConfig());
-                importantPlayersSQL.setPriority(Thread.MAX_PRIORITY);
-                importantPlayersSQL.setLogged(true);
-            } else {
-                playersSQL = new DummyConnection();
-                loadingSQL = new DummyConnection();
-                importantPlayersSQL = new DummyConnection();
-            }
-			/*
-			 * SQL Accessors
-			 */
-            donationsOffer = new SQLAccessor(donationsSQL);
-            logsOffer = new SQLAccessor(logsSQL);
-            playersOffer = new SQLAccessor(playersSQL);
-            importantOffer = new SQLAccessor(importantPlayersSQL);
-            loadingOffer = new SQLAccessor(loadingSQL);
-
-			/*
-			 * Init
-			 */
-            donationsSQL.init();
-            logsSQL.init();
-            loadingSQL.init();
-            importantPlayersSQL.init();
-            playersSQL.init();
 
             DbHub.initDefault();
             PunishmentManager.init();
@@ -874,8 +774,6 @@ public class World {
                 }
             }
         }
-        if(Server.NAME.equalsIgnoreCase("arteropk") && !Rank.hasAbility(player, Rank.DEVELOPER))
-            SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(player.getName(), player.getFullIP()));
         final int fReturnCode = returnCode;
         PacketBuilder bldr = new PacketBuilder();
         bldr.put((byte) returnCode);
@@ -1055,14 +953,6 @@ public class World {
         // " [online=" + players.size() + "]");
         engine.submitWork(new Runnable() {
             public void run() {
-
-                if (!Rank.hasAbility(player, Rank.DEVELOPER))
-                    if (Server.getConfig().getBoolean("logssql"))
-                        getLogsConnection().offer(new AccountValuesRequest(player));
-                if (Rank.hasAbility(player, Rank.HELPER))
-                    if (Server.getConfig().getBoolean("logssql"))
-                        getLogsConnection().offer(new StaffActivityRequest(player));
-
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
@@ -1081,9 +971,6 @@ public class World {
                 // player.getSession().removeAttribute("player");
             }
         });
-        if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            if (Server.getConfig().getBoolean("logssql"))
-                getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**
@@ -1095,10 +982,6 @@ public class World {
         logger.severe("An error occurred in an executor service! The server will be halted immediately.");
         t.printStackTrace();
         // System.exit(1);
-    }
-
-    public BanManager getBanManager() {
-        return banManager;
     }
 
     public BountyHandler getBountyHandler() {

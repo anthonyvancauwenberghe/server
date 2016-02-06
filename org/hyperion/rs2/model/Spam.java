@@ -5,7 +5,6 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.RapeCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -125,7 +124,6 @@ public class Spam {
 	public String punish() {
 		if(!isSpamming())
 			return "Player is not spamming..";
-        World.getWorld().getBanManager().moderate("Server", spammer, BanManager.BAN, true, Time.ONE_HOUR, "spamming");
 		World.getWorld().submit(new Event(1000) {
 			private int counter = 0;
 

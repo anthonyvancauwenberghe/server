@@ -1,24 +1,17 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
-import java.util.concurrent.TimeUnit;
-
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
-import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.sql.requests.GetSpecialUID;
-import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.util.Misc;
+
+import java.util.concurrent.TimeUnit;
 
 public class PunishCommand extends Command{
 
@@ -63,10 +56,6 @@ public class PunishCommand extends Command{
             return false;
         }
         final int[] specialUid = victim != null ? victim.specialUid : new int[20];
-        if(combination.getTarget() == Target.SPECIAL && victim == null) {
-            if (Server.getConfig().getBoolean("logssql"))
-                World.getWorld().getLogsConnection().offer(new GetSpecialUID(victimName, specialUid));
-        }
         final String[] durationParts = parts[1].split(" +");
 
         TimeUnit unit = TimeUnit.HOURS;

@@ -4,10 +4,6 @@ import org.hyperion.Server;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.util.Date;
-
 /**
  * @author Arsen Maxyutov.
  */
@@ -132,28 +128,6 @@ public class RestarterThread extends Thread {
 		}
 	}
 
-	private void checkSQLThread() {
-		if(! World.getWorld().getDonationsConnection().isRunning())
-			return;
-		if(true)
-			return;
-		//System.out.println("Time since last SQL: " + timeSinceLastSQL());
-		if(timeSinceLastSQL() > 3 * 60 * 1000) {
-	        /*SQL.getSQL().stopRunning();
-			SQL.resetSQLObject();
-			SQL.getSQL().start();*/
-			updateSQLTimer();
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter("./data/sqlrestartlog.log", true));
-				bw.write("Restarted SQL Thread at : " + new Date().toString());
-				bw.newLine();
-				bw.close();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	/**
 	 * The run method of the thread.
 	 */
@@ -162,7 +136,6 @@ public class RestarterThread extends Thread {
 		while(enabled) {
 			if(Server.getUptime().minutesUptime() > 10) {
 				checkServerUptime();
-				checkSQLThread();
 				if(Server.getUptime().millisUptime() > MAX_UPTIME) {
 					World.getWorld().update(30, "Uptime over MAX uptime.");
 					return;

@@ -1,17 +1,9 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import java.sql.PreparedStatement;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.sql.SQLConnection;
-import org.hyperion.rs2.sql.requests.QueryRequest;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.hyperion.util.Time;
 
 /**
  * Created by Jet on 1/2/2015.

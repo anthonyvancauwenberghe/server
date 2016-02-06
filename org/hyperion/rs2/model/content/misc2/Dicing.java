@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ClickType;
@@ -12,7 +11,6 @@ import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.saving.PlayerSaving;
-import org.hyperion.rs2.sql.requests.QueryRequest;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -234,18 +232,9 @@ public class Dicing implements ContentTemplate {
 					}
 					put(id, count + previous);
 					player.getActionSender().sendMessage("You have lost your item.");
-					//System.out.println("Count before: " + player.getInventory().getCount(item.getId()));
-					//System.out.println("Count after: " + player.getInventory().getCount(item.getId()));
 					player.setDiced(player.getDiced() - itemvalue);
-					query = "INSERT INTO dicing(username,item_id,item_count,win_value) "
-							+ "VALUES('" + player.getName().toLowerCase() + "'," + id + "," + count + "," + - 1 * itemvalue + ")";
-				}
-				if(itemvalue > 0) {
-					if (Server.getConfig().getBoolean("logssql"))
-						World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 				}
                 PlayerSaving.getSaving().save(player);
-				//System.out.println("Wins: " + wins + ", loses: " + loses);
 				this.stop();
 			}
 		});
@@ -340,7 +329,6 @@ public class Dicing implements ContentTemplate {
 
 	@Override
 	public int[] getValues(int type) {
-		// TODO Auto-generated method stub
 		if(type == 1/* || type == 3*/) {
 			int[] diceIds = {DICE_ID};
 			return diceIds;

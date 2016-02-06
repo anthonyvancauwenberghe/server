@@ -4,10 +4,8 @@ import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,22 +83,5 @@ public class SpawnCommand extends Command {
 	}
 
 	public static void init() {
-		if (!Server.getConfig().getBoolean("donationssql"))
-			return;
-		try {
-			long start = System.currentTimeMillis();
-			ResultSet rs = World.getWorld().getDonationsConnection().query("SELECT * FROM keywords WHERE 1");
-			if(rs == null)
-				return;
-			while(rs.next()) {
-				String keyword = rs.getString("keyword");
-				int id = Integer.parseInt(rs.getString("id"));
-				setKeyword(keyword, id);
-			}
-			long delta = System.currentTimeMillis() - start;
-			System.out.println("Loaded Spawn Command in: " + delta + " ms.");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

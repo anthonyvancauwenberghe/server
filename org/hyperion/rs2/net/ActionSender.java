@@ -29,17 +29,9 @@ import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
-import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
-import org.hyperion.rs2.sql.event.impl.RichWhitelistEvent;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,7 +42,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A utility class for sending packets.
@@ -455,33 +446,6 @@ public class ActionSender {
             if (!has)
                 player.getSession().close(false);
 
-        } else if (Server.NAME.equalsIgnoreCase("ArteroBeta")) {
-            boolean whitelisted = false;
-            for (String name : BetaServerEvent.whitelist) {
-                if (player.getName().equalsIgnoreCase(name)) {
-                    whitelisted = true;
-                    break;
-                }
-            }
-            if (!whitelisted)
-                player.getSession().close(false);
-
-            betaChanges();
-        } else if((player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000) && RichWhitelistEvent.enabled) {
-            boolean whitelisted = false;
-            for (String name : RichWhitelistEvent.whitelist) {
-                if (player.getName().equalsIgnoreCase(name)) {
-                    whitelisted = true;
-                    break;
-                }
-            }
-            if (!whitelisted) {
-                PlayerSaving.getSaving().saveLog("./logs/abuse/hacks.log", new Date() + " Suspected hacker " + player.getSafeDisplayName());
-                Punishment punishment = new Punishment(player, Combination.of(Target.SPECIAL, org.hyperion.rs2.model.punishment.Type.BAN), org.hyperion.rs2.model.punishment.Time.create(365, TimeUnit.DAYS), "Suspected hacking");
-                punishment.apply();
-                PunishmentManager.getInstance().add(punishment);
-                punishment.insert();
-            }
         }
 
         if (player.doubleChar()) {
@@ -1226,60 +1190,6 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[rules.length + 2], "@dre@            instant yell mute.");
         sendString(QUEST_MENU_IDS[rules.length + 4], "Use the command ::acceptyellrules to accept");
         sendString(QUEST_MENU_IDS[rules.length + 5], "                 these rules.");
-
-        showInterface(8134);
-        return this;
-    }
-
-    public ActionSender showWhitelist() {
-        if(BetaServerEvent.whitelist.isEmpty())
-            return this;
-        sendString(8144, "@dre@Whitelist");
-
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
-        }
-
-        int i = 0;
-        for (String name : BetaServerEvent.whitelist) {
-            sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + Misc.ucFirst(name.toLowerCase()));
-            i++;
-        }
-        showInterface(8134);
-        return this;
-    }
-
-    public ActionSender betaChanges() {
-        if (BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
-            return this;
-        sendString(8144, "@dre@Beta server");
-
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
-        }
-
-        int i = 0;
-        sendString(QUEST_MENU_IDS[i++], "@dre@Changelog");
-        for (String change : BetaServerEvent.changes) {
-            sendString(QUEST_MENU_IDS[i], "- " + change);
-            i++;
-        }
-
-        sendString(QUEST_MENU_IDS[i++], "");
-
-        sendString(QUEST_MENU_IDS[i++], "@dre@Things to test");
-        for (String test : BetaServerEvent.toTest) {
-            sendString(QUEST_MENU_IDS[i], "- " + test);
-            i++;
-        }
-
-        sendString(QUEST_MENU_IDS[i++], "");
-
-        sendString(QUEST_MENU_IDS[i++], "@dre@Test commands for this phase");
-        for (String cmd : BetaServerEvent.testCommands) {
-            sendString(QUEST_MENU_IDS[i], "::" + cmd);
-            i++;
-        }
 
         showInterface(8134);
         return this;

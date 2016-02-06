@@ -1,12 +1,10 @@
 package org.hyperion.rs2.util;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.sql.requests.QueryRequest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -52,12 +50,6 @@ public class AccountLogger {
 	public void log(String line, boolean forced) {
 		try {
 			int value = player.getAccountValue().getTotalValue();
-			/*
-			 * oh god!
-			 */
-			if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-				//player.getActionSender().sendMessage("Acc value: " + value);
-			}
 			Status new_status = new Status(value, line);
 			if(lastStatuses.size() == 0) {
 				lastStatuses.add(new_status);
@@ -83,10 +75,6 @@ public class AccountLogger {
 
 
 	private void write(final Status status, int change) {
-		String query = "INSERT INTO actions (username,diff,status) VALUES('" + player.getName().toLowerCase() + "'," + change + ",'" +
-				status.toString().replaceAll("'", "") + "')";
-		if (Server.getConfig().getBoolean("logssql"))
-			World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 		//SQLite.getDatabase().submitQuery(query);
 	}
 

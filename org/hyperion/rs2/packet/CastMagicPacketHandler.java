@@ -1,7 +1,6 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.BanManager;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -56,11 +55,9 @@ public class CastMagicPacketHandler implements PacketHandler {
 
             }
 
-			if(victim.getName().equalsIgnoreCase(player.getName())) {
-				System.out.println("Abusing..." + player.getName());
-				World.getWorld().getBanManager().moderate("serbar", player, BanManager.BAN, true, Long.MAX_VALUE, "abuse");
+			if(victim.getName().equalsIgnoreCase(player.getName()))
 				return;
-			}
+
 			if(victim.getLocation().distance(player.getLocation()) <= 8)
 				player.getWalkingQueue().reset();
 			if(spell == 30298) {

@@ -2,13 +2,7 @@ package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.BanManager;
-import org.hyperion.rs2.model.Graphic;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -19,7 +13,6 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.checkers.GameHandler;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.SnowItems;
-import org.hyperion.rs2.model.content.skill.Thieving;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.util.Misc;
 
@@ -128,12 +121,9 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 				player.sendMessage("Friend, not food!");
 				return;
 			}
-			//player.getLogging().log("First option, clicked on player : " + victim.getName());
-			if(victim.getName().equalsIgnoreCase(player.getName())) {
-				System.out.println("Abusing..." + player.getName());
-				World.getWorld().getBanManager().moderate("serbar", player, BanManager.BAN, true, Long.MAX_VALUE, "abuse");
+
+			if(victim.getName().equalsIgnoreCase(player.getName()))
 				return;
-			}
 			if(player.getEquipment().get(Equipment.SLOT_WEAPON) != null) {
 				if(player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 11951) {
                     if(System.currentTimeMillis() - player.getExtraData().getLong("snowball") < 5000) {
@@ -190,11 +180,8 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 				player.getActionSender().sendMessage("You cannot trade a player that is not in the wilderness, when you are");
 				return;
 			}
-			if(tradeWith.getName().equalsIgnoreCase(player.getName())) {
-				System.out.println("Abusing..." + player.getName());
-				World.getWorld().getBanManager().moderate("serbar", player, BanManager.BAN, true, Long.MAX_VALUE, "abuse");
+			if(tradeWith.getName().equalsIgnoreCase(player.getName()))
 				return;
-			}
 			player.tradeWith2 = tradeWith;
 			if(tradeWith.tradeWith2 == player)
 				Trade.open(player, tradeWith);

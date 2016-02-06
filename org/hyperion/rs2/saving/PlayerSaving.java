@@ -154,7 +154,6 @@ public class PlayerSaving {
 		saveList.add(new SavePvPArmour("pvparmourdata"));
 		saveList.add(new SaveBHPoints("bhpoints"));
 		saveList.add(new SaveBHPerks("bhperks"));
-		saveList.add(new SaveSSHCharges("sshcharges"));
 		saveList.add(new SaveNPCKills("npclogs"));
 		saveList.add(new SaveAccountValue("accountValue"));
 		// Containers, skills etc

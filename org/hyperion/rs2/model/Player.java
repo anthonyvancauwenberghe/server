@@ -167,7 +167,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	/**
 	 * LONG
 	 */
-	private final long logintime = System.currentTimeMillis();
+	public final long logintime = System.currentTimeMillis();
 	public long splitDelay = 0L;
 	public long lastTicketRequest;
 	public long foodTimer = System.currentTimeMillis();
@@ -196,6 +196,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private long dragonFireSpec = 0L;
 	private long lastTeleport = System.currentTimeMillis();
 	private long firstVoteTime = -1;
+	public List<Long> ignores = new ArrayList<>();
 
 	/**
 	 * DOUBLES
@@ -342,7 +343,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private Appearance appearance = new Appearance();
 	private Container bob;
 	private Packet cachedUpdateBlock;
-	private LogManager logManager = new LogManager(this);
+	private LogManager logManager;
 	private SpellBook spellBook = new SpellBook(SpellBook.DEFAULT_SPELLBOOK);
 	private FriendList friendList = new FriendList();
 	private PvPTask currentPvPTask;
@@ -368,6 +369,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		this.setTeleporting(true);
 		this.resetPrayers();
 		this.newCharacter = newCharacter;
+		logManager = new LogManager(this);
 		if (newCharacter) {
 			this.created = System.currentTimeMillis();
 		}
@@ -2318,10 +2320,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setTurkeyKills(int turkeyKills) {
 		this.turkeyKills = turkeyKills;
-    }
-
-    public void completeTGEvent(boolean b) {
-       b = completedTG;
     }
 
     public boolean hasFinishedTG() {

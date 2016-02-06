@@ -1,6 +1,5 @@
 package org.hyperion;
 
-import javafx.application.Application;
 import org.hyperion.rs2.RS2Server;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
@@ -10,7 +9,6 @@ import org.hyperion.rs2.net.security.CharFileEncryption;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
-import org.monitor.domain.Controller;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,8 +68,6 @@ public class Server {
      */
     private static CharFileEncryption charFileEncryption;
 
-    private static Controller guiController;
-
     /**
      * Server uptime.
      *
@@ -116,7 +112,7 @@ public class Server {
      * @param args The command line arguments.
      */
     public static void main(String[] args) throws Exception {
-        Application.launch(Controller.class);
+        launchServer();
     }
 
     public static World launchServer() {

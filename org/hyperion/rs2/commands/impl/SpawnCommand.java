@@ -1,20 +1,11 @@
 package org.hyperion.rs2.commands.impl;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +19,7 @@ public class SpawnCommand extends Command {
 
 	public static void setKeyword(String keyword, int id) {
 		keywords.put(keyword, id);
-		saveKeywords();
+		//saveKeywords();
 	}
 
 	public static Integer getId(String keyword) {
@@ -75,7 +66,7 @@ public class SpawnCommand extends Command {
 		}
 		return true;
 	}
-
+/*
 	private static Map<String, Integer> loadKeywords() {
 		File file = new File("./data/json/keywords.json");
 		try (FileReader fileReader = new FileReader(file)) {
@@ -112,5 +103,5 @@ public class SpawnCommand extends Command {
 		}
 
 		return mapToSave;
-	}
+	}*/
 }

@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class SpawnCommand extends Command {
 
-	private static final Map<String, Integer> keywords = loadKeywords();
+	private static final Map<String, Integer> keywords = new HashMap<>();
 
 
 	public static void setKeyword(String keyword, int id) {

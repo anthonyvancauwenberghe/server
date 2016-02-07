@@ -53,13 +53,13 @@ public class ConnectionHandler extends IoHandlerAdapter {
             player.getExtraData().put("packetsRead", player.getExtraData().getInt("packetsRead")+1);
 			player.getExtraData().put("packetCount", player.getExtraData().getInt("packetCount")+1);
             int packetCount = player.getExtraData().getInt("packetCount");
-            if(packetCount > 20){
+            if(packetCount > 50){
                 player.sendImportantMessage("PLEASE STOP WHAT YOU'RE DOING OR YOU WILL BE KICKED!");
-				if (player.getExtraData().getInt("packetCount") > 50) {
+				if (player.getExtraData().getInt("packetCount") > 150) {
 					player.getSession().close(false);
 					PunishmentManager.getInstance().add(new Punishment(player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
 				}
-				if(packetCount > 49) {
+				if(packetCount > 149) {
 					System.out.printf("%s has a a %,d packet count, banning\n", player.getName(), player.getExtraData().getInt("packetCount"));
 					session.close(false);
 				}

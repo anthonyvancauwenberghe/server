@@ -250,7 +250,7 @@ public class Hunter implements ContentTemplate {
 	public boolean clickObject(Player player, int type, int npcId, int xcoord, int ycoord,
 	                           int d) {
 		if(type == 10) {
-			catchImp(player, npcId, xcoord, ycoord);
+			//catchImp(player, npcId, xcoord, ycoord);
 			return false;
 		}
 		return false;
@@ -258,13 +258,13 @@ public class Hunter implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
-		HunterNpcs.hunterStartup();
+		//HunterNpcs.hunterStartup();
 	}
 
 	@Override
 	public int[] getValues(int type) {
-		if(type == 10)
-			return IMP_IDS;
+		//if(type == 10)
+			//return IMP_IDS;
 		return null;
 	}
 

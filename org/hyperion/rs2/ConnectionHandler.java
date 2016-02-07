@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.RS2CodecFactory;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.task.impl.SessionClosedTask;
 import org.hyperion.rs2.task.impl.SessionMessageTask;
 import org.hyperion.rs2.util.TextUtils;
@@ -60,6 +61,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					PunishmentManager.getInstance().add(new Punishment(player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
 				}
 				if(packetCount > 149) {
+					PlayerSaving.getSaving().saveLog("./logs/toomanypackets.log", System.currentTimeMillis() + ": " + player.getName());
 					System.out.printf("%s has a a %,d packet count, banning\n", player.getName(), player.getExtraData().getInt("packetCount"));
 					session.close(false);
 				}

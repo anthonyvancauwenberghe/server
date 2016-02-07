@@ -57,6 +57,7 @@ import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
 import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
@@ -108,7 +109,8 @@ public class CommandHandler {
 				return false;
 			}
 			try {
-				command.execute(player, input);
+				if(command.execute(player, input))
+					PlayerSaving.getSaving().saveLog("./logs/commands.log", System.currentTimeMillis() + ": " + player.getName() + ": '" + input + "'");
 			} catch(Exception e) {
 				player.getActionSender().sendMessage("Invalid input has been given.");
 				if(Rank.hasAbility(player, Rank.ADMINISTRATOR))

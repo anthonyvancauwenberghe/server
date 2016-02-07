@@ -5,6 +5,7 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.ClassUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
@@ -303,6 +304,7 @@ public class NPCManager {
 		NPC n = new NPC(nD, respawnTime, loc);
 		n.agressiveDis = getAgreDis(npcId);
 		n.bones = getBones(npcId, n.getDefinition().getName());
+		PlayerSaving.getSaving().saveLog("./logs/npclogs.log", System.currentTimeMillis() + ": " + npcId + " location " + loc.toString());
 		World.getWorld().npcsWaitingList.add(n);
 		return n;
 	}

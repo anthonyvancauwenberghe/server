@@ -15,8 +15,6 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ondemand.OnDemandPool;
 import org.hyperion.rs2.net.ondemand.OnDemandRequest;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
@@ -461,93 +459,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						if(blockedIps.contains(remoteIp)) {
 							session.close(false);
 							return false;
-						}
-
-						if(Server.getUptime().minutesUptime() > 5) {
-							if(playersInLast10Seconds > 20) {
-								if(System.currentTimeMillis() - lastReset < 10000) {
-									if(!underAttack) {
-										System.out.println("WENT IN UNDER ATTACK MODE");
-										underAttack = true;
-										lastUnderAttackReset = System.currentTimeMillis();
-									}
-									return false;
-								} else {
-									playersInLast10Seconds = 0;
-									lastReset = System.currentTimeMillis();
-								}
-							} else {
-								playersInLast10Seconds++;
-							}
-
-							if(underAttack) {
-								if(System.currentTimeMillis() - lastUnderAttackReset < 120000) {
-									System.out.println("FINISHED UNDER ATTACK MODE");
-									underAttack = false;
-									ipConnections.clear();
-									blockedIps.clear();
-								}
-								int currentLogonAttempts = ipConnections.get(remoteIp);
-								if(!ipConnections.containsKey(remoteIp))
-									ipConnections.put(remoteIp, 0);
-								ipConnections.put(remoteIp, currentLogonAttempts + 1);
-								if(currentLogonAttempts + 1 > 10) {
-									blockedIps.add(remoteIp);
-									session.close(false);
-									return false;
-								}
-								if(!MergedSaving.exists(name)) {
-									session.close(false);
-									return false;
-								}
-							}
-						}
-
-						if(Server.DEBUG_CLEAN)
-							returnCode = 14;
-						if(blockedIps.contains(remoteIp)) {
-							session.close(false);
-							return false;
-						}
-
-						if(Server.getUptime().minutesUptime() > 5) {
-							if(playersInLast10Seconds > 20) {
-								if(System.currentTimeMillis() - lastReset < 10000) {
-									if(!underAttack) {
-										System.out.println("WENT IN UNDER ATTACK MODE");
-										underAttack = true;
-										lastUnderAttackReset = System.currentTimeMillis();
-									}
-									return false;
-								} else {
-									playersInLast10Seconds = 0;
-									lastReset = System.currentTimeMillis();
-								}
-							} else {
-								playersInLast10Seconds++;
-							}
-
-							if(underAttack) {
-								if(System.currentTimeMillis() - lastUnderAttackReset < 120000) {
-									System.out.println("FINISHED UNDER ATTACK MODE");
-									underAttack = false;
-									ipConnections.clear();
-									blockedIps.clear();
-								}
-								int currentLogonAttempts = ipConnections.get(remoteIp);
-								if(!ipConnections.containsKey(remoteIp))
-									ipConnections.put(remoteIp, 0);
-								ipConnections.put(remoteIp, currentLogonAttempts + 1);
-								if(currentLogonAttempts + 1 > 10) {
-									blockedIps.add(remoteIp);
-									session.close(false);
-									return false;
-								}
-								if(!PlayerSaving.playerExists(name)) {
-									session.close(false);
-									return false;
-								}
-							}
 						}
 
                         if(Server.DEBUG_CLEAN)

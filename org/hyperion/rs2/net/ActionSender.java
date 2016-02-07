@@ -4,22 +4,11 @@ import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.RefreshNewsEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
-import org.hyperion.rs2.model.DeathDrops;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.EquipmentStats;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Palette;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -30,7 +19,6 @@ import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchange.GEItem;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
@@ -41,21 +29,9 @@ import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.model.possiblehacks.IPChange;
-import org.hyperion.rs2.model.possiblehacks.PossibleHack;
-import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
-import org.hyperion.rs2.sql.event.impl.BetaServerEvent;
-import org.hyperion.rs2.sql.event.impl.RichWhitelistEvent;
-import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -66,7 +42,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A utility class for sending packets.
@@ -93,11 +68,11 @@ public class ActionSender {
             {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
             {503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    private static Date LAST_PASS_RESET;
+    public static Date LAST_PASS_RESET;
 
     static {
         try {
-            LAST_PASS_RESET = dateFormat.parse("03-11-2015");
+            LAST_PASS_RESET = dateFormat.parse("04-02-2016");
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -233,23 +208,6 @@ public class ActionSender {
         }
     }
 
-    public void loadAnnouncements() {
-        try {
-            loadIni();
-            if (p.getProperty("announcement1").length() > 0) {
-                sendMessage(p.getProperty("announcement1"));
-            }
-            if (p.getProperty("announcement2").length() > 0) {
-                sendMessage(p.getProperty("announcement2"));
-            }
-            if (p.getProperty("announcement3").length() > 0) {
-                sendMessage(p.getProperty("announcement3"));
-            }
-        } catch (Exception e) {
-            System.out.println("Unable to load announcements.");
-        }
-    }
-
     public void basicLogin() {
         player.getLogManager().add(LogEntry.login(player));
         LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
@@ -277,23 +235,14 @@ public class ActionSender {
             }
             player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
             //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
-            passChangeShit();
-
-
         }
-        //if(RefreshNewsEvent.lastNewsChange > player.getPreviousSessionTime() && !Server.NAME.equalsIgnoreCase("ArteroBeta"))
-          //  player.getNews().sendNewsInterface();
+
+        passChangeShit();
 
         if (WildernessBossEvent.currentBoss != null) {
             player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
         }
-        /* This is for when we add new achievements.
-         if(player.getAchievementsProgress().size() < AchievementData.values().length) {
-            int start = player.getAchievementsProgress().size();
-            for(int i = start; i < AchievementData.values().length; i++) {
-                player.getAchievementsProgress().put(AchievementData.values()[i], 0);
-            }
-        }*/
+
         player.getAchievementTracker().load();
         player.getPoints().checkDonator();
         writeTabs();
@@ -376,7 +325,6 @@ public class ActionSender {
             DialogueManager.openDialogue(player, 10000);
         }
         sendSkills();
-        NewcomersLogging.getLogging().loginCheck(player);
         sendString(1300, "City Teleport");
         sendString(1301, "Teleports you to any city.");
         sendString(1325, "Training Teleports");
@@ -444,17 +392,7 @@ public class ActionSender {
         // player.getInterfaceManager().show(RecoveryInterface.ID);
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
-
-        if (player.pin == -1) {
-            player.verified = true;
-            //PinInterface.get().set(player);
-            //sendMessage("l4unchur13 http://forums.arteropk.com/index.php/topic/11966-updates-1302015/");
-        } else if (!player.getShortIP().equals(player.lastIp)) {
-            player.verified = true;
-            //PinInterface.get().enter(player);
-        } else {
-            player.verified = true;
-        }
+        player.verified = true;
 
         try {
             if (MergedSaving.existsBackup(player.getName())) {
@@ -507,33 +445,6 @@ public class ActionSender {
             if (!has)
                 player.getSession().close(false);
 
-        } else if (Server.NAME.equalsIgnoreCase("ArteroBeta")) {
-            boolean whitelisted = false;
-            for (String name : BetaServerEvent.whitelist) {
-                if (player.getName().equalsIgnoreCase(name)) {
-                    whitelisted = true;
-                    break;
-                }
-            }
-            if (!whitelisted)
-                player.getSession().close(false);
-
-            betaChanges();
-        } else if((player.getAccountValue().getTotalValue() > 50000 || player.getAccountValue().getPkPointValue() > 500000) && RichWhitelistEvent.enabled) {
-            boolean whitelisted = false;
-            for (String name : RichWhitelistEvent.whitelist) {
-                if (player.getName().equalsIgnoreCase(name)) {
-                    whitelisted = true;
-                    break;
-                }
-            }
-            if (!whitelisted) {
-                PlayerSaving.getSaving().saveLog("./logs/abuse/hacks.log", new Date() + " Suspected hacker " + player.getSafeDisplayName());
-                Punishment punishment = new Punishment(player, Combination.of(Target.SPECIAL, org.hyperion.rs2.model.punishment.Type.BAN), org.hyperion.rs2.model.punishment.Time.create(365, TimeUnit.DAYS), "Suspected hacking");
-                punishment.apply();
-                PunishmentManager.getInstance().add(punishment);
-                punishment.insert();
-            }
         }
 
         if (player.doubleChar()) {
@@ -910,64 +821,8 @@ public class ActionSender {
 
     public void passChangeShit() {
 
-        if (player.getExtraData().getBoolean("isdrasticallydiff") && player.getExtraData().getBoolean("diffuid")
-                && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
-            player.getExtraData().put("cantchangepass", true);
-
-            if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime()) {
-
-                player.getExtraData().put("cantdoshit", true);
-
-                player.sendMessage("Alert##Please PM an administrator or moderator##Your account is locked for its own safety", "@red@Checking for unlock...");
-
-
-                SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-                boolean found = false;
-
-                for (final PossibleHack hack : PossibleHacksHolder.getHacks(player.getName())) {
-                    if (hack instanceof IPChange) {
-                        try {
-                            if (format.parse(hack.date).after(LAST_PASS_RESET))
-                                continue;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        final IPChange change = (IPChange) hack;
-
-                        String shortest = change.ip.trim();
-                        shortest = shortest.substring(1, shortest.indexOf(".", shortest.indexOf(".") + 1));
-                        if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-
-                            player.sendMessage("@blu@Found reason to unlock! Unlocked account");
-                            player.getExtraData().put("cantdoshit", false);
-
-                            found = true;
-                            break;
-                        }
-
-                        shortest = change.newIp.trim();
-                        shortest = shortest.substring(1, shortest.indexOf(".", shortest.indexOf(".") + 1));
-
-                        if (player.getShortIP().toLowerCase().startsWith(shortest.trim())) {
-
-                            player.sendMessage("@blu@Found reason to unlock! Unlocked account");
-                            player.getExtraData().put("cantdoshit", false);
-
-                            found = true;
-                            break;
-                        }
-
-                    }
-
-
-                }
-
-                if (!found)
-                    player.sendMessage("No unlock reason found!");
-            }
-
-        } else if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.getExtraData().getBoolean("isdrasticallydiff")) {
+        if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+            player.getExtraData().put("cantdoshit", true);
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
             player.getExtraData().put("needpasschange", true);
@@ -1334,60 +1189,6 @@ public class ActionSender {
         sendString(QUEST_MENU_IDS[rules.length + 2], "@dre@            instant yell mute.");
         sendString(QUEST_MENU_IDS[rules.length + 4], "Use the command ::acceptyellrules to accept");
         sendString(QUEST_MENU_IDS[rules.length + 5], "                 these rules.");
-
-        showInterface(8134);
-        return this;
-    }
-
-    public ActionSender showWhitelist() {
-        if(BetaServerEvent.whitelist.isEmpty())
-            return this;
-        sendString(8144, "@dre@Whitelist");
-
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
-        }
-
-        int i = 0;
-        for (String name : BetaServerEvent.whitelist) {
-            sendString(QUEST_MENU_IDS[i], "@dre@" + (i + 1) + ". @bla@" + Misc.ucFirst(name.toLowerCase()));
-            i++;
-        }
-        showInterface(8134);
-        return this;
-    }
-
-    public ActionSender betaChanges() {
-        if (BetaServerEvent.changes.isEmpty() && BetaServerEvent.toTest.isEmpty() && BetaServerEvent.testCommands.isEmpty())
-            return this;
-        sendString(8144, "@dre@Beta server");
-
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
-        }
-
-        int i = 0;
-        sendString(QUEST_MENU_IDS[i++], "@dre@Changelog");
-        for (String change : BetaServerEvent.changes) {
-            sendString(QUEST_MENU_IDS[i], "- " + change);
-            i++;
-        }
-
-        sendString(QUEST_MENU_IDS[i++], "");
-
-        sendString(QUEST_MENU_IDS[i++], "@dre@Things to test");
-        for (String test : BetaServerEvent.toTest) {
-            sendString(QUEST_MENU_IDS[i], "- " + test);
-            i++;
-        }
-
-        sendString(QUEST_MENU_IDS[i++], "");
-
-        sendString(QUEST_MENU_IDS[i++], "@dre@Test commands for this phase");
-        for (String cmd : BetaServerEvent.testCommands) {
-            sendString(QUEST_MENU_IDS[i], "::" + cmd);
-            i++;
-        }
 
         showInterface(8134);
         return this;
@@ -1908,29 +1709,6 @@ public class ActionSender {
                     bldr.put((byte) count);
                 }
                 bldr.putLEShortA(item.getId() + 1);
-            } else {
-                bldr.put((byte) 0);
-                bldr.putLEShortA(0);
-            }
-        }
-        player.write(bldr.toPacket());
-        return this;
-    }
-
-    public ActionSender sendUpdateItems(int interfaceId, GEItem[] items) {
-        PacketBuilder bldr = new PacketBuilder(53, Type.VARIABLE_SHORT);
-        bldr.putShort(interfaceId);
-        bldr.putShort(items.length);
-        for (GEItem item : items) {
-            if (item != null) {
-                int count = item.getItem().getCount();
-                if (count > 254) {
-                    bldr.put((byte) 255);
-                    bldr.putInt2(count);
-                } else {
-                    bldr.put((byte) count);
-                }
-                bldr.putLEShortA(item.getItem().getId() + 1);
             } else {
                 bldr.put((byte) 0);
                 bldr.putLEShortA(0);

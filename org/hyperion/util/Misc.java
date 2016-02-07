@@ -6,8 +6,15 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 public class Misc {
+
+	public static final Random RANDOM = new Random(System.currentTimeMillis());
+
+	public static <T> T randomElement(T[] array) {
+		return array[(int) (RANDOM.nextDouble() * array.length)];
+	}
 
 	public static String aOrAn(String word) {
 		return ((word.startsWith("A") || word.startsWith("E") || word.startsWith("O")) ? "an" : "a");
@@ -30,9 +37,7 @@ public class Misc {
 	}
 
 	public static boolean isInCircle(int x, int y, int x2, int y2, int r) {
-		if(Math.pow((x - x2), 2) + Math.pow((y - y2), 2) <= Math.pow(r, 2))
-			return true;
-		return false;
+		return Math.pow((x - x2), 2) + Math.pow((y - y2), 2) <= Math.pow(r, 2);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package org.hyperion.rs2.saving.impl;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
 import org.hyperion.rs2.saving.SaveString;
 
 public class SavePvPArmour extends SaveString {
@@ -15,7 +14,6 @@ public class SavePvPArmour extends SaveString {
 		try {
 			player.getPvPStorage().editFromString(value.trim());
 		}catch(Exception e) {
-			//make sure it doesn't screw saving
 			e.printStackTrace();
 			System.err.println("ERROR LOADING PVPARMOUR FOR "+player.getName());
 		}

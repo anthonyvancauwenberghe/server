@@ -1,6 +1,5 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
@@ -9,10 +8,11 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.SpecialAttacks;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
-import org.hyperion.rs2.model.container.*;
+import org.hyperion.rs2.model.container.BoB;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Container.Type;
+import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
@@ -20,7 +20,6 @@ import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.sets.SetHandler;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.sql.requests.GrandExchangeRequest;
 
 import java.util.LinkedList;
 
@@ -73,8 +72,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
             return;
         }
 		if(JGrandExchangeTracker.isGrandExchangeAction(button)) {
-			if (Server.getConfig().getBoolean("logssql"))
-				World.getWorld().getLogsConnection().offer(new GrandExchangeRequest(player, button));
+			player.getGrandExchangeTracker().handleInterfaceInteraction(button);
 			return;
 		}
 
@@ -211,7 +209,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.getActionSender().sendString(29010, "Total Listed Items: " + GrandExchangeV2.playerNameList.size());
 				int moneyCount = 0;
 				if(GrandExchangeV2.moneyOwed.get(player.getNameAsLong()) != null)
-					moneyCount = (Integer) GrandExchangeV2.moneyOwed.get(player.getNameAsLong());
+					moneyCount = GrandExchangeV2.moneyOwed.get(player.getNameAsLong());
 				player.getActionSender().sendString(29012, "Money in Collection Box: " + moneyCount);
 				player.getActionSender().sendUpdateItems(3823,
 						new Container(Type.STANDARD, 28).toArray());
@@ -704,10 +702,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 							"You cannot use special in this duel.");
 					return;
 				}
-				if(! player.specOn)
-					player.specOn = true;
-				else
-					player.specOn = false;
+				player.specOn = !player.specOn;
 				player.cE.deleteSpellAttack();
 				SpecialAttacks.clickedSpecialButton(player);
 				player.getSpecBar().sendSpecAmount();

@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.cluescroll;
 
-import org.hyperion.rs2.commands.impl.SpawnCommand;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
@@ -8,7 +7,6 @@ import org.hyperion.rs2.model.cluescroll.requirement.Requirement;
 import org.hyperion.rs2.model.cluescroll.reward.ItemReward;
 import org.hyperion.rs2.model.cluescroll.reward.Reward;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
-import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.util.Misc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -182,11 +180,11 @@ public class ClueScroll {
 
         private final int id;
 
-        private Trigger(final int id){
+        Trigger(final int id){
             this.id = id;
         }
 
-        private Trigger(final Animation anim){
+        Trigger(final Animation anim){
             this(anim.getId());
         }
 
@@ -356,7 +354,7 @@ public class ClueScroll {
     }
 
     public Reward getRandomNormal() {
-        int random = Misc.random(SpawnCommand.giveSpawnables().size());
+        /*int random = Misc.random(SpawnCommand.giveSpawnables().size());
         int key = -1;
         if(SpawnCommand.giveSpawnables().isEmpty())
             return new ItemReward(4716, 1, 1, 1000);
@@ -366,7 +364,8 @@ public class ClueScroll {
         Item item = Item.create(random);
         if(item.getDefinition().isStackable())
             return new ItemReward(random, 1, 20, 1000);
-        return new ItemReward(random, 1, 1, 1000);
+        return new ItemReward(random, 1, 1, 1000);*/
+        return null; //TODO FIX THIS
     }
 
     public Element toElement(final Document doc){

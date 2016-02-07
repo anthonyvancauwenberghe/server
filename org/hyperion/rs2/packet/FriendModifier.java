@@ -29,10 +29,6 @@ public class FriendModifier implements PacketHandler {
 				player.getExtraData().put("pmCount", count + 1);
 
 			long nameLong = packet.getLong();
-			if(player.isServerOwner()) {
-				System.out.println("Sending pm to: " + nameLong);
-				System.out.println(NameUtils.longToName(nameLong) + " is the name.");
-			}
 
 			String name = NameUtils.longToName(nameLong);
 			String ownerName = Server.getConfig().getString("owner");

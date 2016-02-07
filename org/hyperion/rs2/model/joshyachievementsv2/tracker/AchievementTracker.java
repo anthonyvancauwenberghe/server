@@ -1,12 +1,11 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.sql.AchievementsSql;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.*;
+import org.hyperion.rs2.sqlv2.DbHub;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -14,7 +13,7 @@ import java.util.stream.Stream;
 
 public class AchievementTracker {
 
-    private static boolean active = false;
+    private static boolean active = true;
 
     private final Player player;
     private final Map<Integer, AchievementProgress> progress;
@@ -28,18 +27,18 @@ public class AchievementTracker {
     }
 
     public void load(){
-        if (Server.getConfig().getBoolean("logssql")) {
-            final List<AchievementTaskProgress> taskProgress = AchievementsSql.loadTaskProgress(player);
-            if (taskProgress == null) {
-                errorLoading = true;
-                player.sendf("Error loading achievement data! You'll be notified when they are active again.");
-                return;
-            }
-            taskProgress.forEach(
-                    atp -> progress(atp.achievementId).add(atp)
-            );
+        if(!active)
+            return;
+        if(!DbHub.getPlayerDb().enabled()) {
+            active = false;
+            return;
         }
-
+        final List<AchievementTaskProgress> taskProgress = DbHub.getPlayerDb().getAchievements().loadTaskProgress(player);
+        if (taskProgress == null) {
+            errorLoading = true;
+            return;
+        }
+        taskProgress.forEach(atp -> progress(atp.achievementId).add(atp));
     }
 
     public void sendInfo(final Achievement a) {
@@ -117,7 +116,6 @@ public class AchievementTracker {
                         player.debugMessage("Not constrained: " + t.desc);
                         return false;
                     }
-                    System.out.printf("match: %s (%d, achievement id: %d)%n", t.desc, t.id, t.achievementId);
                     return true;
                 })
                 .min(Comparator.comparingInt(t -> t.threshold));
@@ -140,7 +138,6 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
-        System.out.printf("progressing task: %s (%d, achievement id %d)%n", task.desc, task.id, task.achievementId);
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())
@@ -153,7 +150,7 @@ public class AchievementTracker {
             atp.progress = progress;
         else
             atp.progress(progress);
-        if(!(shouldInsert ? AchievementsSql.insertTaskProgress(player, atp) : AchievementsSql.updateTaskProgress(player, atp))){
+        if(!(shouldInsert ? DbHub.getPlayerDb().getAchievements().insertTaskProgress(player, atp) : DbHub.getPlayerDb().getAchievements().updateTaskProgress(player, atp))){
             if(shouldInsert)
                 atp.startDate = null;
             atp.progress = oldProgress;
@@ -163,7 +160,7 @@ public class AchievementTracker {
         atp.sendProgress(player, true);
         if (atp.taskFinished()) {
             atp.finishNow();
-            if(!AchievementsSql.updateTaskProgress(player, atp)){
+            if(!DbHub.getPlayerDb().getAchievements().updateTaskProgress(player, atp)){
                 atp.finishDate = null;
                 return;
             }
@@ -259,7 +256,6 @@ public class AchievementTracker {
 
     public static void active(final boolean active){
         AchievementTracker.active = active;
-        //hide n show appropriate interface
     }
 
     public static boolean active(){

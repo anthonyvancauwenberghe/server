@@ -1,12 +1,12 @@
 package org.hyperion.rs2.util;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.hyperion.rs2.model.Entity;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * A class which represents a list of entities.
@@ -203,9 +203,7 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 			if(entities[i] != null) {
 				try {
 					array[ptr++] = entities[i];
-				}catch(ArrayIndexOutOfBoundsException e) {
-					System.err.println("SEVERE ERROR: Cannot generate entity array! Restarting Server");
-					World.getWorld().update(120 , "Error entity array");
+				} catch(ArrayIndexOutOfBoundsException e) {
 					return array;
 				}
 			}

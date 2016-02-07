@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.shops;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
@@ -11,7 +10,6 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.MysteryBox;
 import org.hyperion.rs2.net.ActionSender;
-import org.hyperion.rs2.sql.requests.QueryRequest;
 
 import java.util.HashMap;
 
@@ -90,10 +88,6 @@ public class DonatorShop extends Shop {
 		getContainer().add(item);
 		if(payment > 0) {
 			player.getPoints().increaseDonatorPoints(payment, false);
-			String query = "INSERT INTO donatorshop(username,item_id,item_count,boughtvalue) "
-					+ "VALUES('" + player.getName().toLowerCase() + "'," + item.getId() + "," + item.getCount() + "," + - 1 * payment + ")";
-			if (Server.getConfig().getBoolean("logssql"))
-				World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 		}
 		player.getActionSender().sendUpdateItems(3823,
 				player.getInventory().toArray());
@@ -119,10 +113,6 @@ public class DonatorShop extends Shop {
 			this.getContainer().remove(item);
 			player.getExpectedValues().buyFromStore(item);
 			player.getInventory().add(item);
-			String query = "INSERT INTO donatorshop(username,item_id,item_count,boughtvalue) "
-					+ "VALUES('" + player.getName().toLowerCase() + "'," + item.getId() + "," + item.getCount() + "," + price + ")";
-			if (Server.getConfig().getBoolean("logssql"))
-				World.getWorld().getLogsConnection().offer(new QueryRequest(query));
 			player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 			updatePlayers();
 			player.getActionSender().sendString(3901, "Donator points: @gre@" + player.getPoints().getDonatorPoints());

@@ -1,6 +1,5 @@
 package org.hyperion.rs2.util;
 
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.saving.MergedSaving;
 
 import java.io.BufferedReader;
@@ -52,9 +51,7 @@ class Character {
 	}
 
 	public boolean shouldDelete() {
-		if(donator || hasrights)
-			return false;
-		return true;
+		return !(donator || hasrights);
 	}
 
 	public Character(File file) {

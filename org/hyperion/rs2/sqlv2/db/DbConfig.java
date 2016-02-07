@@ -36,6 +36,6 @@ public class DbConfig {
     }
 
     public static DbConfig parse(final Properties props, final String prefix) {
-        return new DbConfig(props.getProperty(prefix + "-url"), props.getProperty(prefix + "-user"), props.getProperty(prefix + "-pass"), Boolean.parseBoolean(prefix + "-enabled"));
+        return new DbConfig(props.getProperty(prefix + "-url"), props.getProperty(prefix + "-user"), props.getProperty(prefix + "-pass"), Boolean.parseBoolean(props.getProperty(prefix + "-enabled")));
     }
 }

@@ -3,7 +3,6 @@ package org.hyperion.rs2.packet;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.commands.TestCommands;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
@@ -53,7 +52,6 @@ import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.saving.PlayerSaving;
-import org.hyperion.rs2.sql.SQLite;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
@@ -62,8 +60,6 @@ import org.madturnip.tools.RoomDefinitionCreator;
 import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -919,14 +915,6 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("getname")) {
             final String ip = s.substring("getname".length()).trim();
             player.sendMessage(ip);
-            try {
-                ResultSet rs = SQLite.getDatabase().query("SELECT * FROM playerips WHERE ip = '" + ip + "'");
-                while (rs.next()) {
-                    player.sendMessage("IP: " + ip + "Name: " + rs.getString("name") + " time: " + new Date(rs.getLong("time")).toString());
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
         }
 
         if (commandStart.equalsIgnoreCase("hide")) {
@@ -2229,9 +2217,6 @@ public class CommandPacketHandler implements PacketHandler {
             if (player.isDead())
                 return;
             // player.getLogging().log("Command: " + s);
-            if (Server.NAME.equalsIgnoreCase("ArteroBeta"))
-                if(TestCommands.processBetaCommands(player, commandStart, s, withCaps, as))
-                    return;
             if (Rank.hasAbility(player, Rank.OWNER))
                 this.processOwnerCommands(player, commandStart, s, withCaps, as);
             if (Rank.hasAbility(player, Rank.DEVELOPER))

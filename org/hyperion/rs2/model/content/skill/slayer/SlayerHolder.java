@@ -1,9 +1,5 @@
 package org.hyperion.rs2.model.content.skill.slayer;
 
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.content.ContentEntity;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Wasay
@@ -32,7 +28,7 @@ public class SlayerHolder {
         if(isTask(npcid)) {
             if(--taskAmount == 0) {
                 totalTasks++;
-                slayerPoints += (int)((task.getDifficulty().getSlayerPoints() + handleTotalTasks()));
+                slayerPoints += (task.getDifficulty().getSlayerPoints() + handleTotalTasks());
             }
             return task.getXP();
         }
@@ -86,6 +82,22 @@ public class SlayerHolder {
 
     public void setPoints(int value) {
         slayerPoints = value;
+    }
+
+    public void setTaskAmount(int taskAmount) {
+        this.taskAmount = taskAmount;
+    }
+
+    public void setTotalTasks(int totalTasks) {
+        this.totalTasks = totalTasks;
+    }
+
+    public void setTask(SlayerTask task) {
+        this.task = task;
+    }
+
+    public void setSlayerPoints(int slayerPoints) {
+        this.slayerPoints = slayerPoints;
     }
 
     @Override public String toString() {

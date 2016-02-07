@@ -8,36 +8,13 @@ import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.PathTest;
-import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.GameEngine;
-import org.hyperion.rs2.GenericWorldLoader;
-import org.hyperion.rs2.HostGateway;
-import org.hyperion.rs2.WorldLoader;
+import org.hyperion.rs2.*;
 import org.hyperion.rs2.WorldLoader.LoginResult;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.commands.impl.SpawnCommand;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.EventManager;
-import org.hyperion.rs2.event.impl.AntiDupeEvent;
-import org.hyperion.rs2.event.impl.BankersFacing;
-import org.hyperion.rs2.event.impl.CleanupEvent;
-import org.hyperion.rs2.event.impl.DisconnectEvent;
-import org.hyperion.rs2.event.impl.EPEvent;
-import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.HunterEvent;
-import org.hyperion.rs2.event.impl.NpcCombatEvent;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.event.impl.PlayerCombatEvent;
-import org.hyperion.rs2.event.impl.PlayerEvent1Second;
-import org.hyperion.rs2.event.impl.PlayerEvent36Seconds;
-import org.hyperion.rs2.event.impl.PlayerStatsEvent;
-import org.hyperion.rs2.event.impl.PromoteEvent;
-import org.hyperion.rs2.event.impl.RefreshNewsEvent;
-import org.hyperion.rs2.event.impl.ServerMessages;
-import org.hyperion.rs2.event.impl.ServerMinigame;
-import org.hyperion.rs2.event.impl.UpdateEvent;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
+import org.hyperion.rs2.event.impl.*;
 import org.hyperion.rs2.login.LoginServerConnector;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Trade;
@@ -59,7 +36,6 @@ import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.sql.AchievementsSql;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -68,40 +44,27 @@ import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.region.RegionManager;
+import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.sql.DonationsSQLConnection;
-import org.hyperion.rs2.sql.DummyConnection;
-import org.hyperion.rs2.sql.ImportantPlayerConnection;
-import org.hyperion.rs2.sql.LogsSQLConnection;
-import org.hyperion.rs2.sql.MySQLConnection;
-import org.hyperion.rs2.sql.PlayersSQLConnection;
-import org.hyperion.rs2.sql.SQLAccessor;
-import org.hyperion.rs2.sql.SQLite;
-import org.hyperion.rs2.sql.requests.AccountValuesRequest;
-import org.hyperion.rs2.sql.requests.HighscoresRequest;
-import org.hyperion.rs2.sql.requests.StaffActivityRequest;
+import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.ConfigurationParser;
 import org.hyperion.rs2.util.EntityList;
 import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.rs2.util.NewcomersLogging;
 import org.hyperion.rs2.util.Restart;
 import org.hyperion.util.BlockingExecutorService;
+import org.hyperion.util.Misc;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -183,8 +146,7 @@ public class World {
     /**
      * A list of connected players.
      */
-    private EntityList<Player> players = new EntityList<Player>(
-            Constants.MAX_PLAYERS);
+    private EntityList<Player> players = new EntityList<Player>(Constants.MAX_PLAYERS);
 
     /**
      * A list of active NPCs.
@@ -225,12 +187,6 @@ public class World {
      */
     private StaffManager staffManager;
 
-    private MySQLConnection charsSQL;
-    /**
-     * The Ban Manager
-     */
-    private BanManager banManager;
-
     private final BountyHandler bountyHandler = new BountyHandler();
 
     private ServerEnemies enemies;
@@ -248,6 +204,16 @@ public class World {
         return null;
     }
 
+    private final static Set<String> unlockedPlayers = new HashSet<>();
+    private final static Set<String> unlockedRichPlayers = new HashSet<>();
+
+    public static Set<String> getUnlockedPlayers() {
+        return unlockedPlayers;
+    }
+
+    public static Set<String> getUnlockedRichPlayers() {
+        return unlockedRichPlayers;
+    }
 
     /**
      * Creates the world and begins background loading tasks.
@@ -348,49 +314,6 @@ public class World {
         return wilderness;
     }
 
-
-    private MySQLConnection donationsSQL;
-    private SQLAccessor donationsOffer;
-
-    private MySQLConnection logsSQL;
-    private SQLAccessor logsOffer;
-
-    private MySQLConnection playersSQL;
-    private SQLAccessor playersOffer;
-
-    private MySQLConnection loadingSQL;
-    private SQLAccessor loadingOffer;
-
-    private MySQLConnection importantPlayersSQL;
-    private SQLAccessor importantOffer;
-
-    public SQLAccessor getLoadingConnection() {
-        return loadingOffer;
-    }
-
-    public SQLAccessor getImportantConnection() {
-        return importantOffer;
-    }
-
-    public SQLAccessor getPlayersConnection() {
-        return playersOffer;
-    }
-
-
-
-
-    public MySQLConnection getDonationsConnection() {
-        return donationsSQL;
-    }
-
-    public MySQLConnection getLogsConnection() {
-        return logsSQL;
-    }
-
-    public MySQLConnection getCharactersConnection() {
-        return charsSQL;
-    }
-
 	/*public PlayersSQLConnection getPlayersConnection() {
 		return playersSQL;
 	}*/
@@ -418,12 +341,9 @@ public class World {
      * @throws InstantiationException if a class could not be created.
      * @throws IllegalStateException  if the world is already initialised.
      */
-    public void init(GameEngine engine) throws IOException,
-            ClassNotFoundException, InstantiationException,
-            IllegalAccessException {
+    public void init(GameEngine engine) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (this.engine != null) {
-            throw new IllegalStateException(
-                    "The world has already been initialised.");
+            throw new IllegalStateException("The world has already been initialised.");
         } else {
             this.engine = engine;
             this.eventManager = new EventManager(engine);
@@ -436,67 +356,11 @@ public class World {
             this.loadConfiguration();
             this.registerGlobalEvents();
 
+            DbHub.initDefault();
+            PunishmentManager.init();
 
-
-            if (Server.getConfig().getBoolean("donationssql")) {
-                donationsSQL = new DonationsSQLConnection(Server.getConfig());
-            } else {
-                donationsSQL = new DummyConnection();
-            }
-            if (Server.getConfig().getBoolean("logssql")) {
-
-                logsSQL = new LogsSQLConnection(Server.getConfig());
-                //logsSQL.setLogged(true);
-            } else {
-                logsSQL = new DummyConnection();
-            }
-            if (Server.getConfig().getBoolean("playerssql")) {
-                playersSQL = new PlayersSQLConnection(Server.getConfig());
-
-                playersSQL.setPriority(Thread.MAX_PRIORITY);
-                /*loadingSQL = new SQLPlayerLoading(Server.getConfig());
-                loadingSQL.setPriority(Thread.MAX_PRIORITY);*/
-                loadingSQL = new DummyConnection();
-                importantPlayersSQL = new ImportantPlayerConnection(Server.getConfig());
-                importantPlayersSQL.setPriority(Thread.MAX_PRIORITY);
-                importantPlayersSQL.setLogged(true);
-            } else {
-                playersSQL = new DummyConnection();
-                loadingSQL = new DummyConnection();
-                importantPlayersSQL = new DummyConnection();
-            }
-			/*
-			 * SQL Accessors
-			 */
-            donationsOffer = new SQLAccessor(donationsSQL);
-            logsOffer = new SQLAccessor(logsSQL);
-            playersOffer = new SQLAccessor(playersSQL);
-            importantOffer = new SQLAccessor(importantPlayersSQL);
-            loadingOffer = new SQLAccessor(loadingSQL);
-
-			/*
-			 * Init
-			 */
-            donationsSQL.init();
-            logsSQL.init();
-            loadingSQL.init();
-            importantPlayersSQL.init();
-            playersSQL.init();
-
-
-            //sqlSaving = new SQLPlayerSaving(importantPlayersSQL);
-
-
-            //LocalServerSQLConnection.init();
-            //playersSQL.init();
-            banManager = new BanManager(logsSQL);
-            AchievementsSql.sql = logsSQL;
-            PunishmentManager.init(donationsSQL);
-            System.out.println("Initialized GE: " + JGrandExchange.init(playersSQL));
-            //this.banManager.init();
+            System.out.println("Initialized GE: " + JGrandExchange.init());
             this.enemies = new ServerEnemies();
-            SpawnCommand.init();
-            NewcomersLogging.getLogging().init();
             submit(new PunishmentExpirationEvent());
             submit(new WildernessBossEvent(true));
             submit(new PulseGrandExchangeEvent());
@@ -723,52 +587,43 @@ public class World {
      * @param pd The player's details.
      */
     public void load(final PlayerDetails pd, final int code2) {
-        // System.out.println("Load method in World");
-        engine.submitWork(new Runnable() {
-            public void run() {
-                LoginDebugger.getDebugger().log("4. Playerdetails received: " + pd.getName());
-                int code = code2;
-                LoginDebugger.getDebugger().log("Code : " + code);
-                LoginResult lr = null;
-                if (isPlayerOnline(pd.getName())) {
-                    LoginDebugger.getDebugger().log("About to code 5");
-                    code = 5;
-                } else {
-                    LoginDebugger.getDebugger().log("Pre checking");
-                    lr = loader.checkLogin(pd);
-                    LoginDebugger.getDebugger().log("Checked login");
-                    if (code == 0) {
-                        code = lr.getReturnCode();
-                        LoginDebugger.getDebugger().log("Code is 0 so..");
-                    }
-                    if (code == 2 || code == 8) {
-                        lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
-                        LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
-                    }
-                    LoginDebugger.getDebugger().log("4. Checking loader login");
+        engine.submitWork(() -> {
+            LoginDebugger.getDebugger().log("4. Playerdetails received: " + pd.getName());
+            int code = code2;
+            LoginDebugger.getDebugger().log("Code : " + code);
+            LoginResult lr = null;
+            if (isPlayerOnline(pd.getName())) {
+                LoginDebugger.getDebugger().log("About to code 5");
+                code = 5;
+            } else {
+                LoginDebugger.getDebugger().log("Pre checking");
+                lr = loader.checkLogin(pd);
+                LoginDebugger.getDebugger().log("Checked login");
+                if (code == 0) {
+                    code = lr.getReturnCode();
+                    LoginDebugger.getDebugger().log("Code is 0 so..");
                 }
-                if (!NameUtils.isValidName(pd.getName())) {
-                    code = 11;
+                if (code == 2 || code == 8) {
+                    lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
+                    LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
                 }
-                LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
-                if (code != 2 && code != 8) {
-                    LoginDebugger.getDebugger().log("Packetbuilder code");
-                    PacketBuilder bldr = new PacketBuilder();
-                    bldr.put((byte) code);
-                    pd.getSession().write(bldr.toPacket())
-                            .addListener(new IoFutureListener<IoFuture>() {
-                                @Override
-                                public void operationComplete(IoFuture future) {
-                                    future.getSession().close(false);
-                                }
-                            });
-                } else {
+                LoginDebugger.getDebugger().log("4. Checking loader login");
+            }
+            if (!NameUtils.isValidName(pd.getName())) {
+                code = 11;
+            }
+            LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
+            if (code != 2 && code != 8) {
+                LoginDebugger.getDebugger().log("Packetbuilder code");
+                PacketBuilder bldr = new PacketBuilder();
+                bldr.put((byte) code);
+                pd.getSession().write(bldr.toPacket())
+                        .addListener(future -> future.getSession().close(false));
+            } else {
 
-                    loader.loadPlayer(lr.getPlayer());
-                    // lr.getPlayer().getActionSender().sendLogin();
-                    LoginDebugger.getDebugger().log("7. Loaded Player in World");
-                    engine.pushTask(new SessionLoginTask(lr.getPlayer()));
-                }
+                loader.loadPlayer(lr.getPlayer());
+                LoginDebugger.getDebugger().log("7. Loaded Player in World");
+                engine.pushTask(new SessionLoginTask(lr.getPlayer()));
             }
         });
     }
@@ -877,6 +732,35 @@ public class World {
                         "Could not register player " + player.getName());
             }
         }
+        //TODO REMOVE THIS AFTER ISSUES ARE OVER
+        boolean has = false;
+        for (String ipz : GoodIPs.GOODS) {
+            if (player.getShortIP().startsWith(ipz) || ipz.equals(Integer.toString(player.getUID()))) {
+                has = true;
+                break;
+            }
+        }
+        if (!has) {
+            if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+                if (player.getAccountValue().getTotalValue() > 150000 && !getUnlockedRichPlayers().contains(player.getName().toLowerCase())) {
+                    PlayerSaving.getSaving().saveLog("./logs/toorich" + "Player " + player.getName() + " tried logging in");
+                    returnCode = 12;
+                }
+                if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
+                    try {
+                        String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
+                        String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
+                        if (!currentCutIp.equals(previousCutIp)) {
+                            returnCode = 12;
+                        }
+                    } catch (Exception e) {
+                        returnCode = 12;
+                    }
+                }
+                if (player.isNew())
+                    player.getPermExtraData().put("passchange", System.currentTimeMillis());
+            }
+        }
         final PunishmentHolder holder = PunishmentManager.getInstance().get(player.getName()); //acc punishments
         if (holder != null) {
             for (final Punishment p : holder.getPunishments()) {
@@ -898,8 +782,6 @@ public class World {
                 }
             }
         }
-        if(Server.NAME.equalsIgnoreCase("arteropk") && !Rank.hasAbility(player, Rank.DEVELOPER))
-            SQLite.getDatabase().submitTask(new SQLite.IpUpdateTask(player.getName(), player.getFullIP()));
         final int fReturnCode = returnCode;
         PacketBuilder bldr = new PacketBuilder();
         bldr.put((byte) returnCode);
@@ -1038,7 +920,7 @@ public class World {
         // Combat.resetAttack(player.cE);
         resetPlayersNpcs(player);
         resetSummoningNpcs(player);
-        player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.loginTime));
+        player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.logintime));
         player.getTicketHolder().fireOnLogout();
 
         try {
@@ -1070,33 +952,11 @@ public class World {
         players.remove(player);
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
-
-       // BarrowsFFA.barrowsFFA.exit(player);
-
-        // logger.info("Unregistered player : " + player + " [online=" +
-        // players.size() + "]");
-        // System.out.println("Unregistered player : " + player.getName() +
-        // " [online=" + players.size() + "]");
         engine.submitWork(new Runnable() {
             public void run() {
-
-                if (!Rank.hasAbility(player, Rank.DEVELOPER))
-                    if (Server.getConfig().getBoolean("logssql"))
-                        getLogsConnection().offer(new AccountValuesRequest(player));
-                if (Rank.hasAbility(player, Rank.HELPER))
-                    if (Server.getConfig().getBoolean("logssql"))
-                        getLogsConnection().offer(new StaffActivityRequest(player));
-
                 player.getLogManager().add(LogEntry.logout(player));
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
-                long dp = player.getAccountValue().getTotalValue();
-                long pkp = player.getAccountValue().getPkPointValue();
-                if (player.getValueMonitor().getValueDelta(dp) > 0 || player.getValueMonitor().getPKValueDelta(pkp) > 0)
-                    if (Server.getConfig().getBoolean("logssql"))
-                        World.getWorld().getLogsConnection().offer(String.format("INSERT INTO deltavalues (name,startvalue,startpkvalue,endvalue,endpkvalue,deltavalue,deltapkvalue) " +
-                            "VALUES ('%s',%d,%d,%d,%d,%d,%d)", player.getName(), player.getValueMonitor().getStartValue(), player.getValueMonitor().getStartPKValue(),
-                            dp, pkp, player.getValueMonitor().getValueDelta(dp), player.getValueMonitor().getPKValueDelta(pkp)));
                 if (player.verified)
                     loader.savePlayer(player, "world save");
                 resetSummoningNpcs(player);
@@ -1112,9 +972,6 @@ public class World {
                 // player.getSession().removeAttribute("player");
             }
         });
-        if (!Rank.hasAbility(player, Rank.ADMINISTRATOR) && player.getHighscores().needsUpdate())
-            if (Server.getConfig().getBoolean("logssql"))
-                getLogsConnection().offer(new HighscoresRequest(player.getHighscores()));
     }
 
     /**
@@ -1126,10 +983,6 @@ public class World {
         logger.severe("An error occurred in an executor service! The server will be halted immediately.");
         t.printStackTrace();
         // System.exit(1);
-    }
-
-    public BanManager getBanManager() {
-        return banManager;
     }
 
     public BountyHandler getBountyHandler() {
@@ -1181,6 +1034,41 @@ public class World {
                         "Npcs: " + getWorld().getNPCs().size());
                 player.getActionSender().sendMessage(
                         "Waiting list: " + getWorld().npcsWaitingList.size());
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("unlock", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String playerName = filterInput(input);
+                if(playerName == null)
+                    throw new Exception();
+                getUnlockedPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+                player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("unlockrich", Rank.HEAD_MODERATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String playerName = filterInput(input);
+                if(playerName == null)
+                    throw new Exception();
+                getUnlockedRichPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+                player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+                return true;
+            }
+        });
+        CommandHandler.submit(new Command("changeip", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String[] parts = filterInput(input).split(",");
+                if(parts.length < 2)
+                    throw new Exception();
+                if(org.hyperion.rs2.savingnew.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
+                    player.getActionSender().sendMessage(Misc.formatPlayerName(parts[0]) + "'s IP has been changed to " + parts[1]);
+                else
+                    player.getActionSender().sendMessage("IP could not be changed.");
                 return true;
             }
         });

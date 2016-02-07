@@ -59,7 +59,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					player.getSession().close(false);
 					PunishmentManager.getInstance().add(new Punishment(player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
 				}
-				if(packetCount > 49) {
+				if(packetCount > 149) {
 					System.out.printf("%s has a a %,d packet count, banning\n", player.getName(), player.getExtraData().getInt("packetCount"));
 					session.close(false);
 				}

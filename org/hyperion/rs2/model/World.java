@@ -66,7 +66,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
-//import org.hyperion.rs2.saving.SQLPlayerSaving;
+//import org.hyperion.rs2.savingnew.SQLPlayerSaving;
 
 //import org.hyperion.rs2.login.LoginServerWorldLoader;
 
@@ -583,7 +583,6 @@ public class World {
         engine.submitWork(() -> {
             Player player = new Player(playerDetails);
             LoginResponse loginResponse = loader.checkLogin(player, playerDetails);
-            System.out.println(loginResponse);
             if(loginResponse != LoginResponse.NEW_PLAYER && loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
                 playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(false));
                 return;

@@ -113,7 +113,7 @@ public class ExtraData {
 	}
 
     /**
-     * Enables saving of extradata inside the player file
+     * Enables savingnew of extradata inside the player file
      */
     public String getSaveableString() {
         return extraData.toString().replace("=", "-");

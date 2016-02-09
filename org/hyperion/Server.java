@@ -1,18 +1,23 @@
 package org.hyperion;
 
 import org.hyperion.rs2.RS2Server;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.security.CharFileEncryption;
 import org.hyperion.rs2.net.security.EncryptionStandard;
+import org.hyperion.rs2.saving.MergedSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
 
+import java.io.BufferedReader;
 import java.io.Console;
 import java.io.File;
+import java.io.FileReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -157,7 +162,7 @@ public class Server {
             ClanManager.load();
 //			ItemInfo.init();
             System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
-/*
+
             for(File file : files) {
                 String ip = null;
                 int uid = 0;
@@ -185,7 +190,7 @@ public class Server {
                 player.setName(file.getName().replaceAll(".txt", ""));
                 new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
                 org.hyperion.rs2.savingnew.PlayerSaving.save(player);
-            }*/
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.log(Level.SEVERE, "Error starting Hyperion.", ex);

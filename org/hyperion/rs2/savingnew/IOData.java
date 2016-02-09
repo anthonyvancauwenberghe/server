@@ -7,6 +7,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.EloRating;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
@@ -1008,12 +1009,12 @@ public enum IOData {
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return builder.toJsonTree(player.getBank().getItems(), new TypeToken<Item[]>(){}.getType());
+            return builder.toJsonTree(player.getBank().getItems(), new TypeToken<BankItem[]>(){}.getType());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            player.getBank().setItems(builder.fromJson(element, new TypeToken<Item[]>(){}.getType()));
+            player.getBank().setItems(builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType()));
         }
     },
     FRIENDS {

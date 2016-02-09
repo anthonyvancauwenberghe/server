@@ -91,7 +91,7 @@ public class SpawnCommand extends Command {
 				if(!fileToWrite.getParentFile().mkdirs())
 					return mapToSave;
 			} catch (SecurityException e) {
-				System.out.println("Unable to create directory for keywords saving");
+				System.out.println("Unable to create directory for keywords savingnew");
 			}
 		}
 		try (FileWriter writer = new FileWriter(fileToWrite)) {

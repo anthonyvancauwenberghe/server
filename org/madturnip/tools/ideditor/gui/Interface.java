@@ -31,7 +31,7 @@ public class Interface extends JFrame {
 	public boolean addFlag = false;
 
 	/**
-	 * Arrays used for the list, and later, saving.
+	 * Arrays used for the list, and later, savingnew.
 	 * Now that I understand definitions a bit better, I should just outright use it.
 	 */
 	private String[] names, examines, names2, examines2;

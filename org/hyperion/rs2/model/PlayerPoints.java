@@ -134,7 +134,7 @@ public class PlayerPoints {
                 writer.flush();
                 writer.close();
             } catch (Exception ex) {
-                System.out.println("Error saving donor points change: " + ex);
+                System.out.println("Error savingnew donor points change: " + ex);
             }
         }
         player.getExpectedValues().changeDeltaOther("Donator points added", amount);

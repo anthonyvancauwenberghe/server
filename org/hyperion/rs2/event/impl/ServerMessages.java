@@ -41,7 +41,7 @@ public class ServerMessages extends Event {
             public boolean execute(final Player player, final String input){
                 player.getActionSender().sendMessage("Saving server messages...");
                 if(!save()){
-                    player.getActionSender().sendMessage("Error saving messages");
+                    player.getActionSender().sendMessage("Error savingnew messages");
                     return false;
                 }
                 player.getActionSender().sendMessage("Successfully saved messages");

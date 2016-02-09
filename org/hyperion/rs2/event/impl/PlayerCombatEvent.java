@@ -1,18 +1,13 @@
 package org.hyperion.rs2.event.impl;
 
-import java.util.*;
-
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.rs2.event.Event;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.content.ClickId;
-import org.hyperion.rs2.model.content.ClickType;
-import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.saving.PlayerSaving;
 
 public class PlayerCombatEvent extends Event {
 	
@@ -93,8 +88,8 @@ public class PlayerCombatEvent extends Event {
     public static boolean stakeReset(final Player player) {
         final Player opp = player.getTrader();
         if(opp != null && !opp.isDead() && !player.isDead() && !opp.getSession().isConnected() && !player.getSession().isConnected() && player.duelAttackable > 0 && opp.duelAttackable > 0) {
-            PlayerSaving.getSaving().saveLog("./logs/accounts/" + opp.getName(), (new Date()) + " Duel TIE against "+player.getName());
-            PlayerSaving.getSaving().saveLog("./logs/accounts/" + player.getName(), (new Date()) + " Duel TIE against " + opp.getName());
+            FileLogging.savePlayerLog(opp, "Duel TIE against "+player.getName());
+            FileLogging.savePlayerLog(player, " Duel TIE against " + opp.getName());
             Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie
             Container.transfer(opp.getDuel(), opp.getInventory());
             opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);

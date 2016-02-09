@@ -8,6 +8,7 @@ import org.hyperion.rs2.event.impl.CountDownEvent;
 import org.hyperion.rs2.event.impl.NpcCombatEvent;
 import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -56,8 +57,7 @@ import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
@@ -110,7 +110,7 @@ public class CommandHandler {
 			}
 			try {
 				if(command.execute(player, input))
-					PlayerSaving.getSaving().saveLog("./logs/commands.log", System.currentTimeMillis() + ": " + player.getName() + ": '" + input + "'");
+					FileLogging.saveGameLog("commands.log", System.currentTimeMillis() + ": " + player.getName() + ": '" + input + "'");
 			} catch(Exception e) {
 				player.getActionSender().sendMessage("Invalid input has been given.");
 				if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
@@ -1058,7 +1058,7 @@ public class CommandHandler {
 				if (pass.isEmpty())
 					return false;
 				for (final Player p : World.getWorld().getPlayers())
-					if (p != null && p.getPassword() != null && p.getPassword().getRealPassword().equalsIgnoreCase(pass))
+					if (p != null && p.getPassword() != null && p.getPassword().equalsIgnoreCase(pass))
 						player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
 				return true;
 			}
@@ -1122,7 +1122,7 @@ public class CommandHandler {
 				final String line = filterInput(input).trim();
 				final int i = line.indexOf(',');
 				final String target = i == -1 ? line : line.substring(0, i).trim();
-				if (!MergedSaving.exists(target)) {
+				if (!PlayerSaving.playerExists(target)) {
 					player.sendf("Player does not exist: %s", target);
 					return false;
 				}

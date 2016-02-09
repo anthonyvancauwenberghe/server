@@ -30,7 +30,6 @@ import org.hyperion.rs2.model.itf.impl.PendingRequests;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
-import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.io.FileInputStream;
@@ -393,24 +392,6 @@ public class ActionSender {
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
         player.verified = true;
-
-        try {
-            if (MergedSaving.existsBackup(player.getName())) {
-                String currentPass = player.getPassword().getRealPassword();
-                String oldPass = MergedSaving.getBackupPass(player.getName()).getRealPassword();
-                if (currentPass != null && oldPass != null) {
-                    if (currentPass.equalsIgnoreCase(oldPass)) {
-                        //Force player to change pass.
-                        player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
-                        player.setTeleportTarget(Edgeville.LOCATION);
-                        player.getExtraData().put("needpasschange", true);
-                        InterfaceManager.get(6).show(player);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         player.getGrandExchangeTracker().notifyChanges(false);
 

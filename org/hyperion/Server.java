@@ -6,10 +6,13 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.security.CharFileEncryption;
+import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.util.CharFilesCleaner;
 import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
 
+import java.io.Console;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,7 +119,7 @@ public class Server {
     }
 
     public static World launchServer() {
-        /*
+
         Console console = System.console();
         if (console == null) {
             logger.log(Level.WARNING, "Using default password.");
@@ -133,9 +136,9 @@ public class Server {
                 }
             }
         }
-        File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
+        File[] files = new File("./data/characters/mergedchars").listFiles();
         System.out.println("Started converting char files, count: " + files.length);
-*/
+
         final long currentTime = System.currentTimeMillis();
         RestartTask.submitRestartTask();
         long start = System.currentTimeMillis();

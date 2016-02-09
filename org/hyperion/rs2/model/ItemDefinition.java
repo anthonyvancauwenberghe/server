@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
 import org.hyperion.rs2.model.container.impl.WeaponAnimManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.io.*;
 import java.util.HashMap;
@@ -504,7 +503,7 @@ public class ItemDefinition {
 				int id = values[0];
 				int price = values[1];
 				definitions[id].setHighAlcValue(price);
-				PlayerSaving.getSaving().submit(new Runnable() {
+				World.getWorld().getEngine().submitTask(new Runnable() {
 					@Override
 					public void run() {
 						dumpItemDefinitions();
@@ -521,12 +520,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(false);
-					PlayerSaving.getSaving().submit(new Runnable() {
-						@Override
-						public void run() {
-							dumpItemDefinitions();
-						}
-					});
+					World.getWorld().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::unstack 11694");
 				}
@@ -541,7 +535,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(true);
-					PlayerSaving.getSaving().submit(new Runnable() {
+					World.getWorld().getEngine().submitTask(new Runnable() {
 						@Override
 						public void run() {
 							dumpItemDefinitions();

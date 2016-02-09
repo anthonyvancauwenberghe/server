@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.container.duel;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
@@ -10,11 +11,9 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
-
-import java.util.Date;
 
 // Referenced classes of package org.hyperion.rs2.model.container:
 //            Container
@@ -597,10 +596,10 @@ public class Duel {
         player.getActionSender().sendMessage("You have " + (won ? "won" : "lost") + " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);
         healup(player);
-        PlayerSaving.getSaving().saveLog("./logs/accounts/" + opponent.getName(), (new Date()) + " Duel "+(won ? "Won" : "Lost") +" against "+player.getName());
+        FileLogging.savePlayerLog(opponent, "Duel "+(won ? "Won" : "Lost") +" against "+player.getName());
 		player.tradeAccept2 = false;
 		player.duelAttackable = 0;
-        PlayerSaving.getSaving().save(player);
+        PlayerSaving.save(player);
 
         if(won)
             player.getActionSender().showInterface(6733);

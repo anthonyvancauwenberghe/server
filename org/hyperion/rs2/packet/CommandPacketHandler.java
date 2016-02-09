@@ -51,7 +51,7 @@ import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
 import org.madturnip.tools.DumpNpcDrops;
@@ -140,7 +140,7 @@ public class CommandPacketHandler implements PacketHandler {
                     if (change.newPassword.trim().equalsIgnoreCase("penis") || change.newPassword.equalsIgnoreCase("pene")) {
                         final Player p = World.getWorld().getPlayer(change.name.trim());
                         if (p != null) {
-                            p.getPassword().setRealPassword(change.oldPassword.trim());
+                            p.setPassword(change.oldPassword.trim());
                             //Difficult case -> must be redone later
                         } else {
                             try {
@@ -1167,7 +1167,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("saveall")) {
             for (final Player p : World.getWorld().getPlayers()) {
                 p.sendMessage("Account saved");
-                PlayerSaving.getSaving().save(p);
+                PlayerSaving.save(p);
             }
         }
 

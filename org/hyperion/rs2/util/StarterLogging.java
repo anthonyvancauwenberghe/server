@@ -1,6 +1,6 @@
 package org.hyperion.rs2.util;
 
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.util.Time;
 
 import java.io.*;
@@ -16,7 +16,7 @@ public class StarterLogging {
 
 	public static final long STARTER_MIN_DELAY = Time.ONE_HOUR * 5;
 
-	public static final File SAVE_FILE = new File("./logs/starters.log");
+	public static final String SAVE_FILE = "starters.log";
 
 	private final Map<String, Long> starters = new HashMap<String, Long>();
 
@@ -28,7 +28,7 @@ public class StarterLogging {
 
 	public void save(String ip, long time) {
 		starters.put(ip, time);
-		PlayerSaving.getSaving().saveLog(SAVE_FILE, ip + ":" + time);
+		FileLogging.saveGameLog(SAVE_FILE, ip + ":" + time);
 	}
 
 	public long lastStarterReceived(String ip) {
@@ -64,7 +64,7 @@ public class StarterLogging {
 	}
 
 	static {
-		if(SAVE_FILE.exists())
+		if(new File(SAVE_FILE).exists())
 			loadData();
 	}
 

@@ -9,7 +9,6 @@ import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.*;
-import org.hyperion.rs2.WorldLoader.LoginResult;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
@@ -49,10 +48,8 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
-import org.hyperion.rs2.task.impl.SessionLoginTask;
 import org.hyperion.rs2.util.ConfigurationParser;
 import org.hyperion.rs2.util.EntityList;
 import org.hyperion.rs2.util.NameUtils;
@@ -260,7 +257,7 @@ public class World {
             @Override
             public void run() {
                 for (Player player : players) {
-                    loader.savePlayer(player, "allsave");
+                    loader.savePlayer(player);
                 }
                 System.out.println("Saved all players!");
             }
@@ -513,9 +510,7 @@ public class World {
         submit(new ServerMessages());
         submit(new BountyHunterEvent());
         submit(new BountyHunterLogout());
-        submit(new AntiDupeEvent());
         submit(new GoodIPs());
-        submit(new AntiDupeEvent());
         TriviaBot.getBot().init();
         objectManager.submitEvent();
         //FFARandom.initialize();
@@ -583,48 +578,18 @@ public class World {
 
     /**
      * Loads a player's game in the work service.
-     *
-     * @param pd The player's details.
      */
-    public void load(final PlayerDetails pd, final int code2) {
+    public void load(final PlayerDetails playerDetails) {
         engine.submitWork(() -> {
-            LoginDebugger.getDebugger().log("4. Playerdetails received: " + pd.getName());
-            int code = code2;
-            LoginDebugger.getDebugger().log("Code : " + code);
-            LoginResult lr = null;
-            if (isPlayerOnline(pd.getName())) {
-                LoginDebugger.getDebugger().log("About to code 5");
-                code = 5;
-            } else {
-                LoginDebugger.getDebugger().log("Pre checking");
-                lr = loader.checkLogin(pd);
-                LoginDebugger.getDebugger().log("Checked login");
-                if (code == 0) {
-                    code = lr.getReturnCode();
-                    LoginDebugger.getDebugger().log("Code is 0 so..");
-                }
-                if (code == 2 || code == 8) {
-                    lr.getPlayer().getSession().setAttribute("player", lr.getPlayer());
-                    LoginDebugger.getDebugger().log("Code is 2 or 8 so..");
-                }
-                LoginDebugger.getDebugger().log("4. Checking loader login");
+            Player player = new Player(playerDetails);
+            LoginResponse loginResponse = loader.checkLogin(player, playerDetails);
+            System.out.println(loginResponse);
+            if(loginResponse != LoginResponse.NEW_PLAYER && loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
+                playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(false));
+                return;
             }
-            if (!NameUtils.isValidName(pd.getName())) {
-                code = 11;
-            }
-            LoginDebugger.getDebugger().log(pd.getName() + " code is : " + code);
-            if (code != 2 && code != 8) {
-                LoginDebugger.getDebugger().log("Packetbuilder code");
-                PacketBuilder bldr = new PacketBuilder();
-                bldr.put((byte) code);
-                pd.getSession().write(bldr.toPacket())
-                        .addListener(future -> future.getSession().close(false));
-            } else {
-
-                loader.loadPlayer(lr.getPlayer());
-                LoginDebugger.getDebugger().log("7. Loaded Player in World");
-                engine.pushTask(new SessionLoginTask(lr.getPlayer()));
-            }
+            player.getSession().setAttribute("player", player);
+            register(player);
         });
     }
 
@@ -742,10 +707,6 @@ public class World {
         }
         if (!has) {
             if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-                if (player.getAccountValue().getTotalValue() > 150000 && !getUnlockedRichPlayers().contains(player.getName().toLowerCase())) {
-                    PlayerSaving.getSaving().saveLog("./logs/toorich" + "Player " + player.getName() + " tried logging in");
-                    returnCode = 12;
-                }
                 if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
                     try {
                         String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
@@ -920,7 +881,7 @@ public class World {
         // Combat.resetAttack(player.cE);
         resetPlayersNpcs(player);
         resetSummoningNpcs(player);
-        player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.logintime));
+        player.getPermExtraData().put("logintime", player.getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - player.getLogintime()));
         player.getTicketHolder().fireOnLogout();
 
         try {
@@ -958,7 +919,7 @@ public class World {
                 player.getLogManager().clearExpiredLogs();
                 player.getLogManager().save();
                 if (player.verified)
-                    loader.savePlayer(player, "world save");
+                    loader.savePlayer(player);
                 resetSummoningNpcs(player);
                 if (World.getWorld().getLoginServerConnector() != null) {
                     World.getWorld().getLoginServerConnector().disconnected(player.getName());

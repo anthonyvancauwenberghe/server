@@ -1,10 +1,8 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.content.ge.GrandExchange;
-import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.util.Date;
@@ -59,7 +57,7 @@ public class BankPin {
 			if(player.bankPin.length() >= 4) {
 				player.getActionSender().sendMessage("Pin set successfully.");
 				if(player.getSkills().getTotalLevel() > 100) {
-					PlayerSaving.getSaving().saveLog("./logs/accounts/" + player.getName(), (new Date()) + " Set pin: " + player.enterPin);
+					FileLogging.savePlayerLog(player, "Set pin: " + player.enterPin);
 				}
 				player.enterPin = player.bankPin;
 				Bank.open(player, false);

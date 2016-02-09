@@ -26,7 +26,17 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(DEFAULT_LOGGING_PATH, filePath), true))) {
+        File file = new File(DEFAULT_LOGGING_PATH, filePath);
+
+        if (!file.getParentFile().exists()) {
+            try {
+                if(!file.getParentFile().mkdirs())
+                    return;
+            } catch (SecurityException e) {
+                System.out.println("Unable to create directory for list file!");
+            }
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
             for(String line : lines)
                 bw.append(FILE_DATE_FORMAT.format(System.currentTimeMillis())).append(line).append(System.lineSeparator());
             bw.flush();

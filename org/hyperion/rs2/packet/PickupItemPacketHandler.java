@@ -1,9 +1,11 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.saving.PlayerSaving;
 
 public class PickupItemPacketHandler implements PacketHandler {
 

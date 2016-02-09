@@ -13,12 +13,12 @@ import java.util.Arrays;
  * Created by Gilles on 4/02/2016.
  */
 public class PlayerLoading {
-    public static void loadPlayer(Player player) {
+    public static boolean loadPlayer(Player player) {
         Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 
         if (!file.exists()) {
-            return;
+            return false;
         }
 
         try (FileReader fileReader = new FileReader(file)) {
@@ -41,6 +41,7 @@ public class PlayerLoading {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
 
     public static boolean playerExists(String playerName) {

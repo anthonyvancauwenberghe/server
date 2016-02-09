@@ -1,11 +1,5 @@
 package org.hyperion.rs2.model.log.cmd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -13,8 +7,10 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.log.util.LogUtils;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.util.PlayerFiles;
+import org.hyperion.rs2.savingnew.PlayerLoading;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ViewLogsCommand extends Command {
 
@@ -27,7 +23,7 @@ public class ViewLogsCommand extends Command {
             final String line = filterInput(input).trim();
             final String[] parts = line.split(",");
             final String targetName = parts[0].trim();
-            if (!MergedSaving.exists(targetName)) {
+            if (!PlayerLoading.playerExists(targetName)) {
                 player.sendf("%s does not exist", targetName);
                 return false;
             }

@@ -17,7 +17,7 @@ import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
@@ -79,7 +79,7 @@ public class PlayerDeathEvent extends Event {
         }
         toTransfer *= 0.9D;
         toTransfer = killer.getPoints().pkpBonus(toTransfer);
-        killer.getPoints().increasePkPoints((int)(toTransfer) + original, false);
+        killer.getPoints().increasePkPoints(toTransfer + original, false);
 
         killer.sendPkMessage("You have received " + (toTransfer + original) +" PK points for this kill");
 
@@ -146,16 +146,16 @@ public class PlayerDeathEvent extends Event {
 			switch(timer) {
 				case 2:
 					startDeath();
-                    PlayerSaving.getSaving().save(player);
+                    PlayerSaving.save(player);
 					break;
 				case 9:
                     resetPlayer();
-                    PlayerSaving.getSaving().save(player);
+                    PlayerSaving.save(player);
 					break;
 				case 11:
 					player.playAnimation(Animation.create(- 1, 0));
 					player.setDead(false);
-                    PlayerSaving.getSaving().save(player);
+                    PlayerSaving.save(player);
 					this.stop();
 					break;
 			}
@@ -211,7 +211,6 @@ public class PlayerDeathEvent extends Event {
 			player.getActionSender().showInterfaceWalkable(- 1);
 			player.setTeleportTarget(Location.create(2439, 5171, 0), false);
 			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
-;
 		} else {
 			if(! player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
 				if(killer != null) {
@@ -263,7 +262,7 @@ public class PlayerDeathEvent extends Event {
 							if (pkpIncrease > 400)
 								pkpIncrease = 400;
 
-							int pointsToAdd = ((int) ((player.wildernessLevel / 2 + player.getBounty())) + pkpIncrease);
+							int pointsToAdd = ((player.wildernessLevel / 2 + player.getBounty()) + pkpIncrease);
 
                             for(SpecialArea area: SpecialAreaHolder.getAreas()) {
                                 if(area.inEvent() && area.inArea(player))

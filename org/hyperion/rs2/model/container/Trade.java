@@ -5,7 +5,7 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TradeChecker;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PushMessage;
 
@@ -430,9 +430,9 @@ public class Trade {
 		Container.transfer(player.getTrader().getTrade(), player.getInventory());
 		Container.transfer(player.getTrade(), player.getTrader().getInventory());
 		//World.getWorld().getWorldLoader().savePlayer(player, "trade");
-		PlayerSaving.getSaving().save(player);
+		PlayerSaving.save(player);
 		//World.getWorld().getWorldLoader().savePlayer(player.getTrader(), "trade");
-		PlayerSaving.getSaving().save(player.getTrader());
+		PlayerSaving.save(player.getTrader());
 		player.getActionSender().removeAllInterfaces();
 		player.getTrader().getActionSender().removeAllInterfaces();
 		player.getTrader().tradeAccept2 = false;

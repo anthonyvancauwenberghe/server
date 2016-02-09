@@ -96,13 +96,13 @@ public class FriendsAssistant {
 
 
 	public static void addIgnore(Player p, long friend) {
-		p.ignores.add(friend);
+		p.getIgnores().add(friend);
 		updateList(p, friend);
 		refreshGlobalList(p, false);
 	}
 
 	public static void removeIgnore(Player p, long friend) {
-		p.ignores.remove(friend);
+		p.getIgnores().remove(friend);
 		updateList(p, friend);
 		refreshGlobalList(p, false);
 	}
@@ -114,7 +114,7 @@ public class FriendsAssistant {
 
 
 	public static boolean isIgnore(Player p, long ingore) {
-		for(long ingore2 : p.ignores) {
+		for(long ingore2 : p.getIgnores()) {
 			if(ingore == ingore2)
 				return true;
 		}

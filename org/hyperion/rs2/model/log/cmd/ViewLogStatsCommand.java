@@ -6,8 +6,7 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.log.LogManager;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.util.PlayerFiles;
+import org.hyperion.rs2.savingnew.PlayerLoading;
 
 import java.util.Set;
 
@@ -22,7 +21,7 @@ public class ViewLogStatsCommand extends Command {
 
     public boolean execute(final Player player, final String input){
         final String targetName = filterInput(input).trim();
-        if(!MergedSaving.existsMain(targetName)){
+        if(!PlayerLoading.playerExists(targetName)){
             player.sendf("%s does not exist", targetName);
             return false;
         }

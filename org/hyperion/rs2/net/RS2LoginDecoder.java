@@ -1,18 +1,13 @@
 package org.hyperion.rs2.net;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.future.IoFuture;
-import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.hyperion.Server;
 import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ondemand.OnDemandPool;
 import org.hyperion.rs2.net.ondemand.OnDemandRequest;
 import org.hyperion.rs2.util.IoBufferUtils;
@@ -20,8 +15,6 @@ import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,7 +57,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 	/**
 	 * Update stage.
 	 */
-	public static final int STATE_UPDATE = - 1;
+	public static final int STATE_UPDATE = -1;
 
 	/**
 	 * Game opcode.
@@ -107,16 +100,14 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
 	private static int invalidLogins = 0;
 
-	private static HashMap<String, Long> loginAttempts = new HashMap<String, Long>();
-
 	@Override
 	protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
-		synchronized(session) {
-			int state = (Integer)session.getAttribute("state", STATE_OPCODE);
-			switch(state) {
+		synchronized (session) {
+			int state = (Integer) session.getAttribute("state", STATE_OPCODE);
+			switch (state) {
 				case STATE_UPDATE:
-					if(in.remaining() >= 4) {
-	                /*
+					if (in.remaining() >= 4) {
+                    /*
 					 * Here we read the cache id (idx file), file id and priority.
 					 */
 						int cacheId = in.get() & 0xFF;
@@ -133,7 +124,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						return false;
 					}
 				case STATE_OPCODE:
-					if(in.remaining() >= 1) {
+					if (in.remaining() >= 1) {
 					/*
 					 * Here we read the first opcode which indicates the type
 					 * of connection.
@@ -145,7 +136,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 * clients.
 					 */
 						int opcode = in.get() & 0xFF;
-						switch(opcode) {
+						switch (opcode) {
 							case OPCODE_GAME:
 								session.setAttribute("state", STATE_LOGIN);
 								return true;
@@ -158,14 +149,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 								return true;
 							default:
 								invalidLogins++;
-								if(invalidLogins < 10 || invalidLogins % 20 == 0)
+								if (invalidLogins < 10 || invalidLogins % 20 == 0)
 									System.out.println("Invalid opcode xxx : " + opcode + "," + session.getRemoteAddress());
 								String ip = session.getRemoteAddress().toString().split(":")[0];
-								ConnectionHandler.blackList.put(ip, new Object());
-								BufferedWriter bw = new BufferedWriter(new FileWriter("./data/attack.txt", true));
-								bw.write(ip);
-								bw.newLine();
-								bw.close();
+								ConnectionHandler.getIpBlackList().put(ip, new Object());
 								session.close(true);
 
 								return false;
@@ -176,7 +163,9 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					}
 				case STATE_LOGIN:
 
-					if(in.remaining() >= 1) {
+					//System.out.println("herrrr");
+
+					if (in.remaining() >= 1) {
 					/*
 					 * The name hash is a simple hash of the name which is
 					 * suspected to be used to select the appropriate login
@@ -184,7 +173,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 */
 						@SuppressWarnings("unused")
 						int nameHash = in.get() & 0xFF;//l >> 16 & 31L- u can decrypt to get the real player name
-						if(LoginDebugger.getDebugger().isEnabled()) {
+						if (LoginDebugger.getDebugger().isEnabled()) {
 							long possibleNameLong = nameHash >> 16 & 31L;
 							String possibleName = NameUtils.longToName(possibleNameLong);
 							String possibleName2 = NameUtils.longToName(nameHash);
@@ -207,7 +196,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					}
 					break;
 				case STATE_PRECRYPTED:
-					if(in.remaining() >= 2) {
+					if (in.remaining() >= 2) {
 					/*
 					 * We read the type of login.
 					 *
@@ -216,7 +205,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 */
 						int loginOpcode = in.get() & 0xFF;
 						LoginDebugger.getDebugger().log("2. Logincode: " + loginOpcode);
-						if(loginOpcode != 16 && loginOpcode != 18) {
+						if (loginOpcode != 16 && loginOpcode != 18) {
 							//logger.info("Invalid login opcode : " + loginOpcode);
 							System.out.println("Invalid login opcode: " + loginOpcode);
 							session.close(false);
@@ -236,7 +225,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					/*
 					 * This could be invalid so if it is we ignore it.
 					 */
-						if(loginEncryptSize <= 0) {
+						if (loginEncryptSize <= 0) {
 							//logger.info("Encrypted packet size zero or negative : " + loginEncryptSize);
 							session.close(false);
 							in.rewind();
@@ -251,60 +240,26 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 				case STATE_CRYPTED:
 					int size = (Integer) session.getAttribute("size");
 					int encryptSize = (Integer) session.getAttribute("encryptSize");
-					if(in.remaining() >= size) {
+					if (in.remaining() >= size) {
 						String remoteIp = session.getRemoteAddress().toString();
 						String shortIp = TextUtils.shortIp(remoteIp);
-						if (loginAttempts.containsKey(shortIp)) {
-							long lastLogin = loginAttempts.get(shortIp);
-							if(lastLogin != -1) {
-								if(System.currentTimeMillis() - lastLogin < 5000) {
-									PacketBuilder builder = new PacketBuilder();
-									builder.put(
-											(byte)11);
-									session.write(builder.toPacket()).addListener(new IoFutureListener<IoFuture>() {
-										@Override
-										public void operationComplete(IoFuture future) {
-											future.getSession().close(false);
-										}
-									});
-									in.rewind();
-									return false;
-								}
-							}
-						}
-						//System.out.println("Logging in plz");
-					/*
-					 * We read the magic ID which is 255 (0xFF) which indicates
-					 * this is the real login packet.
-					 */
+
 						int returnCode = 0;
 						int magicId = in.get() & 0xFF;
-						if(magicId != 122) {
+						if (magicId != 122) {
 							returnCode = 6;
 						}
-
-					/*
-					 * We now read a short which is the client version and
-					 * check if it equals 317.
-					 */
 						int version = in.getShort() & 0xFFFF;
-						if(version != 490) {
-							returnCode = 6;
-						}
 
-					/*
-					 * The following byte indicates if we are using a low
-					 * memory version.
-					 */
 						@SuppressWarnings("unused")
 						boolean lowMemoryVersion = false;
-						if(in.get() != 5) {
+						if (in.get() != 5) {
 							returnCode = 6;
 						}
 					/*
 					 * We know read the cache indices.
 					 */
-						for(int i = 0; i < 9; i++) {
+						for (int i = 0; i < 9; i++) {
 							in.getInt();
 						}
 
@@ -318,7 +273,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 * We check if there is a mismatch in the sizing.
 					 */
 						int reportedSize = in.get() & 0xFF;
-						if(reportedSize != encryptSize) {
+						if (reportedSize != encryptSize) {
 							//logger.info("Packet size mismatch (expected : " + encryptSize + ", reported : " + reportedSize + ")");
 							session.close(false);
 							in.rewind();
@@ -331,8 +286,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 * check it is equal to 10.
 					 */
 						int blockOpcode = in.get() & 0xFF;
-						if(blockOpcode != 10) {
-							//logger.info("Invalid login block opcode : " + blockOpcode);
+						if (blockOpcode != 10) {
 							returnCode = 6;
 						}
 
@@ -346,81 +300,24 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 					 */
 						long serverKey = (Long) session.getAttribute("serverKey");
 						long reportedServerKey = in.getLong();
-						if(reportedServerKey != serverKey) {
-							//logger.info("Server key mismatch (expected : " + serverKey + ", reported : " + reportedServerKey + ") client key: "+clientKey);
+						if (reportedServerKey != serverKey) {
 							returnCode = 6;
 						}
 
-					/*
-					 * The UID, found in random.dat in newer clients and
-					 * uid.dat in older clients is a way of identifying a
-					 * computer.
-					 *
-					 * However, some clients send a hardcoded or random UID,
-					 * making it useless in the private server scene.
-					 */
 						int uid = in.getInt();
-						if (uid < 15483) {//old: 15467
-							returnCode = 6;
-						}
 
 						int macId = in.getInt();
-						if(macId == 0) {
+						if (macId == 0) {
 							macId = Misc.random(Integer.MAX_VALUE);
 						}
 
 						final int[] specialUid = new int[20];
-						for(int i = 0; i < specialUid.length; i++)
+						for (int i = 0; i < specialUid.length; i++)
 							specialUid[i] = in.getInt();
 
-					/*
-					 * We read and format the name and passwords.
-					 */
 						String name = NameUtils.formatName(IoBufferUtils.getRS2String(in)).trim();
-
-
-						if(name.length() == 0 || name.length() > 12) {
-							//System.out.println("name error");
-							session.close(false);
-							in.rewind();
-
-							return false;
-						}
-
-						//System.out.println("herrrr");
-						//if(banmanager.getStatus(name) == BanManager.BAN || banmanager.getStatus(shortIp) == BanManager.BAN) {
-						//	returnCode = 4;
-						//}
-						final Punishment punishment = PunishmentManager.getInstance().findBan(name, shortIp, macId, specialUid);
-						if(punishment != null) {
-							returnCode = 4;
-							LoginDebugger.getDebugger().log("Packetbuilder code");
-							PacketBuilder bldr = new PacketBuilder();
-							bldr.put((byte) returnCode);
-							bldr.putRS2String(punishment.getCombination().getTarget().name());
-							bldr.putRS2String(punishment.getIssuerName());
-							bldr.putRS2String(punishment.getReason());
-							bldr.putRS2String(punishment.getTime().getRemainingTimeStamp());
-							session.write(bldr.toPacket())
-									.addListener(new IoFutureListener<IoFuture>() {
-										@Override
-										public void operationComplete(IoFuture future) {
-											future.getSession().close(false);
-										}
-									});
-							in.rewind();
-							return false;
-						}
-
 						String pass = IoBufferUtils.getRS2String(in);
-						LoginDebugger.getDebugger().log("3. Login packet: " + name + "," + pass + "," + remoteIp);
 
-					/*
-					 * And setup the ISAAC cipher which is used to encrypt and
-					 * decrypt opcodes.
-					 *
-					 * However, without RSA, this is rendered useless anyway.
-					 */
 						int[] sessionKey = new int[4];
 						sessionKey[0] = (int) (clientKey >> 32);
 						sessionKey[1] = (int) clientKey;
@@ -433,42 +330,19 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 						session.removeAttribute("encryptSize");
 
 						ISAACCipher inCipher = new ISAACCipher(sessionKey);
-						for(int i = 0; i < 4; i++) {
+						for (int i = 0; i < 4; i++) {
 							sessionKey[i] += 50;
 						}
 						ISAACCipher outCipher = new ISAACCipher(sessionKey);
 
-					/*
-					 * Now, the login has completed, and we do the appropriate
-					 * things to fire off the chain of events which will load
-					 * and check the saved games etc.
-					 */
 						session.getFilterChain().remove("protocol");
 						session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.GAME));
-						if(! NameUtils.isValidName(name)) {
-							returnCode = 3;
-							session.close(false);
-							in.rewind();
+
+						if (returnCode != 0) {
+							session.write(new PacketBuilder().put((byte) returnCode).toPacket()).addListener(future -> future.getSession().close(false));
 							return false;
 						}
-
-						if(World.getWorld().getPlayer(name) != null) {
-							returnCode = 5;
-						}
-
-						if(blockedIps.contains(remoteIp)) {
-							session.close(false);
-							return false;
-						}
-
-                        if(Server.DEBUG_CLEAN)
-                            returnCode = 14;
-
-						PlayerDetails pd = new PlayerDetails(session, name, pass, macId, inCipher, outCipher, remoteIp, "Id1");
-						pd.specialUid = specialUid;
-						//System.out.println("loading guy");
-						World.getWorld().load(pd, returnCode);
-						loginAttempts.put(shortIp, System.currentTimeMillis());
+						World.getWorld().load(new PlayerDetails(session, name, pass, macId, uid, inCipher, outCipher, remoteIp, specialUid));
 					}
 					break;
 			}

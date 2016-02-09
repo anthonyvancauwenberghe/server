@@ -26,12 +26,12 @@ public enum IOData {
     PASSWORD {
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getPassword().getRealPassword());
+            return new JsonPrimitive(player.getPassword());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.getPassword().setRealPassword(element.getAsString());
+            player.setPassword(element.getAsString());
         }
     },
     RANK {

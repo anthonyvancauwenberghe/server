@@ -81,6 +81,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(punishment != null) {
 			playerDetails.getSession().write(
 					new PacketBuilder()
+							.put((byte)ACCOUNT_DISABLED.getReturnCode())
 							.putRS2String(punishment.getCombination().getTarget().name())
 							.putRS2String(punishment.getIssuerName())
 							.putRS2String(punishment.getReason())

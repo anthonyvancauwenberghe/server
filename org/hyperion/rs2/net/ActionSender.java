@@ -170,8 +170,7 @@ public class ActionSender {
      * @param inventoryInterfaceId The inventory interface id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendInterfaceInventory(int interfaceId,
-                                               int inventoryInterfaceId) {
+    public ActionSender sendInterfaceInventory(int interfaceId, int inventoryInterfaceId) {
         player.getInterfaceState().interfaceOpened(interfaceId);
         player.write(new PacketBuilder(248).putShortA(interfaceId)
                 .putShort(inventoryInterfaceId).toPacket());
@@ -538,6 +537,11 @@ public class ActionSender {
     public ActionSender sendEP() {
         sendString(12280, " Potential: ");// ep
         sendString(12281, getEPString());
+        return this;
+    }
+
+    public ActionSender sendClientConfirmation(int basicValue) {
+        player.write(new PacketBuilder(80).putShort(basicValue).toPacket());
         return this;
     }
 

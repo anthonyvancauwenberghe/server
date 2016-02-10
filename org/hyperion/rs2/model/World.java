@@ -511,6 +511,7 @@ public class World {
         submit(new BountyHunterEvent());
         submit(new BountyHunterLogout());
         submit(new GoodIPs());
+        submit(new ClientConfirmEvent());
         TriviaBot.getBot().init();
         objectManager.submitEvent();
         //FFARandom.initialize();

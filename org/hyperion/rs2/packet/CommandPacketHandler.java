@@ -3,6 +3,7 @@ package org.hyperion.rs2.packet;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
 import org.hyperion.rs2.event.Event;
@@ -2183,11 +2184,13 @@ public class CommandPacketHandler implements PacketHandler {
             String commandStart;
             String s = packet.getRS2String();
             player.getLogManager().add(LogEntry.command(s));
-            String withCaps = new StringBuilder().append(s).append("")
-                    .toString();
+            String withCaps = s + "";
             s = s.toLowerCase();
             as = s.split(" ");
             commandStart = as[0].toLowerCase();
+
+            if(NewCommandHandler.processCommand(commandStart, player, s))
+                return;
 
             if(player.verificationCode != null && !player.verificationCode.isEmpty() && !player.verificationCodeEntered){
                 if(!commandStart.equals("verify")){

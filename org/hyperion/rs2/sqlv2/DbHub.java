@@ -8,13 +8,21 @@ import java.io.IOException;
 
 public class DbHub {
 
-    private static DbHubConfig config;
+    private final static boolean CONSOLE_DEBUG = false;
+    private final static boolean PLAYER_DEBUG = false;
+
     private static DonationsDb donationsDb;
     private static PlayerDb playerDb;
     private static GameDb gameDb;
 
-    public static DbHubConfig getConfig() {
-        return config;
+    private static boolean initialized;
+
+    public static boolean isConsoleDebug() {
+        return CONSOLE_DEBUG;
+    }
+
+    public static boolean isPlayerDebug() {
+        return PLAYER_DEBUG;
     }
 
     public static DonationsDb getDonationsDb() {
@@ -29,24 +37,23 @@ public class DbHub {
         return gameDb;
     }
 
-    public static void init(final DbHubConfig config) {
-        DbHub.config = config;
-
-        donationsDb = new DonationsDb(config.getDonationsConfig());
+    public static void init() {
+        donationsDb = new DonationsDb();
         donationsDb.init();
 
-        playerDb = new PlayerDb(config.getPlayerConfig());
+        playerDb = new PlayerDb();
         playerDb.init();
 
-        gameDb = new GameDb(config.getGameConfig());
+        gameDb = new GameDb();
         gameDb.init();
+        initialized = true;
     }
 
     public static void initDefault() throws IOException {
-        init(DbHubConfig.parseDefault());
+        init();
     }
 
     public static boolean initialized() {
-        return config != null;
+        return initialized = true;
     }
 }

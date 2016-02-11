@@ -1,5 +1,6 @@
 package org.hyperion.rs2.commands;
 
+import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.impl.*;
@@ -694,7 +695,7 @@ public class CommandHandler {
 		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				Server.getConfig().loadConfigFile();
+				Configuration.reloadConfiguration();
 				return true;
 			}
 		});
@@ -715,7 +716,7 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command(Server.getConfig().getString("spawncommand"), Rank.OWNER) {
+		submit(new Command("spawnitem", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -1546,7 +1547,7 @@ public class CommandHandler {
 
         submit(new Command("sendcmd", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
-                if(!Server.NAME.equalsIgnoreCase("arteropk"))
+                if(!Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk"))
                     return false;
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');

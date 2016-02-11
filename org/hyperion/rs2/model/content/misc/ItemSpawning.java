@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Location;
@@ -213,11 +213,11 @@ public class ItemSpawning {
 			case 5023:
 			case 10566:
 			case 10637:
-				return "This item can only be purchased in the " + Server.NAME + " points shop.";
+				return "This item can only be purchased in the " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points shop.";
 		}
 		for(String forbiddenName : PKPOINTS_NAMES) {
 			if(itemName.contains(forbiddenName))
-				return "This item can only be purchased in the " + Server.NAME + " points shop.";
+				return "This item can only be purchased in the " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points shop.";
 		}
 		/**
 		 * Forbidden Items. eg Zaniks Crate

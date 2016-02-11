@@ -1,6 +1,6 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.NewCommandHandler;
@@ -732,7 +732,7 @@ public class CommandPacketHandler implements PacketHandler {
             int rating = Integer.parseInt(as[1]);
             player.getPoints().setEloRating(rating);
         }
-        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equals("spece")) {
+        if (Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk") && commandStart.equals("spece")) {
             String targetName = s.substring(6).trim();
             boolean found = false;
 
@@ -993,7 +993,7 @@ public class CommandPacketHandler implements PacketHandler {
          * "getpass" exists for DeviousPK (Too lazy to edit it so it works :( )
          */
 
-        if (Server.NAME.equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
+        if (Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
             final String targetName = s.substring(6).trim();
             if (tooCool4School.contains(targetName.toLowerCase()))
                 return;
@@ -1376,8 +1376,7 @@ public class CommandPacketHandler implements PacketHandler {
             /**
              * uncomment this when not in beta testing
              */
-            if (ItemSpawning.allowedMessage(Integer.parseInt(as[3]))
-                    .length() > 0 && !Server.DEBUG) {
+            if (ItemSpawning.allowedMessage(Integer.parseInt(as[3])).length() > 0) {
                 return;
             }
 
@@ -2549,20 +2548,20 @@ public class CommandPacketHandler implements PacketHandler {
             }
             if (ItemSpawning.canSpawn(player, false) &&
                     !player.hardMode()) {
-                if (commandStart.equals("vengrunes") && Server.SPAWN) {
+                if (commandStart.equals("vengrunes")) {
                     ContentEntity.addItem(player, 557, 1000);
                     ContentEntity.addItem(player, 560, 1000);
                     ContentEntity.addItem(player, 9075, 1000);
                     return;
                 }
-                if (commandStart.equals("barragerunes") && Server.SPAWN) {
+                if (commandStart.equals("barragerunes")) {
                     ContentEntity.addItem(player, 560, 1000);
                     ContentEntity.addItem(player, 565, 1000);
                     ContentEntity.addItem(player, 555, 1000);
                     return;
                 }
 
-                if (commandStart.equalsIgnoreCase("copy") && Server.SPAWN) {
+                if (commandStart.equalsIgnoreCase("copy")) {
                     if (!copyCheck(player))
                         return;
                     if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
@@ -2588,7 +2587,7 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                 }
 
-                if (commandStart.equalsIgnoreCase("copyinv") && Server.SPAWN) {
+                if (commandStart.equalsIgnoreCase("copyinv")) {
                     if (!copyCheck(player))
                         return;
                     if (ContentEntity.getTotalAmountOfItems(player) > 0) {
@@ -2684,7 +2683,7 @@ public class CommandPacketHandler implements PacketHandler {
                 player.getActionSender().sendMessage("EP level " + player.EP);
                 return;
             }
-            if (commandStart.equals("givemetabsplz") && Server.SPAWN && !player.hardMode()) {
+            if (commandStart.equals("givemetabsplz") && !player.hardMode()) {
                 for (int i = 0; i < 100; i++) {
                     int id = 8008 + Misc.random(4);
                     ContentEntity.addItem(player, id);
@@ -2790,10 +2789,7 @@ public class CommandPacketHandler implements PacketHandler {
                 else
                     Magic.teleport(player, 3566 - Misc.random(1),
                             9952 - Misc.random(1), 0, false);
-                if (Server.SPAWN)
-                    player.getActionSender()
-                            .sendMessage(
-                                    "Please note that combat skills can be set by using commands such as ::str 99");
+                    player.getActionSender().sendMessage("Please note that combat skills can be set by using commands such as ::str 99");
                 return;
             }
 

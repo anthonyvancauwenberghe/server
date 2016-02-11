@@ -1,9 +1,9 @@
 package org.hyperion.rs2.sqlv2.impl.punishments;
 
 import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.sqlv2.dao.SqlDaoManager;
 import org.hyperion.rs2.sqlv2.db.Db;
-import org.hyperion.rs2.sqlv2.db.DbConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Punishments extends SqlDaoManager<PunishmentDao> {
         try(final PunishmentDao dao = open()) {
             return dao.load();
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return new ArrayList<>();
         }
@@ -30,7 +30,7 @@ public class Punishments extends SqlDaoManager<PunishmentDao> {
         try(final PunishmentDao dao = open()) {
             dao.insert(punishment.getIssuerName(), punishment.getVictimName(), punishment.getVictimIp(), punishment.getVictimMac(),  punishment.getVictimSpecialUidAsString(), punishment.getCombination().getTarget().name(), punishment.getCombination().getType().name(), punishment.getTime().getStartTime(), punishment.getTime().getDuration(), punishment.getTime().getUnit().name(), punishment.getReason());
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
         }
     }
@@ -39,7 +39,7 @@ public class Punishments extends SqlDaoManager<PunishmentDao> {
         try(final PunishmentDao dao = open()) {
             dao.update(punishment.getIssuerName(), punishment.getTime().getStartTime(), punishment.getTime().getDuration(), punishment.getTime().getUnit().name(), punishment.getReason(), punishment.getVictimName(), punishment.getCombination().getTarget().name(), punishment.getCombination().getType().name());
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
         }
     }
@@ -48,7 +48,7 @@ public class Punishments extends SqlDaoManager<PunishmentDao> {
         try(final PunishmentDao dao = open()) {
             dao.setActive(isActive, punishment.getVictimName(), punishment.getCombination().getTarget().name(), punishment.getCombination().getType().name());
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
         }
     }
@@ -57,7 +57,7 @@ public class Punishments extends SqlDaoManager<PunishmentDao> {
         try(final PunishmentDao dao = open()) {
             dao.delete(punishment.getVictimName(), punishment.getCombination().getTarget().name(), punishment.getCombination().getType().name());
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
         }
     }

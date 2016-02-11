@@ -1,7 +1,7 @@
 package org.hyperion.rs2.sqlv2.dao;
 
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.sqlv2.db.Db;
-import org.hyperion.rs2.sqlv2.db.DbConfig;
 
 public class SqlDaoManager<T extends SqlDao> {
 
@@ -25,7 +25,7 @@ public class SqlDaoManager<T extends SqlDao> {
         try{
             return db.dbi.open(clazz);
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return null;
         }

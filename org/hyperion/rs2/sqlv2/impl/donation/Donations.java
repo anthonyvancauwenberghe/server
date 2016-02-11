@@ -1,9 +1,9 @@
 package org.hyperion.rs2.sqlv2.impl.donation;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.sqlv2.dao.SqlDaoManager;
 import org.hyperion.rs2.sqlv2.db.Db;
-import org.hyperion.rs2.sqlv2.db.DbConfig;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Donations extends SqlDaoManager<DonationDao> {
         try{
             return dao.get(name, finished);
         } catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return null;
         }
@@ -47,7 +47,7 @@ public class Donations extends SqlDaoManager<DonationDao> {
         try(final DonationDao dao = open()){
             return dao.finish(d.index()) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }

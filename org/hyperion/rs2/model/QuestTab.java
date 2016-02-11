@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
@@ -82,7 +83,7 @@ public class QuestTab {
             player.getActionSender().sendString("", 33011 + i);
             player.getActionSender().sendTooltip(33011 + i, "");
         }
-        player.getActionSender().sendString("@yel@" + Server.NAME, 640);
+        player.getActionSender().sendString("@yel@" + Configuration.getString(Configuration.ConfigurationObject.NAME), 640);
         player.getActionSender().sendString("@yel@Server Information ", getId(0));
         player.getActionSender().sendFont(getId(0), 2);
         player.getActionSender().sendString("", getId(5));

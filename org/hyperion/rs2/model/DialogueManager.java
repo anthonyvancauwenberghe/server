@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
@@ -180,7 +180,7 @@ public class DialogueManager {
 				break;
 			case 18:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Hello, welcome to " + Server.NAME + ", Please ensure you are active", "on the forums to keep updated with whats new.");
+						"Hello, welcome to " + Configuration.getString(Configuration.ConfigurationObject.NAME) + ", Please ensure you are active", "on the forums to keep updated with whats new.");
 				player.getInterfaceState().setNextDialogueId(0, 19);
 				break;
 			case 19:
@@ -342,7 +342,7 @@ public class DialogueManager {
 				break;
 			case 45:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Well done " + player.getName() + ", now please", "read the guide to understand basic infomation about " + Server.NAME);
+						"Well done " + player.getName() + ", now please", "read the guide to understand basic information about " + Configuration.getString(Configuration.ConfigurationObject.NAME));
 				player.getInterfaceState().setNextDialogueId(0, dialogueId + 1);
 				break;
 			case 46:
@@ -449,11 +449,11 @@ public class DialogueManager {
 					ContentEntity.addItem(player, 1712, 1);
 					ContentEntity.addItem(player, 2560, 1);
 				}
-				player.getActionSender().openQuestInterface(Server.NAME + " Guide Book", new String[]{
+				player.getActionSender().openQuestInterface(Configuration.getString(Configuration.ConfigurationObject.NAME) + " Guide Book", new String[]{
 						"Congratulations on Completeing the begineers",
 						"Tutorial you can now read your guide book",
 						"To learn how to get started.",
-						"on " + Server.NAME + ".com",
+						"on " + Configuration.getString(Configuration.ConfigurationObject.NAME) + ".com",
 				});
 				player.getSkills().reset();
 				player.getActionSender().sendSkills();

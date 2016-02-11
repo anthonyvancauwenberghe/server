@@ -1,6 +1,6 @@
 package org.hyperion.rs2.net;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.GoodIPs;
@@ -23,7 +23,6 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
-import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
@@ -411,7 +410,7 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendLogin() {
-        if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+        if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
             boolean has = false;
             for (String ipz : GoodIPs.GOODS) {
                 if(player.getShortIP().startsWith(ipz) || ipz.equals(Integer.toString(player.getUID()))){
@@ -450,24 +449,6 @@ public class ActionSender {
     public ActionSender showItemInterface(final String name, final int width, final int height, final Item... items) {
         InterfaceManager.<ItemContainer>get(10).sendItems(player, name, width, height, items);
         return this;
-    }
-
-    public void checkStarter() {
-        if (Server.SPAWN) {
-            player.getActionSender()
-                    .sendMessage(
-                            "To spawn Items use the commands ::item, ::spawn or ::pickup e.g. ::item 4151 2");
-            player.getActionSender()
-                    .sendMessage(
-                            "To change Levels use the commands ::atk, ::attk, ::attack, ::mage, ::magic, e.g. ::pray 95");
-            player.getActionSender()
-                    .sendMessage(
-                            "To find item ids use the ::nameitem command , e.g. ::nameitem armadyl");
-            player.getActionSender().sendMessage(
-                    "To find the complete command list , visit " + Server.NAME
-                            + ".com/commands.php");
-        }
-        Starter.giveStarter(player);
     }
 
     public ActionSender sendMultiZone(int i) {
@@ -1009,8 +990,7 @@ public class ActionSender {
     }
 
     public ActionSender sendWebpage(String url) {
-        if (!Server.OLD_SCHOOL)
-            sendMessage("l4unchur13 " + url);
+        sendMessage("l4unchur13 " + url);
         return this;
     }
 
@@ -1061,7 +1041,7 @@ public class ActionSender {
     }
 
     public ActionSender openLotteryInformation() {
-        sendString(8144, Server.NAME + " Lottery information:");
+        sendString(8144, Configuration.getString(Configuration.ConfigurationObject.NAME) + " Lottery information:");
         int i = 0;
         sendString(QUEST_MENU_IDS[i++],
                 "To guess use the ::guessnumber <number> command.");
@@ -1073,37 +1053,6 @@ public class ActionSender {
                 "If you can guess the number correctly,");
         sendString(QUEST_MENU_IDS[i++],
                 " you will be rewarded 2000 donator points.");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        for (; i < QUEST_MENU_IDS.length; i++) {
-            sendString(QUEST_MENU_IDS[i], "");
-        }
-        showInterface(8134);
-        return this;
-    }
-
-    public ActionSender openRules() {
-        sendString(8144, Server.NAME + " rules:");
-        int i = 0;
-        sendString(QUEST_MENU_IDS[i++],
-                "-Autotypers must be at least at 5 sec, Yell autotypers");
-        sendString(QUEST_MENU_IDS[i++],
-                "must be at least at 15 sec, otherwise MUTE.");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Trading DeviousPK Items or accounts for");
-        sendString(QUEST_MENU_IDS[i++],
-                "RSGP or Real Money = IPBAN + account reset.");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Advertising other websites or servers = IPBAN");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Advertising any kind of virus = IPBAN");
-        sendString(QUEST_MENU_IDS[i++], "-Abusing bugs = IPBAN");
-        sendString(QUEST_MENU_IDS[i++], "-Moderator impersonating = BAN");
-        sendString(QUEST_MENU_IDS[i++], "-Scamming is not allowed! = BAN");
-        sendString(QUEST_MENU_IDS[i++], "-Autoclicking is not allowed! = BAN");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");
         sendString(QUEST_MENU_IDS[i++], "");

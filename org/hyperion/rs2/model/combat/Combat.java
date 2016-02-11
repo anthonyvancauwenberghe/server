@@ -20,7 +20,6 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
-import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -495,7 +494,6 @@ public class Combat {
              * Get random Damage Hit.
              */
             damg = random(maxHit);
-            RestarterThread.getRestarter().updateCombatTimer();
             boolean verac = false;
             if (CombatAssistant.isVeracEquiped(combatEntity.getPlayer())
                     && random(6) == 1)

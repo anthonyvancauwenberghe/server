@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
@@ -211,7 +211,7 @@ public class TriviaBot {
 		} else {
 			yellMessage("One of the answers was: @dre@" + currentAnswers.get(0));
 		}
-		yellMessage("He has been rewarded " + Server.NAME + " points. The question will soon be updated.");
+		yellMessage("He has been rewarded " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points. The question will soon be updated.");
 		String wrongAnswers = "";
 		for(String s : attemptedAnswers) {
 			if(wrongAnswers.length() > 80)

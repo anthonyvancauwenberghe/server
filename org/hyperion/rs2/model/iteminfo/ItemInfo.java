@@ -1,19 +1,16 @@
 package org.hyperion.rs2.model.iteminfo;
 
+import org.hyperion.Configuration;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.hyperion.Server;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Player;
 
 public class ItemInfo{
 
@@ -72,7 +69,7 @@ public class ItemInfo{
         public String msg(final ItemDefinition def){
             return rawMsg.replace("$id$", Integer.toString(def.getId()))
                     .replace("$name$", def.getProperName())
-                    .replace("$server$", Server.NAME);
+                    .replace("$server$", Configuration.getString(Configuration.ConfigurationObject.NAME));
         }
 
         private static Entry id(final String msg, final int id){

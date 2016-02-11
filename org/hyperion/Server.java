@@ -11,7 +11,6 @@ import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.CharFilesCleaner;
-import org.hyperion.rs2.util.RestarterThread;
 import org.madturnip.tools.DumpNpcDrops;
 
 import java.io.BufferedReader;
@@ -21,42 +20,17 @@ import java.io.FileReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * A class to start both the file and game servers.
- *
- * @authors Graham Edgecombe and Arsen Maxyutov
- */
+import static org.hyperion.Configuration.ConfigurationObject.NAME;
+
 public class Server {
 
-    /**
-     * The server configuration.
-     */
-    private static final Configuration config = new Configuration();
-
-    /**
-     * The old school flag.
-     */
-    public static final boolean OLD_SCHOOL = config.getBoolean("oldschool");
-
-    /**
-     * The server name.
-     */
-    public static final String NAME = config.getString("name");
-
-    /**
-     * The spawn server flag.
-     */
-    public static final boolean SPAWN = config.getBoolean("spawn");
-
-    private final static Logger logger = Logger.getLogger("ArteroPk");
+    private final static Logger logger = Logger.getLogger(Configuration.getString(NAME));
 
     /**
      * The update version.
      */
     public static final double UPDATE = 6.72;
 
-
-    public static final boolean DEBUG_CLEAN = false;
     /**
      * Server uptime instance
      */
@@ -82,10 +56,6 @@ public class Server {
         return uptime;
     }
 
-    public static Configuration getConfig() {
-        return config;
-    }
-
     public static ServerStatistics getStats() {
         return stats;
     }
@@ -93,16 +63,6 @@ public class Server {
     public static CharFileEncryption getCharFileEncryption() {
         return charFileEncryption;
     }
-
-
-    public static final boolean DEBUG = false;
-
-    public static final boolean inDebug() {
-        return DEBUG;
-    }
-
-    public static final java.io.OutputStream OUTPUT = System.out;
-    public static final java.io.OutputStream ERR = System.err;
 
     /**
      * Last server vote claim
@@ -146,7 +106,7 @@ public class Server {
         long start = System.currentTimeMillis();
         new Thread(new CharFilesCleaner()).start();
         System.out.println("-- Starting " + NAME + "  -- " + UPDATE);
-        System.out.println("Spawn server: " + SPAWN);
+        System.out.println("Spawn server: " + Configuration.getString(NAME));
         World.init(); // this starts off background loading
         try {
             //new FileServer().bind().start();
@@ -193,7 +153,6 @@ public class Server {
             logger.log(Level.SEVERE, "Error starting Hyperion.", ex);
             System.exit(1);
         }
-        RestarterThread.getRestarter();
     }
 
     public static Logger getLogger() {

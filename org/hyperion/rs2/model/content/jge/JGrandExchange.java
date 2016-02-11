@@ -64,7 +64,7 @@ public class JGrandExchange {
     }
 
     public boolean load(){
-        if(!DbHub.getPlayerDb().enabled())
+        if(!DbHub.getPlayerDb().isEnabled())
             return false;
         List<Entry> entryList = DbHub.getPlayerDb().getGrandExchange().load();
         if(entryList == null)
@@ -216,8 +216,6 @@ public class JGrandExchange {
     }
 
     public static boolean init(){
-        if(!DbHub.initialized())
-            return false;
         ItemInfo.geBlacklist.load();
         instance = new JGrandExchange();
         return instance.load();

@@ -3,7 +3,7 @@ package org.hyperion.rs2.model;
 import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
@@ -73,6 +73,8 @@ import java.util.logging.Logger;
  * @author Graham Edgecombe
  */
 public class World {
+
+    private World() {}
 
     public static final double PLAYER_MULTI = 1.20;
 
@@ -536,7 +538,7 @@ public class World {
             }
         }
         if (!has) {
-            if(Server.NAME.equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+            if(Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                 if (player.getPermExtraData().getLong("passchange") < ActionSender.LAST_PASS_RESET.getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase()) && !player.isNew()) {
                     try {
                         String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));

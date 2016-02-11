@@ -19,7 +19,7 @@ public final class PunishmentManager {
     }
 
     public boolean load(){
-        if(!DbHub.getGameDb().enabled())
+        if(!DbHub.getGameDb().isEnabled())
             return false;
         List<Punishment> punishments = DbHub.getGameDb().getPunishment().load();
         if(punishments.isEmpty() || punishments.isEmpty())

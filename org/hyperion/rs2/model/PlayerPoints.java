@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -231,7 +231,7 @@ public class PlayerPoints {
     public void increasePkPoints(int points, boolean message) {
         pkPoints += points;
         if (message)
-            player.sendPkMessage("Your " + Server.NAME + " points have been increased by " + points + "!");
+            player.sendPkMessage("Your " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points have been increased by " + points + "!");
         player.getQuestTab().sendPkPoints();
     }
 

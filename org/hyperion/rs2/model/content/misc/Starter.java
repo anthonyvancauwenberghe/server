@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
@@ -13,22 +12,17 @@ public class Starter {
 
 	public static void giveMain(Player player) {
 		for(int i = 0; i <= 6; i++) {
-			if(Server.SPAWN) {
 				player.getSkills().setExperience(i, 13100000);
 				player.getSkills().setLevel(i, 99);
-			} else {
-				player.getSkills().setExperience(i, 740000);
-				player.getSkills().setLevel(i, 70);
-			}
 		}
-		ContentEntity.addItem(player, Server.SPAWN ? 4151 : 4587, 1); // Weapon
+		ContentEntity.addItem(player, 4151, 1); // Weapon
 		//ContentEntity.addItem(player, 4588, 3); // Weapon Noted
 		ContentEntity.addItem(player, 1215, 1); // DDS
 		ContentEntity.addItem(player, 1127, 1); // Weapon Noted
 		ContentEntity.addItem(player, 1079, 1); // Weapon Noted
 		ContentEntity.addItem(player, 10828, 1); // Helm
 		ContentEntity.addItem(player, 392, 200); // Food
-		ContentEntity.addItem(player, Server.SPAWN ? 7460 + Misc.random(2) : 7460, 1); // Bracelet
+		ContentEntity.addItem(player, 7460, 1); // Bracelet
 		ContentEntity.addItem(player, 3105, 1);//Climbing boots
 		//ContentEntity.addItem(player, 3106, 3);
 		ContentEntity.addItem(player, 158, 25);// Potions
@@ -46,23 +40,13 @@ public class Starter {
 		player.getSkills().setExperience(0, 275000);// 60 Attk
 		player.getSkills().setLevel(0, 60);
 		for(int i = 2; i <= 4; i++) {
-			if(Server.SPAWN) {
 				player.getSkills().setExperience(i, 13100000);
 				player.getSkills().setLevel(i, 99);
-			} else {
-				player.getSkills().setExperience(i, 740000);
-				player.getSkills().setLevel(i, 70);
-			}
 		}
 		player.getSkills().setExperience(5, 15000);
 		player.getSkills().setLevel(5, 31);
-		if(Server.SPAWN) {
 			player.getSkills().setExperience(6, 13100000);
 			player.getSkills().setLevel(6, 99);
-		} else {
-			player.getSkills().setExperience(6, 740000);
-			player.getSkills().setLevel(6, 70);
-		}
 		ContentEntity.addItem(player, 4587, 1); // Weapon
 		ContentEntity.addItem(player, 1215, 1);// Dds
 		ContentEntity.addItem(player, 4675, 1); // Ancient staff
@@ -97,21 +81,12 @@ public class Starter {
 		//player.getBank().add(new Item(11337, 5));
 		// ContentEntity.addSkillXP(player, 275000, 0); //60 Attk
 		// ContentEntity.addSkillXP(player, 1210500, 2); //70 Str
-		if(Server.SPAWN) {
 			player.getSkills().setExperience(3, 13100000);// 80 Hp
 			player.getSkills().setLevel(3, 99);
 			player.getSkills().setExperience(4, 13100000);// 80 Range
 			player.getSkills().setLevel(4, 99);
 			player.getSkills().setExperience(6, 13100000); // 75 Mage
 			player.getSkills().setLevel(6, 99);
-		} else {
-			player.getSkills().setExperience(3, 740000);// 80 Hp
-			player.getSkills().setLevel(3, 70);
-			player.getSkills().setExperience(4, 740000);// 80 Range
-			player.getSkills().setLevel(4, 70);
-			player.getSkills().setExperience(6, 740000); // 75 Mage
-			player.getSkills().setLevel(6, 70);
-		}
 		ContentEntity.addItem(player, 861, 1); // Shortbow
 		ContentEntity.addItem(player, 892, 1000);// Arrows
 		ContentEntity.addItem(player, 9185, 1);// Cbows
@@ -137,21 +112,11 @@ public class Starter {
 		player.getSkills().setExperience(1, 62000);
 		player.getSkills().setLevel(1, 45);
 		for(int i = 2; i <= 4; i++) {
-			if(Server.SPAWN) {
 				player.getSkills().setExperience(i, 13100000);
 				player.getSkills().setLevel(i, 99);
-			} else {
-				player.getSkills().setExperience(i, 740000);
-				player.getSkills().setLevel(i, 70);
-			}
 		}
-		if(Server.SPAWN) {
 			player.getSkills().setExperience(6, 13100000);
 			player.getSkills().setLevel(6, 99);
-		} else {
-			player.getSkills().setExperience(6, 740000);
-			player.getSkills().setLevel(6, 70);
-		}
 		player.getSkills().setExperience(5, 15000);
 		player.getSkills().setLevel(5, 31);
 		ContentEntity.addItem(player, 4587, 1); // Weapon
@@ -161,7 +126,7 @@ public class Starter {
 		ContentEntity.addItem(player, 1079, 1); // Weapon Noted
 		ContentEntity.addItem(player, 3751, 1); // Weapon Noted
 		ContentEntity.addItem(player, 392, 200); // Food
-		ContentEntity.addItem(player, Server.SPAWN ? 7460 + Misc.random(2) : 7460, 1); // Bracelet
+		ContentEntity.addItem(player, 7460, 1); // Bracelet
 		ContentEntity.addItem(player, 3105, 1);//Climbing boots
 		//ContentEntity.addItem(player, 3106, 3);
 		ContentEntity.addItem(player, 158, 25);// Potions
@@ -214,21 +179,19 @@ public class Starter {
 		String ip = player.getFullIP().split(":")[0].replace("/", "");
 		long lastStarter = StarterLogging.getLogging().lastStarterReceived(ip);
 		if(System.currentTimeMillis() - lastStarter > StarterLogging.STARTER_MAX_DELAY) {
-			ContentEntity.addItem(player, 995, Server.SPAWN ? 25000000 : 5000000);
-			ContentEntity.addItem(player, Server.SPAWN ? 6585 : 1704); // Amulet
+			ContentEntity.addItem(player, 995, 25000000);
+			ContentEntity.addItem(player, 6585); // Amulet
 			ContentEntity.addItem(player, 555, 1000);
 			ContentEntity.addItem(player, 560, 1000);//deaths
-			ContentEntity.addItem(player, Server.SPAWN ? 565 : 562, 1000);//bloods-chaos
+			ContentEntity.addItem(player, 565, 1000);//bloods-chaos
 			ContentEntity.addItem(player, 557, 1000);
 			ContentEntity.addItem(player, 9075, 1000);
 			DialogueManager.openDialogue(player, 109);// temp disable
-			if(! Server.SPAWN)
-				StarterLogging.getLogging().save(ip, System.currentTimeMillis());
 		} else if(System.currentTimeMillis() - lastStarter > StarterLogging.STARTER_MIN_DELAY) {
-			ContentEntity.addItem(player, Server.SPAWN ? 6585 : 1704); // Amulet
+			ContentEntity.addItem(player, 6585); // Amulet
 			ContentEntity.addItem(player, 555, 1000);
 			ContentEntity.addItem(player, 560, 1000);//deaths
-			ContentEntity.addItem(player, Server.SPAWN ? 565 : 562, 1000);//bloods-chaos
+			ContentEntity.addItem(player, 565, 1000);//bloods-chaos
 			ContentEntity.addItem(player, 557, 1000);
 			ContentEntity.addItem(player, 9075, 1000);
 			DialogueManager.openDialogue(player, 109);// temp disable

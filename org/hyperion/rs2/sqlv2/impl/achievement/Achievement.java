@@ -2,9 +2,9 @@ package org.hyperion.rs2.sqlv2.impl.achievement;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTaskProgress;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.sqlv2.dao.SqlDaoManager;
 import org.hyperion.rs2.sqlv2.db.Db;
-import org.hyperion.rs2.sqlv2.db.DbConfig;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
         try(final AchievementDao dao = open()) {
             return dao.getProgress(player.getName().toLowerCase().replace("_", " "));
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return null;
         }
@@ -31,7 +31,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
         try(final AchievementDao dao = open()){
             return dao.updateProgress(player.getName().toLowerCase().replace("_", " "), atp.achievementId, atp.taskId, atp.progress, atp.startDate == null ? null : atp.startDate.toString(), atp.finishDate == null ? null : atp.finishDate.toString()) == 1;
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }
@@ -41,7 +41,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
         try(final AchievementDao dao = open()){
             return dao.insertProgress(player.getName().toLowerCase().replace("_", " "), atp.achievementId, atp.taskId, atp.progress, atp.startDate == null ? null : atp.startDate.toString(), atp.finishDate == null ? null : atp.finishDate.toString()) == 1;
         } catch(Exception ex) {
-            if (DbConfig.consoleDebug)
+            if (DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }

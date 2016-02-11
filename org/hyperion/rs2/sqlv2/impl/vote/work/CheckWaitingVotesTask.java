@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.sqlv2.DbHub;
-import org.hyperion.rs2.sqlv2.db.DbConfig;
 import org.hyperion.rs2.sqlv2.impl.vote.VoteDao;
 import org.hyperion.rs2.sqlv2.impl.vote.WaitingVote;
 import org.hyperion.rs2.task.Task;
@@ -131,10 +130,10 @@ public class CheckWaitingVotesTask implements Task {
     @Override
     public void execute(final GameEngine context) {
         List<WaitingVote> votes = null;
-        if(DbHub.initialized() && DbHub.getDonationsDb().enabled())
+        if(DbHub.initialized() && DbHub.getDonationsDb().isEnabled())
             votes = DbHub.getDonationsDb().votes().waiting(player);
         if(votes == null){
-            if(DbConfig.playerDebug)
+            if(DbHub.isPlayerDebug())
                 player.sendf("Unable to retrieve voting information at this time. Try again later.");
             return;
         }
@@ -266,9 +265,9 @@ public class CheckWaitingVotesTask implements Task {
             bonus = -1;
             DbHub.getDonationsDb().votes().insertVote(dao, player, runelocusVotes, rspslistVotes, topgVotes);
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
-            if(DbConfig.playerDebug)
+            if(DbHub.isPlayerDebug())
                 player.sendf("There was an error processing your donations!");
         }
 

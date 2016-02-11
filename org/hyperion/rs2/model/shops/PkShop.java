@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.shops;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
@@ -131,7 +131,7 @@ public class PkShop extends PointsShop {
 
 	@Override
 	public String getPointsName() {
-		return Server.NAME + " Points";
+		return Configuration.getString(Configuration.ConfigurationObject.NAME) + " Points";
 	}
 
 

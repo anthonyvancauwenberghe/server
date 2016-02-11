@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.combat.weapons.impl;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.combat.Constants;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponAnimations;
@@ -13,7 +12,7 @@ public class Longsword extends Weapon {
 	/**
 	 * The longsword weapon animations.
 	 */
-	public static final WeaponAnimations WEAPON_ANIMATIONS = Server.OLD_SCHOOL ? new WeaponAnimations(808, 819, 824, 451, 404) : WeaponAnimations.DEFAULT_ANIMS;
+	public static final WeaponAnimations WEAPON_ANIMATIONS = WeaponAnimations.DEFAULT_ANIMS;
 
 	/**
 	 * The longsword weapon speed.

@@ -1,7 +1,10 @@
 package org.hyperion.rs2.sqlv2.db;
 
+import org.hyperion.Configuration;
 import org.hyperion.rs2.sqlv2.impl.achievement.Achievement;
 import org.hyperion.rs2.sqlv2.impl.grandexchange.GrandExchange;
+
+import static org.hyperion.Configuration.ConfigurationObject.*;
 
 /**
  * Created by Gilles on 3/02/2016.
@@ -11,16 +14,32 @@ public class PlayerDb extends Db {
     private Achievement achievements;
     private GrandExchange grandExchange;
 
-    public PlayerDb(DbConfig config) {
-        super(config);
-    }
-
     public Achievement getAchievements() {
         return achievements;
     }
 
     public GrandExchange getGrandExchange() {
         return grandExchange;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return Configuration.getBoolean(PLAYER_DB_ENABLED);
+    }
+
+    @Override
+    public String getUrl() {
+        return Configuration.getString(PLAYER_DB_URL);
+    }
+
+    @Override
+    public String getUsername() {
+        return Configuration.getString(PLAYER_DB_USER);
+    }
+
+    @Override
+    public String getPassword() {
+        return Configuration.getString(PLAYER_DB_PASSWORD);
     }
 
     @Override

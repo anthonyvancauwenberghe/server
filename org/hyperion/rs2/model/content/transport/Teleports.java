@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.transport;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.DialogueManager;
@@ -134,7 +134,6 @@ public class Teleports implements ContentTemplate {
 				case 177209: //Dag Kings
 				case - 20015:
                     DialogueManager.openDialogue(player, 1889);
-                    ;
 					break;
 				case 177212: //Chaos Elemental
 				case - 20012:
@@ -217,7 +216,7 @@ public class Teleports implements ContentTemplate {
 						player.getActionSender().sendMessage("To enter his lair you must sacrifice 20 ArteroPK points!");
 					} else {
 						player.getPoints().setPkPoints((player.getPoints().getPkPoints() - 20));
-						player.getActionSender().sendMessage("The mighty beast steals 20 "+ Server.NAME +" points from you upon entering!");
+						player.getActionSender().sendMessage("The mighty beast steals 20 "+ Configuration.getString(Configuration.ConfigurationObject.NAME) +" points from you upon entering!");
 						player.sendMessage("@dre@Calm from afar, but if you grab the beast's attention...", "@dre@Then be prepared to die!");
 						Magic.teleport(player,2533,4652,0,false);
 					}

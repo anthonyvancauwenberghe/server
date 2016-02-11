@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.container;
 
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -77,9 +76,6 @@ public class BoB {
 	 * @param amount The amount of the item to deposit.
 	 */
 	public static void withdraw(Player player, int slot, int id, int amount) {
-		if(! Server.SPAWN) {
-			return;
-		}
 		if(player.cE.summonedNpc == null){
 			PushMessage.pushStaffMessage("@red@[Important] " + player.getSafeDisplayName() + " is trying to withdraw", player);
 			PushMessage.pushStaffMessage("@red@[Important] from BoB without any summoned followers.", player);
@@ -167,11 +163,7 @@ public class BoB {
 		deposit(player, slot, id, amount, player.getInventory());
 	}
 
-	public static void deposit(Player player, int slot, int id, int amount,
-	                           Container container) {
-		if(! Server.SPAWN) {
-			return;
-		}
+	public static void deposit(Player player, int slot, int id, int amount, Container container) {
 		if(player.cE.summonedNpc == null){
 			PushMessage.pushStaffMessage("Trying to deposit into BOB with no summoned npc", player);
 			return;

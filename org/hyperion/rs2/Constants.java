@@ -1,7 +1,5 @@
 package org.hyperion.rs2;
 
-import org.hyperion.Server;
-
 /**
  * Holds global server constants.
  *
@@ -123,7 +121,7 @@ public class Constants {
 	 */
 	public static final int MAX_ITEMS = Integer.MAX_VALUE;
 
-	public static final int XPRATE = Server.SPAWN ? 20 : 10;
+	public static final int XPRATE = 20;
 
 	/**
 	 * When the server starts up, in Milliseconds.

@@ -2,7 +2,7 @@ package org.hyperion.rs2;
 
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.Uptime;
 import org.hyperion.rs2.model.World;
 
@@ -20,12 +20,12 @@ public class RS2Server {
 	/**
 	 * The version.
 	 */
-	public static final int VERSION = Server.getConfig().getInteger("version");
+	public static final int VERSION = Configuration.getInt(Configuration.ConfigurationObject.VERSION);
 
 	/**
 	 * The port to listen on.
 	 */
-	public static final int PORT = Server.getConfig().getInteger("port");
+	public static final int PORT = Configuration.getInt(Configuration.ConfigurationObject.PORT);
 
 	/**
 	 * The <code>IoAcceptor</code> instance.
@@ -75,7 +75,7 @@ public class RS2Server {
 			engine.start();
 			bind(PORT);
 			//logger.info("Ready");
-			System.out.println("--" + Server.NAME + " Loaded in " + (System.currentTimeMillis() - Uptime.SERVER_STARTUP) + "ms --");
+			System.out.println("--" + Configuration.getString(Configuration.ConfigurationObject.NAME) + " Loaded in " + (System.currentTimeMillis() - Uptime.SERVER_STARTUP) + "ms --");
 			//TextUtils.printItemNames();
 		} catch(Exception e) {
 			e.printStackTrace();

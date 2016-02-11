@@ -2,7 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.data.Persistable;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.action.ActionQueue;
@@ -775,7 +775,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public boolean isServerOwner() {
-		return getName().equalsIgnoreCase(Server.getConfig().getString("owner"));
+		return getName().equalsIgnoreCase(Configuration.getString(Configuration.ConfigurationObject.OWNER));
 	}
 
 	public long getCreatedTime() {

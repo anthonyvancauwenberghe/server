@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
@@ -35,8 +34,6 @@ public class SpawnServerCommands {
 			player.sendMessage("You cannot max here!");
 			return;
 		}
-		if(! Server.SPAWN)
-			return;
 		if(FightPits.inGame(player))
 			return;
 		if(player.getLocation().inPvPArea()) {

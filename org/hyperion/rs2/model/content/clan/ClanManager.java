@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.content.clan;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -19,8 +18,6 @@ import java.util.Map;
 public class ClanManager {
 
 	public static void joinClanChat(Player player, String clanName, boolean onLogin) {
-		if(Server.OLD_SCHOOL)
-			return;
 		clanName = clanName.replace("_", " ");
 		if(! canEnter(player, clanName))
 			return;

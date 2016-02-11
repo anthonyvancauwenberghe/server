@@ -1,9 +1,9 @@
 package org.hyperion.rs2.sqlv2.impl.vote;
 
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.sqlv2.dao.SqlDaoManager;
 import org.hyperion.rs2.sqlv2.db.Db;
-import org.hyperion.rs2.sqlv2.db.DbConfig;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.waiting(playerName);
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return null;
         }
@@ -31,7 +31,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.processRunelocus(vote.index()) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }
@@ -41,7 +41,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.processTopg(vote.index()) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }
@@ -51,7 +51,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.processRspslist(vote.index()) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }
@@ -61,7 +61,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.process(vote.index()) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }
@@ -71,7 +71,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.delete(vote.index()) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }
@@ -81,7 +81,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         try{
             return dao.insertVote(name, runelocus, top100, topg) == 1;
         }catch(Exception ex){
-            if(DbConfig.consoleDebug)
+            if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return false;
         }

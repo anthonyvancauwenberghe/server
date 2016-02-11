@@ -1,6 +1,6 @@
 package org.hyperion.rs2.commands.impl;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
@@ -75,7 +75,7 @@ public class YellCommand extends Command {
 		long yellMilliseconds = System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur");
 		long yellDelay = getYellDelay(player);
 
-		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+		if(!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
 			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
 					player.sendMessage("Please wait " + (int) ((yellDelay - yellMilliseconds) / 1000) + " seconds before yelling.");
@@ -101,7 +101,7 @@ public class YellCommand extends Command {
 		final String suffixWithoutTitles = (player.hardMode() ? "[I]" : "") + "[" + colors + Rank.getPrimaryRank(player).toString() + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
-		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+		if(!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
 			World.submit(
 					new Event(yellDelay) {
 						public void execute() {

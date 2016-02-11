@@ -1,6 +1,5 @@
 package org.hyperion.rs2.commands.impl;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -37,8 +36,6 @@ public class SpawnCommand extends Command {
 
 	@Override
 	public boolean execute(Player player, String input) {
-		if(! Server.SPAWN)
-			return false;
 		String keywordInput = filterInput(input);
 		String[] parts = keywordInput.split(" ");
 		String keyword = parts[0];

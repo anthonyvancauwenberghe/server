@@ -3,10 +3,13 @@ package org.hyperion.rs2.model.content.misc2.teamboss;
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,7 +58,7 @@ public abstract class TeamBossSession {
             players.remove(p);
             p.getTeamSessions().remove(TeamBossSession.this);
         });
-        npcs.stream().map(NpcDeathEvent::new).forEach(World.getWorld()::submit);
+        npcs.stream().map(NpcDeathEvent::new).forEach(World::submit);
         sessions.remove(this);
     }
 
@@ -76,7 +79,7 @@ public abstract class TeamBossSession {
     public abstract void handleReward();
     public abstract SpecialArea getArea();
 
-    public void sendHome(final Player player) {;
+    public void sendHome(final Player player) {
         player.setTeleportTarget(Edgeville.LOCATION);
     }
 

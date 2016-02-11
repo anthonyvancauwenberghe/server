@@ -113,7 +113,7 @@ public class CorporealBeast implements Attack {
 			} else if(attackId == 1) {
 				n.cE.doAnim(RANGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2200);
-				World.getWorld().submit(new Event(1000) {
+				World.submit(new Event(1000) {
 					@Override
 					public void execute() {
 						//range attack
@@ -125,7 +125,7 @@ public class CorporealBeast implements Attack {
 				//mage attack
 				n.cE.doAnim(MAGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3300);
-				World.getWorld().submit(new Event(1500) {
+				World.submit(new Event(1500) {
 					@Override
 					public void execute() {
 						//offset values for the projectile

@@ -61,7 +61,7 @@ public abstract class NIGGERUZ extends SpecialArea {
 
         NPCDefinition nD = NPCDefinition.forId(495);
         NPC n = NPCManager.addNPC(getDefaultLocation().transform(-1, -2, 0), 495, -1);
-        World.getWorld().npcsWaitingList.add(n);
+        World.npcsWaitingList.add(n);
         positionMap.put(n.getLocation().getX() * 16 +
                 n.getLocation().getY() * 4, n);
 

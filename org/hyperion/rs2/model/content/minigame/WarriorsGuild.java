@@ -134,7 +134,7 @@ public class WarriorsGuild implements ContentTemplate {
 			p.getActionSender().sendMessage("You need at least 100 tokens to enter this room!");
 			return false;
 		}
-		World.getWorld().submit(new Event(60000) {
+		World.submit(new Event(60000) {
 			public void execute() {
 				if(inCyclopsRoom(p)) {
 					if(ContentEntity.deleteItemA(p, TOKENS, 10)) {
@@ -194,9 +194,9 @@ public class WarriorsGuild implements ContentTemplate {
 				}
 			}
 
-			for(int i = 1; i <= World.getWorld().npcs.size(); i++) {
-				if(World.getWorld().npcs.get(i) != null) {
-					NPC npc = (NPC) World.getWorld().npcs.get(i);
+			for(int i = 1; i <= World.npcs.size(); i++) {
+				if(World.npcs.get(i) != null) {
+					NPC npc = (NPC) World.npcs.get(i);
 					if (npc.ownerId == player.getIndex() && player.cE.summonedNpc != npc) {
 						npc.forceMessage("I'm not done with you " + player.getSafeDisplayName() + "!");
 						return false;

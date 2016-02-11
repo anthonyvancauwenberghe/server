@@ -307,7 +307,7 @@ public class PlayerSaving {
                     return;
                 }
 			}
-			//World.getWorld().getSQLSaving().load(player);
+			//World.getSQLSaving().load(player);
 			in.close();
 			player.getHighscores();
 		} catch(IOException e) {

@@ -20,7 +20,7 @@ public class DonatedCommand extends Command {
         final long time = player.getExtraData().getLong("lastsql");
         if(System.currentTimeMillis() - time >= DELAY){
             player.getExtraData().put("lastsql", System.currentTimeMillis());
-            World.getWorld().submit(new CheckPendingDonationsTask(player));
+            World.submit(new CheckPendingDonationsTask(player));
             return true;
         }else{
             player.sendf("You can only use this command every 20 seconds!");

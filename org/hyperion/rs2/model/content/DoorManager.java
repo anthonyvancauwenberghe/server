@@ -143,7 +143,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.getWorld().submit(new Event(1200) {
+					World.submit(new Event(1200) {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {
@@ -221,7 +221,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.getWorld().submit(new Event(1200) {
+					World.submit(new Event(1200) {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {

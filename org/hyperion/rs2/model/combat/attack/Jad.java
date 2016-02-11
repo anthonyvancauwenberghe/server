@@ -1,7 +1,10 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 
@@ -46,7 +49,7 @@ public class Jad implements Attack {
 			} else if(attackId == 1) {
 				n.cE.doAnim(RANGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				World.getWorld().submit(new Event(1000) {
+				World.submit(new Event(1000) {
 					@Override
 					public void execute() {
 						//range attack
@@ -59,14 +62,14 @@ public class Jad implements Attack {
 				//mage attack
 				n.cE.doAnim(MAGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3300);
-				World.getWorld().submit(new Event(1500) {
+				World.submit(new Event(1500) {
 					@Override
 					public void execute() {
 						//offset values for the projectile
 						int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.getAbsX()) * - 1;
 						int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.getAbsY()) * - 1;
 						//find our lockon target
-						int hitId = attack.getSlotId((Entity) n);
+						int hitId = attack.getSlotId(n);
 						//extra variables - not for release
 						int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 						int timer = 1;

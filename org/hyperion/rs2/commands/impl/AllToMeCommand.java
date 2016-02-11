@@ -16,12 +16,12 @@ public class AllToMeCommand extends Command {
 
 	@Override
 	public boolean execute(Player player, String input) {
-		for(final Player otherPlayer : World.getWorld().getPlayers()) {
+		for(final Player otherPlayer : World.getPlayers()) {
 			if(player == otherPlayer)
 				continue;
 			final int x = player.getLocation().getX() + Misc.random(3);
 			final int y = player.getLocation().getY() + Misc.random(3);
-			World.getWorld().submit(new Event(Misc.random(10000)) {
+			World.submit(new Event(Misc.random(10000)) {
 				public void execute() {
 					Magic.teleport(otherPlayer, x, y, 0, true);
                     this.stop();

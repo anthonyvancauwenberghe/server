@@ -115,7 +115,7 @@ public class CheckWaitingVotesTask implements Task {
                 if(Misc.random(120 / streak) == 1){
                     final int donatorPoints = 1000;
                     player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
-                    for(final Player p : World.getWorld().getPlayers()){
+                    for(final Player p : World.getPlayers()){
                         p.sendServerMessage(player.getSafeDisplayName() + " has just received " + donatorPoints + " donator points for voting!");
                     }
                     return "You receive " + donatorPoints + " donator points as a rare bonus!";

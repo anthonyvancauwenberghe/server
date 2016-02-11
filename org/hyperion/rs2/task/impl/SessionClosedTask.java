@@ -42,7 +42,7 @@ public class SessionClosedTask implements Task {
             SocketAddress address = session.getRemoteAddress();
             if(p != null) {
             	if(!p.loggedOut) {
-            		World.getWorld().unregister(p);
+            		World.unregister(p);
             	}
             }else
         		System.out.println("Tried to logout player but the player was null..");

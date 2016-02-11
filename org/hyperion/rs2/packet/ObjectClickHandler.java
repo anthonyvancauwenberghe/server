@@ -86,10 +86,10 @@ public class ObjectClickHandler {
             case 14828:
             case 14826:
             case 14827:
-                World.getWorld().getWilderness().useObelisk(player, x, y);
+                World.getWilderness().useObelisk(player, x, y);
                 break;
             case 5110:
-                World.getWorld().submit(new Event(100) {
+                World.submit(new Event(100) {
                     @Override
                     public void execute() {
                         if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
@@ -102,7 +102,7 @@ public class ObjectClickHandler {
                 break;
             case 1766:
                 player.playAnimation(Animation.create(828));  //ladder climb anim
-                World.getWorld().submit(new Event(600) {
+                World.submit(new Event(600) {
                     @Override
                     public void execute() throws IOException {
                         player.setTeleportTarget(Location.create(3017, 3850, 0));
@@ -166,7 +166,7 @@ public class ObjectClickHandler {
                     break;
                 player.face(Location.create(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), y, 2));
                 player.playAnimation(Animation.create(7002));
-                World.getWorld().submit(new Event(1100) {
+                World.submit(new Event(1100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 1, 0);
@@ -177,7 +177,7 @@ public class ObjectClickHandler {
                         this.stop();
                     }
                 });
-                World.getWorld().submit(new Event(2100) {
+                World.submit(new Event(2100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 0, 0);
@@ -207,7 +207,7 @@ public class ObjectClickHandler {
 				player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 
 				
-				World.getWorld().submit(new Event(600){
+				World.submit(new Event(600){
 					@Override
 					public void execute(){
 						player.forceWalkX1 = player.getLocation().getX();
@@ -227,7 +227,7 @@ public class ObjectClickHandler {
 						this.stop();
 					}
 				});
-				World.getWorld().submit(new Event(1250){
+				World.submit(new Event(1250){
 					@Override
 					public void execute(){
 						player.getAppearance().setAnimations(a,b,c);

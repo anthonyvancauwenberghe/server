@@ -108,7 +108,7 @@ public class ObjectManager {
     }
 
     public static void update(GameObject obj) {
-        for (Player p : World.getWorld().getPlayers()) {
+        for (Player p : World.getPlayers()) {
                 if (obj == null) {
                     System.out.println("Object is null!");
                     return;

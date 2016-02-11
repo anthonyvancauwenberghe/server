@@ -120,7 +120,7 @@ public class Server {
         launchServer();
     }
 
-    public static World launchServer() {
+    public static void launchServer() {
 
         Console console = System.console();
         if (console == null) {
@@ -147,7 +147,7 @@ public class Server {
         new Thread(new CharFilesCleaner()).start();
         System.out.println("-- Starting " + NAME + "  -- " + UPDATE);
         System.out.println("Spawn server: " + SPAWN);
-        World.getWorld(); // this starts off background loading
+        World.init(); // this starts off background loading
         try {
             //new FileServer().bind().start();
 
@@ -194,7 +194,6 @@ public class Server {
             System.exit(1);
         }
         RestarterThread.getRestarter();
-        return World.getWorld();
     }
 
     public static Logger getLogger() {

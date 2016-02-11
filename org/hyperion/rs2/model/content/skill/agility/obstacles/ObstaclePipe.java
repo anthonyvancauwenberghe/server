@@ -38,7 +38,7 @@ public class ObstaclePipe extends Obstacle {
             super.succeed(player, start.distance(end) + 1, message);
             player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
         } else {
-            World.getWorld().submit(new Event(600) {
+            World.submit(new Event(600) {
                 int progress = 7;
                 @Override
                 public void execute() {

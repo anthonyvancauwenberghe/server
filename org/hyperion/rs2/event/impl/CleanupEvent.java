@@ -26,7 +26,7 @@ public class CleanupEvent extends Event {
 
 	@Override
 	public void execute() {
-		World.getWorld().submit(new CleanupTask());
+		World.submit(new CleanupTask());
 	}
 
 }

@@ -1,8 +1,5 @@
 package org.hyperion.rs2.model.punishment.holder;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.Combination;
@@ -10,6 +7,10 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.util.NameUtils;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PunishmentHolder {
 
@@ -58,7 +59,7 @@ public class PunishmentHolder {
     }
 
     public Player getVictim(){
-        return World.getWorld().getPlayer(getVictimName());
+        return World.getPlayer(getVictimName());
     }
 
     public String getVictimIP(){

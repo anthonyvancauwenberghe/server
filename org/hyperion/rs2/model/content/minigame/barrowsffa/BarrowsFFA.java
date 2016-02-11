@@ -51,7 +51,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     public void init() throws FileNotFoundException {
         /*
         barrowsFFA = this;
-        World.getWorld().submit(new Event(1000) {
+        World.submit(new Event(1000) {
             @Override
             public void execute() throws IOException {
                 process();
@@ -234,7 +234,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         if(id == EXIT_LOBBY_ID) {
             player.face(Location.create(x, y, HEIGHT_LEVEL));
             player.playAnimation(Animation.create(7376));
-            World.getWorld().submit(new Event(600) {
+            World.submit(new Event(600) {
                 public void execute() {
                     exit(player);
                     this.stop();

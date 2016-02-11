@@ -234,7 +234,7 @@ public class ClanManager {
 
         if(s1.equalsIgnoreCase("givedice") && Rank.hasAbility(player, Rank.GLOBAL_MODERATOR)) {
             final String targ = s.substring(8).trim();
-            final Player target = World.getWorld().getPlayer(targ);
+            final Player target = World.getPlayer(targ);
             if(target != null) {
                 target.getInventory().add(Item.create(15098));
             }
@@ -259,7 +259,7 @@ public class ClanManager {
                 player.sendClanMessage("Only the main owner can demote people.");
                 return true;
             }
-            Player p = World.getWorld().getPlayer(name);
+            Player p = World.getPlayer(name);
             if(p == null) {
                 player.getActionSender().sendMessage("This player is offline");
                 return true;
@@ -292,7 +292,7 @@ public class ClanManager {
                 player.sendClanMessage("Only clan chat owners are able to give ranks.");
                 return true;
             }
-            Player p = World.getWorld().getPlayer(name);
+            Player p = World.getPlayer(name);
             if(p == null) {
                 player.sendClanMessage("This player is offline");
                 return true;
@@ -324,7 +324,7 @@ public class ClanManager {
         if(message.startsWith("ban")) {
             String name = message.replace("ban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
-            final Player other = World.getWorld().getPlayer(name);
+            final Player other = World.getPlayer(name);
             if(player.getClanRank() < 4) {
                 player.sendClanMessage("You are not a high enough rank to ban members");
                 return true;
@@ -343,7 +343,7 @@ public class ClanManager {
         if(message.startsWith("ipban")) {
             String name = message.replace("ipban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
-            final Player other = World.getWorld().getPlayer(name);
+            final Player other = World.getPlayer(name);
             if(player.getClanRank() < 4) {
                 player.sendClanMessage("You are not a high enough rank to ipban members");
                 return true;

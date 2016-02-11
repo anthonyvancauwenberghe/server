@@ -234,7 +234,7 @@ public class Misc {
 
 	public static void doHomeTeleport(final Player player) {
 		player.getActionSender().sendMessage("Starting HomeTeleport");
-		World.getWorld().submit(new Event(600) {
+		World.submit(new Event(600) {
 			int index = 0;
 
 			public void execute() {

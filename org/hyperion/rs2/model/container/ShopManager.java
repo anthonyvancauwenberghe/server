@@ -697,7 +697,7 @@ public class ShopManager {
 		}
 		in.close();
 		System.out.println("Loaded " + counter + " shops.");
-		World.getWorld().submit(new Event(10000) {
+		World.submit(new Event(10000) {
 			@Override
 			public void execute() {
 				process();

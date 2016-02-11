@@ -14,7 +14,7 @@ public class DemoteCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
 		input = filterInput(input);
-		Player beingDemoted = World.getWorld().getPlayer(input);
+		Player beingDemoted = World.getPlayer(input);
 
 		if(beingDemoted != null) {
             if(Rank.getPrimaryRankIndex(beingDemoted) > Rank.getPrimaryRankIndex(player)) {

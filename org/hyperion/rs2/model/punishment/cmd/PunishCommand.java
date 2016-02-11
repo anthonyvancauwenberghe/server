@@ -32,7 +32,7 @@ public class PunishCommand extends Command{
             return false;
         }
         final String victimName = parts[0].trim();
-        final Player victim = World.getWorld().getPlayer(victimName);
+        final Player victim = World.getPlayer(victimName);
         if(victimName.isEmpty() || (victim == null)){
             player.sendf("Unable to find player %s", Misc.ucFirst(victimName.toLowerCase()));
             return false;

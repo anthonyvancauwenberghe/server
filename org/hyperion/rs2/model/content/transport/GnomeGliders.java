@@ -60,13 +60,13 @@ public class GnomeGliders implements ContentTemplate {
 			return;
 		player.getActionSender().showInterface(802);
 		player.getActionSender().sendClientConfig(153, getMove(flightId));
-		World.getWorld().submit(new Event(1800) {
+		World.submit(new Event(1800) {
 			public void execute() {
 				player.setTeleportTarget(Location.create(getX(flightId), getY(flightId), getH(flightId)));
 				this.stop();
 			}
 		});
-		World.getWorld().submit(new Event(2400) {
+		World.submit(new Event(2400) {
 			public void execute() {
 				player.getActionSender().removeAllInterfaces();
 				player.getActionSender().sendClientConfig(153, - 1);

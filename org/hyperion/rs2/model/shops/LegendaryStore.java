@@ -3,12 +3,14 @@ package org.hyperion.rs2.model.shops;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,7 +37,7 @@ public class LegendaryStore extends CurrencyShop {
             }
         }
 
-        World.getWorld().submit(new Event(2000) {
+        World.submit(new Event(2000) {
             @Override
             public void execute() throws IOException {
                 final File file = new File("./data/legendaryshop.txt");
@@ -109,7 +111,7 @@ public class LegendaryStore extends CurrencyShop {
         private final Piece[]  pieces;
         public final int type;
         private final List<Integer> ids;
-        private ThirdAgeSet(final int type, final Piece... pieces) {
+        ThirdAgeSet(final int type, final Piece... pieces) {
             this.pieces = pieces;
             this.type = type;
             this.ids = Stream.of(pieces).map(p -> p.id).collect(Collectors.toList());

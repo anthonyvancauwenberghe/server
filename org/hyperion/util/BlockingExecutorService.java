@@ -51,7 +51,7 @@ public class BlockingExecutorService implements ExecutorService {
 				continue;
 			} catch(OutOfMemoryError e) {
 				System.out.println("OUTOFMEMORY DAFUQ!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-				for(Player player : World.getWorld().getPlayers()) {
+				for(Player player : World.getPlayers()) {
 					PlayerFiles.saveGame(player);
 				}
 				System.exit(0);

@@ -86,7 +86,7 @@ public class Punishment {
             return true;
         }
         boolean applied = false;
-        for(final Player p : World.getWorld().getPlayers()){
+        for(final Player p : World.getPlayers()){
             if(p == null)
                 continue;
             switch(getCombination().getTarget()){
@@ -117,7 +117,7 @@ public class Punishment {
         final Player victim = getVictim();
         if(victim != null)
             return getCombination().isApplied(victim);
-        for(final Player p : World.getWorld().getPlayers()){
+        for(final Player p : World.getPlayers()){
             if(p == null)
                 continue;
             switch(getCombination().getTarget()){
@@ -145,7 +145,7 @@ public class Punishment {
             return true;
         }
         boolean unapplied = false;
-        for(final Player p : World.getWorld().getPlayers()){
+        for(final Player p : World.getPlayers()){
             if(p == null)
                 continue;
             switch(getCombination().getTarget()){
@@ -179,7 +179,7 @@ public class Punishment {
     }
 
     public Player getIssuer(){
-        return World.getWorld().getPlayer(getIssuerName());
+        return World.getPlayer(getIssuerName());
     }
 
     public String getVictimName(){
@@ -187,7 +187,7 @@ public class Punishment {
     }
 
     public Player getVictim(){
-        return World.getWorld().getPlayer(getVictimName());
+        return World.getPlayer(getVictimName());
     }
 
     public String getVictimIp(){

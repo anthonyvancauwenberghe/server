@@ -10,7 +10,7 @@ import java.util.List;
 public class GlobalItemManager {
 
 	public static void init() {
-		World.getWorld().submit(new Event(1000, "globalitems") {
+		World.submit(new Event(1000, "globalitems") {
 			@Override
 			public void execute() {
 				process();
@@ -128,14 +128,14 @@ public class GlobalItemManager {
 	}
 
 	public static void removeItem(GlobalItem globalItem) {
-		for(Player p2 : World.getWorld().getPlayers()) {
+		for(Player p2 : World.getPlayers()) {
 			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
 				p2.getActionSender().removeGlobalItem(globalItem.getItem(), globalItem.getLocation());
 		}
 	}
 
 	public static void createItem(GlobalItem globalItem) {
-		for(Player p2 : World.getWorld().getPlayers()) {
+		for(Player p2 : World.getPlayers()) {
 			if(p2 == globalItem.owner)
 				continue;
 			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))

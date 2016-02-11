@@ -76,7 +76,7 @@ public class Dicing implements ContentTemplate {
         }
 		final int thrown = value;
 		startRollingDice(player);
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Event(3000) {
 			public void execute() {
 				ClanManager.sendDiceMessage(player, clan, thrown);
 				this.stop();
@@ -177,7 +177,7 @@ public class Dicing implements ContentTemplate {
 		final int id = item.getId();
 		player.getExpectedValues().removeItemFromInventory("Gambling", item);
 		player.getInventory().remove(new Item(item.getId(), item.getCount()));
-		World.getWorld().submit(new Event(2000, "checked") {
+		World.submit(new Event(2000, "checked") {
 			@Override
 			public void execute() {
 				int r = getRandomNumber(dicer, 100);
@@ -243,7 +243,7 @@ public class Dicing implements ContentTemplate {
 
 	public static void rollPrivateDice(final Player player) {
 		startRollingDice(player);
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Event(3000) {
 			public void execute() {
 				int thrown = getRandomNumber(player, 100);
 				player.getActionSender().sendMessage("You roll " + thrown + " with your dice.");
@@ -301,7 +301,7 @@ public class Dicing implements ContentTemplate {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        World.getWorld().submit(new Event(Time.FIVE_MINUTES) {
+        World.submit(new Event(Time.FIVE_MINUTES) {
             public void execute() {
                 try {
                     final List<String> lines = Files.readAllLines(new File("./data/dontopkp.txt").toPath());

@@ -1,17 +1,10 @@
 package org.hyperion.rs2;
 
 import org.hyperion.rs2.event.impl.UpdateEvent;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.ServerTimeManager;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.task.Task;
-import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.util.BlockingExecutorService;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.util.Date;
 import java.util.concurrent.*;
 
 /**
@@ -74,7 +67,7 @@ public class GameEngine implements Runnable {
 				bw.write("RESTARTED SERVER : " + new Date().toString());
 				bw.newLine();
 				bw.close();
-				for(Player player : World.getWorld().getPlayers()) {
+				for(Player player : World.getPlayers()) {
 					Trade.declineTrade(player);
 					PlayerFiles.saveGame(player);
 				}
@@ -192,7 +185,7 @@ public class GameEngine implements Runnable {
 					System.out.println("sever shit happening 2");
 					e.printStackTrace();
 					World.writeError("game_engine_taskservice_errors.txt", e);
-					//World.getWorld().handleError(t);
+					//World.handleError(t);
 					increaseErrors();
 				}
 			}
@@ -213,7 +206,7 @@ public class GameEngine implements Runnable {
 					System.out.println("sever shit happening 3");
 					e.printStackTrace();
 					World.writeError("game_engine_workservice_errors.txt", e);
-					//World.getWorld().handleError(t);
+					//World.handleError(t);
 					increaseErrors();
 				}
 			}
@@ -234,7 +227,7 @@ public class GameEngine implements Runnable {
 					System.out.println("Logic pool exception!");
 					e.printStackTrace();
 					World.writeError("game_engine_logicservice2_errors.txt", e);
-					//World.getWorld().handleError(t);
+					//World.handleError(t);
 					increaseErrors();
 				}
 			}

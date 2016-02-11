@@ -910,7 +910,7 @@ public class Summoning implements ContentTemplate {
 			SummoningMonsters.SummonNewNPC(player, SummoningData.getNpcbyPouchId(a), a);
 		}
 		if(type == 11) {
-			Entity npc = World.getWorld().getNPCs().get(slot);
+			Entity npc = World.getNPCs().get(slot);
 			if(npc != null && ((NPC) npc).ownerId == player.getIndex()) {
 				BoB.openInventory(player);
 			} else {

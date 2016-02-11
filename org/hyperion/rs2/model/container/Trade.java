@@ -37,7 +37,7 @@ public class Trade {
 	 * @param player2
 	 */
 	public static void open(Player player, Player player2) {
-		if(World.getWorld().updateInProgress())
+		if(World.updateInProgress())
 			return;
         if(player.getGameMode() != player2.getGameMode()) {
             player.sendMessage("You cannot trade players in different game modes");
@@ -57,7 +57,7 @@ public class Trade {
 			player.getActionSender().sendMessage("You are too far away to open a trade.");
 			return;
 		}
-		if(World.getWorld().updateInProgress()) {
+		if(World.updateInProgress()) {
 			player.getActionSender().sendMessage("You can't trade during an update.");
 			return;
 		}
@@ -65,8 +65,8 @@ public class Trade {
 		if(FightPits.inGame(player) || FightPits.inGame(player2)) {
 			return;
 		}
-		//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": opened a trade with: "+player2.getName());
-		//World.getWorld().getAbuseHandler().cacheMessage(player2,player2.getName()+": opened a trade with: "+player.getName());
+		//World.getAbuseHandler().cacheMessage(player,player.getName()+": opened a trade with: "+player2.getName());
+		//World.getAbuseHandler().cacheMessage(player2,player2.getName()+": opened a trade with: "+player.getName());
         player.openingTrade = true;
 		player2.openingTrade = true;
 		player.setTradeWith(player2);
@@ -161,7 +161,7 @@ public class Trade {
 			player.tradeAccept2 = false;
 			player.getTrader().tradeAccept1 = false;
 			player.getTrader().tradeAccept2 = false;
-			//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": removed: "+newId+":"+transferAmount+" from trade.");
+			//World.getAbuseHandler().cacheMessage(player,player.getName()+": removed: "+newId+":"+transferAmount+" from trade.");
 			player.getActionSender().sendString(3431, "");
 			player.getTrader().getActionSender().sendString(3431, "");
 			player.getActionSender().sendString(19001, "has " + player.getTrader().getInventory().freeSlots() + " free");
@@ -281,7 +281,7 @@ public class Trade {
 				}
 			}
 		} finally {
-			//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": added: "+id+":"+amount+" to trade.");
+			//World.getAbuseHandler().cacheMessage(player,player.getName()+": added: "+id+":"+amount+" to trade.");
 			player.getInventory().setFiringEvents(inventoryFiringEvents);
 			if(trader == null) {
 				player.tradeAccept1 = false;
@@ -363,7 +363,7 @@ public class Trade {
 			PushMessage.pushStaffMessage("is trying to do a 3-way trade", player);
 			return;
 		}
-		if(World.getWorld().updateInProgress()) {
+		if(World.updateInProgress()) {
 			player.getActionSender().sendMessage("You can't trade during an update.");
 			return;
 		}
@@ -406,7 +406,7 @@ public class Trade {
 	    if(player.getTrader().getSkills().getTotalLevel() > 100){
 	    	TextUtils.writeToFile("./logs/accounts/"+player.getTrader().getName(),(new Date())+" Trade Confirmed: "+player.getName());
 	    }*/
-		//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": completed a trade with: "+player.getTrader().getName());
+		//World.getAbuseHandler().cacheMessage(player,player.getName()+": completed a trade with: "+player.getTrader().getName());
 		new TradeChecker(player, player.getTrader());
             player.getLogManager().add(
                     LogEntry.trade(
@@ -429,9 +429,9 @@ public class Trade {
 
 		Container.transfer(player.getTrader().getTrade(), player.getInventory());
 		Container.transfer(player.getTrade(), player.getTrader().getInventory());
-		//World.getWorld().getWorldLoader().savePlayer(player, "trade");
+		//World.getWorldLoader().savePlayer(player, "trade");
 		PlayerSaving.save(player);
-		//World.getWorld().getWorldLoader().savePlayer(player.getTrader(), "trade");
+		//World.getWorldLoader().savePlayer(player.getTrader(), "trade");
 		PlayerSaving.save(player.getTrader());
 		player.getActionSender().removeAllInterfaces();
 		player.getTrader().getActionSender().removeAllInterfaces();
@@ -447,7 +447,7 @@ public class Trade {
 
 	public static synchronized void declineTrade(Player player) {
 		if(player.getTrader() != null) {
-			//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": declined a trade with: "+player.getTrader().getName());
+			//World.getAbuseHandler().cacheMessage(player,player.getName()+": declined a trade with: "+player.getTrader().getName());
 			Container.transfer(player.getTrader().getTrade(), player.getTrader().getInventory());
 			if(player.duelAttackable == 0) {
 				Container.transfer(player.getTrader().getDuel(), player.getTrader().getInventory());

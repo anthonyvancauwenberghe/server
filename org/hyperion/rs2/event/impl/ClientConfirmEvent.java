@@ -32,14 +32,14 @@ public class ClientConfirmEvent extends Event {
 
     @Override
     public void execute() throws IOException {
-        World.getWorld().getPlayers().stream().filter(player -> player != null).forEach(player -> {
+        World.getPlayers().stream().filter(player -> player != null).forEach(player -> {
             EXPECTED_RESULTS.clear();
             RECEIVED_NUMBERS.clear();
             int randomNumber = Misc.random(50000);
             EXPECTED_RESULTS.put(player.getName(), (((randomNumber + 40) / 3) * 7) / 8);
             player.getActionSender().sendClientConfirmation(randomNumber);
 
-            World.getWorld().submit(new Event(Time.FIVE_SECONDS, player.getName()) {
+            World.submit(new Event(Time.FIVE_SECONDS, player.getName()) {
                 @Override
                 public void execute() throws IOException {
                     if(!EXPECTED_RESULTS.containsKey(player.getName()))

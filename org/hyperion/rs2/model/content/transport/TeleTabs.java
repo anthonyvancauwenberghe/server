@@ -72,14 +72,14 @@ public class TeleTabs implements ContentTemplate {
         //player.getExtraData().put("combatimmunity", System.currentTimeMillis() + Long.valueOf(delay) - 100L + 2400L);
         Combat.resetAttack(player.cE);
 
-		World.getWorld().submit(new Event(delay) {
+		World.submit(new Event(delay) {
 			@Override
 			public void execute() {
 				player.playAnimation(Animation.create(4071, 0));
 				this.stop();
 			}
 		});
-		World.getWorld().submit(new Event(2400) {
+		World.submit(new Event(2400) {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));

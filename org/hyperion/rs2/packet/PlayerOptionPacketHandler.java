@@ -65,11 +65,11 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			case 72:
 				int id = packet.getShortA();
 				//System.out.println("AtkNpc :" + attacknpc);
-			/*if(attacknpc < 0 || attacknpc > World.getWorld().getNPCs().size())
+			/*if(attacknpc < 0 || attacknpc > World.getNPCs().size())
 				return;*/
 				if(id <= 0 || id >= Constants.MAX_NPCS)
 					return;
-				NPC victim = (NPC) World.getWorld().getNPCs().get(id);
+				NPC victim = (NPC) World.getNPCs().get(id);
 				if(victim != null) {
 					player.debugMessage("NpcId: " + victim.getDefinition().getId());
 				if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)
@@ -110,7 +110,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		}
 		//System.out.println("attack: "+id);
 
-		final Player victim = (Player) World.getWorld().getPlayers().get(id);
+		final Player victim = (Player) World.getPlayers().get(id);
 		if(victim != null) {
 			if(victim.getAgility().isBusy())
 				return;
@@ -134,7 +134,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 					ContentEntity.startAnimation(player, 7530);
 					SnowItems.fireSnowBall(player, victim);
 					player.getWalkingQueue().reset();
-					World.getWorld().submit(new Event(2000) {
+					World.submit(new Event(2000) {
 						public void execute() {
 							if(player.getInventory().getCount(SnowItems.SNOWBALL.getId()) > 0)
 								player.getInventory().remove(new Item(11951, 1));
@@ -174,7 +174,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		if(id <= 0 || id >= Constants.MAX_PLAYERS) {
 			return;
 		}
-		Player tradeWith = (Player) World.getWorld().getPlayers().get(id);
+		Player tradeWith = (Player) World.getPlayers().get(id);
 		if(tradeWith != null && System.currentTimeMillis() - tradeWith.cE.lastHit > 10000 && System.currentTimeMillis() - player.cE.lastHit > 10000 && player.duelAttackable <= 0 && tradeWith.duelAttackable <= 0) {
 			if(player.getLocation().inPvPArea() && ! tradeWith.getLocation().inPvPArea()) {
 				player.getActionSender().sendMessage("You cannot trade a player that is not in the wilderness, when you are");
@@ -210,7 +210,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		//Spammers pwning.
 		if (Rank.hasAbility(player, Rank.MODERATOR)) {
 			if(player.getSpam().isHunting()) {
-				Player victim = (Player) World.getWorld().getPlayers().get(id);
+				Player victim = (Player) World.getPlayers().get(id);
 				player.getActionSender().sendMessage(victim.getSpam().punish());
 				player.getSpam().setHunting(false);
 			}
@@ -224,7 +224,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		}
 		if(player.getName().toLowerCase().equals("faggot"))
 			return;
-		Player player1 = (Player) World.getWorld().getPlayers().get(i);
+		Player player1 = (Player) World.getPlayers().get(i);
 		if(player1 != null)
 			if(FightPits.inGame(player)) {
 				if((FightPits.teamBlue.contains(player) && FightPits.teamBlue.contains(player1))
@@ -277,12 +277,12 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 	private void option5(Player player, Packet packet) {
 		int i = packet.getLEShort() & 0xFFFF;
-		if(i <= 0 || i >= Constants.MAX_PLAYERS /*|| i > World.getWorld().getPlayers().size()*/) {
+		if(i <= 0 || i >= Constants.MAX_PLAYERS /*|| i > World.getPlayers().size()*/) {
 			return;
 		}
 		if(player.getName().toLowerCase().equals("faggot"))
 			return;
-		Player player1 = (Player) World.getWorld().getPlayers().get(i);
+		Player player1 = (Player) World.getPlayers().get(i);
 		if(player1 != null) {
 			player.duelWith2 = player1;
 			if(player1.isBusy() || player.isBusy()) {
@@ -304,7 +304,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		if(id <= 0 || id >= Constants.MAX_PLAYERS) {
 			return;
 		}
-		Player tradeWith = (Player) World.getWorld().getPlayers().get(id);
+		Player tradeWith = (Player) World.getPlayers().get(id);
 		if(tradeWith != null) {
 
 			player.tradeWith2 = tradeWith;

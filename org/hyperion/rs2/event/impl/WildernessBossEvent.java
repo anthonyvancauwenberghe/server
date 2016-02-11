@@ -72,7 +72,7 @@ public class WildernessBossEvent extends Event {
             currentBoss = NPCManager.addNPC(SPAWN_POINTS[spawn].getX(), SPAWN_POINTS[spawn].getY(), SPAWN_POINTS[spawn].getZ(), BOSS_IDS[boss], -1);
 
 
-            World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(currentBoss.getDefinition().getName() + " has been summoned!"));
+            World.getPlayers().forEach(p -> p.sendServerMessage(currentBoss.getDefinition().getName() + " has been summoned!"));
         }
         this.stop();
     }

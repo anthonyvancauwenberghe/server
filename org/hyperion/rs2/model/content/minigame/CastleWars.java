@@ -40,7 +40,7 @@ public class CastleWars implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 		castleWars = this;
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Event(1000) {
 			@Override
 			public void execute() {
 				process();
@@ -91,7 +91,7 @@ public class CastleWars implements ContentTemplate {
 			}
 			//System.out.println("cw tick");
 			timeLeft--;
-			int newTime = ((int) timeLeft / 60) - 1;
+			int newTime = (timeLeft / 60) - 1;
 			if(timeInMinsLeft != newTime || newTime <= 0) {
 				timeInMinsLeft = newTime;
 				updateTimer();
@@ -112,12 +112,12 @@ public class CastleWars implements ContentTemplate {
 			return;
 		} else {
 			player.getActionSender().sendClientConfig(380, 1);
-			player.getActionSender().sendString(11480, "Time until next game starts: " + ((int) timeLeft / 60));
+			player.getActionSender().sendString(11480, "Time until next game starts: " + (timeLeft / 60));
 		}
 	}
 
 	public void updateTimer() {
-		int timeShowing = ((int) timeLeft / 60);
+		int timeShowing = (timeLeft / 60);
 		if(timeShowing == 0)
 			timeShowing = timeLeft;
 		for(Player player : waitingRoomZammy) {
@@ -173,9 +173,7 @@ public class CastleWars implements ContentTemplate {
 			player.heal(99);
 			giveWinItems(player, draw);
 		}
-		draw = true;
-		if(saraKills > zammyKills)
-			draw = false;
+		draw = saraKills <= zammyKills;
 		for(Player player : gameSara) {
 			player.setTeleportTarget(lobby);
 			player.setDead(false);

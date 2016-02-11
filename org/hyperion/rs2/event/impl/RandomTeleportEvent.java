@@ -24,7 +24,7 @@ public class RandomTeleportEvent extends Event {
 	@Override
 	public void execute() {
 		Player randomPlayer = null;
-		EntityList<Player> list = World.getWorld().getPlayers();
+		EntityList<Player> list = World.getPlayers();
 		while(randomPlayer == null) {
 			int randIndex = Misc.random(list.size() - 1);
 			randomPlayer = (Player) list.get(randIndex);

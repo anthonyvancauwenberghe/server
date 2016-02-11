@@ -390,13 +390,13 @@ public abstract class Entity {
 
 	public void vacateSquare() {
 		getWalkingQueue().reset();
-		if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
+		if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
 			getWalkingQueue().addStep(location.getX() - 1, location.getY());
-		} else if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
+		} else if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
 			getWalkingQueue().addStep(location.getX() + 1, location.getY());
-		} else if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
+		} else if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
 			getWalkingQueue().addStep(location.getX(), location.getY() - 1);
-		} else if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
+		} else if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
 			getWalkingQueue().addStep(location.getX(), location.getY() + 1);
 		}
 		getWalkingQueue().finish();
@@ -496,7 +496,7 @@ public abstract class Entity {
 			if(cE.getAbsX() >= 2814 && cE.getAbsX() <= 2942 && cE.getAbsY() >= 5250 && cE.getAbsY() <= 5373) {
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
-            World.getWorld().resetPlayersNpcs(player);
+            World.resetPlayersNpcs(player);
 		}
 	}
 

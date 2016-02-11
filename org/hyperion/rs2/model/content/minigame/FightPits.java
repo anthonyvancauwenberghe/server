@@ -250,7 +250,7 @@ public class FightPits implements ContentTemplate {
 		return previous != null && previous.getName().equalsIgnoreCase(itemDef.getName());
 	}
 	public void init() throws FileNotFoundException {
-		World.getWorld().submit(new Event(1000L) {
+		World.submit(new Event(1000L) {
 			@Override
 			public void execute() {
 				process();
@@ -405,7 +405,7 @@ public class FightPits implements ContentTemplate {
 			player.getInventory().clear();
 			player.getEquipment().clear();
 			final Player p2 = player;
-			World.getWorld().submit(new Event(600) {
+			World.submit(new Event(600) {
 				public void execute() {
                     spawnItems(p2);
 					this.stop();
@@ -543,7 +543,7 @@ public class FightPits implements ContentTemplate {
 				gameTimeLeft = 240 + waitingRoom.size() * 15;
 				if(EVENT)
 					gameTimeLeft += 160;
-				timeLeft = gameTimeLeft + 15 + World.getWorld().getPlayers().size()/3;
+				timeLeft = gameTimeLeft + 15 + World.getPlayers().size()/3;
 				if(NEXT_GAME_EVENT)
 					timeLeft += 35;
 				startGame();
@@ -561,7 +561,7 @@ public class FightPits implements ContentTemplate {
 			for(Player player : waitingRoom) {
 				player.getActionSender().sendMessage("You need 3 players to start a game!");
 			}
-			timeLeft = 15 + World.getWorld().getPlayers().size()/3;
+			timeLeft = 15 + World.getPlayers().size()/3;
 		}
 	}
 
@@ -746,7 +746,7 @@ public class FightPits implements ContentTemplate {
                     npc.serverKilled = true;
                     if(!npc.isDead())
                     {
-                        World.getWorld().submit(new DeathEvent(npc));
+                        World.submit(new DeathEvent(npc));
                     }
                     npc.setDead(true);
                     npc.health = 0;

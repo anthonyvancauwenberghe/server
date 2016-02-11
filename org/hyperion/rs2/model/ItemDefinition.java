@@ -503,7 +503,7 @@ public class ItemDefinition {
 				int id = values[0];
 				int price = values[1];
 				definitions[id].setHighAlcValue(price);
-				World.getWorld().getEngine().submitTask(new Runnable() {
+				World.getEngine().submitTask(new Runnable() {
 					@Override
 					public void run() {
 						dumpItemDefinitions();
@@ -520,7 +520,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(false);
-					World.getWorld().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
+					World.getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::unstack 11694");
 				}
@@ -535,7 +535,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(true);
-					World.getWorld().getEngine().submitTask(new Runnable() {
+					World.getEngine().submitTask(new Runnable() {
 						@Override
 						public void run() {
 							dumpItemDefinitions();

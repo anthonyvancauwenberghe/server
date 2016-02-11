@@ -47,7 +47,7 @@ public class RS2Server {
 	 * @throws InstantiationException if a class loaded by the world was not created.
 	 */
 	public RS2Server() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		World.getWorld().init(engine);
+		World.init(engine);
 		acceptor.setHandler(new ConnectionHandler());
 		//acceptor.getFilterChain().addFirst("throttleFilter", new ConnectionThrottleFilter());
 	}

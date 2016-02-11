@@ -65,7 +65,7 @@ public class CreateChallengeCommand extends Command{
         player.getInventory().remove(new Item(id, amount));
         final Challenge challenge = Challenge.create(player, length, id, amount);
         ChallengeManager.add(challenge);
-        for(final Player p : World.getWorld().getPlayers())
+        for(final Player p : World.getPlayers())
             if(p != null)
                 challenge.send(p, true);
         return true;

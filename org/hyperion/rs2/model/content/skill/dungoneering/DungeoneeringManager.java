@@ -64,7 +64,7 @@ public class DungeoneeringManager implements ContentTemplate {
             try {
                 player.debugMessage("Yo3");
 
-                final NPC npc = (NPC) World.getWorld().getNPCs().get(npcSlot);
+                final NPC npc = (NPC) World.getNPCs().get(npcSlot);
                 if (npc == null) {
                     player.sendMessage("Null NPC");
                     return false;
@@ -151,7 +151,7 @@ public class DungeoneeringManager implements ContentTemplate {
             return false;
         switch (id) {
             case 2804:
-                if (World.getWorld().updateInProgress()) {
+                if (World.updateInProgress()) {
                     player.sendMessage("You cannot start a dungeon right now");
                     return true;
                 }
@@ -310,9 +310,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
 
     private static final boolean nonviable(final ItemDefinition def) {
-        if (!full(def.getBonus()) || def.getName().contains("(") || def.getName().contains("/") || def.getName().endsWith("0") || def.getName().endsWith("5") || def.getName().toLowerCase().startsWith("anger"))
-            return true;
-        return false;
+        return !full(def.getBonus()) || def.getName().contains("(") || def.getName().contains("/") || def.getName().endsWith("0") || def.getName().endsWith("5") || def.getName().toLowerCase().startsWith("anger");
     }
 
     private static final boolean full(final int[] bonus) {

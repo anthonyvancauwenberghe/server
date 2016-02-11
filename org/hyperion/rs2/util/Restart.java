@@ -19,7 +19,7 @@ public class Restart {
 
 	public void execute() {
 		try {
-			for (Player player : World.getWorld().getPlayers()) {
+			for (Player player : World.getPlayers()) {
 				Trade.declineTrade(player);
 				PlayerFiles.saveGame(player);
 			}

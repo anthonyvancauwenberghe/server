@@ -38,7 +38,7 @@ public class RestartTask extends TimerTask {
     public void run() {
         if (Server.getUptime().millisUptime() > (Time.ONE_HOUR * 5)) {
             System.out.println("Daily restart task submitted.");
-            World.getWorld().update(120, "Automatic daily restart.");
+            World.update(120, "Automatic daily restart.");
         } else submitRestartTask();
     }
 }

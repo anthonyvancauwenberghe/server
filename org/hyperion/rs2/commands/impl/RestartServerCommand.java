@@ -29,7 +29,7 @@ public class RestartServerCommand extends Command {
 			player.getActionSender().sendMessage("E.g. Use command as ::restartserver terrible lagg");
 			return false;
 		}
-		World.getWorld().update(UPDATE_TIMER, player.getName() + "\t" + reason);
+		World.update(UPDATE_TIMER, player.getName() + "\t" + reason);
 		return true;
 
 	}

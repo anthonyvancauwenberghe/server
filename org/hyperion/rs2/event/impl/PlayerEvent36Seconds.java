@@ -41,7 +41,7 @@ public class PlayerEvent36Seconds extends Event {
 	@Override
 	public void execute() {
 
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player == null) {
 				continue;
 			}
@@ -53,7 +53,7 @@ public class PlayerEvent36Seconds extends Event {
 			player.getQuestTab().sendUptime();
 			Afk.procesPlayer(player);
 		}
-		System.out.println("Uptime: " + Server.getUptime().toString() + " - Players online: " + World.getWorld().getPlayers().size() + " - Staff online: " + World.getWorld().getPlayers().stream().filter(p -> p != null && Rank.isStaffMember(p)).count());
+		System.out.println("Uptime: " + Server.getUptime().toString() + " - Players online: " + World.getPlayers().size() + " - Staff online: " + World.getPlayers().stream().filter(p -> p != null && Rank.isStaffMember(p)).count());
 		ClanManager.save();
 	}
 

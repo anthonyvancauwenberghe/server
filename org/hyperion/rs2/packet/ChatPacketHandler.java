@@ -48,7 +48,7 @@ public class ChatPacketHandler implements PacketHandler {
 			/*if(unpacked.contains("pkgods")) {
 				System.out.println(unpacked);
 				if(System.currentTimeMillis() - player.getCreatedTime() < Time.ONE_HOUR) {
-					World.getWorld().getBanManager().moderate("Server", player, BanManager.BAN, true, Long.MAX_VALUE, "pkgods spammer");
+					World.getBanManager().moderate("Server", player, BanManager.BAN, true, Long.MAX_VALUE, "pkgods spammer");
 				}
 				return;
 			} */
@@ -72,7 +72,7 @@ public class ChatPacketHandler implements PacketHandler {
 				Clan.sendClanMessage(player, player.getName()+": "+unpacked.substring(1),true);
 				return;
 			}
-			World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": "+unpacked);
+			World.getAbuseHandler().cacheMessage(player,player.getName()+": "+unpacked);
 			unpacked = TextUtils.filterText(unpacked);
 			unpacked = TextUtils.optimizeText(unpacked);
 			TextUtils.textPack(packed, unpacked);

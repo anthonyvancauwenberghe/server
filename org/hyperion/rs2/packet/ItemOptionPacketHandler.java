@@ -187,7 +187,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
             return;
         }
 		Item item = player.getInventory().get(invslot);
-        final NPC npc = (NPC)World.getWorld().getNPCs().get(i);
+        final NPC npc = (NPC)World.getNPCs().get(i);
         if (item != null && npc != null) {
             if(npc.getDefinition().getId() == 2999)
                 Dicing.diceNpc(player, npc, item);
@@ -377,7 +377,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().valueGeItem(player, slot);
+					//World.getGrandExchange().valueGeItem(player, slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					//player.getLogging().log("Option 1 Shop Buy : " + def.getName());
 					ShopManager.valueBuyItem(player, id);
@@ -514,7 +514,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getExtraData().get("geshop") != null && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
+					//World.getGrandExchange().addItem(player,id,20,slot);
 					GrandExchangeV2.setItem(player, id, slot);
 				} else if(slot >= 0 && slot < Inventory.SIZE) {
 					ShopManager.sellItem(player, id, slot, 1);
@@ -522,7 +522,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().buyItem(player, id, 1, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 1, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					ShopManager.buyItem(player, id, slot, 1);
 				}
@@ -640,7 +640,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
 				if(slot >= 0 && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
+					//World.getGrandExchange().addItem(player,id,20,slot);
 					GrandExchangeV2.setItem(player, id, slot);
 				} else if(slot >= 0 && slot < Inventory.SIZE) {
 					//value
@@ -649,7 +649,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().buyItem(player, id, 5, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 5, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					ShopManager.buyItem(player, id, slot, 5);
 				}
@@ -758,7 +758,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
 				if(slot >= 0 && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
+					//World.getGrandExchange().addItem(player,id,20,slot);
 					GrandExchangeV2.setItem(player, id, slot);
 				} else if(slot >= 0 && slot < Inventory.SIZE) {
 					//value
@@ -767,7 +767,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().buyItem(player, id, 10, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 10, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					ShopManager.buyItem(player, id, slot, 10);
 				}
@@ -841,7 +841,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
 				if(slot >= 0 && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
+					//World.getGrandExchange().addItem(player,id,20,slot);
 					GrandExchangeV2.setItem(player, id, slot);
 				} else if(slot >= 0 && slot < Inventory.SIZE) {
 					//value
@@ -852,7 +852,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
-					//World.getWorld().getGrandExchange().buyItem(player, id, 20, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 20, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					//ShopManager.buyItem(player, id, slot, 20);
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);

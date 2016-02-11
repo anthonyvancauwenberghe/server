@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 
@@ -115,7 +114,7 @@ public class NPC extends Entity {
 		if(health <= 0) {
 			if(! this.isDead()) {
 				charm = NPCManager.getCharms(this.definition.getId(), this.definition.getName());
-				World.getWorld().submit(new NpcDeathEvent(this));
+				World.submit(new NpcDeathEvent(this));
 			}
 			this.setDead(true);
 		}

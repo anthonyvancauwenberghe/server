@@ -18,22 +18,20 @@ public class ServerDatabase extends Thread {
 	private static String database;
 
 	public ServerDatabase(String database) {
-		this.database = database;
+		ServerDatabase.database = database;
 		ServerDatabase.connect();
 		new SQLAdminManager();
 	}
 
 	public static boolean isClosed() throws SQLException {
-		if(connection == null || connection.isClosed())
-			return true;
-		return false;
+		return connection == null || connection.isClosed();
 	}
 
 
 	public void updatePlayersOnline() {
 		try {
 			//System.out.println("Running DeviousPK Player Updating Code");
-			int playercount = World.getWorld().getPlayers().size();
+			int playercount = World.getPlayers().size();
 			URL url = new URL("http://www.DeviousPK.com/setplayercount.php?players=" + playercount);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.getContent();
@@ -85,8 +83,8 @@ public class ServerDatabase extends Thread {
 		}
 		try {
 			//connection = (Connection) DriverManager.getConnection("jdbc:mysql://127.0.0.1/darkstar", "root","YahooNimbus100");
-			connection = (Connection) DriverManager.getConnection("jdbc:sqlite:/data/" + database + ".db");
-			statement = (Statement) connection.createStatement();
+			connection = DriverManager.getConnection("jdbc:sqlite:/data/" + database + ".db");
+			statement = connection.createStatement();
 			//query("CREATE TABLE `hyp_bans` (`username` varchar(32) NOT NULL,`modname` varchar(32) NOT NULL,`moderatelevel` int(2) NOT NULL,`length` int(32) NOT NULL,`date` Timestamp(32) NOT NULL)");
 		} catch(Exception e) {
 			//System.out.println("Connetion rejected, Wrong username or password, or ip is banned, or host is down.");
@@ -100,9 +98,9 @@ public class ServerDatabase extends Thread {
 		if(connection == null)
 			return null;
 		try {
-			statement = (Statement) connection.createStatement();
+			statement = connection.createStatement();
 			if(query.startsWith("SELECT")) {
-				return (ResultSet) statement.executeQuery(query);
+				return statement.executeQuery(query);
 			} else if(query.startsWith("UPDATE")) {
 				statement.executeUpdate(query);
 			} else {

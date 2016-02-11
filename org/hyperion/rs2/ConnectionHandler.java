@@ -33,7 +33,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	private final static HashMap<String, Object> ipBlackList = new HashMap<>();
 
-	private final GameEngine engine = World.getWorld().getEngine();
+	private final GameEngine engine = World.getEngine();
 
 	public static HashMap<String, Object> getIpBlackList() {
 		return ipBlackList;
@@ -44,7 +44,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		Object playerObject = session.getAttribute("player");
 		if(playerObject != null && playerObject instanceof Player) {
 			Player player = (Player)playerObject;
-			World.getWorld().unregister(player);
+			World.unregister(player);
 		} else
 			session.close(true);
 	}
@@ -101,7 +101,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 			Player player = (Player) playerobject;
 			System.out.println("Connection closed because its idle "
 					+ player.getName());
-			World.getWorld().unregister(player);
+			World.unregister(player);
 		} else
 			session.close(false);
 	}

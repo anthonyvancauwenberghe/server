@@ -87,7 +87,7 @@ public class GodWarsZammy implements Attack {
 							Combat.npcRangeAttack(n, p.cE, 1213, 65, true);
 						}
 					}
-					World.getWorld().submit(new Event(1000) {
+					World.submit(new Event(1000) {
 						@Override
 						public void execute() {
 							for(Player p : RegionManager.getLocalPlayers(n)) {

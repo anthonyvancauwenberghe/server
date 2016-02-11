@@ -44,7 +44,7 @@ public class Events {
         eventStartTime = 0;
         eventTimeTillStart = 0;
         eventLocation = null;
-        for(Player player : World.getWorld().getPlayers()) {
+        for(Player player : World.getPlayers()) {
             player.getActionSender().sendString("cancel", 32456);
         }
     }
@@ -59,7 +59,7 @@ public class Events {
         eventTimeTillStart = timeTillStart;
         eventStartTime = System.currentTimeMillis();
         eventLocation = location;
-        for(Player player : World.getWorld().getPlayers()) {
+        for(Player player : World.getPlayers()) {
             player.getQuestTab().sendUptime();
             player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }

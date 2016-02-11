@@ -64,7 +64,7 @@ public class DonatorShop extends Shop {
 			player.getActionSender().sendUpdateItems(3823,
 					player.getInventory().toArray());
 			updatePlayers();
-			for(Player p : World.getWorld().getPlayers()) {
+			for(Player p : World.getPlayers()) {
 				if (p != null) {
 					p.sendServerMessage("Exclusive items have been added to the donator shop");
 					p.sendServerMessage("Only " + item.getCount() + " of these items will ever be sold.");
@@ -119,13 +119,13 @@ public class DonatorShop extends Shop {
 			if(isVeblenGood(item.getId())) {
 				if(first) {
 					first = false;
-					for(Player p : World.getWorld().getPlayers()) {
+					for(Player p : World.getPlayers()) {
 						if (p != null) {
 							p.sendServerMessage(player.getSafeDisplayName() + " was the first one to buy an exclusive item today!");
 						}
 					}
 				} else {
-					for(Player p : World.getWorld().getPlayers()) {
+					for(Player p : World.getPlayers()) {
 						if (p != null) {
 							p.sendServerMessage(player.getSafeDisplayName() + " has just bought an exclusive item!");
 						}

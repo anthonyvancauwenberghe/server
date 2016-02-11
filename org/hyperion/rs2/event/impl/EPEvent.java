@@ -1,7 +1,6 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.commands.Command;
-
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
@@ -31,7 +30,7 @@ public class EPEvent extends Event {
 
 	@Override
 	public void execute() {
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 			if(p.getLocation().inPvPArea()) {
 				if(System.currentTimeMillis() - p.getLastEPIncrease() > Time.ONE_HOUR) {
 					p.increaseEP();

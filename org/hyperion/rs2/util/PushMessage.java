@@ -1,9 +1,5 @@
 package org.hyperion.rs2.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
@@ -17,7 +13,7 @@ public class PushMessage {
 
 	}
 	public static final void pushHelpMessage(String s) {
-		for(Player other : World.getWorld().getPlayers()) {
+		for(Player other : World.getPlayers()) {
 			if(other != null && Rank.isAbilityToggled(other, Rank.HELPER))
 				other.getActionSender().sendMessage(s);
 		}
@@ -32,7 +28,7 @@ public class PushMessage {
 		String name = "";
 		if(player != null)
 			name = player.getSafeDisplayName();
-		for(Player target : World.getWorld().getPlayers()) {
+		for(Player target : World.getPlayers()) {
 			if(target != null) {
 				if(Rank.isStaffMember(target)) {
 					target.getActionSender().sendMessage("@blu@[Staff] " + name + ": " + TextUtils.ucFirst(s.toLowerCase()));
@@ -78,7 +74,7 @@ public class PushMessage {
 	 * Global or important messages
 	 */
 	public static final void pushGlobalMessage(String s) {
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 			if(p != null) {
 				p.getActionSender().sendMessage(s);
 			}

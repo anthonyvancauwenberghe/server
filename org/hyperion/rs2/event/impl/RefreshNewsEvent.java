@@ -48,7 +48,7 @@ public class RefreshNewsEvent extends Event {
             }
 
             if(announce && !oldNews.getContent().equalsIgnoreCase(latestNews[0].getContent())) {
-                for(Player player : World.getWorld().getPlayers()) {
+                for(Player player : World.getPlayers()) {
                     player.sendServerMessage("There is some news! Do ::news to check it out!");
                     lastNewsChange = System.currentTimeMillis();
                 }

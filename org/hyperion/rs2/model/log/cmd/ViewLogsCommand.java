@@ -72,7 +72,7 @@ public class ViewLogsCommand extends Command {
                     return false;
                 }
             }
-            final Player target = World.getWorld().getPlayer(targetName);
+            final Player target = World.getPlayer(targetName);
             final LogManager manager = target != null ? target.getLogManager() : new LogManager(targetName);
             for (final LogEntry.Category category : categories) {
                 final Set<LogEntry> logs = manager.getLogs(category, startTime);

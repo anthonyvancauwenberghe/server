@@ -9,7 +9,7 @@ public class TutorialQuest implements ContentTemplate {
 
 
 	public void talkToGuide(Player player, int npcSlot) {
-		player.setInteractingEntity(World.getWorld().getNPCs().get(npcSlot));
+		player.setInteractingEntity(World.getNPCs().get(npcSlot));
 		if(player.tutIsland == 1) {
 			DialogueManager.openDialogue(player, 37);
 		} else if(player.tutIsland == 2) {

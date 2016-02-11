@@ -24,7 +24,7 @@ public enum Target {
         public void apply(final Player player, final Type type){
 
             type.apply(player);
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && player.getShortIP().equals(p.getShortIP()))
                     type.apply(p);
 
@@ -33,7 +33,7 @@ public enum Target {
         public boolean isApplied(final Player player, final Type type){
             if(!type.isApplied(player))
                 return false;
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && player.getShortIP().equals(p.getShortIP()) && !type.isApplied(p))
                     return false;
             return true;
@@ -41,7 +41,7 @@ public enum Target {
 
         public void unapply(final Player player, final Type type){
             type.unapply(player);
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && player.getShortIP().equals(p.getShortIP()))
                     type.unapply(p);
         }
@@ -49,7 +49,7 @@ public enum Target {
     MAC{
         public void apply(final Player player, final Type type){
             type.apply(player);
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && player.getUID() == p.getUID())
                     type.apply(p);
         }
@@ -57,7 +57,7 @@ public enum Target {
         public boolean isApplied(final Player player, final Type type){
             if(!type.isApplied(player))
                 return false;
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && player.getUID() == p.getUID() && !type.isApplied(p))
                     return false;
             return true;
@@ -65,7 +65,7 @@ public enum Target {
 
         public void unapply(final Player player, final Type type){
             type.unapply(player);
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && player.getUID() == p.getUID())
                     type.unapply(p);
         }
@@ -73,7 +73,7 @@ public enum Target {
     SPECIAL {
         public void apply(final Player player, final Type type){
             type.apply(player);
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && Arrays.equals(player.specialUid, p.specialUid))
                     type.apply(p);
         }
@@ -81,7 +81,7 @@ public enum Target {
         public boolean isApplied(final Player player, final Type type){
             if(!type.isApplied(player))
                 return false;
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && Arrays.equals(player.specialUid, p.specialUid) && !type.isApplied(p))
                     return false;
             return true;
@@ -89,7 +89,7 @@ public enum Target {
 
         public void unapply(final Player player, final Type type){
             type.unapply(player);
-            for(final Player p : World.getWorld().getPlayers())
+            for(final Player p : World.getPlayers())
                 if(!player.equals(p) && Arrays.equals(player.specialUid, p.specialUid))
                     type.unapply(p);
         }

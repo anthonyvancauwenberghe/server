@@ -60,7 +60,7 @@ public class Bork  {
                 final int height = player.getIndex() * 4;
                 Magic.teleport(player, TELEPORT_LOCATION.transform(0, 0, height), false);
 
-                World.getWorld().submit(new BorkEvent(player));
+                World.submit(new BorkEvent(player));
                 return true;
             }
 

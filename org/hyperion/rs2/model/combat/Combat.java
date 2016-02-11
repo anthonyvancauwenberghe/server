@@ -624,7 +624,7 @@ public class Combat {
             CombatAssistant.addExperience(combatEntity, bowType, damgDouble);
         CombatAssistant.addExperience(combatEntity, bowType, damage);
 
-        World.getWorld().submit(new Event(delay, "combat") {
+        World.submit(new Event(delay, "combat") {
             public void execute() {
                 if (combatEntity == null || opponent == null) {
                     this.stop();
@@ -817,7 +817,7 @@ public class Combat {
 
     public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, final int type, final boolean prayerBlock) {
 
-        World.getWorld().submit(new Event(delay, "npcattack") {
+        World.submit(new Event(delay, "npcattack") {
             @Override
             public void execute() {
                 if ((combatEntity == null ||
@@ -1220,7 +1220,7 @@ public class Combat {
             int baseX = combatEntity.getAbsX() - 25;
             int baseY = combatEntity.getAbsY() - 25;
             combatEntity.getEntity().getWalkingQueue().reset();
-            Path p = World.getWorld().pathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
+            Path p = World.pathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
             if (p != null) {
                 for (int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
@@ -1275,30 +1275,30 @@ public class Combat {
         else if (y < toY)
             moveY = 1;
         if (moveX != 0 && moveY != 0) {
-            if (!World.getWorld().isWalkAble(height, x, y, (x + moveX), (y + moveY), 0)) {
-                if (World.getWorld().isWalkAble(height, x, y, (x + moveX), y, 0)) {
+            if (!World.isWalkAble(height, x, y, (x + moveX), (y + moveY), 0)) {
+                if (World.isWalkAble(height, x, y, (x + moveX), y, 0)) {
                     moveY = 0;
-                } else if (World.getWorld().isWalkAble(height, x, y, x, (y + moveY), 0)) {
+                } else if (World.isWalkAble(height, x, y, x, (y + moveY), 0)) {
                     moveX = 0;
                 } else {
                     return;
                 }
             }
-        } else if (!World.getWorld().isWalkAble(height, x, y, x + moveX, y
+        } else if (!World.isWalkAble(height, x, y, x + moveX, y
                 + moveY, 0)) {
             if (moveX != 0) {
-                if (!World.getWorld().isWalkAble(height, x, y, x + moveX, y
+                if (!World.isWalkAble(height, x, y, x + moveX, y
                         + 1, 0)) {
                     moveY = 1;
-                } else if (!World.getWorld().isWalkAble(height, x, y, x + moveX, y
+                } else if (!World.isWalkAble(height, x, y, x + moveX, y
                         - 1, 0)) {
                     moveY = -1;
                 }
             } else if (moveY != 0) {
-                if (!World.getWorld().isWalkAble(height, x, y, x + 1, y
+                if (!World.isWalkAble(height, x, y, x + 1, y
                         + moveY, 0)) {
                     moveX = 1;
-                } else if (!World.getWorld().isWalkAble(height, x, y, x - 1, y
+                } else if (!World.isWalkAble(height, x, y, x - 1, y
                         + moveY, 0)) {
                     moveX = -1;
                 }
@@ -1320,7 +1320,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        World.getWorld().submit(new Event(16000) {
+        World.submit(new Event(16000) {
             private int lastDamg = -1;
             private int ticks = 4;
 

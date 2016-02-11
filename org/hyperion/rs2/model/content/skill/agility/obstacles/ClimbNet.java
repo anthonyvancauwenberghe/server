@@ -1,7 +1,10 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Animation;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
 
@@ -35,7 +38,7 @@ public class ClimbNet extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, 1, message);
         player.playAnimation(Animation.create(animId));
-        World.getWorld().submit(new Event(700) {
+        World.submit(new Event(700) {
             @Override
             public void execute() {
                 int j = 0;

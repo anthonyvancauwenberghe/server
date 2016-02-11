@@ -10,8 +10,6 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 
-import java.util.LinkedList;
-
 public class YellCommand extends Command {
 
 	public static final int NORMAL_YELL_DELAY = 240000;
@@ -74,7 +72,7 @@ public class YellCommand extends Command {
 		input = PushMessage.filteredString(input);
 		input = input.replaceAll("tradereq", "").replaceAll("duelreq", "").replaceAll(":clan:", "");
 
-		long yellMilliseconds = (long)(System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur"));
+		long yellMilliseconds = System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur");
 		long yellDelay = getYellDelay(player);
 
 		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
@@ -104,7 +102,7 @@ public class YellCommand extends Command {
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
 		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
-			World.getWorld().submit(
+			World.submit(
 					new Event(yellDelay) {
 						public void execute() {
 							player.sendMessage("[B] Nab: Hey " + player.getSafeDisplayName() + ", you can yell again!");
@@ -117,7 +115,7 @@ public class YellCommand extends Command {
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}
 		 */
-		for(Player other : World.getWorld().getPlayers()) {
+		for(Player other : World.getPlayers()) {
 			if(other != null) {
 				if(!other.getPermExtraData().getBoolean("disabledYell")) {
 					String message;

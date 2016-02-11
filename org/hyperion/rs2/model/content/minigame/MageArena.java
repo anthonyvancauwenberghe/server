@@ -70,14 +70,14 @@ public class MageArena implements ContentTemplate {
 					client.getWalkingQueue().addStep(2509, client.getLocation().getY() - 2);
 				}
 				client.getWalkingQueue().finish();
-				World.getWorld().submit(new Event(2000) {
+				World.submit(new Event(2000) {
 					@Override
 					public void execute() {
 						ContentEntity.startAnimation(client, 804);
 						this.stop();
 					}
 				});
-				World.getWorld().submit(new Event(3000) {
+				World.submit(new Event(3000) {
 					@Override
 					public void execute() {
 						ContentEntity.startAnimation(client, - 1);

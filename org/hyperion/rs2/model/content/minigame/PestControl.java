@@ -30,7 +30,7 @@ public class PestControl implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
-        /*World.getWorld().submit(new Event(1000){
+        /*World.submit(new Event(1000){
 			@Override
 			public void execute(){
 				process();
@@ -181,7 +181,7 @@ public class PestControl implements ContentTemplate {
 
 	public void killNPC(PestNPC pnpc) {
 		pnpc.npc.health = 0;
-		World.getWorld().submit(new NpcDeathEvent(pnpc.npc));
+		World.submit(new NpcDeathEvent(pnpc.npc));
 		pnpc.npc.setDead(true);
 	}
 

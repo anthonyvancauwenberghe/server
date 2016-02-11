@@ -63,22 +63,22 @@ public class UpdateEvent extends Event {
 
 	@Override
 	public void execute() {
-		int npcscount = World.getWorld().getNPCs().size();
-		int playercount = World.getWorld().getPlayers().size();
-        for(NPC npc : World.getWorld().npcsWaitingList) {
+		int npcscount = World.getNPCs().size();
+		int playercount = World.getPlayers().size();
+        for(NPC npc : World.npcsWaitingList) {
 			// npc.getWalkingQueue().walkingCheck();
 			try {
-				World.getWorld().removeFromWaiting(npc);
+				World.removeFromWaiting(npc);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
-		World.getWorld().npcsWaitingList.clear();
+		World.npcsWaitingList.clear();
 		List<Task> tickTasks = new ArrayList<Task>(npcscount + playercount);
 		List<Task> updateTasks = new ArrayList<Task>(playercount);
 		List<Task> resetTasks = new ArrayList<Task>(npcscount + playercount);
 
-		for(NPC npc : World.getWorld().getNPCs()) {
+		for(NPC npc : World.getNPCs()) {
 			try {
 				tickTasks.add(new NPCTickTask(npc));
 				resetTasks.add(new NPCResetTask(npc));
@@ -87,7 +87,7 @@ public class UpdateEvent extends Event {
 			}
 		}
 
-		Iterator<Player> it$ = World.getWorld().getPlayers().iterator();
+		Iterator<Player> it$ = World.getPlayers().iterator();
 		while(it$.hasNext()) {
 			try {
 				Player player = it$.next();
@@ -106,7 +106,7 @@ public class UpdateEvent extends Event {
                         if(player.getSession() != null && !player.getSession().isConnected()) {
                         	if(!player.loggedOut) {
                         		player.forceMessage("I have x-logged");
-                        		World.getWorld().unregister(player);
+                        		World.unregister(player);
                         	}
                         	player.loggedOut = true;
                         }
@@ -122,7 +122,7 @@ public class UpdateEvent extends Event {
 		Task updateTask = new ParallelTask(updateTasks);
 		Task resetTask = new ParallelTask(resetTasks);
 
-		World.getWorld().submit(new ConsecutiveTask(tickTask, updateTask, resetTask));
+		World.submit(new ConsecutiveTask(tickTask, updateTask, resetTask));
 	}
 }
 
@@ -194,17 +194,17 @@ public class UpdateEvent extends Event {
 //
 //	@Override
 //	public void execute() {
-//		int npcscount = World.getWorld().getNPCs().size();
-//		int playercount = World.getWorld().getPlayers().size();
-//		for(NPC npc : World.getWorld().npcsWaitingList) {
+//		int npcscount = World.getNPCs().size();
+//		int playercount = World.getPlayers().size();
+//		for(NPC npc : World.npcsWaitingList) {
 //			// npc.getWalkingQueue().walkingCheck();
 //			try {
-//				World.getWorld().removeFromWaiting(npc);
+//				World.removeFromWaiting(npc);
 //			} catch(Exception e) {
 //				e.printStackTrace();
 //			}
 //		}
-//		World.getWorld().npcsWaitingList.clear();
+//		World.npcsWaitingList.clear();
 //		List<Task> npcTickTasks = new ArrayList<>(npcscount);
 //		List<Task> npcResetTasks = new ArrayList<>(npcscount);
 //
@@ -212,7 +212,7 @@ public class UpdateEvent extends Event {
 //		List<Task> updateTasks = new ArrayList<Task>(playercount);
 //		List<Task> resetTasks = new ArrayList<Task>(npcscount + playercount);
 //
-//		for(NPC npc : World.getWorld().getNPCs()) {
+//		for(NPC npc : World.getNPCs()) {
 //			try {
 //				npcTickTasks.add(new NPCTickTask(npc));
 //				npcResetTasks.add(new NPCResetTask(npc));
@@ -221,7 +221,7 @@ public class UpdateEvent extends Event {
 //			}
 //		}
 //
-//		Iterator<Player> it$ = World.getWorld().getPlayers().iterator();
+//		Iterator<Player> it$ = World.getPlayers().iterator();
 //		while(it$.hasNext()) {
 //			try {
 //				Player player = it$.next();
@@ -240,7 +240,7 @@ public class UpdateEvent extends Event {
 //					if(player.getSession() != null && !player.getSession().isConnected()) {
 //						if(!player.loggedOut) {
 //							player.forceMessage("I have x-logged");
-//							World.getWorld().unregister(player);
+//							World.unregister(player);
 //						}
 //						player.loggedOut = true;
 //					}
@@ -259,7 +259,7 @@ public class UpdateEvent extends Event {
 //		Task npcTickTask = new ConsecutiveTask(npcTickTasks);
 //		Task npcResetTask = new ParallelTask(npcResetTasks);
 //
-//		World.getWorld().submit(new ConsecutiveTask(tickTask, npcTickTask, updateTask, resetTask, npcResetTask));
+//		World.submit(new ConsecutiveTask(tickTask, npcTickTask, updateTask, resetTask, npcResetTask));
 //	}
 //}
 //*/

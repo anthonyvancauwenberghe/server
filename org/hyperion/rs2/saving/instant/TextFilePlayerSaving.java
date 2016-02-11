@@ -57,7 +57,7 @@ public class TextFilePlayerSaving extends InstantPlayerSaving {
 				}
 			}
 			file.close();
-			//World.getWorld().getSQLSaving().save(player);
+			//World.getSQLSaving().save(player);
 			return true;
 		} catch (IOException e) {
 			System.out.println("Player's name: " + player.getName());

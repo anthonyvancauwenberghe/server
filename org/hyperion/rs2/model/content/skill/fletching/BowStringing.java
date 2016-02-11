@@ -129,7 +129,7 @@ public class BowStringing extends LogCutting {
         client.setBusy(true);
         ContentEntity.startAnimation(client, item.getEmote());
 
-        World.getWorld().submit(new Event(5000) {
+        World.submit(new Event(5000) {
             @Override
             public void execute() {
                 if(client.getRandomEvent().skillAction(2))

@@ -18,7 +18,7 @@ public class RecordingCommand extends Command {
 	public boolean execute(Player player, String input) {
 		input = filterInput(input);
 		try {
-			Player victim = World.getWorld().getPlayer(input);
+			Player victim = World.getPlayer(input);
 			if(victim != null) {
 				victim.getActionSender().sendMessage(KEY);
 				player.getActionSender().sendMessage("Message sent.");

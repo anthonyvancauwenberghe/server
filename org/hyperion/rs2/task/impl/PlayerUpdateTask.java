@@ -88,7 +88,7 @@ public class PlayerUpdateTask implements Task {
 			/*
 			 * If the player should still be in our list.
 			 */
-			if(World.getWorld().getPlayers().contains(otherPlayer) && ! otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && ! otherPlayer.isHidden()) {
+			if(World.getPlayers().contains(otherPlayer) && ! otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && ! otherPlayer.isHidden()) {
 				if(updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
 					break;
 				}

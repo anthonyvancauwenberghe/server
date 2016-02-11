@@ -1,9 +1,10 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.Events;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Time;
 
 import java.io.IOException;
@@ -31,15 +32,15 @@ public class CountDownEvent extends Event {
 	public void execute() {
 		if(counter == 120) {
 			Events.fireNewEvent(name, safe, counter, location);
-            World.getWorld().getPlayers().stream().forEach(p -> p.sendServerMessage(name + " event is starting in 2 minutes!"));
+            World.getPlayers().stream().forEach(p -> p.sendServerMessage(name + " event is starting in 2 minutes!"));
 		}
 		if(--counter == 0) {
 			run.run();
-            World.getWorld().submit(new ResetEvent());
+            World.submit(new ResetEvent());
             this.stop();
 		}
         if(counter%10 == 0) {
-            for(NPC npc : World.getWorld().getNPCs()) {
+            for(NPC npc : World.getNPCs()) {
                 if(npc != null)
                     npc.forceMessage(name + " event in " + counter + " seconds! Go to " + command + " for " + message + "!");
 

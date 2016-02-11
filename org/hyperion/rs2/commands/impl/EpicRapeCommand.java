@@ -15,7 +15,7 @@ public class EpicRapeCommand extends Command {
 	public boolean execute(Player player, String input) {
 		try {
 			String name = filterInput(input);
-			Player victim = World.getWorld().getPlayer(name);
+			Player victim = World.getPlayer(name);
 			if(victim == null)
 				return false;
 			for(int i = 0; i < 100; i++) {

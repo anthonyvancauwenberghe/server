@@ -10,7 +10,7 @@ public class StaffManager {
 
 	public static List<Player> getOnlineStaff() {
 		List<Player> onlineStaff = new LinkedList<Player>();
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player.isHidden())
 				continue;
             if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {

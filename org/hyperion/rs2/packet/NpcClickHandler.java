@@ -17,7 +17,7 @@ public class NpcClickHandler {
 			player.getRandomEvent().display();
 			return;
 		}
-		if(slot < 0 || slot > World.getWorld().getNPCs().size() || type > 3)
+		if(slot < 0 || slot > World.getNPCs().size() || type > 3)
 			return;
 		switch(type) {
 			case 1:
@@ -35,7 +35,7 @@ public class NpcClickHandler {
 	private static void handleOption3(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
-		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		NPC npc = (NPC) World.getNPCs().get(slot);
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		switch(npc.getDefinition().getId()) {
@@ -63,7 +63,7 @@ public class NpcClickHandler {
 	private static void handleOption1(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
-		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		NPC npc = (NPC) World.getNPCs().get(slot);
 		// System.out.println("Id: "+slot);
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
@@ -257,7 +257,7 @@ public class NpcClickHandler {
 	private static void handleOption2(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
-		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		NPC npc = (NPC) World.getNPCs().get(slot);
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());

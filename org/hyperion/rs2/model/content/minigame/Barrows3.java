@@ -60,7 +60,7 @@ public class Barrows3 implements ContentTemplate {
 	public void dig(final Player player) {
 		if(ContentEntity.isInArea(player, 3550, 3269, 3580, 3305)) {
 			ContentEntity.startAnimation(player, DIGGING_EMOTE);
-			World.getWorld().submit(new Event(1000, "dig") {
+			World.submit(new Event(1000, "dig") {
 				@Override
 				public void execute() {
 					ContentEntity.startAnimation(player, - 1);
@@ -142,7 +142,7 @@ public class Barrows3 implements ContentTemplate {
 			player.getExtraData().remove(BROTHERS_KILLED_KEY);
 			player.getExtraData().remove(KILLSCOUNT_KEY);
 			player.getExtraData().remove(BROTHER_TARGET);
-			World.getWorld().submit(new Event(2000) {
+			World.submit(new Event(2000) {
 				@Override
 				public void execute() {
 					Magic.teleport(player, Edgeville.LOCATION, true);
@@ -168,7 +168,7 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public void clickStairs(final Player player, final int id) {
-		World.getWorld().submit(new Event(600) {
+		World.submit(new Event(600) {
 			@Override
 			public void execute() {
 				switch(id) {
@@ -262,7 +262,7 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public static void confirmCoffinTeleport(final Player player) {
-		World.getWorld().submit(new Event(100) {
+		World.submit(new Event(100) {
 			@Override
 			public void execute() {
 				ContentEntity.teleport(player, 3551, 9692, 0);

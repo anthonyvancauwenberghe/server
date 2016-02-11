@@ -20,7 +20,7 @@ public class TicketManager {
 
     public static synchronized void add(final Ticket ticket) {
         TICKETS.add(ticket);
-        World.getWorld().getPlayers().stream().filter(player -> player != null && Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()).forEach(player ->
+        World.getPlayers().stream().filter(player -> player != null && Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()).forEach(player ->
             player.sendMessage("@dre@------------------------------ New ticket submitted ------------------------------",
                     "@dre@Player: @bla@" + TextUtils.ucFirst(ticket.name),
                     "@dre@Title: @bla@" + TextUtils.ucFirst(ticket.title),
@@ -41,7 +41,7 @@ public class TicketManager {
     }
 
     private static void refreshSizeForStaff() {
-        World.getWorld().getPlayers().stream().filter(player -> player != null && Rank.isStaffMember(player)).forEach(player -> {
+        World.getPlayers().stream().filter(player -> player != null && Rank.isStaffMember(player)).forEach(player -> {
             final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT).putShort(5);
             builder.putTriByte(getSizeForPlayer(player));
             player.write(builder.toPacket());
@@ -63,7 +63,7 @@ public class TicketManager {
             return;
         Ticket tick = forId(id);
         if(tick != null) {
-            final Player p = World.getWorld().getPlayer(tick.name);
+            final Player p = World.getPlayer(tick.name);
             if(p != null) {
                 if(!p.getLocation().inDuel() && !p.getLocation().inPvPArea()  && !Jail.inJail(p) && !p.getDungeoneering().inDungeon()) {
                     Magic.teleport(p, player.getLocation(), true);

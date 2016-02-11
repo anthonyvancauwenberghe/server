@@ -5,11 +5,7 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Time;
-import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 
@@ -72,7 +68,7 @@ public class PinInterface extends Interface{
                         );
                         p.apply();
                         PunishmentManager.getInstance().add(p);
-                        for(final Player pl : World.getWorld().getPlayers()){
+                        for(final Player pl : World.getPlayers()){
                             if(pl == null || !Rank.hasAbility(pl, Rank.ADMINISTRATOR))
                                 continue;
                             pl.sendf("@red@Potential Hack Attempt. Name: @blu@%s @red@| IP: @blu@%s -> %s", player.getName(), player.lastIp, player.getShortIP());

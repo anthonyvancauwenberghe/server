@@ -63,7 +63,7 @@ public class NPCUpdateTask implements Task {
 			/*
 			 * If the NPC should still be in our list.
 			 */
-			if(World.getWorld().getNPCs().contains(npc) && ! npc.isTeleporting() && ! npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
+			if(World.getNPCs().contains(npc) && ! npc.isTeleporting() && ! npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
 				/*
 				 * Update the movement.
 				 */

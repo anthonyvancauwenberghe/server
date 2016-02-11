@@ -526,34 +526,28 @@ public class Skills {
 
 
         try {
+            Calendar c = Calendar.getInstance();
+            int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
+            int bonusSkill = (dayOfYear % (Skills.SKILL_COUNT - 8)) + 7;
 
-            synchronized (World.getWorld()) {
-
-                Calendar c = Calendar.getInstance();
-                int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
-                int bonusSkill = (dayOfYear % (Skills.SKILL_COUNT - 8)) + 7;
-
-                int lastSkillChange = -1;
-                if (World.getWorld().getProperty("lastSkillChange") != null) {
-                    lastSkillChange = World.getWorld().getProperty("lastSkillChange");
-                }
-
-                if (dayOfYear != lastSkillChange) {
-                    if (bonusSkill != BONUS_SKILL) {
-                        while (bonusSkill == 21) {
-                            bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
-                        }
-                        BONUS_SKILL = bonusSkill;
-                        for (Player player1 : World.getWorld().getPlayers()) {
-                            player1.getQuestTab().sendBonusSkill();
-                            //player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
-                        }
-                    }
-                    World.getWorld().putProperty("lastSkillChange", dayOfYear);
-                }
+            int lastSkillChange = -1;
+            if (World.getProperty("lastSkillChange") != null) {
+                lastSkillChange = World.getProperty("lastSkillChange");
             }
 
-
+            if (dayOfYear != lastSkillChange) {
+                if (bonusSkill != BONUS_SKILL) {
+                    while (bonusSkill == 21) {
+                        bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
+                    }
+                    BONUS_SKILL = bonusSkill;
+                    for (Player player1 : World.getPlayers()) {
+                        player1.getQuestTab().sendBonusSkill();
+                        //player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
+                    }
+                }
+                World.putProperty("lastSkillChange", dayOfYear);
+            }
         } catch (Exception e) {
         }
 
@@ -584,7 +578,7 @@ public class Skills {
         exps[skill] += exp;
         if (exps[skill] >= MAXIMUM_EXP) {
             if (oldExp != MAXIMUM_EXP) {
-                for (Player p : World.getWorld().getPlayers()) {
+                for (Player p : World.getPlayers()) {
                     p.sendLootMessage("Achievement", player.getSafeDisplayName() + " has just reached 200m experience in " + SKILL_NAME[skill] + "!");
                 }
                 player.checkCapes();

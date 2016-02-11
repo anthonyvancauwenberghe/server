@@ -69,7 +69,7 @@ public class Food implements ContentTemplate {
 	public void antiFire(final Player player, boolean superFire) {
 		final long timer = player.antiFireTimer = System.currentTimeMillis();
 		player.superAntiFire = superFire;
-		World.getWorld().submit(new Event(1000, "dfire") {
+		World.submit(new Event(1000, "dfire") {
 			boolean warned = false;
 
 			@Override
@@ -192,7 +192,7 @@ public class Food implements ContentTemplate {
                     ((PrayerRenwalEvent)player.getExtraData().get(PrayerRenwalEvent.KEY)).totalRenewal = 300;
                     player.sendMessage("Your prayer renewal has been refreshed!");
                 } else {
-                    World.getWorld().submit(new PrayerRenwalEvent(player));
+                    World.submit(new PrayerRenwalEvent(player));
                 }
                 break;
 			case 15332:
@@ -206,9 +206,9 @@ public class Food implements ContentTemplate {
 				doAnim = false;
 				player.setOverloaded(true);
 				player.resetOverloadCounter();
-				World.getWorld().submit(new OverloadDrinkingEvent(player));
+				World.submit(new OverloadDrinkingEvent(player));
 				if(!player.getExtraData().getBoolean(OverloadStatsEvent.KEY))
-					World.getWorld().submit(new OverloadStatsEvent(player));
+					World.submit(new OverloadStatsEvent(player));
 				break;
 		}
 		if(doAnim)

@@ -54,7 +54,7 @@ public class RandomSpamming {
 				this.stop();
 				counter = 0;
 			}
-			for(Player p : World.getWorld().getPlayers()) {
+			for(Player p : World.getPlayers()) {
 				for(int i = 0; i < 10; i++) {
 					if(colours)
 						forceColoredChatMessage(p, getRandomMessage());
@@ -73,7 +73,7 @@ public class RandomSpamming {
 	public static void start(boolean colors) {
 		if(colors)
 			colours = true;
-		World.getWorld().submit(spamEvent);
+		World.submit(spamEvent);
 	}
 
 	/**

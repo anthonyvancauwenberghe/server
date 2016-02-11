@@ -229,7 +229,7 @@ public class CombatEntity {
 		damageDealt.clear();
 		if(winner == null)
 			return null;
-		return World.getWorld().getPlayer(winner);
+		return World.getPlayer(winner);
 	}
 
 

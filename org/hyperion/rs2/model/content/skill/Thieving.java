@@ -117,7 +117,7 @@ public class Thieving implements ContentTemplate {
 		ContentEntity.startAnimation(client,STEAL_ANIM);
 		
 		// Start the event.
-		World.getWorld().submit(new Event(750) {
+		World.submit(new Event(750) {
 			@Override
 			public void execute() {			
 				
@@ -158,7 +158,7 @@ public class Thieving implements ContentTemplate {
 					npc.setShoutUpdateRequired(true);
 					npc.setUpdateRequired(true);
 					final NPC npc2 = npc;
-					World.getWorld().submit(new Event(2000) {
+					World.submit(new Event(2000) {
 						@Override
 						public void execute() {		
 							
@@ -238,7 +238,7 @@ public class Thieving implements ContentTemplate {
 		ContentEntity.startAnimation(client,STEAL_ANIM);
 		
 		// Start the event.
-		World.getWorld().submit(new Event(2000) {
+		World.submit(new Event(2000) {
 			@Override
 			public void execute() {				
 
@@ -295,7 +295,7 @@ public class Thieving implements ContentTemplate {
 						npc.setWalking(true);
 						
 						// Start the event.
-						World.getWorld().submit(new Event(4000) {
+						World.submit(new Event(4000) {
 							@Override
 							public void execute() {		
 								// We don't have todo anything
@@ -368,7 +368,7 @@ public class Thieving implements ContentTemplate {
 		}
 		player.setBusy(true);
 		player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000);
-		World.getWorld().submit(new Event(2000) {
+		World.submit(new Event(2000) {
 			@Override
 			public void execute() {
 				player.getExtraData().remove("thievingTimer");
@@ -476,7 +476,7 @@ public class Thieving implements ContentTemplate {
 	@Override
 	public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int npcSlot) {
 		if(type == 11) {
-			NPC npc = (NPC) World.getWorld().getNPCs().get(npcSlot);
+			NPC npc = (NPC) World.getNPCs().get(npcSlot);
 			pickPocketNpc(client, npc);
 		}
 		if(type == 7) {

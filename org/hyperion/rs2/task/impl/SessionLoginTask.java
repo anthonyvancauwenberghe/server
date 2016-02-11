@@ -28,7 +28,7 @@ public class SessionLoginTask implements Task {
 
 	@Override
 	public void execute(GameEngine context) {
-		World.getWorld().register(player);
+		World.register(player);
 	}
 
 }

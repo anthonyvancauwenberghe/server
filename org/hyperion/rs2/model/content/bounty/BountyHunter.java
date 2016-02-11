@@ -88,7 +88,7 @@ public class BountyHunter {
 	}
 	
 	public void findTarget() {
-		for(final Player p : World.getWorld().getPlayers()) {
+		for(final Player p : World.getPlayers()) {
 			if(p.isHidden() || !applicable(p) || this.player.equals(p) || !levelCheck(p) || !wealthCheck(p) || !wildLevelCheck(p) || p.equals(prevTarget)) continue;
 			    assignTarget(p);
 			break;

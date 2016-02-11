@@ -73,8 +73,8 @@ public class NpcDeathEvent extends Event {
             npc.getWalkingQueue().reset();
         } else if (timer == 0) {
             Player jet = null;
-            if (World.getWorld().getPlayer("jet") != null) {
-                jet = World.getWorld().getPlayer("jet").debug ? World.getWorld().getPlayer("jet") : null;
+            if (World.getPlayer("jet") != null) {
+                jet = World.getPlayer("jet").debug ? World.getPlayer("jet") : null;
             }
 
             int tokens = 0;
@@ -85,7 +85,7 @@ public class NpcDeathEvent extends Event {
                 if (killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
                 if (!reward.isPresent()) break;
-                final Player player = World.getWorld().getPlayer(killer.getKey().toLowerCase().trim());
+                final Player player = World.getPlayer(killer.getKey().toLowerCase().trim());
                 if (player == null) continue;
                 double percent = killer.getValue() / ((double) npc.maxHealth);
                 if (percent > 0.1 || (npcIdForDoubleDrops == npc.getDefinition().getId() && percent > 0.05)) {
@@ -143,8 +143,8 @@ public class NpcDeathEvent extends Event {
             }
             try {
                 if (Summoning.isBoB(npc.getDefinition().getId()) &&
-                        ((Player) World.getWorld().getPlayers().get(npc.ownerId)).cE.summonedNpc == npc)
-                    BoB.dropBoB(npc.getLocation(), (Player) World.getWorld().getPlayers().get(npc.ownerId));
+                        ((Player) World.getPlayers().get(npc.ownerId)).cE.summonedNpc == npc)
+                    BoB.dropBoB(npc.getLocation(), (Player) World.getPlayers().get(npc.ownerId));
             } catch (Exception e) {
             }//it throws a aload of index out of bounds exceptions if a player logs out, handle it if u want i was just a lil lazy at the tiem i c, btw remem , getlevelforexp , if we do binary search with that , its gonna be boostspeed prohax!!!!!! :P guess what, Idk concept of binary search ive heard of it but never  looked at code or implementation ok ill explain in 30 secs
             if (killer != null) {
@@ -315,11 +315,11 @@ public class NpcDeathEvent extends Event {
             }
         } else if (timer == -1) {
             if (WildernessBossEvent.isWildernessBoss(npc.getDefinition().getId())) {
-                World.getWorld().getPlayers().forEach(p -> p.sendServerMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " has been defeated!"));
-                World.getWorld().submit(new WildernessBossEvent(false));
+                World.getPlayers().forEach(p -> p.sendServerMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " has been defeated!"));
+                World.submit(new WildernessBossEvent(false));
                 WildernessBossEvent.currentBoss = null;
             }
-            World.getWorld().unregister(npc);
+            World.unregister(npc);
             this.stop();
         } else if (timer == 10) {
             npc.isHidden(false);

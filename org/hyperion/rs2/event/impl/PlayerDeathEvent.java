@@ -272,7 +272,7 @@ public class PlayerDeathEvent extends Event {
 							}
 							if(player.getKillStreak() >= 6) {
                                 AchievementHandler.progressAchievement(player, "Killstreak");
-								for(Player p : World.getWorld().getPlayers())
+								for(Player p : World.getPlayers())
 									if(p != null)
                                 		p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
 							}

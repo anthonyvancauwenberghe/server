@@ -96,7 +96,7 @@ public class Smelting implements ContentTemplate {
 		}
 		ContentEntity.startAnimation(client, SMELTING_ANIM);
 		client.setBusy(true);
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Event(3000) {
 			int amount = am;
 
 			@Override

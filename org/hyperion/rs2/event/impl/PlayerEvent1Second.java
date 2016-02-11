@@ -1,12 +1,9 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.content.minigame.DangerousPK;
 
 /**
  * An event which increases ActivityPoints, refreshes Quest Tab , refreshes
@@ -28,7 +25,7 @@ public class PlayerEvent1Second extends Event {
 
 	@Override
 	public void execute() {
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 
 
 			if(! p.active)

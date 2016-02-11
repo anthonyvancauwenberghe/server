@@ -1,12 +1,9 @@
 package org.hyperion.rs2.model.content.bounty;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.PlayerCombatEvent;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
-
-import java.util.function.Function;
 
 public class BountyHunterEvent extends Event{
 
@@ -21,19 +18,19 @@ public class BountyHunterEvent extends Event{
 		if (counter == 0) {
 			counter = 5;
 			//Checks if the player is in combat with his target, if not he'll reset
-            World.getWorld().getPlayers().stream().filter(p ->
+            World.getPlayers().stream().filter(p ->
                 p.cE.getOpponent() == null || !p.getCombat().getOpponent().getEntity().equals(p.getBountyHunter().getTarget())
             ).forEach(p -> p.getBountyHunter().clearTarget());
 		}
 		if (counter % 2 == 0) {
-			for (final Player p : World.getWorld().getPlayers()) {
+			for (final Player p : World.getPlayers()) {
 				//if the player has a target, but the target is not in the wilderness anymore
 
 				if (BountyHunter.applicable(p))
 					p.getBountyHunter().findTarget();
 			}
 		}
-		for (Player p : World.getWorld().getPlayers()) {
+		for (Player p : World.getPlayers()) {
 			if (p == null)
 				continue;
 			//This means the player has no target

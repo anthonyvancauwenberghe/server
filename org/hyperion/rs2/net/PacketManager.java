@@ -79,14 +79,14 @@ public class PacketManager {
             if(((player.verified || packet.getOpcode() == InterfacePacketHandler.DATA_OPCODE) && (player.verificationCodeEntered || packet.getOpcode() == 4 || packet.getOpcode() == 103)) || packetHandlers[packet.getOpcode()] instanceof QuietPacketHandler)
 				packetHandlers[packet.getOpcode()].handle(player, packet);
 		} catch(BufferUnderflowException nio) {
-			if(!World.getWorld().gracefullyExitSession(session))
+			if(!World.gracefullyExitSession(session))
 				session.close(false);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			System.out.println("Exception with packet " + packet.getOpcode() + " caused by Player : " + player.getName());
 			World.writeError("packet_errors.txt", ex);
 			//logger.log(Level.SEVERE, "Exception handling packet.", ex);
-			if(!World.getWorld().gracefullyExitSession(session))
+			if(!World.gracefullyExitSession(session))
 				session.close(false);
 		} finally {
             player.getExtraData().put("packetCount", player.getExtraData().getInt("packetCount")-1);

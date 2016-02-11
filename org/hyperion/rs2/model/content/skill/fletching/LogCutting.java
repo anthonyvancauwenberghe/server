@@ -159,7 +159,7 @@ public class LogCutting extends Fletching {
 
         ContentEntity.startAnimation(client, 1248);
 
-        World.getWorld().submit(new Event(5000) {
+        World.submit(new Event(5000) {
             int craftAm = amount2;
 
             @Override

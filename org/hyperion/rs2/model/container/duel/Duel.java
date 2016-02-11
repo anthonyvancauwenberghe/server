@@ -42,7 +42,7 @@ public class Duel {
 			player.getActionSender().sendMessage("You are too far away to open a duel.");
 			return;
 		}
-		if(World.getWorld().updateInProgress()) {
+		if(World.updateInProgress()) {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
@@ -50,8 +50,8 @@ public class Duel {
             player.sendf("You cannot duel yourself!");
             return;
         }
-		//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());
-		//World.getWorld().getAbuseHandler().cacheMessage(player1, (new StringBuilder()).append(player1.getName()).append(": opened a duel with: ").append(player.getName()).toString());
+		//World.getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());
+		//World.getAbuseHandler().cacheMessage(player1, (new StringBuilder()).append(player1.getName()).append(": opened a duel with: ").append(player.getName()).toString());
 		player.setBusy(true);
 		opponent.setBusy(true);
 		player.currentInterfaceStatus = 2;
@@ -155,7 +155,7 @@ public class Duel {
 			player.tradeAccept2 = false;
 			player.getTrader().tradeAccept1 = false;
 			player.getTrader().tradeAccept2 = false;
-			//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": removed: "+newId+":"+transferAmount+" from trade.");
+			//World.getAbuseHandler().cacheMessage(player,player.getName()+": removed: "+newId+":"+transferAmount+" from trade.");
 			player.getTrader().getActionSender().sendString(3431, "Are you sure you want to make this trade?");
 			player.getActionSender().sendString(3431, "Are you sure you want to make this trade?");
 		} else {
@@ -260,7 +260,7 @@ public class Duel {
 				}
 			}
 		} finally {
-			//World.getWorld().getAbuseHandler().cacheMessage(player,player.getName()+": added: "+id+":"+amount+" to trade.");
+			//World.getAbuseHandler().cacheMessage(player,player.getName()+": added: "+id+":"+amount+" to trade.");
 			player.getInventory().setFiringEvents(inventoryFiringEvents);
 			if(player.getTrader() == null || player.getDuel() == null) {
 				System.out.println("MARTIN YOU SHOULD FIX THIS LUL");
@@ -385,7 +385,7 @@ public class Duel {
 	public static void finishTrade(Player player) {
 		if(player.getTrader() == null)
 			return;
-		if(World.getWorld().updateInProgress()) {
+		if(World.updateInProgress()) {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
@@ -447,7 +447,7 @@ public class Duel {
 		//player.debugMessage("declined trade");
 		//System.out.println("decline: "+player.getName());
 		if(player.getTrader() != null && player.getTrader().getTrader() != null && player.getTrader().getTrader().equals(player)) {
-			//World.getWorld().getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": declined a trade with: ").append(player.getTrader().getName()).toString());
+			//World.getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": declined a trade with: ").append(player.getTrader().getName()).toString());
 			if(player.duelAttackable == 0) {
 				player.getTrader().duelAttackable = 0;
 				player.getTrader().duelWith2 = null;
@@ -528,7 +528,7 @@ public class Duel {
         player.getWalkingQueue().reset();
 		removeBanEquip(player);
 		removeBanEquip(player.getTrader());
-		World.getWorld().submit(new Event(1000, "duel") {
+		World.submit(new Event(1000, "duel") {
 
 			int timer = 3;
 

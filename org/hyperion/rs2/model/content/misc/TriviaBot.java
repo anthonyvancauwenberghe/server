@@ -95,7 +95,7 @@ public class TriviaBot {
 	public void init() {
 		loadQuestions();
 		updateQuestion();
-		World.getWorld().submit(TRIVIA_EVENT);
+		World.submit(TRIVIA_EVENT);
 		CommandHandler.submit(new Command("answer", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -139,7 +139,7 @@ public class TriviaBot {
 	 */
 	public int getPlayersAmount() {
 		int counter = 0;
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 			if(p.getTrivia().isEnabled())
 				counter++;
 		}
@@ -227,7 +227,7 @@ public class TriviaBot {
 		resetAnswers();
 		addReward(p);
 		if(speedCounter > 0) {
-			World.getWorld().submit(new Event(2000) {
+			World.submit(new Event(2000) {
 				public void execute() {
 					updateQuestion();
 					speedCounter--;
@@ -288,7 +288,7 @@ public class TriviaBot {
 	 * @param message
 	 */
 	private void yellMessage(String message) {
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 			if(p.getTrivia().isEnabled())
 				p.getActionSender().sendMessage(TITLE + message);
 		}

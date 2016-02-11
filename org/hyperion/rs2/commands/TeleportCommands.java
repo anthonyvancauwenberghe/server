@@ -1,11 +1,7 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.rs2.event.impl.RandomTeleportEvent;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
@@ -82,7 +78,7 @@ public class TeleportCommands {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				Player victim = World.getWorld().getPlayer(name);
+				Player victim = World.getPlayer(name);
 				if(victim != null) {
 					if(victim.getLocation().inPvPArea()) {
 						player.getActionSender().sendMessage("You can't teleport people out of the wild!");
@@ -111,7 +107,7 @@ public class TeleportCommands {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				Player releasing = World.getWorld().getPlayer(name);
+				Player releasing = World.getPlayer(name);
 				if(releasing != null) {
 					if(Rank.isStaffMember(releasing)) {
 						player.getActionSender().sendMessage("This command no longer works on staff members.");
@@ -135,7 +131,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("randomteleevent", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				World.getWorld().submit(new RandomTeleportEvent(player));
+				World.submit(new RandomTeleportEvent(player));
 				return true;
 			}
 		});
@@ -147,7 +143,7 @@ public class TeleportCommands {
 				if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
 				String name = filterInput(input);
-				Player target = World.getWorld().getPlayer(name);
+				Player target = World.getPlayer(name);
 				if(target != null) {
                     if(!Rank.hasAbility(player, Rank.DEVELOPER) && target.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
@@ -174,7 +170,7 @@ public class TeleportCommands {
                     return false;
 
 				String name = filterInput(input);
-				Player x = World.getWorld().getPlayer(name);
+				Player x = World.getPlayer(name);
 				if(x != null) {
                     if(!Rank.hasAbility(player, Rank.DEVELOPER) && x.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");

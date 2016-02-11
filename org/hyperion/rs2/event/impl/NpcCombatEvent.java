@@ -33,7 +33,7 @@ public class NpcCombatEvent extends Event {
 	public void execute() {
         final long startTime = System.currentTimeMillis();
 		NpcCombatEvent.agressiveNPCS();
-		for(NPC npc : World.getWorld().getNPCs()) {
+		for(NPC npc : World.getNPCs()) {
 			try {
 				if(npc.cE.getOpponent() != null) {
 					if(! Combat.processCombat(npc.cE))
@@ -54,7 +54,7 @@ public class NpcCombatEvent extends Event {
 
 	public static void corpHeal() {
 		boolean willHeal = true;
-		for(NPC npc : World.getWorld().getNPCs()) {
+		for(NPC npc : World.getNPCs()) {
 			try{
 				if(npc.getDefinition().getId() == 8133) {
 					for(Player p : RegionManager.getLocalPlayers(npc)) {
@@ -80,7 +80,7 @@ public class NpcCombatEvent extends Event {
 		}
 	}
 	public static void agressiveNPCS() {
-		for(NPC npc : World.getWorld().getNPCs()) {
+		for(NPC npc : World.getNPCs()) {
 			try {
                 if(npc.ownerId < 1 && npc.agressiveDis < 1 && Combat.getWildLevel(npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ()) > 20)
                     npc.agressiveDis = 3;

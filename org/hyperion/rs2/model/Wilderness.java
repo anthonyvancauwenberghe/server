@@ -45,7 +45,7 @@ public class Wilderness {
 		final int maxX = maxX2;
 		final int maxY = maxY2;
 		final Obelisk o2 = randomObelisk();
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Event(3000) {
 			public int timer = 2;
 
 			@Override

@@ -12,11 +12,11 @@ public enum MassEvent {
 	}
 
 	public final void executeEvent(final EventBuilder e) {
-		World.getWorld().submit(new Event(e.getDelay()) {
+		World.submit(new Event(e.getDelay()) {
 			public void execute() {
 				if(e.checkStop())
 					this.stop();
-				for(Player p : World.getWorld().getPlayers())
+				for(Player p : World.getPlayers())
 					e.execute(p);
 				if(e.getDelay() == 0)
 					EventBuilder.stopEvent(e);
@@ -24,7 +24,7 @@ public enum MassEvent {
 		});
 	}
 
-	private MassEvent() {
+	MassEvent() {
 	}
 }
 

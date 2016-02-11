@@ -1,13 +1,14 @@
 package org.hyperion.rs2.commands.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ViewPacketActivityCommand extends Command {
 
@@ -22,7 +23,7 @@ public class ViewPacketActivityCommand extends Command {
         private final String name;
         private final String key;
 
-        private Style(final String name, final String key){
+        Style(final String name, final String key){
             this.name = name;
             this.key = key;
         }
@@ -50,7 +51,7 @@ public class ViewPacketActivityCommand extends Command {
     }
 
     public boolean execute(final Player player, final String input){
-        final List<Player> players = new ArrayList<>(World.getWorld().getPlayers());
+        final List<Player> players = new ArrayList<>(World.getPlayers());
         int size = DEFAULT_SIZE;
         final String line = filterInput(input).trim();
         if(!line.isEmpty()){

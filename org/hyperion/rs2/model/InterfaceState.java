@@ -184,7 +184,7 @@ public class InterfaceState {
 				return;
 			switch(enterAmountInterfaceId) {
 				case GrandExchange.GEInterfaceId:
-					//World.getWorld().getGrandExchange().addItem(player, enterAmountId, ((Integer) player.getExtraData().get("geamount")), enterAmountSlot, amount);
+					//World.getGrandExchange().addItem(player, enterAmountId, ((Integer) player.getExtraData().get("geamount")), enterAmountSlot, amount);
 					break;
 				case BoB.PLAYER_INVENTORY_INTERFACE:
 					BoB.deposit(player, enterAmountSlot, enterAmountId, amount);
@@ -261,7 +261,7 @@ public class InterfaceState {
 					break;
 				case ShopManager.SHOP_INVENTORY_INTERFACE:
 					if(enterAmountSlot >= 0 && player.getShopId() == - 2) {
-						//World.getWorld().getGrandExchange().buyItem(player, enterAmountId, amount, player.geItem[enterAmountSlot].getName(),enterAmountSlot);
+						//World.getGrandExchange().buyItem(player, enterAmountId, amount, player.geItem[enterAmountSlot].getName(),enterAmountSlot);
 					} else if(enterAmountSlot >= 0 && enterAmountSlot < ShopManager.SIZE) {
 						ShopManager.buyItem(player, enterAmountId, enterAmountSlot, amount);
 					}

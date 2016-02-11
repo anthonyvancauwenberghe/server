@@ -114,7 +114,7 @@ public class ActionQueue {
 		}
 		if(queuedActions.size() > 0) {
 			currentAction = queuedActions.poll();
-			World.getWorld().submit(currentAction);
+			World.submit(currentAction);
 		}
 	}
 

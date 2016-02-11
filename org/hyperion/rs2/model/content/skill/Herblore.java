@@ -127,7 +127,7 @@ public class Herblore implements ContentTemplate {
 		if(ContentEntity.returnSkillLevel(c, 15) >= u.getPotionLevel()) {
 			ContentEntity.startAnimation(c, 0x378);
 			c.inAction = true;
-			World.getWorld().submit(new Event(3000) {
+			World.submit(new Event(3000) {
 				int amountLeft = amount2;
 
 				@Override
@@ -263,7 +263,7 @@ public class Herblore implements ContentTemplate {
 		if(ContentEntity.returnSkillLevel(c, 15) >= p.getPotionLevel()[i]) {
 			ContentEntity.startAnimation(c, 0x378);
 			c.inAction = true;
-			World.getWorld().submit(new Event(3000, "checked") {
+			World.submit(new Event(3000, "checked") {
 				@Override
 				public void execute() {
 					if(! c.inAction) {

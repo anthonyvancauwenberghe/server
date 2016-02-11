@@ -158,7 +158,7 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 			}
 		} else {
 			System.out.println("Attempting to unregister player instead");
-			World.getWorld().unregister(player);
+			World.unregister(player);
 		}
 		return false;
 	}

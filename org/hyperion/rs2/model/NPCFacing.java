@@ -15,7 +15,7 @@ public class NPCFacing {
 	}
 
 	public static void faceBankers() {
-		for(NPC n : World.getWorld().npcs) {
+		for(NPC n : World.npcs) {
 			if(n.getDefinition().getId() == 494 || n.getDefinition().getId() == 495) {
 				if(n.getSpawnLocation().getY() == 3366) {
 					n.cE.face(n.getSpawnLocation().getX(), 3367);

@@ -42,7 +42,7 @@ public class SummoningMonsters {
 		return null;
 	}
 	public static void runEvent(Player p) {
-		//for (Player p : World.getWorld().getPlayers()) {
+		//for (Player p : World.getPlayers()) {
 		if(p == null || p.cE.summonedNpc == null) {
 			return;
 		}
@@ -71,13 +71,13 @@ public class SummoningMonsters {
              try {
                  Combat.follow(p.cE.summonedNpc.cE, p.cE);
              } catch(final Exception ex) {
-                 World.getWorld().resetSummoningNpcs(p);
+                 World.resetSummoningNpcs(p);
              }
 			//}
 		}
 		if(p.SummoningCounter <= 0) {
 			p.getActionSender().sendMessage("Your Summoning monster has died.");
-			World.getWorld().resetSummoningNpcs(p);
+			World.resetSummoningNpcs(p);
 		} else if(p.SummoningCounter == 100) {
 			p.getActionSender().sendMessage("Your Summoning monster will die in a minute...");
 		} else if(p.SummoningCounter == 200) {
@@ -107,7 +107,7 @@ public class SummoningMonsters {
 		}
 		ContentEntity.deleteItemA(p, itemId, 1);
 		if(p.cE.summonedNpc != null) {
-			World.getWorld().resetSummoningNpcs(p);
+			World.resetSummoningNpcs(p);
 		}
 		SummonNewNPC2(p, npcID);
 	}
@@ -119,7 +119,7 @@ public class SummoningMonsters {
 						p.getLocation().getZ(), npcID, - 1);
 		p.SummoningCounter = SummoningData.getTimerById(npcID);
 		if(npcID == 6813) {
-			World.getWorld().submit(new BunyipEvent(p));
+			World.submit(new BunyipEvent(p));
 		}
 		monster.ownerId = p.getIndex();
 		Combat.follow(monster.getCombat(), p.getCombat());

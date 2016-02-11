@@ -18,11 +18,11 @@ public class FileLogging {
     private final static DateFormat FILE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss | ");
 
     public static void savePlayerLog(final Player player, final String... lines) {
-        World.getWorld().getEngine().pushTask(context -> writeToFile("characters/" + player.getName().toLowerCase(), lines));
+        World.getEngine().pushTask(context -> writeToFile("characters/" + player.getName().toLowerCase(), lines));
     }
 
     public static void saveGameLog(final String filePath, final String... lines) {
-        World.getWorld().getEngine().pushTask(context -> writeToFile(filePath, lines));
+        World.getEngine().pushTask(context -> writeToFile(filePath, lines));
     }
 
     private static void writeToFile(String filePath, String... lines) {

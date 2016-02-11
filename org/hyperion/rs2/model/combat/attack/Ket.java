@@ -1,7 +1,10 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 
@@ -61,7 +64,7 @@ public class Ket implements Attack {
 					int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.getAbsX()) * - 1;
 					int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.getAbsY()) * - 1;
 					//find our lockon target
-					int hitId = attack.getSlotId((Entity) n);
+					int hitId = attack.getSlotId(n);
 					//extra variables - not for release
 					int timer = 1;
 					int min = 16;
@@ -76,7 +79,7 @@ public class Ket implements Attack {
 					//create the projectile
 					attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 445, 99, 35, hitId, slope);
 					Combat.npcAttack(n, attack, Combat.random(23), 700, 2);
-					World.getWorld().submit(new Event(700) {
+					World.submit(new Event(700) {
 						@Override
 						public void execute() {
 

@@ -1,18 +1,14 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import java.io.FileNotFoundException;
-
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.SummoningData.SummonType;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.combat.summoning.impl.PackYak;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
+
+import java.io.FileNotFoundException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +26,7 @@ public class SummoningBoBs implements ContentTemplate {
     public boolean clickObject(Player player, int type, int useItem, int itemUsedSlot, int onItem, int slot) {
         if(type == ClickType.NPC_OPTION1) {
             if(player.getCombat().getFamiliar() != null) {
-                NPC npc = (NPC)World.getWorld().getNPCs().get(slot);
+                NPC npc = (NPC)World.getNPCs().get(slot);
                 player.debugMessage("Npc ownerid "+npc.ownerId+" npc id "+useItem);
                 if(npc.ownerId < 1)
                     return false;

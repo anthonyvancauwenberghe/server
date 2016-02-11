@@ -2,7 +2,10 @@ package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -200,7 +203,7 @@ public class Smithing implements ContentTemplate {
 			return true;
 		}
 		ContentEntity.startAnimation(client, 898);
-		World.getWorld().submit(new Event(2500) {
+		World.submit(new Event(2500) {
 			int amm = amm2;
 
 			@Override
@@ -221,7 +224,7 @@ public class Smithing implements ContentTemplate {
 					ContentEntity.addSkillXP(client, SMITHING_FRAME[type][k][2]
 							* 50 * EXPMULTIPLIER, Skills.SMITHING);
 					/*
-					 * World.getWorld().submit(new Event(2000) {
+					 * World.submit(new Event(2000) {
 					 * 
 					 * @Override public void execute() {
 					 */

@@ -19,7 +19,7 @@ public class PlayerCombatEvent extends Event {
 	
 	
 	public synchronized static Player[] cloneEntityList() {
-		return World.getWorld().getPlayers().stream().toArray(Player[]::new);
+		return World.getPlayers().stream().toArray(Player[]::new);
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public class PlayerCombatEvent extends Event {
                             int baseY = player.getLocation().getY() - 25;
                             player.getWalkingQueue().reset();
                             player.getWalkingQueue().setRunningQueue(true);
-                            Path p = World.getWorld().pathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            Path p = World.pathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
                             if(p != null) {
                                 for(int i = 1; i < p.getLength(); i++) {
                                     if((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)

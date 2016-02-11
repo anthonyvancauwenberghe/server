@@ -1,6 +1,5 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
@@ -110,7 +109,7 @@ public class WalkingPacketHandler implements PacketHandler {
         int baseX = player.getLocation().getX()-PathTest.maxRegionSize;
         int baseY = player.getLocation().getY()-PathTest.maxRegionSize;
         player.getWalkingQueue().setRunningQueue(runSteps);
-        Path p = World.getWorld().pathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+        Path p = World.pathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
         if(p == null)
         	return;
         for(int i = 0; i < p.getLength(); i++){

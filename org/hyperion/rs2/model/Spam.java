@@ -124,7 +124,7 @@ public class Spam {
 	public String punish() {
 		if(!isSpamming())
 			return "Player is not spamming..";
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Event(1000) {
 			private int counter = 0;
 
 			@Override
@@ -186,7 +186,7 @@ public class Spam {
 			@Override
 			public boolean execute(Player player, String input) {
 				LinkedList<Spam> spammers = new LinkedList<Spam>();
-				for(Player spammer : World.getWorld().getPlayers()) {
+				for(Player spammer : World.getPlayers()) {
 					if(spammer.getSpam().isSpamming()) {
 						spammers.add(spammer.getSpam());
 					}
@@ -212,7 +212,7 @@ public class Spam {
 
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				for(Player target : World.getWorld().getPlayers()) {
+				for(Player target : World.getPlayers()) {
                     if (target != null) {
                         if (target.getSpam().isSpamming())
                             target.getSpam().punish();

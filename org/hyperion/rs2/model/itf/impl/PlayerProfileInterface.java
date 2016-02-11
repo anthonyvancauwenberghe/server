@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
@@ -33,7 +32,7 @@ public class PlayerProfileInterface extends Interface{
             player.sendf("Invalid name");
             return false;
         }
-        final Player target = World.getWorld().getPlayer(targetName);
+        final Player target = World.getPlayer(targetName);
         if(target == null){
             player.sendf("This player is offline");
             return false;
@@ -59,7 +58,7 @@ public class PlayerProfileInterface extends Interface{
         final int requestId = pkt.getByte();
         if(player.getExtraData().get("lastKnownName") == null)
             return;
-        final Player viewing = World.getWorld().getPlayer(player.getExtraData().getString("lastKnownName"));
+        final Player viewing = World.getPlayer(player.getExtraData().getString("lastKnownName"));
         if(viewing == null){
             player.sendf("Cannot request data of an offline player's profile (yet)");
             return;

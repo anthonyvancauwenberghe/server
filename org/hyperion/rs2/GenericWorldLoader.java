@@ -52,7 +52,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(LOGIN_ATTEMPTS.get(player.getName()) >= MAXIMUM_LOGIN_ATTEMPTS) {
 			System.out.println(LOGIN_ATTEMPTS.remove(player.getName()));
 			BLOCKED_PLAYERS.add(player.getName());
-			World.getWorld().submit(new Event(Time.ONE_MINUTE, "LoginServer") {
+			World.submit(new Event(Time.ONE_MINUTE, "LoginServer") {
 				String playerName = player.getName();
 
 				@Override
@@ -65,10 +65,10 @@ public class GenericWorldLoader implements WorldLoader {
 			return LOGIN_ATTEMPTS_EXCEEDED;
 		}
 
-		if(World.getWorld().getPlayers().size() >= Constants.MAX_PLAYERS)
+		if(World.getPlayers().size() >= Constants.MAX_PLAYERS)
 			return WORLD_FULL;
 
-		if(World.getWorld().updateInProgress())
+		if(World.updateInProgress())
 			return UPDATE_IN_PROGRESS;
 
 		if(playerDetails.getUID() < 15483)
@@ -93,7 +93,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(!NameUtils.isValidName(player.getName()) || player.getName().startsWith(" ") || player.getName().split(" ").length - 1 > 1 || player.getName().length() > 12 || player.getName().length() <= 0)
 			return INVALID_CREDENTIALS;
 
-		if(World.getWorld().getPlayer(player.getName()) != null)
+		if(World.getPlayer(player.getName()) != null)
 			return ALREADY_LOGGED_IN;
 
 		/**

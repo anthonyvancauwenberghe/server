@@ -18,7 +18,7 @@ public class PromoteEvent extends Event {
 
 	@Override
 	public void execute() {
-			World.getWorld().getPlayers().forEach(player -> {
+			World.getPlayers().forEach(player -> {
 				String lastVoted = player.getPermExtraData().getString("lastVoted");
 				if (lastVoted != null)
 					if (!lastVoted.equalsIgnoreCase(CheckWaitingVotesTask.FORMAT_PLAYER.format(Calendar.getInstance().getTime())))

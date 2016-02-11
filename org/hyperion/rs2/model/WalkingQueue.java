@@ -1,19 +1,18 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent.OverloadFactory;
+import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.minigame.DangerousPK;
+import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.content.minigame.DangerousPK;
-import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.util.DirectionUtils;
 
 import java.io.BufferedWriter;
@@ -304,7 +303,7 @@ public class WalkingQueue {
 			}
             if(player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
                 if(player.duelAttackable <= 0) {
-                    World.getWorld().submit(new PlayerDeathEvent(player));
+                    World.submit(new PlayerDeathEvent(player));
                 }
                 return false;
             }

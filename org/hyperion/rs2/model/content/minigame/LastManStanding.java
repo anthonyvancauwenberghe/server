@@ -3,7 +3,6 @@ package org.hyperion.rs2.model.content.minigame;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -49,7 +48,7 @@ public class LastManStanding implements ContentTemplate {
 
     private static void startCountdown() {
         counter = 30;
-        World.getWorld().submit(new Event(1000) {
+        World.submit(new Event(1000) {
             @Override
             public void execute() {
                 if(!getLastManStanding().canJoin) {
@@ -241,7 +240,7 @@ public class LastManStanding implements ContentTemplate {
                 topTenPlayers.add(p);
                 System.out.println(topTenPlayers.size());
             }
-            World.getWorld().getPlayers().forEach(player -> openInterface(player));
+            World.getPlayers().forEach(player -> openInterface(player));
         }
         participants.clear();
         finishedPlayers.clear();

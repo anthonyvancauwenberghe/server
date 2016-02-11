@@ -145,7 +145,7 @@ public class ActionSender {
      * @param message The message to send.
      */
     public static void yellMessage(String message) {
-        for (Player p : World.getWorld().getPlayers()) {
+        for (Player p : World.getPlayers()) {
             p.getActionSender().sendMessage(message);
         }
     }
@@ -156,7 +156,7 @@ public class ActionSender {
      * @param messages
      */
     public static void yellModMessage(String... messages) {
-        for (Player p : World.getWorld().getPlayers()) {
+        for (Player p : World.getPlayers()) {
             if (Rank.isStaffMember(p)) {
                 for (String message : messages)
                     p.getActionSender().sendMessage(message);
@@ -250,7 +250,7 @@ public class ActionSender {
         player.getPoints().loginCheck();
         if (Rank.getPrimaryRank(player).ordinal() >= Rank.HELPER.ordinal() && !Rank.hasAbility(player, Rank.DEVELOPER)) {
             String rank = Rank.getPrimaryRank(player).toString();
-            for (Player p : World.getWorld().getPlayers())
+            for (Player p : World.getPlayers())
                 if (p != null)
                     if (!p.getPermExtraData().getBoolean("disabledStaffMessages"))
                         p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
@@ -365,7 +365,6 @@ public class ActionSender {
             sendString(lunarids[i] + 3, "Not in use.");
             sendString(lunarids[i] + 4, "Not in use.");
         }
-        World.getWorld().getEnemies().check(player);
         sendString(29177, "@or1@Pure Set");
         sendString(29178, "@or1@Zerk Set");
         sendString(29179, "@or1@Welfare Hybrid Set");
@@ -712,7 +711,7 @@ public class ActionSender {
         bldr.put((byte) horizontalAmount);
         bldr.put((byte) horizontalSpeed);
         if (time > -1) {
-            World.getWorld().submit(new Event(time) {
+            World.submit(new Event(time) {
                 @Override
                 public void execute() throws IOException {
                     player.getActionSender().cameraReset();
@@ -933,7 +932,7 @@ public class ActionSender {
         if (player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
             return this;
         if (player.isFollowing == null) {
-            player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
+            player.isFollowing = (Player) World.getPlayers().get(id);
             if (player.isFollowing == null) // if the player index returns null player, shouldn't be following
                 return this;
             player.isFollowing.beingFollowed = player;
@@ -1119,7 +1118,7 @@ public class ActionSender {
 
     public ActionSender openPlayersInterface() {
         sendString(8144, "@dre@Players Online: "
-                + (int) (World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
+                + (int) (World.getPlayers().size() * World.PLAYER_MULTI));
         int i = 0;
         int r = 0;
         Player p3 = null;
@@ -1127,13 +1126,13 @@ public class ActionSender {
         for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
             sendString(QUEST_MENU_IDS[d], "");
         }
-        for (; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
+        for (; (i + 1) <= World.getPlayers().size(); i++) {
             if (i >= 99) {
-                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getWorld().getPlayers().size() * World.PLAYER_MULTI) - 98) + " players");
+                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * World.PLAYER_MULTI) - 98) + " players");
                 break;
             }
-            if (World.getWorld().getPlayers().get((i + 1)) != null) {
-                p3 = (Player) World.getWorld().getPlayers().get((i + 1));
+            if (World.getPlayers().get((i + 1)) != null) {
+                p3 = (Player) World.getPlayers().get((i + 1));
                 if (p3.isHidden())
                     continue;
                 String s = p3.getSafeDisplayName();
@@ -1666,7 +1665,7 @@ public class ActionSender {
         if (System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
             player.write((new PacketBuilder(109)).toPacket());
             player.loggedOut = true;
-            World.getWorld().unregister(player);
+            World.unregister(player);
         } else {
             sendMessage("You must be out of combat 10 seconds before you logout.");
         }
@@ -1860,7 +1859,7 @@ public class ActionSender {
      */
     public ActionSender sendUpdate() {
         PacketBuilder bldr = new PacketBuilder(114);
-        bldr.putLEShort(World.getWorld().updateTimer * 50 / 30);
+        bldr.putLEShort(World.updateTimer * 50 / 30);
         player.write(bldr.toPacket());
         return this;
     }

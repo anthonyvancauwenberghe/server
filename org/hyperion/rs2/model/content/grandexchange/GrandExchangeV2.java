@@ -63,7 +63,7 @@ public class GrandExchangeV2 {
 		//ServerDatabase.query("CREATE TABLE `hyp_grandmoney` (`username` varchar(32) NOT NULL,`money` int(255) NOT NULL,PRIMARY KEY (`username`))");
 		try {
 			String query = "SELECT * FROM hyp_grandmoney";
-			ResultSet results = (ResultSet) ServerDatabase.query(query);
+			ResultSet results = ServerDatabase.query(query);
 			if(results != null)
 				while(results.next()) {
 					String username = results.getString("username");
@@ -95,7 +95,7 @@ public class GrandExchangeV2 {
 		player.getActionSender().sendString(29011, "Your Listed Items: " + itemCount);
 		int moneyCount = 0;
 		if(moneyOwed.get(player.getNameAsLong()) != null)
-			moneyCount = (Integer) moneyOwed.get(player.getNameAsLong());
+			moneyCount = moneyOwed.get(player.getNameAsLong());
 		player.getActionSender().sendString(28510, "Money in Collection Box: " + Misc.getFormattedValue(moneyCount));
 		player.getExtraData().put("gepage", 1);
 		clickPage(player, 1);
@@ -262,7 +262,7 @@ public class GrandExchangeV2 {
 			}
 		}
 		ServerDatabase.query(databaseUpdate);
-		Player seller = World.getWorld().getPlayer(item.getName());
+		Player seller = World.getPlayer(item.getName());
 		if(seller != null) {
 			if(! player.getName().toLowerCase().equals(playerName.toLowerCase()))
 				seller.getActionSender().sendMessage("Your " + ItemDefinition.forId(itemId).getName() + " has been sold in the grand exchange.");
@@ -380,7 +380,7 @@ public class GrandExchangeV2 {
 		player.getActionSender().sendString(28508, "Total Listed Items: " + player.geItems.size());
 		int moneyCount = 0;
 		if(moneyOwed.get(player.getNameAsLong()) != null)
-			moneyCount = (Integer) moneyOwed.get(player.getNameAsLong());
+			moneyCount = moneyOwed.get(player.getNameAsLong());
 		player.getActionSender().sendString(28510, "Money in Collection Box: " + moneyCount);
 		player.getExtraData().put("gepage", 1);
 		clickPage(player, 1);

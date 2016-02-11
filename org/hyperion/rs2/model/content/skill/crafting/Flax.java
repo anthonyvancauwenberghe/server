@@ -18,7 +18,7 @@ public class Flax extends Crafting{
             return false;
         client.setBusy(true);
         ContentEntity.startAnimation(client, 2286);
-        World.getWorld().submit(new Event(2000) {
+        World.submit(new Event(2000) {
             @Override
             public void execute() {
                 if(!client.isBusy()) {
@@ -36,7 +36,7 @@ public class Flax extends Crafting{
     public static boolean spinFlax(final Player client, int id) {
         ContentEntity.startAnimation(client, 894);
         client.setBusy(true);
-        World.getWorld().submit(new Event(2000) {
+        World.submit(new Event(2000) {
             int amount = ContentEntity.getItemAmount(client, 1779);
 
             @Override

@@ -1,9 +1,10 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.util.Misc;
@@ -27,7 +28,7 @@ public class ServerMinigame extends Event {
 
     @Override
     public void execute() {
-        World.getWorld().submit(new CountDownEvent(builders[Misc.random(builders.length - 1)]));
+        World.submit(new CountDownEvent(builders[Misc.random(builders.length - 1)]));
     }
 
     public static class CountDownEventBuilder {
@@ -41,7 +42,7 @@ public class ServerMinigame extends Event {
         public CountDownEventBuilder(final int npcId, final Location location) {
             this(NPCDefinition.forId(npcId).getName().replaceAll("_", " "), "the event tab", location, "2x drop rates for 30 minutes", () -> {
                 NpcDeathEvent.npcIdForDoubleDrops = npcId;
-                World.getWorld().submit(new Event(Time.THIRTY_MINUTES) {
+                World.submit(new Event(Time.THIRTY_MINUTES) {
                     public void execute() {
                         NpcDeathEvent.npcIdForDoubleDrops = -1;
                         this.stop();

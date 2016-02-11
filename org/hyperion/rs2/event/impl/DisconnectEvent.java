@@ -18,7 +18,7 @@ public class DisconnectEvent extends Event {
 	@Override
 	public void execute() {
 		long currentTime = System.currentTimeMillis();
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player != null) {
 				if(player.isDisconnected() && currentTime - player.cE.lastHit >= 10000) {
 					forceLogout(player);
@@ -33,7 +33,7 @@ public class DisconnectEvent extends Event {
 			return "That player is offline";
 		}
 		try {
-			World.getWorld().unregister(glitcher);
+			World.unregister(glitcher);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -46,7 +46,7 @@ public class DisconnectEvent extends Event {
 			@Override
 			public boolean execute(Player player, String input) {
 				String name = input.replaceAll("forcelogout ", "");
-				Player glitcher = World.getWorld().getPlayer(name);
+				Player glitcher = World.getPlayer(name);
 				player.getActionSender().sendMessage(forceLogout(glitcher));
 				return true;
 			}

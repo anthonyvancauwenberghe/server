@@ -426,7 +426,7 @@ public class Magic {
 		final int submitDamage = Damage;
 		final boolean submitSplash = splash;
 		final CombatEntity opp2 = opponent;
-		World.getWorld().submit(new Event(timer, "checked") {
+		World.submit(new Event(timer, "checked") {
 			@Override
 			public void execute() {
 				boolean hitSomething = false;
@@ -464,7 +464,7 @@ public class Magic {
 			return;
 		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-            World.getWorld().submit(new Event(600) {
+            World.submit(new Event(600) {
                 @Override
                 public void execute() throws IOException {
                     victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
@@ -617,7 +617,7 @@ public class Magic {
 		// deal damage
 
 		if(false/* END_GFX[spell] == 369 && !splash */)
-			World.getWorld().submit(new Event(500) {
+			World.submit(new Event(500) {
 				@Override
 				public void execute() {
 					p.hit(Damage, c.getEntity(), false, 2);
@@ -636,7 +636,7 @@ public class Magic {
 			}
 		}
        		p.lastHit = System.currentTimeMillis();
-		World.getWorld().submit(new Event(1000, "finishmagic") {
+		World.submit(new Event(1000, "finishmagic") {
 			@Override
 			public void execute() {
 				// System.out.println("resetting magic");
@@ -833,7 +833,7 @@ public class Magic {
 		if(item == 995 || player.isBusy())
 			return;
 		player.setBusy(true);
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Event(3000) {
 
 			@Override
 			public void execute() {
@@ -1222,7 +1222,7 @@ public class Magic {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
 		player.inAction = ! player.inAction;
-		World.getWorld().submit(new Event(600) {
+		World.submit(new Event(600) {
 			int index = 0;
 
 			public void execute() {
@@ -1382,7 +1382,7 @@ public class Magic {
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
-		World.getWorld().submit(new Event(delay) {
+		World.submit(new Event(delay) {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));

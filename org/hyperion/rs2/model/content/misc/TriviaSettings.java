@@ -39,9 +39,7 @@ public class TriviaSettings {
 	}
 
 	public boolean canAnswer() {
-		if(System.currentTimeMillis() - lastTimeAnswered > TIMER)
-			return true;
-		return false;
+		return System.currentTimeMillis() - lastTimeAnswered > TIMER;
 	}
 
 	public boolean isEnabled() {
@@ -53,7 +51,7 @@ public class TriviaSettings {
 	}
 
 	public static void resetAllTimers() {
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 			if(p != null) {
                 p.getTrivia().resetTimer();
             }

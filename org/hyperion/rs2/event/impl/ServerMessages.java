@@ -169,7 +169,7 @@ public class ServerMessages extends Event {
 			if(currentIndex == size() || currentIndex > size())
                 currentIndex = 0;
 			final String message = MESSAGES.get(currentIndex++);
-			for(Player p : World.getWorld().getPlayers())
+			for(Player p : World.getPlayers())
 				if(p != null)
                     if(!p.getName().equalsIgnoreCase("Ferry"))
 					    p.sendServerMessage(message);

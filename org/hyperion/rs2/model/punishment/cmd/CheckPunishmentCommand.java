@@ -1,9 +1,5 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -15,6 +11,11 @@ import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 public class CheckPunishmentCommand extends Command {
 
     public CheckPunishmentCommand() {
@@ -23,7 +24,7 @@ public class CheckPunishmentCommand extends Command {
 
     public boolean execute(final Player player, final String input) {
         final String targetName = filterInput(input);
-        final Player target = World.getWorld().getPlayer(targetName);
+        final Player target = World.getPlayer(targetName);
         final List<Punishment> punishments = new ArrayList<>();
         for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
             for(final Punishment p : h.getPunishments()){

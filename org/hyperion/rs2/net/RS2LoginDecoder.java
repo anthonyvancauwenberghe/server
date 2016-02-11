@@ -145,7 +145,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 								session.write(new PacketBuilder().put(INITIAL_RESPONSE).toPacket());
 								return true;
 							case OPCODE_PLAYERCOUNT:
-								session.write(new PacketBuilder().putShort(World.getWorld().getPlayers().size()).toPacket());
+								session.write(new PacketBuilder().putShort(World.getPlayers().size()).toPacket());
 								return true;
 							default:
 								invalidLogins++;
@@ -342,7 +342,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 							session.write(new PacketBuilder().put((byte) returnCode).toPacket()).addListener(future -> future.getSession().close(false));
 							return false;
 						}
-						World.getWorld().load(new PlayerDetails(session, name, pass, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+						World.load(new PlayerDetails(session, name, pass, macId, uid, inCipher, outCipher, remoteIp, specialUid));
 					}
 					break;
 			}

@@ -107,7 +107,7 @@ public class RestarterThread extends Thread {
 	 * Checks if the server is running fine, if not, an update will happen.
 	 */
 	private void checkServerUptime() {
-		int players = World.getWorld().getPlayers().size();
+		int players = World.getPlayers().size();
 		counter++;
 		if(counter >= 20) {
 			counter = 0;
@@ -137,7 +137,7 @@ public class RestarterThread extends Thread {
 			if(Server.getUptime().minutesUptime() > 10) {
 				checkServerUptime();
 				if(Server.getUptime().millisUptime() > MAX_UPTIME) {
-					World.getWorld().update(30, "Uptime over MAX uptime.");
+					World.update(30, "Uptime over MAX uptime.");
 					return;
 				}
 			}

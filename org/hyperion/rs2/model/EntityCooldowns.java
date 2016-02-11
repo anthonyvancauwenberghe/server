@@ -63,7 +63,7 @@ public class EntityCooldowns {
 	 */
 	public void flag(CooldownFlags cooldown, int duration, Entity entity) {
 		cooldowns.set(cooldown.ordinal(), true);
-		World.getWorld().submit(new CooldownEvent(entity, cooldown, duration));
+		World.submit(new CooldownEvent(entity, cooldown, duration));
 	}
 
 	/**

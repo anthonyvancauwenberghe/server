@@ -252,7 +252,7 @@ public class MiningV2 implements ContentTemplate {
 		if(cycle2 <= 1)
 			cycle2 = 2;
 		final int cycle = cycle2;
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Event(1000) {
 			int cycleCount = cycle;
 
 			@Override
@@ -289,7 +289,7 @@ public class MiningV2 implements ContentTemplate {
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
 							ObjectManager.addObject(blank_rock);
 							rockLocationStatus.put(l, 1);
-							World.getWorld().submit(new Event(rock.respawn * 1000) {
+							World.submit(new Event(rock.respawn * 1000) {
 								@Override
 								public void execute() {
 									ObjectManager.replace(blank_rock, new_rock);

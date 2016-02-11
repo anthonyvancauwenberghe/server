@@ -375,7 +375,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public static void resetCorpDamage() {
-		for (Player p : World.getWorld().getPlayers()) {
+		for (Player p : World.getPlayers()) {
 			if (p == null)
 				continue;
 			if (p.getCorpDamage() > 0)
@@ -589,7 +589,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		}
 
 		if(!contains && add) {
-			for (Player p : World.getWorld().getPlayers()) {
+			for (Player p : World.getPlayers()) {
 				p.sendLootMessage("Achievement", getSafeDisplayName() + " has just achieved " + name + "!");
 			}
 			bank.add(new BankItem(0, id, 1));
@@ -1533,7 +1533,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		if(skills.getLevel(Skills.HITPOINTS) <= 0) {
 			if(! this.isDead()) {
 				Prayer.retribution(this);
-				World.getWorld().submit(new PlayerDeathEvent(this));
+				World.submit(new PlayerDeathEvent(this));
 
 			}
 			this.setDead(true);
@@ -1561,7 +1561,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		else
 			skills.setLevel(skill, (cHp + hp));
 		if(skills.getLevel(3) <= 0) {
-			World.getWorld().submit(new PlayerDeathEvent(this));
+			World.submit(new PlayerDeathEvent(this));
 			this.setDead(true);
 		}
 	}
@@ -1577,7 +1577,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 				skills.setLevel(3, (cHp + hp));
 		}
 		if(skills.getLevel(3) <= 0) {
-			World.getWorld().submit(new PlayerDeathEvent(this));
+			World.submit(new PlayerDeathEvent(this));
 			this.setDead(true);
 		}
 	}
@@ -1658,7 +1658,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 						ContentEntity.playerGfx(this, 1684);
 						ContentEntity.startAnimation(this, 9603);
 						extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
-						World.getWorld().submit(new Event(0x258) {
+						World.submit(new Event(0x258) {
 							int loop = 0;
 
 							public void execute() {
@@ -1777,7 +1777,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 			hitType = HitType.NO_DAMAGE;
 		if(source instanceof Player) {
 			try {
-				if(duelAttackable > 0 && World.getWorld().getPlayers().get(source.getIndex()).isDead())
+				if(duelAttackable > 0 && World.getPlayers().get(source.getIndex()).isDead())
 					return 0;
 			}catch(Exception e) {
 
@@ -1802,7 +1802,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 			playAnimation(anim);
 			isDoingEmote = true;
 			inAction = true;
-			World.getWorld().submit(new Event(1000, "checked") {
+			World.submit(new Event(1000, "checked") {
 				@Override
 				public void execute() {
 					isDoingEmote = false;
@@ -2038,28 +2038,28 @@ public class Player extends Entity implements Persistable, Cloneable {
 			bounty = 10;
 		switch(killStreak) {
 			case 5:
-				World.getWorld().getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName() + " is on a "
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName() + " is on a "
 						+ killStreak + " killstreak!"));
 				break;
 			case 7:
-				World.getWorld().getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName()
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName()
 						+ " has begun a rampage with a killstreak of " + killStreak));
 				break;
 			case 9:
-				World.getWorld().getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName()
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName()
 						+ " is on a massacre with " + killStreak + " kills!"));
 				break;
 		}
 		if(killStreak >= 10) {
 			if(Math.random() > 0.5) {
-				World.getWorld().getPlayers().stream().filter(p -> p != null).forEach(p -> {
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> {
 					p.sendPkMessage(getSafeDisplayName() + " now has "
 							+ killStreak + " kills in a row! Kill him and gain "
 							+ bounty + " Pk points!");
 				});
 			} else {
 				String ppl = getPeopleString();
-				World.getWorld().getPlayers().stream().filter(p -> p != null).forEach(p -> {
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> {
 					p.sendPkMessage(getSafeDisplayName() + " has killed "
 							+ killStreak + ppl + " in a row! Kill him and gain "
 							+ bounty + " Pk points!");

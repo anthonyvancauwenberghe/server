@@ -16,10 +16,6 @@ package org.hyperion.rs2.model.content.skill;
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Iterator;
-import java.util.List;
 import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.event.Event;
@@ -34,6 +30,11 @@ import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.minigame.RecipeForDisaster;
 import org.hyperion.rs2.model.content.misc.PrayerIcon;
 import org.hyperion.util.Misc;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Prayer skill handler
@@ -105,7 +106,7 @@ public class Prayer implements ContentTemplate {
 		}
 		ContentEntity.deleteItem(player, buryItem);
 		final int fBuryXP = buryXP;
-		World.getWorld().submit(new Event(2000, "checked") {
+		World.submit(new Event(2000, "checked") {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {
@@ -182,7 +183,7 @@ public class Prayer implements ContentTemplate {
 					&& p.getSkills().getLevel(3) > 0) {
 				p.cE.doGfx(436, 0);
 				p.getSkills().detractLevel(5, p.getSkills().getLevel(5));
-				p.heal((int) (p.getSkills().getLevelForExp(3) / 5));
+				p.heal(p.getSkills().getLevelForExp(3) / 5);
 			}
 		}
 	}
@@ -219,7 +220,7 @@ public class Prayer implements ContentTemplate {
 		if(distance < 20)
 			player.getActionSender().createGlobalProjectile(player.cE.getAbsY(), player.cE.getAbsX(), offsetY, offsetX, 50, speed, 2263, 20, 9, hitId, time, slope);
 	    /* UNTIL THIS */
-		World.getWorld().submit(new Event(1200, "checked") {
+		World.submit(new Event(1200, "checked") {
 			public void execute() {
 				try {
 					if(victim != null)
@@ -835,9 +836,7 @@ public class Prayer implements ContentTemplate {
 			return true;
 		if(index == 5 && (player.getPrayers().isEnabled(34) || player.getPrayers().isEnabled(45)))// energy
 			return true;
-		if(index == 6 && (player.getPrayers().isEnabled(34) || player.getPrayers().isEnabled(46)))// special
-			return true;
-		return false;
+		return index == 6 && (player.getPrayers().isEnabled(34) || player.getPrayers().isEnabled(46));
 	}
 
 	/*

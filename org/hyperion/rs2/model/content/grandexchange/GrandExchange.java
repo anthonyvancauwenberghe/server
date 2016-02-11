@@ -56,7 +56,7 @@ public class GrandExchange {
 		}
 		try {
 			String query = "SELECT * FROM hyp_grandmoney";
-			ResultSet results = (ResultSet) ServerDatabase.query(query);
+			ResultSet results = ServerDatabase.query(query);
 			while(results.next()) {
 				String username = results.getString("username");
 				int money = results.getInt("money");
@@ -245,7 +245,7 @@ public class GrandExchange {
 			}
 		}
 		ServerDatabase.query(databaseUpdate);
-		Player seller = World.getWorld().getPlayer(item.getName());
+		Player seller = World.getPlayer(item.getName());
 		if(seller != null) {
 			if(! player.getName().toLowerCase().equals(playerName.toLowerCase()))
 				seller.getActionSender().sendMessage("Your " + ItemDefinition.forId(itemId).getName() + " has been sold in the grand exchange.");
@@ -298,7 +298,7 @@ public class GrandExchange {
 				for(Map.Entry<Long, GEItem> entry : items[i].entrySet()) {
 					if(index >= 40)
 						break;
-					items2[index] = (Item) entry.getValue().getItem();
+					items2[index] = entry.getValue().getItem();
 					//player.geItem[index++] = entry.getValue();
 				}
 			}
@@ -325,7 +325,7 @@ public class GrandExchange {
 			for(Map.Entry<Long, GEItem> entry : items[item].entrySet()) {
 				if(index >= 39)
 					break;
-				items2[index] = (Item) entry.getValue().getItem();
+				items2[index] = entry.getValue().getItem();
 				//player.geItem[index++] = entry.getValue();
 			}
 		}
@@ -347,7 +347,7 @@ public class GrandExchange {
 				for(Map.Entry<Long, GEItem> entry : items[i].entrySet()) {
 					if(index >= 39)
 						break;
-					items2[index] = (Item) entry.getValue().getItem();
+					items2[index] = entry.getValue().getItem();
 					//player.geItem[index++] = entry.getValue();
 				}
 			}

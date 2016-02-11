@@ -57,10 +57,7 @@ import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
-import org.madturnip.tools.DumpNpcDrops;
-import org.madturnip.tools.RoomDefinitionCreator;
 
-import javax.swing.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.text.ParseException;
@@ -868,12 +865,6 @@ public class CommandPacketHandler implements PacketHandler {
             player.sendMessage(Dungeon.activeDungeons.size());
         }
 
-        if (commandStart.equalsIgnoreCase("opendef")) {
-            final JFrame frame = new RoomDefinitionCreator(player);
-            frame.pack();
-            frame.setVisible(true);
-        }
-
         if (commandStart.equalsIgnoreCase("reloadpunish")) {
             boolean loaded = PunishmentManager.getInstance().load();
             player.sendMessage("Loaded punishments" + loaded);
@@ -1216,8 +1207,6 @@ public class CommandPacketHandler implements PacketHandler {
 
                 }
             }
-
-            DumpNpcDrops.startDump2();
         }
 
         if (commandStart.equalsIgnoreCase("reloadaod")) {

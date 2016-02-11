@@ -11,7 +11,6 @@ import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.CharFilesCleaner;
-import org.madturnip.tools.DumpNpcDrops;
 
 import java.io.BufferedReader;
 import java.io.Console;
@@ -113,7 +112,6 @@ public class Server {
 
             new RS2Server().start();
 
-            DumpNpcDrops.startDump2();
             PossibleHacksHolder.init();
             RoomDefinition.load();
             ClanManager.load();

@@ -3,7 +3,6 @@ package org.hyperion.rs2.model.content.grandexchange;
 import org.hyperion.rs2.event.impl.UpdateEvent;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.util.Restart;
-import org.madturnip.tools.SQLAdminManager;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,7 +19,6 @@ public class ServerDatabase extends Thread {
 	public ServerDatabase(String database) {
 		ServerDatabase.database = database;
 		ServerDatabase.connect();
-		new SQLAdminManager();
 	}
 
 	public static boolean isClosed() throws SQLException {

@@ -1,6 +1,7 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.rs2.commands.impl.CommandResult;
+import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.jsoup.helper.StringUtil;
@@ -17,16 +18,26 @@ import static org.hyperion.rs2.commands.impl.CommandResult.*;
 public abstract class NewCommand {
     private final String key;
     private final Rank rank;
+    private final long delay;
     private final CommandInput[] requiredInput;
 
-    public NewCommand(String key, Rank rank, CommandInput... requiredInput) {
+    public NewCommand(String key, Rank rank, long delay, CommandInput... requiredInput) {
         this.key = key;
         this.rank = rank;
         this.requiredInput = requiredInput;
+        this.delay = delay;
+    }
+
+    public NewCommand(String key, long delay, CommandInput... requiredInput) {
+        this(key, null, delay, requiredInput);
     }
 
     public NewCommand(String key, CommandInput... requiredInput) {
-        this(key, null, requiredInput);
+        this(key, null, 0, requiredInput);
+    }
+
+    public NewCommand(String key, Rank rank, CommandInput... requiredInput) {
+        this(key, rank, 0, requiredInput);
     }
 
     public final String getKey() {
@@ -41,6 +52,14 @@ public abstract class NewCommand {
         return requiredInput;
     }
 
+    public final long getDelay() {
+        return delay;
+    }
+
+    public final boolean hasDelay() {
+        return getDelay() != 0;
+    }
+
     protected abstract boolean execute(Player player, String[] input);
 
     public final CommandResult doCommand(Player player, String[] input) {
@@ -51,6 +70,7 @@ public abstract class NewCommand {
         try {
             for (int i = 0; i < input.length; i++) {
                 //Over here we need to test what the argument is.
+                //It gives warnings, but it's nothing unwanted, we're careful with the exception and simply can't test any more.
                 if (StringUtil.isNumeric(input[i])) {
                     if (Pattern.matches("([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) {
                         return GOT_ERROR_MESSAGE;
@@ -74,10 +94,9 @@ public abstract class NewCommand {
 
     public final String getModelInput() {
         String modelInput = "::" + getKey() + " ";
-        for (int i = 0; i < requiredInput.length; i++)
-            modelInput += requiredInput[i].getShortDescription() + ", ";
-        modelInput = modelInput.substring(0, modelInput.length() - 2);
-        return modelInput;
+        for (CommandInput inputString : requiredInput)
+            modelInput += inputString.getShortDescription() + ", ";
+        return  modelInput.substring(0, modelInput.length() - 2); //this will remove the unnecessary comma without us having to do a lot of extra work.
     }
 
     public final String filterInput(String input) {

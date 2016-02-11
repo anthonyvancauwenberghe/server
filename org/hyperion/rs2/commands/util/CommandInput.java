@@ -1,4 +1,4 @@
-package org.hyperion.rs2.commands;
+package org.hyperion.rs2.commands.util;
 
 import org.hyperion.rs2.model.Player;
 
@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 /**
  * Created by Gilles on 10/02/2016.
  */
-public class CommandInput<T> {
+public final class CommandInput<T> {
     /**
      * This is a predicate that will tell the command input in that spot what to check.
      */

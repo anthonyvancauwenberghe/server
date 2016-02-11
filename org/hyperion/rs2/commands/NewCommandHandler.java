@@ -1,12 +1,16 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.rs2.commands.impl.CommandResult;
+import org.hyperion.rs2.commands.util.CommandInput;
+import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Time;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Gilles on 10/02/2016.
  */
-public class NewCommandHandler {
+public final class NewCommandHandler {
 
     /**
      * Simple static integer to keep the maximum available parts for the command.
@@ -27,6 +31,13 @@ public class NewCommandHandler {
      * This map just keeps all the commands that got submitted in it.
      */
     private final static HashMap<String, List<NewCommand>> COMMANDS = new HashMap<>();
+
+    /**
+     * This map keeps what command which player used. The CommandUsage keeps the time of it's creation,
+     * therefor we can keep people from using commands multiple times in a certain time frame.
+     * This map gets cleaned by an event that is submitted whenever a command is used that has a delay to it.
+     */
+    private final static HashMap<String, List<String>> COMMANDS_USED = new HashMap<>();
 
     /**
      * This class adds the submitted command to the map. It does this by submitting them one by one to a help method.
@@ -46,6 +57,21 @@ public class NewCommandHandler {
         COMMANDS.get(command.getKey()).add(command);
     }
 
+    private static void commandUsed(String playerName, String commandUsed, long delay) {
+        if(!COMMANDS_USED.containsKey(playerName))
+            COMMANDS_USED.put(playerName, new ArrayList<>());
+        COMMANDS_USED.get(playerName).add(commandUsed);
+
+        World.getWorld().submit(new Event(delay) {
+            @Override
+            public void execute() throws IOException {
+                if(COMMANDS_USED.containsKey(playerName))
+                    COMMANDS_USED.get(playerName).remove(commandUsed);
+                stop();
+            }
+        });
+    }
+
     /**
      * This method processes the command if possible.
      * @param key The command key.
@@ -56,6 +82,8 @@ public class NewCommandHandler {
     public static boolean processCommand(String key, Player player, String input) {
         //First we check if the map actually contains this command
         if(!COMMANDS.containsKey(key))
+            return false;
+        if(COMMANDS_USED.containsKey(player.getName()) && COMMANDS_USED.get(player.getName()).stream().filter(commandUsage -> commandUsage.equalsIgnoreCase(key)).count() > 0)
             return false;
         //After we split the input, if the command is just the key we skip a part.
         List<NewCommand> fittingCommands;
@@ -82,8 +110,13 @@ public class NewCommandHandler {
             if (command == null)
                 continue;
             CommandResult commandResult = command.doCommand(player, parts);
-            if(commandResult == CommandResult.SUCCESSFUL || commandResult == CommandResult.GOT_ERROR_MESSAGE)
+            if(commandResult == CommandResult.GOT_ERROR_MESSAGE)
                 return true;
+            if(commandResult == CommandResult.SUCCESSFUL) {
+                if(command.hasDelay())
+                    commandUsed(player.getName(), key, command.getDelay());
+                return true;
+            }
         }
         //If after trying neither of the commands worked (and they didn't give their individual message) we give them the possible inputs, but this time filtered.
             player.sendMessage("The possible combinations for this command with " + parts.length + " arguments are: ");
@@ -97,7 +130,7 @@ public class NewCommandHandler {
      * ~ GLIS
      */
     static {
-        NewCommandHandler.submit(new NewCommand("isonline", Rank.DEVELOPER, new CommandInput<>(PlayerSaving::playerExists, "player", "A player that exists in the system.")) {
+        NewCommandHandler.submit(new NewCommand("isonline", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<>(PlayerSaving::playerExists, "player", "A player that exists in the system.")) {
             @Override
             protected boolean execute(Player player, String[] input) {
                 player.sendMessage("Player " + TextUtils.optimizeText(input[0]) + " is currently " + (World.getWorld().getPlayer(input[0]) == null ? "offline" : "online"));

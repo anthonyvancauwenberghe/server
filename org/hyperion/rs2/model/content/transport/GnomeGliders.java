@@ -1,17 +1,14 @@
 package org.hyperion.rs2.model.content.transport;
 
-import java.io.FileNotFoundException;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.util.Misc;
+
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -120,7 +117,7 @@ public class GnomeGliders implements ContentTemplate {
 	}
 
 	private void addNPC(int id, int x, int y, int z) {
-		NPC npc = World.getWorld().getNPCManager().addNPC(x, y, z, id, - 1);
+		NPC npc = NPCManager.addNPC(x, y, z, id, - 1);
 		npcs.add(npc);
 	}
 

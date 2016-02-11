@@ -18,6 +18,7 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
@@ -296,7 +297,7 @@ public class ActionSender {
         }
         player.getWalkingQueue().setRunningToggled(true);
         sendMapRegion();
-        // World.getWorld().getGlobalItemManager().displayItems(player);
+        // GlobalItemManager.displayItems(player);
         InterfaceContainerListener interfacecontainerlistener = new InterfaceContainerListener(
                 player, 3214);
         player.getInventory().addListener(interfacecontainerlistener);
@@ -316,8 +317,7 @@ public class ActionSender {
 
         player.startUpEvents();
         if (player.fightCavesWave > 0) {
-            World.getWorld().getContentManager()
-                    .handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
+            ContentManager.handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
         }
         if (player.isNew()) {
             DialogueManager.openDialogue(player, 10000);

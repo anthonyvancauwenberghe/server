@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -174,7 +174,7 @@ public class FightCaves
 	}
 
 	public NPC spawnNpc(int i, Location location, Player player) {
-		NPC npc = World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
+		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
 		npc.agressiveDis = 150;
 		npc.ownerId = player.getIndex();
 		return npc;

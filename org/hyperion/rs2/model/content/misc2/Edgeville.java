@@ -1,9 +1,8 @@
 package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -13,24 +12,20 @@ public class Edgeville implements ContentTemplate {
 
 	public final static Location LOCATION = Location.create(3087, 3491, 0);
 
-	public static NPC DICER = World.getWorld().getNPCManager().addNPC(3089, 3485, 0, 2999, - 1);
+
 
 	@Override
-	public boolean clickObject(Player player, int type, int a, int b, int c,
-	                           int d) {
-		// TODO Auto-generated method stub
+	public boolean clickObject(Player player, int type, int a, int b, int c, int d) {
 		return false;
 	}
 
 	@Override
 	public void init() throws FileNotFoundException {
-		// TODO Auto-generated method stub
-
+		NPCManager.addNPC(3089, 3485, 0, 2999, - 1);
 	}
 
 	@Override
 	public int[] getValues(int type) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

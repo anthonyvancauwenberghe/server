@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.minigame.Bork;
@@ -201,12 +202,12 @@ public class PlayerDeathEvent extends Event {
         } else if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
             LastManStanding.getLastManStanding().deathCheck(player, killer);
 		} else if (Bork.doDeath(player)) {
-        } else if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.ATTACKABLE)) {
-			if(World.getWorld().getContentManager().handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
+        } else if(ContentManager.handlePacket(6, player, ClickId.ATTACKABLE)) {
+			if(ContentManager.handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
 			if(killer != null) //in fight pits death, reward player
 				killer.getInventory().add(Item.create(391, 1));
-		} else if(World.getWorld().getContentManager().handlePacket(6, player, 32000, - 1, - 1, - 1)) {
-			World.getWorld().getContentManager().handlePacket(6, player, 32001, - 1, - 1, - 1);
+		} else if(ContentManager.handlePacket(6, player, 32000, - 1, - 1, - 1)) {
+			ContentManager.handlePacket(6, player, 32001, - 1, - 1, - 1);
 		} else if(player.fightCavesWave > 0 && !player.getLocation().inPvPArea()) { //If dying in fight caves
 			player.fightCavesWave = 0;
 			player.getActionSender().showInterfaceWalkable(- 1);
@@ -216,7 +217,7 @@ public class PlayerDeathEvent extends Event {
 			if(! player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
 				if(killer != null) {
 					//blood lust system
-					World.getWorld().getContentManager().handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
+					ContentManager.handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
                     BountyHandler.handle(killer, player.getName());
 					/**
 					 * Increasing stupid points and stuff.

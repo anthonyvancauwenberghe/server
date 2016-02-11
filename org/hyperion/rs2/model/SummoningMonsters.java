@@ -4,7 +4,6 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.SummoningData;
 import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.BunyipEvent;
 import org.hyperion.rs2.model.content.skill.Summoning;
@@ -115,9 +114,7 @@ public class SummoningMonsters {
 
 	public static void SummonNewNPC2(final Player p, int npcID) {
 
-		final NPC monster = World
-				.getWorld()
-				.getNPCManager()
+		final NPC monster = NPCManager
 				.addNPC(p.getLocation().getX(), p.getLocation().getY(),
 						p.getLocation().getZ(), npcID, - 1);
 		p.SummoningCounter = SummoningData.getTimerById(npcID);

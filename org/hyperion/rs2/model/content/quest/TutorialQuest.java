@@ -9,7 +9,7 @@ public class TutorialQuest implements ContentTemplate {
 
 
 	public void talkToGuide(Player player, int npcSlot) {
-		player.setInteractingEntity(((NPC) World.getWorld().getNPCs().get(npcSlot)));
+		player.setInteractingEntity(World.getWorld().getNPCs().get(npcSlot));
 		if(player.tutIsland == 1) {
 			DialogueManager.openDialogue(player, 37);
 		} else if(player.tutIsland == 2) {
@@ -53,13 +53,13 @@ public class TutorialQuest implements ContentTemplate {
 			if(++ player.tutSubIsland >= 3) {
 
 				GlobalItem globalItem = new GlobalItem(player, b, c, 0, new Item(2138, 1));
-				World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+				GlobalItemManager.newDropItem(player, globalItem);
 			}
 		} else if(type == 6) {
 			if(a == 1738) {
 				//player.setTeleportTarget(Location.create(2897, 3513, 1));
 				GlobalItem globalItem = new GlobalItem(player, 2897, 3507, 1, new Item(1856, 1));
-				World.getWorld().getGlobalItemManager().addToItems(globalItem);
+				GlobalItemManager.addToItems(globalItem);
 			} else if(a == 1740) {
 				//player.setTeleportTarget(Location.create(2897, 3513, 0));
 			}

@@ -4,6 +4,7 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
@@ -305,12 +306,7 @@ public class Location {
             return true;
         }
         //donator place area
-        if(x >= 2343 && x <= 2354 && y >= 9823 && y <= 9834) {
-            return true;
-        }
-        else {
-            return false;
-        }
+		return x >= 2343 && x <= 2354 && y >= 9823 && y <= 9834;
     }
 
 	/**
@@ -346,7 +342,7 @@ public class Location {
 		if(player == null || player.cE == null)
 			return false;
 		return 	player.getLocation().inPvPArea()
-				|| World.getWorld().getContentManager().handlePacket(6, player, 30000, - 1, - 1, - 1)
+				|| ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| player.duelAttackable > 0
 				|| CastleWars.getCastleWars().isInGame(player)
 				|| (player.cE.getAbsX() >= 2460 && player.cE.getAbsX() <= 2557 && player.cE.getAbsY() >= 3264 && player.cE.getAbsY() <= 3335)

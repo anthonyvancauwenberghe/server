@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.BoB;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Food;
@@ -13,7 +14,9 @@ import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.shops.PvMStore;
 import org.hyperion.util.Misc;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * The death event handles player and npc deaths. Drops loot, does animation, teleportation, etc.
@@ -102,7 +105,7 @@ public class NpcDeathEvent extends Event {
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
                                 new Item(391, 1));
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                        GlobalItemManager.newDropItem(player, globalItem5);
                     }
                     if (jet != null) {
                         jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d, %1.2f percent", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId(), percent);
@@ -117,10 +120,10 @@ public class NpcDeathEvent extends Event {
                 jet.getActionSender().sendMessage("Killer is: " + killer.getName() + " for npc: " + npc.getDefinition().getName());
             if (killer != null) {
                 if (!npc.serverKilled) {
-                    World.getWorld().getContentManager().handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
+                    ContentManager.handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
                     for (final Map.Entry<Player, Double> kill : killers.entrySet()) {
                         if (kill.getValue() > 0.20 && killer != kill.getKey())
-                            World.getWorld().getContentManager().handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
+                            ContentManager.handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
 
                     }
                     if (Bork.handleBorkDeath(killer, npc))
@@ -164,7 +167,7 @@ public class NpcDeathEvent extends Event {
                     GlobalItem globalItem5 = new GlobalItem(
                             player, x, y, z,
                             new Item(npc.bones, 1));
-                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                    GlobalItemManager.newDropItem(player, globalItem5);
                 }
                 if (!player.getDungeoneering().inDungeon()) {
                     //charms
@@ -175,7 +178,7 @@ public class NpcDeathEvent extends Event {
                         if (player.getInventory().contains(16639))
                             ContentEntity.addItem(player, npc.charm, 1);
                         else
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                            GlobalItemManager.newDropItem(player, globalItem5);
                     }
                     //talismines
                     int tali = NPCManager.getTalismine(npc.getDefinition());
@@ -184,7 +187,7 @@ public class NpcDeathEvent extends Event {
                                 player, x, y, z,
                                 new Item(tali, 1)
                         );
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                        GlobalItemManager.newDropItem(player, globalItem5);
                     }
 
                     if (tokens <= 0)
@@ -197,7 +200,7 @@ public class NpcDeathEvent extends Event {
                                     new Item(PvMStore.TOKEN, tokens)
                             );
                             if (player.getInventory().freeSlots() < 1 || !player.getInventory().contains(16638))
-                                World.getWorld().getGlobalItemManager().newDropItem(player, globalItem5);
+                                GlobalItemManager.newDropItem(player, globalItem5);
                             else
                                 player.getInventory().add(globalItem5.getItem());
                         }
@@ -249,7 +252,7 @@ public class NpcDeathEvent extends Event {
                                         for (Player p : player.getRegion().getPlayers())
                                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + (amt == 1 ? Misc.aOrAn(ItemDefinition.forId(drop.getId()).getName()) : amt) + " " + ItemDefinition.forId(drop.getId()).getName() + (amt > 1 ? "s" : "") + ".");
                                     }
-                                    World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                                    GlobalItemManager.newDropItem(player, globalItem);
                                 }
                             }
                         }
@@ -259,7 +262,7 @@ public class NpcDeathEvent extends Event {
                     if(ClueScrollUtils.dropClueScroll(player, npc)) {
                         Item clueScroll = ClueScrollUtils.getScroll(npc);
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ(), clueScroll);
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                        GlobalItemManager.newDropItem(player, globalItem);
                         for (Player p : player.getRegion().getPlayers())
                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + Misc.aOrAn(clueScroll.getDefinition().getName()) + " " + clueScroll.getDefinition().getName() + ".");
                     }
@@ -272,7 +275,7 @@ public class NpcDeathEvent extends Event {
                         for (Player p : player.getRegion().getPlayers())
                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten a " + ItemDefinition.forId(18768).getName() + ".");
 
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                        GlobalItemManager.newDropItem(player, globalItem);
 
                     }
                 } else {
@@ -282,7 +285,7 @@ public class NpcDeathEvent extends Event {
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                     npc.getLocation().getY(), npc.getLocation().getZ(),
                                     Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(49)) : 1));
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                            GlobalItemManager.newDropItem(player, globalItem);
                         }
 
                     } else {
@@ -292,18 +295,18 @@ public class NpcDeathEvent extends Event {
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                     npc.getLocation().getY(), npc.getLocation().getZ(),
                                     Item.create(def.getId(), def.isStackable() ? (1 + Misc.random(100)) : 1));
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                            GlobalItemManager.newDropItem(player, globalItem);
                             globalItem.createdTime = System.currentTimeMillis() + 47000L;
                             globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                     npc.getLocation().getY(), npc.getLocation().getZ(),
                                     Item.create(Food.randomFood(), 1));
                             globalItem.createdTime = System.currentTimeMillis() + 47000L;
-                            World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                            GlobalItemManager.newDropItem(player, globalItem);
                         }
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),
                                 Item.create(995, npc.getDefinition().combat() * 15 + 1));
-                        World.getWorld().getGlobalItemManager().newDropItem(player, globalItem);
+                        GlobalItemManager.newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }
 

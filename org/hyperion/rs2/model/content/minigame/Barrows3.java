@@ -10,7 +10,6 @@ import org.hyperion.rs2.model.combat.attack.Barrows;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
@@ -267,7 +266,7 @@ public class Barrows3 implements ContentTemplate {
 			@Override
 			public void execute() {
 				ContentEntity.teleport(player, 3551, 9692, 0);
-				NPC n = World.getWorld().getNPCManager().addNPC(3553, 9694, 0, player.getExtraData().getInt(BROTHER_TARGET), - 1);
+				NPC n = NPCManager.addNPC(3553, 9694, 0, player.getExtraData().getInt(BROTHER_TARGET), - 1);
 				n.forceMessage("You dare disturb my slumber!!");
 				n.agressiveDis = 7;
 				n.ownerId = player.getIndex();
@@ -288,7 +287,7 @@ public class Barrows3 implements ContentTemplate {
 			}
 			if(! client.hasTarget()) {
 				//spawn npc
-				NPC n = World.getWorld().getNPCManager().addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
+				NPC n = NPCManager.addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
 				n.forceMessage("You dare disturb my slumber!");
 				n.agressiveDis = 7;
 				n.ownerId = client.getIndex();

@@ -47,7 +47,7 @@ public class HunterNpcs {
 		int x = MIN_X + Misc.random(MAX_X - MIN_X);
 		int y = MIN_Y + Misc.random(MAX_Y - MIN_Y);
 		int impId = getRandomImp();
-		NPC imp = World.getWorld().getNPCManager()
+		NPC imp = NPCManager
 				.addNPC(Location.create(x, y, 0), impId, - 1);
 		synchronized(imps) {
 			imps.add(imp);

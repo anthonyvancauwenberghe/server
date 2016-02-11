@@ -43,7 +43,7 @@ public class DeathDrops {
 		Item epItems = EPDrops.getEPItem(killer.EP);
 		if(epItems != null) {
 			killer.removeEP();
-			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), epItems));
+			GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), epItems));
 		}
 
         List<Item> droppingItems = dropItems(player, DangerousPK.inDangerousPK(player));
@@ -56,17 +56,17 @@ public class DeathDrops {
                 break;
             }
             if(killer.getGameMode() <= player.getGameMode())
-			    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
+			    GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
             else {
                 int price = (int)(NewGameMode.getUnitPrice(item) * NewGameMode.SELL_REDUCTION);
                 if(price > 1)
-                    World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(),
+                    GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(),
                         Item.create(995, price)));
             }
         }
 
         if(killer.hardMode() && !player.isNewlyCreated()) {
-            World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 200_000)));
+            GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 200_000)));
         }
 
 		final Item[] dropped = droppingItems.toArray(new Item[droppingItems.size()]);
@@ -220,7 +220,7 @@ public class DeathDrops {
 				killer.removeEP();
 				if(Rank.hasAbility(killer, Rank.OWNER))
 					System.out.println("Ep item: " + ItemDefinition.forId(EPItem.getId()).getName());
-				World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), EPItem));
+				GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), EPItem));
 			}
 		}
 		LinkedList<Item> delayedDrops = new LinkedList<Item>();
@@ -234,7 +234,7 @@ public class DeathDrops {
 				if(ItemSpawning.allowedMessage(dropItem.getId()).length() <= 1)
 					delayedDrops.add(dropItem);
 				else
-					World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), dropItem));
+					GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), dropItem));
 			} else {
 				/**
 				 * Following id's should not be dropped.
@@ -265,11 +265,11 @@ public class DeathDrops {
 						continue;
 				}
 				keepItems.add(dropItem);
-				//World.getWorld().getGlobalItemManager().newDropItem(player, new GlobalItem(player,player.getLocation(),player.getEquipment().get(i)));
+				//GlobalItemManager.newDropItem(player, new GlobalItem(player,player.getLocation(),player.getEquipment().get(i)));
 			}
 		}
 		for(Item delayedItem : delayedDrops) {
-			World.getWorld().getGlobalItemManager().newDropItem(killer, new GlobalItem(killer, player.getLocation(), delayedItem));
+			GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), delayedItem));
 		}
 		for(Item keepItem : keepItems) {
 			if(keepItem != null)

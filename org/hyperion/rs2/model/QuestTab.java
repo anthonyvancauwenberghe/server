@@ -110,7 +110,7 @@ public class QuestTab {
 
     public void sendStaffCount() {
         int id = getId(2);
-        int staffOnline = World.getWorld().getStaffManager().getOnlineStaff().size();
+        int staffOnline = StaffManager.getOnlineStaff().size();
         player.getActionSender().sendString("@or1@Staff online: " + (staffOnline == 0 ? "@red@" : "@gre@") + staffOnline, id);
         player.getActionSender().sendTooltip(id, "Staff online");
     }
@@ -313,7 +313,7 @@ public class QuestTab {
         ActionsManager.getManager().submit(getClickId(2), new ButtonAction() {
             @Override
             public void handle(Player player, int id) {
-                List<Player> onlineStaff = World.getWorld().getStaffManager().getOnlineStaff();
+                List<Player> onlineStaff = StaffManager.getOnlineStaff();
                 player.getActionSender().sendMessage("Staff online: @dre@" + onlineStaff.size());
                 for (Player staffMember : onlineStaff) {
                     final Rank rank = Rank.getPrimaryRank(staffMember);

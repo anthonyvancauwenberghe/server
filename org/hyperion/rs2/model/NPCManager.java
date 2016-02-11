@@ -19,15 +19,13 @@ import java.util.Map;
 
 public class NPCManager {
 
-	public void restoreArea(Location location) throws IOException {
-		// NPC npc =
-		// World.getWorld().getNPCManager().addNPC(player.getLocation().getX(),
-		// player.getLocation().getY(), player.getLocation().getZ(),
-		// Integer.parseInt(as[1]), -1);
-		// npc.agressiveDis = 25;
-		// spawn = 175 2159 5104 0 2160 5105 2158 5103 1
-		// TextUtils.writeToFile("./data/spawns.cfg",
-		// "spawn = "+Integer.parseInt(as[1])+"	"+player.getLocation().getX()+"	"+player.getLocation().getY()+"	"+player.getLocation().getZ()+"	"+(player.getLocation().getX()-1)+"	"+(player.getLocation().getY()-1)+"	"+(player.getLocation().getX()+1)+"	"+(player.getLocation().getY()+1)+"	1");
+	private final static Attack[] attacks = new Attack[12000];// 3000 npcs?
+
+	public static Attack getAttack(NPC n) {
+		return attacks[n.getDefinition().getId()];
+	}
+
+	public static void restoreArea(Location location) throws IOException {
 
 		String name = "./data/spawnsold.cfg";
 		BufferedReader file = null;
@@ -53,9 +51,7 @@ public class NPCManager {
 							&& positionMap
 							.get((Integer.valueOf(valuesArray[1]) * 16 + Integer
 									.valueOf(valuesArray[2]) * 4)) == null) {
-						NPC npc = World
-								.getWorld()
-								.getNPCManager()
+						NPC npc = NPCManager
 								.addNPC(Integer.valueOf(valuesArray[1]),
 										Integer.valueOf(valuesArray[2]),
 										Integer.valueOf(valuesArray[3]), id, -10);
@@ -71,12 +67,6 @@ public class NPCManager {
 								(Integer.valueOf(valuesArray[1]) * 16 + Integer
 										.valueOf(valuesArray[2]) * 4), npc);
 					}
-	                /*
-					 * addNPC(Integer.valueOf(valuesArray[1]),
-					 * Integer.valueOf(valuesArray[2]),
-					 * Integer.valueOf(valuesArray[3]),id,60);
-					 */
-
 				}
 
 			}
@@ -86,17 +76,41 @@ public class NPCManager {
 		}
 	}
 
-	public static Map<Integer, NPC> positionMap = new HashMap<Integer, NPC>();
+	public static final Map<Integer, NPC> positionMap = new HashMap<>();
 	public static NPC banker;
 
-	public NPCManager() throws IOException {
-		//System.out.println("Starting with Loading NPCS!");
-		NPCDefinition.init();
-		startUp();
-		String name = "./data/spawns.cfg";
-		BufferedReader file = null;
+	public static void init() {
 		try {
-			file = new BufferedReader(new FileReader(name));
+			int counter = 0;
+			Class[] classes = ClassUtils.getClasses("org.hyperion.rs2.model.combat.attack");
+			for(Class cls : classes) {
+				if(Attack.class.isAssignableFrom(cls) && cls != Attack.class) {
+					try {
+						Attack attack = (Attack) cls.newInstance();
+						int[] ids = attack.npcIds();
+						if(ids[0] == - 1) {
+							for(int i = 0; i < attacks.length; i++) {
+								if(attacks[i] == null)
+									attacks[i] = attack;
+							}
+						} else {
+							for (int id : ids) {
+								attacks[id] = attack;
+							}
+						}
+						counter++;
+					} catch(Exception e) {
+						System.out.println("Failed to load attack: " + cls);
+					}
+				}
+			}
+			System.out.println("Loaded " + counter + " NPC Attacks.");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		String name = "./data/spawns.cfg";
+		try (BufferedReader file = new BufferedReader(new FileReader(name))){
 			while(true) {
 				String line = file.readLine();
 				if(line == null)
@@ -109,12 +123,6 @@ public class NPCManager {
 					values = values.trim();
 					String[] valuesArray = values.split("\t");
 					int id = Integer.valueOf(valuesArray[0]);
-					/*
-					 * if(Integer.valueOf(valuesArray[2]) == 3366){
-					 * System.out.println(Integer.valueOf(valuesArray[1]) +
-					 * " space " + Integer.valueOf(valuesArray[2]) + " space " +
-					 * Integer.valueOf(valuesArray[3])); }
-					 */
 					NPC npc = addNPC(Integer.valueOf(valuesArray[1]),
 							Integer.valueOf(valuesArray[2]),
 							Integer.valueOf(valuesArray[3]), id, -10);
@@ -139,23 +147,15 @@ public class NPCManager {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-		} finally {
-			if(file != null)
-				file.close();
 		}
-		
-		HaloweenEvent.init(positionMap);
 
         for(SpecialArea area : SpecialAreaHolder.getAreas()) {
             if(area instanceof NIGGERUZ)
-                ((NIGGERUZ)area).initNpc(this, positionMap);
+                ((NIGGERUZ)area).initNpc(positionMap);
         }
 
 		name = "./data/npcdrops.cfg";
-		file = null;
-		int lineInt = 1;
-		try {
-			file = new BufferedReader(new FileReader(name));
+		try (BufferedReader file = new BufferedReader(new FileReader(name))) {
 			String line;
 			while((line = file.readLine()) != null) {
 				int spot = line.indexOf('=');
@@ -175,11 +175,6 @@ public class NPCManager {
 
 						id = Integer.valueOf(valuesArray[0]);
 						NPCDefinition def = NPCDefinition.forId(id);
-						/**
-						 * Commented out old NPCDrops
-						 */
-						//NPCDefinition.forId(id).dropId = new int[(valuesArray.length + 1)][4];
-
 
 						for(i = 1; i < valuesArray.length; i++) {
 							String[] itemData = valuesArray[i].split("-");
@@ -189,35 +184,19 @@ public class NPCManager {
 							final int chance = Integer.valueOf(itemData[3]);
 							
 							def.getDrops().add(NPCDrop.create(itemId, minAmount, maxAmount, chance));
-							/*NPCDefinition.forId(id).dropId[i][0] = Integer
-									.valueOf(itemData[0]);// itemId
-							NPCDefinition.forId(id).dropId[i][1] = Integer
-									.valueOf(itemData[1]);// minAm
-							NPCDefinition.forId(id).dropId[i][2] = Integer
-									.valueOf(itemData[2]);// maxAm
-							NPCDefinition.forId(id).dropId[i][3] = Integer
-									.valueOf(itemData[3]);// chance*/
 						}
 					} catch(Exception e) {
 						e.printStackTrace();
-						System.out.println("error on array: " + i + " npcId: "
-								+ id);
+						System.out.println("error on array: " + i + " npcId: " + id);
 					}
 				}
-				lineInt++;
-
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("error on line: " + lineInt + " ");
-		} finally {
-			if(file != null)
-				file.close();
 		}
-		// DumpNpcDrops.startDump();
 	}
 
-	private int getBones(int id, String name) {
+	private static int getBones(int id, String name) {
 		name = name.toLowerCase();
 		if(id >= 4278 && id <= 4284)
 			return 0;
@@ -300,21 +279,21 @@ public class NPCManager {
 		return array[Misc.random(array.length - 1)];
 	}
 
-	public NPC addNPC(Location loc, int npcId, int respawnTime) {
+	public static NPC addNPC(Location loc, int npcId, int respawnTime) {
 		NPCDefinition nD = NPCDefinition.forId(npcId);
 		NPC n = new NPC(nD, respawnTime, loc);
-		n.agressiveDis = getAgreDis(npcId);
+		n.agressiveDis = getAgressiveDistance(npcId);
 		n.bones = getBones(npcId, n.getDefinition().getName());
 		FileLogging.saveGameLog("npclogs.log", System.currentTimeMillis() + ": " + npcId + " location " + loc.toString());
 		World.getWorld().npcsWaitingList.add(n);
 		return n;
 	}
 
-	public NPC addNPC(int x, int y, int z, int npcId, int respawnTime) {
+	public static NPC addNPC(int x, int y, int z, int npcId, int respawnTime) {
 		return addNPC(Location.create(x, y, z), npcId, respawnTime);
 	}
 
-	public static final int getAgreDis(int npcId) {
+	public static int getAgressiveDistance(int npcId) {
 		switch(npcId) {
             case 7135:
             case 7134:
@@ -352,38 +331,7 @@ public class NPCManager {
 		}
 	}
 
-	public void startUp() {
-		try {
-			int counter = 0;
-			Class[] classes = ClassUtils.getClasses("org.hyperion.rs2.model.combat.attack");
-			for(Class cls : classes) {
-				if(Attack.class.isAssignableFrom(cls) && cls != Attack.class) {
-					try {
-						Attack attack = (Attack) cls.newInstance();
-						int[] ids = attack.npcIds();
-						if(ids[0] == - 1) {
-							for(int i = 0; i < attacks.length; i++) {
-								if(attacks[i] == null)
-									attacks[i] = attack;
-							}
-						} else {
-							for (int id : ids) {
-								attacks[id] = attack;
-							}
-						}
-						counter++;
-					} catch(Exception e) {
-						System.out.println("Failed to load attack: " + cls);
-					}
-				}
-			}
-			System.out.println("Loaded " + counter + " NPC Attacks.");
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public boolean trodOnNpc(NPC npc, int i, int j) {
+	public static boolean trodOnNpc(NPC npc, int i, int j) {
 		int k = 1 + npc.getDefinition().sizeX();
 		int l = 1 + npc.getDefinition().sizeY();
 		int ai[][] = new int[16][2];
@@ -392,7 +340,6 @@ public class NPCManager {
 				ai[i1 + j1][0] = i + i1;
 				ai[i1 + j1][1] = j + j1;
 			}
-
 		}
 
 		for(NPC npc1 : RegionManager.getLocalNpcs(npc)) {
@@ -422,12 +369,6 @@ public class NPCManager {
 		}
 		return false;
 	}
-
-	public Attack getAttack(NPC n) {
-		return attacks[n.getDefinition().getId()];
-	}
-
-	public Attack[] attacks = new Attack[12000];// 3000 npcs?
 
 	static {
 		CommandHandler.submit(new Command("npcids", Rank.MODERATOR) {

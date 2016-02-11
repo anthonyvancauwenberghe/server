@@ -567,7 +567,7 @@ public class FightPits implements ContentTemplate {
 
 	@SuppressWarnings("unused")
 	private void spawnNpc(int i, Location location) {
-		NPC npc = World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), 0, i, - 1);
+		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), 0, i, - 1);
 		npc.agressiveDis = 150;
 		monsters.add(npc);
 	}

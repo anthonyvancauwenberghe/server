@@ -3,9 +3,10 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 
@@ -68,10 +69,7 @@ public class NpcClickHandler {
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());
 		player.setInteractingEntity(npc);
-		if(World
-				.getWorld()
-				.getContentManager()
-				.handlePacket(10, player, npc.getDefinition().getId(),
+		if(ContentManager.handlePacket(10, player, npc.getDefinition().getId(),
 						npc.getLocation().getX(), npc.getLocation().getY(),
 						slot)) {
 			return;
@@ -263,10 +261,7 @@ public class NpcClickHandler {
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());
-		if(World
-				.getWorld()
-				.getContentManager()
-				.handlePacket(11, player, npc.getDefinition().getId(),
+		if(ContentManager.handlePacket(11, player, npc.getDefinition().getId(),
 						npc.getLocation().getX(), npc.getLocation().getY(),
 						slot))
 			return;

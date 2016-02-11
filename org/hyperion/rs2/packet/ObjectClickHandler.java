@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class ObjectClickHandler {
 
         if (Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
             p.getActionSender().sendMessage("Clicked object: " + id);
-        if (World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, -1))
+        if (ContentManager.handlePacket(5 + type, p, id, x, y, -1))
             return;
         if (type == 1) {
             objectClickOne(p, id, x, y);

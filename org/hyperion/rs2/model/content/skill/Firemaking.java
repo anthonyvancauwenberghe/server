@@ -122,8 +122,8 @@ public class Firemaking implements ContentTemplate {
 
 	private void sendAshes(Location loc) {
 		GlobalItem globalItem = new GlobalItem(null, loc, new Item(592, 1));
-		World.getWorld().getGlobalItemManager().globalItems.add(globalItem);
-		World.getWorld().getGlobalItemManager().createItem(globalItem);
+		GlobalItemManager.addToItems(globalItem);
+		GlobalItemManager.createItem(globalItem);
 		globalItem.itemHidden = false;
 	}
 

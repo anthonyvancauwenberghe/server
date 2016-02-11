@@ -14,7 +14,6 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.EventManager;
 import org.hyperion.rs2.event.impl.*;
-import org.hyperion.rs2.login.LoginServerConnector;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -123,28 +122,6 @@ public class World {
 
     public LinkedList<NPC> npcsWaitingList = new LinkedList<>();
 
-    /**
-     * The login server connector.
-     */
-    private LoginServerConnector connector;
-
-    /**
-     * Global Item Manager, for drops
-     */
-    private GlobalItemManager globalItemManager;
-
-    private ContentManager contentManager = new ContentManager();
-
-    /**
-     * The NPC Manager
-     */
-    private NPCManager npcManager;
-
-    /**
-     * The Staff Manager
-     */
-    private StaffManager staffManager;
-
     private ServerEnemies enemies;
 
     private final ConcurrentHashMap<String, Object> propertyMap = new ConcurrentHashMap<>();
@@ -209,23 +186,6 @@ public class World {
     @SuppressWarnings("unchecked")
     public Map<BlockPoint, DirectionCollection>[] World_Objects = new Hashtable[worldmapobjects];
 
-    /**
-     * Gets the login server connector.
-     *
-     * @return The login server connector.
-     */
-    public LoginServerConnector getLoginServerConnector() {
-        return connector;
-    }
-
-    public GlobalItemManager getGlobalItemManager() {
-        return globalItemManager;
-    }
-
-    public StaffManager getStaffManager() {
-        return staffManager;
-    }
-
     private Wilderness wilderness = null;
 
     public Wilderness getWilderness() {
@@ -267,12 +227,12 @@ public class World {
         } else {
             this.engine = engine;
             this.eventManager = new EventManager(engine);
-            this.npcManager = new NPCManager();
-            this.contentManager.init();
+            NPCManager.init();
+            NPCDefinition.init();
+            ContentManager.init();
 //            this.gui = new DebugGUI();
             getWilderness().init();
-            this.globalItemManager = new GlobalItemManager();
-            this.staffManager = new StaffManager();
+            GlobalItemManager.init();
             this.loadConfiguration();
             this.registerGlobalEvents();
 
@@ -461,29 +421,12 @@ public class World {
     }
 
     /**
-     * Gets the world loader.
-     *
-     * @return The world loader.
-     */
-    public WorldLoader getWorldLoader() {
-        return loader;
-    }
-
-    /**
      * Gets the game engine.
      *
      * @return The game engine.
      */
     public GameEngine getEngine() {
         return engine;
-    }
-
-    public NPCManager getNPCManager() {
-        return npcManager;
-    }
-
-    public ContentManager getContentManager() {
-        return contentManager;
     }
 
 	/*
@@ -833,9 +776,6 @@ public class World {
                 if (player.verified)
                     loader.savePlayer(player);
                 resetSummoningNpcs(player);
-                if (World.getWorld().getLoginServerConnector() != null) {
-                    World.getWorld().getLoginServerConnector().disconnected(player.getName());
-                }
                 player.destroy();
 				/*
 				 * player.getSkills().destroy();

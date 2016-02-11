@@ -27,6 +27,7 @@ import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.Clan;
@@ -447,7 +448,7 @@ public class CommandPacketHandler implements PacketHandler {
 		 * throwable1.printStackTrace(); } break MISSING_BLOCK_LABEL_2017;
 		 */
         if (commandStart.equals("resetcontent")) {
-            World.getWorld().getContentManager().init();
+            ContentManager.init();
             return;
         }
 
@@ -533,7 +534,7 @@ public class CommandPacketHandler implements PacketHandler {
 
 		/*
 		 * if(s1.equals("jad")) { int k = Integer.parseInt(as[1]);
-		 * World.getWorld().getContentManager().handlePacket(6, player, 9358, k,
+		 * ContentManager.handlePacket(6, player, 9358, k,
 		 * 1, 1); return; }
 		 */
 		/*
@@ -570,7 +571,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equals("restore")) {
-            World.getWorld().getNPCManager().restoreArea(player.getLocation());
+            NPCManager.restoreArea(player.getLocation());
             return;
         }
         if (commandStart.equals("anim")) {
@@ -696,7 +697,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equals("jad")) {
             int k = Integer.parseInt(as[1]);
-            World.getWorld().getContentManager()
+            ContentManager
                     .handlePacket(6, player, 9358, k, 1, 1);
             return;
         }
@@ -938,9 +939,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("summonnpc")) {
             int id = Integer.parseInt(as[1]);
-            final NPC monster = World
-                    .getWorld()
-                    .getNPCManager()
+            final NPC monster = NPCManager
                     .addNPC(player.getLocation().getX(), player.getLocation().getY(),
                             player.getLocation().getZ(), id, -1);
             player.SummoningCounter = 6000;
@@ -1204,7 +1203,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("reloadrevs")) {
             for (final NPC n : World.getWorld().getNPCs()) {
-                n.agressiveDis = NPCManager.getAgreDis(n.getDefinition().getId());
+                n.agressiveDis = NPCManager.getAgressiveDistance(n.getDefinition().getId());
             }
             for (int k : RevAttack.getRevs()) {
                 final NPCDefinition def = NPCDefinition.forId(k);
@@ -1233,7 +1232,7 @@ public class CommandPacketHandler implements PacketHandler {
             final int id = Integer.parseInt(as[1]);
             for (int i = 0; i < 100; i++) {
 
-                NPC npc = World.getWorld().getNPCManager().addNPC(player.getLocation(), id, -1);
+                NPC npc = NPCManager.addNPC(player.getLocation(), id, -1);
                 npc.cE.hit(npc.health * 5, player, false, Constants.DEFLECT);
 
             }

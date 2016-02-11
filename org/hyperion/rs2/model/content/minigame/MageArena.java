@@ -3,6 +3,7 @@ package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
@@ -17,7 +18,7 @@ public class MageArena implements ContentTemplate {
 		int height = 0;
 		ContentEntity.teleport(player, 3104, 3934, height);
 		//teleport to arena,
-		World.getWorld().getNPCManager().addNPC(3104 + 3, 3934 + 3, height, 907, - 1);
+		NPCManager.addNPC(3104 + 3, 3934 + 3, height, 907, - 1);
 		//spawn kolodian
 
 	}
@@ -50,7 +51,7 @@ public class MageArena implements ContentTemplate {
 			if(oId == 905) {
 				startMinigame(client);
 			} else if(oId != 911)
-				World.getWorld().getNPCManager().addNPC(client.getLocation().getX() + 3, client.getLocation().getY() + 3, 0, (oId + 1), - 1);
+				NPCManager.addNPC(client.getLocation().getX() + 3, client.getLocation().getY() + 3, 0, (oId + 1), - 1);
 			else
 				wonMinigame(client);
 		} else if(type == 6) {

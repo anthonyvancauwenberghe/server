@@ -1,10 +1,7 @@
 package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -91,13 +88,13 @@ public class PestControl implements ContentTemplate {
 
 	public void startUpGame() {
 		//spawn portals etc
-		voidKnight = new PestNPC(World.getWorld().getNPCManager().addNPC(2656, 2592, 0, 3782, - 1), - 1);
+		voidKnight = new PestNPC(NPCManager.addNPC(2656, 2592, 0, 3782, - 1), - 1);
 		voidKnight.npc.health = 200;
 		voidKnight.npc.maxHealth = 200;
-		portals[0] = new PestNPC(World.getWorld().getNPCManager().addNPC(2628, 2591, 0, 6150, - 1), - 1);
-		portals[1] = new PestNPC(World.getWorld().getNPCManager().addNPC(2680, 2588, 0, 6151, - 1), - 1);
-		portals[2] = new PestNPC(World.getWorld().getNPCManager().addNPC(2669, 2570, 0, 6152, - 1), - 1);
-		portals[3] = new PestNPC(World.getWorld().getNPCManager().addNPC(2645, 2569, 0, 6153, - 1), - 1);
+		portals[0] = new PestNPC(NPCManager.addNPC(2628, 2591, 0, 6150, - 1), - 1);
+		portals[1] = new PestNPC(NPCManager.addNPC(2680, 2588, 0, 6151, - 1), - 1);
+		portals[2] = new PestNPC(NPCManager.addNPC(2669, 2570, 0, 6152, - 1), - 1);
+		portals[3] = new PestNPC(NPCManager.addNPC(2645, 2569, 0, 6153, - 1), - 1);
 		for(PestNPC pn : portals) {
 			pn.npc.health = 200;
 			pn.npc.maxHealth = 200;
@@ -108,7 +105,7 @@ public class PestControl implements ContentTemplate {
 	}
 
 	public void spawnNpc(int i, Location location, Player player) {
-		World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
+		NPCManager.addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
 		//npc.agressiveDis = 150;
 	}
 

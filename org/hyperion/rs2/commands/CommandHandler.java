@@ -20,6 +20,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
@@ -388,7 +389,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				World.getWorld().getNPCManager().addNPC(player.getLocation(),
+				NPCManager.addNPC(player.getLocation(),
 						parts[0], -1);
 				return true;
 			}
@@ -404,7 +405,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				    World.getWorld().getNPCManager().addNPC(player.getLocation(),
+				    NPCManager.addNPC(player.getLocation(),
                             parts[0], parts.length == 2 ? parts[1] : 50);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
 						+ parts[0] + "	" + player.getLocation() + "	"
@@ -420,7 +421,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				World.getWorld().getNPCManager().addNPC(player.getLocation(),
+				NPCManager.addNPC(player.getLocation(),
 						parts[0], -1);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
 						+ parts[0] + "	" + player.getLocation() + "	"
@@ -648,7 +649,7 @@ public class CommandHandler {
 		submit(new Command("resetcontent", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				World.getWorld().getContentManager().init();
+				ContentManager.init();
 				return true;
 			}
 		});

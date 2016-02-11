@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -947,12 +948,8 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
-		if(World.getWorld().getContentManager()
-				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| World.getWorld().getContentManager()
-				.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from fight pits.");
+		if(ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1) || ContentManager.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
+			player.getActionSender().sendMessage("You cannot teleport from fight pits.");
 			return;
 		}
 		if(player.getTimeSinceLastTeleport() < 1600)
@@ -1083,9 +1080,9 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
-		if(World.getWorld().getContentManager()
+		if(ContentManager
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| World.getWorld().getContentManager()
+				|| ContentManager
 				.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport from fight pits.");
@@ -1202,9 +1199,9 @@ public class Magic {
             return;
         }
 
-		if(!player.getDungeoneering().inDungeon() && (World.getWorld().getContentManager()
+		if(!player.getDungeoneering().inDungeon() && (ContentManager
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| World.getWorld().getContentManager()
+				|| ContentManager
 				.handlePacket(6, player, 30001, - 1, - 1, - 1))) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport from fight pits.");
@@ -1333,9 +1330,9 @@ public class Magic {
 						"You cannot teleport from duel arena.");
 				return;
 			}
-			if(World.getWorld().getContentManager()
+			if(ContentManager
 					.handlePacket(6, player, 30000, - 1, - 1, - 1)
-					|| World.getWorld().getContentManager()
+					|| ContentManager
 					.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 				player.getActionSender().sendMessage(
 						"You cannot teleport here.");
@@ -1413,9 +1410,7 @@ public class Magic {
 			if(item.getId() == 13740 || item.getId() == 13744)
 				return false;
 		}
-		if(!player.getSpellBook().isAncient())
-			return false;
-		return true;
+		return player.getSpellBook().isAncient();
 	}
 	
 	public static void goTo13s(final Player player) {

@@ -61,7 +61,7 @@ public class BoB {
 		if(player == null || player.getBoB() == null || player.isHidden()) return;
 		for(int i = 0; i < player.getBoB().capacity(); i++) {
 			if(player.getBoB().get(i) != null) {
-				World.getWorld().getGlobalItemManager().newDropItem(player, new GlobalItem(player, loc, player.getBoB().get(i)));
+				GlobalItemManager.newDropItem(player, new GlobalItem(player, loc, player.getBoB().get(i)));
 			}
 		}
         player.getLogManager().add(LogEntry.bob(player.getName(),player.getBoB().getItems()));

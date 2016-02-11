@@ -8,7 +8,6 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
@@ -108,11 +107,6 @@ public class LoginServerConnector extends IoHandlerAdapter {
 		if(! cf.isConnected() && (session == null || ! session.isConnected())) {
 			logger.severe("Connection to login server failed. Retrying...");
 			// this stops stack overflow errors
-			World.getWorld().getEngine().submitLogic(new Runnable() {
-				public void run() {
-					World.getWorld().getLoginServerConnector().connect(password, node);
-				}
-			});
 		} else {
 			this.session = cf.getSession();
 			logger.info("Connected.");

@@ -91,7 +91,7 @@ public class Spam {
 				if(counter >= SPAM_MESSAGES_LIMIT) {
 					warnings++;
 					warnModerators(spammer);
-					if(warnings > 10 && World.getWorld().getStaffManager().getOnlineStaff().size() == 0) {
+					if(warnings > 10 && StaffManager.getOnlineStaff().size() == 0) {
 						spammer.getSpam().punish();
 					}
 					spammer.getExtraData().put(COUNTER_KEY, 0);

@@ -1,9 +1,6 @@
 package org.hyperion.rs2.model.content.bounty;
 
-import org.hyperion.rs2.model.GlobalItem;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.bank.BankItem;
@@ -188,7 +185,7 @@ public class BountyHunter {
         GlobalItem gI = new GlobalItem(player, opp.getLocation().getX(),
                 opp.getLocation().getY(), opp.getLocation().getZ(),
                 Item.create(Emblem.BASE_ID, 1));
-        World.getWorld().getGlobalItemManager().newDropItem(player, gI);
+        GlobalItemManager.newDropItem(player, gI);
         upgradeEmblem();
 	}
 

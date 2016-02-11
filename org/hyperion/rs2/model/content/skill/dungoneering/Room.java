@@ -3,7 +3,7 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 import org.hyperion.rs2.model.Damage;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.content.skill.FishingV2;
 import org.hyperion.util.Misc;
 
@@ -69,7 +69,7 @@ public class Room {
         must_clear = Misc.random(10) < 7;
         for(int i = 0; i < npcCount; i++) {
             final Point loc = definition.randomLoc();
-            final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
+            final NPC npc = NPCManager.addNPC(randomLocation(), boss ? dungeon.difficulty.getBoss() : dungeon.difficulty.getRandomMonster(), -1);
             npc.agressiveDis = 10;
             npcs.add(npc);
         }
@@ -77,11 +77,11 @@ public class Room {
         if(Misc.random(7) == 0) {
             switch(Misc.random(2)) {
                 default:
-                    final NPC npc = World.getWorld().getNPCManager().addNPC(randomLocation(), FishingV2.FISHING_SPOTS[Misc.random(FishingV2.FISHING_SPOTS.length - 1)], -1);
+                    final NPC npc = NPCManager.addNPC(randomLocation(), FishingV2.FISHING_SPOTS[Misc.random(FishingV2.FISHING_SPOTS.length - 1)], -1);
                     events.add(npc);
                     break;
                 case 1:
-                    final NPC npc2 = World.getWorld().getNPCManager().addNPC(randomLocation(), Misc.random(1) == 0 ? 8824 : 8827, -1);
+                    final NPC npc2 = NPCManager.addNPC(randomLocation(), Misc.random(1) == 0 ? 8824 : 8827, -1);
                     events.add(npc2);
                     break;
             }

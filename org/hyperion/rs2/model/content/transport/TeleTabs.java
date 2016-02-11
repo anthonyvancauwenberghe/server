@@ -3,9 +3,9 @@ package org.hyperion.rs2.model.content.transport;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Jail;
 
@@ -38,7 +38,7 @@ public class TeleTabs implements ContentTemplate {
 			player.getActionSender().sendMessage("You cannot teleport from duel arena.");
 			return;
 		}
-		if(World.getWorld().getContentManager().handlePacket(6, player, 30000, - 1, - 1, - 1) || World.getWorld().getContentManager().handlePacket(6, player, 30001, - 1, - 1, - 1)) {
+		if(ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1) || ContentManager.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 			player.getActionSender().sendMessage("You cannot teleport from fight pits.");
 			return;
 		}

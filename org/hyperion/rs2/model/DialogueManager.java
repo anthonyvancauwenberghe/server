@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.EP.EPExchange;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
@@ -51,7 +52,7 @@ public class DialogueManager {
 		if(player.getInteractingEntity() instanceof Player)
 			return;
 		NPC npc = (NPC) player.getInteractingEntity();
-		if(World.getWorld().getContentManager().handlePacket(20, player, dialogueId, 0, 0, 0))
+		if(ContentManager.handlePacket(20, player, dialogueId, 0, 0, 0))
 			return;
 		switch(dialogueId) {
 			case 0:

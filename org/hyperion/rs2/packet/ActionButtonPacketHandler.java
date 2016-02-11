@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.container.Container.Type;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
@@ -59,8 +60,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 
 	public static void handle(Player player, int button) {
 
-		if(World.getWorld().getContentManager()
-				.handlePacket(0, player, button, - 1, - 1, - 1))
+		if(ContentManager.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;
         if(button >= 31421 && button <= 31426)
 		    if(SetHandler.handleSet(player, button))

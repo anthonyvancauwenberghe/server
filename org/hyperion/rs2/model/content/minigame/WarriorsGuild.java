@@ -222,7 +222,7 @@ public class WarriorsGuild implements ContentTemplate {
 							player, x, y, player.getLocation().getZ(),
 							new Item(getDefenderId(player), 1)
 					);
-					World.getWorld().getGlobalItemManager().newDropItem(player, defender);
+					GlobalItemManager.newDropItem(player, defender);
 					if(player.WGLevel < 7) {
 						player.WGLevel++;
 					}
@@ -239,8 +239,8 @@ public class WarriorsGuild implements ContentTemplate {
 							player, x, y, player.getLocation().getZ(),
 							new Item(ArmourIds[i - 1], 1));
 				}
-				for(int i = 0; i < DropItems.length; i++) {
-					World.getWorld().getGlobalItemManager().newDropItem(player, DropItems[i]);
+				for (GlobalItem DropItem : DropItems) {
+					GlobalItemManager.newDropItem(player, DropItem);
 				}
 			}
 		}
@@ -248,9 +248,7 @@ public class WarriorsGuild implements ContentTemplate {
 	}
 
 	public NPC spawnNpc(int npcId, Location location, Player player) {
-		NPC npc = World
-				.getWorld()
-				.getNPCManager()
+		NPC npc = NPCManager
 				.addNPC(location.getX(), location.getY(), location.getZ(),
 						npcId, - 1);
 		npc.agressiveDis = 10;

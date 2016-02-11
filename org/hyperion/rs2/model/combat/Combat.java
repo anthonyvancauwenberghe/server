@@ -2,7 +2,6 @@ package org.hyperion.rs2.model.combat;
 
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
-import org.hyperion.map.pathfinding.PathfinderV2;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
@@ -13,6 +12,7 @@ import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
@@ -511,7 +511,7 @@ public class Combat {
 						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
                     int deltaBonus = MeleeAtk - MeleeDef;
-                    int toAdd = Misc.random((int) (deltaBonus / 3));
+                    int toAdd = Misc.random(deltaBonus / 3);
                     damg += toAdd;
                     combatEntity.getPlayer().debugMessage("Toadd: " + toAdd);
                     if (damg < 0)
@@ -525,7 +525,6 @@ public class Combat {
                 }
             } else {
                 if (verac) {
-                    ;
                 } else
                     damg = CombatCalculation.getCalculatedDamage(combatEntity.getEntity(), combatEntity.getOpponent().getEntity(), damg, combatStyle, maxHit);
                 if (SlayerTask.getLevelById(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
@@ -727,11 +726,10 @@ public class Combat {
      */
     private static boolean processNpcCombat(final CombatEntity combatEntity, int distance) {
         if (combatEntity.attack == null)
-            combatEntity.attack = World.getWorld().getNPCManager().getAttack(combatEntity.getNPC());
+            combatEntity.attack = NPCManager.getAttack(combatEntity.getNPC());
         // combatEntity.doAtkEmote();
 
         if (combatEntity.attack != null) {
-            ;
             // timer
 			/*
 			 * if(combatEntity.predictedAtk >
@@ -891,7 +889,7 @@ public class Combat {
         int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.getAbsY())
                 * -1;
         // find our lockon target
-        int hitId = attack.getSlotId((Entity) n);
+        int hitId = attack.getSlotId(n);
         // extra variables - not for release
         int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX()
                 + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY()
@@ -957,8 +955,8 @@ public class Combat {
             }
             if ((combatEntity.getEntity() instanceof Player)
                     && (opponent.getEntity() instanceof Player)
-                    && World.getWorld().getContentManager().handlePacket(6, (Player) combatEntity.getEntity(), 30000, -1, -1, -1)
-                    && World.getWorld().getContentManager().handlePacket(6, (Player) opponent.getEntity(), 30000, -1, -1, -1))
+                    && ContentManager.handlePacket(6, (Player) combatEntity.getEntity(), 30000, -1, -1, -1)
+                    && ContentManager.handlePacket(6, (Player) opponent.getEntity(), 30000, -1, -1, -1))
                 return "1";
             String type = "NPC";
             if (opponent.getEntity() instanceof Player)
@@ -1018,7 +1016,7 @@ public class Combat {
             int cb1 = combatEntity.getCombat();
             int cb2 = opponent.getCombat();
             if (combatEntity.getEntity() instanceof Player &&
-                    World.getWorld().getContentManager().handlePacket(
+                    ContentManager.handlePacket(
                             6, combatEntity.getPlayer(), ClickId.ATTACKABLE))
                 return "1";
             if (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())) {
@@ -1172,7 +1170,7 @@ public class Combat {
                 || (combatEntity.getAbsZ() > 0 && combatEntity.getAbsX() > 3540 && combatEntity.getAbsX() < 3585 && combatEntity.getAbsY() > 9935 && combatEntity.getAbsY() < 9975))
             return true;
         if (combatEntity.getEntity() instanceof Player) {
-            if (World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))
+            if (ContentManager.handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))
                 return true;
         }
         return false;
@@ -1404,7 +1402,7 @@ public class Combat {
                         // player.getInventory().add(item);
                         return;
                     } else {
-                        World.getWorld().getGlobalItemManager().newDropItem(player, new GlobalItem(player, loc, item));
+                        GlobalItemManager.newDropItem(player, new GlobalItem(player, loc, item));
                     }
                 }
             }
@@ -1479,17 +1477,13 @@ public class Combat {
     public static boolean usingPhoenixNecklace(Player player) {
         if (player.getEquipment().get(Equipment.SLOT_AMULET) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11090)
-            return true;
-        return false;
+        return player.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11090;
     }
 
     public static boolean ringOfLifeEqupped(Player player) {
         if (player.getEquipment().get(Equipment.SLOT_RING) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_RING).getId() == 2570)
-            return true;
-        return false;
+        return player.getEquipment().get(Equipment.SLOT_RING).getId() == 2570;
     }
 
     public static boolean isGuthanEquiped(Player player) {
@@ -1498,12 +1492,10 @@ public class Combat {
                 || player.getEquipment().get(Equipment.SLOT_CHEST) == null
                 || player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4724
+        return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4724
                 && player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4726
                 && player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4728
-                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4730)
-            return true;
-        return false;
+                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4730;
     }
 
     public static boolean isToragEquiped(Player player) {
@@ -1512,12 +1504,10 @@ public class Combat {
                 || player.getEquipment().get(Equipment.SLOT_CHEST) == null
                 || player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4745
+        return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4745
                 && player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4747
                 && player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4749
-                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4751)
-            return true;
-        return false;
+                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4751;
     }
 
     public static void createGlobalProjectile(Entity e, int casterY, int casterX, int offsetY, int offsetX, int angle, int speed, int gfxMoving, int startHeight, int endHeight, int lockon, int slope) {

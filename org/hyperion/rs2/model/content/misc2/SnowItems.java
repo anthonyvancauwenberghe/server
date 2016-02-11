@@ -37,7 +37,7 @@ public class SnowItems implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 		if(System.currentTimeMillis() < MAXTIME)
-			World.getWorld().getNPCManager().addNPC(3085, 3497, 0, 9400, - 1);
+			NPCManager.addNPC(3085, 3497, 0, 9400, - 1);
 	}
 
 	@Override

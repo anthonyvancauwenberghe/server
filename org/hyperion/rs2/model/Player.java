@@ -60,6 +60,7 @@ import org.hyperion.rs2.net.ISAACCipher;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.AccountLogger;
 import org.hyperion.rs2.util.AccountValue;
 import org.hyperion.rs2.util.NameUtils;
@@ -2066,6 +2067,11 @@ public class Player extends Entity implements Persistable, Cloneable {
 				});
 			}
 		}
+	}
+
+	public void dispose() {
+		PlayerSaving.save(this);
+		getActionSender().sendLogout();
 	}
 
 	public void addLastKill(String name) {

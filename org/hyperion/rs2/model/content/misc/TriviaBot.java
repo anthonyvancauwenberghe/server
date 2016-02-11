@@ -289,7 +289,7 @@ public class TriviaBot {
 	 */
 	private void yellMessage(String message) {
 		for(Player p : World.getPlayers()) {
-			if(p.getTrivia().isEnabled())
+			if(p != null && p.getTrivia().isEnabled())
 				p.getActionSender().sendMessage(TITLE + message);
 		}
 	}

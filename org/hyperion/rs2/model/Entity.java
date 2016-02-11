@@ -160,6 +160,11 @@ public abstract class Entity {
 	private boolean isAggressor;
 
 	/**
+	 * Whether the entity is already registered in the world.
+	 */
+	private boolean registered;
+
+	/**
 	 * Creates the entity.
 	 */
 	public Entity() {
@@ -178,6 +183,25 @@ public abstract class Entity {
 
 	public void isHidden(boolean bool) {
 		isHidden = bool;
+	}
+
+	/**
+	 * Gets if this entity is registered.
+	 *
+	 * @return the unregistered.
+	 */
+	public boolean isRegistered() {
+		return registered;
+	}
+
+	/**
+	 * Sets if this entity is registered,
+	 *
+	 * @param registered
+	 *            the unregistered to set.
+	 */
+	public void setRegistered(boolean registered) {
+		this.registered = registered;
 	}
 
 	/**

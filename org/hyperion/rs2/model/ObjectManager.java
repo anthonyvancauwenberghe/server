@@ -109,13 +109,11 @@ public class ObjectManager {
 
     public static void update(GameObject obj) {
         for (Player p : World.getPlayers()) {
+            if(p == null)
+                continue;
                 if (obj == null) {
                     System.out.println("Object is null!");
                     return;
-                }
-                if (p == null){
-                    System.out.println("Player is null!");
-                    continue;
                 }
             if (obj.isVisible(p.getLocation())) {
                 p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());

@@ -25,6 +25,36 @@ public class FileLogging {
         Server.getLoader().getEngine().pushTask(context -> writeToFile(filePath, lines));
     }
 
+    public static void writeError(String filename, Exception ex) {
+        Server.getLoader().getEngine().pushTask(context -> {
+            StringBuilder sb = new StringBuilder();
+            if (ex.getCause() != null)
+                sb.append("	cause: ").append(ex.getCause().toString()).append("\n");
+            if (ex.getClass() != null)
+                sb.append("	class: ").append(ex.getClass().toString()).append("\n");
+            if (ex.getMessage() != null)
+                sb.append("	message: ").append(ex.getMessage()).append("\n");
+            if (ex.getStackTrace() == null)
+                ex.fillInStackTrace();
+            if (ex.getStackTrace() != null) {
+                for (StackTraceElement s : ex.getStackTrace()) {
+                    sb.append("	at ")
+                            .append(s.getClassName())
+                            .append(".")
+                            .append(s.getMethodName())
+                            .append("(")
+                            .append(s.getFileName())
+                            .append(":")
+                            .append(s.getLineNumber())
+                            .append(")")
+                            .append("\n");
+                }
+            }
+            sb.append("================================");
+            writeToFile(filename, sb.toString().split("\n"));
+        });
+    }
+
     private static void writeToFile(String filePath, String... lines) {
         File file = new File(DEFAULT_LOGGING_PATH, filePath);
 

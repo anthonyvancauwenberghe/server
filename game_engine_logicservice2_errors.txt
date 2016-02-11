@@ -8723,7 +8723,7 @@ Tue Jan 06 23:50:17 GMT+01:00 2015
 	message: -2430
 	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
 	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:826)
-	at org.hyperion.rs2.model.World.isWalkAble(World.java:502)
+	at org.hyperion.rs2.model.WorldMap.checkPos(World.java:502)
 	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1122)
 	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
 	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
@@ -8746,7 +8746,7 @@ Tue Jan 06 23:50:18 GMT+01:00 2015
 	message: -2430
 	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
 	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:826)
-	at org.hyperion.rs2.model.World.isWalkAble(World.java:502)
+	at org.hyperion.rs2.model.WorldMap.checkPos(World.java:502)
 	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1122)
 	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
 	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
@@ -9165,7 +9165,7 @@ Sat Jan 10 22:09:29 GMT+01:00 2015
 	message: -2430
 	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
 	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:828)
-	at org.hyperion.rs2.model.World.isWalkAble(World.java:504)
+	at org.hyperion.rs2.model.WorldMap.checkPos(World.java:504)
 	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1113)
 	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
 	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
@@ -9188,7 +9188,7 @@ Sat Jan 10 22:09:29 GMT+01:00 2015
 	message: -2430
 	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
 	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:828)
-	at org.hyperion.rs2.model.World.isWalkAble(World.java:504)
+	at org.hyperion.rs2.model.WorldMap.checkPos(World.java:504)
 	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1113)
 	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
 	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:67)
@@ -9607,7 +9607,7 @@ Tue Jan 20 21:52:19 GMT+01:00 2015
 	message: -3030
 	at org.hyperion.map.WorldMap.isWalkAble2(WorldMap.java:948)
 	at org.hyperion.map.WorldMap.checkPos(WorldMap.java:828)
-	at org.hyperion.rs2.model.World.isWalkAble(World.java:503)
+	at org.hyperion.rs2.model.WorldMap.checkPos(World.java:503)
 	at org.hyperion.rs2.model.combat.Combat.follow2(Combat.java:1113)
 	at org.hyperion.rs2.model.combat.Combat.follow(Combat.java:1092)
 	at org.hyperion.rs2.model.SummoningMonsters.runEvent(SummoningMonsters.java:60)

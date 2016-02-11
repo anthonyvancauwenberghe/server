@@ -41,7 +41,7 @@ public class HostGateway {
 	/**
 	 * Used to keep track of hosts and their amount of connections.
 	 */
-	private static Map<String, Integer> map = new HashMap<String, Integer>();
+	private static Map<String, Integer> map = new HashMap<>();
 
 	/**
 	 * Checks the host into the gateway.

@@ -617,7 +617,7 @@ public class CommandPacketHandler implements PacketHandler {
             if (as.length == 3) {
                 int l1 = Integer.parseInt(as[1]);
                 int i2 = Integer.parseInt(as[2]);
-                player.setInteractingEntity(World.getNPCs().get(i2));
+                player.setInteractingEntity(World.getNpcs().get(i2));
                 DialogueManager.openDialogue(player, l1);
             }
             return;
@@ -1166,10 +1166,10 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("emptysummnpcs")) {
             for (final int i : SummoningMonsters.SUMMONING_MONSTERS) {
-                for (final NPC npc : World.getNPCs()) {
+                for (final NPC npc : World.getNpcs()) {
                     if (npc.getDefinition().getId() == i) {
                         World.submit(new NpcDeathEvent(npc));
-                        World.getNPCs().remove(npc);
+                        World.getNpcs().remove(npc);
 
                     }
                 }
@@ -1193,7 +1193,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("reloadrevs")) {
-            for (final NPC n : World.getNPCs()) {
+            for (final NPC n : World.getNpcs()) {
                 n.agressiveDis = NPCManager.getAgressiveDistance(n.getDefinition().getId());
             }
             for (int k : RevAttack.getRevs()) {
@@ -1694,7 +1694,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("spamnpc")) {
             String message = s.substring(8).trim();
-            for (NPC npc : World.getNPCs()) {
+            for (NPC npc : World.getNpcs()) {
                 npc.forceMessage(message);
             }
         }
@@ -1966,7 +1966,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
         if (commandStart.startsWith("giles")) {
             try {
-                for (NPC n : World.getNPCs()) {
+                for (NPC n : World.getNpcs()) {
                     if (n.getDefinition().getId() == 2538) {
                         player.getActionSender().sendMessage(
                                 "Giles at: " + n.getLocation().getX() + " "
@@ -2745,7 +2745,7 @@ public class CommandPacketHandler implements PacketHandler {
             if (commandStart.equals("players")) {
                 player.sendServerMessage(
                         "There are currently "
-                                + (int) (World.getPlayers().size() * World.PLAYER_MULTI)
+                                + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER))
                                 + " players online!");
                 player.getActionSender().openPlayersInterface();
                 return;

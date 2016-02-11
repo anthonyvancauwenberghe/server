@@ -187,7 +187,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
             return;
         }
 		Item item = player.getInventory().get(invslot);
-        final NPC npc = (NPC)World.getNPCs().get(i);
+        final NPC npc = (NPC)World.getNpcs().get(i);
         if (item != null && npc != null) {
             if(npc.getDefinition().getId() == 2999)
                 Dicing.diceNpc(player, npc, item);

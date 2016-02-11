@@ -63,22 +63,13 @@ public class UpdateEvent extends Event {
 
 	@Override
 	public void execute() {
-		int npcscount = World.getNPCs().size();
+		int npcscount = World.getNpcs().size();
 		int playercount = World.getPlayers().size();
-        for(NPC npc : World.npcsWaitingList) {
-			// npc.getWalkingQueue().walkingCheck();
-			try {
-				World.removeFromWaiting(npc);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		World.npcsWaitingList.clear();
 		List<Task> tickTasks = new ArrayList<Task>(npcscount + playercount);
 		List<Task> updateTasks = new ArrayList<Task>(playercount);
 		List<Task> resetTasks = new ArrayList<Task>(npcscount + playercount);
 
-		for(NPC npc : World.getNPCs()) {
+		for(NPC npc : World.getNpcs()) {
 			try {
 				tickTasks.add(new NPCTickTask(npc));
 				resetTasks.add(new NPCResetTask(npc));
@@ -194,7 +185,7 @@ public class UpdateEvent extends Event {
 //
 //	@Override
 //	public void execute() {
-//		int npcscount = World.getNPCs().size();
+//		int npcscount = World.getNpcs().size();
 //		int playercount = World.getPlayers().size();
 //		for(NPC npc : World.npcsWaitingList) {
 //			// npc.getWalkingQueue().walkingCheck();
@@ -212,7 +203,7 @@ public class UpdateEvent extends Event {
 //		List<Task> updateTasks = new ArrayList<Task>(playercount);
 //		List<Task> resetTasks = new ArrayList<Task>(npcscount + playercount);
 //
-//		for(NPC npc : World.getNPCs()) {
+//		for(NPC npc : World.getNpcs()) {
 //			try {
 //				npcTickTasks.add(new NPCTickTask(npc));
 //				npcResetTasks.add(new NPCResetTask(npc));

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
@@ -64,7 +65,7 @@ public class DungeoneeringManager implements ContentTemplate {
             try {
                 player.debugMessage("Yo3");
 
-                final NPC npc = (NPC) World.getNPCs().get(npcSlot);
+                final NPC npc = (NPC) World.getNpcs().get(npcSlot);
                 if (npc == null) {
                     player.sendMessage("Null NPC");
                     return false;
@@ -151,7 +152,7 @@ public class DungeoneeringManager implements ContentTemplate {
             return false;
         switch (id) {
             case 2804:
-                if (World.updateInProgress()) {
+                if (Server.isUpdating()) {
                     player.sendMessage("You cannot start a dungeon right now");
                     return true;
                 }

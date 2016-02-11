@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
@@ -68,7 +69,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(World.getPlayers().size() >= Constants.MAX_PLAYERS)
 			return WORLD_FULL;
 
-		if(World.updateInProgress())
+		if(Server.isUpdating())
 			return UPDATE_IN_PROGRESS;
 
 		if(playerDetails.getUID() < 15483)

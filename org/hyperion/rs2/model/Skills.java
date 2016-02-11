@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Skills {
 
+    private static int lastSkillChange = -1;
 
     public static final class CurrentBonusXP {
         private final long time;
@@ -523,32 +524,27 @@ public class Skills {
      * @param exp   The experience to add.
      */
     public void addExperience(int skill, double exp) {
+        Calendar c = Calendar.getInstance();
+        int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
+        int bonusSkill = (dayOfYear % (Skills.SKILL_COUNT - 8)) + 7;
 
+        int lastSkillChange = -1;
+        if(Skills.lastSkillChange != -1) {
+            lastSkillChange = Skills.lastSkillChange;
+        }
 
-        try {
-            Calendar c = Calendar.getInstance();
-            int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
-            int bonusSkill = (dayOfYear % (Skills.SKILL_COUNT - 8)) + 7;
-
-            int lastSkillChange = -1;
-            if (World.getProperty("lastSkillChange") != null) {
-                lastSkillChange = World.getProperty("lastSkillChange");
-            }
-
-            if (dayOfYear != lastSkillChange) {
-                if (bonusSkill != BONUS_SKILL) {
-                    while (bonusSkill == 21) {
-                        bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
-                    }
-                    BONUS_SKILL = bonusSkill;
-                    for (Player player1 : World.getPlayers()) {
-                        player1.getQuestTab().sendBonusSkill();
-                        //player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
-                    }
+        if (dayOfYear != lastSkillChange) {
+            if (bonusSkill != BONUS_SKILL) {
+                while (bonusSkill == 21) {
+                    bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
                 }
-                World.putProperty("lastSkillChange", dayOfYear);
+                BONUS_SKILL = bonusSkill;
+                for (Player player1 : World.getPlayers()) {
+                    player1.getQuestTab().sendBonusSkill();
+                    //player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
+                }
             }
-        } catch (Exception e) {
+            Skills.lastSkillChange = dayOfYear;
         }
 
 

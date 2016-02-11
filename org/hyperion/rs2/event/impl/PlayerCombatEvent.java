@@ -1,6 +1,7 @@
 package org.hyperion.rs2.event.impl;
 
 import org.hyperion.map.pathfinding.Path;
+import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.Location;
@@ -55,7 +56,7 @@ public class PlayerCombatEvent extends Event {
                             int baseY = player.getLocation().getY() - 25;
                             player.getWalkingQueue().reset();
                             player.getWalkingQueue().setRunningQueue(true);
-                            Path p = World.pathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
                             if(p != null) {
                                 for(int i = 1; i < p.getLength(); i++) {
                                     if((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)

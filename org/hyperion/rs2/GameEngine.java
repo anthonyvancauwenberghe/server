@@ -1,7 +1,7 @@
 package org.hyperion.rs2;
 
 import org.hyperion.rs2.event.impl.UpdateEvent;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.util.BlockingExecutorService;
 
@@ -56,31 +56,6 @@ public class GameEngine implements Runnable {
 		tasks.offer(task);
 	}
 
-	private int errors = 0;
-
-	private void increaseErrors() {
-		errors++;
-		System.out.println("Errorcount: " + errors);
-		/*if(errors > 100) {
-			try {
-				BufferedWriter bw = new BufferedWriter(new FileWriter("./data/errorrestart.log", true));
-				bw.write("RESTARTED SERVER : " + new Date().toString());
-				bw.newLine();
-				bw.close();
-				for(Player player : World.getPlayers()) {
-					Trade.declineTrade(player);
-					PlayerFiles.saveGame(player);
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			for(int i = 0; i < 10; i++) {
-				System.out.println("Restarting Server because of errors!!");
-			}
-			System.exit(0);
-		}*/
-	}
-
 
 	/**
 	 * Checks if this <code>GameEngine</code> is running.
@@ -123,22 +98,14 @@ public class GameEngine implements Runnable {
 				try {
 					final Task task = tasks.take();
 					UpdateEvent.updateTimer();
-					submitLogic(new Runnable() {
-						@Override
-						public void run() {
-							long start = System.currentTimeMillis();
-							task.execute(GameEngine.this);
-							long delta = System.currentTimeMillis() - start;
-							//ServerTimeManager.getSingleton().add(task.getClass().getSimpleName(), delta);
-						}
-					});
+					submitLogic(() -> task.execute(GameEngine.this));
 				} catch(InterruptedException e) {
 					System.out.println("Cought Interrupedexception!");
 					e.printStackTrace();
 					continue;
 				} catch(Exception e) {
 					e.printStackTrace();
-					World.writeError("game_engine_tasks_errors.txt", e);
+					FileLogging.writeError("game_engine_tasks_errors.txt", e);
 				}
 			}
 		} finally {
@@ -157,18 +124,14 @@ public class GameEngine implements Runnable {
 	 * @return The <code>ScheduledFuture</code> of the scheduled logic.
 	 */
 	public ScheduledFuture<?> scheduleLogic(final Runnable runnable, long delay, TimeUnit unit) {
-		return logicService.schedule(new Runnable() {
-			public void run() {
-				try {
-					runnable.run();
-				} catch(Exception e) {
-					System.out.println("Server shit happening 1");
-					e.printStackTrace();
-					World.writeError("game_engine_logic_errors.txt", e);
-					increaseErrors();
-				}
-			}
-		}, delay, unit);
+		return logicService.schedule((Runnable) () -> {
+            try {
+                runnable.run();
+            } catch(Exception e) {
+                e.printStackTrace();
+                FileLogging.writeError("game_engine_logic_errors.txt", e);
+            }
+        }, delay, unit);
 	}
 
 	/**
@@ -177,19 +140,14 @@ public class GameEngine implements Runnable {
 	 * @param runnable The runnable.
 	 */
 	public void submitTask(final Runnable runnable) {
-		taskService.submit(new Runnable() {
-			public void run() {
-				try {
-					runnable.run();
-				} catch(Exception e) {
-					System.out.println("sever shit happening 2");
-					e.printStackTrace();
-					World.writeError("game_engine_taskservice_errors.txt", e);
-					//World.handleError(t);
-					increaseErrors();
-				}
-			}
-		});
+		taskService.submit((Runnable) () -> {
+            try {
+                runnable.run();
+            } catch(Exception e) {
+                e.printStackTrace();
+                FileLogging.writeError("game_engine_taskservice_errors.txt", e);
+            }
+        });
 	}
 
 	/**
@@ -198,19 +156,15 @@ public class GameEngine implements Runnable {
 	 * @param runnable The runnable.
 	 */
 	public void submitWork(final Runnable runnable) {
-		workService.submit(new Runnable() {
-			public void run() {
-				try {
-					runnable.run();
-				} catch(Exception e) {
-					System.out.println("sever shit happening 3");
-					e.printStackTrace();
-					World.writeError("game_engine_workservice_errors.txt", e);
-					//World.handleError(t);
-					increaseErrors();
-				}
-			}
-		});
+		workService.submit((Runnable) () -> {
+            try {
+                runnable.run();
+            } catch(Exception e) {
+                System.out.println("sever shit happening 3");
+                e.printStackTrace();
+                FileLogging.writeError("game_engine_workservice_errors.txt", e);
+            }
+        });
 	}
 
 	/**
@@ -219,19 +173,14 @@ public class GameEngine implements Runnable {
 	 * @param runnable The runnable.
 	 */
 	public void submitLogic(final Runnable runnable) {
-		logicService.submit(new Runnable() {
-			public void run() {
-				try {
-					runnable.run();
-				} catch(Exception e) {
-					System.out.println("Logic pool exception!");
-					e.printStackTrace();
-					World.writeError("game_engine_logicservice2_errors.txt", e);
-					//World.handleError(t);
-					increaseErrors();
-				}
-			}
-		});
+		logicService.submit((Runnable) () -> {
+            try {
+                runnable.run();
+            } catch(Exception e) {
+                e.printStackTrace();
+                FileLogging.writeError("game_engine_logicservice2_errors.txt", e);
+            }
+        });
 	}
 
 	/**

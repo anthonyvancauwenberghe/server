@@ -1067,7 +1067,7 @@ public class ActionSender {
 
     public ActionSender openPlayersInterface() {
         sendString(8144, "@dre@Players Online: "
-                + (int) (World.getPlayers().size() * World.PLAYER_MULTI));
+                + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
         int i = 0;
         int r = 0;
         Player p3 = null;
@@ -1077,7 +1077,7 @@ public class ActionSender {
         }
         for (; (i + 1) <= World.getPlayers().size(); i++) {
             if (i >= 99) {
-                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * World.PLAYER_MULTI) - 98) + " players");
+                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 98) + " players");
                 break;
             }
             if (World.getPlayers().get((i + 1)) != null) {
@@ -1806,9 +1806,9 @@ public class ActionSender {
      *
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendUpdate() {
+    public ActionSender sendUpdate(int updateTimer) {
         PacketBuilder bldr = new PacketBuilder(114);
-        bldr.putLEShort(World.updateTimer * 50 / 30);
+        bldr.putLEShort(updateTimer * 50 / 30);
         player.write(bldr.toPacket());
         return this;
     }

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.container.duel;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.logging.FileLogging;
@@ -42,7 +43,7 @@ public class Duel {
 			player.getActionSender().sendMessage("You are too far away to open a duel.");
 			return;
 		}
-		if(World.updateInProgress()) {
+		if(Server.isUpdating()) {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
@@ -385,7 +386,7 @@ public class Duel {
 	public static void finishTrade(Player player) {
 		if(player.getTrader() == null)
 			return;
-		if(World.updateInProgress()) {
+		if(Server.isUpdating()) {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}

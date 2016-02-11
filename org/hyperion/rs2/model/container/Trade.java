@@ -1,6 +1,10 @@
 package org.hyperion.rs2.model.container;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.Server;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.ItemsTradeable;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TradeChecker;
@@ -37,7 +41,7 @@ public class Trade {
 	 * @param player2
 	 */
 	public static void open(Player player, Player player2) {
-		if(World.updateInProgress())
+		if(Server.isUpdating())
 			return;
         if(player.getGameMode() != player2.getGameMode()) {
             player.sendMessage("You cannot trade players in different game modes");
@@ -57,7 +61,7 @@ public class Trade {
 			player.getActionSender().sendMessage("You are too far away to open a trade.");
 			return;
 		}
-		if(World.updateInProgress()) {
+		if(Server.isUpdating()) {
 			player.getActionSender().sendMessage("You can't trade during an update.");
 			return;
 		}
@@ -363,7 +367,7 @@ public class Trade {
 			PushMessage.pushStaffMessage("is trying to do a 3-way trade", player);
 			return;
 		}
-		if(World.updateInProgress()) {
+		if(Server.isUpdating()) {
 			player.getActionSender().sendMessage("You can't trade during an update.");
 			return;
 		}

@@ -65,11 +65,11 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			case 72:
 				int id = packet.getShortA();
 				//System.out.println("AtkNpc :" + attacknpc);
-			/*if(attacknpc < 0 || attacknpc > World.getNPCs().size())
+			/*if(attacknpc < 0 || attacknpc > World.getNpcs().size())
 				return;*/
 				if(id <= 0 || id >= Constants.MAX_NPCS)
 					return;
-				NPC victim = (NPC) World.getNPCs().get(id);
+				NPC victim = (NPC) World.getNpcs().get(id);
 				if(victim != null) {
 					player.debugMessage("NpcId: " + victim.getDefinition().getId());
 				if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)

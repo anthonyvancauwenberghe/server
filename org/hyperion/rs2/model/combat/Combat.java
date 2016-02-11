@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.combat;
 
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
+import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
@@ -1218,7 +1219,7 @@ public class Combat {
             int baseX = combatEntity.getAbsX() - 25;
             int baseY = combatEntity.getAbsY() - 25;
             combatEntity.getEntity().getWalkingQueue().reset();
-            Path p = World.pathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
+            Path p = PathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
             if (p != null) {
                 for (int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
@@ -1273,30 +1274,30 @@ public class Combat {
         else if (y < toY)
             moveY = 1;
         if (moveX != 0 && moveY != 0) {
-            if (!World.isWalkAble(height, x, y, (x + moveX), (y + moveY), 0)) {
-                if (World.isWalkAble(height, x, y, (x + moveX), y, 0)) {
+            if (!WorldMap.checkPos(height, x, y, (x + moveX), (y + moveY), 0)) {
+                if (WorldMap.checkPos(height, x, y, (x + moveX), y, 0)) {
                     moveY = 0;
-                } else if (World.isWalkAble(height, x, y, x, (y + moveY), 0)) {
+                } else if (WorldMap.checkPos(height, x, y, x, (y + moveY), 0)) {
                     moveX = 0;
                 } else {
                     return;
                 }
             }
-        } else if (!World.isWalkAble(height, x, y, x + moveX, y
+        } else if (!WorldMap.checkPos(height, x, y, x + moveX, y
                 + moveY, 0)) {
             if (moveX != 0) {
-                if (!World.isWalkAble(height, x, y, x + moveX, y
+                if (!WorldMap.checkPos(height, x, y, x + moveX, y
                         + 1, 0)) {
                     moveY = 1;
-                } else if (!World.isWalkAble(height, x, y, x + moveX, y
+                } else if (!WorldMap.checkPos(height, x, y, x + moveX, y
                         - 1, 0)) {
                     moveY = -1;
                 }
             } else if (moveY != 0) {
-                if (!World.isWalkAble(height, x, y, x + 1, y
+                if (!WorldMap.checkPos(height, x, y, x + 1, y
                         + moveY, 0)) {
                     moveX = 1;
-                } else if (!World.isWalkAble(height, x, y, x - 1, y
+                } else if (!WorldMap.checkPos(height, x, y, x - 1, y
                         + moveY, 0)) {
                     moveX = -1;
                 }

@@ -22,11 +22,6 @@ public class NPC extends Entity {
 	 */
 	private final NPCDefinition definition;
 
-	/**
-	 * Creates the NPC with the specified definition.
-	 *
-	 * @param definition The definition.
-	 */
 	public NPC(NPCDefinition npcdefinition, int respawntime, Location loc) {
 		health = 10;
 		maxHealth = 10;
@@ -43,6 +38,7 @@ public class NPC extends Entity {
 		maxHealth = npcdefinition.maxHp();
 		health = npcdefinition.maxHp();
 		spawnLocation = loc;
+		setLocation(loc);
 		isHidden(false);
 	}
 

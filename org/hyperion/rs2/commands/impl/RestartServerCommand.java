@@ -4,7 +4,6 @@ import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
 
 public class RestartServerCommand extends Command {
@@ -29,7 +28,7 @@ public class RestartServerCommand extends Command {
 			player.getActionSender().sendMessage("E.g. Use command as ::restartserver terrible lagg");
 			return false;
 		}
-		World.update(UPDATE_TIMER, player.getName() + "\t" + reason);
+		Server.update(UPDATE_TIMER, player.getName() + "\t" + reason);
 		return true;
 
 	}

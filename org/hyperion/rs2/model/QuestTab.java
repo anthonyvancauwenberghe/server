@@ -102,7 +102,7 @@ public class QuestTab {
     }
 
     public void sendPlayerCount() {
-        int players = (int) (World.getPlayers().size() * World.PLAYER_MULTI);
+        int players = (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER));
         int id = getId(1);    //Easier to adjust later
 
         player.getActionSender().sendString("@or1@Players online: @gre@" + players, id);

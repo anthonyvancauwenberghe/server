@@ -1,6 +1,7 @@
 package org.hyperion.rs2.net;
 
 import org.apache.mina.core.session.IoSession;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.packet.DefaultPacketHandler;
@@ -84,7 +85,7 @@ public class PacketManager {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			System.out.println("Exception with packet " + packet.getOpcode() + " caused by Player : " + player.getName());
-			World.writeError("packet_errors.txt", ex);
+			FileLogging.writeError("packet_errors.txt", ex);
 			//logger.log(Level.SEVERE, "Exception handling packet.", ex);
 			if(!World.gracefullyExitSession(session))
 				session.close(false);

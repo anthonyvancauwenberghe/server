@@ -380,7 +380,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				String message = filterInput(input);
-				for(NPC npc : World.getNPCs()) {
+				for(NPC npc : World.getNpcs()) {
 					npc.forceMessage(message);
 				}
 				return true;
@@ -522,10 +522,10 @@ public class CommandHandler {
 				try {
 					int time = parts[0];
 					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
-						World.update(time, player.getName() + "Restart Request");
+						Server.update(time, player.getName() + "Restart Request");
 					}
 					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.HEAD_MODERATOR ) ) {
-						World.update(120, player.getName() + "Restart Request");
+						Server.update(120, player.getName() + "Restart Request");
 					}
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use command as ::update <seconds>");
@@ -559,10 +559,10 @@ public class CommandHandler {
 				try {
 					int time = Integer.parseInt(parts[0]);
 					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
-						World.update(time, player.getName() + "Restart Request");
+						Server.update(time, player.getName() + "Restart Request");
 					}
 					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.HEAD_MODERATOR ) ) {
-						World.update(120, player.getName() + "Restart Request");
+						Server.update(120, player.getName() + "Restart Request");
 					}
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use command as ::update <seconds>");
@@ -573,9 +573,8 @@ public class CommandHandler {
 		submit(new Command("stopupdate", Rank.ADMINISTRATOR) {
 
 			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				World.stopUpdate();
+			public boolean execute(Player player, String input) throws Exception {
+				Server.setUpdating(false);
 				return true;
 			}
 			
@@ -1669,15 +1668,15 @@ public class CommandHandler {
                         player.sendf("%s : 1/%d , %d - %d", ItemDefinition.forId(drop.getId()).getName(), drop.getChance(), drop.getMin(), drop.getMax());
                     }
                 }catch(Exception e) {
-                    player.sendf("NPC Count: %,d", World.getNPCs().size());
+                    player.sendf("NPC Count: %,d", World.getNpcs().size());
                     try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt", true))){
                         writer.newLine();
                         writer.newLine();
                         writer.write("Date: " + new Date());
                         writer.newLine();
-                        writer.write(String.format("NPC Count: %,d", World.getNPCs().size()));
+                        writer.write(String.format("NPC Count: %,d", World.getNpcs().size()));
                         writer.newLine();
-                        for(final NPC npc : World.getNPCs()){
+                        for(final NPC npc : World.getNpcs()){
                             writer.write(String.format(
                                     "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",
                                     npc.getDefinition().getName(),

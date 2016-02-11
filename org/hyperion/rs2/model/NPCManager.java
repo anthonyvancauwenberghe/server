@@ -289,7 +289,7 @@ public class NPCManager {
 		n.agressiveDis = getAgressiveDistance(npcId);
 		n.bones = getBones(npcId, n.getDefinition().getName());
 		FileLogging.saveGameLog("npclogs.log", System.currentTimeMillis() + ": " + npcId + " location " + loc.toString());
-		World.npcsWaitingList.add(n);
+		World.register(n);
 		return n;
 	}
 
@@ -378,7 +378,7 @@ public class NPCManager {
 		CommandHandler.submit(new Command("npcids", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				for(NPC npc : World.getNPCs()) {
+				for(NPC npc : World.getNpcs()) {
 					if(npc == null)
 						continue;
 					int distance = player.getLocation().distance(npc.getLocation());

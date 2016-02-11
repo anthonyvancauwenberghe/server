@@ -1,5 +1,6 @@
 package org.hyperion;
 
+import org.hyperion.engine.Update;
 import org.hyperion.rs2.net.security.CharFileEncryption;
 import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.util.ShutdownHook;
@@ -18,6 +19,7 @@ public class Server {
     private final static Uptime uptime = new Uptime();
     private final static ServerStatistics stats = new ServerStatistics();
     private static CharFileEncryption charFileEncryption;
+    private static boolean updating = false;
 
     private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
 
@@ -39,6 +41,14 @@ public class Server {
 
     public static GameLoader getLoader() {
         return loader;
+    }
+
+    public static boolean isUpdating() {
+        return updating;
+    }
+
+    public static void setUpdating(boolean updating) {
+        Server.updating = updating;
     }
 
     public static void main(String[] args) throws Exception {
@@ -69,6 +79,11 @@ public class Server {
             logger.log(Level.SEVERE, "Could not start " + Configuration.getString(NAME) + "!", ex);
             System.exit(1);
         }
+    }
+
+    public static void update(int time, final String reason) {
+        setUpdating(true);
+        getLoader().getEngine().submitWork(new Update(time, reason));
     }
 /*
         File[] files = new File("./data/characters/mergedchars").listFiles();

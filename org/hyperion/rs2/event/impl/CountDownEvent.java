@@ -40,7 +40,7 @@ public class CountDownEvent extends Event {
             this.stop();
 		}
         if(counter%10 == 0) {
-            for(NPC npc : World.getNPCs()) {
+            for(NPC npc : World.getNpcs()) {
                 if(npc != null)
                     npc.forceMessage(name + " event in " + counter + " seconds! Go to " + command + " for " + message + "!");
 

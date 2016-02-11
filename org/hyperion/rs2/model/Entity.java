@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
@@ -414,13 +415,13 @@ public abstract class Entity {
 
 	public void vacateSquare() {
 		getWalkingQueue().reset();
-		if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
+		if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
 			getWalkingQueue().addStep(location.getX() - 1, location.getY());
-		} else if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
+		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
 			getWalkingQueue().addStep(location.getX() + 1, location.getY());
-		} else if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
+		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
 			getWalkingQueue().addStep(location.getX(), location.getY() - 1);
-		} else if(World.isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
+		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
 			getWalkingQueue().addStep(location.getX(), location.getY() + 1);
 		}
 		getWalkingQueue().finish();

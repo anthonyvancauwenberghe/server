@@ -26,7 +26,7 @@ public class SummoningBoBs implements ContentTemplate {
     public boolean clickObject(Player player, int type, int useItem, int itemUsedSlot, int onItem, int slot) {
         if(type == ClickType.NPC_OPTION1) {
             if(player.getCombat().getFamiliar() != null) {
-                NPC npc = (NPC)World.getNPCs().get(slot);
+                NPC npc = (NPC)World.getNpcs().get(slot);
                 player.debugMessage("Npc ownerid "+npc.ownerId+" npc id "+useItem);
                 if(npc.ownerId < 1)
                     return false;

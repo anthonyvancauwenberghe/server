@@ -476,7 +476,7 @@ public class Thieving implements ContentTemplate {
 	@Override
 	public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int npcSlot) {
 		if(type == 11) {
-			NPC npc = (NPC) World.getNPCs().get(npcSlot);
+			NPC npc = (NPC) World.getNpcs().get(npcSlot);
 			pickPocketNpc(client, npc);
 		}
 		if(type == 7) {

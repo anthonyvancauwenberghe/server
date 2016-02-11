@@ -78,7 +78,7 @@ public class CastMagicPacketHandler implements PacketHandler {
 		if(id <= 0 || id >= Constants.MAX_NPCS) {
 			return;
 		}
-		NPC victim = (NPC) World.getNPCs().get(id);
+		NPC victim = (NPC) World.getNpcs().get(id);
 		int spell = packet.getShortA();
 		if(victim != null) {
 			if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)

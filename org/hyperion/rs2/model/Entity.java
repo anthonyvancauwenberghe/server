@@ -4,10 +4,10 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.region.RegionManager;
 import org.hyperion.rs2.net.LoginDebugger;
 
 import java.util.LinkedHashSet;
@@ -614,7 +614,7 @@ public abstract class Entity {
 	public void setLocation(Location location) {
 		this.location = location;
 
-		Region newRegion = World.getWorld().getRegionManager().getRegionByLocation(location);
+		Region newRegion = RegionManager.getRegionByLocation(location);
 		if(newRegion != currentRegion) {
 			if(currentRegion != null) {
 				removeFromRegion(currentRegion);

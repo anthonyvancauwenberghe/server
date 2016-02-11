@@ -593,7 +593,7 @@ public class CommandHandler {
 				int id = Integer.parseInt(parts[0]);
 				int face = Integer.parseInt(parts[1]);
 				int type = Integer.parseInt(parts[2]);
-                World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(id), player.getLocation(), type, face));
+                ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getLocation(), type, face));
 				TextUtils.writeToFile("./data/objspawns.cfg", "spawn = " + id + "	" +
 						player.getLocation().toString() + "	" + face + "	" + type + "	"
 						+ GameObjectDefinition.forId(id).getName());

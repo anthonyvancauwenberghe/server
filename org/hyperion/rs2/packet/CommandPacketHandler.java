@@ -28,6 +28,7 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.Events;
+import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
@@ -2333,8 +2334,7 @@ public class CommandPacketHandler implements PacketHandler {
                     if (player.getPoints().getPkPoints() < amount)
                         throw new Exception(
                                 "You don't have enough PK points to do this!");
-                    if (World.getWorld().getBountyHandler()
-                            .add(name, player.getName(), amount)) {
+                    if (BountyHandler.add(name, player.getName(), amount)) {
                         player.sendf(
                                 "You have successfully placed a bounty of %d on %s",
                                 amount, name);
@@ -2352,7 +2352,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
 
             if (commandStart.equalsIgnoreCase("checkbounties")) {
-                World.getWorld().getBountyHandler().listBounties(player);
+                BountyHandler.listBounties(player);
             }
 
             if (commandStart.equalsIgnoreCase("givewikireward") && (Rank.hasAbility(player, Rank.DEVELOPER) || player.getName().equalsIgnoreCase("boomwiki"))) {

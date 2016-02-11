@@ -1,18 +1,12 @@
 package org.hyperion.map;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.packet.ObjectClickHandler;
+import org.hyperion.rs2.model.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author Martin
@@ -394,7 +388,7 @@ public class WorldMap {
                 if (id == 2213 || id == 2214 || id == 3045 || id == 5276 || id == 6084 || id == 10517 || id == 11338 || id == 11758 ||
                         id == 12798 || id == 12799 || id == 12800 || id == 3193 || id == 12801 || id == 12120 || id == 12121)
                     bankBooths.put((tileX * 5000 + tileY), face2);
-                world.getObjectMap().addMapObject(tileX, tileY, height, id);
+                ObjectManager.addMapObject(tileX, tileY, height, id);
 
 				/*if(tileX >= 2814 && tileX <= 2942 && tileY >= 5250 && tileY <= 5373)
 					height--;*/
@@ -952,11 +946,9 @@ public class WorldMap {
             System.out.println("error in WorldMap X: " + absX + " Y: " + absY);
             return false;
         }
-        final GameObject obj = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0);
+        final GameObject obj = ObjectManager.getObjectAt(absX, absY, 0);
         if (obj != null) {
-            if (obj.getDefinition().getId() == 6951)
-                return true;
-            return false;
+            return obj.getDefinition().getId() == 6951;
         }
         if (world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
             return true;
@@ -991,25 +983,13 @@ public class WorldMap {
         for (int i : dirs) {
             //System.out.print("   "+i);
             if (dir == 2) {
-                if (isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check);
             } else if (dir == 14) {
-                if (isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check);
             } else if (dir == 10) {
-                if (isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check);
             } else if (dir == 6) {
-                if (isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check);
             } else if (i != -1) {
 				/*if(check == 1 && world.World_Objects[which].containsKey(f2) && i == dir) {
 					return false;

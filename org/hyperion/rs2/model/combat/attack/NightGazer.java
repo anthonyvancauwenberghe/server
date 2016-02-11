@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class NightGazer implements Attack {
 
@@ -26,7 +27,7 @@ public class NightGazer implements Attack {
     private void handleIceSpecial(NPC npc) {
         npc.forceMessage("ISN'T IT GETTING A BIT... COLD?");
         npc.cE.doAnim(13429);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int damage = Combat.random(MAX_MAGIC_DAMAGE) + 5;
             player.cE.setFreezeTimer(5000);
             player.getActionSender().sendMessage("You have been frozen and weakened!");
@@ -42,7 +43,7 @@ public class NightGazer implements Attack {
     private void handleShardSpecial(NPC npc) {
         npc.forceMessage("TRY AND DODGE THIS!");
         npc.cE.doAnim(13428);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int skill = Combat.random(6);
             if(skill == 3 || skill == 5) {
                 return;

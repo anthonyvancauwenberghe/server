@@ -48,6 +48,8 @@ public class Server {
      */
     public static final boolean SPAWN = config.getBoolean("spawn");
 
+    private final static Logger logger = Logger.getLogger("ArteroPk");
+
     /**
      * The update version.
      */
@@ -64,11 +66,6 @@ public class Server {
      * The server statistics.
      */
     private static final ServerStatistics stats = new ServerStatistics();
-
-    /**
-     * Logger instance
-     */
-    private static final Logger logger = Logger.getLogger(Server.class.getName());
 
 
     /**
@@ -197,9 +194,10 @@ public class Server {
             System.exit(1);
         }
         RestarterThread.getRestarter();
-        //SQL.getSQL();
-        //ShopManager.dumpShops();
         return World.getWorld();
     }
 
+    public static Logger getLogger() {
+        return logger;
+    }
 }

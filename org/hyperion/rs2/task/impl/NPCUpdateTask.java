@@ -3,6 +3,7 @@ package org.hyperion.rs2.task.impl;
 import org.hyperion.rs2.GameEngine;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
+import org.hyperion.rs2.model.region.RegionManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.task.Task;
@@ -91,7 +92,7 @@ public class NPCUpdateTask implements Task {
 		/*
 		 * Loop through all NPCs in the world.
 		 */
-		for(NPC npc : World.getWorld().getRegionManager().getLocalNpcs(player)) {
+		for(NPC npc : RegionManager.getLocalNpcs(player)) {
 			/*
 			 * Check if there is room left in the local list.
 			 */

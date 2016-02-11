@@ -6,6 +6,7 @@ import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
+import org.hyperion.rs2.model.region.RegionManager;
 import org.hyperion.rs2.util.ClassUtils;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
@@ -394,7 +395,7 @@ public class NPCManager {
 
 		}
 
-		for(NPC npc1 : World.getWorld().getRegionManager().getLocalNpcs(npc)) {
+		for(NPC npc1 : RegionManager.getLocalNpcs(npc)) {
 			if(npc != npc1 && ! npc1.isHidden()) {
 				int k1 = npc1.getLocation().getX();
 				int l1 = npc1.getLocation().getY();

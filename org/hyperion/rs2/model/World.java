@@ -23,7 +23,6 @@ import org.hyperion.rs2.model.content.DoorManager;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.BountyHunterLogout;
-import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.event.PulseGrandExchangeEvent;
@@ -33,7 +32,6 @@ import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
-import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -54,7 +52,6 @@ import org.hyperion.rs2.util.ConfigurationParser;
 import org.hyperion.rs2.util.EntityList;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.Restart;
-import org.hyperion.util.BlockingExecutorService;
 import org.hyperion.util.Misc;
 
 import java.io.BufferedWriter;
@@ -63,7 +60,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 //import org.hyperion.rs2.savingnew.SQLPlayerSaving;
@@ -82,27 +78,9 @@ public class World {
     public static final double PLAYER_MULTI = 1.20;
 
     /**
-     * Ticket Manager - no fuckin shit
-     */
-
-    private final TicketManager ticketManager = new TicketManager();
-
-    public final TicketManager getTicketManager() {
-        return ticketManager;
-    }
-
-
-//    private DebugGUI gui;
-//
-//    public DebugGUI getGUI() {
-//        return gui;
-//    }
-
-    /**
      * Logging class.
      */
-    private static final Logger logger = Logger
-            .getLogger(World.class.getName());
+    private static final Logger logger = Logger.getLogger(World.class.getName());
 
     /**
      * World instance.
@@ -117,13 +95,6 @@ public class World {
     public static World getWorld() {
         return world;
     }
-
-    /**
-     * An executor service which handles background loading tasks.
-     */
-    private BlockingExecutorService backgroundLoader = new BlockingExecutorService(
-            Executors.newSingleThreadExecutor());
-
 
     /**
      * The game engine.
@@ -143,29 +114,19 @@ public class World {
     /**
      * A list of connected players.
      */
-    private EntityList<Player> players = new EntityList<Player>(Constants.MAX_PLAYERS);
+    private EntityList<Player> players = new EntityList<>(Constants.MAX_PLAYERS);
 
     /**
      * A list of active NPCs.
      */
-    public EntityList<NPC> npcs = new EntityList<NPC>(Constants.MAX_NPCS);
+    public EntityList<NPC> npcs = new EntityList<>(Constants.MAX_NPCS);
 
-    public LinkedList<NPC> npcsWaitingList = new LinkedList<NPC>();
-
-    /**
-     * The game object manager.
-     */
-    private ObjectManager objectManager;
+    public LinkedList<NPC> npcsWaitingList = new LinkedList<>();
 
     /**
      * The login server connector.
      */
     private LoginServerConnector connector;
-
-    /**
-     * The region manager.
-     */
-    private RegionManager regionManager = new RegionManager();
 
     /**
      * Global Item Manager, for drops
@@ -183,8 +144,6 @@ public class World {
      * The Staff Manager
      */
     private StaffManager staffManager;
-
-    private final BountyHandler bountyHandler = new BountyHandler();
 
     private ServerEnemies enemies;
 
@@ -217,30 +176,12 @@ public class World {
      */
     public World() {
         try {
-            /*
-             * backgroundLoader.submit(new Callable<Object>() {
-			 *
-			 * @Override public Object call() throws Exception { objectManager =
-			 * new ObjectManager(); objectManager.load(); DoorManager.init();
-			 * return null; } });
-			 */
-			/*
-			 * backgroundLoader.submit(new Callable<Object>() {
-			 *
-			 * @Override public Object call() throws Exception {
-			 * ItemDefinition.init(); //NPCDefinition.init(); for(int i = 0; i <
-			 * worldmapobjects; i++) { World_Objects[i] = null; World_Objects[i]
-			 * = new Hashtable<BlockPoint, DirectionCollection>(); }
-			 * WorldMap.loadWorldMap(true);
-			 * //WorldMap2.getSingleton().initialize(); return null; } });
-			 */
-            objectManager = new ObjectManager();
-            objectManager.load();
+            ObjectManager.init();
             DoorManager.init();
 
             for (int i = 0; i < worldmapobjects; i++) {
                 World_Objects[i] = null;
-                World_Objects[i] = new Hashtable<BlockPoint, DirectionCollection>();
+                World_Objects[i] = new Hashtable<>();
             }
             // worldMap = new WorldMap();
             WorldMap.loadWorldMap(true, this);
@@ -275,24 +216,6 @@ public class World {
      */
     public LoginServerConnector getLoginServerConnector() {
         return connector;
-    }
-
-    /**
-     * Gets the background loader.
-     *
-     * @return The background loader.
-     */
-    public BlockingExecutorService getBackgroundLoader() {
-        return backgroundLoader;
-    }
-
-    /**
-     * Gets the region manager.
-     *
-     * @return The region manager.
-     */
-    public RegionManager getRegionManager() {
-        return regionManager;
     }
 
     public GlobalItemManager getGlobalItemManager() {
@@ -513,7 +436,6 @@ public class World {
         submit(new GoodIPs());
         submit(new ClientConfirmEvent());
         TriviaBot.getBot().init();
-        objectManager.submitEvent();
         //FFARandom.initialize();
         // new SQL();
     }
@@ -536,15 +458,6 @@ public class World {
      */
     public void submit(Task task) {
         this.engine.pushTask(task);
-    }
-
-    /**
-     * Gets the object map.
-     *
-     * @return The object map.
-     */
-    public ObjectManager getObjectMap() {
-        return objectManager;
     }
 
     /**
@@ -652,8 +565,7 @@ public class World {
 
     public void removeFromWaiting(NPC npc) {
         // TODO LOOK AT THIS CODE, IT MAY HAVE TO BE MODIFIED
-        Region region = World.getWorld().getRegionManager()
-                .getRegionByLocation(npc.getLocation());
+        Region region = RegionManager.getRegionByLocation(npc.getLocation());
         region.addNpc(npc);
         npc.setLocation(npc.getSpawnLocation());
         register(npc);
@@ -944,10 +856,6 @@ public class World {
         logger.severe("An error occurred in an executor service! The server will be halted immediately.");
         t.printStackTrace();
         // System.exit(1);
-    }
-
-    public BountyHandler getBountyHandler() {
-        return bountyHandler;
     }
 
     public void update(int time, final String reason) {

@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.attack.CorporealBeast;
+import org.hyperion.rs2.model.region.RegionManager;
 
 /**
  * Handles all events related to combat.
@@ -56,7 +57,7 @@ public class NpcCombatEvent extends Event {
 		for(NPC npc : World.getWorld().getNPCs()) {
 			try{
 				if(npc.getDefinition().getId() == 8133) {
-					for(Player p : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+					for(Player p : RegionManager.getLocalPlayers(npc)) {
 						if(p != null) {
 						CombatEntity combatEntity = p.getCombat();
 						if(combatEntity.getAbsX() >= 2505 && combatEntity.getAbsY() >= 4630 &&
@@ -87,7 +88,7 @@ public class NpcCombatEvent extends Event {
 					//complicated agressecode used for all players
 					int dis = 1000;
 					Player player2 = null;
-					for(Player player4 : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+					for(Player player4 : RegionManager.getLocalPlayers(npc)) {
 						if(player4 != null && player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agressiveDis) {
 							dis = player4.getLocation().distance(npc.getLocation());
 							player2 = player4;

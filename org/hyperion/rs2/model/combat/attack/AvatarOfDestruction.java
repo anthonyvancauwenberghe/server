@@ -1,11 +1,10 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 import java.util.Arrays;
 
@@ -45,7 +44,7 @@ public class AvatarOfDestruction implements Attack {
             return 6;
         }
         n.getCombat().doAtkEmote();
-        for(final Player player : World.getWorld().getRegionManager().getLocalPlayers(n)) {
+        for(final Player player : RegionManager.getLocalPlayers(n)) {
             int hitType = Combat.random(1);
             int tempDamage = CombatCalculation.getCalculatedDamage(n, player, Combat.random(MAX_DAMAGE), hitType, MAX_DAMAGE);
             if(player.getLocation().distance(n.getLocation()) == 1)

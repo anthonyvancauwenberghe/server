@@ -1,9 +1,13 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.map.WorldMap;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class GodWarsArmy implements Attack {
 
@@ -56,7 +60,7 @@ public class GodWarsArmy implements Attack {
 					//mage
 					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-					for(Player p : World.getWorld().getRegionManager().getLocalPlayers((Entity) n)) {
+					for(Player p : RegionManager.getLocalPlayers(n)) {
 						int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 						if(distance2 <= 10) {
 							Combat.npcRangeAttack(n, p.cE, 1198, 68, true);
@@ -69,7 +73,7 @@ public class GodWarsArmy implements Attack {
 					//range
 					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-					for(Player p : World.getWorld().getRegionManager().getLocalPlayers((Entity) n)) {
+					for(Player p : RegionManager.getLocalPlayers(n)) {
 						int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 						if(distance2 <= 10) {
 							Combat.npcRangeAttack(n, p.cE, 1197, 68, true);

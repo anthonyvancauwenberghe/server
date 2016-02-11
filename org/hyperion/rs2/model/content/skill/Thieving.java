@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.Stall;
+import org.hyperion.rs2.model.region.RegionManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -378,7 +379,7 @@ public class Thieving implements ContentTemplate {
 	}
 
 	public boolean stealFromStall(final Player player, final int objectId, final int x, final int y) {
-		/*if (World.getWorld().getObjectMap().getObjectAt(x, y,player.getLocation().getZ()) != null) {
+		/*if (ObjectManager.getObjectAt(x, y,player.getLocation().getZ()) != null) {
 			System.out.println("Stealing from stall null");
 			return true;
 		}*/
@@ -425,7 +426,7 @@ public class Thieving implements ContentTemplate {
 		}
 		if(! caught)
 			return null;
-		for(NPC npc : World.getWorld().getRegionManager().getLocalNpcs(player)) {
+		for(NPC npc : RegionManager.getLocalNpcs(player)) {
 			boolean continue2 = false;
 			for(int i : guardIds) {
 				if(i == npc.getDefinition().getId())

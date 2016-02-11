@@ -62,7 +62,7 @@ public class Wilderness {
 					createGfx(player, 343, player.getLocation().getX(), player.getLocation().getY());
 				} else if(timer == 1) {
 					for(int j = 0; j < 4; j++) {
-						World.getWorld().getObjectMap().removeObject(list2[j]);
+						ObjectManager.removeObject(list2[j]);
 					}
 					for(Player p : player.getLocalPlayers()) {
 						tele(o2, p, minX, minY, maxX, maxY);
@@ -71,7 +71,7 @@ public class Wilderness {
 					tele(o2, player, minX, minY, maxX, maxY);
 					//reset the oblisks
 					for(int i = 0; i < 4; i++) {
-						World.getWorld().getObjectMap().removeObject(replaceGlobalObject(o.x[i], o.y[i], 14826, - 1, 10));
+						ObjectManager.removeObject(replaceGlobalObject(o.x[i], o.y[i], 14826, - 1, 10));
 					}
 					this.stop();
 				}
@@ -109,7 +109,7 @@ public class Wilderness {
 
 	public GameObject replaceGlobalObject(int x, int y, int id, int face, int type) {
 		GameObject gO = new GameObject(GameObjectDefinition.forId(id), Location.create(x, y, 0), type, face);
-		World.getWorld().getObjectMap().addObject(gO);
+		ObjectManager.addObject(gO);
 		return gO;
 	}
 

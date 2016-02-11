@@ -282,7 +282,7 @@ public class ObjectClickHandler {
 
     public static boolean objectExist(int id, int x, int y, int height) {
         final Location location = Location.create(x, y, height);
-        return World.getWorld().getObjectMap().objectExist(location, id);
+        return ObjectManager.objectExist(location, id);
 
     }
 

@@ -99,7 +99,7 @@ public class Woodcutting implements ContentTemplate {
 				client.getWalkingQueue().addStep(x, y);
 				client.getWalkingQueue().addStep(walktoX, walktoY);
 				client.getWalkingQueue().finish();
-				World.getWorld().getObjectMap().update(new GameObject(GameObjectDefinition.forId(6951), Location.create(x, y, client.getLocation().getZ()), 10, 0));
+				ObjectManager.update(new GameObject(GameObjectDefinition.forId(6951), Location.create(x, y, client.getLocation().getZ()), 10, 0));
 				ContentEntity.startAnimation(client, - 1);
 				this.stop();
 			}
@@ -110,7 +110,7 @@ public class Woodcutting implements ContentTemplate {
 			@Override
 			public void execute() {
 				client.getWalkingQueue().reset();
-				World.getWorld().getObjectMap().update(new GameObject(GameObjectDefinition.forId(object), Location.create(x, y, client.getLocation().getZ()), 10, 0));
+				ObjectManager.update(new GameObject(GameObjectDefinition.forId(object), Location.create(x, y, client.getLocation().getZ()), 10, 0));
 				this.stop();
 			}
 
@@ -167,7 +167,7 @@ public class Woodcutting implements ContentTemplate {
 			@Override
 			public void execute() {
 				// tree cut down by another player
-				/*if(World.getWorld().getObjectMap().getObjectAt(x, y,
+				/*if(ObjectManager.getObjectAt(x, y,
 						client.getLocation().getZ()) == null) {
 					stop2();
 					return;
@@ -271,13 +271,13 @@ public class Woodcutting implements ContentTemplate {
 					if(Edgeville.LOCATION.distance(Location.create(x, y, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(x, y, 0)) > 70) {
 						final GameObject stump = new GameObject(GameObjectDefinition.forId(TREE_STUMP), Location.create(x, y, client.getLocation().getZ()), 10, 0);
 						final GameObject tree = new GameObject(GameObjectDefinition.forId(object), Location.create(x, y, client.getLocation().getZ()), 10, 0);
-						World.getWorld().getObjectMap().addObject(stump);
+						ObjectManager.addObject(stump);
 						World.getWorld().submit(new Event(TREE_RESPAWN_TIME) {
 
 							@Override
 							public void execute() {
-								World.getWorld().getObjectMap().replace(stump, tree);
-								World.getWorld().getObjectMap().removeObject(stump);
+								ObjectManager.replace(stump, tree);
+								ObjectManager.removeObject(stump);
 								this.stop();
 							}
 

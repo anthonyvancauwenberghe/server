@@ -1,28 +1,17 @@
 package org.hyperion.rs2.task.impl;
 
-import java.util.List;
 import org.hyperion.rs2.GameEngine;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Appearance;
-import org.hyperion.rs2.model.ChatMessage;
-import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.UpdateFlags;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
-import org.hyperion.rs2.model.recolor.Recolor;
+import org.hyperion.rs2.model.region.RegionManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.task.Task;
-import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.util.Misc;
 
 import java.util.Iterator;
 
@@ -130,7 +119,7 @@ public class PlayerUpdateTask implements Task {
 		/*
 		 * Loop through every player.
 		 */
-		for(Player otherPlayer : World.getWorld().getRegionManager().getLocalPlayers(player)) {
+		for(Player otherPlayer : RegionManager.getLocalPlayers(player)) {
 			/*
 			 * Check if there is room left in the local list.
 			 */
@@ -586,7 +575,7 @@ public class PlayerUpdateTask implements Task {
 		byte skull = - 1; //default
 		if(otherPlayer.isSkulled())
 			skull = 0;
-		playerProps.put((byte) skull); // skull icon*/
+		playerProps.put(skull); // skull icon*/
 		//print((byte) otherPlayer.isSkulled);
 		/*playerProps.put((byte) 0);
 		playerProps.put((byte) 0);

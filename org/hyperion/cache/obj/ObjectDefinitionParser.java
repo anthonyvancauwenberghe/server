@@ -5,6 +5,7 @@ import org.hyperion.cache.Cache;
 import org.hyperion.cache.index.impl.StandardIndex;
 import org.hyperion.cache.util.ByteBufferUtils;
 import org.hyperion.rs2.model.GameObjectDefinition;
+import org.hyperion.rs2.model.ObjectManager;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -18,39 +19,11 @@ import java.nio.ByteBuffer;
 public class ObjectDefinitionParser {
 
 	/**
-	 * The cache.
-	 */
-	private Cache cache;
-
-	/**
-	 * The index.
-	 */
-	private StandardIndex[] indices;
-
-	/**
-	 * The listener.
-	 */
-	private ObjectDefinitionListener listener;
-
-	/**
-	 * Creates the object definition parser.
-	 *
-	 * @param cache    The cache.
-	 * @param indices  The indices in the cache.
-	 * @param listener The object definition listener.
-	 */
-	public ObjectDefinitionParser(Cache cache, StandardIndex[] indices, ObjectDefinitionListener listener) {
-		this.cache = cache;
-		this.indices = indices;
-		this.listener = listener;
-	}
-
-	/**
 	 * Parses the object definitions in the cache.
 	 *
 	 * @throws IOException if an I/O error occurs.
 	 */
-	public void parse() throws IOException {
+	public static void parse(Cache cache, StandardIndex[] indices) throws IOException {
 		ByteBuffer buf = new Archive(cache.getFile(0, 2)).getFileAsByteBuffer("loc.dat");
 
 		for(StandardIndex index : indices) {
@@ -210,7 +183,7 @@ public class ObjectDefinitionParser {
 				}
 			} while(true);
 
-			listener.objectDefinitionParsed(new GameObjectDefinition(id, name, desc, sizeX, sizeY, isSolid, isWalkable, hasActions, actionCount, animation));
+			ObjectManager.objectDefinitionParsed(new GameObjectDefinition(id, name, desc, sizeX, sizeY, isSolid, isWalkable, hasActions, actionCount, animation));
 		}
 	}
 

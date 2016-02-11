@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ public class BallakThePummeller implements Attack {
     private void handleFlames(NPC npc) {
         npc.forceMessage("BUUUUUUURRRRRRRRRNNNNNNNN!");
         npc.cE.doAnim(13605);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int unlucky = Combat.random(1);
             if(unlucky == 0) {
                 player.playGraphics(Graphic.create(1393));
@@ -42,7 +43,7 @@ public class BallakThePummeller implements Attack {
     private void handleHealthSap(NPC npc) {
         npc.forceMessage("GIVE ME LIFE!");
         npc.cE.doAnim(13606);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             player.playGraphics(Graphic.create(336));
             int damage = Combat.random(30);
             Combat.npcRangeAttack(npc, player.cE, 165, 0, false);
@@ -55,7 +56,7 @@ public class BallakThePummeller implements Attack {
     private void handleFireSpell(NPC npc) {
         npc.forceMessage("FEEL THE HEAT!");
         npc.cE.doAnim(13604);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int fireGfx = 1154;
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player.cE.getEntity(), Combat.random(MAX_RANGE_DAMAGE), 1, MAX_RANGE_DAMAGE), 1500, 1);

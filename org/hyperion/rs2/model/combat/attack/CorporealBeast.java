@@ -1,10 +1,10 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.event.Event;
-
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.*;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.region.RegionManager;
 import org.hyperion.util.Misc;
 
 
@@ -132,7 +132,7 @@ public class CorporealBeast implements Attack {
 						int offsetY = ((n.cE.getAbsX() + n.cE.getOffsetX()) - attack.getAbsX()) * - 1;
 						int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.getAbsY()) * - 1;
 						//find our lockon target
-						int hitId = attack.getSlotId((Entity) n);
+						int hitId = attack.getSlotId(n);
 						//extra variables - not for release
 						int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 						int timer = 1;
@@ -148,7 +148,7 @@ public class CorporealBeast implements Attack {
 						//create the projectile
 						//attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 1824, 99, 35, hitId, slope);
 						//attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1824, 99, 35, hitId, slope);
-						for(Player players : World.getWorld().getRegionManager().getLocalPlayers(n)) {
+						for(Player players : RegionManager.getLocalPlayers(n)) {
 							//if(players.getLocation().distance(n.getLocation()) < 8) {
 								distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 								speed = 75 - (distance - 1) * 2;

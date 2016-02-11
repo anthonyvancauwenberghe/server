@@ -111,7 +111,7 @@ public class Mining implements ContentTemplate {
 						"You cannot mine that ore.");
 				return true;
 			}
-			GameObject g = World.getWorld().getObjectMap().getObjectAt(objectX, objectY,
+			GameObject g = ObjectManager.getObjectAt(objectX, objectY,
 					player.getLocation().getZ());
 			if(g != null && g.getType() == EXPIRED_ORE) {
 				player.getActionSender().sendMessage(
@@ -127,7 +127,7 @@ public class Mining implements ContentTemplate {
 			World.getWorld().submit(new Event(MINING_DELAY) {
 				@Override
 				public void execute() {
-					GameObject g = World.getWorld().getObjectMap().getObjectAt(objectX, objectY,
+					GameObject g = ObjectManager.getObjectAt(objectX, objectY,
 							player.getLocation().getZ());
 
 
@@ -166,11 +166,11 @@ public class Mining implements ContentTemplate {
 									final GameObject normal = new GameObject(GameObjectDefinition.forId(objectID), Location.create(objectX, objectY, player.getLocation().getZ()), 10, 0);
 
 									ContentEntity.startAnimation(player, - 1);
-									World.getWorld().getObjectMap().addObject(expired);
+									ObjectManager.addObject(expired);
 									World.getWorld().submit(new Event(ORE_RESPAWN_TIME) {
 										@Override
 										public void execute() {
-											World.getWorld().getObjectMap().replace(expired, normal);
+											ObjectManager.replace(expired, normal);
 											this.stop();
 										}
 									});

@@ -287,12 +287,12 @@ public class MiningV2 implements ContentTemplate {
 						if(Edgeville.LOCATION.distance(Location.create(x, y, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(x, y, 0)) > 70) {
 							final GameObject blank_rock = new GameObject(GameObjectDefinition.forId(450), l, 10, 0);
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
-							World.getWorld().getObjectMap().addObject(blank_rock);
+							ObjectManager.addObject(blank_rock);
 							rockLocationStatus.put(l, 1);
 							World.getWorld().submit(new Event(rock.respawn * 1000) {
 								@Override
 								public void execute() {
-									World.getWorld().getObjectMap().replace(blank_rock, new_rock);
+									ObjectManager.replace(blank_rock, new_rock);
 									rockLocationStatus.remove(l);
 									this.stop();
 								}

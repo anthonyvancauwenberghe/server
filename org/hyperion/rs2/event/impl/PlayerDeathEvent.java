@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
+import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc2.Jail;
@@ -216,7 +217,7 @@ public class PlayerDeathEvent extends Event {
 				if(killer != null) {
 					//blood lust system
 					World.getWorld().getContentManager().handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
-                    World.getWorld().getBountyHandler().handle(killer, player.getName());
+                    BountyHandler.handle(killer, player.getName());
 					/**
 					 * Increasing stupid points and stuff.
 					 */

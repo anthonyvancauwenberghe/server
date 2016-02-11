@@ -72,12 +72,6 @@ public class RS2Server {
 	 */
 	public void start() throws ExecutionException {
 		try {
-			//ScriptManager.getScriptManager().loadScripts(Constants.SCRIPTS_DIRECTORY);
-			if(World.getWorld().getBackgroundLoader().getPendingTaskAmount() > 0) {
-				//logger.info("Waiting for pending background loading tasks...");
-				World.getWorld().getBackgroundLoader().waitForPendingTasks();
-			}
-			World.getWorld().getBackgroundLoader().shutdown();
 			engine.start();
 			bind(PORT);
 			//logger.info("Ready");

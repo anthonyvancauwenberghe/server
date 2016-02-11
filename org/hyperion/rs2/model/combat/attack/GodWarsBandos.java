@@ -1,10 +1,14 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.map.WorldMap;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class GodWarsBandos implements Attack {
 
@@ -71,7 +75,7 @@ public class GodWarsBandos implements Attack {
 					//range
 					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-					for(Player p : World.getWorld().getRegionManager().getLocalPlayers(n)) {
+					for(Player p : RegionManager.getLocalPlayers(n)) {
 						int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 						if(distance2 <= 10 && WorldMap.projectileClear(n.getLocation().getZ(), n.getDefinition().sizeX() + n.getLocation().getX(), n.getDefinition().sizeY() + n.getLocation().getY(), p.cE.getAbsX(), p.cE.getAbsY())) {
 							p.cE.doGfx(1177, 0);

@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.content;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.GameObjectDefinition;
@@ -36,7 +38,8 @@ public class DoorManager {
 					doors.put(d.getSecondClosedLocation(), d);
 				}
 			}
-			logger.info("Loaded " + list.size() + " doors.");
+			if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+				Server.getLogger().log(Level.INFO, "Doors have been successfully loaded.");
 		} catch(Exception e) {
 			logger.log(Level.WARNING, "Failed to load the doors for some reason, check if doors.xml is in the data folder.", e);
 		}

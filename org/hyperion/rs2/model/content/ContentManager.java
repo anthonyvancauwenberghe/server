@@ -19,7 +19,7 @@ public class ContentManager {
 		try {
 			for(int i = 0; i < PACKET_HANDLERS; i++) {
 				contentMaps[i] = null;
-				contentMaps[i] = new HashMap<Integer, ContentTemplate>();
+				contentMaps[i] = new HashMap<>();
 			}
 			addContent();
 		} catch(Exception e) {
@@ -39,7 +39,6 @@ public class ContentManager {
                         }
                         if(content instanceof SpecialArea || SpecialArea.class.isAssignableFrom(cls)) {
                             SpecialAreaHolder.put(cls.getSimpleName(), (SpecialArea)content, true);
-                            System.err.println("HIT "+cls.getSimpleName() + " TO ADD CONTENT SPECIAL AREA");
                         }
 						if(cls.getName().contains("prayer"))
 							prayer = content;

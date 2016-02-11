@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.content.jge;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
@@ -10,6 +12,7 @@ import org.hyperion.rs2.sqlv2.DbHub;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
@@ -215,9 +218,10 @@ public class JGrandExchange {
         return instance;
     }
 
-    public static boolean init(){
+    public static void init(){
         ItemInfo.geBlacklist.load();
         instance = new JGrandExchange();
-        return instance.load();
+        if(instance.load() && Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+            Server.getLogger().log(Level.INFO, "Grand Exchange has successfully loaded.");
     }
 }

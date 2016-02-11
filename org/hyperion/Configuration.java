@@ -22,9 +22,10 @@ import java.util.logging.Logger;
 
 public class Configuration {
     public enum ConfigurationObject {
-        NAME("DeviousPk", String.class),
+        NAME("ArteroPk", String.class),
         OWNER("Arre", String.class),
         PORT("43599", Integer.class),
+        DEBUG("true", Boolean.class),
         VERSION("317", Integer.class),
         LOCALHOST("false", Boolean.class),
         PLAYER_MULTIPLIER("1.2", Double.class),
@@ -87,37 +88,45 @@ public class Configuration {
     public static Map<ConfigurationObject, String> loadMap() {
         try (FileReader fileReader = new FileReader(CONFIGURATION_FILE)) {
             JsonParser parser = new JsonParser();
-            JsonObject object = (JsonObject)parser.parse(fileReader);
+            JsonObject object = (JsonObject) parser.parse(fileReader);
             Map<ConfigurationObject, String> configuration = new Gson().fromJson(object, new TypeToken<HashMap<ConfigurationObject, String>>() {}.getType());
+            boolean hasToSave = ConfigurationObject.VALUES.length != configuration.size();
             Arrays.stream(ConfigurationObject.VALUES).forEach(configurationObject -> {
-                if(!configuration.containsKey(configurationObject))
+                if (!configuration.containsKey(configurationObject))
                     configuration.put(configurationObject, configurationObject.getValue());
             });
+            if(hasToSave)
+                saveConfiguration();
             return configuration;
         } catch (FileNotFoundException e) {
             logger.warning("Using default configuration file.");
-            return saveDefaultConfiguration();
+            return saveConfiguration();
         } catch (Exception e) {
             logger.severe("Something went severely wrong while trying to load the configuration file.");
         }
         return null;
     }
 
-    public static Map<ConfigurationObject, String> saveDefaultConfiguration() {
+    public static Map<ConfigurationObject, String> saveConfiguration() {
         if (!CONFIGURATION_FILE.getParentFile().exists()) {
-            if(!CONFIGURATION_FILE.getParentFile().mkdirs()) {
+            if (!CONFIGURATION_FILE.getParentFile().mkdirs()) {
                 logger.warning("Unable to create directory for configuration file!");
                 return null;
             }
         }
 
         //Treemap so it keeps the order in the file itself, making it cleaner to edit.
-        Map<ConfigurationObject, String> defaultConfigFile = new TreeMap<>();
-        Arrays.stream(ConfigurationObject.VALUES).forEach(value -> defaultConfigFile.put(value, value.getValue()));
+        Map<ConfigurationObject, String> defaultConfigFile;
+        if (CONFIGURATIONS == null)
+            defaultConfigFile = new TreeMap<>();
+        else
+            defaultConfigFile = new TreeMap<>(CONFIGURATIONS);
+        Arrays.stream(ConfigurationObject.VALUES).filter(value -> !defaultConfigFile.containsKey(value)).forEach(value -> defaultConfigFile.put(value, value.getValue()));
 
         try (FileWriter writer = new FileWriter(CONFIGURATION_FILE)) {
             Gson builder = new GsonBuilder().setPrettyPrinting().create();
-            writer.write(builder.toJson(defaultConfigFile, new TypeToken<HashMap<ConfigurationObject, String>>() {}.getType()));
+            writer.write(builder.toJson(defaultConfigFile, new TypeToken<HashMap<ConfigurationObject, String>>() {
+            }.getType()));
         } catch (Exception e) {
             logger.severe("Something went severely wrong while trying to save the default configuration file.");
         }

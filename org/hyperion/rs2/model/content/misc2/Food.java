@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.content.misc2;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.data.PersistenceManager;
 import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.event.impl.OverloadDrinkingEvent;
@@ -17,6 +19,7 @@ import org.hyperion.util.Misc;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Food and potion system.
@@ -40,7 +43,8 @@ public class Food implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 		foods = (List<FoodItem>) PersistenceManager.load(new FileInputStream("./data/food.xml"));
-		System.out.println(foods.size() + " food loaded.");
+		if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+			Server.getLogger().log(Level.INFO, "Successfully loaded " + foods.size() + " food items.");
 	}
 
 	@Override

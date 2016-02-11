@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
@@ -503,12 +504,7 @@ public class ItemDefinition {
 				int id = values[0];
 				int price = values[1];
 				definitions[id].setHighAlcValue(price);
-				World.getEngine().submitTask(new Runnable() {
-					@Override
-					public void run() {
-						dumpItemDefinitions();
-					}
-				});
+				Server.getLoader().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
 				return true;
 			}
 		});
@@ -520,7 +516,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(false);
-					World.getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
+					Server.getLoader().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::unstack 11694");
 				}
@@ -535,12 +531,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(true);
-					World.getEngine().submitTask(new Runnable() {
-						@Override
-						public void run() {
-							dumpItemDefinitions();
-						}
-					});
+					Server.getLoader().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::stack 11694");
 				}

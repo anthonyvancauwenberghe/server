@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
@@ -14,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created with IntelliJ IDEA.
@@ -112,7 +115,8 @@ public class RoomDefinition {
                 }
             }
 
-            System.out.println("Loaded "+defs+" Room Definitions");
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Loaded "+defs+" Room Definitions");
         }catch(final Exception ex) {
 
         }

@@ -1,7 +1,7 @@
 package org.hyperion.fileserver;
 
+import org.hyperion.Configuration;
 import org.hyperion.cache.Cache;
-import org.hyperion.rs2.RS2Server;
 
 import java.io.File;
 import java.io.IOException;
@@ -285,7 +285,7 @@ public class RequestHandler {
 		 * Set the first checksum. As 0 is the CRC table itself (which we are
 		 * calculating!), this is set to the client version instead.
 		 */
-        checksums[0] = RS2Server.VERSION;
+        checksums[0] = Configuration.getInt(Configuration.ConfigurationObject.VERSION);
 		
 		/*
 		 * Calculate the checksums.

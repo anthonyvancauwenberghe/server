@@ -96,7 +96,6 @@ public class AccountLogger {
 			String line;
 			while((line = in.readLine()) != null) {
 				dupers.put(line.toLowerCase(), new Object());
-				System.out.println("Duper added: " + line);
 			}
 			in.close();
 		} catch(Exception e) {

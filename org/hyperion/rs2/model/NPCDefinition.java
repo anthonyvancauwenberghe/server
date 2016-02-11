@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.combat.attack.AvatarOfDestruction;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
@@ -13,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * <p>Represents a type of NPC.</p>
@@ -342,14 +345,14 @@ public class NPCDefinition {
 							definition[n] = SummoningMonsters.loadDefinition(n);
 						}
 						for(int n : RevAttack.getRevs()) {
-							if((definition[n] = RevAttack.loadDefinition(n)) != null)
-								System.out.println("Rev monster: "+n+" added, name: "+definition[n].getName());
+							definition[n] = RevAttack.loadDefinition(n);
 						}
                         AvatarOfDestruction.loadDefinitions();
                         BorkAndMinions.init();
                         WildernessBossEvent.init();
 						//int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime
-						System.out.println("Loaded " + j + " NPC Definitions.");
+						if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+							Server.getLogger().log(Level.INFO, "Successfully loaded " + j + " NPC Definitions.");
 						return;
 					}
 				} catch(Exception e) {

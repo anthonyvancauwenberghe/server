@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.logging.FileLogging;
@@ -16,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class NPCManager {
 
@@ -104,7 +107,8 @@ public class NPCManager {
 					}
 				}
 			}
-			System.out.println("Loaded " + counter + " NPC Attacks.");
+			if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+				Server.getLogger().log(Level.INFO, "Loaded " + counter + " NPC attacks.");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

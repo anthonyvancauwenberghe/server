@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 /**
  * Created by Gilles on 17/12/2015.
@@ -31,7 +32,8 @@ public class RestartTask extends TimerTask {
                 RESTART_TIME.getTime(),
                 TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
         );
-        System.out.println("Restart task successfully submitted. Restart will occur: '" + DATE_FORMAT.format(new Date(RESTART_TIME.getTimeInMillis())) + "'");
+        if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+            Server.getLogger().log(Level.INFO, "Restart task successfully submitted. Restart will occur: '" + DATE_FORMAT.format(new Date(RESTART_TIME.getTimeInMillis())) + "'");
     }
 
     @Override

@@ -28,34 +28,34 @@ public class TriviaBot {
 	/**
 	 * The cycle time.
 	 */
-	private static final int CYCLE_TIME = 1 * 60 * 1000; //1 Min
+	private static final int CYCLE_TIME = 60 * 1000; //1 Min
 
 	/**
 	 * Max amount of characters a question can be.
 	 */
-	private static int QUESTION_MAX_LENGTH = 45;
+	private final static int QUESTION_MAX_LENGTH = 45;
 
 	/**
 	 * LinkedLists to hold data for the TriviaBot. The names are self-explanatory.
 	 */
-	private List<String> currentAnswers = new LinkedList<String>();
-	private List<String> attemptedAnswers = new LinkedList<String>();
-	private static List<Question> questions = new ArrayList<Question>();
+	private static List<String> currentAnswers = new LinkedList<>();
+	private static List<String> attemptedAnswers = new LinkedList<>();
+	private static List<Question> questions = new ArrayList<>();
 
 	/**
 	 * The current Question.
 	 */
-	private String currentQuestion;
+	private static String currentQuestion;
 
 	/**
 	 * The speed counter.
 	 */
-	private int speedCounter = 0;
+	private static int speedCounter = 0;
 
 	/**
 	 * The ID of the last question.
 	 */
-	private int lastQuestionID = 0;
+	private static int lastQuestionID = 0;
 
 	/**
 	 * All answers shouldn't contain any of the Strings below to be considered as valid.
@@ -68,7 +68,7 @@ public class TriviaBot {
 	/**
 	 * The event that updates the question every <code>CYCLETIME</code>.
 	 */
-	private final Event TRIVIA_EVENT = new Event(CYCLE_TIME) {
+	private final static Event TRIVIA_EVENT = new Event(CYCLE_TIME) {
 		@Override
 		public void execute() {
 			updateQuestion();
@@ -76,23 +76,9 @@ public class TriviaBot {
 	};
 
 	/**
-	 * TriviaBot singleton.
-	 */
-	private static TriviaBot bot = new TriviaBot();
-
-	/**
-	 * Accessor for the TriviaBot.
-	 *
-	 * @return the triviabot.
-	 */
-	public static TriviaBot getBot() {
-		return bot;
-	}
-
-	/**
 	 * Initialized the TriviaBot.
 	 */
-	public void init() {
+	public static void init() {
 		loadQuestions();
 		updateQuestion();
 		World.submit(TRIVIA_EVENT);
@@ -100,15 +86,14 @@ public class TriviaBot {
 			@Override
 			public boolean execute(Player player, String input) {
 				String answer = input.replace("answer ", "");
-				TriviaBot.getBot().sayAnswer(player, answer);
+				sayAnswer(player, answer);
 				return true;
 			}
 		});
 		CommandHandler.submit(new Command("howmanytrivia", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("There are currently "
-						+ TriviaBot.getBot().getPlayersAmount() + " people playing");
+				player.getActionSender().sendMessage("There are currently " + getPlayersAmount() + " people playing");
 				return true;
 			}
 		});
@@ -119,7 +104,7 @@ public class TriviaBot {
 	 *
 	 * @param counter
 	 */
-	public void setSpeedCounter(int counter) {
+	public static void setSpeedCounter(int counter) {
 		speedCounter = counter;
 	}
 
@@ -128,7 +113,7 @@ public class TriviaBot {
 	 *
 	 * @returns the amount of questions.
 	 */
-	public int getQuestionsAmount() {
+	public static int getQuestionsAmount() {
 		return questions.size();
 	}
 
@@ -137,7 +122,7 @@ public class TriviaBot {
 	 *
 	 * @returns the amount of trivia players.
 	 */
-	public int getPlayersAmount() {
+	public static int getPlayersAmount() {
 		int counter = 0;
 		for(Player p : World.getPlayers()) {
 			if(p.getTrivia().isEnabled())
@@ -151,14 +136,14 @@ public class TriviaBot {
 	 *
 	 * @returns the current question
 	 */
-	public String getQuestion() {
+	public static String getQuestion() {
 		return currentQuestion;
 	}
 
 	/**
 	 * Resets the answers.
 	 */
-	public void resetAnswers() {
+	public static void resetAnswers() {
 		currentAnswers.clear();
 		attemptedAnswers.clear();
 	}
@@ -169,7 +154,7 @@ public class TriviaBot {
 	 * @param p
 	 * @param answer
 	 */
-	public void sayAnswer(Player p, String answer) {
+	public static void sayAnswer(Player p, String answer) {
 		if(! p.getTrivia().canAnswer()) {
 			p.getActionSender().sendMessage("You have already answered a few seconds ago.");
 			return;
@@ -204,7 +189,7 @@ public class TriviaBot {
 	 *
 	 * @param p
 	 */
-	private void rightAnswer(Player p) {
+	private static void rightAnswer(Player p) {
 		yellMessage("Player @dre@" + p.getSafeDisplayName() + "@bla@ has answered my question correctly.");
 		if(currentAnswers.size() == 1) {
 			yellMessage("The answer was: @dre@" + currentAnswers.get(0));
@@ -240,7 +225,7 @@ public class TriviaBot {
 	/**
 	 * Updates the current question.
 	 */
-	public void updateQuestion() {
+	public static void updateQuestion() {
 		TriviaSettings.resetAllTimers();
 		int r = Misc.random(questions.size() - 1);
 		if(Math.random() > 0.5) {
@@ -258,7 +243,7 @@ public class TriviaBot {
 	 *
 	 * @param ID
 	 */
-	private void setQuestion(int ID) {
+	private static void setQuestion(int ID) {
 		currentQuestion = questions.get(ID).getQuestion();
 		lastQuestionID = ID;
 		resetAnswers();
@@ -278,7 +263,7 @@ public class TriviaBot {
 	 *
 	 * @param player
 	 */
-	private void addReward(Player player) {
+	private static void addReward(Player player) {
 		player.getPoints().increasePkPoints(Misc.random(getPlayersAmount() * 2) + 1);
 	}
 
@@ -287,7 +272,7 @@ public class TriviaBot {
 	 *
 	 * @param message
 	 */
-	private void yellMessage(String message) {
+	private static void yellMessage(String message) {
 		for(Player p : World.getPlayers()) {
 			if(p != null && p.getTrivia().isEnabled())
 				p.getActionSender().sendMessage(TITLE + message);

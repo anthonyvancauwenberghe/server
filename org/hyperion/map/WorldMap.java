@@ -1,5 +1,7 @@
 package org.hyperion.map;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 
@@ -7,6 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * @author Martin
@@ -24,9 +27,8 @@ public class WorldMap {
 
 
     // loadDatabases() by Phate/WinterLove, renamed & edit by WhiteFang
-    public static void loadWorldMap(boolean b) {
+    public static void loadWorldMap() {
         try {
-            if (b) {
                 new Thread() {
                     @Override
                     public void run() {
@@ -44,8 +46,8 @@ public class WorldMap {
                         }
                     }
                 }.start();
-                //dumpObjects();
-            }
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Worldmap has been started.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -631,7 +633,8 @@ public class WorldMap {
             adderdir = null;
 
         }
-        System.out.println("	-Loaded " + counter + " world objects");
+        if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+            Server.getLogger().log(Level.INFO, "Successfully loaded " + counter + " World Objects.");
         //ObjectClickHandler.loaded = true;
 
         //new Thread(() -> world.getObjectMap().toMap()).start();

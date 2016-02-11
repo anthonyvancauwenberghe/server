@@ -1,14 +1,15 @@
 package org.hyperion.rs2.model.possiblehacks;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.util.login.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created with IntelliJ IDEA.
@@ -58,8 +59,8 @@ public final class PossibleHacksHolder {
         } catch(Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("Finished loading possible hacks in: "+(System.currentTimeMillis()-start)+"ms");
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Finished loading possible hacks in: "+(System.currentTimeMillis()-start)+"ms");
 
 
     }

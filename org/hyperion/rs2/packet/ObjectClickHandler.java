@@ -86,7 +86,7 @@ public class ObjectClickHandler {
             case 14828:
             case 14826:
             case 14827:
-                World.getWilderness().useObelisk(player, x, y);
+                Wilderness.useObelisk(player, x, y);
                 break;
             case 5110:
                 World.submit(new Event(100) {

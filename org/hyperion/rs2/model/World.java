@@ -4,6 +4,7 @@ import org.apache.mina.core.future.IoFuture;
 import org.apache.mina.core.future.IoFutureListener;
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.map.WorldMap;
@@ -17,21 +18,15 @@ import org.hyperion.rs2.event.impl.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.ContentManager;
-import org.hyperion.rs2.model.content.DoorManager;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.BountyHunterLogout;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.event.PulseGrandExchangeEvent;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc.Lottery;
-import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
-import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
@@ -45,7 +40,6 @@ import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.util.ConfigurationParser;
 import org.hyperion.rs2.util.EntityList;
@@ -56,9 +50,9 @@ import org.hyperion.util.Misc;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 //import org.hyperion.rs2.savingnew.SQLPlayerSaving;
@@ -82,16 +76,6 @@ public class World {
      * Logging class.
      */
     private static final Logger logger = Logger.getLogger(World.class.getName());
-
-    /**
-     * The game engine.
-     */
-    private static GameEngine engine;
-
-    /**
-     * The event manager.
-     */
-    private static EventManager eventManager;
 
     /**
      * The current loader implementation.
@@ -134,50 +118,15 @@ public class World {
         return unlockedRichPlayers;
     }
 
-    /**
-     * Creates the world and begins background loading tasks.
-     */
-    public static void init() {
-        try {
-            ObjectManager.init();
-            DoorManager.init();
-
-            for (int i = 0; i < worldmapobjects; i++) {
-                World_Objects[i] = null;
-                World_Objects[i] = new Hashtable<>();
-            }
-            // worldMap = new WorldMap();
-            WorldMap.loadWorldMap(true);
-
-
-            // org.hyperion.map.Region.load();
-            new Lottery();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-
-            @Override
-            public void run() {
-                for (Player player : players) {
-                    loader.savePlayer(player);
-                }
-                System.out.println("Saved all players!");
-            }
-        });
-    }
-
     public static int worldmapobjects = 10331; // 10331, 5116
     @SuppressWarnings("unchecked")
     public static Map<BlockPoint, DirectionCollection>[] World_Objects = new Hashtable[worldmapobjects];
 
-    private static Wilderness wilderness = null;
-
-    public static Wilderness getWilderness() {
-        if (wilderness == null)
-            wilderness = new Wilderness();
-        return wilderness;
+    static {
+        for (int i = 0; i < worldmapobjects; i++) {
+            World_Objects[i] = null;
+            World_Objects[i] = new Hashtable<>();
+        }
     }
 
     private static boolean updateInProgress = false;
@@ -186,45 +135,11 @@ public class World {
         return updateInProgress;
     }
 
-    public static int updateTimer = -1;
-
-    /**
-     * Initialises the world: loading configuration and registering global
-     * events.
-     *
-     * @param engine The engine processing this world's tasks.
-     * @throws IOException            if an I/O error occurs loading configuration.
-     * @throws ClassNotFoundException if a class loaded through reflection was not found.
-     * @throws IllegalAccessException if a class could not be accessed.
-     * @throws InstantiationException if a class could not be created.
-     * @throws IllegalStateException  if the world is already initialised.
-     */
-    public static void init(GameEngine engine) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        if (World.engine != null) {
-            throw new IllegalStateException("The world has already been initialised.");
-        } else {
-            World.engine = engine;
-            eventManager = new EventManager(engine);
-            NPCManager.init();
-            NPCDefinition.init();
-            ContentManager.init();
-//            this.gui = new DebugGUI();
-            getWilderness().init();
-            GlobalItemManager.init();
-            loadConfiguration();
-            registerGlobalEvents();
-
-            DbHub.initDefault();
-            PunishmentManager.init();
-
-            System.out.println("Initialized GE: " + JGrandExchange.init());
-            submit(new PunishmentExpirationEvent());
-            submit(new WildernessBossEvent(true));
-            submit(new PulseGrandExchangeEvent());
-
-            System.out.println("Loaded achievements: " + Achievements.load());
-        }
+    public static void setUpdateInProgress(boolean updateInProgress) {
+        World.updateInProgress = updateInProgress;
     }
+
+    public static int updateTimer = -1;
 
    /* private SQLPlayerSaving sqlSaving;
 
@@ -273,28 +188,15 @@ public class World {
         }
     }
 
-    /**
-     * Loads server configuration.
-     *
-     * @throws IOException            if an I/O error occurs.
-     * @throws ClassNotFoundException if a class loaded through reflection was not found.
-     * @throws IllegalAccessException if a class could not be accessed.
-     * @throws InstantiationException if a class could not be created.
-     */
-    public static void loadConfiguration() throws IOException, ClassNotFoundException,
-            InstantiationException, IllegalAccessException {
-        FileInputStream fis = new FileInputStream("data/configuration.cfg");
-        try {
+    public static void loadConfiguration() {
+        try(FileInputStream fis = new FileInputStream("data/configuration.cfg")) {
             ConfigurationParser p = new ConfigurationParser(fis);
             Map<String, String> mappings = p.getMappings();
-			/*
-			 * Worldloader configuration.
-			 */
+
             if (mappings.containsKey("worldLoader")) {
                 String worldLoaderClass = mappings.get("worldLoader");
                 Class<?> loader = Class.forName(worldLoaderClass);
                 World.loader = (WorldLoader) loader.newInstance();
-                System.out.println("WorldLoader set to : " + worldLoaderClass);
             } else {
                 loader = new GenericWorldLoader();
                 System.out.println("WorldLoader is set to default");
@@ -305,32 +207,15 @@ public class World {
 			 * Packets configuration.
 			 */
             if (complexMappings.containsKey("packetHandlers")) {
-                Map<Class<?>, Object> loadedHandlers = new HashMap<Class<?>, Object>();
-                for (Map.Entry<String, String> handler : complexMappings.get(
-                        "packetHandlers").entrySet()) {
+                for (Map.Entry<String, String> handler : complexMappings.get("packetHandlers").entrySet()) {
                     int id = Integer.parseInt(handler.getKey());
                     Class<?> handlerClass = Class.forName(handler.getValue());
-                    Object handlerInstance;
-                    if (loadedHandlers.containsKey(handlerClass)) {
-                        handlerInstance = loadedHandlers.get(loadedHandlers
-                                .get(handlerClass));
-                    } else {
-                        handlerInstance = handlerClass.newInstance();
-                    }
-                    PacketManager.getPacketManager().bind(id,
-                            (PacketHandler) handlerInstance);
-                    logger.fine("Bound " + handler.getValue() + " to opcode : "
-                            + id);
+                    PacketManager.getPacketManager().bind(id, (PacketHandler)handlerClass.newInstance());
+                    logger.fine("Bound " + handler.getValue() + " to opcode: " + id);
                 }
             }
-			/*if (loader instanceof LoginServerWorldLoader) {
-				connector = new LoginServerConnector(
-						mappings.get("loginServer"));
-				connector.connect(mappings.get("nodePassword"),
-						Integer.parseInt(mappings.get("nodeId")));
-			}*/
-        } finally {
-            fis.close();
+        } catch(Exception e) {
+            Server.getLogger().log(Level.SEVERE, "Something went wrong while loading the World configuration file.");
         }
     }
 
@@ -348,20 +233,15 @@ public class World {
     /**
      * Registers global events such as updating.
      */
-    private static void registerGlobalEvents() {
+    public static void registerGlobalEvents() {
         submit(new UpdateEvent());
         submit(new CleanupEvent());
         submit(new BankersFacing());
         submit(new PlayerEvent36Seconds());
-        // submit(new PlayerEvent30Seconds());//unneeded
         submit(new PlayerEvent1Second());
         submit(new EPEvent());
-        // submit(new SummoningEvent());
         submit(new HunterEvent());
-       // submit(new RefreshNewsEvent());
-        // abuse.start();
         submit(new DisconnectEvent());
-        //submit(new EventDebuggingEvent());
         submit(new PlayerStatsEvent());
         submit(new PromoteEvent());
         submit(new PlayerCombatEvent());
@@ -372,9 +252,9 @@ public class World {
         submit(new BountyHunterLogout());
         submit(new GoodIPs());
         submit(new ClientConfirmEvent());
-        TriviaBot.getBot().init();
-        //FFARandom.initialize();
-        // new SQL();
+        submit(new PunishmentExpirationEvent());
+        submit(new WildernessBossEvent(true));
+        submit(new PulseGrandExchangeEvent());
     }
 
     /**
@@ -383,9 +263,7 @@ public class World {
      * @param event The event to submit.
      */
     public static void submit(Event event) {
-        if (eventManager == null || event == null)
-            return;
-        eventManager.submit(event);
+        EventManager.submit(event);
     }
 
     /**
@@ -394,16 +272,7 @@ public class World {
      * @param task The task to submit.
      */
     public static void submit(Task task) {
-        engine.pushTask(task);
-    }
-
-    /**
-     * Gets the game engine.
-     *
-     * @return The game engine.
-     */
-    public static GameEngine getEngine() {
-        return engine;
+        Server.getLoader().getEngine().pushTask(task);
     }
 
 	/*
@@ -414,7 +283,7 @@ public class World {
      * Loads a player's game in the work service.
      */
     public static void load(final PlayerDetails playerDetails) {
-        engine.submitWork(() -> {
+        Server.getLoader().getEngine().submitWork(() -> {
             Player player = new Player(playerDetails);
             LoginResponse loginResponse = loader.checkLogin(player, playerDetails);
             if(loginResponse != LoginResponse.NEW_PLAYER && loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
@@ -745,22 +614,20 @@ public class World {
         players.remove(player);
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
-        engine.submitWork(new Runnable() {
-            public void run() {
-                player.getLogManager().add(LogEntry.logout(player));
-                player.getLogManager().clearExpiredLogs();
-                player.getLogManager().save();
-                if (player.verified)
-                    loader.savePlayer(player);
-                resetSummoningNpcs(player);
-                player.destroy();
-				/*
-				 * player.getSkills().destroy();
-				 * player.getActionSender().destroy();
-				 * player.getInterfaceState().destroy();
-				 */
-                // player.getSession().removeAttribute("player");
-            }
+        Server.getLoader().getEngine().submitWork(() -> {
+            player.getLogManager().add(LogEntry.logout(player));
+            player.getLogManager().clearExpiredLogs();
+            player.getLogManager().save();
+            if (player.verified)
+                loader.savePlayer(player);
+            resetSummoningNpcs(player);
+            player.destroy();
+            /*
+             * player.getSkills().destroy();
+             * player.getActionSender().destroy();
+             * player.getInterfaceState().destroy();
+             */
+            // player.getSession().removeAttribute("player");
         });
     }
 

@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model.content.clan;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -14,6 +16,7 @@ import org.hyperion.rs2.util.TextUtils;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class ClanManager {
 
@@ -434,7 +437,8 @@ public class ClanManager {
 
         }
 
-        System.out.println("Loaded "+clans.size() +" clans");
+        if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+            Server.getLogger().log(Level.INFO, "Loaded " + clans.size() + " clans.");
     }
 
 }

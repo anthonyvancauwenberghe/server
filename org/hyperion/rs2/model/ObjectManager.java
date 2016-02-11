@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
 import org.hyperion.cache.InvalidCacheException;
@@ -40,7 +41,8 @@ public class ObjectManager {
         try(Cache cache = new Cache(new File("./data/cache/"))) {
             StandardIndex[] defIndices = cache.getIndexTable().getObjectDefinitionIndices();
             ObjectDefinitionParser.parse(cache, defIndices);
-            Server.getLogger().log(Level.INFO, "Loaded " + definitionCount + " object definitions.");
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Loaded " + definitionCount + " object definitions.");
         } catch(InvalidCacheException e) {
             Server.getLogger().log(Level.SEVERE, "The cache could not be found.", e);
         } catch(IOException ex) {
@@ -52,6 +54,8 @@ public class ObjectManager {
                 String parts[] = line.replace("spawn = ", "").split("\t");
                 GAME_OBJECTS.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Location.create(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])), Integer.parseInt(parts[5]), Integer.parseInt(parts[4])));
             });
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Successfully loaded all objects from the file.");
         } catch(IOException ex) {
             Server.getLogger().log(Level.SEVERE, "Something went wrong while loading the game objects from the file.", ex);
         }

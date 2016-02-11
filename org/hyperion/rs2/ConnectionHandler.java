@@ -2,26 +2,27 @@
 		package org.hyperion.rs2;
 
 		import org.apache.mina.core.service.IoHandlerAdapter;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.net.LoginDebugger;
-import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.net.RS2CodecFactory;
-import org.hyperion.rs2.task.impl.SessionClosedTask;
-import org.hyperion.rs2.task.impl.SessionMessageTask;
-import org.hyperion.rs2.util.TextUtils;
+		import org.apache.mina.core.session.IdleStatus;
+		import org.apache.mina.core.session.IoSession;
+		import org.apache.mina.filter.codec.ProtocolCodecFilter;
+		import org.hyperion.Server;
+		import org.hyperion.rs2.model.Player;
+		import org.hyperion.rs2.model.World;
+		import org.hyperion.rs2.model.punishment.Combination;
+		import org.hyperion.rs2.model.punishment.Punishment;
+		import org.hyperion.rs2.model.punishment.Target;
+		import org.hyperion.rs2.model.punishment.Type;
+		import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+		import org.hyperion.rs2.net.LoginDebugger;
+		import org.hyperion.rs2.net.Packet;
+		import org.hyperion.rs2.net.RS2CodecFactory;
+		import org.hyperion.rs2.task.impl.SessionClosedTask;
+		import org.hyperion.rs2.task.impl.SessionMessageTask;
+		import org.hyperion.rs2.util.TextUtils;
 
-import java.net.SocketAddress;
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+		import java.net.SocketAddress;
+		import java.util.HashMap;
+		import java.util.concurrent.TimeUnit;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -32,8 +33,6 @@ import java.util.concurrent.TimeUnit;
 public class ConnectionHandler extends IoHandlerAdapter {
 
 	private final static HashMap<String, Object> ipBlackList = new HashMap<>();
-
-	private final GameEngine engine = World.getEngine();
 
 	public static HashMap<String, Object> getIpBlackList() {
 		return ipBlackList;
@@ -69,7 +68,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				return;
 			}
 		}
-		engine.pushTask(new SessionMessageTask(session, (Packet) message));
+		Server.getLoader().getEngine().pushTask(new SessionMessageTask(session, (Packet) message));
 	}
 
 	@Override
@@ -90,7 +89,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		if(lastLogouts.size() > 20) {
 			lastLogouts.remove(0);
 		}*/
-		engine.pushTask(new SessionClosedTask(session));
+		Server.getLoader().getEngine().pushTask(new SessionClosedTask(session));
 	}
 
 	@Override

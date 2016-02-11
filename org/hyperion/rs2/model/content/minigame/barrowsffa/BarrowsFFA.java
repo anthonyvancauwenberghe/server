@@ -14,13 +14,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Wasay
- * Date: 4/23/15
- * Time: 3:12 PM
- * To change this template use File | Settings | File Templates.
- */
 public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     public static BarrowsFFA barrowsFFA;

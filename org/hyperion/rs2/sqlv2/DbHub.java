@@ -1,14 +1,13 @@
 package org.hyperion.rs2.sqlv2;
 
+import org.hyperion.Configuration;
 import org.hyperion.rs2.sqlv2.db.DonationsDb;
 import org.hyperion.rs2.sqlv2.db.GameDb;
 import org.hyperion.rs2.sqlv2.db.PlayerDb;
 
-import java.io.IOException;
-
 public class DbHub {
 
-    private final static boolean CONSOLE_DEBUG = false;
+    private final static boolean CONSOLE_DEBUG = Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG);
     private final static boolean PLAYER_DEBUG = false;
 
     private static DonationsDb donationsDb;
@@ -47,10 +46,6 @@ public class DbHub {
         gameDb = new GameDb();
         gameDb.init();
         initialized = true;
-    }
-
-    public static void initDefault() throws IOException {
-        init();
     }
 
     public static boolean initialized() {

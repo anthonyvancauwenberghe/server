@@ -25,7 +25,7 @@ public class ViewLogStatsCommand extends Command {
             player.sendf("%s does not exist", targetName);
             return false;
         }
-        final Player target = World.getPlayer(targetName);
+        final Player target = World.getPlayerByName(targetName);
         final LogManager manager = target != null ? target.getLogManager() : new LogManager(targetName);
         player.sendf("@red@%s@blu@ Log Stats", targetName);
         for(final LogEntry.Category category : LogEntry.Category.values()){

@@ -46,7 +46,7 @@ public class DisconnectEvent extends Event {
 			@Override
 			public boolean execute(Player player, String input) {
 				String name = input.replaceAll("forcelogout ", "");
-				Player glitcher = World.getPlayer(name);
+				Player glitcher = World.getPlayerByName(name);
 				player.getActionSender().sendMessage(forceLogout(glitcher));
 				return true;
 			}

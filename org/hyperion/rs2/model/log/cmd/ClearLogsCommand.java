@@ -21,7 +21,7 @@ public class ClearLogsCommand extends Command {
             player.sendf("%s does not exist", targetName);
             return false;
         }
-        final Player target = World.getPlayer(targetName);
+        final Player target = World.getPlayerByName(targetName);
         if(target == null){
             player.sendf("%s must be online for you to clear their logs", targetName);
             return false;

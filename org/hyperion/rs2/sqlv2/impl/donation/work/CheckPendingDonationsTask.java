@@ -1,6 +1,6 @@
 package org.hyperion.rs2.sqlv2.impl.donation.work;
 
-import org.hyperion.rs2.GameEngine;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.sqlv2.DbHub;
@@ -22,7 +22,7 @@ public class CheckPendingDonationsTask implements Task {
     @Override
     public void execute(final GameEngine context) {
         List<Donation> donations = null;
-        if(DbHub.initialized() && DbHub.getDonationsDb().isEnabled())
+        if(DbHub.initialized() && DbHub.getDonationsDb().isInitialized())
             donations = DbHub.getDonationsDb().donations().unfinished(player);
         if(donations == null){
             if(DbHub.isPlayerDebug())

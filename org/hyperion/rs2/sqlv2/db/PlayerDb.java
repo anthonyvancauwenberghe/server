@@ -23,22 +23,22 @@ public class PlayerDb extends Db {
     }
 
     @Override
-    public boolean isEnabled() {
+    protected boolean isEnabled() {
         return Configuration.getBoolean(PLAYER_DB_ENABLED);
     }
 
     @Override
-    public String getUrl() {
+    protected String getUrl() {
         return Configuration.getString(PLAYER_DB_URL);
     }
 
     @Override
-    public String getUsername() {
+    protected String getUsername() {
         return Configuration.getString(PLAYER_DB_USER);
     }
 
     @Override
-    public String getPassword() {
+    protected String getPassword() {
         return Configuration.getString(PLAYER_DB_PASSWORD);
     }
 

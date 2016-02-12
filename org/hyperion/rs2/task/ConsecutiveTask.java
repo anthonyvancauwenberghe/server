@@ -1,6 +1,6 @@
 package org.hyperion.rs2.task;
 
-import org.hyperion.rs2.GameEngine;
+import org.hyperion.engine.GameEngine;
 
 import java.util.LinkedList;
 import java.util.List;

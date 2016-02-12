@@ -196,7 +196,7 @@ public class JGrandExchangeTracker {
     }
 
     public boolean handleInterfaceInteraction(final int id){
-        if(!JGrandExchange.enabled || !DbHub.getPlayerDb().isEnabled())
+        if(!JGrandExchange.enabled || !DbHub.getPlayerDb().isInitialized())
             return false;
         switch(id){
             case SLOT_1_BUY:

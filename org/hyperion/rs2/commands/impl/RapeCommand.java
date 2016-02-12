@@ -15,7 +15,7 @@ public class RapeCommand extends Command {
 	public boolean execute(Player player, String input) {
 		try {
 			String name = filterInput(input);
-			Player victim = World.getPlayer(name);
+			Player victim = World.getPlayerByName(name);
 			if(victim == null) {
 				player.getActionSender().sendMessage("Player is offline");
 				return false;

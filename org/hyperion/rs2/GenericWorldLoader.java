@@ -5,18 +5,19 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerDetails;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.util.Misc;
 import org.hyperion.util.ObservableArrayList;
 import org.hyperion.util.Time;
 
@@ -33,6 +34,24 @@ import static org.hyperion.rs2.model.Rank.ADMINISTRATOR;
  * Created by Gilles on 6/02/2016.
  */
 public class GenericWorldLoader implements WorldLoader {
+
+	/**
+	 * TEMP
+	 */
+	private final static Set<String> unlockedPlayers = new HashSet<>();
+
+	private final static Set<String> unlockedRichPlayers = new HashSet<>();
+
+	public static Set<String> getUnlockedPlayers() {
+		return unlockedPlayers;
+	}
+
+	public static Set<String> getUnlockedRichPlayers() {
+		return unlockedRichPlayers;
+	}
+	/**
+	 * END OF TEMP
+	 */
 
 	private final static String ALLOWED_IPS_DIR = "./data/json/allowed_ips.json";
 	private final static List<String> ALLOWED_IPS = loadList(ALLOWED_IPS_DIR).listen((list) -> saveList(list, ALLOWED_IPS_DIR));
@@ -51,7 +70,6 @@ public class GenericWorldLoader implements WorldLoader {
 		}
 
 		if(LOGIN_ATTEMPTS.get(player.getName()) >= MAXIMUM_LOGIN_ATTEMPTS) {
-			System.out.println(LOGIN_ATTEMPTS.remove(player.getName()));
 			BLOCKED_PLAYERS.add(player.getName());
 			World.submit(new Event(Time.ONE_MINUTE, "LoginServer") {
 				String playerName = player.getName();
@@ -94,7 +112,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(!NameUtils.isValidName(player.getName()) || player.getName().startsWith(" ") || player.getName().split(" ").length - 1 > 1 || player.getName().length() > 12 || player.getName().length() <= 0)
 			return INVALID_CREDENTIALS;
 
-		if(World.getPlayer(player.getName()) != null)
+		if(World.getPlayerByName(player.getName()) != null)
 			return ALREADY_LOGGED_IN;
 
 		/**
@@ -111,6 +129,32 @@ public class GenericWorldLoader implements WorldLoader {
 		if(Rank.hasAbility(player, ADMINISTRATOR))
 			if(!ALLOWED_IPS.contains(player.getShortIP()))
 				return INVALID_CREDENTIALS;
+
+		/**
+		 * TEMP
+		 */
+
+		if (!ALLOWED_IPS.contains(player.getShortIP())) {
+			if(Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+				if (player.getPermExtraData().getLong("passchange") < EntityHandler.getLastPassReset().getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase())) {
+					try {
+						String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
+						String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
+						if (!currentCutIp.equals(previousCutIp)) {
+							return MEMBERS_ONLY;
+						}
+					} catch (Exception e) {
+						return MEMBERS_ONLY;
+					}
+				}
+				if (player.isNew())
+					player.getPermExtraData().put("passchange", System.currentTimeMillis());
+			}
+		}
+
+		/**
+		 * END OF TEMP
+		 */
 
 		LOGIN_ATTEMPTS.remove(player.getName());
 		return SUCCESSFUL_LOGIN;
@@ -168,5 +212,44 @@ public class GenericWorldLoader implements WorldLoader {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	static {
+		CommandHandler.submit(new Command("unlock", Rank.ADMINISTRATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				String playerName = filterInput(input);
+				if(playerName == null)
+					throw new Exception();
+				getUnlockedPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+				player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+				return true;
+			}
+		});
+		CommandHandler.submit(new Command("unlockrich", Rank.HEAD_MODERATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				String playerName = filterInput(input);
+				if(playerName == null)
+					throw new Exception();
+				getUnlockedRichPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+				player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+				return true;
+			}
+		});
+		CommandHandler.submit(new Command("changeip", Rank.ADMINISTRATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				String[] parts = filterInput(input).split(",");
+				if(parts.length < 2)
+					throw new Exception();
+				if(org.hyperion.rs2.savingnew.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
+					player.getActionSender().sendMessage(Misc.formatPlayerName(parts[0]) + "'s IP has been changed to " + parts[1]);
+				else
+					player.getActionSender().sendMessage("IP could not be changed.");
+				return true;
+			}
+		});
 	}
 }

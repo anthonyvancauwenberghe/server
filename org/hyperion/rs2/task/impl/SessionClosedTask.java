@@ -1,7 +1,7 @@
 package org.hyperion.rs2.task.impl;
 
 import org.apache.mina.core.session.IoSession;
-import org.hyperion.rs2.GameEngine;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.task.Task;

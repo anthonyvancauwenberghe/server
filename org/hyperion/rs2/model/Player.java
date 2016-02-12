@@ -231,7 +231,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public boolean joiningPits = false;
 	public boolean isInMuli = false;
 	public boolean cannotSwitch = false;
-	public boolean newCharacter = false;
+	private boolean newCharacter = false;
 	public boolean ignoreOnLogin = false;
 	public boolean oldFag = false;
 	public boolean inAction;
@@ -1134,6 +1134,10 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public boolean isNew() {
 		return newCharacter;
+	}
+
+	public void setNew(boolean isNew) {
+		newCharacter = isNew;
 	}
 
 	public boolean isNewlyCreated() {

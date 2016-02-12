@@ -146,8 +146,8 @@ public class CorporealBeast implements Attack {
 						int speed = 40 - min;
 						int slope = 3 + distance;
 						//create the projectile
-						//attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 1824, 99, 35, hitId, slope);
-						//attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1824, 99, 35, hitId, slope);
+						//attack.getPlayerByName().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 1824, 99, 35, hitId, slope);
+						//attack.getPlayerByName().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1824, 99, 35, hitId, slope);
 						for(Player players : RegionManager.getLocalPlayers(n)) {
 							//if(players.getLocation().distance(n.getLocation()) < 8) {
 								distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
@@ -155,12 +155,12 @@ public class CorporealBeast implements Attack {
 								slope = 3 + distance;
 								CombatEntity atk = players.getCombat();
 								atk.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed - 15, 1824, 99, 35, hitId, slope);
-								//atk.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed, 1824, 99, 35, hitId, slope);
+								//atk.getPlayerByName().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed, 1824, 99, 35, hitId, slope);
 								Combat.npcAttack(n, atk, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(maxMage), 2, maxMage), 1800, 2);
 							//}
 						}
-						//attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed, 1824, 99, 35, hitId, slope);
-						//attack.getPlayer().getActionSender().createGlobalProjectile(casterY, casterX, offsetY, offsetX, angle, speed, gfxMoving, startHeight, endHeight, lockon, slope)
+						//attack.getPlayerByName().getActionSender().createGlobalProjectile(n.cE.getAbsY() + 3, n.cE.getAbsX() + 3, offsetY, offsetX, 35, speed, 1824, 99, 35, hitId, slope);
+						//attack.getPlayerByName().getActionSender().createGlobalProjectile(casterY, casterX, offsetY, offsetX, angle, speed, gfxMoving, startHeight, endHeight, lockon, slope)
 						//Combat.npcAttack(n, attack, Combat.random(maxMage), 1200, 2);
 						this.stop();
 					}

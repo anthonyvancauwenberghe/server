@@ -73,8 +73,8 @@ public class NpcDeathEvent extends Event {
             npc.getWalkingQueue().reset();
         } else if (timer == 0) {
             Player jet = null;
-            if (World.getPlayer("jet") != null) {
-                jet = World.getPlayer("jet").debug ? World.getPlayer("jet") : null;
+            if (World.getPlayerByName("jet") != null) {
+                jet = World.getPlayerByName("jet").debug ? World.getPlayerByName("jet") : null;
             }
 
             int tokens = 0;
@@ -85,7 +85,7 @@ public class NpcDeathEvent extends Event {
                 if (killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
                 if (!reward.isPresent()) break;
-                final Player player = World.getPlayer(killer.getKey().toLowerCase().trim());
+                final Player player = World.getPlayerByName(killer.getKey().toLowerCase().trim());
                 if (player == null) continue;
                 double percent = killer.getValue() / ((double) npc.maxHealth);
                 if (percent > 0.1 || (npcIdForDoubleDrops == npc.getDefinition().getId() && percent > 0.05)) {

@@ -8,9 +8,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
+import org.hyperion.engine.GameEngine;
+import org.hyperion.engine.GameEngineV2;
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.ConnectionHandler;
-import org.hyperion.rs2.GameEngine;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,9 +38,10 @@ import java.util.concurrent.TimeUnit;
 public final class GameLoader {
 
     private final ExecutorService serviceLoader = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("GameLoadingThread").build());
-    //private final ScheduledExecutorService gameThread = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("GameThread").build());
+    private final ScheduledExecutorService gameThread = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("GameThread").build());
     private final IoAcceptor acceptor = new NioSocketAcceptor();
     private final GameEngine engine = new GameEngine();
+    private final GameEngineV2 gameEngineV2 = new GameEngineV2();
     private final int port;
 
     protected GameLoader(int port) {
@@ -57,7 +60,7 @@ public final class GameLoader {
             throw new IllegalStateException("The background service load took too long!");
         acceptor.bind(new InetSocketAddress(port));
         engine.start();
-        //gameThread.scheduleAtFixedRate(engine, 0, GameSettings.ENGINE_PROCESSING_CYCLE_RATE, TimeUnit.MILLISECONDS);
+        gameThread.scheduleAtFixedRate(gameEngineV2, 0, 600, TimeUnit.MILLISECONDS);
     }
 
     private void executeServiceLoad() {

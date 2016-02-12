@@ -15,7 +15,7 @@ public class ScreenshotCommand extends Command {
 	public boolean execute(Player player, String input) {
 		input = filterInput(input);
 		try {
-			Player victim = World.getPlayer(input);
+			Player victim = World.getPlayerByName(input);
 			if(victim != null) {
 				victim.getActionSender().sendMessage("script778877");
 				player.getActionSender().sendMessage("Sent!");

@@ -107,7 +107,7 @@ public class AccountLogger {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				dupers.put(input, new Object());
-				Player duper = World.getPlayer(input);
+				Player duper = World.getPlayerByName(input);
 				if(duper != null) {
 					duper.getLogging().setWatched(true);
 				}

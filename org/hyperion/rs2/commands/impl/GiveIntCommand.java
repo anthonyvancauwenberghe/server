@@ -19,7 +19,7 @@ public abstract class GiveIntCommand extends Command {
             return false;
         }
         final String name = line.substring(0, i).trim();
-        final Player target = World.getPlayer(name);
+        final Player target = World.getPlayerByName(name);
         if(target == null){
             player.sendf("Unable to find player: %s", name);
             return false;

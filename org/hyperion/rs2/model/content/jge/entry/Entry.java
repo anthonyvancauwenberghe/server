@@ -94,7 +94,7 @@ public class Entry {
     }
 
     public Optional<Player> playerOpt(){
-        return Optional.ofNullable(World.getPlayer(playerName));
+        return Optional.ofNullable(World.getPlayerByName(playerName));
     }
 
     public void ifPlayer(final Consumer<Player> action){

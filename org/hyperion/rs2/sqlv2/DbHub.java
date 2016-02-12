@@ -49,6 +49,6 @@ public class DbHub {
     }
 
     public static boolean initialized() {
-        return initialized = true;
+        return initialized;
     }
 }

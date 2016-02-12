@@ -29,7 +29,7 @@ public class AchievementTracker {
     public void load(){
         if(!active)
             return;
-        if(!DbHub.getPlayerDb().isEnabled()) {
+        if(!DbHub.getPlayerDb().isInitialized()) {
             active = false;
             return;
         }

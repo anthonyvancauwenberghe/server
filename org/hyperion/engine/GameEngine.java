@@ -1,4 +1,4 @@
-package org.hyperion.rs2;
+package org.hyperion.engine;
 
 import org.hyperion.rs2.event.impl.UpdateEvent;
 import org.hyperion.rs2.logging.FileLogging;

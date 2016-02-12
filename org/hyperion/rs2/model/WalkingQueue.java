@@ -186,7 +186,7 @@ public class WalkingQueue {
 	public void reset() {
 	    /*
          * if(entity instanceof Player &&
-		 * entity.cE.getPlayer().getName().contains("lux"))
+		 * entity.cE.getPlayerByName().getName().contains("lux"))
 		 * System.out.println("Resetting queue");
 		 */
 		runQueue = false;

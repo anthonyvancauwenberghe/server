@@ -59,7 +59,7 @@ public class FriendsAssistant {
 		}
         final String text = TextUtils.pmText(chatTextSize, chatText);
         final String fromName = NameUtils.longToName(from);
-        final Player fromPlayer = World.getPlayer(fromName);
+        final Player fromPlayer = World.getPlayerByName(fromName);
 		if(fromPlayer == null)
 			return;
 		fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));

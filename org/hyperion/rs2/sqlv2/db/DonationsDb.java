@@ -23,22 +23,22 @@ public class DonationsDb extends Db {
     }
 
     @Override
-    public boolean isEnabled() {
+    protected boolean isEnabled() {
         return Configuration.getBoolean(DONATION_DB_ENABLED);
     }
 
     @Override
-    public String getUrl() {
+    protected String getUrl() {
         return Configuration.getString(DONATION_DB_URL);
     }
 
     @Override
-    public String getUsername() {
+    protected String getUsername() {
         return Configuration.getString(DONATION_DB_USER);
     }
 
     @Override
-    public String getPassword() {
+    protected String getPassword() {
         return Configuration.getString(DONATION_DB_PASSWORD);
     }
 

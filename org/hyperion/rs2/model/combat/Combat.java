@@ -454,7 +454,7 @@ public class Combat {
             } else {
                 if (!combatEntity.canMove() && combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) == 2)
                     return true;
-                //combatEntity.getPlayer().getWalkingQueue().reset();
+                //combatEntity.getPlayerByName().getWalkingQueue().reset();
             }
 
 			/*
@@ -484,7 +484,7 @@ public class Combat {
 
             			/*
 			 * else
-			 * combatEntity.getPlayer().getActionSender().resetFollow();
+			 * combatEntity.getPlayerByName().getActionSender().resetFollow();
 			 */// this isnt too nessary in melee, only magic and range
 			/*if(bowType != Constants.RANGEDNOARROWS)
 				combatEntity.doAtkEmote();
@@ -506,8 +506,8 @@ public class Combat {
                      */
                     int MeleeAtk = CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer());
                     int MeleeDef = CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getPlayer());
-					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
+					/*if(combatEntity.getPlayerByName().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayerByName().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
                     int deltaBonus = MeleeAtk - MeleeDef;
                     int toAdd = Misc.random(deltaBonus / 3);
@@ -518,8 +518,8 @@ public class Combat {
                     if (damg > maxHit)
                         damg = maxHit;
 					
-					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayer().getActionSender().sendMessage("Damg : " + damg);
+					/*if(combatEntity.getPlayerByName().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayerByName().getActionSender().sendMessage("Damg : " + damg);
 					}*/
                 }
             } else {
@@ -535,9 +535,9 @@ public class Combat {
          * Spirit shield effects.
          */
         if (combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
-            //combatEntity.getPlayer().getActionSender().sendMessage("Damg without divine would be: " + damg);
+            //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg without divine would be: " + damg);
             damg = SpiritShields.applyEffects(opponent.cE, damg);
-            //combatEntity.getPlayer().getActionSender().sendMessage("Damg with divine is: " + damg);
+            //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg with divine is: " + damg);
         } else {
             damg = SpiritShields.applyEffects(opponent.cE, damg);
         }
@@ -785,7 +785,7 @@ public class Combat {
 				 * combatEntity.getOpponent().doDefEmote();
 				 * if(combatEntity.getOpponent().getEntity() instanceof
 				 * NPC ||
-				 * combatEntity.getOpponent().getPlayer().autoRetailate
+				 * combatEntity.getOpponent().getPlayerByName().autoRetailate
 				 * ){
 				 * combatEntity.getOpponent().setOpponent(combatEntity);
 				 * } }
@@ -835,11 +835,11 @@ public class Combat {
                     }
 
                     /*if(type == 1
-                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
+                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayerByName()))) {
                         newDamg = 0;
                     }
                     if(type == 2
-                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
+                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayerByName()))) {
                         newDamg = 0;
                     }*/
                     //defence

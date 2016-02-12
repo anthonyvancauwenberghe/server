@@ -564,7 +564,7 @@ public class SpecialAttacks {
 			case 15704:
 				if(player.getLocation().disabledRange())
 					return false;
-				// ContentEntity.startAnimation(combatEntity.getPlayer(), 426);
+				// ContentEntity.startAnimation(combatEntity.getPlayerByName(), 426);
 				int clientSpeed;
 				int showDelay;
 				int slope;
@@ -914,7 +914,7 @@ public class SpecialAttacks {
 							/*int rangeAtk = CombatAssistant.calculateRangeAttack(player);
 							int rangeDef;
 							if(player.cE.getOpponent().getEntity() instanceof Player)
-								rangeDef = CombatAssistant.calculateRangeDefence(player.cE.getOpponent().getPlayer());
+								rangeDef = CombatAssistant.calculateRangeDefence(player.cE.getOpponent().getPlayerByName());
 							else
 								rangeDef = player.cE.getOpponent().getCombat() / 2;
 							int deltaRangeBonus = rangeAtk - rangeDef;
@@ -944,7 +944,7 @@ public class SpecialAttacks {
 			case 859:
 				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getLocation().disabledRange())
 					return false;
-				// ContentEntity.startAnimation(combatEntity.getPlayer(), 426);
+				// ContentEntity.startAnimation(combatEntity.getPlayerByName(), 426);
 				if(currentdistance <= 1) {
 					clientSpeed = 55;
 				} else if(currentdistance <= 3) {
@@ -1087,7 +1087,7 @@ public class SpecialAttacks {
 				// TODO
 				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getLocation().disabledRange())
 					return false;
-				// ContentEntity.startAnimation(combatEntity.getPlayer(), 426);
+				// ContentEntity.startAnimation(combatEntity.getPlayerByName(), 426);
 				if(currentdistance <= 1) {
 					clientSpeed = 55;
 				} else if(currentdistance <= 3) {

@@ -33,13 +33,13 @@ public class FriendModifier implements PacketHandler {
 			String name = NameUtils.longToName(nameLong);
 			String ownerName = Configuration.getString(Configuration.ConfigurationObject.OWNER);
 
-			final Player playerTo = World.getPlayer(name);
+			final Player playerTo = World.getPlayerByName(name);
 			//null check b4 use
 			if (playerTo == null || playerTo.chatStatus == null || (playerTo.chatStatus[1] == 2 && !Rank.isStaffMember(player)))
 				return;
 
 			if(name.equalsIgnoreCase(ownerName)) {
-				Player owner = World.getPlayer(ownerName);
+				Player owner = World.getPlayerByName(ownerName);
 				if(!Rank.isStaffMember(player) && !Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
 					if(owner != null) {
 						if(!owner.getFriends().contains(player.getNameAsLong())) {

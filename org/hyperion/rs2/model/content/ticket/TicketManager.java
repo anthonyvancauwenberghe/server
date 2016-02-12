@@ -63,7 +63,7 @@ public class TicketManager {
             return;
         Ticket tick = forId(id);
         if(tick != null) {
-            final Player p = World.getPlayer(tick.name);
+            final Player p = World.getPlayerByName(tick.name);
             if(p != null) {
                 if(!p.getLocation().inDuel() && !p.getLocation().inPvPArea()  && !Jail.inJail(p) && !p.getDungeoneering().inDungeon()) {
                     Magic.teleport(p, player.getLocation(), true);

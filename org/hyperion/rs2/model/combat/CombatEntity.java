@@ -100,7 +100,7 @@ public class CombatEntity {
 	}
 
 	public void addSpellAttack(int j) {
-		//getPlayer().getActionSender().sendMessage("Add Spell Atk : " + j);
+		//getPlayerByName().getActionSender().sendMessage("Add Spell Atk : " + j);
 		magicAttackNext = j;
 	}
 
@@ -171,7 +171,7 @@ public class CombatEntity {
 
 
 	public void setAtkType(int i) {
-		//getPlayer().getActionSender().sendMessage("Your atkType is now " + i);
+		//getPlayerByName().getActionSender().sendMessage("Your atkType is now " + i);
 		atkType = i;
 	}
 
@@ -229,7 +229,7 @@ public class CombatEntity {
 		damageDealt.clear();
 		if(winner == null)
 			return null;
-		return World.getPlayer(winner);
+		return World.getPlayerByName(winner);
 	}
 
 

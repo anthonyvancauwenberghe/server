@@ -133,7 +133,7 @@ public final class NewCommandHandler {
         NewCommandHandler.submit(new NewCommand("isonline", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<>(PlayerSaving::playerExists, "player", "A player that exists in the system.")) {
             @Override
             protected boolean execute(Player player, String[] input) {
-                player.sendMessage("Player " + TextUtils.optimizeText(input[0]) + " is currently " + (World.getPlayer(input[0]) == null ? "offline" : "online"));
+                player.sendMessage("Player " + TextUtils.optimizeText(input[0]) + " is currently " + (World.getPlayerByName(input[0]) == null ? "offline" : "online"));
                 return true;
             }
         });

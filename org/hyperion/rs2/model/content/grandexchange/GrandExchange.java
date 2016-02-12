@@ -245,7 +245,7 @@ public class GrandExchange {
 			}
 		}
 		ServerDatabase.query(databaseUpdate);
-		Player seller = World.getPlayer(item.getName());
+		Player seller = World.getPlayerByName(item.getName());
 		if(seller != null) {
 			if(! player.getName().toLowerCase().equals(playerName.toLowerCase()))
 				seller.getActionSender().sendMessage("Your " + ItemDefinition.forId(itemId).getName() + " has been sold in the grand exchange.");

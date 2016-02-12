@@ -16,7 +16,7 @@ public final class BountyHandler {
 		if(bounty < 400)
 		    return false;
 		Bounty old = bounties.get(playerName);
-		Player player = World.getPlayer(fromPlayer);
+		Player player = World.getPlayerByName(fromPlayer);
 		if(old != null && old.getBounty() > bounty)
 			return false;
 		else if(old != null) {
@@ -42,7 +42,7 @@ public final class BountyHandler {
 	}
 
     private static boolean ipCheck(final Player killer, final String key) {
-        Player keyPlayer = World.getPlayer(key);
+        Player keyPlayer = World.getPlayerByName(key);
 		return keyPlayer != null && keyPlayer.getShortIP().equalsIgnoreCase(killer.getShortIP());
 	}
 	

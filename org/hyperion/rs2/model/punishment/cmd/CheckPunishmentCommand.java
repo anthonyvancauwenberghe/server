@@ -24,7 +24,7 @@ public class CheckPunishmentCommand extends Command {
 
     public boolean execute(final Player player, final String input) {
         final String targetName = filterInput(input);
-        final Player target = World.getPlayer(targetName);
+        final Player target = World.getPlayerByName(targetName);
         final List<Punishment> punishments = new ArrayList<>();
         for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
             for(final Punishment p : h.getPunishments()){

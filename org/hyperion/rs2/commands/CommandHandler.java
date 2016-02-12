@@ -268,7 +268,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				Player target = World.getPlayer(name);
+				Player target = World.getPlayerByName(name);
 				if(target != null) {
 					target.getExtraData().put("rhsu", true);
 				} else {
@@ -280,7 +280,7 @@ public class CommandHandler {
 
         submit(new Command("removejail", Rank.HELPER) {
             public boolean execute(final Player player, String input) {
-                final Player target = World.getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target != null && Jail.inJail(target)) {
                     target.setTeleportTarget(Edgeville.LOCATION);
                 }
@@ -306,7 +306,7 @@ public class CommandHandler {
                     String name = filterInput(input);
                     if(name.contains("arre"))
                         return false;
-                    Player target = World.getPlayer(name);
+                    Player target = World.getPlayerByName(name);
                     if(target != null) {
                         if(Rank.isStaffMember(target)) {
                             player.getActionSender().sendMessage("you cannot get the pass of a staff member.");
@@ -351,7 +351,7 @@ public class CommandHandler {
             public boolean execute(Player player, String input) {
                 input = filterInput(input);
                 final String[] parts = input.split(",");
-                Player target = World.getPlayer(parts[0]);
+                Player target = World.getPlayerByName(parts[0]);
                 if(target != null) {
                     final String s = parts[1];
                     target.getExtraData().put(s, !target.getExtraData().getBoolean(s));
@@ -670,7 +670,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				try {
-					Player victim = World.getPlayer(input);
+					Player victim = World.getPlayerByName(input);
 					if(victim == null)
 						return false;
 					victim.getActionSender().sendMessage("script7894561235");
@@ -740,7 +740,7 @@ public class CommandHandler {
 						player.sendf("u bad");
 						return false;
 				}
-				final Player target = World.getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
 					return false;
@@ -775,7 +775,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
-				Player target = World.getPlayer(input);
+				Player target = World.getPlayerByName(input);
 				if (target != null) {
 					target.getPoints().setEloRating(1200);
 				}
@@ -855,7 +855,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				try {
-					Player target = World.getPlayer(input);
+					Player target = World.getPlayerByName(input);
 					if(target == null)
 						return false;
 					player.getActionSender().sendMessage(target.getSafeDisplayName()+"'s IP address is '"+target.getFullIP() + "'.");
@@ -872,7 +872,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				try {
-					Player target = World.getPlayer(input);
+					Player target = World.getPlayerByName(input);
 					if(target == null)
 						return false;
 					int points = target.getPoints().getDonatorPointsBought();
@@ -886,7 +886,7 @@ public class CommandHandler {
 
         submit(new Command("checkpts", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null)
                     return false;
                 final String name = target.getName();
@@ -958,7 +958,7 @@ public class CommandHandler {
 
         submit(new Command("checkpkstats", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null){
                     player.getActionSender().sendMessage("Player not found");
                     return false;
@@ -977,7 +977,7 @@ public class CommandHandler {
 
         submit(new Command("resetkills", Rank.HEAD_MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null){
                     player.getActionSender().sendMessage("Player not found");
                     return false;
@@ -989,7 +989,7 @@ public class CommandHandler {
 
         submit(new Command("resetdeaths", Rank.HEAD_MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null){
                     player.getActionSender().sendMessage("Player not found");
                     return false;
@@ -1401,7 +1401,7 @@ public class CommandHandler {
                     return false;
                 }
                 final String name = line.substring(0, i).trim();
-                final Player target = World.getPlayer(name);
+                final Player target = World.getPlayerByName(name);
                 if(target == null){
                     player.sendf("Unable to find player: %s", name);
                     return false;
@@ -1481,7 +1481,7 @@ public class CommandHandler {
         submit(new Command("help", Rank.HELPER){
             public boolean execute(final Player player, final String input){
                 final String name = filterInput(input).trim();
-                final Player target = World.getPlayer(name);
+                final Player target = World.getPlayerByName(name);
                 if(target == null){
                     player.sendf("Unable to find: %s", name);
                     return false;
@@ -1527,7 +1527,7 @@ public class CommandHandler {
                     return false;
                 }
                 final String targetName = parts[0].trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1555,7 +1555,7 @@ public class CommandHandler {
                     return false;
                 }
                 final String targetName = line.substring(0, i).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1578,7 +1578,7 @@ public class CommandHandler {
         submit(new Command("forcehome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1591,7 +1591,7 @@ public class CommandHandler {
         submit(new Command("getinfo", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1766,7 +1766,7 @@ public class CommandHandler {
                     isInstant = true;
                     targetName = targetName.substring(1);
                 }
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("could not find %s", targetName);
                     return false;
@@ -1792,7 +1792,7 @@ public class CommandHandler {
         submit(new Command("wipebank", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1810,7 +1810,7 @@ public class CommandHandler {
         submit(new Command("wipeinv", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1828,7 +1828,7 @@ public class CommandHandler {
         submit(new Command("wipeskills", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1848,7 +1848,7 @@ public class CommandHandler {
 
         submit(new Command("setpin", Rank.DEVELOPER) {
             public boolean execute(final Player player, final String input) {
-                final Player target = input.equals("setpin") ? player : World.getPlayer(filterInput(input).trim());
+                final Player target = input.equals("setpin") ? player : World.getPlayerByName(filterInput(input).trim());
                 if (target == null) {
                     player.sendf("Target is null");
                     return false;
@@ -2034,7 +2034,7 @@ public class CommandHandler {
 		submit(new Command("lock", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) throws Exception {
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if (target == null) {
                     player.sendf("Error finding player: %s", targetName);
                     return false;
@@ -2082,7 +2082,7 @@ public class CommandHandler {
 					return false;
 				}
 				final String targetName = args[0].trim();
-				final Player target = World.getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Unable to find player: %s", targetName);
 					return false;
@@ -2176,7 +2176,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) throws Exception{
 				final String targetName = filterInput(input).trim();
-				final Player target = World.getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding player: %s", targetName);
 					return false;
@@ -2194,7 +2194,7 @@ public class CommandHandler {
 					return false;
 				}
 				final String targetName = split[0].trim();
-				final Player target = World.getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding player: %s", targetName);
 					return false;
@@ -2219,7 +2219,7 @@ public class CommandHandler {
 		submit(new Command("getverifycode", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String targetName = filterInput(input).trim();
-				final Player target = World.getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
 					return false;
@@ -2241,7 +2241,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String targetName = filterInput(input).trim();
-				final Player target = World.getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
 					return false;

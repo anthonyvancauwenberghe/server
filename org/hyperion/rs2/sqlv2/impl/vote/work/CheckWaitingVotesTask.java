@@ -1,6 +1,6 @@
 package org.hyperion.rs2.sqlv2.impl.vote.work;
 
-import org.hyperion.rs2.GameEngine;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -130,7 +130,7 @@ public class CheckWaitingVotesTask implements Task {
     @Override
     public void execute(final GameEngine context) {
         List<WaitingVote> votes = null;
-        if(DbHub.initialized() && DbHub.getDonationsDb().isEnabled())
+        if(DbHub.initialized() && DbHub.getDonationsDb().isInitialized())
             votes = DbHub.getDonationsDb().votes().waiting(player);
         if(votes == null){
             if(DbHub.isPlayerDebug())

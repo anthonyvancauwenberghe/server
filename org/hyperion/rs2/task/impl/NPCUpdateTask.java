@@ -1,6 +1,6 @@
 package org.hyperion.rs2.task.impl;
 
-import org.hyperion.rs2.GameEngine;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.region.RegionManager;
@@ -386,5 +386,4 @@ public class NPCUpdateTask implements Task {
 		updateBlock.putByteS((byte) getCurrentHP(n.health, n.maxHealth, 100));
 		updateBlock.putByteC((byte) 100);
 	}
-
 }

@@ -849,12 +849,12 @@ public class Prayer implements ContentTemplate {
 	 * player.cE.getOpponent().getEntity() instanceof Player){
 	 * ContentEntity.startAnimation(player, 12575); //int gfx =
 	 * getGfxIdForPrayer(i); //System.out.println("gfx: "+gfx+" i: "+i);
-	 * //ContentEntity.playerGfx(player.cE.getOpponent().getPlayer(), gfx, 0);
+	 * //ContentEntity.playerGfx(player.cE.getOpponent().getPlayerByName(), gfx, 0);
 	 * break; } int gfxProjectile = getGfxIdForPrayerProjectile(i);
 	 * ContentEntity.playerGfx(player, gfxProjectile); //} } } // } } for(int i
 	 * = 0; i < 8; i++){ //if(System.currentTimeMillis()-player.lastCurseCast[i]
 	 * < 20000){ for(CombatEntility ce : player.cE.getAttackers()){
-	 * if(ce.getEntity() instanceof Player){ Player p = ce.getPlayer();
+	 * if(ce.getEntity() instanceof Player){ Player p = ce.getPlayerByName();
 	 * if(isPrayerForSkillIdOnDrain(p,i)){ player.skillCursesNegative[i]++;
 	 * //player.lastCurseCast[i] = System.currentTimeMillis(); } } //} } } }
 	 */

@@ -116,7 +116,7 @@ public class Node {
 //				LoginDebugger.getDebugger().log("Node check login: " + name + "," + password);
 //				LoginResponse res = server.getLoader().checkLogin(new PlayerDetails(null, name, password, 0, "", null, null, "", "Id2"));
 //				if(res.getReturnCode() == 2) {
-//					PlayerData pd = new PlayerData(name, (int) Rank.getPrimaryRankIndex(res.getPlayer()));
+//					PlayerData pd = new PlayerData(name, (int) Rank.getPrimaryRankIndex(res.getPlayerByName()));
 //					NodeManager.getNodeManager().register(pd, this);
 //				}
 //				IoBuffer resp = IoBuffer.allocate(16);
@@ -174,7 +174,7 @@ public class Node {
 //			}
 //			case LoginPacket.DISCONNECT: {
 //				String name = NameUtils.formatNameForProtocol(IoBufferUtils.getRS2String(buf));
-//				PlayerData p = NodeManager.getNodeManager().getPlayer(name);
+//				PlayerData p = NodeManager.getNodeManager().getPlayerByName(name);
 //				if(p != null) {
 //					NodeManager.getNodeManager().unregister(p);
 //				}

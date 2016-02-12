@@ -59,7 +59,7 @@ public class PunishmentHolder {
     }
 
     public Player getVictim(){
-        return World.getPlayer(getVictimName());
+        return World.getPlayerByName(getVictimName());
     }
 
     public String getVictimIP(){

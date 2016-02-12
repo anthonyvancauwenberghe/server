@@ -50,7 +50,7 @@ public class DungoneeringParty extends Interface {
                 final List<Player> players = new CopyOnWriteArrayList<>();
 
                 for(final String s : playerStrings) {
-                    final Player p = World.getPlayer(s);
+                    final Player p = World.getPlayerByName(s);
                     if(p == null || !p.getLocation().inDungeonLobby()) {
                         player.sendMessage("%s cannot join party, removed from group", s);
                     } else {
@@ -76,7 +76,7 @@ public class DungoneeringParty extends Interface {
             case INVITE:
                 ClanManager.joinClanChat(player, "Party "+player.getName(), false);
                 final String name = pkt.getRS2String();
-                final Player p = World.getPlayer(name);
+                final Player p = World.getPlayerByName(name);
                 if(name.equalsIgnoreCase(player.getName())) {
                     player.sendMessage("You cannot invite yourself!");
                     return;

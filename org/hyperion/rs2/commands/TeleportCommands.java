@@ -78,7 +78,7 @@ public class TeleportCommands {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				Player victim = World.getPlayer(name);
+				Player victim = World.getPlayerByName(name);
 				if(victim != null) {
 					if(victim.getLocation().inPvPArea()) {
 						player.getActionSender().sendMessage("You can't teleport people out of the wild!");
@@ -107,7 +107,7 @@ public class TeleportCommands {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				Player releasing = World.getPlayer(name);
+				Player releasing = World.getPlayerByName(name);
 				if(releasing != null) {
 					if(Rank.isStaffMember(releasing)) {
 						player.getActionSender().sendMessage("This command no longer works on staff members.");
@@ -143,7 +143,7 @@ public class TeleportCommands {
 				if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
 				String name = filterInput(input);
-				Player target = World.getPlayer(name);
+				Player target = World.getPlayerByName(name);
 				if(target != null) {
                     if(!Rank.hasAbility(player, Rank.DEVELOPER) && target.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
@@ -170,7 +170,7 @@ public class TeleportCommands {
                     return false;
 
 				String name = filterInput(input);
-				Player x = World.getPlayer(name);
+				Player x = World.getPlayerByName(name);
 				if(x != null) {
                     if(!Rank.hasAbility(player, Rank.DEVELOPER) && x.duelAttackable > 0) {
                         player.getActionSender().sendMessage("This player is currently in a duel.");

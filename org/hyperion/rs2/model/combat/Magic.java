@@ -177,7 +177,7 @@ public class Magic {
 		}
 		if(spell.getFreeze() > 0 && attacker.getPlayer().getLocation().disabledMagic() && !attacker.getPlayer().hasBeenInformed) {
 			attacker.getPlayer().getActionSender().sendMessage("@red@The normal hybridding area is at ::13s! (Range is disabled there)");
-			//attacker.getPlayer().getActionSender().send
+			//attacker.getPlayerByName().getActionSender().send
 			// Message("@red@To start hybridding INSTANTLY, go to \"Instant Sets\" in the spawn tab and click 'Hybrid'");
 			attacker.getPlayer().hasBeenInformed = true;
 		}

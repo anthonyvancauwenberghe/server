@@ -1,6 +1,6 @@
 package org.hyperion.rs2.task;
 
-import org.hyperion.rs2.GameEngine;
+import org.hyperion.engine.GameEngine;
 
 /**
  * A task is a class which carries out a unit of work.
@@ -15,6 +15,6 @@ public interface Task {
 	 *
 	 * @param context The game engine this task is being executed in.
 	 */
-	public void execute(GameEngine context);
+	void execute(GameEngine context);
 
 }

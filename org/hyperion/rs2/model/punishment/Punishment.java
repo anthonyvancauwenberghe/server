@@ -179,7 +179,7 @@ public class Punishment {
     }
 
     public Player getIssuer(){
-        return World.getPlayer(getIssuerName());
+        return World.getPlayerByName(getIssuerName());
     }
 
     public String getVictimName(){
@@ -187,7 +187,7 @@ public class Punishment {
     }
 
     public Player getVictim(){
-        return World.getPlayer(getVictimName());
+        return World.getPlayerByName(getVictimName());
     }
 
     public String getVictimIp(){
@@ -226,18 +226,26 @@ public class Punishment {
     }
 
     public void insert(){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().insert(this);
     }
 
     public void update(){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().update(this);
     }
 
     public void setActive(final boolean isActive){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().setActive(this, isActive);
     }
 
     public void delete(){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().delete(this);
     }
 

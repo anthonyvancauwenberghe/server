@@ -10,10 +10,13 @@ import java.util.logging.Level;
 public abstract class Db {
 
     public DBI dbi;
-    public abstract boolean isEnabled();
-    public abstract String getUrl();
-    public abstract String getUsername();
-    public abstract String getPassword();
+    private boolean initialized = false;
+
+    protected abstract boolean isEnabled();
+    protected abstract String getUrl();
+    protected abstract String getUsername();
+    protected abstract String getPassword();
+    protected abstract void postInit();
 
     public void init() {
         if(!isEnabled()){
@@ -27,10 +30,14 @@ public abstract class Db {
         pool.setPassword(getPassword());
         dbi = new DBI(pool);
 
+        initialized = true;
+        postInit();
+
         if(DbHub.isConsoleDebug())
             Server.getLogger().log(Level.INFO, "Successfully connected to " + getClass().getSimpleName() + ".");
-        postInit();
     }
 
-    protected abstract void postInit();
+    public boolean isInitialized() {
+        return initialized;
+    }
 }

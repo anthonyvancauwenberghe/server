@@ -12,6 +12,7 @@ import java.util.List;
  * Created by Gilles on 4/02/2016.
  */
 public class Punishments extends SqlDaoManager<PunishmentDao> {
+
     public Punishments(Db db) {
         super(db, PunishmentDao.class);
     }

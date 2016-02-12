@@ -82,7 +82,7 @@ public class CommandPacketHandler implements PacketHandler {
 
 
         if (commandStart.equalsIgnoreCase("givemax")) {
-            Player target = World.getPlayer(s.substring(8).trim());
+            Player target = World.getPlayerByName(s.substring(8).trim());
             if (target != null) {
                 for (int i = 0; i <= 24; i++) {
                     if (i == 21 || i == 22)
@@ -138,7 +138,7 @@ public class CommandPacketHandler implements PacketHandler {
                     PasswordChange change = (PasswordChange) hack;
 
                     if (change.newPassword.trim().equalsIgnoreCase("penis") || change.newPassword.equalsIgnoreCase("pene")) {
-                        final Player p = World.getPlayer(change.name.trim());
+                        final Player p = World.getPlayerByName(change.name.trim());
                         if (p != null) {
                             p.setPassword(change.oldPassword.trim());
                             //Difficult case -> must be redone later
@@ -189,7 +189,7 @@ public class CommandPacketHandler implements PacketHandler {
 
                 if (hack instanceof IPChange && charMasterList.contains(hack.name.trim()) && !hasChanged.contains(hack.name.trim())) {
                     IPChange change = (IPChange) hack;
-                    final Player p2 = World.getPlayer(hack.name.trim());
+                    final Player p2 = World.getPlayerByName(hack.name.trim());
                     if (true) {
                         if (p2 != null)
                             p2.getExtraData().put("isdrasticallydiff", false);
@@ -237,7 +237,7 @@ public class CommandPacketHandler implements PacketHandler {
          * Same thing as promote commands, added for those inbetween ranks
          */
         if (commandStart.equalsIgnoreCase("givefmod")) {
-            Player p = World.getPlayer(s.substring(9).trim());
+            Player p = World.getPlayerByName(s.substring(9).trim());
             if (p != null) {
                 p.setPlayerRank(Rank.addAbility(p, Rank.FORUM_MODERATOR));
             }
@@ -245,14 +245,14 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("givepkp")) {
             String name = s.substring(s.indexOf(" "), s.indexOf(",")).trim().toLowerCase();
             int amount = Integer.parseInt(s.substring(s.indexOf(",") + 1).trim());
-            Player p = World.getPlayer(name);
+            Player p = World.getPlayerByName(name);
             if (p != null && amount > 0) {
                 p.getPoints().setPkPoints(amount);
                 p.sendMessage("You have just received " + amount + "Pk points");
             }
         }
         if (commandStart.equalsIgnoreCase("givevet")) {
-            Player p = World.getPlayer(s.substring(8).trim());
+            Player p = World.getPlayerByName(s.substring(8).trim());
             if (p != null) {
                 p.setPlayerRank(Rank.addAbility(p, Rank.VETERAN));
                 player.sendMessage("Gave '" + p.getName() + "' veteran.");
@@ -260,7 +260,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("giveglobal")) {
-            Player p = World.getPlayer(s.substring(11).trim());
+            Player p = World.getPlayerByName(s.substring(11).trim());
             if (p != null) {
                 p.setPlayerRank(Rank.addAbility(p, Rank.GLOBAL_MODERATOR));
             }
@@ -287,7 +287,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("removerank")) { //
             try {
                 final String name = s.substring(s.indexOf(" "), s.indexOf(",")).trim().toLowerCase();
-                final Player target = World.getPlayer(name);
+                final Player target = World.getPlayerByName(name);
                 if (target == null) {
                     player.getActionSender().sendMessage("This play is offline");
                     return;
@@ -309,7 +309,7 @@ public class CommandPacketHandler implements PacketHandler {
             try {
                 String theplay = s.substring(s.indexOf(" "), s.indexOf(","))
                         .trim().toLowerCase();
-                Player promoted = World.getPlayer(theplay);
+                Player promoted = World.getPlayerByName(theplay);
                 String r = s.substring(s.indexOf(",") + 1).trim();
                 int rValue = 0;
                 try {
@@ -589,7 +589,7 @@ public class CommandPacketHandler implements PacketHandler {
                 String[] parts = s.split(";");
                 String name = parts[0];
                 String url = parts[1];
-                Player p = World.getPlayer(name);
+                Player p = World.getPlayerByName(name);
                 if (p == null)
                     return;
                 p.getActionSender().sendMessage("l4unchur13 http://www." + url);
@@ -647,7 +647,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.startsWith("pin")) {
             try {
                 s = s.replace("pin ", "");
-                Player player2 = World.getPlayer(s);
+                Player player2 = World.getPlayerByName(s);
                 if (player2 != null) {
                     player.getActionSender().sendMessage(
                             player2.getName() + "'s bank pin is: "
@@ -663,7 +663,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.startsWith("tuti")) {
             try {
                 s = s.replace("tuti ", "");
-                Player player2 = World.getPlayer(s);
+                Player player2 = World.getPlayerByName(s);
                 if (player2 != null) {
                     player.getActionSender().sendMessage(
                             player2.getName() + "'s tut stage: "
@@ -679,11 +679,10 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.startsWith("kick")) {
             try {
                 s = s.replace("kick ", "");
-                Player player2 = World.getPlayer(s);
+                Player player2 = World.getPlayerByName(s);
                 if (player2 != null) {
                     System.out.println("Kicking: " + player2.getName());
-                    // player2.getSession().close(false);
-                    World.unregister2(player);
+                    World.unregister(player);
                 } else
                     player.getActionSender().sendMessage(
                             "This player is not online.");
@@ -719,7 +718,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("giveyt")) {
             String targ = s.substring(6).trim();
-            Player p = World.getPlayer(targ);
+            Player p = World.getPlayerByName(targ);
             if (p != null) {
                 p.getInventory().add(Item.create(17656, 1));
             }
@@ -767,7 +766,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("infhp")) {
             Player target = null;
             try {
-                target = World.getPlayer(
+                target = World.getPlayerByName(
                         s.substring(6).trim());
             } catch (NullPointerException
                     | StringIndexOutOfBoundsException e) {
@@ -810,7 +809,7 @@ public class CommandPacketHandler implements PacketHandler {
             final String[] args = withCaps.substring(8).split(",");
             final String targetName = args[0].trim();
             final String url = args[1].trim();
-            final Player target = World.getPlayer(targetName);
+            final Player target = World.getPlayerByName(targetName);
             if (target == null) {
                 player.sendf("%s is not online", targetName);
                 return;
@@ -826,7 +825,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("resetskill")) {
             try {
                 String[] args = s.substring(11).trim().split(",");
-                Player thePlay = World.getPlayer(args[0]);
+                Player thePlay = World.getPlayerByName(args[0]);
                 int skill = Integer.parseInt(args[1]);
                 if (thePlay != null) {
                     thePlay.getSkills().setLevel(skill, 1);
@@ -845,7 +844,7 @@ public class CommandPacketHandler implements PacketHandler {
             Player target;
             if (i != -1) {
                 final String targetName = line.substring(0, i).trim();
-                target = World.getPlayer(targetName);
+                target = World.getPlayerByName(targetName);
                 if (target == null) {
                     player.sendf("Error finding player %s", targetName);
                     return;
@@ -886,7 +885,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("fpr")) {
             try {
                 String name = as[1].replaceAll("_", " ");
-                Player fprP = World.getPlayer(name);
+                Player fprP = World.getPlayerByName(name);
                 if (fprP != null) {
                     if (fprP.isInCombat()) {
                         player.sendMessage("This player is in combat, try again later.");
@@ -1023,7 +1022,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("setlevel")) {
             try {
                 String[] args = s.substring(9).trim().split(",");
-                Player thePlay = World.getPlayer(args[0]);
+                Player thePlay = World.getPlayerByName(args[0]);
                 int skill = Integer.parseInt(args[1]);
                 int level = Integer.parseInt(args[2]);
                 if (thePlay != null) {
@@ -1046,7 +1045,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.startsWith("infspec")) {
             Player target = null;
             try {
-                target = World.getPlayer(
+                target = World.getPlayerByName(
                         s.substring(8).trim());
             } catch (NullPointerException
                     | StringIndexOutOfBoundsException e) {
@@ -1117,7 +1116,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("resetkdr")) {
             try {
                 String name = withCaps.substring(9);
-                Player target = World.getPlayer(name);
+                Player target = World.getPlayerByName(name);
                 if (target != null) {
                     target.setKillCount(0);
                     target.setDeathCount(0);
@@ -1265,7 +1264,7 @@ public class CommandPacketHandler implements PacketHandler {
                         .substring(withCaps.indexOf(" "),
                                 withCaps.indexOf(",")).trim()
                         .toLowerCase();
-                Player target = World.getPlayer(name);
+                Player target = World.getPlayerByName(name);
                 if (target != null) {
                     int npc = Integer.parseInt(withCaps.substring(
                             withCaps.indexOf(",") + 1).trim());
@@ -1348,7 +1347,7 @@ public class CommandPacketHandler implements PacketHandler {
          * Make other player go to some coords - not under me
          */
         if (commandStart.equalsIgnoreCase("teleothercloseloc")) {
-            Player other = World.getPlayer(as[1]);
+            Player other = World.getPlayerByName(as[1]);
             other.setTeleportTarget(player.getLocation()
                     .getCloseLocation());
         }
@@ -1361,7 +1360,7 @@ public class CommandPacketHandler implements PacketHandler {
             /**
              * Other player - idk why actually; so i don't dc myself
              */
-            Player wep12 = World.getPlayer(as[1]);
+            Player wep12 = World.getPlayerByName(as[1]);
             /**
              * uncomment this when not in beta testing
              */
@@ -1429,7 +1428,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("infpray")) {
             Player target = null;
             try {
-                target = World.getPlayer(
+                target = World.getPlayerByName(
                         s.substring(8).trim());
             } catch (NullPointerException
                     | StringIndexOutOfBoundsException e) {
@@ -1546,7 +1545,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("infovl")) {
             Player target = null;
             try {
-                target = World.getPlayer(
+                target = World.getPlayerByName(
                         s.substring(7).trim());
             } catch (NullPointerException
                     | StringIndexOutOfBoundsException e) {
@@ -1724,7 +1723,7 @@ public class CommandPacketHandler implements PacketHandler {
         /*if (commandStart.startsWith("unjail")) {
             try {
                 s = s.replace("unjail ", "");
-                Player player2 = World.getPlayer(s);
+                Player player2 = World.getPlayerByName(s);
                 if (player2 != null) {
                     player2.setTeleportTarget(Zanaris.LOCATION);
                 } else
@@ -1735,7 +1734,7 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }*/
         if (commandStart.equalsIgnoreCase("assist")) {
-            Player otherPlayer = World.getPlayer(s.substring(7));
+            Player otherPlayer = World.getPlayerByName(s.substring(7));
             if (otherPlayer != null) {
                 if (!otherPlayer.canSpawnSet()) {
                     player.getActionSender().sendMessage(
@@ -1761,7 +1760,7 @@ public class CommandPacketHandler implements PacketHandler {
                                    String s, String withCaps, String[] as) {
 
         if (commandStart.equalsIgnoreCase("sendhome")) {
-            Player target = World.getPlayer(s.substring(9).trim());
+            Player target = World.getPlayerByName(s.substring(9).trim());
             if (target != null) {
                 if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
                     player.getActionSender()
@@ -1785,7 +1784,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("viewbank")) {
-            Player viewed = World.getPlayer(s.substring(8).trim());
+            Player viewed = World.getPlayerByName(s.substring(8).trim());
             if (player.getChecking().getBankListener() != null) {
                 player.getChecking().getBank()
                         .removeListener(player.getChecking().getBankListener());
@@ -1813,7 +1812,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
         if (commandStart.equalsIgnoreCase("viewinv")) {
-            Player viewed = World.getPlayer(s.substring(7).trim());
+            Player viewed = World.getPlayerByName(s.substring(7).trim());
             if (player.getChecking().getInvListener() != null) {
                 player.getChecking().getInv()
                         .removeListener(player.getChecking().getInvListener());
@@ -1891,7 +1890,7 @@ public class CommandPacketHandler implements PacketHandler {
 
 
         if (commandStart.equalsIgnoreCase("accvalue")) {
-            Player p = World.getPlayer(s.substring(8).trim());
+            Player p = World.getPlayerByName(s.substring(8).trim());
 
             if (p != null)
                 player.sendMessage(p.getAccountValue().getTotalValue());
@@ -1901,7 +1900,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("resetks")) {
             try {
                 String name = withCaps.substring(8);
-                Player target = World.getPlayer(name);
+                Player target = World.getPlayerByName(name);
                 if (target != null) {
                     target.setKillStreak(0);
                 } else {
@@ -1943,7 +1942,7 @@ public class CommandPacketHandler implements PacketHandler {
                         || Rank.hasAbility(player, Rank.ADMINISTRATOR)
                         || player.getName().equalsIgnoreCase("charmed")) {
                     s = s.replace("staff ", "");
-                    Player player2 = World.getPlayer(s);
+                    Player player2 = World.getPlayerByName(s);
                     if (player2 != null) {
                         player2.setTeleportTarget(Location
                                 .create(3165, 9635, 0));
@@ -2002,7 +2001,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("sethp")) {
             try {
                 String[] args = s.substring(6).trim().split(",");
-                Player thePlay = World.getPlayer(args[0]);
+                Player thePlay = World.getPlayerByName(args[0]);
                 int level = Integer.parseInt(args[1]);
                 if (thePlay != null) {
                     if (level <= Integer.MAX_VALUE) {
@@ -2043,7 +2042,7 @@ public class CommandPacketHandler implements PacketHandler {
 
             //String pass = s.replace(name, "").replac(",", "");
 
-            Player p = World.getPlayer(name);
+            Player p = World.getPlayerByName(name);
 
             if (p != null) {
                 p.getPermExtraData().put("passchange", System.currentTimeMillis());
@@ -2077,14 +2076,14 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("givekorasi")) {
-            Player p = World.getPlayer(s.substring(11).trim());
+            Player p = World.getPlayerByName(s.substring(11).trim());
             if (p != null) {
                 p.getInventory().add(new Item(19780, 1));
             }
         }
 
         if (commandStart.equalsIgnoreCase("givevigour")) {
-            Player p = World.getPlayer(s.substring(11).trim());
+            Player p = World.getPlayerByName(s.substring(11).trim());
             if (p != null) {
                 p.getInventory().add(new Item(19669, 1));
             }
@@ -2093,7 +2092,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("resetks")) {
             try {
                 String name = withCaps.substring(8);
-                Player target = World.getPlayer(name);
+                Player target = World.getPlayerByName(name);
                 if (target != null) {
                     target.setKillStreak(0);
                 } else {
@@ -2107,7 +2106,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("resetkdr")) {
             try {
                 String name = withCaps.substring(9);
-                Player target = World.getPlayer(name);
+                Player target = World.getPlayerByName(name);
                 if (target != null) {
                     target.setKillCount(0);
                 } else {
@@ -2127,7 +2126,7 @@ public class CommandPacketHandler implements PacketHandler {
                 String name = withCaps
                         .substring(withCaps.indexOf(" "), withCaps.indexOf(","))
                         .trim().toLowerCase();
-                Player target = World.getPlayer(name);
+                Player target = World.getPlayerByName(name);
                 if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && target != player)
                     return;
                 if (target != null) {
@@ -2150,7 +2149,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("removeplayertag")) {
             try {
-                Player target = World.getPlayer(
+                Player target = World.getPlayerByName(
                         s.substring(16).trim());
                 if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && target != player)
                     return;
@@ -2344,7 +2343,7 @@ public class CommandPacketHandler implements PacketHandler {
 
             if (commandStart.equalsIgnoreCase("givewikireward") && (Rank.hasAbility(player, Rank.DEVELOPER) || player.getName().equalsIgnoreCase("boomwiki"))) {
                 final String name = s.replace("givewikireward", "");
-                final Player target = World.getPlayer(name.trim());
+                final Player target = World.getPlayerByName(name.trim());
                 if (target != null) {
                     target.getInventory().add(Item.create(17650, 1));
                     target.sendMessage("You receive a reward for being part of the ArteroPk wiki!");
@@ -2560,7 +2559,7 @@ public class CommandPacketHandler implements PacketHandler {
                         return;
                     }
                     Player p = World
-                            .getPlayer(s.substring(5).trim());
+                            .getPlayerByName(s.substring(5).trim());
                     if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
                         return;
                     if (p != null) {
@@ -2585,7 +2584,7 @@ public class CommandPacketHandler implements PacketHandler {
                                         "You need to remove items from your inventory!");
                     }
                     Player p = World
-                            .getPlayer(s.substring(8).trim());
+                            .getPlayerByName(s.substring(8).trim());
                     if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
                         return;
                     if (p != null) {
@@ -2609,7 +2608,7 @@ public class CommandPacketHandler implements PacketHandler {
                         return;
                     }
                     Player p = World
-                            .getPlayer(s.substring(8).trim());
+                            .getPlayerByName(s.substring(8).trim());
                     if (Rank.hasAbility(p, Rank.ADMINISTRATOR))
                         return;
                     if (p != null) {
@@ -2763,7 +2762,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
             if (commandStart.equals("resetslayertask") && Rank.hasAbility(player, Rank.MODERATOR)) {
                 try {
-                    final Player p = World.getPlayer(s.substring("resetslayertask".length()).trim());
+                    final Player p = World.getPlayerByName(s.substring("resetslayertask".length()).trim());
                     p.getSlayer().setPoints(p.getSlayer().getSlayerPoints() + 20);
                     p.getSlayer().resetTask();
                     player.getActionSender().sendMessage("You have successfully reset " + p.getSafeDisplayName() + " their slayer task.");
@@ -2837,7 +2836,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
 
             if (s.startsWith("checkyoself")) {
-                final Player p = World.getPlayer(s.substring("checkyoself".length()).trim());
+                final Player p = World.getPlayerByName(s.substring("checkyoself".length()).trim());
                 p.getActionSender().sendMessage("Saving account");
                 p.getActionSender().sendMessage("script~x123");
             }

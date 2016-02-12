@@ -101,7 +101,7 @@ public class Clan {
 	}
 
 	public boolean isKicked(String name) {
-        final Player player = World.getPlayer(name);
+        final Player player = World.getPlayerByName(name);
         if(player != null && peopleKicked.contains(player.getShortIP()))
             return true;
         return peopleKicked.contains(name);
@@ -111,7 +111,7 @@ public class Clan {
         if(!peopleKicked.contains(name))
             return false;
         peopleKicked.remove(name);
-        final Player player = World.getPlayer(name);
+        final Player player = World.getPlayerByName(name);
         if(player != null)
             peopleKicked.remove(player.getShortIP());
         else {

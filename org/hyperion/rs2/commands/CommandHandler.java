@@ -448,7 +448,7 @@ public class CommandHandler {
 				int[] parts = getIntArray(input);
 				ShopManager.open(player, parts[0]);
 				return true;
-			}
+			}//Let's convert this one
 		});
 		submit(new Command("enablepvp", Rank.OWNER) {
 			@Override

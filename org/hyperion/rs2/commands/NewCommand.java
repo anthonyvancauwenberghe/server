@@ -1,11 +1,13 @@
 package org.hyperion.rs2.commands;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.jsoup.helper.StringUtil;
 
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import static org.hyperion.rs2.commands.impl.CommandResult.*;
@@ -45,11 +47,11 @@ public abstract class NewCommand {
     }
 
     public final Rank getRank() {
-        return rank;
+        return rank == null ? Rank.PLAYER : rank;
     }
 
     public final CommandInput[] getRequiredInput() {
-        return requiredInput;
+        return requiredInput == null ? new CommandInput[]{} : requiredInput;
     }
 
     public final long getDelay() {
@@ -64,26 +66,33 @@ public abstract class NewCommand {
 
     public final CommandResult doCommand(Player player, String[] input) {
         //First we'll check the rank requirement.
-        if (!Rank.hasAbility(player, getRank()))
-            return NEED_ERROR_MESSAGE;
+        if (!Rank.hasAbility(player, getRank())) {
+            player.sendMessage("You do not have the required rank for this command.");
+            return GOT_ERROR_MESSAGE;
+        }
         //After this we see if each argument is valid.
         try {
             for (int i = 0; i < input.length; i++) {
                 //Over here we need to test what the argument is.
                 //It gives warnings, but it's nothing unwanted, we're careful with the exception and simply can't test any more.
                 if (StringUtil.isNumeric(input[i])) {
-                    if (Pattern.matches("([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) {
+                    if (Pattern.matches("([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) { //Gue'ssing it's this line
+                        System.out.println(1);
                         return GOT_ERROR_MESSAGE;
                     } else if (!getRequiredInput()[i].testInput(player, Integer.parseInt(input[i]))) {
+                        System.out.println(2);
                         return GOT_ERROR_MESSAGE;
                     }
                 } else if ((input[i].equals("true") || input[i].equals("false")) && !getRequiredInput()[i].testInput(player, Boolean.parseBoolean(input[i]))) {
+                    System.out.println(3);
                     return GOT_ERROR_MESSAGE;
                 } else if (!getRequiredInput()[i].testInput(player, input[i])) {
+                    System.out.println(4);
                     return GOT_ERROR_MESSAGE;
                 }
             }
         } catch (Exception e) {
+            Server.getLogger().log(Level.WARNING, null, e);//
             return NEED_ERROR_MESSAGE;
         }
         //If we get here it means that it did pass the tests.

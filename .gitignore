@@ -21,6 +21,7 @@ local.properties
 lib/
 libs/
 *.bat
+*.json
 data\bugchars\*
 
 # External tool builders

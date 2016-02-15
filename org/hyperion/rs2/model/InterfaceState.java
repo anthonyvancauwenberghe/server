@@ -4,8 +4,6 @@ import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchange;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.util.Misc;
@@ -183,9 +181,6 @@ public class InterfaceState {
 			if(amount <= 0)
 				return;
 			switch(enterAmountInterfaceId) {
-				case GrandExchange.GEInterfaceId:
-					//World.getGrandExchange().addItem(player, enterAmountId, ((Integer) player.getExtraData().get("geamount")), enterAmountSlot, amount);
-					break;
 				case BoB.PLAYER_INVENTORY_INTERFACE:
 					BoB.deposit(player, enterAmountSlot, enterAmountId, amount);
 					break;
@@ -249,15 +244,6 @@ public class InterfaceState {
 					break;
 				case Bank.DEPOSIT_INVENTORY_INTERFACE:
 					Bank.deposit(player, enterAmountSlot, enterAmountId, amount, true);
-					break;
-				case 28000://GEIntergace
-					GrandExchangeV2.buyItem(player, enterAmountId, enterAmountSlot, amount);
-					break;
-				case 29000://GEIntergace
-					if(enterAmountId == 0)
-						GrandExchangeV2.setAmount(player, amount);
-					else if(enterAmountId == 1)
-						GrandExchangeV2.setPrice(player, amount);
 					break;
 				case ShopManager.SHOP_INVENTORY_INTERFACE:
 					if(enterAmountSlot >= 0 && player.getShopId() == - 2) {

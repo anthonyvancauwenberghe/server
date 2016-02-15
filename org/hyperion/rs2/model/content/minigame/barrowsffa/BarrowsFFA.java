@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame.barrowsffa;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
@@ -227,7 +227,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         if(id == EXIT_LOBBY_ID) {
             player.face(Location.create(x, y, HEIGHT_LEVEL));
             player.playAnimation(Animation.create(7376));
-            World.submit(new Event(600) {
+            World.submit(new Task(600) {
                 public void execute() {
                     exit(player);
                     this.stop();

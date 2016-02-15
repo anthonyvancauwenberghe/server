@@ -1,6 +1,6 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.rs2.event.impl.ClientConfirmEvent;
+import org.hyperion.engine.task.impl.ClientConfirmTask;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.net.Packet;
 
@@ -10,6 +10,6 @@ import org.hyperion.rs2.net.Packet;
 public class ClientResponsePacketHandler implements PacketHandler {
     @Override
     public void handle(Player player, Packet packet) {
-        ClientConfirmEvent.addResponse(player.getName(), packet.getShort());
+        ClientConfirmTask.addResponse(player.getName(), packet.getShort());
     }
 }

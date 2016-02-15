@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
@@ -56,7 +56,7 @@ public class RangingGuild implements ContentTemplate {
 					.getId()));
 			p.face(Location.create(xcoord, ycoord, 0));
 
-			World.submit(new Event(1000) {
+			World.submit(new Task(1000) {
 				public void execute() {
 					int offX = (p.getLocation().getX() - xcoord) * - 1;
 					int offY = (p.getLocation().getY() - ycoord) * - 1;
@@ -68,7 +68,7 @@ public class RangingGuild implements ContentTemplate {
 				}
 			});
 			World.submit(
-					new Event(2000) {
+					new Task(2000) {
 						public void execute() {
 							int hit = Misc.random(10) - Misc.random(p.getSkills().getLevel(4) / 12 + p.getBonus().get(4) / 15);
 							if(hit < 0) {

@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
@@ -77,7 +77,7 @@ public class Bork  {
     }
 
 
-    private static final class BorkEvent extends Event {
+    private static final class BorkEvent extends Task {
         private static final double PKP_MULTIPLIER = 5;
         private static final double TOKEN_MULTIPLIER = 1;
         /**

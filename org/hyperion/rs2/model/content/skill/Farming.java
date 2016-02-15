@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -307,7 +307,7 @@ public class Farming implements ContentTemplate {
 		player.getActionSender().sendReplaceObject(x + offset(serverPlant.type), y + offset(serverPlant.type), plant.plotId, 0, 10);
 		player.getFarm().plants.remove(((x * 16) + y));
 		player.getActionSender().sendMessage("You dig up the plot.");
-		World.submit(new Event(500) {
+		World.submit(new Task(500) {
 			@Override
 			public void execute() {
 				this.stop();
@@ -350,7 +350,7 @@ public class Farming implements ContentTemplate {
 		player.setBusy(true);
 		player.playAnimation(Animation.create(2273));
 		player.getActionSender().sendMessage("You rake the plot of land.");
-		World.submit(new Event(3000) {
+		World.submit(new Task(3000) {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {
@@ -472,7 +472,7 @@ public class Farming implements ContentTemplate {
 		//unRakedPatches.put(8338, patch);//spirit tree
 
 
-		World.submit(new Event(30000) {
+		World.submit(new Task(30000) {
 			@Override
 			public void execute() {
 				calendar = new GregorianCalendar();

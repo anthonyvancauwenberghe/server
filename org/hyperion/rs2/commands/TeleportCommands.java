@@ -1,6 +1,5 @@
 package org.hyperion.rs2.commands;
 
-import org.hyperion.rs2.event.impl.RandomTeleportEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.misc2.Jail;
@@ -125,13 +124,6 @@ public class TeleportCommands {
 					} else
 						player.getActionSender().sendMessage("This player is not online.");
 				}
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("randomteleevent", Rank.DEVELOPER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				World.submit(new RandomTeleportEvent(player));
 				return true;
 			}
 		});

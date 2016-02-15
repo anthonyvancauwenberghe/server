@@ -2,7 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.combat.Combat;
 
 import java.util.LinkedList;
@@ -44,7 +44,7 @@ public class Wilderness {
 		final int maxX = maxX2;
 		final int maxY = maxY2;
 		final Obelisk o2 = randomObelisk();
-		World.submit(new Event(3000) {
+		World.submit(new Task(3000) {
 			public int timer = 2;
 
 			@Override

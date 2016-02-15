@@ -504,7 +504,7 @@ public class ItemDefinition {
 				int id = values[0];
 				int price = values[1];
 				definitions[id].setHighAlcValue(price);
-				Server.getLoader().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
+				Server.getLoader().getEngine().submit(ItemDefinition::dumpItemDefinitions);
 				return true;
 			}
 		});
@@ -516,7 +516,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(false);
-					Server.getLoader().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
+					Server.getLoader().getEngine().submit(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::unstack 11694");
 				}
@@ -531,7 +531,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(true);
-					Server.getLoader().getEngine().submitTask(ItemDefinition::dumpItemDefinitions);
+					Server.getLoader().getEngine().submit(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::stack 11694");
 				}

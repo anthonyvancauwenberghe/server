@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
@@ -250,7 +250,7 @@ public class FightPits implements ContentTemplate {
 		return previous != null && previous.getName().equalsIgnoreCase(itemDef.getName());
 	}
 	public void init() throws FileNotFoundException {
-		World.submit(new Event(1000L) {
+		World.submit(new Task(1000) {
 			@Override
 			public void execute() {
 				process();
@@ -377,7 +377,7 @@ public class FightPits implements ContentTemplate {
 	
 	private static void normalize(Player player) {
 		player.setOverloaded(false);
-		player.getExtraData().remove(OverloadStatsEvent.KEY);
+		player.getExtraData().remove(OverloadStatsTask.KEY);
 		player.overloadTimer = 0;
 		for(int i = 0; i < 6; i++) {
 			player.getSkills().normalizeLevel(i);
@@ -405,7 +405,7 @@ public class FightPits implements ContentTemplate {
 			player.getInventory().clear();
 			player.getEquipment().clear();
 			final Player p2 = player;
-			World.submit(new Event(600) {
+			World.submit(new Task(600) {
 				public void execute() {
                     spawnItems(p2);
 					this.stop();

@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.agility;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.util.Misc;
 
@@ -101,7 +101,7 @@ public class Obstacle {
     }
 
     public void succeed(Player player, int tick, String message) {
-        World.submit(new Event(tick * 600) {
+        World.submit(new Task(tick * 600) {
             @Override
             public void execute() {
                 player.getSkills().addExperience(Skills.AGILITY, skillXp);
@@ -117,7 +117,7 @@ public class Obstacle {
     }
 
     public void fail(Player player, int tick, String message) {
-        World.submit(new Event(tick * 600) {
+        World.submit(new Task(tick * 600) {
             @Override
             public void execute() {
                 reset(player);

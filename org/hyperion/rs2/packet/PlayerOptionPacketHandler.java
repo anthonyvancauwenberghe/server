@@ -1,7 +1,7 @@
 package org.hyperion.rs2.packet;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -134,7 +134,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 					ContentEntity.startAnimation(player, 7530);
 					SnowItems.fireSnowBall(player, victim);
 					player.getWalkingQueue().reset();
-					World.submit(new Event(2000) {
+					World.submit(new Task(2000) {
 						public void execute() {
 							if(player.getInventory().getCount(SnowItems.SNOWBALL.getId()) > 0)
 								player.getInventory().remove(new Item(11951, 1));

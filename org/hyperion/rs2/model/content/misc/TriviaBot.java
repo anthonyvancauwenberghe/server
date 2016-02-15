@@ -1,13 +1,14 @@
 package org.hyperion.rs2.model.content.misc;
 
 import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -24,11 +25,6 @@ public class TriviaBot {
 	 * Prefix for all messages done by TriviaBot.
 	 */
 	private static final String TITLE = "[@whi@TriviaBot@bla@] ";
-
-	/**
-	 * The cycle time.
-	 */
-	private static final int CYCLE_TIME = 60 * 1000; //1 Min
 
 	/**
 	 * Max amount of characters a question can be.
@@ -68,7 +64,7 @@ public class TriviaBot {
 	/**
 	 * The event that updates the question every <code>CYCLETIME</code>.
 	 */
-	private final static Event TRIVIA_EVENT = new Event(CYCLE_TIME) {
+	private final static Task TRIVIA_EVENT = new Task(Time.ONE_MINUTE) {
 		@Override
 		public void execute() {
 			updateQuestion();
@@ -212,7 +208,7 @@ public class TriviaBot {
 		resetAnswers();
 		addReward(p);
 		if(speedCounter > 0) {
-			World.submit(new Event(2000) {
+			World.submit(new Task(2000) {
 				public void execute() {
 					updateQuestion();
 					speedCounter--;

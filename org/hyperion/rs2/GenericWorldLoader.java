@@ -7,9 +7,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
@@ -24,7 +24,6 @@ import org.hyperion.util.Time;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 import static org.hyperion.rs2.LoginResponse.*;
@@ -71,11 +70,11 @@ public class GenericWorldLoader implements WorldLoader {
 
 		if(LOGIN_ATTEMPTS.get(player.getName()) >= MAXIMUM_LOGIN_ATTEMPTS) {
 			BLOCKED_PLAYERS.add(player.getName());
-			World.submit(new Event(Time.ONE_MINUTE, "LoginServer") {
+			World.submit(new Task(Time.ONE_MINUTE) {
 				String playerName = player.getName();
 
 				@Override
-				public void execute() throws IOException {
+				public void execute() {
 					BLOCKED_PLAYERS.remove(playerName);
 					stop();
 				}

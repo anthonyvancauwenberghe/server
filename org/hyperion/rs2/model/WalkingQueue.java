@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.engine.task.impl.OverloadStatsTask.OverloadFactory;
+import org.hyperion.engine.task.impl.PlayerDeathTask;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent.OverloadFactory;
-import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
@@ -303,7 +303,7 @@ public class WalkingQueue {
 			}
             if(player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
                 if(player.duelAttackable <= 0) {
-                    World.submit(new PlayerDeathEvent(player));
+                    World.submit(new PlayerDeathTask(player));
                 }
                 return false;
             }

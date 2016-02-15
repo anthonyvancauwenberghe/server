@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
+import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -181,7 +181,7 @@ public class PestControl implements ContentTemplate {
 
 	public void killNPC(PestNPC pnpc) {
 		pnpc.npc.health = 0;
-		World.submit(new NpcDeathEvent(pnpc.npc));
+		World.submit(new NpcDeathTask(pnpc.npc));
 		pnpc.npc.setDead(true);
 	}
 

@@ -17,8 +17,8 @@ package org.hyperion.rs2.model.content.skill;
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import org.hyperion.data.PersistenceManager;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
@@ -106,7 +106,7 @@ public class Prayer implements ContentTemplate {
 		}
 		ContentEntity.deleteItem(player, buryItem);
 		final int fBuryXP = buryXP;
-		World.submit(new Event(2000, "checked") {
+		World.submit(new Task(2000L) {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {
@@ -220,7 +220,7 @@ public class Prayer implements ContentTemplate {
 		if(distance < 20)
 			player.getActionSender().createGlobalProjectile(player.cE.getAbsY(), player.cE.getAbsX(), offsetY, offsetX, 50, speed, 2263, 20, 9, hitId, time, slope);
 	    /* UNTIL THIS */
-		World.submit(new Event(1200, "checked") {
+		World.submit(new Task(1200) {
 			public void execute() {
 				try {
 					if(victim != null)

@@ -27,6 +27,7 @@ public class Configuration {
         PORT("43599", Integer.class),
         DEBUG("true", Boolean.class),
         VERSION("317", Integer.class),
+        ENGINE_DELAY("200", Integer.class),
         LOCALHOST("false", Boolean.class),
         PLAYER_MULTIPLIER("1.2", Double.class),
         DONATION_DB_ENABLED("false", Boolean.class),

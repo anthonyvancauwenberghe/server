@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -89,7 +89,7 @@ public class RecipeForDisaster implements ContentTemplate {
 	}
 
 	public void spawnWave(final Player player, final int rfdlevel) {
-		World.submit(new Event(5000) {
+		World.submit(new Task(5000) {
 			public void execute() {
 				spawnNpc(WAVES[rfdlevel], getLocation(), player);
 				this.stop();

@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.combat.attack;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.map.WorldMap;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -80,7 +80,7 @@ public class GodWarsSara implements Attack {
 							Combat.npcRangeAttack(n, p.cE, 1213, 65, true);
 						}
 					}
-					World.submit(new Event(1000) {
+					World.submit(new Task(1000) {
 						@Override
 						public void execute() {
 							for(Player p : RegionManager.getLocalPlayers(n)) {

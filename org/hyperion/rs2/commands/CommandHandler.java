@@ -2,13 +2,11 @@ package org.hyperion.rs2.commands;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcCombatTask;
+import org.hyperion.engine.task.impl.PlayerCombatTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.impl.*;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.CountDownEvent;
-import org.hyperion.rs2.event.impl.NpcCombatEvent;
-import org.hyperion.rs2.event.impl.PlayerCombatEvent;
-import org.hyperion.rs2.event.impl.ServerMinigame;
 import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
@@ -33,6 +31,8 @@ import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.publicevent.EventCountdownTask;
+import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
@@ -655,13 +655,13 @@ public class CommandHandler {
 		});
 		submit(new Command("fixnpcs", Rank.MODERATOR) {
             public boolean execute(Player player, String input) {
-                World.submit(new NpcCombatEvent());
+                World.submit(new NpcCombatTask());
                 return true;
             }
         });
 		submit(new Command("fixwild", Rank.MODERATOR) {
 			public boolean execute(Player player, String input) {
-				World.submit(new PlayerCombatEvent());
+				World.submit(new PlayerCombatTask());
 				return true;
 			}
 		});
@@ -1001,9 +1001,7 @@ public class CommandHandler {
 
         submit(new Command("kickall", Rank.OWNER){
             public boolean execute(final Player player, final String input){
-                for(final Player p : World.getPlayers())
-                    if(!player.equals(p))
-                        p.getSession().close();
+				World.getPlayers().stream().filter(p -> !player.equals(p)).forEach(p -> p.getSession().close(true));
                 return true;
             }
         });
@@ -1775,7 +1773,7 @@ public class CommandHandler {
                     target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                 }else{
                     World.submit(
-							new Event(1000) {
+							new Task(1000) {
 								public void execute() {
 									if (target.isDead())
 										stop();
@@ -1956,7 +1954,7 @@ public class CommandHandler {
 		submit(new Command("startminigame", Rank.COMMUNITY_MANAGER) {
 			public boolean execute(final Player player, final String input) throws Exception {
                 int builder = Integer.parseInt(filterInput(input));
-				World.submit(new CountDownEvent(ServerMinigame.builders[builder]));
+				World.submit(new EventCountdownTask(ServerEventTask.builders[builder]));
 				return true;
 			}
 		});

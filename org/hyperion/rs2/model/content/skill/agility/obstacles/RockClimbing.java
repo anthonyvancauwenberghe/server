@@ -1,10 +1,9 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
-import org.hyperion.util.Misc;
 
 /**
  * Created by Gilles on 12/09/2015.

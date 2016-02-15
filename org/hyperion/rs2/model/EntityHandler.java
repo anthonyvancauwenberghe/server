@@ -3,8 +3,8 @@ package org.hyperion.rs2.model;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.engine.task.TaskManager;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.HostGateway;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
@@ -143,8 +143,8 @@ public class EntityHandler {
             }
             player.sendMessage("@bla@Welcome back to @dre@" + Configuration.getString(Configuration.ConfigurationObject.NAME) + "@bla@.", "");
 
-            if (WildernessBossEvent.currentBoss != null) {
-                player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
+            if (WildernessBossTask.currentBoss != null) {
+                player.sendMessage(WildernessBossTask.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
             }
         }
 
@@ -226,51 +226,10 @@ public class EntityHandler {
             DialogueManager.openDialogue(player, 10000);
         }
         player.getActionSender().sendSkills();
-        player.getActionSender().sendString(1300, "City Teleport");
-        player.getActionSender().sendString(1301, "Teleports you to any city.");
-        player.getActionSender().sendString(1325, "Training Teleports");
-        player.getActionSender().sendString(1326, "Teleports you to training spots.");
-        player.getActionSender().sendString(1350, "Minigame Teleport");
-        player.getActionSender().sendString(1351, "Teleports you to any minigame.");
-        player.getActionSender().sendString(1382, "PK Teleport");
-        player.getActionSender().sendString(1383, "Teleports you to the wilderness.");
-        player.getActionSender().sendString(1415, "Boss Teleport");
-        player.getActionSender().sendString(1416, "Teleports you to dungeons.");
+        player.getQuestTab().createQuestTab();
+        player.getAchievementTab().createAchievementTab();
+        player.getSpawnTab().createSpawnTab();
 
-        player.getActionSender().sendString(13037, "City Teleport");
-        player.getActionSender().sendString(13038, "Teleports you to any city.");
-        player.getActionSender().sendString(13047, "Training Teleports");
-        player.getActionSender().sendString(13048, "Teleports you to training spots.");
-        player.getActionSender().sendString(13055, "Minigame Teleport");
-        player.getActionSender().sendString(13056, "Teleports you to any minigame.");
-        player.getActionSender().sendString(13063, "PK Teleport");
-        player.getActionSender().sendString(13064, "Teleports you to the wilderness.");
-        player.getActionSender().sendString(13071, "Boss Teleport");
-        player.getActionSender().sendString(13072, "Teleports you to a dungeon.");
-
-        player.getActionSender().sendString(30067, "City Teleport"); // Needed
-        player.getActionSender().sendString(30068, "Teleports you to any city.");
-
-        player.getActionSender().sendString(30109, "Training Teleports"); // Needed
-        player.getActionSender().sendString(30110, "Teleports you to training spots.");
-
-        player.getActionSender().sendString(30078, "Minigame Teleport"); // Needed
-        player.getActionSender().sendString(30079, "Teleports players to any minigame.");
-
-        player.getActionSender().sendString(30083 + 3, "Boss Teleport"); // Needed
-        player.getActionSender().sendString(30083 + 4, "Teleports you to a dungeon.");
-
-        player.getActionSender().sendString(30117, "Player Killing Teleport"); // Needed
-        player.getActionSender().sendString(30118, "Teleports you to the wilderness.");
-
-        int[] lunarids = {30138, 30146, 30162, 30170, 30226, 30234};
-        for (int lunarid : lunarids) {
-            player.getActionSender().sendString(lunarid + 3, "Not in use.");
-            player.getActionSender().sendString(lunarid + 4, "Not in use.");
-        }
-        player.getActionSender().sendString(29177, "@or1@Pure Set");
-        player.getActionSender().sendString(29178, "@or1@Zerk Set");
-        player.getActionSender().sendString(29179, "@or1@Welfare Hybrid Set");
         AchievementHandler.progressAchievement(player, "Total");
 
         for (int i = 0; i < 7; i++) {
@@ -280,10 +239,6 @@ public class EntityHandler {
 
         player.checkCapes();
 
-        if (player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
-            player.getActionSender().sendMessage("script~x123");
-        }
-
         // player.getInterfaceManager().show(RecoveryInterface.ID);
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
@@ -291,7 +246,6 @@ public class EntityHandler {
 
         player.getGrandExchangeTracker().notifyChanges(false);
 
-        player.getActionSender().applySkillReward();
         if(player.verificationCode != null && !player.verificationCode.isEmpty()){
             if(player.getLocation().inPvPArea())
                 player.verificationCodeEntered = true;
@@ -361,7 +315,7 @@ public class EntityHandler {
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
-        Server.getLoader().getEngine().submitWork(() -> {
+        Server.getLoader().getEngine().submit(() -> {
             player.getLogManager().add(LogEntry.logout(player));
             player.getLogManager().clearExpiredLogs();
             player.getLogManager().save();

@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.data.PersistenceManager;
+import org.hyperion.engine.task.Task;
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -368,7 +368,7 @@ public class Thieving implements ContentTemplate {
 		}
 		player.setBusy(true);
 		player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000);
-		World.submit(new Event(2000) {
+		World.submit(new Task(2000) {
 			@Override
 			public void execute() {
 				player.getExtraData().remove("thievingTimer");

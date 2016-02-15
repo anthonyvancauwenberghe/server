@@ -1,20 +1,18 @@
 package org.hyperion.rs2.packet;
 
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.action.impl.MiningAction;
 import org.hyperion.rs2.action.impl.MiningAction.Node;
 import org.hyperion.rs2.action.impl.ProspectingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
-
-import java.io.IOException;
 
 public class ObjectClickHandler {
 
@@ -89,7 +87,7 @@ public class ObjectClickHandler {
                 Wilderness.useObelisk(player, x, y);
                 break;
             case 5110:
-                World.submit(new Event(100) {
+                World.submit(new Task(100) {
                     @Override
                     public void execute() {
                         if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
@@ -102,9 +100,9 @@ public class ObjectClickHandler {
                 break;
             case 1766:
                 player.playAnimation(Animation.create(828));  //ladder climb anim
-                World.submit(new Event(600) {
+                World.submit(new Task(600) {
                     @Override
-                    public void execute() throws IOException {
+                    public void execute() {
                         player.setTeleportTarget(Location.create(3017, 3850, 0));
                         this.stop();
                     }
@@ -166,7 +164,7 @@ public class ObjectClickHandler {
                     break;
                 player.face(Location.create(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), y, 2));
                 player.playAnimation(Animation.create(7002));
-                World.submit(new Event(1100) {
+                World.submit(new Task(1100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 1, 0);
@@ -177,7 +175,7 @@ public class ObjectClickHandler {
                         this.stop();
                     }
                 });
-                World.submit(new Event(2100) {
+                World.submit(new Task(2100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 0, 0);

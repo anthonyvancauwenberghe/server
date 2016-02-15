@@ -1,27 +1,14 @@
 package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Wasay
- * Date: 1/14/15
- * Time: 9:14 AM
- * To change this template use File | Settings | File Templates.
- */
 public class LegendaryStore extends CurrencyShop {
     /**
      * @param id
@@ -36,28 +23,6 @@ public class LegendaryStore extends CurrencyShop {
                 container.add(Item.create(piece));
             }
         }
-
-        World.submit(new Event(2000) {
-            @Override
-            public void execute() throws IOException {
-                final File file = new File("./data/legendaryshop.txt");
-                if(!file.exists())
-                    file.createNewFile();
-                try(final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                    if(!file.exists())
-                        file.createNewFile();
-                    for(final Item item : container.toArray()) {
-                        if(item == null) continue;
-                        int price = getSpecialPrice(item);
-                        writer.write(String.format("[%s]: PRICE: %d PKP: %,d DP: %,d", item.getDefinition().getName(), price, price * 100_000, price * 1000));
-                        writer.newLine();
-                    }
-                } catch(final Exception ex) {
-                    ex.printStackTrace();
-                }
-                this.stop();
-            }
-        });
     }
 
     @Override

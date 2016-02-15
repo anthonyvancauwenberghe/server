@@ -1,11 +1,11 @@
 package org.hyperion.rs2.model.combat;
 
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcDeathTask;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.map.pathfinding.PathTest;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
 import org.hyperion.rs2.model.container.Equipment;
@@ -623,7 +623,7 @@ public class Combat {
             CombatAssistant.addExperience(combatEntity, bowType, damgDouble);
         CombatAssistant.addExperience(combatEntity, bowType, damage);
 
-        World.submit(new Event(delay, "combat") {
+        World.submit(new Task(delay, "combat") {
             public void execute() {
                 if (combatEntity == null || opponent == null) {
                     this.stop();
@@ -816,7 +816,7 @@ public class Combat {
 
     public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, final int type, final boolean prayerBlock) {
 
-        World.submit(new Event(delay, "npcattack") {
+        World.submit(new Task(delay, "npcattack") {
             @Override
             public void execute() {
                 if ((combatEntity == null ||
@@ -981,7 +981,7 @@ public class Combat {
                     NPC npc = opponent.getNPC();
                     if (combatEntity.getPlayer() != null) {
                         if (npc.getDefinition().getId() == 5666 &&
-                                (System.currentTimeMillis() - NpcDeathEvent.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < (Time.ONE_MINUTE * 3)))
+                                (System.currentTimeMillis() - NpcDeathTask.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < (Time.ONE_MINUTE * 3)))
                             return "Let someone else try killing barrelchest!";
                         if (System.currentTimeMillis() - npc.getCombat().lastHit < 9000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
                             return "This monster is already in combat";
@@ -1109,8 +1109,8 @@ public class Combat {
     public static boolean isInMulti(CombatEntity combatEntity) {
         if (combatEntity == null || combatEntity.getEntity() == null)
             return false;
-        if (WildernessBossEvent.currentBoss != null)
-            if (Misc.isInCircle(WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), 10))
+        if (WildernessBossTask.currentBoss != null)
+            if (Misc.isInCircle(WildernessBossTask.currentBoss.getLocation().getX(), WildernessBossTask.currentBoss.getLocation().getY(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), 10))
                 return true;
         if ((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
                 && combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607)
@@ -1319,7 +1319,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        World.submit(new Event(16000) {
+        World.submit(new Task(16000) {
             private int lastDamg = -1;
             private int ticks = 4;
 

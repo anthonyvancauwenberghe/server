@@ -4,10 +4,10 @@ import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.Configuration;
 import org.hyperion.data.Persistable;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.PlayerDeathTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.action.ActionQueue;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -30,7 +30,6 @@ import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
@@ -302,8 +301,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public Player beingFollowed = null;
 	public Player isFollowing = null;
 	public Player tradeWith2 = null;
-	public GEItem[] geItem = new GEItem[40];
-	public List<GEItem> geItems = new LinkedList<>();
 	public ArmourClass pickedClass = null;
 	private Agility agility = new Agility(this);
 	private PlayerChecker playerChecker = PlayerChecker.create();
@@ -1538,7 +1535,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		if(skills.getLevel(Skills.HITPOINTS) <= 0) {
 			if(! this.isDead()) {
 				Prayer.retribution(this);
-				World.submit(new PlayerDeathEvent(this));
+				World.submit(new PlayerDeathTask(this));
 
 			}
 			this.setDead(true);
@@ -1566,7 +1563,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		else
 			skills.setLevel(skill, (cHp + hp));
 		if(skills.getLevel(3) <= 0) {
-			World.submit(new PlayerDeathEvent(this));
+			World.submit(new PlayerDeathTask(this));
 			this.setDead(true);
 		}
 	}
@@ -1582,7 +1579,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 				skills.setLevel(3, (cHp + hp));
 		}
 		if(skills.getLevel(3) <= 0) {
-			World.submit(new PlayerDeathEvent(this));
+			World.submit(new PlayerDeathTask(this));
 			this.setDead(true);
 		}
 	}
@@ -1663,7 +1660,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 						ContentEntity.playerGfx(this, 1684);
 						ContentEntity.startAnimation(this, 9603);
 						extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
-						World.submit(new Event(0x258) {
+						World.submit(new Task(200) {
 							int loop = 0;
 
 							public void execute() {
@@ -1673,7 +1670,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 									this.stop();
 								}
 								loop++;
-								return;
 							}
 						});
 						return 0;
@@ -1807,7 +1803,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 			playAnimation(anim);
 			isDoingEmote = true;
 			inAction = true;
-			World.submit(new Event(1000, "checked") {
+			World.submit(new Task(1000, "emote") {
 				@Override
 				public void execute() {
 					isDoingEmote = false;

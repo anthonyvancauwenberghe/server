@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.event.impl.CooldownEvent;
+import org.hyperion.engine.task.impl.CooldownTask;
 
 import java.util.BitSet;
 
@@ -63,7 +63,7 @@ public class EntityCooldowns {
 	 */
 	public void flag(CooldownFlags cooldown, int duration, Entity entity) {
 		cooldowns.set(cooldown.ordinal(), true);
-		World.submit(new CooldownEvent(entity, cooldown, duration));
+		World.submit(new CooldownTask(entity, cooldown, duration));
 	}
 
 	/**

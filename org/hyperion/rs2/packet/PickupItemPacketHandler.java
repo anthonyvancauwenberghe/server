@@ -1,6 +1,6 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.net.Packet;
 
@@ -29,7 +29,7 @@ public class PickupItemPacketHandler implements PacketHandler {
 		final int itemID = packet.getShort();
 		final int itemX = packet.getLEShort();
 		final Location loc = Location.create(itemX, itemY, 0);
-		World.submit(new Event(600, "checked") {
+		World.submit(new Task(600) {
 			int timeout = 0;
 
 			@Override

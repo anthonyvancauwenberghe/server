@@ -3,21 +3,21 @@ package org.hyperion.rs2.model;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
+import org.hyperion.engine.task.impl.*;
 import org.hyperion.map.BlockPoint;
 import org.hyperion.map.DirectionCollection;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.WorldLoader;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.EventManager;
-import org.hyperion.rs2.event.impl.*;
-import org.hyperion.rs2.model.content.bounty.BountyHunterEvent;
 import org.hyperion.rs2.model.content.bounty.BountyHunterLogout;
-import org.hyperion.rs2.model.content.jge.event.PulseGrandExchangeEvent;
-import org.hyperion.rs2.model.punishment.event.PunishmentExpirationEvent;
+import org.hyperion.rs2.model.content.bounty.BountyHunterTask;
+import org.hyperion.rs2.model.content.jge.event.PulseGrandExchangeTask;
+import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
+import org.hyperion.rs2.model.punishment.event.PunishmentExpirationTask;
 import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.packet.PacketHandler;
-import org.hyperion.rs2.task.Task;
 import org.hyperion.rs2.util.ConfigurationParser;
 import org.hyperion.rs2.util.EntityList;
 
@@ -54,12 +54,8 @@ public final class World {
         }
     }
 
-    public static void submit(Event event) {
-        EventManager.submit(event);
-    }
-
     public static void submit(Task task) {
-        Server.getLoader().getEngine().pushTask(task);
+        TaskManager.submit(task);
     }
 
     /**
@@ -191,26 +187,21 @@ public final class World {
     }
 
     public static void registerGlobalEvents() {
-        submit(new CleanupEvent());
-        submit(new BankersFacing());
-        submit(new PlayerEvent36Seconds());
-        submit(new PlayerEvent1Second());
-        submit(new EPEvent());
-        submit(new HunterEvent());
-        submit(new DisconnectEvent());
-        submit(new PlayerStatsEvent());
-        submit(new PromoteEvent());
-        submit(new PlayerCombatEvent());
-        submit(new NpcCombatEvent());
-        submit(new ServerMinigame());
-        submit(new ServerMessages());
-        submit(new BountyHunterEvent());
+        submit(new PlayerTask36Seconds());
+        submit(new PlayerTask1Tick());
+        submit(new EarnPotentialTask());
+        submit(new DisconnectNulledTask());
+        submit(new PromoteTask());
+        submit(new PlayerCombatTask());
+        submit(new NpcCombatTask());
+        submit(new ServerEventTask());
+        submit(new ServerMessageTask());
+        submit(new BountyHunterTask());
         submit(new BountyHunterLogout());
-        submit(new GoodIPs());
-        submit(new ClientConfirmEvent());
-        submit(new PunishmentExpirationEvent());
-        submit(new WildernessBossEvent(true));
-        submit(new PulseGrandExchangeEvent());
+        submit(new ClientConfirmTask());
+        submit(new PunishmentExpirationTask());
+        submit(new WildernessBossTask(true));
+        submit(new PulseGrandExchangeTask());
 }
 
     //TODO MOVE THOSE TO THE CORRECT PLACE
@@ -229,7 +220,7 @@ public final class World {
         getNpcs().stream().filter(npc -> npc != null).forEach(npc -> {
             if (!npc.isDead()) {
                 npc.serverKilled = true;
-                submit(new NpcDeathEvent(npc));
+                submit(new NpcDeathTask(npc));
             }
             npc.setDead(true);
             npc.health = 0;
@@ -242,7 +233,7 @@ public final class World {
             return;
         npc.serverKilled = true;
         if (!npc.isDead()) {
-            submit(new NpcDeathEvent(npc));
+            submit(new NpcDeathTask(npc));
         }
         npc.setDead(true);
         npc.health = 0;

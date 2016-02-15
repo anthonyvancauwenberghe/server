@@ -1,7 +1,8 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.container.Equipment;
@@ -13,7 +14,6 @@ import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Misc;
 
 /**

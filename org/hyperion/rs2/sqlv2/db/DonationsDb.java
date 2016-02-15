@@ -1,11 +1,10 @@
 package org.hyperion.rs2.sqlv2.db;
 
 import org.hyperion.Configuration;
-import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sqlv2.impl.donation.Donations;
-import org.hyperion.rs2.sqlv2.impl.donation.cmd.DonatedCommand;
+import org.hyperion.rs2.sqlv2.impl.donation.work.CheckPendingDonationsTask;
 import org.hyperion.rs2.sqlv2.impl.vote.Votes;
-import org.hyperion.rs2.sqlv2.impl.vote.cmd.VotedCommand;
 
 import static org.hyperion.Configuration.ConfigurationObject.*;
 
@@ -47,7 +46,6 @@ public class DonationsDb extends Db {
         donations = new Donations(this);
         votes = new Votes(this);
 
-        CommandHandler.submit(new VotedCommand());
-        CommandHandler.submit(new DonatedCommand("donated"), new DonatedCommand("getpoints"));
+        World.submit(new CheckPendingDonationsTask());
     }
 }

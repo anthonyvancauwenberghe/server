@@ -83,7 +83,7 @@ public class Server {
 
     public static void update(int time, final String reason) {
         setUpdating(true);
-        getLoader().getEngine().submitWork(new Update(time, reason));
+        getLoader().getEngine().submit(new Update(time, reason));
     }
 /*
         File[] files = new File("./data/characters/mergedchars").listFiles();

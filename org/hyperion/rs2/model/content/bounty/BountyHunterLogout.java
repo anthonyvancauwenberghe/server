@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.bounty;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.util.Time;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Gilles on 14/09/2015.
  */
-public class BountyHunterLogout extends Event {
+public class BountyHunterLogout extends Task {
 
     public BountyHunterLogout() {
         super(Time.ONE_MINUTE * 20);
@@ -54,8 +54,6 @@ public class BountyHunterLogout extends Event {
         synchronized (LOCK) {
             logoutsInWild.clear();
             blocked.clear();
-            System.out.println("Bounty hunter blocklist has been reset.");
         }
     }
-
 }

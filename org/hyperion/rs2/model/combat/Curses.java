@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.combat;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -22,10 +22,10 @@ public class Curses {
 		final int leechId = player.getPrayers().pollLeech();
 		final CombatEntity victim = player.cE.getOpponent();
 		updateLeech(player);
-		World.submit(new Event(800, "checked") {
+		World.submit(new Task(800L) {
 			public void execute() {
 				ContentEntity.startAnimation(player, 12575);
-				if(victim == null || player == null) {
+				if(victim == null) {
 					this.stop();
 					return;
 				}
@@ -45,7 +45,7 @@ public class Curses {
 		if(player.cE.getOpponent() != null && player.cE.getOpponent().getEntity() instanceof Player)
 			pseudoPlayer = player.cE.getOpponent().getPlayer();
 		final Player opponentPlayer = pseudoPlayer;
-		World.submit(new Event(1800, "checked") {
+		World.submit(new Task(1800L) {
 			public void execute() {
 				if(opponentPlayer != null) {
 					opponentPlayer.getCombat().doGfx(getGfxIdForPrayer(leechId));
@@ -55,13 +55,6 @@ public class Curses {
 							opponentPlayer.getSpecBar().sendSpecBar();
 							opponentPlayer.getSpecBar().sendSpecAmount();
 						}
-					} else {
-	                            /*int drainSkill = getSkillIdForLeechId(index);
-								if(drainSkill != -1 && drainSkill != 42) {
-									if(opponentPlayer.getSkills().getLevel(drainSkill) >= opponentPlayer.getSkills().getLevelForExperience(drainSkill)) {
-										opponentPlayer.getSkills().setLevel(drainSkill, (int)(opponentPlayer.getSkills().getLevel(drainSkill) * 0.85));
-									}
-								}*/
 					}
 					opponentPlayer.getActionSender().sendMessage("Your " + DRAIN_NAMES[leechId - 40] + " has been leeched by " + player.getSafeDisplayName() + " !");
 					player.getActionSender().sendMessage("You have leeched " + opponentPlayer.getSafeDisplayName() + "'s " + DRAIN_NAMES[leechId - 40] + " !");

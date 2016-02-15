@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.log.LogEntry;
 
@@ -10,7 +10,7 @@ import java.util.List;
 public class GlobalItemManager {
 
 	public static void init() {
-		World.submit(new Event(1000, "globalitems") {
+		World.submit(new Task(1000, "globalitems") {
 			@Override
 			public void execute() {
 				process();

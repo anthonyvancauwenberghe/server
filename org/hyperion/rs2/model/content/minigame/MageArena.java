@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.minigame;
 // Yay
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
@@ -70,14 +70,14 @@ public class MageArena implements ContentTemplate {
 					client.getWalkingQueue().addStep(2509, client.getLocation().getY() - 2);
 				}
 				client.getWalkingQueue().finish();
-				World.submit(new Event(2000) {
+				World.submit(new Task(2000) {
 					@Override
 					public void execute() {
 						ContentEntity.startAnimation(client, 804);
 						this.stop();
 					}
 				});
-				World.submit(new Event(3000) {
+				World.submit(new Task(3000) {
 					@Override
 					public void execute() {
 						ContentEntity.startAnimation(client, - 1);

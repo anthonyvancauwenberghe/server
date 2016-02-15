@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Web implements ContentTemplate {
 
@@ -49,7 +48,7 @@ public class Web implements ContentTemplate {
 	}
 
 	public static void refreshWeb(final Player player, final Location loc/*, final GameObject old*/) {
-		World.submit(new Event(20000) {
+		World.submit(new Task(20000) {
 			public void execute() {
 				//ObjectManager.replace(old, new GameObject(GameObjectDefinition.forId(733), loc, 10, 0));
 				player.getActionSender().sendCreateObject(733, 10, 0, loc);
@@ -65,9 +64,9 @@ public class Web implements ContentTemplate {
 		if(type == 6) {
             if(objectId == 1765) {
                 player.playAnimation(Animation.create(828));
-                World.submit(new Event(600) {
+                World.submit(new Task(600) {
                     @Override
-                    public void execute() throws IOException {
+                    public void execute() {
                         player.setTeleportTarget(Location.create(3069, 10255, 0));
                         this.stop();
                     }

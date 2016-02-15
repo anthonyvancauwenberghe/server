@@ -76,18 +76,14 @@ public abstract class NewCommand {
                 //Over here we need to test what the argument is.
                 //It gives warnings, but it's nothing unwanted, we're careful with the exception and simply can't test any more.
                 if (StringUtil.isNumeric(input[i])) {
-                    if (Pattern.matches("([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) { //Gue'ssing it's this line
-                        System.out.println(1);
+                    if (Pattern.matches("([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) {
                         return GOT_ERROR_MESSAGE;
                     } else if (!getRequiredInput()[i].testInput(player, Integer.parseInt(input[i]))) {
-                        System.out.println(2);
                         return GOT_ERROR_MESSAGE;
                     }
                 } else if ((input[i].equals("true") || input[i].equals("false")) && !getRequiredInput()[i].testInput(player, Boolean.parseBoolean(input[i]))) {
-                    System.out.println(3);
                     return GOT_ERROR_MESSAGE;
                 } else if (!getRequiredInput()[i].testInput(player, input[i])) {
-                    System.out.println(4);
                     return GOT_ERROR_MESSAGE;
                 }
             }
@@ -104,8 +100,8 @@ public abstract class NewCommand {
     public final String getModelInput() {
         String modelInput = "::" + getKey() + " ";
         for (CommandInput inputString : requiredInput)
-            modelInput += inputString.getShortDescription() + ", ";
-        return  modelInput.substring(0, modelInput.length() - 2); //this will remove the unnecessary comma without us having to do a lot of extra work.
+            modelInput += inputString.getShortDescription() + NewCommandHandler.SPLITTER + " ";
+        return  modelInput.substring(0, modelInput.length() - NewCommandHandler.SPLITTER.length() - 1); //this will remove the unnecessary comma without us having to do a lot of extra work.
     }
 
     public final String filterInput(String input) {

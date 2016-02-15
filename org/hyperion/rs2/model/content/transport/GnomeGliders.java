@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.transport;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
@@ -60,13 +60,13 @@ public class GnomeGliders implements ContentTemplate {
 			return;
 		player.getActionSender().showInterface(802);
 		player.getActionSender().sendClientConfig(153, getMove(flightId));
-		World.submit(new Event(1800) {
+		World.submit(new Task(1800) {
 			public void execute() {
 				player.setTeleportTarget(Location.create(getX(flightId), getY(flightId), getH(flightId)));
 				this.stop();
 			}
 		});
-		World.submit(new Event(2400) {
+		World.submit(new Task(2400) {
 			public void execute() {
 				player.getActionSender().removeAllInterfaces();
 				player.getActionSender().sendClientConfig(153, - 1);

@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -57,7 +57,7 @@ public class DangerousPK implements ContentTemplate {
             return;
         }
 		player.playAnimation(Animation.create(7376));
-		World.submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			public void execute() {
 				player.setTeleportTarget(Location.create(2475, 5214, 0));
                 this.stop();

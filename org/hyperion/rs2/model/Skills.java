@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -328,7 +328,7 @@ public class Skills {
         int norm = getLevelForExp(skill);
         if (levels[skill] > norm) {
             if (isCombatSkill(skill)) {
-                if (player.getExtraData().get(OverloadStatsEvent.KEY) != null)
+                if (player.getExtraData().get(OverloadStatsTask.KEY) != null)
                     return;
             }
             levels[skill]--;

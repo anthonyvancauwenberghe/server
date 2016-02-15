@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.combat;
 
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.weapons.SpecialWeapon;
 import org.hyperion.rs2.model.container.Equipment;
@@ -9,7 +8,6 @@ import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -496,7 +494,7 @@ public class SpecialAttacks {
 			final int cbStyle = combatStyle;
 			final int crit = critical;
             if(delayedWeapon(weaponId)) {
-			World.submit(new Event(delay, "combat") {
+			World.submit(new org.hyperion.engine.task.Task(delay, "combat") {
 				public void execute() {
 					if(player.getPrayers().isEnabled(48))
 						Prayer.soulSplit(player, oldEntity, hitDamage);
@@ -545,7 +543,7 @@ public class SpecialAttacks {
 					break;
 				}
 				opp.morrigansLeft = hitDamage / 5;
-				World.submit(new Event(1000) {
+				World.submit(new org.hyperion.engine.task.Task(1000) {
 					public void execute() {
 						opp.morrigansLeft--;
 						if(opp.morrigansLeft <= 0) {
@@ -654,7 +652,7 @@ public class SpecialAttacks {
                 final int hit2 = damg8;
                 final CombatEntity entity =player.cE.getOpponent();
                 if(entity != null) {
-                    World.submit(new Event(200 * distance + 300, "combat") {
+                    World.submit(new org.hyperion.engine.task.Task(200 * distance + 300, "combat") {
                         public void execute() {
                             entity.hit(hit1, player, false, 1);
                             entity.hit(hit2, player, false, 1);
@@ -752,9 +750,9 @@ public class SpecialAttacks {
                 int delay = 300 + distance * 200;
                 Combat.addXP(player, damg5, false);
 
-                World.submit(new Event(delay, "combat") {
+                World.submit(new org.hyperion.engine.task.Task(delay, "combat") {
                     @Override
-                    public void execute() throws IOException {
+                    public void execute() {
                         oldEntity.hit(damg5, player,
                                 false, crit);
                         oldEntity._getPlayer().ifPresent(p -> Magic.vengeance(p,player.cE, hitDamage));
@@ -795,7 +793,7 @@ public class SpecialAttacks {
 				if(hitDamage > 0) {
                     player.cE.getOpponent().hit(hitDamage /2,
                             player, false, 0);
-					World.submit(new Event(1000) {
+					World.submit(new org.hyperion.engine.task.Task(1000) {
 						@Override
 						public void execute() {
 							String message = Combat.canAtk(player.cE, oldEntity);
@@ -820,7 +818,7 @@ public class SpecialAttacks {
 					oldEntity.hit(maxDamg3,
 							player, false, 0);
                     final int newMaxDamage = (int)(maxDamg * 1.5);
-					World.submit(new Event(1000) {
+					World.submit(new org.hyperion.engine.task.Task(1000) {
 						@Override
 						public void execute() {
 							String message = Combat.canAtk(player.cE, oldEntity);
@@ -1060,7 +1058,7 @@ public class SpecialAttacks {
 				Combat.addXP(player, hit3tt, true);
 				final CombatEntity entitytt =player.cE.getOpponent();
 				if(entitytt != null) {
-					World.submit(new Event(200 * distance + 300, "combat") {
+					World.submit(new org.hyperion.engine.task.Task(200 * distance + 300, "combat") {
 						public void execute() {
 							entitytt.hit(hit1tt, player, false, 1);
 							entitytt.hit(hit2tt, player, false, 1);
@@ -1180,7 +1178,7 @@ public class SpecialAttacks {
 				final int hit2t = damg8;
 				final CombatEntity entityt =player.cE.getOpponent();
 				if(entityt != null) {
-					World.submit(new Event(200 * distance + 300, "combat") {
+					World.submit(new org.hyperion.engine.task.Task(200 * distance + 300, "combat") {
 						public void execute() {
 							entityt.hit(hit1t, player, false, 1);
 							entityt.hit(hit2t, player, false, 1);

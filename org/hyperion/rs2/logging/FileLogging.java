@@ -18,15 +18,15 @@ public class FileLogging {
     private final static DateFormat FILE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss | ");
 
     public static void savePlayerLog(final Player player, final String... lines) {
-        Server.getLoader().getEngine().pushTask(context -> writeToFile("characters/" + player.getName().toLowerCase(), lines));
+        Server.getLoader().getEngine().submit(() -> writeToFile("characters/" + player.getName().toLowerCase(), lines));
     }
 
     public static void saveGameLog(final String filePath, final String... lines) {
-        Server.getLoader().getEngine().pushTask(context -> writeToFile(filePath, lines));
+        Server.getLoader().getEngine().submit(() -> writeToFile(filePath, lines));
     }
 
     public static void writeError(String filename, Exception ex) {
-        Server.getLoader().getEngine().pushTask(context -> {
+        Server.getLoader().getEngine().submit(() -> {
             StringBuilder sb = new StringBuilder();
             if (ex.getCause() != null)
                 sb.append("	cause: ").append(ex.getCause().toString()).append("\n");
@@ -56,7 +56,7 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
-        Server.getLoader().getEngine().submitWork(() -> {
+        Server.getLoader().getEngine().submit(() -> {
             File file = new File(DEFAULT_LOGGING_PATH, filePath);
 
             if (!file.getParentFile().exists()) {

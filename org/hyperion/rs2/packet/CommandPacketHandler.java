@@ -1,13 +1,15 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcDeathTask;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.commands.impl.SkillSetCommand;
 import org.hyperion.rs2.commands.impl.YellCommand;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.*;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.challenge.Challenge;
@@ -41,6 +43,7 @@ import org.hyperion.rs2.model.content.misc2.Afk;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
+import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -100,21 +103,21 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("resetpevents")) {
-            ServerMinigame.CountDownEventBuilder[] builders = new ServerMinigame.CountDownEventBuilder[]{
-                    new ServerMinigame.CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", () -> FightPits.startEvent(), true),
-                    new ServerMinigame.CountDownEventBuilder("Hybridding", "hybrid", false),
-                    new ServerMinigame.CountDownEventBuilder("OldSchool PK", "ospk", false),
-                    new ServerMinigame.CountDownEventBuilder("Pure Pking", "purepk", false),
-                    new ServerMinigame.CountDownEventBuilder(8133, Location.create(2521, 4647, 0)),
-                    new ServerMinigame.CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
-                    new ServerMinigame.CountDownEventBuilder(50, Location.create(2270, 4687, 0))
+            ServerEventTask.CountDownEventBuilder[] builders = new ServerEventTask.CountDownEventBuilder[]{
+                    new ServerEventTask.CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", () -> FightPits.startEvent(), true),
+                    new ServerEventTask.CountDownEventBuilder("Hybridding", "hybrid", false),
+                    new ServerEventTask.CountDownEventBuilder("OldSchool PK", "ospk", false),
+                    new ServerEventTask.CountDownEventBuilder("Pure Pking", "purepk", false),
+                    new ServerEventTask.CountDownEventBuilder(8133, Location.create(2521, 4647, 0)),
+                    new ServerEventTask.CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
+                    new ServerEventTask.CountDownEventBuilder(50, Location.create(2270, 4687, 0))
             };
-            for (int i = 0; i < ServerMinigame.builders.length; i++)
-                ServerMinigame.builders[i] = builders[i];
+            for (int i = 0; i < ServerEventTask.builders.length; i++)
+                ServerEventTask.builders[i] = builders[i];
         }
 
         if (commandStart.equalsIgnoreCase("resetnpcdd"))
-            NpcDeathEvent.npcIdForDoubleDrops = -1;
+            NpcDeathTask.npcIdForDoubleDrops = -1;
 
 
         if (commandStart.equalsIgnoreCase("resetpossiblehacks")) {
@@ -229,10 +232,6 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
 
-
-        if (commandStart.equalsIgnoreCase("realn1ggashit")) {
-            World.submit(new GoodIPs());
-        }
         /**
          * Same thing as promote commands, added for those inbetween ranks
          */
@@ -399,10 +398,6 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
 
-        if (commandStart.startsWith("cutscene")) {
-            World.submit(new CutSceneEvent(player));
-            return;
-        }
         if (commandStart.startsWith("resetcam")) {
             player.getActionSender().cameraReset();
             return;
@@ -774,7 +769,7 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Event(500) {
+            World.submit(new Task(500) {
                 public void execute() {
                     int hp = t.getSkills().calculateMaxLifePoints();
                     t.getSkills().setLevel(Skills.HITPOINTS, hp);
@@ -1053,7 +1048,7 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Event(500) {
+            World.submit(new Task(500) {
                 public void execute() {
                     t.getSpecBar().setAmount(1000);
                     if (t.cE == null)
@@ -1069,7 +1064,7 @@ public class CommandPacketHandler implements PacketHandler {
             final int[] fros = {14743, 14745, 14747, 14749, 14751};
             boolean b = as[1] != null && as[1].equalsIgnoreCase("true");
             if (b) {
-                World.submit(new Event(1000) {
+                World.submit(new Task(1000) {
 
                     @Override
                     public void execute() {
@@ -1129,8 +1124,8 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equalsIgnoreCase("wildyboss")) {
-            if (WildernessBossEvent.currentBoss != null) {
-                player.setTeleportTarget(WildernessBossEvent.currentBoss.getLocation());
+            if (WildernessBossTask.currentBoss != null) {
+                player.setTeleportTarget(WildernessBossTask.currentBoss.getLocation());
             }
         }
         if (commandStart.equals("removeobject")) {
@@ -1167,7 +1162,7 @@ public class CommandPacketHandler implements PacketHandler {
             for (final int i : SummoningMonsters.SUMMONING_MONSTERS) {
                 for (final NPC npc : World.getNpcs()) {
                     if (npc.getDefinition().getId() == i) {
-                        World.submit(new NpcDeathEvent(npc));
+                        World.submit(new NpcDeathTask(npc));
                         World.getNpcs().remove(npc);
 
                     }
@@ -1328,7 +1323,7 @@ public class CommandPacketHandler implements PacketHandler {
                             Constants.DEFLECT);
                     // World.submit(new NpcDeathEvent(n));
                     n.setDead(true);
-                    World.submit(new NpcDeathEvent(n));
+                    World.submit(new NpcDeathTask(n));
                 }
             }
         }
@@ -1336,7 +1331,7 @@ public class CommandPacketHandler implements PacketHandler {
          * Test summoing specials, w8ing is a drag
          */
         if (commandStart.equalsIgnoreCase("infsumm")) {
-            World.submit(new Event(1000) {
+            World.submit(new Task(1000) {
                 public void execute() {
                     player.getSummBar().increment(100);
                 }
@@ -1436,7 +1431,7 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Event(1000) {
+            World.submit(new Task(1000) {
                 public void execute() {
                     t.getSkills().setLevel(5, 99);
                     if (t.cE == null)
@@ -1514,7 +1509,7 @@ public class CommandPacketHandler implements PacketHandler {
                     i4 = Integer.parseInt(as[2]);
                 }
                 final int i5 = i4;
-                World.submit(new Event(800) {
+                World.submit(new Task(800) {
                     public void execute() {
                         player.playAnimation(Animation.create(l1, i5));
                     }
@@ -1553,13 +1548,13 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Event(500) {
+            World.submit(new Task(500) {
                 public void execute() {
                     t.resetOverloadCounter();
                     t.overloadTimer = Long.MAX_VALUE;
                     t.setOverloaded(true);
-                    World.submit(new OverloadStatsEvent(t));
-                    World.submit(new Event(20000) {
+                    World.submit(new OverloadStatsTask(t));
+                    World.submit(new Task(20000) {
                         public void execute() {
                             t.resetOverloadCounter();
                             t.overloadTimer = Long.MAX_VALUE;
@@ -1625,7 +1620,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("repeatfx")) {
             final String[] as2 = as.clone();
             final int j = Integer.parseInt(as[1]);
-            World.submit(new Event(800) {
+            World.submit(new Task(800) {
                 @Override
                 public void execute() {
                     player.playGraphics(Graphic.create(j,
@@ -1666,29 +1661,6 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equals("bank")) {
             Bank.open(player, false);
             return;
-        }
-
-
-        if (commandStart.equalsIgnoreCase("addmessage")) {
-            final String message = withCaps.substring(11).trim();
-            if (message.isEmpty()) {
-                player.getActionSender().sendMessage(
-                        "Cannot add an empty message");
-                return;
-            }
-            if (ServerMessages.contains(message)) {
-                player.getActionSender().sendMessage(
-                        "No duplicate messages: " + message);
-                return;
-            }
-            if (!ServerMessages.add(message)) {
-                player.getActionSender().sendMessage(
-                        "Error adding message: " + message);
-                return;
-            }
-            player.getActionSender().sendMessage(
-                    String.format("[Added Message] Index %d: %s",
-                            ServerMessages.size() - 1, message));
         }
 
         if (commandStart.equalsIgnoreCase("spamnpc")) {
@@ -2193,7 +2165,7 @@ public class CommandPacketHandler implements PacketHandler {
                             PunishmentManager.getInstance().add(ban);
                             ban.insert();
                         }
-                        player.getSession().close();
+                        player.getSession().close(true);
                         return;
                     }else{
                         player.sendf("You have %,d attempts left to verify", player.verificationCodeAttemptsLeft);

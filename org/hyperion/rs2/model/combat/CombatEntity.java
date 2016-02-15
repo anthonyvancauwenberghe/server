@@ -86,10 +86,9 @@ public class CombatEntity {
 	private Map<String, Integer> damageDealt = new HashMap<String, Integer>();
 
 	public boolean isNpcAttackAble() {
-		if(getEntity() instanceof Player)
+		if(getEntity() instanceof Player) {
 			return true;
-		else if(n.maxHealth <= 0) {
-			//System.out.println("MaxHealth =  " + n.maxHealth + " Name " + n.getDefinition().getName()  + " id " + n.getDefinition().getId());
+		} else if(n.maxHealth <= 0) {
 			return false;
 		}
 		return true;

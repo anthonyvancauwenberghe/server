@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.map.WorldMap;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -110,7 +110,7 @@ public class NPC extends Entity {
 		if(health <= 0) {
 			if(! this.isDead()) {
 				charm = NPCManager.getCharms(this.definition.getId(), this.definition.getName());
-				World.submit(new NpcDeathEvent(this));
+				World.submit(new NpcDeathTask(this));
 			}
 			this.setDead(true);
 		}

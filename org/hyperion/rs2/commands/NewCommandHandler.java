@@ -1,18 +1,16 @@
 package org.hyperion.rs2.commands;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.util.CommandInput;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.savingnew.PlayerLoading;
-import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +21,11 @@ import java.util.stream.Collectors;
  * Created by Gilles on 10/02/2016.
  */
 public final class NewCommandHandler {
+
+    /**
+     * The splitter used.
+     */
+    public final static String SPLITTER = ",";
 
     /**
      * Simple static integer to keep the maximum available parts for the command.
@@ -66,9 +69,9 @@ public final class NewCommandHandler {
             COMMANDS_USED.put(playerName, new ArrayList<>());
         COMMANDS_USED.get(playerName).add(commandUsed);
 
-        World.submit(new Event(delay) {
+        World.submit(new Task(delay) {
             @Override
-            public void execute() throws IOException {
+            public void execute() {
                 if (COMMANDS_USED.containsKey(playerName))
                     COMMANDS_USED.get(playerName).remove(commandUsed);
                 stop();
@@ -94,7 +97,7 @@ public final class NewCommandHandler {
         List<NewCommand> fittingCommands;
         String[] parts = {};
         if (!key.equals(input)) {
-            parts = input.replace(key + " ", "").toLowerCase().split(":");
+            parts = input.replace(key + " ", "").toLowerCase().split(SPLITTER);
             //We allow a maximum of 5 parts to prevent abuse.
             if (parts.length > MAXIMUM_PARTS)
                 return false;
@@ -115,7 +118,6 @@ public final class NewCommandHandler {
             if (command == null)
                 continue;
             CommandResult commandResult = command.doCommand(player, parts);
-            System.out.println(commandResult);
             if (commandResult == CommandResult.GOT_ERROR_MESSAGE)
                 return true;
             if (commandResult == CommandResult.SUCCESSFUL) {
@@ -136,13 +138,6 @@ public final class NewCommandHandler {
      * ~ GLIS
      */
     static {
-        //Got it?
-        //the library jar?
-        //I sent it on skype
-//question was exactly is this
-        //It's a lamba method reference, it fills the input in bc it only has one choice, basically it's  this;
-        //+1 was right then xd
-        //Just ot test, might be wonky
         NewCommandHandler.submit(
                 new NewCommand("isonline", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
@@ -151,61 +146,12 @@ public final class NewCommandHandler {
                         return true;
                     }
                 },
-
                 new NewCommand("shop", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> integer >= 0, "ShopId", "The ID of the shop, has to be a positive number.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ShopManager.open(player, Integer.parseInt(input[0]));
-                        return true; //You haove mftgo fbmeg ffugmcking kiding me
-                        //im a kms irl fuck sake jaghax
-                        //Ffs >.<
-                        //(My code is cleaned up not tho xD)
-                        //??FUCKING CRYing irl
-                    }//Just use password as pass, this is a testserver
-
-                    //thought that was its output :x
-                    //none working :x Where is the server? xD
+                        return true;
+                    }
                 });
-        //I'll Skype it you
-        //I may have made a mistake with new player creation (I'm still working on this, keep that in mind :)
-
-        /*
-
-        //Now, shop needs 1 input, it needs the shop ID, soooo, we create 1 commandInput (It has to be an integer, bc number)
-                //ShopId is the name of the argument, if it gives the player feedback it will tell it to use the command as
-                //::shop ShopId
-                //The last String is a so called information string, which tells the player about what exactly this requirement is, so in this case
-                //Now we have the constructor ready, we put in the ranks, the key, the time, and the extra input it may require (input is optional btw and you can have max 5, so you can have commands with no input and some commands with 5 inputs
-                //Bc execute is abstract we have to overwrite it
-
-        //Here comes what the command DOES, String[] input is the input after it's been checked to be valid, so in this case;
-                        //Let's test it out
-                        //This'll take a second, still here? yea
-                        //Following? defi\o
-                        //so say we have ::item val val, are we splitting it via ,?
-                        //Yes, I chose , bc spaces don't work with playernames that well, it gives issues
-                        //yea thats wy i chose to change my commands
-                        //Basically, because you have the above predicate (in the new COmmandInput constructor) you KNOW this argument will always be a positive int
-                        //Otherwise it wouldn't have gotten this far
-                        //so say we do ;;shop Stringnotint
-                        //commanDresult would give us the error ooption yeaa?
-                        //yep
-                        //What's in your pc?
-                        //in what aspect
-                        //Hardware
-                        // i need a graphics card
-                        //You need a new pc :p Holxy fudck man
-                        //seems to work fairly well considering i dont really play games other than rsps
-
-                        //Still, you'd work so much faster if your pc could keep up :p I like having a lot open so I can do a lot of things at a time and be very
-                        //productive, wouldn't work on your pc for e :p
-                        //yea im constantly closing processes :s
-                        //sec, netbeans always uses alot of mem
-                        //I'm sure if you prove useful arre may help you out, he did with Joshy too
-                        //i heard something about that, wasnt josh homeless at one point?
-                        //Not that I know, as far as I know the dude lives with his parents :p Idk rlly, I know him decently well, but more as a... Person I guess? Not rlly what he had in his life
-                        //ahh i feel you
-                        //You're missing a lib, sec
-                        //i'll push iotkk*/
     }
 }

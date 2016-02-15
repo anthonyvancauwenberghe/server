@@ -80,16 +80,4 @@ public class PushMessage {
 			}
 		}
 	}
-
-	/**
-	 * Push Administrator Message
-	 */
-	public static final void pushAdminMesssage(final String s) {
-		MassEvent.getSingleton().executeEvent(new EventBuilder() {
-			@Override
-			public void execute(Player p) {
-				p.getActionSender().sendMessage("[@red@ADMIN@bla@]: " + s);
-			}
-		});
-	}
 }

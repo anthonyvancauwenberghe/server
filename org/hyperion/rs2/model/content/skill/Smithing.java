@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
@@ -203,7 +203,7 @@ public class Smithing implements ContentTemplate {
 			return true;
 		}
 		ContentEntity.startAnimation(client, 898);
-		World.submit(new Event(2500) {
+		World.submit(new Task(2500) {
 			int amm = amm2;
 
 			@Override

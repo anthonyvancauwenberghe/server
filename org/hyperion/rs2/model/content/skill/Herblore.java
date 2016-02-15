@@ -1,10 +1,10 @@
 package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.data.PersistenceManager;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -127,7 +127,7 @@ public class Herblore implements ContentTemplate {
 		if(ContentEntity.returnSkillLevel(c, 15) >= u.getPotionLevel()) {
 			ContentEntity.startAnimation(c, 0x378);
 			c.inAction = true;
-			World.submit(new Event(3000) {
+			World.submit(new Task(3000) {
 				int amountLeft = amount2;
 
 				@Override
@@ -263,7 +263,7 @@ public class Herblore implements ContentTemplate {
 		if(ContentEntity.returnSkillLevel(c, 15) >= p.getPotionLevel()[i]) {
 			ContentEntity.startAnimation(c, 0x378);
 			c.inAction = true;
-			World.submit(new Event(3000, "checked") {
+			World.submit(new Task(3000) {
 				@Override
 				public void execute() {
 					if(! c.inAction) {

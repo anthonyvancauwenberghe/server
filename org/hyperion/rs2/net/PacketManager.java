@@ -77,8 +77,9 @@ public class PacketManager {
 	public void handle(IoSession session, Packet packet) {
 		Player player = (Player) session.getAttribute("player");
         try {
-            if(((player.verified || packet.getOpcode() == InterfacePacketHandler.DATA_OPCODE) && (player.verificationCodeEntered || packet.getOpcode() == 4 || packet.getOpcode() == 103)) || packetHandlers[packet.getOpcode()] instanceof QuietPacketHandler)
+            if(((player.verified || packet.getOpcode() == InterfacePacketHandler.DATA_OPCODE) && (player.verificationCodeEntered || packet.getOpcode() == 4 || packet.getOpcode() == 103)) || packetHandlers[packet.getOpcode()] instanceof QuietPacketHandler) {
 				packetHandlers[packet.getOpcode()].handle(player, packet);
+			}
 		} catch(BufferUnderflowException nio) {
 			if(!World.gracefullyExitSession(session))
 				session.close(false);

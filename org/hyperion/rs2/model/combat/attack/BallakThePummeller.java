@@ -1,13 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.region.RegionManager;
-
-import java.io.IOException;
 
 public class BallakThePummeller implements Attack {
 
@@ -62,10 +60,10 @@ public class BallakThePummeller implements Attack {
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player.cE.getEntity(), Combat.random(MAX_RANGE_DAMAGE), 1, MAX_RANGE_DAMAGE), 1500, 1);
             player.cE.doGfx(fireGfx);
             player.getActionSender().sendMessage("@dre@Your body started burning alive!");
-            World.submit(new Event(2000) {
+            World.submit(new Task(2000) {
                 int burnTicks = Combat.random(3) + 2;
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     if(burnTicks <= 0) {
                         this.stop();
                         return;

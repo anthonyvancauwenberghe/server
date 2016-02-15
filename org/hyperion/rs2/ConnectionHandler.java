@@ -2,27 +2,26 @@
 		package org.hyperion.rs2;
 
 		import org.apache.mina.core.service.IoHandlerAdapter;
-		import org.apache.mina.core.session.IdleStatus;
-		import org.apache.mina.core.session.IoSession;
-		import org.apache.mina.filter.codec.ProtocolCodecFilter;
-		import org.hyperion.Server;
-		import org.hyperion.rs2.model.Player;
-		import org.hyperion.rs2.model.World;
-		import org.hyperion.rs2.model.punishment.Combination;
-		import org.hyperion.rs2.model.punishment.Punishment;
-		import org.hyperion.rs2.model.punishment.Target;
-		import org.hyperion.rs2.model.punishment.Type;
-		import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-		import org.hyperion.rs2.net.LoginDebugger;
-		import org.hyperion.rs2.net.Packet;
-		import org.hyperion.rs2.net.RS2CodecFactory;
-		import org.hyperion.rs2.task.impl.SessionClosedTask;
-		import org.hyperion.rs2.task.impl.SessionMessageTask;
-		import org.hyperion.rs2.util.TextUtils;
+import org.apache.mina.core.session.IdleStatus;
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.hyperion.Server;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.net.LoginDebugger;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.net.PacketManager;
+import org.hyperion.rs2.net.RS2CodecFactory;
+import org.hyperion.rs2.util.TextUtils;
 
-		import java.net.SocketAddress;
-		import java.util.HashMap;
-		import java.util.concurrent.TimeUnit;
+import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -68,28 +67,31 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				return;
 			}
 		}
-		Server.getLoader().getEngine().pushTask(new SessionMessageTask(session, (Packet) message));
+		Server.getLoader().getEngine().submit(() -> {
+			if(session.getAttribute("player") != null)
+				PacketManager.getPacketManager().handle(session, (Packet)message);
+			else {
+				((Packet)message).getPayload().clear().free();
+			}
+		});
 	}
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		/*long currentTime = System.currentTimeMillis();
-		if(currentTime - lastLogouts.get(0) < 5000) {
-			Object playerobject = session.getAttribute("player");
-			if (playerobject != null) {
-				Player player = (Player) playerobject;
-				System.out.println("Connection closed too fast for "
-						+ player.getName());
-				logStackTrace(player.getName(),player.getLocation());
-			} else {
-				System.out.println("Playerobject is null in ConnectionHandler..");
+		Server.getLoader().getEngine().submit(() -> {
+			if(session.containsAttribute("player")) {
+				Player p = (Player) session.getAttribute("player");
+				SocketAddress address = session.getRemoteAddress();
+				if(p != null) {
+					if(!p.loggedOut) {
+						World.unregister(p);
+					}
+				}else
+					System.out.println("Tried to logout player but the player was null..");
+				if(address != null)
+					System.out.println("Closing session: " + p.getName() + "," + address.toString());
 			}
-		}
-		lastLogouts.add(currentTime);
-		if(lastLogouts.size() > 20) {
-			lastLogouts.remove(0);
-		}*/
-		Server.getLoader().getEngine().pushTask(new SessionClosedTask(session));
+        });
 	}
 
 	@Override

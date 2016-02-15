@@ -9,7 +9,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.hyperion.engine.GameEngine;
-import org.hyperion.engine.GameEngineV2;
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.model.*;
@@ -40,8 +39,7 @@ public final class GameLoader {
     private final ExecutorService serviceLoader = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("GameLoadingThread").build());
     private final ScheduledExecutorService gameThread = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat("GameThread").build());
     private final IoAcceptor acceptor = new NioSocketAcceptor();
-    private final GameEngine engine = new GameEngine();
-    private final GameEngineV2 gameEngineV2 = new GameEngineV2();
+    private final GameEngine gameEngine = new GameEngine();
     private final int port;
 
     protected GameLoader(int port) {
@@ -59,13 +57,12 @@ public final class GameLoader {
         if (!serviceLoader.awaitTermination(15, TimeUnit.MINUTES))
             throw new IllegalStateException("The background service load took too long!");
         acceptor.bind(new InetSocketAddress(port));
-        engine.start();
-        gameThread.scheduleAtFixedRate(gameEngineV2, 0, 600, TimeUnit.MILLISECONDS);
+        gameThread.scheduleAtFixedRate(gameEngine, 0, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY), TimeUnit.MILLISECONDS);
     }
 
     private void executeServiceLoad() {
         //TODO ADD CHAR FILE CLEANER
-        serviceLoader.execute(RestartTask::submitRestartTask);
+        serviceLoader.execute(NPCDefinition::init);
         serviceLoader.execute(PossibleHacksHolder::init);
         serviceLoader.execute(RoomDefinition::load);
         serviceLoader.execute(ClanManager::load);
@@ -74,7 +71,6 @@ public final class GameLoader {
         serviceLoader.execute(WorldMap::loadWorldMap);
         serviceLoader.execute(DoorManager::init);
         serviceLoader.execute(NPCManager::init);
-        serviceLoader.execute(NPCDefinition::init);
         serviceLoader.execute(ContentManager::init);
         serviceLoader.execute(Wilderness::init);
         serviceLoader.execute(GlobalItemManager::init);
@@ -85,9 +81,10 @@ public final class GameLoader {
         serviceLoader.execute(JGrandExchange::init);
         serviceLoader.execute(Achievements::load);
         serviceLoader.execute(TriviaBot::init);
+        serviceLoader.execute(RestartTask::submitRestartTask);
     }
 
     public GameEngine getEngine() {
-        return engine;
+        return gameEngine;
     }
 }

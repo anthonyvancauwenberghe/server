@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.ChatMessage;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -44,7 +44,7 @@ public class RandomSpamming {
 	/**
 	 * The spam Event
 	 */
-	private static Event spamEvent = new Event(4000) {
+	private static Task spamEvent = new Task(4000) {
 		int counter = 0;
 
 		@Override

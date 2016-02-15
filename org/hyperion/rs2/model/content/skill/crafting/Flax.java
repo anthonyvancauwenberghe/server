@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.crafting;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
@@ -18,7 +18,7 @@ public class Flax extends Crafting{
             return false;
         client.setBusy(true);
         ContentEntity.startAnimation(client, 2286);
-        World.submit(new Event(2000) {
+        World.submit(new Task(2000) {
             @Override
             public void execute() {
                 if(!client.isBusy()) {
@@ -36,7 +36,7 @@ public class Flax extends Crafting{
     public static boolean spinFlax(final Player client, int id) {
         ContentEntity.startAnimation(client, 894);
         client.setBusy(true);
-        World.submit(new Event(2000) {
+        World.submit(new Task(2000) {
             int amount = ContentEntity.getItemAmount(client, 1779);
 
             @Override

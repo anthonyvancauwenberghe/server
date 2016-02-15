@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
@@ -40,7 +40,7 @@ public class CastleWars implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 		castleWars = this;
-		World.submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			@Override
 			public void execute() {
 				process();

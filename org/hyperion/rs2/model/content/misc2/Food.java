@@ -3,11 +3,11 @@ package org.hyperion.rs2.model.content.misc2;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.data.PersistenceManager;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.OverloadDrinkingEvent;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
-import org.hyperion.rs2.event.impl.PrayerRenwalEvent;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.OverloadDrinkingTask;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
+import org.hyperion.engine.task.impl.PrayerRenwalTask;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule;
@@ -73,7 +73,7 @@ public class Food implements ContentTemplate {
 	public void antiFire(final Player player, boolean superFire) {
 		final long timer = player.antiFireTimer = System.currentTimeMillis();
 		player.superAntiFire = superFire;
-		World.submit(new Event(1000, "dfire") {
+		World.submit(new Task(1000L) {
 			boolean warned = false;
 
 			@Override
@@ -192,11 +192,11 @@ public class Food implements ContentTemplate {
 				player.specPotionTimer = System.currentTimeMillis();
 				break;
             case 17652:
-                if(player.getExtraData().get(PrayerRenwalEvent.KEY) != null) {
-                    ((PrayerRenwalEvent)player.getExtraData().get(PrayerRenwalEvent.KEY)).totalRenewal = 300;
+                if(player.getExtraData().get(PrayerRenwalTask.KEY) != null) {
+                    ((PrayerRenwalTask)player.getExtraData().get(PrayerRenwalTask.KEY)).totalRenewal = 300;
                     player.sendMessage("Your prayer renewal has been refreshed!");
                 } else {
-                    World.submit(new PrayerRenwalEvent(player));
+                    World.submit(new PrayerRenwalTask(player));
                 }
                 break;
 			case 15332:
@@ -210,9 +210,9 @@ public class Food implements ContentTemplate {
 				doAnim = false;
 				player.setOverloaded(true);
 				player.resetOverloadCounter();
-				World.submit(new OverloadDrinkingEvent(player));
-				if(!player.getExtraData().getBoolean(OverloadStatsEvent.KEY))
-					World.submit(new OverloadStatsEvent(player));
+				World.submit(new OverloadDrinkingTask(player));
+				if(!player.getExtraData().getBoolean(OverloadStatsTask.KEY))
+					World.submit(new OverloadStatsTask(player));
 				break;
 		}
 		if(doAnim)
@@ -268,7 +268,7 @@ public class Food implements ContentTemplate {
 			return true;
 		}
 		int heal = foodItem.getHeal();
-		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
+		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossTask.NECKLACE_ID)
 			heal *= 1.1;
 		if(heal < 0 || (heal > 0)) {
 			ContentEntity.heal(player, heal);
@@ -284,7 +284,7 @@ public class Food implements ContentTemplate {
 
 	private void rocktail(Player player, int slot) {
 		int heal = 23;
-		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
+		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossTask.NECKLACE_ID)
 			heal *= 1.1;
 		int newHpLevel = player.getSkills().getLevel(Skills.HITPOINTS) + heal;
 		if(newHpLevel >= player.getSkills().calculateMaxLifePoints() + 10) {
@@ -300,7 +300,7 @@ public class Food implements ContentTemplate {
         if(player.duelRule[DuelRule.DuelRules.FOOD.ordinal()])
             return;
         int heal = healAmt;
-		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossEvent.NECKLACE_ID)
+		if(player.getEquipment().get(Equipment.SLOT_AMULET) != null && player.getEquipment().get(Equipment.SLOT_AMULET).getId() == WildernessBossTask.NECKLACE_ID)
 			heal *= 1.1;
         player.heal(heal, true);
         ContentEntity.startAnimation(player, ANIMATION_EAT_ID);

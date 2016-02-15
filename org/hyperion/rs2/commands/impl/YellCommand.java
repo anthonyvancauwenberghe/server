@@ -1,8 +1,8 @@
 package org.hyperion.rs2.commands.impl;
 
 import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
@@ -103,7 +103,7 @@ public class YellCommand extends Command {
 		input = TextUtils.ucFirst(input);
 		if(!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
 			World.submit(
-					new Event(yellDelay) {
+					new Task(yellDelay) {
 						public void execute() {
 							player.sendMessage("[B] Nab: Hey " + player.getSafeDisplayName() + ", you can yell again!");
 							stop();

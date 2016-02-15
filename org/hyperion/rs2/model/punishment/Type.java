@@ -48,7 +48,7 @@ public enum Type {
     },
     BAN{
         public void apply(final Player player){
-            player.getSession().close();
+            player.getSession().close(true);
         }
 
         public boolean isApplied(final Player player){

@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc2.teamboss;
 
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
+import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -58,7 +58,7 @@ public abstract class TeamBossSession {
             players.remove(p);
             p.getTeamSessions().remove(TeamBossSession.this);
         });
-        npcs.stream().map(NpcDeathEvent::new).forEach(World::submit);
+        npcs.stream().map(NpcDeathTask::new).forEach(World::submit);
         sessions.remove(this);
     }
 

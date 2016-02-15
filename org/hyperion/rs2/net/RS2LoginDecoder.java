@@ -178,7 +178,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submitWork(() -> {
+        Server.getLoader().getEngine().submit(() -> {
             Player player = new Player(playerDetails);
             LoginResponse loginResponse = World.getLoader().checkLogin(player, playerDetails);
 

@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.RapeCommand;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
@@ -124,7 +124,7 @@ public class Spam {
 	public String punish() {
 		if(!isSpamming())
 			return "Player is not spamming..";
-		World.submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			private int counter = 0;
 
 			@Override

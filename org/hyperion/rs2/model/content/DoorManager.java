@@ -3,7 +3,7 @@ package org.hyperion.rs2.model.content;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.data.PersistenceManager;
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
@@ -146,7 +146,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.submit(new Event(1200) {
+					World.submit(new Task(1200) {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {
@@ -224,7 +224,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.submit(new Event(1200) {
+					World.submit(new Task(1200) {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {

@@ -1,6 +1,6 @@
 package org.hyperion.rs2.action;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 
 /**
@@ -9,7 +9,7 @@ import org.hyperion.rs2.model.Player;
  * @author blakeman8192
  * @author Graham Edgecombe
  */
-public abstract class Action extends Event {
+public abstract class Action extends Task {
 
 	/**
 	 * A queue policy determines when the clients should queue up actions.

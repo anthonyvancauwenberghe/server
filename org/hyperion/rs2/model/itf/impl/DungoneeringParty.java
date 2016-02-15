@@ -1,13 +1,12 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -63,9 +62,9 @@ public class DungoneeringParty extends Interface {
 
                 }
 
-                World.submit(new Event(1000) {
+                World.submit(new Task(1000) {
                     @Override
-                    public void execute() throws IOException {
+                    public void execute() {
                         players.add(player);
                         player.getDungeoneering().start(players, difficulty, size);
                         this.stop();

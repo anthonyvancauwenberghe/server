@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
@@ -53,7 +53,7 @@ public class RopeSwing extends Obstacle{
         if(direction == 3)
             player.face(Location.create(player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ()));
 
-        World.submit(new Event(600) {
+        World.submit(new Task(600) {
             int progress = start.distance(end);
             @Override
             public void execute() {
@@ -92,7 +92,7 @@ public class RopeSwing extends Obstacle{
 
     @Override
     public void fail(Player player, int tick, String message) {
-        World.submit(new Event(600) {
+        World.submit(new Task(600) {
             int progress = start.distance(end);
 
             @Override

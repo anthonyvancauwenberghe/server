@@ -1,8 +1,8 @@
 package org.hyperion.rs2.net;
 
 import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -23,7 +23,6 @@ import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.util.TextUtils;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -417,9 +416,9 @@ public class ActionSender {
         bldr.put((byte) horizontalAmount);
         bldr.put((byte) horizontalSpeed);
         if (time > -1) {
-            World.submit(new Event(time) {
+            World.submit(new Task(time) {
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     player.getActionSender().cameraReset();
                     this.stop();
                 }
@@ -507,18 +506,6 @@ public class ActionSender {
         bldr.putShort(player.getLocation().getRegionX() + 6);
         player.write(bldr.toPacket());
         return this;
-    }
-
-    public void applySkillReward() {
-        if (player.getPermExtraData().getBoolean("skillreward"))
-            return;
-        player.getPermExtraData().put("skillreward", true);
-        int skillz = player.getSkills().getTotal99s();
-
-        for (; skillz > 0; skillz--) {
-            player.getSkills().reward99(skillz / 3);
-        }
-
     }
 
     static final SimpleDateFormat START = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -676,17 +663,6 @@ public class ActionSender {
             sendSidebarInterface(15, -1);
         }
         return this;
-    }
-
-    /**
-     * Sends the c00l quest tab.
-     */
-
-    public void writeTabs() {
-        player.getQuestTab().createQuestTab();
-        player.getAchievementTab().createAchievementTab();
-        player.getSpawnTab().createSpawnTab();
-        sendString("Revenants (Multi)", 45614);
     }
 
     /**

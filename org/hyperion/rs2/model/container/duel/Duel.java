@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.container.duel;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
@@ -502,8 +502,8 @@ public class Duel {
         );
 		player.setOverloaded(false);
 		player.getTrader().setOverloaded(false);
-		player.getExtraData().remove(OverloadStatsEvent.KEY);
-		player.getTrader().getExtraData().remove(OverloadStatsEvent.KEY);
+		player.getExtraData().remove(OverloadStatsTask.KEY);
+		player.getTrader().getExtraData().remove(OverloadStatsTask.KEY);
 		player.overloadTimer = 0;
 		player.getTrader().overloadTimer = 0;
 		for(int i = 0; i < 6; i++) {
@@ -529,7 +529,7 @@ public class Duel {
         player.getWalkingQueue().reset();
 		removeBanEquip(player);
 		removeBanEquip(player.getTrader());
-		World.submit(new Event(1000, "duel") {
+		World.submit(new Task(1000) {
 
 			int timer = 3;
 

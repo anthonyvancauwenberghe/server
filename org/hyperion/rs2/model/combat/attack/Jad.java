@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Attack;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
@@ -49,7 +49,7 @@ public class Jad implements Attack {
 			} else if(attackId == 1) {
 				n.cE.doAnim(RANGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				World.submit(new Event(1000) {
+				World.submit(new Task(1000) {
 					@Override
 					public void execute() {
 						//range attack
@@ -62,7 +62,7 @@ public class Jad implements Attack {
 				//mage attack
 				n.cE.doAnim(MAGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3300);
-				World.submit(new Event(1500) {
+				World.submit(new Task(1500) {
 					@Override
 					public void execute() {
 						//offset values for the projectile

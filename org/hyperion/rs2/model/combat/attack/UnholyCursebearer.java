@@ -1,13 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.region.RegionManager;
-
-import java.io.IOException;
 
 public class UnholyCursebearer implements Attack {
 
@@ -46,10 +44,10 @@ public class UnholyCursebearer implements Attack {
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             player.cE.doGfx(curseGfx);
             player.getActionSender().sendMessage("@dre@You have been cursed by the Cursebearer!");
-            World.submit(new Event(1000) {
+            World.submit(new Task(1000) {
                 int curseTicks = Combat.random(2) + 1;
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     if (curseTicks <= 0) {
                         this.stop();
                         return;

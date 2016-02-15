@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.fletching;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
@@ -129,7 +129,7 @@ public class BowStringing extends LogCutting {
         client.setBusy(true);
         ContentEntity.startAnimation(client, item.getEmote());
 
-        World.submit(new Event(5000) {
+        World.submit(new Task(5000) {
             @Override
             public void execute() {
                 if(client.getRandomEvent().skillAction(2))

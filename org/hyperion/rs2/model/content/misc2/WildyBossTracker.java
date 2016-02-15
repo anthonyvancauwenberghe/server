@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ClickType;
@@ -27,15 +27,15 @@ public class WildyBossTracker implements ContentTemplate {
 
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
-        if(WildernessBossEvent.currentBoss != null) {
+        if(WildernessBossTask.currentBoss != null) {
             if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()) > 0) {
-                player.sendMessage(compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY()));
+                player.sendMessage(compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossTask.currentBoss.getLocation().getX(), WildernessBossTask.currentBoss.getLocation().getY()));
             } else {
                 player.sendMessage("This item only works in the wilderness.");
             }
         } else {
             player.sendf("Wilderness boss spawning in %s minutes.", TimeUnit.MINUTES.convert(
-                            (WildernessBossEvent.DELAY_FOR_RESPAWN - (System.currentTimeMillis() - WildernessBossEvent.timeStart)), TimeUnit.MILLISECONDS)
+                            (WildernessBossTask.DELAY_FOR_RESPAWN - (System.currentTimeMillis() - WildernessBossTask.timeStart)), TimeUnit.MILLISECONDS)
             );
         }
         return true;

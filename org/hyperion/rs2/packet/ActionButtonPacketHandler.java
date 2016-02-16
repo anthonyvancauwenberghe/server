@@ -109,12 +109,10 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.getActionSender().removeAllInterfaces();
 				break;
 			case - 28489:
-				//TODO
 				player.getActionSender().sendSidebarInterface(13, 31000);
 				break;
 			case 31054:
 				player.getActionSender().sendSidebarInterface(13, 6299);
-				//TODO
 				break;
 			case 28003:
 				player.getActionSender().removeAllInterfaces();

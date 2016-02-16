@@ -1,9 +1,7 @@
 package org.hyperion.engine.task.impl;
 
-import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc2.Afk;
@@ -39,12 +37,8 @@ public class PlayerTask36Seconds extends Task {
 			player.getSummBar().cycle();
 			player.getActionSender().sendString(38760, player.getSummBar().getAmount() + "");
 			player.getSpecBar().normalize();
-			player.getQuestTab().sendPlayerCount();
-			player.getQuestTab().sendStaffCount();
-			player.getQuestTab().sendUptime();
 			Afk.procesPlayer(player);
 		}
-		System.out.println("Uptime: " + Server.getUptime().toString() + " - Players online: " + World.getPlayers().size() + " - Staff online: " + World.getPlayers().stream().filter(p -> p != null && Rank.isStaffMember(p)).count());
 		ClanManager.save();
 	}
 

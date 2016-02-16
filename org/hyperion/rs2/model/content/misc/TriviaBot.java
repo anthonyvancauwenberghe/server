@@ -7,6 +7,7 @@ import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -121,7 +122,7 @@ public class TriviaBot {
 	public static int getPlayersAmount() {
 		int counter = 0;
 		for(Player p : World.getPlayers()) {
-			if(p.getTrivia().isEnabled())
+			if(Lock.isEnabled(p, Lock.TRIVIA))
 				counter++;
 		}
 		return counter;
@@ -270,7 +271,7 @@ public class TriviaBot {
 	 */
 	private static void yellMessage(String message) {
 		for(Player p : World.getPlayers()) {
-			if(p != null && p.getTrivia().isEnabled())
+			if(p != null && Lock.isEnabled(p, Lock.TRIVIA))
 				p.getActionSender().sendMessage(TITLE + message);
 		}
 	}

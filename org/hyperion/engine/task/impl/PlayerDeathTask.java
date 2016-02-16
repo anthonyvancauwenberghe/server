@@ -28,10 +28,208 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-
+/**
+ * @author Gilles
+ */
 public class PlayerDeathTask extends Task {
 
-    public static final Map<String, Queue<String>> kills = new HashMap<String, Queue<String>>();
+	public static final Map<String, Queue<String>> kills = new HashMap<>();
+	private static final Location DEATH_LOCATION = Location.create(3096, 3471, 0);
+
+	private final Player player;
+
+	private int timer = 0;
+
+	public PlayerDeathTask(Player player) {
+		super(1, player);
+		this.player = player;
+		player.setDead(true);
+	}
+
+	@Override
+	public void execute() {
+		try {
+			if(! player.isActive() || player.isHidden()) {
+				this.stop();
+				return;
+			}
+			if(Jail.inJail(player)) {
+				player.getSkills().setLevel(Skills.HITPOINTS, player.getSkills().getLevelForExp(Skills.HITPOINTS));
+				this.stop();
+				return;
+			}
+			switch(timer) {
+				case 2:
+					startDeath();
+					PlayerSaving.save(player);
+					break;
+				case 9:
+					resetPlayer();
+					PlayerSaving.save(player);
+					break;
+				case 11:
+					player.playAnimation(Animation.create(- 1, 0));
+					player.setDead(false);
+					PlayerSaving.save(player);
+					this.stop();
+					break;
+			}
+			timer++;
+		} catch(Exception e) {
+			e.printStackTrace();
+			this.stop();
+		}
+	}
+
+	private void startDeath() {
+		player.playAnimation(Animation.create(0x900, 0));
+		Combat.logoutReset(player.cE);
+		player.cE.setPoisoned(false);
+		player.getWalkingQueue().reset();
+		player.getActionSender().resetFollow();
+		player.cE.morrigansLeft = 0;
+	}
+
+	private void resetPlayer() {
+		player.playAnimation(Animation.create(- 1, 0));
+		player.getCombat().setOpponent(null);
+		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
+			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
+		}
+		if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 120000) {
+			player.getSpecBar().setAmount(SpecialBar.FULL);
+			player.getExtraData().put("lastdeath", System.currentTimeMillis());
+		} else {
+			player.sendMessage("You don't restore special energy as you have died too recently.");
+		}
+		player.specOn = false;
+		player.teleBlockTimer = System.currentTimeMillis();
+		player.getActionSender().resetFollow();
+		if(player.getRunePouch().size() > 0)
+			player.getRunePouch().clear();
+		player.getSpecBar().sendSpecAmount();
+		player.getSpecBar().sendSpecBar();
+		player.cE.setPoisoned(false);
+		player.cE.setFreezeTimer(0);
+		Player killer = player.cE.getKiller();
+		if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
+				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
+			Duel.finishFullyDuel(player);
+		} else if (player.getDungeoneering().inDungeon()) {
+			DungeoneeringManager.handleDying(player);
+		} else if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+			LastManStanding.getLastManStanding().deathCheck(player, killer);
+		} else if (Bork.doDeath(player)) {
+		} else if(ContentManager.handlePacket(6, player, ClickId.ATTACKABLE)) {
+			if(ContentManager.handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
+				if(killer != null) //in fight pits death, reward player
+					killer.getInventory().add(Item.create(391, 1));
+		} else if(ContentManager.handlePacket(6, player, 32000, - 1, - 1, - 1)) {
+			ContentManager.handlePacket(6, player, 32001, - 1, - 1, - 1);
+		} else if(player.fightCavesWave > 0 && !player.getLocation().inPvPArea()) { //If dying in fight caves
+			player.fightCavesWave = 0;
+			player.getActionSender().showInterfaceWalkable(- 1);
+			player.setTeleportTarget(Location.create(2439, 5171, 0), false);
+			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
+		} else {
+			if(! player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+				if(killer != null) {
+					//blood lust system
+					ContentManager.handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
+					BountyHandler.handle(killer, player.getName());
+					/**
+					 * Increasing stupid points and stuff.
+					 */
+					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
+					BountyPerkHandler.handleSpecialPerk(killer);
+					if(true || killer.getLocation().inPvPArea()) {
+						boolean isDev = false;
+						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal()
+								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
+							isDev = true;
+						if(!isDev) {
+							killer.increaseKillCount();
+							int oldKillerRating = killer.getPoints().getEloRating();
+							if(killer.getLocation().getZ() != PurePk.HEIGHT) {
+								killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
+								player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
+							}
+
+
+						}
+
+						try {
+							if(killer.getPvPTask() != null)
+								TaskHandler.checkTask(killer, player);
+						} catch(Exception e) {
+							System.err.println("PvP tasks error!");
+							e.printStackTrace();
+						}
+						killer.getBountyHunter().handleBHKill(player);
+						//killer.getAchievementTracker().playerKill();
+						if(isRecentKill(killer, player)) {
+							killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
+							if(killer.getGameMode() <= player.getGameMode())
+								handlePkpTransfer(killer, player, 0);
+						} else {
+							if(player.getKillCount() >= 10) {
+								killer.increaseKillStreak();
+							}
+							killer.getAchievementTracker().playerKill();
+							//AchievementHandler.progressAchievement(player, "Kill");
+							killer.addLastKill(player.getName());
+							int pkpIncrease = (int) Math.pow(player.getKillCount(), .8);
+							if (pkpIncrease > 400)
+								pkpIncrease = 400;
+
+							int pointsToAdd = ((player.wildernessLevel / 2 + player.getBounty()) + pkpIncrease);
+
+							for(SpecialArea area: SpecialAreaHolder.getAreas()) {
+								if(area.inEvent() && area.inArea(player))
+									pointsToAdd *= 4;
+							}
+							if(player.getKillStreak() >= 6) {
+								AchievementHandler.progressAchievement(player, "Killstreak");
+								for(Player p : World.getPlayers())
+									if(p != null)
+										p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+							}
+							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
+							if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
+								killer.getSpecBar().increment(SpecialBar.FULL/5);
+							if(Rank.hasAbility(killer, Rank.DONATOR))
+								killer.getSpecBar().increment(SpecialBar.CYCLE_INCREMENT);
+							killer.getSpecBar().sendSpecBar();
+							killer.getSpecBar().sendSpecAmount();
+
+						}
+						if(!isDev) {
+							player.increaseDeathCount();
+							player.resetKillStreak();
+							player.resetBounty();
+						}
+
+					}
+					//DeathDrops.dropAllItems(player, killer);
+					DeathDrops.dropsAtDeath(player, killer);
+				} else {
+					DeathDrops.dropsAtDeath(player, player);
+				}
+			}
+			boolean inSpecial = false;
+			for(SpecialArea area : SpecialAreaHolder.getAreas()) {
+				if(area.inArea(player) && area instanceof NIGGERUZ) {
+					inSpecial = true;
+					player.setTeleportTarget(area.getDefaultLocation(), false);
+				}
+			}
+			if(!inSpecial)
+				player.setTeleportTarget(DEATH_LOCATION, false);
+			player.getActionSender().sendMessage(getDeathMessage());
+		}
+		player.setSkulled(false);
+		player.resetPrayers();
+	}
 
     public static boolean isRecentKill(final Player killer, final Player player) {
         if(killer.equals(player))
@@ -112,206 +310,6 @@ public class PlayerDeathTask extends Task {
 		"The darkness of the afterlife awaits you...",
 		"You're stupid... and dead"
 	};
-
-
-	private Player player;
-
-	public static Location DEATH_LOCATION() {
-		return Location.create(3096, 3471, 0);
-	}
-
-	/**
-	 * Executes the death event for the dying player.
-	 *
-	 * @param player
-	 */
-	public PlayerDeathTask(Player player) {
-		super(500L);
-		this.player = player;
-		player.setDead(true);
-	}
-
-	private int timer = 0;
-
-	@Override
-	public void execute() {
-		try {
-			if(! player.isActive() || player.isHidden()) {
-				this.stop();
-				return;
-			}
-			if(Jail.inJail(player)) {
-				player.getSkills().setLevel(Skills.HITPOINTS, player.getSkills().getLevelForExp(Skills.HITPOINTS));
-				this.stop();
-				return;
-			}
-			switch(timer) {
-				case 2:
-					startDeath();
-                    PlayerSaving.save(player);
-					break;
-				case 9:
-                    resetPlayer();
-                    PlayerSaving.save(player);
-					break;
-				case 11:
-					player.playAnimation(Animation.create(- 1, 0));
-					player.setDead(false);
-                    PlayerSaving.save(player);
-					this.stop();
-					break;
-			}
-			timer++;
-		} catch(Exception e) {
-			e.printStackTrace();
-			this.stop();
-		}
-	}
-
-
-	private void resetPlayer() {
-		player.playAnimation(Animation.create(- 1, 0));
-		player.getCombat().setOpponent(null);
-		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
-			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
-		}
-        if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 120000) {
-		    player.getSpecBar().setAmount(SpecialBar.FULL);
-            player.getExtraData().put("lastdeath", System.currentTimeMillis());
-        } else {
-            player.sendMessage("You don't restore special energy as you have died too quickly");
-        }
-		player.specOn = false;
-		player.teleBlockTimer = System.currentTimeMillis();
-		player.getActionSender().resetFollow();
-        if(player.getRunePouch().size() > 0)
-            player.getRunePouch().clear();
-		player.getSpecBar().sendSpecAmount();
-		player.getSpecBar().sendSpecBar();
-		//CombatEntility ddd = entity.cE.getKiller();
-
-		player.cE.setPoisoned(false);
-
-		player.cE.setFreezeTimer(0);
-		Player killer = player.cE.getKiller();
-        if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
-				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
-			Duel.finishFullyDuel(player);
-        } else if (player.getDungeoneering().inDungeon()) {
-			DungeoneeringManager.handleDying(player);
-        } else if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            LastManStanding.getLastManStanding().deathCheck(player, killer);
-		} else if (Bork.doDeath(player)) {
-        } else if(ContentManager.handlePacket(6, player, ClickId.ATTACKABLE)) {
-			if(ContentManager.handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
-			if(killer != null) //in fight pits death, reward player
-				killer.getInventory().add(Item.create(391, 1));
-		} else if(ContentManager.handlePacket(6, player, 32000, - 1, - 1, - 1)) {
-			ContentManager.handlePacket(6, player, 32001, - 1, - 1, - 1);
-		} else if(player.fightCavesWave > 0 && !player.getLocation().inPvPArea()) { //If dying in fight caves
-			player.fightCavesWave = 0;
-			player.getActionSender().showInterfaceWalkable(- 1);
-			player.setTeleportTarget(Location.create(2439, 5171, 0), false);
-			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
-		} else {
-			if(! player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-				if(killer != null) {
-					//blood lust system
-					ContentManager.handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
-                    BountyHandler.handle(killer, player.getName());
-					/**
-					 * Increasing stupid points and stuff.
-					 */
-					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
-					BountyPerkHandler.handleSpecialPerk(killer);
-					if(true || killer.getLocation().inPvPArea()) {
-						boolean isDev = false;
-						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal()
-								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
-							isDev = true;
-						if(!isDev) {
-						    killer.increaseKillCount();
-						    int oldKillerRating = killer.getPoints().getEloRating();
-                            if(killer.getLocation().getZ() != PurePk.HEIGHT) {
-						        killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
-						        player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
-                            }
-
-
-						}
-
-                        try {
-                            if(killer.getPvPTask() != null)
-                                TaskHandler.checkTask(killer, player);
-                        } catch(Exception e) {
-                            System.err.println("PvP tasks error!");
-                            e.printStackTrace();
-                        }
-						killer.getBountyHunter().handleBHKill(player);
-						//killer.getAchievementTracker().playerKill();
-						if(isRecentKill(killer, player)) {
-							killer.sendPkMessage("You have recently killed this player and do not receive PK points.");
-                            if(killer.getGameMode() <= player.getGameMode())
-                                handlePkpTransfer(killer, player, 0);
-                        } else {
-							if(player.getKillCount() >= 10) {
-								killer.increaseKillStreak();
-							}
-							killer.getAchievementTracker().playerKill();
-							//AchievementHandler.progressAchievement(player, "Kill");
-                            killer.addLastKill(player.getName());
-							int pkpIncrease = (int) Math.pow(player.getKillCount(), .8);
-							if (pkpIncrease > 400)
-								pkpIncrease = 400;
-
-							int pointsToAdd = ((player.wildernessLevel / 2 + player.getBounty()) + pkpIncrease);
-
-                            for(SpecialArea area: SpecialAreaHolder.getAreas()) {
-                                if(area.inEvent() && area.inArea(player))
-									pointsToAdd *= 4;
-							}
-							if(player.getKillStreak() >= 6) {
-                                AchievementHandler.progressAchievement(player, "Killstreak");
-								for(Player p : World.getPlayers())
-									if(p != null)
-                                		p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
-							}
-							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
-                            if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
-                                killer.getSpecBar().increment(SpecialBar.FULL/5);
-                            if(Rank.hasAbility(killer, Rank.DONATOR))
-                                killer.getSpecBar().increment(SpecialBar.CYCLE_INCREMENT);
-                            killer.getSpecBar().sendSpecBar();
-							killer.getSpecBar().sendSpecAmount();
-
-                        }
-						if(!isDev) {
-						    player.increaseDeathCount();
-						    player.resetKillStreak();
-						    player.resetBounty();
-						}
-
-					}
-					//DeathDrops.dropAllItems(player, killer);
-					DeathDrops.dropsAtDeath(player, killer);
-				} else {
-					DeathDrops.dropsAtDeath(player, player);
-				}
-			}
-            boolean inSpecial = false;
-            for(SpecialArea area : SpecialAreaHolder.getAreas()) {
-                if(area.inArea(player) && area instanceof NIGGERUZ) {
-                    inSpecial = true;
-                    player.setTeleportTarget(area.getDefaultLocation(), false);
-                }
-            }
-            if(!inSpecial)
-			    player.setTeleportTarget(DEATH_LOCATION(), false);
-			player.getActionSender().sendMessage(getDeathMessage());
-		}
-		player.setSkulled(false);
-		player.resetPrayers();
-	}
 	
 	private static String sendKillMessage(String name) {
 		name = TextUtils.titleCase(name);
@@ -326,15 +324,4 @@ public class PlayerDeathTask extends Task {
 		final int rand = Misc.random(array.length - 1);
 		return array[rand].replaceAll("%s", name);
 	}
-
-	private void startDeath() {
-		player.playAnimation(Animation.create(0x900, 0));
-		Combat.logoutReset(player.cE);
-		player.cE.setPoisoned(false);
-		player.getWalkingQueue().reset();
-		player.getActionSender().resetFollow();
-		player.cE.morrigansLeft = 0;
-	}
-
-
 }

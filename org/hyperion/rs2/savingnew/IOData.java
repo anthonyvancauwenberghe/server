@@ -51,6 +51,22 @@ public enum IOData {
             player.setPlayerRank(element.getAsLong());
         }
     },
+    LOCKS {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getLocks() != 0;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getLocks());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setLocks(element.getAsLong());
+        }
+    },
     GAMEMODE {
         @Override
         public boolean shouldSave(Player player) {
@@ -224,36 +240,85 @@ public enum IOData {
             player.setLastHonorPointsReward(element.getAsLong());
         }
     },
-    LAST_VOTED {
+    LAST_VOTE_STREAK_INCREASE {
         @Override
         public boolean shouldSave(Player player) {
-            return player.getLastVoted() != 0;
+            return player.getLastVoteStreakIncrease() != 0;
         }
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getLastVoted());
+            return new JsonPrimitive(player.getLastVoteStreakIncrease());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.setLastVoted(element.getAsLong());
+            player.setLastVoteStreakIncrease(element.getAsLong());
         }
     },
-    FIRST_VOTED {
+
+    VOTING_STREAK {
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getVoteStreak());
+        }
+
         @Override
         public boolean shouldSave(Player player) {
-            return player.getFirstVoteTime() != -1;
+            return player.getVoteStreak() != 0;
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setVoteStreak(element.getAsInt());
+        }
+    },
+    TODAY_VOTES {
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getTodayVotes());
+        }
+
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getTodayVotes() != 0;
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setTodayVotes(element.getAsInt());
+        }
+    },
+    LAST_VOTE_BONUS {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getLastVoteBonus() != 0;
         }
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getFirstVoteTime());
+            return new JsonPrimitive(player.getLastVoteBonus());
         }
 
         @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.setFirstVoteTime(element.getAsLong());
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setLastVoteBonus(element.getAsLong());
+        }
+    },
+    VOTE_BONUS_END {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getVoteBonusEndTime() != 0;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getVoteBonusEndTime() - System.currentTimeMillis());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setVoteBonusEndTime(element.getAsLong(), true);
         }
     },
     ELO {
@@ -334,38 +399,6 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
             player.getSpellBook().changeSpellBook(element.getAsInt());
-        }
-    },
-    EXPERIENCE_LOCK {
-        @Override
-        public boolean shouldSave(Player player) {
-            return player.xpLock;
-        }
-
-        @Override
-        public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.xpLock);
-        }
-
-        @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.xpLock = element.getAsBoolean();
-        }
-    },
-    TRIVIA_ENABLED {
-        @Override
-        public boolean shouldSave(Player player) {
-            return player.getTrivia().isEnabled();
-        }
-
-        @Override
-        public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getTrivia().isEnabled());
-        }
-
-        @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.getTrivia().setEnabled(element.getAsBoolean());
         }
     },
     DEFAULT_ALTAR {

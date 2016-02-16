@@ -86,10 +86,8 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					if(!p.loggedOut) {
 						World.unregister(p);
 					}
-				}else
+				} else
 					System.out.println("Tried to logout player but the player was null..");
-				if(address != null)
-					System.out.println("Closing session: " + p.getName() + "," + address.toString());
 			}
         });
 	}

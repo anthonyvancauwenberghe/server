@@ -120,6 +120,10 @@ public final class World {
         return loader;
     }
 
+    public static int getMaxPlayerCount() {
+        return maxPlayerCount;
+    }
+
     public static void sequence() {
 
         // Handle queued logins.
@@ -184,6 +188,20 @@ public final class World {
         } catch(Exception e) {
             Server.getLogger().log(Level.SEVERE, "Something went wrong while loading the World configuration file.");
         }
+    }
+
+    public static void sendGlobalMessage(String message) {
+        getPlayers().forEach(player -> player.sendServerMessage(message));
+    }
+
+    public static void updatePlayersOnline() {
+        if(players.size() > maxPlayerCount)
+            maxPlayerCount = players.size();
+        World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.PLAYERS_ONLINE));
+    }
+
+    public static void updateStaffOnline() {
+        World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.STAFF_ONLINE));
     }
 
     public static void registerGlobalEvents() {

@@ -11,7 +11,6 @@ public class BattleAxe extends Weapon {
 
 	public BattleAxe(int id) {
 		super(id, Weapon.MELEE_TYPE, WEAPON_SPEED, false, false, WEAPON_ANIMATIONS);
-		// TODO Auto-generated constructor stub
 	}
 
 }

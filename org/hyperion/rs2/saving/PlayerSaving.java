@@ -115,8 +115,6 @@ public class PlayerSaving {
 		saveList.add(new SaveSpec("Spec"));
 		saveList.add(new SaveAtkType("AtkType"));
 		saveList.add(new SaveMagicbook("MagicBook"));
-		saveList.add(new SaveExpLock("XpLock"));
-		saveList.add(new SaveTrivia("Trivia"));
 		saveList.add(new SavePrayerBook("Altar"));
 		saveList.add(new SaveClan("Clan"));
         saveList.add(new SaveYellTag("YellTag"));
@@ -138,9 +136,7 @@ public class PlayerSaving {
 		saveList.add(new SaveDeathcount("DeathCount"));
 		saveList.add(new SaveCleaned("Cleaned"));
 		saveList.add(new SaveFightCavesWave("FightCavesWave"));
-		saveList.add(new SaveLastVoted("LastVoted")); //
-        saveList.add(new SaveFirstVoteTime("FirstVoteTime"));
-        saveList.add(new SaveVoteCount("VoteCount"));
+		saveList.add(new SaveLastVoted("LastVoted"));
 		saveList.add(new SaveMaxCape("maxcape"));
 		saveList.add(new SaveCompCape("compcape"));
 		saveList.add(new SavePvPTask("pvptask"));

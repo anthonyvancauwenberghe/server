@@ -60,7 +60,6 @@ public class Events {
         eventStartTime = System.currentTimeMillis();
         eventLocation = location;
         for(Player player : World.getPlayers()) {
-            player.getQuestTab().sendUptime();
             player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }

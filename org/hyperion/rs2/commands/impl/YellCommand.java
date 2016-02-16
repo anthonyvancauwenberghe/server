@@ -6,6 +6,7 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
@@ -117,9 +118,9 @@ public class YellCommand extends Command {
 		 */
 		for(Player other : World.getPlayers()) {
 			if(other != null) {
-				if(!other.getPermExtraData().getBoolean("disabledYell")) {
+				if(!Lock.isEnabled(other, Lock.YELL)) {
 					String message;
-					if (!other.getPermExtraData().getBoolean("disabledYellTitles")) {
+					if (!Lock.isEnabled(other, Lock.YELL_TITLES)) {
 						message = suffix + input;
 					} else {
 						message = suffixWithoutTitles + input;

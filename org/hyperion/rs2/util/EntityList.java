@@ -79,6 +79,10 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 			e.setIndex(slot);
 			entities[slot] = e;
 			size++;
+			if(e instanceof Player) {
+				World.updatePlayersOnline();
+				World.updateStaffOnline();
+			}
 			return true;
 		}
 		return false;
@@ -146,7 +150,6 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 			Player player = (Player) e;
 			if (player.getSession().isConnected()) {
 				player.dispose();
-				return false;
 			}
 		}
 
@@ -155,6 +158,10 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 			entities[e.getIndex()] = null;
 			slotQueue.add(e.getIndex());
 			size--;
+			if(e instanceof Player) {
+				World.updatePlayersOnline();
+				World.updateStaffOnline();
+			}
 			return true;
 		}
 		return false;

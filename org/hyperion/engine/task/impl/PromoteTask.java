@@ -3,10 +3,9 @@ package org.hyperion.engine.task.impl;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.sqlv2.impl.vote.work.CheckWaitingVotesTask;
 import org.hyperion.util.Time;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class PromoteTask extends Task {
 
@@ -18,14 +17,13 @@ public class PromoteTask extends Task {
 
 	@Override
 	public void execute() {
-			World.getPlayers().forEach(player -> {
-				String lastVoted = player.getPermExtraData().getString("lastVoted");
-				if (lastVoted != null)
-					if (!lastVoted.equalsIgnoreCase(CheckWaitingVotesTask.FORMAT_PLAYER.format(Calendar.getInstance().getTime())))
-						if (!Rank.hasAbility(player, Rank.DEVELOPER))
-							player.sendServerMessage("Don't forget to vote again using the ::vote command!");
-				if (lastVoted == null)
+			World.getPlayers().stream().filter(player -> !Rank.hasAbility(player, Rank.DEVELOPER)).forEach(player -> {
+				LocalDate lastVoteDate = LocalDate.ofEpochDay(player.getLastVoteStreakIncrease());
+				if(!lastVoteDate.equals(LocalDate.now())) {
+						player.sendServerMessage("Don't forget to vote again using the ::vote command!");
+				} else {
 					player.sendServerMessage("Remember to vote using the ::vote command!");
+				}
 			});
 	}
 }

@@ -6,6 +6,7 @@ import org.hyperion.Configuration;
 import org.hyperion.data.Persistable;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.impl.PlayerDeathTask;
+import org.hyperion.engine.task.impl.VoteBonusEndTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.action.ActionQueue;
 import org.hyperion.rs2.model.Damage.Hit;
@@ -25,6 +26,7 @@ import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.container.impl.TabbedContainer;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.clan.Clan;
@@ -86,7 +88,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public String bankPin = "";
 	public String enterPin = "";
 	public String lastSearch = "";
-	public boolean xpLock = false;
 	private String name;
 	private String IP;
 	private String clanName = "";
@@ -96,7 +97,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	/**
 	 * INTEGERS
 	 */
-	public static final int MAX_NAME_LENGTH = 12;
 	private final int uid;
 	public int pin = -1;
 	public int turkeyKills;
@@ -158,7 +158,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private int bounty = 10;
 	private int killCount = 0;
 	private int deathCount = 0;
-	private int voteCount;
+	private int voteStreak = 0;
+	private int todayVotes = 0;
 
 	/**
 	 * LONG
@@ -178,21 +179,21 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public long lastVeng = 0;
 	public long antiFireTimer = 0;
 	public long overloadTimer = 0;
-	public long lastAccountValueTime = System.currentTimeMillis();
 	private long previousSessionTime = System.currentTimeMillis();
 	private long lastHonorPointsReward = System.currentTimeMillis();
 	private long created;
 	private long disconnectedTimer = System.currentTimeMillis();
-	private long lastSQL = 0;
-	private long lastVoted = 0;
+	private long lastVoteStreakIncrease = 0L;
 	private long lastEPIncrease = System.currentTimeMillis();
 	private long nameLong;
 	private long playerRank = 1;
 	private long lastDuelUpdate = 0L;
 	private long dragonFireSpec = 0L;
 	private long lastTeleport = System.currentTimeMillis();
-	private long firstVoteTime = -1;
 	private final List<Long> ignores = new ArrayList<>(100);
+	private long locks = 0;
+	private long voteBonusEndTime = 0;
+	private long lastVoteBonus = 0L;
 	/**
 	 * DOUBLES
 	 */
@@ -315,11 +316,11 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private SummoningBar summoningBar = new SummoningBar(this);
 	private Yelling yelling = new Yelling();
 	private ExtraData extraData = new ExtraData();
-	private QuestTab questtab = new QuestTab(this);
+	private NewQuestTab questtab = new NewQuestTab(this);
 	private SpawnTab spawntab = new SpawnTab(this);
 	private AchievementTab achievementtab = new AchievementTab(this);
 	private ItemDropping itemDropping = new ItemDropping();
-	private TriviaSettings ts = new TriviaSettings(0, false);
+	private TriviaSettings ts = new TriviaSettings(0);
 	private Mail mail = new Mail(this);
 	private SkillingData sd = new SkillingData();
 	private ChatMessage currentChatMessage;
@@ -660,7 +661,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return itemDropping;
 	}
 
-	public QuestTab getQuestTab() {
+	public NewQuestTab getQuestTab() {
 		return questtab;
 	}
 
@@ -857,7 +858,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 *
 	 * @returns for how long the player was online in milliseconds.
 	 */
-	public long onlineTime() {
+	public long getCurrentSessionTime() {
 		return System.currentTimeMillis() - logintime;
 	}
 
@@ -913,20 +914,12 @@ public class Player extends Entity implements Persistable, Cloneable {
 		skullTimer = timer;
 	}
 
-	public long getLastVoted() {
-		return lastVoted;
+	public long getLastVoteStreakIncrease() {
+		return lastVoteStreakIncrease;
 	}
 
-	public void setLastVoted(long time) {
-		lastVoted = time;
-	}
-
-	public long getLastSQL() {
-		return lastSQL;
-	}
-
-	public void updateLastSQL() {
-		lastSQL = System.currentTimeMillis();
+	public void setLastVoteStreakIncrease(long time) {
+		lastVoteStreakIncrease = time;
 	}
 
 	public long getLastEPIncrease() {
@@ -1423,6 +1416,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setPlayerRank(long playerRank) {
 		this.playerRank = playerRank;
+		getActionSender().sendRights();
+		getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.RANK);
 	}
 
 	/**
@@ -1819,7 +1814,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public void startUpEvents() {
 		// getActionSender().sendString(29161,
 		// "Players Online: "+World.getPlayers().size());
-		// getActionSender().sendString(29162, Server.getOnlineTime());
+		// getActionSender().sendString(29162, Server.getCurrentSessionTime());
 		FriendsAssistant.initialize(this);
 		for(int i = 0; i < 5; i++) {
 			getInterfaceState().setNextDialogueId(i, - 1);
@@ -2092,7 +2087,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void increaseKillCount() {
 		killCount++;
-		getQuestTab().updateQuestTab();
 	}
 
 	public ActionSender sendHeadedMessage(final String color, final String header, final Object... message) {
@@ -2107,13 +2101,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(!getPermExtraData().getBoolean("disabledPkMessages"))
+		if(Lock.isEnabled(this, Lock.PK_MESSAGES))
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendLootMessage(String tag, Object... message) {
-		if(!getPermExtraData().getBoolean("disabledLootMessages"))
+		if(Lock.isEnabled(this, Lock.LOOT_MESSAGES))
 			return sendHeadedMessage("@gre@", "[" + tag + "]", message);
 		return getActionSender();
 	}
@@ -2145,7 +2139,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void increaseDeathCount() {
 		deathCount++;
-		getQuestTab().updateQuestTab();
 	}
 
 	public BankField getBankField() {
@@ -2226,22 +2219,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return highscores;
 	}
 
-	public long getFirstVoteTime() {
-		return firstVoteTime;
-	}
-
-	public void setFirstVoteTime(final long firstVoteTime){
-		this.firstVoteTime = firstVoteTime;
-	}
-
-	public int getVoteCount() {
-		return voteCount;
-	}
-
-	public void setVoteCount(final int voteCount){
-		this.voteCount = voteCount;
-	}
-
 	@SuppressWarnings("deprecation")
 	public void addCharge(int seconds) {
 		if (chargeTill < System.currentTimeMillis())
@@ -2310,5 +2287,48 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public List<Long> getIgnores() {
 		return ignores;
+	}
+
+	public int getVoteStreak() {
+		return voteStreak;
+	}
+
+	public void setVoteStreak(int voteStreak) {
+		this.voteStreak = voteStreak;
+	}
+
+	public int getTodayVotes() {
+		return todayVotes;
+	}
+
+	public void setTodayVotes(int todayVotes) {
+		this.todayVotes = todayVotes;
+	}
+
+	public long getLocks() {
+		return locks;
+	}
+
+	public void setLocks(long locks) {
+		this.locks = locks;
+	}
+
+	public long getVoteBonusEndTime() {
+		return voteBonusEndTime;
+	}
+
+	public void setVoteBonusEndTime(long bonusEnd, boolean applyEvent) {
+		if(applyEvent) {
+			World.submit(new VoteBonusEndTask(this, bonusEnd));
+		}
+		this.voteBonusEndTime = (applyEvent ? System.currentTimeMillis() : 0) + bonusEnd;
+	}
+
+	public long getLastVoteBonus() {
+		return lastVoteBonus;
+	}
+
+	public void setLastVoteBonus(long lastVoteBonus) {
+		this.lastVoteBonus = lastVoteBonus;
 	}
 }

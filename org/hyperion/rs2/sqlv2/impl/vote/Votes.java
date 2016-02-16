@@ -27,7 +27,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         return waiting(player.getName().toLowerCase());
     }
 
-    public boolean processRunelocus(final VoteDao dao, final WaitingVote vote) {
+    public boolean processRunelocus(final WaitingVote vote) {
         try{
             return dao.processRunelocus(vote.index()) == 1;
         }catch(Exception ex){
@@ -37,7 +37,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         }
     }
 
-    public boolean processTopg(final VoteDao dao, final WaitingVote vote) {
+    public boolean processTopg(final WaitingVote vote) {
         try{
             return dao.processTopg(vote.index()) == 1;
         }catch(Exception ex){
@@ -47,7 +47,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         }
     }
 
-    public boolean processRspslist(final VoteDao dao, final WaitingVote vote) {
+    public boolean processRspslist(final WaitingVote vote) {
         try{
             return dao.processRspslist(vote.index()) == 1;
         }catch(Exception ex){
@@ -57,7 +57,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         }
     }
 
-    public boolean process(final VoteDao dao, final WaitingVote vote) {
+    public boolean process(final WaitingVote vote) {
         try{
             return dao.process(vote.index()) == 1;
         }catch(Exception ex){
@@ -67,7 +67,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         }
     }
 
-    public boolean delete(final VoteDao dao, final WaitingVote vote) {
+    public boolean delete(final WaitingVote vote) {
         try{
             return dao.delete(vote.index()) == 1;
         }catch(Exception ex){
@@ -77,7 +77,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         }
     }
 
-    public boolean insertVote(final VoteDao dao, final String name, final int runelocus, final int top100, final int topg) {
+    public boolean insertVote(final String name, final int runelocus, final int top100, final int topg) {
         try{
             return dao.insertVote(name, runelocus, top100, topg) == 1;
         }catch(Exception ex){
@@ -87,7 +87,7 @@ public class Votes extends SqlDaoManager<VoteDao> {
         }
     }
 
-    public boolean insertVote(final VoteDao dao, final Player player, final int runelocus, final int top100, final int topg) {
-        return insertVote(dao, player.getName().toLowerCase(), runelocus, top100, topg);
+    public boolean insertVote(final Player player, final int runelocus, final int top100, final int topg) {
+        return insertVote(player.getName().toLowerCase(), runelocus, top100, topg);
     }
 }

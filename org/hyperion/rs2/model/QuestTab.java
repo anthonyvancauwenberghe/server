@@ -3,14 +3,7 @@ package org.hyperion.rs2.model;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.rs2.model.content.Events;
-import org.hyperion.rs2.model.content.bounty.BountyPerks;
-import org.hyperion.rs2.packet.ActionsManager;
-import org.hyperion.rs2.packet.ButtonAction;
 import org.hyperion.util.Misc;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 /**
  * @author Arsen Maxyutov.
@@ -67,7 +60,6 @@ public class QuestTab {
         sendBHPerks();
         sendYellEnabled();
         sendYellTitlesEnabled();
-        sendTriviaEnabled();
         sendPkMessagesEnabled();
         sendStaffMessagesEnabled();
         sendLootMessagesEnabled();
@@ -213,12 +205,6 @@ public class QuestTab {
         player.getActionSender().sendTooltip(id, (player.getPermExtraData().getBoolean("disabledYellTitles") ? "Enable" : "Disable") + " yell titles");
     }
 
-    public void sendTriviaEnabled() {
-        int id = getId(27);
-        player.getActionSender().sendString("@or1@" + (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia", id);
-        player.getActionSender().sendTooltip(id, (player.getTrivia().isEnabled() ? "Disable" : "Enable") + " trivia");
-    }
-
     public void sendPkMessagesEnabled() {
         int id = getId(28);
         player.getActionSender().sendString("@or1@" + (player.getPermExtraData().getBoolean("disabledPkMessages") ? "Enable" : "Disable") + " PK messages", id);
@@ -251,8 +237,6 @@ public class QuestTab {
 
     public void sendExpLockEnabled() {
         int id = getId(33);
-        player.getActionSender().sendString("@or1@" + (player.xpLock ? "Disable" : "Enable") + " exp lock", id);
-        player.getActionSender().sendTooltip(id, (player.xpLock ? "Disable" : "Enable") + " exp lock");
     }
 
     public void sendRankInfo() {
@@ -284,6 +268,7 @@ public class QuestTab {
     }
 
     static {
+        /*
         for(int i = 0; i < Rank.values().length; i++) {
             final int i2 = i;
             ActionsManager.getManager().submit(getClickId(36 + i), new ButtonAction() {
@@ -544,6 +529,6 @@ public class QuestTab {
             public void handle(Player player, int id) {
                 player.sendMessage("l4unchur13 https://twitter.com/arteropk1");
             }
-        });
+        });*/
     }
 }

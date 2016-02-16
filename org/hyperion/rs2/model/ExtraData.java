@@ -29,9 +29,7 @@ public class ExtraData {
 	private final Map<String, Object> extraData;
 	
 	public ExtraData() {
-		extraData = new HashMap<String, Object>();
-		this.put("zombiewave", 0);
-		this.put("bhon", true);
+		extraData = new HashMap<>();
 	}
 
 	/**

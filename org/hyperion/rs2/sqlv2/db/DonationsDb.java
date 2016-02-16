@@ -1,10 +1,15 @@
 package org.hyperion.rs2.sqlv2.db;
 
 import org.hyperion.Configuration;
+import org.hyperion.rs2.commands.NewCommand;
+import org.hyperion.rs2.commands.NewCommandHandler;
+import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.sqlv2.impl.donation.Donations;
 import org.hyperion.rs2.sqlv2.impl.donation.work.CheckPendingDonationsTask;
 import org.hyperion.rs2.sqlv2.impl.vote.Votes;
+import org.hyperion.rs2.sqlv2.impl.vote.work.CheckWaitingVotesTask;
+import org.hyperion.util.Time;
 
 import static org.hyperion.Configuration.ConfigurationObject.*;
 
@@ -47,5 +52,22 @@ public class DonationsDb extends Db {
         votes = new Votes(this);
 
         World.submit(new CheckPendingDonationsTask());
+        World.submit(new CheckWaitingVotesTask());
+        NewCommandHandler.submit(
+                new NewCommand("voted", Time.TEN_SECONDS) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        player.sendMessage("Voting has been automated. Votes will be processed in " + CheckWaitingVotesTask.getSecondLeft() + " seconds.");
+                        return true;
+                    }
+                },
+                new NewCommand("donated", Time.TEN_SECONDS) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        player.sendMessage("Donating has been automated. Donations will be processed in " + CheckPendingDonationsTask.getSecondLeft() + " seconds.");
+                        return true;
+                    }
+                }
+        );
     }
 }

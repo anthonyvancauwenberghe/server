@@ -1202,7 +1202,6 @@ public class CommandHandler {
 										  for (final Player p : World.getPlayers()) {
 											  p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
 											  p.sendServerMessage("Click it in the questtab to join in!");
-											  p.getQuestTab().sendUptime();
 										  }
 
 									  } catch (Exception ex) {
@@ -1218,7 +1217,6 @@ public class CommandHandler {
 						Events.resetEvent();
 
 						for (final Player p : World.getPlayers()) {
-							p.getQuestTab().sendUptime();
 							p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
 						}
 						return true;

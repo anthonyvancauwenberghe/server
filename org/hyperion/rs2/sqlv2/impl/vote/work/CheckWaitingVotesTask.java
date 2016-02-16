@@ -1,259 +1,171 @@
 package org.hyperion.rs2.sqlv2.impl.vote.work;
 
-import java.text.SimpleDateFormat;
+import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.container.bank.BankItem;
+import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.rs2.sqlv2.impl.vote.WaitingVote;
+import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
-public class CheckWaitingVotesTask {
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.stream.Collectors;
 
-////TODO REDO THIS CLASS
-    public static final SimpleDateFormat FORMAT_PLAYER = new SimpleDateFormat("dd/MM/yyyy");
-//    public static final SimpleDateFormat FORMAT_SQL = new SimpleDateFormat("yyyy-MM-dd");
-//
-//    private int bonus = -1;
-//    private int votingPoints = 0;
-//    private int streak;
-//
-//    public CheckWaitingVotesTask() {
-//        super(Time.ONE_MINUTE);
-//    }
-//
-//    private static String doBonus(Player player) {
-//        switch(bonus){
-//            case 0:
-//                votingPoints *= 2;
-//                return ("You get double voting reward!");
-//            case 1:
-//                long time;
-//                switch(streak){
-//                    case 10:
-//                        time = 2 * Time.ONE_HOUR;
-//                        break;
-//                    case 5:
-//                        time = 90 * Time.ONE_MINUTE;
-//                        break;
-//                    case 3:
-//                        time = Time.ONE_HOUR;
-//                        break;
-//                    case 2:
-//                        time = 45 * Time.ONE_MINUTE;
-//                        break;
-//                    case 1:
-//                        time = 30 * Time.ONE_MINUTE;
-//                        break;
-//                    default:
-//                        time = 15 * Time.ONE_MINUTE;
-//                        break;
-//                }
-//                player.getPermExtraData().put("doubleExperience", System.currentTimeMillis() + time);
-//                return "You received double experience for " + time / Time.ONE_MINUTE + " minutes!";
-//            case 2:
-//                double multiplier;
-//                switch(streak){
-//                    case 10:
-//                        multiplier = 1.5;
-//                        break;
-//                    case 5:
-//                        multiplier = 1.2;
-//                        break;
-//                    case 3:
-//                        multiplier = 1.1;
-//                        break;
-//                    case 2:
-//                        multiplier = 1.05;
-//                        break;
-//                    case 1:
-//                        multiplier = 1.02;
-//                        break;
-//                    default:
-//                        multiplier = 1.01;
-//                        break;
-//                }
-//                player.getPermExtraData().put("increasedDroprate", System.currentTimeMillis() + Time.ONE_HOUR);
-//                player.getPermExtraData().put("dropRateMultiplier", multiplier);
-//                return "You received increased droprates for one hour!";
-//            case 3:
-//                double reducement;
-//                switch(streak){
-//                    case 10:
-//                        reducement = 0.5;
-//                        break;
-//                    case 5:
-//                        reducement = 0.8;
-//                        break;
-//                    case 3:
-//                        reducement = 0.9;
-//                        break;
-//                    case 2:
-//                        reducement = 0.95;
-//                        break;
-//                    case 1:
-//                        reducement = 0.98;
-//                        break;
-//                    default:
-//                        reducement = 0.99;
-//                        break;
-//                }
-//                player.getPermExtraData().put("loweredYellTimer", System.currentTimeMillis() + Time.ONE_HOUR);
-//                player.getPermExtraData().put("yellReduction", reducement);
-//                return "You received a reduced yelldelay for one hour!";
-//            case 4:
-//                if(Misc.random(120 / streak) == 1){
-//                    final int donatorPoints = 1000;
-//                    player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + donatorPoints);
-//                    for(final Player p : World.getPlayers()){
-//                        p.sendServerMessage(player.getSafeDisplayName() + " has just received " + donatorPoints + " donator points for voting!");
-//                    }
-//                    return "You receive " + donatorPoints + " donator points as a rare bonus!";
-//                }else{
-//                    bonus = Misc.random(4);
-//                    doBonus();
-//                }
-//                break;
-//        }
-//        return "";
-//    }
-//
-//    @Override
-//    public void execute() {
-//        List<WaitingVote> votes = null;
-//        if(DbHub.initialized() && DbHub.getDonationsDb().isInitialized())
-//            votes = DbHub.getDonationsDb().votes().waiting(player);
-//        if(votes == null){
-//            if(DbHub.isPlayerDebug())
-//                player.sendf("Unable to retrieve voting information at this time. Try again later.");
-//            return;
-//        }
-//        if(votes.isEmpty()){
-//            player.sendf("You don't have any votes! Type ::vote to start voting");
-//            return;
-//        }
-//        int currentStreak = player.getPermExtraData().getInt("votingStreak");
-//        boolean runelocus = false;
-//        boolean rspslist = false;
-//        boolean topg = false;
-//        int runelocusVotes = 0;
-//        int rspslistVotes = 0;
-//        int topgVotes = 0;
-//        try(final VoteDao dao = DbHub.getDonationsDb().votes().open()){
-//            for(final WaitingVote vote : votes){
-//                if(!vote.processed()){
-//                    if(!DbHub.getDonationsDb().votes().process(dao, vote))
-//                        continue;
-//                    if(vote.runelocus() && !vote.runelocusProcessed()){
-//                        if( DbHub.getDonationsDb().votes().processRunelocus(dao, vote))
-//                            runelocusVotes += 2;
-//                    }
-//                    if(vote.topg() && !vote.topgProcessed()){
-//                        if(DbHub.getDonationsDb().votes().processTopg(dao, vote))
-//                            topgVotes++;
-//                    }
-//                    if(vote.rspslist() && !vote.rspslistProcessed()){
-//                        if(DbHub.getDonationsDb().votes().processRspslist(dao, vote))
-//                            rspslistVotes++;
-//                    }
-//                }
-//                if(vote.date().toString().equalsIgnoreCase(FORMAT_SQL.format(Calendar.getInstance().getTime()))){
-//                    if(vote.runelocus())
-//                        runelocus = true;
-//                    if(vote.rspslist())
-//                        rspslist = true;
-//                } else {
-//                    DbHub.getDonationsDb().votes().delete(dao, vote);
-//                }
-//            }
-//            if(runelocusVotes == 0 && rspslistVotes == 0 && topgVotes == 0){
-//                player.sendf("You have no votes to claim. Type ::vote to vote");
-//                return;
-//            }
-//            final Calendar cal = Calendar.getInstance();
-//            cal.add(Calendar.DATE, -1);
-//            final String yesterday = FORMAT_PLAYER.format(cal.getTime());
-//            final String lastVoted = player.getPermExtraData().getString("lastVoted");
-//            if(lastVoted != null){
-//                if(lastVoted.equalsIgnoreCase(yesterday)){
-//                    currentStreak++;
-//                    //On the condition that his last vote was not today it'll reset. Otherwise it means he already received his bonus today & he doesn't need a bonus anymore
-//                }else if(!lastVoted.equalsIgnoreCase(FORMAT_PLAYER.format(Calendar.getInstance().getTime()))){
-//                    player.sendMessage("Your voting streak has been reset!");
-//                    currentStreak = 0;
-//                }
-//            }
-//            final int todayVotes = player.getPermExtraData().getInt("todayVoted") + runelocusVotes + topgVotes + rspslistVotes;
-//            player.getPermExtraData().put("todayVoted", todayVotes);
-//            if(todayVotes > 20 + (Misc.random(10))){
-//                player.getInventory().remove(Item.create(3062, player.getInventory().getCount(3062)));
-//                player.getBank().remove(Item.create(3062, player.getBank().getCount(3062)));
-//                player.getPoints().setVotingPoints(0);
-//                player.sendMessage("Stop multivoting so heavily!");
-//                player.getPermExtraData().put("todayVoted", 0);
-//                return;
-//            }
-//            if(runelocus && rspslist && !FORMAT_PLAYER.format(Calendar.getInstance().getTime()).equalsIgnoreCase(lastVoted)){
-//                player.getPermExtraData().put("lastVoted", FORMAT_PLAYER.format(Calendar.getInstance().getTime()));
-//                player.getPermExtraData().put("todayVoted", 0);
-//                player.getAchievementTracker().voted();
-//                if(currentStreak >= 31){
-//                    streak = 10;
-//                }else if(currentStreak >= 14){
-//                    streak = 5;
-//                }else if(currentStreak >= 7){
-//                    streak = 3;
-//                }else if(currentStreak >= 4){
-//                    streak = 2;
-//                }else if(currentStreak >= 2){
-//                    streak = 1;
-//                }
-//                votingPoints += streak;
-//
-//                //The bonus gets set
-//                bonus = Misc.random(4);
-//            }
-//            votingPoints += runelocusVotes + rspslistVotes + topgVotes;
-//            final StringBuilder sb = new StringBuilder();
-//            if(runelocus && topg && rspslist){
-//                sb.append(doBonus());
-//            }else{
-//                //Now all the processing is done, it's time to add the points and tell him if he can still vote for the streak
-//                sb.append("You can still vote on ");
-//                if(!runelocus)
-//                    sb.append("Runelocus & ");
-//                if(!rspslist)
-//                    sb.append("RSPSList");
-//                if(sb.toString().endsWith(" & ")){
-//                    sb.replace(sb.length() - 3, sb.length(), "");
-//                }
-//                sb.append(".");
-//            }
-//            if(!runelocus || !rspslist){
-//                player.sendf("Alert##Thank you for voting!##You received %d voting point(s)##Remember to vote on all 3 sites to %s streak!##%s", votingPoints, currentStreak != 0 ? "keep your" : "get a", sb.toString());
-//            }else{
-//                if(bonus == -1){
-//                    player.sendMessage("Alert##Thank you for voting again!##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + " ##ArteroPK appreciates your support!");
-//                }else{
-//                    if(currentStreak != 0){
-//                        player.sendMessage("Alert##Thank you for voting " + currentStreak + " " + (currentStreak == 1 ? "day" : "days") + " in a row.##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + ".##" + sb.toString());
-//                    }else{
-//                        player.sendMessage("Alert##Thank you for voting.##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + ".##" + sb.toString());
-//                    }
-//                }
-//            }
-//            final int freeSlots = player.getInventory().freeSlots();
-//            if(freeSlots >= 1){
-//                player.getInventory().add(new Item(3062, votingPoints));
-//            }else{
-//                player.getBank().add(new BankItem(0, 3062, votingPoints));
-//                player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
-//            }
-//            player.setLastVoted(System.currentTimeMillis());
-//            player.getPermExtraData().put("votingStreak", currentStreak);
-//            votingPoints = 0;
-//            streak = 0;
-//            bonus = -1;
-//            DbHub.getDonationsDb().votes().insertVote(dao, player, runelocusVotes, rspslistVotes, topgVotes);
-//        } catch(Exception ex) {
-//            if(DbHub.isConsoleDebug())
-//                ex.printStackTrace();
-//            if(DbHub.isPlayerDebug())
-//                player.sendf("There was an error processing your vote!");
-//        }
-//    }
+public class CheckWaitingVotesTask extends Task {
+
+    /**
+     * The maximum amount of votes a player can do on one day.
+     */
+    private final static int MAXIMUM_VOTES_PER_DAY = 25;
+
+    /**
+     * The time the task will put in-between each execution.
+     */
+    private final static long CYCLE_TIME = Time.FIVE_MINUTES;
+
+    /**
+     * The instance, so we can request the time left.
+     */
+    private static CheckWaitingVotesTask INSTANCE;
+
+    public CheckWaitingVotesTask() {
+        super(CYCLE_TIME);
+        if(INSTANCE != null)
+            throw new IllegalStateException("There is already an instance of " + getClass().getSimpleName() + " running.");
+        INSTANCE = this;
+    }
+
+    @Override
+    protected void execute() {
+        if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized()) {
+            stop();
+            return;
+        }
+        World.getPlayers().stream().filter(player -> player != null).forEach(player -> {
+            List<WaitingVote> votes = DbHub.getDonationsDb().votes().waiting(player);
+            if (votes == null || votes.isEmpty())
+                return;
+            if (votes.stream().filter(vote -> !vote.processed()).count() < 1)
+                return;
+            boolean runelocus = false;
+            boolean rspslist = false;
+            boolean topg = false;
+            int runelocusVotes = 0;
+            int rspslistVotes = 0;
+            int topgVotes = 0;
+
+            /**
+             * First we'll gather for all votes if they're processed or not.
+             */
+            for (WaitingVote vote : votes) {
+                if (!vote.processed() && DbHub.getDonationsDb().votes().process(vote)) {
+                    if (vote.runelocus() && !vote.runelocusProcessed()) {
+                        if (DbHub.getDonationsDb().votes().processRunelocus(vote))
+                            runelocusVotes++;
+                    }
+                    if (vote.topg() && !vote.topgProcessed()) {
+                        if (DbHub.getDonationsDb().votes().processTopg(vote))
+                            topgVotes++;
+                    }
+                    if (vote.rspslist() && !vote.rspslistProcessed()) {
+                        if (DbHub.getDonationsDb().votes().processRspslist(vote))
+                            rspslistVotes++;
+                    }
+                }
+                if (vote.runelocus())
+                    runelocus = true;
+                if (vote.rspslist())
+                    rspslist = true;
+                if (vote.topg())
+                    topg = true;
+            }
+
+            LocalDate lastVoteDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteStreakIncrease()), ZoneId.systemDefault()).toLocalDate();
+
+            if (!lastVoteDate.equals(LocalDate.now())) {
+                player.setTodayVotes(0);
+                if (runelocus && topg && rspslist) {
+                    player.setVoteStreak(player.getVoteStreak() + 1);
+                    player.sendMessage("Your current voting streak is now " + player.getVoteStreak() + "!");
+                    player.setLastVoteStreakIncrease(System.currentTimeMillis());
+                }
+            }
+            player.setTodayVotes(player.getTodayVotes() + runelocusVotes + topgVotes + rspslistVotes);
+
+            if (player.getTodayVotes() > MAXIMUM_VOTES_PER_DAY) {
+                player.getInventory().remove(Item.create(3062, player.getInventory().getCount(3062)));
+                player.getBank().remove(Item.create(3062, player.getBank().getCount(3062)));
+                player.getPoints().setVotingPoints(0);
+                player.sendMessage("You can only vote a maximum of " + MAXIMUM_VOTES_PER_DAY + " times a day.", "Your " + ItemDefinition.forId(3062).getProperName() + "es have been cleared and your points reset.");
+            }
+
+            if (player.getTodayVotes() > 10 && Misc.random(2) == 1 && player.getTodayVotes() <= MAXIMUM_VOTES_PER_DAY) {
+                player.sendMessage("You can only vote a maximum of " + MAXIMUM_VOTES_PER_DAY + " times a day without getting", "your votes cleaned, be careful!");
+            }
+
+            VoteBonus voteBonus = null;
+            int votingPoints = (runelocusVotes * 2) + rspslistVotes + topgVotes;
+
+            LocalDate lastVoteBonusDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteBonus()), ZoneId.systemDefault()).toLocalDate();
+            boolean canReceiveBonus = !lastVoteBonusDate.equals(LocalDate.now());
+
+            if (canReceiveBonus) {
+                if (runelocus && topg && rspslist) {
+                    voteBonus = Misc.randomElement(VoteBonus.VALUES);
+                    while (!voteBonus.willApply(player)) {
+                        voteBonus = Misc.randomElement(VoteBonus.VALUES);
+                    }
+                    player.sendMessage("Alert##Thank you for voting" + (player.getTodayVotes() > 1 ? " again" : "") + "!##You received " + votingPoints + " Strange Box" + (votingPoints == 1 ? "" : "es") + " ##" + voteBonus.bonusMessage(player));
+                    voteBonus.applyBonus(player);
+                    player.setLastVoteBonus(System.currentTimeMillis());
+                } else {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("You can still vote on ");
+                    if (!runelocus)
+                        sb.append("Runelocus & ");
+                    if (!rspslist)
+                        sb.append("RSPSList & ");
+                    if (!topg)
+                        sb.append("TopG");
+                    if (sb.toString().endsWith(" & ")) {
+                        sb.replace(sb.length() - 3, sb.length(), "");
+                    }
+                    sb.append(".");
+                    player.sendMessage("Alert##Thank you for voting" + (player.getTodayVotes() > 1 ? " again" : "") + "!##You received " + votingPoints + " Strange Box" + ((runelocusVotes + rspslistVotes + topgVotes) == 1 ? "" : "es") + " ##" + sb.toString());
+                }
+            } else {
+                player.sendMessage("Alert##Thank you for voting" + (player.getTodayVotes() > 1 ? " again" : "") + "!##You received " + votingPoints + " Strange Box" + ((runelocusVotes + rspslistVotes + topgVotes) == 1 ? "" : "es") + " ##You can vote " + (MAXIMUM_VOTES_PER_DAY - player.getTodayVotes()) + " more times today!");
+            }
+
+            final int freeSlots = player.getInventory().freeSlots();
+            if (freeSlots >= 1) {
+                player.getInventory().add(new Item(3062, votingPoints));
+            } else {
+                player.getBank().add(new BankItem(0, 3062, votingPoints));
+                player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
+            }
+
+            DbHub.getDonationsDb().votes().insertVote(player, runelocusVotes, rspslistVotes, topgVotes);
+            archiveVotes(player, runelocus && topg && rspslist);
+        });
+    }
+
+    private static void archiveVotes(Player player, boolean deleteAllProcessed) {
+        List<WaitingVote> processedVotes = DbHub.getDonationsDb().votes().waiting(player).stream().filter(vote -> vote.processed() && (deleteAllProcessed || !vote.date().toLocalDate().equals(LocalDate.now()))).collect(Collectors.toList());
+        processedVotes.forEach(vote -> DbHub.getDonationsDb().votes().delete(vote));
+    }
+
+    public static int getSecondLeft() {
+        if(INSTANCE == null)
+            return -1;
+        return (int)((INSTANCE.getCountdown() * Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY)) / 1000);
+    }
 }

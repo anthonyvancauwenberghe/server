@@ -34,11 +34,7 @@ public class NpcDeathTask extends Task {
 
     public static final int CYCLES_AMOUNT = 9;
 
-    private NPC npc;
-
-    public static Location DEATH_LOCATION() {
-        return Location.create(3221, 3218, 0);
-    }
+    private final NPC npc;
 
     /**
      * Creates te death event for the specified entity.
@@ -72,13 +68,7 @@ public class NpcDeathTask extends Task {
             npc.cE.setPoisoned(false);
             npc.getWalkingQueue().reset();
         } else if (timer == 0) {
-            Player jet = null;
-            if (World.getPlayerByName("jet") != null) {
-                jet = World.getPlayerByName("jet").debug ? World.getPlayerByName("jet") : null;
-            }
-
             int tokens = 0;
-
             int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
             final Map<Player, Double> killers = new HashMap<>();
             for (final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
@@ -107,17 +97,12 @@ public class NpcDeathTask extends Task {
                                 new Item(391, 1));
                         GlobalItemManager.newDropItem(player, globalItem5);
                     }
-                    if (jet != null) {
-                        jet.sendf("%s did %d damage and made %d dp and %d pkp on npc %d, %1.2f percent", killer.getKey(), killer.getValue(), dp, pkp, npc.getDefinition().getId(), percent);
-                    }
 
                 }
 
             }
 
             Player killer = npc.cE.getKiller();
-            if (jet != null && killer != null && npc != null)
-                jet.getActionSender().sendMessage("Killer is: " + killer.getName() + " for npc: " + npc.getDefinition().getName());
             if (killer != null) {
                 if (!npc.serverKilled) {
                     ContentManager.handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
@@ -333,7 +318,7 @@ public class NpcDeathTask extends Task {
     }
 
 
-    private static final boolean unreacheablenpc(final int id) {
+    private static boolean unreacheablenpc(final int id) {
         return id == 8596;
     }
 

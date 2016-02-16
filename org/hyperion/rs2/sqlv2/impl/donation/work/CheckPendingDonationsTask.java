@@ -1,5 +1,6 @@
 package org.hyperion.rs2.sqlv2.impl.donation.work;
 
+import org.hyperion.Configuration;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -12,26 +13,31 @@ import java.util.List;
 
 public class CheckPendingDonationsTask extends Task {
 
-    private final double MULTIPLIER=1.5;
-    private final String SPECIAL_EVENT_NAME="Christmas";
+    private final double MULTIPLIER = 1.5;
+    private final String SPECIAL_EVENT_NAME = "Christmas";
+
+    /**
+     * The instance, so we can request the time left.
+     */
+    private static CheckPendingDonationsTask INSTANCE;
 
     public CheckPendingDonationsTask() {
-        super(Time.ONE_MINUTE);
+        super(Time.FIVE_MINUTES);
+        if(INSTANCE != null)
+            throw new IllegalStateException("There is already an instance of " + getClass().getSimpleName() + " running.");
+        INSTANCE = this;
     }
 
     @Override
     public void execute() {
+        if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized()){
+            stop();
+            return;
+        }
+
         World.getPlayers().stream().filter(player -> player != null).forEach(player -> {
-            List<Donation> donations = null;
-            if (DbHub.initialized() && DbHub.getDonationsDb().isInitialized())
-                donations = DbHub.getDonationsDb().donations().unfinished(player);
-            if (donations == null) {
-                if (DbHub.isPlayerDebug())
-                    player.sendf("Unable to retrieve donation info at this time. Try again later.");
-                return;
-            }
-            if (donations.isEmpty()) {
-                player.sendf("You don't have any pending donations! Type ::donate to donate");
+            List<Donation> donations = DbHub.getDonationsDb().donations().unfinished(player);
+            if (donations == null || donations.isEmpty()) {
                 return;
             }
             int processedCount = 0;
@@ -43,7 +49,6 @@ public class CheckPendingDonationsTask extends Task {
                 if (d.method().equals("survey")) {
                     player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() + d.points());
                     player.sendf("%,d Donator Points have been added to your account for surveys", d.points());
-                    player.getQuestTab().sendDonatePoints();
                 } else {
                     if (d.points() > 0) {
                         player.sendf("Donation Processed! Order ID: %s | $%,d (%,d Donator Points)", d.tokenId(), d.dollars(), d.points());
@@ -52,7 +57,6 @@ public class CheckPendingDonationsTask extends Task {
                     } else if (d.points() != 0) {
                         player.getPoints().setDonatorPoints(player.getPoints().getDonatorPoints() - d.points());
                         player.sendf("%,d Donator Points have been deducted from your account!", d.points());
-                        player.getQuestTab().sendDonatePoints();
                     }
                 }
                 ++processedCount;
@@ -66,7 +70,6 @@ public class CheckPendingDonationsTask extends Task {
             }
             player.getPoints().setDonatorPoints((int) Math.round(player.getPoints().getDonatorPoints() + totalPoints * MULTIPLIER));
             player.getPoints().setDonatorsBought(player.getPoints().getDonatorPointsBought() + totalPoints);
-            player.getQuestTab().sendDonatePoints();
             player.sendf("Alert##Thank you for donating $%,d##%,d donator points have been added to your account", totalDollars, totalPoints);
             if (MULTIPLIER > 1)
                 player.sendf(SPECIAL_EVENT_NAME + " SPECIAL! You received an extra " + (MULTIPLIER - 1) * 100 + "% Donator Points for " + SPECIAL_EVENT_NAME + "!");
@@ -84,7 +87,12 @@ public class CheckPendingDonationsTask extends Task {
             return;
         player.setPlayerRank(Rank.addAbility(player, rank));
         player.setPlayerRank(Rank.setPrimaryRank(player, rank));
-        player.getQuestTab().sendRankInfo();
         player.sendf("You have been given %s status!", rank);
+    }
+
+    public static int getSecondLeft() {
+        if(INSTANCE == null)
+            return -1;
+        return (int)((INSTANCE.getCountdown() * Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY)) / 1000);
     }
 }

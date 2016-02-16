@@ -12,38 +12,32 @@ import java.util.Objects;
 public abstract class Task {
     
     /**
-     * The delay between the task executing.
-     */
-    private long delay;
- 
-    /**
      * A flag which indicates if this task should be executed once immediately.
      */
     private final boolean immediate;
-
+    /**
+     * The key for the task
+     */
+    private final Object key;
+    /**
+     * The delay between the task executing.
+     */
+    private long delay;
     /**
      * The current 'count down' value. When this reaches zero the task will be
      * executed.
      */
     private long countdown;
-
-    /**
-     * The key for the task
-     */
-    private final Object key;
- 
     /**
      * A flag which indicates if this task is still running.
      */
     private boolean running = true;
 
     public Task(long delay, boolean immediate, Object key) {
-        if(delay < 0)
-            throw new IllegalArgumentException("The delay for a task cannot be negative.");
         if(key == null)
             throw new IllegalArgumentException("The key for a task cannot be null.");
         this.delay = delay;
-        this.immediate = immediate;
+        this.immediate = immediate || delay < 0;
         this.key = key;
         countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
     }
@@ -97,7 +91,11 @@ public abstract class Task {
         }
         return running;
     }
- 
+
+    public long getCountdown() {
+        return countdown;
+    }
+
     /**
      * Performs this task's action.
      */

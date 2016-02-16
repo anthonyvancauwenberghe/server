@@ -14,18 +14,15 @@ public class Anchor extends Weapon implements SpecialWeapon {
 
 	public Anchor(int id) {
 		super(id, Constants.MELEE, 2400, true, false, WEAPON_ANIMATIONS);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public boolean specialAttack(Player player) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public int getSpecialDrain(Player player) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

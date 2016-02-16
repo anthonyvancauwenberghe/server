@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.ContentManager;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.Bork;
@@ -72,12 +73,6 @@ public class EntityHandler {
         System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
         HostGateway.enter(player.getShortIP());
         World.getPlayers().add(player);
-
-        //TODO MAKE THOSE WORK
-        /*
-        World.updatePlayersOnline();
-        World.updateStaffOnline();
-        */
 
         /**
          * We send the player his details.
@@ -148,7 +143,7 @@ public class EntityHandler {
             }
         }
 
-        if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
+        if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime() && !player.isNew()) {
             player.getExtraData().put("cantdoshit", true);
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
             player.setTeleportTarget(Edgeville.LOCATION);
@@ -157,7 +152,7 @@ public class EntityHandler {
         }
 
         if (Rank.getPrimaryRank(player).ordinal() >= Rank.HELPER.ordinal() && !Rank.hasAbility(player, Rank.DEVELOPER))
-            World.getPlayers().stream().filter(p -> p != null).filter(p -> !p.getPermExtraData().getBoolean("disabledStaffMessages")).forEach(p -> p.sendStaffMessage(Rank.getPrimaryRank(player).toString() + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!"));
+            World.getPlayers().stream().filter(p -> p != null && !Lock.isEnabled(p, Lock.STAFF_LOGIN) && p != player).forEach(p -> p.sendStaffMessage(Rank.getPrimaryRank(player).toString() + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!"));
 
 
         if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
@@ -226,7 +221,6 @@ public class EntityHandler {
             DialogueManager.openDialogue(player, 10000);
         }
         player.getActionSender().sendSkills();
-        player.getQuestTab().createQuestTab();
         player.getAchievementTab().createAchievementTab();
         player.getSpawnTab().createSpawnTab();
 

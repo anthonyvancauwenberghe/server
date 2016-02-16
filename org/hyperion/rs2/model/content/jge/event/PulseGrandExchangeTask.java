@@ -11,7 +11,6 @@ public class PulseGrandExchangeTask extends Task {
     }
 
     public void execute() {
-        JGrandExchange.getInstance().stream()
-                .forEach(JGrandExchange.getInstance()::submit);
+        JGrandExchange.getInstance().stream().forEach(JGrandExchange.getInstance()::submit);
     }
 }

@@ -63,8 +63,6 @@ public abstract class InstantPlayerSaving {
 		saveList.add(new SaveLastHonorPointsReward("LastHonors"));
 		saveList.add(new SaveAtkType("AtkType"));
 		saveList.add(new SaveMagicbook("MagicBook"));
-		saveList.add(new SaveExpLock("XpLock"));
-		saveList.add(new SaveTrivia("Trivia"));
 		saveList.add(new SavePrayerBook("Altar"));
 		saveList.add(new SaveDonatorPointsBought("DonatorsBought"));
 		//saveList.add(new SaveDonatorPoints("DonatorPoints"));

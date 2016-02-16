@@ -16,12 +16,12 @@ public class SaveLastVoted extends SaveLong {
 
 	@Override
 	public void setValue(Player player, long value) {
-		player.setLastVoted(value); //
+		player.setLastVoteStreakIncrease(value); //
 	}
 
 	@Override
 	public Long getValue(Player player) {
-		return player.getLastVoted();
+		return player.getLastVoteStreakIncrease();
 	}
 
 }

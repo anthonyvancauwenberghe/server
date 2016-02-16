@@ -2,13 +2,8 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementProgress;
-import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTaskProgress;
-import org.hyperion.rs2.packet.ActionsManager;
 import org.hyperion.util.Misc;
-import org.hyperion.util.Time;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -123,6 +118,7 @@ public class AchievementTab {
     }
 
     static {
+            /*
         try {
             for (Achievement achievement : Achievements.get().values()) {
                 if (achievement.difficulty == Achievement.Difficulty.EASY) {
@@ -189,6 +185,6 @@ public class AchievementTab {
             ActionsManager.getManager().submit(32002, (player1, id) -> player1.sendMessage("l4unchur13 http://www.arteropk.wikia.com/wiki/Achievements"));
         } catch(Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

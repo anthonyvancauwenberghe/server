@@ -227,22 +227,6 @@ public class FightPits implements ContentTemplate {
 		data = null;
 	}
 	
-	public FightPits() {
-		waitingRoom = new CopyOnWriteArrayList<>();
-		teamRed = new CopyOnWriteArrayList<>();
-		teamBlue = new CopyOnWriteArrayList<>();
-		playersInGame = new CopyOnWriteArrayList<>();
-		monsters = new CopyOnWriteArrayList<>();
-		lastChamp = "";
-		timeLeft = 0;
-		for(int i = 0; i < 4; i++) {
-			meleeItems.add(new ArrayList<>());
-			rangeItems.add(new ArrayList<>());
-			mageItems.add(new ArrayList<>());
-
-		}
-	}
-	
 	public static int HELM = 0, BODY = 1, LEGS = 2, WEAPON = 3;
 	
 	public static boolean isNoted(ItemDefinition itemDef) {
@@ -256,6 +240,19 @@ public class FightPits implements ContentTemplate {
 				process();
 			}
 		});
+		waitingRoom = new CopyOnWriteArrayList<>();
+		teamRed = new CopyOnWriteArrayList<>();
+		teamBlue = new CopyOnWriteArrayList<>();
+		playersInGame = new CopyOnWriteArrayList<>();
+		monsters = new CopyOnWriteArrayList<>();
+		lastChamp = "";
+		timeLeft = 0;
+		for(int i = 0; i < 4; i++) {
+			meleeItems.add(new ArrayList<>());
+			rangeItems.add(new ArrayList<>());
+			mageItems.add(new ArrayList<>());
+
+		}
 		for(int id = 14000; id < 15000; id++) {
 			ItemDefinition itemDef = ItemDefinition.forId(id);
 			String name = null;

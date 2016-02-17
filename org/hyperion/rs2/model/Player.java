@@ -352,7 +352,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		this.display = details.getName();
 		this.nameLong = NameUtils.nameToLong(this.name);
 		this.password = details.getPassword();
-		this.uid = details.getUID();
+		this.uid = details.getMacAddress();
 		this.IP = details.getIpAddress();
 		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 		this.setTeleporting(true);

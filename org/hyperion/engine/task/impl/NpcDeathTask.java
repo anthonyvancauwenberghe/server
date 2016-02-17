@@ -40,7 +40,7 @@ public class NpcDeathTask extends Task {
      * Creates te death event for the specified entity.
      */
     public NpcDeathTask(NPC npc) {
-        super(600);
+        super(400);
         this.npc = npc;
     }
 
@@ -64,8 +64,10 @@ public class NpcDeathTask extends Task {
     private void executeNpcDeath() {
         if (timer == 7) {
             npc.playAnimation(Animation.create(npc.getDefinition().deathEmote(), 0));
-            Combat.logoutReset(npc.cE);
-            npc.cE.setPoisoned(false);
+            if(npc.cE != null) {
+                Combat.logoutReset(npc.cE);
+                npc.cE.setPoisoned(false);
+            }
             npc.getWalkingQueue().reset();
         } else if (timer == 0) {
             int tokens = 0;

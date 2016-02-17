@@ -100,7 +100,7 @@ public class ItemDefinition {
 	 */
 
 
-	public static void init() throws IOException {
+	public static void init() {
 		if(definitions != null) {
 			throw new IllegalStateException("Definitions already loaded.");
 		}
@@ -108,20 +108,21 @@ public class ItemDefinition {
 		loadItems();
 	}
 
-	public static void loadItems() throws IOException {
-		BufferedReader in = new BufferedReader(new FileReader(CONFIG_FILE));
-		String line;
-		while((line = in.readLine()) != null) {
-			//System.out.println(line);
-			try {
-				ItemDefinition definition = ItemDefinition.forString(line);
-				definitions[definition.getId()] = definition;
-			} catch(Exception e) {
-                e.printStackTrace();
-				System.out.println("Error reading config file: " + line);
+	private static void loadItems() {
+		try (BufferedReader in = new BufferedReader(new FileReader(CONFIG_FILE))) {
+			String line;
+			while ((line = in.readLine()) != null) {
+				try {
+					ItemDefinition definition = ItemDefinition.forString(line);
+					definitions[definition.getId()] = definition;
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("Error reading config file: " + line);
+				}
 			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		in.close();
 	}
 
 	/**
@@ -490,13 +491,6 @@ public class ItemDefinition {
 
 
 	static {
-		//System.out.println("About to load stuff");
-		try {
-			init();
-
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
 		CommandHandler.submit(new Command("setalchvalue", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {

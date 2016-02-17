@@ -1,14 +1,14 @@
 package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Stream;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 public class AchievementProgress{
 
@@ -81,7 +81,6 @@ public class AchievementProgress{
 
     public String getTabString(){
         String color = "@red@";
-        //System.out.println("progress size: " + progress.size());
         if(progress.values().stream().anyMatch(atp -> atp.started() || atp.progress > 0))
             color = "@or1@";
         if(finished())
@@ -107,16 +106,7 @@ public class AchievementProgress{
     }
 
     public String info(){
-        final String color = progressColor();
         final double percent = progressPercent();
-        return String.format("Achievement @blu@%d @bla@| %s | %s%s%%", achievement().id, achievement().shortTitle, color, percent);
-    }
-
-    public boolean shouldSendInfoFor(final int taskId){
-        final AchievementTaskProgress atp = progress(taskId);
-        if(atp == null)
-            return false;
-        //was going to do some checks here..
-        return true;
+        return String.format("@dre@Achievement %d | %s | %s%%", achievement().id + 1, achievement().shortTitle, percent);
     }
 }

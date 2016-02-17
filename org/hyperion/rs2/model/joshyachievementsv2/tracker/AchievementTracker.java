@@ -172,8 +172,7 @@ public class AchievementTracker {
                 ap.achievement().rewards.reward(player);
             }
         }
-        player.getAchievementTab().updateAchievementTab();
-        //updateInterface(ap.achievement());
+        player.getAchievementTab().sendAchievement(ap.achievement());
     }
 
     public void barrowsTrip() {

@@ -1,8 +1,9 @@
 package org.hyperion.rs2.model.joshyachievementsv2.task;
 
-import java.util.function.Predicate;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraints;
+
+import java.util.function.Predicate;
 
 public abstract class Task{
 
@@ -63,7 +64,7 @@ public abstract class Task{
 
     public String shortDesc(){
         if(shortDesc == null)
-            shortDesc = desc.length() <= 70 ? desc : (desc.substring(0, 70) + "...");
+            shortDesc = desc.length() <= 40 ? desc : (desc.substring(0, 40) + "...");
         return shortDesc;
     }
 }

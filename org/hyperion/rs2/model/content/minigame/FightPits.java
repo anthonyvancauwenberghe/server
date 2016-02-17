@@ -46,9 +46,9 @@ public class FightPits implements ContentTemplate {
 	private static String lastChamp;
 	private static int timeLeft;
 	
-	public static List<List<Item>> meleeItems = new ArrayList<List<Item>>();
-	public static List<List<Item>> rangeItems = new ArrayList<List<Item>>();
-	public static List<List<Item>> mageItems = new ArrayList<List<Item>>();
+	public static List<List<Item>> meleeItems = new ArrayList<>();
+	public static List<List<Item>> rangeItems = new ArrayList<>();
+	public static List<List<Item>> mageItems = new ArrayList<>();
 	
 	public static List<Integer> scItems = new Vector<Integer>();
 	public static List<Integer> rewardItems = new ArrayList<Integer>();
@@ -228,17 +228,17 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public FightPits() {
-		waitingRoom = new CopyOnWriteArrayList<Player>();
-		teamRed = new CopyOnWriteArrayList<Player>();
-		teamBlue = new CopyOnWriteArrayList<Player>();
-		playersInGame = new CopyOnWriteArrayList<Player>();
-		monsters = new CopyOnWriteArrayList<NPC>();
+		waitingRoom = new CopyOnWriteArrayList<>();
+		teamRed = new CopyOnWriteArrayList<>();
+		teamBlue = new CopyOnWriteArrayList<>();
+		playersInGame = new CopyOnWriteArrayList<>();
+		monsters = new CopyOnWriteArrayList<>();
 		lastChamp = "";
 		timeLeft = 0;
 		for(int i = 0; i < 4; i++) {
-			meleeItems.add(new ArrayList<Item>());
-			rangeItems.add(new ArrayList<Item>());
-			mageItems.add(new ArrayList<Item>());
+			meleeItems.add(new ArrayList<>());
+			rangeItems.add(new ArrayList<>());
+			mageItems.add(new ArrayList<>());
 
 		}
 	}

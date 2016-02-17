@@ -48,11 +48,11 @@ public class Duel {
 			return;
 		}
         if(player.getUID() == opponent.getUID()){
+			System.out.println(player.getUID());
+			System.out.println(opponent.getUID());
 			player.sendf("You cannot duel yourself!");
             return;
         }
-		//World.getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());
-		//World.getAbuseHandler().cacheMessage(player1, (new StringBuilder()).append(player1.getName()).append(": opened a duel with: ").append(player.getName()).toString());
 		player.setBusy(true);
 		opponent.setBusy(true);
 		player.currentInterfaceStatus = 2;

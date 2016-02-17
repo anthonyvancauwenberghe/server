@@ -65,6 +65,7 @@ public final class GameLoader {
         serviceLoader.execute(NPCDefinition::init);
         serviceLoader.execute(PossibleHacksHolder::init);
         serviceLoader.execute(RoomDefinition::load);
+        serviceLoader.execute(ItemDefinition::init);
         serviceLoader.execute(ClanManager::load);
         serviceLoader.execute(ObjectManager::init);
         serviceLoader.execute(Lottery::init);
@@ -79,9 +80,9 @@ public final class GameLoader {
         serviceLoader.execute(DbHub::init);
         serviceLoader.execute(PunishmentManager::init);
         serviceLoader.execute(JGrandExchange::init);
-        serviceLoader.execute(Achievements::load);
         serviceLoader.execute(TriviaBot::init);
         serviceLoader.execute(RestartTask::submitRestartTask);
+        serviceLoader.execute(Achievements::load);
     }
 
     public GameEngine getEngine() {

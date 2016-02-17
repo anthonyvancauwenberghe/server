@@ -756,14 +756,13 @@ public class ActionSender {
     }
 
     public ActionSender openPlayersInterface() {
-        sendString(8144, "@dre@Players Online: "
-                + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
+        sendString(8144, "@dre@Players Online: " + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
         int i = 0;
         int r = 0;
-        Player p3 = null;
+        Player p3;
 
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
+        for (int QUEST_MENU_ID : QUEST_MENU_IDS) {
+            sendString(QUEST_MENU_ID, "");
         }
         for (; (i + 1) <= World.getPlayers().size(); i++) {
             if (i >= 99) {

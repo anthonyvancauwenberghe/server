@@ -5,7 +5,6 @@ import org.hyperion.Server;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.HostGateway;
-import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Trade;
@@ -180,7 +179,6 @@ public class EntityHandler {
                 player.getActionSender().sendPlayerOption("null", 5, 0);
         }
         player.getActionSender().sendSidebarInterfaces();
-        // GodWars.godWars.checkGodWarsInterface(player);
         if (player.getSpellBook().isAncient()) {
             player.getActionSender().sendSidebarInterface(6, 12855);
         } else if (player.getSpellBook().isRegular()) {
@@ -195,7 +193,6 @@ public class EntityHandler {
         }
         player.getWalkingQueue().setRunningToggled(true);
         player.getActionSender().sendMapRegion();
-        // GlobalItemManager.displayItems(player);
         InterfaceContainerListener interfacecontainerlistener = new InterfaceContainerListener(
                 player, 3214);
         player.getInventory().addListener(interfacecontainerlistener);
@@ -211,8 +208,6 @@ public class EntityHandler {
         player.getEquipment().addListener(new WeaponContainerListener(player));
         ActionSender.sendClientConfigs(player);
 
-        // player.calculateMemberShip();
-
         player.startUpEvents();
         if (player.fightCavesWave > 0) {
             ContentManager.handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
@@ -221,10 +216,7 @@ public class EntityHandler {
             DialogueManager.openDialogue(player, 10000);
         }
         player.getActionSender().sendSkills();
-        player.getAchievementTab().createAchievementTab();
         player.getSpawnTab().createSpawnTab();
-
-        AchievementHandler.progressAchievement(player, "Total");
 
         for (int i = 0; i < 7; i++) {
             if (player.getSkills().getLevel(i) >= 119 && i != 3 && i != 5)
@@ -233,12 +225,12 @@ public class EntityHandler {
 
         player.checkCapes();
 
-        // player.getInterfaceManager().show(RecoveryInterface.ID);
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
         player.verified = true;
 
         player.getGrandExchangeTracker().notifyChanges(false);
+        player.getAchievementTracker().load();
 
         if(player.verificationCode != null && !player.verificationCode.isEmpty()){
             if(player.getLocation().inPvPArea())

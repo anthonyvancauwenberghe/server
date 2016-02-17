@@ -5,7 +5,6 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.weapons.impl.*;
 import org.hyperion.rs2.model.combat.weapons.impl.Longsword;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 
 /**
  * @author Jack Daniels.
@@ -89,8 +88,6 @@ public class Weapon extends Item {
 	 */
 	public static Weapon getWeapon(String name, int id) {
 		name = name.toLowerCase();
-		if(FightPits.isBow(id))
-			return new Bow(id, Bow.WEAPON_SHORTBOW_SPEED);
 		if(id == 16337)
 			return new Bow(id, 1200);
 		if(id == 16887)

@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.joshyachievementsv2;
 
 import org.hyperion.rs2.model.joshyachievementsv2.reward.Rewards;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Tasks;
+import org.hyperion.util.Misc;
 
 public class Achievement{
 
@@ -11,6 +12,11 @@ public class Achievement{
         MEDIUM,
         HARD,
         ELITE;
+
+        @Override
+        public String toString() {
+            return Misc.ucFirst(name());
+        }
     }
 
     public final int id;

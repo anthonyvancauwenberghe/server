@@ -25,6 +25,7 @@ public class Configuration {
         NAME("ArteroPk", String.class),
         OWNER("Arre", String.class),
         PORT("43599", Integer.class),
+        CLIENT_VERSION("15484", Integer.class),
         DEBUG("true", Boolean.class),
         VERSION("317", Integer.class),
         ENGINE_DELAY("200", Integer.class),

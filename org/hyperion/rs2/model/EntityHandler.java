@@ -2,6 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.HostGateway;
@@ -30,6 +31,7 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -241,6 +243,48 @@ public class EntityHandler {
 
         if(player.getName().equalsIgnoreCase("nab"))
             ClanManager.joinClanChat(player, "help", false);
+        
+        TaskManager.submit(new Task(Time.FIVE_SECONDS, player) {
+            @Override
+            protected void execute() {
+                player.getActionSender().sendString(1300, "City Teleport");
+                player.getActionSender().sendString(1301, "Teleports you to any city.");
+                player.getActionSender().sendString(1325, "Training Teleports");
+                player.getActionSender().sendString(1326, "Teleports you to training spots.");
+                player.getActionSender().sendString(1350, "Minigame Teleport");
+                player.getActionSender().sendString(1351, "Teleports you to any minigame.");
+                player.getActionSender().sendString(1382, "PK Teleport");
+                player.getActionSender().sendString(1383, "Teleports you to the wilderness.");
+                player.getActionSender().sendString(1415, "Boss Teleport");
+                player.getActionSender().sendString(1416, "Teleports you to dungeons.");
+
+                player.getActionSender().sendString(13037, "City Teleport");
+                player.getActionSender().sendString(13038, "Teleports you to any city.");
+                player.getActionSender().sendString(13047, "Training Teleports");
+                player.getActionSender().sendString(13048, "Teleports you to training spots.");
+                player.getActionSender().sendString(13055, "Minigame Teleport");
+                player.getActionSender().sendString(13056, "Teleports you to any minigame.");
+                player.getActionSender().sendString(13063, "PK Teleport");
+                player.getActionSender().sendString(13064, "Teleports you to the wilderness.");
+                player.getActionSender().sendString(13071, "Boss Teleport");
+                player.getActionSender().sendString(13072, "Teleports you to a dungeon.");
+
+                player.getActionSender().sendString(30067, "City Teleport"); // Needed
+                player.getActionSender().sendString(30068, "Teleports you to any city.");
+
+                player.getActionSender().sendString(30109, "Training Teleports"); // Needed
+                player.getActionSender().sendString(30110, "Teleports you to training spots.");
+
+                player.getActionSender().sendString(30078, "Minigame Teleport"); // Needed
+                player.getActionSender().sendString(30079, "Teleports players to any minigame.");
+
+                player.getActionSender().sendString(30083 + 3, "Boss Teleport"); // Needed
+                player.getActionSender().sendString(30083 + 4, "Teleports you to a dungeon.");
+
+                player.getActionSender().sendString(30117, "Player Killing Teleport"); // Needed
+                player.getActionSender().sendString(30118, "Teleports you to the wilderness.");
+            }
+        });
     }
 
     private static void register(NPC npc) {

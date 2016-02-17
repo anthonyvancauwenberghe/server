@@ -89,7 +89,7 @@ public class GenericWorldLoader implements WorldLoader {
 		if(Server.isUpdating())
 			return UPDATE_IN_PROGRESS;
 
-		if(playerDetails.getUID() < 15483)
+		if(playerDetails.getUID() < Configuration.getInt(Configuration.ConfigurationObject.CLIENT_VERSION))
 			return SERVER_UPDATED;
 
 		if(ConnectionHandler.getIpBlackList().containsKey(player.getFullIP()))

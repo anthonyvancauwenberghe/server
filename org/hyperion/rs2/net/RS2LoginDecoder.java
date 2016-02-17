@@ -45,7 +45,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     session.close(true);
                     return false;
                 }
-                if ((in.get() & 0xFF) != 14) {
+                if ((in.get() & 0xFF) != 18) { //TODO CHANGE THIS BACK TO 14 IN BOTH CLIENT AND SERVER
                     String ip = session.getRemoteAddress().toString().split(":")[0];
                     ConnectionHandler.getIpBlackList().put(ip, new Object());
                     session.close(true);
@@ -103,7 +103,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 int returnCode = 0;
                 int magicId = in.get() & 0xFF;
-                if (magicId != 122) {
+                if (magicId != 128) {//TODO CHANGE THIS BACK TO 120 IN BOTH CLIENT AND SERVER
                     returnCode = 6;
                 }
 
@@ -112,7 +112,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 @SuppressWarnings("unused")
                 boolean lowMemoryVersion = false;
-                if (in.get() != 5) {
+                if (in.get() != 9) { //TODO CHANGE THIS BACK TO 5 IN BOTH CLIENT AND SERVER
                     returnCode = 6;
                 }
 

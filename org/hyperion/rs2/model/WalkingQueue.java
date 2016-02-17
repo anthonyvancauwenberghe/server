@@ -455,7 +455,7 @@ public class WalkingQueue {
 
 			// turn on the godwars interface
 			if(entity instanceof Player) {
-				GodWars.godWars.checkGodWarsInterface((Player) entity);
+				GodWars.godWars.checkGodWarsInterface((Player)entity);
 			}
 
 			/*

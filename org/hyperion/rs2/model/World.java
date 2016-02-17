@@ -150,15 +150,15 @@ public final class World {
         UpdateSequence<Player> playerUpdate = new PlayerUpdateSequence(synchronizer, updateExecutor);
         UpdateSequence<NPC> npcUpdate = new NpcUpdateSequence();
         // Then we execute pre-updating code.
-        players.forEach(playerUpdate::executePreUpdate);
-        npcs.forEach(npcUpdate::executePreUpdate);
+        players.stream().filter(player -> player != null).forEach(playerUpdate::executePreUpdate);
+        npcs.stream().filter(npc -> npc != null).forEach(npcUpdate::executePreUpdate);
         // Then we execute parallelized updating code.
         synchronizer.bulkRegister(players.size());
-        players.forEach(playerUpdate::executeUpdate);
+        players.stream().filter(player -> player != null).forEach(playerUpdate::executeUpdate);
         synchronizer.arriveAndAwaitAdvance();
         // Then we execute post-updating code.
-        players.forEach(playerUpdate::executePostUpdate);
-        npcs.forEach(npcUpdate::executePostUpdate);
+        players.stream().filter(player -> player != null).forEach(playerUpdate::executePostUpdate);
+        npcs.stream().filter(npc -> npc != null).forEach(npcUpdate::executePostUpdate);
     }
 
     public static void loadConfiguration() {

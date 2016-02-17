@@ -6,6 +6,8 @@ import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 
 /**
@@ -39,6 +41,10 @@ public class Update implements Runnable {
                     Dungeon.activeDungeons.forEach(Dungeon::complete);
                     ClanManager.save();
                     Server.getLogger().info("Update task finished! Reason for update: " + reason);
+                    try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("./data/key.dat"))) {
+                        out.writeObject(Server.getCharFileEncryption().getKey());
+                    }
+                    Runtime.getRuntime().exec("cmd /c start run.bat");
                     System.exit(1);
                 }
                 Thread.sleep(1000);

@@ -180,11 +180,6 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendRights() {
-        player.write(new PacketBuilder(127).put((byte)Rank.getPrimaryRankIndex(player)).toPacket());
-        return this;
-    }
-
     public ActionSender sendWildLevel(int i) {
         int j = 36500;// 197,12278
         if (i == -1)

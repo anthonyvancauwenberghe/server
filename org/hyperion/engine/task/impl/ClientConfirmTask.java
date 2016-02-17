@@ -38,7 +38,7 @@ public class ClientConfirmTask extends Task {
             EXPECTED_RESULTS.put(player.getName(), (((randomNumber + 40) / 3) * 7) / 8);
             player.getActionSender().sendClientConfirmation(randomNumber);
 
-            World.submit(new Task(Time.FIVE_SECONDS, player.getName()) {
+            World.submit(new Task(Time.TEN_SECONDS, player.getName()) {
                 @Override
                 public void execute() {
                     if(!EXPECTED_RESULTS.containsKey(player.getName()))

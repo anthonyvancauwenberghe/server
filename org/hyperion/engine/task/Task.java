@@ -37,7 +37,7 @@ public abstract class Task {
         if(key == null)
             throw new IllegalArgumentException("The key for a task cannot be null.");
         this.delay = delay;
-        this.immediate = immediate || delay < 0;
+        this.immediate = immediate || delay < 0 || delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY) == 0;
         this.key = key;
         countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
     }

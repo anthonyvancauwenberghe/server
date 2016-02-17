@@ -1089,6 +1089,7 @@ public class NewQuestTab {
                 questTabComponent.addObserver();
             }
         }
+        player.getActionSender().sendScrollbarLength(33010, (byComponent.size() + QuestTabComponent.TITLES.size()) * 14);
     }
 
     public void updateComponent(QuestTabComponent questTabComponent) {

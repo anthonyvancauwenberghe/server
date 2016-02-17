@@ -253,12 +253,10 @@ public class EntityHandler {
      */
     public static boolean deregister(Entity entity) {
         TaskManager.cancelTasks(entity);
-        if(entity instanceof Player) {
-            return deregister((Player)entity);
-        } if(entity instanceof NPC) {
-            return deregister((NPC)entity);
+        if (entity instanceof Player) {
+            return deregister((Player) entity);
         }
-        return false;
+        return entity instanceof NPC && deregister((NPC) entity);
     }
 
     private static boolean deregister(Player player) {

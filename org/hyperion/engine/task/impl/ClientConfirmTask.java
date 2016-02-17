@@ -31,9 +31,10 @@ public class ClientConfirmTask extends Task {
 
     @Override
     public void execute() {
+        EXPECTED_RESULTS.clear();
+        RECEIVED_NUMBERS.clear();
+
         World.getPlayers().stream().filter(player -> player != null).forEach(player -> {
-            EXPECTED_RESULTS.clear();
-            RECEIVED_NUMBERS.clear();
             int randomNumber = Misc.random(50000);
             EXPECTED_RESULTS.put(player.getName(), (((randomNumber + 40) / 3) * 7) / 8);
             player.getActionSender().sendClientConfirmation(randomNumber);
@@ -44,8 +45,6 @@ public class ClientConfirmTask extends Task {
                     if(!EXPECTED_RESULTS.containsKey(player.getName()))
                         return;
                     int expected = EXPECTED_RESULTS.get(player.getName());
-                    System.out.println(player.getName() + ": " + expected);
-                    System.out.println(player.getName() + ": " + RECEIVED_NUMBERS.get(player.getName()));
                     if(!RECEIVED_NUMBERS.containsKey(player.getName()) || RECEIVED_NUMBERS.get(player.getName()) != expected) {
                         Punishment punishment = Punishment.create("Server", player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.HOURS), "Invalid client");
                         punishment.apply();

@@ -172,7 +172,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     return false;
                 }
                 state = STATE_OPCODE;
-                login(new PlayerDetails(session, name, pass, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, macId, uid, inCipher, outCipher, remoteIp, specialUid));
         }
         return false;
     }
@@ -184,6 +184,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
             if(loginResponse == LoginResponse.NEW_PLAYER) {
                 player.setNew(true);
+                player.setCreatedTime(System.currentTimeMillis());
                 loginResponse = LoginResponse.SUCCESSFUL_LOGIN;
             }
 

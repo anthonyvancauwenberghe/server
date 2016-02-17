@@ -138,6 +138,8 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
+        if(!DbHub.getPlayerDb().isInitialized())
+            return;
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())

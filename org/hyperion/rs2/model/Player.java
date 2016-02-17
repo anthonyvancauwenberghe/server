@@ -1416,7 +1416,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setPlayerRank(long playerRank) {
 		this.playerRank = playerRank;
-		getActionSender().sendRights();
 		getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.RANK);
 	}
 

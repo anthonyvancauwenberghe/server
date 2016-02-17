@@ -48,7 +48,7 @@ public class Duel {
 			return;
 		}
         if(player.getUID() == opponent.getUID()){
-            player.sendf("You cannot duel yourself!");
+			player.sendf("You cannot duel yourself!");
             return;
         }
 		//World.getAbuseHandler().cacheMessage(player, (new StringBuilder()).append(player.getName()).append(": opened a duel with: ").append(player1.getName()).toString());

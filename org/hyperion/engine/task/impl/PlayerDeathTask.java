@@ -41,7 +41,7 @@ public class PlayerDeathTask extends Task {
 	private int timer = 0;
 
 	public PlayerDeathTask(Player player) {
-		super(1, player);
+		super(0, player);
 		this.player = player;
 		player.setDead(true);
 	}

@@ -50,6 +50,7 @@ public class Duel {
         if(player.getUID() == opponent.getUID()){
 			System.out.println(player.getUID());
 			System.out.println(opponent.getUID());
+			//TODO REMOVE THIS
 			player.sendf("You cannot duel yourself!");
             return;
         }

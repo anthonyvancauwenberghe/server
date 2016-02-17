@@ -30,8 +30,8 @@ public abstract class Db {
         pool.setPassword(getPassword());
         dbi = new DBI(pool);
 
-        initialized = true;
         postInit();
+        initialized = true;
 
         if(DbHub.isConsoleDebug())
             Server.getLogger().log(Level.INFO, "Successfully connected to " + getClass().getSimpleName() + ".");

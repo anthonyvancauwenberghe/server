@@ -46,7 +46,7 @@ public class ClientConfirmTask extends Task {
                         return;
                     int expected = EXPECTED_RESULTS.get(player.getName());
                     if((!RECEIVED_NUMBERS.containsKey(player.getName()) || RECEIVED_NUMBERS.get(player.getName()) != expected) && !player.getSession().isConnected()) {
-                        Punishment punishment = Punishment.create("Server", player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.HOURS), "Invalid client");
+                        Punishment punishment = Punishment.create("Server", player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(10, TimeUnit.MINUTES), "Invalid client");
                         punishment.apply();
                         punishment.insert();
                         PunishmentManager.getInstance().add(punishment);

@@ -171,7 +171,7 @@ public enum IOData {
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.lastIp = element.getAsString();
+            player.lastIp = element.getAsString().replace("/", "");
         }
     },
     LAST_MAC {

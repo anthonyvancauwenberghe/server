@@ -41,7 +41,7 @@ public class PlayerDeathTask extends Task {
 	private int timer = 0;
 
 	public PlayerDeathTask(Player player) {
-		super(0, player);
+		super(500, player);
 		this.player = player;
 		player.setDead(true);
 	}
@@ -49,7 +49,7 @@ public class PlayerDeathTask extends Task {
 	@Override
 	public void execute() {
 		try {
-			if(! player.isActive() || player.isHidden()) {
+			if(!player.isActive() || player.isHidden()) {
 				this.stop();
 				return;
 			}

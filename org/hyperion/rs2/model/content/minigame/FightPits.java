@@ -38,10 +38,10 @@ public class FightPits implements ContentTemplate {
 	
 	public static int gameTimeLeft;
 	
-	public static CopyOnWriteArrayList<Player> waitingRoom;
-	public static CopyOnWriteArrayList<Player> playersInGame;
-	public static CopyOnWriteArrayList<Player> teamRed;
-	public static CopyOnWriteArrayList<Player> teamBlue;
+	public static CopyOnWriteArrayList<Player> waitingRoom = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<Player> playersInGame = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<Player> teamRed = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<Player> teamBlue = new CopyOnWriteArrayList<>();
 	private CopyOnWriteArrayList<NPC> monsters;
 	private static String lastChamp;
 	private static int timeLeft;

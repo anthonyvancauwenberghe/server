@@ -26,6 +26,11 @@ public enum IOData {
     },
     PASSWORD {
         @Override
+        public boolean shouldSave(Player player) {
+            return player.getPassword() != null;
+        }
+
+        @Override
         public JsonElement saveValue(Player player, Gson builder) {
             return new JsonPrimitive(player.getPassword());
         }
@@ -1047,7 +1052,7 @@ public enum IOData {
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            player.getBank().setItems(builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType()));
+            Arrays.stream((BankItem[])builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType())).forEach(bankItem -> player.getBank().add(new BankItem(bankItem.getTabIndex(), bankItem.getId(), bankItem.getCount())));
         }
     },
     FRIENDS {

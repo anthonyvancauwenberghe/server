@@ -100,14 +100,12 @@ public class EntityHandler {
             for (final PunishmentHolder h : PunishmentManager.getInstance().getHolders()) {
                 if (player.getName().equalsIgnoreCase(h.getVictimName()))
                     continue;
-                for (final Punishment p : h.getPunishments()) {
-                    if ((p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
-                            || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())
-                            || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))) {
-                        p.getCombination().getType().apply(player);
-                        p.send(player, false);
-                    }
-                }
+                h.getPunishments().stream().filter(p -> (p.getCombination().getTarget() == Target.IP && p.getVictimIp().equals(player.getShortIP()))
+                        || (p.getCombination().getTarget() == Target.MAC && p.getVictimMac() == player.getUID())
+                        || (p.getCombination().getTarget() == Target.SPECIAL && Arrays.equals(p.getVictimSpecialUid(), player.specialUid))).forEach(p -> {
+                    p.getCombination().getType().apply(player);
+                    p.send(player, false);
+                });
             }
         }
 

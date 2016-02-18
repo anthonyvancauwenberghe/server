@@ -62,7 +62,7 @@ public class CleanCharacterFiles implements Runnable {
     /**
      * The place where the files will get moved to when they're not valid.
      */
-    private final static File cleanedFileDirectory = new File(IOData.getCharFilePath() + "/deletedchars/" + LocalDate.now().toString() + "/");
+    private final static File cleanedFileDirectory = new File("./data/deletedchars/" + LocalDate.now().toString() + "/");
 
     /**
      * This method can be called at any time and will go through all the character files. It will use the default set directory.

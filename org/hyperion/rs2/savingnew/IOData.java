@@ -692,6 +692,22 @@ public enum IOData {
             player.setDeathCount(element.getAsInt());
         }
     },
+    TAB_AMOUNT {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getBankField().getTabAmount() > 2;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getBankField().getTabAmount());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.getBankField().setTabAmount(element.getAsInt());
+        }
+    },
     CLEANED {
         @Override
         public boolean shouldSave(Player player) {
@@ -1052,7 +1068,7 @@ public enum IOData {
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            Arrays.stream((BankItem[])builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType())).forEach(bankItem -> player.getBank().add(new BankItem(bankItem.getTabIndex(), bankItem.getId(), bankItem.getCount())));
+            Arrays.stream((BankItem[])builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType())).filter(bankItem -> bankItem != null).forEach(bankItem -> player.getBank().add(new BankItem(bankItem.getTabIndex(), bankItem.getId(), bankItem.getCount())));
         }
     },
     FRIENDS {

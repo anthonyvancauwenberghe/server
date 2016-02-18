@@ -5,7 +5,10 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class PromoteTask extends Task {
 
@@ -20,7 +23,7 @@ public class PromoteTask extends Task {
 			World.getPlayers().stream().filter(player -> !Rank.hasAbility(player, Rank.DEVELOPER)).forEach(player -> {
 				boolean gaveMessage = false;
 				if(player.getLastVoteStreakIncrease() > 0) {
-					LocalDate lastVoteDate = LocalDate.ofEpochDay(player.getLastVoteStreakIncrease());
+					LocalDate lastVoteDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteStreakIncrease()), ZoneId.systemDefault()).toLocalDate();
 					if (!lastVoteDate.equals(LocalDate.now())) {
 						player.sendServerMessage("Don't forget to vote again using the ::vote command!");
 						gaveMessage = true;

@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model.container.bank;
 
-import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.net.PacketBuilder;
 
@@ -175,7 +174,4 @@ public class BankField {
     public int getTabAmount() {
         return tabAmount;
     }
-
-
-
 }

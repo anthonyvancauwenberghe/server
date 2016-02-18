@@ -28,7 +28,7 @@ public class PlayerLoading {
             Gson builder = new GsonBuilder().create();
             JsonObject reader = (JsonObject) fileParser.parse(fileReader);
 
-            Arrays.stream(IOData.VALUES).forEach(ioData -> {
+            Arrays.stream(IOData.VALUES).forEachOrdered(ioData -> {
                 if(reader.has(ioData.toString())) {
                     JsonElement element = reader.get(ioData.toString());
                     if(element == null)

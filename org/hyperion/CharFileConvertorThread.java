@@ -57,7 +57,7 @@ public class CharFileConvertorThread extends Thread {
             }
                 Player player = new Player(uid);
                 player.setIP(ip);
-                player.setName(charFile.getName().replaceAll(".txt", ""));
+                player.setName(charFile.getName().replace(".txt", ""));
                 player.destroy();
                 new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
                 if(org.hyperion.rs2.savingnew.PlayerSaving.save(player))

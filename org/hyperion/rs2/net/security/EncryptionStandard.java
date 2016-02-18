@@ -21,6 +21,8 @@ public class EncryptionStandard {
     }
 
     public static String encrypt(String plainText, Key encryptionKey) {
+        if(plainText == null)
+            return "";
         try {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);

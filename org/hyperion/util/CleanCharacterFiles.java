@@ -62,7 +62,7 @@ public class CleanCharacterFiles implements Runnable {
     /**
      * The place where the files will get moved to when they're not valid.
      */
-    private final static File cleanedFileDirectory = new File("./data/deletedchars/");
+    private final static File cleanedFileDirectory = new File("./data/deletedchars/" + LocalDate.now().toString() + "/");
 
     /**
      * This method can be called at any time and will go through all the character files. It will use the default set directory.
@@ -106,7 +106,6 @@ public class CleanCharacterFiles implements Runnable {
             File characterFile = characterFiles.poll();
             if (characterFile == null)
                 break;
-            boolean willGetCleaned = false;
             try (FileReader fileReader = new FileReader(characterFile)) {
                 JsonParser fileParser = new JsonParser();
                 Gson builder = new Gson();
@@ -135,8 +134,7 @@ public class CleanCharacterFiles implements Runnable {
 
                 if (reader.has(IOData.KILL_COUNT.toString()) && reader.get(IOData.KILL_COUNT.toString()).getAsInt() >= 10)
                     continue;
-
-                FileUtils.moveFileToDirectory(characterFile, cleanedFileDirectory, true);
+                FileUtils.moveFileToDirectory(characterFile, new File(cleanedFileDirectory + characterFile.getName()), true);
                 characterFilesCleaned++;
             } catch (Exception e) {
                 logger.log(Level.WARNING, "An error occurred while trying to read a character file on thread " + threadId + " in character file " + characterFile.getName() + ".", e);

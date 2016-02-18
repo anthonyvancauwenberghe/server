@@ -42,7 +42,9 @@ public class Configuration {
         PLAYER_DB_USER("root", String.class),
         DONATION_DB_PASSWORD("", String.class),
         GAME_DB_PASSWORD("", String.class),
-        PLAYER_DB_PASSWORD("", String.class);
+        PLAYER_DB_PASSWORD("", String.class),
+        CHARACTER_FILE_CLEANUP("false", Boolean.class),
+        CHARACTER_FILE_CLEANUP_THREADS("1", Integer.class);
 
         public final static ConfigurationObject[] VALUES = values();
         private final String value;
@@ -127,8 +129,7 @@ public class Configuration {
 
         try (FileWriter writer = new FileWriter(CONFIGURATION_FILE)) {
             Gson builder = new GsonBuilder().setPrettyPrinting().create();
-            writer.write(builder.toJson(defaultConfigFile, new TypeToken<HashMap<ConfigurationObject, String>>() {
-            }.getType()));
+            writer.write(builder.toJson(defaultConfigFile, new TypeToken<HashMap<ConfigurationObject, String>>() {}.getType()));
         } catch (Exception e) {
             logger.severe("Something went severely wrong while trying to save the default configuration file.");
         }

@@ -9,17 +9,17 @@ import org.hyperion.rs2.model.World;
  * An event which increases ActivityPoints, refreshes Quest Tab , refreshes
  * Skills.
  */
-public class PlayerTask1Tick extends Task {
+public class PlayerTask1Second extends Task {
 
 	/**
 	 * The delay in milliseconds between consecutive execution.
 	 */
-	public static final long CYCLETIME = 600;
+	public static final long CYCLETIME = 1000;
 
 	/**
 	 * Creates the event each 30 seconds.
 	 */
-	public PlayerTask1Tick() {
+	public PlayerTask1Second() {
 		super(CYCLETIME);
 	}
 

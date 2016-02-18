@@ -634,9 +634,9 @@ public enum IOData {
         public void loadValue(Player player, JsonElement element, Gson builder) {
             JsonObject object = element.getAsJsonObject();
             if(object.has("taskId"))
-                player.getSlayer().setTask(SlayerTask.valueOf(element.getAsString()));
+                player.getSlayer().setTask(SlayerTask.valueOf(object.get("taskId").getAsString()));
             if(object.has("taskAmount"))
-                player.getSlayer().setTaskAmount(element.getAsInt());
+                player.getSlayer().setTaskAmount(object.get("taskAmount").getAsInt());
         }
     },
     KILL_STREAK {

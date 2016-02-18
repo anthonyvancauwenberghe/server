@@ -13,7 +13,7 @@ import java.security.Key;
 public class EncryptionStandard {
 
     public static String encryptPassword(String password) {
-        return encrypt(password, Server.getCharFileEncryption().getKey());
+        return encrypt(password.toLowerCase(), Server.getCharFileEncryption().getKey());
     }
 
     public static String decryptPassword(String password) {

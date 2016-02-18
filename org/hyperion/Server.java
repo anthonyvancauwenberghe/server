@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.security.Key;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,6 +84,7 @@ public class Server {
                 }
             }
         }
+
         Runtime.getRuntime().addShutdownHook(new ShutdownHook());
         try {
             logger.info("Started loading the server...");
@@ -92,49 +95,14 @@ public class Server {
             logger.log(Level.SEVERE, "Could not start " + Configuration.getString(NAME) + "!", ex);
             System.exit(1);
         }
+        int threads = 10;
+        ExecutorService application = Executors.newFixedThreadPool(threads);
+        for(int i = 0; i < threads; i++)
+            application.submit(new CharFileConvertorThread());
     }
 
     public static void update(int time, final String reason) {
         setUpdating(true);
         getLoader().getEngine().submit(new Update(time, reason));
     }
-/*
-        File[] files = new File("./data/characters/mergedchars").listFiles();
-        System.out.println("Started converting char files, count: " + files.length);
-
-        final long currentTime = System.currentTimeMillis();
-        long start = System.currentTimeMillis();
-        new Thread(new CharFilesCleaner()).start();
-        System.out.println("-- Starting " + NAME + "  -- ");
-        System.out.println("Spawn server: " + Configuration.getString(NAME));
-        try {
-
-            for(File file : files) {
-                String ip = null;
-                int uid = 0;
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String line;
-                    while((line = br.readLine()) != null) {
-                        if(line.startsWith("Mac=")) {
-                            uid = Integer.parseInt(line.replaceAll("Mac=", "").trim());
-                            continue;
-                        }
-                        if(line.startsWith("IP=")) {
-                            ip = line.replaceAll("IP=", "").trim();
-                            break;
-                        }
-                        if(line.startsWith("Skills"))
-                            break;
-                    }
-                    br.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                Player player = new Player(uid);
-                player.setIP(ip);
-                player.setName(file.getName().replaceAll(".txt", ""));
-                new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
-                org.hyperion.rs2.savingnew.PlayerSaving.save(player);
-            }*/
 }

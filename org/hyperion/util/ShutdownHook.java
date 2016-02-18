@@ -1,6 +1,7 @@
 package org.hyperion.util;
 
 import org.hyperion.Server;
+import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.World;
 
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ public class ShutdownHook extends Thread {
     public void run() {
         logger.info("The shutdown hook is processing all required actions...");
         Server.setUpdating(true);
-        World.getPlayers().stream().filter(player -> player != null).forEach(World::unregister);
+        World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
         logger.info("The shutdown hook actions have been completed, shutting the server down...");
     }
 }

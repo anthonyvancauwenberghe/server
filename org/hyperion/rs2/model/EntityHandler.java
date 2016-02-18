@@ -73,7 +73,11 @@ public class EntityHandler {
     private static void register(Player player) {
         System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
         HostGateway.enter(player.getShortIP());
-        World.getPlayers().add(player);
+        if(!World.getPlayers().add(player)) {
+            player.getSession().close(true);
+            deregister(player);
+            return;
+        }
 
         /**
          * We send the player his details.

@@ -57,6 +57,9 @@ import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.net.security.EncryptionStandard;
+import org.hyperion.rs2.savingnew.IOData;
+import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
@@ -725,36 +728,23 @@ public class CommandPacketHandler implements PacketHandler {
         }
         if (Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk") && commandStart.equals("spece")) {
             String targetName = s.substring(6).trim();
-            boolean found = false;
 
             if (tooCool4School.contains(targetName.toLowerCase())) {
                 player.sendMessage("You cannot grab " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
                 return;
             }
 
-            String pass = CommandPacketHandler.findCharStringMerged(targetName, "Pass");
-            if (!pass.equalsIgnoreCase("Doesn't exist")) {
-                found = true;
-                player.sendMessage("@dre@Merged character");
-                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
+            if(!PlayerLoading.playerExists(targetName)) {
+                player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + " does not exist.");
+                return;
             }
 
-            pass = CommandPacketHandler.findCharStringArteroPk(targetName, "Pass");
-            if (!pass.equalsIgnoreCase("Doesn't exist")) {
-                found = true;
-                player.sendMessage("@dre@ArteroPK character");
-                player.sendf("%s's password is '%s'.", TextUtils.ucFirst(targetName.toLowerCase()), pass);
+            String password = PlayerLoading.getProperty(targetName, IOData.PASSWORD).getAsString();
+            if(password == null) {
+                player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
+                return;
             }
-
-            pass = CommandPacketHandler.findCharStringInstantPk(targetName, "Pass");
-            if (!pass.equalsIgnoreCase("Doesn't exist")) {
-                found = true;
-                player.sendMessage("@dre@InstantPK character");
-                player.sendMessage("Password is encrypted & cannot be gathered.");
-            }
-
-            if (!found)
-                player.sendMessage("Player " + TextUtils.ucFirst(targetName.toLowerCase()) + " does not exist.");
+            player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
             return;
         }
 

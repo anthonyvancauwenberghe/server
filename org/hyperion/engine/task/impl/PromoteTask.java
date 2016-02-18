@@ -18,12 +18,16 @@ public class PromoteTask extends Task {
 	@Override
 	public void execute() {
 			World.getPlayers().stream().filter(player -> !Rank.hasAbility(player, Rank.DEVELOPER)).forEach(player -> {
-				LocalDate lastVoteDate = LocalDate.ofEpochDay(player.getLastVoteStreakIncrease());
-				if(!lastVoteDate.equals(LocalDate.now())) {
+				boolean gaveMessage = false;
+				if(player.getLastVoteStreakIncrease() != 0) {
+					LocalDate lastVoteDate = LocalDate.ofEpochDay(player.getLastVoteStreakIncrease());
+					if (!lastVoteDate.equals(LocalDate.now())) {
 						player.sendServerMessage("Don't forget to vote again using the ::vote command!");
-				} else {
-					player.sendServerMessage("Remember to vote using the ::vote command!");
+						gaveMessage = true;
+					}
 				}
+				if(!gaveMessage)
+					player.sendServerMessage("Remember to vote using the ::vote command!");
 			});
 	}
 }

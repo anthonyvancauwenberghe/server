@@ -1,5 +1,8 @@
 package org.hyperion.engine.task;
 
+import org.hyperion.rs2.model.EntityHandler;
+import org.hyperion.rs2.model.World;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +32,7 @@ public abstract class TaskManager {
 			}
 		} catch(Throwable e) {
 			e.printStackTrace();
+			World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
 		}
 	}
 

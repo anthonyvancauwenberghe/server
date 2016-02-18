@@ -16,45 +16,55 @@ import java.util.Queue;
  */
 public class CharFileConvertorThread extends Thread {
     private final static Queue<File> CHARFILES = new LinkedList<>(Arrays.asList(new File("./data/characters/mergedchars").listFiles()));
+    private final int threadNumber;
+
+    public CharFileConvertorThread(int threadNumber) {
+        this.threadNumber = threadNumber;
+    }
 
     @Override
     public void run() {
         boolean running = true;
         while (running) {
-                if (CHARFILES.isEmpty())
+            File charFile = null;
+            synchronized (CHARFILES) {
+                if (CHARFILES.isEmpty()) {
                     running = false;
-                File charFile = CHARFILES.remove();
-                if (charFile == null)
                     continue;
-                String ip = null;
-                int uid = 0;
-                try (BufferedReader br = new BufferedReader(new FileReader(charFile))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        if (line.startsWith("Mac=")) {
-                            uid = Integer.parseInt(line.replaceAll("Mac=", "").trim());
-                            continue;
-                        }
-                        if (line.startsWith("IP=")) {
-                            ip = line.replaceAll("IP=", "").trim();
-                            break;
-                        }
-                        if (line.startsWith("Skills"))
-                            break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-                Player player = new Player(uid);
-                player.setIP(ip);
-                player.setName(charFile.getName().replaceAll(".txt", ""));
-                new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
-                org.hyperion.rs2.savingnew.PlayerSaving.save(player);
-                if (!charFile.delete()) {
-                    charFile.deleteOnExit();
-                }
-                System.out.println(CHARFILES.size() + " characters to go.");
+                charFile = CHARFILES.remove();
             }
-        System.out.println("Done converting.");
+            if (charFile == null)
+                continue;
+            String ip = null;
+            int uid = 0;
+            try (BufferedReader br = new BufferedReader(new FileReader(charFile))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith("Mac=")) {
+                        uid = Integer.parseInt(line.replaceAll("Mac=", "").trim());
+                        continue;
+                    }
+                    if (line.startsWith("IP=")) {
+                        ip = line.replaceAll("IP=", "").trim();
+                        break;
+                    }
+                    if (line.startsWith("Skills"))
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Player player = new Player(uid);
+            player.setIP(ip);
+            player.setName(charFile.getName().replaceAll(".txt", ""));
+            new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
+            org.hyperion.rs2.savingnew.PlayerSaving.save(player);
+            if (!charFile.delete()) {
+                charFile.deleteOnExit();
+            }
+            System.out.println(CHARFILES.size() + " characters to go.");
+        }
+        System.out.println("Thread " + threadNumber + ": Done converting; shutting down.");
     }
 }

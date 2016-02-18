@@ -98,7 +98,7 @@ public class Server {
         int threads = 10;
         ExecutorService application = Executors.newFixedThreadPool(threads);
         for(int i = 0; i < threads; i++)
-            application.submit(new CharFileConvertorThread());
+            application.submit(new CharFileConvertorThread(i + 1));
     }
 
     public static void update(int time, final String reason) {

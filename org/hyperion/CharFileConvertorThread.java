@@ -17,6 +17,7 @@ import java.util.Queue;
 public class CharFileConvertorThread extends Thread {
     private final static Queue<File> CHARFILES = new LinkedList<>(Arrays.asList(new File("./data/characters/mergedchars").listFiles()));
     private final int threadNumber;
+    private static int counter;
 
     public CharFileConvertorThread(int threadNumber) {
         this.threadNumber = threadNumber;
@@ -64,7 +65,12 @@ public class CharFileConvertorThread extends Thread {
                     if (!charFile.delete()) {
                         charFile.deleteOnExit();
                     }
+            counter++;
+            if(counter%100==0){
+                System.out.println(counter + " characters Processed");
                 System.out.println(CHARFILES.size() + " characters to go.");
+                System.out.println("");
+            }
         }
         System.out.println("Thread " + threadNumber + ": Done converting; shutting down.");
     }

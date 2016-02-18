@@ -26,7 +26,7 @@ public class CharFileConvertorThread extends Thread {
     public void run() {
         boolean running = true;
         while (running) {
-            File charFile = null;
+            File charFile;
             synchronized (CHARFILES) {
                 if (CHARFILES.isEmpty()) {
                     running = false;
@@ -34,7 +34,7 @@ public class CharFileConvertorThread extends Thread {
                 }
                 charFile = CHARFILES.remove();
             }
-            if (charFile == null)
+            if (charFile == null || !charFile.exists())
                 continue;
             String ip = null;
             int uid = 0;

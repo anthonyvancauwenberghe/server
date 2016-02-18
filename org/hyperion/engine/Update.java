@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -39,7 +40,7 @@ public class Update implements Runnable {
                 if (updateTimer == 0) {
                     World.getPlayers().forEach(Trade::declineTrade);
                     Dungeon.activeDungeons.forEach(Dungeon::complete);
-                    World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
+                    World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
                     ClanManager.save();
                     Server.getLogger().info("Update task finished! Reason for update: " + reason);
                     try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("./data/key.dat"))) {

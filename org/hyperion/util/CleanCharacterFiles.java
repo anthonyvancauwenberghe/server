@@ -9,6 +9,7 @@ import org.hyperion.rs2.savingnew.IOData;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -134,10 +135,14 @@ public class CleanCharacterFiles implements Runnable {
 
                 if (reader.has(IOData.KILL_COUNT.toString()) && reader.get(IOData.KILL_COUNT.toString()).getAsInt() >= 10)
                     continue;
-                FileUtils.moveFileToDirectory(characterFile, new File(cleanedFileDirectory + "/" + characterFile.getName()), true);
-                characterFilesCleaned++;
             } catch (Exception e) {
                 logger.log(Level.WARNING, "An error occurred while trying to read a character file on thread " + threadId + " in character file " + characterFile.getName() + ".", e);
+            }
+            try {
+                FileUtils.moveFileToDirectory(characterFile, cleanedFileDirectory, true);
+                characterFilesCleaned++;
+            } catch(IOException e) {
+                logger.log(Level.WARNING, "An error occurred while trying to move the file " + characterFile.getName() + " to the new directory.", e);
             }
         }
 

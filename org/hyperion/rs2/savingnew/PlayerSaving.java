@@ -15,14 +15,14 @@ import java.util.Arrays;
  * Created by Gilles on 4/02/2016.
  */
 public class PlayerSaving {
-    public static void save(Player player) {
+    public static boolean save(Player player) {
         Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 
         if (!file.getParentFile().exists()) {
             try {
                 if(!file.getParentFile().mkdirs())
-                    return;
+                    return false;
             } catch (SecurityException e) {
                 System.out.println("Unable to create directory for player data!");
             }
@@ -51,10 +51,11 @@ public class PlayerSaving {
                     object.add(ioData.toString(), toSave.getAsJsonObject());
             });
             writer.write(builder.toJson(object));
-            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public static boolean playerExists(String playerName) {

@@ -55,16 +55,16 @@ public class CharFileConvertorThread extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Player player = new Player(uid);
-            player.setIP(ip);
-            player.setName(charFile.getName().replaceAll(".txt", ""));
-            player.destroy();
-            new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
-            org.hyperion.rs2.savingnew.PlayerSaving.save(player);
-            if (!charFile.delete()) {
-                charFile.deleteOnExit();
-            }
-            System.out.println(CHARFILES.size() + " characters to go.");
+                Player player = new Player(uid);
+                player.setIP(ip);
+                player.setName(charFile.getName().replaceAll(".txt", ""));
+                player.destroy();
+                new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
+                if(org.hyperion.rs2.savingnew.PlayerSaving.save(player))
+                    if (!charFile.delete()) {
+                        charFile.deleteOnExit();
+                    }
+                System.out.println(CHARFILES.size() + " characters to go.");
         }
         System.out.println("Thread " + threadNumber + ": Done converting; shutting down.");
     }

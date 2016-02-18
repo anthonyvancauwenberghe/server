@@ -206,7 +206,7 @@ public final class World {
 
     public static void registerGlobalEvents() {
         submit(new PlayerTask36Seconds());
-        submit(new PlayerTask1Tick());
+        submit(new PlayerTask1Second());
         submit(new EarnPotentialTask());
         submit(new DisconnectNulledTask());
         submit(new PromoteTask());

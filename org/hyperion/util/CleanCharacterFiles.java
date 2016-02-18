@@ -134,7 +134,7 @@ public class CleanCharacterFiles implements Runnable {
 
                 if (reader.has(IOData.KILL_COUNT.toString()) && reader.get(IOData.KILL_COUNT.toString()).getAsInt() >= 10)
                     continue;
-                FileUtils.moveFileToDirectory(characterFile, new File(cleanedFileDirectory + characterFile.getName()), true);
+                FileUtils.moveFileToDirectory(characterFile, new File(cleanedFileDirectory + "/" + characterFile.getName()), true);
                 characterFilesCleaned++;
             } catch (Exception e) {
                 logger.log(Level.WARNING, "An error occurred while trying to read a character file on thread " + threadId + " in character file " + characterFile.getName() + ".", e);

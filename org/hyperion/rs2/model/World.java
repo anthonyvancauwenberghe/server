@@ -197,11 +197,11 @@ public final class World {
     public static void updatePlayersOnline() {
         if(players.size() > maxPlayerCount)
             maxPlayerCount = players.size();
-        World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.PLAYERS_ONLINE));
+        World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.PLAYERS_ONLINE));
     }
 
     public static void updateStaffOnline() {
-        World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.STAFF_ONLINE));
+        World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.STAFF_ONLINE));
     }
 
     public static void registerGlobalEvents() {

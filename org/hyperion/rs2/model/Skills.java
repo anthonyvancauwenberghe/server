@@ -500,7 +500,7 @@ public class Skills {
                     bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
                 }
                 BONUS_SKILL = bonusSkill;
-                World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.BONUS_SKILL));
+                World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.BONUS_SKILL));
             }
             Skills.lastSkillChange = dayOfYear;
         }

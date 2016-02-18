@@ -316,7 +316,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private SummoningBar summoningBar = new SummoningBar(this);
 	private Yelling yelling = new Yelling();
 	private ExtraData extraData = new ExtraData();
-	private NewQuestTab questtab = new NewQuestTab(this);
+	private QuestTab questtab = new QuestTab(this);
 	private SpawnTab spawntab = new SpawnTab(this);
 	private AchievementTab achievementtab = new AchievementTab(this);
 	private ItemDropping itemDropping = new ItemDropping();
@@ -661,7 +661,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return itemDropping;
 	}
 
-	public NewQuestTab getQuestTab() {
+	public QuestTab getQuestTab() {
 		return questtab;
 	}
 
@@ -1416,7 +1416,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setPlayerRank(long playerRank) {
 		this.playerRank = playerRank;
-		getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.RANK);
+		getQuestTab().updateComponent(QuestTab.QuestTabComponent.RANK);
 	}
 
 	/**

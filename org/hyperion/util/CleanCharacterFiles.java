@@ -3,6 +3,7 @@ package org.hyperion.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.commons.io.FileUtils;
 import org.hyperion.Configuration;
 import org.hyperion.rs2.savingnew.IOData;
 
@@ -19,9 +20,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import static org.hyperion.Configuration.ConfigurationObject.CHARACTER_FILE_CLEANUP;
-import static org.hyperion.Configuration.ConfigurationObject.CHARACTER_FILE_CLEANUP_THREADS;
+import static org.hyperion.Configuration.ConfigurationObject.*;
 
 /**
  * Created by Gilles on 18/02/2016.
@@ -39,9 +40,29 @@ public class CleanCharacterFiles implements Runnable {
     private static boolean enabled = true;
 
     /**
+     * The amount of character files that got cleaned.
+     */
+    private static int characterFilesCleaned = 0;
+
+    /**
      * The logger class
      */
     private final static Logger logger = Logger.getLogger("CharacterFileCleaner");
+
+    /**
+     * The start-time of the cleaning.
+     */
+    private static long startTime = -1;
+
+    /**
+     * Whether the cleaned already reported to the logger or not.
+     */
+    private static boolean reported = false;
+
+    /**
+     * The place where the files will get moved to when they're not valid.
+     */
+    private final static File cleanedFileDirectory = new File(IOData.getCharFilePath() + "/deletedchars/" + LocalDate.now().toString() + "/");
 
     /**
      * This method can be called at any time and will go through all the character files. It will use the default set directory.
@@ -56,7 +77,11 @@ public class CleanCharacterFiles implements Runnable {
             return;
         }
 
-        characterFiles = new LinkedList<>(Arrays.asList(characterFilesFolder));
+        if(!cleanedFileDirectory.exists())
+            cleanedFileDirectory.mkdirs();
+
+        characterFiles = new LinkedList<>(Arrays.asList(characterFilesFolder).stream().filter(file -> file.getName().endsWith(".txt")).collect(Collectors.toList()));
+        startTime = System.currentTimeMillis();
 
         /**
          * This will start the threads, with the pre-configured settings.
@@ -74,41 +99,57 @@ public class CleanCharacterFiles implements Runnable {
 
     @Override
     public void run() {
-        while (characterFiles != null && !characterFiles.isEmpty() && enabled) {
+        while (characterFiles != null && !characterFiles.isEmpty() && enabled && !reported) {
+            if(characterFiles.size()%1000 == 0) {
+                System.out.println("Characterfile cleaner has " + characterFiles.size() + " files left to clean.");
+            }
             File characterFile = characterFiles.poll();
             if (characterFile == null)
                 break;
-            boolean willGetCleaned = true;
+            boolean willGetCleaned = false;
             try (FileReader fileReader = new FileReader(characterFile)) {
                 JsonParser fileParser = new JsonParser();
                 Gson builder = new Gson();
                 JsonObject reader = (JsonObject) fileParser.parse(fileReader);
 
-                /**
-                 * If a player doesn't have a single rank we'll make him cleaned
-                 */
-                if (!reader.has(IOData.PREVIOUS_LOGIN.toString())) {
-                    if(!LocalDateTime.ofInstant(Instant.ofEpochMilli(reader.get(IOData.PREVIOUS_LOGIN.toString()).getAsLong()), ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())) {
-                        if (!reader.has(IOData.RANK.toString()))
-                            willGetCleaned = true;
+                if (!reader.has(IOData.PREVIOUS_LOGIN.toString()))
+                    continue;
 
-                        if (reader.has(IOData.TUTORIAL_PROGRESS.toString())) {
-                            if (reader.get(IOData.TUTORIAL_PROGRESS.toString()).getAsInt() != 28) {
-                                willGetCleaned = true;
-                            }
-                        }
+                if (!LocalDateTime.ofInstant(Instant.ofEpochMilli(reader.get(IOData.PREVIOUS_LOGIN.toString()).getAsLong()), ZoneId.systemDefault()).toLocalDate().isAfter(LocalDate.now().minusDays(8)))
+                    continue;
 
-                        if(reader.has(IOData.LEVELS.toString())) {
-                            builder.fromJson(reader.get(IOData.LEVELS.toString()).getAsJsonArray(), int[].class);
-                        }
-                    }
-                } else {
-                    willGetCleaned = true;
-                }
+                if (reader.has(IOData.RANK.toString()))
+                    continue;
 
+                if (reader.has(IOData.TUTORIAL_PROGRESS.toString()) && reader.get(IOData.TUTORIAL_PROGRESS.toString()).getAsInt() >= 28)
+                    continue;
+
+                if (reader.has(IOData.ACCOUNT_VALUE.toString()) && reader.get(IOData.ACCOUNT_VALUE.toString()).getAsInt() > 10000)
+                    continue;
+
+                if (reader.has(IOData.DONATOR_POINTS.toString()) || reader.has(IOData.DONATOR_POINTS_BOUGHT.toString()))
+                    continue;
+
+                if (reader.has(IOData.LEVELS.toString()) && Arrays.stream(builder.fromJson(reader.get(IOData.LEVELS.toString()).getAsJsonArray(), int[].class)).count() >= 800)
+                    continue;
+
+                if (reader.has(IOData.KILL_COUNT.toString()) && reader.get(IOData.KILL_COUNT.toString()).getAsInt() >= 10)
+                    continue;
+
+                FileUtils.moveFileToDirectory(characterFile, cleanedFileDirectory, true);
+                characterFilesCleaned++;
             } catch (Exception e) {
-                logger.log(Level.WARNING, "An error occurred while trying to read a character file.", e);
+                logger.log(Level.WARNING, "An error occurred while trying to read a character file on thread " + threadId + " in character file " + characterFile.getName() + ".", e);
             }
+        }
+
+        if (Configuration.getBoolean(DEBUG))
+            System.out.println("Character-file cleaning thread " + threadId + " finished.");
+        if (!reported)
+
+        {
+            logger.info("Done cleaning character files. Cleaned " + characterFilesCleaned + " character files in " + (System.currentTimeMillis() - startTime) + "ms");
+            reported = true;
         }
     }
 }

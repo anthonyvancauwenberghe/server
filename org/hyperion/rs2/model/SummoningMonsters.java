@@ -127,6 +127,7 @@ public class SummoningMonsters {
 		p.cE.summonedNpc = monster;
 		monster.playGraphics(Graphic.create(1315));
         openSummonTab(p, monster);
+		World.register(monster);
 	}
 
     public static void renewFamiliar(Player player) {

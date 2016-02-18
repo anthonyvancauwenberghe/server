@@ -23,6 +23,7 @@ import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.util.CleanCharacterFiles;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -61,8 +62,7 @@ public final class GameLoader {
     }
 
     private void executeServiceLoad() {
-        //TODO ADD CHAR FILE CLEANER
-
+        serviceLoader.execute(CleanCharacterFiles::startup);
         serviceLoader.execute(NPCDefinition::init);
         serviceLoader.execute(PossibleHacksHolder::init);
         serviceLoader.execute(RoomDefinition::load);
@@ -84,7 +84,6 @@ public final class GameLoader {
         serviceLoader.execute(TriviaBot::init);
         serviceLoader.execute(RestartTask::submitRestartTask);
         serviceLoader.execute(Achievements::load);
-
     }
 
     public GameEngine getEngine() {

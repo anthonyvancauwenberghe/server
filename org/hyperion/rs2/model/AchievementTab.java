@@ -113,7 +113,9 @@ public class AchievementTab {
                             player.getActionSender().sendDialogue("@dre@" + achievement.title, ActionSender.DialogueType.MESSAGE, 1,
                                     Animation.FacialAnimation.HAPPY,
                                     "@dre@Started: @bla@" + start,
-                                    "@dre@Finished: @bla@" + finish);
+                                    "@dre@Finished: @bla@" + finish,
+                                    "",
+                                    "");
                     } else {
                         for (int taskId = 0; taskId < achievement.tasks.size(); taskId++) {
                             achievementProgress.progress(taskId).info(player).forEach(player::sendMessage);

@@ -2,7 +2,7 @@ package org.hyperion;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
-import org.hyperion.rs2.model.NewQuestTab;
+import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.util.Time;
@@ -38,7 +38,7 @@ public class Uptime {
 		TaskManager.submit(new Task(Time.ONE_MINUTE, "Uptime") {
 			@Override
 			protected void execute() {
-				World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(NewQuestTab.QuestTabComponent.UPTIME));
+				World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.UPTIME));
 				System.out.println("Uptime: " + Server.getUptime().toString() + " - Players online: " + World.getPlayers().size() + " - Staff online: " + World.getPlayers().stream().filter(p -> p != null && Rank.isStaffMember(p)).count());
 			}
 		});

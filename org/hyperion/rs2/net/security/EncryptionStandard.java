@@ -14,7 +14,7 @@ public class EncryptionStandard {
 
     public static String encryptPassword(String password) {
         if(password == null)
-            return null;
+            return "";
         return encrypt(password.toLowerCase(), Server.getCharFileEncryption().getKey());
     }
 

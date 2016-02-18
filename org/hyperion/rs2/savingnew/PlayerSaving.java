@@ -34,6 +34,8 @@ public class PlayerSaving {
                 if(!ioData.shouldSave(player))
                     return;
                 JsonElement toSave = ioData.saveValue(player, builder);
+                if(toSave == null)
+                    return;
                 if(toSave.isJsonPrimitive()) {
                     JsonPrimitive toSavePrimitive = (JsonPrimitive)toSave;
                     if(toSavePrimitive.isBoolean())

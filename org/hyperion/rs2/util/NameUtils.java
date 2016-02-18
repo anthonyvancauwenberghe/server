@@ -69,6 +69,8 @@ public class NameUtils {
 	 * @return The formatted name.
 	 */
 	public static String formatNameForProtocol(String s) {
+		if(s == null)
+			return "";
 		return s.toLowerCase().replace(" ", "_");
 	}
 

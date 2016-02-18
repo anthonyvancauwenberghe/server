@@ -80,7 +80,7 @@ public class CleanCharacterFiles implements Runnable {
         if(!cleanedFileDirectory.exists())
             cleanedFileDirectory.mkdirs();
 
-        characterFiles = new LinkedList<>(Arrays.asList(characterFilesFolder).stream().filter(file -> file.getName().endsWith(".txt")).collect(Collectors.toList()));
+        characterFiles = new LinkedList<>(Arrays.asList(characterFilesFolder).stream().filter(file -> file.getName().endsWith(".json")).collect(Collectors.toList()));
         startTime = System.currentTimeMillis();
 
         /**

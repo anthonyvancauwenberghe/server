@@ -62,7 +62,7 @@ public final class GameLoader {
     }
 
     private void executeServiceLoad() {
-        serviceLoader.execute(CleanCharacterFiles::startup);
+        //serviceLoader.execute(CleanCharacterFiles::startup);
         serviceLoader.execute(NPCDefinition::init);
         serviceLoader.execute(PossibleHacksHolder::init);
         serviceLoader.execute(RoomDefinition::load);

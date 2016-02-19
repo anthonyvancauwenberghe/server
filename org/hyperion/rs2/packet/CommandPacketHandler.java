@@ -2157,7 +2157,7 @@ public class CommandPacketHandler implements PacketHandler {
                         }
                         player.getSession().close(true);
                         return;
-                    }else{
+                    } else {
                         player.sendf("You have %,d attempts left to verify", player.verificationCodeAttemptsLeft);
                         return;
                     }

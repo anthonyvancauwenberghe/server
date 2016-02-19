@@ -231,7 +231,6 @@ public class EntityHandler {
 
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);
-        player.verified = true;
 
         player.getGrandExchangeTracker().notifyChanges(false);
         player.getAchievementTracker().load();
@@ -349,7 +348,7 @@ public class EntityHandler {
             player.getLogManager().add(LogEntry.logout(player));
             player.getLogManager().clearExpiredLogs();
             player.getLogManager().save();
-            if (player.verified)
+            if (player.verificationCodeEntered)
                 World.getLoader().savePlayer(player);
             player.destroy();
         });

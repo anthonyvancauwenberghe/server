@@ -61,7 +61,6 @@ import org.hyperion.rs2.net.ISAACCipher;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
-import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.AccountLogger;
 import org.hyperion.rs2.util.AccountValue;
 import org.hyperion.rs2.util.NameUtils;
@@ -98,7 +97,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * INTEGERS
 	 */
 	private final int uid;
-	public int pin = -1;
 	public int turkeyKills;
 	public int EP = 0;
 	public int blackMarks = 0;
@@ -219,7 +217,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public boolean onConfirmScreen = false;
 	public boolean openingTrade = false;
 	public boolean duelRule[] = new boolean[24];
-	public boolean verified;
 	public boolean banEquip[] = new boolean[14];
 	public boolean inGame;
 	public boolean attackOption = false;
@@ -2061,11 +2058,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 				});
 			}
 		}
-	}
-
-	public void dispose() {
-		PlayerSaving.save(this);
-		getActionSender().sendLogout();
 	}
 
 	public void addLastKill(String name) {

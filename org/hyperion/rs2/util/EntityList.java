@@ -1,6 +1,7 @@
 package org.hyperion.rs2.util;
 
 import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 
@@ -149,7 +150,8 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		if (e instanceof Player) {
 			Player player = (Player) e;
 			if (player.getSession().isConnected()) {
-				player.dispose();
+				player.destroy();
+				player.getSession().close(true);
 			}
 		}
 
@@ -190,7 +192,7 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 	}
 
 	public boolean remove(Player player, boolean force) {
-		if(force) {	
+		if(force) {
 			for(int i = 1; i < entities.length; i++) {
 				if(entities[i] == player) {
 					System.out.println("Successfully terminated player");
@@ -200,8 +202,8 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 				}
 			}
 		} else {
-			System.out.println("Attempting to unregister player instead");
-			World.unregister(player);
+			System.out.println("Attempting to deregister player instead");
+			EntityHandler.deregister(player);
 		}
 		return false;
 	}

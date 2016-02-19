@@ -20,7 +20,8 @@ import org.hyperion.rs2.net.RS2CodecFactory;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.net.SocketAddress;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,9 +32,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConnectionHandler extends IoHandlerAdapter {
 
-	private final static HashMap<String, Object> ipBlackList = new HashMap<>();
+	private final static List<String> ipBlackList = new ArrayList<>();
 
-	public static HashMap<String, Object> getIpBlackList() {
+	public static List<String> getIpBlackList() {
 		return ipBlackList;
 	}
 
@@ -81,7 +82,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		Server.getLoader().getEngine().submit(() -> {
 			if(session.containsAttribute("player")) {
 				Player p = (Player) session.getAttribute("player");
-				SocketAddress address = session.getRemoteAddress();
 				if(p != null) {
 					if(!p.loggedOut) {
 						World.unregister(p);
@@ -107,13 +107,11 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionOpened(IoSession session) throws Exception {
-		// System.out.println("Session opened!");
 		SocketAddress remoteAddress = session.getRemoteAddress();
 		String remoteIp = remoteAddress.toString();
 		String ip = remoteIp.split(":")[0];
 		String shortIp = TextUtils.shortIp(remoteIp);
-		if(! HostGateway.canEnter(shortIp)) {
-			System.out.println("Cant enter hostgateway: " + shortIp);
+		if(! HostGateway.canEnter(shortIp) || ConnectionHandler.getIpBlackList().contains(ip)) {
 			session.close(true);
 			return;
 		}

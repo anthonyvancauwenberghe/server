@@ -3,7 +3,6 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.net.Packet;
 
 /**
@@ -31,8 +30,6 @@ public class InterfacePacketHandler implements PacketHandler{
 
     private void handleData(final Player player, final Packet pkt){
         final short id = pkt.getShort();
-        if(!player.verified && id != PinInterface.ID)
-            return;
         final Interface itf = InterfaceManager.get(id);
         if(itf == null)
             return;

@@ -45,9 +45,9 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     session.close(true);
                     return false;
                 }
-                if ((in.get() & 0xFF) != 18) { //TODO CHANGE THIS BACK TO 14 IN BOTH CLIENT AND SERVER
+                if ((in.get() & 0xFF) != 18) {
                     String ip = session.getRemoteAddress().toString().split(":")[0];
-                    ConnectionHandler.getIpBlackList().put(ip, new Object());
+                    ConnectionHandler.getIpBlackList().add(ip);
                     session.close(true);
                     return false;
                 }

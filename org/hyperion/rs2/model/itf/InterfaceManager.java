@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.itf;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.content.itfactivation.ChangeMaxCape;
 import org.hyperion.rs2.model.itf.impl.*;
 
 import java.util.Collection;
@@ -22,7 +21,6 @@ public final class InterfaceManager {
         addGlobal(new PendingRequests());
         addGlobal(new ChangePassword());
         addGlobal(new PlayerProfileInterface());
-        addGlobal(new PinInterface());
         addGlobal(new ItemContainer());
         addGlobal(new NameItemInterface());
         addGlobal(new ModerationInterface());

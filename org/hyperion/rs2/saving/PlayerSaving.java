@@ -170,7 +170,6 @@ public class PlayerSaving {
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
         saveList.add(new SaveBonusXP());
-        saveList.add(new SavePin());
         saveList.add(new SavePid());
         saveList.add(new SaveDungeoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));

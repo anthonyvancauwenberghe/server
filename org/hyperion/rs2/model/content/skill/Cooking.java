@@ -169,7 +169,7 @@ public class Cooking implements ContentTemplate {
 			public void stop() {
 				ContentEntity.startAnimation(client, - 1);
 				client.setBusy(false);
-				this.stop();
+				super.stop();
 			}
 
 		});

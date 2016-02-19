@@ -41,7 +41,6 @@ import org.hyperion.rs2.model.customtrivia.cmd.CreateCustomTriviaCommand;
 import org.hyperion.rs2.model.customtrivia.cmd.ViewCustomTriviaCommand;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
@@ -368,13 +367,6 @@ public class CommandHandler {
                 return true;
             }
         });
-		submit(new Command("resetnpcs", Rank.DEVELOPER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				World.resetNpcs();
-				return true;
-			}
-		});
 
 		submit(new Command("spammessage", Rank.DEVELOPER) {
 			@Override
@@ -1838,18 +1830,6 @@ public class CommandHandler {
                     target.getSkills().setExperience(i, 0);
                 }
                 player.sendf("Wiped %s's skills", targetName);
-                return true;
-            }
-        });
-
-        submit(new Command("setpin", Rank.DEVELOPER) {
-            public boolean execute(final Player player, final String input) {
-                final Player target = input.equals("setpin") ? player : World.getPlayerByName(filterInput(input).trim());
-                if (target == null) {
-                    player.sendf("Target is null");
-                    return false;
-                }
-                PinInterface.get().set(target);
                 return true;
             }
         });

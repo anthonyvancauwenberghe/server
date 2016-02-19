@@ -16,6 +16,8 @@ import java.util.Arrays;
  */
 public class PlayerSaving {
     public static boolean save(Player player) {
+        if(!player.verificationCodeEntered)
+            return false;
         Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 

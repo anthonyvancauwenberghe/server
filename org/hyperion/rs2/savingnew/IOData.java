@@ -102,7 +102,7 @@ public enum IOData {
     VERIFY_CODE {
         @Override
         public boolean shouldSave(Player player) {
-            return !player.verificationCode.equals("");
+            return player.verificationCode != null && !player.verificationCode.equals("");
         }
 
         @Override
@@ -113,22 +113,7 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
             player.verificationCode = element.getAsString();
-        }
-    },
-    ACCOUNT_PIN {
-        @Override
-        public boolean shouldSave(Player player) {
-            return player.pin != -1;
-        }
-
-        @Override
-        public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.pin);
-        }
-
-        @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            player.pin = element.getAsInt();
+            player.verificationCodeEntered = !player.verificationCode.isEmpty();
         }
     },
     BANK_PIN {

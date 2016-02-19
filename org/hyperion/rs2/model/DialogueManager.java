@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.EP.EPExchange;
@@ -18,7 +17,6 @@ import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.RangingGuild;
 import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
 import org.hyperion.rs2.model.content.misc.Starter;
-import org.hyperion.rs2.model.content.misc.TGEvent;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
@@ -1214,55 +1212,6 @@ public class DialogueManager {
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 201:
-                player.getActionSender().removeChatboxInterface();
-                break;
-            /** Thanks giving event dialogues*/
-            case 179: //jack D
-                player.getInterfaceState().setNextDialogueId(0, -1);
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "Good day " + player.getName() + "! I'm kind of in trouble.",
-                        "In order to save thanks-giving I need your help to",
-                        "defeat 50 evil chickens, once you've done that", "please come back to me and that speak to me again.");
-                break;
-            case 180: //jack D
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "You have killed "+player.getTurkeyKills()+" out of "+player.getTurkeyKills()+" evil chickens.",
-                        "Speak with me once you have killed 50 of them,",
-                        "we must save the thanks-giving after all!");
-                player.getInterfaceState().setNextDialogueId(0, 6000);//
-                break;
-            case 181: //jack D
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "So you managed to kill all the evil chickens, "+player.getName()+"!",
-                        "Now the thanks-giving is all safe thanks to you!");
-                player.getInterfaceState().setNextDialogueId(0, 182);//
-                break;
-            case 182: //jack D
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "Please accept my reward as a gift,", "it's the least I can do!");
-                player.getInterfaceState().setNextDialogueId(0, 183);//
-                break;
-            case 183:
-                player.sendMessage("DeviousPK wishes you happy thanks-giving!");
-                player.getActionSender().removeChatboxInterface();
-                player.sendMessage("@red@You have received x1 Web cloak to your bank account!");
-                player.getBank().add(new BankItem(0, 15352, 1));
-                break;
-
-            case 184: //gala
-                if (player.hasFinishedTG()) {
-                    player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                            "You have already saved the thanks-giving, "+player.getName()+"!");
-                    player.getInterfaceState().setNextDialogueId(0, -1);
-                    return;
-                }
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "My friend called Grandpa Jack is in need of help.",
-                        "I will take you to him for more instructions.");
-                player.getInterfaceState().setNextDialogueId(0, 185);
-                break;
-            case 185: //gala
-                TGEvent.teleport(player);
                 player.getActionSender().removeChatboxInterface();
                 break;
             case 186: //tele to pure pk

@@ -234,17 +234,6 @@ public final class World {
         });
     }
 
-    public static void resetNpcs() {
-        getNpcs().stream().filter(npc -> npc != null).forEach(npc -> {
-            if (!npc.isDead()) {
-                npc.serverKilled = true;
-                submit(new NpcDeathTask(npc));
-            }
-            npc.setDead(true);
-            npc.health = 0;
-        });
-    }
-
     public static void resetSummoningNpcs(Player player) {
         NPC npc = player.cE.summonedNpc;
         if (npc == null)

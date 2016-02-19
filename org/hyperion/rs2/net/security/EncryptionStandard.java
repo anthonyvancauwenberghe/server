@@ -22,6 +22,14 @@ public final class EncryptionStandard {
         return decrypt(password, Server.getCharFileEncryption().getKey());
     }
 
+    public static String encryptGoogleKey(String key) {
+        return encrypt(key, Server.getCharFileEncryption().getKey());
+    }
+
+    public static String decryptGoogleKey(String key) {
+        return decrypt(key, Server.getCharFileEncryption().getKey());
+    }
+
     public static String encrypt(String plainText, Key encryptionKey) {
         if(plainText == null)
             return "";

@@ -248,9 +248,7 @@ public class WarriorsGuild implements ContentTemplate {
 	}
 
 	public NPC spawnNpc(int npcId, Location location, Player player) {
-		NPC npc = NPCManager
-				.addNPC(location.getX(), location.getY(), location.getZ(),
-						npcId, - 1);
+		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), location.getZ(), npcId, - 1);
 		npc.agressiveDis = 10;
 		npc.ownerId = player.getIndex();
 		return npc;

@@ -9,6 +9,7 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.EP.EPExchange;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
 import org.hyperion.rs2.model.content.minigame.Barrows3;
@@ -1299,21 +1300,11 @@ public class DialogueManager {
 						"Your account has been saved but...", "You have to change your name to activate it.", "Please enter a new name in the input box.");
 				player.getInterfaceState().setNextDialogueId(0, 402);
 				break;
-			case 402:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("namechange");
-				break;
 
 			case 403:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"Unfortunately this name is already taken,", "please choose an other name");
 				player.getInterfaceState().setNextDialogueId(0, 404);
-				break;
-			case 404:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("namechange");
 				break;
 			case 405:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
@@ -1350,11 +1341,6 @@ public class DialogueManager {
 						"Please enter a new name for your","ArteroPk account.");
 				player.getInterfaceState().setNextDialogueId(0, 505);
 				break;
-			case 505:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("doublecharartero");
-				break;
 			case 506:
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"You have made an invalid choice, please try again.");
@@ -1372,11 +1358,6 @@ public class DialogueManager {
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"Please enter a new name for your","InstantPk account.");
 				player.getInterfaceState().setNextDialogueId(0, 509);
-				break;
-			case 509:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("doublecharinstant");
 				break;
 			case 510:
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
@@ -1458,17 +1439,34 @@ public class DialogueManager {
 				break;
 			case 600:
 				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getInterfaceState().setStringListener("ge_set_quantity");
+				player.getInterfaceState().setStringListener("ge_set_quantity", "Enter the quantity");
 				break;
 			case 601:
 				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getInterfaceState().setStringListener("ge_set_price");
+				player.getInterfaceState().setStringListener("ge_set_price", "Enter the price");
 				break;
 			case 610:
 			case 611:
 			case 612:
 			case 613:
 				player.getRandomEvent().answer(dialogueId - 610);
+				break;
+			case 650:
+				PlayerAuthenticationGenerator.setupAuthenticator(player);
+				break;
+			case 651:
+				//TODO MAKE INFO PAGE
+				break;
+			case 652:
+				PlayerAuthenticationGenerator.disableAuthenticator(player);
+				break;
+			case 654:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getInterfaceState().setStringListener("authenticator_confirmation", "Enter your current key");
+				break;
+			case 655:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getInterfaceState().setStringListener("authenticator_removal_confirmation", "Enter your current key");
 				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

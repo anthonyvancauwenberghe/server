@@ -21,7 +21,8 @@ public enum LoginResponse {
     COULD_NOT_COMPLETE(13),
     UPDATE_IN_PROGRESS(14),
     LOGIN_ATTEMPTS_EXCEEDED(16),
-    AUTHENTICATION_WRONG(22);
+    AUTHENTICATION_WRONG(22),
+    AUTHENTICATION_USED_TWICE(23);
 
     private final int returnCode;
 

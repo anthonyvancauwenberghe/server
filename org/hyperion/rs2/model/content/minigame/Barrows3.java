@@ -198,7 +198,6 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public void killNpc(Player client, int id) {
-		System.out.println("Id killed: " + id);
 		int killsInt = client.getExtraData().getInt(BROTHERS_KILLED_KEY);
 		boolean[] killedbrothers = intToBoolArray(killsInt, 6);
 		killedbrothers[id - Barrows.AHRIM] = true;
@@ -286,11 +285,11 @@ public class Barrows3 implements ContentTemplate {
 				return true;
 			}
 			if(! client.hasTarget()) {
-				//spawn npc
 				NPC n = NPCManager.addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
 				n.forceMessage("You dare disturb my slumber!");
 				n.agressiveDis = 7;
 				n.ownerId = client.getIndex();
+				World.register(n);
 				client.setHasTarget(true);
 			}
 		}

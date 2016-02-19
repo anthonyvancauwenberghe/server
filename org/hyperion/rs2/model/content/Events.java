@@ -2,6 +2,7 @@ package org.hyperion.rs2.model.content;
 
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
@@ -60,6 +61,7 @@ public class Events {
         eventStartTime = System.currentTimeMillis();
         eventLocation = location;
         for(Player player : World.getPlayers()) {
+            player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.EVENT);
             player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
         }
     }

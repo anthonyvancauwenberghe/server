@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentManager;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 
@@ -76,7 +77,9 @@ public class NpcClickHandler {
 		}
 		npc.face(player.getLocation());
 		switch(npc.getDefinition().getId()) {
-
+			case 4375:
+				PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+				break;
             case 817:
                 if (player.getBank().contains(15352) || player.getInventory().contains(15352) || player.getEquipment().contains(15352)) {
                     player.sendMessage("You have already saved the thanks-giving!");

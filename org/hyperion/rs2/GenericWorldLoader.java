@@ -12,10 +12,11 @@ import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification.VerifyResponse;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.PacketBuilder;
-import org.hyperion.rs2.net.security.Authentication;
 import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
@@ -136,8 +137,15 @@ public class GenericWorldLoader implements WorldLoader {
 			return INVALID_CREDENTIALS;
 		}
 
-        if(player.getGoogleAuthenticatorKey() != null && !Authentication.authenticatePlayer(player, playerDetails.getAuthenticationCode()))
-            return AUTHENTICATION_WRONG;
+        if(player.getGoogleAuthenticatorKey() != null) {
+			VerifyResponse verifyResponse = PlayerAuthenticatorVerification.verifyPlayer(player, playerDetails.getAuthenticationCode());
+			if(verifyResponse == VerifyResponse.PIN_ENTERED_TWICE)
+				return AUTHENTICATION_USED_TWICE;
+			if(verifyResponse == VerifyResponse.INCORRECT_PIN) {
+				LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
+				return AUTHENTICATION_WRONG;
+			}
+		}
 
 		if(Rank.hasAbility(player, ADMINISTRATOR))
 			if(!ALLOWED_IPS.contains(player.getShortIP()))

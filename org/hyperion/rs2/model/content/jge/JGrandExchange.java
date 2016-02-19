@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.rs2.sql.DbHub;
 
 import java.util.*;
 import java.util.function.Function;

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.sun.javafx.beans.event.AbstractNotifyListener;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
@@ -18,7 +19,7 @@ import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
-import org.hyperion.util.ObservableArrayList;
+import org.hyperion.util.ObservableCollection;
 import org.hyperion.util.Time;
 
 import java.io.File;
@@ -53,11 +54,20 @@ public class GenericWorldLoader implements WorldLoader {
 	 */
 
 	private final static String ALLOWED_IPS_DIR = "./data/json/allowed_ips.json";
-	private final static List<String> ALLOWED_IPS = loadList(ALLOWED_IPS_DIR).listen((list) -> saveList(list, ALLOWED_IPS_DIR));
+	private final static ObservableCollection<String> ALLOWED_IPS = loadList(ALLOWED_IPS_DIR);
 	private final static Map<String, Integer> LOGIN_ATTEMPTS = new HashMap<>();
 	private final static Set<String> BLOCKED_PLAYERS = new HashSet<>();
 
 	private final static int MAXIMUM_LOGIN_ATTEMPTS = 5;
+
+	static {
+		ALLOWED_IPS.addListener(new AbstractNotifyListener() {
+			@Override
+			public void invalidated(javafx.beans.Observable observable) {
+				saveList(ALLOWED_IPS, ALLOWED_IPS_DIR);
+			}
+		});
+	}
 
 	@Override
 	public LoginResponse checkLogin(Player player, PlayerDetails playerDetails) {
@@ -170,29 +180,28 @@ public class GenericWorldLoader implements WorldLoader {
 		return true;
 	}
 
-	private static ObservableArrayList<String> loadList(String fileName) {
+	private static ObservableCollection<String> loadList(String fileName) {
 		File file = new File(fileName);
 		if (!file.exists()) {
 			saveList(fileName);
-			return new ObservableArrayList<>();
+			return new ObservableCollection<>(new ArrayList<>());
 		}
 
 		try (FileReader fileReader = new FileReader(file)) {
 			JsonParser parser = new JsonParser();
 			JsonArray object = (JsonArray) parser.parse(fileReader);
-			return new Gson().fromJson(object, new TypeToken<ObservableArrayList<String>>() {
-			}.getType());
+			return new ObservableCollection<>(new Gson().fromJson(object, new TypeToken<ArrayList<String>>() {}.getType()));
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ObservableArrayList<>();
+			return new ObservableCollection<>(new ArrayList<>());
 		}
 	}
 
 	private static void saveList(String fileName) {
-		saveList(new ArrayList<>(), fileName);
+		saveList(new ObservableCollection<>(new ArrayList<>()), fileName);
 	}
 
-	private static void saveList(List<String> list, String fileName) {
+	private static void saveList(ObservableCollection<String> list, String fileName) {
 		File fileToWrite = new File(fileName);
 
 		if (!fileToWrite.getParentFile().exists()) {
@@ -206,7 +215,7 @@ public class GenericWorldLoader implements WorldLoader {
 
 		try (FileWriter writer = new FileWriter(fileToWrite)) {
 			Gson builder = new GsonBuilder().setPrettyPrinting().create();
-			writer.write(builder.toJson(list, new TypeToken<ObservableArrayList<String>>() {}.getType()));
+			writer.write(builder.toJson(list, new TypeToken<ObservableCollection<String>>() {}.getType()));
 			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -215,6 +224,17 @@ public class GenericWorldLoader implements WorldLoader {
 
 
 	static {
+        CommandHandler.submit(new Command("addip", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String ipAddress = filterInput(input);
+                if(ipAddress == null)
+                    throw new Exception();
+                ALLOWED_IPS.add(ipAddress.toLowerCase().replaceAll("_", " "));
+                player.getActionSender().sendMessage("The IP address '" + ipAddress + "' has been added to the list.");
+                return true;
+            }
+        });
 		CommandHandler.submit(new Command("unlock", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception{

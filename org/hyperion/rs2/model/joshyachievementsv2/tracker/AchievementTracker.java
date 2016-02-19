@@ -5,7 +5,7 @@ import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.*;
-import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.rs2.sql.DbHub;
 
 import java.util.*;
 import java.util.function.Predicate;

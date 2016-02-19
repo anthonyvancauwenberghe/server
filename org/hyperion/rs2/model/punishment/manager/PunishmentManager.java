@@ -4,7 +4,7 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
-import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.rs2.sql.DbHub;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.util.*;

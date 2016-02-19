@@ -22,7 +22,7 @@ import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.sql.DbHub;
+import org.hyperion.sql.DbHub;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

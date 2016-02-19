@@ -10011,7 +10011,7 @@ Mon Nov 02 20:04:46 GMT+01:00 2015
 ================================
 Fri Feb 05 17:16:15 CET 2016
 	class: class java.lang.NullPointerException
-	at org.hyperion.rs2.sql.SQLConnection.offer(SQLConnection.java:321)
+	at org.hyperion.sql.SQLConnection.offer(SQLConnection.java:321)
 	at org.hyperion.rs2.model.World$4.run(World.java:1061)
 	at org.hyperion.engine.GameEngine$4.run(GameEngine.java:211)
 	at java.util.concurrent.Executors$RunnableAdapter.call(null:-1)
@@ -10025,7 +10025,7 @@ Sat Feb 06 07:01:40 CET 2016
 	class: class java.lang.NullPointerException
 	at java.util.LinkedList.unlink(null:-1)
 	at java.util.LinkedList.remove(null:-1)
-	at org.hyperion.rs2.sql.SQLConnection.offer(SQLConnection.java:325)
+	at org.hyperion.sql.SQLConnection.offer(SQLConnection.java:325)
 	at org.hyperion.rs2.model.World$4.run(World.java:1061)
 	at org.hyperion.engine.GameEngine$4.run(GameEngine.java:211)
 	at java.util.concurrent.Executors$RunnableAdapter.call(null:-1)

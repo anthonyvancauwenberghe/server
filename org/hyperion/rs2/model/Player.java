@@ -9,6 +9,8 @@ import org.hyperion.engine.task.impl.PlayerDeathTask;
 import org.hyperion.engine.task.impl.VoteBonusEndTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.action.ActionQueue;
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -59,6 +61,7 @@ import org.hyperion.rs2.model.shops.LegendaryStore;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.net.security.Authentication;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
 import org.hyperion.rs2.util.AccountLogger;
@@ -92,6 +95,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private String clanName = "";
 	private String[] lastKills = {"", "", "", "", ""};
 	private String password;
+	private String googleAuthenticatorKey;
 
 	/**
 	 * INTEGERS
@@ -158,6 +162,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private int deathCount = 0;
 	private int voteStreak = 0;
 	private int todayVotes = 0;
+	private List<Integer> googleAuthenticatorBackup;
 
 	/**
 	 * LONG
@@ -2321,5 +2326,35 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setLastVoteBonus(long lastVoteBonus) {
 		this.lastVoteBonus = lastVoteBonus;
+	}
+
+	public String getGoogleAuthenticatorKey() {
+		return googleAuthenticatorKey;
+	}
+
+	public void setGoogleAuthenticatorKey(String googleAuthenticatorKey) {
+		this.googleAuthenticatorKey = googleAuthenticatorKey;
+	}
+
+	public List<Integer> getGoogleAuthenticatorBackup() {
+		return googleAuthenticatorBackup;
+	}
+
+	public void setGoogleAuthenticatorBackup(List<Integer> googleAuthenticatorBackup) {
+		this.googleAuthenticatorBackup = googleAuthenticatorBackup;
+	}
+
+	static {
+		CommandHandler.submit(new Command("test", Rank.DEVELOPER) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception {
+				try {
+					Authentication.generateGoogleAuthenticatorQR(player);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+		});
 	}
 }

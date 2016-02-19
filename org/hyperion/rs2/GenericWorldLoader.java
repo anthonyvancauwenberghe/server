@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.PacketBuilder;
+import org.hyperion.rs2.net.security.Authentication;
 import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
@@ -134,6 +135,9 @@ public class GenericWorldLoader implements WorldLoader {
 			LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
 			return INVALID_CREDENTIALS;
 		}
+
+        if(player.getGoogleAuthenticatorKey() != null && !Authentication.authenticatePlayer(player, playerDetails.getAuthenticationCode()))
+            return AUTHENTICATION_WRONG;
 
 		if(Rank.hasAbility(player, ADMINISTRATOR))
 			if(!ALLOWED_IPS.contains(player.getShortIP()))

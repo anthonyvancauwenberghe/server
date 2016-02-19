@@ -7,7 +7,7 @@ import java.security.Key;
 /**
  * Created by Gilles on 11/11/2015.
  */
-public class CharFileEncryption implements Serializable {
+public final class CharFileEncryption implements Serializable {
 
     private final Key key;
     static final long serialVersionUID = 1561486465;

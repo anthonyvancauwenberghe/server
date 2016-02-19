@@ -7,16 +7,12 @@ import org.hyperion.rs2.net.security.EncryptionStandard;
 public final class PlayerDetails {
 
 	private IoSession session;
-	private final String name;
-	private final String password;
-	private final int macAddress;
-	private final ISAACCipher inCipher;
-	private final ISAACCipher outCipher;
-	private final String IpAddress;
+	private final String name, password, IpAddress;
+	private final int macAddress, UID, authenticationCode;
+	private final ISAACCipher inCipher, outCipher;
 	private final int[] specialUid;
-	private final int UID;
 
-	public PlayerDetails(IoSession session, String name, String password, int macAddress, int UID, ISAACCipher inCipher, ISAACCipher outCipher, String IpAddress, int[] specialUid) {
+	public PlayerDetails(IoSession session, String name, String password, int authenticationCode, int macAddress, int UID, ISAACCipher inCipher, ISAACCipher outCipher, String IpAddress, int[] specialUid) {
 		this.session = session;
 		this.name = name;
 		this.password = EncryptionStandard.encryptPassword(password);
@@ -26,6 +22,7 @@ public final class PlayerDetails {
 		this.IpAddress = IpAddress;
 		this.specialUid = specialUid;
 		this.UID = UID;
+		this.authenticationCode = authenticationCode;
 	}
 
 	public IoSession getSession() {
@@ -54,5 +51,8 @@ public final class PlayerDetails {
 	}
 	public int getUID() {
 		return UID;
+	}
+	public int getAuthenticationCode() {
+		return authenticationCode;
 	}
 }

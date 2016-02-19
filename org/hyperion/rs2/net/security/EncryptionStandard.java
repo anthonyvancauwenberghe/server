@@ -10,7 +10,7 @@ import java.security.Key;
  * Created by Gilles on 29/10/2015.
  **/
 
-public class EncryptionStandard {
+public final class EncryptionStandard {
 
     public static String encryptPassword(String password) {
         if(password == null)
@@ -36,7 +36,7 @@ public class EncryptionStandard {
         }
     }
 
-    public static String decrypt(String encrypted, Key encryptionKey) {
+    private static String decrypt(String encrypted, Key encryptionKey) {
         try {
         Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, encryptionKey);

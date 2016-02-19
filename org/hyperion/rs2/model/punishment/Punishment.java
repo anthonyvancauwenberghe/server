@@ -4,8 +4,8 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.sql.DbHub;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.sql.DbHub;
 
 import java.util.Arrays;
 import java.util.StringJoiner;

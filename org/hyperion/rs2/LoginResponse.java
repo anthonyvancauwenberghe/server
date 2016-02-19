@@ -20,7 +20,8 @@ public enum LoginResponse {
     MEMBERS_ONLY(12),
     COULD_NOT_COMPLETE(13),
     UPDATE_IN_PROGRESS(14),
-    LOGIN_ATTEMPTS_EXCEEDED(16);
+    LOGIN_ATTEMPTS_EXCEEDED(16),
+    AUTHENTICATION_WRONG(22);
 
     private final int returnCode;
 

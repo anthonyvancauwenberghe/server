@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Gilles on 4/02/2016.
@@ -146,6 +147,38 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
             player.setPid(element.getAsInt());
+        }
+    },
+    GOOGLE_AUTHENTICATOR_KEY {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getGoogleAuthenticatorKey() != null;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getGoogleAuthenticatorKey());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setGoogleAuthenticatorKey(element.getAsString());
+        }
+    },
+    GOOGLE_AUTHENTICATOR_BACKUP_CODES {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getGoogleAuthenticatorBackup() != null;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return builder.toJsonTree(player.getGoogleAuthenticatorBackup(), new TypeToken<List<Integer>>(){}.getType());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setGoogleAuthenticatorBackup(builder.fromJson(element, new TypeToken<List<Integer>>(){}.getType()));
         }
     },
     LAST_IP {

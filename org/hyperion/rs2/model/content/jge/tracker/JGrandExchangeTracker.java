@@ -9,7 +9,7 @@ import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.sql.DbHub;
+import org.hyperion.sql.DbHub;
 
 import java.util.Optional;
 import java.util.function.Consumer;

@@ -906,6 +906,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
             case 17023: //dismiss
 				player.SummoningCounter = 0;
                 player.getActionSender().sendSidebarInterface(16, -1);
+				World.resetSummoningNpcs(player);
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
             case 17038:

@@ -27,10 +27,11 @@ public abstract class TaskManager {
 
 			while (it.hasNext()) {
 				t = it.next();
+				System.out.println(t.getClass().getSimpleName());
 				if (!t.tick())
 					it.remove();
 			}
-		} catch(Throwable e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 			World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
 		}

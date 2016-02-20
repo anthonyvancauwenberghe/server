@@ -5,6 +5,7 @@ import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
+import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.HostGateway;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
@@ -72,6 +73,7 @@ public class EntityHandler {
     private static void register(Player player) {
         System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
         HostGateway.enter(player.getShortIP());
+        ConnectionHandler.removeIp(player.getShortIP());
         if(!World.getPlayers().add(player)) {
             player.getSession().close(true);
             deregister(player);

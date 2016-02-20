@@ -1,18 +1,13 @@
 
 		package org.hyperion.rs2;
 
-		import com.google.gson.Gson;
-		import com.google.gson.GsonBuilder;
-		import com.google.gson.JsonArray;
-		import com.google.gson.JsonParser;
-		import com.google.gson.reflect.TypeToken;
-		import com.sun.javafx.beans.event.AbstractNotifyListener;
-		import javafx.beans.Observable;
 		import org.apache.mina.core.service.IoHandlerAdapter;
 		import org.apache.mina.core.session.IdleStatus;
 		import org.apache.mina.core.session.IoSession;
 		import org.apache.mina.filter.codec.ProtocolCodecFilter;
 		import org.hyperion.Server;
+		import org.hyperion.engine.task.Task;
+		import org.hyperion.engine.task.TaskManager;
 		import org.hyperion.rs2.model.Player;
 		import org.hyperion.rs2.model.World;
 		import org.hyperion.rs2.model.punishment.Combination;
@@ -20,19 +15,19 @@
 		import org.hyperion.rs2.model.punishment.Target;
 		import org.hyperion.rs2.model.punishment.Type;
 		import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-		import org.hyperion.rs2.net.LoginDebugger;
 		import org.hyperion.rs2.net.Packet;
 		import org.hyperion.rs2.net.PacketManager;
 		import org.hyperion.rs2.net.RS2CodecFactory;
 		import org.hyperion.rs2.util.TextUtils;
 		import org.hyperion.util.ObservableCollection;
 
-		import java.io.File;
-		import java.io.FileReader;
 		import java.io.FileWriter;
+		import java.io.IOException;
 		import java.net.SocketAddress;
 		import java.util.ArrayList;
 		import java.util.Collection;
+		import java.util.HashMap;
+		import java.util.Map;
 		import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,61 +38,45 @@
  */
 public class ConnectionHandler extends IoHandlerAdapter {
 
-	private final static ObservableCollection<String> ipBlackList = loadList("./blacklist.json");
+	private final static int MAX_CONNECTIONS_TRIES = 50;
+
+	private final static ObservableCollection<String> ipBlackList = new ObservableCollection<>(new ArrayList<>());
+	private final static Map<String, Integer> ipTries = new HashMap<>();
+
+	public static void removeIp(String ip) {
+		if(ipTries.containsKey(ip))
+			ipTries.remove(ip);
+	}
 
 	static {
-		ipBlackList.addListener(new AbstractNotifyListener() {
+		TaskManager.submit(new Task(15000, "IPtries cleaning") {
 			@Override
-			public void invalidated(Observable observable) {
-				saveList(ipBlackList, "./blacklist.json");
+			protected void execute() {
+				ipTries.clear();
 			}
 		});
 	}
 
-	private static ObservableCollection<String> loadList(String fileName) {
-		File file = new File(fileName);
-		if (!file.exists()) {
-			saveList(fileName);
-			return new ObservableCollection<>(new ArrayList<>());
-		}
-
-		try (FileReader fileReader = new FileReader(file)) {
-			JsonParser parser = new JsonParser();
-			JsonArray object = (JsonArray) parser.parse(fileReader);
-			return new ObservableCollection<>(new Gson().fromJson(object, new TypeToken<ArrayList<String>>() {}.getType()));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ObservableCollection<>(new ArrayList<>());
-		}
-	}
-
-	private static void saveList(String fileName) {
-		saveList(new ObservableCollection<>(new ArrayList<>()), fileName);
-	}
-
-	private static void saveList(ObservableCollection<String> list, String fileName) {
-		File fileToWrite = new File(fileName);
-
-		if (!fileToWrite.getParentFile().exists()) {
-			try {
-				if(!fileToWrite.getParentFile().mkdirs())
-					return;
-			} catch (SecurityException e) {
-				System.out.println("Unable to create directory for list file!");
-			}
-		}
-
-		try (FileWriter writer = new FileWriter(fileToWrite)) {
-			Gson builder = new GsonBuilder().setPrettyPrinting().create();
-			writer.write(builder.toJson(list, new TypeToken<ObservableCollection<String>>() {}.getType()));
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static Collection<String> getIpBlackList() {
 		return ipBlackList;
+	}
+
+	public static void addIp(String ip) {
+		ipBlackList.add(ip);
+		System.out.println("Blocked IP " + ip + " in the firewall.");
+		try (FileWriter writer = new FileWriter("./blockit.txt", true)) {
+			writer.write(ip.replace("/", ""));
+			writer.write("\r\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		try {
+			Runtime.getRuntime().exec("cmd /c start blockit.bat");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -173,11 +152,23 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		String remoteIp = remoteAddress.toString();
 		String ip = remoteIp.split(":")[0];
 		String shortIp = TextUtils.shortIp(remoteIp);
-		if(! HostGateway.canEnter(shortIp) || ConnectionHandler.getIpBlackList().contains(ip)) {
+		if(! HostGateway.canEnter(shortIp)) {
+			addIp(shortIp);
 			session.close(true);
 			return;
 		}
-		LoginDebugger.getDebugger().log("\n Connection opened: " + remoteIp);
+		if(ConnectionHandler.getIpBlackList().contains(ip)) {
+			session.close(true);
+			return;
+		}
+		if(!ipTries.containsKey(shortIp))
+			ipTries.put(shortIp, 0);
+		ipTries.put(shortIp, ipTries.get(shortIp) + 1);
+
+		if(ipTries.get(shortIp) > MAX_CONNECTIONS_TRIES) {
+			addIp(shortIp);
+			ipTries.remove(shortIp);
+		}
 		session.setAttribute("remote", remoteAddress);
 		session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
 		// engine.pushTask(new SessionOpenedTask(session));

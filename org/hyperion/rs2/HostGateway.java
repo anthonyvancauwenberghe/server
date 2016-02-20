@@ -17,11 +17,6 @@ package org.hyperion.rs2;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +31,7 @@ public class HostGateway {
 	/**
 	 * The maximum amount of connections per host.
 	 */
-	public static final int MAX_CONNECTIONS_PER_HOST = 500;
+	public static final int MAX_CONNECTIONS_PER_HOST = 10;
 
 	/**
 	 * Used to keep track of hosts and their amount of connections.
@@ -52,10 +47,7 @@ public class HostGateway {
 	 */
 	public static boolean canEnter(String ip) {
 		Integer amount = map.get(ip);
-		if(amount == null) {
-			return true;
-		}
-		return amount <= MAX_CONNECTIONS_PER_HOST;
+		return amount == null || amount <= MAX_CONNECTIONS_PER_HOST;
 	}
 
 	/**
@@ -90,23 +82,4 @@ public class HostGateway {
 				map.put(ip, amount - 1);
 		}
 	}
-
-	static {
-		CommandHandler.submit(new Command("debuggateway", Rank.PLAYER) {
-
-			@Override
-			public boolean execute(Player player, String input) {
-				String ip = player.getShortIP();
-				Integer amount = map.get(ip);
-				if(amount == null) {
-					player.getActionSender().sendMessage("Amount is 0");
-				} else {
-					player.getActionSender().sendMessage("Amount is " + amount);
-				}
-				return true;
-			}
-
-		});
-	}
-
 }

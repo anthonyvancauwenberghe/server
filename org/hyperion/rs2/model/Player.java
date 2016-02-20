@@ -1351,9 +1351,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * @return The player's name.
 	 */
 	public String getName() {
-		if (!NameUtils.isValidName(name)) {
-			System.out.println("Glitched name at : " + this.getLocation());
-		}
 		return name;
 	}
 

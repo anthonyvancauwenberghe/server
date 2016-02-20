@@ -36,7 +36,7 @@ public class PathTest {
 				return finder.findPath(maxRegionSize, maxRegionSize, toX, toY);
 			} catch(Exception e) {
 				e.printStackTrace();
-				return new Path();
+				return null;
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

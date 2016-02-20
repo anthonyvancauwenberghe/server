@@ -1,7 +1,6 @@
 package org.hyperion.map.pathfinding;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 
 /**
@@ -363,7 +362,7 @@ public class AStarPathFinder implements PathFinder {
 		@SuppressWarnings("unchecked")
 		public void add(Object o) {
 			list.add(o);
-			Collections.sort(list);
+			//Collections.sort(list);
 		}
 
 		/**

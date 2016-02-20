@@ -79,7 +79,6 @@ public class Server {
                     if (EncryptionStandard.encrypt("randomstring", charFileEncryption.getKey()).equals(checkString)) {
                         correctPass = true;
                     } else {
-                        correctPass = true;
                         System.out.println("Password incorrect.");
                     }
                 }

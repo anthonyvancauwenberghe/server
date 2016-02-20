@@ -51,7 +51,6 @@ public class Combat {
                 return false;
 
         LAST_ATTACK.put(combatEntity, System.currentTimeMillis());
-        System.out.println(1);
         try {
             /**
              * Logical check if combatEntity isn't null, isn't dead, etc..

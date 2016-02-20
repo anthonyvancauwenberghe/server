@@ -289,7 +289,7 @@ public class MiningV2 implements ContentTemplate {
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
 							ObjectManager.addObject(blank_rock);
 							rockLocationStatus.put(l, 1);
-							World.submit(new Task(rock.respawn * 1000) {
+							World.submit(new Task(rock.respawn * 1000, "mining") {
 								@Override
 								public void execute() {
 									ObjectManager.replace(blank_rock, new_rock);

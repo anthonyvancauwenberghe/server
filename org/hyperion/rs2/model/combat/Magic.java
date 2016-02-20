@@ -417,7 +417,7 @@ public class Magic {
 		final int submitDamage = Damage;
 		final boolean submitSplash = splash;
 		final CombatEntity opp2 = opponent;
-		World.submit(new Task(timer) {
+		World.submit(new Task(timer, "Magic") {
 			@Override
 			public void execute() {
 				boolean hitSomething = false;
@@ -1370,7 +1370,7 @@ public class Magic {
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
-		World.submit(new Task(delay) {
+		World.submit(new Task(delay, "magic") {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));

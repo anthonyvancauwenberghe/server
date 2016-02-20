@@ -69,7 +69,7 @@ public final class NewCommandHandler {
             COMMANDS_USED.put(playerName, new ArrayList<>());
         COMMANDS_USED.get(playerName).add(commandUsed);
 
-        World.submit(new Task(delay) {
+        World.submit(new Task(delay, "newcommandhandler") {
             @Override
             public void execute() {
                 if (COMMANDS_USED.containsKey(playerName))

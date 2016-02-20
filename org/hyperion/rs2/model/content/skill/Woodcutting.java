@@ -161,7 +161,7 @@ public class Woodcutting implements ContentTemplate {
 		client.inAction = true;
 		ContentEntity.turnTo(client, x, y);
 		final int fNumberOfCycles = numberOfCycles;
-		World.submit(new Task(WOODCUTTING_DELAY) {
+		World.submit(new Task(WOODCUTTING_DELAY, "woodcutting delay") {
 			public int cycle = - 1;
 
 			@Override
@@ -272,7 +272,7 @@ public class Woodcutting implements ContentTemplate {
 						final GameObject stump = new GameObject(GameObjectDefinition.forId(TREE_STUMP), Location.create(x, y, client.getLocation().getZ()), 10, 0);
 						final GameObject tree = new GameObject(GameObjectDefinition.forId(object), Location.create(x, y, client.getLocation().getZ()), 10, 0);
 						ObjectManager.addObject(stump);
-						World.submit(new Task(TREE_RESPAWN_TIME) {
+						World.submit(new Task(TREE_RESPAWN_TIME, "tree respawn time") {
 
 							@Override
 							public void execute() {

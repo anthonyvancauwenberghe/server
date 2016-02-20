@@ -53,7 +53,7 @@ public class Firemaking implements ContentTemplate {
 		if(timer < 2500)
 			timer = 2500;
 		player.setBusy(true);
-		World.submit(new org.hyperion.engine.task.Task(timer) {
+		World.submit(new org.hyperion.engine.task.Task(timer,"firemaking") {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {

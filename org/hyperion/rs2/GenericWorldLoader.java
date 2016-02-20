@@ -17,7 +17,6 @@ import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerifica
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.PacketBuilder;
-import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
@@ -133,8 +132,6 @@ public class GenericWorldLoader implements WorldLoader {
 		if(!loadPlayer(player))
 			return NEW_PLAYER;
 
-		System.out.println(EncryptionStandard.decryptPassword(player.getPassword()));
-		System.out.println(EncryptionStandard.decryptPassword(playerDetails.getPassword()));
 		if(!player.getPassword().equals(playerDetails.getPassword())) {
 			LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
 			return INVALID_CREDENTIALS;

@@ -120,7 +120,7 @@ public class GenericWorldLoader implements WorldLoader {
 			return ACCOUNT_DISABLED;
 		}
 
-		if(!NameUtils.isValidName(player.getName()) || player.getName().startsWith(" ") || player.getName().split(" ").length - 1 > 1 || player.getName().length() > 12 || player.getName().length() <= 0)
+		if(!NameUtils.isValidName(player.getName()) || player.getName().startsWith(" ") || player.getName().length() > 12 || player.getName().length() <= 0)
 			return INVALID_CREDENTIALS;
 
 		if(World.getPlayerByName(player.getName()) != null)

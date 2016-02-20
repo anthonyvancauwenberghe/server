@@ -49,7 +49,7 @@ public class NpcDeathTask extends Task {
     @Override
     public void execute() {
         try {
-            if (!npc.isDead()) {
+            if (!npc.isDead() || npc == null) {
                 this.stop();
                 return;
             }
@@ -76,7 +76,12 @@ public class NpcDeathTask extends Task {
             System.out.println(5);
         } else if (timer == 0) {
             int tokens = 0;
-            int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
+            System.out.println("SETTING X");
+            int x = npc.getLocation().getX();
+            System.out.println("SETTING Y");
+            int y = npc.getLocation().getY();
+            System.out.println("SETTING Z");
+            int z = npc.getLocation().getZ();
             System.out.println(6);
             final Map<Player, Double> killers = new HashMap<>();
             for (final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {

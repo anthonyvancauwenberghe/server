@@ -182,6 +182,7 @@ public class MiningV2 implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
+		/*
 		for(Rock rock : Rock.values()) {
 			for(int i = 0; i < rock.rockIds.length; i++)
 				rockOres.put(rock.rockIds[i], rock);
@@ -189,7 +190,7 @@ public class MiningV2 implements ContentTemplate {
 		for(Pickaxe pic : Pickaxe.values()) {
 			pickaxes.put(pic.pick, pic);
 		}
-		//miningTest();
+		//miningTest();*/
 	}
 
 	@Override
@@ -262,8 +263,7 @@ public class MiningV2 implements ContentTemplate {
 					return;
 				}
 				if(ContentEntity.freeSlots(player) == 0) {
-					ContentEntity.sendMessage(player,
-							"There is not enough space in your inventory.");
+					ContentEntity.sendMessage(player, "There is not enough space in your inventory.");
 					stop2();
 					return;
 				}

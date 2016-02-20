@@ -52,7 +52,7 @@ public class DonationsDb extends Db {
         votes = new Votes(this);
 
         World.submit(new CheckPendingDonationsTask());
-        World.submit(new CheckWaitingVotesTask());
+        //World.submit(new CheckWaitingVotesTask());
         NewCommandHandler.submit(
                 new NewCommand("voted", Time.TEN_SECONDS) {
                     @Override

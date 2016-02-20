@@ -2152,7 +2152,7 @@ public class CommandPacketHandler implements PacketHandler {
             commandStart = as[0].toLowerCase();
 
             if(COMMAND_USAGE.containsKey(player.getSafeDisplayName())) {
-                if(System.currentTimeMillis() - COMMAND_USAGE.get(player.getSafeDisplayName()) <= 10000)
+                if(System.currentTimeMillis() - COMMAND_USAGE.get(player.getSafeDisplayName()) <= 1000)
                     return;
             }
             COMMAND_USAGE.put(player.getSafeDisplayName(), System.currentTimeMillis());

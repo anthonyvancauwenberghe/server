@@ -62,7 +62,6 @@ public class NpcDeathTask extends Task {
 
 
     private void executeNpcDeath() {
-        System.out.println(1);
         if (timer == 7) {
             System.out.println(1);
             npc.playAnimation(Animation.create(npc.getDefinition().deathEmote(), 0));

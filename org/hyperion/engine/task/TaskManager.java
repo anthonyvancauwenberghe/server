@@ -27,7 +27,6 @@ public abstract class TaskManager {
 
 			while (it.hasNext()) {
 				t = it.next();
-				System.out.println(t.getClass().getSimpleName() + ": " + t.getKey() + " " + t.isImmediate() + " " + t.getCountdown());
 				if (!t.tick())
 					it.remove();
 			}

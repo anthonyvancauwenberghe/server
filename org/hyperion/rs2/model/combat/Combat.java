@@ -36,47 +36,57 @@ public class Combat {
             /**
              * Logical check if combatEntity isn't null, isn't dead, etc..
              */
+            System.out.println("CBTASK 1");
             if (!CombatAssistant.isValid(combatEntity))
                 return false;
             /**
              * Facing
              */
+            System.out.println("CBTASK 2");
             combatEntity.face(combatEntity.getOpponent().getAbsX() + combatEntity.getOpponent().getOffsetX(), combatEntity.getOpponent().getAbsY() + combatEntity.getOpponent().getOffsetY(), true);
 
+            System.out.println("CBTASK 3");
             if (combatEntity.predictedAtk > System.currentTimeMillis()) {
                 return true;
             }
 
+            System.out.println("CBTASK 4");
             String message = canAtk(combatEntity, combatEntity.getOpponent());
             if (message.length() > 1) {
                 if (combatEntity.getEntity() instanceof Player)
                     combatEntity.getPlayer().getActionSender().sendMessage(message);
                 return false;
             }
+            System.out.println("CBTASK 5");
             /**
              * Add opponent to attackers list
              */
             if (!combatEntity.getOpponent().getAttackers().contains(combatEntity)) {
                 combatEntity.getOpponent().getAttackers().add(combatEntity);
             }
+            System.out.println("CBTASK 6");
 
             combatEntity._getPlayer().ifPresent(p -> p.getExtraData().put("combatimmunity", System.currentTimeMillis()));
 
+            System.out.println("CBTASK 7");
             /**
              * Distance and freezetimer check.
              */
             int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
+            System.out.println("CBTASK 8");
             /*Checks if standing on eachother*/
             if (distance == 0) {
 				/*If standing on eachother and frozen*/
-                if (combatEntity.isFrozen())
+                if (combatEntity.isFrozen()) {
                     return false;
+                }
                 if (!combatEntity.getOpponent().vacating) {
                     combatEntity.vacating = true;
                     combatEntity.getEntity().vacateSquare();
                 }
                 return true;
             }
+            System.out.println("CBTASK 9");
             combatEntity.vacating = false;
             /**
              * Run seperate code depending on whether the combatEntity is an NPC or a Player.
@@ -106,7 +116,6 @@ public class Combat {
                 combatEntity.getOpponent().lastHit = System.currentTimeMillis();
                 return processNpcCombat(combatEntity, distance);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;

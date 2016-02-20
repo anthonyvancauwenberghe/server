@@ -33,14 +33,21 @@ public class NpcCombatTask extends Task {
 	@Override
 	public void execute() {
         final long startTime = System.currentTimeMillis();
+		System.out.println(1);
 		NpcCombatTask.agressiveNPCS();
+		System.out.println(2);
 		for(NPC npc : World.getNpcs()) {
 			try {
+				System.out.println(3);
 				if(npc.cE.getOpponent() != null) {
+					System.out.println(4);
 					if(!Combat.processCombat(npc.cE))
 						Combat.resetAttack(npc.cE);
+					System.out.println(5);
 				} else if(! npc.isDead())
+					System.out.println(6);
 					NPC.randomWalk(npc);
+				System.out.println(7);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

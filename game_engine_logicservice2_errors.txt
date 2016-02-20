@@ -51051,3 +51051,22 @@ Sat Feb 06 01:01:30 CET 2016
 	at java.lang.Thread.run(null:-1)
 
 ================================
+Sat Feb 06 21:00:28 CET 2016
+	class: class java.lang.NullPointerException
+	at java.util.LinkedList.unlink(null:-1)
+	at java.util.LinkedList.remove(null:-1)
+	at org.hyperion.rs2.sql.SQLConnection.offer(SQLConnection.java:325)
+	at org.hyperion.rs2.model.World.unregister2(World.java:1086)
+	at org.hyperion.rs2.model.World.unregister(World.java:991)
+	at org.hyperion.rs2.task.impl.SessionClosedTask.execute(SessionClosedTask.java:45)
+	at org.hyperion.rs2.GameEngine$1.run(GameEngine.java:137)
+	at org.hyperion.rs2.GameEngine$5.run(GameEngine.java:232)
+	at java.util.concurrent.Executors$RunnableAdapter.call(null:-1)
+	at java.util.concurrent.FutureTask.run(null:-1)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(null:-1)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(null:-1)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(null:-1)
+	at java.lang.Thread.run(null:-1)
+
+================================

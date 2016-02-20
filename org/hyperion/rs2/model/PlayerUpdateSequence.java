@@ -588,7 +588,6 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * We can used the cached update block!
 		 */
-        synchronized(otherPlayer) {
             if(otherPlayer.hasCachedUpdateBlock() && otherPlayer != player && ! forceAppearance && ! noChat) {
                 packet.put(otherPlayer.getCachedUpdateBlock().getPayload().flip());
                 return;
@@ -711,7 +710,6 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			 * And finally append the block at the end.
 			 */
             packet.put(blockPacket.getPayload());
-        }
     }
 
     private static void appendHit2Update(final NPC n, final PacketBuilder updateBlock) {

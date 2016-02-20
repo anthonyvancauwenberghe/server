@@ -82,19 +82,19 @@ public class Dicing implements ContentTemplate {
 			}
 		});
 	}
-	public static synchronized void put(int k, int v) {
+	public static void put(int k, int v) {
 		gambled.put(k, v);
 	}
 	
-	public static synchronized void remove(int k) {
+	public static void remove(int k) {
 		gambled.remove(k);
 	}
 	
-	public static synchronized Integer get(int k) {
+	public static Integer get(int k) {
 		return gambled.get(k);
 	}
 	
-	public static synchronized Item[] getGambledItems() {
+	public static Item[] getGambledItems() {
 		List<Item> item = new LinkedList<Item>();
 		for(int k : gambled.keySet()) {
 			item.add(new Item(k, get(k)));

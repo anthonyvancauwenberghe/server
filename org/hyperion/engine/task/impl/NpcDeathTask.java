@@ -40,7 +40,7 @@ public class NpcDeathTask extends Task {
      * Creates te death event for the specified entity.
      */
     public NpcDeathTask(NPC npc) {
-        super(400);
+        super(200);
         this.npc = npc;
     }
 

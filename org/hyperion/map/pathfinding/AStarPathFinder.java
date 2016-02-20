@@ -138,6 +138,8 @@ public class AStarPathFinder implements PathFinder {
 
 					// determine the location of the neighbour and evaluate it
 
+					if(current == null)
+						continue;
 					int xp = x + current.x;
 					int yp = y + current.y;
 

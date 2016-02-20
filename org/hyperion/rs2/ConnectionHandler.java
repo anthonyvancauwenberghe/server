@@ -65,8 +65,8 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		ipBlackList.add(ip);
 		System.out.println("Blocked IP " + ip + " in the firewall.");
 		try (FileWriter writer = new FileWriter("./blockit.txt", true)) {
+			writer.write("\n");
 			writer.write(ip.replace("/", ""));
-			writer.write("\r\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
@@ -139,8 +139,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		Object playerobject = session.getAttribute("player");
 		if(playerobject != null) {
 			Player player = (Player) playerobject;
-			System.out.println("Connection closed because its idle "
-					+ player.getName());
+			System.out.println("Connection closed because its idle " + player.getName());
 			World.unregister(player);
 		} else
 			session.close(false);
@@ -152,15 +151,12 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		String remoteIp = remoteAddress.toString();
 		String ip = remoteIp.split(":")[0];
 		String shortIp = TextUtils.shortIp(remoteIp);
-		if(! HostGateway.canEnter(shortIp)) {
-			addIp(shortIp);
+
+		if(!HostGateway.canEnter(shortIp)) {
 			session.close(true);
 			return;
 		}
-		if(ConnectionHandler.getIpBlackList().contains(ip)) {
-			session.close(true);
-			return;
-		}
+
 		if(!ipTries.containsKey(shortIp))
 			ipTries.put(shortIp, 0);
 		ipTries.put(shortIp, ipTries.get(shortIp) + 1);
@@ -169,8 +165,8 @@ public class ConnectionHandler extends IoHandlerAdapter {
 			addIp(shortIp);
 			ipTries.remove(shortIp);
 		}
+
 		session.setAttribute("remote", remoteAddress);
 		session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
-		// engine.pushTask(new SessionOpenedTask(session));
 	}
 }

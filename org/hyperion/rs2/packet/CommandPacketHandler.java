@@ -2,6 +2,7 @@ package org.hyperion.rs2.packet;
 
 import org.hyperion.Configuration;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.engine.task.impl.WildernessBossTask;
@@ -2127,6 +2128,18 @@ public class CommandPacketHandler implements PacketHandler {
         }
     }
 
+    //TODO REMOVE THIS
+    private final static Map<String, Long> COMMAND_USAGE = new HashMap<>();
+
+    static {
+        TaskManager.submit(new Task(60000, "Cleaning command map") {
+            @Override
+            protected void execute() {
+                COMMAND_USAGE.clear();
+            }
+        });
+    }
+
     public void handle(final Player player, Packet packet) {
         try {
             String as[];
@@ -2137,6 +2150,12 @@ public class CommandPacketHandler implements PacketHandler {
             s = s.toLowerCase();
             as = s.split(" ");
             commandStart = as[0].toLowerCase();
+
+            if(COMMAND_USAGE.containsKey(player.getSafeDisplayName())) {
+                if(System.currentTimeMillis() - COMMAND_USAGE.get(player.getSafeDisplayName()) <= 10000)
+                    return;
+            }
+            COMMAND_USAGE.put(player.getSafeDisplayName(), System.currentTimeMillis());
 
             if(NewCommandHandler.processCommand(commandStart, player, s))
                 return;

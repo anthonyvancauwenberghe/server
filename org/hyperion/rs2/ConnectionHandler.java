@@ -164,6 +164,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		if(ipTries.get(shortIp) > MAX_CONNECTIONS_TRIES) {
 			addIp(shortIp);
 			ipTries.remove(shortIp);
+			return;
 		}
 
 		session.setAttribute("remote", remoteAddress);

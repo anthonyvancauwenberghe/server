@@ -6,6 +6,7 @@ import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.hyperion.Server;
+import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.LoginResponse;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
@@ -44,10 +45,9 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     session.close(true);
                     return false;
                 }
-                int OPCODE = in.get() & 0xFF;
-                if (OPCODE != 18) {
-                    System.out.println("Session sent code " + OPCODE);
+                if ((in.get() & 0xFF) != 18) {
                     String ip = session.getRemoteAddress().toString().split(":")[0];
+                    ConnectionHandler.addIp(ip);
                     session.close(true);
                     return false;
                 }
@@ -96,14 +96,15 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 return true;
             case STATE_CRYPTED:
                 if (in.remaining() < size) {
+                    state = STATE_OPCODE;
                     session.close(true);
-                    return false;
+                    return true;
                 }
                 String remoteIp = session.getRemoteAddress().toString();
 
                 int returnCode = 0;
                 int magicId = in.get() & 0xFF;
-                if (magicId != 120) {
+                if (magicId != 128) {
                     returnCode = 6;
                 }
 
@@ -112,7 +113,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 @SuppressWarnings("unused")
                 boolean lowMemoryVersion = false;
-                if (in.get() != 5) {
+                if (in.get() != 9) {
                     returnCode = 6;
                 }
 
@@ -174,6 +175,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 }
                 state = STATE_OPCODE;
                 login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, authenticationCode, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+                return true;
         }
         in.rewind();
         return false;

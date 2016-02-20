@@ -32,7 +32,12 @@ public class PathTest {
 				return null;
 			}
 
-			return finder.findPath(maxRegionSize, maxRegionSize, toX, toY);
+			try {
+				return finder.findPath(maxRegionSize, maxRegionSize, toX, toY);
+			} catch(Exception e) {
+				e.printStackTrace();
+				return new Path();
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

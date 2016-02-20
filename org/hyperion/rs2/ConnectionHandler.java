@@ -21,6 +21,7 @@
 		import org.hyperion.rs2.util.TextUtils;
 		import org.hyperion.util.ObservableCollection;
 
+		import java.io.File;
 		import java.io.FileWriter;
 		import java.io.IOException;
 		import java.net.SocketAddress;
@@ -65,7 +66,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		ipBlackList.add(ip);
 		System.out.println("Blocked IP " + ip + " in the firewall.");
 		try (FileWriter writer = new FileWriter("./blockit.txt", true)) {
-			writer.write("\n");
+			writer.write(File.separator);
 			writer.write(ip.replace("/", ""));
 		} catch (IOException e) {
 			e.printStackTrace();

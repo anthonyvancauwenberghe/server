@@ -9,7 +9,6 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Dicing;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -167,7 +166,7 @@ public class ClanManager {
         if(player.isClanMainOwner())
             displayRank = "[O] ";
 		//message = "[@blu@" + TextUtils.titleCase(player.getClanName()) + "@bla@] " + displayRank + player.getSafeDisplayName() + ": @dre@" + TextUtils.ucFirst(message.toLowerCase().replaceAll("@", ""));
-        player.getLogManager().add(LogEntry.clanchat(player.getClanName(), message));
+        //player.getLogManager().add(LogEntry.clanchat(player.getClanName(), message));
         message = ""+displayRank+player.getSafeDisplayName() + ":"+TextUtils.ucFirst(message.replaceAll("@", "") + ":clan:");
 		if(player.getClanName() == "") {
 			player.sendClanMessage("You need to join a clan chat before you can send messages.");

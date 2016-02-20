@@ -7,7 +7,6 @@ import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.sql.DbHub;
 
 import java.util.*;
@@ -162,7 +161,7 @@ public class JGrandExchange {
         }
         submitEntry.ifPlayer(p -> {
             p.getGrandExchangeTracker().notifyChanges(false);
-            p.getLogManager().add(LogEntry.geProgress(submitEntry.progress.last()));
+            //p.getLogManager().add(LogEntry.geProgress(submitEntry.progress.last()));
 //            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
 //                    matchedEntry.playerName, matchedEntry.type.pastTense,
 //                    submitEntry.item().getDefinition().getName(), maxQuantity,
@@ -175,7 +174,7 @@ public class JGrandExchange {
         });
         matchedEntry.ifPlayer(p -> {
             p.getGrandExchangeTracker().notifyChanges(false);
-            p.getLogManager().add(LogEntry.geProgress(matchedEntry.progress.last()));
+            //p.getLogManager().add(LogEntry.geProgress(matchedEntry.progress.last()));
 //            p.sendf("[GE Update] %s %s %s x %,d %s you @ %,d %s!",
 //                    submitEntry.playerName, submitEntry.type.pastTense,
 //                    submitEntry.item().getDefinition().getName(), maxQuantity,

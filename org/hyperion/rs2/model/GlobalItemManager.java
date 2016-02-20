@@ -2,7 +2,6 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.log.LogEntry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -109,7 +108,7 @@ public class GlobalItemManager {
 				player.getExpectedValues().pickupItem(globalItem.getItem());
 				GLOBAL_ITEMS.remove(globalItem);
                 if(item != 2422) {
-                    player.getLogManager().add(LogEntry.pickupItem(globalItem));
+                    //player.getLogManager().add(LogEntry.pickupItem(globalItem));
 			        player.getInventory().add(globalItem.getItem());
                 }
 				if(globalItem.owner == null) {

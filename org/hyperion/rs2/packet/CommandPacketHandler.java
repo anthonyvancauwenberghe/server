@@ -50,7 +50,6 @@ import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.itf.impl.NameItemInterface;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
@@ -2145,7 +2144,7 @@ public class CommandPacketHandler implements PacketHandler {
             String as[];
             String commandStart;
             String s = packet.getRS2String();
-            player.getLogManager().add(LogEntry.command(s));
+            //player.getLogManager().add(LogEntry.command(s));
             String withCaps = s + "";
             s = s.toLowerCase();
             as = s.split(" ");

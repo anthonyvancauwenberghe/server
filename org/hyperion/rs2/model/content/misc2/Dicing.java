@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.util.Misc;
@@ -206,7 +205,7 @@ public class Dicing implements ContentTemplate {
                 player.getActionSender().sendMessage("The gambler rolled " + r + " with his dice.");
                 dicer.forceMessage(r + "!");
 				String query = null;
-                player.getLogManager().add(LogEntry.gamble(dicer, item, r));
+                //player.getLogManager().add(LogEntry.gamble(dicer, item, r));
 				if(r >= 55) {
 					int amount = count;
 					if(amount > 10 && Misc.random(2) == 0) {

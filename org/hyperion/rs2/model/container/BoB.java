@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.util.PushMessage;
 
 
@@ -63,7 +62,7 @@ public class BoB {
 				GlobalItemManager.newDropItem(player, new GlobalItem(player, loc, player.getBoB().get(i)));
 			}
 		}
-        player.getLogManager().add(LogEntry.bob(player.getName(),player.getBoB().getItems()));
+        //player.getLogManager().add(LogEntry.bob(player.getName(),player.getBoB().getItems()));
 		player.getBoB().clear();
 	}
 

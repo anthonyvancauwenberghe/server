@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.util.NameUtils;
@@ -62,8 +61,8 @@ public class FriendsAssistant {
         final Player fromPlayer = World.getPlayerByName(fromName);
 		if(fromPlayer == null)
 			return;
-		fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
-        p.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
+		//fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
+        //p.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
         p.write(new PacketBuilder(196, Type.VARIABLE).putLong(from).putInt(lastChatId++).put((byte) rights).put(chatText, 0, chatTextSize).toPacket());
 	}
 

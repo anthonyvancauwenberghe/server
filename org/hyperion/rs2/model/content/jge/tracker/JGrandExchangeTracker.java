@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.content.jge.entry.EntryManager;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.sql.DbHub;
 
 import java.util.Optional;
@@ -419,7 +418,7 @@ public class JGrandExchangeTracker {
                         nullifyNewEntry();
                         showEntries();
                         JGrandExchange.getInstance().submit(entry);
-                        player.getLogManager().add(LogEntry.geEntryAdded(entry));
+                        //player.getLogManager().add(LogEntry.geEntryAdded(entry));
                     }, "You are not building a new entry right now!");
                 }
                 return true;

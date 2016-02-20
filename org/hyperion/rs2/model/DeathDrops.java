@@ -7,7 +7,6 @@ import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Food;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.shops.DonatorShop;
 import org.hyperion.util.Misc;
 
@@ -72,8 +71,8 @@ public class DeathDrops {
 		final Item[] dropped = droppingItems.toArray(new Item[droppingItems.size()]);
 
 		player.getExpectedValues().deathDrop(dropped);
-        player.getLogManager().add(LogEntry.death(player, killer, dropped));
-		killer.getLogManager().add(LogEntry.kill(killer, player, dropped));
+        //player.getLogManager().add(LogEntry.death(player, killer, dropped));
+		//killer.getLogManager().add(LogEntry.kill(killer, player, dropped));
 
     }
 

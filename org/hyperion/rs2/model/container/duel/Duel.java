@@ -11,7 +11,6 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
@@ -486,7 +485,7 @@ public class Duel {
 			return;
         if(player.duelAttackable > 0)
             return;
-        player.getLogManager().add(
+        /*player.getLogManager().add(
                 LogEntry.duel(
                         player,
                         player.getTrader()
@@ -497,7 +496,7 @@ public class Duel {
                         player,
                         player.getTrader()
                 )
-        );
+        );*/
 		player.setOverloaded(false);
 		player.getTrader().setOverloaded(false);
 		player.getExtraData().remove(OverloadStatsTask.KEY);
@@ -610,8 +609,8 @@ public class Duel {
 		try {
 			Player player1 = player.getTrader();
 			if(player1 != null) {
-                player1.getLogManager().add(LogEntry.duelResult(player1, player));
-                player.getLogManager().add(LogEntry.duelResult(player1, player));
+                //player1.getLogManager().add(LogEntry.duelResult(player1, player));
+                //player.getLogManager().add(LogEntry.duelResult(player1, player));
                 finishDuel(player1, player, true);
                 finishDuel(player, player1, false);
             } else {

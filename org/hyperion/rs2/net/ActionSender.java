@@ -19,7 +19,6 @@ import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -521,7 +520,7 @@ public class ActionSender {
 
     public void unapply() {
         if (player.getPermExtraData().getBoolean("skillreward")) {
-            player.getLogManager().getLogs(LogEntry.Category.ACTIVITY, startdate);
+            //player.getLogManager().getLogs(LogEntry.Category.ACTIVITY, startdate);
         }
 
     }

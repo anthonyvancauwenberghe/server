@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TradeChecker;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PushMessage;
@@ -412,7 +411,7 @@ public class Trade {
 	    }*/
 		//World.getAbuseHandler().cacheMessage(player,player.getName()+": completed a trade with: "+player.getTrader().getName());
 		new TradeChecker(player, player.getTrader());
-            player.getLogManager().add(
+            /*player.getLogManager().add(
                     LogEntry.trade(
                             player.getName(),
                             player.getTrader().getName(),
@@ -427,7 +426,7 @@ public class Trade {
 							player.getTrade().toArray(),
 							player.getTrader().getTrade().toArray()
 					)
-			);
+			);*/
 			player.getExpectedValues().trade(player.getTrader().getTrade().getItems(), player.getTrade().getItems());
 			player.getTrader().getExpectedValues().trade(player.getTrade().getItems(), player.getTrader().getTrade().getItems());
 

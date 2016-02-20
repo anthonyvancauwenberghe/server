@@ -23,7 +23,6 @@ import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PendingRequests;
-import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
@@ -117,7 +116,7 @@ public class EntityHandler {
         /**
          * Now we'll actually log the player in.
          */
-        player.getLogManager().add(LogEntry.login(player));
+        //player.getLogManager().add(LogEntry.login(player));
         player.setActive(true);
         player.isHidden(false);
         player.getPoints().loginCheck();
@@ -345,9 +344,9 @@ public class EntityHandler {
         HostGateway.exit(player.getShortIP());
         player.getSession().close(false);
         Server.getLoader().getEngine().submit(() -> {
-            player.getLogManager().add(LogEntry.logout(player));
-            player.getLogManager().clearExpiredLogs();
-            player.getLogManager().save();
+            //player.getLogManager().add(LogEntry.logout(player));
+            //player.getLogManager().clearExpiredLogs();
+            //player.getLogManager().save();
             if (player.verificationCodeEntered)
                 World.getLoader().savePlayer(player);
             player.destroy();

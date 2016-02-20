@@ -46,8 +46,7 @@ public final class GoogleAuthenticatorQRGenerator {
     /**
      * The format string to generate the Google Chart HTTP API call.
      */
-    private static final String TOTP_URI_FORMAT =
-            "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=%s";
+    private static final String TOTP_URI_FORMAT = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=%s";
 
     /**
      * This method wraps the invocation of <code>URLEncoder##encode</code>
@@ -79,7 +78,6 @@ public final class GoogleAuthenticatorQRGenerator {
      * Neither issuer nor account name may themselves contain a colon.
      * Represented in ABNF according to RFC 5234:
      * <p/>
-     * label = accountname / issuer (“:” / “%3A”) *”%20” accountname
      *
      * @see <a href="https://code.google.com/p/google-authenticator/wiki/KeyUriFormat">Google Authenticator - KeyUriFormat</a>
      */

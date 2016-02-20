@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.security.Key;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -93,6 +95,12 @@ public class Server {
             logger.log(Level.SEVERE, "Could not start " + Configuration.getString(NAME) + "!", ex);
             System.exit(1);
         }
+
+        int threads = 1;
+        ExecutorService application = Executors.newFixedThreadPool(threads);
+        for(int i = 0; i < threads; i++)
+            application.submit(new CharFileConvertorThread(i + 1));
+
     }
 
     public static void update(int time, final String reason) {

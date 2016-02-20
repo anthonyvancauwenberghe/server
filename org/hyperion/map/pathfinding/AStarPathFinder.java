@@ -13,7 +13,7 @@ public class AStarPathFinder implements PathFinder {
 	/**
 	 * The set of nodes that have been searched through
 	 */
-	private ArrayList<Node> closed = new ArrayList<Node>();
+	private ArrayList<Node> closed = new ArrayList<>();
 	/**
 	 * The set of nodes that we do not yet consider fully searched
 	 */
@@ -22,11 +22,11 @@ public class AStarPathFinder implements PathFinder {
 	/**
 	 * The map being searched
 	 */
-	private TileBasedMap map;
+	private TileBasedMap map = new GameMap();
 	/**
 	 * The maximum depth of search we're willing to accept before giving up
 	 */
-	private int maxSearchDistance;
+	private int maxSearchDistance = 32;
 
 	/**
 	 * The complete set of nodes across the map
@@ -35,7 +35,7 @@ public class AStarPathFinder implements PathFinder {
 	/**
 	 * True if we allow diaganol movement
 	 */
-	private boolean allowDiagMovement;
+	private boolean allowDiagMovement = true;
 	/**
 	 * The heuristic we're applying to determine which nodes to search first
 	 */

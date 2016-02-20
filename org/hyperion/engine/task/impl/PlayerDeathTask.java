@@ -49,6 +49,11 @@ public class PlayerDeathTask extends Task {
 	@Override
 	public void execute() {
 		try {
+			if(!World.getPlayers().contains(player)) {
+				player.getSession().close(true);
+				player.destroy();
+			}
+
 			if(!player.isActive() || player.isHidden()) {
 				this.stop();
 				return;

@@ -86,8 +86,10 @@ public abstract class Task {
      */
     public boolean tick() {
         if (running && --countdown == 0) {
-            System.out.println("Processing task: " + getClass().getSimpleName() + " " + getKey() + " " + getDelay());
+            long startTime = System.currentTimeMillis();
             execute();
+            if(System.currentTimeMillis() - startTime > 15)
+                System.out.println(getClass().getSimpleName() + ": " + getKey() + " - took " + (System.currentTimeMillis() - startTime) + "ms");
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         }
         return running;

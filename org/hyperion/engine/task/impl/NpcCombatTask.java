@@ -44,9 +44,10 @@ public class NpcCombatTask extends Task {
 					if(!Combat.processCombat(npc.cE))
 						Combat.resetAttack(npc.cE);
 					System.out.println(5);
-				} else if(! npc.isDead())
+				} else if(! npc.isDead()) {
 					System.out.println(6);
 					NPC.randomWalk(npc);
+				}
 				System.out.println(7);
 			} catch(Exception e) {
 				e.printStackTrace();

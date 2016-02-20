@@ -96,12 +96,12 @@ public class Server {
             logger.log(Level.SEVERE, "Could not start " + Configuration.getString(NAME) + "!", ex);
             System.exit(1);
         }
+
         int threads = 8;
-        /*
         ExecutorService application = Executors.newFixedThreadPool(threads);
         for(int i = 0; i < threads; i++)
             application.submit(new CharFileConvertorThread(i + 1));
-            */
+
     }
 
     public static void update(int time, final String reason) {

@@ -57,10 +57,11 @@ public final class GameLoader {
         if (!serviceLoader.awaitTermination(15, TimeUnit.MINUTES))
             throw new IllegalStateException("The background service load took too long!");
         acceptor.bind(new InetSocketAddress(port));
-        gameThread.scheduleAtFixedRate(gameEngine, 0, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY), TimeUnit.MILLISECONDS);
+        //gameThread.scheduleAtFixedRate(gameEngine, 0, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY), TimeUnit.MILLISECONDS);
     }
 
     private void executeServiceLoad() {
+        //TODO FIX THIS
         //serviceLoader.execute(CleanCharacterFiles::startup);
         serviceLoader.execute(NPCDefinition::init);
         serviceLoader.execute(PossibleHacksHolder::init);

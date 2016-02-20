@@ -1,28 +1,39 @@
 
 		package org.hyperion.rs2;
 
+		import com.google.gson.Gson;
+		import com.google.gson.GsonBuilder;
+		import com.google.gson.JsonArray;
+		import com.google.gson.JsonParser;
+		import com.google.gson.reflect.TypeToken;
+		import com.sun.javafx.beans.event.AbstractNotifyListener;
+		import javafx.beans.Observable;
 		import org.apache.mina.core.service.IoHandlerAdapter;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.hyperion.Server;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.net.LoginDebugger;
-import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.net.PacketManager;
-import org.hyperion.rs2.net.RS2CodecFactory;
-import org.hyperion.rs2.util.TextUtils;
+		import org.apache.mina.core.session.IdleStatus;
+		import org.apache.mina.core.session.IoSession;
+		import org.apache.mina.filter.codec.ProtocolCodecFilter;
+		import org.hyperion.Server;
+		import org.hyperion.rs2.model.Player;
+		import org.hyperion.rs2.model.World;
+		import org.hyperion.rs2.model.punishment.Combination;
+		import org.hyperion.rs2.model.punishment.Punishment;
+		import org.hyperion.rs2.model.punishment.Target;
+		import org.hyperion.rs2.model.punishment.Type;
+		import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+		import org.hyperion.rs2.net.LoginDebugger;
+		import org.hyperion.rs2.net.Packet;
+		import org.hyperion.rs2.net.PacketManager;
+		import org.hyperion.rs2.net.RS2CodecFactory;
+		import org.hyperion.rs2.util.TextUtils;
+		import org.hyperion.util.ObservableCollection;
 
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+		import java.io.File;
+		import java.io.FileReader;
+		import java.io.FileWriter;
+		import java.net.SocketAddress;
+		import java.util.ArrayList;
+		import java.util.Collection;
+		import java.util.concurrent.TimeUnit;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -32,9 +43,60 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConnectionHandler extends IoHandlerAdapter {
 
-	private final static List<String> ipBlackList = new ArrayList<>();
+	private final static ObservableCollection<String> ipBlackList = loadList("./blacklist.json");
 
-	public static List<String> getIpBlackList() {
+	static {
+		ipBlackList.addListener(new AbstractNotifyListener() {
+			@Override
+			public void invalidated(Observable observable) {
+				saveList(ipBlackList, "./blacklist.json");
+			}
+		});
+	}
+
+	private static ObservableCollection<String> loadList(String fileName) {
+		File file = new File(fileName);
+		if (!file.exists()) {
+			saveList(fileName);
+			return new ObservableCollection<>(new ArrayList<>());
+		}
+
+		try (FileReader fileReader = new FileReader(file)) {
+			JsonParser parser = new JsonParser();
+			JsonArray object = (JsonArray) parser.parse(fileReader);
+			return new ObservableCollection<>(new Gson().fromJson(object, new TypeToken<ArrayList<String>>() {}.getType()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ObservableCollection<>(new ArrayList<>());
+		}
+	}
+
+	private static void saveList(String fileName) {
+		saveList(new ObservableCollection<>(new ArrayList<>()), fileName);
+	}
+
+	private static void saveList(ObservableCollection<String> list, String fileName) {
+		File fileToWrite = new File(fileName);
+
+		if (!fileToWrite.getParentFile().exists()) {
+			try {
+				if(!fileToWrite.getParentFile().mkdirs())
+					return;
+			} catch (SecurityException e) {
+				System.out.println("Unable to create directory for list file!");
+			}
+		}
+
+		try (FileWriter writer = new FileWriter(fileToWrite)) {
+			Gson builder = new GsonBuilder().setPrettyPrinting().create();
+			writer.write(builder.toJson(list, new TypeToken<ObservableCollection<String>>() {}.getType()));
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static Collection<String> getIpBlackList() {
 		return ipBlackList;
 	}
 

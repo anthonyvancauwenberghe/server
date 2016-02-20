@@ -146,7 +146,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.submit(new Task(1200) {
+					World.submit(new Task(1200, "Doormanager") {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {

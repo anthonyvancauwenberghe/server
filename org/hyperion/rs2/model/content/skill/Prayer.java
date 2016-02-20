@@ -220,7 +220,7 @@ public class Prayer implements ContentTemplate {
 		if(distance < 20)
 			player.getActionSender().createGlobalProjectile(player.cE.getAbsY(), player.cE.getAbsX(), offsetY, offsetX, 50, speed, 2263, 20, 9, hitId, time, slope);
 	    /* UNTIL THIS */
-		World.submit(new Task(1200) {
+		World.submit(new Task(1200, "Prayer 1200 task") {
 			public void execute() {
 				try {
 					if(victim != null)

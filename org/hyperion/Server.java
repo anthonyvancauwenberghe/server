@@ -27,7 +27,7 @@ public class Server {
     private static CharFileEncryption charFileEncryption;
     private static boolean updating = false;
 
-    private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
+    private static final String checkString = "zTlqHOomTVi1KCCLCnBKwA==";
 
     public static Uptime getUptime() {
         return uptime;

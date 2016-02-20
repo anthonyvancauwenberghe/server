@@ -9,9 +9,9 @@ import java.util.List;
 public class StaffManager {
 
 	public static List<Player> getOnlineStaff() {
-		List<Player> onlineStaff = new LinkedList<Player>();
+		List<Player> onlineStaff = new LinkedList<>();
 		for(Player player : World.getPlayers()) {
-			if(player.isHidden())
+			if(player == null || player.isHidden())
 				continue;
             if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
                 if(Rank.getPrimaryRank(player).ordinal() < Rank.WIKI_EDITOR.ordinal())

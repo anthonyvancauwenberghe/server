@@ -37,7 +37,7 @@ public class ClimbBranch extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, 1, message);
         player.playAnimation(Animation.create(animId));
-        World.submit(new Task(700) {
+        World.submit(new Task(700,"climbbranch") {
             @Override
             public void execute() {
                 player.setTeleportTarget(Location.create(end.getX(), end.getY(), end.getZ()));

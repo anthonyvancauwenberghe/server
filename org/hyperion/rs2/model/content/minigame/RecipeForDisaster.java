@@ -89,7 +89,7 @@ public class RecipeForDisaster implements ContentTemplate {
 	}
 
 	public void spawnWave(final Player player, final int rfdlevel) {
-		World.submit(new Task(5000) {
+		World.submit(new Task(5000, "recipefordisaster") {
 			public void execute() {
 				spawnNpc(WAVES[rfdlevel], getLocation(), player);
 				this.stop();

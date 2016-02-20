@@ -455,7 +455,7 @@ public class Magic {
 			return;
 		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-            World.submit(new Task(600) {
+            World.submit(new Task(600, "magic5") {
                 @Override
                 public void execute() {
                     victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
@@ -608,7 +608,7 @@ public class Magic {
 		// deal damage
 
 		if(false/* END_GFX[spell] == 369 && !splash */)
-			World.submit(new Task(500) {
+			World.submit(new Task(500,"magic6") {
 				@Override
 				public void execute() {
 					p.hit(Damage, c.getEntity(), false, 2);
@@ -821,7 +821,7 @@ public class Magic {
 		if(item == 995 || player.isBusy())
 			return;
 		player.setBusy(true);
-		World.submit(new Task(3000L) {
+		World.submit(new Task(3000L,"magic1") {
 
 			@Override
 			public void execute() {
@@ -1210,7 +1210,7 @@ public class Magic {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
 		player.inAction = ! player.inAction;
-		World.submit(new Task(600) {
+		World.submit(new Task(600,"magic2") {
 			int index = 0;
 
 			public void execute() {

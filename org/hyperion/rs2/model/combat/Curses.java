@@ -22,7 +22,7 @@ public class Curses {
 		final int leechId = player.getPrayers().pollLeech();
 		final CombatEntity victim = player.cE.getOpponent();
 		updateLeech(player);
-		World.submit(new Task(800L) {
+		World.submit(new Task(800L,"curses") {
 			public void execute() {
 				ContentEntity.startAnimation(player, 12575);
 				if(victim == null) {
@@ -45,7 +45,7 @@ public class Curses {
 		if(player.cE.getOpponent() != null && player.cE.getOpponent().getEntity() instanceof Player)
 			pseudoPlayer = player.cE.getOpponent().getPlayer();
 		final Player opponentPlayer = pseudoPlayer;
-		World.submit(new Task(1800L) {
+		World.submit(new Task(1800L, "curses2") {
 			public void execute() {
 				if(opponentPlayer != null) {
 					opponentPlayer.getCombat().doGfx(getGfxIdForPrayer(leechId));

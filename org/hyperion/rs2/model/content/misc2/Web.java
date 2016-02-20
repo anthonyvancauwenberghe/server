@@ -48,7 +48,7 @@ public class Web implements ContentTemplate {
 	}
 
 	public static void refreshWeb(final Player player, final Location loc/*, final GameObject old*/) {
-		World.submit(new Task(20000) {
+		World.submit(new Task(20000, "web") {
 			public void execute() {
 				//ObjectManager.replace(old, new GameObject(GameObjectDefinition.forId(733), loc, 10, 0));
 				player.getActionSender().sendCreateObject(733, 10, 0, loc);
@@ -64,7 +64,7 @@ public class Web implements ContentTemplate {
 		if(type == 6) {
             if(objectId == 1765) {
                 player.playAnimation(Animation.create(828));
-                World.submit(new Task(600) {
+                World.submit(new Task(600, "web2") {
                     @Override
                     public void execute() {
                         player.setTeleportTarget(Location.create(3069, 10255, 0));

@@ -1338,7 +1338,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        World.submit(new Task(16000) {
+        World.submit(new Task(16000,"poison") {
             private int lastDamg = -1;
             private int ticks = 4;
 

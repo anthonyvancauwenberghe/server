@@ -124,7 +124,7 @@ public class Cooking implements ContentTemplate {
 			ContentEntity.startAnimation(client, COOKING_ANIM_FIRE);
 		}
 
-		World.submit(new Task(2500) {
+		World.submit(new Task(2500, "cooking") {
 			int amount2 = amount;
 
 			@Override

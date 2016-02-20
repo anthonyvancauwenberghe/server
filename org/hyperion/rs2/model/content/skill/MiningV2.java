@@ -252,7 +252,7 @@ public class MiningV2 implements ContentTemplate {
 		if(cycle2 <= 1)
 			cycle2 = 2;
 		final int cycle = cycle2;
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000, "mining1") {
 			int cycleCount = cycle;
 
 			@Override

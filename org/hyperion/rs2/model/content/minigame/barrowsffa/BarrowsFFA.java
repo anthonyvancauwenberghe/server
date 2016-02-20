@@ -227,7 +227,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         if(id == EXIT_LOBBY_ID) {
             player.face(Location.create(x, y, HEIGHT_LEVEL));
             player.playAnimation(Animation.create(7376));
-            World.submit(new Task(600) {
+            World.submit(new Task(600,"barrowsfaa") {
                 public void execute() {
                     exit(player);
                     this.stop();

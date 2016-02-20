@@ -53,7 +53,7 @@ public class RopeSwing extends Obstacle{
         if(direction == 3)
             player.face(Location.create(player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ()));
 
-        World.submit(new Task(600) {
+        World.submit(new Task(600,"ropeswinging2") {
             int progress = start.distance(end);
             @Override
             public void execute() {
@@ -92,7 +92,7 @@ public class RopeSwing extends Obstacle{
 
     @Override
     public void fail(Player player, int tick, String message) {
-        World.submit(new Task(600) {
+        World.submit(new Task(600,"ropeswinging") {
             int progress = start.distance(end);
 
             @Override

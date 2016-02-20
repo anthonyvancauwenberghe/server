@@ -60,7 +60,7 @@ public class BallakThePummeller implements Attack {
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player.cE.getEntity(), Combat.random(MAX_RANGE_DAMAGE), 1, MAX_RANGE_DAMAGE), 1500, 1);
             player.cE.doGfx(fireGfx);
             player.getActionSender().sendMessage("@dre@Your body started burning alive!");
-            World.submit(new Task(2000) {
+            World.submit(new Task(2000,"ballakthepummeller") {
                 int burnTicks = Combat.random(3) + 2;
                 @Override
                 public void execute() {

@@ -368,7 +368,7 @@ public class Thieving implements ContentTemplate {
 		}
 		player.setBusy(true);
 		player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000);
-		World.submit(new Task(2000) {
+		World.submit(new Task(2000,"thieving") {
 			@Override
 			public void execute() {
 				player.getExtraData().remove("thievingTimer");

@@ -82,7 +82,7 @@ public class GenericWorldLoader implements WorldLoader {
 
 		if(LOGIN_ATTEMPTS.get(player.getName()) >= MAXIMUM_LOGIN_ATTEMPTS) {
 			BLOCKED_PLAYERS.add(player.getName());
-			World.submit(new Task(Time.ONE_MINUTE) {
+			World.submit(new Task(Time.ONE_MINUTE,"generic worldloader") {
 				String playerName = player.getName();
 
 				@Override

@@ -526,7 +526,7 @@ public class Duel {
         player.getWalkingQueue().reset();
 		removeBanEquip(player);
 		removeBanEquip(player.getTrader());
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000,"duel") {
 
 			int timer = 3;
 

@@ -79,7 +79,7 @@ public class Woodcutting implements ContentTemplate {
 		client.inAction = true;
 		ContentEntity.turnTo(client, x, y);
 
-		World.submit(new Task(2000) {
+		World.submit(new Task(2000, "woodcutting1") {
 
 			@Override
 			public void execute() {
@@ -105,7 +105,7 @@ public class Woodcutting implements ContentTemplate {
 			}
 
 		});
-		World.submit(new Task(3500) {
+		World.submit(new Task(3500, "woodcutting2") {
 
 			@Override
 			public void execute() {

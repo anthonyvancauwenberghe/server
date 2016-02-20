@@ -11,7 +11,7 @@ public enum MassEvent {
 	}
 
 	public final void executeEvent(final EventBuilder e) {
-		World.submit(new Task(e.getDelay()) {
+		World.submit(new Task(e.getDelay(),"massevent") {
 			public void execute() {
 				if(e.checkStop())
 					this.stop();

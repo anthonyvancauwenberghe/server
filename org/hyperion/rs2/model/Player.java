@@ -1643,7 +1643,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 						ContentEntity.playerGfx(this, 1684);
 						ContentEntity.startAnimation(this, 9603);
 						extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
-						World.submit(new Task(200) {
+						World.submit(new Task(200,"combatimmunity") {
 							int loop = 0;
 
 							public void execute() {

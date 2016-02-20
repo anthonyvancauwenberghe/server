@@ -106,7 +106,7 @@ public class Prayer implements ContentTemplate {
 		}
 		ContentEntity.deleteItem(player, buryItem);
 		final int fBuryXP = buryXP;
-		World.submit(new Task(2000L) {
+		World.submit(new Task(2000L,"prayer2") {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {

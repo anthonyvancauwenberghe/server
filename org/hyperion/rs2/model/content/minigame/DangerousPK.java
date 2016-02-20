@@ -57,7 +57,7 @@ public class DangerousPK implements ContentTemplate {
             return;
         }
 		player.playAnimation(Animation.create(7376));
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000,"dangerouspk") {
 			public void execute() {
 				player.setTeleportTarget(Location.create(2475, 5214, 0));
                 this.stop();

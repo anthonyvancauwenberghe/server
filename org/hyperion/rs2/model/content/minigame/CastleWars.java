@@ -40,7 +40,7 @@ public class CastleWars implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 		castleWars = this;
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000,"castle wars") {
 			@Override
 			public void execute() {
 				process();

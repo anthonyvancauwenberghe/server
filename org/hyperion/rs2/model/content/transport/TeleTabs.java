@@ -79,7 +79,7 @@ public class TeleTabs implements ContentTemplate {
 				this.stop();
 			}
 		});
-		World.submit(new Task(2400) {
+		World.submit(new Task(2400, "teletabs2") {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));

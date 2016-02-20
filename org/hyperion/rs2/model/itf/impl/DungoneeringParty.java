@@ -62,7 +62,7 @@ public class DungoneeringParty extends Interface {
 
                 }
 
-                World.submit(new Task(1000) {
+                World.submit(new Task(1000,"dung") {
                     @Override
                     public void execute() {
                         players.add(player);

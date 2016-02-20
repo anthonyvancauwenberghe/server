@@ -79,7 +79,7 @@ public class Ket implements Attack {
 					//create the projectile
 					attack.getPlayer().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, 445, 99, 35, hitId, slope);
 					Combat.npcAttack(n, attack, Combat.random(23), 700, 2);
-					World.submit(new Task(700) {
+					World.submit(new Task(700,"ket") {
 						@Override
 						public void execute() {
 

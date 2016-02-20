@@ -87,7 +87,7 @@ public class ObjectClickHandler {
                 Wilderness.useObelisk(player, x, y);
                 break;
             case 5110:
-                World.submit(new Task(100) {
+                World.submit(new Task(100,"objectclick1") {
                     @Override
                     public void execute() {
                         if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
@@ -100,7 +100,7 @@ public class ObjectClickHandler {
                 break;
             case 1766:
                 player.playAnimation(Animation.create(828));  //ladder climb anim
-                World.submit(new Task(600) {
+                World.submit(new Task(600,"objectclick2") {
                     @Override
                     public void execute() {
                         player.setTeleportTarget(Location.create(3017, 3850, 0));
@@ -164,7 +164,7 @@ public class ObjectClickHandler {
                     break;
                 player.face(Location.create(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), y, 2));
                 player.playAnimation(Animation.create(7002));
-                World.submit(new Task(1100) {
+                World.submit(new Task(1100,"objectclick3") {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 1, 0);
@@ -175,7 +175,7 @@ public class ObjectClickHandler {
                         this.stop();
                     }
                 });
-                World.submit(new Task(2100) {
+                World.submit(new Task(2100,"objectclick4") {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 0, 0);

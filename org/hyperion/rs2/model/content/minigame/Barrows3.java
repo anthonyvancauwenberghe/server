@@ -142,7 +142,7 @@ public class Barrows3 implements ContentTemplate {
 			player.getExtraData().remove(BROTHERS_KILLED_KEY);
 			player.getExtraData().remove(KILLSCOUNT_KEY);
 			player.getExtraData().remove(BROTHER_TARGET);
-			World.submit(new Task(2000) {
+			World.submit(new Task(2000,"barrows3") {
 				@Override
 				public void execute() {
 					Magic.teleport(player, Edgeville.LOCATION, true);
@@ -168,7 +168,7 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public void clickStairs(final Player player, final int id) {
-		World.submit(new Task(600) {
+		World.submit(new Task(600,"barrows2") {
 			@Override
 			public void execute() {
 				switch(id) {
@@ -261,7 +261,7 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public static void confirmCoffinTeleport(final Player player) {
-		World.submit(new Task(100) {
+		World.submit(new Task(100,"barrows1") {
 			@Override
 			public void execute() {
 				ContentEntity.teleport(player, 3551, 9692, 0);

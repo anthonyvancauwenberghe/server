@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.combat.Combat;
+
 /**
  * Created by Gilles on 12/02/2016.
  */
@@ -18,6 +20,15 @@ public class NpcUpdateSequence implements UpdateSequence<NPC> {
 		 */
         if(npc != null && npc.getWalkingQueue() != null)
             npc.getWalkingQueue().processNextMovement();
+
+        if(npc != null) {
+            if (npc.cE.getOpponent() != null) {
+                if (!Combat.processCombat(npc.cE))
+                    Combat.resetAttack(npc.cE);
+            } else if (npc.isDead()) {
+                NPC.randomWalk(npc);
+            }
+        }
     }
 
     @Override

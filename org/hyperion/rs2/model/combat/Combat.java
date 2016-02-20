@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.map.WorldMap;
@@ -24,56 +25,68 @@ import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @authors Martin and Arsen
  */
 
 public class Combat {
 
+    private final static Map<CombatEntity, Long> LAST_ATTACK = new HashMap<>();
+
+    static {
+        TaskManager.submit(new Task(30000, "Combat last attack cleaning") {
+            @Override
+            protected void execute() {
+                LAST_ATTACK.clear();
+            }
+        });
+    }
 
     public static boolean processCombat(final CombatEntity combatEntity) {
+        if(LAST_ATTACK.containsKey(combatEntity) && combatEntity != null)
+            if((System.currentTimeMillis() - LAST_ATTACK.get(combatEntity)) < 200)
+                return false;
+
+        LAST_ATTACK.put(combatEntity, System.currentTimeMillis());
+        System.out.println(1);
         try {
             /**
              * Logical check if combatEntity isn't null, isn't dead, etc..
              */
-            System.out.println("CBTASK 1");
             if (!CombatAssistant.isValid(combatEntity))
                 return false;
             /**
              * Facing
              */
-            System.out.println("CBTASK 2");
             combatEntity.face(combatEntity.getOpponent().getAbsX() + combatEntity.getOpponent().getOffsetX(), combatEntity.getOpponent().getAbsY() + combatEntity.getOpponent().getOffsetY(), true);
 
-            System.out.println("CBTASK 3");
             if (combatEntity.predictedAtk > System.currentTimeMillis()) {
                 return true;
             }
 
-            System.out.println("CBTASK 4");
             String message = canAtk(combatEntity, combatEntity.getOpponent());
             if (message.length() > 1) {
                 if (combatEntity.getEntity() instanceof Player)
                     combatEntity.getPlayer().getActionSender().sendMessage(message);
                 return false;
             }
-            System.out.println("CBTASK 5");
+
             /**
              * Add opponent to attackers list
              */
             if (!combatEntity.getOpponent().getAttackers().contains(combatEntity)) {
                 combatEntity.getOpponent().getAttackers().add(combatEntity);
             }
-            System.out.println("CBTASK 6");
 
             combatEntity._getPlayer().ifPresent(p -> p.getExtraData().put("combatimmunity", System.currentTimeMillis()));
 
-            System.out.println("CBTASK 7");
             /**
              * Distance and freezetimer check.
              */
             int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
-            System.out.println("CBTASK 8");
             /*Checks if standing on eachother*/
             if (distance == 0) {
 				/*If standing on eachother and frozen*/
@@ -86,7 +99,6 @@ public class Combat {
                 }
                 return true;
             }
-            System.out.println("CBTASK 9");
             combatEntity.vacating = false;
             /**
              * Run seperate code depending on whether the combatEntity is an NPC or a Player.

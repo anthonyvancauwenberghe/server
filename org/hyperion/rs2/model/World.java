@@ -149,6 +149,8 @@ public final class World {
 
         UpdateSequence<Player> playerUpdate = new PlayerUpdateSequence(synchronizer, updateExecutor);
         UpdateSequence<NPC> npcUpdate = new NpcUpdateSequence();
+        //Does the aggression
+        NpcCombatTask.agressiveNPCS();
         // Then we execute pre-updating code.
         players.stream().filter(player -> player != null).forEach(playerUpdate::executePreUpdate);
         npcs.stream().filter(npc -> npc != null).forEach(npcUpdate::executePreUpdate);
@@ -211,7 +213,6 @@ public final class World {
         submit(new DisconnectNulledTask());
         submit(new PromoteTask());
         submit(new PlayerCombatTask());
-        submit(new NpcCombatTask());
         submit(new ServerEventTask());
         submit(new ServerMessageTask());
         submit(new BountyHunterTask());

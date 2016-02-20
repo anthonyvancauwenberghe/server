@@ -903,15 +903,6 @@ public class CommandPacketHandler implements PacketHandler {
                     player.isHidden());
         }
 
-        if (commandStart.equals("testhits")) {
-            int counter = 0;
-            for (; counter < 100; counter++) {
-                Combat.processCombat(player.cE);
-                player.cE.predictedAtk = System.currentTimeMillis();
-                player.cE.getOpponent()._getPlayer().ifPresent(p -> p.getSkills().setLevel(Skills.HITPOINTS, 99));
-            }
-        }
-
         if (commandStart.equalsIgnoreCase("summonnpc")) {
             int id = Integer.parseInt(as[1]);
             final NPC monster = NPCManager

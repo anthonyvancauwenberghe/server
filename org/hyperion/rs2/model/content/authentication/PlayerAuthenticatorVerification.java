@@ -2,7 +2,10 @@ package org.hyperion.rs2.model.content.authentication;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
+import org.hyperion.rs2.commands.NewCommand;
+import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.net.security.authenticator.Authentication;
 import org.hyperion.util.Time;
 
@@ -28,6 +31,10 @@ public class PlayerAuthenticatorVerification {
             if(USED_PINS.get(player.getSafeDisplayName()) == enteredPin)
                 return VerifyResponse.PIN_ENTERED_TWICE;
 
+        //Just in case we get here without checking this first.
+        if(player.getGoogleAuthenticatorKey() == null || player.getGoogleAuthenticatorKey().trim().isEmpty())
+            return VerifyResponse.CORRECT_PIN;
+
         Authentication.AuthenticationResponse authenticationResponse = Authentication.authenticateKey(player.getGoogleAuthenticatorKey(), player.getGoogleAuthenticatorBackup(), enteredPin);
         if(authenticationResponse == Authentication.AuthenticationResponse.CORRECT_KEY) {
             USED_PINS.put(player.getSafeDisplayName(), enteredPin);
@@ -43,5 +50,15 @@ public class PlayerAuthenticatorVerification {
             return VerifyResponse.CORRECT_PIN;
         }
         return VerifyResponse.INCORRECT_PIN;
+    }
+
+    static {
+        NewCommandHandler.submit(new NewCommand("authenticator", Rank.HELPER, Time.TEN_SECONDS) {
+            @Override
+            protected boolean execute(Player player, String[] input) {
+                PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+                return true;
+            }
+        });
     }
 }

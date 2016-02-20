@@ -51,7 +51,6 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.ticket.TicketHolder;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
-import org.hyperion.rs2.model.log.LogManager;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.sets.CustomSetHolder;
@@ -332,7 +331,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private Appearance appearance = new Appearance();
 	private Container bob;
 	private Packet cachedUpdateBlock;
-	private LogManager logManager;
 	private SpellBook spellBook = new SpellBook(SpellBook.DEFAULT_SPELLBOOK);
 	private FriendList friendList = new FriendList();
 	private PvPTask currentPvPTask;
@@ -357,7 +355,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 		this.setTeleporting(true);
 		this.resetPrayers();
 		lastAttacker = new LastAttacker(name);
-		logManager = new LogManager(this);
 	}
 
 	public Player(int uid) {
@@ -1103,10 +1100,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public Container getRunePouch() {
 		return runePouch;
-	}
-
-	public LogManager getLogManager(){
-		return logManager;
 	}
 
 	public String getFullIP() {

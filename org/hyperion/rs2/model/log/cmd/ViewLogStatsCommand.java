@@ -3,12 +3,6 @@ package org.hyperion.rs2.model.log.cmd;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.model.log.LogManager;
-import org.hyperion.rs2.savingnew.PlayerLoading;
-
-import java.util.Set;
 
 /**
  * Created by Jet on 12/18/2014.
@@ -20,6 +14,7 @@ public class ViewLogStatsCommand extends Command {
     }
 
     public boolean execute(final Player player, final String input){
+        /*
         final String targetName = filterInput(input).trim();
         if(!PlayerLoading.playerExists(targetName)){
             player.sendf("%s does not exist", targetName);
@@ -32,6 +27,7 @@ public class ViewLogStatsCommand extends Command {
             final Set<LogEntry> logs = manager.getLogs(category);
             player.sendf("@gre@%s @blu@Logs: @red@%,d", category, logs == null ? 0 : logs.size());
         }
-        return false;
+        return false;*/
+        return true;
     }
 }

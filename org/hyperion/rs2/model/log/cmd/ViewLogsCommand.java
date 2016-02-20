@@ -3,14 +3,6 @@ package org.hyperion.rs2.model.log.cmd;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.model.log.LogManager;
-import org.hyperion.rs2.model.log.util.LogUtils;
-import org.hyperion.rs2.savingnew.PlayerLoading;
-
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class ViewLogsCommand extends Command {
 
@@ -19,6 +11,7 @@ public class ViewLogsCommand extends Command {
     }
 
     public boolean execute(final Player player, final String input){
+        /*
         try {
             final String line = filterInput(input).trim();
             final String[] parts = line.split(",");
@@ -91,5 +84,7 @@ public class ViewLogsCommand extends Command {
             ex.printStackTrace();
             return false;
         }
+        */
+        return true;
     }
 }

@@ -179,8 +179,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		}
 		LoginDebugger.getDebugger().log("\n Connection opened: " + remoteIp);
 		session.setAttribute("remote", remoteAddress);
-		session.getFilterChain().addFirst("protocol",
-				new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
+		session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
 		// engine.pushTask(new SessionOpenedTask(session));
 	}
 }

@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
@@ -46,7 +46,7 @@ public class LogBalance extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, start.distance(end) + 1, message);
         player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
-        World.getWorld().submit(new Event((start.distance(end) + 1) * 600) {
+        World.submit(new Task((start.distance(end) + 1) * 600) {
             @Override
             public void execute() {
                 player.setTeleportTarget(end);
@@ -63,7 +63,7 @@ public class LogBalance extends Obstacle {
         player.getAppearance().setAnimations(a, animId, animId);
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
 
-        World.getWorld().submit(new Event(600) {
+        World.submit(new Task(600) {
             int progress = start.distance(calculateMiddle(start, end)) + 2;
 
             @Override

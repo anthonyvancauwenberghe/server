@@ -1,24 +1,18 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import com.mysql.jdbc.TimeUtil;
-import javafx.util.converter.PercentageStringConverter;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
-import org.hyperion.rs2.model.content.ClickType;
-import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc.Percentage;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.shops.PvMStore;
-import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -66,7 +60,7 @@ public class Bork  {
                 final int height = player.getIndex() * 4;
                 Magic.teleport(player, TELEPORT_LOCATION.transform(0, 0, height), false);
 
-                World.getWorld().submit(new BorkEvent(player));
+                World.submit(new BorkEvent(player));
                 return true;
             }
 
@@ -83,7 +77,7 @@ public class Bork  {
     }
 
 
-    private static final class BorkEvent extends Event {
+    private static final class BorkEvent extends Task {
         private static final double PKP_MULTIPLIER = 5;
         private static final double TOKEN_MULTIPLIER = 1;
         /**
@@ -108,9 +102,9 @@ public class Bork  {
             //for(; i < CHILD_IDS.length; i++)
                 //player.getActionSender().sendString(CHILD_IDS[i], "");
             final int height = player.getIndex() * 4;
-            npcs.add(World.getWorld().getNPCManager().addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1));
+            npcs.add(NPCManager.addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1));
             for(int i = 0; i<3; i++)
-                npcs.add(World.getWorld().getNPCManager().addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1));
+                npcs.add(NPCManager.addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1));
 
 
         }

@@ -155,7 +155,6 @@ public abstract class HarvestingAction extends Action {
 				return;
 			}
 			if(cycles == 0) {
-				// TODO replace with expired object!
 				if(! getPeriodicRewards()) {
 					giveRewards(player, item);
 				}

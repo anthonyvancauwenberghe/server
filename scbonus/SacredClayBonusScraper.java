@@ -1,18 +1,14 @@
 package scbonus;
 
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.content.minigame.FightPits;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.content.minigame.FightPits;
+import java.util.*;
 
 public class SacredClayBonusScraper {
 
@@ -83,7 +79,6 @@ public class SacredClayBonusScraper {
 
     private static void loadDefinitions(final Map<Integer, ItemDefinition> map) throws Exception{
         final Scanner input = new Scanner(new File("./data/itemconfigs.cfg"));
-        ItemDefinition.loadItems();
         while(input.hasNextLine()){
             final String line = input.nextLine();
             try{

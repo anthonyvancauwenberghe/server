@@ -4,7 +4,6 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.SummoningData;
 import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.misc.BunyipEvent;
 import org.hyperion.rs2.model.content.skill.Summoning;
@@ -43,7 +42,7 @@ public class SummoningMonsters {
 		return null;
 	}
 	public static void runEvent(Player p) {
-		//for (Player p : World.getWorld().getPlayers()) {
+		//for (Player p : World.getPlayers()) {
 		if(p == null || p.cE.summonedNpc == null) {
 			return;
 		}
@@ -72,13 +71,13 @@ public class SummoningMonsters {
              try {
                  Combat.follow(p.cE.summonedNpc.cE, p.cE);
              } catch(final Exception ex) {
-                 World.getWorld().resetSummoningNpcs(p);
+                 World.resetSummoningNpcs(p);
              }
 			//}
 		}
 		if(p.SummoningCounter <= 0) {
 			p.getActionSender().sendMessage("Your Summoning monster has died.");
-			World.getWorld().resetSummoningNpcs(p);
+			World.resetSummoningNpcs(p);
 		} else if(p.SummoningCounter == 100) {
 			p.getActionSender().sendMessage("Your Summoning monster will die in a minute...");
 		} else if(p.SummoningCounter == 200) {
@@ -108,21 +107,19 @@ public class SummoningMonsters {
 		}
 		ContentEntity.deleteItemA(p, itemId, 1);
 		if(p.cE.summonedNpc != null) {
-			World.getWorld().resetSummoningNpcs(p);
+			World.resetSummoningNpcs(p);
 		}
 		SummonNewNPC2(p, npcID);
 	}
 
 	public static void SummonNewNPC2(final Player p, int npcID) {
 
-		final NPC monster = World
-				.getWorld()
-				.getNPCManager()
+		final NPC monster = NPCManager
 				.addNPC(p.getLocation().getX(), p.getLocation().getY(),
 						p.getLocation().getZ(), npcID, - 1);
 		p.SummoningCounter = SummoningData.getTimerById(npcID);
 		if(npcID == 6813) {
-			World.getWorld().submit(new BunyipEvent(p));
+			World.submit(new BunyipEvent(p));
 		}
 		monster.ownerId = p.getIndex();
 		Combat.follow(monster.getCombat(), p.getCombat());
@@ -130,6 +127,7 @@ public class SummoningMonsters {
 		p.cE.summonedNpc = monster;
 		monster.playGraphics(Graphic.create(1315));
         openSummonTab(p, monster);
+		World.register(monster);
 	}
 
     public static void renewFamiliar(Player player) {

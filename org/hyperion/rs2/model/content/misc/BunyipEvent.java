@@ -1,17 +1,13 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ContentEntity;
 
-public class BunyipEvent extends Event {
+public class BunyipEvent extends Task {
 	
 	private Player player;
-	
-	public BunyipEvent() {
-		super(20000);
-	}
-	
+
 	public BunyipEvent(Player p) {
 		super(20000);
 		player = p;	}

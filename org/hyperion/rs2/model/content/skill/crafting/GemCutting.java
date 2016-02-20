@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.crafting;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
@@ -100,7 +100,7 @@ public class GemCutting extends Crafting {
 
         ContentEntity.sendMessage(c, "You start cutting the gem...");
 
-        World.getWorld().submit(new Event(2200) {
+        World.submit(new Task(2200) {
             @Override
             public void execute() {
                 if(c.getRandomEvent().skillAction(2))

@@ -4,8 +4,8 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.sql.DbHub;
 
 import java.util.Arrays;
 import java.util.StringJoiner;
@@ -86,7 +86,7 @@ public class Punishment {
             return true;
         }
         boolean applied = false;
-        for(final Player p : World.getWorld().getPlayers()){
+        for(final Player p : World.getPlayers()){
             if(p == null)
                 continue;
             switch(getCombination().getTarget()){
@@ -117,7 +117,7 @@ public class Punishment {
         final Player victim = getVictim();
         if(victim != null)
             return getCombination().isApplied(victim);
-        for(final Player p : World.getWorld().getPlayers()){
+        for(final Player p : World.getPlayers()){
             if(p == null)
                 continue;
             switch(getCombination().getTarget()){
@@ -145,7 +145,7 @@ public class Punishment {
             return true;
         }
         boolean unapplied = false;
-        for(final Player p : World.getWorld().getPlayers()){
+        for(final Player p : World.getPlayers()){
             if(p == null)
                 continue;
             switch(getCombination().getTarget()){
@@ -179,7 +179,7 @@ public class Punishment {
     }
 
     public Player getIssuer(){
-        return World.getWorld().getPlayer(getIssuerName());
+        return World.getPlayerByName(getIssuerName());
     }
 
     public String getVictimName(){
@@ -187,7 +187,7 @@ public class Punishment {
     }
 
     public Player getVictim(){
-        return World.getWorld().getPlayer(getVictimName());
+        return World.getPlayerByName(getVictimName());
     }
 
     public String getVictimIp(){
@@ -226,18 +226,26 @@ public class Punishment {
     }
 
     public void insert(){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().insert(this);
     }
 
     public void update(){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().update(this);
     }
 
     public void setActive(final boolean isActive){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().setActive(this, isActive);
     }
 
     public void delete(){
+        if(!DbHub.getGameDb().isInitialized())
+            return;
         DbHub.getGameDb().getPunishment().delete(this);
     }
 

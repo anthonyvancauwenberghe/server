@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
@@ -56,7 +56,7 @@ public class RangingGuild implements ContentTemplate {
 					.getId()));
 			p.face(Location.create(xcoord, ycoord, 0));
 
-			World.getWorld().submit(new Event(1000) {
+			World.submit(new Task(1000) {
 				public void execute() {
 					int offX = (p.getLocation().getX() - xcoord) * - 1;
 					int offY = (p.getLocation().getY() - ycoord) * - 1;
@@ -67,10 +67,10 @@ public class RangingGuild implements ContentTemplate {
 					this.stop();
 				}
 			});
-			World.getWorld().submit(
-					new Event(2000) {
+			World.submit(
+					new Task(2000) {
 						public void execute() {
-							int hit = Misc.random(10) - Misc.random((int) p.getSkills().getLevel(4) / 12 + p.getBonus().get(4) / 15);
+							int hit = Misc.random(10) - Misc.random(p.getSkills().getLevel(4) / 12 + p.getBonus().get(4) / 15);
 							if(hit < 0) {
 								hit = 0;
 							}
@@ -102,8 +102,8 @@ public class RangingGuild implements ContentTemplate {
 			return true;
 		}
 		if(p.rangeMiniShots == 0) {
-			p.getActionSender().sendMessage("You scored " + p.rangeMiniScore + " points and recieved " + ((int) (p.rangeMiniScore / 10)) + " archery tickets.");
-			ContentEntity.addItem(p, 1464, ((int) (p.rangeMiniScore / 10)));
+			p.getActionSender().sendMessage("You scored " + p.rangeMiniScore + " points and recieved " + p.rangeMiniScore / 10 + " archery tickets.");
+			ContentEntity.addItem(p, 1464, p.rangeMiniScore / 10);
 			p.getSkills().addExperience(4, p.rangeMiniScore * 25);
 			p.rangeMiniShots = - 1;
 			p.rangeMiniScore = 0;

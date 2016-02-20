@@ -1,10 +1,12 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.ObjectManager;
 import org.hyperion.util.Misc;
 
 import java.awt.*;
@@ -14,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +31,7 @@ public class RoomDefinition {
     public static final RoomDefinition START_ROOM;
 
     static {
-        START_ROOM = new RoomDefinition(2908, 9913, 2917, 9912, Arrays.asList(new Point[]{new Point(2910, 9907)}));
+        START_ROOM = new RoomDefinition(2908, 9913, 2917, 9912, Arrays.asList(new Point(2910, 9907)));
         ROOM_DEFINITIONS_LIST.remove(START_ROOM);
     }
 
@@ -43,8 +46,8 @@ public class RoomDefinition {
         this.y_end = y_end;
         this.spawnLocations = spawnLocations;
         ROOM_DEFINITIONS_LIST.add(this);
-        World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2476), Location.create(x, y, 0), 10, 0));
-        World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(2477), Location.create(x_end, y_end, 0), 10, 0));
+        ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(2476), Location.create(x, y, 0), 10, 0));
+        ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(2477), Location.create(x_end, y_end, 0), 10, 0));
     }
 
     public final Room getRoom(final Dungeon dungeon, final int loop_around) {
@@ -112,7 +115,8 @@ public class RoomDefinition {
                 }
             }
 
-            System.out.println("Loaded "+defs+" Room Definitions");
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Loaded "+defs+" Room Definitions");
         }catch(final Exception ex) {
 
         }

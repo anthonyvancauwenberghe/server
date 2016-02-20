@@ -1,18 +1,22 @@
 package org.hyperion.rs2.model.content;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.data.PersistenceManager;
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.Door.DoorType;
 import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.region.RegionManager;
 
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DoorManager {
@@ -34,10 +38,10 @@ public class DoorManager {
 					doors.put(d.getSecondClosedLocation(), d);
 				}
 			}
-			logger.info("Loaded " + list.size() + " doors.");
+			if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+				Server.getLogger().log(Level.INFO, "Doors have been successfully loaded.");
 		} catch(Exception e) {
-			logger.warning("Failed to load the doors for some reason, check if doors.xml is in the data folder.");
-			System.out.println(e);
+			logger.log(Level.WARNING, "Failed to load the doors for some reason, check if doors.xml is in the data folder.", e);
 		}
 	}
 
@@ -53,7 +57,7 @@ public class DoorManager {
 		final Door door = doors.get(Location.create(loc.getX(), loc.getY(), loc.getZ()%4));
 		if(door == null) {
 			GameObjectDefinition def = GameObjectDefinition.forId(objectId);
-			if(def.getName() != null) {
+			if(def != null && def.getName() != null) {
 				//System.out.println(""+def.getName());
 				if(def.getName().toLowerCase().contains("gate") || objectId == 1553 || objectId == 1551) {
 					player.getActionSender().sendDestroyObject(0, 0, loc);
@@ -65,7 +69,7 @@ public class DoorManager {
 		if(door.isOpen()) {
 			switch(door.getType()) {
 				case NORMAL:
-					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+					for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
 							if(p.getLocation().distance(door.getOpenLocation()) < 15) {
                                 p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), Location.create(door.getOpenLocation().getX(), door.getOpenLocation().getY(), p.getLocation().getZ()));
@@ -81,7 +85,7 @@ public class DoorManager {
 					//TODO: Nothing.
 					break;
 				case DOUBLE:
-					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+					for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
 							if(p.getLocation().distance(door.getOpenLocation()) < 15) {
 								p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), Location.create(door.getOpenLocation().getX(), door.getOpenLocation().getY(), p.getLocation().getZ()));
@@ -103,7 +107,7 @@ public class DoorManager {
 			switch(door.getType()) {
 
 				case NORMAL:
-					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+					for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
 							if(p.getLocation().isWithinDistance(door.getClosedLocation())) {
 								p.getActionSender().sendDestroyObject(door.getClosedType(), door.getClosedFace(), door.getClosedLocation());
@@ -134,7 +138,7 @@ public class DoorManager {
 						player.getWalkingQueue().addStep(door.getWalkTo().getX(), door.getWalkTo().getY());
 					}
 					player.getWalkingQueue().finish();
-					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+					for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
 							if(p.getLocation().isWithinDistance(door.getClosedLocation())) {
 								p.getActionSender().sendDestroyObject(door.getClosedType(), door.getClosedFace(), door.getClosedLocation());
@@ -142,10 +146,10 @@ public class DoorManager {
 							}
 						}
 					}
-					World.getWorld().submit(new Event(1200) {
+					World.submit(new Task(1200) {
 						@Override
 						public void execute() {
-							for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+							for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 								for(final Player p : reg.getPlayers()) {
 									if(p.getLocation().distance(door.getOpenLocation()) < 15) {
 										p.getActionSender().sendDestroyObject(door.getClosedType(), door.getClosedFace(), door.getOpenLocation());
@@ -158,7 +162,7 @@ public class DoorManager {
 					});
 					break;
 				case DOUBLE:
-					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+					for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
                             if(p.getLocation().distance(door.getOpenLocation()) < 15) {
                                 p.getActionSender().sendCreateObject(door.getClosedId(), door.getClosedType(), door.getClosedFace(),Location.create(door.getClosedLocation().getX(), door.getClosedLocation().getY(), player.getLocation().getZ()));
@@ -210,7 +214,7 @@ public class DoorManager {
 						}
 					}
 					player.getWalkingQueue().finish();
-					for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+					for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 						for(final Player p : reg.getPlayers()) {
 							if(p.getLocation().isWithinDistance(door.getClosedLocation())) {
 								p.getActionSender().sendDestroyObject(door.getClosedType(), door.getClosedFace(), door.getClosedLocation());
@@ -220,10 +224,10 @@ public class DoorManager {
 							}
 						}
 					}
-					World.getWorld().submit(new Event(1200) {
+					World.submit(new Task(1200) {
 						@Override
 						public void execute() {
-							for(Region reg : World.getWorld().getRegionManager().getSurroundingRegions(loc)) {
+							for(Region reg : RegionManager.getSurroundingRegions(loc)) {
 								for(final Player p : reg.getPlayers()) {
 									if(p.getLocation().isWithinDistance(door.getOpenLocation())) {
 										p.getActionSender().sendDestroyObject(door.getOpenType(), door.getOpenFace(), door.getOpenLocation());

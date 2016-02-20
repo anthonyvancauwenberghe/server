@@ -1,84 +1,36 @@
 package org.hyperion;
 
-import org.hyperion.rs2.RS2Server;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.skill.dungoneering.RoomDefinition;
-import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
+import org.hyperion.engine.Update;
 import org.hyperion.rs2.net.security.CharFileEncryption;
-import org.hyperion.rs2.util.CharFilesCleaner;
-import org.hyperion.rs2.util.RestarterThread;
-import org.madturnip.tools.DumpNpcDrops;
+import org.hyperion.rs2.net.security.EncryptionStandard;
+import org.hyperion.util.ShutdownHook;
 
+import java.io.Console;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.security.Key;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * A class to start both the file and game servers.
- *
- * @authors Graham Edgecombe and Arsen Maxyutov
- */
+import static org.hyperion.Configuration.ConfigurationObject.NAME;
+import static org.hyperion.Configuration.ConfigurationObject.PORT;
+
 public class Server {
 
-    /**
-     * The server configuration.
-     */
-    private static final Configuration config = new Configuration();
-
-    /**
-     * The old school flag.
-     */
-    public static final boolean OLD_SCHOOL = config.getBoolean("oldschool");
-
-    /**
-     * The server name.
-     */
-    public static final String NAME = config.getString("name");
-
-    /**
-     * The spawn server flag.
-     */
-    public static final boolean SPAWN = config.getBoolean("spawn");
-
-    /**
-     * The update version.
-     */
-    public static final double UPDATE = 6.72;
-
-
-    public static final boolean DEBUG_CLEAN = false;
-    /**
-     * Server uptime instance
-     */
-    private static final Uptime uptime = new Uptime();
-
-    /**
-     * The server statistics.
-     */
-    private static final ServerStatistics stats = new ServerStatistics();
-
-    /**
-     * Logger instance
-     */
-    private static final Logger logger = Logger.getLogger(Server.class.getName());
-
-
-    /**
-     * The Encryption instance, holding the used key on startup.
-     */
+    private final static Logger logger = Logger.getLogger(Configuration.getString(NAME));
+    private final static GameLoader loader = new GameLoader(Configuration.getInt(PORT));
+    private final static Uptime uptime = new Uptime();
+    private final static ServerStatistics stats = new ServerStatistics();
     private static CharFileEncryption charFileEncryption;
+    private static boolean updating = false;
 
-    /**
-     * Server uptime.
-     *
-     * @return the server uptime
-     */
+    private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
+
     public static Uptime getUptime() {
         return uptime;
-    }
-
-    public static Configuration getConfig() {
-        return config;
     }
 
     public static ServerStatistics getStats() {
@@ -89,109 +41,71 @@ public class Server {
         return charFileEncryption;
     }
 
-
-    public static final boolean DEBUG = false;
-
-    public static final boolean inDebug() {
-        return DEBUG;
+    public static Logger getLogger() {
+        return logger;
     }
 
-    public static final java.io.OutputStream OUTPUT = System.out;
-    public static final java.io.OutputStream ERR = System.err;
+    public static GameLoader getLoader() {
+        return loader;
+    }
 
-    /**
-     * Last server vote claim
-     */
-    public static long lastServerVote = 0L;
+    public static boolean isUpdating() {
+        return updating;
+    }
 
-    private static final String checkString = "ZL0Rw+jTUzQ7OBep3Z/Cgg\u003d\u003d";
+    public static void setUpdating(boolean updating) {
+        Server.updating = updating;
+    }
 
-    /**
-     * The entry point of the application.
-     *
-     * @param args The command line arguments.
-     */
     public static void main(String[] args) throws Exception {
-        launchServer();
-    }
-
-    public static World launchServer() {
-        /*
-        Console console = System.console();
-        if (console == null) {
-            logger.log(Level.WARNING, "Using default password.");
-            charFileEncryption = new CharFileEncryption("Glis1234Glis1234");
+        File file = new File("./data/key.dat");
+        if(file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+                charFileEncryption = new CharFileEncryption((Key) in.readObject());
+            }
+            if(!file.delete()) {
+                file.deleteOnExit();
+            }
         } else {
-            boolean correctPass = false;
-            while(!correctPass) {
-                char passwordArray[] = console.readPassword("Enter password: ");
-                charFileEncryption = new CharFileEncryption(String.valueOf(passwordArray));
-                if(EncryptionStandard.encrypt("randomstring", charFileEncryption.getKey()).equals(checkString)) {
-                    correctPass = true;
-                } else {
-                    System.out.println("Password incorrect.");
+            Console console = System.console();
+            if (console == null) {
+                logger.log(Level.WARNING, "Using default password.");
+                charFileEncryption = new CharFileEncryption("Glis1234Glis1234");
+            } else {
+                boolean correctPass = false;
+                while (!correctPass) {
+                    char passwordArray[] = console.readPassword("Enter password: ");
+                    charFileEncryption = new CharFileEncryption(String.valueOf(passwordArray));
+                    if (EncryptionStandard.encrypt("randomstring", charFileEncryption.getKey()).equals(checkString)) {
+                        correctPass = true;
+                    } else {
+                        correctPass = true;
+                        System.out.println("Password incorrect.");
+                    }
                 }
             }
         }
-        File[] files = new File(MergedSaving.MERGED_DIR).listFiles();
-        System.out.println("Started converting char files, count: " + files.length);
-*/
-        final long currentTime = System.currentTimeMillis();
-        RestartTask.submitRestartTask();
-        long start = System.currentTimeMillis();
-        new Thread(new CharFilesCleaner()).start();
-        System.out.println("-- Starting " + NAME + "  -- " + UPDATE);
-        System.out.println("Spawn server: " + SPAWN);
-        World.getWorld(); // this starts off background loading
+
+        Runtime.getRuntime().addShutdownHook(new ShutdownHook());
         try {
-            //new FileServer().bind().start();
-
-            new RS2Server().start();
-
-            DumpNpcDrops.startDump2();
-            PossibleHacksHolder.init();
-            RoomDefinition.load();
-            ClanManager.load();
-//			ItemInfo.init();
-            System.out.println("Fully loaded server in : " + (System.currentTimeMillis() - start) + " ms.");
-/*
-            for(File file : files) {
-                String ip = null;
-                int uid = 0;
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String line;
-                    while((line = br.readLine()) != null) {
-                        if(line.startsWith("Mac=")) {
-                            uid = Integer.parseInt(line.replaceAll("Mac=", "").trim());
-                            continue;
-                        }
-                        if(line.startsWith("IP=")) {
-                            ip = line.replaceAll("IP=", "").trim();
-                            break;
-                        }
-                        if(line.startsWith("Skills"))
-                            break;
-                    }
-                    br.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
-                Player player = new Player(uid);
-                player.setIP(ip);
-                player.setName(file.getName().replaceAll(".txt", ""));
-                new PlayerSaving().load(player, MergedSaving.MERGED_DIR);
-                org.hyperion.rs2.savingnew.PlayerSaving.save(player);
-            }*/
+            logger.info("Started loading the server...");
+            loader.init();
+            loader.finish();
+            logger.info(Configuration.getString(NAME) + " is now online on port " + Configuration.getInt(PORT) + ".");
         } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.log(Level.SEVERE, "Error starting Hyperion.", ex);
+            logger.log(Level.SEVERE, "Could not start " + Configuration.getString(NAME) + "!", ex);
             System.exit(1);
         }
-        RestarterThread.getRestarter();
-        //SQL.getSQL();
-        //ShopManager.dumpShops();
-        return World.getWorld();
+        int threads = 8;
+        /*
+        ExecutorService application = Executors.newFixedThreadPool(threads);
+        for(int i = 0; i < threads; i++)
+            application.submit(new CharFileConvertorThread(i + 1));
+            */
     }
 
+    public static void update(int time, final String reason) {
+        setUpdating(true);
+        getLoader().getEngine().submit(new Update(time, reason));
+    }
 }

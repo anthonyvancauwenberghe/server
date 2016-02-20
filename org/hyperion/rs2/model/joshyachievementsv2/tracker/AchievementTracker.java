@@ -5,7 +5,7 @@ import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.*;
-import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.sql.DbHub;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -29,7 +29,7 @@ public class AchievementTracker {
     public void load(){
         if(!active)
             return;
-        if(!DbHub.getPlayerDb().enabled()) {
+        if(!DbHub.getPlayerDb().isInitialized()) {
             active = false;
             return;
         }
@@ -138,6 +138,8 @@ public class AchievementTracker {
     }
 
     private void progress(final Task task, final int progress) {
+        if(!DbHub.getPlayerDb().isInitialized())
+            return;
         final AchievementProgress ap = progress(task.achievementId);
         final AchievementTaskProgress atp = ap.progress(task.id);
         if (ap.finished() || atp.finished())
@@ -170,8 +172,7 @@ public class AchievementTracker {
                 ap.achievement().rewards.reward(player);
             }
         }
-        player.getAchievementTab().updateAchievementTab();
-        //updateInterface(ap.achievement());
+        player.getAchievementTab().sendAchievement(ap.achievement());
     }
 
     public void barrowsTrip() {

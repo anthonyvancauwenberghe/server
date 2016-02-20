@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class BulwarkBeast implements Attack {
 
@@ -32,7 +33,7 @@ public class BulwarkBeast implements Attack {
     private void handleQuakeEffect(NPC npc) {
         npc.forceMessage("GGUUUUUUUAAAAAAAAHHHHHHHH!");
         npc.cE.doAnim(13003);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int type = Combat.random(1) + 1;
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player, Combat.random(MAX_QUAKE_DAMAGE), type, MAX_QUAKE_DAMAGE), 2000, type);
             type = Combat.random(1) + 1;
@@ -46,7 +47,7 @@ public class BulwarkBeast implements Attack {
     private void handleHealthEffect(NPC npc) {
         npc.forceMessage("YUUUUUMMMMMMM!");
         npc.cE.doAnim(13002);
-        int healthToAdd = Combat.random(25 * World.getWorld().getRegionManager().getLocalPlayers(npc).size()) + 25;
+        int healthToAdd = Combat.random(25 * RegionManager.getLocalPlayers(npc).size()) + 25;
         if(npc.health + healthToAdd > npc.maxHealth) {
             npc.health = npc.maxHealth;
         } else {

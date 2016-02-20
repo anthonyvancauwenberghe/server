@@ -15,7 +15,6 @@ public class Bow extends Weapon {
 
 	public Bow(int id, int weaponSpeed) {
 		super(id, Weapon.RANGED_TYPE, weaponSpeed, true, false, WEAPON_ANIMATIONS);
-		// TODO Auto-generated constructor stub
 	}
 
 }

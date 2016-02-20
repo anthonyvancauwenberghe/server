@@ -1,24 +1,15 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.SpellBook;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.FileNotFoundException;
 
 public class DangerousPK implements ContentTemplate {
 	public enum ArmourClass {
@@ -66,7 +57,7 @@ public class DangerousPK implements ContentTemplate {
             return;
         }
 		player.playAnimation(Animation.create(7376));
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			public void execute() {
 				player.setTeleportTarget(Location.create(2475, 5214, 0));
                 this.stop();

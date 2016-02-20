@@ -1,11 +1,11 @@
 package org.hyperion.rs2.model.content.transport;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Jail;
 
@@ -38,7 +38,7 @@ public class TeleTabs implements ContentTemplate {
 			player.getActionSender().sendMessage("You cannot teleport from duel arena.");
 			return;
 		}
-		if(World.getWorld().getContentManager().handlePacket(6, player, 30000, - 1, - 1, - 1) || World.getWorld().getContentManager().handlePacket(6, player, 30001, - 1, - 1, - 1)) {
+		if(ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1) || ContentManager.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 			player.getActionSender().sendMessage("You cannot teleport from fight pits.");
 			return;
 		}
@@ -59,7 +59,7 @@ public class TeleTabs implements ContentTemplate {
 		final int x1 = x;
 		final int y1 = y;
 		final int z1 = z;
-		int delay = 1200;
+		long delay = 1200;
 
 		player.inAction = false;
 		if((player.getLocation().getX() >= 2814 && player.getLocation().getX() <= 2942 && player.getLocation().getY() >= 5250 && player.getLocation().getY() <= 5373)
@@ -72,14 +72,14 @@ public class TeleTabs implements ContentTemplate {
         //player.getExtraData().put("combatimmunity", System.currentTimeMillis() + Long.valueOf(delay) - 100L + 2400L);
         Combat.resetAttack(player.cE);
 
-		World.getWorld().submit(new Event(delay) {
+		World.submit(new Task(delay) {
 			@Override
 			public void execute() {
 				player.playAnimation(Animation.create(4071, 0));
 				this.stop();
 			}
 		});
-		World.getWorld().submit(new Event(2400) {
+		World.submit(new Task(2400) {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));

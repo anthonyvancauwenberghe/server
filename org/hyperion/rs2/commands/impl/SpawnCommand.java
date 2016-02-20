@@ -1,6 +1,5 @@
 package org.hyperion.rs2.commands.impl;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -37,8 +36,6 @@ public class SpawnCommand extends Command {
 
 	@Override
 	public boolean execute(Player player, String input) {
-		if(! Server.SPAWN)
-			return false;
 		String keywordInput = filterInput(input);
 		String[] parts = keywordInput.split(" ");
 		String keyword = parts[0];
@@ -91,7 +88,7 @@ public class SpawnCommand extends Command {
 				if(!fileToWrite.getParentFile().mkdirs())
 					return mapToSave;
 			} catch (SecurityException e) {
-				System.out.println("Unable to create directory for keywords saving");
+				System.out.println("Unable to create directory for keywords savingnew");
 			}
 		}
 		try (FileWriter writer = new FileWriter(fileToWrite)) {

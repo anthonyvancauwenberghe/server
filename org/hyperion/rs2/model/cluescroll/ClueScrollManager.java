@@ -1,12 +1,14 @@
 package org.hyperion.rs2.model.cluescroll;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -14,14 +16,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.*;
+import java.util.logging.Level;
 
 public final class ClueScrollManager {
 
@@ -32,7 +30,8 @@ public final class ClueScrollManager {
     static{
         try{
             load();
-            System.out.println("ClueScrolls Loaded: " + MAP.size());
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Successfully loaded " + MAP.size() + " Clue Scrolls.");
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -63,9 +62,7 @@ public final class ClueScrollManager {
 
     public static boolean isClue(int id) {
         final ClueScroll cs = get(id);
-        if(cs != null)
-            return true;
-        return false;
+        return cs != null;
     }
 
     public static void trigger(final Player player, final ClueScroll.Trigger trigger){
@@ -95,9 +92,7 @@ public final class ClueScrollManager {
     }
 
     public static boolean hasClueScroll(final Player player) {
-        if(getBankCount(player) == 0 && getInventoryCount(player) == 0)
-            return true;
-        return false;
+        return getBankCount(player) == 0 && getInventoryCount(player) == 0;
     }
 
     public static int getInventoryCount(final Player player){

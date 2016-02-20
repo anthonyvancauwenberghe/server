@@ -1,11 +1,11 @@
 package org.hyperion.rs2.model.combat;
 
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcDeathTask;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.map.WorldMap;
 import org.hyperion.map.pathfinding.Path;
-import org.hyperion.map.pathfinding.PathfinderV2;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
+import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.pvp.PvPDegradeHandler;
 import org.hyperion.rs2.model.container.Equipment;
@@ -13,6 +13,7 @@ import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
@@ -20,7 +21,6 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
-import org.hyperion.rs2.util.RestarterThread;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -454,7 +454,7 @@ public class Combat {
             } else {
                 if (!combatEntity.canMove() && combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) == 2)
                     return true;
-                //combatEntity.getPlayer().getWalkingQueue().reset();
+                //combatEntity.getPlayerByName().getWalkingQueue().reset();
             }
 
 			/*
@@ -484,7 +484,7 @@ public class Combat {
 
             			/*
 			 * else
-			 * combatEntity.getPlayer().getActionSender().resetFollow();
+			 * combatEntity.getPlayerByName().getActionSender().resetFollow();
 			 */// this isnt too nessary in melee, only magic and range
 			/*if(bowType != Constants.RANGEDNOARROWS)
 				combatEntity.doAtkEmote();
@@ -495,7 +495,6 @@ public class Combat {
              * Get random Damage Hit.
              */
             damg = random(maxHit);
-            RestarterThread.getRestarter().updateCombatTimer();
             boolean verac = false;
             if (CombatAssistant.isVeracEquiped(combatEntity.getPlayer())
                     && random(6) == 1)
@@ -507,11 +506,11 @@ public class Combat {
                      */
                     int MeleeAtk = CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer());
                     int MeleeDef = CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getPlayer());
-					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
+					/*if(combatEntity.getPlayerByName().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayerByName().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
                     int deltaBonus = MeleeAtk - MeleeDef;
-                    int toAdd = Misc.random((int) (deltaBonus / 3));
+                    int toAdd = Misc.random(deltaBonus / 3);
                     damg += toAdd;
                     combatEntity.getPlayer().debugMessage("Toadd: " + toAdd);
                     if (damg < 0)
@@ -519,13 +518,12 @@ public class Combat {
                     if (damg > maxHit)
                         damg = maxHit;
 					
-					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayer().getActionSender().sendMessage("Damg : " + damg);
+					/*if(combatEntity.getPlayerByName().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayerByName().getActionSender().sendMessage("Damg : " + damg);
 					}*/
                 }
             } else {
                 if (verac) {
-                    ;
                 } else
                     damg = CombatCalculation.getCalculatedDamage(combatEntity.getEntity(), combatEntity.getOpponent().getEntity(), damg, combatStyle, maxHit);
                 if (SlayerTask.getLevelById(combatEntity.getOpponent().getNPC().getDefinition().getId()) > combatEntity.getPlayer().getSkills().getLevel(Skills.SLAYER))
@@ -537,9 +535,9 @@ public class Combat {
          * Spirit shield effects.
          */
         if (combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
-            //combatEntity.getPlayer().getActionSender().sendMessage("Damg without divine would be: " + damg);
+            //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg without divine would be: " + damg);
             damg = SpiritShields.applyEffects(opponent.cE, damg);
-            //combatEntity.getPlayer().getActionSender().sendMessage("Damg with divine is: " + damg);
+            //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg with divine is: " + damg);
         } else {
             damg = SpiritShields.applyEffects(opponent.cE, damg);
         }
@@ -625,7 +623,7 @@ public class Combat {
             CombatAssistant.addExperience(combatEntity, bowType, damgDouble);
         CombatAssistant.addExperience(combatEntity, bowType, damage);
 
-        World.getWorld().submit(new Event(delay, "combat") {
+        World.submit(new Task(delay, "combat") {
             public void execute() {
                 if (combatEntity == null || opponent == null) {
                     this.stop();
@@ -727,11 +725,10 @@ public class Combat {
      */
     private static boolean processNpcCombat(final CombatEntity combatEntity, int distance) {
         if (combatEntity.attack == null)
-            combatEntity.attack = World.getWorld().getNPCManager().getAttack(combatEntity.getNPC());
+            combatEntity.attack = NPCManager.getAttack(combatEntity.getNPC());
         // combatEntity.doAtkEmote();
 
         if (combatEntity.attack != null) {
-            ;
             // timer
 			/*
 			 * if(combatEntity.predictedAtk >
@@ -788,7 +785,7 @@ public class Combat {
 				 * combatEntity.getOpponent().doDefEmote();
 				 * if(combatEntity.getOpponent().getEntity() instanceof
 				 * NPC ||
-				 * combatEntity.getOpponent().getPlayer().autoRetailate
+				 * combatEntity.getOpponent().getPlayerByName().autoRetailate
 				 * ){
 				 * combatEntity.getOpponent().setOpponent(combatEntity);
 				 * } }
@@ -819,7 +816,7 @@ public class Combat {
 
     public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, final int type, final boolean prayerBlock) {
 
-        World.getWorld().submit(new Event(delay, "npcattack") {
+        World.submit(new Task(delay, "npcattack") {
             @Override
             public void execute() {
                 if ((combatEntity == null ||
@@ -838,11 +835,11 @@ public class Combat {
                     }
 
                     /*if(type == 1
-                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
+                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayerByName()))) {
                         newDamg = 0;
                     }
                     if(type == 2
-                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
+                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayerByName()))) {
                         newDamg = 0;
                     }*/
                     //defence
@@ -891,7 +888,7 @@ public class Combat {
         int offsetX = ((n.cE.getAbsY() + n.cE.getOffsetY()) - attack.getAbsY())
                 * -1;
         // find our lockon target
-        int hitId = attack.getSlotId((Entity) n);
+        int hitId = attack.getSlotId(n);
         // extra variables - not for release
         int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX()
                 + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY()
@@ -957,8 +954,8 @@ public class Combat {
             }
             if ((combatEntity.getEntity() instanceof Player)
                     && (opponent.getEntity() instanceof Player)
-                    && World.getWorld().getContentManager().handlePacket(6, (Player) combatEntity.getEntity(), 30000, -1, -1, -1)
-                    && World.getWorld().getContentManager().handlePacket(6, (Player) opponent.getEntity(), 30000, -1, -1, -1))
+                    && ContentManager.handlePacket(6, (Player) combatEntity.getEntity(), 30000, -1, -1, -1)
+                    && ContentManager.handlePacket(6, (Player) opponent.getEntity(), 30000, -1, -1, -1))
                 return "1";
             String type = "NPC";
             if (opponent.getEntity() instanceof Player)
@@ -984,7 +981,7 @@ public class Combat {
                     NPC npc = opponent.getNPC();
                     if (combatEntity.getPlayer() != null) {
                         if (npc.getDefinition().getId() == 5666 &&
-                                (System.currentTimeMillis() - NpcDeathEvent.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < (Time.ONE_MINUTE * 3)))
+                                (System.currentTimeMillis() - NpcDeathTask.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < (Time.ONE_MINUTE * 3)))
                             return "Let someone else try killing barrelchest!";
                         if (System.currentTimeMillis() - npc.getCombat().lastHit < 9000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
                             return "This monster is already in combat";
@@ -1018,7 +1015,7 @@ public class Combat {
             int cb1 = combatEntity.getCombat();
             int cb2 = opponent.getCombat();
             if (combatEntity.getEntity() instanceof Player &&
-                    World.getWorld().getContentManager().handlePacket(
+                    ContentManager.handlePacket(
                             6, combatEntity.getPlayer(), ClickId.ATTACKABLE))
                 return "1";
             if (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())) {
@@ -1112,8 +1109,8 @@ public class Combat {
     public static boolean isInMulti(CombatEntity combatEntity) {
         if (combatEntity == null || combatEntity.getEntity() == null)
             return false;
-        if (WildernessBossEvent.currentBoss != null)
-            if (Misc.isInCircle(WildernessBossEvent.currentBoss.getLocation().getX(), WildernessBossEvent.currentBoss.getLocation().getY(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), 10))
+        if (WildernessBossTask.currentBoss != null)
+            if (Misc.isInCircle(WildernessBossTask.currentBoss.getLocation().getX(), WildernessBossTask.currentBoss.getLocation().getY(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), 10))
                 return true;
         if ((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
                 && combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607)
@@ -1172,7 +1169,7 @@ public class Combat {
                 || (combatEntity.getAbsZ() > 0 && combatEntity.getAbsX() > 3540 && combatEntity.getAbsX() < 3585 && combatEntity.getAbsY() > 9935 && combatEntity.getAbsY() < 9975))
             return true;
         if (combatEntity.getEntity() instanceof Player) {
-            if (World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))
+            if (ContentManager.handlePacket(ClickType.OBJECT_CLICK1, combatEntity.getPlayer(), ClickId.ATTACKABLE))
                 return true;
         }
         return false;
@@ -1222,7 +1219,7 @@ public class Combat {
             int baseX = combatEntity.getAbsX() - 25;
             int baseY = combatEntity.getAbsY() - 25;
             combatEntity.getEntity().getWalkingQueue().reset();
-            Path p = World.getWorld().pathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
+            Path p = PathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
             if (p != null) {
                 for (int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
@@ -1277,30 +1274,30 @@ public class Combat {
         else if (y < toY)
             moveY = 1;
         if (moveX != 0 && moveY != 0) {
-            if (!World.getWorld().isWalkAble(height, x, y, (x + moveX), (y + moveY), 0)) {
-                if (World.getWorld().isWalkAble(height, x, y, (x + moveX), y, 0)) {
+            if (!WorldMap.checkPos(height, x, y, (x + moveX), (y + moveY), 0)) {
+                if (WorldMap.checkPos(height, x, y, (x + moveX), y, 0)) {
                     moveY = 0;
-                } else if (World.getWorld().isWalkAble(height, x, y, x, (y + moveY), 0)) {
+                } else if (WorldMap.checkPos(height, x, y, x, (y + moveY), 0)) {
                     moveX = 0;
                 } else {
                     return;
                 }
             }
-        } else if (!World.getWorld().isWalkAble(height, x, y, x + moveX, y
+        } else if (!WorldMap.checkPos(height, x, y, x + moveX, y
                 + moveY, 0)) {
             if (moveX != 0) {
-                if (!World.getWorld().isWalkAble(height, x, y, x + moveX, y
+                if (!WorldMap.checkPos(height, x, y, x + moveX, y
                         + 1, 0)) {
                     moveY = 1;
-                } else if (!World.getWorld().isWalkAble(height, x, y, x + moveX, y
+                } else if (!WorldMap.checkPos(height, x, y, x + moveX, y
                         - 1, 0)) {
                     moveY = -1;
                 }
             } else if (moveY != 0) {
-                if (!World.getWorld().isWalkAble(height, x, y, x + 1, y
+                if (!WorldMap.checkPos(height, x, y, x + 1, y
                         + moveY, 0)) {
                     moveX = 1;
-                } else if (!World.getWorld().isWalkAble(height, x, y, x - 1, y
+                } else if (!WorldMap.checkPos(height, x, y, x - 1, y
                         + moveY, 0)) {
                     moveX = -1;
                 }
@@ -1322,7 +1319,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        World.getWorld().submit(new Event(16000) {
+        World.submit(new Task(16000) {
             private int lastDamg = -1;
             private int ticks = 4;
 
@@ -1404,7 +1401,7 @@ public class Combat {
                         // player.getInventory().add(item);
                         return;
                     } else {
-                        World.getWorld().getGlobalItemManager().newDropItem(player, new GlobalItem(player, loc, item));
+                        GlobalItemManager.newDropItem(player, new GlobalItem(player, loc, item));
                     }
                 }
             }
@@ -1479,17 +1476,13 @@ public class Combat {
     public static boolean usingPhoenixNecklace(Player player) {
         if (player.getEquipment().get(Equipment.SLOT_AMULET) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11090)
-            return true;
-        return false;
+        return player.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11090;
     }
 
     public static boolean ringOfLifeEqupped(Player player) {
         if (player.getEquipment().get(Equipment.SLOT_RING) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_RING).getId() == 2570)
-            return true;
-        return false;
+        return player.getEquipment().get(Equipment.SLOT_RING).getId() == 2570;
     }
 
     public static boolean isGuthanEquiped(Player player) {
@@ -1498,12 +1491,10 @@ public class Combat {
                 || player.getEquipment().get(Equipment.SLOT_CHEST) == null
                 || player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4724
+        return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4724
                 && player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4726
                 && player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4728
-                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4730)
-            return true;
-        return false;
+                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4730;
     }
 
     public static boolean isToragEquiped(Player player) {
@@ -1512,12 +1503,10 @@ public class Combat {
                 || player.getEquipment().get(Equipment.SLOT_CHEST) == null
                 || player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
             return false;
-        if (player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4745
+        return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4745
                 && player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4747
                 && player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4749
-                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4751)
-            return true;
-        return false;
+                && player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4751;
     }
 
     public static void createGlobalProjectile(Entity e, int casterY, int casterX, int offsetY, int offsetX, int angle, int speed, int gfxMoving, int startHeight, int endHeight, int lockon, int slope) {

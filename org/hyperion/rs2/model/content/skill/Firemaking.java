@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -53,7 +53,7 @@ public class Firemaking implements ContentTemplate {
 		if(timer < 2500)
 			timer = 2500;
 		player.setBusy(true);
-		World.getWorld().submit(new Event(timer) {
+		World.submit(new org.hyperion.engine.task.Task(timer) {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {
@@ -108,13 +108,13 @@ public class Firemaking implements ContentTemplate {
 	}
 
 	private void createObject(Location loc, int fire) {
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			player.getActionSender().sendCreateObject(fire, 10, 0, loc);
 		}
 	}
 
 	private void removeObject(Location loc) {
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player != null)
                 player.getActionSender().sendDestroyObject(10, 0, loc);
 		}
@@ -122,8 +122,8 @@ public class Firemaking implements ContentTemplate {
 
 	private void sendAshes(Location loc) {
 		GlobalItem globalItem = new GlobalItem(null, loc, new Item(592, 1));
-		World.getWorld().getGlobalItemManager().globalItems.add(globalItem);
-		World.getWorld().getGlobalItemManager().createItem(globalItem);
+		GlobalItemManager.addToItems(globalItem);
+		GlobalItemManager.createItem(globalItem);
 		globalItem.itemHidden = false;
 	}
 
@@ -170,7 +170,7 @@ public class Firemaking implements ContentTemplate {
 		logs.put(1517, new Log(1517, 135, 45, 100));
 		logs.put(1515, new Log(1515, 202, 60, 150));
 		logs.put(1513, new Log(1513, 303, 70, 200));
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			@Override
 			public void execute() {
 				process();

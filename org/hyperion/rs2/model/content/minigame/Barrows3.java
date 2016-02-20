@@ -1,16 +1,15 @@
 package org.hyperion.rs2.model.content.minigame;
 // Yay
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.attack.Barrows;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
@@ -61,7 +60,7 @@ public class Barrows3 implements ContentTemplate {
 	public void dig(final Player player) {
 		if(ContentEntity.isInArea(player, 3550, 3269, 3580, 3305)) {
 			ContentEntity.startAnimation(player, DIGGING_EMOTE);
-			World.getWorld().submit(new Event(1000, "dig") {
+			World.submit(new Task(1000, "dig") {
 				@Override
 				public void execute() {
 					ContentEntity.startAnimation(player, - 1);
@@ -143,7 +142,7 @@ public class Barrows3 implements ContentTemplate {
 			player.getExtraData().remove(BROTHERS_KILLED_KEY);
 			player.getExtraData().remove(KILLSCOUNT_KEY);
 			player.getExtraData().remove(BROTHER_TARGET);
-			World.getWorld().submit(new Event(2000) {
+			World.submit(new Task(2000) {
 				@Override
 				public void execute() {
 					Magic.teleport(player, Edgeville.LOCATION, true);
@@ -169,7 +168,7 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public void clickStairs(final Player player, final int id) {
-		World.getWorld().submit(new Event(600) {
+		World.submit(new Task(600) {
 			@Override
 			public void execute() {
 				switch(id) {
@@ -199,7 +198,6 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public void killNpc(Player client, int id) {
-		System.out.println("Id killed: " + id);
 		int killsInt = client.getExtraData().getInt(BROTHERS_KILLED_KEY);
 		boolean[] killedbrothers = intToBoolArray(killsInt, 6);
 		killedbrothers[id - Barrows.AHRIM] = true;
@@ -263,11 +261,11 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	public static void confirmCoffinTeleport(final Player player) {
-		World.getWorld().submit(new Event(100) {
+		World.submit(new Task(100) {
 			@Override
 			public void execute() {
 				ContentEntity.teleport(player, 3551, 9692, 0);
-				NPC n = World.getWorld().getNPCManager().addNPC(3553, 9694, 0, player.getExtraData().getInt(BROTHER_TARGET), - 1);
+				NPC n = NPCManager.addNPC(3553, 9694, 0, player.getExtraData().getInt(BROTHER_TARGET), - 1);
 				n.forceMessage("You dare disturb my slumber!!");
 				n.agressiveDis = 7;
 				n.ownerId = player.getIndex();
@@ -287,11 +285,11 @@ public class Barrows3 implements ContentTemplate {
 				return true;
 			}
 			if(! client.hasTarget()) {
-				//spawn npc
-				NPC n = World.getWorld().getNPCManager().addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
+				NPC n = NPCManager.addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
 				n.forceMessage("You dare disturb my slumber!");
 				n.agressiveDis = 7;
 				n.ownerId = client.getIndex();
+				World.register(n);
 				client.setHasTarget(true);
 			}
 		}

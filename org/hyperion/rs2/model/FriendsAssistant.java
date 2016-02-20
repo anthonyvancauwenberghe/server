@@ -18,7 +18,7 @@ public class FriendsAssistant {
 	}
 
 	public static void refreshGlobalList(Player p, boolean offline) {//login method, send all players online for everyone else not u
-		for(Player c : World.getWorld().getPlayers()) {
+		for(Player c : World.getPlayers()) {
 			if(c == null || c == p)
 				continue;
 			if(c.getFriends().contains(p.getNameAsLong()) && !isIgnore(p, c.getNameAsLong())) {
@@ -38,7 +38,7 @@ public class FriendsAssistant {
 	public static void sendPm(Player p, long to, byte[] chatText, int chatTextSize) {
         if(p == null)
             return;
-		for(Player c : World.getWorld().getPlayers()) {
+		for(Player c : World.getPlayers()) {
 			if(c == null)
 				continue;
 			if(c.getNameAsLong() == to) {
@@ -59,7 +59,7 @@ public class FriendsAssistant {
 		}
         final String text = TextUtils.pmText(chatTextSize, chatText);
         final String fromName = NameUtils.longToName(from);
-        final Player fromPlayer = World.getWorld().getPlayer(fromName);
+        final Player fromPlayer = World.getPlayerByName(fromName);
 		if(fromPlayer == null)
 			return;
 		fromPlayer.getLogManager().add(LogEntry.privateChat(fromName, p.getName(), text));
@@ -68,7 +68,7 @@ public class FriendsAssistant {
 	}
 
 	public static void updateList(Player p, long friend) {
-		for(Player c : World.getWorld().getPlayers()) {
+		for(Player c : World.getPlayers()) {
 			if(c == null)
 				continue;
 			if(c.getNameAsLong() == friend && c.chatStatus[1] != 2 && (c.getFriends().contains(p.getNameAsLong()) || c.chatStatus[1] == 0) && ! isIgnore(c, p.getNameAsLong())) {
@@ -96,13 +96,13 @@ public class FriendsAssistant {
 
 
 	public static void addIgnore(Player p, long friend) {
-		p.ignores.add(friend);
+		p.getIgnores().add(friend);
 		updateList(p, friend);
 		refreshGlobalList(p, false);
 	}
 
 	public static void removeIgnore(Player p, long friend) {
-		p.ignores.remove(friend);
+		p.getIgnores().remove(friend);
 		updateList(p, friend);
 		refreshGlobalList(p, false);
 	}
@@ -114,7 +114,7 @@ public class FriendsAssistant {
 
 
 	public static boolean isIgnore(Player p, long ingore) {
-		for(long ingore2 : p.ignores) {
+		for(long ingore2 : p.getIgnores()) {
 			if(ingore == ingore2)
 				return true;
 		}

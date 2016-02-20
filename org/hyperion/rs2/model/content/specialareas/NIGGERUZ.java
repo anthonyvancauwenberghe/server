@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.content.specialareas;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.Equipment;
 
 import java.util.List;
 import java.util.Map;
@@ -58,11 +57,11 @@ public abstract class NIGGERUZ extends SpecialArea {
 
     }
 
-    public void initNpc(final NPCManager manager, final Map positionMap) {
+    public void initNpc(final Map positionMap) {
 
         NPCDefinition nD = NPCDefinition.forId(495);
-        NPC n = manager.addNPC(getDefaultLocation().transform(-1, -2, 0), 495, -1);
-        World.getWorld().npcsWaitingList.add(n);
+        NPC n = NPCManager.addNPC(getDefaultLocation().transform(-1, -2, 0), 495, -1);
+        World.register(n);
         positionMap.put(n.getLocation().getX() * 16 +
                 n.getLocation().getY() * 4, n);
 

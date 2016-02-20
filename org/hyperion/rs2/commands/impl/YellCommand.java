@@ -1,16 +1,15 @@
 package org.hyperion.rs2.commands.impl;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
-
-import java.util.LinkedList;
 
 public class YellCommand extends Command {
 
@@ -74,10 +73,10 @@ public class YellCommand extends Command {
 		input = PushMessage.filteredString(input);
 		input = input.replaceAll("tradereq", "").replaceAll("duelreq", "").replaceAll(":clan:", "");
 
-		long yellMilliseconds = (long)(System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur"));
+		long yellMilliseconds = System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur");
 		long yellDelay = getYellDelay(player);
 
-		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
+		if(!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
 			if((player.getSkills().getTotalLevel() >= 1800 || player.getPoints().getEloPeak() >= 1800) || Rank.hasAbility(player, Rank.SUPER_DONATOR) || Rank.hasAbility(player, Rank.DONATOR)) {
 				if(yellMilliseconds < getYellDelay(player)) {
 					player.sendMessage("Please wait " + (int) ((yellDelay - yellMilliseconds) / 1000) + " seconds before yelling.");
@@ -103,9 +102,9 @@ public class YellCommand extends Command {
 		final String suffixWithoutTitles = (player.hardMode() ? "[I]" : "") + "[" + colors + Rank.getPrimaryRank(player).toString() + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
 		input = input.replaceFirst("yell ", "");
 		input = TextUtils.ucFirst(input);
-		if(!Rank.isStaffMember(player) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
-			World.getWorld().submit(
-					new Event(yellDelay) {
+		if(!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
+			World.submit(
+					new Task(yellDelay) {
 						public void execute() {
 							player.sendMessage("[B] Nab: Hey " + player.getSafeDisplayName() + ", you can yell again!");
 							stop();
@@ -117,11 +116,11 @@ public class YellCommand extends Command {
 		/**
 		 * {@link org.hyperion.rs2.util.PushMessage}
 		 */
-		for(Player other : World.getWorld().getPlayers()) {
+		for(Player other : World.getPlayers()) {
 			if(other != null) {
-				if(!other.getPermExtraData().getBoolean("disabledYell")) {
+				if(!Lock.isEnabled(other, Lock.YELL)) {
 					String message;
-					if (!other.getPermExtraData().getBoolean("disabledYellTitles")) {
+					if (!Lock.isEnabled(other, Lock.YELL_TITLES)) {
 						message = suffix + input;
 					} else {
 						message = suffixWithoutTitles + input;

@@ -9,14 +9,12 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.combat.SpecialAttacks;
 import org.hyperion.rs2.model.combat.summoning.SummoningSpecial;
 import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.Container.Type;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
 import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.sets.SetHandler;
 import org.hyperion.rs2.net.Packet;
@@ -59,8 +57,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
 
 	public static void handle(Player player, int button) {
 
-		if(World.getWorld().getContentManager()
-				.handlePacket(0, player, button, - 1, - 1, - 1))
+		if(ContentManager.handlePacket(0, player, button, - 1, - 1, - 1))
 			return;
         if(button >= 31421 && button <= 31426)
 		    if(SetHandler.handleSet(player, button))
@@ -112,150 +109,25 @@ public class ActionButtonPacketHandler implements PacketHandler {
 				player.getActionSender().removeAllInterfaces();
 				break;
 			case - 28489:
-				//TODO
 				player.getActionSender().sendSidebarInterface(13, 31000);
 				break;
 			case 31054:
 				player.getActionSender().sendSidebarInterface(13, 6299);
-				//TODO
-				break;
-			case 28133:
-			case 28134:
-			case 28135:
-			case 28136:
-			case 28137:
-			case 28138:
-			case 28139:
-			case 28140:
-			case 28141:
-			case 28142:
-			case 28143:
-			case 28144:
-			case 28145:
-			case 28146:
-			case 28147:
-			case 28148:
-			case 28149:
-			case 28150:
-			case 28151:
-			case 28152:
-			case 28153:
-			case 28154:
-			case 28155:
-			case 28156:
-			case 28157:
-			case 28158:
-			case 28159:
-			case 28160:
-			case 28161:
-			case 28162:
-			case 28163:
-			case 28164:
-			case 28165:
-			case 28166:
-			case 28167:
-			case 28168:
-			case 28169:
-			case 28170:
-			case 28171:
-			case 28172:
-			case 28173:
-			case 28174:
-			case 28175:
-			case 28176:
-			case 28177:
-			case 28178:
-			case 28179:
-			case 28180:
-			case 28181:
-			case 28182:
-				GrandExchangeV2.buyItem(player, button);
 				break;
 			case 28003:
 				player.getActionSender().removeAllInterfaces();
-				break;
-			case 29045:
-			case 28511:
-				GrandExchangeV2.claimMoney(player);
-				break;
-			case 29036:
-				if(player.getExtraData().get("geitemid") == null || player.getExtraData().get("geitemslot") == null) {
-					player.getActionSender().sendMessage("You must select an item first!");
-					break;
-				}
-				if(player.getExtraData().get("geitemam") == null) {
-					player.getActionSender().sendMessage("You must set an amount first!");
-					break;
-				}
-				if(player.getExtraData().get("geitemprice") == null) {
-					player.getActionSender().sendMessage("You must set a price first!");
-					break;
-				}
-
-				GrandExchangeV2.addItem(player,
-						(Integer) player.getExtraData().get("geitemid"),
-						(Integer) player.getExtraData().get("geitemam"),
-						(Integer) player.getExtraData().get("geitemslot"),
-						(Integer) player.getExtraData().get("geitemprice"));
 				break;
 
             case 24589:
                 player.sendMessage("Attempting to join event...");
                 Events.joinEvent(player);
                 break;
-			case 28504:
-				//player.getActionSender().showInterface(29000);
-				GrandExchangeV2.resetSellInterface(player);
-				player.getActionSender().sendString(29010, "Total Listed Items: " + GrandExchangeV2.playerNameList.size());
-				int moneyCount = 0;
-				if(GrandExchangeV2.moneyOwed.get(player.getNameAsLong()) != null)
-					moneyCount = GrandExchangeV2.moneyOwed.get(player.getNameAsLong());
-				player.getActionSender().sendString(29012, "Money in Collection Box: " + moneyCount);
-				player.getActionSender().sendUpdateItems(3823,
-						new Container(Type.STANDARD, 28).toArray());
-				player.getActionSender().sendInterfaceInventory(29000, 29500);
-				break;
 			case 29006:
 				//GrandExchangeV2.openGE(player);
 				break;
 			case 29040:
 				player.getExtraData().put("geshop", 1);
-				player.getActionSender().sendUpdateItems(3823,
-						player.getInventory().toArray());
-				break;
-			case 29025:
-				player.getExtraData().put("geitemprice",
-						(Integer) player.getExtraData().get("geitemprice") + 1000);
-				GrandExchangeV2.setPrice(player, (Integer) player.getExtraData().get("geitemprice"));
-				break;
-			case 29024:
-				player.getExtraData().put("geitemprice",
-						(Integer) player.getExtraData().get("geitemprice") - 1000);
-				GrandExchangeV2.setPrice(player, (Integer) player.getExtraData().get("geitemprice"));
-				break;
-			case 29030:
-				GrandExchangeV2.setPrice(player);
-				break;
-			case 29023:
-				player.getExtraData().put("geitemam",
-						(Integer) player.getExtraData().get("geitemam") + 1);
-				GrandExchangeV2.setAmount(player, (Integer) player.getExtraData().get("geitemam"));
-				break;
-			case 29022:
-				player.getExtraData().put("geitemam",
-						(Integer) player.getExtraData().get("geitemam") - 1);
-				GrandExchangeV2.setAmount(player, (Integer) player.getExtraData().get("geitemam"));
-				break;
-			case 29026:
-				GrandExchangeV2.setAmount(player);
-				break;
-			case 28014:
-			case 28018:
-				GrandExchangeV2.upPage(player);
-				break;
-			case 28012:
-			case 28016:
-				GrandExchangeV2.downPage(player);
+				player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 				break;
 			case 2461:
 			case 8209:
@@ -1034,6 +906,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
             case 17023: //dismiss
 				player.SummoningCounter = 0;
                 player.getActionSender().sendSidebarInterface(16, -1);
+				World.resetSummoningNpcs(player);
 				player.getActionSender().sendMessage("You dismiss your familiar.");
 				break;
             case 17038:

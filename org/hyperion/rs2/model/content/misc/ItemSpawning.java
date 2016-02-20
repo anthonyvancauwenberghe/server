@@ -1,15 +1,14 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc2.Dicing;
@@ -132,7 +131,7 @@ public class ItemSpawning {
             return false;
         if(player.getLocation().inDungeonLobby())
             return false;
-        if(World.getWorld().getContentManager().handlePacket(ClickType.OBJECT_CLICK1
+        if(ContentManager.handlePacket(ClickType.OBJECT_CLICK1
                 , player, ClickId.CAN_TELEPORT))
             return false;
         if((player.cE.getAbsX() >= 2500 && player.cE.getAbsY() >= 4630 &&
@@ -154,10 +153,8 @@ public class ItemSpawning {
             if(msg)player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");
             return false;
         }
-        if(FightPits.inPits(player))
-            return false;
-        return true;
-    }
+		return !FightPits.inPits(player);
+	}
 	/**
 	 * Checks whether an item can be spawned.
 	 *
@@ -216,11 +213,11 @@ public class ItemSpawning {
 			case 5023:
 			case 10566:
 			case 10637:
-				return "This item can only be purchased in the " + Server.NAME + " points shop.";
+				return "This item can only be purchased in the " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points shop.";
 		}
 		for(String forbiddenName : PKPOINTS_NAMES) {
 			if(itemName.contains(forbiddenName))
-				return "This item can only be purchased in the " + Server.NAME + " points shop.";
+				return "This item can only be purchased in the " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points shop.";
 		}
 		/**
 		 * Forbidden Items. eg Zaniks Crate

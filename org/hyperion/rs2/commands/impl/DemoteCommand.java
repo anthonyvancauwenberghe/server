@@ -14,7 +14,7 @@ public class DemoteCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
 		input = filterInput(input);
-		Player beingDemoted = World.getWorld().getPlayer(input);
+		Player beingDemoted = World.getPlayerByName(input);
 
 		if(beingDemoted != null) {
             if(Rank.getPrimaryRankIndex(beingDemoted) > Rank.getPrimaryRankIndex(player)) {
@@ -26,7 +26,6 @@ public class DemoteCommand extends Command {
 					continue;
 				beingDemoted.setPlayerRank(Rank.removeAbility(beingDemoted, rank));
 			}
-            beingDemoted.getQuestTab().sendRankInfo();
 
             player.getActionSender().sendMessage(beingDemoted.getName()+" is demoted. current abilities:");
             for(Rank rank : Rank.values()) {

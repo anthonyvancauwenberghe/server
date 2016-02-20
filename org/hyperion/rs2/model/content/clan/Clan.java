@@ -42,9 +42,7 @@ public class Clan {
 	}
 
 	public boolean isFull() {
-		if(players.size() >= MAX_CLAN_MEMBERS)
-			return true;
-		return false;
+		return players.size() >= MAX_CLAN_MEMBERS;
 	}
 
 	public String getName() {
@@ -103,7 +101,7 @@ public class Clan {
 	}
 
 	public boolean isKicked(String name) {
-        final Player player = World.getWorld().getPlayer(name);
+        final Player player = World.getPlayerByName(name);
         if(player != null && peopleKicked.contains(player.getShortIP()))
             return true;
         return peopleKicked.contains(name);
@@ -113,7 +111,7 @@ public class Clan {
         if(!peopleKicked.contains(name))
             return false;
         peopleKicked.remove(name);
-        final Player player = World.getWorld().getPlayer(name);
+        final Player player = World.getPlayerByName(name);
         if(player != null)
             peopleKicked.remove(player.getShortIP());
         else {

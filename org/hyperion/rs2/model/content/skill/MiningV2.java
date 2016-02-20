@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -252,7 +252,7 @@ public class MiningV2 implements ContentTemplate {
 		if(cycle2 <= 1)
 			cycle2 = 2;
 		final int cycle = cycle2;
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			int cycleCount = cycle;
 
 			@Override
@@ -287,12 +287,12 @@ public class MiningV2 implements ContentTemplate {
 						if(Edgeville.LOCATION.distance(Location.create(x, y, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(x, y, 0)) > 70) {
 							final GameObject blank_rock = new GameObject(GameObjectDefinition.forId(450), l, 10, 0);
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
-							World.getWorld().getObjectMap().addObject(blank_rock);
+							ObjectManager.addObject(blank_rock);
 							rockLocationStatus.put(l, 1);
-							World.getWorld().submit(new Event(rock.respawn * 1000) {
+							World.submit(new Task(rock.respawn * 1000) {
 								@Override
 								public void execute() {
-									World.getWorld().getObjectMap().replace(blank_rock, new_rock);
+									ObjectManager.replace(blank_rock, new_rock);
 									rockLocationStatus.remove(l);
 									this.stop();
 								}

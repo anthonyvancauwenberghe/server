@@ -1,10 +1,7 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.engine.task.Task;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
@@ -92,7 +89,7 @@ public class RecipeForDisaster implements ContentTemplate {
 	}
 
 	public void spawnWave(final Player player, final int rfdlevel) {
-		World.getWorld().submit(new Event(5000) {
+		World.submit(new Task(5000) {
 			public void execute() {
 				spawnNpc(WAVES[rfdlevel], getLocation(), player);
 				this.stop();
@@ -101,9 +98,7 @@ public class RecipeForDisaster implements ContentTemplate {
 	}
 
 	public NPC spawnNpc(int npcid, Location location, Player player) {
-		NPC npc = World
-				.getWorld()
-				.getNPCManager()
+		NPC npc = NPCManager
 				.addNPC(location.getX(), location.getY(), location.getZ(),
 						npcid, - 1);
 		npc.agressiveDis = 150;
@@ -119,9 +114,6 @@ public class RecipeForDisaster implements ContentTemplate {
 		if(player.getLocation().getX() > 2000 || player.getLocation().getX() < 1800) {
 			return false;
 		}
-		if(player.getLocation().getY() > 5400 || player.getLocation().getY() < 5300) {
-			return false;
-		}
-		return true;
+		return !(player.getLocation().getY() > 5400 || player.getLocation().getY() < 5300);
 	}
 }

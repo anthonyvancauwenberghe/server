@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.combat.EloRating;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -96,7 +96,6 @@ public class PlayerPoints {
             } else
                 player.setPlayerRank(Rank.addAbility(player, newRank));
         }
-        player.getQuestTab().updateQuestTab();
     }
 
     /**
@@ -134,12 +133,11 @@ public class PlayerPoints {
                 writer.flush();
                 writer.close();
             } catch (Exception ex) {
-                System.out.println("Error saving donor points change: " + ex);
+                System.out.println("Error savingnew donor points change: " + ex);
             }
         }
         player.getExpectedValues().changeDeltaOther("Donator points added", amount);
         player.sendServerMessage("You have been given " + amount + " donator points.");
-        player.getQuestTab().sendDonatePoints();
     }
 
     public void checkDonator() {
@@ -165,7 +163,6 @@ public class PlayerPoints {
     public void setDonatorPoints(int am) {
         player.getExpectedValues().changeDeltaOther("Donator points set", am - donatorPoints);
         donatorPoints = am;
-        player.getQuestTab().sendDonatePoints();
     }
 
     public void setDonatorsBought(int am) {
@@ -177,7 +174,6 @@ public class PlayerPoints {
      */
     public void setHonorPoints(int value) {
         this.honorPoints = value;
-        player.getQuestTab().sendHonorPoints();
     }
 
     /**
@@ -186,7 +182,6 @@ public class PlayerPoints {
     public void setVotingPoints(int points) {
         player.getExpectedValues().changeDeltaOther("Voting points set", points - votingPoints);
         votingPoints = points;
-        player.getQuestTab().sendVotePoints();
     }
 
     public void increaseVotingPoints(int times) {
@@ -200,7 +195,6 @@ public class PlayerPoints {
         player.getExpectedValues().changeDeltaOther("Voting points added", toAdd);
         player.sendServerMessage("Your voting points have been increased by " +
                 toAdd + ", you now have " + votingPoints + " voting points!");
-        player.getQuestTab().sendVotePoints();
     }
 
 
@@ -221,7 +215,6 @@ public class PlayerPoints {
      */
     public void setPkPoints(int points) {
         pkPoints = points;
-        player.getQuestTab().sendPkPoints();
     }
 
     public void increasePkPoints(int points) {
@@ -231,8 +224,7 @@ public class PlayerPoints {
     public void increasePkPoints(int points, boolean message) {
         pkPoints += points;
         if (message)
-            player.sendPkMessage("Your " + Server.NAME + " points have been increased by " + points + "!");
-        player.getQuestTab().sendPkPoints();
+            player.sendPkMessage("Your " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points have been increased by " + points + "!");
     }
 
     public void loginCheck() {
@@ -253,7 +245,6 @@ public class PlayerPoints {
                 honorPoints += (int) (reward);
 
                 player.sendPkMessage("You have been awarded " + (int) reward + " honor points!");
-                player.getQuestTab().sendHonorPoints();
                 player.setLastHonorPointsReward(System.currentTimeMillis());
             }
         } else if (delta > (Time.ONE_DAY * 1.5)) {
@@ -262,10 +253,8 @@ public class PlayerPoints {
             if (honorPoints < 0)
                 honorPoints = 0;
             player.sendPkMessage("You've lost honor points due to inactivity!");
-            player.getQuestTab().sendHonorPoints();
             player.setLastHonorPointsReward(System.currentTimeMillis());
         }
-        player.getValueMonitor().setStartValues(player.getAccountValue().getTotalValue(), player.getAccountValue().getPkPointValue());
     }
 
     public void setEloPeak(int elo) {

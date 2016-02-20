@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.itf.impl;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.content.ticket.TicketManager;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.Packet;
 
@@ -17,10 +17,8 @@ public class PendingRequests extends Interface {
     }
 
     public void handle(final Player player, final Packet pkt) {
-
-        World.getWorld().getTicketManager().display(player);
+        TicketManager.display(player);
         player.write(Interface.createStatePacket(SHOW, 3));
-
     }
 
 }

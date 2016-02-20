@@ -54,7 +54,6 @@ public final class BountyPerkHandler {
 		if(player.getBountyHunter().getKills() >= player.getBHPerks().calcNextPerkCost()) {
 			player.getBountyHunter().setKills(player.getBountyHunter().getKills() - player.getBHPerks().calcNextPerkCost());
 			player.getBHPerks().upgradePerk(perk);
-			player.getQuestTab().updateQuestTab();
 		} else {
 			player.sendMessage("You don't have enough BH points for this!");
 		}

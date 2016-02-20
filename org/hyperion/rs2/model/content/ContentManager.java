@@ -1,30 +1,25 @@
 package org.hyperion.rs2.model.content;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.util.ClassUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ContentManager {
 	
-	public ContentTemplate prayer = null;//key classes like this may be nessary for skills like this
-	private ZombieMinigame zombieMinigame;
-	public ZombieMinigame getZombieMinigame() {
-		return zombieMinigame;
-	}
+	public static ContentTemplate prayer = null;//key classes like this may be nessary for skills like this
 
-	public void init() {
+	public static void init() {
 		try {
-			for(int i = 0; i < packetHandlers; i++) {
+			for(int i = 0; i < PACKET_HANDLERS; i++) {
 				contentMaps[i] = null;
-				contentMaps[i] = new HashMap<Integer, ContentTemplate>();
+				contentMaps[i] = new HashMap<>();
 			}
 			addContent();
 		} catch(Exception e) {
@@ -32,7 +27,7 @@ public class ContentManager {
 		}
 	}
 
-	public void addContent() {
+	public static void addContent() {
 		try {
 			Class[] classes = ClassUtils.getClasses("org.hyperion.rs2.model.content");
 			for(Class cls : classes) {
@@ -44,15 +39,12 @@ public class ContentManager {
                         }
                         if(content instanceof SpecialArea || SpecialArea.class.isAssignableFrom(cls)) {
                             SpecialAreaHolder.put(cls.getSimpleName(), (SpecialArea)content, true);
-                            System.err.println("HIT "+cls.getSimpleName() + " TO ADD CONTENT SPECIAL AREA");
                         }
 						if(cls.getName().contains("prayer"))
 							prayer = content;
-						if(cls.getName().contains("zombieminigame"))
-							zombieMinigame = (ZombieMinigame)content;
 
 						content.init();
-						for(int i = 0; i < packetHandlers; i++) {
+						for(int i = 0; i < PACKET_HANDLERS; i++) {
 							int[] j = content.getValues(i);
 							if(j != null) {
 								addListener(content, i, j);
@@ -70,10 +62,10 @@ public class ContentManager {
 		}
 	}
 
-	public final int packetHandlers = 23;
+	public final static int PACKET_HANDLERS = 23;
 
 	@SuppressWarnings("unchecked")
-	public Map<Integer, ContentTemplate>[] contentMaps = new Map[packetHandlers];
+	public static Map<Integer, ContentTemplate>[] contentMaps = new Map[PACKET_HANDLERS];
 
 	/**
 	 * mapId - packet
@@ -105,18 +97,18 @@ public class ContentManager {
 	public static final int OBJECT_CLICK1 = 6;
 	public static final int OBJECT_CLICK2 = 7;
 
-	public void addListener(ContentTemplate cT, int type, int[] ids) {
-		for(int i = 0; i < ids.length; i++) {
-			contentMaps[type].put(ids[i], cT);
+	public static void addListener(ContentTemplate cT, int type, int[] ids) {
+		for(int id : ids) {
+			contentMaps[type].put(id, cT);
 		}
 	}
-	public boolean handlePacket(int type, Player player, int id) {
+	public static boolean handlePacket(int type, Player player, int id) {
 		return handlePacket(type, player, id, -1, -1, -1);
 	}
-	public boolean handlePacket(int type, Player player, int id, int b, int c, int d) {
-		if(type > packetHandlers - 1)
+	public static boolean handlePacket(int type, Player player, int id, int b, int c, int d) {
+		if(type > PACKET_HANDLERS - 1)
 			return false;
-		ContentTemplate a = (ContentTemplate) contentMaps[type].get(id);
+		ContentTemplate a = contentMaps[type].get(id);
 		if(a != null) {
 			return a.clickObject(player, type, id, b, c, d);
 		} else {

@@ -1,16 +1,15 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.combat.Combat;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class Wilderness {
-    /*Misc methods to do with wilderness, mage bank, obelisks etc*/
-
-	public Wilderness() {
-	}
 
 	public static class Obelisk {
 		public int[] x = new int[4];
@@ -22,9 +21,9 @@ public class Wilderness {
 		}
 	}
 
-	public List<Obelisk> obelisks = new LinkedList<Obelisk>();
+	public static List<Obelisk> obelisks = new LinkedList<Obelisk>();
 
-	public void useObelisk(final Player player, int x, int y) {
+	public static void useObelisk(final Player player, int x, int y) {
 		final Obelisk o = useObelisk(x, y);
 		if(o == null)
 			return;
@@ -45,7 +44,7 @@ public class Wilderness {
 		final int maxX = maxX2;
 		final int maxY = maxY2;
 		final Obelisk o2 = randomObelisk();
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Task(3000) {
 			public int timer = 2;
 
 			@Override
@@ -62,7 +61,7 @@ public class Wilderness {
 					createGfx(player, 343, player.getLocation().getX(), player.getLocation().getY());
 				} else if(timer == 1) {
 					for(int j = 0; j < 4; j++) {
-						World.getWorld().getObjectMap().removeObject(list2[j]);
+						ObjectManager.removeObject(list2[j]);
 					}
 					for(Player p : player.getLocalPlayers()) {
 						tele(o2, p, minX, minY, maxX, maxY);
@@ -71,7 +70,7 @@ public class Wilderness {
 					tele(o2, player, minX, minY, maxX, maxY);
 					//reset the oblisks
 					for(int i = 0; i < 4; i++) {
-						World.getWorld().getObjectMap().removeObject(replaceGlobalObject(o.x[i], o.y[i], 14826, - 1, 10));
+						ObjectManager.removeObject(replaceGlobalObject(o.x[i], o.y[i], 14826, - 1, 10));
 					}
 					this.stop();
 				}
@@ -81,14 +80,14 @@ public class Wilderness {
 		list = null;
 	}
 
-	public void createGfx(Player player, int id, int x, int y) {
+	public static void createGfx(Player player, int id, int x, int y) {
 		for(Player p : player.getLocalPlayers()) {
 			p.getActionSender().sendStillGraphics(id, 0, y, x, 50);
 		}
 		player.getActionSender().sendStillGraphics(id, 0, y, x, 50);
 	}
 
-	public void tele(final Obelisk o2, Player p, int minX, int minY, int maxX, int maxY) {
+	public static void tele(final Obelisk o2, Player p, int minX, int minY, int maxX, int maxY) {
 		//System.out.println("x: "+minX+" y: "+minY +" x2: "+maxX+" y2: "+maxY);
 		if(p.getLocation().getX() > minX && p.getLocation().getX() < maxX) {
 			if(p.getLocation().getY() > minY && p.getLocation().getY() < maxY) {
@@ -107,13 +106,13 @@ public class Wilderness {
 		}
 	}
 
-	public GameObject replaceGlobalObject(int x, int y, int id, int face, int type) {
+	public static GameObject replaceGlobalObject(int x, int y, int id, int face, int type) {
 		GameObject gO = new GameObject(GameObjectDefinition.forId(id), Location.create(x, y, 0), type, face);
-		World.getWorld().getObjectMap().addObject(gO);
+		ObjectManager.addObject(gO);
 		return gO;
 	}
 
-	public Obelisk useObelisk(int x, int y) {
+	public static Obelisk useObelisk(int x, int y) {
 		for(Obelisk o : obelisks) {
 			for(int i = 0; i < 4; i++) {
 				if(o.x[i] == x && o.y[i] == y) {
@@ -124,7 +123,7 @@ public class Wilderness {
 		return null;
 	}
 
-	public Obelisk randomObelisk() {
+	public static Obelisk randomObelisk() {
 		int r = Combat.random(obelisks.size() - 1);
 		int i = 0;
 		for(Obelisk o : obelisks) {
@@ -135,7 +134,7 @@ public class Wilderness {
 		return null;
 	}
 
-	public void init() {
+	public static void init() {
 		int[] x = {3305, 3305, 3309, 3309,};
 		int[] y = {3914, 3918, 3918, 3914,};
 		obelisks.add(new Obelisk(x, y));
@@ -154,5 +153,7 @@ public class Wilderness {
 		int[] x6 = {3033, 3033, 3037, 3037,};
 		int[] y6 = {3730, 3734, 3730, 3734,};
 		obelisks.add(new Obelisk(x6, y6));
+		if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+			Server.getLogger().log(Level.INFO, "Wilderness has successfully loaded.");
 	}
 }

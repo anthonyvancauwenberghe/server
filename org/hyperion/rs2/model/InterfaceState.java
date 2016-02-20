@@ -1,16 +1,12 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchange;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 
 import java.util.ArrayList;
@@ -186,9 +182,6 @@ public class InterfaceState {
 			if(amount <= 0)
 				return;
 			switch(enterAmountInterfaceId) {
-				case GrandExchange.GEInterfaceId:
-					//World.getWorld().getGrandExchange().addItem(player, enterAmountId, ((Integer) player.getExtraData().get("geamount")), enterAmountSlot, amount);
-					break;
 				case BoB.PLAYER_INVENTORY_INTERFACE:
 					BoB.deposit(player, enterAmountSlot, enterAmountId, amount);
 					break;
@@ -253,18 +246,9 @@ public class InterfaceState {
 				case Bank.DEPOSIT_INVENTORY_INTERFACE:
 					Bank.deposit(player, enterAmountSlot, enterAmountId, amount, true);
 					break;
-				case 28000://GEIntergace
-					GrandExchangeV2.buyItem(player, enterAmountId, enterAmountSlot, amount);
-					break;
-				case 29000://GEIntergace
-					if(enterAmountId == 0)
-						GrandExchangeV2.setAmount(player, amount);
-					else if(enterAmountId == 1)
-						GrandExchangeV2.setPrice(player, amount);
-					break;
 				case ShopManager.SHOP_INVENTORY_INTERFACE:
 					if(enterAmountSlot >= 0 && player.getShopId() == - 2) {
-						//World.getWorld().getGrandExchange().buyItem(player, enterAmountId, amount, player.geItem[enterAmountSlot].getName(),enterAmountSlot);
+						//World.getGrandExchange().buyItem(player, enterAmountId, amount, player.geItem[enterAmountSlot].getName(),enterAmountSlot);
 					} else if(enterAmountSlot >= 0 && enterAmountSlot < ShopManager.SIZE) {
 						ShopManager.buyItem(player, enterAmountId, enterAmountSlot, amount);
 					}
@@ -310,9 +294,9 @@ public class InterfaceState {
 	}
 
 
-	public void setStringListener(String listener) {
+	public void setStringListener(String listener, String message) {
 		this.string_input_listener = listener;
-		player.getActionSender().sendEnterStringInterface();
+		player.getActionSender().sendEnterStringInterface(message);
 	}
 
 	public String string_input_listener = "";
@@ -324,93 +308,6 @@ public class InterfaceState {
 		result = result.replaceAll("_"," ");
 		final String finalResult = result;
 		switch (string_input_listener) {
-			case "doublecharinstant":
-				if(player.doubleChar()) {
-					boolean allowed = true;
-					if(MergedSaving.exists(result)) {
-						allowed = false;
-					}
-					if(!NameUtils.isValidName(result)) {
-						allowed = false;
-					}
-					if(allowed) {
-						boolean success = MergedSaving.renameInstant(player.getName(), result);
-						if(success) {
-							System.out.println("Successfully renamed instant file");
-							player.getSession().close(false);
-						} else {
-							System.out.println("Failed to rename instant file");
-						}
-					} else {
-						DialogueManager.openDialogue(player, 513);
-					}
-				}
-				return true;
-			case "doublecharartero":
-				if(player.doubleChar()) {
-					boolean allowed = true;
-					if(MergedSaving.exists(result)) {
-						allowed = false;
-					}
-					if(!NameUtils.isValidName(result)) {
-						allowed = false;
-					}
-					if(allowed) {
-
-						boolean success = MergedSaving.renameArtero(player.getName(), result);
-						if(success) {
-							System.out.println("Succesfully renamed artero file");
-							player.getSession().close(false);
-						} else {
-							System.out.println("Failed to rename artero file");
-						}
-
-					} else {
-						DialogueManager.openDialogue(player, 514);
-					}
-				}
-				return true;
-			case "namechange":
-				if(player.needsNameChange()) {
-					boolean allowed = true;
-					if(MergedSaving.exists(result)) {
-						allowed = false;
-					}
-					if(!NameUtils.isValidName(result)) {
-						allowed = false;
-					}
-					if(allowed) {
-						String rename = player.getExtraData().getString("rename");
-						if(rename != null) {
-							if(rename.equalsIgnoreCase(result)) {
-								boolean success = false;
-								if(player.getSource() == GenericWorldLoader.ARTERO) {
-									success = MergedSaving.cleanArteroFile(player.getName());
-								} else if(player.getSource() == GenericWorldLoader.INSTANT) {
-									success = MergedSaving.cleanInstantFile(player.getName());
-								}
-								String initialName = player.getName();
-								if(success) {
-									player.setName(result);
-									player.display = result;
-									player.getActionSender().sendMessage("@blu@You've changed your name to: " + result);
-									player.setNeedsNameChange(false);
-									MergedSaving.save(player);
-								}
-								player.getSession().close(false);
-							} else {
-								DialogueManager.openDialogue(player, 406);
-							}
-						} else {
-							player.getExtraData().put("rename", result);
-							DialogueManager.openDialogue(player, 405);
-						}
-					} else {
-						DialogueManager.openDialogue(player, 403);
-					}
-				}
-
-				return true;
 			case "ge_set_quantity":
 				player.getGrandExchangeTracker().ifNewEntry(e -> {
 					try{
@@ -441,6 +338,12 @@ public class InterfaceState {
 						player.sendf("Invalid price");
 					}
 				}, "You are not building a new entry right now");
+				return true;
+			case "authenticator_confirmation":
+				PlayerAuthenticationGenerator.confirmAuthenticator(player, result);
+				return true;
+			case "authenticator_removal_confirmation":
+				PlayerAuthenticationGenerator.removeAuthenticator(player, result);
 				return true;
 			default:
 				return false;

@@ -3,9 +3,11 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
+import org.hyperion.rs2.model.content.ContentManager;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
 
@@ -16,7 +18,7 @@ public class NpcClickHandler {
 			player.getRandomEvent().display();
 			return;
 		}
-		if(slot < 0 || slot > World.getWorld().getNPCs().size() || type > 3)
+		if(slot < 0 || slot > World.getNpcs().size() || type > 3)
 			return;
 		switch(type) {
 			case 1:
@@ -34,7 +36,7 @@ public class NpcClickHandler {
 	private static void handleOption3(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
-		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		NPC npc = (NPC) World.getNpcs().get(slot);
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		switch(npc.getDefinition().getId()) {
@@ -62,23 +64,22 @@ public class NpcClickHandler {
 	private static void handleOption1(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
-		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		NPC npc = (NPC) World.getNpcs().get(slot);
 		// System.out.println("Id: "+slot);
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());
 		player.setInteractingEntity(npc);
-		if(World
-				.getWorld()
-				.getContentManager()
-				.handlePacket(10, player, npc.getDefinition().getId(),
+		if(ContentManager.handlePacket(10, player, npc.getDefinition().getId(),
 						npc.getLocation().getX(), npc.getLocation().getY(),
 						slot)) {
 			return;
 		}
 		npc.face(player.getLocation());
 		switch(npc.getDefinition().getId()) {
-
+			case 4375:
+				PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+				break;
             case 817:
                 if (player.getBank().contains(15352) || player.getInventory().contains(15352) || player.getEquipment().contains(15352)) {
                     player.sendMessage("You have already saved the thanks-giving!");
@@ -259,14 +260,11 @@ public class NpcClickHandler {
 	private static void handleOption2(Player player, int slot) {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
-		NPC npc = (NPC) World.getWorld().getNPCs().get(slot);
+		NPC npc = (NPC) World.getNpcs().get(slot);
 		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());
-		if(World
-				.getWorld()
-				.getContentManager()
-				.handlePacket(11, player, npc.getDefinition().getId(),
+		if(ContentManager.handlePacket(11, player, npc.getDefinition().getId(),
 						npc.getLocation().getX(), npc.getLocation().getY(),
 						slot))
 			return;

@@ -1,310 +1,286 @@
 package org.hyperion.rs2;
 
-import org.hyperion.rs2.model.Password;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerDetails;
-import org.hyperion.rs2.model.World;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.sun.javafx.beans.event.AbstractNotifyListener;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
+import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification.VerifyResponse;
+import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.net.LoginDebugger;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.net.PacketBuilder;
+import org.hyperion.rs2.savingnew.PlayerLoading;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
+import org.hyperion.util.ObservableCollection;
+import org.hyperion.util.Time;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Date;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.*;
+
+import static org.hyperion.rs2.LoginResponse.*;
+import static org.hyperion.rs2.model.Rank.ADMINISTRATOR;
 
 /**
- * An implementation of the <code>WorldLoader</code> class that saves players
- * in binary, gzip-compressed files in the <code>data/players/</code>
- * directory.
- *
- * @author Graham Edgecombe
+ * Created by Gilles on 6/02/2016.
  */
 public class GenericWorldLoader implements WorldLoader {
 
-	public static final int MERGED = 0;
-	public static final int ARTERO = 1;
-	public static final int INSTANT = 2;
+	/**
+	 * TEMP
+	 */
+	private final static Set<String> unlockedPlayers = new HashSet<>();
 
-	@Override
-	public LoginResult checkLogin(PlayerDetails pd) {
-		//System.out.println("Received pd login: " + pd.getName() + "/" + pd.getPassword());
-		int source = -1;
-		Player player = null;
-		int code = 2;
-		boolean needsNamechange = false;
-		boolean newcharacter = true;
-		boolean doublechar = false;
-		if(World.getWorld().updateInProgress()) {
-			code = LoginResult.UPDATE_IN_PROGRESS;
-			LoginDebugger.getDebugger().log("Update progress in  Genericworldloader");
-		} else if(PunishmentManager.getInstance().isBanned(pd.getName(), pd.IP.split(":")[0], pd.getUID(), pd.specialUid) || ConnectionHandler.blackList.containsKey(pd.IP)) {
-			code = 4;
-			LoginDebugger.getDebugger().log("Code 4 ban in Genericworldloader");
-		} else if(MergedSaving.exists(pd.getName())) {
-			String name = pd.getName();
-			newcharacter = false;
-			try {
-				//You will never reach this code if there's double name because one of them will be renamed before it can be saved
-				//An account that must be renamed will not be saved until the name is changed
-				if(MergedSaving.existsMain(name)) {
-					/*
-					 * Artero has become Merged and wants to Login with Artero -> Login and let him play
-					 * Artero has become Merged and wants to login with Instant -> Login and force to change name
-					 * Instant has become merged and wants to login with Artero -> Login and let him play
-					 * Instant has become merged adn wants to login with instant -> Login and force to change name
-					 */
-					Password pass = MergedSaving.getMainPass(name);
-					if(pass.getRealPassword() == null)
-						code = LoginResult.INVALID_USER_OR_PASS;
-					else if (!pass.getRealPassword().equalsIgnoreCase(/*EncryptionStandard.encrypt(*/pd.getPassword()))/*)*/ {
-						code = LoginResult.INVALID_USER_OR_PASS;
-					} else {
-						//MEANS everything went very well
-						source = MERGED;
-					}
+	private final static Set<String> unlockedRichPlayers = new HashSet<>();
 
-					if(code == LoginResult.INVALID_USER_OR_PASS) {
-						//Couldnt login on Merged, maybe it can login with Artero or Instant?
-						//Merge comes from one source so there have to be two sources for a conflict
+	public static Set<String> getUnlockedPlayers() {
+		return unlockedPlayers;
+	}
 
-						if(MergedSaving.existsArtero(name) && MergedSaving.existsInstant(name)) {
-							int arteroPriority = MergedSaving.getArteroPriority(name);
-							int instantPriority = MergedSaving.getInstantPriority(name);
-							if(instantPriority > arteroPriority) {
-								//The merge is from instant, let's check Artero
-								String passStr = MergedSaving.getArteroPass(name);
-								if(passStr != null && passStr.equalsIgnoreCase(pd.getPassword())) {
-									source = ARTERO;
-									code = LoginResult.SUCCESSFUL_LOGIN;
-									needsNamechange = true;
-								} else {
-									code = LoginResult.INVALID_USER_OR_PASS;
-								}
-							} else {
-								//The merge is from Artero, let's check Instant
-								pass = MergedSaving.getInstantPass(pd.getName());
-								if(pass.getSalt() != null && !pass.getSalt().equalsIgnoreCase("null")) {
-									//Encrypt pd pass
-									String encryptedPdPass = Password.encryptPassword(pd.getPassword(), pass.getSalt());
-									//Compare encrypted passwords
-									if(pass.getEncryptedPass().equalsIgnoreCase(encryptedPdPass)) {
-										source = INSTANT;
-										code = LoginResult.SUCCESSFUL_LOGIN;
-										needsNamechange = true;
-									} else {
-										code = LoginResult.INVALID_USER_OR_PASS;
-									}
-								} else {
-									if(pass.getRealPassword() == null)
-										code = LoginResult.INVALID_USER_OR_PASS;
-									else if (!pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
-										code = LoginResult.INVALID_USER_OR_PASS;
-									} else {
-										//MEANS everything went very well
-										source = INSTANT;
-										code = LoginResult.SUCCESSFUL_LOGIN;
-										needsNamechange = true;
-									}
-								}
-							}
-						}
+	public static Set<String> getUnlockedRichPlayers() {
+		return unlockedRichPlayers;
+	}
+	/**
+	 * END OF TEMP
+	 */
 
-					}
-				} else {
-					/*
-					 * There are 4 scenarios:
-					 * artero has priority, person logs in with artero acc -> load and let him play
-					 * artero has priority, person logs in with instant acc -> ask him to change his name
-					 * instant has priority, person logs in with artero acc  -> ask him to change his name
-					 * instant has priority, person logs in with instant acc -> load and let him play
-					 */
-					//determine which file has bigger priority
-					int arteroPriority = MergedSaving.getArteroPriority(name);
-					int instantPriority = MergedSaving.getInstantPriority(name);
-					//System.out.println("Instantprior: " + instantPriority + "/artero: " + arteroPriority);
-					boolean instant = instantPriority > arteroPriority;
-					if(instant) {
-						/*
-						 * First assume he logs in with InstantPk account
-						 */
-						Password pass = MergedSaving.getInstantPass(pd.getName());
-						if(pass.getSalt() != null && !pass.getSalt().equalsIgnoreCase("null")) {
-							//Encrypt pd pass
-							String encryptedPdPass = Password.encryptPassword(pd.getPassword(), pass.getSalt());
-							//Compare encrypted passwords
-							if(pass.getEncryptedPass().equalsIgnoreCase(encryptedPdPass)) {
-								source = INSTANT;
-								 /*
-								  * Check if maybe same pass with Artero Account
-								  */
-								String passStr = MergedSaving.getArteroPass(name);
-								if(passStr != null && passStr.equalsIgnoreCase(pd.getPassword())) {
-									doublechar = true;
-								}
-							} else {
-								code = LoginResult.INVALID_USER_OR_PASS;
-							}
-						} else {
-							if(pass.getRealPassword() == null)
-								code = LoginResult.INVALID_USER_OR_PASS;
-							else if (!pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
-								code = LoginResult.INVALID_USER_OR_PASS;
-							} else {
-								//MEANS everything went very well
-								source = INSTANT;
-								/*
-								 * Check if maybe same pass with Artero Account
-								 */
-								String passStr = MergedSaving.getArteroPass(name);
-								if(passStr != null && passStr.equalsIgnoreCase(pd.getPassword())) {
-									doublechar = true;
-								}
-							}
-						}
-						//if he could not login with his instantpk account, maybe he is trying to login with Artero
-						if(code == LoginResult.INVALID_USER_OR_PASS) {
-							if(MergedSaving.existsArtero(name)) {
-								String password = MergedSaving.getArteroPass(name);
-								if(password.equalsIgnoreCase(pd.getPassword())) {
-									//TODO ASK PLAYER TO CHANGE HIS USERNAME
-									source = ARTERO;
-									code = LoginResult.SUCCESSFUL_LOGIN;
-									needsNamechange = true;
-								}
-							}
-						}
-					} else {
-						//Artero Login
-						//System.out.println("Checking Artero login");
-						String passStr = MergedSaving.getArteroPass(name);
-						//System.out.println("Correct pass is : " + passStr);
-						if(passStr != null && passStr.equalsIgnoreCase(pd.getPassword())) {
-							source = ARTERO;
-							/*
-							 * Check Instant Login
-							 */
-							Password pass = MergedSaving.getInstantPass(pd.getName());
-							if(pass.getSalt() != null && !pass.getSalt().equalsIgnoreCase("null")) {
-								//Encrypt pd pass
-								String encryptedPdPass = Password.encryptPassword(pd.getPassword(), pass.getSalt());
-								//Compare encrypted passwords
-								if(pass.getEncryptedPass().equalsIgnoreCase(encryptedPdPass)) {
-									doublechar = true;
-								}
-							} else {
-								if(pass.getRealPassword() != null) {
-									if(pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
-										doublechar = true;
-									}
+	private final static String ALLOWED_IPS_DIR = "./data/json/allowed_ips.json";
+	private final static ObservableCollection<String> ALLOWED_IPS = loadList(ALLOWED_IPS_DIR);
+	private final static Map<String, Integer> LOGIN_ATTEMPTS = new HashMap<>();
+	private final static Set<String> BLOCKED_PLAYERS = new HashSet<>();
 
-								}
-							}
-						} else {
-							code = LoginResult.INVALID_USER_OR_PASS;
-						}
+	private final static int MAXIMUM_LOGIN_ATTEMPTS = 5;
 
-						//If Artero login didn't work try Instant
-						if(code == LoginResult.INVALID_USER_OR_PASS) {
-							if(MergedSaving.existsInstant(name)) {
-								//System.out.println("Couldn't login to priority acc, try secondary");
-								Password pass = MergedSaving.getInstantPass(pd.getName());
-								if(pass.getSalt() != null && !pass.getSalt().equalsIgnoreCase("null")) {
-									//Encrypt pd pass
-									String encryptedPdPass = Password.encryptPassword(pd.getPassword(), pass.getSalt());
-									//Compare encrypted passwords
-									if(pass.getEncryptedPass().equalsIgnoreCase(encryptedPdPass)) {
-										//ASK TO CHANGE USERNAME TODO
-										code = LoginResult.SUCCESSFUL_LOGIN;
-										needsNamechange = true;
-										source = INSTANT;
-									} else {
-										code = LoginResult.INVALID_USER_OR_PASS;
-									}
-								} else {
-									if(pass.getRealPassword() == null)
-										code = LoginResult.INVALID_USER_OR_PASS;
-									else if (!pass.getRealPassword().equalsIgnoreCase(pd.getPassword())) {
-										code = LoginResult.INVALID_USER_OR_PASS;
-									} else {
-										//ASK TO CHANGE USERNAME TODO
-										needsNamechange = true;
-										code = LoginResult.SUCCESSFUL_LOGIN;
-										source = INSTANT;
-									}
-								}
-							}
-
-						}
-
-					}
-				}
-			} catch(Exception ex) {
-				code = 11;
-				ex.printStackTrace();
+	static {
+		ALLOWED_IPS.addListener(new AbstractNotifyListener() {
+			@Override
+			public void invalidated(javafx.beans.Observable observable) {
+				saveList(ALLOWED_IPS, ALLOWED_IPS_DIR);
 			}
-		}
-		LoginDebugger.getDebugger().log("Checking more in genericworldloader");
-		//Logical verifications
-		if(code == 2) {
-			//System.out.println("Creating new player");
-			LoginDebugger.getDebugger().log("About to make new player in GWL");
-			player = new Player(pd, newcharacter);
-
-			player.setSource(source);
-			if(source == GenericWorldLoader.ARTERO || source == GenericWorldLoader.INSTANT) {
-				player.setInitialSource(source);
-			}
-			if(needsNamechange) {
-				player.setNeedsNameChange(true);
-			}
-			if(doublechar) {
-				player.setDoubleChar(true);
-			}
-			LoginDebugger.getDebugger().log("Made new player in GWL");
-		}
-		LoginDebugger.getDebugger().log("Pre checking enabled disabled login debugger");
-		if(LoginDebugger.getDebugger().isEnabled()) {
-			String name = "unset";
-			if(player != null)
-				name = player.getName();
-			LoginDebugger.getDebugger().log("5. Login Result: " + code + ": " + name);
-		}
-		return new LoginResult(code, player);
+		});
 	}
 
 	@Override
-	public boolean savePlayer(Player player, String info) {
-		if(! NameUtils.isValidName(player.getName())) {
-			System.out.println("Trying to save for wrong player: " + player.getName() + "," + info);
+	public LoginResponse checkLogin(Player player, PlayerDetails playerDetails) {
+		if(LOGIN_ATTEMPTS.get(player.getName()) == null)
+			LOGIN_ATTEMPTS.put(player.getName(), 0);
+
+		if(BLOCKED_PLAYERS.contains(player.getName())) {
+			return LOGIN_ATTEMPTS_EXCEEDED;
 		}
-		final File file = new File("./data/logSaves.txt");
-		try {
-			file.createNewFile();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		if(LOGIN_ATTEMPTS.get(player.getName()) >= MAXIMUM_LOGIN_ATTEMPTS) {
+			BLOCKED_PLAYERS.add(player.getName());
+			World.submit(new Task(Time.ONE_MINUTE) {
+				String playerName = player.getName();
+
+				@Override
+				public void execute() {
+					BLOCKED_PLAYERS.remove(playerName);
+					stop();
+				}
+			});
+
+			return LOGIN_ATTEMPTS_EXCEEDED;
 		}
-		TextUtils.writeToFile(file, String.format("[%s]%s has logged out info: %s",
-				new Date(System.currentTimeMillis()).toString(), player.getName(), info));
-		PlayerSaving.getSaving().save(player);
-		return true;
+
+		if(World.getPlayers().size() >= Constants.MAX_PLAYERS)
+			return WORLD_FULL;
+
+		if(Server.isUpdating())
+			return UPDATE_IN_PROGRESS;
+
+		if(playerDetails.getUID() != Configuration.getInt(Configuration.ConfigurationObject.CLIENT_VERSION))
+			return SERVER_UPDATED;
+
+		if(ConnectionHandler.getIpBlackList().contains(player.getFullIP()))
+			return ACCOUNT_DISABLED;
+
+		final Punishment punishment = PunishmentManager.getInstance().findBan(playerDetails.getName(), playerDetails.getIpAddress().split(":")[0], playerDetails.getMacAddress(), playerDetails.getSpecialUid());
+		if(punishment != null) {
+			playerDetails.getSession().write(
+					new PacketBuilder()
+							.put((byte)ACCOUNT_DISABLED.getReturnCode())
+							.putRS2String(punishment.getCombination().getTarget().name())
+							.putRS2String(punishment.getIssuerName())
+							.putRS2String(punishment.getReason())
+							.putRS2String(punishment.getTime().getRemainingTimeStamp())
+							.toPacket()).addListener(future -> future.getSession().close(false));
+			return ACCOUNT_DISABLED;
+		}
+
+		if(!NameUtils.isValidName(player.getName()) || player.getName().startsWith(" ") || player.getName().split(" ").length - 1 > 1 || player.getName().length() > 12 || player.getName().length() <= 0)
+			return INVALID_CREDENTIALS;
+
+		if(World.getPlayerByName(player.getName()) != null)
+			return ALREADY_LOGGED_IN;
+
+		/**
+		 * If we get this far, we're loading the player his actual details to check.
+		 */
+		if(!loadPlayer(player))
+			return NEW_PLAYER;
+
+		if(!player.getPassword().equals(playerDetails.getPassword())) {
+			LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
+			return INVALID_CREDENTIALS;
+		}
+
+        if(player.getGoogleAuthenticatorKey() != null) {
+			VerifyResponse verifyResponse = PlayerAuthenticatorVerification.verifyPlayer(player, playerDetails.getAuthenticationCode());
+			if(verifyResponse == VerifyResponse.PIN_ENTERED_TWICE)
+				return AUTHENTICATION_USED_TWICE;
+			if(verifyResponse == VerifyResponse.INCORRECT_PIN) {
+				LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
+				return AUTHENTICATION_WRONG;
+			}
+		}
+
+		if(Rank.hasAbility(player, ADMINISTRATOR))
+			if(!ALLOWED_IPS.contains(player.getShortIP()))
+				return INVALID_CREDENTIALS;
+
+		/**
+		 * TEMP
+		 */
+
+		if (!ALLOWED_IPS.contains(player.getShortIP())) {
+			if(Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroPk") && !Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
+				if (player.getPermExtraData().getLong("passchange") < EntityHandler.getLastPassReset().getTime() && !getUnlockedPlayers().contains(player.getName().toLowerCase())) {
+					try {
+						String currentCutIp = player.getShortIP().substring(0, player.getShortIP().substring(0, player.getShortIP().lastIndexOf(".")).lastIndexOf("."));
+						String previousCutIp = player.lastIp.substring(0, player.lastIp.substring(0, player.lastIp.lastIndexOf(".")).lastIndexOf("."));
+						if (!currentCutIp.equals(previousCutIp)) {
+							return MEMBERS_ONLY;
+						}
+					} catch (Exception e) {
+						return MEMBERS_ONLY;
+					}
+				}
+				if (player.isNew())
+					player.getPermExtraData().put("passchange", System.currentTimeMillis());
+			}
+		}
+
+		/**
+		 * END OF TEMP
+		 */
+
+		LOGIN_ATTEMPTS.remove(player.getName());
+		return SUCCESSFUL_LOGIN;
 	}
 
 	@Override
 	public boolean loadPlayer(Player player) {
-		try {
-			if(MergedSaving.exists(player.getName())) {
-				MergedSaving.load(player);
+		return PlayerLoading.loadPlayer(player);
+	}
 
-			}
-			LoginDebugger.getDebugger().log("6. Generic worldloader loaded Player file " + player.getName());
-			return true;
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			return false;
+	@Override
+	public boolean savePlayer(Player player) {
+		PlayerSaving.save(player);
+		return true;
+	}
+
+	private static ObservableCollection<String> loadList(String fileName) {
+		File file = new File(fileName);
+		if (!file.exists()) {
+			saveList(fileName);
+			return new ObservableCollection<>(new ArrayList<>());
+		}
+
+		try (FileReader fileReader = new FileReader(file)) {
+			JsonParser parser = new JsonParser();
+			JsonArray object = (JsonArray) parser.parse(fileReader);
+			return new ObservableCollection<>(new Gson().fromJson(object, new TypeToken<ArrayList<String>>() {}.getType()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ObservableCollection<>(new ArrayList<>());
 		}
 	}
 
+	private static void saveList(String fileName) {
+		saveList(new ObservableCollection<>(new ArrayList<>()), fileName);
+	}
+
+	private static void saveList(ObservableCollection<String> list, String fileName) {
+		File fileToWrite = new File(fileName);
+
+		if (!fileToWrite.getParentFile().exists()) {
+			try {
+				if(!fileToWrite.getParentFile().mkdirs())
+					return;
+			} catch (SecurityException e) {
+				System.out.println("Unable to create directory for list file!");
+			}
+		}
+
+		try (FileWriter writer = new FileWriter(fileToWrite)) {
+			Gson builder = new GsonBuilder().setPrettyPrinting().create();
+			writer.write(builder.toJson(list, new TypeToken<ObservableCollection<String>>() {}.getType()));
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	static {
+        CommandHandler.submit(new Command("addip", Rank.ADMINISTRATOR) {
+            @Override
+            public boolean execute(Player player, String input) throws Exception{
+                String ipAddress = filterInput(input);
+                if(ipAddress == null)
+                    throw new Exception();
+                ALLOWED_IPS.add(ipAddress.toLowerCase().replaceAll("_", " "));
+                player.getActionSender().sendMessage("The IP address '" + ipAddress + "' has been added to the list.");
+                return true;
+            }
+        });
+		CommandHandler.submit(new Command("unlock", Rank.ADMINISTRATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				String playerName = filterInput(input);
+				if(playerName == null)
+					throw new Exception();
+				getUnlockedPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+				player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+				return true;
+			}
+		});
+		CommandHandler.submit(new Command("unlockrich", Rank.HEAD_MODERATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				String playerName = filterInput(input);
+				if(playerName == null)
+					throw new Exception();
+				getUnlockedRichPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
+				player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
+				return true;
+			}
+		});
+		CommandHandler.submit(new Command("changeip", Rank.ADMINISTRATOR) {
+			@Override
+			public boolean execute(Player player, String input) throws Exception{
+				String[] parts = filterInput(input).split(",");
+				if(parts.length < 2)
+					throw new Exception();
+				if(org.hyperion.rs2.savingnew.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
+					player.getActionSender().sendMessage(Misc.formatPlayerName(parts[0]) + "'s IP has been changed to " + parts[1]);
+				else
+					player.getActionSender().sendMessage("IP could not be changed.");
+				return true;
+			}
+		});
+	}
 }

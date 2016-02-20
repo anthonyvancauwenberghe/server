@@ -1,9 +1,9 @@
 package org.hyperion.rs2.saving.impl;
 
-import java.util.Date;
-
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.saving.SaveString;
+
+import java.util.Date;
 
 public class SaveCreatedString extends SaveString {
 

@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.misc2;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -37,7 +37,7 @@ public class SnowItems implements ContentTemplate {
 	@Override
 	public void init() throws FileNotFoundException {
 		if(System.currentTimeMillis() < MAXTIME)
-			World.getWorld().getNPCManager().addNPC(3085, 3497, 0, 9400, - 1);
+			NPCManager.addNPC(3085, 3497, 0, 9400, - 1);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class SnowItems implements ContentTemplate {
 		ContentEntity.playerGfx(player, 1284);//11951
 		player.getInventory().add(new Item(11951, player.getInventory().freeSlots()));
 		player.getActionSender().showInterfaceWalkable(11877);
-		World.getWorld().submit(new Event(10000) {
+		World.submit(new Task(10000) {
 			public void execute() {
 				player.getActionSender().showInterfaceWalkable(- 1);
 				this.stop();

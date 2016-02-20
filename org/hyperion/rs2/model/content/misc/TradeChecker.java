@@ -1,19 +1,18 @@
 package org.hyperion.rs2.model.content.misc;
 
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.AccountValue;
 
 import java.io.File;
-import java.util.Date;
 
 /**
  * @author Arsen Maxyutov.
  */
 public class TradeChecker {
 
-	private static final File DIR = new File("./logs/suspicioustrades/");
+	private static final File DIR = new File("suspicioustrades");
 
 	/**
 	 * @param player
@@ -40,6 +39,6 @@ public class TradeChecker {
 	 * @param line
 	 */
 	private void writeLog(String name, String line) {
-		PlayerSaving.getSaving().saveLog(DIR + "/" + name + ".log", new Date() + "," + line);
+		FileLogging.saveGameLog(DIR + "/" + name + ".log", line);
 	}
 }

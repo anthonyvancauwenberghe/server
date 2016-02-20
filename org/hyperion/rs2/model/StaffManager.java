@@ -8,13 +8,9 @@ import java.util.List;
 
 public class StaffManager {
 
-	public StaffManager() {
-
-	}
-
-	public List<Player> getOnlineStaff() {
+	public static List<Player> getOnlineStaff() {
 		List<Player> onlineStaff = new LinkedList<Player>();
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player.isHidden())
 				continue;
             if(Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
@@ -32,7 +28,7 @@ public class StaffManager {
 		CommandHandler.submit(new Command("onlinestaff", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				List<Player> onlineStaff = World.getWorld().getStaffManager().getOnlineStaff();
+				List<Player> onlineStaff = getOnlineStaff();
 				player.getActionSender().sendMessage("Staff online: @dre@" + onlineStaff.size());
 				for(Player staffMember : onlineStaff) {
 					final Rank rank = Rank.getPrimaryRank(staffMember);

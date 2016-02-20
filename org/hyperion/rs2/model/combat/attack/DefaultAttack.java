@@ -1,14 +1,10 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.Attack;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
-import org.hyperion.rs2.model.Player;
 
 public class DefaultAttack implements Attack {
 
@@ -23,7 +19,7 @@ public class DefaultAttack implements Attack {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
 			}
             if(attack != null && attack.getEntity() instanceof NPC && attack.getNPC().ownerId > 0) {
-                final Player player = (Player)World.getWorld().getPlayers().get(attack.getNPC().ownerId);
+                final Player player = (Player)World.getPlayers().get(attack.getNPC().ownerId);
                 if(player != null)
                     attack = player.cE;
             }
@@ -34,25 +30,25 @@ public class DefaultAttack implements Attack {
 			n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
 			int maxHit = 0;
 			if(n.getDefinition().combat() > 200)
-				maxHit = (int) n.getDefinition().combat() / 9;
+				maxHit = n.getDefinition().combat() / 9;
 			else if(n.getDefinition().combat() > 175)
 				maxHit = (int) (n.getDefinition().combat() / 8.5);
 			else if(n.getDefinition().combat() > 150)
-				maxHit = (int) (n.getDefinition().combat() / 8);
+				maxHit = n.getDefinition().combat() / 8;
 			else if(n.getDefinition().combat() > 120)
 				maxHit = (int) (n.getDefinition().combat() / 7.5);
 			else if(n.getDefinition().combat() > 100)
-				maxHit = (int) n.getDefinition().combat() / 7;
+				maxHit = n.getDefinition().combat() / 7;
 			else if(n.getDefinition().combat() > 80)
 				maxHit = (int) (n.getDefinition().combat() / 8.3);
 			else if(n.getDefinition().combat() > 60)
 				maxHit = (int) (n.getDefinition().combat() / 8.7);
 			else if(n.getDefinition().combat() > 40)
-				maxHit = (int) n.getDefinition().combat() / 8;
+				maxHit = n.getDefinition().combat() / 8;
 			else if(n.getDefinition().combat() > 20)
-				maxHit = (int) n.getDefinition().combat() / 6;
+				maxHit = n.getDefinition().combat() / 6;
 			else
-				maxHit = (int) n.getDefinition().combat() / 6;
+				maxHit = n.getDefinition().combat() / 6;
 			//attack.hit(Combat.random(maxHit),attack.getEntity(),false);
 	        /*if(Combat.random(n.getDefinition().getBonus()[1]) < Combat.random(CombatAssistant.calculateMeleeDefence(attack.getPlayer(), 1))){
 				maxHit = 0;

@@ -14,7 +14,7 @@ public class PromoteCommand extends Command {
 	@Override
 	public boolean execute(Player player, String input) {
 		input = filterInput(input);
-		Player promoted = World.getWorld().getPlayer(input);
+		Player promoted = World.getPlayerByName(input);
 		if(promoted != null) {
 			if(Rank.hasAbility(promoted, Rank.HEAD_MODERATOR) && Rank.hasAbility(player, Rank.OWNER)) {
 				promoted.setPlayerRank(Rank.addAbility(promoted, Rank.DEVELOPER));

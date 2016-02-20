@@ -1,10 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.map.WorldMap;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class GodWarsZammy implements Attack {
 
@@ -78,7 +79,7 @@ public class GodWarsZammy implements Attack {
 					//mage
 					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
-					for(Player p : World.getWorld().getRegionManager().getLocalPlayers((Entity) n)) {
+					for(Player p : RegionManager.getLocalPlayers(n)) {
 						int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 						if(distance2 <= 10) {
 							Combat.npcAttack(n, p.cE, Combat.random(12), 1000, 2);
@@ -86,10 +87,10 @@ public class GodWarsZammy implements Attack {
 							Combat.npcRangeAttack(n, p.cE, 1213, 65, true);
 						}
 					}
-					World.getWorld().submit(new Event(1000) {
+					World.submit(new Task(1000) {
 						@Override
 						public void execute() {
-							for(Player p : World.getWorld().getRegionManager().getLocalPlayers((Entity) n)) {
+							for(Player p : RegionManager.getLocalPlayers(n)) {
 								int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
 								if(distance2 <= 10) {
 									p.cE.doGfx(1211, 0);

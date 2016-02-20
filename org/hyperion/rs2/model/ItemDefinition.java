@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
@@ -8,7 +9,6 @@ import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.Equipment.EquipmentType;
 import org.hyperion.rs2.model.container.impl.WeaponAnimManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.io.*;
 import java.util.HashMap;
@@ -100,7 +100,7 @@ public class ItemDefinition {
 	 */
 
 
-	public static void init() throws IOException {
+	public static void init() {
 		if(definitions != null) {
 			throw new IllegalStateException("Definitions already loaded.");
 		}
@@ -108,20 +108,21 @@ public class ItemDefinition {
 		loadItems();
 	}
 
-	public static void loadItems() throws IOException {
-		BufferedReader in = new BufferedReader(new FileReader(CONFIG_FILE));
-		String line;
-		while((line = in.readLine()) != null) {
-			//System.out.println(line);
-			try {
-				ItemDefinition definition = ItemDefinition.forString(line);
-				definitions[definition.getId()] = definition;
-			} catch(Exception e) {
-                e.printStackTrace();
-				System.out.println("Error reading config file: " + line);
+	private static void loadItems() {
+		try (BufferedReader in = new BufferedReader(new FileReader(CONFIG_FILE))) {
+			String line;
+			while ((line = in.readLine()) != null) {
+				try {
+					ItemDefinition definition = ItemDefinition.forString(line);
+					definitions[definition.getId()] = definition;
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("Error reading config file: " + line);
+				}
 			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		in.close();
 	}
 
 	/**
@@ -490,13 +491,6 @@ public class ItemDefinition {
 
 
 	static {
-		//System.out.println("About to load stuff");
-		try {
-			init();
-
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
 		CommandHandler.submit(new Command("setalchvalue", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
@@ -504,12 +498,7 @@ public class ItemDefinition {
 				int id = values[0];
 				int price = values[1];
 				definitions[id].setHighAlcValue(price);
-				PlayerSaving.getSaving().submit(new Runnable() {
-					@Override
-					public void run() {
-						dumpItemDefinitions();
-					}
-				});
+				Server.getLoader().getEngine().submit(ItemDefinition::dumpItemDefinitions);
 				return true;
 			}
 		});
@@ -521,12 +510,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(false);
-					PlayerSaving.getSaving().submit(new Runnable() {
-						@Override
-						public void run() {
-							dumpItemDefinitions();
-						}
-					});
+					Server.getLoader().getEngine().submit(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::unstack 11694");
 				}
@@ -541,12 +525,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(true);
-					PlayerSaving.getSaving().submit(new Runnable() {
-						@Override
-						public void run() {
-							dumpItemDefinitions();
-						}
-					});
+					Server.getLoader().getEngine().submit(ItemDefinition::dumpItemDefinitions);
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use as ::stack 11694");
 				}

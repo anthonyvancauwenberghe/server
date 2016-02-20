@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
  * Created by User on 3/20/2015.
@@ -22,9 +21,11 @@ public class TabbedContainer extends Container {
         this.player = player;
     }
 
+    @Override
     public boolean add(Item item) {
         if(item == null) {
-            return false;        }
+            return false;
+        }
         BankItem bankItem;
         if(!(item instanceof BankItem))
             item = item.toBankItem(0);

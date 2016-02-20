@@ -1,10 +1,5 @@
 package org.hyperion.util;
 
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.content.ContentEntity;
-
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -231,22 +226,6 @@ public class Misc {
 
 	public static int[] HomeTeleportGfx = {775, 800, 801, 802, 803, 804, 1703, 1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711, 1712, 1713};
 	public static int[] HomeTeleportAnimations = {1722, 1723, 1724, 1725, 2798, 2799, 2800, 3195, 4643, 4645, 4646, 4847, 4848, 4849, 4850, 4851, 4852};
-
-	public static void doHomeTeleport(final Player player) {
-		player.getActionSender().sendMessage("Starting HomeTeleport");
-		World.getWorld().submit(new Event(600) {
-			int index = 0;
-
-			public void execute() {
-				ContentEntity.startAnimation(player, HomeTeleportAnimations[index]);
-				player.cE.doGfx(HomeTeleportGfx[index], 0);
-				index++;
-				if(index == 17)
-					this.stop();
-			}
-		});
-		player.getActionSender().sendMessage("Done with HomeTeleport");
-	}
 
 	/**
 	 * @param level

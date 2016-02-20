@@ -1,14 +1,15 @@
 package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.data.PersistenceManager;
+import org.hyperion.engine.task.Task;
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.Stall;
+import org.hyperion.rs2.model.region.RegionManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -116,7 +117,7 @@ public class Thieving implements ContentTemplate {
 		ContentEntity.startAnimation(client,STEAL_ANIM);
 		
 		// Start the event.
-		World.getWorld().submit(new Event(750) {
+		World.submit(new Event(750) {
 			@Override
 			public void execute() {			
 				
@@ -157,7 +158,7 @@ public class Thieving implements ContentTemplate {
 					npc.setShoutUpdateRequired(true);
 					npc.setUpdateRequired(true);
 					final NPC npc2 = npc;
-					World.getWorld().submit(new Event(2000) {
+					World.submit(new Event(2000) {
 						@Override
 						public void execute() {		
 							
@@ -237,7 +238,7 @@ public class Thieving implements ContentTemplate {
 		ContentEntity.startAnimation(client,STEAL_ANIM);
 		
 		// Start the event.
-		World.getWorld().submit(new Event(2000) {
+		World.submit(new Event(2000) {
 			@Override
 			public void execute() {				
 
@@ -294,7 +295,7 @@ public class Thieving implements ContentTemplate {
 						npc.setWalking(true);
 						
 						// Start the event.
-						World.getWorld().submit(new Event(4000) {
+						World.submit(new Event(4000) {
 							@Override
 							public void execute() {		
 								// We don't have todo anything
@@ -367,7 +368,7 @@ public class Thieving implements ContentTemplate {
 		}
 		player.setBusy(true);
 		player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000);
-		World.getWorld().submit(new Event(2000) {
+		World.submit(new Task(2000) {
 			@Override
 			public void execute() {
 				player.getExtraData().remove("thievingTimer");
@@ -378,7 +379,7 @@ public class Thieving implements ContentTemplate {
 	}
 
 	public boolean stealFromStall(final Player player, final int objectId, final int x, final int y) {
-		/*if (World.getWorld().getObjectMap().getObjectAt(x, y,player.getLocation().getZ()) != null) {
+		/*if (ObjectManager.getObjectAt(x, y,player.getLocation().getZ()) != null) {
 			System.out.println("Stealing from stall null");
 			return true;
 		}*/
@@ -425,7 +426,7 @@ public class Thieving implements ContentTemplate {
 		}
 		if(! caught)
 			return null;
-		for(NPC npc : World.getWorld().getRegionManager().getLocalNpcs(player)) {
+		for(NPC npc : RegionManager.getLocalNpcs(player)) {
 			boolean continue2 = false;
 			for(int i : guardIds) {
 				if(i == npc.getDefinition().getId())
@@ -475,7 +476,7 @@ public class Thieving implements ContentTemplate {
 	@Override
 	public boolean clickObject(final Player client, final int type, final int id, final int slot, final int itemId2, final int npcSlot) {
 		if(type == 11) {
-			NPC npc = (NPC) World.getWorld().getNPCs().get(npcSlot);
+			NPC npc = (NPC) World.getNpcs().get(npcSlot);
 			pickPocketNpc(client, npc);
 		}
 		if(type == 7) {

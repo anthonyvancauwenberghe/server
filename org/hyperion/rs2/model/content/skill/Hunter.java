@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -226,7 +226,7 @@ public class Hunter implements ContentTemplate {
 				}
 				ContentEntity.startAnimation(p, 5209);
 				p.cE.face(xcoord, ycoord);
-				World.getWorld().submit(new Event(500) {
+				World.submit(new Task(500L) {
 					public void execute() {
 						boolean success = HunterNpcs.removeImp(NpcId, xcoord, ycoord);
 						if(success) {

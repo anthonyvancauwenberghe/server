@@ -1,13 +1,13 @@
 package org.hyperion.rs2.saving.impl;
 
-import java.io.File;
-import java.util.Date;
-
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.saving.SaveString;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.io.File;
+import java.util.Date;
 
 public class SaveIP extends SaveString {
 

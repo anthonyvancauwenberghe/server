@@ -86,10 +86,9 @@ public class CombatEntity {
 	private Map<String, Integer> damageDealt = new HashMap<String, Integer>();
 
 	public boolean isNpcAttackAble() {
-		if(getEntity() instanceof Player)
+		if(getEntity() instanceof Player) {
 			return true;
-		else if(n.maxHealth <= 0) {
-			//System.out.println("MaxHealth =  " + n.maxHealth + " Name " + n.getDefinition().getName()  + " id " + n.getDefinition().getId());
+		} else if(n.maxHealth <= 0) {
 			return false;
 		}
 		return true;
@@ -100,7 +99,7 @@ public class CombatEntity {
 	}
 
 	public void addSpellAttack(int j) {
-		//getPlayer().getActionSender().sendMessage("Add Spell Atk : " + j);
+		//getPlayerByName().getActionSender().sendMessage("Add Spell Atk : " + j);
 		magicAttackNext = j;
 	}
 
@@ -171,7 +170,7 @@ public class CombatEntity {
 
 
 	public void setAtkType(int i) {
-		//getPlayer().getActionSender().sendMessage("Your atkType is now " + i);
+		//getPlayerByName().getActionSender().sendMessage("Your atkType is now " + i);
 		atkType = i;
 	}
 
@@ -229,7 +228,7 @@ public class CombatEntity {
 		damageDealt.clear();
 		if(winner == null)
 			return null;
-		return World.getWorld().getPlayer(winner);
+		return World.getPlayerByName(winner);
 	}
 
 

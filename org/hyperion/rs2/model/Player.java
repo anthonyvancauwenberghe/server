@@ -2,13 +2,13 @@ package org.hyperion.rs2.model;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.data.Persistable;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.PlayerDeathTask;
+import org.hyperion.engine.task.impl.VoteBonusEndTask;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.action.ActionQueue;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.PlayerDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
@@ -24,15 +24,14 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankField;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.TabbedContainer;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.rs2.model.content.bounty.BountyHunter;
 import org.hyperion.rs2.model.content.bounty.BountyPerks;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.ge.GrandExchange;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2.GEItem;
 import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFAHolder;
@@ -59,7 +58,6 @@ import org.hyperion.rs2.model.sets.CustomSetHolder;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.ISAACCipher;
-import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.packet.NpcClickHandler;
 import org.hyperion.rs2.packet.ObjectClickHandler;
@@ -89,18 +87,17 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public String bankPin = "";
 	public String enterPin = "";
 	public String lastSearch = "";
-	public boolean xpLock = false;
 	private String name;
 	private String IP;
 	private String clanName = "";
 	private String[] lastKills = {"", "", "", "", ""};
+	private String password;
+	private String googleAuthenticatorKey;
 
 	/**
 	 * INTEGERS
 	 */
-	public static final int MAX_NAME_LENGTH = 12;
 	private final int uid;
-	public int pin = -1;
 	public int turkeyKills;
 	public int EP = 0;
 	public int blackMarks = 0;
@@ -149,8 +146,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private int gameMode = 0;
 	private int diced = 0;
 	private int skullTimer = 0;
-	private int initialSource = GenericWorldLoader.MERGED;
-	private int source = GenericWorldLoader.MERGED;
 	private int shopId = -1;
 	private int npcId = -1;
 	private int fightPitsDamage;
@@ -162,12 +157,14 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private int bounty = 10;
 	private int killCount = 0;
 	private int deathCount = 0;
-	private int voteCount;
+	private int voteStreak = 0;
+	private int todayVotes = 0;
+	private List<Integer> googleAuthenticatorBackup;
 
 	/**
 	 * LONG
 	 */
-	public final long logintime = System.currentTimeMillis();
+	private final long logintime = System.currentTimeMillis();
 	public long splitDelay = 0L;
 	public long lastTicketRequest;
 	public long foodTimer = System.currentTimeMillis();
@@ -182,22 +179,21 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public long lastVeng = 0;
 	public long antiFireTimer = 0;
 	public long overloadTimer = 0;
-	public long lastAccountValueTime = System.currentTimeMillis();
 	private long previousSessionTime = System.currentTimeMillis();
 	private long lastHonorPointsReward = System.currentTimeMillis();
 	private long created;
 	private long disconnectedTimer = System.currentTimeMillis();
-	private long lastSQL = 0;
-	private long lastVoted = 0;
+	private long lastVoteStreakIncrease = 0L;
 	private long lastEPIncrease = System.currentTimeMillis();
 	private long nameLong;
 	private long playerRank = 1;
 	private long lastDuelUpdate = 0L;
 	private long dragonFireSpec = 0L;
 	private long lastTeleport = System.currentTimeMillis();
-	private long firstVoteTime = -1;
-	public List<Long> ignores = new ArrayList<>();
-
+	private final List<Long> ignores = new ArrayList<>(100);
+	private long locks = 0;
+	private long voteBonusEndTime = 0;
+	private long lastVoteBonus = 0L;
 	/**
 	 * DOUBLES
 	 */
@@ -223,7 +219,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public boolean onConfirmScreen = false;
 	public boolean openingTrade = false;
 	public boolean duelRule[] = new boolean[24];
-	public boolean verified;
 	public boolean banEquip[] = new boolean[14];
 	public boolean inGame;
 	public boolean attackOption = false;
@@ -235,7 +230,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public boolean joiningPits = false;
 	public boolean isInMuli = false;
 	public boolean cannotSwitch = false;
-	public boolean newCharacter = false;
+	private boolean newCharacter = false;
 	public boolean ignoreOnLogin = false;
 	public boolean oldFag = false;
 	public boolean inAction;
@@ -259,7 +254,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private boolean canSpawnSet = true;
 	private boolean hasTarget = false;
 	private boolean members = true;
-	private boolean chargeSpell;
 	private boolean isPlayerBusy = false;
 	private boolean isSkilling = false;
 	private boolean canWalk = false;
@@ -269,9 +263,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	/**
 	 * OBJECTS
 	 */
-	private final List<DuelRules> duelRules = new ArrayList<>(20);
 	private final InterfaceManager interfaceManager = new InterfaceManager(this);
-	private final ValueMonitor valueMonitor = new ValueMonitor(this);
 	private final GrandExchange grandExchange = new GrandExchange(this);
 	private final BarrowsFFAHolder barrowsFFA = new BarrowsFFAHolder();
 	private final TicketHolder ticketHolder = new TicketHolder();
@@ -309,8 +301,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public Player beingFollowed = null;
 	public Player isFollowing = null;
 	public Player tradeWith2 = null;
-	public GEItem[] geItem = new GEItem[40];
-	public List<GEItem> geItems = new LinkedList<>();
 	public ArmourClass pickedClass = null;
 	private Agility agility = new Agility(this);
 	private PlayerChecker playerChecker = PlayerChecker.create();
@@ -329,11 +319,10 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private SpawnTab spawntab = new SpawnTab(this);
 	private AchievementTab achievementtab = new AchievementTab(this);
 	private ItemDropping itemDropping = new ItemDropping();
-	private TriviaSettings ts = new TriviaSettings(0, false);
+	private TriviaSettings ts = new TriviaSettings(0);
 	private Mail mail = new Mail(this);
 	private SkillingData sd = new SkillingData();
 	private ChatMessage currentChatMessage;
-	private Password password = new Password();
 	private AtomicInteger overloadCounter = new AtomicInteger(0);
 	private PvPArmourStorage pvpStorage = new PvPArmourStorage();
 	private LastAttacker lastAttacker;
@@ -353,27 +342,22 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private Highscores highscores;
 	private JGrandExchangeTracker geTracker;
 
-	public Player(PlayerDetails details, boolean newCharacter) {
-		LoginDebugger.getDebugger().log("In Player constructor");
+	public Player(PlayerDetails details) {
 		this.session = details.getSession();
 		this.inCipher = details.getInCipher();
 		this.outCipher = details.getOutCipher();
 		this.name = details.getName().toLowerCase();
-		this.specialUid = details.specialUid;
+		this.specialUid = details.getSpecialUid();
 		this.display = details.getName();
 		this.nameLong = NameUtils.nameToLong(this.name);
-		this.password.setRealPassword(details.getPassword());
-		this.uid = details.getUID();
-		this.IP = details.IP;
+		this.password = details.getPassword();
+		this.uid = details.getMacAddress();
+		this.IP = details.getIpAddress();
 		this.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 		this.setTeleporting(true);
 		this.resetPrayers();
-		this.newCharacter = newCharacter;
-		logManager = new LogManager(this);
-		if (newCharacter) {
-			this.created = System.currentTimeMillis();
-		}
 		lastAttacker = new LastAttacker(name);
+		logManager = new LogManager(this);
 	}
 
 	public Player(int uid) {
@@ -384,25 +368,12 @@ public class Player extends Entity implements Persistable, Cloneable {
 		lastAttacker = new LastAttacker(name);
 	}
 
-	public static int getConfigId(int i) {
-		switch (i) {
-			case 0:
-				return 0;
-
-			case 1:
-				return 1;
-
-			case 2:
-				return 2;
-
-			case 3:
-				return 3;
-		}
-		return 0;
+	public long getLogintime() {
+		return logintime;
 	}
 
 	public static void resetCorpDamage() {
-		for (Player p : World.getWorld().getPlayers()) {
+		for (Player p : World.getPlayers()) {
 			if (p == null)
 				continue;
 			if (p.getCorpDamage() > 0)
@@ -468,27 +439,25 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * Player NPC
 	 */
 
-    public final InterfaceManager getInterfaceManager() {
-        return interfaceManager;
-    }
+	public final InterfaceManager getInterfaceManager() {
+		return interfaceManager;
+	}
 
-    public ValueMonitor getValueMonitor() {return valueMonitor;}
+	public GrandExchange getGrandExchange() {return grandExchange;}
 
-    public GrandExchange getGrandExchange() {return grandExchange;}
+	public BarrowsFFAHolder getBarrowsFFA() { return barrowsFFA; }
 
-    public BarrowsFFAHolder getBarrowsFFA() { return barrowsFFA; }
-
-    public int getTutorialProgress() {
+	public int getTutorialProgress() {
 		return tutorialProgress;
 	}
 
-    public void setTutorialProgress(int step) {
-        tutorialProgress = step;
-    }
+	public void setTutorialProgress(int step) {
+		tutorialProgress = step;
+	}
 
-    public final TicketHolder getTicketHolder() {
-        return ticketHolder;
-    }
+	public final TicketHolder getTicketHolder() {
+		return ticketHolder;
+	}
 
 	public boolean isBanking() {
 		return isBanking;
@@ -502,33 +471,33 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return npckillLogger;
 	}
 
-    public boolean isPidSet(){
-        return pid != -1;
-    }
+	public boolean isPidSet(){
+		return pid != -1;
+	}
 
-    public int getPid(){
-        return pid;
-    }
+	public int getPid(){
+		return pid;
+	}
 
 	/*
 	 * Attributes.
 	 */
 
-    public void setPid(final int pid){
+	public void setPid(final int pid){
 		this.pid = pid;
 	}
 
-    public boolean hardMode() {
-        return gameMode == 1;
-    }
+	public boolean hardMode() {
+		return gameMode == 1;
+	}
 
-    public int getGameMode() {
-        return gameMode;
-    }
+	public int getGameMode() {
+		return gameMode;
+	}
 
-    public void setGameMode(int mode) {
-        this.gameMode = mode;
-    }
+	public void setGameMode(int mode) {
+		this.gameMode = mode;
+	}
 
 	public void setMaxCape(boolean b) {
 		hasMaxCape = b;
@@ -554,9 +523,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return playerChecker;
 	}
 
-    public HashMap<AchievementData, Integer> getAchievementsProgress() {
-        return achievementsProgress;
-    }
+	public HashMap<AchievementData, Integer> getAchievementsProgress() {
+		return achievementsProgress;
+	}
 
 	public AchievementTracker getAchievementTracker(){
 		return achievementTracker;
@@ -566,13 +535,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return randomEvent;
 	}
 
-    public Difficulty getViewingDifficulty() {
+	public Difficulty getViewingDifficulty() {
 		return viewingDifficulty;
 	}
 
 	public void setViewingDifficulty(Difficulty viewingDifficulty) {
 		this.viewingDifficulty = viewingDifficulty;
-    }
+	}
 
 	public boolean checkMaxCapeRequirment() {
 		for (int i = 7; i < this.getSkills().getLevels().length; i++) {
@@ -584,7 +553,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return this.getPoints().getEloPeak() >= 1900;
 	}
 
-   // private InterfaceManager itfManager;
+	// private InterfaceManager itfManager;
 
 	public boolean checkCompCapeReq() {
 		for(int i = 7; i < this.getSkills().getXps().length; i++) {
@@ -598,32 +567,32 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return true;
 	}
 
-    public void checkCapes() {
-        checkContainers(12747, checkCompCapeReq(), "Completionist cape");
-        checkContainers(12744, checkMaxCapeRequirment(), "Max cape");
-        checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99, "Dungeoneering cape");
-        checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP, "Dungeoneering master cape");
-    }
+	public void checkCapes() {
+		checkContainers(12747, checkCompCapeReq(), "Completionist cape");
+		checkContainers(12744, checkMaxCapeRequirment(), "Max cape");
+		checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99, "Dungeoneering cape");
+		checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP, "Dungeoneering master cape");
+	}
 
-    private void checkContainers(final int id, final boolean add, String name) {
-        final Container[] containers = new Container[]{bank, equipment, inventory};
-        boolean contains = false;
-        for(final Container container : containers) {
-            if(container.contains(id)) {
-                contains = true;
-                if(!add) {
+	private void checkContainers(final int id, final boolean add, String name) {
+		final Container[] containers = new Container[]{bank, equipment, inventory};
+		boolean contains = false;
+		for(final Container container : containers) {
+			if(container.contains(id)) {
+				contains = true;
+				if(!add) {
 					container.remove(Item.create(id));
 				}
-            }
-        }
+			}
+		}
 
-        if(!contains && add) {
-			for (Player p : World.getWorld().getPlayers()) {
+		if(!contains && add) {
+			for (Player p : World.getPlayers()) {
 				p.sendLootMessage("Achievement", getSafeDisplayName() + " has just achieved " + name + "!");
 			}
 			bank.add(new BankItem(0, id, 1));
 		}
-    }
+	}
 
 	/**
 	 * Gets the KDR value rounded to 3 decimals.
@@ -655,21 +624,21 @@ public class Player extends Entity implements Persistable, Cloneable {
 		previousSessionTime = time;
 	}
 
-    public DungeoneeringHolder getDungeoneering() {
-        return dungeoneeringHolder;
-    }
+	public DungeoneeringHolder getDungeoneering() {
+		return dungeoneeringHolder;
+	}
 
-    public CustomSetHolder getCustomSetHolder() {
-        return customSetHolder;
-    }
+	public CustomSetHolder getCustomSetHolder() {
+		return customSetHolder;
+	}
 
 	public TriviaSettings getTrivia() {
 		return ts;
 	}
 
-    public RecolorManager getRecolorManager(){
-        return recolorManager;
-    }
+	public RecolorManager getRecolorManager(){
+		return recolorManager;
+	}
 
 	public SummoningBar getSummBar() {
 		return summoningBar;
@@ -704,16 +673,16 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	//public News getNews() {
-		//return news;
+	//return news;
 	//}
 
 	public ExtraData getExtraData() {
 		return extraData;
 	}
 
-    public ExtraData getPermExtraData() {
-        return permExtraData;
-    }
+	public ExtraData getPermExtraData() {
+		return permExtraData;
+	}
 
 	public Yelling getYelling() {
 		return yelling;
@@ -751,48 +720,48 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return canSpawnSet;
 	}
 
-    public void init() {
+	public void init() {
 
 
-        try {
-            File f = new File("./data/charfarm/"+getName()+".bin");
-            InputStream is = new FileInputStream(f);
-            IoBuffer buf = IoBuffer.allocate(1024);
-            buf.setAutoExpand(true);
-            while(true) {
-                byte[] temp = new byte[1024];
-                int read = is.read(temp, 0, temp.length);
-                if(read == - 1) {
-                    break;
-                } else {
-                    buf.put(temp, 0, read);
-                }
-            }
-            buf.flip();
-            Farming.deserialize(buf, this);
-        }catch(final Exception ex) {
+		try {
+			File f = new File("./data/charfarm/"+getName()+".bin");
+			InputStream is = new FileInputStream(f);
+			IoBuffer buf = IoBuffer.allocate(1024);
+			buf.setAutoExpand(true);
+			while(true) {
+				byte[] temp = new byte[1024];
+				int read = is.read(temp, 0, temp.length);
+				if(read == - 1) {
+					break;
+				} else {
+					buf.put(temp, 0, read);
+				}
+			}
+			buf.flip();
+			Farming.deserialize(buf, this);
+		}catch(final Exception ex) {
 
-        }
-
-
-    }
-
-        public void serialize() {
-            try {
-                OutputStream os = new FileOutputStream("data/charfarm/"+this.getName()+".bin");
-                IoBuffer buf = IoBuffer.allocate(1024);
-                buf.setAutoExpand(true);
-                Farming.serialize(buf,this);
-                buf.flip();
-                byte[] data = new byte[buf.limit()];
-                buf.get(data);
-                os.write(data);
-                os.flush();
-                os.close();
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
 		}
+
+
+	}
+
+	public void serialize() {
+		try {
+			OutputStream os = new FileOutputStream("data/charfarm/"+this.getName()+".bin");
+			IoBuffer buf = IoBuffer.allocate(1024);
+			buf.setAutoExpand(true);
+			Farming.serialize(buf,this);
+			buf.flip();
+			byte[] data = new byte[buf.limit()];
+			buf.get(data);
+			os.write(data);
+			os.flush();
+			os.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public boolean hasTarget() {
 		return hasTarget;
@@ -803,7 +772,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public boolean isServerOwner() {
-		return getName().equalsIgnoreCase(Server.getConfig().getString("owner"));
+		return getName().equalsIgnoreCase(Configuration.getString(Configuration.ConfigurationObject.OWNER));
 	}
 
 	public long getCreatedTime() {
@@ -870,7 +839,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 						}
 					}
 				}
-
 			}
 		}*/
 		return totalvalue;
@@ -889,7 +857,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 *
 	 * @returns for how long the player was online in milliseconds.
 	 */
-	public long onlineTime() {
+	public long getCurrentSessionTime() {
 		return System.currentTimeMillis() - logintime;
 	}
 
@@ -899,7 +867,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 */
 
 
-    public final List<TeamBossSession> getTeamSessions() {
+	public final List<TeamBossSession> getTeamSessions() {
 		return teamBossSessions;
 	}
 
@@ -945,24 +913,20 @@ public class Player extends Entity implements Persistable, Cloneable {
 		skullTimer = timer;
 	}
 
-	public long getLastVoted() {
-		return lastVoted;
+	public long getLastVoteStreakIncrease() {
+		return lastVoteStreakIncrease;
 	}
 
-	public void setLastVoted(long time) {
-		lastVoted = time;
-	}
-
-	public long getLastSQL() {
-		return lastSQL;
-	}
-
-	public void updateLastSQL() {
-		lastSQL = System.currentTimeMillis();
+	public void setLastVoteStreakIncrease(long time) {
+		lastVoteStreakIncrease = time;
 	}
 
 	public long getLastEPIncrease() {
 		return lastEPIncrease;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public void increaseEP() {
@@ -989,22 +953,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 			getActionSender().sendPvPLevel(false);
 	}
 
-	public int getInitialSource() {
-		return initialSource;
-	}
-
-	public void setInitialSource(int source) {
-		this.initialSource = source;
-	}
-
-	public int getSource() {
-		return source;
-	}
-
-	public void setSource(int source) {
-		this.source = source;
-	}
-
 	public void resetOverloadCounter() {
 		overloadCounter.set(0);
 	}
@@ -1021,9 +969,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return bountyHunter;
 	}
 
-    public BountyPerks getBHPerks() {
-        return bhperks;
-    }
+	public BountyPerks getBHPerks() {
+		return bhperks;
+	}
 
 	public void refreshDuelTimer() {
 		lastDuelUpdate = System.currentTimeMillis();
@@ -1045,9 +993,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return lastTicketRequest;
 	}
 
-    public final SlayerHolder getSlayer() {
-        return slayTask;
-    }
+	public final SlayerHolder getSlayer() {
+		return slayTask;
+	}
 
 	public void refreshTickReq() {
 		this.lastTicketRequest = System.currentTimeMillis();
@@ -1153,13 +1101,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 		// clears arraylist
 	}
 
-    public Container getRunePouch() {
-        return runePouch;
-    }
+	public Container getRunePouch() {
+		return runePouch;
+	}
 
-    public LogManager getLogManager(){
-        return logManager;
-    }
+	public LogManager getLogManager(){
+		return logManager;
+	}
 
 	public String getFullIP() {
 		return IP;
@@ -1177,14 +1125,18 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return newCharacter;
 	}
 
-    public boolean isNewlyCreated() {
+	public void setNew(boolean isNew) {
+		newCharacter = isNew;
+	}
+
+	public boolean isNewlyCreated() {
 		return getTotalOnlineTime() < Time.FIVE_MINUTES * 3;
-    }
+	}
 	// friends, 2 off
 
-    public long getTotalOnlineTime() {
-        return getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - logintime);
-    }
+	public long getTotalOnlineTime() {
+		return getPermExtraData().getLong("logintime") + (System.currentTimeMillis() - logintime);
+	}
 
 	/**
 	 * Gets the request manager.
@@ -1244,15 +1196,15 @@ public class Player extends Entity implements Persistable, Cloneable {
 					session.write(pendingPacket);
 				}
 				pendingPackets.clear();
-                getExtraData().put("packetsWrite", getExtraData().getInt("packetsWrite")+1);
+				getExtraData().put("packetsWrite", getExtraData().getInt("packetsWrite")+1);
 				session.write(packet);
 			}
 		}
 	}
 
-    public int getPendingPacketsCount(){
-        return pendingPackets.size();
-    }
+	public int getPendingPacketsCount(){
+		return pendingPackets.size();
+	}
 
 	/**
 	 * Gets the player's bank.
@@ -1422,9 +1374,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 		}
 	}
 
-    public String getSafeDisplayName(){
-        return getDisplay() != null && !getDisplay().isEmpty() ? TextUtils.titleCase(getDisplay()) : getName();
-    }
+	public String getSafeDisplayName(){
+		return getDisplay() != null && !getDisplay().isEmpty() ? TextUtils.titleCase(getDisplay()) : getName();
+	}
 
 	public String getDisplay() {
 		return display;
@@ -1435,7 +1387,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 *
 	 * @return The player's password.
 	 */
-	public Password getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
@@ -1463,6 +1415,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setPlayerRank(long playerRank) {
 		this.playerRank = playerRank;
+		getQuestTab().updateComponent(QuestTab.QuestTabComponent.RANK);
 	}
 
 	/**
@@ -1556,8 +1509,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * @param source The Entity dealing the blow.
 	 */
 	public void inflictDamage(Hit inc, Entity source) {
-        if(inc.getDamage() < 0)
-            return;
+		if(inc.getDamage() < 0)
+			return;
 		if(! getUpdateFlags().get(UpdateFlag.HIT)) {
 			getDamage().setHit1(inc);
 			getUpdateFlags().flag(UpdateFlag.HIT);
@@ -1575,7 +1528,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		if(skills.getLevel(Skills.HITPOINTS) <= 0) {
 			if(! this.isDead()) {
 				Prayer.retribution(this);
-				World.getWorld().submit(new PlayerDeathEvent(this));
+				World.submit(new PlayerDeathTask(this));
 
 			}
 			this.setDead(true);
@@ -1603,7 +1556,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		else
 			skills.setLevel(skill, (cHp + hp));
 		if(skills.getLevel(3) <= 0) {
-			World.getWorld().submit(new PlayerDeathEvent(this));
+			World.submit(new PlayerDeathTask(this));
 			this.setDead(true);
 		}
 	}
@@ -1619,7 +1572,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 				skills.setLevel(3, (cHp + hp));
 		}
 		if(skills.getLevel(3) <= 0) {
-			World.getWorld().submit(new PlayerDeathEvent(this));
+			World.submit(new PlayerDeathTask(this));
 			this.setDead(true);
 		}
 	}
@@ -1640,97 +1593,96 @@ public class Player extends Entity implements Persistable, Cloneable {
 		int trueStyle = style;
 		if(trueStyle >= 5)
 			trueStyle -= 5;
-        if(source != null) {
-            if (trueStyle == Constants.MELEE) {
-                if (getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE)) {
-                    damg *= 0.6;
-                    if (npc)
-                        damg = 0;
-                } else if (getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE)) {
-                    damg *= 0.6;
-                    if (npc)
-                        damg = 0;
-                    if (Misc.random(3) == 1) {
-                        this.playAnimation(Animation.create(12573));
-                        this.playGraphics(Graphic.create(2230));
-                        source.cE.hit(damg / 10, this, false, Constants.DEFLECT);
-                    }
-                }
-            } else if (trueStyle == Constants.MAGE) {
-                if (getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE)) {
-                    damg *= 0.6;
-                    if (npc)
-                        damg = 0;
-                } else if (getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC)) {
-                    damg *= 0.6;
-                    if (npc)
-                        damg = 0;
-                    if (Misc.random(3) == 1) {
-                        this.playAnimation(Animation.create(12573));
-                        this.playGraphics(Graphic.create(2228));
-                        source.cE.hit(damg / 10, this, false, Constants.DEFLECT);
-                    }
-                }
-            } else if (trueStyle == Constants.RANGE) {
-                if (getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE)) {
-                    damg *= 0.6;
-                    if (npc)
-                        damg = 0;
-                } else if (getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED)) {
-                    damg *= 0.6;
-                    if (npc)
-                        damg = 0;
-                    if (Misc.random(3) == 1) {
-                        this.playAnimation(Animation.create(12573));
-                        this.playGraphics(Graphic.create(2229));
-                        source.cE.hit(damg / 10, this, false, Constants.DEFLECT);
-                    }
-                }
-            }
-        }
+		if(source != null) {
+			if (trueStyle == Constants.MELEE) {
+				if (getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MELEE)) {
+					damg *= 0.6;
+					if (npc)
+						damg = 0;
+				} else if (getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MELEE)) {
+					damg *= 0.6;
+					if (npc)
+						damg = 0;
+					if (Misc.random(3) == 1) {
+						this.playAnimation(Animation.create(12573));
+						this.playGraphics(Graphic.create(2230));
+						source.cE.hit(damg / 10, this, false, Constants.DEFLECT);
+					}
+				}
+			} else if (trueStyle == Constants.MAGE) {
+				if (getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE)) {
+					damg *= 0.6;
+					if (npc)
+						damg = 0;
+				} else if (getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC)) {
+					damg *= 0.6;
+					if (npc)
+						damg = 0;
+					if (Misc.random(3) == 1) {
+						this.playAnimation(Animation.create(12573));
+						this.playGraphics(Graphic.create(2228));
+						source.cE.hit(damg / 10, this, false, Constants.DEFLECT);
+					}
+				}
+			} else if (trueStyle == Constants.RANGE) {
+				if (getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_RANGE)) {
+					damg *= 0.6;
+					if (npc)
+						damg = 0;
+				} else if (getPrayers().isEnabled(Prayers.CURSE_DEFLECT_RANGED)) {
+					damg *= 0.6;
+					if (npc)
+						damg = 0;
+					if (Misc.random(3) == 1) {
+						this.playAnimation(Animation.create(12573));
+						this.playGraphics(Graphic.create(2229));
+						source.cE.hit(damg / 10, this, false, Constants.DEFLECT);
+					}
+				}
+			}
+		}
 
-        /** Ring of life */
-        if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
-            if (duelAttackable < 1 && !Duel.inDuelLocation(this)) {
-                final int newhp = getSkills().getLevel(3) - damg;
-                if (newhp < Math.floor(getSkills().calculateMaxLifePoints() * .13) && newhp > 0) {  //10% of hp
-                    if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
-                        getEquipment().set(Equipment.SLOT_RING, null);
-                        getWalkingQueue().reset();
-                        ContentEntity.playerGfx(this, 1684);
-                        ContentEntity.startAnimation(this, 9603);
-                        extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
-                        World.getWorld().submit(new Event(0x258) {
-                            int loop = 0;
+		/** Ring of life */
+		if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
+			if (duelAttackable < 1 && !Duel.inDuelLocation(this)) {
+				final int newhp = getSkills().getLevel(3) - damg;
+				if (newhp < Math.floor(getSkills().calculateMaxLifePoints() * .13) && newhp > 0) {  //10% of hp
+					if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
+						getEquipment().set(Equipment.SLOT_RING, null);
+						getWalkingQueue().reset();
+						ContentEntity.playerGfx(this, 1684);
+						ContentEntity.startAnimation(this, 9603);
+						extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
+						World.submit(new Task(200) {
+							int loop = 0;
 
-                            public void execute() {
-                                if (loop == 5) {
-                                    setTeleportTarget(Location.create(3225, 3218, 0));
-                                    sendMessage("Your ring of life saves you, but is destroyed in the process.");
-                                    this.stop();
-                                }
-                                loop++;
-                                return;
-                            }
-                        });
-                        return 0;
-                    }
-                }
-            }
-        }
+							public void execute() {
+								if (loop == 5) {
+									setTeleportTarget(Location.create(3225, 3218, 0));
+									sendMessage("Your ring of life saves you, but is destroyed in the process.");
+									this.stop();
+								}
+								loop++;
+							}
+						});
+						return 0;
+					}
+				}
+			}
+		}
 
-        /** The phoenix necklace effect. */
-        if (Combat.usingPhoenixNecklace(this)) {
-            int newhp = getSkills().getLevel(3) - damg;
-            if (newhp < Math.floor(getSkills().calculateMaxLifePoints() / 3.5) && newhp > 0) {
-                getEquipment().set(Equipment.SLOT_AMULET, null);
-                heal(damg);
-                ContentEntity.playerGfx(this, 436);
-                extraData.put("combatimmunity", System.currentTimeMillis() + 300L);
-                sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
-                return 0;
-            }
-        }
+		/** The phoenix necklace effect. */
+		if (Combat.usingPhoenixNecklace(this)) {
+			int newhp = getSkills().getLevel(3) - damg;
+			if (newhp < Math.floor(getSkills().calculateMaxLifePoints() / 3.5) && newhp > 0) {
+				getEquipment().set(Equipment.SLOT_AMULET, null);
+				heal(damg);
+				ContentEntity.playerGfx(this, 436);
+				extraData.put("combatimmunity", System.currentTimeMillis() + 300L);
+				sendMessage("Your phoenix necklace heals you, but is destroyed in the process.");
+				return 0;
+			}
+		}
 
 		return damg;
 	}
@@ -1799,28 +1751,28 @@ public class Player extends Entity implements Persistable, Cloneable {
         }
 	*/
 		//If hitting more than hitpoints
-        if(source instanceof Player && LegendaryStore.ThirdAgeSet.setFor(style).has(((Player) source).getEquipment())) {
-            damg *= 1.15;
+		if(source instanceof Player && LegendaryStore.ThirdAgeSet.setFor(style).has(((Player) source).getEquipment())) {
+			damg *= 1.15;
 
-        }
+		}
 		if(damg > skills.getLevel(Skills.HITPOINTS)) {
 			damg = skills.getLevel(Skills.HITPOINTS);
 		}
-       // if(Rank.hasAbility(this, Rank.ADMINISTRATOR)) {
-            if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
-                damg = 0;
-       // }
+		// if(Rank.hasAbility(this, Rank.ADMINISTRATOR)) {
+		if(extraData.getLong("combatimmunity") > System.currentTimeMillis())
+			damg = 0;
+		// }
 
-        if(damg < 0)
-            damg = 0;
+		if(damg < 0)
+			damg = 0;
 		if(poison)
 			hitType = HitType.POISON_DAMAGE;
 		else if(damg <= 0)
 			hitType = HitType.NO_DAMAGE;
 		if(source instanceof Player) {
 			try {
-			if(duelAttackable > 0 && World.getWorld().getPlayers().get(source.getIndex()).isDead())
-				return 0;
+				if(duelAttackable > 0 && World.getPlayers().get(source.getIndex()).isDead())
+					return 0;
 			}catch(Exception e) {
 
 			}
@@ -1844,7 +1796,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 			playAnimation(anim);
 			isDoingEmote = true;
 			inAction = true;
-			World.getWorld().submit(new Event(1000, "checked") {
+			World.submit(new Task(1000, "emote") {
 				@Override
 				public void execute() {
 					isDoingEmote = false;
@@ -1853,14 +1805,14 @@ public class Player extends Entity implements Persistable, Cloneable {
 				}
 
 			});
-            ClueScrollManager.trigger(this, anim.getId());
+			ClueScrollManager.trigger(this, anim.getId());
 		}
 	}
 
 	public void startUpEvents() {
 		// getActionSender().sendString(29161,
-		// "Players Online: "+World.getWorld().getPlayers().size());
-		// getActionSender().sendString(29162, Server.getOnlineTime());
+		// "Players Online: "+World.getPlayers().size());
+		// getActionSender().sendString(29162, Server.getCurrentSessionTime());
 		FriendsAssistant.initialize(this);
 		for(int i = 0; i < 5; i++) {
 			getInterfaceState().setNextDialogueId(i, - 1);
@@ -1981,53 +1933,53 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public void setClanRank(int r) {
 		clanRank = r;
 	}
-	
-    public boolean isClanMainOwner() {
-        if(clanName == null || clanName.isEmpty())
-            return false;
-        Clan clan = ClanManager.clans.get(clanName);
-        return clan != null && clan.getOwner().equalsIgnoreCase(getName());
-    }
-	
-	public String getPlayersNameInClan() {
-		//System.out.println("Clanranker is " + clanRank);
-        if(isClanMainOwner())
-                return "[Owner] " + getDisplay();
-        return getClanRankName() + getDisplay();
+
+	public boolean isClanMainOwner() {
+		if(clanName == null || clanName.isEmpty())
+			return false;
+		Clan clan = ClanManager.clans.get(clanName);
+		return clan != null && clan.getOwner().equalsIgnoreCase(getName());
 	}
 
-    public String getClanRankName() {
-        String rank = "";
-        switch(clanRank) {
-            case 0:
-                return "";
-            case 1:
-                rank = "Recruit";
-                if(Dicing.diceClans.contains(clanName)) rank = "100K max";
-                break;
-            case 2:
-                rank = "Corporal";
-                if(Dicing.diceClans.contains(clanName)) rank = "500K max";
-                break;
-            case 3:
-                rank = "Sergeant";
-                if(Dicing.diceClans.contains(clanName)) rank = "Unlimited";
-                break;
-            case 4:
-                rank = "Lieutenant";
-                break;
-            case 5:
-                rank = "Owner";
-                break;
-            case 6:
-                rank = "Mod";
-                break;
-            case 7:
-                rank = "Admin";
-                break;
-        }
-        return "[" + rank + "] ";
-    }
+	public String getPlayersNameInClan() {
+		//System.out.println("Clanranker is " + clanRank);
+		if(isClanMainOwner())
+			return "[Owner] " + getDisplay();
+		return getClanRankName() + getDisplay();
+	}
+
+	public String getClanRankName() {
+		String rank = "";
+		switch(clanRank) {
+			case 0:
+				return "";
+			case 1:
+				rank = "Recruit";
+				if(Dicing.diceClans.contains(clanName)) rank = "100K max";
+				break;
+			case 2:
+				rank = "Corporal";
+				if(Dicing.diceClans.contains(clanName)) rank = "500K max";
+				break;
+			case 3:
+				rank = "Sergeant";
+				if(Dicing.diceClans.contains(clanName)) rank = "Unlimited";
+				break;
+			case 4:
+				rank = "Lieutenant";
+				break;
+			case 5:
+				rank = "Owner";
+				break;
+			case 6:
+				rank = "Mod";
+				break;
+			case 7:
+				rank = "Admin";
+				break;
+		}
+		return "[" + rank + "] ";
+	}
 
 	public String getClanName() {
 		return clanName;
@@ -2056,66 +2008,56 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public void resetBounty() {
 		bounty = 10;
 	}
-	
+
 	public void resetKillStreak() {
 		killStreak = 0;
 	}
-	
+
 	public int getKillStreak() {
 		return killStreak;
 	}
 
-    public void setKillStreak(int killStreak) {
+	public void setKillStreak(int killStreak) {
 		this.killStreak = killStreak;
 	}
 
 	public void increaseKillStreak() {
 		killStreak++;
 		getAchievementTracker().onKillstreak(killStreak);
-        actionSender.sendString(36505, "Killstreak: @red@" + killStreak);
+		actionSender.sendString(36505, "Killstreak: @red@" + killStreak);
 		bounty = (int)(4 * Math.pow(killStreak, 1.87));
-        if(bounty > 40_000)
-            bounty = 40_000;
+		if(bounty > 40_000)
+			bounty = 40_000;
 		if(bounty < 10)
 			bounty = 10;
 		switch(killStreak) {
 			case 5:
-				for(Player p : World.getWorld().getPlayers())
-					if(p != null)
-						p.sendPkMessage(getSafeDisplayName() + " is on a "
-						+ killStreak + " killstreak!");
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName() + " is on a "
+						+ killStreak + " killstreak!"));
 				break;
 			case 7:
-				for(Player p : World.getWorld().getPlayers())
-					if(p != null)
-						p.sendPkMessage(getSafeDisplayName()
-						+ " has begun a rampage with a killstreak of " + killStreak);
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName()
+						+ " has begun a rampage with a killstreak of " + killStreak));
 				break;
 			case 9:
-				for(Player p : World.getWorld().getPlayers())
-					if(p != null)
-						p.sendPkMessage(getSafeDisplayName()
-						+ " is on a massacre with " + killStreak + " kills!");
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(getSafeDisplayName()
+						+ " is on a massacre with " + killStreak + " kills!"));
 				break;
 		}
 		if(killStreak >= 10) {
 			if(Math.random() > 0.5) {
-				for (Player p : World.getWorld().getPlayers()) {
-					if (p != null) {
-						p.sendPkMessage(getSafeDisplayName() + " now has "
-								+ killStreak + " kills in a row! Kill him and gain "
-								+ bounty + " Pk points!");
-					}
-				}
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> {
+					p.sendPkMessage(getSafeDisplayName() + " now has "
+							+ killStreak + " kills in a row! Kill him and gain "
+							+ bounty + " Pk points!");
+				});
 			} else {
 				String ppl = getPeopleString();
-				for(Player p : World.getWorld().getPlayers()) {
-					if (p != null) {
-						p.sendPkMessage(getSafeDisplayName() + " has killed "
-								+ killStreak + ppl + " in a row! Kill him and gain "
-								+ bounty + " Pk points!");
-					}
-				}
+				World.getPlayers().stream().filter(p -> p != null).forEach(p -> {
+					p.sendPkMessage(getSafeDisplayName() + " has killed "
+							+ killStreak + ppl + " in a row! Kill him and gain "
+							+ bounty + " Pk points!");
+				});
 			}
 		}
 	}
@@ -2138,7 +2080,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void increaseKillCount() {
 		killCount++;
-		getQuestTab().updateQuestTab();
 	}
 
 	public ActionSender sendHeadedMessage(final String color, final String header, final Object... message) {
@@ -2153,13 +2094,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(!getPermExtraData().getBoolean("disabledPkMessages"))
+		if(Lock.isEnabled(this, Lock.PK_MESSAGES))
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendLootMessage(String tag, Object... message) {
-		if(!getPermExtraData().getBoolean("disabledLootMessages"))
+		if(Lock.isEnabled(this, Lock.LOOT_MESSAGES))
 			return sendHeadedMessage("@gre@", "[" + tag + "]", message);
 		return getActionSender();
 	}
@@ -2169,11 +2110,11 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public ActionSender sendStaffMessage(Object... message) {
-				return sendHeadedMessage("@blu@", "[Staff]", message);
+		return sendHeadedMessage("@blu@", "[Staff]", message);
 	}
 
 	public ActionSender sendClanMessage(Object... message) {
-			return sendHeadedMessage("@dre@", null, message);
+		return sendHeadedMessage("@dre@", null, message);
 	}
 
 	public ActionSender sendImportantMessage(Object... message) {
@@ -2191,7 +2132,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void increaseDeathCount() {
 		deathCount++;
-		getQuestTab().updateQuestTab();
 	}
 
 	public BankField getBankField() {
@@ -2245,9 +2185,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 			for(int i = 0; i < getBank().size(); i++) {
 				Item item = getBank().get(i);
 				if(item != null && item.getId() == 995) {
-                    if (item.getCount() <= amount)
+					if (item.getCount() <= amount)
 						getBank().remove(item);
-                    else
+					else
 						getBank().remove(new BankItem(0, 995, amount));
 				}
 			}
@@ -2272,30 +2212,14 @@ public class Player extends Entity implements Persistable, Cloneable {
 		return highscores;
 	}
 
-	public long getFirstVoteTime() {
-		return firstVoteTime;
+	@SuppressWarnings("deprecation")
+	public void addCharge(int seconds) {
+		if (chargeTill < System.currentTimeMillis())
+			chargeTill = System.currentTimeMillis();
+		Date date = new Date(chargeTill);
+		date.setSeconds((date.getSeconds() + seconds));
+		chargeTill = date.getTime();
 	}
-
-    public void setFirstVoteTime(final long firstVoteTime){
-        this.firstVoteTime = firstVoteTime;
-    }
-
-	public int getVoteCount() {
-		return voteCount;
-	}
-
-    public void setVoteCount(final int voteCount){
-        this.voteCount = voteCount;
-    }
-
-    @SuppressWarnings("deprecation")
-    public void addCharge(int seconds) {
-        if (chargeTill < System.currentTimeMillis())
-            chargeTill = System.currentTimeMillis();
-        Date date = new Date(chargeTill);
-        date.setSeconds((date.getSeconds() + seconds));
-        chargeTill = date.getTime();
-    }
 
 	@Override
 	public boolean equals(Object other) {
@@ -2310,29 +2234,29 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	/** Does the player have a active charge?*/
-    public boolean hasCharge() {
-    return chargeSpell || chargeTill > System.currentTimeMillis();
-    }
+	public boolean hasCharge() {
+		return chargeTill > System.currentTimeMillis();
+	}
 
-    public int getTurkeyKills() {
-        return turkeyKills;
-    }
+	public int getTurkeyKills() {
+		return turkeyKills;
+	}
 
 	public void setTurkeyKills(int turkeyKills) {
 		this.turkeyKills = turkeyKills;
-    }
+	}
 
-    public boolean hasFinishedTG() {
-        return turkeyKills >= 50;
-    }
+	public boolean hasFinishedTG() {
+		return turkeyKills >= 50;
+	}
 
-     public int setTreasureScroll(int treasureScroll) {
-        return this.treasureScroll = treasureScroll;
-     }
+	public int setTreasureScroll(int treasureScroll) {
+		return this.treasureScroll = treasureScroll;
+	}
 
-    public int getTreasureScroll() {
-        return treasureScroll;
-    }
+	public int getTreasureScroll() {
+		return treasureScroll;
+	}
 
 	public JGrandExchangeTracker getGrandExchangeTracker(){
 		if(geTracker == null)
@@ -2353,4 +2277,67 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public String verificationCode = "";
 	public boolean verificationCodeEntered = true;
 	public int verificationCodeAttemptsLeft = 3;
+
+	public List<Long> getIgnores() {
+		return ignores;
+	}
+
+	public int getVoteStreak() {
+		return voteStreak;
+	}
+
+	public void setVoteStreak(int voteStreak) {
+		this.voteStreak = voteStreak;
+	}
+
+	public int getTodayVotes() {
+		return todayVotes;
+	}
+
+	public void setTodayVotes(int todayVotes) {
+		this.todayVotes = todayVotes;
+	}
+
+	public long getLocks() {
+		return locks;
+	}
+
+	public void setLocks(long locks) {
+		this.locks = locks;
+	}
+
+	public long getVoteBonusEndTime() {
+		return voteBonusEndTime;
+	}
+
+	public void setVoteBonusEndTime(long bonusEnd, boolean applyEvent) {
+		if(applyEvent) {
+			World.submit(new VoteBonusEndTask(this, bonusEnd));
+		}
+		this.voteBonusEndTime = (applyEvent ? System.currentTimeMillis() : 0) + bonusEnd;
+	}
+
+	public long getLastVoteBonus() {
+		return lastVoteBonus;
+	}
+
+	public void setLastVoteBonus(long lastVoteBonus) {
+		this.lastVoteBonus = lastVoteBonus;
+	}
+
+	public String getGoogleAuthenticatorKey() {
+		return googleAuthenticatorKey;
+	}
+
+	public void setGoogleAuthenticatorKey(String googleAuthenticatorKey) {
+		this.googleAuthenticatorKey = googleAuthenticatorKey;
+	}
+
+	public List<Integer> getGoogleAuthenticatorBackup() {
+		return googleAuthenticatorBackup;
+	}
+
+	public void setGoogleAuthenticatorBackup(List<Integer> googleAuthenticatorBackup) {
+		this.googleAuthenticatorBackup = googleAuthenticatorBackup;
+	}
 }

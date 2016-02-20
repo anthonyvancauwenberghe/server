@@ -4,7 +4,6 @@ import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.recolor.save.SaveRecolorManager;
 import org.hyperion.rs2.saving.impl.*;
 import org.hyperion.rs2.util.TextUtils;
 
@@ -100,11 +99,9 @@ public class PlayerSaving {
 	private void initSaveObjects() {
 		saveList.add(new SaveName("Name"));
 		saveList.add(new SavePass("Pass"));
-		saveList.add(new SaveSalt("Salt"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
         saveList.add(new SaveBankPin("BankPin"));
-		saveList.add(new SaveInitialSource("InitialSource"));
         saveList.add(new SaveTabAmount());
         saveList.add(new SaveTurkeyKills("TurkeyKills"));
 		saveList.add(new SaveRank("Rank"));
@@ -118,8 +115,6 @@ public class PlayerSaving {
 		saveList.add(new SaveSpec("Spec"));
 		saveList.add(new SaveAtkType("AtkType"));
 		saveList.add(new SaveMagicbook("MagicBook"));
-		saveList.add(new SaveExpLock("XpLock"));
-		saveList.add(new SaveTrivia("Trivia"));
 		saveList.add(new SavePrayerBook("Altar"));
 		saveList.add(new SaveClan("Clan"));
         saveList.add(new SaveYellTag("YellTag"));
@@ -141,9 +136,7 @@ public class PlayerSaving {
 		saveList.add(new SaveDeathcount("DeathCount"));
 		saveList.add(new SaveCleaned("Cleaned"));
 		saveList.add(new SaveFightCavesWave("FightCavesWave"));
-		saveList.add(new SaveLastVoted("LastVoted")); //
-        saveList.add(new SaveFirstVoteTime("FirstVoteTime"));
-        saveList.add(new SaveVoteCount("VoteCount"));
+		saveList.add(new SaveLastVoted("LastVoted"));
 		saveList.add(new SaveMaxCape("maxcape"));
 		saveList.add(new SaveCompCape("compcape"));
 		saveList.add(new SavePvPTask("pvptask"));
@@ -173,12 +166,10 @@ public class PlayerSaving {
         saveList.add(new SaveSlayer("slayerdata"));
         saveList.add(new SaveEmblemPoints("emblemPoints"));
 
-        saveList.add(new SaveRecolorManager());
         saveList.add(new SaveCustomSet());
         saveList.add(new SavePermExtraData());
         saveList.add(new SaveGameMode());
         saveList.add(new SaveBonusXP());
-        saveList.add(new SavePin());
         saveList.add(new SavePid());
         saveList.add(new SaveDungeoneering());
         saveList.add(new SaveRunePouch("Rune Pouch"));
@@ -311,7 +302,7 @@ public class PlayerSaving {
                     return;
                 }
 			}
-			//World.getWorld().getSQLSaving().load(player);
+			//World.getSQLSaving().load(player);
 			in.close();
 			player.getHighscores();
 		} catch(IOException e) {

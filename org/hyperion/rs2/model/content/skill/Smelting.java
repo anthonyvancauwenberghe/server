@@ -9,8 +9,8 @@ package org.hyperion.rs2.model.content.skill;
  */
 
 import org.hyperion.data.PersistenceManager;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
@@ -96,7 +96,7 @@ public class Smelting implements ContentTemplate {
 		}
 		ContentEntity.startAnimation(client, SMELTING_ANIM);
 		client.setBusy(true);
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Task(3000) {
 			int amount = am;
 
 			@Override

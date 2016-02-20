@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -34,7 +34,7 @@ public class DonatorsPlace implements ContentTemplate {
 	}
 
 	private void addNPC(int id, int x, int y, int z) {
-		World.getWorld().getNPCManager().addNPC(x, y, z, id, - 1);
+		NPCManager.addNPC(x, y, z, id, - 1);
 	}
 
 	@Override

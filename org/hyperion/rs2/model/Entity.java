@@ -1,13 +1,14 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.region.Region;
+import org.hyperion.rs2.model.region.RegionManager;
 import org.hyperion.rs2.net.LoginDebugger;
 
 import java.util.LinkedHashSet;
@@ -160,6 +161,11 @@ public abstract class Entity {
 	private boolean isAggressor;
 
 	/**
+	 * Whether the entity is already registered in the world.
+	 */
+	private boolean registered;
+
+	/**
 	 * Creates the entity.
 	 */
 	public Entity() {
@@ -178,6 +184,25 @@ public abstract class Entity {
 
 	public void isHidden(boolean bool) {
 		isHidden = bool;
+	}
+
+	/**
+	 * Gets if this entity is registered.
+	 *
+	 * @return the unregistered.
+	 */
+	public boolean isRegistered() {
+		return registered;
+	}
+
+	/**
+	 * Sets if this entity is registered,
+	 *
+	 * @param registered
+	 *            the unregistered to set.
+	 */
+	public void setRegistered(boolean registered) {
+		this.registered = registered;
 	}
 
 	/**
@@ -390,13 +415,13 @@ public abstract class Entity {
 
 	public void vacateSquare() {
 		getWalkingQueue().reset();
-		if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
+		if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
 			getWalkingQueue().addStep(location.getX() - 1, location.getY());
-		} else if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
+		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
 			getWalkingQueue().addStep(location.getX() + 1, location.getY());
-		} else if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
+		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
 			getWalkingQueue().addStep(location.getX(), location.getY() - 1);
-		} else if(World.getWorld().isWalkAble(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
+		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
 			getWalkingQueue().addStep(location.getX(), location.getY() + 1);
 		}
 		getWalkingQueue().finish();
@@ -496,7 +521,7 @@ public abstract class Entity {
 			if(cE.getAbsX() >= 2814 && cE.getAbsX() <= 2942 && cE.getAbsY() >= 5250 && cE.getAbsY() <= 5373) {
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
-            World.getWorld().resetPlayersNpcs(player);
+            World.resetPlayersNpcs(player);
 		}
 	}
 
@@ -614,7 +639,7 @@ public abstract class Entity {
 	public void setLocation(Location location) {
 		this.location = location;
 
-		Region newRegion = World.getWorld().getRegionManager().getRegionByLocation(location);
+		Region newRegion = RegionManager.getRegionByLocation(location);
 		if(newRegion != currentRegion) {
 			if(currentRegion != null) {
 				removeFromRegion(currentRegion);

@@ -4,8 +4,7 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.saving.instant
-.SaveContainer;
+import org.hyperion.rs2.saving.instant.SaveContainer;
 
 public class SaveInventory extends SaveContainer {
 

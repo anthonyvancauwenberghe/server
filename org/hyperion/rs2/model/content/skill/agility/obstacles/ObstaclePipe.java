@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
@@ -38,7 +38,7 @@ public class ObstaclePipe extends Obstacle {
             super.succeed(player, start.distance(end) + 1, message);
             player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
         } else {
-            World.getWorld().submit(new Event(600) {
+            World.submit(new Task(600) {
                 int progress = 7;
                 @Override
                 public void execute() {

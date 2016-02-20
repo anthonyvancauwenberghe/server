@@ -7,7 +7,7 @@ import org.hyperion.rs2.model.container.Inventory;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 
 /**
@@ -48,7 +48,7 @@ public class LegendaryStoreHandler implements ContentTemplate {
                 } else if(id == WRATH_SCROLL) {
                     player.getPermExtraData().put("wrath", true);
                 }
-                PlayerSaving.getSaving().save(player);
+                PlayerSaving.save(player);
                 player.sendf("You unlock the @blu@%s@bla@ prayer!", TextUtils.titleCase(ItemDefinition.forId(id).getName().replace("Scroll of ", "")));
             }
         }

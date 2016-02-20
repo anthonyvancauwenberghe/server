@@ -7,6 +7,7 @@ import org.hyperion.cache.util.ZipUtils;
 import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
 import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.ObjectManager;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -19,39 +20,11 @@ import java.nio.ByteBuffer;
 public class LandscapeParser {
 
 	/**
-	 * The cache.
-	 */
-	private Cache cache;
-
-	/**
-	 * The cache file.
-	 */
-	private int area;
-
-	/**
-	 * The listener.
-	 */
-	private LandscapeListener listener;
-
-	/**
-	 * Creates the parser.
-	 *
-	 * @param cache    The cache.
-	 * @param area     The area id.
-	 * @param listener The listener.
-	 */
-	public LandscapeParser(Cache cache, int area, LandscapeListener listener) {
-		this.cache = cache;
-		this.area = area;
-		this.listener = listener;
-	}
-
-	/**
 	 * Parses the landscape file.
 	 *
 	 * @throws IOException if an I/O error occurs.
 	 */
-	public void parse() throws IOException {
+	public void parse(Cache cache, int area) throws IOException {
 		int x = ((area >> 8) & 0xFF) * 64;
 		int y = (area & 0xFF) * 64;
 
@@ -93,7 +66,7 @@ public class LandscapeParser {
 
 							Location loc = Location.create(localX + x, localY + y, plane);
 
-							listener.objectParsed(new GameObject(GameObjectDefinition.forId(objId), loc, type, rotation));
+							ObjectManager.objectParsed(new GameObject(GameObjectDefinition.forId(objId), loc, type, rotation));
 						}
 					}
 				}

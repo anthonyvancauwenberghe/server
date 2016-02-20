@@ -1,12 +1,12 @@
 package org.hyperion.rs2.saving;
 
+import org.hyperion.rs2.model.Player;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.hyperion.rs2.model.Player;
 
 /**
  * @author Arsen Maxyutov.

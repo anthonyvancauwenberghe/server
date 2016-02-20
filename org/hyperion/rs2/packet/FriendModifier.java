@@ -1,6 +1,6 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.FriendsAssistant;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -31,15 +31,15 @@ public class FriendModifier implements PacketHandler {
 			long nameLong = packet.getLong();
 
 			String name = NameUtils.longToName(nameLong);
-			String ownerName = Server.getConfig().getString("owner");
+			String ownerName = Configuration.getString(Configuration.ConfigurationObject.OWNER);
 
-			final Player playerTo = World.getWorld().getPlayer(name);
+			final Player playerTo = World.getPlayerByName(name);
 			//null check b4 use
 			if (playerTo == null || playerTo.chatStatus == null || (playerTo.chatStatus[1] == 2 && !Rank.isStaffMember(player)))
 				return;
 
 			if(name.equalsIgnoreCase(ownerName)) {
-				Player owner = World.getWorld().getPlayer(ownerName);
+				Player owner = World.getPlayerByName(ownerName);
 				if(!Rank.isStaffMember(player) && !Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
 					if(owner != null) {
 						if(!owner.getFriends().contains(player.getNameAsLong())) {

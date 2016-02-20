@@ -1,11 +1,11 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.util.Date;
@@ -33,7 +33,7 @@ public class ChangePassword extends Interface {
             return;
         }
 */
-        if(player.getPassword().getRealPassword().equalsIgnoreCase(password)) {
+        if(player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(password))) {
             player.sendImportantMessage("Don't be foolish, use a different password!");
             return;
         }
@@ -50,8 +50,8 @@ public class ChangePassword extends Interface {
                                 player.getPassword(), password,
                                 player.getShortIP(),
                                 date));
-        PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, player.getPassword().getRealPassword(), password));
-        player.getPassword().setRealPassword(password);
+        PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, EncryptionStandard.decryptPassword(player.getPassword()), password));
+        player.setPassword(EncryptionStandard.encryptPassword(password));
         /*String encrypted = Password.encryptPassword(password, player.getPassword().getSalt());
         player.getPassword().setEncryptedPass(encrypted);*/
         player.getActionSender().sendMessage(

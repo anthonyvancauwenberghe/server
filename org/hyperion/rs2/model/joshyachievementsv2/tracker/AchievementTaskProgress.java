@@ -3,12 +3,12 @@ package org.hyperion.rs2.model.joshyachievementsv2.tracker;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievement;
 import org.hyperion.rs2.model.joshyachievementsv2.Achievements;
-import org.hyperion.rs2.model.joshyachievementsv2.constraint.Constraint;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AchievementTaskProgress{
 
@@ -45,7 +45,7 @@ public class AchievementTaskProgress{
         else if(progress > 0)
             return "@or1@";
         else
-            return "@red@";
+            return "@dre@";
     }
 
     public double progressPercent(){
@@ -97,19 +97,17 @@ public class AchievementTaskProgress{
 
     public List<String> info(final Player player){
         final List<String> info = new ArrayList<>();
-        final Task task = task();
         final String color = progressColor();
         final double percent = progressPercent();
         final boolean finished = taskFinished();
-        if(task.hasPreTask())
-            info.add(String.format("> T@blu@%d @bla@(@red@*@blu@%d@bla@) %s | %s%,d / %,d @bla@| %s%s%%", task.number, task.preTask().number, task.shortDesc(), color, progress, task.threshold, color, percent));
+        if(task().hasPreTask())
+            info.add(String.format("@dre@> @bla@Task %d @dre@- (@bla@%d pre-tasks@dre@) @bla@%s @dre@| @bla@%s%,d/%,d @dre@| @bla@%s%s%%", task().number, task().preTask().number, task().shortDesc(), color, progress, task().threshold, color, percent));
         else
-            info.add(String.format("> T@blu@%d @bla@%s | %s%,d / %,d @bla@| %s%s%%", task.number, task.shortDesc(), color, progress, task.threshold, color, percent));
+            info.add(String.format("@dre@> @bla@Task %d @dre@- @bla@%s @dre@| @bla@%,d/%,d @dre@| @bla@%s%%", task().number, task().shortDesc(), progress, task().threshold, percent));
         if(startDate != null)
-            info.add(String.format("> T@blu@%d @bla@Started: @blu@%s @bla@| %s", task.number, startDate, finishDate != null ? "Finished: @blu@"+finishDate : "@red@Currently in progress..."));
+            info.add(String.format("@dre@> @bla@Task %d @dre@- @dre@Started: @bla@%s | @dre@%s", task().number, startDate, finishDate != null ? "Finished: @bla@" + finishDate : "@bla@Currently in progress..."));
         if(!finished){
-            for(final Constraint c : task.constraints.list)
-                info.add(String.format("> T@blu@%d @bla@[%sX@bla@] %s", task.number, c.constrainedColor(player), c.shortDesc()));
+            info.addAll(task().constraints.list.stream().map(c -> String.format("   @dre@[%s@dre@] @bla@%s", c.constrainedText(player), c.shortDesc())).collect(Collectors.toList()));
         }
         return info;
     }

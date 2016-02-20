@@ -16,8 +16,8 @@ package org.hyperion.rs2.model.content.skill;
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
@@ -169,7 +169,7 @@ public class Fishing implements ContentTemplate {
 			ContentEntity.turnTo(client, x, y);
 			final int fNumberOfCycles = (int) Math.random() * 5 + 5;
 
-			World.getWorld().submit(new Event(FISHING_DELAY) {
+			World.submit(new Task(FISHING_DELAY) {
 				public int cycle = - 1;
 
 				@Override
@@ -532,7 +532,7 @@ public class Fishing implements ContentTemplate {
 			ContentEntity.turnTo(client, x, y);
 			final int fNumberOfCycles = (int) Math.random() * 5 + 5;
 
-			World.getWorld().submit(new Event(FISHING_DELAY) {
+			World.submit(new Task(FISHING_DELAY) {
 				public int cycle = - 1;
 
 				@Override

@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
@@ -37,7 +37,7 @@ public class ClimbBranch extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, 1, message);
         player.playAnimation(Animation.create(animId));
-        World.getWorld().submit(new Event(700) {
+        World.submit(new Task(700) {
             @Override
             public void execute() {
                 player.setTeleportTarget(Location.create(end.getX(), end.getY(), end.getZ()));

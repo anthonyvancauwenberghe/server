@@ -9,43 +9,18 @@ public class TriviaSettings {
 
 	private static final int TIMER = 3000;
 
-	private boolean enabled = DEFAULT_ENABLED;
-
 	private long lastTimeAnswered;
-
-	public void enable() {
-		enabled = true;
-	}
-
-	public void disable() {
-		enabled = false;
-	}
-
-	public void change() {
-		enabled = ! enabled;
-	}
 
 	public void updateTimer() {
 		lastTimeAnswered = System.currentTimeMillis();
 	}
 
-	public TriviaSettings(long lastTimeAnswered, boolean enabled) {
-		this.enabled = enabled;
-		this.lastTimeAnswered = 0;
-	}
-
-	public void setEnabled(boolean b) {
-		enabled = b;
+	public TriviaSettings(long lastTimeAnswered) {
+		this.lastTimeAnswered = lastTimeAnswered;
 	}
 
 	public boolean canAnswer() {
-		if(System.currentTimeMillis() - lastTimeAnswered > TIMER)
-			return true;
-		return false;
-	}
-
-	public boolean isEnabled() {
-		return enabled;
+		return System.currentTimeMillis() - lastTimeAnswered > TIMER;
 	}
 
 	private void resetTimer() {
@@ -53,7 +28,7 @@ public class TriviaSettings {
 	}
 
 	public static void resetAllTimers() {
-		for(Player p : World.getWorld().getPlayers()) {
+		for(Player p : World.getPlayers()) {
 			if(p != null) {
                 p.getTrivia().resetTimer();
             }

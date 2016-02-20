@@ -9,7 +9,7 @@ import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.log.LogEntry;
-import org.hyperion.rs2.sqlv2.DbHub;
+import org.hyperion.sql.DbHub;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -196,7 +196,7 @@ public class JGrandExchangeTracker {
     }
 
     public boolean handleInterfaceInteraction(final int id){
-        if(!JGrandExchange.enabled || !DbHub.getPlayerDb().enabled())
+        if(!JGrandExchange.enabled || !DbHub.getPlayerDb().isInitialized())
             return false;
         switch(id){
             case SLOT_1_BUY:

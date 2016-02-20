@@ -1,8 +1,9 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.content.Lock;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Skills {
 
+    private static int lastSkillChange = -1;
 
     public static final class CurrentBonusXP {
         private final long time;
@@ -327,7 +329,7 @@ public class Skills {
         int norm = getLevelForExp(skill);
         if (levels[skill] > norm) {
             if (isCombatSkill(skill)) {
-                if (player.getExtraData().get(OverloadStatsEvent.KEY) != null)
+                if (player.getExtraData().get(OverloadStatsTask.KEY) != null)
                     return;
             }
             levels[skill]--;
@@ -442,24 +444,6 @@ public class Skills {
             }
         }
         return 1;
-
-		/*int points = 0;
-		int output = 0;
-
-		for (int lvl = 1; lvl < 99; lvl++) {
-			points += Math.floor(lvl + 300.0 * Math.pow(2.0, lvl / 7.0));
-			output = (int) Math.floor(points / 4);
-			if (output >= exp)
-				return lvl;
-		}
-		return 99;*/
-    }
-
-
-    public int getExperienceTilLevel(int skill, int targetLevel) {
-        int startXp = getXPForLevel(getLevelForExp(skill));
-        startXp = getXPForLevel(targetLevel) - startXp;
-        return startXp;
     }
 
     /**
@@ -479,23 +463,6 @@ public class Skills {
             output = (int) Math.floor(points / 4);
         }
         return 0;
-    }
-
-
-    public int getTotal99s() {
-        int count = 0;
-        for (int i = 7; i < levels.length; i++) {
-            if (levels[i] == 99) count++;
-        }
-        return count;
-    }
-
-    public void reward99(int total) {
-        //int reward = (int) (Math.pow(1.3, total) * 25);
-		int reward = 0;
-        player.getPoints().increaseDonatorPoints(reward, false);
-        player.getPoints().increasePkPoints(reward * 20, false);
-        player.sendf("You have been rewarded@or2@ %,d Donator Points @bla@and@red@ %,d PKPoints @bla@for your %dth 99 skill!", reward, reward * 20, total);
     }
 
     /**
@@ -523,42 +490,23 @@ public class Skills {
      * @param exp   The experience to add.
      */
     public void addExperience(int skill, double exp) {
+        Calendar c = Calendar.getInstance();
+        int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
+        int bonusSkill = (dayOfYear % (Skills.SKILL_COUNT - 8)) + 7;
 
-
-        try {
-
-            synchronized (World.getWorld()) {
-
-                Calendar c = Calendar.getInstance();
-                int dayOfYear = (c.get(Calendar.DAY_OF_YEAR) + 4);
-                int bonusSkill = (dayOfYear % (Skills.SKILL_COUNT - 8)) + 7;
-
-                int lastSkillChange = -1;
-                if (World.getWorld().getProperty("lastSkillChange") != null) {
-                    lastSkillChange = World.getWorld().getProperty("lastSkillChange");
+        if (dayOfYear != lastSkillChange) {
+            if (bonusSkill != BONUS_SKILL) {
+                while (bonusSkill == 21) {
+                    bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
                 }
-
-                if (dayOfYear != lastSkillChange) {
-                    if (bonusSkill != BONUS_SKILL) {
-                        while (bonusSkill == 21) {
-                            bonusSkill = Misc.random(Skills.SKILL_COUNT - 8) + 7;
-                        }
-                        BONUS_SKILL = bonusSkill;
-                        for (Player player1 : World.getWorld().getPlayers()) {
-                            player1.getQuestTab().sendBonusSkill();
-                            //player1.sendServerMessage("The bonus skill has been changed to " + Misc.getSkillName(Skills.BONUS_SKILL) + ".");
-                        }
-                    }
-                    World.getWorld().putProperty("lastSkillChange", dayOfYear);
-                }
+                BONUS_SKILL = bonusSkill;
+                World.getPlayers().forEach(player -> player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.BONUS_SKILL));
             }
-
-
-        } catch (Exception e) {
+            Skills.lastSkillChange = dayOfYear;
         }
 
 
-        if (player.xpLock && skill <= MAGIC)
+        if (Lock.isEnabled(player, Lock.EXPERIENCE_LOCK) && skill <= MAGIC)
             return;
         if (skill <= MAGIC && player.getDungeoneering().inDungeon())
             exp *= 1.75;
@@ -584,7 +532,7 @@ public class Skills {
         exps[skill] += exp;
         if (exps[skill] >= MAXIMUM_EXP) {
             if (oldExp != MAXIMUM_EXP) {
-                for (Player p : World.getWorld().getPlayers()) {
+                for (Player p : World.getPlayers()) {
                     p.sendLootMessage("Achievement", player.getSafeDisplayName() + " has just reached 200m experience in " + SKILL_NAME[skill] + "!");
                 }
                 player.checkCapes();

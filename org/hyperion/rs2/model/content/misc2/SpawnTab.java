@@ -159,11 +159,13 @@ public class SpawnTab {
 		for(Supplies supplies : Supplies.values()) {
 			ActionsManager.getManager().submit(START_INDEX + index + 1, new ButtonAction() {
 				@Override
-				public void handle(Player player, int id) {
-					if(Rank.hasAbility(player, Rank.DEVELOPER) || ItemSpawning.canSpawn(player, true))
-						for(Item item : supplies.items) {
-							player.getInventory().add(item);
-						}
+				public boolean handle(Player player, int id) {
+					if(!Rank.hasAbility(player, Rank.DEVELOPER) && !ItemSpawning.canSpawn(player, true))
+						return false;
+					for(Item item : supplies.items) {
+						player.getInventory().add(item);
+					}
+					return true;
 				}
 			});
 			index++;
@@ -172,11 +174,13 @@ public class SpawnTab {
 		for(Sets sets : Sets.values()) {
 			ActionsManager.getManager().submit(START_INDEX + index + 1, new ButtonAction() {
 				@Override
-				public void handle(Player player, int id) {
-					if(Rank.hasAbility(player, Rank.DEVELOPER) || ItemSpawning.canSpawn(player, true))
-						for(Item item : sets.items) {
-							player.getInventory().add(item);
-						}
+				public boolean handle(Player player, int id) {
+					if(!Rank.hasAbility(player, Rank.DEVELOPER) && !ItemSpawning.canSpawn(player, true))
+						return false;
+					for(Item item : sets.items) {
+						player.getInventory().add(item);
+					}
+					return true;
 				}
 			});
 			index++;

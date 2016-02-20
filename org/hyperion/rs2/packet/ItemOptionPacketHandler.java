@@ -3,24 +3,18 @@ package org.hyperion.rs2.packet;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.BoB;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.ge.GrandExchange;
-import org.hyperion.rs2.model.content.grandexchange.GrandExchangeV2;
-import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.DragonfireShield;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.misc2.*;
+import org.hyperion.rs2.model.content.misc2.Dicing;
+import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.rs2.net.Packet;
 
 /**
@@ -155,7 +149,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
             player.getExtraData().put("binditem", item);
             return;
         }
-		if(World.getWorld().getContentManager().handlePacket(13, player, useItem, itemUsedSlot, onItem, usedWithSlot))
+		if(ContentManager.handlePacket(13, player, useItem, itemUsedSlot, onItem, usedWithSlot))
 			return;
 		//random stuff
 		return;
@@ -176,9 +170,9 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		player.face(Location.create(objectX, objectY, 0));
 		if(player.getLocation().distance(Location.create(objectX, objectY, 0)) > 2)
 			return;
-		if(World.getWorld().getContentManager().handlePacket(14, player, itemId, itemSlot, objectId, - 1))
+		if(ContentManager.handlePacket(14, player, itemId, itemSlot, objectId, - 1))
 			return;
-		if(World.getWorld().getContentManager().handlePacket(19, player, itemId, objectId, objectX, objectY))
+		if(ContentManager.handlePacket(19, player, itemId, objectId, objectX, objectY))
 			return;
 		//random stuff
 		return;
@@ -192,7 +186,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
             return;
         }
 		Item item = player.getInventory().get(invslot);
-        final NPC npc = (NPC)World.getWorld().getNPCs().get(i);
+        final NPC npc = (NPC)World.getNpcs().get(i);
         if (item != null && npc != null) {
             if(npc.getDefinition().getId() == 2999)
                 Dicing.diceNpc(player, npc, item);
@@ -219,7 +213,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			return;
 		if(player.getInventory().get(castOnSlot) == null || player.getInventory().get(castOnSlot).getId() != castOnItem)
 			return;
-		if(World.getWorld().getContentManager().handlePacket(18, player, castSpell, castOnItem, castOnSlot, - 1))
+		if(ContentManager.handlePacket(18, player, castSpell, castOnItem, castOnSlot, - 1))
 			return;
 		//random stuff
 		Magic.alch(player, castOnItem, castOnSlot, castSpell);
@@ -248,7 +242,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		if(player.getInventory().get(burySlot) == null || player.getInventory().get(burySlot).getId() != buryItemID)
 			return;
 		//System.out.println("buryA: "+buryA+" burySlot: "+burySlot+" itemId: "+buryItemID);
-		if(World.getWorld().getContentManager().handlePacket(1, player, buryItemID, burySlot, buryA, - 1))
+		if(ContentManager.handlePacket(1, player, buryItemID, burySlot, buryA, - 1))
 			return;
 		//random stuff
 		return;
@@ -267,7 +261,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int id = packet.getShortA() & 0xFFFF;
 		ItemDefinition def = ItemDefinition.forId(id);
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(2, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(2, player, id, slot, interfaceId, - 1))
 				return;
 		switch(interfaceId) {
 			case Equipment.INTERFACE:
@@ -382,7 +376,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().valueGeItem(player, slot);
+					//World.getGrandExchange().valueGeItem(player, slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					//player.getLogging().log("Option 1 Shop Buy : " + def.getName());
 					ShopManager.valueBuyItem(player, id);
@@ -396,7 +390,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int slot = packet.getLEShort() & 0xFFFF;
 		int id = packet.getShortA() & 0xFFFF;
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(17, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(17, player, id, slot, interfaceId, - 1))
 				return;
 		switch(id) {
 		/*case 11283:
@@ -422,7 +416,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int interfaceId = packet.getShortA() & 0xFFFF;
 		//System.out.println("option 7: "+id+" "+slot+" "+interfaceId);
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(22, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(22, player, id, slot, interfaceId, - 1))
 				return;
 	}
 
@@ -440,7 +434,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		//System.out.println(interfaceId+" "+id+" "+slot);
 		//player.getLogging().log("Item option 2 : " + id + ", " + interfaceId);
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(3, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(3, player, id, slot, interfaceId, - 1))
 				return;
 		switch(interfaceId) {
             case RunePouch.INVENTORY_INTERFACE:
@@ -518,16 +512,13 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				}
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
-				if(slot >= 0 && player.getExtraData().get("geshop") != null && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
-					GrandExchangeV2.setItem(player, id, slot);
-				} else if(slot >= 0 && slot < Inventory.SIZE) {
+				if(slot >= 0 && slot < Inventory.SIZE) {
 					ShopManager.sellItem(player, id, slot, 1);
 				}
 				break;
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().buyItem(player, id, 1, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 1, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					ShopManager.buyItem(player, id, slot, 1);
 				}
@@ -547,7 +538,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int slot = packet.getShortA();
 		//player.getLogging().log("Item option 3 : " + id + ", " + interfaceId);
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(4, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(4, player, id, slot, interfaceId, - 1))
 				return;
 		if(player.getPvPStorage().contains(id)) {
 			player.sendf("You have approximately %d%% charges left on your %s", player.getPvPStorage().get(id)/10, ItemDefinition.forId(id).getName());
@@ -644,17 +635,14 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				}
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
-				if(slot >= 0 && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
-					GrandExchangeV2.setItem(player, id, slot);
-				} else if(slot >= 0 && slot < Inventory.SIZE) {
+				if(slot >= 0 && slot < Inventory.SIZE) {
 					//value
 					ShopManager.sellItem(player, id, slot, 5);
 				}
 				break;
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().buyItem(player, id, 5, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 5, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					ShopManager.buyItem(player, id, slot, 5);
 				}
@@ -674,7 +662,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int id = packet.getShortA() & 0xFFFF;
 		//player.getLogging().log("Item option 4 : " + id + ", " + interfaceId);
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(5, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(5, player, id, slot, interfaceId, - 1))
 				return;
 		switch(interfaceId) {
 		case Equipment.INTERFACE:
@@ -762,17 +750,14 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				}
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
-				if(slot >= 0 && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
-					GrandExchangeV2.setItem(player, id, slot);
-				} else if(slot >= 0 && slot < Inventory.SIZE) {
+				if(slot >= 0 && slot < Inventory.SIZE) {
 					//value
 					ShopManager.sellItem(player, id, slot, 10);
 				}
 				break;
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
-					//World.getWorld().getGrandExchange().buyItem(player, id, 10, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 10, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					ShopManager.buyItem(player, id, slot, 10);
 				}
@@ -793,7 +778,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		int id = packet.getLEShort() & 0xFFFF;
 		//player.getLogging().log("Item option 5 : " + id + ", " + interfaceId);
 		if(interfaceId != 5382 || (slot <= 27 && player.getInventory().get(slot) != null && player.getInventory().get(slot).getId() == id))
-			if(World.getWorld().getContentManager().handlePacket(21, player, id, slot, interfaceId, - 1))
+			if(ContentManager.handlePacket(21, player, id, slot, interfaceId, - 1))
 				return;
 		switch(interfaceId) {
             case RunePouch.INVENTORY_INTERFACE:
@@ -845,10 +830,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 				}
 				break;
 			case ShopManager.PLAYER_INVENTORY_INTERFACE:
-				if(slot >= 0 && (Integer) player.getExtraData().get("geshop") != 0) {
-					//World.getWorld().getGrandExchange().addItem(player,id,20,slot);
-					GrandExchangeV2.setItem(player, id, slot);
-				} else if(slot >= 0 && slot < Inventory.SIZE) {
+				if(slot >= 0 && slot < Inventory.SIZE) {
 					//value
 					//ShopManager.sellItem(player, id, slot, 20);
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
@@ -857,7 +839,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			case ShopManager.SHOP_INVENTORY_INTERFACE:
 				if(slot >= 0 && player.getShopId() == - 2) {
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);
-					//World.getWorld().getGrandExchange().buyItem(player, id, 20, player.geItem[slot].getName(),slot);
+					//World.getGrandExchange().buyItem(player, id, 20, player.geItem[slot].getName(),slot);
 				} else if(slot >= 0 && slot < ShopManager.SIZE) {
 					//ShopManager.buyItem(player, id, slot, 20);
 					player.getInterfaceState().openEnterAmountInterface(interfaceId, slot, id);

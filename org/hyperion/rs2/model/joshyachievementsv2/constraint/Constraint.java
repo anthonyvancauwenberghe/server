@@ -12,10 +12,10 @@ public interface Constraint {
         return desc().length() <= 70 ? desc() : (desc().substring(0, 70) + "...");
     }
 
-    default String constrainedColor(final Player player){
+    default String constrainedText(final Player player){
         if(constrained(player))
-            return "@gre@";
+            return "Requirement met";
         else
-            return "@red@";
+            return "Requirement not met";
     }
 }

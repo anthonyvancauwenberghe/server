@@ -9,21 +9,21 @@ package org.hyperion.rs2.login;
 
 	@Override
 	public LoginResult checkLogin(PlayerDetails pd) {
-		if(!World.getWorld().getLoginServerConnector().isAuthenticated()) {
+		if(!World.getLoginServerConnector().isAuthenticated()) {
 			return new LoginResult(8);
 		} else {
-			return World.getWorld().getLoginServerConnector().checkLogin(pd);
+			return World.getLoginServerConnector().checkLogin(pd);
 		}
 	}
 
 	@Override
 	public boolean loadPlayer(Player player) {
-		return World.getWorld().getLoginServerConnector().loadPlayer(player);
+		return World.getLoginServerConnector().loadPlayer(player);
 	}
 
 	@Override
 	public boolean savePlayer(Player player) {
-		return World.getWorld().getLoginServerConnector().savePlayer(player);
+		return World.getLoginServerConnector().savePlayer(player);
 	}
 
 }*/

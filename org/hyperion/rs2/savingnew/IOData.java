@@ -7,11 +7,13 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.EloRating;
+import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Gilles on 4/02/2016.
@@ -25,13 +27,18 @@ public enum IOData {
     },
     PASSWORD {
         @Override
+        public boolean shouldSave(Player player) {
+            return player.getPassword() != null;
+        }
+
+        @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getPassword().getRealPassword());
+            return new JsonPrimitive(player.getPassword());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.getPassword().setRealPassword(element.getAsString());
+            player.setPassword(element.getAsString());
         }
     },
     RANK {
@@ -48,6 +55,22 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
             player.setPlayerRank(element.getAsLong());
+        }
+    },
+    LOCKS {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getLocks() != 0;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getLocks());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setLocks(element.getAsLong());
         }
     },
     GAMEMODE {
@@ -80,7 +103,7 @@ public enum IOData {
     VERIFY_CODE {
         @Override
         public boolean shouldSave(Player player) {
-            return !player.verificationCode.equals("");
+            return player.verificationCode != null && !player.verificationCode.equals("");
         }
 
         @Override
@@ -91,22 +114,7 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
             player.verificationCode = element.getAsString();
-        }
-    },
-    ACCOUNT_PIN {
-        @Override
-        public boolean shouldSave(Player player) {
-            return player.pin != -1;
-        }
-
-        @Override
-        public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.pin);
-        }
-
-        @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            player.pin = element.getAsInt();
+            player.verificationCodeEntered = !player.verificationCode.isEmpty();
         }
     },
     BANK_PIN {
@@ -141,6 +149,38 @@ public enum IOData {
             player.setPid(element.getAsInt());
         }
     },
+    GOOGLE_AUTHENTICATOR_KEY {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getGoogleAuthenticatorKey() != null;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getGoogleAuthenticatorKey());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setGoogleAuthenticatorKey(element.getAsString());
+        }
+    },
+    GOOGLE_AUTHENTICATOR_BACKUP_CODES {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getGoogleAuthenticatorBackup() != null;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return builder.toJsonTree(player.getGoogleAuthenticatorBackup(), new TypeToken<List<Integer>>(){}.getType());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setGoogleAuthenticatorBackup(builder.fromJson(element, new TypeToken<List<Integer>>(){}.getType()));
+        }
+    },
     LAST_IP {
         @Override
         public boolean shouldSave(Player player) {
@@ -154,7 +194,7 @@ public enum IOData {
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.lastIp = element.getAsString();
+            player.lastIp = element.getAsString().replace("/", "");
         }
     },
     LAST_MAC {
@@ -223,36 +263,85 @@ public enum IOData {
             player.setLastHonorPointsReward(element.getAsLong());
         }
     },
-    LAST_VOTED {
+    LAST_VOTE_STREAK_INCREASE {
         @Override
         public boolean shouldSave(Player player) {
-            return player.getLastVoted() != 0;
+            return player.getLastVoteStreakIncrease() != 0;
         }
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getLastVoted());
+            return new JsonPrimitive(player.getLastVoteStreakIncrease());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.setLastVoted(element.getAsLong());
+            player.setLastVoteStreakIncrease(element.getAsLong());
         }
     },
-    FIRST_VOTED {
+
+    VOTING_STREAK {
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getVoteStreak());
+        }
+
         @Override
         public boolean shouldSave(Player player) {
-            return player.getFirstVoteTime() != -1;
+            return player.getVoteStreak() != 0;
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setVoteStreak(element.getAsInt());
+        }
+    },
+    TODAY_VOTES {
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getTodayVotes());
+        }
+
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getTodayVotes() != 0;
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setTodayVotes(element.getAsInt());
+        }
+    },
+    LAST_VOTE_BONUS {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getLastVoteBonus() != 0;
         }
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getFirstVoteTime());
+            return new JsonPrimitive(player.getLastVoteBonus());
         }
 
         @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.setFirstVoteTime(element.getAsLong());
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setLastVoteBonus(element.getAsLong());
+        }
+    },
+    VOTE_BONUS_END {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getVoteBonusEndTime() != 0;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getVoteBonusEndTime() - System.currentTimeMillis());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setVoteBonusEndTime(element.getAsLong(), true);
         }
     },
     ELO {
@@ -333,38 +422,6 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
             player.getSpellBook().changeSpellBook(element.getAsInt());
-        }
-    },
-    EXPERIENCE_LOCK {
-        @Override
-        public boolean shouldSave(Player player) {
-            return player.xpLock;
-        }
-
-        @Override
-        public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.xpLock);
-        }
-
-        @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.xpLock = element.getAsBoolean();
-        }
-    },
-    TRIVIA_ENABLED {
-        @Override
-        public boolean shouldSave(Player player) {
-            return player.getTrivia().isEnabled();
-        }
-
-        @Override
-        public JsonElement saveValue(Player player, Gson builder) {
-            return new JsonPrimitive(player.getTrivia().isEnabled());
-        }
-
-        @Override
-        public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.getTrivia().setEnabled(element.getAsBoolean());
         }
     },
     DEFAULT_ALTAR {
@@ -600,9 +657,9 @@ public enum IOData {
         public void loadValue(Player player, JsonElement element, Gson builder) {
             JsonObject object = element.getAsJsonObject();
             if(object.has("taskId"))
-                player.getSlayer().setTask(SlayerTask.valueOf(element.getAsString()));
+                player.getSlayer().setTask(SlayerTask.valueOf(object.get("taskId").getAsString()));
             if(object.has("taskAmount"))
-                player.getSlayer().setTaskAmount(element.getAsInt());
+                player.getSlayer().setTaskAmount(object.get("taskAmount").getAsInt());
         }
     },
     KILL_STREAK {
@@ -651,6 +708,22 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
             player.setDeathCount(element.getAsInt());
+        }
+    },
+    TAB_AMOUNT {
+        @Override
+        public boolean shouldSave(Player player) {
+            return player.getBankField().getTabAmount() > 2;
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getBankField().getTabAmount());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.getBankField().setTabAmount(element.getAsInt());
         }
     },
     CLEANED {
@@ -1008,12 +1081,12 @@ public enum IOData {
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return builder.toJsonTree(player.getBank().getItems(), new TypeToken<Item[]>(){}.getType());
+            return builder.toJsonTree(player.getBank().getItems(), new TypeToken<BankItem[]>(){}.getType());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            player.getBank().setItems(builder.fromJson(element, new TypeToken<Item[]>(){}.getType()));
+            Arrays.stream((BankItem[])builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType())).filter(bankItem -> bankItem != null).forEach(bankItem -> player.getBank().add(new BankItem(bankItem.getTabIndex(), bankItem.getId(), bankItem.getCount())));
         }
     },
     FRIENDS {

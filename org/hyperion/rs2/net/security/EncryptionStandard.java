@@ -10,17 +10,29 @@ import java.security.Key;
  * Created by Gilles on 29/10/2015.
  **/
 
-public class EncryptionStandard {
+public final class EncryptionStandard {
 
     public static String encryptPassword(String password) {
-        return encrypt(password, Server.getCharFileEncryption().getKey());
+        if(password == null)
+            return "";
+        return encrypt(password.toLowerCase(), Server.getCharFileEncryption().getKey());
     }
 
     public static String decryptPassword(String password) {
         return decrypt(password, Server.getCharFileEncryption().getKey());
     }
 
+    public static String encryptGoogleKey(String key) {
+        return encrypt(key, Server.getCharFileEncryption().getKey());
+    }
+
+    public static String decryptGoogleKey(String key) {
+        return decrypt(key, Server.getCharFileEncryption().getKey());
+    }
+
     public static String encrypt(String plainText, Key encryptionKey) {
+        if(plainText == null)
+            return "";
         try {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
@@ -32,7 +44,7 @@ public class EncryptionStandard {
         }
     }
 
-    public static String decrypt(String encrypted, Key encryptionKey) {
+    private static String decrypt(String encrypted, Key encryptionKey) {
         try {
         Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, encryptionKey);

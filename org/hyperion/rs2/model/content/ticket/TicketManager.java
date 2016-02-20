@@ -11,82 +11,59 @@ import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.packet.InterfacePacketHandler;
 import org.hyperion.rs2.util.TextUtils;
 
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Wasay
- * Date: 1/9/15
- * Time: 5:50 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TicketManager {
 
-    private final Set<Ticket> tickets = new TreeSet<>((Ticket id_1, Ticket id_2) -> Integer.valueOf(id_1.id).compareTo(Integer.valueOf(id_2.id)));
+    private final static Set<Ticket> TICKETS = new TreeSet<>((Ticket id_1, Ticket id_2) -> Integer.valueOf(id_1.id).compareTo(id_2.id));
 
-    public synchronized void add(final Ticket ticket) {
-        tickets.add(ticket);
-        for(final Player player : World.getWorld().getPlayers()) {
-            if (Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()) {
-                player.sendMessage( "@dre@------------------------------ New ticket submitted ------------------------------",
-                                    "@dre@Player: @bla@" + TextUtils.ucFirst(ticket.name),
-                                    "@dre@Title: @bla@" + TextUtils.ucFirst(ticket.title),
-                                    "@dre@Reason: @bla@" + ticket.request,
-                                    "@dre@Rank: @bla@" + ticket.min_rank,
-                                    "@dre@----------------------------------------------------------------------------------"
-                        );
-            }
-        }
-
-        refreshSizeForStaff();
-
-    }
-
-    private int getSizeForPlayer(final Player player) {
-        if(!Rank.isStaffMember(player))
-            return -1;
-        int size = 0;
-        for(final Ticket ticket : tickets) {
-            if(Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal())
-                size++;
-        }
-        return size;
-    }
-
-    private void refreshSizeForStaff() {
-
-        for(final Player player : World.getWorld().getPlayers()) {
-            final int size = getSizeForPlayer(player);
-            if (size != -1) {
-                final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT).putShort(5);
-                builder.putTriByte(size);
-                player.write(builder.toPacket());
-            }
-        }
-
-    }
-
-    public synchronized void remove(final Ticket ticket) {
-        tickets.remove(ticket);
+    public static synchronized void add(final Ticket ticket) {
+        TICKETS.add(ticket);
+        World.getPlayers().stream().filter(player -> player != null && Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()).forEach(player ->
+            player.sendMessage("@dre@------------------------------ New ticket submitted ------------------------------",
+                    "@dre@Player: @bla@" + TextUtils.ucFirst(ticket.name),
+                    "@dre@Title: @bla@" + TextUtils.ucFirst(ticket.title),
+                    "@dre@Reason: @bla@" + ticket.request,
+                    "@dre@Rank: @bla@" + ticket.min_rank,
+                    "@dre@----------------------------------------------------------------------------------"
+            ));
         refreshSizeForStaff();
     }
 
-    public Ticket forId(final int id) {
+    public static synchronized void remove(final Ticket ticket) {
+        TICKETS.remove(ticket);
+        refreshSizeForStaff();
+    }
+
+    private static int getSizeForPlayer(Player player) {
+        return (int)(TICKETS.stream().filter(ticket -> ticket.min_rank.ordinal() <= Rank.getPrimaryRankIndex(player)).count());
+    }
+
+    private static void refreshSizeForStaff() {
+        World.getPlayers().stream().filter(player -> player != null && Rank.isStaffMember(player)).forEach(player -> {
+            final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT).putShort(5);
+            builder.putTriByte(getSizeForPlayer(player));
+            player.write(builder.toPacket());
+        });
+    }
+
+    public static Ticket forId(final int id) {
         Ticket tick = null;
-        for(final Ticket ticket : tickets)
+        for(final Ticket ticket : TICKETS)
             if(ticket.id == id)
                 tick = ticket;
         return tick;
     }
 
-    public void assist(final Player player, final int id) {
+    public static void assist(final Player player, final int id) {
         if(!Rank.isStaffMember(player))
             return;
         if(!ItemSpawning.canSpawn(player))
             return;
         Ticket tick = forId(id);
         if(tick != null) {
-            final Player p = World.getWorld().getPlayer(tick.name);
+            final Player p = World.getPlayerByName(tick.name);
             if(p != null) {
                 if(!p.getLocation().inDuel() && !p.getLocation().inPvPArea()  && !Jail.inJail(p) && !p.getDungeoneering().inDungeon()) {
                     Magic.teleport(p, player.getLocation(), true);
@@ -105,10 +82,10 @@ public class TicketManager {
         }
     }
 
-    public void display(final Player player) {
+    public static void display(final Player player) {
         final PacketBuilder builder = new PacketBuilder(InterfacePacketHandler.DATA_OPCODE, Packet.Type.VARIABLE_SHORT).putShort(3);
-        builder.putShort((short) getSizeForPlayer(player));
-        for(final Ticket ticket : tickets) {
+        builder.putShort((short)getSizeForPlayer(player));
+        for(final Ticket ticket : TICKETS) {
             if(Rank.getPrimaryRank(player).ordinal() >= ticket.min_rank.ordinal()) {
                 builder.putRS2String(ticket.title);
                 builder.putRS2String(ticket.name);
@@ -117,10 +94,7 @@ public class TicketManager {
                 builder.put((byte)revert(ticket.min_rank));
             }
         }
-
         player.write(builder.toPacket());
-
-
     }
 
     public static Rank convert(final int read) {

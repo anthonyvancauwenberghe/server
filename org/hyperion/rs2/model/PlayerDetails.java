@@ -2,132 +2,57 @@ package org.hyperion.rs2.model;
 
 import org.apache.mina.core.session.IoSession;
 import org.hyperion.rs2.net.ISAACCipher;
-import org.hyperion.rs2.util.NameUtils;
+import org.hyperion.rs2.net.security.EncryptionStandard;
 
-/**
- * Contains details about a player (but not the actual <code>Player</code>
- * object itself) that has not logged in yet.
- *
- * @author Graham Edgecombe
- */
-public class PlayerDetails {
+public final class PlayerDetails {
 
-	/**
-	 * The session.
-	 */
 	private IoSession session;
+	private final String name, password, IpAddress;
+	private final int macAddress, UID, authenticationCode;
+	private final ISAACCipher inCipher, outCipher;
+	private final int[] specialUid;
 
-	/**
-	 * The player name.
-	 */
-	private String name;
-
-	/**
-	 * The player password.
-	 */
-	private String pass;
-
-	/**
-	 * The player's UID.
-	 */
-	private int uid;
-
-	/**
-	 * The incoming ISAAC cipher.
-	 */
-	private ISAACCipher inCipher;
-
-	/**
-	 * The outgoing ISAAC cipher.
-	 */
-	private ISAACCipher outCipher;
-
-	public String IP;
-
-    public int[] specialUid;
-
-	/**
-	 * Creates the player details class.
-	 *
-	 * @param session   The session.
-	 * @param name      The name.
-	 * @param pass      The password.
-	 * @param uid       The unique id.
-	 * @param inCipher  The incoming cipher.
-	 * @param outCipher The outgoing cipher.
-	 */
-	public PlayerDetails(IoSession session, String name, String pass, int uid, ISAACCipher inCipher, ISAACCipher outCipher, String IP, String message) {
+	public PlayerDetails(IoSession session, String name, String password, int authenticationCode, int macAddress, int UID, ISAACCipher inCipher, ISAACCipher outCipher, String IpAddress, int[] specialUid) {
 		this.session = session;
 		this.name = name;
-		this.pass = pass;
-		this.uid = uid;
+		this.password = EncryptionStandard.encryptPassword(password);
+		this.macAddress = macAddress;
 		this.inCipher = inCipher;
 		this.outCipher = outCipher;
-		this.IP = IP;
-		if(! NameUtils.isValidName(name)) {
-			System.out.println("Initialiting invalid name: " + name + ", " + message);
-		}
+		this.IpAddress = IpAddress;
+		this.specialUid = specialUid;
+		this.UID = UID;
+		this.authenticationCode = authenticationCode;
 	}
 
-	/**
-	 * Gets the <code>IoSession</code>.
-	 *
-	 * @return The <code>IoSession</code>.
-	 */
 	public IoSession getSession() {
 		return session;
 	}
-
-	/**
-	 * Gets the name.
-	 *
-	 * @return The name.
-	 */
 	public String getName() {
-		if(! NameUtils.isValidName(name)) {
-			System.out.println("Invalid name in pd!" + name);
-		}
 		return name;
 	}
-
-	/**
-	 * Gets the password.
-	 *
-	 * @return The password.
-	 */
 	public String getPassword() {
-		return pass;
+		return password;
 	}
-
-	/**
-	 * Gets the unique id.
-	 *
-	 * @return The unique id.
-	 */
-	public int getUID() {
-		return uid;
+	public int getMacAddress() {
+		return macAddress;
 	}
-
-	/**
-	 * Gets the incoming ISAAC cipher.
-	 *
-	 * @return The incoming ISAAC cipher.
-	 */
 	public ISAACCipher getInCipher() {
 		return inCipher;
 	}
-
-	/**
-	 * Gets the outgoing ISAAC cipher.
-	 *
-	 * @return The outgoing ISAAC cipher.
-	 */
 	public ISAACCipher getOutCipher() {
 		return outCipher;
 	}
-
-	public void setPass(String password) {
-		this.pass = password;
+	public String getIpAddress() {
+		return IpAddress;
 	}
-
+	public int[] getSpecialUid() {
+		return specialUid;
+	}
+	public int getUID() {
+		return UID;
+	}
+	public int getAuthenticationCode() {
+		return authenticationCode;
+	}
 }

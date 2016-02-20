@@ -40,7 +40,7 @@ public abstract class SaveObject {
 	 *
 	 * @param player
 	 * @param writer
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	public abstract boolean save(Player player, BufferedWriter writer) throws IOException;
 
@@ -50,7 +50,7 @@ public abstract class SaveObject {
 	 * @param player
 	 * @param values
 	 * @param reader
-	 * @throws java.io.IOException
+	 * @throws IOException
 	 */
 	public abstract void load(Player player, String values, BufferedReader reader)
 			throws IOException;

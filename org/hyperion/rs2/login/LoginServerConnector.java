@@ -7,12 +7,8 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
-import org.hyperion.rs2.WorldLoader.LoginResult;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.PlayerDetails;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerLoading;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PlayerFiles;
@@ -111,11 +107,6 @@ public class LoginServerConnector extends IoHandlerAdapter {
 		if(! cf.isConnected() && (session == null || ! session.isConnected())) {
 			logger.severe("Connection to login server failed. Retrying...");
 			// this stops stack overflow errors
-			World.getWorld().getEngine().submitLogic(new Runnable() {
-				public void run() {
-					World.getWorld().getLoginServerConnector().connect(password, node);
-				}
-			});
 		} else {
 			this.session = cf.getSession();
 			logger.info("Connected.");
@@ -245,7 +236,7 @@ public class LoginServerConnector extends IoHandlerAdapter {
 	 *
 	 * @param pd The player details.
 	 * @return The login result.
-	 */
+	 *//*
 	public LoginResult checkLogin(PlayerDetails pd) {
 		IoBuffer buf = IoBuffer.allocate(16);
 		buf.setAutoExpand(true);
@@ -268,7 +259,7 @@ public class LoginServerConnector extends IoHandlerAdapter {
 				return new LoginResult(code);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Loads a player.
@@ -295,8 +286,8 @@ public class LoginServerConnector extends IoHandlerAdapter {
 				return false;
 			} else {
 
-				if(MergedSaving.existsMain(player.getName())) {
-					PlayerSaving.getSaving().load(player, MergedSaving.MERGED_DIR);
+				if(PlayerLoading.playerExists(player.getName())) {
+					PlayerLoading.loadPlayer(player);
 				} else {
 					player.deserialize(playerData, false);
 				}

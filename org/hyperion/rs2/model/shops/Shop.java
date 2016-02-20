@@ -118,7 +118,7 @@ public abstract class Shop {
 	}
 
 	public void updatePlayers() {
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player == null)
 				continue;
 			if(this.id == player.getShopId()) {

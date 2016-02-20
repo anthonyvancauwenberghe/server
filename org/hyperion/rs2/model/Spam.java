@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.commands.impl.RapeCommand;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
@@ -91,7 +91,7 @@ public class Spam {
 				if(counter >= SPAM_MESSAGES_LIMIT) {
 					warnings++;
 					warnModerators(spammer);
-					if(warnings > 10 && World.getWorld().getStaffManager().getOnlineStaff().size() == 0) {
+					if(warnings > 10 && StaffManager.getOnlineStaff().size() == 0) {
 						spammer.getSpam().punish();
 					}
 					spammer.getExtraData().put(COUNTER_KEY, 0);
@@ -124,7 +124,7 @@ public class Spam {
 	public String punish() {
 		if(!isSpamming())
 			return "Player is not spamming..";
-		World.getWorld().submit(new Event(1000) {
+		World.submit(new Task(1000) {
 			private int counter = 0;
 
 			@Override
@@ -186,7 +186,7 @@ public class Spam {
 			@Override
 			public boolean execute(Player player, String input) {
 				LinkedList<Spam> spammers = new LinkedList<Spam>();
-				for(Player spammer : World.getWorld().getPlayers()) {
+				for(Player spammer : World.getPlayers()) {
 					if(spammer.getSpam().isSpamming()) {
 						spammers.add(spammer.getSpam());
 					}
@@ -212,7 +212,7 @@ public class Spam {
 
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				for(Player target : World.getWorld().getPlayers()) {
+				for(Player target : World.getPlayers()) {
                     if (target != null) {
                         if (target.getSpam().isSpamming())
                             target.getSpam().punish();

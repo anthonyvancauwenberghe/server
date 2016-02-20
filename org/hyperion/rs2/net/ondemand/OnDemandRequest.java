@@ -79,7 +79,7 @@ public class OnDemandRequest {
 				session.write(bldr.toPacket());
 			}
 		} catch(IOException ex) {
-			if(!World.getWorld().gracefullyExitSession(session))
+			if(!World.gracefullyExitSession(session))
 				session.close(false);
 		}
 	}

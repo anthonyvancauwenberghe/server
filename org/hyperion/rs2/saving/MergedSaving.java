@@ -1,10 +1,8 @@
 package org.hyperion.rs2.saving;
 
-import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.saving.instant.InstantPlayerSaving;
 import org.hyperion.util.Time;
 
 import java.io.BufferedReader;
@@ -21,14 +19,7 @@ public class MergedSaving {
     public static final String BACKUP_DIR = "C:/Users/Administrator/Desktop/TEST/artero/";
 
     public static void load(Player player) {
-        int source = player.getSource();
-        if(source == GenericWorldLoader.ARTERO) {
-            PlayerSaving.getSaving().load(player, ARTERO_DIR);
-        } else if(source == GenericWorldLoader.INSTANT) {
-            InstantPlayerSaving.getSaving().load(player);
-        } else {
-            PlayerSaving.getSaving().load(player, MERGED_DIR);
-        }
+
     }
 
     public static boolean cleanArteroFile(String name) {

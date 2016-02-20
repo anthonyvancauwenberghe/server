@@ -2,7 +2,6 @@ package org.hyperion.rs2.pf;
 
 import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.region.RegionManager;
 
@@ -52,7 +51,6 @@ public class TileMapBuilder {
 	 */
 	public TileMap build() {
 		// the region manager
-		RegionManager mgr = World.getWorld().getRegionManager();
 		// a set of regions covered by our center position + radius
 		Set<Region> coveredRegions = new HashSet<Region>();
 
@@ -60,7 +58,7 @@ public class TileMapBuilder {
 		for(int x = (- radius - 1); x <= (radius + 1); x++) {
 			for(int y = (- radius - 1); y <= (radius + 1); y++) {
 				Location loc = centerPosition.transform(x, y, 0);
-				coveredRegions.add(mgr.getRegionByLocation(loc));
+				coveredRegions.add(RegionManager.getRegionByLocation(loc));
 			}
 		}
 

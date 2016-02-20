@@ -13,7 +13,7 @@ public class ReportAbuse implements PacketHandler {
 		try {
 			String name = NameUtils.longToName(l);
 			int rule = packet.get();
-			//World.getWorld().getAbuseHandler().reportAbuse(player,name,rule);
+			//World.getAbuseHandler().reportAbuse(player,name,rule);
 		} catch(ArrayIndexOutOfBoundsException e2) {
 			//errors todo with input will be handled here
 		} catch(Exception e) {

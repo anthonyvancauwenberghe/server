@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.transport;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -44,13 +44,13 @@ public class Levers implements ContentTemplate {
 		player.getCombat().setOpponent(null);
 		player.setCanWalk(false);
 		player.updateTeleportTimer();
-		World.getWorld().submit(new Event(1500) {
+		World.submit(new Task(1500) {
 			@Override
 			public void execute() {
 				player.getActionSender().sendCreateObject(objectId, 4, lever.getDirection2(), loc);
 				player.playGraphics(Graphic.create(1576, 6553635));// perfect !
 				player.playAnimation(Animation.create(8939, 0));
-				World.getWorld().submit(new Event(1800) {
+				World.submit(new Task(1800) {
 
 					@Override
 					public void execute() {

@@ -4,8 +4,8 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
-import org.hyperion.rs2.sqlv2.DbHub;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.sql.DbHub;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ public final class PunishmentManager {
     }
 
     public boolean load(){
-        if(!DbHub.getGameDb().enabled())
+        if(!DbHub.getGameDb().isInitialized())
             return false;
         List<Punishment> punishments = DbHub.getGameDb().getPunishment().load();
         if(punishments.isEmpty() || punishments.isEmpty())

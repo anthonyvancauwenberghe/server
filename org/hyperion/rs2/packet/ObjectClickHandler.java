@@ -1,19 +1,18 @@
 package org.hyperion.rs2.packet;
 
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.action.impl.MiningAction;
 import org.hyperion.rs2.action.impl.MiningAction.Node;
 import org.hyperion.rs2.action.impl.ProspectingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.bank.Bank;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
-
-import java.io.IOException;
 
 public class ObjectClickHandler {
 
@@ -36,7 +35,7 @@ public class ObjectClickHandler {
 
         if (Rank.hasAbility(p, Rank.ADMINISTRATOR) && p.debug)
             p.getActionSender().sendMessage("Clicked object: " + id);
-        if (World.getWorld().getContentManager().handlePacket(5 + type, p, id, x, y, -1))
+        if (ContentManager.handlePacket(5 + type, p, id, x, y, -1))
             return;
         if (type == 1) {
             objectClickOne(p, id, x, y);
@@ -85,10 +84,10 @@ public class ObjectClickHandler {
             case 14828:
             case 14826:
             case 14827:
-                World.getWorld().getWilderness().useObelisk(player, x, y);
+                Wilderness.useObelisk(player, x, y);
                 break;
             case 5110:
-                World.getWorld().submit(new Event(100) {
+                World.submit(new Task(100) {
                     @Override
                     public void execute() {
                         if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
@@ -101,9 +100,9 @@ public class ObjectClickHandler {
                 break;
             case 1766:
                 player.playAnimation(Animation.create(828));  //ladder climb anim
-                World.getWorld().submit(new Event(600) {
+                World.submit(new Task(600) {
                     @Override
-                    public void execute() throws IOException {
+                    public void execute() {
                         player.setTeleportTarget(Location.create(3017, 3850, 0));
                         this.stop();
                     }
@@ -165,7 +164,7 @@ public class ObjectClickHandler {
                     break;
                 player.face(Location.create(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), y, 2));
                 player.playAnimation(Animation.create(7002));
-                World.getWorld().submit(new Event(1100) {
+                World.submit(new Task(1100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 1, 0);
@@ -176,7 +175,7 @@ public class ObjectClickHandler {
                         this.stop();
                     }
                 });
-                World.getWorld().submit(new Event(2100) {
+                World.submit(new Task(2100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 0, 0);
@@ -206,7 +205,7 @@ public class ObjectClickHandler {
 				player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 
 				
-				World.getWorld().submit(new Event(600){
+				World.submit(new Event(600){
 					@Override
 					public void execute(){
 						player.forceWalkX1 = player.getLocation().getX();
@@ -226,7 +225,7 @@ public class ObjectClickHandler {
 						this.stop();
 					}
 				});
-				World.getWorld().submit(new Event(1250){
+				World.submit(new Event(1250){
 					@Override
 					public void execute(){
 						player.getAppearance().setAnimations(a,b,c);
@@ -282,7 +281,7 @@ public class ObjectClickHandler {
 
     public static boolean objectExist(int id, int x, int y, int height) {
         final Location location = Location.create(x, y, height);
-        return World.getWorld().getObjectMap().objectExist(location, id);
+        return ObjectManager.objectExist(location, id);
 
     }
 

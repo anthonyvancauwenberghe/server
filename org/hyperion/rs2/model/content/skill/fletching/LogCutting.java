@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.skill.fletching;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
@@ -159,7 +159,7 @@ public class LogCutting extends Fletching {
 
         ContentEntity.startAnimation(client, 1248);
 
-        World.getWorld().submit(new Event(5000) {
+        World.submit(new Task(5000) {
             int craftAm = amount2;
 
             @Override

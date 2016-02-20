@@ -1,12 +1,8 @@
 package org.hyperion.rs2.util;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.util.Misc;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 
 public class PlayerFiles {
 
@@ -32,7 +28,7 @@ public class PlayerFiles {
 			if(! Misc.contains(charArray[i], validChars))
 				return false;
 		}
-		PlayerSaving.getSaving().save(p, message);
+		PlayerSaving.save(p);
 		return true;
 	}
 
@@ -51,7 +47,7 @@ public class PlayerFiles {
 				return false;
 			}
 		}
-		PlayerSaving.getSaving().save(p);
+		PlayerSaving.save(p);
 		return true;
 	}
 }

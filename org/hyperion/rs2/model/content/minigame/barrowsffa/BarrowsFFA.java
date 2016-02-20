@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame.barrowsffa;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
@@ -14,13 +14,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Wasay
- * Date: 4/23/15
- * Time: 3:12 PM
- * To change this template use File | Settings | File Templates.
- */
 public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     public static BarrowsFFA barrowsFFA;
@@ -51,7 +44,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     public void init() throws FileNotFoundException {
         /*
         barrowsFFA = this;
-        World.getWorld().submit(new Event(1000) {
+        World.submit(new Event(1000) {
             @Override
             public void execute() throws IOException {
                 process();
@@ -234,7 +227,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         if(id == EXIT_LOBBY_ID) {
             player.face(Location.create(x, y, HEIGHT_LEVEL));
             player.playAnimation(Animation.create(7376));
-            World.getWorld().submit(new Event(600) {
+            World.submit(new Task(600) {
                 public void execute() {
                     exit(player);
                     this.stop();

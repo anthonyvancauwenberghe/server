@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.log.LogEntry;
 
@@ -9,8 +9,8 @@ import java.util.List;
 
 public class GlobalItemManager {
 
-	public GlobalItemManager() {
-		World.getWorld().submit(new Event(1000, "globalitems") {
+	public static void init() {
+		World.submit(new Task(1000, "globalitems") {
 			@Override
 			public void execute() {
 				process();
@@ -18,11 +18,11 @@ public class GlobalItemManager {
 		});
 	}
 
-	public List<GlobalItem> globalItems = new LinkedList<GlobalItem>();
+	public static final List<GlobalItem> GLOBAL_ITEMS = new LinkedList<GlobalItem>();
 
-	public void displayItems(Player player) {
-		synchronized(globalItems) {
-			for(GlobalItem globalItem : globalItems) {
+	public static void displayItems(Player player) {
+		synchronized(GLOBAL_ITEMS) {
+			for(GlobalItem globalItem : GLOBAL_ITEMS) {
 				if((! globalItem.itemHidden || globalItem.owner == player) && globalItem.getItem() != null && player.getLocation().isWithinDistance(globalItem.getLocation(), 64)) {
 					//display the item
 					if(! ItemsTradeable.isTradeable(globalItem.getItem().getId()) && globalItem.owner != player) {
@@ -35,9 +35,9 @@ public class GlobalItemManager {
 		}
 	}
 
-	public GlobalItem getItem(int id, Location loc) {
-		synchronized(globalItems) {
-			for(GlobalItem g : globalItems) {
+	public static GlobalItem getItem(int id, Location loc) {
+		synchronized(GLOBAL_ITEMS) {
+			for(GlobalItem g : GLOBAL_ITEMS) {
 				//System.out.println(""+g.getItem().getId()+", "+g.getLocation().getX()+", "+g.getLocation().getY());
 				if(g.getLocation().distance(loc) == 0) {
 					if(g.getItem().getId() == id) {
@@ -49,48 +49,48 @@ public class GlobalItemManager {
 		return null;
 	}
 
-	public void newDropItem(Player player, GlobalItem globalItem) {
+	public static void newDropItem(Player player, GlobalItem globalItem) {
 		GlobalItem onGround = getItem(globalItem.getItem().getId(), globalItem.getLocation());
 		if(onGround != null && onGround.getItem().getDefinition().isStackable()) {
 			int count = onGround.getItem().getCount() + globalItem.getItem().getCount();
 			onGround.setNewItem(new Item(onGround.getItem().getId(), count));
 		} else {
-			synchronized(globalItems) {
-				globalItems.add(globalItem);
+			synchronized(GLOBAL_ITEMS) {
+				GLOBAL_ITEMS.add(globalItem);
 			}
 			if(player.getLocation().isWithinDistance(globalItem.getLocation(), 64))
 				player.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
 		}
 	}
 
-	public void addToItems(GlobalItem globalItem) {
-		synchronized(globalItems) {
-			globalItems.add(globalItem);
+	public static void addToItems(GlobalItem globalItem) {
+		synchronized(GLOBAL_ITEMS) {
+			GLOBAL_ITEMS.add(globalItem);
 		}
 	}
 
-	public void dropItem(Player player, int itemId, int slot) {
+	public static void dropItem(Player player, int itemId, int slot) {
 		Item item = player.getInventory().get(slot);
 		if(item == null || itemId != item.getId()) {
 			player.getActionSender().sendMessage("Client is out of sync, Please logout.");
 			return;
 		}
 		GlobalItem globalItem = new GlobalItem(player, player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), new Item(item.getId(), item.getCount()));
-		synchronized(globalItems) {
-			globalItems.add(globalItem);
+		synchronized(GLOBAL_ITEMS) {
+			GLOBAL_ITEMS.add(globalItem);
 		}
 		player.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
 		player.getInventory().remove(item);
 	}
 
-	public void pickupItem(Player player, int item, int x, int y) {
+	public static void pickupItem(Player player, int item, int x, int y) {
 		if(ContentEntity.freeSlots(player) <= 0) {
 			ContentEntity.sendMessage(player, "You have not got enough space to pick up that item");
 			return;
 		}
 		GlobalItem globalItem = null;
-		synchronized(globalItems) {
-			for(GlobalItem g : globalItems) {
+		synchronized(GLOBAL_ITEMS) {
+			for(GlobalItem g : GLOBAL_ITEMS) {
 				//System.out.println(""+g.getItem().getId()+", "+g.getLocation().getX()+", "+g.getLocation().getY());
 				if(g.getLocation().getX() == x && g.getLocation().getY() == y && g.getLocation().getZ() == player.getLocation().getZ()) {
 					if(g.getItem().getId() == item) {
@@ -101,13 +101,13 @@ public class GlobalItemManager {
 			}
 		}
 		if(globalItem != null) {
-			synchronized(globalItems) {
+			synchronized(GLOBAL_ITEMS) {
                 if (globalItem.owner != null && globalItem.owner.getGameMode() != player.getGameMode()) {
                     player.sendMessage("You cannot pick up this item as it belongs to another game mode");
                     return;
                 }
 				player.getExpectedValues().pickupItem(globalItem.getItem());
-				globalItems.remove(globalItem);
+				GLOBAL_ITEMS.remove(globalItem);
                 if(item != 2422) {
                     player.getLogManager().add(LogEntry.pickupItem(globalItem));
 			        player.getInventory().add(globalItem.getItem());
@@ -127,15 +127,15 @@ public class GlobalItemManager {
 		}
 	}
 
-	public void removeItem(GlobalItem globalItem) {
-		for(Player p2 : World.getWorld().getPlayers()) {
+	public static void removeItem(GlobalItem globalItem) {
+		for(Player p2 : World.getPlayers()) {
 			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
 				p2.getActionSender().removeGlobalItem(globalItem.getItem(), globalItem.getLocation());
 		}
 	}
 
-	public void createItem(GlobalItem globalItem) {
-		for(Player p2 : World.getWorld().getPlayers()) {
+	public static void createItem(GlobalItem globalItem) {
+		for(Player p2 : World.getPlayers()) {
 			if(p2 == globalItem.owner)
 				continue;
 			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
@@ -143,12 +143,8 @@ public class GlobalItemManager {
 		}
 	}
 
-	public void process() {
-		Object[] items = null;
-		synchronized(globalItems) {
-			items = globalItems.toArray();
-		}
-		for(Object object : items) {
+	public static void process() {
+		for(Object object : GLOBAL_ITEMS.toArray()) {
 			GlobalItem gItem = (GlobalItem) object;
 			if(System.currentTimeMillis() - gItem.createdTime >= 52000 && gItem.itemHidden) {
 				if(! ItemsTradeable.isTradeable(gItem.getItem().getId())) {
@@ -158,14 +154,11 @@ public class GlobalItemManager {
 				gItem.itemHidden = false;
 			} else if(System.currentTimeMillis() - gItem.createdTime >= 120000) {
 				removeItem(gItem);
-				synchronized(globalItems) {
-					globalItems.remove(gItem);
+				synchronized(GLOBAL_ITEMS) {
+					GLOBAL_ITEMS.remove(gItem);
 				}
 				gItem.destroy();
-				gItem = null;
 			}
 		}
 	}
-
-
 }

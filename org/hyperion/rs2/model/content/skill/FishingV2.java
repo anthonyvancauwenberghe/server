@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
@@ -45,7 +45,7 @@ public class FishingV2 implements ContentTemplate {
 		if(FISHING_TIMER < 6)
 			FISHING_TIMER = 6;
 		player.setBusy(true);
-		World.getWorld().submit(new Event(FISHING_TIMER * 50) {
+		World.submit(new Task(FISHING_TIMER * 50) {
 			int cycle = 10;
 
 			@Override

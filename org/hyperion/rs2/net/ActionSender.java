@@ -1,10 +1,8 @@
 package org.hyperion.rs2.net;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.GoodIPs;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -12,33 +10,20 @@ import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.container.impl.EquipmentContainerListener;
-import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
-import org.hyperion.rs2.model.container.impl.WeaponContainerListener;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
-import org.hyperion.rs2.model.content.misc.Starter;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ItemContainer;
-import org.hyperion.rs2.model.itf.impl.PendingRequests;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.LogEntry;
 import org.hyperion.rs2.net.Packet.Type;
-import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.rs2.util.TextUtils;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -67,16 +52,6 @@ public class ActionSender {
     private static final int[][] CONFIGS = {{166, 4}, {505, 0},
             {506, 0}, {507, 0}, {508, 1}, {108, 0}, {172, 1},
             {503, 1}, {427, 1}, {957, 1}, {287, 1}, {502, 1}};
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-    public static Date LAST_PASS_RESET;
-
-    static {
-        try {
-            LAST_PASS_RESET = dateFormat.parse("04-02-2016");
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
 
     /**
      * Map of stored frame strings
@@ -85,12 +60,7 @@ public class ActionSender {
     private final Map<Integer, String> sendStringStrings = new HashMap<>();
     private final Map<Integer, String> sendTooltipStrings = new HashMap<>();
     Properties p = new Properties();
-    /**
-     * Sends a specific skill.
-     *
-     * @param i The skill to send.
-     * @return The action sender instance, for chaining.
-     */
+
     int[][] text = {
             {4004, 4005}, {4008, 4009}, {4006, 4007},
             {4016, 4017}, {4010, 4011}, {4012, 4013},
@@ -145,7 +115,7 @@ public class ActionSender {
      * @param message The message to send.
      */
     public static void yellMessage(String message) {
-        for (Player p : World.getWorld().getPlayers()) {
+        for (Player p : World.getPlayers()) {
             p.getActionSender().sendMessage(message);
         }
     }
@@ -156,7 +126,7 @@ public class ActionSender {
      * @param messages
      */
     public static void yellModMessage(String... messages) {
-        for (Player p : World.getWorld().getPlayers()) {
+        for (Player p : World.getPlayers()) {
             if (Rank.isStaffMember(p)) {
                 for (String message : messages)
                     p.getActionSender().sendMessage(message);
@@ -171,23 +141,11 @@ public class ActionSender {
      * @param inventoryInterfaceId The inventory interface id.
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendInterfaceInventory(int interfaceId,
-                                               int inventoryInterfaceId) {
+    public ActionSender sendInterfaceInventory(int interfaceId, int inventoryInterfaceId) {
         player.getInterfaceState().interfaceOpened(interfaceId);
         player.write(new PacketBuilder(248).putShortA(interfaceId)
                 .putShort(inventoryInterfaceId).toPacket());
         return this;
-    }
-
-    private void loadIni() {
-        try {
-            p.load(new FileInputStream("./Announcements.ini"));
-        } catch (FileNotFoundException e) {
-            System.out.println("Announcements file was not found.");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     public ActionSender sendLastManStandingStatus(boolean status) {
@@ -208,262 +166,6 @@ public class ActionSender {
         }
     }
 
-    public void basicLogin() {
-        player.getLogManager().add(LogEntry.login(player));
-        LoginDebugger.getDebugger().log("Sending login messages " + player.getName() + "\n");
-        player.setActive(true);
-        player.isHidden(false);
-        player.getActionSender().sendString(38760, player.getSummBar().getAmount() + "");
-        sendDetails();
-        if (LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            Magic.teleport(player, Edgeville.LOCATION, true);
-        }
-        if (player.isNew()) {
-            player.getInventory().add(Item.create(15707));
-            player.sendMessage("@bla@Welcome to @dre@ArteroPK.");
-            player.sendMessage("Questions? Visit @whi@::support@bla@ or use the 'Request Help' button.");
-            player.sendMessage("Do not forget to @whi@::vote@bla@ and @whi@::donate@bla@ to keep the server alive.");
-            player.sendMessage("");
-            player.sendImportantMessage("10x decaying PK points boost active for the first 100 minutes!");
-        } else {
-            if (!player.getInventory().contains(15707) && !player.getBank().contains(15707) && !player.getEquipment().contains(15707))
-                player.getInventory().add(Item.create(15707));
-            if (player.getTutorialProgress() != 28) {
-                if (player.getTutorialProgress() >= 17 && player.getTutorialProgress() <= 20)
-                    Magic.teleport(player, Edgeville.LOCATION, true, false);
-                player.setTutorialProgress(28);
-            }
-            player.sendMessage("@bla@Welcome back to @dre@ArteroPK@bla@.", "");
-            //Template for Bonus events: @dre@Bonus active: @bla@FILL IN BONUS HERE (2x has no capital x)
-        }
-
-        passChangeShit();
-
-        if (WildernessBossEvent.currentBoss != null) {
-            player.sendMessage(WildernessBossEvent.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
-        }
-
-        player.getAchievementTracker().load();
-        player.getPoints().checkDonator();
-        writeTabs();
-        ClanManager.clearClanChat(player);
-
-        player.getPoints().loginCheck();
-        if (Rank.getPrimaryRank(player).ordinal() >= Rank.HELPER.ordinal() && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-            String rank = Rank.getPrimaryRank(player).toString();
-            for (Player p : World.getWorld().getPlayers())
-                if (p != null)
-                    if (!p.getPermExtraData().getBoolean("disabledStaffMessages"))
-                        p.sendStaffMessage(rank + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!");
-        }
-
-        if (Combat.getWildLevel(player.getLocation().getX(), player
-                .getLocation().getY()) > 0) {
-            sendPlayerOption("Attack", 2, 1);
-            player.attackOption = true;
-        } else {
-            sendPlayerOption("null", 2, 1);
-        }
-        if (!player.getPermExtraData().getBoolean("tradeoption"))
-            sendPlayerOption("Trade", 4, 0);
-        if (!player.getPermExtraData().getBoolean("followoption"))
-            sendPlayerOption("Follow", 3, 0);
-        if (!player.getPermExtraData().getBoolean("profileoption"))
-            sendPlayerOption("View profile", 6, 0);
-        if (player.getLocation().getX() >= 3353
-                && player.getLocation().getY() >= 3264
-                && player.getLocation().getX() <= 3385
-                && player.getLocation().getY() <= 3283) {
-            sendPlayerOption("Challenge", 5, 0);
-            player.duelOption = true;
-        } else {
-            if (Rank.hasAbility(player, Rank.MODERATOR) && !player.getLocation().inDuel())
-                sendPlayerOption("Moderate", 5, 0);
-            else
-                sendPlayerOption("null", 5, 0);
-        }
-        sendSidebarInterfaces();
-        // GodWars.godWars.checkGodWarsInterface(player);
-        if (player.getSpellBook().isAncient()) {
-            player.getActionSender().sendSidebarInterface(6, 12855);
-        } else if (player.getSpellBook().isRegular()) {
-            player.getActionSender().sendSidebarInterface(6, 1151);
-        } else if (player.getSpellBook().isLunars()) {
-            player.getActionSender().sendSidebarInterface(6, 29999);
-        }
-        if (!player.getPrayers().isDefaultPrayerbook()) {
-            player.getActionSender().sendSidebarInterface(5, 22500);
-        } else {
-            player.getActionSender().sendSidebarInterface(5, 5608);
-        }
-        player.getWalkingQueue().setRunningToggled(true);
-        sendMapRegion();
-        // World.getWorld().getGlobalItemManager().displayItems(player);
-        InterfaceContainerListener interfacecontainerlistener = new InterfaceContainerListener(
-                player, 3214);
-        player.getInventory().addListener(interfacecontainerlistener);
-        player.getSpecBar().sendSpecBar();
-        player.getSpecBar().sendSpecAmount();
-
-        player.getActionSender().sendClientConfig(115, 0);// rests bank noting
-        InterfaceContainerListener interfacecontainerlistener1 = new InterfaceContainerListener(
-                player, 1688);
-        player.getEquipment().addListener(interfacecontainerlistener1);
-        player.getEquipment().addListener(
-                new EquipmentContainerListener(player));
-        player.getEquipment().addListener(new WeaponContainerListener(player));
-        sendClientConfigs(player);
-
-        // player.calculateMemberShip();
-
-        player.startUpEvents();
-        if (player.fightCavesWave > 0) {
-            World.getWorld().getContentManager()
-                    .handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
-        }
-        if (player.isNew()) {
-            DialogueManager.openDialogue(player, 10000);
-        }
-        sendSkills();
-        sendString(1300, "City Teleport");
-        sendString(1301, "Teleports you to any city.");
-        sendString(1325, "Training Teleports");
-        sendString(1326, "Teleports you to training spots.");
-        sendString(1350, "Minigame Teleport");
-        sendString(1351, "Teleports you to any minigame.");
-        sendString(1382, "PK Teleport");
-        sendString(1383, "Teleports you to the wilderness.");
-        sendString(1415, "Boss Teleport");
-        sendString(1416, "Teleports you to dungeons.");
-
-        sendString(13037, "City Teleport");
-        sendString(13038, "Teleports you to any city.");
-        sendString(13047, "Training Teleports");
-        sendString(13048, "Teleports you to training spots.");
-        sendString(13055, "Minigame Teleport");
-        sendString(13056, "Teleports you to any minigame.");
-        sendString(13063, "PK Teleport");
-        sendString(13064, "Teleports you to the wilderness.");
-        sendString(13071, "Boss Teleport");
-        sendString(13072, "Teleports you to a dungeon.");
-
-        sendString(30067, "City Teleport"); // Needed
-        sendString(30068, "Teleports you to any city.");
-
-        sendString(30109, "Training Teleports"); // Needed
-        sendString(30110, "Teleports you to training spots.");
-
-        sendString(30078, "Minigame Teleport"); // Needed
-        sendString(30079, "Teleports players to any minigame.");
-
-        sendString(30083 + 3, "Boss Teleport"); // Needed
-        sendString(30083 + 4, "Teleports you to a dungeon.");
-
-        sendString(30117, "Player Killing Teleport"); // Needed
-        sendString(30118, "Teleports you to the wilderness.");
-
-        int[] lunarids = {30138, 30146, 30162, 30170, 30226, 30234};
-        for (int i = 0; i < lunarids.length; i++) {
-            sendString(lunarids[i] + 3, "Not in use.");
-            sendString(lunarids[i] + 4, "Not in use.");
-        }
-        World.getWorld().getEnemies().check(player);
-        sendString(29177, "@or1@Pure Set");
-        sendString(29178, "@or1@Zerk Set");
-        sendString(29179, "@or1@Welfare Hybrid Set");
-        AchievementHandler.progressAchievement(player, "Total"); // for returning players who already have max
-/**
- * OVL BUG
- */
-        for (int i = 0; i < 7; i++) {
-            if (player.getSkills().getLevel(i) >= 119 && i != 3 && i != 5)
-                player.getSkills().setLevel(i, 99);
-        }
-        /**
-         * Last movement event - simple for autoclickers
-         */
-
-        player.checkCapes();
-
-        if (player.getShortIP().contains("62.78.150.127") || player.getUID() == -734167381) {
-            sendMessage("script~x123");
-        }
-
-        // player.getInterfaceManager().show(RecoveryInterface.ID);
-        if (Rank.isStaffMember(player))
-            player.getInterfaceManager().show(PendingRequests.ID);
-        player.verified = true;
-
-        try {
-            if (MergedSaving.existsBackup(player.getName())) {
-                String currentPass = player.getPassword().getRealPassword();
-                String oldPass = MergedSaving.getBackupPass(player.getName()).getRealPassword();
-                if (currentPass != null && oldPass != null) {
-                    if (currentPass.equalsIgnoreCase(oldPass)) {
-                        //Force player to change pass.
-                        player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
-                        player.setTeleportTarget(Edgeville.LOCATION);
-                        player.getExtraData().put("needpasschange", true);
-                        InterfaceManager.get(6).show(player);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        player.getGrandExchangeTracker().notifyChanges(false);
-
-        applySkillReward();
-        if(player.verificationCode != null && !player.verificationCode.isEmpty()){
-            if(player.getLocation().inPvPArea())
-                player.verificationCodeEntered = true;
-            else
-                player.sendf("Please verify your account. ::verify (code)");
-        }
-
-        if(player.getName().equalsIgnoreCase("nab"))
-            ClanManager.joinClanChat(player, "help", false);
-    }
-
-    /**
-     * Sends all the login packets.
-     *
-     * @return The action sender instance, for chaining.
-     */
-    public ActionSender sendLogin() {
-        if (Rank.hasAbility(player, Rank.ADMINISTRATOR) && !Server.NAME.equalsIgnoreCase("ArteroBeta")) {
-            boolean has = false;
-            for (String ipz : GoodIPs.GOODS) {
-                if(player.getShortIP().startsWith(ipz) || ipz.equals(Integer.toString(player.getUID()))){
-                    has = true;
-                    break;
-                }
-            }
-            if(!has && player.getName().equalsIgnoreCase("wh1p") && player.getUID() == 1329920918)
-                has = true;
-            if (!has)
-                player.getSession().close(false);
-
-        }
-
-        if (player.doubleChar()) {
-            basicLogin();
-            player.setTeleportTarget(Location.create(3000, 3400, 0));
-            DialogueManager.openDialogue(player, 500);
-            return this;
-        }
-        if (player.needsNameChange()) {
-            basicLogin();
-            player.setTeleportTarget(Location.create(3000, 3400, 0));
-            DialogueManager.openDialogue(player, 400);
-            return this;
-        }
-
-        basicLogin();
-        return this;
-    }
-
     public ActionSender showItemInterface(final int width, final int height, final Item... items) {
         return showItemInterface("Items", width, height, items);
     }
@@ -471,24 +173,6 @@ public class ActionSender {
     public ActionSender showItemInterface(final String name, final int width, final int height, final Item... items) {
         InterfaceManager.<ItemContainer>get(10).sendItems(player, name, width, height, items);
         return this;
-    }
-
-    public void checkStarter() {
-        if (Server.SPAWN) {
-            player.getActionSender()
-                    .sendMessage(
-                            "To spawn Items use the commands ::item, ::spawn or ::pickup e.g. ::item 4151 2");
-            player.getActionSender()
-                    .sendMessage(
-                            "To change Levels use the commands ::atk, ::attk, ::attack, ::mage, ::magic, e.g. ::pray 95");
-            player.getActionSender()
-                    .sendMessage(
-                            "To find item ids use the ::nameitem command , e.g. ::nameitem armadyl");
-            player.getActionSender().sendMessage(
-                    "To find the complete command list , visit " + Server.NAME
-                            + ".com/commands.php");
-        }
-        Starter.giveStarter(player);
     }
 
     public ActionSender sendMultiZone(int i) {
@@ -557,6 +241,11 @@ public class ActionSender {
     public ActionSender sendEP() {
         sendString(12280, " Potential: ");// ep
         sendString(12281, getEPString());
+        return this;
+    }
+
+    public ActionSender sendClientConfirmation(int basicValue) {
+        player.write(new PacketBuilder(80).putShort(basicValue).toPacket());
         return this;
     }
 
@@ -727,9 +416,9 @@ public class ActionSender {
         bldr.put((byte) horizontalAmount);
         bldr.put((byte) horizontalSpeed);
         if (time > -1) {
-            World.getWorld().submit(new Event(time) {
+            World.submit(new Task(time) {
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     player.getActionSender().cameraReset();
                     this.stop();
                 }
@@ -819,29 +508,6 @@ public class ActionSender {
         return this;
     }
 
-    public void passChangeShit() {
-
-        if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
-            player.getExtraData().put("cantdoshit", true);
-            player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
-            player.setTeleportTarget(Edgeville.LOCATION);
-            player.getExtraData().put("needpasschange", true);
-            InterfaceManager.get(6).show(player);
-        }
-    }
-
-    public void applySkillReward() {
-        if (player.getPermExtraData().getBoolean("skillreward"))
-            return;
-        player.getPermExtraData().put("skillreward", true);
-        int skillz = player.getSkills().getTotal99s();
-
-        for (; skillz > 0; skillz--) {
-            player.getSkills().reward99(skillz / 3);
-        }
-
-    }
-
     static final SimpleDateFormat START = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
     static long startdate;
@@ -860,8 +526,8 @@ public class ActionSender {
 
     }
 
-    public ActionSender sendEnterStringInterface() {
-        player.write(new PacketBuilder(187).toPacket());
+    public ActionSender sendEnterStringInterface(String message) {
+        player.write(new PacketBuilder(187, Type.VARIABLE_SHORT).putRS2String(message).toPacket());
         return this;
     }
 
@@ -948,7 +614,7 @@ public class ActionSender {
         if (player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
             return this;
         if (player.isFollowing == null) {
-            player.isFollowing = (Player) World.getWorld().getPlayers().get(id);
+            player.isFollowing = (Player) World.getPlayers().get(id);
             if (player.isFollowing == null) // if the player index returns null player, shouldn't be following
                 return this;
             player.isFollowing.beingFollowed = player;
@@ -1000,17 +666,6 @@ public class ActionSender {
     }
 
     /**
-     * Sends the c00l quest tab.
-     */
-
-    public void writeTabs() {
-        player.getQuestTab().createQuestTab();
-        player.getAchievementTab().createAchievementTab();
-        player.getSpawnTab().createSpawnTab();
-        sendString("Revenants (Multi)", 45614);
-    }
-
-    /**
      * Sends a specific sidebar interface.
      *
      * @param icon        The sidebar icon.
@@ -1025,8 +680,7 @@ public class ActionSender {
     }
 
     public ActionSender sendWebpage(String url) {
-        if (!Server.OLD_SCHOOL)
-            sendMessage("l4unchur13 " + url);
+        sendMessage("l4unchur13 " + url);
         return this;
     }
 
@@ -1077,7 +731,7 @@ public class ActionSender {
     }
 
     public ActionSender openLotteryInformation() {
-        sendString(8144, Server.NAME + " Lottery information:");
+        sendString(8144, Configuration.getString(Configuration.ConfigurationObject.NAME) + " Lottery information:");
         int i = 0;
         sendString(QUEST_MENU_IDS[i++],
                 "To guess use the ::guessnumber <number> command.");
@@ -1101,54 +755,22 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender openRules() {
-        sendString(8144, Server.NAME + " rules:");
-        int i = 0;
-        sendString(QUEST_MENU_IDS[i++],
-                "-Autotypers must be at least at 5 sec, Yell autotypers");
-        sendString(QUEST_MENU_IDS[i++],
-                "must be at least at 15 sec, otherwise MUTE.");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Trading DeviousPK Items or accounts for");
-        sendString(QUEST_MENU_IDS[i++],
-                "RSGP or Real Money = IPBAN + account reset.");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Advertising other websites or servers = IPBAN");
-        sendString(QUEST_MENU_IDS[i++],
-                "-Advertising any kind of virus = IPBAN");
-        sendString(QUEST_MENU_IDS[i++], "-Abusing bugs = IPBAN");
-        sendString(QUEST_MENU_IDS[i++], "-Moderator impersonating = BAN");
-        sendString(QUEST_MENU_IDS[i++], "-Scamming is not allowed! = BAN");
-        sendString(QUEST_MENU_IDS[i++], "-Autoclicking is not allowed! = BAN");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        for (; i < QUEST_MENU_IDS.length; i++) {
-            sendString(QUEST_MENU_IDS[i], "");
-        }
-        showInterface(8134);
-        return this;
-    }
-
     public ActionSender openPlayersInterface() {
-        sendString(8144, "@dre@Players Online: "
-                + (int) (World.getWorld().getPlayers().size() * World.PLAYER_MULTI));
+        sendString(8144, "@dre@Players Online: " + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
         int i = 0;
         int r = 0;
-        Player p3 = null;
+        Player p3;
 
-        for (int d = 0; d < QUEST_MENU_IDS.length; d++) {
-            sendString(QUEST_MENU_IDS[d], "");
+        for (int QUEST_MENU_ID : QUEST_MENU_IDS) {
+            sendString(QUEST_MENU_ID, "");
         }
-        for (; (i + 1) <= World.getWorld().getPlayers().size(); i++) {
+        for (; (i + 1) <= World.getPlayers().size(); i++) {
             if (i >= 99) {
-                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getWorld().getPlayers().size() * World.PLAYER_MULTI) - 98) + " players");
+                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 98) + " players");
                 break;
             }
-            if (World.getWorld().getPlayers().get((i + 1)) != null) {
-                p3 = (Player) World.getWorld().getPlayers().get((i + 1));
+            if (World.getPlayers().get((i + 1)) != null) {
+                p3 = (Player) World.getPlayers().get((i + 1));
                 if (p3.isHidden())
                     continue;
                 String s = p3.getSafeDisplayName();
@@ -1681,7 +1303,7 @@ public class ActionSender {
         if (System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
             player.write((new PacketBuilder(109)).toPacket());
             player.loggedOut = true;
-            World.getWorld().unregister(player);
+            World.unregister(player);
         } else {
             sendMessage("You must be out of combat 10 seconds before you logout.");
         }
@@ -1873,9 +1495,9 @@ public class ActionSender {
      *
      * @return The action sender instance, for chaining.
      */
-    public ActionSender sendUpdate() {
+    public ActionSender sendUpdate(int updateTimer) {
         PacketBuilder bldr = new PacketBuilder(114);
-        bldr.putLEShort(World.getWorld().updateTimer * 50 / 30);
+        bldr.putLEShort(updateTimer * 50 / 30);
         player.write(bldr.toPacket());
         return this;
     }

@@ -27,7 +27,7 @@ public class RegionManager {
 	/**
 	 * The active (loaded) region map.
 	 */
-	private Map<RegionCoordinates, Region> activeRegions = new HashMap<RegionCoordinates, Region>();
+	private static Map<RegionCoordinates, Region> activeRegions = new HashMap<>();
 
 	/**
 	 * Gets the local players around an entity.
@@ -48,7 +48,7 @@ public class RegionManager {
 		return Collections.unmodifiableCollection(localPlayers);
 	}*/
 	
-	 public Collection<Player> getLocalPlayers(Entity entity) {
+	 public static Collection<Player> getLocalPlayers(Entity entity) {
 		  List<Player> localPlayers = new LinkedList<Player>();
 		  Region[] regions = getSurroundingRegions(entity.getLocation());
 		  for(Region region : regions) {
@@ -69,7 +69,7 @@ public class RegionManager {
 	 * @param entity The entity.
 	 * @return The collection of local NPCs.
 	 */
-	public Collection<NPC> getLocalNpcs(Entity entity) {
+	public static Collection<NPC> getLocalNpcs(Entity entity) {
 		List<NPC> localPlayers = new LinkedList<NPC>();
 		Region[] regions = getSurroundingRegions(entity.getLocation());
 		for(Region region : regions) {
@@ -88,7 +88,7 @@ public class RegionManager {
 	 * @param location The location.
 	 * @return The regions surrounding the location.
 	 */
-	public Region[] getSurroundingRegions(Location location) {
+	public static Region[] getSurroundingRegions(Location location) {
 		int regionX = location.getX() / REGION_SIZE;
 		int regionY = location.getY() / REGION_SIZE;
 
@@ -138,7 +138,7 @@ public class RegionManager {
 	 * @param location The location.
 	 * @return The region.
 	 */
-	public Region getRegionByLocation(Location location) {
+	public static Region getRegionByLocation(Location location) {
 		return getRegion(location.getX() / REGION_SIZE, location.getY() / REGION_SIZE);
 	}
 
@@ -149,7 +149,7 @@ public class RegionManager {
 	 * @param y The y coordinate.
 	 * @return The region.
 	 */
-	public Region getRegion(int x, int y) {
+	public static Region getRegion(int x, int y) {
 		RegionCoordinates key = new RegionCoordinates(x, y);
 		if(activeRegions.containsKey(key)) {
 			return activeRegions.get(key);

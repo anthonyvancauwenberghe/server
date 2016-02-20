@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.container;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.SpiritShields;
 import org.hyperion.rs2.model.content.misc2.MysteryBox;
@@ -697,7 +697,7 @@ public class ShopManager {
 		}
 		in.close();
 		System.out.println("Loaded " + counter + " shops.");
-		World.getWorld().submit(new Event(10000) {
+		World.submit(new Task(10000) {
 			@Override
 			public void execute() {
 				process();

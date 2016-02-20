@@ -1,18 +1,15 @@
 package org.hyperion.map;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.packet.ObjectClickHandler;
+import org.hyperion.rs2.model.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.logging.Level;
 
 /**
  * @author Martin
@@ -30,10 +27,8 @@ public class WorldMap {
 
 
     // loadDatabases() by Phate/WinterLove, renamed & edit by WhiteFang
-    public static void loadWorldMap(boolean b, World world2) {
+    public static void loadWorldMap() {
         try {
-            world = world2;
-            if (b) {
                 new Thread() {
                     @Override
                     public void run() {
@@ -44,15 +39,15 @@ public class WorldMap {
                         sizeX = null;
                         sizeY = null;
                         shootable = null;
-                        for (int i = 0; i < world.worldmapobjects; i++) {
-                            if (world.World_Objects[i].size() <= 0) {
-                                world.World_Objects[i] = null;
+                        for (int i = 0; i < World.worldmapobjects; i++) {
+                            if (World.World_Objects[i].size() <= 0) {
+                                World.World_Objects[i] = null;
                             }
                         }
                     }
                 }.start();
-                //dumpObjects();
-            }
+            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+                Server.getLogger().log(Level.INFO, "Worldmap has been started.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,16 +75,16 @@ public class WorldMap {
         directions.add(-5);
         DirectionCollection dc2 = new DirectionCollection(directions, 0);
         for (int i = x; i < finishX; i++) {
-            world.World_Objects[getArea(i, y)].put(new BlockPoint(i, y, height, 0), dc2);
+            World.World_Objects[getArea(i, y)].put(new BlockPoint(i, y, height, 0), dc2);
         }
         for (int i = y; i < finishY; i++) {
-            world.World_Objects[getArea(x, i)].put(new BlockPoint(x, i, height, 0), dc2);
+            World.World_Objects[getArea(x, i)].put(new BlockPoint(x, i, height, 0), dc2);
         }
         for (int i = x; i < finishX; i++) {
-            world.World_Objects[getArea(i, finishY)].put(new BlockPoint(i, finishY, height, 0), dc2);
+            World.World_Objects[getArea(i, finishY)].put(new BlockPoint(i, finishY, height, 0), dc2);
         }
         for (int i = y; i < finishY; i++) {
-            world.World_Objects[getArea(finishX, i)].put(new BlockPoint(finishX, i, height, 0), dc2);
+            World.World_Objects[getArea(finishX, i)].put(new BlockPoint(finishX, i, height, 0), dc2);
         }
         //}
     }
@@ -394,7 +389,7 @@ public class WorldMap {
                 if (id == 2213 || id == 2214 || id == 3045 || id == 5276 || id == 6084 || id == 10517 || id == 11338 || id == 11758 ||
                         id == 12798 || id == 12799 || id == 12800 || id == 3193 || id == 12801 || id == 12120 || id == 12121)
                     bankBooths.put((tileX * 5000 + tileY), face2);
-                world.getObjectMap().addMapObject(tileX, tileY, height, id);
+                ObjectManager.addMapObject(tileX, tileY, height, id);
 
 				/*if(tileX >= 2814 && tileX <= 2942 && tileY >= 5250 && tileY <= 5373)
 					height--;*/
@@ -585,8 +580,8 @@ public class WorldMap {
                 if (dir2 != -1 && i2 == 1) {
                     dir = dir2;
                 }
-                if (world.World_Objects[which].containsKey(adder[i2])) {
-                    DirectionCollection dircol = world.World_Objects[which].get(adder[i2]);
+                if (World.World_Objects[which].containsKey(adder[i2])) {
+                    DirectionCollection dircol = World.World_Objects[which].get(adder[i2]);
                     ArrayList<Integer> directions = new ArrayList<Integer>();
                     for (int i3 : dircol.directions) {
                         directions.add(i3);
@@ -604,8 +599,8 @@ public class WorldMap {
                             dirstoadd.add(-1);
                         }
                         DirectionCollection dc2 = new DirectionCollection(dirstoadd, face2);
-                        world.World_Objects[which].remove(adder[i2]);
-                        world.World_Objects[which].put(adder[i2], dc2);
+                        World.World_Objects[which].remove(adder[i2]);
+                        World.World_Objects[which].put(adder[i2], dc2);
                         counter++;
                         ///*doors*/if(id == 1531|| id == 1534 || id == 1537 || id == 11708 || id == 11715 || id == 1590 || id == 1530 || id == 1533 || id == 1536  || id == 10529 || id == 14749 || id == 1533 || id == 1519 || id == 11707 || id == 11714 || id == 11721 || id == 9563 || id == 2647 || id == 2595 || id == 2399 || id == 2112 || id == 1591 || id == 59
                         ///*gates*/	|| id == 37 || id == 38 || id == 39 || id == 47 || id == 48 || id == 49 || id == 50 || id == 52 || id == 53 || id == 89 || id == 90 || id == 94 || id == 95 || id == 166 || id == 167 || id == 190 || id == 788 || id == 789 || id == 1551 || id == 1552 || id == 1553 || id == 1556 || id == 1557 || id == 1558 || id == 1559 || id == 1560 || id == 1561 || id == 1589 || id == 1590 || id == 1596 || id == 1597 || id == 1598 || id == 1599 || id == 2039 || id == 2041 || id == 2050 || id == 2051 || id == 2058 || id == 2060 || id == 2115 || id == 2116 || id == 2154 || id == 2155 || id == 2199 || id == 2200 || id == 2255 || id == 2256 || id == 2259 || id == 2260 || id == 2261 || id == 2262 || id == 2307 || id == 2308 || id == 2391 || id == 2392 || id == 2394 || id == 2432 || id == 2433 || id == 2438 || id == 2439 || id == 2552 || id == 2553 || id == 2607 || id == 2608 || id == 2623 || id == 2664 || id == 2665 || id == 2673 || id == 2674 || id == 2685 || id == 2686 || id == 2687 || id == 2688 || id == 2786 || id == 2787 || id == 2788 || id == 2789 || id == 2814 || id == 2815 || id == 2865 || id == 2866 || id == 2882 || id == 2883 || id == 2912 || id == 2913 || id == 2922 || id == 2923 || id == 2924 || id == 2925 || id == 2930 || id == 2931 || id == 3015 || id == 3016 || id == 3020 || id == 3021 || id == 3022 || id == 3023 || id == 3197 || id == 3198 || id == 3444 || id == 3445 || id == 3506 || id == 3507 || id == 3725 || id == 3726 || id == 3727 || id == 3728 || id == 3944 || id == 3945 || id == 3946 || id == 3947 || id == 4139 || id == 4140 || id == 4311 || id == 4312 || id == 4313 || id == 4787 || id == 4788 || id == 5043 || id == 5044 || id == 6451 || id == 6452 || id == 6461 || id == 6462 || id == 6566 || id == 6615 || id == 7049 || id == 7050 || id == 7051 || id == 7052 || id == 8810 || id == 8811 || id == 8812 || id == 8813 || id == 9140 || id == 9141 || id == 9142) {
@@ -616,7 +611,7 @@ public class WorldMap {
                     ArrayList<Integer> dirstoadd = new ArrayList<Integer>();
                     dirstoadd.add(dir);
                     DirectionCollection dc = new DirectionCollection(dirstoadd, face2);
-                    world.World_Objects[which].put(adder[i2], dc);
+                    World.World_Objects[which].put(adder[i2], dc);
                     counter++;
                     //		/*doors*/if(id == 1531|| id == 1534 || id == 1537 || id == 11708 || id == 11715 || id == 1590 || id == 1530 || id == 1533 || id == 1536  || id == 10529 || id == 14749 || id == 1533 || id == 1519 || id == 11707 || id == 11714 || id == 11721 || id == 9563 || id == 2647 || id == 2595 || id == 2399 || id == 2112 || id == 1591 || id == 59
                     //		/*gates*/	|| id == 37 || id == 38 || id == 39 || id == 47 || id == 48 || id == 49 || id == 50 || id == 52 || id == 53 || id == 89 || id == 90 || id == 94 || id == 95 || id == 166 || id == 167 || id == 190 || id == 788 || id == 789 || id == 1551 || id == 1552 || id == 1553 || id == 1556 || id == 1557 || id == 1558 || id == 1559 || id == 1560 || id == 1561 || id == 1589 || id == 1590 || id == 1596 || id == 1597 || id == 1598 || id == 1599 || id == 2039 || id == 2041 || id == 2050 || id == 2051 || id == 2058 || id == 2060 || id == 2115 || id == 2116 || id == 2154 || id == 2155 || id == 2199 || id == 2200 || id == 2255 || id == 2256 || id == 2259 || id == 2260 || id == 2261 || id == 2262 || id == 2307 || id == 2308 || id == 2391 || id == 2392 || id == 2394 || id == 2432 || id == 2433 || id == 2438 || id == 2439 || id == 2552 || id == 2553 || id == 2607 || id == 2608 || id == 2623 || id == 2664 || id == 2665 || id == 2673 || id == 2674 || id == 2685 || id == 2686 || id == 2687 || id == 2688 || id == 2786 || id == 2787 || id == 2788 || id == 2789 || id == 2814 || id == 2815 || id == 2865 || id == 2866 || id == 2882 || id == 2883 || id == 2912 || id == 2913 || id == 2922 || id == 2923 || id == 2924 || id == 2925 || id == 2930 || id == 2931 || id == 3015 || id == 3016 || id == 3020 || id == 3021 || id == 3022 || id == 3023 || id == 3197 || id == 3198 || id == 3444 || id == 3445 || id == 3506 || id == 3507 || id == 3725 || id == 3726 || id == 3727 || id == 3728 || id == 3944 || id == 3945 || id == 3946 || id == 3947 || id == 4139 || id == 4140 || id == 4311 || id == 4312 || id == 4313 || id == 4787 || id == 4788 || id == 5043 || id == 5044 || id == 6451 || id == 6452 || id == 6461 || id == 6462 || id == 6566 || id == 6615 || id == 7049 || id == 7050 || id == 7051 || id == 7052 || id == 8810 || id == 8811 || id == 8812 || id == 8813 || id == 9140 || id == 9141 || id == 9142) {
@@ -638,7 +633,8 @@ public class WorldMap {
             adderdir = null;
 
         }
-        System.out.println("	-Loaded " + counter + " world objects");
+        if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+            Server.getLogger().log(Level.INFO, "Successfully loaded " + counter + " World Objects.");
         //ObjectClickHandler.loaded = true;
 
         //new Thread(() -> world.getObjectMap().toMap()).start();
@@ -912,17 +908,16 @@ public class WorldMap {
         return true;
 
     }*/
-    public static World world;
 
     public static int getFace(int toAbsX, int toAbsY, int height) {
         BlockPoint f = new BlockPoint(toAbsX, toAbsY, height, 0);
         int which = getArea(toAbsX, toAbsY);
-        if (world.World_Objects[which] == null) {
+        if (World.World_Objects[which] == null) {
             return -1;
         }
 
-        if (world.World_Objects[which].containsKey(f)) {
-            DirectionCollection dc = world.World_Objects[which].get(f);
+        if (World.World_Objects[which].containsKey(f)) {
+            DirectionCollection dc = World.World_Objects[which].get(f);
             return dc.face;
         }
         return -1;
@@ -948,27 +943,25 @@ public class WorldMap {
         int dir = direction(absX, absY, toAbsX, toAbsY);
         DirectionCollection dc = null;
         DirectionCollection dc2 = null;
-        if (which > world.World_Objects.length) {
+        if (which > World.World_Objects.length) {
             System.out.println("error in WorldMap X: " + absX + " Y: " + absY);
             return false;
         }
-        final GameObject obj = World.getWorld().getObjectMap().getObjectAt(absX, absY, 0);
+        final GameObject obj = ObjectManager.getObjectAt(absX, absY, 0);
         if (obj != null) {
-            if (obj.getDefinition().getId() == 6951)
-                return true;
-            return false;
+            return obj.getDefinition().getId() == 6951;
         }
-        if (world.World_Objects[which] != null && which < world.World_Objects[which].size()) {
+        if (World.World_Objects[which] != null && which < World.World_Objects[which].size()) {
             return true;
         }
-        if (world.World_Objects[which] == null) {
+        if (World.World_Objects[which] == null) {
             return true;
         }
 
-        if (world.World_Objects[which].containsKey(f)) {
-            dc = world.World_Objects[which].get(f);
-        } else if (world.World_Objects[which].containsKey(f2)) {
-            dc2 = world.World_Objects[which].get(f2);
+        if (World.World_Objects[which].containsKey(f)) {
+            dc = World.World_Objects[which].get(f);
+        } else if (World.World_Objects[which].containsKey(f2)) {
+            dc2 = World.World_Objects[which].get(f2);
         }
 
         if (dc == null && dc2 == null) {
@@ -991,25 +984,13 @@ public class WorldMap {
         for (int i : dirs) {
             //System.out.print("   "+i);
             if (dir == 2) {
-                if (isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check);
             } else if (dir == 14) {
-                if (isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY - 1, check);
             } else if (dir == 10) {
-                if (isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX + 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check);
             } else if (dir == 6) {
-                if (isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check)) {
-                    return true;
-                }
-                return false;
+                return isWalkAble2(height, absX, absY, toAbsX - 1, toAbsY, check) && isWalkAble2(height, absX, absY, toAbsX, toAbsY + 1, check);
             } else if (i != -1) {
 				/*if(check == 1 && world.World_Objects[which].containsKey(f2) && i == dir) {
 					return false;
@@ -1018,19 +999,19 @@ public class WorldMap {
 				} else if(world.World_Objects[which].containsKey(f) && i == dir) {
 					return false;
 				}*/
-                if (check == 1 && world.World_Objects[which].containsKey(f2)) {
+                if (check == 1 && World.World_Objects[which].containsKey(f2)) {
                     return true;
-                } else if (check == 0 && world.World_Objects[which].containsKey(f2) && i == dir) {
+                } else if (check == 0 && World.World_Objects[which].containsKey(f2) && i == dir) {
                     return false;
-                } else if (world.World_Objects[which].containsKey(f) && i == dir) {
+                } else if (World.World_Objects[which].containsKey(f) && i == dir) {
                     return false;
                 }
             } else {
-                if (check == 1 && world.World_Objects[which].containsKey(f2)) {
+                if (check == 1 && World.World_Objects[which].containsKey(f2)) {
                     return true;
-                } else if (check == 0 && world.World_Objects[which].containsKey(f2)) {
+                } else if (check == 0 && World.World_Objects[which].containsKey(f2)) {
                     return false;
-                } else if (world.World_Objects[which].containsKey(f)) {
+                } else if (World.World_Objects[which].containsKey(f)) {
                     return false;
                 }
             }

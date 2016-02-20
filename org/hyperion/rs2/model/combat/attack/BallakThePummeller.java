@@ -1,12 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
-
-import java.io.IOException;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class BallakThePummeller implements Attack {
 
@@ -29,7 +28,7 @@ public class BallakThePummeller implements Attack {
     private void handleFlames(NPC npc) {
         npc.forceMessage("BUUUUUUURRRRRRRRRNNNNNNNN!");
         npc.cE.doAnim(13605);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int unlucky = Combat.random(1);
             if(unlucky == 0) {
                 player.playGraphics(Graphic.create(1393));
@@ -42,7 +41,7 @@ public class BallakThePummeller implements Attack {
     private void handleHealthSap(NPC npc) {
         npc.forceMessage("GIVE ME LIFE!");
         npc.cE.doAnim(13606);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             player.playGraphics(Graphic.create(336));
             int damage = Combat.random(30);
             Combat.npcRangeAttack(npc, player.cE, 165, 0, false);
@@ -55,16 +54,16 @@ public class BallakThePummeller implements Attack {
     private void handleFireSpell(NPC npc) {
         npc.forceMessage("FEEL THE HEAT!");
         npc.cE.doAnim(13604);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int fireGfx = 1154;
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             Combat.npcAttack(npc, player.cE, CombatCalculation.getCalculatedDamage(npc, player.cE.getEntity(), Combat.random(MAX_RANGE_DAMAGE), 1, MAX_RANGE_DAMAGE), 1500, 1);
             player.cE.doGfx(fireGfx);
             player.getActionSender().sendMessage("@dre@Your body started burning alive!");
-            World.getWorld().submit(new Event(2000) {
+            World.submit(new Task(2000) {
                 int burnTicks = Combat.random(3) + 2;
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     if(burnTicks <= 0) {
                         this.stop();
                         return;

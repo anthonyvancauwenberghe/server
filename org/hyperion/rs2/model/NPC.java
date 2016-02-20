@@ -1,12 +1,11 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.map.WorldMap;
-import org.hyperion.rs2.event.impl.NpcDeathEvent;
 import org.hyperion.rs2.model.Damage.Hit;
 import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.shops.LegendaryStore;
 
@@ -23,11 +22,6 @@ public class NPC extends Entity {
 	 */
 	private final NPCDefinition definition;
 
-	/**
-	 * Creates the NPC with the specified definition.
-	 *
-	 * @param definition The definition.
-	 */
 	public NPC(NPCDefinition npcdefinition, int respawntime, Location loc) {
 		health = 10;
 		maxHealth = 10;
@@ -44,6 +38,7 @@ public class NPC extends Entity {
 		maxHealth = npcdefinition.maxHp();
 		health = npcdefinition.maxHp();
 		spawnLocation = loc;
+		setLocation(loc);
 		isHidden(false);
 	}
 
@@ -115,7 +110,7 @@ public class NPC extends Entity {
 		if(health <= 0) {
 			if(! this.isDead()) {
 				charm = NPCManager.getCharms(this.definition.getId(), this.definition.getName());
-				World.getWorld().submit(new NpcDeathEvent(this));
+				World.submit(new NpcDeathTask(this));
 			}
 			this.setDead(true);
 		}

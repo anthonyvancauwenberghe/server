@@ -1,14 +1,15 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.Server;
+import org.hyperion.Configuration;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.EP.EPExchange;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
 import org.hyperion.rs2.model.content.minigame.Barrows3;
@@ -17,7 +18,6 @@ import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.RangingGuild;
 import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
 import org.hyperion.rs2.model.content.misc.Starter;
-import org.hyperion.rs2.model.content.misc.TGEvent;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
@@ -51,7 +51,7 @@ public class DialogueManager {
 		if(player.getInteractingEntity() instanceof Player)
 			return;
 		NPC npc = (NPC) player.getInteractingEntity();
-		if(World.getWorld().getContentManager().handlePacket(20, player, dialogueId, 0, 0, 0))
+		if(ContentManager.handlePacket(20, player, dialogueId, 0, 0, 0))
 			return;
 		switch(dialogueId) {
 			case 0:
@@ -179,7 +179,7 @@ public class DialogueManager {
 				break;
 			case 18:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Hello, welcome to " + Server.NAME + ", Please ensure you are active", "on the forums to keep updated with whats new.");
+						"Hello, welcome to " + Configuration.getString(Configuration.ConfigurationObject.NAME) + ", Please ensure you are active", "on the forums to keep updated with whats new.");
 				player.getInterfaceState().setNextDialogueId(0, 19);
 				break;
 			case 19:
@@ -341,7 +341,7 @@ public class DialogueManager {
 				break;
 			case 45:
 				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-						"Well done " + player.getName() + ", now please", "read the guide to understand basic infomation about " + Server.NAME);
+						"Well done " + player.getName() + ", now please", "read the guide to understand basic information about " + Configuration.getString(Configuration.ConfigurationObject.NAME));
 				player.getInterfaceState().setNextDialogueId(0, dialogueId + 1);
 				break;
 			case 46:
@@ -448,11 +448,11 @@ public class DialogueManager {
 					ContentEntity.addItem(player, 1712, 1);
 					ContentEntity.addItem(player, 2560, 1);
 				}
-				player.getActionSender().openQuestInterface(Server.NAME + " Guide Book", new String[]{
+				player.getActionSender().openQuestInterface(Configuration.getString(Configuration.ConfigurationObject.NAME) + " Guide Book", new String[]{
 						"Congratulations on Completeing the begineers",
 						"Tutorial you can now read your guide book",
 						"To learn how to get started.",
-						"on " + Server.NAME + ".com",
+						"on " + Configuration.getString(Configuration.ConfigurationObject.NAME) + ".com",
 				});
 				player.getSkills().reset();
 				player.getActionSender().sendSkills();
@@ -1215,55 +1215,6 @@ public class DialogueManager {
             case 201:
                 player.getActionSender().removeChatboxInterface();
                 break;
-            /** Thanks giving event dialogues*/
-            case 179: //jack D
-                player.getInterfaceState().setNextDialogueId(0, -1);
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "Good day " + player.getName() + "! I'm kind of in trouble.",
-                        "In order to save thanks-giving I need your help to",
-                        "defeat 50 evil chickens, once you've done that", "please come back to me and that speak to me again.");
-                break;
-            case 180: //jack D
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "You have killed "+player.getTurkeyKills()+" out of "+player.getTurkeyKills()+" evil chickens.",
-                        "Speak with me once you have killed 50 of them,",
-                        "we must save the thanks-giving after all!");
-                player.getInterfaceState().setNextDialogueId(0, 6000);//
-                break;
-            case 181: //jack D
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "So you managed to kill all the evil chickens, "+player.getName()+"!",
-                        "Now the thanks-giving is all safe thanks to you!");
-                player.getInterfaceState().setNextDialogueId(0, 182);//
-                break;
-            case 182: //jack D
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "Please accept my reward as a gift,", "it's the least I can do!");
-                player.getInterfaceState().setNextDialogueId(0, 183);//
-                break;
-            case 183:
-                player.sendMessage("DeviousPK wishes you happy thanks-giving!");
-                player.getActionSender().removeChatboxInterface();
-                player.sendMessage("@red@You have received x1 Web cloak to your bank account!");
-                player.getBank().add(new BankItem(0, 15352, 1));
-                break;
-
-            case 184: //gala
-                if (player.hasFinishedTG()) {
-                    player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                            "You have already saved the thanks-giving, "+player.getName()+"!");
-                    player.getInterfaceState().setNextDialogueId(0, -1);
-                    return;
-                }
-                player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
-                        "My friend called Grandpa Jack is in need of help.",
-                        "I will take you to him for more instructions.");
-                player.getInterfaceState().setNextDialogueId(0, 185);
-                break;
-            case 185: //gala
-                TGEvent.teleport(player);
-                player.getActionSender().removeChatboxInterface();
-                break;
             case 186: //tele to pure pk
                 final Optional<SpecialArea> purePk = SpecialAreaHolder.get("purepk");
                 if(purePk.isPresent()) {
@@ -1349,21 +1300,11 @@ public class DialogueManager {
 						"Your account has been saved but...", "You have to change your name to activate it.", "Please enter a new name in the input box.");
 				player.getInterfaceState().setNextDialogueId(0, 402);
 				break;
-			case 402:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("namechange");
-				break;
 
 			case 403:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"Unfortunately this name is already taken,", "please choose an other name");
 				player.getInterfaceState().setNextDialogueId(0, 404);
-				break;
-			case 404:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("namechange");
 				break;
 			case 405:
 				player.getActionSender().sendDialogue("ArteroPk", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
@@ -1400,11 +1341,6 @@ public class DialogueManager {
 						"Please enter a new name for your","ArteroPk account.");
 				player.getInterfaceState().setNextDialogueId(0, 505);
 				break;
-			case 505:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("doublecharartero");
-				break;
 			case 506:
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"You have made an invalid choice, please try again.");
@@ -1422,11 +1358,6 @@ public class DialogueManager {
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
 						"Please enter a new name for your","InstantPk account.");
 				player.getInterfaceState().setNextDialogueId(0, 509);
-				break;
-			case 509:
-				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getActionSender().removeChatboxInterface();
-				player.getInterfaceState().setStringListener("doublecharinstant");
 				break;
 			case 510:
 				player.getActionSender().sendDialogue("Server", DialogueType.NPC, 2611, FacialAnimation.DEFAULT,
@@ -1508,17 +1439,34 @@ public class DialogueManager {
 				break;
 			case 600:
 				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getInterfaceState().setStringListener("ge_set_quantity");
+				player.getInterfaceState().setStringListener("ge_set_quantity", "Enter the quantity");
 				break;
 			case 601:
 				player.getInterfaceState().setNextDialogueId(0, -1);
-				player.getInterfaceState().setStringListener("ge_set_price");
+				player.getInterfaceState().setStringListener("ge_set_price", "Enter the price");
 				break;
 			case 610:
 			case 611:
 			case 612:
 			case 613:
 				player.getRandomEvent().answer(dialogueId - 610);
+				break;
+			case 650:
+				PlayerAuthenticationGenerator.setupAuthenticator(player);
+				break;
+			case 651:
+				//TODO MAKE INFO PAGE
+				break;
+			case 652:
+				PlayerAuthenticationGenerator.disableAuthenticator(player);
+				break;
+			case 654:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getInterfaceState().setStringListener("authenticator_confirmation", "Enter your current key");
+				break;
+			case 655:
+				player.getInterfaceState().setNextDialogueId(0, -1);
+				player.getInterfaceState().setStringListener("authenticator_removal_confirmation", "Enter your current key");
 				break;
             case 6000:
                 player.getActionSender().removeChatboxInterface();

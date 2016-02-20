@@ -1,19 +1,9 @@
 package org.hyperion.rs2.saving.instant;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import org.hyperion.Server;
-import org.hyperion.rs2.model.Password;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.util.PasswordEncryption;
+
+import java.io.*;
 
 public class TextFilePlayerSaving extends InstantPlayerSaving {
 	
@@ -67,7 +57,7 @@ public class TextFilePlayerSaving extends InstantPlayerSaving {
 				}
 			}
 			file.close();
-			//World.getWorld().getSQLSaving().save(player);
+			//World.getSQLSaving().save(player);
 			return true;
 		} catch (IOException e) {
 			System.out.println("Player's name: " + player.getName());

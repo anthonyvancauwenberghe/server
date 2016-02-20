@@ -40,7 +40,7 @@ public class CastMagicPacketHandler implements PacketHandler {
 		if(id <= 0 || id >= Constants.MAX_PLAYERS) {
 			return;
 		}
-		Player victim = (Player) World.getWorld().getPlayers().get(id);
+		Player victim = (Player) World.getPlayers().get(id);
 		int spell = packet.getLEShort();
 		//System.out.println("spell: " + spell);
 		if(victim != null) {
@@ -78,7 +78,7 @@ public class CastMagicPacketHandler implements PacketHandler {
 		if(id <= 0 || id >= Constants.MAX_NPCS) {
 			return;
 		}
-		NPC victim = (NPC) World.getWorld().getNPCs().get(id);
+		NPC victim = (NPC) World.getNpcs().get(id);
 		int spell = packet.getShortA();
 		if(victim != null) {
 			if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)

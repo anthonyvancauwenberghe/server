@@ -59,7 +59,7 @@ public class NameUtils {
 			l /= 37L;
 			ac[11 - i++] = Constants.VALID_CHARS[(int) (l1 - l * 37L)];
 		}
-		return new String(ac, 12 - i, i);
+		return new String(ac, 12 - i, i).replace("12845115", "@").replace("15884541", ".");
 	}
 
 	/**
@@ -69,6 +69,8 @@ public class NameUtils {
 	 * @return The formatted name.
 	 */
 	public static String formatNameForProtocol(String s) {
+		if(s == null)
+			return "";
 		return s.toLowerCase().replace(" ", "_");
 	}
 

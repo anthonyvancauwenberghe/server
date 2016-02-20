@@ -1,12 +1,12 @@
 package org.hyperion.rs2.saving.instant;
 
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.saving.instant.impl.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.saving.instant.impl.*;
 
 /**
  * This class holds all the PlayerSaving logic and settings.
@@ -49,7 +49,6 @@ public abstract class InstantPlayerSaving {
 	private void initSaveObjects() {
 		saveList.add(new SaveName("Name"));
 		saveList.add(new SavePass("Pass"));
-		saveList.add(new SaveSalt("Salt"));
 		saveList.add(new SaveStatus("Status"));
 		saveList.add(new SaveAccValue("AccValue"));
 		saveList.add(new SaveIP("IP"));
@@ -60,12 +59,10 @@ public abstract class InstantPlayerSaving {
 		saveList.add(new SaveElo("Elo"));
 		saveList.add(new SaveDiced("Diced"));
 		//saveList.add(new SavePreviousSessionTime("PreviousTime"));
-		saveList.add(new SaveCreatedLong("CreatedLong"));;
+		saveList.add(new SaveCreatedLong("CreatedLong"));
 		saveList.add(new SaveLastHonorPointsReward("LastHonors"));
 		saveList.add(new SaveAtkType("AtkType"));
 		saveList.add(new SaveMagicbook("MagicBook"));
-		saveList.add(new SaveExpLock("XpLock"));
-		saveList.add(new SaveTrivia("Trivia"));
 		saveList.add(new SavePrayerBook("Altar"));
 		saveList.add(new SaveDonatorPointsBought("DonatorsBought"));
 		//saveList.add(new SaveDonatorPoints("DonatorPoints"));

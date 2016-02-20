@@ -14,7 +14,7 @@ public class ServerStatistics {
 	}
 
 	public void print() {
-		int players = World.getWorld().getPlayers().size();
+		int players = World.getPlayers().size();
 		if(players > maxPlayercount)
 			maxPlayercount = players;
 		String message = "Players online: " + players + ", Max: " + maxPlayercount
@@ -23,7 +23,7 @@ public class ServerStatistics {
 	}
 
 	public String getQuery() {
-		int players = World.getWorld().getPlayers().size();
+		int players = World.getPlayers().size();
 		long minutes = Time.currentTimeMinutes();
 		String base = "INSERT INTO " + TABLE_NAME + "(players,time) VALUES (";
 		return base + players + "," + minutes + ");";

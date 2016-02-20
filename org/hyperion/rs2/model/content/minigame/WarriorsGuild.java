@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
@@ -134,7 +134,7 @@ public class WarriorsGuild implements ContentTemplate {
 			p.getActionSender().sendMessage("You need at least 100 tokens to enter this room!");
 			return false;
 		}
-		World.getWorld().submit(new Event(60000) {
+		World.submit(new Task(60000) {
 			public void execute() {
 				if(inCyclopsRoom(p)) {
 					if(ContentEntity.deleteItemA(p, TOKENS, 10)) {
@@ -194,9 +194,9 @@ public class WarriorsGuild implements ContentTemplate {
 				}
 			}
 
-			for(int i = 1; i <= World.getWorld().npcs.size(); i++) {
-				if(World.getWorld().npcs.get(i) != null) {
-					NPC npc = (NPC) World.getWorld().npcs.get(i);
+			for(int i = 1; i <= World.npcs.size(); i++) {
+				if(World.npcs.get(i) != null) {
+					NPC npc = (NPC) World.npcs.get(i);
 					if (npc.ownerId == player.getIndex() && player.cE.summonedNpc != npc) {
 						npc.forceMessage("I'm not done with you " + player.getSafeDisplayName() + "!");
 						return false;
@@ -222,7 +222,7 @@ public class WarriorsGuild implements ContentTemplate {
 							player, x, y, player.getLocation().getZ(),
 							new Item(getDefenderId(player), 1)
 					);
-					World.getWorld().getGlobalItemManager().newDropItem(player, defender);
+					GlobalItemManager.newDropItem(player, defender);
 					if(player.WGLevel < 7) {
 						player.WGLevel++;
 					}
@@ -239,8 +239,8 @@ public class WarriorsGuild implements ContentTemplate {
 							player, x, y, player.getLocation().getZ(),
 							new Item(ArmourIds[i - 1], 1));
 				}
-				for(int i = 0; i < DropItems.length; i++) {
-					World.getWorld().getGlobalItemManager().newDropItem(player, DropItems[i]);
+				for (GlobalItem DropItem : DropItems) {
+					GlobalItemManager.newDropItem(player, DropItem);
 				}
 			}
 		}
@@ -248,11 +248,7 @@ public class WarriorsGuild implements ContentTemplate {
 	}
 
 	public NPC spawnNpc(int npcId, Location location, Player player) {
-		NPC npc = World
-				.getWorld()
-				.getNPCManager()
-				.addNPC(location.getX(), location.getY(), location.getZ(),
-						npcId, - 1);
+		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), location.getZ(), npcId, - 1);
 		npc.agressiveDis = 10;
 		npc.ownerId = player.getIndex();
 		return npc;

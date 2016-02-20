@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.Hunter;
 import org.hyperion.util.Misc;
@@ -42,12 +41,10 @@ public class HunterNpcs {
 	}
 
 	public static void spawnImp() {
-		if(Server.OLD_SCHOOL)
-			return;
 		int x = MIN_X + Misc.random(MAX_X - MIN_X);
 		int y = MIN_Y + Misc.random(MAX_Y - MIN_Y);
 		int impId = getRandomImp();
-		NPC imp = World.getWorld().getNPCManager()
+		NPC imp = NPCManager
 				.addNPC(Location.create(x, y, 0), impId, - 1);
 		synchronized(imps) {
 			imps.add(imp);

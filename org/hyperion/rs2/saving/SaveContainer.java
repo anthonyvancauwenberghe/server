@@ -124,7 +124,7 @@ public abstract class SaveContainer extends SaveObject {
             items[i] = (BankItem) player.getBank().get(i);
         }
         return items;
-    };
+    }
 
 	public abstract Item[] getContainer(Player player);
 

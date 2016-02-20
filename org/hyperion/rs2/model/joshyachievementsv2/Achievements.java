@@ -1,12 +1,12 @@
 package org.hyperion.rs2.model.joshyachievementsv2;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Player;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.model.joshyachievementsv2.io.IO;
 import org.hyperion.rs2.model.joshyachievementsv2.task.Task;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 public final class Achievements{
@@ -62,7 +62,8 @@ public final class Achievements{
         return instance;
     }
 
-    public static boolean load(){
-        return (instance = IO.achievements.load()) != null;
+    public static void load(){
+        if((instance = IO.achievements.load()) != null && Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+            Server.getLogger().log(Level.INFO, "Achievements have successfully loaded.");
     }
 }

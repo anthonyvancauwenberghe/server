@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill;
 
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -57,7 +57,7 @@ public class Mining implements ContentTemplate {
 			player.getActionSender().sendMessage(
 					"You examine the rock for ores...");
 			ContentEntity.turnTo(player, x, y);
-			World.getWorld().submit(new Event(PROSPECTING_DELAY) {
+			World.submit(new Task(PROSPECTING_DELAY) {
 				@Override
 				public void execute() {
 					player.getActionSender().sendMessage(
@@ -111,7 +111,7 @@ public class Mining implements ContentTemplate {
 						"You cannot mine that ore.");
 				return true;
 			}
-			GameObject g = World.getWorld().getObjectMap().getObjectAt(objectX, objectY,
+			GameObject g = ObjectManager.getObjectAt(objectX, objectY,
 					player.getLocation().getZ());
 			if(g != null && g.getType() == EXPIRED_ORE) {
 				player.getActionSender().sendMessage(
@@ -124,10 +124,10 @@ public class Mining implements ContentTemplate {
 			ContentEntity.turnTo(player, objectX, objectY);
 			ContentEntity.startAnimation(player,
 					PICKAXE_ANIMATIONS[pickaxe]);
-			World.getWorld().submit(new Event(MINING_DELAY) {
+			World.submit(new Task(MINING_DELAY) {
 				@Override
 				public void execute() {
-					GameObject g = World.getWorld().getObjectMap().getObjectAt(objectX, objectY,
+					GameObject g = ObjectManager.getObjectAt(objectX, objectY,
 							player.getLocation().getZ());
 
 
@@ -166,11 +166,11 @@ public class Mining implements ContentTemplate {
 									final GameObject normal = new GameObject(GameObjectDefinition.forId(objectID), Location.create(objectX, objectY, player.getLocation().getZ()), 10, 0);
 
 									ContentEntity.startAnimation(player, - 1);
-									World.getWorld().getObjectMap().addObject(expired);
-									World.getWorld().submit(new Event(ORE_RESPAWN_TIME) {
+									ObjectManager.addObject(expired);
+									World.submit(new Task(ORE_RESPAWN_TIME) {
 										@Override
 										public void execute() {
-											World.getWorld().getObjectMap().replace(expired, normal);
+											ObjectManager.replace(expired, normal);
 											this.stop();
 										}
 									});
@@ -280,7 +280,7 @@ public class Mining implements ContentTemplate {
 	/**
 	 * Checks if the player has a pick axe.
 	 *
-	 * @param player The player.
+	 * @param client The player.
 	 * @return True if the player has one, false if not.
 	 */
 	public static int hasPickaxe(Player client) {

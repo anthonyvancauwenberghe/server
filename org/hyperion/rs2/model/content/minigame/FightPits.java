@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.OverloadStatsEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
@@ -38,17 +38,17 @@ public class FightPits implements ContentTemplate {
 	
 	public static int gameTimeLeft;
 	
-	public static CopyOnWriteArrayList<Player> waitingRoom;
-	public static CopyOnWriteArrayList<Player> playersInGame;
-	public static CopyOnWriteArrayList<Player> teamRed;
-	public static CopyOnWriteArrayList<Player> teamBlue;
+	public static CopyOnWriteArrayList<Player> waitingRoom = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<Player> playersInGame = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<Player> teamRed = new CopyOnWriteArrayList<>();
+	public static CopyOnWriteArrayList<Player> teamBlue = new CopyOnWriteArrayList<>();
 	private CopyOnWriteArrayList<NPC> monsters;
 	private static String lastChamp;
 	private static int timeLeft;
 	
-	public static List<List<Item>> meleeItems = new ArrayList<List<Item>>();
-	public static List<List<Item>> rangeItems = new ArrayList<List<Item>>();
-	public static List<List<Item>> mageItems = new ArrayList<List<Item>>();
+	public static List<List<Item>> meleeItems = new ArrayList<>();
+	public static List<List<Item>> rangeItems = new ArrayList<>();
+	public static List<List<Item>> mageItems = new ArrayList<>();
 	
 	public static List<Integer> scItems = new Vector<Integer>();
 	public static List<Integer> rewardItems = new ArrayList<Integer>();
@@ -227,22 +227,6 @@ public class FightPits implements ContentTemplate {
 		data = null;
 	}
 	
-	public FightPits() {
-		waitingRoom = new CopyOnWriteArrayList<Player>();
-		teamRed = new CopyOnWriteArrayList<Player>();
-		teamBlue = new CopyOnWriteArrayList<Player>();
-		playersInGame = new CopyOnWriteArrayList<Player>();
-		monsters = new CopyOnWriteArrayList<NPC>();
-		lastChamp = "";
-		timeLeft = 0;
-		for(int i = 0; i < 4; i++) {
-			meleeItems.add(new ArrayList<Item>());
-			rangeItems.add(new ArrayList<Item>());
-			mageItems.add(new ArrayList<Item>());
-
-		}
-	}
-	
 	public static int HELM = 0, BODY = 1, LEGS = 2, WEAPON = 3;
 	
 	public static boolean isNoted(ItemDefinition itemDef) {
@@ -250,12 +234,25 @@ public class FightPits implements ContentTemplate {
 		return previous != null && previous.getName().equalsIgnoreCase(itemDef.getName());
 	}
 	public void init() throws FileNotFoundException {
-		World.getWorld().submit(new Event(1000L) {
+		World.submit(new Task(1000) {
 			@Override
 			public void execute() {
 				process();
 			}
 		});
+		waitingRoom = new CopyOnWriteArrayList<>();
+		teamRed = new CopyOnWriteArrayList<>();
+		teamBlue = new CopyOnWriteArrayList<>();
+		playersInGame = new CopyOnWriteArrayList<>();
+		monsters = new CopyOnWriteArrayList<>();
+		lastChamp = "";
+		timeLeft = 0;
+		for(int i = 0; i < 4; i++) {
+			meleeItems.add(new ArrayList<>());
+			rangeItems.add(new ArrayList<>());
+			mageItems.add(new ArrayList<>());
+
+		}
 		for(int id = 14000; id < 15000; id++) {
 			ItemDefinition itemDef = ItemDefinition.forId(id);
 			String name = null;
@@ -377,7 +374,7 @@ public class FightPits implements ContentTemplate {
 	
 	private static void normalize(Player player) {
 		player.setOverloaded(false);
-		player.getExtraData().remove(OverloadStatsEvent.KEY);
+		player.getExtraData().remove(OverloadStatsTask.KEY);
 		player.overloadTimer = 0;
 		for(int i = 0; i < 6; i++) {
 			player.getSkills().normalizeLevel(i);
@@ -405,7 +402,7 @@ public class FightPits implements ContentTemplate {
 			player.getInventory().clear();
 			player.getEquipment().clear();
 			final Player p2 = player;
-			World.getWorld().submit(new Event(600) {
+			World.submit(new Task(600) {
 				public void execute() {
                     spawnItems(p2);
 					this.stop();
@@ -543,7 +540,7 @@ public class FightPits implements ContentTemplate {
 				gameTimeLeft = 240 + waitingRoom.size() * 15;
 				if(EVENT)
 					gameTimeLeft += 160;
-				timeLeft = gameTimeLeft + 15 + World.getWorld().getPlayers().size()/3;
+				timeLeft = gameTimeLeft + 15 + World.getPlayers().size()/3;
 				if(NEXT_GAME_EVENT)
 					timeLeft += 35;
 				startGame();
@@ -561,13 +558,13 @@ public class FightPits implements ContentTemplate {
 			for(Player player : waitingRoom) {
 				player.getActionSender().sendMessage("You need 3 players to start a game!");
 			}
-			timeLeft = 15 + World.getWorld().getPlayers().size()/3;
+			timeLeft = 15 + World.getPlayers().size()/3;
 		}
 	}
 
 	@SuppressWarnings("unused")
 	private void spawnNpc(int i, Location location) {
-		NPC npc = World.getWorld().getNPCManager().addNPC(location.getX(), location.getY(), 0, i, - 1);
+		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), 0, i, - 1);
 		npc.agressiveDis = 150;
 		monsters.add(npc);
 	}
@@ -746,7 +743,7 @@ public class FightPits implements ContentTemplate {
                     npc.serverKilled = true;
                     if(!npc.isDead())
                     {
-                        World.getWorld().submit(new DeathEvent(npc));
+                        World.submit(new DeathEvent(npc));
                     }
                     npc.setDead(true);
                     npc.health = 0;

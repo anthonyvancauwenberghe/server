@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 
 public class AutoSaving {
 
@@ -17,7 +17,7 @@ public class AutoSaving {
 	public void process() {
 		timer++;
 		if(timer >= CYCLES_TO_AUTOSAVE) {
-			PlayerSaving.getSaving().save(player);
+			PlayerSaving.save(player);
 			timer = 0;
 		}
 	}

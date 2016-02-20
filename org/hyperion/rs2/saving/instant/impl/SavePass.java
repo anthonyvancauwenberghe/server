@@ -11,13 +11,13 @@ public class SavePass extends SaveString {
 
 	@Override
 	public void setValue(Player player, String value) {
-		player.getPassword().setEncryptedPass(value);
+		player.setPassword(value);
 	}
 
 	@Override
 	public String getValue(Player player) {
 		//System.out.println("Saving password: " + player.getPassword().getPassString());
-		return player.getPassword().getEncryptedPass();
+		return player.getPassword();
 	}
 
 }

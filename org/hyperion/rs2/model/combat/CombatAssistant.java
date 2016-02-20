@@ -1,18 +1,14 @@
 package org.hyperion.rs2.model.combat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.skill.Prayer;
+
+import java.util.*;
 
 
 public class CombatAssistant {
@@ -34,7 +30,7 @@ public class CombatAssistant {
 	 * @param combatEntity
 	 */
 	public static void checkSkull(CombatEntity combatEntity) {
-		if(combatEntity.getOpponent().getEntity() instanceof NPC && WildernessBossEvent.isWildernessBoss(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
+		if(combatEntity.getOpponent().getEntity() instanceof NPC && WildernessBossTask.isWildernessBoss(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
 			combatEntity.getPlayer().setSkulled(true);
 			Prayer.setHeadIcon(combatEntity.getPlayer());
 			return;
@@ -51,7 +47,6 @@ public class CombatAssistant {
             return;
 		if(! combatEntity.getPlayer().isSkulled()) {
 			combatEntity.getPlayer().setSkulled(true);
-			;
 			Prayer.setHeadIcon(combatEntity.getPlayer());
 		}
 	}
@@ -72,9 +67,7 @@ public class CombatAssistant {
 	 * Stab weapons
 	 */
 	
-	public static final List<Integer> STAB_WEAPONS = new LinkedList<Integer>(Arrays.asList(new Integer[]
-			{ 11716, 11717, 13454,5698, 13889, 14484, 18349, 17135
-			}));
+	public static final List<Integer> STAB_WEAPONS = new LinkedList<Integer>(Arrays.asList(11716, 11717, 13454,5698, 13889, 14484, 18349, 17135));
 	
 	public static final boolean isStab(Item item) {
 		if(item == null)
@@ -125,10 +118,7 @@ public class CombatAssistant {
 		if(combatEntity.getEntity().isDead() || combatEntity.getOpponent().getEntity().isDead()) {
 			return false;
 		}
-		if(! combatEntity.getOpponent().isNpcAttackAble()) {
-			return false;
-		}
-		return true;
+		return combatEntity.getOpponent().isNpcAttackAble();
 	}
 
 
@@ -668,12 +658,10 @@ public class CombatAssistant {
 				|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
 				|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
 			return false;
-		if(player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4753
+		return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 4753
 				&& player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 4755
 				&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 4757
-				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4759)
-			return true;
-		return false;
+				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4759;
 	}
 
 	private static Random random = new Random();
@@ -891,10 +879,8 @@ public class CombatAssistant {
 				|| p.getEquipment().get(Equipment.SLOT_WEAPON) == null) {
 			return false;
 		}
-		if(p.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11128
-				&& p.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 6528)
-			return true;
-		return false;
+		return p.getEquipment().get(Equipment.SLOT_AMULET).getId() == 11128
+				&& p.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 6528;
 	}
 
 	public static boolean fullVoidMelee(Player player) {
@@ -903,12 +889,10 @@ public class CombatAssistant {
 				|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
 				|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
 			return false;
-		if(player.getEquipment().get(Equipment.SLOT_HELM).getId() == 11665
+		return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 11665
 				&& player.getEquipment().get(Equipment.SLOT_GLOVES).getId() == 8842
 				&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 8839
-				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840)
-			return true;
-		return false;
+				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840;
 	}
 
 	public static boolean fullVoidRange(Player player) {
@@ -917,12 +901,10 @@ public class CombatAssistant {
 				|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
 				|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
 			return false;
-		if(player.getEquipment().get(Equipment.SLOT_HELM).getId() == 11664
+		return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 11664
 				&& player.getEquipment().get(Equipment.SLOT_GLOVES).getId() == 8842
 				&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 8839
-				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840)
-			return true;
-		return false;
+				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840;
 	}
 
     /**
@@ -933,10 +915,8 @@ public class CombatAssistant {
     public static boolean wearingFarseer(Player player) {
         if(player.getEquipment().get(Equipment.SLOT_SHIELD) == null)
             return false;
-        if(player.getEquipment().get(Equipment.SLOT_SHIELD).getId() == 18363)
-            return true;
-        return false;
-    }
+		return player.getEquipment().get(Equipment.SLOT_SHIELD).getId() == 18363;
+	}
 
     public static boolean fullVoidMage(Player player) {
 		if(player.getEquipment().get(Equipment.SLOT_HELM) == null
@@ -944,12 +924,10 @@ public class CombatAssistant {
 				|| player.getEquipment().get(Equipment.SLOT_CHEST) == null
 				|| player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
 			return false;
-		if(player.getEquipment().get(Equipment.SLOT_HELM).getId() == 11663
+		return player.getEquipment().get(Equipment.SLOT_HELM).getId() == 11663
 				&& player.getEquipment().get(Equipment.SLOT_GLOVES).getId() == 8842
 				&& player.getEquipment().get(Equipment.SLOT_CHEST).getId() == 8839
-				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840)
-			return true;
-		return false;
+				&& player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 8840;
 	}
 
 	/**
@@ -973,9 +951,7 @@ public class CombatAssistant {
 			return false;
 		if(player.getEquipment().get(Equipment.SLOT_BOTTOMS) == null)
 			return false;
-		if(player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() != 4722)
-			return false;
-		return true;
+		return player.getEquipment().get(Equipment.SLOT_BOTTOMS).getId() == 4722;
 	}
 
 	public static int getRangedHit2(Player p) {

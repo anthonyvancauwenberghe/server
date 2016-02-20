@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model.content.misc2.teamboss.impl;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.teamboss.TeamBossSession;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.util.Misc;
 
 /**
@@ -23,16 +23,16 @@ public class SkeletalTrioSession extends TeamBossSession {
                 //rewards
         },
         new NPC[] {
-                World.getWorld().getNPCManager().addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11255, -1),
-                World.getWorld().getNPCManager().addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11254, -1),
-                World.getWorld().getNPCManager().addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11253, -1)
+                NPCManager.addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11255, -1),
+                NPCManager.addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11254, -1),
+                NPCManager.addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11253, -1)
         },
         players);
     }
 
 
     @Override
-    public void handleReward() {;
+    public void handleReward() {
         final int distribution = players.size();
         for(Player p : players) {
             for(final NPCDrop drop : rewards) {

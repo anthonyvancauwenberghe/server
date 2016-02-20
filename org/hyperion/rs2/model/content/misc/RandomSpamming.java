@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model.content.misc;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.ChatMessage;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
@@ -44,7 +44,7 @@ public class RandomSpamming {
 	/**
 	 * The spam Event
 	 */
-	private static Event spamEvent = new Event(4000) {
+	private static Task spamEvent = new Task(4000) {
 		int counter = 0;
 
 		@Override
@@ -54,7 +54,7 @@ public class RandomSpamming {
 				this.stop();
 				counter = 0;
 			}
-			for(Player p : World.getWorld().getPlayers()) {
+			for(Player p : World.getPlayers()) {
 				for(int i = 0; i < 10; i++) {
 					if(colours)
 						forceColoredChatMessage(p, getRandomMessage());
@@ -73,7 +73,7 @@ public class RandomSpamming {
 	public static void start(boolean colors) {
 		if(colors)
 			colours = true;
-		World.getWorld().submit(spamEvent);
+		World.submit(spamEvent);
 	}
 
 	/**

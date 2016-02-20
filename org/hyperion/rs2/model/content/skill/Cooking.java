@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.data.PersistenceManager;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
@@ -124,7 +124,7 @@ public class Cooking implements ContentTemplate {
 			ContentEntity.startAnimation(client, COOKING_ANIM_FIRE);
 		}
 
-		World.getWorld().submit(new Event(2500) {
+		World.submit(new Task(2500) {
 			int amount2 = amount;
 
 			@Override
@@ -169,7 +169,7 @@ public class Cooking implements ContentTemplate {
 			public void stop() {
 				ContentEntity.startAnimation(client, - 1);
 				client.setBusy(false);
-				this.stop();
+				super.stop();
 			}
 
 		});

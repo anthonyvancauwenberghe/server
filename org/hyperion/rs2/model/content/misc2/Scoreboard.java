@@ -57,7 +57,7 @@ public class Scoreboard implements ContentTemplate {
 		 */
 		lastupdate = System.currentTimeMillis();
 		LinkedList<ScoreboardPlayer> fullList = new LinkedList<ScoreboardPlayer>();
-		for(Player player : World.getWorld().getPlayers()) {
+		for(Player player : World.getPlayers()) {
 			if(player != null)
 			fullList.add(new ScoreboardPlayer(player.getName(), player.getBounty()));
 		}
@@ -110,7 +110,7 @@ public class Scoreboard implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
-		World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(3192), Location.create(3084, 3485, 0), 10, 0)); //ScoreBoard
+		ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(3192), Location.create(3084, 3485, 0), 10, 0)); //ScoreBoard
 	}
 
 	@Override

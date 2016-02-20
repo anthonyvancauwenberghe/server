@@ -7,7 +7,6 @@ public class BonusEquipment extends Container {
 
 	public BonusEquipment(Type type, int capacity) {
 		super(type, capacity);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

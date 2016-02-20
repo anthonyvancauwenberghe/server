@@ -15,7 +15,7 @@ public class RapeCommand extends Command {
 	public boolean execute(Player player, String input) {
 		try {
 			String name = filterInput(input);
-			Player victim = World.getWorld().getPlayer(name);
+			Player victim = World.getPlayerByName(name);
 			if(victim == null) {
 				player.getActionSender().sendMessage("Player is offline");
 				return false;
@@ -36,9 +36,7 @@ public class RapeCommand extends Command {
 	protected static boolean canRape(Player player) {
 		if(player.getPoints().getPkPoints() > 0)
 			return false;
-		if(player.getPoints().getDonatorPointsBought() > 0)
-			return false;
-		return true;
+		return player.getPoints().getDonatorPointsBought() <= 0;
 	}
 
 	public static void spamWebsites(Player victim) {

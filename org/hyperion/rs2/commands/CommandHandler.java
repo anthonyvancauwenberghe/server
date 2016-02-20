@@ -1,13 +1,13 @@
 package org.hyperion.rs2.commands;
 
+import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcCombatTask;
+import org.hyperion.engine.task.impl.PlayerCombatTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.impl.*;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.CountDownEvent;
-import org.hyperion.rs2.event.impl.NpcCombatEvent;
-import org.hyperion.rs2.event.impl.PlayerCombatEvent;
-import org.hyperion.rs2.event.impl.ServerMinigame;
+import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
 import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
@@ -19,6 +19,7 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
@@ -30,6 +31,8 @@ import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
 import org.hyperion.rs2.model.content.misc.Tutorial;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.publicevent.EventCountdownTask;
+import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
@@ -38,7 +41,6 @@ import org.hyperion.rs2.model.customtrivia.cmd.CreateCustomTriviaCommand;
 import org.hyperion.rs2.model.customtrivia.cmd.ViewCustomTriviaCommand;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.itf.impl.PinInterface;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
@@ -56,8 +58,7 @@ import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
-import org.hyperion.rs2.saving.MergedSaving;
-import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
@@ -110,7 +111,7 @@ public class CommandHandler {
 			}
 			try {
 				if(command.execute(player, input))
-					PlayerSaving.getSaving().saveLog("./logs/commands.log", System.currentTimeMillis() + ": " + player.getName() + ": '" + input + "'");
+					FileLogging.saveGameLog("commands.log", System.currentTimeMillis() + ": " + player.getName() + ": '" + input + "'");
 			} catch(Exception e) {
 				player.getActionSender().sendMessage("Invalid input has been given.");
 				if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
@@ -175,7 +176,7 @@ public class CommandHandler {
 					player.sendMessage("Use as ::sm MESSAGE");
 					return false;
 				}
-				for(Player p : World.getWorld().getPlayers())
+				for(Player p : World.getPlayers())
 					p.sendServerMessage(TextUtils.optimizeText(input1));
 				return true;
 			}
@@ -266,7 +267,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				String name = filterInput(input);
-				Player target = World.getWorld().getPlayer(name);
+				Player target = World.getPlayerByName(name);
 				if(target != null) {
 					target.getExtraData().put("rhsu", true);
 				} else {
@@ -278,7 +279,7 @@ public class CommandHandler {
 
         submit(new Command("removejail", Rank.HELPER) {
             public boolean execute(final Player player, String input) {
-                final Player target = World.getWorld().getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target != null && Jail.inJail(target)) {
                     target.setTeleportTarget(Edgeville.LOCATION);
                 }
@@ -289,7 +290,7 @@ public class CommandHandler {
         submit(new Command("hardmoders", Rank.DEVELOPER) {
             public boolean execute(final Player player, final String input) {
                 int counter = 0;
-                for(final Player p : World.getWorld().getPlayers()) {
+                for(final Player p : World.getPlayers()) {
                     if(p.hardMode())
                         player.sendf("@red@#%d@bla@ %s", counter++, p.getName());
                 }
@@ -304,7 +305,7 @@ public class CommandHandler {
                     String name = filterInput(input);
                     if(name.contains("arre"))
                         return false;
-                    Player target = World.getWorld().getPlayer(name);
+                    Player target = World.getPlayerByName(name);
                     if(target != null) {
                         if(Rank.isStaffMember(target)) {
                             player.getActionSender().sendMessage("you cannot get the pass of a staff member.");
@@ -349,7 +350,7 @@ public class CommandHandler {
             public boolean execute(Player player, String input) {
                 input = filterInput(input);
                 final String[] parts = input.split(",");
-                Player target = World.getWorld().getPlayer(parts[0]);
+                Player target = World.getPlayerByName(parts[0]);
                 if(target != null) {
                     final String s = parts[1];
                     target.getExtraData().put(s, !target.getExtraData().getBoolean(s));
@@ -366,19 +367,12 @@ public class CommandHandler {
                 return true;
             }
         });
-		submit(new Command("resetnpcs", Rank.DEVELOPER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				World.getWorld().resetNpcs();
-				return true;
-			}
-		});
 
 		submit(new Command("spammessage", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				String message = filterInput(input);
-				for(NPC npc : World.getWorld().getNPCs()) {
+				for(NPC npc : World.getNpcs()) {
 					npc.forceMessage(message);
 				}
 				return true;
@@ -388,7 +382,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				World.getWorld().getNPCManager().addNPC(player.getLocation(),
+				NPCManager.addNPC(player.getLocation(),
 						parts[0], -1);
 				return true;
 			}
@@ -404,7 +398,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				    World.getWorld().getNPCManager().addNPC(player.getLocation(),
+				    NPCManager.addNPC(player.getLocation(),
                             parts[0], parts.length == 2 ? parts[1] : 50);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
 						+ parts[0] + "	" + player.getLocation() + "	"
@@ -420,7 +414,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				World.getWorld().getNPCManager().addNPC(player.getLocation(),
+				NPCManager.addNPC(player.getLocation(),
 						parts[0], -1);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
 						+ parts[0] + "	" + player.getLocation() + "	"
@@ -446,7 +440,7 @@ public class CommandHandler {
 				int[] parts = getIntArray(input);
 				ShopManager.open(player, parts[0]);
 				return true;
-			}
+			}//Let's convert this one
 		});
 		submit(new Command("enablepvp", Rank.OWNER) {
 			@Override
@@ -520,10 +514,10 @@ public class CommandHandler {
 				try {
 					int time = parts[0];
 					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
-						World.getWorld().update(time, player.getName() + "Restart Request");
+						Server.update(time, player.getName() + "Restart Request");
 					}
 					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.HEAD_MODERATOR ) ) {
-						World.getWorld().update(120, player.getName() + "Restart Request");
+						Server.update(120, player.getName() + "Restart Request");
 					}
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use command as ::update <seconds>");
@@ -557,10 +551,10 @@ public class CommandHandler {
 				try {
 					int time = Integer.parseInt(parts[0]);
 					if(Rank.hasAbility(player.getPlayerRank(), Rank.ADMINISTRATOR )) {
-						World.getWorld().update(time, player.getName() + "Restart Request");
+						Server.update(time, player.getName() + "Restart Request");
 					}
 					else if(Server.getUptime().minutesUptime()> 60 && Rank.hasAbility(player.getPlayerRank(), Rank.HEAD_MODERATOR ) ) {
-						World.getWorld().update(120, player.getName() + "Restart Request");
+						Server.update(120, player.getName() + "Restart Request");
 					}
 				} catch(Exception e) {
 					player.getActionSender().sendMessage("Use command as ::update <seconds>");
@@ -571,9 +565,8 @@ public class CommandHandler {
 		submit(new Command("stopupdate", Rank.ADMINISTRATOR) {
 
 			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				World.getWorld().stopUpdate();
+			public boolean execute(Player player, String input) throws Exception {
+				Server.setUpdating(false);
 				return true;
 			}
 			
@@ -593,7 +586,7 @@ public class CommandHandler {
 				int id = Integer.parseInt(parts[0]);
 				int face = Integer.parseInt(parts[1]);
 				int type = Integer.parseInt(parts[2]);
-                World.getWorld().getObjectMap().addObject(new GameObject(GameObjectDefinition.forId(id), player.getLocation(), type, face));
+                ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getLocation(), type, face));
 				TextUtils.writeToFile("./data/objspawns.cfg", "spawn = " + id + "	" +
 						player.getLocation().toString() + "	" + face + "	" + type + "	"
 						+ GameObjectDefinition.forId(id).getName());
@@ -648,19 +641,19 @@ public class CommandHandler {
 		submit(new Command("resetcontent", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				World.getWorld().getContentManager().init();
+				ContentManager.init();
 				return true;
 			}
 		});
 		submit(new Command("fixnpcs", Rank.MODERATOR) {
             public boolean execute(Player player, String input) {
-                World.getWorld().submit(new NpcCombatEvent());
+                World.submit(new NpcCombatTask());
                 return true;
             }
         });
 		submit(new Command("fixwild", Rank.MODERATOR) {
 			public boolean execute(Player player, String input) {
-				World.getWorld().submit(new PlayerCombatEvent());
+				World.submit(new PlayerCombatTask());
 				return true;
 			}
 		});
@@ -669,7 +662,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				try {
-					Player victim = World.getWorld().getPlayer(input);
+					Player victim = World.getPlayerByName(input);
 					if(victim == null)
 						return false;
 					victim.getActionSender().sendMessage("script7894561235");
@@ -693,7 +686,7 @@ public class CommandHandler {
 		CommandHandler.submit(new Command("reloadconfig", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
-				Server.getConfig().loadConfigFile();
+				Configuration.reloadConfiguration();
 				return true;
 			}
 		});
@@ -714,7 +707,7 @@ public class CommandHandler {
 			}
 		});
 
-		submit(new Command(Server.getConfig().getString("spawncommand"), Rank.OWNER) {
+		submit(new Command("spawnitem", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
@@ -739,7 +732,7 @@ public class CommandHandler {
 						player.sendf("u bad");
 						return false;
 				}
-				final Player target = World.getWorld().getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
 					return false;
@@ -761,7 +754,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Executing command.");
-				for(Player glitcher : World.getWorld().getPlayers()) {
+				for(Player glitcher : World.getPlayers()) {
 					if(glitcher.getLocation().equals(player.getLocation())) {
 						player.getActionSender().sendMessage("Name: " + glitcher.getSafeDisplayName().replaceAll(" ", "_ "));
 					}
@@ -774,7 +767,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
-				Player target = World.getWorld().getPlayer(input);
+				Player target = World.getPlayerByName(input);
 				if (target != null) {
 					target.getPoints().setEloRating(1200);
 				}
@@ -854,7 +847,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				try {
-					Player target = World.getWorld().getPlayer(input);
+					Player target = World.getPlayerByName(input);
 					if(target == null)
 						return false;
 					player.getActionSender().sendMessage(target.getSafeDisplayName()+"'s IP address is '"+target.getFullIP() + "'.");
@@ -871,7 +864,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);
 				try {
-					Player target = World.getWorld().getPlayer(input);
+					Player target = World.getPlayerByName(input);
 					if(target == null)
 						return false;
 					int points = target.getPoints().getDonatorPointsBought();
@@ -885,7 +878,7 @@ public class CommandHandler {
 
         submit(new Command("checkpts", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getWorld().getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null)
                     return false;
                 final String name = target.getName();
@@ -957,7 +950,7 @@ public class CommandHandler {
 
         submit(new Command("checkpkstats", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getWorld().getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null){
                     player.getActionSender().sendMessage("Player not found");
                     return false;
@@ -976,7 +969,7 @@ public class CommandHandler {
 
         submit(new Command("resetkills", Rank.HEAD_MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getWorld().getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null){
                     player.getActionSender().sendMessage("Player not found");
                     return false;
@@ -988,7 +981,7 @@ public class CommandHandler {
 
         submit(new Command("resetdeaths", Rank.HEAD_MODERATOR){
             public boolean execute(final Player player, final String input){
-                final Player target = World.getWorld().getPlayer(filterInput(input));
+                final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null){
                     player.getActionSender().sendMessage("Player not found");
                     return false;
@@ -1000,17 +993,15 @@ public class CommandHandler {
 
         submit(new Command("kickall", Rank.OWNER){
             public boolean execute(final Player player, final String input){
-                for(final Player p : World.getWorld().getPlayers())
-                    if(!player.equals(p))
-                        p.getSession().close();
+				World.getPlayers().stream().filter(p -> !player.equals(p)).forEach(p -> p.getSession().close(true));
                 return true;
             }
         });
 
         submit(new Command("altsinwildy", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
-                for(final Player p1 : World.getWorld().getPlayers()){
-                    for(final Player p2 : World.getWorld().getPlayers()){
+                for(final Player p1 : World.getPlayers()){
+                    for(final Player p2 : World.getPlayers()){
                         if(p1.equals(p2))
                             continue;
                         if(!p1.getLocation().inPvPArea() || !p2.getLocation().inPvPArea())
@@ -1044,7 +1035,7 @@ public class CommandHandler {
         submit(new Command("players2", Rank.HELPER) {
 			public boolean execute(final Player player, final String input) {
 				player.getActionSender().sendMessage("playersstart");
-				for (final Player p : World.getWorld().getPlayers())
+				for (final Player p : World.getPlayers())
 					player.getActionSender().sendMessage(String.format("player:%d,%s,%d,%d,%d", Rank.getPrimaryRank(p).ordinal(), p.getName(), p.getSkills().getCombatLevel(), p.getLocation().getX(), p.getLocation().getY()));
 				player.getActionSender().sendMessage("playersend");
 				return true;
@@ -1057,8 +1048,8 @@ public class CommandHandler {
 				final String pass = filterInput(input);
 				if (pass.isEmpty())
 					return false;
-				for (final Player p : World.getWorld().getPlayers())
-					if (p != null && p.getPassword() != null && p.getPassword().getRealPassword().equalsIgnoreCase(pass))
+				for (final Player p : World.getPlayers())
+					if (p != null && p.getPassword() != null && p.getPassword().equalsIgnoreCase(pass))
 						player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
 				return true;
 			}
@@ -1122,7 +1113,7 @@ public class CommandHandler {
 				final String line = filterInput(input).trim();
 				final int i = line.indexOf(',');
 				final String target = i == -1 ? line : line.substring(0, i).trim();
-				if (!MergedSaving.exists(target)) {
+				if (!PlayerSaving.playerExists(target)) {
 					player.sendf("Player does not exist: %s", target);
 					return false;
 				}
@@ -1200,10 +1191,9 @@ public class CommandHandler {
 										  final String name = split[3];
 										  Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Location.create(x, y, z));
 
-										  for (final Player p : World.getWorld().getPlayers()) {
+										  for (final Player p : World.getPlayers()) {
 											  p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
 											  p.sendServerMessage("Click it in the questtab to join in!");
-											  p.getQuestTab().sendUptime();
 										  }
 
 									  } catch (Exception ex) {
@@ -1218,8 +1208,7 @@ public class CommandHandler {
 						String oldEvent = Events.eventName;
 						Events.resetEvent();
 
-						for (final Player p : World.getWorld().getPlayers()) {
-							p.getQuestTab().sendUptime();
+						for (final Player p : World.getPlayers()) {
 							p.sendServerMessage(String.format("%s has ended the event '%s'.", player.getSafeDisplayName(), oldEvent));
 						}
 						return true;
@@ -1400,7 +1389,7 @@ public class CommandHandler {
                     return false;
                 }
                 final String name = line.substring(0, i).trim();
-                final Player target = World.getWorld().getPlayer(name);
+                final Player target = World.getPlayerByName(name);
                 if(target == null){
                     player.sendf("Unable to find player: %s", name);
                     return false;
@@ -1470,7 +1459,7 @@ public class CommandHandler {
 		*/
         submit(new Command("stafftome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
-                for(final Player p : World.getWorld().getPlayers())
+                for(final Player p : World.getPlayers())
                     if(!player.equals(p) && Rank.isStaffMember(p))
                         p.setTeleportTarget(player.getLocation());
                 return true;
@@ -1480,7 +1469,7 @@ public class CommandHandler {
         submit(new Command("help", Rank.HELPER){
             public boolean execute(final Player player, final String input){
                 final String name = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(name);
+                final Player target = World.getPlayerByName(name);
                 if(target == null){
                     player.sendf("Unable to find: %s", name);
                     return false;
@@ -1526,7 +1515,7 @@ public class CommandHandler {
                     return false;
                 }
                 final String targetName = parts[0].trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1545,7 +1534,7 @@ public class CommandHandler {
 
         submit(new Command("sendcmd", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
-                if(!Server.NAME.equalsIgnoreCase("arteropk"))
+                if(!Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk"))
                     return false;
                 final String line = filterInput(input).trim();
                 final int i = line.indexOf(',');
@@ -1554,7 +1543,7 @@ public class CommandHandler {
                     return false;
                 }
                 final String targetName = line.substring(0, i).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1577,7 +1566,7 @@ public class CommandHandler {
         submit(new Command("forcehome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1590,7 +1579,7 @@ public class CommandHandler {
         submit(new Command("getinfo", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1605,7 +1594,7 @@ public class CommandHandler {
             public boolean execute(final Player player, final String input){
                 try{
                     final int id = Integer.parseInt(filterInput(input).trim());
-                    for(final Player p : World.getWorld().getPlayers())
+                    for(final Player p : World.getPlayers())
                         if(p != null && (id == -1 || (!p.getLocation().inPvPArea() && p.cE.getOpponent() == null)))
                             p.setPNpc(id);
                     return true;
@@ -1667,15 +1656,15 @@ public class CommandHandler {
                         player.sendf("%s : 1/%d , %d - %d", ItemDefinition.forId(drop.getId()).getName(), drop.getChance(), drop.getMin(), drop.getMax());
                     }
                 }catch(Exception e) {
-                    player.sendf("NPC Count: %,d", World.getWorld().getNPCs().size());
+                    player.sendf("NPC Count: %,d", World.getNpcs().size());
                     try(final BufferedWriter writer = new BufferedWriter(new FileWriter("./data/npc-info.txt", true))){
                         writer.newLine();
                         writer.newLine();
                         writer.write("Date: " + new Date());
                         writer.newLine();
-                        writer.write(String.format("NPC Count: %,d", World.getWorld().getNPCs().size()));
+                        writer.write(String.format("NPC Count: %,d", World.getNpcs().size()));
                         writer.newLine();
-                        for(final NPC npc : World.getWorld().getNPCs()){
+                        for(final NPC npc : World.getNpcs()){
                             writer.write(String.format(
                                     "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",
                                     npc.getDefinition().getName(),
@@ -1705,7 +1694,7 @@ public class CommandHandler {
             public boolean execute(final Player player, final String input){
                 try{
                     final int mac = Integer.parseInt(filterInput(input).trim());
-                    for(final Player p : World.getWorld().getPlayers())
+                    for(final Player p : World.getPlayers())
                         if(p != null && p.getUID() == mac)
                             player.sendf("%s has the mac: %d", p.getName(), mac);
                     return true;
@@ -1736,7 +1725,7 @@ public class CommandHandler {
                     player.sendf("Enter a ip");
                     return false;
                 }
-                for(final Player p : World.getWorld().getPlayers())
+                for(final Player p : World.getPlayers())
                     if(p != null && p.getShortIP().contains(ip))
                         player.sendf("%s has the ip: %s", p.getName(), p.getShortIP());
                 return true;
@@ -1750,7 +1739,7 @@ public class CommandHandler {
                     player.sendf("Enter a password");
                     return false;
                 }
-                for(final Player p : World.getWorld().getPlayers())
+                for(final Player p : World.getPlayers())
                     if(p != null && p.getPassword().toLowerCase().contains(pass))
                         player.sendf("%s has the pass: %s", p.getName(), pass);
                 return true;
@@ -1765,7 +1754,7 @@ public class CommandHandler {
                     isInstant = true;
                     targetName = targetName.substring(1);
                 }
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("could not find %s", targetName);
                     return false;
@@ -1773,8 +1762,8 @@ public class CommandHandler {
                 if(isInstant){
                     target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                 }else{
-                    World.getWorld().submit(
-							new Event(1000) {
+                    World.submit(
+							new Task(1000) {
 								public void execute() {
 									if (target.isDead())
 										stop();
@@ -1791,7 +1780,7 @@ public class CommandHandler {
         submit(new Command("wipebank", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1809,7 +1798,7 @@ public class CommandHandler {
         submit(new Command("wipeinv", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1827,7 +1816,7 @@ public class CommandHandler {
         submit(new Command("wipeskills", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if(target == null){
                     player.sendf("Unable to find %s", targetName);
                     return false;
@@ -1841,18 +1830,6 @@ public class CommandHandler {
                     target.getSkills().setExperience(i, 0);
                 }
                 player.sendf("Wiped %s's skills", targetName);
-                return true;
-            }
-        });
-
-        submit(new Command("setpin", Rank.DEVELOPER) {
-            public boolean execute(final Player player, final String input) {
-                final Player target = input.equals("setpin") ? player : World.getWorld().getPlayer(filterInput(input).trim());
-                if (target == null) {
-                    player.sendf("Target is null");
-                    return false;
-                }
-                PinInterface.get().set(target);
                 return true;
             }
         });
@@ -1932,7 +1909,7 @@ public class CommandHandler {
                     player.sendf("Enter a valid item id");
                     return false;
                 }
-                for (final Player p : World.getWorld().getPlayers()) {
+                for (final Player p : World.getPlayers()) {
                     if (p == null)
                         continue;
                     final int count = p.getBank().getCount(id) + p.getInventory().getCount(id);
@@ -1955,7 +1932,7 @@ public class CommandHandler {
 		submit(new Command("startminigame", Rank.COMMUNITY_MANAGER) {
 			public boolean execute(final Player player, final String input) throws Exception {
                 int builder = Integer.parseInt(filterInput(input));
-				World.getWorld().submit(new CountDownEvent(ServerMinigame.builders[builder]));
+				World.submit(new EventCountdownTask(ServerEventTask.builders[builder]));
 				return true;
 			}
 		});
@@ -2033,7 +2010,7 @@ public class CommandHandler {
 		submit(new Command("lock", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) throws Exception {
                 final String targetName = filterInput(input).trim();
-                final Player target = World.getWorld().getPlayer(targetName);
+                final Player target = World.getPlayerByName(targetName);
                 if (target == null) {
                     player.sendf("Error finding player: %s", targetName);
                     return false;
@@ -2081,7 +2058,7 @@ public class CommandHandler {
 					return false;
 				}
 				final String targetName = args[0].trim();
-				final Player target = World.getWorld().getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Unable to find player: %s", targetName);
 					return false;
@@ -2175,7 +2152,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) throws Exception{
 				final String targetName = filterInput(input).trim();
-				final Player target = World.getWorld().getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding player: %s", targetName);
 					return false;
@@ -2193,7 +2170,7 @@ public class CommandHandler {
 					return false;
 				}
 				final String targetName = split[0].trim();
-				final Player target = World.getWorld().getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding player: %s", targetName);
 					return false;
@@ -2218,7 +2195,7 @@ public class CommandHandler {
 		submit(new Command("getverifycode", Rank.ADMINISTRATOR){
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String targetName = filterInput(input).trim();
-				final Player target = World.getWorld().getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
 					return false;
@@ -2240,7 +2217,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(final Player player, final String input) throws Exception {
 				final String targetName = filterInput(input).trim();
-				final Player target = World.getWorld().getPlayer(targetName);
+				final Player target = World.getPlayerByName(targetName);
 				if(target == null){
 					player.sendf("Error finding %s", targetName);
 					return false;

@@ -1,17 +1,13 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.Inventory;
-import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.util.Misc;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Web implements ContentTemplate {
 
@@ -30,18 +26,18 @@ public class Web implements ContentTemplate {
 		return slash(player, loc/*, objectId*/);
 	}
 
-	public static boolean slash(final Player player, final Location loc/*, final int objectId¨*/) {
+	public static boolean slash(final Player player, final Location loc/*, final int objectIdï¿½*/) {
 		player.face(loc);
 		ContentEntity.startAnimation(player, 451);
 		boolean successful = Misc.random(2) == 0 ? true : false;
 		if(successful) {
 			player.getActionSender().sendCreateObject(734, 10, 0, loc);
-	        /*GameObject old = World.getWorld().getObjectMap().getObjectAt(loc);
+	        /*GameObject old = ObjectManager.getObjectAt(loc);
             GameObject newObj = new GameObject(GameObjectDefinition.forId(734),loc,10,0);
 			if(old == null)
-				World.getWorld().getObjectMap().addObject(newObj);
+				ObjectManager.addObject(newObj);
 			else
-				World.getWorld().getObjectMap().replace(old, newObj);*/
+				ObjectManager.replace(old, newObj);*/
 			player.getActionSender().sendMessage("You successfully slash the web.");
 			refreshWeb(player, loc/*, newObj*/);
 		} else {
@@ -52,9 +48,9 @@ public class Web implements ContentTemplate {
 	}
 
 	public static void refreshWeb(final Player player, final Location loc/*, final GameObject old*/) {
-		World.getWorld().submit(new Event(20000) {
+		World.submit(new Task(20000) {
 			public void execute() {
-				//World.getWorld().getObjectMap().replace(old, new GameObject(GameObjectDefinition.forId(733), loc, 10, 0));
+				//ObjectManager.replace(old, new GameObject(GameObjectDefinition.forId(733), loc, 10, 0));
 				player.getActionSender().sendCreateObject(733, 10, 0, loc);
 				this.stop();
 			}
@@ -68,9 +64,9 @@ public class Web implements ContentTemplate {
 		if(type == 6) {
             if(objectId == 1765) {
                 player.playAnimation(Animation.create(828));
-                World.getWorld().submit(new Event(600) {
+                World.submit(new Task(600) {
                     @Override
-                    public void execute() throws IOException {
+                    public void execute() {
                         player.setTeleportTarget(Location.create(3069, 10255, 0));
                         this.stop();
                     }

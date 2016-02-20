@@ -1,11 +1,15 @@
 package org.hyperion.rs2.model.content.misc;
 
+import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
+
+import java.util.logging.Level;
 
 public class Lottery {
 
@@ -41,7 +45,7 @@ public class Lottery {
 		}
 	}
 
-	static {
+	public static void init() {
 		CommandHandler.submit(new Command("howmanyguesses", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -74,5 +78,7 @@ public class Lottery {
 				return true;
 			}
 		});
+		if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+			Server.getLogger().log(Level.INFO, "Lottery has successfully loaded.");
 	}
 }

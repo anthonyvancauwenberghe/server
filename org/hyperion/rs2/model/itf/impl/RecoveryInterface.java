@@ -52,7 +52,7 @@ public class RecoveryInterface extends Interface {
             return;
         }
         //save recovery info
-        /*World.getWorld().getCharactersConnection().offer(new QueryRequest(""){
+        /*World.getCharactersConnection().offer(new QueryRequest(""){
             public void process(SQLConnection sql) throws SQLException{
                 PreparedStatement stmt = null;
                 try{

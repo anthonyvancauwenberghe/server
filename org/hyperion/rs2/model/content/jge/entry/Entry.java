@@ -7,7 +7,6 @@ import org.hyperion.rs2.model.content.jge.entry.claim.Claims;
 import org.hyperion.rs2.model.content.jge.entry.progress.ProgressManager;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -95,7 +94,7 @@ public class Entry {
     }
 
     public Optional<Player> playerOpt(){
-        return Optional.ofNullable(World.getWorld().getPlayer(playerName));
+        return Optional.ofNullable(World.getPlayerByName(playerName));
     }
 
     public void ifPlayer(final Consumer<Player> action){

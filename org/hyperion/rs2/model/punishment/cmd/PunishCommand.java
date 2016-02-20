@@ -8,7 +8,6 @@ import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.packet.CommandPacketHandler;
-import org.hyperion.rs2.saving.MergedSaving;
 import org.hyperion.util.Misc;
 
 import java.util.concurrent.TimeUnit;
@@ -33,8 +32,8 @@ public class PunishCommand extends Command{
             return false;
         }
         final String victimName = parts[0].trim();
-        final Player victim = World.getWorld().getPlayer(victimName);
-        if(victimName.isEmpty() || (!MergedSaving.existsMain(victimName) && victim == null)){
+        final Player victim = World.getPlayerByName(victimName);
+        if(victimName.isEmpty() || (victim == null)){
             player.sendf("Unable to find player %s", Misc.ucFirst(victimName.toLowerCase()));
             return false;
         }

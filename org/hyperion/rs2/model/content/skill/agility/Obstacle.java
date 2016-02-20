@@ -1,12 +1,8 @@
 package org.hyperion.rs2.model.content.skill.agility;
 
-import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.content.skill.RandomEvent;
 import org.hyperion.util.Misc;
-
-import java.util.List;
 
 /**
  * Created by Gilles on 10/09/2015.
@@ -66,7 +62,7 @@ public class Obstacle {
         this.skillXp = skillXp;
         this.course = course;
         this.progress = progress;
-        course.addObstacle(this);
+        Course.addObstacle(this);
     }
 
     public boolean overCome(Player player) {
@@ -80,9 +76,7 @@ public class Obstacle {
             player.sendMessage("You need an agility level of " + levelReq + " to use this " + (course.getClass() == Shortcuts.class ? "shortcut" : this.toString().toLowerCase()) + ".");
             return false;
         }
-        if(player.getRandomEvent().skillAction())
-            return false;
-        return true;
+        return !player.getRandomEvent().skillAction();
     }
 
     public void executeObject(Player player) {
@@ -107,7 +101,7 @@ public class Obstacle {
     }
 
     public void succeed(Player player, int tick, String message) {
-        World.getWorld().submit(new Event(tick * 600) {
+        World.submit(new Task(tick * 600) {
             @Override
             public void execute() {
                 player.getSkills().addExperience(Skills.AGILITY, skillXp);
@@ -123,7 +117,7 @@ public class Obstacle {
     }
 
     public void fail(Player player, int tick, String message) {
-        World.getWorld().submit(new Event(tick * 600) {
+        World.submit(new Task(tick * 600) {
             @Override
             public void execute() {
                 reset(player);

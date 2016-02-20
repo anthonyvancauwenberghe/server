@@ -1,11 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.*;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatCalculation;
+import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.combat.pvp.PvPArmourStorage;
-import org.hyperion.rs2.model.content.bounty.rewards.BHDrop;
 import org.hyperion.util.ArrayUtils;
 import org.hyperion.util.Misc;
 
@@ -173,7 +173,7 @@ public class RevAttack implements Attack {
     public void handleRangeAttack(NPC n, Entity attack) {
 
         n.cE.doAnim(n.getDefinition().getAtkEmote(2));
-        final int maxHit = (int) (n.getDefinition().combat() / 4);
+        final int maxHit = n.getDefinition().combat() / 4;
         int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.RANGE, maxHit);
 
         final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));

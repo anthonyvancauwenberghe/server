@@ -1,13 +1,13 @@
 package org.hyperion.rs2.saving.instant;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.combat.SpiritShields;
 import org.hyperion.rs2.model.container.Container;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 public abstract class SaveContainer extends SaveObject {
 

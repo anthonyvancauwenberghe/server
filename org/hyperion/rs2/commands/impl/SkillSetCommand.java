@@ -1,13 +1,12 @@
 package org.hyperion.rs2.commands.impl;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.skill.Prayer;
 
 /**
  * @author Arsen Maxyutov.
@@ -54,8 +53,6 @@ public class SkillSetCommand extends Command {
 			return false;
         if(!ItemSpawning.canSpawn(player))
             return false;
-		if(! Server.SPAWN)
-			return false;
 		if(! canChangeLevel(player))
 			return false;
 		input = filterInput(input);
@@ -70,7 +67,7 @@ public class SkillSetCommand extends Command {
 			if(skill == 5 || skill == 1)
 				player.resetPrayers();
 			player.getSkills().setLevel(skill, level);
-			player.getSkills().setExperience(skill, player.getSkills().getXPForLevel(level));
+			player.getSkills().setExperience(skill, Skills.getXPForLevel(level));
 		} catch(Exception e) {
 			player.getActionSender().sendMessage("Please enter a skill level from 1 to 99");
 		}

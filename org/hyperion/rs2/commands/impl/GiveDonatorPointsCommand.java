@@ -15,7 +15,7 @@ public class GiveDonatorPointsCommand extends Command {
     public boolean execute(Player player, String input) {
         String name = filterInput(input);
         String[] split = name.split(",");
-        Player donator = World.getWorld().getPlayer(split[0]);
+        Player donator = World.getPlayerByName(split[0]);
         int amount = Integer.parseInt(split[1]);
         boolean bought = false;
         if (split.length > 2)

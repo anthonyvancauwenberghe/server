@@ -910,7 +910,7 @@ public class Summoning implements ContentTemplate {
 			SummoningMonsters.SummonNewNPC(player, SummoningData.getNpcbyPouchId(a), a);
 		}
 		if(type == 11) {
-			Entity npc = World.getWorld().getNPCs().get(slot);
+			Entity npc = World.getNpcs().get(slot);
 			if(npc != null && ((NPC) npc).ownerId == player.getIndex()) {
 				BoB.openInventory(player);
 			} else {
@@ -926,6 +926,8 @@ public class Summoning implements ContentTemplate {
 
 	@Override
 	public int[] getValues(int type) {
+		return null;
+		/*
 		if(type == 13) {
 			int[] items = {2138, 2859, 6291, 3369, 440, 6319, 1783, 3095,
 					12168, 2134, 3138, 6032, 9976, 3325, 12156, 1519, 12164,
@@ -952,7 +954,7 @@ public class Summoning implements ContentTemplate {
 			return mergeWithplusplusArray(BoBids);
 		}
 
-		return null;
+		return null;*/
 	}
 
 	private static int[] mergeWithplusplusArray(int[] arr) {

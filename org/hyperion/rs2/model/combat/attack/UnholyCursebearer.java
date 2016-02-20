@@ -1,12 +1,11 @@
 package org.hyperion.rs2.model.combat.attack;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
-
-import java.io.IOException;
+import org.hyperion.rs2.model.region.RegionManager;
 
 public class UnholyCursebearer implements Attack {
 
@@ -28,7 +27,7 @@ public class UnholyCursebearer implements Attack {
     private void handleMagicSpell(NPC npc) {
         npc.forceMessage(Combat.random(1) == 0 ? "TASTE THE PAIN OF DEATH!" : "MY MAGIC WILL END ALL!");
         npc.cE.doAnim(13172);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             player.getSkills().setLevel(Skills.PRAYER, (int) (player.getSkills().getLevel(Skills.PRAYER) * .8));
             Combat.npcRangeAttack(npc, player.cE, 2119, 0, false);
             int damage = Combat.random(MAX_MAGIC_DAMAGE);
@@ -40,15 +39,15 @@ public class UnholyCursebearer implements Attack {
     private void handleCurseEffect(NPC npc) {
         npc.forceMessage("I BEAR THE CURSE TO YOU!");
         npc.cE.doAnim(13170);
-        for(Player player : World.getWorld().getRegionManager().getLocalPlayers(npc)) {
+        for(Player player : RegionManager.getLocalPlayers(npc)) {
             int curseGfx = 1103;
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             player.cE.doGfx(curseGfx);
             player.getActionSender().sendMessage("@dre@You have been cursed by the Cursebearer!");
-            World.getWorld().submit(new Event(1000) {
+            World.submit(new Task(1000) {
                 int curseTicks = Combat.random(2) + 1;
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     if (curseTicks <= 0) {
                         this.stop();
                         return;

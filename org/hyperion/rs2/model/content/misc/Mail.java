@@ -45,39 +45,30 @@ public class Mail {
 		player.getActionSender().sendMessage("Please re-enter your e-mail.");
 	}
 
-    public void setMail(String mail, final boolean showMsg){
+    public String setMail(String mail){
         if(mail == null)
             mail = "";
         mail = mail.toLowerCase();
         char[] charArray = mail.toCharArray();
         for(int i = 0; i < charArray.length; i++) {
             if(! Misc.contains(charArray[i], ALLOWEDCHARACTERS))
-                return;
+                return "The information you're sending us is not valid.";
         }
         if(mail.length() < 3) {
-            if(showMsg)
-                player.getActionSender().sendMessage("Entered e-mail is too short.");
-            return;
+            return "Entered e-mail is too short.";
         }
         if(! mail.contains(".") || ! mail.contains("@")) {
-            if(showMsg)
-                player.getActionSender().sendMessage("Entered e-mail is invalid.");
-            return;
+            return "Entered e-mail is invalid.";
         }
         String host = mail.split("@")[1];
         for(String s : ALLOWEDHOSTS) {
             if(host.contains(s)) {
                 this.mail = mail;
-                return;
+				return "Successfully set e-mail address.";
             }
         }
-        if(showMsg)
-            player.getActionSender().sendMessage("Invalid host.");
+		return "This e-mail host is not allowed.";
     }
-
-	public void setMail(String mail) {
-		setMail(mail, true);
-	}
 
 	public String toString() {
 		if(mail == null || mail.equals(""))

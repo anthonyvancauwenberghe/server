@@ -1,12 +1,13 @@
 package org.hyperion.rs2.model.combat;
 
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.event.Event;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -19,7 +20,6 @@ import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -176,7 +176,7 @@ public class Magic {
 		}
 		if(spell.getFreeze() > 0 && attacker.getPlayer().getLocation().disabledMagic() && !attacker.getPlayer().hasBeenInformed) {
 			attacker.getPlayer().getActionSender().sendMessage("@red@The normal hybridding area is at ::13s! (Range is disabled there)");
-			//attacker.getPlayer().getActionSender().send
+			//attacker.getPlayerByName().getActionSender().send
 			// Message("@red@To start hybridding INSTANTLY, go to \"Instant Sets\" in the spawn tab and click 'Hybrid'");
 			attacker.getPlayer().hasBeenInformed = true;
 		}
@@ -397,23 +397,15 @@ public class Magic {
 		// find our lockon target
 		int hitId = attacker.getSlotId(attacker.getEntity());
 		// extra proj values - not to be released
-		int timer = 3;
 		int speed = 105;
 		int distance = attacker.getEntity().getLocation()
 				.distance(opponent.getEntity().getLocation());
-		if(distance >= 9) {
-			timer = 6;
-		} else if(distance >= 6) {
-			timer = 5;
-		} else if(distance >= 3) {
-			timer = 4;
-		}
 		int min = 40;
 		min -= (distance - 1) * 8;
 		speed -= min;
 		int slope = 12 + distance;
 
-		timer = 1600 + (distance * 200);
+		long timer = 1600 + (distance * 200);
 		attacker.getPlayer().getActionSender()
 				.createGlobalProjectile(attacker.getAbsY(), attacker.getAbsX(), offsetY,
 						offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,
@@ -425,14 +417,14 @@ public class Magic {
 		final int submitDamage = Damage;
 		final boolean submitSplash = splash;
 		final CombatEntity opp2 = opponent;
-		World.getWorld().submit(new Event(timer, "checked") {
+		World.submit(new Task(timer) {
 			@Override
 			public void execute() {
 				boolean hitSomething = false;
 				if(spell.isMulti()) {
 					if(Combat.isInMulti(attacker)) {
 							finishMagic(attacker, opp2, submitDamage, spell,
-									opp2 == opp ? true : false, submitSplash,
+									opp2 == opp, submitSplash,
 									critical);
 							hitSomething = true;
 					}
@@ -463,9 +455,9 @@ public class Magic {
 			return;
 		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-            World.getWorld().submit(new Event(600) {
+            World.submit(new Task(600) {
                 @Override
-                public void execute() throws IOException {
+                public void execute() {
                     victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
                     this.stop();
                 }
@@ -483,7 +475,7 @@ public class Magic {
 				if(Misc.random(40) == 0) {
 					p.getEquipment().set(Equipment.SLOT_RING, null);
 				}
-			} else if(p.getEquipment().get(Equipment.SLOT_RING).getId() == WildernessBossEvent.RING_ID) {
+			} else if(p.getEquipment().get(Equipment.SLOT_RING).getId() == WildernessBossTask.RING_ID) {
 				victim.hit((int) (hit * 0.10), p, false, 3);
 			}
 		}
@@ -616,7 +608,7 @@ public class Magic {
 		// deal damage
 
 		if(false/* END_GFX[spell] == 369 && !splash */)
-			World.getWorld().submit(new Event(500) {
+			World.submit(new Task(500) {
 				@Override
 				public void execute() {
 					p.hit(Damage, c.getEntity(), false, 2);
@@ -635,14 +627,11 @@ public class Magic {
 			}
 		}
        		p.lastHit = System.currentTimeMillis();
-		World.getWorld().submit(new Event(1000, "finishmagic") {
+		World.submit(new Task(1000, "finishmagic") {
 			@Override
 			public void execute() {
-				// System.out.println("resetting magic");
 				if(c.getOpponent() == null) {
-					// System.out.println("resetting magic 1");
 					if(p != null) {
-						// System.out.println("resetting magic2");
 						c.setOpponent(p);
 						Combat.resetAttack(c);
 					}
@@ -832,7 +821,7 @@ public class Magic {
 		if(item == 995 || player.isBusy())
 			return;
 		player.setBusy(true);
-		World.getWorld().submit(new Event(3000) {
+		World.submit(new Task(3000L) {
 
 			@Override
 			public void execute() {
@@ -947,12 +936,8 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
-		if(World.getWorld().getContentManager()
-				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| World.getWorld().getContentManager()
-				.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from fight pits.");
+		if(ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1) || ContentManager.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
+			player.getActionSender().sendMessage("You cannot teleport from fight pits.");
 			return;
 		}
 		if(player.getTimeSinceLastTeleport() < 1600)
@@ -1083,9 +1068,9 @@ public class Magic {
 					"You cannot teleport from duel arena.");
 			return;
 		}
-		if(World.getWorld().getContentManager()
+		if(ContentManager
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| World.getWorld().getContentManager()
+				|| ContentManager
 				.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport from fight pits.");
@@ -1202,9 +1187,9 @@ public class Magic {
             return;
         }
 
-		if(!player.getDungeoneering().inDungeon() && (World.getWorld().getContentManager()
+		if(!player.getDungeoneering().inDungeon() && (ContentManager
 				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| World.getWorld().getContentManager()
+				|| ContentManager
 				.handlePacket(6, player, 30001, - 1, - 1, - 1))) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport from fight pits.");
@@ -1225,7 +1210,7 @@ public class Magic {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
 		player.inAction = ! player.inAction;
-		World.getWorld().submit(new Event(600) {
+		World.submit(new Task(600) {
 			int index = 0;
 
 			public void execute() {
@@ -1333,9 +1318,9 @@ public class Magic {
 						"You cannot teleport from duel arena.");
 				return;
 			}
-			if(World.getWorld().getContentManager()
+			if(ContentManager
 					.handlePacket(6, player, 30000, - 1, - 1, - 1)
-					|| World.getWorld().getContentManager()
+					|| ContentManager
 					.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
 				player.getActionSender().sendMessage(
 						"You cannot teleport here.");
@@ -1385,7 +1370,7 @@ public class Magic {
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
-		World.getWorld().submit(new Event(delay) {
+		World.submit(new Task(delay) {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));
@@ -1413,9 +1398,7 @@ public class Magic {
 			if(item.getId() == 13740 || item.getId() == 13744)
 				return false;
 		}
-		if(!player.getSpellBook().isAncient())
-			return false;
-		return true;
+		return player.getSpellBook().isAncient();
 	}
 	
 	public static void goTo13s(final Player player) {

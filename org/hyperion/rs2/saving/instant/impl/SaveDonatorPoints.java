@@ -1,7 +1,6 @@
 package org.hyperion.rs2.saving.instant.impl;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.saving.instant.SaveInteger;
 
 public class SaveDonatorPoints extends SaveInteger {

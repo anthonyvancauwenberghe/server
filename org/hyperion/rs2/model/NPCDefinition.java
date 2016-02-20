@@ -1,7 +1,12 @@
 package org.hyperion.rs2.model;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.hyperion.rs2.event.impl.WildernessBossEvent;
+import org.hyperion.Configuration;
+import org.hyperion.Server;
+import org.hyperion.engine.task.impl.WildernessBossTask;
+import org.hyperion.rs2.commands.NewCommand;
+import org.hyperion.rs2.commands.NewCommandHandler;
+import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.combat.attack.AvatarOfDestruction;
 import org.hyperion.rs2.model.combat.attack.BorkAndMinions;
 import org.hyperion.rs2.model.combat.attack.GodWarsBandos;
@@ -13,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * <p>Represents a type of NPC.</p>
@@ -107,136 +113,7 @@ public class NPCDefinition {
 	}
 
 	public static void init() {
-	    /*try {
-			String line = "";
-			String token = "";
-			String token2 = "";
-			String token2_2 = "";
-			String[] token3 = new String[5];
-			boolean EndOfFile = false;
-			int ReadMode = 0;
-			BufferedReader characterfile = null;
-			try {
-				characterfile = new BufferedReader(new FileReader("./data/NPCEmotes.cfg"));
-			} catch(Exception fileex) {
-			} 
-			try {
-				line = characterfile.readLine();
-			} catch(Exception exception) {
-			} 
-			while(EndOfFile == false && line != null) {
-				line = line.trim();
-				int spot = line.indexOf("=");
-				if (spot > -1) {
-					token = line.substring(0, spot);
-					token = token.trim();
-					token2 = line.substring(spot + 1);
-					token2 = token2.trim();
-					token2_2 = token2.replaceAll("\t\t", "\t");
-					token2_2 = token2_2.replaceAll("\t\t", "\t");
-					token2_2 = token2_2.replaceAll("\t\t", "\t");
-					token2_2 = token2_2.replaceAll("\t\t", "\t");
-					token2_2 = token2_2.replaceAll("\t\t", "\t");
-					token3 = token2_2.split("\t");
-					if (token.equals("npcID")) {
-						atkEmote[Integer.parseInt(token3[0])][0] = Integer.parseInt(token3[1]);
-						blockEmote[Integer.parseInt(token3[0])] = Integer.parseInt(token3[2]);
-						deathEmote[Integer.parseInt(token3[0])] = Integer.parseInt(token3[3]);
-						if(token3.length >= 6){
-							for(int i = 0; i < (token3.length-5); i++){
-								atkEmote[Integer.parseInt(token3[0])]
-									[1+i] 
-									= Integer.parseInt(token3[5+i]);
-							}
-						}
-					}
-				} else { 
-					if (line.equals("[ENDOFNPCEMOTES]")) {
-						try { 
-							characterfile.close(); 
-						} catch(Exception exception) { }
-					}
-				}
-				try {
-					line = characterfile.readLine();
-				} catch(Exception exception1) {
-					EndOfFile = true;
-				}
-			}
-			try { 
-				characterfile.close();
-			} catch(Exception exception) { }
-		} catch(Exception exception23) { 
-			exception23.printStackTrace();
-		}
-		BufferedReader file = null;
-		try {
-			file = new BufferedReader(new FileReader("./data/npcdefinitions.cfg"));
-			while (true) {
-				String line = file.readLine();
-				if (line == null)
-					break;
-				int spot = line.indexOf('=');
-				if (spot > -1) {
-					String values = line.substring(spot + 1);
-					values = values.replace("\t\t", "\t");
-					values = values.replace("\t\t", "\t");
-					values = values.trim();
-					String[] valuesArray = values.split("\t");
-					int time = 30;
-					if (valuesArray.length > 4) {
-						time = Integer.valueOf(valuesArray[4]);
-					}
-					names[Integer.valueOf(valuesArray[0])] = valuesArray[1].replaceAll("_", " ");
-					combat[Integer.valueOf(valuesArray[0])] = Integer.valueOf(valuesArray[2]);
-					maxHp22[Integer.valueOf(valuesArray[0])] = Integer.valueOf(valuesArray[3]);
-					spawnTime[Integer.valueOf(valuesArray[0])] = time;
-				}
-			}
-		} finally {
-			if (file != null)
-				file.close();
-		}
-		try{
-		OutputStream os = new FileOutputStream("data/npcdump.bin");
-		buf = IoBuffer.allocate(1024);
-		buf.setAutoExpand(true);
-		for(int i = 0; i < names.length; i++){
-			buf.putShort((short) i);
-			if(names[i] == null)
-				names[i] = "null";
-			IoBufferUtils.putRS2String(buf, names[i]);
-			buf.putShort((short) combat[i]);
-			buf.putShort((short) maxHp22[i]);
-			buf.putShort((short) spawnTime[i]);
-			buf.putShort((short) deathEmote[i]);
-			buf.putShort((short) blockEmote[i]);
-			int i3 = 0;
-			for(int i2 = 0; i2 < atkEmote[i].length; i2++){
-				if(atkEmote[i][i2] > 0)
-					i3++;
-			}
-			buf.put((byte) i3);
-			for(int i2 = 0; i2 < i3; i2++){
-				buf.putShort((short) atkEmote[i][i2]);
-			}
-			buf.put((byte) npcSize(i));
-			
-			for(int i2 = 0; i2 < 10; i2++){
-				buf.putShort((short) i2);
-			}
-			
-		}
-		buf.flip();
-		byte[] data = new byte[buf.limit()];
-		buf.get(data);
-		os.write(data);
-		os.flush();
-		os.close();
-		} catch(Exception e){e.printStackTrace();}*/
-		try {
-			File f = new File("./data/npcdump.bin");
-			InputStream is = new FileInputStream(f);
+		try(InputStream is = new FileInputStream(new File("./data/npcdump.bin"))) {
 			IoBuffer buf = IoBuffer.allocate(1024);
 			buf.setAutoExpand(true);
 			while(true) {
@@ -262,10 +139,8 @@ public class NPCDefinition {
 						int blockEmote = buf.getUnsignedShort();
 						int atkLenght = buf.getUnsigned();
 						int[] attacks = new int[4];
-						//System.out.println("new atk anim");
 						for(int i2 = 0; i2 < atkLenght; i2++) {
 							attacks[i2] = buf.getUnsignedShort();
-							//System.out.println("" + attacks[i2]);
 						}
 						int size = buf.getUnsigned();
 						int[] bonus = new int[10];
@@ -273,7 +148,7 @@ public class NPCDefinition {
 							bonus[i2] = buf.getUnsignedShort();
 						}
 						j++;
-						switch(id) { //To Hardcode HP etc
+						switch(id) {
                             case 83:
                                 hp = 100;
                                 break;
@@ -342,14 +217,13 @@ public class NPCDefinition {
 							definition[n] = SummoningMonsters.loadDefinition(n);
 						}
 						for(int n : RevAttack.getRevs()) {
-							if((definition[n] = RevAttack.loadDefinition(n)) != null)
-								System.out.println("Rev monster: "+n+" added, name: "+definition[n].getName());
+							definition[n] = RevAttack.loadDefinition(n);
 						}
                         AvatarOfDestruction.loadDefinitions();
                         BorkAndMinions.init();
-                        WildernessBossEvent.init();
-						//int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime
-						System.out.println("Loaded " + j + " NPC Definitions.");
+                        WildernessBossTask.init();
+						if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
+							Server.getLogger().log(Level.INFO, "Successfully loaded " + j + " NPC Definitions.");
 						return;
 					}
 				} catch(Exception e) {
@@ -359,7 +233,6 @@ public class NPCDefinition {
 		} catch(Exception e2) {
 			e2.printStackTrace();
 		}
-		//System.out.println("Loaded "+j+" NPC Definitions.");
 	}
 	
 	public static final NPCDefinition create(int id, int maxHp, int cb, int[] bonus, int deathAnim, int blockAnim, int[] atkAnims, int size, String name, int spawnTime) {
@@ -460,4 +333,22 @@ public class NPCDefinition {
 		return this.id;
 	}
 
+	static {
+		NewCommandHandler.submit(
+				new NewCommand("npcdefinition", Rank.DEVELOPER, new CommandInput<Integer>(integer -> integer >= 0 && integer <= definition.length, "NpcId", "The ID of the NPC to check.")) {
+					@Override
+					protected boolean execute(Player player, String[] input) {
+						NPCDefinition npcDefinition = definition[Integer.parseInt(input[0])];
+						if(npcDefinition == null) {
+							player.sendMessage("This NPC does not exist in the game or doesn't have any special definitions.");
+							return true;
+						}
+						player.sendMessage("NpcId: " + npcDefinition.getId());
+						player.sendMessage("MaxHp: " + npcDefinition.maxHp());
+						player.sendMessage("Combat: " + npcDefinition.combat());
+						return true;
+					}
+				}
+		);
+	}
 }

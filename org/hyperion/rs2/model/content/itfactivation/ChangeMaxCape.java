@@ -1,13 +1,12 @@
 package org.hyperion.rs2.model.content.itfactivation;
 
-import org.hyperion.rs2.event.Event;
+import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.UpdateFlags;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
@@ -45,7 +44,7 @@ public class ChangeMaxCape extends Interface implements ContentTemplate{
             player.maxCapeSecondaryColor = pkt.getInt();
             player.cE.lastHit = System.currentTimeMillis();
             player.getLastAttack().updateLastAttacker(player.getLastAttack().getName());
-            World.getWorld().submit(new Event(5000) {
+            World.submit(new Task(5000) {
                 @Override
                 public void execute() {
                     player.maxCapePrimaryColor = oldColor_1;

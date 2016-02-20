@@ -212,7 +212,6 @@ public final class World {
         submit(new EarnPotentialTask());
         submit(new DisconnectNulledTask());
         submit(new PromoteTask());
-        submit(new PlayerCombatTask());
         submit(new ServerEventTask());
         submit(new ServerMessageTask());
         submit(new BountyHunterTask());

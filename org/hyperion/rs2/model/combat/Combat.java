@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.map.WorldMap;
@@ -25,32 +24,13 @@ import org.hyperion.rs2.model.shops.SlayerShop;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @authors Martin and Arsen
  */
 
 public class Combat {
 
-    private final static Map<CombatEntity, Long> LAST_ATTACK = new HashMap<>();
-
-    static {
-        TaskManager.submit(new Task(30000, "Combat last attack cleaning") {
-            @Override
-            protected void execute() {
-                LAST_ATTACK.clear();
-            }
-        });
-    }
-
     public static boolean processCombat(final CombatEntity combatEntity) {
-        if(LAST_ATTACK.containsKey(combatEntity) && combatEntity != null)
-            if((System.currentTimeMillis() - LAST_ATTACK.get(combatEntity)) < 200)
-                return false;
-
-        LAST_ATTACK.put(combatEntity, System.currentTimeMillis());
         try {
             /**
              * Logical check if combatEntity isn't null, isn't dead, etc..

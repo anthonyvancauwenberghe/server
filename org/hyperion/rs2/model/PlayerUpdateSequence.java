@@ -1,5 +1,9 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.map.pathfinding.Path;
+import org.hyperion.map.pathfinding.PathTest;
+import org.hyperion.rs2.logging.FileLogging;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.region.RegionManager;
@@ -58,10 +62,64 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 player.setCurrentChatMessage(null);
             }
             player.getWalkingQueue().processNextMovement();
+
+            /**
+             * Player combat
+             */
+            if(player.cE != null) {
+                //following for players
+                if (player.isFollowing != null) {
+                    int dis = player.getLocation().distance(player.isFollowing.getLocation());
+                    if (dis <= 20 && dis > 1) {
+                        try {
+                            int toX = player.isFollowing.getLocation().getX();
+                            int toY = player.isFollowing.getLocation().getY();
+                            if (player.isFollowing.getWalkingQueue().getPublicPoint() != null) {
+                                toX = player.isFollowing.getWalkingQueue().getPublicPoint().getX();
+                                toY = player.isFollowing.getWalkingQueue().getPublicPoint().getY();
+                            }
+                            int baseX = player.getLocation().getX() - 25;
+                            int baseY = player.getLocation().getY() - 25;
+                            player.getWalkingQueue().reset();
+                            player.getWalkingQueue().setRunningQueue(true);
+                            Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            if (p != null) {
+                                for (int i = 1; i < p.getLength(); i++) {
+                                    if ((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
+                                        player.getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
+                                }
+                                player.getWalkingQueue().finish();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                if (!stakeReset(player) && player.cE.getOpponent() != null) {
+                    if (!Combat.processCombat(player.cE))
+                        Combat.resetAttack(player.cE);
+                }
+            }
+
+            player.getWalkingQueue().walkingCheck();
         } catch (Exception e) {
             e.printStackTrace();
             World.unregister(player);
         }
+    }
+
+    public static boolean stakeReset(final Player player) {
+        final Player opp = player.getTrader();
+        if(opp != null && !opp.isDead() && !player.isDead() && !opp.getSession().isConnected() && !player.getSession().isConnected() && player.duelAttackable > 0 && opp.duelAttackable > 0) {
+            FileLogging.savePlayerLog(opp, "Duel TIE against "+player.getName());
+            FileLogging.savePlayerLog(player, " Duel TIE against " + opp.getName());
+            Container.transfer(player.getDuel(), player.getInventory());
+            Container.transfer(opp.getDuel(), opp.getInventory());
+            opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -530,7 +588,6 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * We can used the cached update block!
 		 */
-        synchronized(otherPlayer) {
             if(otherPlayer.hasCachedUpdateBlock() && otherPlayer != player && ! forceAppearance && ! noChat) {
                 packet.put(otherPlayer.getCachedUpdateBlock().getPayload().flip());
                 return;
@@ -653,7 +710,6 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			 * And finally append the block at the end.
 			 */
             packet.put(blockPacket.getPayload());
-        }
     }
 
     private static void appendHit2Update(final NPC n, final PacketBuilder updateBlock) {

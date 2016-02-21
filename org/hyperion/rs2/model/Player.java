@@ -1180,17 +1180,15 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * @param packet The packet.
 	 */
 	public void write(Packet packet) {
-		synchronized(this) {
-			if(! active) {
-				pendingPackets.add(packet);
-			} else {
-				for(Packet pendingPacket : pendingPackets) {
-					session.write(pendingPacket);
-				}
-				pendingPackets.clear();
-				getExtraData().put("packetsWrite", getExtraData().getInt("packetsWrite")+1);
-				session.write(packet);
+		if(!active) {
+			pendingPackets.add(packet);
+		} else {
+			for(Packet pendingPacket : pendingPackets) {
+				session.write(pendingPacket);
 			}
+			pendingPackets.clear();
+			getExtraData().put("packetsWrite", getExtraData().getInt("packetsWrite")+1);
+			session.write(packet);
 		}
 	}
 

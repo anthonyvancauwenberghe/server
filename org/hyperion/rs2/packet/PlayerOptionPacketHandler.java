@@ -155,7 +155,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			//so people that spam click don't have an advantage
 			if(oldCombat != victim.cE)
 				System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET OPT1");
-				if(! Combat.processCombat(player.cE))
+				if(!Combat.processCombat(player.cE))
 					Combat.resetAttack(player.cE);
 			int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());
 			if(distance < 8 && (CombatAssistant.getCombatStyle(player.cE) != 8 || player.cE.getAutoCastId() > 0)) {

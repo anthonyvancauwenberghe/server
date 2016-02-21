@@ -21,14 +21,13 @@ public class PathTest {
 	 */
 	private Path path;
 
-	private static PathTest tester;
+	private static PathTest tester = new PathTest();
 
 	/**
 	 * Create a new test game for the path finding tutorial
 	 */
 	public PathTest() {
 		finder = new AStarPathFinder(map, 32, true);
-		tester = this;
 	}
 
 	public int baseX = 0;

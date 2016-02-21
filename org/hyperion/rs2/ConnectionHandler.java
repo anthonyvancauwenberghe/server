@@ -20,9 +20,8 @@ import org.hyperion.rs2.net.PacketManager;
 import org.hyperion.rs2.net.RS2CodecFactory;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.ObservableCollection;
-		import org.hyperion.util.Time;
 
-		import java.io.FileWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
@@ -54,8 +53,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 			@Override
 			protected void execute() {
 				ipTries.clear();
-				if(!Server.isUpdating() && Server.getUptime().minutesUptime()> Time.ONE_MINUTE*25)
-					Server.update(45,"20 min server restart");
 			}
 		});
 	}

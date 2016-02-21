@@ -36,6 +36,8 @@ public abstract class Task {
     public Task(long delay, boolean immediate, Object key) {
         if(key == null)
             throw new IllegalArgumentException("The key for a task cannot be null.");
+        if(delay < Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY))
+            throw new IllegalArgumentException("The task delay cannot be less than the engine tick rate.");
         this.delay = delay = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         this.immediate = immediate || delay <= 0;
         this.key = key;

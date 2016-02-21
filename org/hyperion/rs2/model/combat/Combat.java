@@ -116,6 +116,7 @@ public class Combat {
         /**
          * Initializing variables.
          */
+
         boolean hit = false;
         boolean special = false;
         boolean finishOff = true;
@@ -126,7 +127,7 @@ public class Combat {
         int damg = 0;
         Entity attacker = combatEntity.getEntity();
         final Entity opponent = combatEntity.getOpponent().getEntity();
-
+        System.out.println("PLAYER CB 1");
         /**
          * Skull Adding
          */
@@ -134,7 +135,9 @@ public class Combat {
 
 
         int magicAtk = combatEntity.getNextMagicAtk();
+        System.out.println("PLAYER CB 2");
         if (combatEntity.getNextMagicAtk() > 0) {
+            System.out.println("PLAYER CB 3");
             if (distance > 11) {
                 if (opponent instanceof Player)
                     combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
@@ -153,6 +156,7 @@ public class Combat {
                         follow(combatEntity, combatEntity.getOpponent());
                 } else combatEntity.getPlayer().getWalkingQueue().reset();
             }
+            System.out.println("PLAYER CB 4");
             // cast the actual spell using magic code :), result was if
             // its succesfuly or not (i.e no runes)
             int result = Magic.castSpell(combatEntity, combatEntity.getOpponent(), magicAtk);
@@ -179,10 +183,12 @@ public class Combat {
                 // no runes so reset
                 return false;
             }
+            System.out.println("PLAYER CB 5");
         }
         /**
          * Max Hit and Combat Style Determination.
          */
+        System.out.println("PLAYER CB 6");
         int bowType = CombatAssistant.getCombatStyle(combatEntity);
         // Check Arrows/Bow
         if (bowType <= Constants.NOAMMO) {
@@ -205,6 +211,7 @@ public class Combat {
             //System.out.println("Returning false");
             return false;
         }
+        System.out.println("PLAYER CB 7");
         int maxHit = 0;
         final int combatStyle;
         if (bowType == Constants.MELEETYPE) {
@@ -222,6 +229,7 @@ public class Combat {
         /**
          * Special Activating
          */
+        System.out.println("PLAYER CB 8");
         if (!hit && combatEntity.getNextMagicAtk() <= 0) {
             if (combatEntity.getPlayer().specOn) {
                 if (combatEntity.predictedAtk > System.currentTimeMillis() + 600) {
@@ -252,6 +260,7 @@ public class Combat {
         /**
          * Autocasting
          */
+        System.out.println("PLAYER CB 9");
         if (!hit) {
             if (combatEntity.getAutoCastId() > 0) {
                 if (combatEntity.getPlayer().duelRule[DuelRules.MAGE.ordinal()]
@@ -285,6 +294,7 @@ public class Combat {
         /**
          * Ranging
          */
+        System.out.println("PLAYER CB 10");
         if (!hit) {
             // If in Duel , Return
             if (bowType != 8 && combatEntity.getPlayer().duelRule[DuelRules.RANGE.ordinal()]
@@ -438,6 +448,7 @@ public class Combat {
         /**
          * Melee
          */
+        System.out.println("PLAYER CB 11");
         if (!hit) {
             if (combatEntity.getPlayer().duelRule[DuelRules.MELEE.ordinal()]
                     && combatEntity.getPlayer().duelAttackable > 0) {
@@ -454,7 +465,7 @@ public class Combat {
                     return true;
                 //combatEntity.getPlayerByName().getWalkingQueue().reset();
             }
-
+            System.out.println("PLAYER CB 12");
 			/*
 			 * if(!WorldMap.projectileClear(combatEntity.getEntity().
 			 * getLocation().getZ(),
@@ -474,6 +485,7 @@ public class Combat {
                 return true;// we dont want to reset attack but just
                 // wait another 500ms or so...
             }
+            System.out.println("PLAYER CB 13");
             int addspeed = combatEntity.getAtkSpeed();
             if (addspeed != 0)
                 combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
@@ -492,6 +504,7 @@ public class Combat {
             /**
              * Get random Damage Hit.
              */
+            System.out.println("PLAYER CB 14");
             damg = random(maxHit);
             boolean verac = false;
             if (CombatAssistant.isVeracEquiped(combatEntity.getPlayer())
@@ -521,6 +534,7 @@ public class Combat {
 					}*/
                 }
             } else {
+                System.out.println("PLAYER CB 15");
                 if (verac) {
                 } else
                     damg = CombatCalculation.getCalculatedDamage(combatEntity.getEntity(), combatEntity.getOpponent().getEntity(), damg, combatStyle, maxHit);
@@ -532,6 +546,7 @@ public class Combat {
         /**
          * Spirit shield effects.
          */
+        System.out.println("PLAYER CB 16");
         if (combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
             //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg without divine would be: " + damg);
             damg = SpiritShields.applyEffects(opponent.cE, damg);
@@ -554,7 +569,7 @@ public class Combat {
                 combatEntity.doAtkEmote();
         }
 
-
+        System.out.println("PLAYER CB 17");
         if (combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
             if (SlayerShop.hasHelm(combatEntity.getPlayer()))
                 damg *= 1.15;
@@ -567,12 +582,14 @@ public class Combat {
             PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
             ItemDegrading.check(combatEntity.getPlayer());
         }
+        System.out.println("PLAYER CB 18");
         if (finishOff) {
 
             finishOff(combatEntity, damg, hit, bowType, damgDouble, doubleHit, distance, possibleMaxHit, combatStyle);
         }
 
         Curses.applyLeeches(combatEntity.getPlayer());
+        System.out.println("PLAYER CB ENDED 19");
         return true;
     }
 

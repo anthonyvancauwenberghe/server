@@ -82,7 +82,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 					player.cE.setOpponent(victim.cE);
 
-					if(System.currentTimeMillis() - player.getLastFirstClickAttack() > 1000) {
+					if(System.currentTimeMillis() - player.getLastFirstClickAttack() < 1000) {
 						System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET");
 						if (!Combat.processCombat(player.cE)) {
 							Combat.resetAttack(player.cE);
@@ -158,7 +158,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			player.cE.setOpponent(victim.cE);
 			//so people that spam click don't have an advantage
 			if(oldCombat != victim.cE)
-				if(System.currentTimeMillis() - player.getLastFirstClickAttack() > 1000) {
+				if(System.currentTimeMillis() - player.getLastFirstClickAttack() < 1000) {
 					System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET OPT1");
 					if(!Combat.processCombat(player.cE)) {
 						player.setLastFirstClickAttack(System.currentTimeMillis());

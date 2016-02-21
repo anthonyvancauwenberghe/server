@@ -230,9 +230,8 @@ public class Combat {
          * Special Activating
          */
         System.out.println("PLAYER CB 8");
-        if (!hit && combatEntity.getNextMagicAtk() <= 0) {
+        if (combatEntity.getNextMagicAtk() <= 0 && combatEntity.getPlayer().specOn) {
             System.out.println("PLAYER CB 8.1");
-            if (combatEntity.getPlayer().specOn) {
                 System.out.println("PLAYER CB 8.2");
                 if (combatEntity.predictedAtk > System.currentTimeMillis() + 600) {
                     return true;
@@ -245,7 +244,6 @@ public class Combat {
                     System.out.println("PLAYER CB 8.5");
                     hit = true;
                     finishOff = false;
-                    special = true;
                     if (weaponId != 15241) {
                         System.out.println("PLAYER CB 8.6");
                         combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
@@ -253,7 +251,7 @@ public class Combat {
                         System.out.println("PLAYER CB 8.7");
                         if (Misc.random(150) == 0) { // 1/101 chance of exploding when specing
                             combatEntity.getPlayer().getEquipment().set(Equipment.SLOT_WEAPON, null);
-                            combatEntity.getPlayer().getActionSender().sendMessage("@red@Your handcannon exploded!");
+                            combatEntity.getPlayer().sendImportantMessage("Your handcannon exploded!");
                         }
                     }
                     System.out.println("PLAYER CB 8.8");
@@ -265,8 +263,6 @@ public class Combat {
                 System.out.println("PLAYER CB 8.10");
                 combatEntity.getPlayer().getSpecBar().sendSpecAmount();
                 System.out.println("PLAYER CB 8.11");
-            }
-            System.out.println("PLAYER CB 8.12");
         }
         /**
          * Autocasting

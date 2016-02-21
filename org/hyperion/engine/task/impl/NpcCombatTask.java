@@ -1,12 +1,9 @@
 package org.hyperion.engine.task.impl;
 
-import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.CombatEntity;
-import org.hyperion.rs2.model.combat.attack.CorporealBeast;
 import org.hyperion.rs2.model.region.RegionManager;
 
 /**
@@ -14,73 +11,8 @@ import org.hyperion.rs2.model.region.RegionManager;
  *
  * @author Martin
  */
-public class NpcCombatTask extends Task {
-	//TODO TRANSFORM THIS EVENT TO NPC UPDATING
-	/**
-	 * The cycle time, in milliseconds.
-	 */
-	public static final long CYCLE_TIME = 600;//
-
-	/**
-	 * Creates the update event to cycle every 600 milliseconds.
-	 */
-	public NpcCombatTask() {
-		super(CYCLE_TIME);
-	}
-
-	public static long lastTimeDid = System.currentTimeMillis();
-
-	@Override
-	public void execute() {
-        final long startTime = System.currentTimeMillis();
-		NpcCombatTask.agressiveNPCS();
-		for(NPC npc : World.getNpcs()) {
-			try {
-				if(npc.cE.getOpponent() != null) {
-					if(!Combat.processCombat(npc.cE))
-						Combat.resetAttack(npc.cE);
-				} else if(! npc.isDead()) {
-					NPC.randomWalk(npc);
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-        long deltaMs = System.currentTimeMillis() - startTime;
-        //corpHeal();
-        if(deltaMs > 50)
-            System.err.println("[NPC COMBAT EVENT] took: "+(deltaMs) + "ms");
-
-
-    }
-
-	public static void corpHeal() {
-		boolean willHeal = true;
-		for(NPC npc : World.getNpcs()) {
-			try{
-				if(npc.getDefinition().getId() == 8133) {
-					for(Player p : RegionManager.getLocalPlayers(npc)) {
-						if(p != null) {
-						CombatEntity combatEntity = p.getCombat();
-						if(combatEntity.getAbsX() >= 2505 && combatEntity.getAbsY() >= 4630 &&
-								combatEntity.getAbsX() <= 2536 && combatEntity.getAbsY() <= 4658) {
-							if(p.getLocation().getY() <= 4636 || p.getLocation().getY() >= 4655) {
-								CorporealBeast.stomp(npc, p.cE, true);
-							}
-							willHeal = false;
-						}
-					}
-					}
-					if(willHeal) {
-						npc.health = npc.maxHealth;
-						Player.resetCorpDamage();
-					}
-				}
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+public class NpcCombatTask {
+	//TODO MOVE THIS
 	public static void agressiveNPCS() {
 		for(NPC npc : World.getNpcs()) {
 			try {

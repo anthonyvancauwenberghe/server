@@ -35,41 +35,33 @@ public class Combat {
             /**
              * Logical check if combatEntity isn't null, isn't dead, etc..
              */
-        System.out.println("COMBAT 1");
             if (!CombatAssistant.isValid(combatEntity))
                 return false;
             /**
              * Facing
              */
-            System.out.println("COMBAT 2");
             combatEntity.face(combatEntity.getOpponent().getAbsX() + combatEntity.getOpponent().getOffsetX(), combatEntity.getOpponent().getAbsY() + combatEntity.getOpponent().getOffsetY(), true);
             if (combatEntity.predictedAtk > System.currentTimeMillis()) {
                 return true;
             }
-            System.out.println("COMBAT 3");
             String message = canAtk(combatEntity, combatEntity.getOpponent());
             if (message.length() > 1) {
-                System.out.println("COMBAT 4");
                 if (combatEntity.getEntity() instanceof Player)
                     combatEntity.getPlayer().getActionSender().sendMessage(message);
-                System.out.println("COMBAT 5");
                 return false;
             }
 
             /**
              * Add opponent to attackers list
              */
-            System.out.println("COMBAT 6");
             if (!combatEntity.getOpponent().getAttackers().contains(combatEntity)) {
                 combatEntity.getOpponent().getAttackers().add(combatEntity);
             }
-            System.out.println("COMBAT 7");
             combatEntity._getPlayer().ifPresent(p -> p.getExtraData().put("combatimmunity", System.currentTimeMillis()));
 
             /**
              * Distance and freezetimer check.
              */
-            System.out.println("COMBAT 8");
             int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
             /*Checks if standing on eachother*/
             if (distance == 0) {
@@ -87,23 +79,19 @@ public class Combat {
             /**
              * Run seperate code depending on whether the combatEntity is an NPC or a Player.
              */
-            System.out.println("COMBAT 9");
             if (combatEntity.getEntity() instanceof Player) {
                 final Player player = combatEntity.getPlayer();
                 if (player.getNpcState()) {
                     player.setPNpc(-1);
                 }
-                System.out.println("COMBAT 10");
                 if (combatEntity.getOpponent()._getPlayer().isPresent()) {
                     final Player opp = combatEntity.getOpponent().getPlayer();
                     if (opp.getNpcState()) {
                         opp.setPNpc(-1);
                     }
-                    System.out.println("COMBAT 11");
                     if (!player.getSession().isConnected() && !opp.getSession().isConnected()) {
                         return false;
                     }
-                    System.out.println("COMBAT 12");
                     if (player.getExtraData().getLong("stuntimez") > System.currentTimeMillis()) {
                         player.sendMessage("You are too dazed to fight");
                         return false;
@@ -111,7 +99,6 @@ public class Combat {
                 }
                 return processPlayerCombat(combatEntity, distance);
             } else {
-                System.out.println("COMBAT 14");
                 if (combatEntity.getOpponent()._getPlayer().isPresent() && !combatEntity.getOpponent().getPlayer().getSession().isConnected())
                     return false;
                 combatEntity.getOpponent().lastHit = System.currentTimeMillis();
@@ -125,6 +112,7 @@ public class Combat {
 
 
     private static boolean processPlayerCombat(final CombatEntity combatEntity, int distance) throws Exception {
+        System.out.println("ENTERED PLAYER CB");
         /**
          * Initializing variables.
          */
@@ -734,6 +722,7 @@ public class Combat {
      * @return
      */
     private static boolean processNpcCombat(final CombatEntity combatEntity, int distance) {
+        System.out.println("ENTERED NPC CB");
         if (combatEntity.attack == null)
             combatEntity.attack = NPCManager.getAttack(combatEntity.getNPC());
         // combatEntity.doAtkEmote();

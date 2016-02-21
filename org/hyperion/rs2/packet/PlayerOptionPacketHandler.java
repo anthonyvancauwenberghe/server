@@ -82,6 +82,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 					player.cE.setOpponent(victim.cE);
 
+					System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET");
 					if(! Combat.processCombat(player.cE))
 						Combat.resetAttack(player.cE);
 					int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());
@@ -153,6 +154,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			player.cE.setOpponent(victim.cE);
 			//so people that spam click don't have an advantage
 			if(oldCombat != victim.cE)
+				System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET OPT1");
 				if(! Combat.processCombat(player.cE))
 					Combat.resetAttack(player.cE);
 			int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());

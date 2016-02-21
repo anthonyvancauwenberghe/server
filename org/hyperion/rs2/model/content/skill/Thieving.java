@@ -414,6 +414,7 @@ public class Thieving implements ContentTemplate {
 		if(guard != null) {
 			guard.forceMessage("What are you doing over there!");
 			guard.cE.setOpponent(player.cE);
+			System.out.println("PROCESSING CB FROM THIEVING");
 			Combat.processCombat(guard.cE);
 		}
 		return true;

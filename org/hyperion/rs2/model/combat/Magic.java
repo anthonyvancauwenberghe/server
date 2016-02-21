@@ -411,6 +411,7 @@ public class Magic {
 						offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,
 						slope);
 		attacker.face(opponent.getAbsX(), opponent.getAbsY());
+			System.out.println("PROCESSING CB FROM MAGIC");
 		Combat.processCombat(attacker);
 		/*if(spell.getMoveGfx() == - 1)//dunno why this exists
 			timer = 2300;*/

@@ -65,6 +65,7 @@ public class CastMagicPacketHandler implements PacketHandler {
                 victim.getLastAttack().updateLastAttacker(player.getName());
             }
 			player.cE.setOpponent(victim.cE);
+			System.out.println("PROCESSING CB FROM MAGICPACKET");
 			Combat.processCombat(player.cE);
 		}
 	}

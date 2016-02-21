@@ -82,9 +82,13 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 					player.cE.setOpponent(victim.cE);
 
-					System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET");
-					if(! Combat.processCombat(player.cE))
-						Combat.resetAttack(player.cE);
+					if(System.currentTimeMillis() - player.getLastFirstClickAttack() > 1000) {
+						System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET");
+						if (!Combat.processCombat(player.cE)) {
+							Combat.resetAttack(player.cE);
+							player.setLastFirstClickAttack(System.currentTimeMillis());
+						}
+					}
 					int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());
 					if(distance < 8 && (CombatAssistant.getCombatStyle(player.cE) != 8 || player.cE.getNextMagicAtk() > 0)) {
 						player.getWalkingQueue().reset();
@@ -154,10 +158,12 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			player.cE.setOpponent(victim.cE);
 			//so people that spam click don't have an advantage
 			if(oldCombat != victim.cE)
-				System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET OPT1");
-				if(System.currentTimeMillis() - player.getLastFirstClickAttack() > 1000 && !Combat.processCombat(player.cE)) {
-					player.setLastFirstClickAttack(System.currentTimeMillis());
-					Combat.resetAttack(player.cE);
+				if(System.currentTimeMillis() - player.getLastFirstClickAttack() > 1000) {
+					System.out.println("PROCESSING CB FROM PLAYEROPTIONSPACKET OPT1");
+					if(!Combat.processCombat(player.cE)) {
+						player.setLastFirstClickAttack(System.currentTimeMillis());
+						Combat.resetAttack(player.cE);
+					}
 				}
 			int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());
 			if(distance < 8 && (CombatAssistant.getCombatStyle(player.cE) != 8 || player.cE.getAutoCastId() > 0)) {

@@ -23,11 +23,11 @@ public class NpcUpdateSequence implements UpdateSequence<NPC> {
 
         if(npc != null) {
             if(npc.cE.getOpponent() != null) {
-                //System.out.println("Processing cb for " + npc.getDefinition().getName());
+                System.out.println("Processing cb for " + npc.getDefinition().getName());
                 if (!Combat.processCombat(npc.cE)) {
-                    //System.out.println("Done processing cb for " + npc.getDefinition().getName());
+                    System.out.println("Done processing cb for " + npc.getDefinition().getName());
                     Combat.resetAttack(npc.cE);
-                    //System.out.println("Done resetting cb for " + npc.getDefinition().getName());
+                    System.out.println("Done resetting cb for " + npc.getDefinition().getName());
                 }
             } else if (npc.isDead()) {
                 NPC.randomWalk(npc);

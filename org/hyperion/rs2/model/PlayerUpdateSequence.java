@@ -66,40 +66,40 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             /**
              * Player combat
              */
-            //System.out.println("combat started");
+            System.out.println("combat started");
             if(player.cE != null) {
                 //following for players
                 if (player.isFollowing != null) {
-                    //System.out.println(1);
+                    System.out.println(1);
                     int dis = player.getLocation().distance(player.isFollowing.getLocation());
-                   // System.out.println(2);
+                    System.out.println(2);
                     if (dis <= 20 && dis > 1) {
                         try {
-                            //System.out.println(3);
+                            System.out.println(3);
                             int toX = player.isFollowing.getLocation().getX();
                             int toY = player.isFollowing.getLocation().getY();
-                            //System.out.println(4);
+                            System.out.println(4);
                             if (player.isFollowing.getWalkingQueue().getPublicPoint() != null) {
-                                //System.out.println(5);
+                                System.out.println(5);
                                 toX = player.isFollowing.getWalkingQueue().getPublicPoint().getX();
                                 toY = player.isFollowing.getWalkingQueue().getPublicPoint().getY();
-                               // System.out.println(6);
+                                System.out.println(6);
                             }
-                            //System.out.println(7);
+                            System.out.println(7);
                             int baseX = player.getLocation().getX() - 25;
                             int baseY = player.getLocation().getY() - 25;
                             player.getWalkingQueue().reset();
                             player.getWalkingQueue().setRunningQueue(true);
-                          //  System.out.println(8);
+                            System.out.println(8);
                             Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
-                           // System.out.println(9);
+                            System.out.println(9);
                             if (p != null) {
-                               // System.out.println(10);
+                                System.out.println(10);
                                 for (int i = 1; i < p.getLength(); i++) {
                                     if ((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
                                         player.getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
                                 }
-                               // System.out.println(11);
+                                System.out.println(11);
                                 player.getWalkingQueue().finish();
                             }
                         } catch (Exception e) {
@@ -108,11 +108,11 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     }
                 }
                 if (!stakeReset(player) && player.cE.getOpponent() != null) {
-                    //System.out.println("Processing cb for " + player.getSafeDisplayName());
+                    System.out.println("Processing cb for " + player.getSafeDisplayName());
                     if (!Combat.processCombat(player.cE)) {
-                        //System.out.println("Done processing cb for " + player.getSafeDisplayName());
+                        System.out.println("Done processing cb for " + player.getSafeDisplayName());
                         Combat.resetAttack(player.cE);
-                        //System.out.println("Done resetting cb for " + player.getSafeDisplayName());
+                        System.out.println("Done resetting cb for " + player.getSafeDisplayName());
                     }
                 }
             }

@@ -192,6 +192,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private long locks = 0;
 	private long voteBonusEndTime = 0;
 	private long lastVoteBonus = 0L;
+	private long lastFirstClickAttack = System.currentTimeMillis();
 	/**
 	 * DOUBLES
 	 */
@@ -2325,5 +2326,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setGoogleAuthenticatorBackup(List<Integer> googleAuthenticatorBackup) {
 		this.googleAuthenticatorBackup = googleAuthenticatorBackup;
+	}
+
+	public long getLastFirstClickAttack() {
+		return lastFirstClickAttack;
+	}
+
+	public void setLastFirstClickAttack(long lastFirstClickAttack) {
+		this.lastFirstClickAttack = lastFirstClickAttack;
 	}
 }

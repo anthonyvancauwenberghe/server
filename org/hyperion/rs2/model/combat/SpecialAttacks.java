@@ -60,9 +60,8 @@ public class SpecialAttacks {
 	}
 
 
-	public static boolean special(final Player player,
-	                              int maxDamg, final int weaponId, int currentdistance,
-	                              int combatStyle) {
+	public static boolean special(final Player player, int maxDamg, final int weaponId, int currentdistance, int combatStyle) {
+		System.out.println("Doing special attack");
 		CombatEntity combatEntity = player.getCombat();
 		int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
 		int playerGfx = - 1;

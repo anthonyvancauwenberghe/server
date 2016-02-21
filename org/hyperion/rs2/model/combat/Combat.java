@@ -1214,8 +1214,6 @@ public class Combat {
                         combatEntity.getEntity().getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
                 }
                 combatEntity.getEntity().getWalkingQueue().finish();
-            } else {
-                //System.out.println("Derp");
             }
         } catch (Exception e) {
             e.printStackTrace();

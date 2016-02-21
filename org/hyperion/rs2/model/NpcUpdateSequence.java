@@ -23,8 +23,9 @@ public class NpcUpdateSequence implements UpdateSequence<NPC> {
 
         if(npc != null) {
             System.out.println("1");
-            if (npc.cE.getOpponent() != null) {
+            if(npc.cE.getOpponent() != null) {
                 System.out.println("2");
+                System.out.println("Processing cb for: " + npc.getDefinition().getName());
                 if (!Combat.processCombat(npc.cE)) {
                     System.out.println("3");
                     Combat.resetAttack(npc.cE);

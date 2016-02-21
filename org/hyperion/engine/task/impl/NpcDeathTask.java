@@ -62,68 +62,68 @@ public class NpcDeathTask extends Task {
 
     private void executeNpcDeath() {
         if (timer == 7) {
-            System.out.println("NPCDEATH 0");
+           // System.out.println("NPCDEATH 0");
             npc.playAnimation(Animation.create(npc.getDefinition().deathEmote(), 0));
             if(npc.cE != null) {
-                System.out.println("NPCDEATH 1");
+               // System.out.println("NPCDEATH 1");
                 Combat.logoutReset(npc.cE);
-                System.out.println("NPCDEATH 2");
+               // System.out.println("NPCDEATH 2");
                 npc.cE.setPoisoned(false);
-                System.out.println("NPCDEATH 3");
+                //System.out.println("NPCDEATH 3");
             }
             npc.getWalkingQueue().reset();
-            System.out.println("NPCDEATH 4");
+           // System.out.println("NPCDEATH 4");
         } else if (timer == 0) {
             int tokens = 0;
-            System.out.println("SETTING X");
+         //   System.out.println("SETTING X");
             int x = npc.getLocation().getX();
-            System.out.println("SETTING Y");
+          //  System.out.println("SETTING Y");
             int y = npc.getLocation().getY();
-            System.out.println("SETTING Z");
+          //  System.out.println("SETTING Z");
             int z = npc.getLocation().getZ();
-            System.out.println("NPCDEATH 5");
+          //  System.out.println("NPCDEATH 5");
             final Map<Player, Double> killers = new HashMap<>();
             for (final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
-                System.out.println("NPCDEATH 6");
+             //   System.out.println("NPCDEATH 6");
                 if (killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
-                System.out.println("NPCDEATH 7");
+             //   System.out.println("NPCDEATH 7");
                 if (!reward.isPresent()) break;
                 final Player player = World.getPlayerByName(killer.getKey().toLowerCase().trim());
-                System.out.println("NPCDEATH 8");
+               // System.out.println("NPCDEATH 8");
                 if (player == null) continue;
                 double percent = killer.getValue() / ((double) npc.maxHealth);
-                System.out.println("NPCDEATH 9");
+               // System.out.println("NPCDEATH 9");
                 if (percent > 0.1 || (npcIdForDoubleDrops == npc.getDefinition().getId() && percent > 0.05)) {
-                    System.out.println("NPCDEATH 10");
+                  //  System.out.println("NPCDEATH 10");
                     killers.put(player, percent);
-                    System.out.println("NPCDEATH 11");
+                   // System.out.println("NPCDEATH 11");
                     final int dp = (int) (reward.get().dp * percent);
                     final int pkp = (int) (reward.get().pkp * percent);
-                    System.out.println("NPCDEATH 12");
+                   // System.out.println("NPCDEATH 12");
                     tokens = (int) (reward.get().tokens * percent);
-                    System.out.println("NPCDEATH 13");
+                //    System.out.println("NPCDEATH 13");
                     player.getPoints().increasePkPoints(pkp);//1750 hp, 175pkp
-                    System.out.println("NPCDEATH 14");
+                  //  System.out.println("NPCDEATH 14");
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
-                    System.out.println("NPCDEATH 15");
+                    //System.out.println("NPCDEATH 15");
                     double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.035 : 0.04;
-                    System.out.println("NPCDEATH 16");
+                   // System.out.println("NPCDEATH 16");
                     for (double d = 0.03; d < percent; d += increment) {
-                        System.out.println("NPCDEATH 17");
+                     //   System.out.println("NPCDEATH 17");
                         if (unreacheablenpc(npc.getDefinition().getId())) {
-                            System.out.println("NPCDEATH 18");
+                       //     System.out.println("NPCDEATH 18");
                             x = player.getLocation().getX();
                             y = player.getLocation().getY();
                             z = player.getLocation().getZ();
                         }
-                        System.out.println("NPCDEATH 19");
+                        //System.out.println("NPCDEATH 19");
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
                                 new Item(391, 1));
-                        System.out.println("NPCDEATH 21");
+                        //System.out.println("NPCDEATH 21");
                         GlobalItemManager.newDropItem(player, globalItem5);
-                        System.out.println("NPCDEATH 22");
+                        //System.out.println("NPCDEATH 22");
                     }
 
                 }

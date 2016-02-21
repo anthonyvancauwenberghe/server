@@ -44,11 +44,17 @@ public class GameMap implements TileBasedMap {
 		}
 	}
 
+	/**
+	 * @see TileBasedMap#visited(int, int)
+	 */
 	public boolean visited(int x, int y) {
 		return visited[x][y];
 	}
 
 
+	/**
+	 * @see TileBasedMap#blocked(Mover, int, int)
+	 */
 	public boolean blocked(int sx, int sy, int x, int y) {
 		//return if you can move here
 	    /*if(sx == x || sy == y){
@@ -59,16 +65,19 @@ public class GameMap implements TileBasedMap {
 				return true;
 			if(!WorldMap.isWalkAble(0, (PathTest.getSingleton().baseX+x), (PathTest.getSingleton().baseY+sy), (PathTest.getSingleton().baseX+x), (PathTest.getSingleton().baseY+y), 0))
 				return true;
-			
+
 			if(!WorldMap.isWalkAble(0, (PathTest.getSingleton().baseX+sx), (PathTest.getSingleton().baseY+sy), (PathTest.getSingleton().baseX+sx), (PathTest.getSingleton().baseY+y), 0))
 				return true;
 			if(!WorldMap.isWalkAble(0, (PathTest.getSingleton().baseX+sx), (PathTest.getSingleton().baseY+y), (PathTest.getSingleton().baseX+x), (PathTest.getSingleton().baseY+y), 0))
 				return true;
 		}*/
 		//return WorldMap.isWalkAble(0, (PathTest.getSingleton().baseX+sx), (PathTest.getSingleton().baseY+sy), (PathTest.getSingleton().baseX+x), (PathTest.getSingleton().baseY+y), 0);
-		return !WorldMap.checkPos(0, (PathTest.baseX + sx), (PathTest.baseY + sy), (PathTest.baseX + x), (PathTest.baseY + y), 0);
+		return !WorldMap.checkPos(0, (PathTest.getSingleton().baseX + sx), (PathTest.getSingleton().baseY + sy), (PathTest.getSingleton().baseX + x), (PathTest.getSingleton().baseY + y), 0);
 	}
 
+	/**
+	 * @see TileBasedMap#getCost(Mover, int, int, int, int)
+	 */
 	public float getCost(int sx, int sy, int tx, int ty) {
 		return 1;
 	}

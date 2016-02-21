@@ -1204,7 +1204,7 @@ public class Combat {
             int baseX = combatEntity.getAbsX() - 25;
             int baseY = combatEntity.getAbsY() - 25;
             combatEntity.getEntity().getWalkingQueue().reset();
-            Path p = PathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
+            Path p = PathTest.getSingleton().getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
             if (p != null) {
                 for (int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));

@@ -91,7 +91,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                             player.getWalkingQueue().reset();
                             player.getWalkingQueue().setRunningQueue(true);
                             System.out.println(8);
-                            Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            Path p = PathTest.getSingleton().getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
                             System.out.println(9);
                             if (p != null) {
                                 System.out.println(10);

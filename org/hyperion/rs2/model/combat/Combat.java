@@ -73,7 +73,6 @@ public class Combat {
             int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
             /*Checks if standing on eachother*/
             if (distance == 0) {
-
 				/*If standing on eachother and frozen*/
                 if (combatEntity.isFrozen()) {
                     return false;
@@ -740,19 +739,9 @@ public class Combat {
         // combatEntity.doAtkEmote();
 
         if (combatEntity.attack != null) {
-            // timer
-			/*
-			 * if(combatEntity.predictedAtk >
-			 * System.currentTimeMillis()){
-			 * follow(combatEntity,combatEntity.getOpponent()); return
-			 * true;//we dont want to reset attack but just wait another
-			 * 500ms or so... }
-			 */
             if (combatEntity.getOpponent().getEntity() instanceof Player) {
-                if (!combatEntity.getOpponent().getPlayer().isActive()
-                        || combatEntity.getOpponent().getPlayer().isHidden()) {
-                    resetAttack(combatEntity);
-                    return false;
+                if (!combatEntity.getOpponent().getPlayer().isActive() || combatEntity.getOpponent().getPlayer().isHidden()) {
+                    return true;
                 }
             }
             if (combatEntity.getNPC().ownerId >= 1 && combatEntity.getNPC().summoned) {
@@ -777,45 +766,17 @@ public class Combat {
                 type = 0;
             }
             if (type == 5) {
-				/*
-				 * if(combatEntity.getOpponent().getOpponent() == null
-				 * || combatEntity.getOpponent().getOpponent() ==
-				 * combatEntity){
-				 * //combatEntity.getOpponent().face(combatEntity
-				 * .getAbsX(),combatEntity.getAbsY());
-				 * combatEntity.getOpponent
-				 * ().face(combatEntity.getAbsX()
-				 * +combatEntity.getOffsetX
-				 * (),combatEntity.getAbsY()+combatEntity.getOffsetY());
-				 * 
-				 * if(combatEntity.getOpponent().getEntity() instanceof
-				 * Player ||
-				 * combatEntity.getOpponent().getNPC().getDefinition
-				 * ().doesDefEmote())
-				 * combatEntity.getOpponent().doDefEmote();
-				 * if(combatEntity.getOpponent().getEntity() instanceof
-				 * NPC ||
-				 * combatEntity.getOpponent().getPlayerByName().autoRetailate
-				 * ){
-				 * combatEntity.getOpponent().setOpponent(combatEntity);
-				 * } }
-				 */
                 if (combatEntity.getOpponent().getEntity() instanceof Player)
                     combatEntity.getOpponent().getPlayer().getLastAttack().updateLastAttacker(combatEntity.getNPC().getIndex());
                 combatEntity.getOpponent().lastHit = System.currentTimeMillis();
-                // successful
             } else if (type == 1) {
-                // cancel
                 return false;
             } else if (type == 0) {
 
                 follow(combatEntity, combatEntity.getOpponent());
             }
-            //System.out.println("Npc attack type: " + type);
         }
         return true;
-        // combatEntity.getOpponent().hit(1,combatEntity.getOpponent().getEntity(),false);
-        // npc combat, not as complicated as player combat
     }
 
     public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, int type) {
@@ -1067,6 +1028,7 @@ public class Combat {
             }
             combatEntity.setOpponent(null);
         }
+        System.out.println("Done resetting attack for " + combatEntity);
     }
 
     public static void logoutReset(CombatEntity combatEntity) {

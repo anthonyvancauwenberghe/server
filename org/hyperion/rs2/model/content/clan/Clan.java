@@ -27,12 +27,12 @@ public class Clan {
 		return players;
 	}
 
-	public synchronized void add(Player player) {
+	public void add(Player player) {
 		player.setClanName(this.clanName);
 		players.add(player);
 	}
 
-	public synchronized void remove(Player player) {
+	public void remove(Player player) {
         player.setClanName("");
 		players.remove(player);
 	}

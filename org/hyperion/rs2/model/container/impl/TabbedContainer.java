@@ -74,7 +74,7 @@ public class TabbedContainer extends Container {
         }
     }
 
-    public synchronized boolean insert(final BankItem bankItem, int slot) {
+    public boolean insert(final BankItem bankItem, int slot) {
         if(slot == -1 && size() == Bank.SIZE)
             return false;
         int tabAmount = player.getBankField().getTabAmounts()[bankItem.getTabIndex()];

@@ -194,7 +194,6 @@ public class Farming implements ContentTemplate {
 		//buf.put((byte) 251);
 		//buf.put((byte) 231);
 		//buf.put((byte) 221);//farming signature, this indicates start of farming data
-		synchronized(player.getFarm().rakePatches) {
 			for(Object object : player.getFarm().rakePatches.values().toArray()) {
 				RakePatch rpatch = (RakePatch) object;
 				buf.put((byte) 3);//3 is the type for a rake patch
@@ -203,8 +202,6 @@ public class Farming implements ContentTemplate {
 				buf.put((byte) rpatch.timeLeft);
 				buf.putShort((short) rpatch.unRakedObjId);
 			}
-		}
-		synchronized(player.getFarm().plants) {
 			for(Object object : player.getFarm().plants.values().toArray()) {
 				PlayerPlant plant = (PlayerPlant) object;
 				buf.put((byte) 4);//4 is the type for a plant
@@ -217,7 +214,6 @@ public class Farming implements ContentTemplate {
 				buf.putShort((short) plant.day);
 				buf.put((byte) plant.hour);
 				buf.put((byte) plant.minute);
-			}
 		}
 		//buf.put((byte) 241);
 		//buf.put((byte) 231);
@@ -477,7 +473,6 @@ public class Farming implements ContentTemplate {
 			public void execute() {
 				calendar = new GregorianCalendar();
 				for(Player player : World.getPlayers()) {
-					synchronized(player.getFarm().rakePatches) {
 						for(Object object : player.getFarm().rakePatches.values().toArray()) {
 							RakePatch rpatch = (RakePatch) object;
 							rpatch.timeLeft--;
@@ -485,9 +480,7 @@ public class Farming implements ContentTemplate {
 								player.getActionSender().sendReplaceObject(rpatch.x, rpatch.y, rpatch.unRakedObjId, 0, 10);
 								player.getFarm().rakePatches.remove(((rpatch.x * 16) + rpatch.y));
 							}
-						}
 					}
-					synchronized(player.getFarm().plants) {
 						for(Object object : player.getFarm().plants.values().toArray()) {
 							PlayerPlant plant = (PlayerPlant) object;
 							Plant serverPlant = patches.get(plant.plotId).seeds.get(plant.seed);
@@ -500,7 +493,6 @@ public class Farming implements ContentTemplate {
 								plant.dead = true;
 								player.getActionSender().sendReplaceObject(plant.x + offset(serverPlant.type), plant.y + offset(serverPlant.type), serverPlant.dieseasedStages[(serverPlant.dieseasedStages.length - 1)], 0, 10);
 							}
-						}
 					}
 	                /*for(Object object : player.getFarm().plants.toArray()){
                         PlayerPlant plant = (PlayerPlant) object;

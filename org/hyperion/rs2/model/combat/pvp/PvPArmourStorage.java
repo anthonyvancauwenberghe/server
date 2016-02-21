@@ -67,11 +67,11 @@ public class PvPArmourStorage {
 		return edit(armours, armourCharges);
 	}
 	
-	public synchronized boolean contains(int id) {
+	public boolean contains(int id) {
 		return wrappedMap.containsKey(id);
 	}
 	
-	public synchronized int degrade(int id) {
+	public int degrade(int id) {
 		if(!contains(id))
 			return DEFAULT_CHARGE;
 		int amount = wrappedMap.get(id) - 1;
@@ -81,7 +81,7 @@ public class PvPArmourStorage {
 		return amount;
 	}
 	
-	public synchronized int get(int id) {
+	public int get(int id) {
 		return wrappedMap.get(id);
 	}
 	

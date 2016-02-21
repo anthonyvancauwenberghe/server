@@ -3,7 +3,9 @@ package org.hyperion.rs2.model;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @author Arsen Maxyutov.
@@ -270,9 +272,7 @@ public class Prayers {
 	}
 
 	public void disableFor(int time, int... prayers) {
-		synchronized (disabledPrayers) {
-			disabledPrayers.add(new DisabledPrayer(time, prayers));
-		}
+		disabledPrayers.add(new DisabledPrayer(time, prayers));
 	}
 
 	public ArrayList<DisabledPrayer> getDisabled() {

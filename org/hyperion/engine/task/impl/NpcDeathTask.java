@@ -31,7 +31,6 @@ public class NpcDeathTask extends Task {
 
     public static int npcIdForDoubleDrops;
 
-
     public static final int CYCLES_AMOUNT = 9;
 
     private final NPC npc;
@@ -40,7 +39,7 @@ public class NpcDeathTask extends Task {
      * Creates te death event for the specified entity.
      */
     public NpcDeathTask(NPC npc) {
-        super(200);
+        super(400, npc.getDefinition().getName());
         this.npc = npc;
     }
 
@@ -49,7 +48,7 @@ public class NpcDeathTask extends Task {
     @Override
     public void execute() {
         try {
-            if (!npc.isDead()) {
+            if (!npc.isDead() || npc == null) {
                 this.stop();
                 return;
             }
@@ -62,7 +61,6 @@ public class NpcDeathTask extends Task {
 
 
     private void executeNpcDeath() {
-        System.out.println(1);
         if (timer == 7) {
             System.out.println(1);
             npc.playAnimation(Animation.create(npc.getDefinition().deathEmote(), 0));
@@ -77,7 +75,12 @@ public class NpcDeathTask extends Task {
             System.out.println(5);
         } else if (timer == 0) {
             int tokens = 0;
-            int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
+            System.out.println("SETTING X");
+            int x = npc.getLocation().getX();
+            System.out.println("SETTING Y");
+            int y = npc.getLocation().getY();
+            System.out.println("SETTING Z");
+            int z = npc.getLocation().getZ();
             System.out.println(6);
             final Map<Player, Double> killers = new HashMap<>();
             for (final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
@@ -349,8 +352,6 @@ public class NpcDeathTask extends Task {
                         GlobalItemManager.newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }
-
-
                 }
             }
         } else if (timer == -1) {

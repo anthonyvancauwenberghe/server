@@ -588,7 +588,8 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * We can used the cached update block!
 		 */
-            if(otherPlayer.hasCachedUpdateBlock() && otherPlayer != player && ! forceAppearance && ! noChat) {
+        synchronized(otherPlayer) {
+            if (otherPlayer.hasCachedUpdateBlock() && otherPlayer != player && !forceAppearance && !noChat) {
                 packet.put(otherPlayer.getCachedUpdateBlock().getPayload().flip());
                 return;
             }
@@ -604,41 +605,41 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             int mask = 0;
             final UpdateFlags flags = otherPlayer.getUpdateFlags();
 
-            if(flags.get(UpdateFlags.UpdateFlag.WALK)) {
+            if (flags.get(UpdateFlags.UpdateFlag.WALK)) {
                 mask |= 0x400;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
+            if (flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
                 mask |= 0x100;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
+            if (flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
                 mask |= 0x8;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
                 mask |= 0x4;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.CHAT) && ! noChat) {
+            if (flags.get(UpdateFlags.UpdateFlag.CHAT) && !noChat) {
                 mask |= 0x80;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
                 mask |= 0x1;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
+            if (flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
                 mask |= 0x10;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
                 mask |= 0x2;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT)) {
                 mask |= 0x20;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
                 mask |= 0x200;
             }
 
 			/*
 			 * Check if the bitmask would overflow a byte.
 			 */
-            if(mask >= 0x100) {
+            if (mask >= 0x100) {
 				/*
 				 * Write it as a short and indicate we have done so.
 				 */
@@ -655,31 +656,31 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * Append the appropriate updates.
 			 */
-            if(flags.get(UpdateFlags.UpdateFlag.WALK)) {
+            if (flags.get(UpdateFlags.UpdateFlag.WALK)) {
                 appendForceMovement(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
+            if (flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
                 appendGraphicsUpdate(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
+            if (flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
                 appendAnimationUpdate(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
                 block.putRS2String(otherPlayer.forcedMessage);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.CHAT) && ! noChat) {
+            if (flags.get(UpdateFlags.UpdateFlag.CHAT) && !noChat) {
                 appendChatUpdate(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
                 Entity entity = otherPlayer.getInteractingEntity();
-                block.putLEShort(entity == null ? - 1 : entity.getClientIndex());
+                block.putLEShort(entity == null ? -1 : entity.getClientIndex());
             }
-            if(flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
+            if (flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
                 appendPlayerAppearanceUpdate(block, player, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
                 Location loc = otherPlayer.getFaceLocation();
-                if(loc == null) {
+                if (loc == null) {
                     block.putLEShortA(0);
                     block.putLEShort(0);
                 } else {
@@ -687,10 +688,10 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     block.putLEShort(loc.getY() * 2 + 1);
                 }
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT)) {
                 appendHitUpdate(otherPlayer, block);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
                 appendHit2Update(otherPlayer, block);
             }
 
@@ -702,7 +703,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * Now it is over, cache the block if we can.
 			 */
-            if(otherPlayer != player && ! forceAppearance && ! noChat) {
+            if (otherPlayer != player && !forceAppearance && !noChat) {
                 otherPlayer.setCachedUpdateBlock(blockPacket);
             }
 
@@ -710,6 +711,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			 * And finally append the block at the end.
 			 */
             packet.put(blockPacket.getPayload());
+        }
     }
 
     private static void appendHit2Update(final NPC n, final PacketBuilder updateBlock) {

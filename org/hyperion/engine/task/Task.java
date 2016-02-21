@@ -36,10 +36,12 @@ public abstract class Task {
     public Task(long delay, boolean immediate, Object key) {
         if(key == null)
             throw new IllegalArgumentException("The key for a task cannot be null.");
-        this.delay = delay;
-        this.immediate = immediate || delay < 0 || delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY) == 0;
+        if(delay < Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY))
+            throw new IllegalArgumentException("The task delay cannot be less than the engine tick rate.");
+        this.delay = delay = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
+        this.immediate = immediate || delay <= 0;
         this.key = key;
-        countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
+        countdown = delay;
     }
 
     public Task(long delay, boolean immediate) {
@@ -86,9 +88,13 @@ public abstract class Task {
      */
     public boolean tick() {
         if (running && --countdown == 0) {
-            System.out.println("Processing task: " + getClass().getSimpleName() + " " + getKey() + " " + getDelay());
+            long startTime = System.currentTimeMillis();
+            System.out.println("Started " + getClass().getSimpleName() + ": " + getKey() + " " + getDelay());
             execute();
-            countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
+            System.out.println("Ended " + getClass().getSimpleName() + ": " + getKey() + " " + getDelay());
+            if(System.currentTimeMillis() - startTime > 15)
+                System.out.println(getClass().getSimpleName() + ": " + getKey() + " - took " + (System.currentTimeMillis() - startTime) + "ms");
+            countdown = delay;
         }
         return running;
     }

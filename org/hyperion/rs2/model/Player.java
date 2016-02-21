@@ -14,7 +14,6 @@ import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.Difficulty;
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
@@ -1781,7 +1780,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public void emoteTabPlay(Animation anim) {
 		if(isDoingEmote) {
 			getActionSender().sendMessage("You are already doing an emote.");
-			return;
 		} else {
 			playAnimation(anim);
 			isDoingEmote = true;
@@ -1795,7 +1793,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 				}
 
 			});
-			ClueScrollManager.trigger(this, anim.getId());
+			//ClueScrollManager.trigger(this, anim.getId());
 		}
 	}
 

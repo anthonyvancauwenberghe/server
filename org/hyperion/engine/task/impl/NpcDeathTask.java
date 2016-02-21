@@ -31,7 +31,6 @@ public class NpcDeathTask extends Task {
 
     public static int npcIdForDoubleDrops;
 
-
     public static final int CYCLES_AMOUNT = 9;
 
     private final NPC npc;
@@ -40,7 +39,7 @@ public class NpcDeathTask extends Task {
      * Creates te death event for the specified entity.
      */
     public NpcDeathTask(NPC npc) {
-        super(200, npc.getDefinition().getName());
+        super(400, npc.getDefinition().getName());
         this.npc = npc;
     }
 
@@ -353,8 +352,6 @@ public class NpcDeathTask extends Task {
                         GlobalItemManager.newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }
-
-
                 }
             }
         } else if (timer == -1) {

@@ -36,10 +36,10 @@ public abstract class Task {
     public Task(long delay, boolean immediate, Object key) {
         if(key == null)
             throw new IllegalArgumentException("The key for a task cannot be null.");
-        this.delay = delay;
-        this.immediate = immediate || delay < 0 || delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY) == 0;
+        this.delay = delay = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
+        this.immediate = immediate || delay <= 0;
         this.key = key;
-        countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
+        countdown = delay;
     }
 
     public Task(long delay, boolean immediate) {
@@ -90,7 +90,7 @@ public abstract class Task {
             execute();
             if(System.currentTimeMillis() - startTime > 15)
                 System.out.println(getClass().getSimpleName() + ": " + getKey() + " - took " + (System.currentTimeMillis() - startTime) + "ms");
-            countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
+            countdown = delay;
         }
         return running;
     }

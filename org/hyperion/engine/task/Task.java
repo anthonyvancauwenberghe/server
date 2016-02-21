@@ -89,9 +89,7 @@ public abstract class Task {
     public boolean tick() {
         if (running && --countdown == 0) {
             long startTime = System.currentTimeMillis();
-            System.out.println("Started " + getClass().getSimpleName() + ": " + getKey() + " " + getDelay());
             execute();
-            System.out.println("Ended " + getClass().getSimpleName() + ": " + getKey() + " " + getDelay());
             if(System.currentTimeMillis() - startTime > 15)
                 System.out.println(getClass().getSimpleName() + ": " + getKey() + " - took " + (System.currentTimeMillis() - startTime) + "ms");
             countdown = delay;

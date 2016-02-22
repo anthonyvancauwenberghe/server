@@ -225,6 +225,10 @@ public class EntityHandler {
             player.getPoints().setEloPeak(2200);
             player.setTeleportTarget(Edgeville.LOCATION);
             player.setTutorialProgress(28);
+            for(int i = 0; i <= 6; i++) {
+                player.getSkills().setLevel(i, 99);
+                player.getSkills().setExperience(i, Math.max(13100000, player.getSkills().getExperience(i)));
+            }
             //TODO CHANGE THIS BACK
             //DialogueManager.openDialogue(player, 10000);
         }

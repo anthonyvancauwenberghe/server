@@ -1,6 +1,7 @@
 package org.hyperion;
 
 import org.hyperion.engine.Update;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.net.security.CharFileEncryption;
 import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.util.ShutdownHook;
@@ -97,6 +98,6 @@ public class Server {
 
     public static void update(int time, final String reason) {
         setUpdating(true);
-        getLoader().getEngine().submit(new Update(time, reason));
+        TaskManager.submit(new Update(time, reason));
     }
 }

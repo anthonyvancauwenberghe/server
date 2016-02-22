@@ -12,8 +12,6 @@ import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification;
-import org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification.VerifyResponse;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.PacketBuilder;
@@ -30,7 +28,6 @@ import java.io.FileWriter;
 import java.util.*;
 
 import static org.hyperion.rs2.LoginResponse.*;
-import static org.hyperion.rs2.model.Rank.ADMINISTRATOR;
 
 /**
  * Created by Gilles on 6/02/2016.
@@ -134,7 +131,7 @@ public class GenericWorldLoader implements WorldLoader {
 			return INVALID_CREDENTIALS;
 		}
 
-        if(player.getGoogleAuthenticatorKey() != null) {
+        /*if(player.getGoogleAuthenticatorKey() != null) {
 			VerifyResponse verifyResponse = PlayerAuthenticatorVerification.verifyPlayer(player, playerDetails.getAuthenticationCode());
 			if(verifyResponse == VerifyResponse.PIN_ENTERED_TWICE)
 				return AUTHENTICATION_USED_TWICE;
@@ -142,9 +139,9 @@ public class GenericWorldLoader implements WorldLoader {
 				LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
 				return AUTHENTICATION_WRONG;
 			}
-		}
+		}*/
 
-		if(Rank.hasAbility(player, ADMINISTRATOR))
+		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
 			if(!ALLOWED_IPS.contains(player.getShortIP()))
 				return INVALID_CREDENTIALS;
 

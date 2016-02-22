@@ -218,7 +218,15 @@ public class EntityHandler {
             ContentManager.handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
         }
         if (player.isNew()) {
-            DialogueManager.openDialogue(player, 10000);
+            player.getPoints().setDonatorPoints(10000);
+            player.getPoints().setPkPoints(10000000);
+            player.getPoints().setVotingPoints(10000000);
+            player.getPoints().setHonorPoints(10000000);
+            player.getPoints().setEloPeak(2200);
+            player.setTeleportTarget(Edgeville.LOCATION);
+            player.setTutorialProgress(28);
+            //TODO CHANGE THIS BACK
+            //DialogueManager.openDialogue(player, 10000);
         }
         player.getActionSender().sendSkills();
         player.getSpawnTab().createSpawnTab();

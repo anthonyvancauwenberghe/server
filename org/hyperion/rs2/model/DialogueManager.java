@@ -9,7 +9,6 @@ import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.EP.EPExchange;
-import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.BountyPerks.Perk;
 import org.hyperion.rs2.model.content.minigame.Barrows3;
@@ -1448,7 +1447,7 @@ public class DialogueManager {
 			case 613:
 				player.getRandomEvent().answer(dialogueId - 610);
 				break;
-			case 650:
+			/*case 650:
 				PlayerAuthenticationGenerator.setupAuthenticator(player);
 				break;
 			case 651:
@@ -1464,7 +1463,7 @@ public class DialogueManager {
 			case 655:
 				player.getInterfaceState().setNextDialogueId(0, -1);
 				player.getInterfaceState().setStringListener("authenticator_removal_confirmation", "Enter your current key");
-				break;
+				break;*/
             case 6000:
                 player.getActionSender().removeChatboxInterface();
                 break;

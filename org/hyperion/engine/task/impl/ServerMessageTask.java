@@ -23,12 +23,12 @@ import java.util.logging.Level;
 
 public class ServerMessageTask extends Task {
 
-    private final static long CYCLE_TIME = Time.THIRTY_SECONDS;
+    private final static long CYCLE_TIME = Time.FIFTEEN_SECONDS;
     private final static String FILE_LOCATION = "./data/json/server_messages.json";
     private final static String DEFAULT_MESSAGE = "Enjoy your time on the server!";
 
     private static boolean enabled = true;
-    private static List<String> messages = Arrays.asList("You are currently playing on the beta server.", "You can spawn anything by doing '::spawn'!");//reloadMessages();
+    private static List<String> messages = Arrays.asList("You are currently playing on the beta server.", "We are currently testing the server with the new engine.", "You can spawn anything by doing '::spawn'!");//reloadMessages();
     private static int currentMessage = 0;
 
     public ServerMessageTask() {

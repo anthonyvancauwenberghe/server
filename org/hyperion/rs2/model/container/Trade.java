@@ -42,6 +42,10 @@ public class Trade {
 	public static void open(Player player, Player player2) {
 		if(Server.isUpdating())
 			return;
+		if(player.getSkills().getLevel(3) <= 1) {
+			player.sendMessage("You cannot trade players when you have low health.");
+			return;
+		}
         if(player.getGameMode() != player2.getGameMode()) {
             player.sendMessage("You cannot trade players in different game modes");
             return;

@@ -1,6 +1,7 @@
 package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.model.DialogueManager;
+import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.misc2.Jail;
@@ -35,7 +36,7 @@ public class ModerationOverride {
 	 */
 	@SuppressWarnings("deprecation")
 	public static final void kickPlayer(Player p) {
-		p.getSession().close();
+		EntityHandler.deregister(p);
 	}
 
 	public static final void jailPlayer(Player p) {

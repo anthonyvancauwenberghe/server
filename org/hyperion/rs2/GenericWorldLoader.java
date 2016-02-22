@@ -104,9 +104,6 @@ public class GenericWorldLoader implements WorldLoader {
 		if(playerDetails.getUID() != Configuration.getInt(Configuration.ConfigurationObject.CLIENT_VERSION))
 			return SERVER_UPDATED;
 
-		if(ConnectionHandler.getIpBlackList().contains(player.getFullIP()))
-			return ACCOUNT_DISABLED;
-
 		final Punishment punishment = PunishmentManager.getInstance().findBan(playerDetails.getName(), playerDetails.getIpAddress().split(":")[0], playerDetails.getMacAddress(), playerDetails.getSpecialUid());
 		if(punishment != null) {
 			playerDetails.getSession().write(

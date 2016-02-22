@@ -41,7 +41,7 @@ public class PlayerDeathTask extends Task {
 	private int timer = 0;
 
 	public PlayerDeathTask(Player player) {
-		super(400, player);
+		super(600, player);
 		this.player = player;
 		player.setDead(true);
 	}
@@ -53,6 +53,9 @@ public class PlayerDeathTask extends Task {
 				this.stop();
 				return;
 			}
+			if(!World.getPlayers().contains(player))
+				EntityHandler.deregister(player);
+
 			if(Jail.inJail(player)) {
 				player.getSkills().setLevel(Skills.HITPOINTS, player.getSkills().getLevelForExp(Skills.HITPOINTS));
 				this.stop();

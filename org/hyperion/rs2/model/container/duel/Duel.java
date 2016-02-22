@@ -35,7 +35,10 @@ public class Duel {
 	}
 
 	public static void open(Player player, Player opponent) {
-
+		if(player.getSkills().getLevel(3) <= 1) {
+			player.sendMessage("You cannot duel players when you have low health.");
+			return;
+		}
 		if(player.duelAttackable > 0)
 			return;
 		if(! player.getLocation().isWithinDistance(opponent.getLocation(), 3)) {

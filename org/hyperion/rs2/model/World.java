@@ -208,7 +208,6 @@ public final class World {
         submit(new PlayerTask36Seconds());
         submit(new PlayerTask1Second());
         submit(new EarnPotentialTask());
-        submit(new DisconnectNulledTask());
         submit(new PromoteTask());
         submit(new PlayerCombatTask());
         submit(new NpcCombatTask());
@@ -216,7 +215,6 @@ public final class World {
         submit(new ServerMessageTask());
         submit(new BountyHunterTask());
         submit(new BountyHunterLogout());
-        submit(new ClientConfirmTask());
         submit(new PunishmentExpirationTask());
         submit(new WildernessBossTask(true));
         submit(new PulseGrandExchangeTask());

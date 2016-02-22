@@ -17,23 +17,6 @@ import java.util.stream.Stream;
  */
 public class DungeoneeringHolder {
 
-    public static void main(final String[] strings) {
-        final DungeoneeringHolder holder = new DungeoneeringHolder();
-        holder.bind(Item.create(4151, 1), 0);
-        holder.bind(Item.create(8856, 1), 0);
-
-        holder.combatXPs[0] = 1300000;
-        holder.combatXPs[6] = 1300500;
-
-        System.out.println(holder.save());
-
-        final DungeoneeringHolder h2 = new DungeoneeringHolder();
-
-        h2.load(holder.save());
-
-        System.out.println(h2.save());
-    }
-
     public final RingPerks perks = new RingPerks();
 
     private final int[] combatXPs = new int[7];

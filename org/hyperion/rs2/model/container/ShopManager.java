@@ -47,6 +47,10 @@ public class ShopManager {
 	 * @param player The player to open the shop for.
 	 */
 	public static void open(Player player, int id) {
+		if(player.getSkills().getLevel(3) <= 1) {
+			player.sendMessage("You cannot open shops when you have low health.");
+			return;
+		}
 		//player.getLogging().log("Opened shop " + id);
 		player.getExtraData().put("geshop", 0);
 		player.getActionSender().sendInterfaceInventory(3824, 3822);

@@ -35,15 +35,6 @@ public class NpcCombatTask extends Task {
         final long startTime = System.currentTimeMillis();
 		NpcCombatTask.agressiveNPCS();
 		for(NPC npc : World.getNpcs()) {
-			try {
-				if(npc.cE.getOpponent() != null) {
-					if(!Combat.processCombat(npc.cE))
-						Combat.resetAttack(npc.cE);
-				} else if(! npc.isDead())
-					NPC.randomWalk(npc);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
 		}
         long deltaMs = System.currentTimeMillis() - startTime;
         //corpHeal();

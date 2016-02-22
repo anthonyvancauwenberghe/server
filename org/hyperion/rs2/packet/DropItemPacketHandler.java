@@ -12,12 +12,15 @@ public class DropItemPacketHandler implements PacketHandler {
 	    /*junk?*/
 		int x = packet.get();
 		int y = packet.get();
-        player.debugMessage("X: "+x+" Y: "+y);
 		int itemSlot = packet.getShortA();
 		if(itemId < 0 || itemId > ItemDefinition.MAX_ID || itemSlot < 0 || itemSlot > 27)
 			return;
 		if((player.isDead() || System.currentTimeMillis() - player.cE.lastHit < 10000) && !ItemSpawning.canSpawn(itemId)) {
 			player.getActionSender().sendMessage("You can't drop items, while in combat.");
+			return;
+		}
+		if(player.getSkills().getLevel(3) <= 1) {
+			player.sendMessage("You cannot drop items while you have low health.");
 			return;
 		}
 		Item toRemove = player.getInventory().get(itemSlot);

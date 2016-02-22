@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.punishment;
 
+import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -48,7 +49,7 @@ public enum Type {
     },
     BAN{
         public void apply(final Player player){
-            player.getSession().close(true);
+            EntityHandler.deregister(player);
         }
 
         public boolean isApplied(final Player player){

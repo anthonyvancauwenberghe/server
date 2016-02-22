@@ -6,7 +6,6 @@ import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.hyperion.Server;
-import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.LoginResponse;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
@@ -45,9 +44,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     session.close(true);
                     return false;
                 }
-                if ((in.get() & 0xFF) != 18) {
-                    String ip = session.getRemoteAddress().toString().split(":")[0];
-                    ConnectionHandler.addIp(ip);
+                if ((in.get() & 0xFF) != 14) {
                     session.close(true);
                     return false;
                 }
@@ -104,7 +101,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 int returnCode = 0;
                 int magicId = in.get() & 0xFF;
-                if (magicId != 128) {
+                if (magicId != 122) {
                     returnCode = 6;
                 }
 
@@ -113,7 +110,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 @SuppressWarnings("unused")
                 boolean lowMemoryVersion = false;
-                if (in.get() != 9) {
+                if (in.get() != 5) {
                     returnCode = 6;
                 }
 
@@ -152,7 +149,8 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 String name = NameUtils.formatName(IoBufferUtils.getRS2String(in)).trim();
                 String pass = IoBufferUtils.getRS2String(in);
-                int authenticationCode = in.getInt();
+                //TODO ADD AUTHENTICATOR
+                //int authenticationCode = in.getInt();
 
                 int[] sessionKey = new int[4];
                 sessionKey[0] = (int) (clientKey >> 32);
@@ -174,7 +172,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     return false;
                 }
                 state = STATE_OPCODE;
-                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, authenticationCode, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, -1, macId, uid, inCipher, outCipher, remoteIp, specialUid));
                 return true;
         }
         in.rewind();
@@ -193,7 +191,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
             }
 
             if(loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
-                playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(false));
+                playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(true));
                 return;
             }
 

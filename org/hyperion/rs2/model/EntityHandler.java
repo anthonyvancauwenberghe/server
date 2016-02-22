@@ -344,7 +344,6 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        player.getSession().close(false);
         Server.getLoader().getEngine().submit(() -> {
             //player.getLogManager().add(LogEntry.logout(player));
             //player.getLogManager().clearExpiredLogs();

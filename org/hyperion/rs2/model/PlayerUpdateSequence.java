@@ -1,5 +1,9 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.map.pathfinding.Path;
+import org.hyperion.map.pathfinding.PathTest;
+import org.hyperion.rs2.logging.FileLogging;
+import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.region.RegionManager;
@@ -18,9 +22,13 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 
     public static final int MAX_PACKET_SIZE = 4500;
 
-    /** Used to block the game thread until updating is completed. */
+    /**
+     * Used to block the game thread until updating is completed.
+     */
     private final Phaser synchronizer;
-    /** The thread pool that will update players in parallel. */
+    /**
+     * The thread pool that will update players in parallel.
+     */
     private final ExecutorService updateExecutor;
 
     private static int maxSize = 0;
@@ -28,10 +36,8 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
     /**
      * Create a new {@link PlayerUpdateSequence}.
      *
-     * @param synchronizer
-     * used to block the game thread until updating is completed.
-     * @param updateExecutor
-     * the thread pool that will update players in parallel.
+     * @param synchronizer   used to block the game thread until updating is completed.
+     * @param updateExecutor the thread pool that will update players in parallel.
      */
     public PlayerUpdateSequence(Phaser synchronizer, ExecutorService updateExecutor) {
         this.synchronizer = synchronizer;
@@ -45,12 +51,12 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             Queue<ChatMessage> messages = player.getChatMessageQueue();
             SummoningMonsters.runEvent(player);
             //TODO REMOVE THIS SHIT WTF
-            if(player.cE.summonedNpc != null) {
-                player.cE.summonedNpc.ownerId = player.getIndex();//yes i know rage later
+            if (player.cE.summonedNpc != null) {
+                player.cE.summonedNpc.ownerId = player.getIndex();
             }
-            if(messages.size() > 0) {
+            if (messages.size() > 0) {
                 ChatMessage message = player.getChatMessageQueue().poll();
-                if(message != null) {
+                if (message != null) {
                     player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.CHAT);
                     player.setCurrentChatMessage(message);
                 }
@@ -58,10 +64,63 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 player.setCurrentChatMessage(null);
             }
             player.getWalkingQueue().processNextMovement();
+
+            try {
+                if (player.isFollowing != null) {
+                    int dis = player.getLocation().distance(player.isFollowing.getLocation());
+                    if (dis <= 20 && dis > 1) {
+                        try {
+                            int toX = player.isFollowing.getLocation().getX();
+                            int toY = player.isFollowing.getLocation().getY();
+                            if (player.isFollowing.getWalkingQueue().getPublicPoint() != null) {
+                                toX = player.isFollowing.getWalkingQueue().getPublicPoint().getX();
+                                toY = player.isFollowing.getWalkingQueue().getPublicPoint().getY();
+                            }
+                            int baseX = player.getLocation().getX() - 25;
+                            int baseY = player.getLocation().getY() - 25;
+                            player.getWalkingQueue().reset();
+                            player.getWalkingQueue().setRunningQueue(true);
+                            Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            if (p != null) {
+                                for (int i = 1; i < p.getLength(); i++) {
+                                    if ((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
+                                        player.getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
+                                }
+                                player.getWalkingQueue().finish();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (!stakeReset(player) && player.cE.getOpponent() != null) {
+                    if (!Combat.processCombat(player.cE))
+                        Combat.resetAttack(player.cE);
+                }
+
+                player.getWalkingQueue().walkingCheck();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             World.unregister(player);
         }
+    }
+
+    public static boolean stakeReset(final Player player) {
+        final Player opp = player.getTrader();
+        if (opp != null && !opp.isDead() && !player.isDead() && !opp.getSession().isConnected() && !player.getSession().isConnected() && player.duelAttackable > 0 && opp.duelAttackable > 0) {
+            FileLogging.savePlayerLog(opp, "Duel TIE against " + player.getName());
+            FileLogging.savePlayerLog(player, " Duel TIE against " + opp.getName());
+            Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie
+            Container.transfer(opp.getDuel(), opp.getInventory());
+            opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -69,7 +128,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         updateExecutor.execute(() -> {
             try {
 
-                if(player.isMapRegionChanging()) {
+                if (player.isMapRegionChanging()) {
                     player.getActionSender().sendMapRegion();
                 }
 
@@ -79,15 +138,15 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 updateThisPlayerMovement(player, packet);
                 updatePlayer(player, updateBlock, player, false, true);
                 packet.putBits(8, player.getLocalPlayers().size());
-                for(Iterator<Player> it$ = player.getLocalPlayers().iterator(); it$.hasNext(); ) {
+                for (Iterator<Player> it$ = player.getLocalPlayers().iterator(); it$.hasNext(); ) {
                     Player otherPlayer = it$.next();
-                    if(World.getPlayers().contains(otherPlayer) && ! otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && ! otherPlayer.isHidden()) {
-                        if(updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
+                    if (World.getPlayers().contains(otherPlayer) && !otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && !otherPlayer.isHidden()) {
+                        if (updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
                             break;
                         }
                         updatePlayerMovement(packet, otherPlayer);
 
-                        if(otherPlayer.getUpdateFlags().isUpdateRequired()) {
+                        if (otherPlayer.getUpdateFlags().isUpdateRequired()) {
                             updatePlayer(player, updateBlock, otherPlayer, false, false);
                         }
                     } else {
@@ -97,16 +156,16 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     }
                 }
 
-                for(Player otherPlayer : RegionManager.getLocalPlayers(player)) {
-                    if(player.getLocalPlayers().size() >= 255) {
+                for (Player otherPlayer : RegionManager.getLocalPlayers(player)) {
+                    if (player.getLocalPlayers().size() >= 255) {
                         break;
                     }
 
-                    if(otherPlayer == player || player.getLocalPlayers().contains(otherPlayer) || otherPlayer.isHidden()) {
+                    if (otherPlayer == player || player.getLocalPlayers().contains(otherPlayer) || otherPlayer.isHidden()) {
                         continue;
                     }
 
-                    if(updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
+                    if (updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
                         break;
                     }
                     player.getLocalPlayers().add(otherPlayer);
@@ -114,7 +173,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     updatePlayer(player, updateBlock, otherPlayer, true, false);
                 }
 
-                if(! updateBlock.isEmpty()) {
+                if (!updateBlock.isEmpty()) {
                     packet.putBits(11, 2047);
                     packet.finishBitAccess();
                     packet.put(updateBlock.toPacket().getPayload());
@@ -123,7 +182,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 }
 
                 int size = packet.size();
-                if(size > maxSize)
+                if (size > maxSize)
                     maxSize = size;
                 player.write(packet.toPacket());
 
@@ -131,11 +190,11 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 packet = new PacketBuilder(65, Packet.Type.VARIABLE_SHORT);
                 packet.startBitAccess();
                 packet.putBits(8, player.getLocalNPCs().size());
-                for(Iterator<NPC> it$ = player.getLocalNPCs().iterator(); it$.hasNext(); ) {
+                for (Iterator<NPC> it$ = player.getLocalNPCs().iterator(); it$.hasNext(); ) {
                     NPC npc = it$.next();
-                    if(World.getNpcs().contains(npc) && ! npc.isTeleporting() && ! npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
+                    if (World.getNpcs().contains(npc) && !npc.isTeleporting() && !npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
                         updateNPCMovement(packet, npc);
-                        if(npc.getUpdateFlags().isUpdateRequired()) {
+                        if (npc.getUpdateFlags().isUpdateRequired()) {
                             updateNPC(updateBlock, npc);
                         }
                     } else {
@@ -144,21 +203,21 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                         packet.putBits(2, 3);
                     }
                 }
-                for(NPC npc : RegionManager.getLocalNpcs(player)) {
-                    if(player.getLocalNPCs().size() >= 255) {
+                for (NPC npc : RegionManager.getLocalNpcs(player)) {
+                    if (player.getLocalNPCs().size() >= 255) {
                         break;
                     }
-                    if(player.getLocalNPCs().contains(npc) || npc.isHidden()) {
+                    if (player.getLocalNPCs().contains(npc) || npc.isHidden()) {
                         continue;
                     }
                     player.getLocalNPCs().add(npc);
                     addNewNPC(player, packet, npc);
-                    if(npc.getUpdateFlags().isUpdateRequired()) {
+                    if (npc.getUpdateFlags().isUpdateRequired()) {
                         updateNPC(updateBlock, npc);
 
                     }
                 }
-                if(! updateBlock.isEmpty()) {
+                if (!updateBlock.isEmpty()) {
                     packet.putBits(14, 16383);
                     packet.finishBitAccess();
                     packet.put(updateBlock.toPacket().getPayload());
@@ -178,7 +237,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
     @Override
     public void executePostUpdate(Player player) {
         try {
-            if(player.getUpdateFlags().get(UpdateFlags.UpdateFlag.HIT_3)) {
+            if (player.getUpdateFlags().get(UpdateFlags.UpdateFlag.HIT_3)) {
                 player.getUpdateFlags().reset();
                 player.getDamage().setHit1(player.getDamage().getHit3());
                 player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.HIT);
@@ -186,7 +245,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 player.getUpdateFlags().reset();
             player.setTeleporting(false);
             player.setMapRegionChanging(false);
-            if(player.cE != null)
+            if (player.cE != null)
                 player.cE.isDoingAtk = false;
             player.resetCachedUpdateBlock();
             player.reset();
@@ -203,7 +262,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
      * @param npc    The npc to add.
      */
     private void addNewNPC(Player player, PacketBuilder packet, NPC npc) {
-		/*
+        /*
 		 * Write the NPC's index.
 		 */
         packet.putBits(14, npc.getIndex());
@@ -250,28 +309,28 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         int mask = 0;
         final UpdateFlags flags = npc.getUpdateFlags();
 
-        if(flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
+        if (flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
             mask |= 0x10;
         }
-        if(flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
+        if (flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
             mask |= 0x8;//0x40
         }
-        if(flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
+        if (flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
             mask |= 0x80;
         }
-        if(flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
+        if (flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
             mask |= 0x20;
         }
-        if(flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
+        if (flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
             mask |= 0x1;
         }
-        if(flags.get(UpdateFlags.UpdateFlag.HIT)) {
+        if (flags.get(UpdateFlags.UpdateFlag.HIT)) {
             mask |= 0x40;//0x8
         }
-        if(flags.get(UpdateFlags.UpdateFlag.TRANSFORM)) {
+        if (flags.get(UpdateFlags.UpdateFlag.TRANSFORM)) {
             mask |= 0x2;
         }
-        if(flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
+        if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
             mask |= 0x4;
         }
 
@@ -280,34 +339,34 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		 */
         packet.put((byte) mask);
 
-        if(flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
+        if (flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
             packet.putLEShort(npc.getCurrentAnimation().getId());
             packet.put((byte) npc.getCurrentAnimation().getDelay());
         }
-        if(flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
+        if (flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
             appendHit2Update(npc, packet);
         }
-        if(flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
+        if (flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
             packet.putShort(npc.getCurrentGraphic().getId());
             packet.putInt(npc.getCurrentGraphic().getDelay());
         }
-        if(flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
+        if (flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
             Entity entity = npc.getInteractingEntity();
-            packet.putShort(entity == null ? - 1 : entity.getClientIndex());
+            packet.putShort(entity == null ? -1 : entity.getClientIndex());
         }
-        if(flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
+        if (flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
             //send a string
             packet.putRS2String(npc.forcedMessage);
         }
-        if(flags.get(UpdateFlags.UpdateFlag.HIT)) {
+        if (flags.get(UpdateFlags.UpdateFlag.HIT)) {
             appendHitUpdate(npc, packet);
         }
-        if(flags.get(UpdateFlags.UpdateFlag.TRANSFORM)) {
+        if (flags.get(UpdateFlags.UpdateFlag.TRANSFORM)) {
             //packet.putLEShortA();
         }
-        if(flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
+        if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
             Location loc = npc.getFaceLocation();
-            if(loc == null) {
+            if (loc == null) {
                 packet.putLEShort(0);
                 packet.putLEShort(0);
             } else {
@@ -328,15 +387,15 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * Check if the NPC is running.
 		 */
-        if(npc.getSprites().getSecondarySprite() == - 1) {
+        if (npc.getSprites().getSecondarySprite() == -1) {
 			/*
 			 * They are not, so check if they are walking.
 			 */
-            if(npc.getSprites().getPrimarySprite() == - 1) {
+            if (npc.getSprites().getPrimarySprite() == -1) {
 				/*
 				 * They are not walking, check if the NPC needs an update.
 				 */
-                if(npc.getUpdateFlags().isUpdateRequired()) {
+                if (npc.getUpdateFlags().isUpdateRequired()) {
 					/*
 					 * Indicate an update is required.
 					 */
@@ -441,11 +500,11 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * Check which type of movement took place.
 		 */
-        if(otherPlayer.getSprites().getPrimarySprite() == - 1) {
+        if (otherPlayer.getSprites().getPrimarySprite() == -1) {
 			/*
 			 * If no movement did, check if an update is required.
 			 */
-            if(otherPlayer.getUpdateFlags().isUpdateRequired()) {
+            if (otherPlayer.getUpdateFlags().isUpdateRequired()) {
 				/*
 				 * Signify that an update happened.
 				 */
@@ -461,7 +520,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 				 */
                 packet.putBits(1, 0);
             }
-        } else if(otherPlayer.getSprites().getSecondarySprite() == - 1) {
+        } else if (otherPlayer.getSprites().getSecondarySprite() == -1) {
 			/*
 			 * The player moved but didn't run. Signify that an update is
 			 * required.
@@ -523,15 +582,15 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		 * If no update is required and we don't have to force an appearance
 		 * update, don't write anything.
 		 */
-        if(! otherPlayer.getUpdateFlags().isUpdateRequired() && ! forceAppearance) {
+        if (!otherPlayer.getUpdateFlags().isUpdateRequired() && !forceAppearance) {
             return;
         }
 
 		/*
 		 * We can used the cached update block!
 		 */
-        synchronized(otherPlayer) {
-            if(otherPlayer.hasCachedUpdateBlock() && otherPlayer != player && ! forceAppearance && ! noChat) {
+        synchronized (otherPlayer) {
+            if (otherPlayer.hasCachedUpdateBlock() && otherPlayer != player && !forceAppearance && !noChat) {
                 packet.put(otherPlayer.getCachedUpdateBlock().getPayload().flip());
                 return;
             }
@@ -547,41 +606,41 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             int mask = 0;
             final UpdateFlags flags = otherPlayer.getUpdateFlags();
 
-            if(flags.get(UpdateFlags.UpdateFlag.WALK)) {
+            if (flags.get(UpdateFlags.UpdateFlag.WALK)) {
                 mask |= 0x400;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
+            if (flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
                 mask |= 0x100;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
+            if (flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
                 mask |= 0x8;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
                 mask |= 0x4;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.CHAT) && ! noChat) {
+            if (flags.get(UpdateFlags.UpdateFlag.CHAT) && !noChat) {
                 mask |= 0x80;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
                 mask |= 0x1;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
+            if (flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
                 mask |= 0x10;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
                 mask |= 0x2;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT)) {
                 mask |= 0x20;
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
                 mask |= 0x200;
             }
 
 			/*
 			 * Check if the bitmask would overflow a byte.
 			 */
-            if(mask >= 0x100) {
+            if (mask >= 0x100) {
 				/*
 				 * Write it as a short and indicate we have done so.
 				 */
@@ -598,31 +657,31 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * Append the appropriate updates.
 			 */
-            if(flags.get(UpdateFlags.UpdateFlag.WALK)) {
+            if (flags.get(UpdateFlags.UpdateFlag.WALK)) {
                 appendForceMovement(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
+            if (flags.get(UpdateFlags.UpdateFlag.GRAPHICS)) {
                 appendGraphicsUpdate(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
+            if (flags.get(UpdateFlags.UpdateFlag.ANIMATION)) {
                 appendAnimationUpdate(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FORCED_CHAT)) {
                 block.putRS2String(otherPlayer.forcedMessage);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.CHAT) && ! noChat) {
+            if (flags.get(UpdateFlags.UpdateFlag.CHAT) && !noChat) {
                 appendChatUpdate(block, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_ENTITY)) {
                 Entity entity = otherPlayer.getInteractingEntity();
-                block.putLEShort(entity == null ? - 1 : entity.getClientIndex());
+                block.putLEShort(entity == null ? -1 : entity.getClientIndex());
             }
-            if(flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
+            if (flags.get(UpdateFlags.UpdateFlag.APPEARANCE) || forceAppearance) {
                 appendPlayerAppearanceUpdate(block, player, otherPlayer);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
+            if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
                 Location loc = otherPlayer.getFaceLocation();
-                if(loc == null) {
+                if (loc == null) {
                     block.putLEShortA(0);
                     block.putLEShort(0);
                 } else {
@@ -630,10 +689,10 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     block.putLEShort(loc.getY() * 2 + 1);
                 }
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT)) {
                 appendHitUpdate(otherPlayer, block);
             }
-            if(flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
+            if (flags.get(UpdateFlags.UpdateFlag.HIT_2)) {
                 appendHit2Update(otherPlayer, block);
             }
 
@@ -645,7 +704,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * Now it is over, cache the block if we can.
 			 */
-            if(otherPlayer != player && ! forceAppearance && ! noChat) {
+            if (otherPlayer != player && !forceAppearance && !noChat) {
                 otherPlayer.setCachedUpdateBlock(blockPacket);
             }
 
@@ -737,7 +796,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
      */
     private void appendChatUpdate(PacketBuilder packet, Player otherPlayer) {
         ChatMessage cm = otherPlayer.getCurrentChatMessage();
-        if(cm == null) {
+        if (cm == null) {
             return;
         }
         byte[] bytes = cm.getText();
@@ -745,7 +804,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         packet.putLEShort(((cm.getColour() & 0xFF) << 8) | (cm.getEffects() & 0xFF));
         packet.put((byte) Rank.getPrimaryRankIndex(otherPlayer));
         packet.putByteC(bytes.length);
-        for(int ptr = bytes.length - 1; ptr >= 0; ptr--) {
+        for (int ptr = bytes.length - 1; ptr >= 0; ptr--) {
             packet.put(bytes[ptr]);
         }
     }
@@ -757,7 +816,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
      * @param otherPlayer The player.
      */
     private void appendPlayerAppearanceUpdate(PacketBuilder packet, Player player, Player otherPlayer) {
-        if(otherPlayer.isHidden() && otherPlayer != player)
+        if (otherPlayer.isHidden() && otherPlayer != player)
             return;
         Appearance app = otherPlayer.getAppearance();
         Container eq = otherPlayer.getEquipment();
@@ -765,31 +824,31 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         PacketBuilder playerProps = new PacketBuilder();
         playerProps.put((byte) app.getGender());
         playerProps.put((byte) otherPlayer.headIconId);
-        byte skull = - 1;
-        if(otherPlayer.isSkulled())
+        byte skull = -1;
+        if (otherPlayer.isSkulled())
             skull = 0;
         playerProps.put(skull);
-        if(! otherPlayer.getNpcState()) {
-            for(int i = 0; i < 4; i++) {
-                if(eq.isSlotUsed(i)) {
+        if (!otherPlayer.getNpcState()) {
+            for (int i = 0; i < 4; i++) {
+                if (eq.isSlotUsed(i)) {
                     playerProps.putShort((short) 0x200 + eq.get(i).getId());
                 } else {
                     playerProps.put((byte) 0);
                 }
             }
-            if(eq.isSlotUsed(Equipment.SLOT_CHEST)) {
+            if (eq.isSlotUsed(Equipment.SLOT_CHEST)) {
                 playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_CHEST).getId());
             } else {
                 playerProps.putShort((short) 0x100 + app.getChest());
             }
-            if(eq.isSlotUsed(Equipment.SLOT_SHIELD)) {
+            if (eq.isSlotUsed(Equipment.SLOT_SHIELD)) {
                 playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_SHIELD).getId());
             } else {
                 playerProps.put((byte) 0);
             }
             Item chest = eq.get(Equipment.SLOT_CHEST);
-            if(chest != null) {
-                if(! Equipment.is(Equipment.EquipmentType.PLATEBODY, chest)) {
+            if (chest != null) {
+                if (!Equipment.is(Equipment.EquipmentType.PLATEBODY, chest)) {
                     playerProps.putShort((short) 0x100 + app.getArms());
                 } else {
                     playerProps.putShort((short) 0x200 + chest.getId());
@@ -797,43 +856,43 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             } else {
                 playerProps.putShort((short) 0x100 + app.getArms());
             }
-            if(eq.isSlotUsed(Equipment.SLOT_BOTTOMS)) {
+            if (eq.isSlotUsed(Equipment.SLOT_BOTTOMS)) {
                 playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_BOTTOMS).getId());
             } else {
                 playerProps.putShort((short) 0x100 + app.getLegs());
             }
             Item helm = eq.get(Equipment.SLOT_HELM);
-            if(helm != null) {
-                if(! Equipment.is(Equipment.EquipmentType.FULL_HELM, helm) && ! Equipment.is(Equipment.EquipmentType.FULL_MASK, helm)) {
+            if (helm != null) {
+                if (!Equipment.is(Equipment.EquipmentType.FULL_HELM, helm) && !Equipment.is(Equipment.EquipmentType.FULL_MASK, helm)) {
                     playerProps.putShort((short) 0x100 + app.getHead());
                 } else {
                     playerProps.put((byte) 0);
                 }
             } else {
-                playerProps.putShort((short) 0x100 +  app.getHead());
+                playerProps.putShort((short) 0x100 + app.getHead());
             }
 
-            if(eq.isSlotUsed(Equipment.SLOT_GLOVES)) {
+            if (eq.isSlotUsed(Equipment.SLOT_GLOVES)) {
                 playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_GLOVES).getId());
             } else {
                 playerProps.putShort((short) 0x100 + app.getHands());
             }
-            if(eq.isSlotUsed(Equipment.SLOT_BOOTS)) {
+            if (eq.isSlotUsed(Equipment.SLOT_BOOTS)) {
                 playerProps.putShort((short) 0x200 + eq.get(Equipment.SLOT_BOOTS).getId());
             } else {
                 playerProps.putShort((short) 0x100 + app.getFeet());
             }
             boolean fullHelm = true;
-            if(helm != null) {
-                fullHelm = ! Equipment.is(Equipment.EquipmentType.FULL_HELM, helm);
+            if (helm != null) {
+                fullHelm = !Equipment.is(Equipment.EquipmentType.FULL_HELM, helm);
             }
-            if(app.getGender() != 1 && fullHelm) {
+            if (app.getGender() != 1 && fullHelm) {
                 playerProps.putShort((short) 0x100 + app.getBeard());
             } else {
                 playerProps.put((byte) 0);
             }
         } else {
-            playerProps.putShort(- 1);
+            playerProps.putShort(-1);
             playerProps.putShort(otherPlayer.getNpcId());
 
         }
@@ -857,21 +916,21 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         playerProps.putShort(otherPlayer.getKillCount());
         final int id = eq.getItemId(Equipment.SLOT_CAPE);
         //commented out until client changes
-        if(eq.isSlotUsed(Equipment.SLOT_CAPE) && (id == 12747 || id == 12744)){
+        if (eq.isSlotUsed(Equipment.SLOT_CAPE) && (id == 12747 || id == 12744)) {
             playerProps.put((byte) 1);
-            if(id == 12747){
+            if (id == 12747) {
                 playerProps.putInt(otherPlayer.compCapePrimaryColor);
                 playerProps.putInt(otherPlayer.compCapeSecondaryColor);
-            }else{
+            } else {
                 playerProps.putInt(otherPlayer.maxCapePrimaryColor);
                 playerProps.putInt(otherPlayer.maxCapeSecondaryColor);
             }
-        }else{
-            playerProps.put((byte)0);
+        } else {
+            playerProps.put((byte) 0);
         }
 
 
-        playerProps.put((byte)otherPlayer.getGameMode());
+        playerProps.put((byte) otherPlayer.getGameMode());
 
         //playerProps.putLong(NameUtils.nameToLong(clanName));
 
@@ -902,7 +961,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * Check if the player is teleporting.
 		 */
-        if(player.isTeleporting() || player.isMapRegionChanging()) {
+        if (player.isTeleporting() || player.isMapRegionChanging()) {
 			/*
 			 * They are, so an update is required.
 			 */
@@ -937,11 +996,11 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * Otherwise, check if the player moved.
 			 */
-            if(player.getSprites().getPrimarySprite() == - 1) {
+            if (player.getSprites().getPrimarySprite() == -1) {
 				/*
 				 * The player didn't move. Check if an update is required.
 				 */
-                if(player.getUpdateFlags().isUpdateRequired()) {
+                if (player.getUpdateFlags().isUpdateRequired()) {
 					/*
 					 * Signifies an update is required.
 					 */
@@ -961,7 +1020,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 				/*
 				 * Check if the player was running.
 				 */
-                if(player.getSprites().getSecondarySprite() == - 1) {
+                if (player.getSprites().getSecondarySprite() == -1) {
 					/*
 					 * The player walked, an update is required.
 					 */

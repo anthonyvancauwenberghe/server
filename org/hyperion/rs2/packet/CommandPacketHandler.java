@@ -2173,7 +2173,7 @@ public class CommandPacketHandler implements PacketHandler {
                             PunishmentManager.getInstance().add(ban);
                             ban.insert();
                         }
-                        player.getSession().close(true);
+                        EntityHandler.deregister(player);
                         return;
                     } else {
                         player.sendf("You have %,d attempts left to verify", player.verificationCodeAttemptsLeft);

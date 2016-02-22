@@ -1,23 +1,31 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.combat.Combat;
+
 /**
  * Created by Gilles on 12/02/2016.
  */
 public class NpcUpdateSequence implements UpdateSequence<NPC> {
     @Override
     public void executePreUpdate(NPC npc) {
-	    /*
-		 * If the map region changed set the last known region.
-		 */
-        if(npc != null && npc.isMapRegionChanging()) {
-            npc.setLastKnownRegion(npc.getLocation());
-        }
+        if(npc != null) {
+            if(npc.isMapRegionChanging()) {
+                npc.setLastKnownRegion(npc.getLocation());
+            }
 
-		/*
-		 * Process the next movement in the NPC's walking queue.
-		 */
-        if(npc != null && npc.getWalkingQueue() != null)
-            npc.getWalkingQueue().processNextMovement();
+            if(npc.getWalkingQueue() != null)
+                npc.getWalkingQueue().processNextMovement();
+
+            try {
+                if(npc.cE.getOpponent() != null) {
+                    if(!Combat.processCombat(npc.cE))
+                        Combat.resetAttack(npc.cE);
+                } else if(! npc.isDead())
+                    NPC.randomWalk(npc);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

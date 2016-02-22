@@ -182,13 +182,14 @@ public class MiningV2 implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
+		/*
 		for(Rock rock : Rock.values()) {
 			for(int i = 0; i < rock.rockIds.length; i++)
 				rockOres.put(rock.rockIds[i], rock);
 		}
 		for(Pickaxe pic : Pickaxe.values()) {
 			pickaxes.put(pic.pick, pic);
-		}
+		}*/
 		//miningTest();
 	}
 

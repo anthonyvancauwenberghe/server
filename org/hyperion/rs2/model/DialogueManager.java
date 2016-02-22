@@ -16,7 +16,6 @@ import org.hyperion.rs2.model.content.minigame.Barrows3;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.DangerousPK.ArmourClass;
 import org.hyperion.rs2.model.content.minigame.RangingGuild;
-import org.hyperion.rs2.model.content.minigame.ZombieMinigame;
 import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
@@ -1093,8 +1092,6 @@ public class DialogueManager {
 					player.sendMessage("You need 70 attack and 45 defense to spawn this instant set!");
 				}
 				break;
-			case ZombieMinigame.START_DIALOG:
-				break;
 			case 165:
 				player.getActionSender().sendDialogue("Upgrade ("+player.getBHPerks().calcNextPerkCost()+" BHPts)", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
 						"Upgrade my perks!",
@@ -1370,7 +1367,7 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, 512);
 				break;
 			case 512:
-				player.getSession().close(false);
+				EntityHandler.deregister(player);
 				break;
 			case 513:
 				//InstantPk

@@ -1,26 +1,19 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
-import org.hyperion.Server;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.content.ClickType;
+import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
-import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
-import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
-import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,6 +32,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
+        /*
         if (type == ClickType.EAT || type == ClickType.ITEM_OPTION7 || type == ClickType.ITEM_OPTOION6)
             return new int[]{15707};
         else if (type == ClickType.OBJECT_CLICK1)
@@ -51,12 +45,13 @@ public class DungeoneeringManager implements ContentTemplate {
         } else if (type == ClickType.NPC_OPTION1)
             return new int[]{TRADER_ID, 9711};
         else if (type == ClickType.NPC_OPTION2)
-            return new int[]{8827, 8824, 9711};
-        return new int[0];  //To change body of implemented methods use File | Settings | File Templates.
+            return new int[]{8827, 8824, 9711};*/
+        return new int[0];
     }
 
     @Override
     public boolean clickObject2(Player player, int type, int npcId, int x, int y, int npcSlot) {
+        /*
         if (type == ClickType.NPC_OPTION2) {
             if (npcId == 9711) {
                 ShopManager.open(player, 81);
@@ -116,23 +111,23 @@ public class DungeoneeringManager implements ContentTemplate {
         } else if (type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungeoneering().getTokens()));
             return true;
-        }
+        }*/
         return false;
     }
 
     @Override
-    public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
+    public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {/*
         if (cantJoin(player)) {
             player.sendMessage("You can only bring the ring of kinship - no summoning allowed!");
             return false;
         }
         Magic.teleport(player, LOBBY, false);
-        player.SummoningCounter = 0;
+        player.SummoningCounter = 0;*/
         return true;
     }
 
     @Override
-    public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+    public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {/*
         if (npcId == TRADER_ID) {
             ShopManager.open(player, 80);
             return true;
@@ -142,12 +137,13 @@ public class DungeoneeringManager implements ContentTemplate {
             DialogueManager.openDialogue(player, 7011);
             return true;
         }
-
+*/
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
+        /*
         if (player.getLocation().distance(Location.create(x, y, 0)) > 2)
             return false;
         switch (id) {
@@ -179,12 +175,12 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.setTeleportTarget(location);
                 player.getDungeoneering().getRoom().initialize();
                 break;
-        }
+        }*/
         return false;
     }
 
     @Override
-    public boolean dialogueAction(Player player, int dialogueId) {
+    public boolean dialogueAction(Player player, int dialogueId) {/*
         switch (dialogueId) {
             case 7000:
             case 7001:
@@ -275,7 +271,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 break;
         }
 
-        player.getActionSender().removeChatboxInterface();
+        player.getActionSender().removeChatboxInterface();*/
         return true;
     }
 

@@ -1,11 +1,11 @@
 package org.hyperion.util;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 
 import java.util.logging.Logger;
 
@@ -25,7 +25,7 @@ public class ShutdownHook extends Thread {
         World.getPlayers().forEach(Trade::declineTrade);
         Dungeon.activeDungeons.forEach(Dungeon::complete);
         Server.setUpdating(true);
-        World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
+        World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
         ClanManager.save();
         logger.info("The shutdown hook actions have been completed, shutting the server down...");
     }

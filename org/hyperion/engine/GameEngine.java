@@ -6,10 +6,10 @@ import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.logging.FileLogging;
-import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 
 import java.util.concurrent.*;
 
@@ -41,7 +41,7 @@ public final class GameEngine implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_running_errors.txt", e);
-            World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
+            World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
         }
     }
 

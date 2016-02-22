@@ -2,11 +2,11 @@ package org.hyperion.engine;
 
 import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.util.Time;
 
 import java.io.FileOutputStream;
@@ -41,7 +41,7 @@ public class Update extends Task {
             if (updateTimer == 0) {
                 World.getPlayers().forEach(Trade::declineTrade);
                 Dungeon.activeDungeons.forEach(Dungeon::complete);
-                World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
+                World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
                 ClanManager.save();
                 Server.getLogger().info("Update task finished! Reason for update: " + reason);
                 try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("./data/key.dat"))) {

@@ -51,7 +51,7 @@ public class SteelTitanSpecial extends AbstractSummoningSpecial {
 
 		combat.getCombat().doGfx(1449);
 
-		World.submit(new Task(800,"steeltitanspecial") {
+		World.submit(new Task(800) {
 			int i = 1;
 			int damage = CombatCalculation.getCalculatedDamage(ce.getOpponent().getEntity(), ce.getEntity(), (int) (Math.random() * 30), Constants.RANGE, 30);
 

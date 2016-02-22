@@ -448,7 +448,7 @@ public class Trade {
 	}
     }
 
-	public static void declineTrade(Player player) {
+	public static synchronized void declineTrade(Player player) {
 		if(player.getTrader() != null) {
 			//World.getAbuseHandler().cacheMessage(player,player.getName()+": declined a trade with: "+player.getTrader().getName());
 			Container.transfer(player.getTrader().getTrade(), player.getTrader().getInventory());

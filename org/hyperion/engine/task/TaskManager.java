@@ -30,7 +30,7 @@ public abstract class TaskManager {
 				if (!t.tick())
 					it.remove();
 			}
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			e.printStackTrace();
 			World.getPlayers().stream().filter(player -> player != null).forEach(EntityHandler::deregister);
 		}

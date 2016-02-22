@@ -169,7 +169,7 @@ public class Fishing implements ContentTemplate {
 			ContentEntity.turnTo(client, x, y);
 			final int fNumberOfCycles = (int) Math.random() * 5 + 5;
 
-			World.submit(new Task(FISHING_DELAY, "fishing Delay") {
+			World.submit(new Task(FISHING_DELAY) {
 				public int cycle = - 1;
 
 				@Override
@@ -532,7 +532,7 @@ public class Fishing implements ContentTemplate {
 			ContentEntity.turnTo(client, x, y);
 			final int fNumberOfCycles = (int) Math.random() * 5 + 5;
 
-			World.submit(new Task(FISHING_DELAY, "fishing delay2") {
+			World.submit(new Task(FISHING_DELAY) {
 				public int cycle = - 1;
 
 				@Override

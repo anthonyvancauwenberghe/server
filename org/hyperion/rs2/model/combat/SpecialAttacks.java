@@ -60,8 +60,9 @@ public class SpecialAttacks {
 	}
 
 
-	public static boolean special(final Player player, int maxDamg, final int weaponId, int currentdistance, int combatStyle) {
-		System.out.println("Doing special attack");
+	public static boolean special(final Player player,
+	                              int maxDamg, final int weaponId, int currentdistance,
+	                              int combatStyle) {
 		CombatEntity combatEntity = player.getCombat();
 		int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
 		int playerGfx = - 1;
@@ -542,7 +543,7 @@ public class SpecialAttacks {
 					break;
 				}
 				opp.morrigansLeft = hitDamage / 5;
-				World.submit(new org.hyperion.engine.task.Task(1000,"specialattacks") {
+				World.submit(new org.hyperion.engine.task.Task(1000) {
 					public void execute() {
 						opp.morrigansLeft--;
 						if(opp.morrigansLeft <= 0) {
@@ -792,7 +793,7 @@ public class SpecialAttacks {
 				if(hitDamage > 0) {
                     player.cE.getOpponent().hit(hitDamage /2,
                             player, false, 0);
-					World.submit(new org.hyperion.engine.task.Task(1000,"specialattacks5") {
+					World.submit(new org.hyperion.engine.task.Task(1000) {
 						@Override
 						public void execute() {
 							String message = Combat.canAtk(player.cE, oldEntity);
@@ -817,7 +818,7 @@ public class SpecialAttacks {
 					oldEntity.hit(maxDamg3,
 							player, false, 0);
                     final int newMaxDamage = (int)(maxDamg * 1.5);
-					World.submit(new org.hyperion.engine.task.Task(1000,"specialattacks10") {
+					World.submit(new org.hyperion.engine.task.Task(1000) {
 						@Override
 						public void execute() {
 							String message = Combat.canAtk(player.cE, oldEntity);

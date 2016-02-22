@@ -31,6 +31,7 @@ public class NpcDeathTask extends Task {
 
     public static int npcIdForDoubleDrops;
 
+
     public static final int CYCLES_AMOUNT = 9;
 
     private final NPC npc;
@@ -39,7 +40,7 @@ public class NpcDeathTask extends Task {
      * Creates te death event for the specified entity.
      */
     public NpcDeathTask(NPC npc) {
-        super(400, npc.getDefinition().getName());
+        super(400);
         this.npc = npc;
     }
 
@@ -48,7 +49,7 @@ public class NpcDeathTask extends Task {
     @Override
     public void execute() {
         try {
-            if (!npc.isDead() || npc == null) {
+            if (!npc.isDead()) {
                 this.stop();
                 return;
             }
@@ -62,68 +63,41 @@ public class NpcDeathTask extends Task {
 
     private void executeNpcDeath() {
         if (timer == 7) {
-            System.out.println("NPCDEATH 0");
             npc.playAnimation(Animation.create(npc.getDefinition().deathEmote(), 0));
             if(npc.cE != null) {
-                System.out.println("NPCDEATH 1");
                 Combat.logoutReset(npc.cE);
-                System.out.println("NPCDEATH 2");
                 npc.cE.setPoisoned(false);
-                System.out.println("NPCDEATH 3");
             }
             npc.getWalkingQueue().reset();
-            System.out.println("NPCDEATH 4");
         } else if (timer == 0) {
             int tokens = 0;
-            System.out.println("SETTING X");
-            int x = npc.getLocation().getX();
-            System.out.println("SETTING Y");
-            int y = npc.getLocation().getY();
-            System.out.println("SETTING Z");
-            int z = npc.getLocation().getZ();
-            System.out.println("NPCDEATH 5");
+            int x = npc.getLocation().getX(), y = npc.getLocation().getY(), z = npc.getLocation().getZ();
             final Map<Player, Double> killers = new HashMap<>();
             for (final Map.Entry<String, Integer> killer : npc.getCombat().getDamageDealt().entrySet()) {
-                System.out.println("NPCDEATH 6");
                 if (killer == null) continue;
                 final Optional<NPCKillReward> reward = getReward(npc.getDefinition().getId());
-                System.out.println("NPCDEATH 7");
                 if (!reward.isPresent()) break;
                 final Player player = World.getPlayerByName(killer.getKey().toLowerCase().trim());
-                System.out.println("NPCDEATH 8");
                 if (player == null) continue;
                 double percent = killer.getValue() / ((double) npc.maxHealth);
-                System.out.println("NPCDEATH 9");
                 if (percent > 0.1 || (npcIdForDoubleDrops == npc.getDefinition().getId() && percent > 0.05)) {
-                    System.out.println("NPCDEATH 10");
                     killers.put(player, percent);
-                    System.out.println("NPCDEATH 11");
                     final int dp = (int) (reward.get().dp * percent);
                     final int pkp = (int) (reward.get().pkp * percent);
-                    System.out.println("NPCDEATH 12");
                     tokens = (int) (reward.get().tokens * percent);
-                    System.out.println("NPCDEATH 13");
                     player.getPoints().increasePkPoints(pkp);//1750 hp, 175pkp
-                    System.out.println("NPCDEATH 14");
                     player.getPoints().increaseDonatorPoints(dp, false);//12 donators pts to divvy up?
-                    System.out.println("NPCDEATH 15");
                     double increment = Rank.hasAbility(player, Rank.SUPER_DONATOR) ? 0.035 : 0.04;
-                    System.out.println("NPCDEATH 16");
                     for (double d = 0.03; d < percent; d += increment) {
-                        System.out.println("NPCDEATH 17");
                         if (unreacheablenpc(npc.getDefinition().getId())) {
-                            System.out.println("NPCDEATH 18");
                             x = player.getLocation().getX();
                             y = player.getLocation().getY();
                             z = player.getLocation().getZ();
                         }
-                        System.out.println("NPCDEATH 19");
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
                                 new Item(391, 1));
-                        System.out.println("NPCDEATH 21");
                         GlobalItemManager.newDropItem(player, globalItem5);
-                        System.out.println("NPCDEATH 22");
                     }
 
                 }
@@ -131,18 +105,13 @@ public class NpcDeathTask extends Task {
             }
 
             Player killer = npc.cE.getKiller();
-            System.out.println(23);
             if (killer != null) {
                 if (!npc.serverKilled) {
-                    System.out.println(24);
                     ContentManager.handlePacket(16, killer, npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
-                    System.out.println(25);
                     for (final Map.Entry<Player, Double> kill : killers.entrySet()) {
-                        System.out.println(26);
                         if (kill.getValue() > 0.20 && killer != kill.getKey())
-
                             ContentManager.handlePacket(16, kill.getKey(), npc.getDefinition().getId(), npc.getLocation().getX(), npc.getLocation().getY(), npc.getIndex());
-                        System.out.println(27);
+
                     }
                     if (Bork.handleBorkDeath(killer, npc))
                         return;
@@ -150,9 +119,7 @@ public class NpcDeathTask extends Task {
 
             }
             npc.setTeleportTarget(npc.getSpawnLocation(), false);
-            System.out.println(28);
             if (npc.npcDeathTimer != -1) {
-                System.out.println(29);
                 if (npc.getDefinition().getId() == 5666)
                     timer = 10 + 190;
                 else timer = 10 + 60;
@@ -164,28 +131,21 @@ public class NpcDeathTask extends Task {
             try {
                 if (Summoning.isBoB(npc.getDefinition().getId()) &&
                         ((Player) World.getPlayers().get(npc.ownerId)).cE.summonedNpc == npc)
-                    System.out.println(30);
                     BoB.dropBoB(npc.getLocation(), (Player) World.getPlayers().get(npc.ownerId));
             } catch (Exception e) {
             }//it throws a aload of index out of bounds exceptions if a player logs out, handle it if u want i was just a lil lazy at the tiem i c, btw remem , getlevelforexp , if we do binary search with that , its gonna be boostspeed prohax!!!!!! :P guess what, Idk concept of binary search ive heard of it but never  looked at code or implementation ok ill explain in 30 secs
             if (killer != null) {
-                System.out.println(31);
                 Player player = killer;
                 if (player.slayerTask == npc.getDefinition().getId()) {
-                    System.out.println(32);
                     player.getSkills().addExperience(Skills.SLAYER, npc.maxHealth * 125);
-                    System.out.println(33);
                     if (--player.slayerAm <= 0) {
                         player.slayerTask = 0;
-                        System.out.println(34);
                         player.getSkills().addExperience(Skills.SLAYER, 10 * npc.maxHealth * 25);
-                        System.out.println(35);
                         DialogueManager.openDialogue(player, 33);
                     }
                 }
                 //bones
                 if (unreacheablenpc(npc.getDefinition().getId())) {
-                    System.out.println(37);
                     x = killer.getLocation().getX();
                     y = killer.getLocation().getY();
                     z = killer.getLocation().getZ();
@@ -194,27 +154,21 @@ public class NpcDeathTask extends Task {
                     GlobalItem globalItem5 = new GlobalItem(
                             player, x, y, z,
                             new Item(npc.bones, 1));
-                    System.out.println(38);
                     GlobalItemManager.newDropItem(player, globalItem5);
-                    System.out.println(39);
                 }
                 if (!player.getDungeoneering().inDungeon()) {
                     //charms
-                    System.out.println(40);
                     if (npc.charm > 0) {
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
                                 new Item(npc.charm, 1));
-                        System.out.println(41);
                         if (player.getInventory().contains(16639))
                             ContentEntity.addItem(player, npc.charm, 1);
                         else
                             GlobalItemManager.newDropItem(player, globalItem5);
                     }
-                    System.out.println(42);
                     //talismines
                     int tali = NPCManager.getTalismine(npc.getDefinition());
-                    System.out.println(43);
                     if (tali > 0) {
                         GlobalItem globalItem5 = new GlobalItem(
                                 player, x, y, z,
@@ -222,23 +176,22 @@ public class NpcDeathTask extends Task {
                         );
                         GlobalItemManager.newDropItem(player, globalItem5);
                     }
-                    System.out.println(44);
+
                     if (tokens <= 0)
                         tokens = Misc.random(11) == 0 ? Misc.random(npc.getDefinition().combat() / 10 + 1) : 0;
                     if (tokens > 0 && npc.getDefinition().getId() != 5399) {
-                        System.out.println(45);
+
                         {
                             GlobalItem globalItem5 = new GlobalItem(
                                     player, x, y, z,
                                     new Item(PvMStore.TOKEN, tokens)
                             );
-                            System.out.println(46);
                             if (player.getInventory().freeSlots() < 1 || !player.getInventory().contains(16638))
                                 GlobalItemManager.newDropItem(player, globalItem5);
                             else
                                 player.getInventory().add(globalItem5.getItem());
                         }
-                        System.out.println(47);
+
                     }
                 }
                 final int kills = player.getNPCLogs().log(npc);
@@ -246,17 +199,15 @@ public class NpcDeathTask extends Task {
                     borkKillers.put(player.getName(), System.currentTimeMillis());
                 player.sendf("You now have @dre@%d@bla@ %s %s.", kills, npc.getDefinition().getName().toLowerCase().replace("_", " "), kills == 1 ? "kill" : "kills");
                 player.getAchievementTracker().npcKill(npc.getDefinition().getId());
-                System.out.println(48);
+
                 if (kills % 1000 == 0) {
                     final Item add = Item.create(PvMStore.TOKEN, npc.getDefinition().combat());
                     player.sendf("For this milestone, you receive @dre@%d@bla@ PvM Tokens", add.getCount());
                     if (!player.getInventory().add(add))
                         player.getBank().add(add);
                 }
-                System.out.println(49);
                 //normal drops
                 if (!player.getDungeoneering().inDungeon()) {
-                    System.out.println(50);
                     final boolean isTask = player.getSlayer().isTask(npc.getDefinition().getId());
                     if (npc.getDefinition().getDrops() != null && npc.getDefinition().getDrops().size() >= 1) {
                         int chance = isTask ? 750 : 1000;
@@ -273,27 +224,21 @@ public class NpcDeathTask extends Task {
                             player.getPermExtraData().remove("increaseDroprate");
                             player.getPermExtraData().remove("dropRateMultiplier");
                         }
-                        System.out.println(51);
                         for (NPCDrop drop : npc.getDefinition().getDrops()) {
                             if (drop == null) continue;
                             if (Combat.random(chance) <= drop.getChance()) {
-                                System.out.println(52);
                                 int amt = drop.getMin() + Combat.random(drop.getMax() - drop.getMin());
                                 if (amt < 0)
                                     amt = 1;
-                                System.out.println(53);
                                 if (player.getInventory().contains(16639) && drop.getId() >= 12158 && drop.getId() <= 12163)
                                     ContentEntity.addItem(player, drop.getId() == 12162 ? 12163 : drop.getId(), amt);
                                 else {
-                                    System.out.println(54);
                                     GlobalItem globalItem = new GlobalItem(player, x, y, z,
                                             Item.create(drop.getId(), amt));
-                                    System.out.println(55);
                                     if (drop.getChance() < 30) {
                                         for (Player p : player.getRegion().getPlayers())
                                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + (amt == 1 ? Misc.aOrAn(ItemDefinition.forId(drop.getId()).getName()) : amt) + " " + ItemDefinition.forId(drop.getId()).getName() + (amt > 1 ? "s" : "") + ".");
                                     }
-                                    System.out.println(56);
                                     GlobalItemManager.newDropItem(player, globalItem);
                                 }
                             }
@@ -309,7 +254,7 @@ public class NpcDeathTask extends Task {
                             p.sendLootMessage("Loot", player.getSafeDisplayName() + " has just gotten " + Misc.aOrAn(clueScroll.getDefinition().getName()) + " " + clueScroll.getDefinition().getName() + ".");
                     }
 */
-                    System.out.println(57);
+
                     if (isTask && Misc.random(1000) < 1) {
                         GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
                                 npc.getLocation().getY(), npc.getLocation().getZ(),
@@ -320,7 +265,6 @@ public class NpcDeathTask extends Task {
                         GlobalItemManager.newDropItem(player, globalItem);
 
                     }
-                    System.out.println(58);
                 } else {
                     if (player.getDungeoneering().getRoom().boss) {
                         for (int i = 0; i < player.getDungeoneering().getCurrentDungeon().difficulty.ordinal() + 1; i++) {
@@ -332,7 +276,7 @@ public class NpcDeathTask extends Task {
                         }
 
                     } else {
-                        System.out.println(59);
+
                         for (int i = 0; i < (npc.getDefinition().combat() / 50 + 1); i++) {
                             final ItemDefinition def = ItemDefinition.forId(DungeoneeringManager.randomItem());
                             GlobalItem globalItem = new GlobalItem(player, npc.getLocation().getX(),
@@ -352,10 +296,11 @@ public class NpcDeathTask extends Task {
                         GlobalItemManager.newDropItem(player, globalItem);
                         globalItem.createdTime = System.currentTimeMillis() + 30000L;
                     }
+
+
                 }
             }
         } else if (timer == -1) {
-            System.out.println(60);
             if (WildernessBossTask.isWildernessBoss(npc.getDefinition().getId())) {
                 World.getPlayers().forEach(p -> p.sendServerMessage(WildernessBossTask.currentBoss.getDefinition().getName() + " has been defeated!"));
                 World.submit(new WildernessBossTask(false));
@@ -364,7 +309,6 @@ public class NpcDeathTask extends Task {
             World.unregister(npc);
             this.stop();
         } else if (timer == 10) {
-            System.out.println(61);
             npc.isHidden(false);
             npc.playAnimation(Animation.create(-1, 0));
             npc.setDead(false);

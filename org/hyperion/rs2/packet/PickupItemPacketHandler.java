@@ -29,21 +29,23 @@ public class PickupItemPacketHandler implements PacketHandler {
 		final int itemID = packet.getShort();
 		final int itemX = packet.getLEShort();
 		final Location loc = Location.create(itemX, itemY, 0);
-		World.submit(new Task(600,"pickupitemhandler") {
+		World.submit(new Task(600) {
 			int timeout = 0;
 
 			@Override
 			public void execute() {
                 if(loc.distance(player.getLocation()) == 1 && timeout > 0) {
+
                     GlobalItemManager.pickupItem(player, itemID, itemX, itemY);
                     player.playAnimation(Animation.create(7270));
                     player.getWalkingQueue().finish();
                     player.getWalkingQueue().reset();
                     this.stop();
                 } else if(loc.distance(player.getLocation()) == 0) {
+					//player.getLogging().log("Picked up item : " + itemID);
 					GlobalItemManager.pickupItem(player, itemID, itemX, itemY);
                     this.stop();
-                } else if(++timeout >= 10) {
+                } else if(++ timeout >= 10) {
 					this.stop();
 				}
 			}

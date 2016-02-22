@@ -80,12 +80,12 @@ public class Constants {
 	/**
 	 * The player cap.
 	 */
-	public static final int MAX_PLAYERS = 600;
+	public static final int MAX_PLAYERS = 800;
 
 	/**
 	 * The NPC cap.
 	 */
-	public static final int MAX_NPCS = 2500;
+	public static final int MAX_NPCS = 3500;
 
 	/**
 	 * The NPC cap.

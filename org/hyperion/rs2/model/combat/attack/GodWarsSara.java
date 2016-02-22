@@ -80,7 +80,7 @@ public class GodWarsSara implements Attack {
 							Combat.npcRangeAttack(n, p.cE, 1213, 65, true);
 						}
 					}
-					World.submit(new Task(1000,"godwarssara") {
+					World.submit(new Task(1000) {
 						@Override
 						public void execute() {
 							for(Player p : RegionManager.getLocalPlayers(n)) {

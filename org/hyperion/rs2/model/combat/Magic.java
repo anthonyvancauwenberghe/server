@@ -411,14 +411,13 @@ public class Magic {
 						offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,
 						slope);
 		attacker.face(opponent.getAbsX(), opponent.getAbsY());
-			System.out.println("PROCESSING CB FROM MAGIC");
 		Combat.processCombat(attacker);
 		/*if(spell.getMoveGfx() == - 1)//dunno why this exists
 			timer = 2300;*/
 		final int submitDamage = Damage;
 		final boolean submitSplash = splash;
 		final CombatEntity opp2 = opponent;
-		World.submit(new Task(timer, "Magic") {
+		World.submit(new Task(timer) {
 			@Override
 			public void execute() {
 				boolean hitSomething = false;
@@ -456,7 +455,7 @@ public class Magic {
 			return;
 		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-            World.submit(new Task(600, "magic5") {
+            World.submit(new Task(600) {
                 @Override
                 public void execute() {
                     victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
@@ -609,7 +608,7 @@ public class Magic {
 		// deal damage
 
 		if(false/* END_GFX[spell] == 369 && !splash */)
-			World.submit(new Task(500,"magic6") {
+			World.submit(new Task(500) {
 				@Override
 				public void execute() {
 					p.hit(Damage, c.getEntity(), false, 2);
@@ -822,7 +821,7 @@ public class Magic {
 		if(item == 995 || player.isBusy())
 			return;
 		player.setBusy(true);
-		World.submit(new Task(3000L,"magic1") {
+		World.submit(new Task(3000L) {
 
 			@Override
 			public void execute() {
@@ -1211,7 +1210,7 @@ public class Magic {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
 		player.inAction = ! player.inAction;
-		World.submit(new Task(600,"magic2") {
+		World.submit(new Task(600) {
 			int index = 0;
 
 			public void execute() {
@@ -1371,7 +1370,7 @@ public class Magic {
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
-		World.submit(new Task(delay, "magic") {
+		World.submit(new Task(delay) {
 			@Override
 			public void execute() {
 				player.setTeleportTarget(Location.create(x1, y1, z1));

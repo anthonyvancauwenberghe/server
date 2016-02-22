@@ -3,6 +3,8 @@ package org.hyperion.rs2.commands;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcCombatTask;
+import org.hyperion.engine.task.impl.PlayerCombatTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.commands.impl.*;
 import org.hyperion.rs2.logging.FileLogging;
@@ -640,6 +642,18 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				ContentManager.init();
+				return true;
+			}
+		});
+		submit(new Command("fixnpcs", Rank.MODERATOR) {
+            public boolean execute(Player player, String input) {
+                World.submit(new NpcCombatTask());
+                return true;
+            }
+        });
+		submit(new Command("fixwild", Rank.MODERATOR) {
+			public boolean execute(Player player, String input) {
+				World.submit(new PlayerCombatTask());
 				return true;
 			}
 		});
@@ -1749,7 +1763,7 @@ public class CommandHandler {
                     target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                 }else{
                     World.submit(
-							new Task(1000,"killplayer") {
+							new Task(1000) {
 								public void execute() {
 									if (target.isDead())
 										stop();

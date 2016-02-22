@@ -73,7 +73,7 @@ public class Food implements ContentTemplate {
 	public void antiFire(final Player player, boolean superFire) {
 		final long timer = player.antiFireTimer = System.currentTimeMillis();
 		player.superAntiFire = superFire;
-		World.submit(new Task(1000L,"firemaking") {
+		World.submit(new Task(1000L) {
 			boolean warned = false;
 
 			@Override

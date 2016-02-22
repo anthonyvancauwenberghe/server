@@ -62,7 +62,7 @@ public class TormentedDemon implements Attack {
 			} else if(attackId == 1) {
 				n.cE.doAnim(RANGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 2400);
-				World.submit(new Task(1000,"tormenteddemon") {
+				World.submit(new Task(1000) {
 					@Override
 					public void execute() {
 						//range attack
@@ -75,7 +75,7 @@ public class TormentedDemon implements Attack {
 				//mage attack
 				n.cE.doAnim(MAGE_EMOTE);
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3300);
-				World.submit(new Task(1500,"tormenteddemons2") {
+				World.submit(new Task(1500) {
 					@Override
 					public void execute() {
 						//offset values for the projectile

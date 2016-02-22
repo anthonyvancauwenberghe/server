@@ -368,7 +368,7 @@ public class Thieving implements ContentTemplate {
 		}
 		player.setBusy(true);
 		player.getExtraData().put("thievingTimer", System.currentTimeMillis() + 2000);
-		World.submit(new Task(2000,"thieving") {
+		World.submit(new Task(2000) {
 			@Override
 			public void execute() {
 				player.getExtraData().remove("thievingTimer");
@@ -414,7 +414,6 @@ public class Thieving implements ContentTemplate {
 		if(guard != null) {
 			guard.forceMessage("What are you doing over there!");
 			guard.cE.setOpponent(player.cE);
-			System.out.println("PROCESSING CB FROM THIEVING");
 			Combat.processCombat(guard.cE);
 		}
 		return true;

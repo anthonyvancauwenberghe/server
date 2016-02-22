@@ -44,7 +44,7 @@ public class RandomSpamming {
 	/**
 	 * The spam Event
 	 */
-	private static Task spamEvent = new Task(4000,"randomspamming") {
+	private static Task spamEvent = new Task(4000) {
 		int counter = 0;
 
 		@Override

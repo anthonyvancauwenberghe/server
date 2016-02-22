@@ -44,13 +44,13 @@ public class Levers implements ContentTemplate {
 		player.getCombat().setOpponent(null);
 		player.setCanWalk(false);
 		player.updateTeleportTimer();
-		World.submit(new Task(1500,"levers") {
+		World.submit(new Task(1500) {
 			@Override
 			public void execute() {
 				player.getActionSender().sendCreateObject(objectId, 4, lever.getDirection2(), loc);
 				player.playGraphics(Graphic.create(1576, 6553635));// perfect !
 				player.playAnimation(Animation.create(8939, 0));
-				World.submit(new Task(1800,"levers2") {
+				World.submit(new Task(1800) {
 
 					@Override
 					public void execute() {

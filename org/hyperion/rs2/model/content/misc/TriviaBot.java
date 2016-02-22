@@ -65,7 +65,7 @@ public class TriviaBot {
 	/**
 	 * The event that updates the question every <code>CYCLETIME</code>.
 	 */
-	private final static Task TRIVIA_EVENT = new Task(Time.ONE_MINUTE,"triviaevent") {
+	private final static Task TRIVIA_EVENT = new Task(Time.ONE_MINUTE) {
 		@Override
 		public void execute() {
 			updateQuestion();
@@ -209,7 +209,7 @@ public class TriviaBot {
 		resetAnswers();
 		addReward(p);
 		if(speedCounter > 0) {
-			World.submit(new Task(2000,"triviabot") {
+			World.submit(new Task(2000) {
 				public void execute() {
 					updateQuestion();
 					speedCounter--;

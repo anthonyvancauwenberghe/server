@@ -234,7 +234,7 @@ public class FightPits implements ContentTemplate {
 		return previous != null && previous.getName().equalsIgnoreCase(itemDef.getName());
 	}
 	public void init() throws FileNotFoundException {
-		World.submit(new Task(1000,"fightpits") {
+		World.submit(new Task(1000) {
 			@Override
 			public void execute() {
 				process();
@@ -402,7 +402,7 @@ public class FightPits implements ContentTemplate {
 			player.getInventory().clear();
 			player.getEquipment().clear();
 			final Player p2 = player;
-			World.submit(new Task(600,"fightpits3") {
+			World.submit(new Task(600) {
 				public void execute() {
                     spawnItems(p2);
 					this.stop();

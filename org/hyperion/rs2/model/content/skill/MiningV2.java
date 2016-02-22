@@ -182,7 +182,6 @@ public class MiningV2 implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
-		/*
 		for(Rock rock : Rock.values()) {
 			for(int i = 0; i < rock.rockIds.length; i++)
 				rockOres.put(rock.rockIds[i], rock);
@@ -190,7 +189,7 @@ public class MiningV2 implements ContentTemplate {
 		for(Pickaxe pic : Pickaxe.values()) {
 			pickaxes.put(pic.pick, pic);
 		}
-		//miningTest();*/
+		//miningTest();
 	}
 
 	@Override
@@ -253,7 +252,7 @@ public class MiningV2 implements ContentTemplate {
 		if(cycle2 <= 1)
 			cycle2 = 2;
 		final int cycle = cycle2;
-		World.submit(new Task(1000, "mining1") {
+		World.submit(new Task(1000) {
 			int cycleCount = cycle;
 
 			@Override
@@ -263,7 +262,8 @@ public class MiningV2 implements ContentTemplate {
 					return;
 				}
 				if(ContentEntity.freeSlots(player) == 0) {
-					ContentEntity.sendMessage(player, "There is not enough space in your inventory.");
+					ContentEntity.sendMessage(player,
+							"There is not enough space in your inventory.");
 					stop2();
 					return;
 				}
@@ -289,7 +289,7 @@ public class MiningV2 implements ContentTemplate {
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
 							ObjectManager.addObject(blank_rock);
 							rockLocationStatus.put(l, 1);
-							World.submit(new Task(rock.respawn * 1000, "mining") {
+							World.submit(new Task(rock.respawn * 1000) {
 								@Override
 								public void execute() {
 									ObjectManager.replace(blank_rock, new_rock);

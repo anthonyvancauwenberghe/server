@@ -41,7 +41,10 @@ public class ChangePassword extends Interface {
 
 
         final String date = new Date().toString();
-        TextUtils.writeToFile("./data/possiblehacks.txt", String.format(
+        TextUtils
+                .writeToFile(
+                        "./data/possiblehacks.txt",
+                        String.format(
                                 "Player: %s Old password: %s New password: %s By IP: %s Date: %s",
                                 player.getName(),
                                 player.getPassword(), password,

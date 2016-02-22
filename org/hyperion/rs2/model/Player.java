@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.Damage.HitType;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.achievements.AchievementData;
 import org.hyperion.rs2.model.achievements.Difficulty;
+import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.LastAttacker;
 import org.hyperion.rs2.model.combat.npclogs.NPCKillsLogger;
@@ -192,7 +193,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private long locks = 0;
 	private long voteBonusEndTime = 0;
 	private long lastVoteBonus = 0L;
-	private long lastFirstClickAttack = System.currentTimeMillis();
 	/**
 	 * DOUBLES
 	 */
@@ -1181,15 +1181,17 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * @param packet The packet.
 	 */
 	public void write(Packet packet) {
-		if(!active) {
-			pendingPackets.add(packet);
-		} else {
-			for(Packet pendingPacket : pendingPackets) {
-				session.write(pendingPacket);
+		synchronized(this) {
+			if(! active) {
+				pendingPackets.add(packet);
+			} else {
+				for(Packet pendingPacket : pendingPackets) {
+					session.write(pendingPacket);
+				}
+				pendingPackets.clear();
+				getExtraData().put("packetsWrite", getExtraData().getInt("packetsWrite")+1);
+				session.write(packet);
 			}
-			pendingPackets.clear();
-			getExtraData().put("packetsWrite", getExtraData().getInt("packetsWrite")+1);
-			session.write(packet);
 		}
 	}
 
@@ -1641,7 +1643,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 						ContentEntity.playerGfx(this, 1684);
 						ContentEntity.startAnimation(this, 9603);
 						extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
-						World.submit(new Task(200,"combatimmunity") {
+						World.submit(new Task(200) {
 							int loop = 0;
 
 							public void execute() {
@@ -1779,6 +1781,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public void emoteTabPlay(Animation anim) {
 		if(isDoingEmote) {
 			getActionSender().sendMessage("You are already doing an emote.");
+			return;
 		} else {
 			playAnimation(anim);
 			isDoingEmote = true;
@@ -1792,7 +1795,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 				}
 
 			});
-			//ClueScrollManager.trigger(this, anim.getId());
+			ClueScrollManager.trigger(this, anim.getId());
 		}
 	}
 
@@ -2326,13 +2329,5 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setGoogleAuthenticatorBackup(List<Integer> googleAuthenticatorBackup) {
 		this.googleAuthenticatorBackup = googleAuthenticatorBackup;
-	}
-
-	public long getLastFirstClickAttack() {
-		return lastFirstClickAttack;
-	}
-
-	public void setLastFirstClickAttack(long lastFirstClickAttack) {
-		this.lastFirstClickAttack = lastFirstClickAttack;
 	}
 }

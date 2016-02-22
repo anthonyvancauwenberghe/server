@@ -149,10 +149,13 @@ public class Dungeon {
     }
 
     public void complete() {
-        for (final Player player : players) {
-            AchievementHandler.progressAchievement(player, "Dungeon");
-            remove(player, true);
+        synchronized (this) {
+            for (final Player player : players) {
+                AchievementHandler.progressAchievement(player, "Dungeon");
+                remove(player, true);
+            }
         }
+
     }
 
     public void assignChildren() {
@@ -171,11 +174,14 @@ public class Dungeon {
 
 
     public void destroy() {
-        for (final Room room : rooms)
-            room.destroy();
-        rooms.clear();
-        players.clear();
-        activeDungeons.remove(this);
+        synchronized (this) {
+            for (final Room room : rooms)
+                room.destroy();
+            rooms.clear();
+            players.clear();
+            activeDungeons.remove(this);
+        }
+
     }
 
     public Room getStartRoom() {

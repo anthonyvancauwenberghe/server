@@ -126,7 +126,6 @@ public final class World {
 
     public static void sequence() {
 
-        System.out.println("Started handling logins");
         // Handle queued logins.
         for (int amount = 0; amount < 50; amount++) {
             Player player = logins.poll();
@@ -134,9 +133,7 @@ public final class World {
                 break;
             register(player);
         }
-        System.out.println("Ended handling logins");
 
-        System.out.println("Started handling logouts");
         // Handle queued logouts.
         int amount = 0;
         Iterator<Player> $it = logouts.iterator();
@@ -149,31 +146,18 @@ public final class World {
                 amount++;
             }
         }
-        System.out.println("Ended handling logouts");
 
-        System.out.println("Creating PlayerSeq");
         UpdateSequence<Player> playerUpdate = new PlayerUpdateSequence(synchronizer, updateExecutor);
-        System.out.println("Creating NpcSeq");
         UpdateSequence<NPC> npcUpdate = new NpcUpdateSequence();
-        //Does the aggression
-        System.out.println("Doing aggro");
-        NpcCombatTask.agressiveNPCS();
         // Then we execute pre-updating code.
-        System.out.println("Doing playerpre");
         players.stream().filter(player -> player != null).forEach(playerUpdate::executePreUpdate);
-        System.out.println("Doing npcpre");
         npcs.stream().filter(npc -> npc != null).forEach(npcUpdate::executePreUpdate);
         // Then we execute parallelized updating code.
-        System.out.println("bulk");
         synchronizer.bulkRegister(players.size());
-        System.out.println("Doing playerupdate");
         players.stream().filter(player -> player != null).forEach(playerUpdate::executeUpdate);
-        System.out.println("Waiting");
         synchronizer.arriveAndAwaitAdvance();
         // Then we execute post-updating code.
-        System.out.println("Doing playerpost");
         players.stream().filter(player -> player != null).forEach(playerUpdate::executePostUpdate);
-        System.out.println("Doing npcpost");
         npcs.stream().filter(npc -> npc != null).forEach(npcUpdate::executePostUpdate);
     }
 
@@ -224,7 +208,10 @@ public final class World {
         submit(new PlayerTask36Seconds());
         submit(new PlayerTask1Second());
         submit(new EarnPotentialTask());
+        submit(new DisconnectNulledTask());
         submit(new PromoteTask());
+        submit(new PlayerCombatTask());
+        submit(new NpcCombatTask());
         submit(new ServerEventTask());
         submit(new ServerMessageTask());
         submit(new BountyHunterTask());

@@ -29,7 +29,7 @@ public final class CustomTriviaManager{
         send(player, LIST.size() == 1);
     }
 
-    public static void processAnswer(final Player player, final String answer){
+    public static synchronized void processAnswer(final Player player, final String answer){
         final Iterator<CustomTrivia> itr = LIST.iterator();
         while(itr.hasNext()){
             final CustomTrivia trivia = itr.next();

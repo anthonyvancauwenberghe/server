@@ -415,7 +415,7 @@ public class ActionSender {
         bldr.put((byte) horizontalAmount);
         bldr.put((byte) horizontalSpeed);
         if (time > -1) {
-            World.submit(new Task(time, "Screenshake") {
+            World.submit(new Task(time) {
                 @Override
                 public void execute() {
                     player.getActionSender().cameraReset();

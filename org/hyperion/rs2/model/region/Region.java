@@ -60,7 +60,9 @@ public class Region {
 	 * @return The list of players.
 	 */
 	public Collection<Player> getPlayers() {
-		return Collections.unmodifiableCollection(new LinkedList<>(players));
+		synchronized(this) {
+			return Collections.unmodifiableCollection(new LinkedList<Player>(players));
+		}
 	}
 
 	/**
@@ -69,7 +71,9 @@ public class Region {
 	 * @return The list of NPCs.
 	 */
 	public Collection<NPC> getNpcs() {
-		return Collections.unmodifiableCollection(new LinkedList<>(npcs));
+		synchronized(this) {
+			return Collections.unmodifiableCollection(new LinkedList<NPC>(npcs));
+		}
 	}
 
 	/**
@@ -87,7 +91,9 @@ public class Region {
 	 * @param player The player to add.
 	 */
 	public void addPlayer(Player player) {
-		players.add(player);
+		synchronized(this) {
+			players.add(player);
+		}
 	}
 
 	/**
@@ -96,7 +102,9 @@ public class Region {
 	 * @param player The player to remove.
 	 */
 	public void removePlayer(Player player) {
-		players.remove(player);
+		synchronized(this) {
+			players.remove(player);
+		}
 	}
 
 	/**
@@ -105,8 +113,10 @@ public class Region {
 	 * @param npc The NPC to add.
 	 */
 	public void addNpc(NPC npc) {
-		if(! npcs.contains(npc))
-			npcs.add(npc);
+		synchronized(this) {
+			if(! npcs.contains(npc))
+				npcs.add(npc);
+		}
 	}
 
 	/**
@@ -115,7 +125,9 @@ public class Region {
 	 * @param npc The NPC to remove.
 	 */
 	public void removeNpc(NPC npc) {
-		npcs.remove(npc);
+		synchronized(this) {
+			npcs.remove(npc);
+		}
 	}
 
 }

@@ -45,7 +45,7 @@ public class FishingV2 implements ContentTemplate {
 		if(FISHING_TIMER < 6)
 			FISHING_TIMER = 6;
 		player.setBusy(true);
-		World.submit(new Task(FISHING_TIMER * 50,"fishingV2") {
+		World.submit(new Task(FISHING_TIMER * 50) {
 			int cycle = 10;
 
 			@Override

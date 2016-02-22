@@ -298,8 +298,8 @@ public class EntityHandler {
      * @param entity The entity to deregister
      */
     public static boolean deregister(Entity entity) {
+        TaskManager.cancelTasks(entity);
         if (entity instanceof Player) {
-            TaskManager.cancelTasks(entity);
             return deregister((Player) entity);
         }
         return entity instanceof NPC && deregister((NPC) entity);
@@ -357,7 +357,6 @@ public class EntityHandler {
     }
 
     private static boolean deregister(NPC npc) {
-        npc.destroy();
         return World.getNpcs().remove(npc);
     }
 }

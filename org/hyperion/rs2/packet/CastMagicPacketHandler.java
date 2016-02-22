@@ -44,11 +44,15 @@ public class CastMagicPacketHandler implements PacketHandler {
 		int spell = packet.getLEShort();
 		//System.out.println("spell: " + spell);
 		if(victim != null) {
-            if(victim.getLocation().inDuel() || Duel.inDuelLocation(victim)) {
-                if(id != player.duelAttackable) {
+
+            if(victim.getLocation().inDuel() || Duel.inDuelLocation(victim))
+            {
+                if(id != player.duelAttackable)
+                {
                     player.sendMessage("You cannot do this to this player");
                     return;
                 }
+
             }
 
 			if(victim.getName().equalsIgnoreCase(player.getName()))
@@ -65,7 +69,6 @@ public class CastMagicPacketHandler implements PacketHandler {
                 victim.getLastAttack().updateLastAttacker(player.getName());
             }
 			player.cE.setOpponent(victim.cE);
-			System.out.println("PROCESSING CB FROM MAGICPACKET");
 			Combat.processCombat(player.cE);
 		}
 	}

@@ -30,6 +30,7 @@ import org.hyperion.util.Time;
 
 public class Combat {
 
+
     public static boolean processCombat(final CombatEntity combatEntity) {
         try {
             /**
@@ -41,22 +42,24 @@ public class Combat {
              * Facing
              */
             combatEntity.face(combatEntity.getOpponent().getAbsX() + combatEntity.getOpponent().getOffsetX(), combatEntity.getOpponent().getAbsY() + combatEntity.getOpponent().getOffsetY(), true);
+
             if (combatEntity.predictedAtk > System.currentTimeMillis()) {
                 return true;
             }
+
             String message = canAtk(combatEntity, combatEntity.getOpponent());
             if (message.length() > 1) {
                 if (combatEntity.getEntity() instanceof Player)
                     combatEntity.getPlayer().getActionSender().sendMessage(message);
                 return false;
             }
-
             /**
              * Add opponent to attackers list
              */
             if (!combatEntity.getOpponent().getAttackers().contains(combatEntity)) {
                 combatEntity.getOpponent().getAttackers().add(combatEntity);
             }
+
             combatEntity._getPlayer().ifPresent(p -> p.getExtraData().put("combatimmunity", System.currentTimeMillis()));
 
             /**
@@ -66,9 +69,8 @@ public class Combat {
             /*Checks if standing on eachother*/
             if (distance == 0) {
 				/*If standing on eachother and frozen*/
-                if (combatEntity.isFrozen()) {
+                if (combatEntity.isFrozen())
                     return false;
-                }
                 if (!combatEntity.getOpponent().vacating) {
                     combatEntity.vacating = true;
                     combatEntity.getEntity().vacateSquare();
@@ -104,6 +106,7 @@ public class Combat {
                 combatEntity.getOpponent().lastHit = System.currentTimeMillis();
                 return processNpcCombat(combatEntity, distance);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -112,11 +115,9 @@ public class Combat {
 
 
     private static boolean processPlayerCombat(final CombatEntity combatEntity, int distance) throws Exception {
-        System.out.println("ENTERED PLAYER CB");
         /**
          * Initializing variables.
          */
-
         boolean hit = false;
         boolean special = false;
         boolean finishOff = true;
@@ -127,7 +128,7 @@ public class Combat {
         int damg = 0;
         Entity attacker = combatEntity.getEntity();
         final Entity opponent = combatEntity.getOpponent().getEntity();
-        System.out.println("PLAYER CB 1");
+
         /**
          * Skull Adding
          */
@@ -135,9 +136,7 @@ public class Combat {
 
 
         int magicAtk = combatEntity.getNextMagicAtk();
-        System.out.println("PLAYER CB 2");
         if (combatEntity.getNextMagicAtk() > 0) {
-            System.out.println("PLAYER CB 3");
             if (distance > 11) {
                 if (opponent instanceof Player)
                     combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
@@ -156,7 +155,6 @@ public class Combat {
                         follow(combatEntity, combatEntity.getOpponent());
                 } else combatEntity.getPlayer().getWalkingQueue().reset();
             }
-            System.out.println("PLAYER CB 4");
             // cast the actual spell using magic code :), result was if
             // its succesfuly or not (i.e no runes)
             int result = Magic.castSpell(combatEntity, combatEntity.getOpponent(), magicAtk);
@@ -183,12 +181,10 @@ public class Combat {
                 // no runes so reset
                 return false;
             }
-            System.out.println("PLAYER CB 5");
         }
         /**
          * Max Hit and Combat Style Determination.
          */
-        System.out.println("PLAYER CB 6");
         int bowType = CombatAssistant.getCombatStyle(combatEntity);
         // Check Arrows/Bow
         if (bowType <= Constants.NOAMMO) {
@@ -211,7 +207,6 @@ public class Combat {
             //System.out.println("Returning false");
             return false;
         }
-        System.out.println("PLAYER CB 7");
         int maxHit = 0;
         final int combatStyle;
         if (bowType == Constants.MELEETYPE) {
@@ -229,45 +224,36 @@ public class Combat {
         /**
          * Special Activating
          */
-        System.out.println("PLAYER CB 8");
-        if (combatEntity.getNextMagicAtk() <= 0 && combatEntity.getPlayer().specOn) {
-            System.out.println("PLAYER CB 8.1");
-                System.out.println("PLAYER CB 8.2");
+        if (!hit && combatEntity.getNextMagicAtk() <= 0) {
+            if (combatEntity.getPlayer().specOn) {
                 if (combatEntity.predictedAtk > System.currentTimeMillis() + 600) {
                     return true;
                 }
-                System.out.println("PLAYER CB 8.3");
                 combatEntity.getPlayer().specOn = false;
                 if (weaponId == -1) {
-                    System.out.println("PLAYER CB 8.4");
+
                 } else if (SpecialAttacks.special(combatEntity.getPlayer(), maxHit, weaponId, distance, combatStyle)) {
-                    System.out.println("PLAYER CB 8.5");
                     hit = true;
                     finishOff = false;
+                    special = true;
                     if (weaponId != 15241) {
-                        System.out.println("PLAYER CB 8.6");
                         combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
                     } else {
-                        System.out.println("PLAYER CB 8.7");
                         if (Misc.random(150) == 0) { // 1/101 chance of exploding when specing
                             combatEntity.getPlayer().getEquipment().set(Equipment.SLOT_WEAPON, null);
-                            combatEntity.getPlayer().sendImportantMessage("Your handcannon exploded!");
+                            combatEntity.getPlayer().getActionSender().sendMessage("@red@Your handcannon exploded!");
                         }
                     }
-                    System.out.println("PLAYER CB 8.8");
                 } else {
-                    System.out.println("PLAYER CB 8.9");
                     combatEntity.getPlayer().getSpecBar().sendSpecAmount();
                     return true;
                 }
-                System.out.println("PLAYER CB 8.10");
                 combatEntity.getPlayer().getSpecBar().sendSpecAmount();
-                System.out.println("PLAYER CB 8.11");
+            }
         }
         /**
          * Autocasting
          */
-        System.out.println("PLAYER CB 9");
         if (!hit) {
             if (combatEntity.getAutoCastId() > 0) {
                 if (combatEntity.getPlayer().duelRule[DuelRules.MAGE.ordinal()]
@@ -301,7 +287,6 @@ public class Combat {
         /**
          * Ranging
          */
-        System.out.println("PLAYER CB 10");
         if (!hit) {
             // If in Duel , Return
             if (bowType != 8 && combatEntity.getPlayer().duelRule[DuelRules.RANGE.ordinal()]
@@ -455,7 +440,6 @@ public class Combat {
         /**
          * Melee
          */
-        System.out.println("PLAYER CB 11");
         if (!hit) {
             if (combatEntity.getPlayer().duelRule[DuelRules.MELEE.ordinal()]
                     && combatEntity.getPlayer().duelAttackable > 0) {
@@ -472,7 +456,7 @@ public class Combat {
                     return true;
                 //combatEntity.getPlayerByName().getWalkingQueue().reset();
             }
-            System.out.println("PLAYER CB 12");
+
 			/*
 			 * if(!WorldMap.projectileClear(combatEntity.getEntity().
 			 * getLocation().getZ(),
@@ -492,7 +476,6 @@ public class Combat {
                 return true;// we dont want to reset attack but just
                 // wait another 500ms or so...
             }
-            System.out.println("PLAYER CB 13");
             int addspeed = combatEntity.getAtkSpeed();
             if (addspeed != 0)
                 combatEntity.predictedAtk = (System.currentTimeMillis() + combatEntity.getAtkSpeed());
@@ -511,7 +494,6 @@ public class Combat {
             /**
              * Get random Damage Hit.
              */
-            System.out.println("PLAYER CB 14");
             damg = random(maxHit);
             boolean verac = false;
             if (CombatAssistant.isVeracEquiped(combatEntity.getPlayer())
@@ -541,7 +523,6 @@ public class Combat {
 					}*/
                 }
             } else {
-                System.out.println("PLAYER CB 15");
                 if (verac) {
                 } else
                     damg = CombatCalculation.getCalculatedDamage(combatEntity.getEntity(), combatEntity.getOpponent().getEntity(), damg, combatStyle, maxHit);
@@ -553,7 +534,6 @@ public class Combat {
         /**
          * Spirit shield effects.
          */
-        System.out.println("PLAYER CB 16");
         if (combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
             //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg without divine would be: " + damg);
             damg = SpiritShields.applyEffects(opponent.cE, damg);
@@ -576,7 +556,7 @@ public class Combat {
                 combatEntity.doAtkEmote();
         }
 
-        System.out.println("PLAYER CB 17");
+
         if (combatEntity.getOpponent().getEntity() instanceof NPC && combatEntity.getPlayer().getSlayer().isTask(combatEntity.getOpponent().getNPC().getDefinition().getId())) {
             if (SlayerShop.hasHelm(combatEntity.getPlayer()))
                 damg *= 1.15;
@@ -589,14 +569,12 @@ public class Combat {
             PvPDegradeHandler.checkDegrade(combatEntity.getPlayer());
             ItemDegrading.check(combatEntity.getPlayer());
         }
-        System.out.println("PLAYER CB 18");
         if (finishOff) {
 
             finishOff(combatEntity, damg, hit, bowType, damgDouble, doubleHit, distance, possibleMaxHit, combatStyle);
         }
 
         Curses.applyLeeches(combatEntity.getPlayer());
-        System.out.println("PLAYER CB ENDED 19");
         return true;
     }
 
@@ -746,15 +724,25 @@ public class Combat {
      * @return
      */
     private static boolean processNpcCombat(final CombatEntity combatEntity, int distance) {
-        System.out.println("ENTERED NPC CB");
         if (combatEntity.attack == null)
             combatEntity.attack = NPCManager.getAttack(combatEntity.getNPC());
         // combatEntity.doAtkEmote();
 
         if (combatEntity.attack != null) {
+            // timer
+			/*
+			 * if(combatEntity.predictedAtk >
+			 * System.currentTimeMillis()){
+			 * follow(combatEntity,combatEntity.getOpponent()); return
+			 * true;//we dont want to reset attack but just wait another
+			 * 500ms or so... }
+			 */
             if (combatEntity.getOpponent().getEntity() instanceof Player) {
-                if (!combatEntity.getOpponent().getPlayer().isActive() || combatEntity.getOpponent().getPlayer().isHidden()) {
-                    return true;
+                if (!combatEntity.getOpponent().getPlayer().isActive()
+                        || combatEntity.getOpponent().getPlayer().isHidden()) {
+                    resetAttack(combatEntity);
+                    System.out.println("Resetting attack");
+                    return false;
                 }
             }
             if (combatEntity.getNPC().ownerId >= 1 && combatEntity.getNPC().summoned) {
@@ -779,17 +767,45 @@ public class Combat {
                 type = 0;
             }
             if (type == 5) {
+				/*
+				 * if(combatEntity.getOpponent().getOpponent() == null
+				 * || combatEntity.getOpponent().getOpponent() ==
+				 * combatEntity){
+				 * //combatEntity.getOpponent().face(combatEntity
+				 * .getAbsX(),combatEntity.getAbsY());
+				 * combatEntity.getOpponent
+				 * ().face(combatEntity.getAbsX()
+				 * +combatEntity.getOffsetX
+				 * (),combatEntity.getAbsY()+combatEntity.getOffsetY());
+				 * 
+				 * if(combatEntity.getOpponent().getEntity() instanceof
+				 * Player ||
+				 * combatEntity.getOpponent().getNPC().getDefinition
+				 * ().doesDefEmote())
+				 * combatEntity.getOpponent().doDefEmote();
+				 * if(combatEntity.getOpponent().getEntity() instanceof
+				 * NPC ||
+				 * combatEntity.getOpponent().getPlayerByName().autoRetailate
+				 * ){
+				 * combatEntity.getOpponent().setOpponent(combatEntity);
+				 * } }
+				 */
                 if (combatEntity.getOpponent().getEntity() instanceof Player)
                     combatEntity.getOpponent().getPlayer().getLastAttack().updateLastAttacker(combatEntity.getNPC().getIndex());
                 combatEntity.getOpponent().lastHit = System.currentTimeMillis();
+                // successful
             } else if (type == 1) {
+                // cancel
                 return false;
             } else if (type == 0) {
 
                 follow(combatEntity, combatEntity.getOpponent());
             }
+            //System.out.println("Npc attack type: " + type);
         }
         return true;
+        // combatEntity.getOpponent().hit(1,combatEntity.getOpponent().getEntity(),false);
+        // npc combat, not as complicated as player combat
     }
 
     public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, int type) {
@@ -1041,7 +1057,6 @@ public class Combat {
             }
             combatEntity.setOpponent(null);
         }
-        System.out.println("Done resetting attack for " + combatEntity);
     }
 
     public static void logoutReset(CombatEntity combatEntity) {
@@ -1204,7 +1219,7 @@ public class Combat {
             int baseX = combatEntity.getAbsX() - 25;
             int baseY = combatEntity.getAbsY() - 25;
             combatEntity.getEntity().getWalkingQueue().reset();
-            Path p = PathTest.getSingleton().getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
+            Path p = PathTest.getPath(combatEntity.getAbsX(), combatEntity.getAbsY(), toX, toY);
             if (p != null) {
                 for (int i = 1; i < p.getLength(); i++) {
                     //player.getActionSender().sendMessage((baseX+p.getX(i))+"	"+(baseY+p.getY(i)));
@@ -1214,6 +1229,8 @@ public class Combat {
                         combatEntity.getEntity().getWalkingQueue().addStep((baseX + p.getX(i)), (baseY + p.getY(i)));
                 }
                 combatEntity.getEntity().getWalkingQueue().finish();
+            } else {
+                //System.out.println("Derp");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1302,7 +1319,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        World.submit(new Task(16000,"poison") {
+        World.submit(new Task(16000) {
             private int lastDamg = -1;
             private int ticks = 4;
 

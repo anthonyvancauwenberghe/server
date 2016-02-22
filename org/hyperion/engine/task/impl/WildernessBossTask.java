@@ -35,7 +35,7 @@ public class WildernessBossTask extends Task {
      * instead of 30 minutes after the restart.
      */
     public WildernessBossTask(boolean forceSpawn) {
-        super(DELAY_FOR_RESPAWN, forceSpawn);
+        super(forceSpawn ? 0 : DELAY_FOR_RESPAWN);
         timeStart = System.currentTimeMillis();
     }
 

@@ -18,29 +18,42 @@ public class BountyHunterLogout extends Task {
         super(Time.ONE_MINUTE * 20);
     }
 
+    private static final Object LOCK = new Object();
+
     private static final int LOGOUT_LIMIT = 2;
 
     private static Map<String, Integer> logoutsInWild = new HashMap<>();
-    private static List<Player> blocked = new ArrayList<>();
+    private static List<Player> blocked = new ArrayList();
 
     public static void addLogout(Player player) {
-        logoutsInWild.put(player.getName(), logoutsInWild.getOrDefault(player.getName(), 0) + 1);
+        synchronized (LOCK) {
+            logoutsInWild.put(player.getName(), logoutsInWild.getOrDefault(player.getName(), 0) + 1);
+        }
     }
 
     public static boolean isBlocked(Player player) {
-        return player != null && blocked.contains(player);
+        synchronized (LOCK) {
+
+             if(player == null)
+                return false;
+            return blocked.contains(player);
+        }
     }
 
     public static void playerLogout(Player player) {
-        addLogout(player);
-        if (logoutsInWild.getOrDefault(player.getName(), 0) >= LOGOUT_LIMIT) {
-            if (!blocked.contains(player))
-                blocked.add(player);
+        synchronized (LOCK) {
+            addLogout(player);
+            if(logoutsInWild.getOrDefault(player.getName(), 0) >= LOGOUT_LIMIT) {
+                if(!blocked.contains(player))
+                    blocked.add(player);
+            }
         }
     }
 
     public void execute() {
-        logoutsInWild.clear();
-        blocked.clear();
+        synchronized (LOCK) {
+            logoutsInWild.clear();
+            blocked.clear();
+        }
     }
 }

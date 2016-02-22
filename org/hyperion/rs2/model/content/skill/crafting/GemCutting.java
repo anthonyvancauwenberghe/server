@@ -100,7 +100,7 @@ public class GemCutting extends Crafting {
 
         ContentEntity.sendMessage(c, "You start cutting the gem...");
 
-        World.submit(new Task(2200,"gemcutting") {
+        World.submit(new Task(2200) {
             @Override
             public void execute() {
                 if(c.getRandomEvent().skillAction(2))

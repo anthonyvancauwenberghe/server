@@ -134,7 +134,7 @@ public class WarriorsGuild implements ContentTemplate {
 			p.getActionSender().sendMessage("You need at least 100 tokens to enter this room!");
 			return false;
 		}
-		World.submit(new Task(60000,"warriorsguild5") {
+		World.submit(new Task(60000) {
 			public void execute() {
 				if(inCyclopsRoom(p)) {
 					if(ContentEntity.deleteItemA(p, TOKENS, 10)) {

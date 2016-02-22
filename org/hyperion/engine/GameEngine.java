@@ -3,8 +3,12 @@ package org.hyperion.engine;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.hyperion.Configuration;
 import org.hyperion.engine.task.TaskManager;
+import org.hyperion.rs2.commands.NewCommand;
+import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.EntityHandler;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 
 import java.util.concurrent.*;
@@ -14,16 +18,24 @@ import java.util.concurrent.*;
  */
 public final class GameEngine implements Runnable {
 
-    private final static int ENGINE_DELAY = Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
     private final static int DEFAULT_ENGINE_STATE = 1;
     private final ScheduledExecutorService logicService = createLogicService();
     private int engineState = DEFAULT_ENGINE_STATE;
 
+    private long lastEngineRun = System.currentTimeMillis();
+    private static long totalTime = 0;
+    private static int totalRuns = 0;
+
     @Override
     public void run() {
         try {
-            if(engineState == DEFAULT_ENGINE_STATE)
+            if(engineState == DEFAULT_ENGINE_STATE) {
                 World.sequence();
+                if(totalRuns > 10)
+                    totalTime += (System.currentTimeMillis() - lastEngineRun);
+                    totalRuns++;
+                lastEngineRun = System.currentTimeMillis();
+            }
             TaskManager.sequence();
             nextEngineState();
         } catch (Exception e) {
@@ -43,7 +55,7 @@ public final class GameEngine implements Runnable {
     }
 
     private void nextEngineState() {
-        if(engineState == 600 / ENGINE_DELAY)
+        if(engineState == 600 / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY))
             engineState = DEFAULT_ENGINE_STATE - 1;
         engineState++;
     }
@@ -55,5 +67,16 @@ public final class GameEngine implements Runnable {
         executor.setKeepAliveTime(45, TimeUnit.SECONDS);
         executor.allowCoreThreadTimeOut(true);
         return Executors.unconfigurableScheduledExecutorService(executor);
+    }
+
+    static {
+        NewCommandHandler.submit(new NewCommand("enginestate", Rank.DEVELOPER) {
+            @Override
+            protected boolean execute(Player player, String[] input) {
+                player.sendMessage("Average time: " + (totalTime / (totalRuns - 10)) + "ms");
+                player.sendMessage("Total runs: " + totalRuns);
+                return true;
+            }
+        });
     }
 }

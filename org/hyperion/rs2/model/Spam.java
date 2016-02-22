@@ -124,7 +124,7 @@ public class Spam {
 	public String punish() {
 		if(!isSpamming())
 			return "Player is not spamming..";
-		World.submit(new Task(1000,"spam") {
+		World.submit(new Task(1000) {
 			private int counter = 0;
 
 			@Override

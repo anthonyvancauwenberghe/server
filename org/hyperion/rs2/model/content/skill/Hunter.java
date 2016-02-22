@@ -226,7 +226,7 @@ public class Hunter implements ContentTemplate {
 				}
 				ContentEntity.startAnimation(p, 5209);
 				p.cE.face(xcoord, ycoord);
-				World.submit(new Task(500L,"hunter") {
+				World.submit(new Task(500L) {
 					public void execute() {
 						boolean success = HunterNpcs.removeImp(NpcId, xcoord, ycoord);
 						if(success) {

@@ -151,7 +151,7 @@ public class RuneCrafting implements ContentTemplate {
 			ContentEntity.playerGfx(client, 186);
 			ContentEntity.sendMessage(client, "You bind the temple's power into " + ContentEntity.getItemName(item) + "s.");
 			//The runecrafting event.
-			World.submit(new Task(2300,"runecrafting") {
+			World.submit(new Task(2300) {
 				@Override
 				public void execute() {
 					ContentEntity.deleteItemAll(client, useItemId2, 1);

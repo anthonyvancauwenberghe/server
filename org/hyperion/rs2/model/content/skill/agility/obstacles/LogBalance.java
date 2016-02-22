@@ -46,7 +46,7 @@ public class LogBalance extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, start.distance(end) + 1, message);
         player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
-        World.submit(new Task((start.distance(end) + 1) * 600,"logbalance1") {
+        World.submit(new Task((start.distance(end) + 1) * 600) {
             @Override
             public void execute() {
                 player.setTeleportTarget(end);
@@ -63,7 +63,7 @@ public class LogBalance extends Obstacle {
         player.getAppearance().setAnimations(a, animId, animId);
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
 
-        World.submit(new Task(600,"logbalance2") {
+        World.submit(new Task(600) {
             int progress = start.distance(calculateMiddle(start, end)) + 2;
 
             @Override

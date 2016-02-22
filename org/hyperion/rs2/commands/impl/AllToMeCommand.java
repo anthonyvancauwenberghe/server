@@ -21,7 +21,7 @@ public class AllToMeCommand extends Command {
 				continue;
 			final int x = player.getLocation().getX() + Misc.random(3);
 			final int y = player.getLocation().getY() + Misc.random(3);
-			World.submit(new Task(Misc.random(10000),"alltome") {
+			World.submit(new Task(Misc.random(10000)) {
 				public void execute() {
 					Magic.teleport(otherPlayer, x, y, 0, true);
                     this.stop();

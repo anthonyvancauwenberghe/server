@@ -101,7 +101,7 @@ public class Obstacle {
     }
 
     public void succeed(Player player, int tick, String message) {
-        World.submit(new Task(tick * 600, "agility obstacle") {
+        World.submit(new Task(tick * 600) {
             @Override
             public void execute() {
                 player.getSkills().addExperience(Skills.AGILITY, skillXp);
@@ -117,7 +117,7 @@ public class Obstacle {
     }
 
     public void fail(Player player, int tick, String message) {
-        World.submit(new Task(tick * 600, "agility obstacle2") {
+        World.submit(new Task(tick * 600) {
             @Override
             public void execute() {
                 reset(player);

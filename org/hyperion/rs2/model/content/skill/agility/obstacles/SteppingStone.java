@@ -47,7 +47,7 @@ public class SteppingStone extends Obstacle {
         player.getAppearance().setAnimations(a, animId, animId);
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
 
-        World.submit(new Task(600,"steppingstone") {
+        World.submit(new Task(600) {
             int progress = start.distance(end) * 3;
             @Override
             public void execute() {
@@ -84,7 +84,7 @@ public class SteppingStone extends Obstacle {
         player.getAppearance().setAnimations(a, animId, animId);
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
 
-        World.submit(new Task(600,"steppingstone2") {
+        World.submit(new Task(600) {
             int progress = start.distance(calculateMiddle(start, end)) * 3;
 
             @Override

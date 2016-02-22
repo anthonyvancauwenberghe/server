@@ -106,7 +106,7 @@ public class Prayer implements ContentTemplate {
 		}
 		ContentEntity.deleteItem(player, buryItem);
 		final int fBuryXP = buryXP;
-		World.submit(new Task(2000L,"prayer2") {
+		World.submit(new Task(2000L) {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {
@@ -220,7 +220,7 @@ public class Prayer implements ContentTemplate {
 		if(distance < 20)
 			player.getActionSender().createGlobalProjectile(player.cE.getAbsY(), player.cE.getAbsX(), offsetY, offsetX, 50, speed, 2263, 20, 9, hitId, time, slope);
 	    /* UNTIL THIS */
-		World.submit(new Task(1200, "Prayer 1200 task") {
+		World.submit(new Task(1200) {
 			public void execute() {
 				try {
 					if(victim != null)

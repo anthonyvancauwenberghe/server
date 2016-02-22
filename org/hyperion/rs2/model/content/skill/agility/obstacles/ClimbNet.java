@@ -38,7 +38,7 @@ public class ClimbNet extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         super.succeed(player, 1, message);
         player.playAnimation(Animation.create(animId));
-        World.submit(new Task(700,"climbnet") {
+        World.submit(new Task(700) {
             @Override
             public void execute() {
                 int j = 0;

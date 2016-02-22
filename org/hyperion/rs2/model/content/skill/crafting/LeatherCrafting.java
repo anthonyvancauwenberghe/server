@@ -194,7 +194,7 @@ public class LeatherCrafting extends Crafting {
         c.setBusy(true);
         ContentEntity.startAnimation(c, 1249);
 
-        World.submit(new Task(2200,"leathercrafting") {
+        World.submit(new Task(2200) {
             int craftAm = amm2;
 
             @Override

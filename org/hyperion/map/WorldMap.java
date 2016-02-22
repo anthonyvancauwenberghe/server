@@ -972,7 +972,7 @@ public class WorldMap {
 
         if (dc != null) {
             dirs = dc.directions;
-        } else {
+        } else if (dc2 != null) {
             dirs = dc2.directions;
         }
         if (dirs.get(0) == -5) {

@@ -44,7 +44,7 @@ public class UnholyCursebearer implements Attack {
             Combat.npcRangeAttack(npc, player.cE, 88, 0, true);
             player.cE.doGfx(curseGfx);
             player.getActionSender().sendMessage("@dre@You have been cursed by the Cursebearer!");
-            World.submit(new Task(1000,"unholycursebearer") {
+            World.submit(new Task(1000) {
                 int curseTicks = Combat.random(2) + 1;
                 @Override
                 public void execute() {

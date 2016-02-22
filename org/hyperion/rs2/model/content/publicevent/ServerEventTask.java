@@ -43,7 +43,7 @@ public class ServerEventTask extends Task {
         public CountDownEventBuilder(final int npcId, final Location location) {
             this(NPCDefinition.forId(npcId).getName().replaceAll("_", " "), "the event tab", location, "2x drop rates for 30 minutes", () -> {
                 NpcDeathTask.npcIdForDoubleDrops = npcId;
-                World.submit(new Task(Time.THIRTY_MINUTES,"servereventtask") {
+                World.submit(new Task(Time.THIRTY_MINUTES) {
                     public void execute() {
                         NpcDeathTask.npcIdForDoubleDrops = -1;
                         this.stop();

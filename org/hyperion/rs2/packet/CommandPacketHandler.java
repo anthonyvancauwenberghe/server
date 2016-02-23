@@ -47,9 +47,7 @@ import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
-import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.ChangePassword;
-import org.hyperion.rs2.model.itf.impl.NameItemInterface;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
@@ -2230,14 +2228,14 @@ public class CommandPacketHandler implements PacketHandler {
                 }
             }
 
-            if (commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
+            /*if (commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
                 try {
                     InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(6));
                 } catch (Exception ex) {
                     InterfaceManager.<NameItemInterface>get(11).send(player, "");
                 }
                 return;
-            }
+            }*/
             if (CommandHandler.processed(commandStart, player, s))
                 return;
 

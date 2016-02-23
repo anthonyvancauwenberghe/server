@@ -28,7 +28,7 @@ public class FileLogging {
     }
 
     public static void writeError(String filename, Exception ex) {
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Write error to file", 2, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Write error to file" + filename, 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 StringBuilder sb = new StringBuilder();
@@ -62,7 +62,9 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file", 1, TimeUnit.SECONDS) {
+        if(true)
+            return;
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file " + filePath, 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 File file = new File(DEFAULT_LOGGING_PATH, filePath);

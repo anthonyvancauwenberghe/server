@@ -128,7 +128,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
     public void executeUpdate(Player player) {
         EngineTask callable = new EngineTask("Player updating for player " + player.getName(), 2, TimeUnit.SECONDS) {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 try {
                     if (player.isMapRegionChanging()) {
                         player.getActionSender().sendMapRegion();
@@ -245,8 +245,10 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         } catch(TimeoutException e) {
             future.cancel(true);
             Server.getLogger().warning("Player update task '" + callable.getTaskName() + "' took too long, cancelled");
+            synchronizer.arriveAndDeregister();
         } catch(Exception e) {
             e.printStackTrace();
+            synchronizer.arriveAndDeregister();
         }
     }
 

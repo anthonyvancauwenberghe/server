@@ -75,14 +75,6 @@ public final class GameEngine implements Runnable {
     }
 
     /**
-     * This executes a task as soon as the thread has any space.
-     * @param task The task to execute
-     */
-    public Future<Boolean> submitTask(EngineTask<Boolean> task) {
-        return taskService.submit(task);
-    }
-
-    /**
      * This executes a IO task as soon as the thread has any space.
      * This will return the object that is asked from the IO task.
      * @param ioTask The task to execute.

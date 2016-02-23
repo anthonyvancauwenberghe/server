@@ -126,7 +126,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 
     @Override
     public void executeUpdate(Player player) {
-        LogicTask callable = new LogicTask("Playerupdating for player " + player.getName()) {
+        LogicTask callable = new LogicTask("Playerupdating for player " + player.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 try {
@@ -241,9 +241,10 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         Future<Boolean> future = updateExecutor.submit(callable);
 
         try {
-            future.get(4, TimeUnit.SECONDS);
+            future.get(callable.getTimeout(), callable.getTimeUnit());
         } catch(TimeoutException e) {
-            Server.getLogger().warning("Player update task '" + callable.getTaskName() + "' took too long.");
+            future.cancel(true);
+            Server.getLogger().warning("Player update task '" + callable.getTaskName() + "' took too long, cancelled");
         } catch(Exception e) {
             e.printStackTrace();
         }

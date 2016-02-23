@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gilles on 6/02/2016.
@@ -27,7 +28,7 @@ public class FileLogging {
     }
 
     public static void writeError(String filename, Exception ex) {
-        Server.getLoader().getEngine().submit(new LogicTask("Write error") {
+        Server.getLoader().getEngine().submit(new LogicTask("Write error", 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 StringBuilder sb = new StringBuilder();
@@ -61,7 +62,7 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
-        Server.getLoader().getEngine().submit(new LogicTask("Write log") {
+        Server.getLoader().getEngine().submit(new LogicTask("Write log", 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 File file = new File(DEFAULT_LOGGING_PATH, filePath);

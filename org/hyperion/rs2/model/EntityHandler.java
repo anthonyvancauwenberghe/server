@@ -8,6 +8,7 @@ import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.HostGateway;
+import org.hyperion.rs2.LoginResponse;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Trade;
@@ -30,6 +31,7 @@ import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
@@ -39,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gilles on 11/02/2016.
@@ -73,6 +76,9 @@ public class EntityHandler {
 
     private static void register(Player player) {
         System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
+        Packet packet = new PacketBuilder().put((byte)LoginResponse.SUCCESSFUL_LOGIN.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket();
+        player.getSession().write(packet);
+
         HostGateway.enter(player.getShortIP());
         ConnectionHandler.removeIp(player.getShortIP());
         if(!World.getPlayers().add(player)) {
@@ -357,7 +363,7 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        Server.getLoader().getEngine().submit(new LogicTask("Saving player " + player.getName() + " on logout") {
+        Server.getLoader().getEngine().submit(new LogicTask("Saving player " + player.getName() + " on logout", 8, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 if (player.verificationCodeEntered)

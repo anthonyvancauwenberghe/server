@@ -102,7 +102,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				return;
 			}
 		}
-		Server.getLoader().getEngine().submit(new LogicTask("Handle packet for player " + session.getAttribute("player")) {
+		Server.getLoader().getEngine().submit(new LogicTask("Handle packet for player " + ((Player)session.getAttribute("player")).getName(), 1, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if(session.getAttribute("player") != null)
@@ -117,7 +117,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		Server.getLoader().getEngine().submit(new LogicTask("Closing session for player " + session.getAttribute("player")) {
+		Server.getLoader().getEngine().submit(new LogicTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if (session.containsAttribute("player")) {

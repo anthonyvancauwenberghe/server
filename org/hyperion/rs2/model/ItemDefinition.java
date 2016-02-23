@@ -14,6 +14,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The item definition manager.
@@ -499,7 +500,7 @@ public class ItemDefinition {
 				int id = values[0];
 				int price = values[1];
 				definitions[id].setHighAlcValue(price);
-				Server.getLoader().getEngine().submit(new LogicTask("Dumping item definitions") {
+				Server.getLoader().getEngine().submit(new LogicTask("Dumping item definitions", 8, TimeUnit.SECONDS) {
 					@Override
 					public Boolean call() throws Exception {
 						ItemDefinition.dumpItemDefinitions();
@@ -517,7 +518,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(false);
-					Server.getLoader().getEngine().submit(new LogicTask("Dumping item definitions") {
+					Server.getLoader().getEngine().submit(new LogicTask("Dumping item definitions", 8, TimeUnit.SECONDS) {
 						@Override
 						public Boolean call() throws Exception {
 							ItemDefinition.dumpItemDefinitions();
@@ -538,7 +539,7 @@ public class ItemDefinition {
 					int[] values = this.getIntArray(input);
 					int id = values[0];
 					definitions[id].setStackable(true);
-					Server.getLoader().getEngine().submit(new LogicTask("Dumping item definitions") {
+					Server.getLoader().getEngine().submit(new LogicTask("Dumping item definitions", 8, TimeUnit.SECONDS) {
 						@Override
 						public Boolean call() throws Exception {
 							ItemDefinition.dumpItemDefinitions();

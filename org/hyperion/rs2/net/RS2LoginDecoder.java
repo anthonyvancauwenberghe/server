@@ -10,13 +10,13 @@ import org.hyperion.engine.LogicTask;
 import org.hyperion.rs2.LoginResponse;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 
 import java.security.SecureRandom;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Login protocol decoding class.
@@ -181,7 +181,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submit(new LogicTask("Player loading and logging in for " + playerDetails.getName()) {
+        Server.getLoader().getEngine().submit(new LogicTask("Player loading and logging in for " + playerDetails.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 Player player = new Player(playerDetails);
@@ -197,8 +197,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(true));
                     return true;
                 }
-
-                playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket());
                 player.getSession().setAttribute("player", player);
 
                 if (!World.getLoginQueue().contains(player)) {

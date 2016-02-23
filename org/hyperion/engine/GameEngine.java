@@ -20,7 +20,8 @@ import java.util.concurrent.*;
 public final class GameEngine implements Runnable {
 
     private final static int DEFAULT_ENGINE_STATE = 1;
-    private final ScheduledExecutorService logicService = createLogicService();
+    private static ExecutorService logicService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactoryBuilder().setNameFormat("UpdateThread").setPriority(Thread.MAX_PRIORITY).build());
+    //private final ScheduledExecutorService logicService = createLogicService();
     private int engineState = DEFAULT_ENGINE_STATE;
 
     private long lastEngineRun = System.currentTimeMillis();
@@ -46,14 +47,14 @@ public final class GameEngine implements Runnable {
         }
     }
 
-    public void submit(LogicTask callable) {
+    public void submit(LogicTask logicTask) {
         try {
-            Future<Boolean> future = logicService.submit(callable);
-
+            Future<Boolean> taskResult = logicService.submit(logicTask);
             try {
-                future.get(4, TimeUnit.SECONDS);
+                taskResult.get(5, TimeUnit.SECONDS);
             } catch(TimeoutException e) {
-                Server.getLogger().warning("Engine logic task '" + callable.getTaskName() + "' took too long.");
+                taskResult.cancel(true);
+                Server.getLogger().warning("Engine logic task '" + logicTask.getTaskName() + "' took too long, cancelled.");
             }
         } catch(Exception e) {
             e.printStackTrace();

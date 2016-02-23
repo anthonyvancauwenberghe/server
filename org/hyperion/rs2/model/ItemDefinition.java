@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.Server;
-import org.hyperion.engine.EngineTask;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
@@ -14,7 +12,6 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The item definition manager.
@@ -493,66 +490,6 @@ public class ItemDefinition {
 
 
 	static {
-		CommandHandler.submit(new Command("setalchvalue", Rank.MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				int[] values = this.getIntArray(input);
-				int id = values[0];
-				int price = values[1];
-				definitions[id].setHighAlcValue(price);
-				Server.getLoader().getEngine().submitLogic(new EngineTask("Dumping item definitions", 8, TimeUnit.SECONDS) {
-					@Override
-					public Boolean call() throws Exception {
-						ItemDefinition.dumpItemDefinitions();
-						return true;
-					}
-				});
-				return true;
-			}
-		});
-
-		CommandHandler.submit(new Command("unstack", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				try {
-					int[] values = this.getIntArray(input);
-					int id = values[0];
-					definitions[id].setStackable(false);
-					Server.getLoader().getEngine().submitLogic(new EngineTask("Dumping item definitions", 8, TimeUnit.SECONDS) {
-						@Override
-						public Boolean call() throws Exception {
-							ItemDefinition.dumpItemDefinitions();
-							return true;
-						}
-					});
-				} catch(Exception e) {
-					player.getActionSender().sendMessage("Use as ::unstack 11694");
-				}
-				return true;
-			}
-		});
-
-		CommandHandler.submit(new Command("stack", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				try {
-					int[] values = this.getIntArray(input);
-					int id = values[0];
-					definitions[id].setStackable(true);
-					Server.getLoader().getEngine().submitLogic(new EngineTask("Dumping item definitions", 8, TimeUnit.SECONDS) {
-						@Override
-						public Boolean call() throws Exception {
-							ItemDefinition.dumpItemDefinitions();
-							return true;
-						}
-					});
-				} catch(Exception e) {
-					player.getActionSender().sendMessage("Use as ::stack 11694");
-				}
-				return true;
-			}
-		});
-
 		CommandHandler.submit(new Command("reloaditems", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {

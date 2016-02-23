@@ -29,7 +29,12 @@ public final class GameEngine implements Runnable {
     /**
      * This thread handles input and output tasks, such as filewriting, and SQL.
      */
-    private final ScheduledExecutorService IOService = createService("IoServerThread");
+    private final ScheduledExecutorService IOService = createService("IoServiceThread");
+
+    /**
+     * This thread handles tasks, it will only do things when
+     */
+    private final ScheduledExecutorService taskService = createService("TaskServiceThread");
 
     /**
      * The current engine state of the server.
@@ -67,6 +72,14 @@ public final class GameEngine implements Runnable {
             e.printStackTrace();
             FileLogging.writeError("game_engine_logic_errors.txt", e);
         }
+    }
+
+    /**
+     * This executes a task as soon as the thread has any space.
+     * @param task The task to execute
+     */
+    public Future<Boolean> submitTask(EngineTask<Boolean> task) {
+        return taskService.submit(task);
     }
 
     /**

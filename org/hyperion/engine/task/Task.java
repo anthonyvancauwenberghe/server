@@ -1,8 +1,13 @@
 package org.hyperion.engine.task;
 
 import org.hyperion.Configuration;
+import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
 
 import java.util.Objects;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * A task that the {@link TaskManager} will execute
@@ -85,8 +90,26 @@ public abstract class Task {
      * @return A flag indicating if the task is running.
      */
     public boolean tick() {
+
         if (running && --countdown == 0) {
-            execute();
+            EngineTask<Boolean> callable = new EngineTask<Boolean>(key.toString(), 300, TimeUnit.MILLISECONDS) {
+                @Override
+                public Boolean call() {
+                    execute();
+                    return true;
+                }
+            };
+
+            Future<Boolean> future = Server.getLoader().getEngine().submitTask(callable);
+
+            try {
+                future.get(callable.getTimeout(), callable.getTimeUnit());
+            } catch(TimeoutException e) {
+                future.cancel(true);
+                Server.getLogger().warning("Player update task '" + callable.getTaskName() + "' took too long, cancelled");
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         }
         return running;

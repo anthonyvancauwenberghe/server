@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.map.WorldMap;
@@ -454,7 +455,7 @@ public class Combat {
             } else {
                 if (!combatEntity.canMove() && combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) == 2)
                     return true;
-                //combatEntity.getPlayerByName().getWalkingQueue().reset();
+                //combatEntity.getPlayer().getWalkingQueue().reset();
             }
 
 			/*
@@ -484,7 +485,7 @@ public class Combat {
 
             			/*
 			 * else
-			 * combatEntity.getPlayerByName().getActionSender().resetFollow();
+			 * combatEntity.getPlayer().getActionSender().resetFollow();
 			 */// this isnt too nessary in melee, only magic and range
 			/*if(bowType != Constants.RANGEDNOARROWS)
 				combatEntity.doAtkEmote();
@@ -506,8 +507,8 @@ public class Combat {
                      */
                     int MeleeAtk = CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer());
                     int MeleeDef = CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getPlayer());
-					/*if(combatEntity.getPlayerByName().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayerByName().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
+					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
                     int deltaBonus = MeleeAtk - MeleeDef;
                     int toAdd = Misc.random(deltaBonus / 3);
@@ -517,9 +518,9 @@ public class Combat {
                         damg = 0;
                     if (damg > maxHit)
                         damg = maxHit;
-					
-					/*if(combatEntity.getPlayerByName().getName().toLowerCase().equals("dr house")){
-						combatEntity.getPlayerByName().getActionSender().sendMessage("Damg : " + damg);
+
+					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayer().getActionSender().sendMessage("Damg : " + damg);
 					}*/
                 }
             } else {
@@ -535,9 +536,9 @@ public class Combat {
          * Spirit shield effects.
          */
         if (combatEntity.getPlayer() != null && Rank.hasAbility(combatEntity.getPlayer(), Rank.ADMINISTRATOR)) {
-            //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg without divine would be: " + damg);
+            //combatEntity.getPlayer().getActionSender().sendMessage("Damg without divine would be: " + damg);
             damg = SpiritShields.applyEffects(opponent.cE, damg);
-            //combatEntity.getPlayerByName().getActionSender().sendMessage("Damg with divine is: " + damg);
+            //combatEntity.getPlayer().getActionSender().sendMessage("Damg with divine is: " + damg);
         } else {
             damg = SpiritShields.applyEffects(opponent.cE, damg);
         }
@@ -623,7 +624,7 @@ public class Combat {
             CombatAssistant.addExperience(combatEntity, bowType, damgDouble);
         CombatAssistant.addExperience(combatEntity, bowType, damage);
 
-        World.submit(new Task(delay, "combat") {
+        TaskManager.submit(new Task(delay, "combat") {
             public void execute() {
                 if (combatEntity == null || opponent == null) {
                     this.stop();
@@ -777,7 +778,7 @@ public class Combat {
 				 * ().face(combatEntity.getAbsX()
 				 * +combatEntity.getOffsetX
 				 * (),combatEntity.getAbsY()+combatEntity.getOffsetY());
-				 * 
+				 *
 				 * if(combatEntity.getOpponent().getEntity() instanceof
 				 * Player ||
 				 * combatEntity.getOpponent().getNPC().getDefinition
@@ -785,7 +786,7 @@ public class Combat {
 				 * combatEntity.getOpponent().doDefEmote();
 				 * if(combatEntity.getOpponent().getEntity() instanceof
 				 * NPC ||
-				 * combatEntity.getOpponent().getPlayerByName().autoRetailate
+				 * combatEntity.getOpponent().getPlayer().autoRetailate
 				 * ){
 				 * combatEntity.getOpponent().setOpponent(combatEntity);
 				 * } }
@@ -816,7 +817,7 @@ public class Combat {
 
     public static boolean npcAttack(final NPC npc, final CombatEntity combatEntity, final int damg, final int delay, final int type, final boolean prayerBlock) {
 
-        World.submit(new Task(delay, "npcattack") {
+        TaskManager.submit(new Task(delay, "npcattack") {
             @Override
             public void execute() {
                 if ((combatEntity == null ||
@@ -835,11 +836,11 @@ public class Combat {
                     }
 
                     /*if(type == 1
-                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayerByName()))) {
+                            && Combat.random(npc.getDefinition().getBonus()[3]) < Combat.random(CombatAssistant.calculateRangeDefence(combatEntity.getPlayer()))) {
                         newDamg = 0;
                     }
                     if(type == 2
-                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayerByName()))) {
+                            && Combat.random(npcc.getDefinition().getBonus()[4]) < Combat.random(CombatAssistant.calculateMageDef(combatEntity.getPlayer()))) {
                         newDamg = 0;
                     }*/
                     //defence
@@ -1245,7 +1246,7 @@ public class Combat {
     }
 
     public static void follow2(final CombatEntity combatEntity, int x, int y, int toX, int toY, int height) {
-		
+
       /*  try {
             long time = System.currentTimeMillis();
 		    int path[][] = PathfinderV2.findRoute(x, y, toX, toY, height);
@@ -1319,7 +1320,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        World.submit(new Task(16000) {
+        TaskManager.submit(new Task(16000) {
             private int lastDamg = -1;
             private int ticks = 4;
 

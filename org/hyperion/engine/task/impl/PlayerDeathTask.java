@@ -53,6 +53,7 @@ public class PlayerDeathTask extends Task {
 				this.stop();
 				return;
 			}
+
 			if(!World.getPlayers().contains(player))
 				EntityHandler.deregister(player);
 

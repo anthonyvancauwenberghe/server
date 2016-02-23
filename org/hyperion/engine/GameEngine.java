@@ -51,7 +51,7 @@ public final class GameEngine implements Runnable {
             Future<Boolean> future = logicService.submit(callable);
 
             try {
-                future.get(2, TimeUnit.SECONDS);
+                future.get(4, TimeUnit.SECONDS);
             } catch(TimeoutException e) {
                 Server.getLogger().warning("Engine logic task '" + callable.getTaskName() + "' took too long.");
             }

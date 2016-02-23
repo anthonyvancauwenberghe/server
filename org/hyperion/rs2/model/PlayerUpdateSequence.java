@@ -241,7 +241,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         Future<Boolean> future = updateExecutor.submit(callable);
 
         try {
-            future.get(2, TimeUnit.SECONDS);
+            future.get(4, TimeUnit.SECONDS);
         } catch(TimeoutException e) {
             Server.getLogger().warning("Player update task '" + callable.getTaskName() + "' took too long.");
         } catch(Exception e) {

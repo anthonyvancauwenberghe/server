@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.Server;
+import org.hyperion.engine.LogicTask;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.logging.FileLogging;
@@ -12,8 +14,7 @@ import org.hyperion.rs2.net.PacketBuilder;
 
 import java.util.Iterator;
 import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Phaser;
+import java.util.concurrent.*;
 
 /**
  * Created by Gilles on 12/02/2016.
@@ -125,113 +126,127 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 
     @Override
     public void executeUpdate(Player player) {
-        updateExecutor.execute(() -> {
-            try {
+        LogicTask callable = new LogicTask("Playerupdating for player " + player.getName()) {
+            @Override
+            public Boolean call() throws Exception {
+                try {
+                    if (player.isMapRegionChanging()) {
+                        player.getActionSender().sendMapRegion();
+                    }
 
-                if (player.isMapRegionChanging()) {
-                    player.getActionSender().sendMapRegion();
-                }
+                    PacketBuilder updateBlock = new PacketBuilder();
+                    PacketBuilder packet = new PacketBuilder(81, Packet.Type.VARIABLE_SHORT);
+                    packet.startBitAccess();
+                    updateThisPlayerMovement(player, packet);
+                    updatePlayer(player, updateBlock, player, false, true);
+                    packet.putBits(8, player.getLocalPlayers().size());
+                    for (Iterator<Player> it$ = player.getLocalPlayers().iterator(); it$.hasNext(); ) {
+                        Player otherPlayer = it$.next();
+                        if (World.getPlayers().contains(otherPlayer) && !otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && !otherPlayer.isHidden()) {
+                            if (updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
+                                break;
+                            }
+                            updatePlayerMovement(packet, otherPlayer);
 
-                PacketBuilder updateBlock = new PacketBuilder();
-                PacketBuilder packet = new PacketBuilder(81, Packet.Type.VARIABLE_SHORT);
-                packet.startBitAccess();
-                updateThisPlayerMovement(player, packet);
-                updatePlayer(player, updateBlock, player, false, true);
-                packet.putBits(8, player.getLocalPlayers().size());
-                for (Iterator<Player> it$ = player.getLocalPlayers().iterator(); it$.hasNext(); ) {
-                    Player otherPlayer = it$.next();
-                    if (World.getPlayers().contains(otherPlayer) && !otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && !otherPlayer.isHidden()) {
+                            if (otherPlayer.getUpdateFlags().isUpdateRequired()) {
+                                updatePlayer(player, updateBlock, otherPlayer, false, false);
+                            }
+                        } else {
+                            it$.remove();
+                            packet.putBits(1, 1);
+                            packet.putBits(2, 3);
+                        }
+                    }
+
+                    for (Player otherPlayer : RegionManager.getLocalPlayers(player)) {
+                        if (player.getLocalPlayers().size() >= 255) {
+                            break;
+                        }
+
+                        if (otherPlayer == player || player.getLocalPlayers().contains(otherPlayer) || otherPlayer.isHidden()) {
+                            continue;
+                        }
+
                         if (updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
                             break;
                         }
-                        updatePlayerMovement(packet, otherPlayer);
+                        player.getLocalPlayers().add(otherPlayer);
+                        addNewPlayer(player, packet, otherPlayer);
+                        updatePlayer(player, updateBlock, otherPlayer, true, false);
+                    }
 
-                        if (otherPlayer.getUpdateFlags().isUpdateRequired()) {
-                            updatePlayer(player, updateBlock, otherPlayer, false, false);
-                        }
+                    if (!updateBlock.isEmpty()) {
+                        packet.putBits(11, 2047);
+                        packet.finishBitAccess();
+                        packet.put(updateBlock.toPacket().getPayload());
                     } else {
-                        it$.remove();
-                        packet.putBits(1, 1);
-                        packet.putBits(2, 3);
-                    }
-                }
-
-                for (Player otherPlayer : RegionManager.getLocalPlayers(player)) {
-                    if (player.getLocalPlayers().size() >= 255) {
-                        break;
+                        packet.finishBitAccess();
                     }
 
-                    if (otherPlayer == player || player.getLocalPlayers().contains(otherPlayer) || otherPlayer.isHidden()) {
-                        continue;
+                    int size = packet.size();
+                    if (size > maxSize)
+                        maxSize = size;
+                    player.write(packet.toPacket());
+
+                    updateBlock = new PacketBuilder();
+                    packet = new PacketBuilder(65, Packet.Type.VARIABLE_SHORT);
+                    packet.startBitAccess();
+                    packet.putBits(8, player.getLocalNPCs().size());
+                    for (Iterator<NPC> it$ = player.getLocalNPCs().iterator(); it$.hasNext(); ) {
+                        NPC npc = it$.next();
+                        if (World.getNpcs().contains(npc) && !npc.isTeleporting() && !npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
+                            updateNPCMovement(packet, npc);
+                            if (npc.getUpdateFlags().isUpdateRequired()) {
+                                updateNPC(updateBlock, npc);
+                            }
+                        } else {
+                            it$.remove();
+                            packet.putBits(1, 1);
+                            packet.putBits(2, 3);
+                        }
                     }
-
-                    if (updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
-                        break;
-                    }
-                    player.getLocalPlayers().add(otherPlayer);
-                    addNewPlayer(player, packet, otherPlayer);
-                    updatePlayer(player, updateBlock, otherPlayer, true, false);
-                }
-
-                if (!updateBlock.isEmpty()) {
-                    packet.putBits(11, 2047);
-                    packet.finishBitAccess();
-                    packet.put(updateBlock.toPacket().getPayload());
-                } else {
-                    packet.finishBitAccess();
-                }
-
-                int size = packet.size();
-                if (size > maxSize)
-                    maxSize = size;
-                player.write(packet.toPacket());
-
-                updateBlock = new PacketBuilder();
-                packet = new PacketBuilder(65, Packet.Type.VARIABLE_SHORT);
-                packet.startBitAccess();
-                packet.putBits(8, player.getLocalNPCs().size());
-                for (Iterator<NPC> it$ = player.getLocalNPCs().iterator(); it$.hasNext(); ) {
-                    NPC npc = it$.next();
-                    if (World.getNpcs().contains(npc) && !npc.isTeleporting() && !npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
-                        updateNPCMovement(packet, npc);
+                    for (NPC npc : RegionManager.getLocalNpcs(player)) {
+                        if (player.getLocalNPCs().size() >= 255) {
+                            break;
+                        }
+                        if (player.getLocalNPCs().contains(npc) || npc.isHidden()) {
+                            continue;
+                        }
+                        player.getLocalNPCs().add(npc);
+                        addNewNPC(player, packet, npc);
                         if (npc.getUpdateFlags().isUpdateRequired()) {
                             updateNPC(updateBlock, npc);
-                        }
-                    } else {
-                        it$.remove();
-                        packet.putBits(1, 1);
-                        packet.putBits(2, 3);
-                    }
-                }
-                for (NPC npc : RegionManager.getLocalNpcs(player)) {
-                    if (player.getLocalNPCs().size() >= 255) {
-                        break;
-                    }
-                    if (player.getLocalNPCs().contains(npc) || npc.isHidden()) {
-                        continue;
-                    }
-                    player.getLocalNPCs().add(npc);
-                    addNewNPC(player, packet, npc);
-                    if (npc.getUpdateFlags().isUpdateRequired()) {
-                        updateNPC(updateBlock, npc);
 
+                        }
                     }
+                    if (!updateBlock.isEmpty()) {
+                        packet.putBits(14, 16383);
+                        packet.finishBitAccess();
+                        packet.put(updateBlock.toPacket().getPayload());
+                    } else {
+                        packet.finishBitAccess();
+                    }
+                    player.write(packet.toPacket());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    World.unregister(player);
+                } finally {
+                    synchronizer.arriveAndDeregister();
                 }
-                if (!updateBlock.isEmpty()) {
-                    packet.putBits(14, 16383);
-                    packet.finishBitAccess();
-                    packet.put(updateBlock.toPacket().getPayload());
-                } else {
-                    packet.finishBitAccess();
-                }
-                player.write(packet.toPacket());
-            } catch (Exception e) {
-                e.printStackTrace();
-                World.unregister(player);
-            } finally {
-                synchronizer.arriveAndDeregister();
+                return true;
             }
-        });
+        };
+
+        //Here we submit the task
+        Future<Boolean> future = updateExecutor.submit(callable);
+
+        try {
+            future.get(2, TimeUnit.SECONDS);
+        } catch(TimeoutException e) {
+            Server.getLogger().warning("Player update task '" + callable.getTaskName() + "' took too long.");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

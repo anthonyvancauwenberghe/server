@@ -2,6 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.LogicTask;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
@@ -356,13 +357,14 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        Server.getLoader().getEngine().submit(() -> {
-            //player.getLogManager().add(LogEntry.logout(player));
-            //player.getLogManager().clearExpiredLogs();
-            //player.getLogManager().save();
-            if (player.verificationCodeEntered)
-                World.getLoader().savePlayer(player);
-            player.destroy();
+        Server.getLoader().getEngine().submit(new LogicTask("Saving player " + player.getName() + " on logout") {
+            @Override
+            public Boolean call() throws Exception {
+                if (player.verificationCodeEntered)
+                    World.getLoader().savePlayer(player);
+                player.destroy();
+                return true;
+            }
         });
         return World.getPlayers().remove(player);
     }

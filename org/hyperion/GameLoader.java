@@ -54,7 +54,7 @@ public final class GameLoader {
     }
 
     public void finish() throws IOException, InterruptedException {
-        if (!serviceLoader.awaitTermination(15, TimeUnit.MINUTES))
+        if (!serviceLoader.awaitTermination(1, TimeUnit.MINUTES))
             throw new IllegalStateException("The background service load took too long!");
         acceptor.bind(new InetSocketAddress(port));
         gameThread.scheduleAtFixedRate(gameEngine, 0, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY), TimeUnit.MILLISECONDS);

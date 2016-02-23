@@ -6,6 +6,7 @@ import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.hyperion.Server;
+import org.hyperion.engine.LogicTask;
 import org.hyperion.rs2.LoginResponse;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
@@ -180,26 +181,30 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submit(() -> {
-            Player player = new Player(playerDetails);
-            LoginResponse loginResponse = World.getLoader().checkLogin(player, playerDetails);
+        Server.getLoader().getEngine().submit(new LogicTask("Player loading and logging in for " + playerDetails.getName()) {
+            @Override
+            public Boolean call() throws Exception {
+                Player player = new Player(playerDetails);
+                LoginResponse loginResponse = World.getLoader().checkLogin(player, playerDetails);
 
-            if(loginResponse == LoginResponse.NEW_PLAYER) {
-                player.setNew(true);
-                player.setCreatedTime(System.currentTimeMillis());
-                loginResponse = LoginResponse.SUCCESSFUL_LOGIN;
-            }
+                if(loginResponse == LoginResponse.NEW_PLAYER) {
+                    player.setNew(true);
+                    player.setCreatedTime(System.currentTimeMillis());
+                    loginResponse = LoginResponse.SUCCESSFUL_LOGIN;
+                }
 
-            if(loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
-                playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(true));
-                return;
-            }
+                if(loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
+                    playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(true));
+                    return true;
+                }
 
-            playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket());
-            player.getSession().setAttribute("player", player);
+                playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket());
+                player.getSession().setAttribute("player", player);
 
-            if (!World.getLoginQueue().contains(player)) {
-                World.getLoginQueue().add(player);
+                if (!World.getLoginQueue().contains(player)) {
+                    World.getLoginQueue().add(player);
+                }
+                return true;
             }
         });
     }

@@ -2,6 +2,7 @@ package org.hyperion.engine;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.hyperion.Configuration;
+import org.hyperion.Server;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandHandler;
@@ -45,9 +46,15 @@ public final class GameEngine implements Runnable {
         }
     }
 
-    public void submit(Runnable t) {
+    public void submit(LogicTask callable) {
         try {
-            logicService.execute(t);
+            Future<Boolean> future = logicService.submit(callable);
+
+            try {
+                future.get(2, TimeUnit.SECONDS);
+            } catch(TimeoutException e) {
+                Server.getLogger().warning("Engine logic task '" + callable.getTaskName() + "' took too long.");
+            }
         } catch(Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_logic_errors.txt", e);

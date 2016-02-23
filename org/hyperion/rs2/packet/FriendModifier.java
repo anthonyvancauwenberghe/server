@@ -71,7 +71,6 @@ public class FriendModifier implements PacketHandler {
 			player.chatStatus[0] = packet.get();
 			player.chatStatus[1] = packet.get();
 			player.chatStatus[2] = packet.get();
-			System.out.println("Friendstatus: " + player.chatStatus[1]);
 			FriendsAssistant.refreshGlobalList(player, player.chatStatus[1] == 2);
 		}
 	}

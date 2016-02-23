@@ -127,7 +127,7 @@ public final class World {
     public static void sequence() {
 
         // Handle queued logins.
-        for (int amount = 0; amount < 50; amount++) {
+        for (int amount = 0; amount < 20; amount++) {
             Player player = logins.poll();
             if (player == null)
                 break;

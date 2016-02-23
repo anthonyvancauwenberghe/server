@@ -2,32 +2,32 @@
 		package org.hyperion.rs2;
 
 		import org.apache.mina.core.service.IoHandlerAdapter;
-		import org.apache.mina.core.session.IdleStatus;
-		import org.apache.mina.core.session.IoSession;
-		import org.apache.mina.filter.codec.ProtocolCodecFilter;
-		import org.hyperion.Server;
-		import org.hyperion.engine.LogicTask;
-		import org.hyperion.engine.task.Task;
-		import org.hyperion.engine.task.TaskManager;
-		import org.hyperion.rs2.model.EntityHandler;
-		import org.hyperion.rs2.model.Player;
-		import org.hyperion.rs2.model.World;
-		import org.hyperion.rs2.model.punishment.Combination;
-		import org.hyperion.rs2.model.punishment.Punishment;
-		import org.hyperion.rs2.model.punishment.Target;
-		import org.hyperion.rs2.model.punishment.Type;
-		import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-		import org.hyperion.rs2.net.Packet;
-		import org.hyperion.rs2.net.PacketManager;
-		import org.hyperion.rs2.net.RS2CodecFactory;
-		import org.hyperion.rs2.util.TextUtils;
+import org.apache.mina.core.session.IdleStatus;
+import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
+import org.hyperion.rs2.model.EntityHandler;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.punishment.Combination;
+import org.hyperion.rs2.model.punishment.Punishment;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Type;
+import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.net.PacketManager;
+import org.hyperion.rs2.net.RS2CodecFactory;
+import org.hyperion.rs2.util.TextUtils;
 
-		import java.io.FileWriter;
-		import java.io.IOException;
-		import java.net.SocketAddress;
-		import java.util.HashMap;
-		import java.util.Map;
-		import java.util.concurrent.TimeUnit;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -102,7 +102,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				return;
 			}
 		}
-		Server.getLoader().getEngine().submit(new LogicTask("Handle packet for player " + ((Player)session.getAttribute("player")).getName(), 1, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogic(new EngineTask("Handle packet for player " + ((Player)session.getAttribute("player")).getName(), 1, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if(session.getAttribute("player") != null)
@@ -112,12 +112,17 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				}
 				return true;
 			}
+
+			@Override
+			public void stopTask() {
+				World.unregister(player);
+			}
 		});
 	}
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		Server.getLoader().getEngine().submit(new LogicTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogic(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if (session.containsAttribute("player")) {
@@ -150,25 +155,36 @@ public class ConnectionHandler extends IoHandlerAdapter {
 	public void sessionOpened(IoSession session) throws Exception {
 		SocketAddress remoteAddress = session.getRemoteAddress();
 		String remoteIp = remoteAddress.toString();
-		String ip = remoteIp.split(":")[0];
-		String shortIp = TextUtils.shortIp(remoteIp);
+		Server.getLoader().getEngine().submitIO(new EngineTask("Open session for IP " + remoteIp, 1, TimeUnit.SECONDS) {
+			@Override
+			public Object call() throws Exception {
+				String ip = remoteIp.split(":")[0];
+				String shortIp = TextUtils.shortIp(remoteIp);
 
-		if(!HostGateway.canEnter(shortIp)) {
-			session.close(true);
-			return;
-		}
+				if(!HostGateway.canEnter(shortIp)) {
+					session.close(true);
+					return true;
+				}
 
-		if(!ipTries.containsKey(shortIp))
-			ipTries.put(shortIp, 0);
-		ipTries.put(shortIp, ipTries.get(shortIp) + 1);
+				if(!ipTries.containsKey(shortIp))
+					ipTries.put(shortIp, 0);
+				ipTries.put(shortIp, ipTries.get(shortIp) + 1);
 
-		if(ipTries.get(shortIp) > MAX_CONNECTIONS_TRIES) {
-			addIp(shortIp);
-			ipTries.remove(shortIp);
-			return;
-		}
+				if(ipTries.get(shortIp) > MAX_CONNECTIONS_TRIES) {
+					addIp(shortIp);
+					ipTries.remove(shortIp);
+					return true;
+				}
 
-		session.setAttribute("remote", remoteAddress);
-		session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
+				session.setAttribute("remote", remoteAddress);
+				session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
+				return true;
+			}
+
+			@Override
+			public void stopTask() {
+				session.close(true);
+			}
+		});
 	}
 }

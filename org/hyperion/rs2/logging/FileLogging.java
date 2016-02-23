@@ -1,7 +1,7 @@
 package org.hyperion.rs2.logging;
 
 import org.hyperion.Server;
-import org.hyperion.engine.LogicTask;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.rs2.model.Player;
 
 import java.io.BufferedWriter;
@@ -28,7 +28,7 @@ public class FileLogging {
     }
 
     public static void writeError(String filename, Exception ex) {
-        Server.getLoader().getEngine().submit(new LogicTask("Write error", 2, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Write error to file", 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 StringBuilder sb = new StringBuilder();
@@ -62,7 +62,7 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
-        Server.getLoader().getEngine().submit(new LogicTask("Write log", 1, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file", 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 File file = new File(DEFAULT_LOGGING_PATH, filePath);

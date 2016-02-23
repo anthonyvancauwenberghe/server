@@ -4,14 +4,11 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.engine.task.TaskManager;
-import org.hyperion.rs2.commands.NewCommand;
-import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.logging.FileLogging;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.savingnew.PlayerSaving;
 
+import java.util.Optional;
 import java.util.concurrent.*;
 
 /**
@@ -19,25 +16,31 @@ import java.util.concurrent.*;
  */
 public final class GameEngine implements Runnable {
 
+    /**
+     * The engine state that the server starts on. This is also the state that is used for the World updating.
+     */
     private final static int DEFAULT_ENGINE_STATE = 1;
-    private static ExecutorService logicService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactoryBuilder().setNameFormat("UpdateThread").setPriority(Thread.MAX_PRIORITY).build());
-    //private final ScheduledExecutorService logicService = createLogicService();
-    private int engineState = DEFAULT_ENGINE_STATE;
 
-    private long lastEngineRun = System.currentTimeMillis();
-    private static long totalTime = 0;
-    private static int totalRuns = 0;
+    /**
+     * This is the thread that handles logic that has nothing to do with the game directly.
+     */
+    private final ScheduledExecutorService logicService = createService("LogicServiceThread");
+
+    /**
+     * This thread handles input and output tasks, such as filewriting, and SQL.
+     */
+    private final ScheduledExecutorService IOService = createService("IoServerThread");
+
+    /**
+     * The current engine state of the server.
+     */
+    private int engineState = DEFAULT_ENGINE_STATE;
 
     @Override
     public void run() {
         try {
-            if(engineState == DEFAULT_ENGINE_STATE) {
+            if(engineState == DEFAULT_ENGINE_STATE)
                 World.sequence();
-                if(totalRuns > 10)
-                    totalTime += (System.currentTimeMillis() - lastEngineRun);
-                    totalRuns++;
-                lastEngineRun = System.currentTimeMillis();
-            }
             TaskManager.sequence();
             nextEngineState();
         } catch (Exception e) {
@@ -47,11 +50,15 @@ public final class GameEngine implements Runnable {
         }
     }
 
-    public void submit(LogicTask logicTask) {
+    /**
+     * This executes a logic task as soon as the thread has any space.
+     * @param logicTask The task to execute
+     */
+    public void submitLogic(EngineTask logicTask) {
         try {
-            Future<Boolean> taskResult = logicService.submit(logicTask);
+            Future taskResult = logicService.submit(logicTask);
             try {
-                taskResult.get(5, TimeUnit.SECONDS);
+                taskResult.get(logicTask.getTimeout(), logicTask.getTimeUnit());
             } catch(TimeoutException e) {
                 taskResult.cancel(true);
                 Server.getLogger().warning("Engine logic task '" + logicTask.getTaskName() + "' took too long, cancelled.");
@@ -62,29 +69,49 @@ public final class GameEngine implements Runnable {
         }
     }
 
+    /**
+     * This executes a IO task as soon as the thread has any space.
+     * This will return the object that is asked from the IO task.
+     * @param ioTask The task to execute.
+     * @return The result of the executed task.
+     */
+    public <T> Optional<T> submitIO(EngineTask<T> ioTask) {
+        try {
+            Future<T> taskResult = IOService.submit(ioTask);
+            try {
+                return Optional.of(taskResult.get(ioTask.getTimeout(), ioTask.getTimeUnit()));
+            } catch(TimeoutException e) {
+                taskResult.cancel(true);
+                ioTask.stopTask();
+                Server.getLogger().warning("Engine IO task '" + ioTask.getTaskName() + "' took too long, cancelled.");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            FileLogging.writeError("game_engine_io_errors.txt", e);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * This will switch the engine to the next possible state.
+     */
     private void nextEngineState() {
         if(engineState == 600 / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY))
             engineState = DEFAULT_ENGINE_STATE - 1;
         engineState++;
     }
 
-    public static ScheduledExecutorService createLogicService() {
+    /**
+     * This will create a thread with the given name.
+     * @param threadName The name for the thread
+     * @return The created thread
+     */
+    public static ScheduledExecutorService createService(String threadName) {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        executor.setThreadFactory(new ThreadFactoryBuilder().setNameFormat("LogicServiceThread").build());
+        executor.setThreadFactory(new ThreadFactoryBuilder().setNameFormat(threadName).build());
         executor.setKeepAliveTime(45, TimeUnit.SECONDS);
         executor.allowCoreThreadTimeOut(true);
         return Executors.unconfigurableScheduledExecutorService(executor);
-    }
-
-    static {
-        NewCommandHandler.submit(new NewCommand("enginestate", Rank.DEVELOPER) {
-            @Override
-            protected boolean execute(Player player, String[] input) {
-                player.sendMessage("Average time: " + (totalTime / (totalRuns - 10)) + "ms");
-                player.sendMessage("Total runs: " + totalRuns);
-                return true;
-            }
-        });
     }
 }

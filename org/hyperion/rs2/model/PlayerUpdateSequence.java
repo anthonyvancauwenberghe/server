@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.Server;
-import org.hyperion.engine.LogicTask;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.logging.FileLogging;
@@ -126,7 +126,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 
     @Override
     public void executeUpdate(Player player) {
-        LogicTask callable = new LogicTask("Playerupdating for player " + player.getName(), 2, TimeUnit.SECONDS) {
+        EngineTask callable = new EngineTask("Player updating for player " + player.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 try {
@@ -238,7 +238,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
         };
 
         //Here we submit the task
-        Future<Boolean> future = updateExecutor.submit(callable);
+        Future future = updateExecutor.submit(callable);
 
         try {
             future.get(callable.getTimeout(), callable.getTimeUnit());

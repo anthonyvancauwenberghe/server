@@ -6,7 +6,7 @@ import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import org.hyperion.Server;
-import org.hyperion.engine.LogicTask;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.rs2.LoginResponse;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
@@ -181,7 +181,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submit(new LogicTask("Player loading and logging in for " + playerDetails.getName(), 2, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitIO(new EngineTask("Player loading and logging in for " + playerDetails.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 Player player = new Player(playerDetails);
@@ -203,6 +203,11 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     World.getLoginQueue().add(player);
                 }
                 return true;
+            }
+
+            @Override
+            public void stopTask() {
+                playerDetails.getSession().close(true);
             }
         });
     }

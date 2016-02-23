@@ -102,7 +102,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				return;
 			}
 		}
-		Server.getLoader().getEngine().submitLogic(new EngineTask("Handle packet for player " + ((Player)session.getAttribute("player")).getName(), 1, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogic(new EngineTask("Handle packet " + ((Packet)message).getOpcode() + " for player " + ((Player)session.getAttribute("player")).getName(), 2, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if(session.getAttribute("player") != null)

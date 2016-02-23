@@ -816,21 +816,6 @@ public class CommandHandler {
 				return true;
 			}
 		});
-		submit(new Command("printcmds", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				Iterator<Command> $it = commands.values().iterator();
-				while($it.hasNext()) {
-					Command cmd = $it.next();
-					if(Rank.hasAbility(player, cmd.getRanks())) {
-						String command = "Command:" + cmd.getKey();
-						player.getActionSender().sendMessage(command);
-						System.out.println(command);
-					}
-				}
-				return true;
-			}
-		});
 		submit(new Command("save", Rank.ADMINISTRATOR) {
 
 			@Override

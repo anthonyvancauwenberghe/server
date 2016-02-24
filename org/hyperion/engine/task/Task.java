@@ -2,10 +2,9 @@ package org.hyperion.engine.task;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
-import org.hyperion.engine.EngineTask;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 /**
  * A task that the {@link TaskManager} will execute
@@ -88,17 +87,12 @@ public abstract class Task {
      * @return A flag indicating if the task is running.
      */
     public boolean tick() {
-
         if (running && --countdown == 0) {
-            EngineTask<Boolean> callable = new EngineTask<Boolean>(key.toString(), 300, TimeUnit.MILLISECONDS) {
-                @Override
-                public Boolean call() {
-                    execute();
-                    return true;
-                }
-            };
-
-            Server.getLoader().getEngine().submitLogic(callable);
+            long startTime = System.currentTimeMillis();
+            execute();
+            if(System.currentTimeMillis() - startTime > 50) {
+                Server.getLogger().log(Level.INFO, "Task '" + getKey() + "' with class '" + getClass().getSimpleName() + "' took " + (System.currentTimeMillis() - startTime) + "ms to execute.");
+            }
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         }
         return running;

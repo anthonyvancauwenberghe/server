@@ -32,11 +32,6 @@ public final class GameEngine implements Runnable {
     private final ScheduledExecutorService IOService = createService("IoServiceThread");
 
     /**
-     * This thread handles tasks, it will only do things when
-     */
-    private final ScheduledExecutorService taskService = createService("TaskServiceThread");
-
-    /**
      * The current engine state of the server.
      */
     private int engineState = DEFAULT_ENGINE_STATE;

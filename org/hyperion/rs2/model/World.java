@@ -147,6 +147,8 @@ public final class World {
             amount++;
         }
 
+        NpcCombatTask.aggressiveNPCS();
+
         UpdateSequence<Player> playerUpdate = new PlayerUpdateSequence(synchronizer, updateExecutor);
         UpdateSequence<NPC> npcUpdate = new NpcUpdateSequence();
         // Then we execute pre-updating code.
@@ -212,7 +214,6 @@ public final class World {
         submit(new EarnPotentialTask());
         submit(new PromoteTask());
         submit(new PlayerCombatTask());
-        submit(new NpcCombatTask());
         submit(new ServerEventTask());
         submit(new ServerMessageTask());
         submit(new BountyHunterTask());

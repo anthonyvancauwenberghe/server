@@ -33,7 +33,7 @@ public class NpcCombatTask extends Task {
 	@Override
 	public void execute() {
         final long startTime = System.currentTimeMillis();
-		NpcCombatTask.agressiveNPCS();
+		NpcCombatTask.aggressiveNPCS();
 		for(NPC npc : World.getNpcs()) {
 		}
         long deltaMs = System.currentTimeMillis() - startTime;
@@ -71,7 +71,7 @@ public class NpcCombatTask extends Task {
 			}
 		}
 	}
-	public static void agressiveNPCS() {
+	public static void aggressiveNPCS() {
 		for(NPC npc : World.getNpcs()) {
 			try {
                 if(npc.ownerId < 1 && npc.agressiveDis < 1 && Combat.getWildLevel(npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ()) > 20)

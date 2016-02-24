@@ -31,7 +31,6 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
-import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -361,7 +360,7 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        PlayerSaving.save(player);
+        World.getLoader().savePlayer(player);
         player.destroy();
         return World.getPlayers().remove(player);
     }

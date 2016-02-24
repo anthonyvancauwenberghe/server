@@ -150,7 +150,6 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		if (e instanceof Player) {
 			Player player = (Player) e;
 			if (player.getSession().isConnected()) {
-				player.destroy();
 				player.getSession().close(true);
 			}
 		}

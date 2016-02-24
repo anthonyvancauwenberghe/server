@@ -1,8 +1,6 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
-import org.hyperion.Server;
-import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
@@ -33,6 +31,7 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
+import org.hyperion.rs2.savingnew.PlayerSaving;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -41,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gilles on 11/02/2016.
@@ -363,14 +361,8 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Saving player " + player.getName() + " on logout", 8, TimeUnit.SECONDS) {
-            @Override
-            public Boolean call() throws Exception {
-                World.getLoader().savePlayer(player);
-                player.destroy();
-                return true;
-            }
-        });
+        PlayerSaving.save(player);
+        player.destroy();
         return World.getPlayers().remove(player);
     }
 

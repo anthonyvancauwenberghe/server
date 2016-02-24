@@ -139,12 +139,12 @@ public final class World {
         Iterator<Player> $it = logouts.iterator();
         while ($it.hasNext()) {
             Player player = $it.next();
-            if (player == null || amount >= 50)
+            if (player == null || amount >= 20)
                 break;
             if (EntityHandler.deregister(player)) {
                 $it.remove();
-                amount++;
             }
+            amount++;
         }
 
         UpdateSequence<Player> playerUpdate = new PlayerUpdateSequence(synchronizer, updateExecutor);
@@ -286,6 +286,6 @@ public final class World {
      * @param player The player to unregister.
      */
     public static void unregister(final Player player) {
-        logouts.add(player);
+        getLogoutQueue().add(player);
     }
 }

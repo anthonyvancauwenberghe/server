@@ -20,6 +20,8 @@ public class FileLogging {
     private final static DateFormat FILE_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss | ");
 
     public static void savePlayerLog(final Player player, final String... lines) {
+        if(true)
+            return;
         Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file for player " + player.getName(), 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
@@ -30,6 +32,8 @@ public class FileLogging {
     }
 
     public static void saveGameLog(final String filePath, final String... lines) {
+        if(true)
+            return;
         Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file " + filePath, 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
@@ -68,8 +72,6 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
-        if(true)
-            return;
         File file = new File(DEFAULT_LOGGING_PATH, filePath);
 
         if (!file.getParentFile().exists()) {

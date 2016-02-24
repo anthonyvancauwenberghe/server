@@ -11,8 +11,8 @@ import java.util.List;
 @RegisterMapper(WaitingVoteMapper.class)
 public interface VoteDao extends SqlDao {
 
-    @SqlQuery("SELECT * FROM waitingVotes WHERE realUsername = :playerName")
-    List<WaitingVote> waiting(@Bind("playerName") final String playerName);
+    @SqlQuery("SELECT * FROM waitingVotes WHERE processed = 0")
+    List<WaitingVote> getWaiting();
 
     @SqlUpdate("UPDATE waitingVotes SET runelocusProcessed = 1 WHERE `index` = :index")
     int processRunelocus(@Bind("index") final int index);

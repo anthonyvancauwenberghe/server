@@ -27,9 +27,14 @@ public final class GameEngine implements Runnable {
     private final ScheduledExecutorService logicService = createService("LogicServiceThread");
 
     /**
-     * This thread handles input and output tasks, such as filewriting, and SQL.
+     * This thread handles input and output tasks, such as file writing.
      */
     private final ScheduledExecutorService IOService = createService("IoServiceThread");
+
+    /**
+     * This thread handles input and output tasks, such as file writing.
+     */
+    private final ScheduledExecutorService SqlService = createService("SqlServiceThread");
 
     /**
      * The current engine state of the server.
@@ -88,6 +93,29 @@ public final class GameEngine implements Runnable {
         } catch(Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_io_errors.txt", e);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * This executes a IO task as soon as the thread has any space.
+     * This will return the object that is asked from the IO task.
+     * @param ioTask The task to execute.
+     * @return The result of the executed task.
+     */
+    public <T> Optional<T> submitSql(EngineTask<T> ioTask) {
+        try {
+            Future<T> taskResult = SqlService.submit(ioTask);
+            try {
+                return Optional.of(taskResult.get(ioTask.getTimeout(), ioTask.getTimeUnit()));
+            } catch(TimeoutException e) {
+                taskResult.cancel(true);
+                ioTask.stopTask();
+                Server.getLogger().warning("Engine Sql task '" + ioTask.getTaskName() + "' took too long, cancelled.");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            FileLogging.writeError("game_engine_sql_errors.txt", e);
         }
         return Optional.empty();
     }

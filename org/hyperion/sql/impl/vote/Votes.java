@@ -13,18 +13,14 @@ public class Votes extends SqlDaoManager<VoteDao> {
         super(db, VoteDao.class);
     }
 
-    public List<WaitingVote> waiting(final String playerName) {
+    public List<WaitingVote> getWaiting() {
         try{
-            return dao.waiting(playerName);
+            return dao.getWaiting();
         }catch(Exception ex){
             if(DbHub.isConsoleDebug())
                 ex.printStackTrace();
             return null;
         }
-    }
-
-    public List<WaitingVote> waiting(final Player player) {
-        return waiting(player.getName().toLowerCase());
     }
 
     public boolean processRunelocus(final WaitingVote vote) {

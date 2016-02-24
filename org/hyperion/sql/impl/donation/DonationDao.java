@@ -11,8 +11,8 @@ import java.util.List;
 @RegisterMapper(DonationMapper.class)
 public interface DonationDao extends SqlDao {
 
-    @SqlQuery("SELECT * FROM donator WHERE name = :name AND finished = :finished")
-    List<Donation> get(@Bind("name") final String name, @Bind("finished") final boolean finished);
+    @SqlQuery("SELECT * FROM donator WHERE  finished = 0")
+    List<Donation> getActive();
 
     @SqlUpdate("UPDATE donator SET `finished` = 1 WHERE `index` = :index")
     int finish(@Bind("index") final int index);

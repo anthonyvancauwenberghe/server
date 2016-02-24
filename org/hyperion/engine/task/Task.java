@@ -91,7 +91,7 @@ public abstract class Task {
             long startTime = System.currentTimeMillis();
             execute();
             if(System.currentTimeMillis() - startTime > 50) {
-                Server.getLogger().log(Level.INFO, "Task '" + getKey() + "' with class '" + getClass().getSimpleName() + "' took " + (System.currentTimeMillis() - startTime) + "ms to execute.");
+                Server.getLogger().log(Level.INFO, "Task '" + getKey() + "' with class '" + getClass().getSimpleName() + "' with delay " + getDelay() + " took " + (System.currentTimeMillis() - startTime) + "ms to execute.");
             }
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         }

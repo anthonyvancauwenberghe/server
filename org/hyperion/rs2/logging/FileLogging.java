@@ -68,6 +68,8 @@ public class FileLogging {
     }
 
     private static void writeToFile(String filePath, String... lines) {
+        if(true)
+            return;
         File file = new File(DEFAULT_LOGGING_PATH, filePath);
 
         if (!file.getParentFile().exists()) {

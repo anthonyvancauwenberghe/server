@@ -215,15 +215,7 @@ public class NpcDeathTask extends Task {
                             chance = 750;
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
-                        if (player.getPermExtraData().getLong("increasedDroprate") >= System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {
-                            if(player.getExtraData().get("dropRateMultiplier") != null) {
-                                double increase = (double) player.getExtraData().get("dropRateMultiplier");
-                                chance -= (int) ((chance * increase) - chance);
-                            }
-                        } else if (player.getPermExtraData().getLong("increasedDroprate") < System.currentTimeMillis() && player.getPermExtraData().getLong("increasedDroprate") != 0) {
-                            player.getPermExtraData().remove("increaseDroprate");
-                            player.getPermExtraData().remove("dropRateMultiplier");
-                        }
+                        chance *= 0.5;
                         for (NPCDrop drop : npc.getDefinition().getDrops()) {
                             if (drop == null) continue;
                             if (Combat.random(chance) <= drop.getChance()) {

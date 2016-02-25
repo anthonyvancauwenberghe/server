@@ -145,8 +145,13 @@ public class EntityHandler {
                     Magic.teleport(player, Edgeville.LOCATION, true, false);
                 player.setTutorialProgress(28);
             }
-            player.sendMessage("@bla@Welcome back to @dre@" + Configuration.getString(Configuration.ConfigurationObject.NAME) + "@bla@.", "");
-
+            player.sendMessage("@bla@Welcome back to @dre@" + Configuration.getString(Configuration.ConfigurationObject.NAME) + "@bla@.", "@dre@Current bonus: @bla@2x experience, 1.5x droprates, 2x honor points!");
+            /**
+             * To remove the bonus;
+             * Skills.java#523
+             * NpcDeathTask.java#218
+             * PlayerPoints.java#245
+             */
             if (WildernessBossTask.currentBoss != null) {
                 player.sendMessage(WildernessBossTask.currentBoss.getDefinition().getName() + " is somewhere in the wilderness!");
             }

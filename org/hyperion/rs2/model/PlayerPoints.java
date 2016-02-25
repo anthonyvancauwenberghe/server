@@ -242,6 +242,7 @@ public class PlayerPoints {
                 }
                 if (Rank.hasAbility(player, Rank.SUPER_DONATOR))
                     reward *= 1.25;
+                reward *= 2;
                 honorPoints += (int) (reward);
 
                 player.sendPkMessage("You have been awarded " + (int) reward + " honor points!");

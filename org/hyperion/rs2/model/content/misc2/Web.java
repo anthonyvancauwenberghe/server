@@ -64,7 +64,7 @@ public class Web implements ContentTemplate {
 		if(type == 6) {
             if(objectId == 1765) {
                 player.playAnimation(Animation.create(828));
-                World.submit(new Task(600) {
+                World.submit(new Task(600, "webslashing") {
                     @Override
                     public void execute() {
                         player.setTeleportTarget(Location.create(3069, 10255, 0));

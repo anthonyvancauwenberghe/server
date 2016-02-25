@@ -402,7 +402,7 @@ public class FightPits implements ContentTemplate {
 			player.getInventory().clear();
 			player.getEquipment().clear();
 			final Player p2 = player;
-			World.submit(new Task(600) {
+			World.submit(new Task(600, "fightpits") {
 				public void execute() {
                     spawnItems(p2);
 					this.stop();

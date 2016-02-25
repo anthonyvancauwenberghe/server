@@ -95,10 +95,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					EntityHandler.deregister(player);
 					PunishmentManager.getInstance().add(new Punishment(player, Combination.of(Target.SPECIAL, Type.BAN), org.hyperion.rs2.model.punishment.Time.create(1, TimeUnit.MINUTES), "Suspected layer 7 ddos."));
 				}
-				if(packetCount > 249) {
-					System.out.printf("%s has a a %,d packet count, banning\n", player.getName(), player.getExtraData().getInt("packetCount"));
-					session.close(false);
-				}
 				return;
 			}
 		}
@@ -122,7 +118,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		Server.getLoader().getEngine().submitLogic(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 2, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogic(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if (session.containsAttribute("player")) {
@@ -134,11 +130,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 					}
 				}
 				return true;
-			}
-
-			@Override
-			public void stopTask() {
-				session.close(true);
 			}
 		});
 	}

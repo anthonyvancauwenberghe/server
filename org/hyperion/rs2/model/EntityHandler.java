@@ -1,6 +1,8 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
+import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
@@ -39,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gilles on 11/02/2016.
@@ -324,6 +327,7 @@ public class EntityHandler {
     private static boolean deregister(Player player) {
         if (System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
             return false;
+        System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
         player.getExtraData().put("lastUnregister", System.currentTimeMillis());
         if (player.getLogging() != null)
             Combat.logoutReset(player.cE);
@@ -360,8 +364,14 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        World.getLoader().savePlayer(player);
-        player.destroy();
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Saving player " + player.getName() + " on logout", 8, TimeUnit.SECONDS) {
+            @Override
+            public Boolean call() throws Exception {
+                World.getLoader().savePlayer(player);
+                player.destroy();
+                return true;
+            }
+        });
         return World.getPlayers().remove(player);
     }
 

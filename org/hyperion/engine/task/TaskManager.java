@@ -15,7 +15,6 @@ public abstract class TaskManager {
 	private final static List<Task> activeTasks = new LinkedList<>();
 
 	public static void sequence() {
-		System.out.println("Starting TaskManager sequence");
 		try {
 			Task t;
 			while ((t = pendingTasks.poll()) != null) {
@@ -35,7 +34,6 @@ public abstract class TaskManager {
 			e.printStackTrace();
 			World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
 		}
-		System.out.println("Ending TaskManager sequence");
 	}
 
 	public static void submit(Task... tasks) {

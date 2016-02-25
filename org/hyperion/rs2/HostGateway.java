@@ -31,7 +31,7 @@ public class HostGateway {
 	/**
 	 * The maximum amount of connections per host.
 	 */
-	public static final int MAX_CONNECTIONS_PER_HOST = 500;
+	public static final int MAX_CONNECTIONS_PER_HOST = 2;
 
 	/**
 	 * Used to keep track of hosts and their amount of connections.

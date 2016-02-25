@@ -1366,7 +1366,7 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(0, 512);
 				break;
 			case 512:
-				EntityHandler.deregister(player);
+				World.getLogoutQueue().add(player);
 				break;
 			case 513:
 				//InstantPk

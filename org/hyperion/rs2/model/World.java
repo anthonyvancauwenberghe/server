@@ -125,7 +125,6 @@ public final class World {
     }
 
     public static void sequence() {
-        System.out.println("Starting World sequence");
         // Handle queued logins.
         for (int amount = 0; amount < 20; amount++) {
             Player player = logins.poll();
@@ -161,8 +160,6 @@ public final class World {
         // Then we execute post-updating code.
         players.stream().filter(player -> player != null).forEach(playerUpdate::executePostUpdate);
         npcs.stream().filter(npc -> npc != null).forEach(npcUpdate::executePostUpdate);
-
-        System.out.println("Ending World sequence");
     }
 
     public static void loadConfiguration() {

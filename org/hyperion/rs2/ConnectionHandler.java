@@ -175,11 +175,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.LOGIN));
 				return true;
 			}
-
-			@Override
-			public void stopTask() {
-				session.close(true);
-			}
 		});
 	}
 }

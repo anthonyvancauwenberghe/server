@@ -4,7 +4,6 @@ import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
@@ -165,7 +164,7 @@ public class Teleports implements ContentTemplate {
 				case 178059: //Fun Pk
 				case - 19909:
 					//DialogueManager.openDialogue(player, 106);
-					Magic.teleport(player, Location.create(2605, 3153, 0), false);
+					//Magic.teleport(player, Location.create(2605, 3153, 0), false);
                     AchievementHandler.progressAchievement(player, "Teleport to FunPk");
                     break;
 				case 176162://Barrows

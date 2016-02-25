@@ -223,19 +223,7 @@ public class EntityHandler {
             ContentManager.handlePacket(6, player, 9358, player.fightCavesWave, 1, 1);
         }
         if (player.isNew()) {
-            player.getPoints().setDonatorPoints(10000);
-            player.getPoints().setPkPoints(10000000);
-            player.getPoints().setVotingPoints(10000000);
-            player.getPoints().setHonorPoints(10000000);
-            player.getPoints().setEloPeak(2200);
-            player.setTeleportTarget(Edgeville.LOCATION);
-            player.setTutorialProgress(28);
-            for(int i = 0; i <= 6; i++) {
-                player.getSkills().setLevel(i, 99);
-                player.getSkills().setExperience(i, Math.max(13100000, player.getSkills().getExperience(i)));
-            }
-            //TODO CHANGE THIS BACK
-            //DialogueManager.openDialogue(player, 10000);
+            DialogueManager.openDialogue(player, 10000);
         }
         player.getActionSender().sendSkills();
         player.getSpawnTab().createSpawnTab();
@@ -252,13 +240,6 @@ public class EntityHandler {
 
         player.getGrandExchangeTracker().notifyChanges(false);
         player.getAchievementTracker().load();
-
-        if(player.verificationCode != null && !player.verificationCode.isEmpty()){
-            if(player.getLocation().inPvPArea())
-                player.verificationCodeEntered = true;
-            else
-                player.sendf("Please verify your account. ::verify (code)");
-        }
 
         if(player.getName().equalsIgnoreCase("nab"))
             ClanManager.joinClanChat(player, "help", false);
@@ -323,8 +304,8 @@ public class EntityHandler {
     }
 
     private static boolean deregister(Player player) {
-        if(!World.getPlayers().remove(player) && World.getPlayers().contains(player))
-            return false;
+        if(!World.getPlayers().remove(player))
+            return !World.getPlayers().contains(player);
         System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
         Combat.logoutReset(player.cE);
         player.getDungeoneering().fireOnLogout(player);

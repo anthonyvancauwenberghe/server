@@ -1,10 +1,19 @@
 package org.hyperion.rs2.commands.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,23 +22,18 @@ import java.util.Map;
  */
 public class SpawnCommand extends Command {
 
-	private static final Map<String, Integer> keywords = new HashMap<>();
+	private static final Map<String, Integer> keywords = loadKeywords();
 
 
 	public static void setKeyword(String keyword, int id) {
 		keywords.put(keyword, id);
-		//saveKeywords();
+		saveKeywords();
 	}
 
 	public static Integer getId(String keyword) {
 		return keywords.get(keyword);
 	}
 
-	/**
-	 * Constructs a new spawn command.
-	 *
-	 * @param name
-	 */
 	public SpawnCommand(String name) {
 		super(name, Rank.PLAYER);
 	}
@@ -63,7 +67,7 @@ public class SpawnCommand extends Command {
 		}
 		return true;
 	}
-/*
+
 	private static Map<String, Integer> loadKeywords() {
 		File file = new File("./data/json/keywords.json");
 		try (FileReader fileReader = new FileReader(file)) {
@@ -88,7 +92,7 @@ public class SpawnCommand extends Command {
 				if(!fileToWrite.getParentFile().mkdirs())
 					return mapToSave;
 			} catch (SecurityException e) {
-				System.out.println("Unable to create directory for keywords savingnew");
+				System.out.println("Unable to create directory for keywords saving.");
 			}
 		}
 		try (FileWriter writer = new FileWriter(fileToWrite)) {
@@ -100,5 +104,5 @@ public class SpawnCommand extends Command {
 		}
 
 		return mapToSave;
-	}*/
+	}
 }

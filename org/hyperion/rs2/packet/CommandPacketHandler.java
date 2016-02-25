@@ -2228,14 +2228,6 @@ public class CommandPacketHandler implements PacketHandler {
                 }
             }
 
-            /*if (commandStart.equalsIgnoreCase("itemn") || commandStart.equalsIgnoreCase("spawn")) {
-                try {
-                    InterfaceManager.<NameItemInterface>get(11).send(player, s.substring(6));
-                } catch (Exception ex) {
-                    InterfaceManager.<NameItemInterface>get(11).send(player, "");
-                }
-                return;
-            }*/
             if (CommandHandler.processed(commandStart, player, s))
                 return;
 

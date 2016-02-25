@@ -42,12 +42,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
         switch (state) {
             case STATE_OPCODE:
                 if (in.remaining() < 2) {
-                    System.out.println(1);
                     session.close(true);
                     return false;
                 }
                 if ((in.get() & 0xFF) != 14) {
-                    System.out.println(2);
                     session.close(true);
                     return false;
                 }
@@ -56,7 +54,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
             case STATE_LOGIN:
                 if (in.remaining() < 1) {
-                    System.out.println(3);
                     state = STATE_OPCODE;
                     session.close(true);
                     return false;
@@ -71,7 +68,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
             case STATE_PRECRYPTED:
                 if (in.remaining() < 2) {
-                    System.out.println(4);
                     state = STATE_OPCODE;
                     session.close(true);
                     return false;
@@ -79,7 +75,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 int loginOpcode = in.get() & 0xFF;
                 if (loginOpcode != 16 && loginOpcode != 18) {
-                    System.out.println(5);
                     state = STATE_OPCODE;
                     session.close(true);
                     return false;
@@ -87,7 +82,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 int loginSize = in.get() & 0xFF;
                 if (in.remaining() < loginSize) {
-                    System.out.println(6);
                     state = STATE_OPCODE;
                     session.close(true);
                     return false;
@@ -95,7 +89,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 int loginEncryptSize = loginSize - 40;
                 if (loginEncryptSize <= 0) {
-                    System.out.println(7);
                     state = STATE_OPCODE;
                     session.close(true);
                     return false;
@@ -108,7 +101,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 if (in.remaining() < size) {
                     state = STATE_OPCODE;
                     session.close(true);
-                    System.out.println(8);
                     return true;
                 }
                 String remoteIp = session.getRemoteAddress().toString();
@@ -116,7 +108,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 int returnCode = 0;
                 int magicId = in.get() & 0xFF;
                 if (magicId != 122) {
-                    System.out.println(9);
                     returnCode = 6;
                 }
 
@@ -126,7 +117,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 @SuppressWarnings("unused")
                 boolean lowMemoryVersion = false;
                 if (in.get() != 5) {
-                    System.out.println(10);
                     returnCode = 6;
                 }
 
@@ -136,7 +126,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 int reportedSize = in.get() & 0xFF;
                 if (reportedSize != --encryptedSize) {
-                    System.out.println(11);
                     state = STATE_OPCODE;
                     session.close(false);
                     in.rewind();
@@ -146,14 +135,12 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 int blockOpcode = in.get() & 0xFF;
                 if (blockOpcode != 10) {
                     returnCode = 6;
-                    System.out.println(12);
                 }
 
                 long clientKey = in.getLong();
 
                 long reportedServerKey = in.getLong();
                 if (reportedServerKey != serverKey) {
-                    System.out.println(13);
                     returnCode = 6;
                 }
 
@@ -188,7 +175,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 session.getFilterChain().addFirst("protocol", new ProtocolCodecFilter(RS2CodecFactory.GAME));
 
                 if (returnCode != 0) {
-                    System.out.println(14);
                     session.write(new PacketBuilder().put((byte) returnCode).toPacket()).addListener(future -> {
                         state = STATE_OPCODE;
                         future.getSession().close(false);
@@ -217,10 +203,8 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 }
 
                 if(loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
-                    String loginResponseString = loginResponse.name();
                     playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> {
                         future.getSession().close(true);
-                        System.out.println("Session closed for player " + player.getName() + " for loginresponse " + loginResponseString);
                     });
                     return true;
                 }

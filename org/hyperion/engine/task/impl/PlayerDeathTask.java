@@ -55,7 +55,7 @@ public class PlayerDeathTask extends Task {
 			}
 
 			if(!World.getPlayers().contains(player))
-				EntityHandler.deregister(player);
+				player.destroy();
 
 			if(Jail.inJail(player)) {
 				player.getSkills().setLevel(Skills.HITPOINTS, player.getSkills().getLevelForExp(Skills.HITPOINTS));

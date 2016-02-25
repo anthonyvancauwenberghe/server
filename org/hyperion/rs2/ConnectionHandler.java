@@ -139,7 +139,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		Object playerobject = session.getAttribute("player");
 		if(playerobject != null) {
 			Player player = (Player) playerobject;
-			System.out.println("Connection closed because its idle " + player.getName());
 			World.unregister(player);
 		} else
 			session.close(false);
@@ -152,11 +151,9 @@ public class ConnectionHandler extends IoHandlerAdapter {
 		Server.getLoader().getEngine().submitIO(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
 			@Override
 			public Object call() throws Exception {
-				String ip = remoteIp.split(":")[0];
 				String shortIp = TextUtils.shortIp(remoteIp);
 
 				if(!HostGateway.canEnter(shortIp)) {
-					System.out.println("Closing session because hostgateway is not letting " + shortIp + " enter.");
 					session.close(true);
 					return true;
 				}
@@ -166,7 +163,6 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				ipTries.put(shortIp, ipTries.get(shortIp) + 1);
 
 				if(ipTries.get(shortIp) > MAX_CONNECTIONS_TRIES) {
-					System.out.println("Closing session because too many tries for " + shortIp + " to enter.");
 					addIp(shortIp);
 					ipTries.remove(shortIp);
 					session.close(true);

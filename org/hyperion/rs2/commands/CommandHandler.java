@@ -140,7 +140,7 @@ public class CommandHandler {
 		submit(new EpicRapeCommand());
 		submit(new RestartServerCommand());
         submit(new WikiCommand());
-		//submit(new SpawnCommand("item"), new SpawnCommand("pickup"), new SpawnCommand("spawn"));
+		submit(new SpawnCommand("item"), new SpawnCommand("pickup"), new SpawnCommand("spawn"));
 		submit(new KeywordCommand("setkeyword"));
         submit(new Command("dp", Rank.DONATOR) {
             @Override
@@ -693,8 +693,7 @@ public class CommandHandler {
 			}
 		});
 
-		//TODO PUT THIS BACK
-		submit(new Command("spawn", Rank.PLAYER) {
+		submit(new Command("spawnitem", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				input = filterInput(input);

@@ -2697,11 +2697,11 @@ public class CommandPacketHandler implements PacketHandler {
                 }
                 int tickets = Integer.parseInt(as[1]);
                 int removed;
-                if ((removed = player.getInventory().remove(
-                        new Item(5020, tickets))) > 0) {
-                    player.getPoints().increasePkPoints(removed * 10);
-                    player.getActionSender().sendMessage(
-                            "You sold: " + removed + " PK tickets!");
+                if(player.getPoints().getPkPoints() + (tickets * 10) < Integer.MAX_VALUE) {
+                    if ((removed = player.getInventory().remove(new Item(5020, tickets))) > 0) {
+                        player.getPoints().increasePkPoints(removed * 10);
+                        player.getActionSender().sendMessage("You sold: " + removed + " PK tickets!");
+                    }
                 }
             }
 

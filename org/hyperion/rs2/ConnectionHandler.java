@@ -157,6 +157,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				String shortIp = TextUtils.shortIp(remoteIp);
 
 				if(!HostGateway.canEnter(shortIp)) {
+					System.out.println("Closing session because hostgateway is not letting " + shortIp + " enter.");
 					session.close(true);
 					return true;
 				}
@@ -166,8 +167,10 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				ipTries.put(shortIp, ipTries.get(shortIp) + 1);
 
 				if(ipTries.get(shortIp) > MAX_CONNECTIONS_TRIES) {
+					System.out.println("Closing session because too many tries for " + shortIp + " to enter.");
 					addIp(shortIp);
 					ipTries.remove(shortIp);
+					session.close(true);
 					return true;
 				}
 

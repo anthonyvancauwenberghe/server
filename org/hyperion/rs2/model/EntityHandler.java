@@ -75,7 +75,6 @@ public class EntityHandler {
     }
 
     private static void register(Player player) {
-        System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
         Packet packet = new PacketBuilder().put((byte)LoginResponse.SUCCESSFUL_LOGIN.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket();
         player.getSession().write(packet);
 
@@ -83,9 +82,9 @@ public class EntityHandler {
         ConnectionHandler.removeIp(player.getShortIP());
         if(!World.getPlayers().add(player)) {
             player.getSession().close(true);
-            deregister(player);
             return;
         }
+        System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
 
         /**
          * We send the player his details.
@@ -327,6 +326,11 @@ public class EntityHandler {
     private static boolean deregister(Player player) {
         if (System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
             return false;
+        if(!World.getPlayers().contains(player) || !World.getPlayers().remove(player)) {
+            player.getSession().close(true);
+            player.destroy();
+            return false;
+        }
         System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
         player.getExtraData().put("lastUnregister", System.currentTimeMillis());
         if (player.getLogging() != null)
@@ -372,7 +376,6 @@ public class EntityHandler {
                 return true;
             }
         });
-        World.getPlayers().remove(player);
         return true;
     }
 

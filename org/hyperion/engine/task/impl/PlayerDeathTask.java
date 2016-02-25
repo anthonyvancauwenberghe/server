@@ -1,5 +1,7 @@
 package org.hyperion.engine.task.impl;
 
+import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gilles
@@ -69,7 +72,13 @@ public class PlayerDeathTask extends Task {
 					break;
 				case 9:
 					resetPlayer();
-					PlayerSaving.save(player);
+					Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("saving player", 8, TimeUnit.SECONDS) {
+						@Override
+						public Boolean call() throws Exception {
+							PlayerSaving.save(player);
+							return true;
+						}
+					});
 					break;
 				case 11:
 					player.playAnimation(Animation.create(- 1, 0));

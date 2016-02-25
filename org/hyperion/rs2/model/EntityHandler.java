@@ -372,7 +372,8 @@ public class EntityHandler {
                 return true;
             }
         });
-        return World.getPlayers().remove(player);
+        World.getPlayers().remove(player);
+        return true;
     }
 
     private static boolean deregister(NPC npc) {

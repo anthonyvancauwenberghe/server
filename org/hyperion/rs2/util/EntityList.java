@@ -1,39 +1,27 @@
 package org.hyperion.rs2.util;
 
 import org.hyperion.rs2.model.Entity;
-import org.hyperion.rs2.model.EntityHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
  * A class which represents a list of entities.
- * Rewritten partially for faster processing
  *
  * @param <E> The type of entity.
  * @author Graham Edgecombe
- * @author Gilles
  */
 public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> {
 
 	/**
 	 * Internal entities array.
 	 */
-	public E[] entities;
-
-	/**
-	 * The queue containing all of the slots that were
-	 * recently removed from. This is used to reduce slot lookup times for
-	 * characters being added to this character list.
-	 */
-	private final Queue<Integer> slotQueue = new LinkedList<>();
-
-	/**
-	 * The finite capacity of this collection.
-	 */
-	private final int capacity;
+	private Entity[] entities;
 
 	/**
 	 * Current size.
@@ -45,10 +33,8 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 	 *
 	 * @param capacity The capacity.
 	 */
-	@SuppressWarnings("unchecked")
 	public EntityList(int capacity) {
-		this.capacity = ++capacity;
-		entities = (E[])new Entity[this.capacity]; // do not use idx 0
+		entities = new Entity[capacity + 1]; // do not use idx 0
 	}
 
 	public Entity get(int index) {
@@ -68,25 +54,30 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		return entity.getIndex();
 	}
 
-	@Override
-	public boolean add(E e) {
-		Objects.requireNonNull(e);
-
-		if (!e.isRegistered()) {
-			int slot = slotSearch();
-			if (slot < 0)
-				return false;
-			e.setRegistered(true);
-			e.setIndex(slot);
-			entities[slot] = e;
-			size++;
-			if(e instanceof Player) {
-				World.updatePlayersOnline();
-				World.updateStaffOnline();
+	/**
+	 * Gets the next free id.
+	 *
+	 * @return The next free id.
+	 */
+	private int getNextId() {
+		for(int i = 1; i < entities.length; i++) {
+			if(entities[i] == null) {
+				return i;
 			}
-			return true;
 		}
-		return false;
+		return - 1;
+	}
+
+	@Override
+	public boolean add(E arg0) {
+		int id = getNextId();
+		if(id == - 1) {
+			return false;
+		}
+		entities[id] = arg0;
+		arg0.setIndex(id);
+		size++;
+		return true;
 	}
 
 	@Override
@@ -108,14 +99,20 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		size = 0;
 	}
 
+	/*@Override
+	public boolean contains(Object arg0) {
+		for(int i = 1; i < entities.length; i++) {
+			if(entities[i] == arg0) {
+				return true;
+			}
+		}
+		return false;
+	}*/
+
 	@Override
-	@SuppressWarnings("unchecked")
-	public boolean contains(Object o) {
-		Objects.requireNonNull(o);
-		if(!(o instanceof Entity))
-			return false;
-		E e = (E)o;
-		return entities[e.getIndex()] != null;
+	public boolean contains(Object arg0) {
+		Entity entity = (Entity) arg0;
+		return entities[entity.getIndex()] == entity;
 	}
 
 	@Override
@@ -136,75 +133,33 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 
 	@Override
 	public Iterator<E> iterator() {
-		return new EntityListIterator<>(this);
+		return new EntityListIterator<E>(this);
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public boolean remove(Object arg0) {
-		Objects.requireNonNull(arg0);
-		if(!(arg0 instanceof Entity))
-			return false;
-		E e = (E)arg0;
-
-		if (e instanceof Player) {
-			Player player = (Player) e;
-			if (player.getSession().isConnected()) {
-				player.getSession().close(true);
+		for(int i = 1; i < entities.length; i++) {
+			if(entities[i] == arg0) {
+				entities[i] = null;
+				size--;
+				if(arg0 instanceof Player) {
+					World.updatePlayersOnline();
+					World.updateStaffOnline();
+				}
+				return true;
 			}
-		}
-
-		if (e.isRegistered() && entities[e.getIndex()] != null) {
-			e.setRegistered(false);
-			entities[e.getIndex()] = null;
-			slotQueue.add(e.getIndex());
-			size--;
-			if(e instanceof Player) {
-				World.updatePlayersOnline();
-				World.updateStaffOnline();
-			}
-			return true;
 		}
 		return false;
 	}
 
-	public Optional<E> search(Predicate<? super E> filter) {
-		for (E e : entities) {
+	public Optional<E> search(Predicate<E> filter) {
+		for (Entity e : entities) {
 			if (e == null)
 				continue;
-			if (filter.test(e))
-				return Optional.of(e);
+			if (filter.test((E)e))
+				return Optional.of((E)e);
 		}
 		return Optional.empty();
-	}
-
-	private int slotSearch() {
-		if (slotQueue.size() == 0) {
-			for (int slot = 1; slot < capacity; slot++) {
-				if (entities[slot] == null) {
-					return slot;
-				}
-			}
-			return -1;
-		}
-		return slotQueue.remove();
-	}
-
-	public boolean remove(Player player, boolean force) {
-		if(force) {
-			for(int i = 1; i < entities.length; i++) {
-				if(entities[i] == player) {
-					System.out.println("Successfully terminated player");
-					entities[i] = null;
-					size--;
-					return true;
-				}
-			}
-		} else {
-			System.out.println("Attempting to deregister player instead");
-			EntityHandler.deregister(player);
-		}
-		return false;
 	}
 
 	@Override
@@ -262,7 +217,4 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
 		return (T[]) Arrays.copyOf(arr, arr.length, arg0.getClass());
 	}
 
-	public int capacity() {
-		return capacity;
-	}
 }

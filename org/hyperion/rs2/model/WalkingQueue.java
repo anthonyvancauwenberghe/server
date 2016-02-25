@@ -230,6 +230,8 @@ public class WalkingQueue {
 
 	public void addStep(int x, int y) {
 		//Make npcs not walk too far away from their spawn location.
+		if(walkingQueue == null)
+			return;
 		if(entity instanceof NPC) {
 			Location target = Location.create(x, y, 0);
 			if(target.distance(((NPC) entity).getSpawnLocation()) > 15)

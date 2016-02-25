@@ -757,7 +757,7 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Task(500) {
+            World.submit(new Task(500, "infhp") {
                 public void execute() {
                     int hp = t.getSkills().calculateMaxLifePoints();
                     t.getSkills().setLevel(Skills.HITPOINTS, hp);
@@ -1036,7 +1036,7 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Task(500) {
+            World.submit(new Task(500, "infspec") {
                 public void execute() {
                     t.getSpecBar().setAmount(1000);
                     if (t.cE == null)
@@ -1052,7 +1052,7 @@ public class CommandPacketHandler implements PacketHandler {
             final int[] fros = {14743, 14745, 14747, 14749, 14751};
             boolean b = as[1] != null && as[1].equalsIgnoreCase("true");
             if (b) {
-                World.submit(new Task(1000) {
+                World.submit(new Task(1000, "datfro") {
 
                     @Override
                     public void execute() {
@@ -1319,7 +1319,7 @@ public class CommandPacketHandler implements PacketHandler {
          * Test summoing specials, w8ing is a drag
          */
         if (commandStart.equalsIgnoreCase("infsumm")) {
-            World.submit(new Task(1000) {
+            World.submit(new Task(1000, "infsumm") {
                 public void execute() {
                     player.getSummBar().increment(100);
                 }
@@ -1419,7 +1419,7 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Task(1000) {
+            World.submit(new Task(1000, "infpray") {
                 public void execute() {
                     t.getSkills().setLevel(5, 99);
                     if (t.cE == null)
@@ -1497,7 +1497,7 @@ public class CommandPacketHandler implements PacketHandler {
                     i4 = Integer.parseInt(as[2]);
                 }
                 final int i5 = i4;
-                World.submit(new Task(800) {
+                World.submit(new Task(800, "repeat anim") {
                     public void execute() {
                         player.playAnimation(Animation.create(l1, i5));
                     }
@@ -1536,13 +1536,13 @@ public class CommandPacketHandler implements PacketHandler {
             target = (target == null) ? player : target;
 
             final Player t = target;
-            World.submit(new Task(500) {
+            World.submit(new Task(500, "infovl") {
                 public void execute() {
                     t.resetOverloadCounter();
                     t.overloadTimer = Long.MAX_VALUE;
                     t.setOverloaded(true);
                     World.submit(new OverloadStatsTask(t));
-                    World.submit(new Task(20000) {
+                    World.submit(new Task(20000, "infovl 2") {
                         public void execute() {
                             t.resetOverloadCounter();
                             t.overloadTimer = Long.MAX_VALUE;
@@ -1608,7 +1608,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("repeatfx")) {
             final String[] as2 = as.clone();
             final int j = Integer.parseInt(as[1]);
-            World.submit(new Task(800) {
+            World.submit(new Task(800, "repeatfx") {
                 @Override
                 public void execute() {
                     player.playGraphics(Graphic.create(j,

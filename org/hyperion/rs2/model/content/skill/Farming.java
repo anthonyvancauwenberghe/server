@@ -350,7 +350,7 @@ public class Farming implements ContentTemplate {
 		player.setBusy(true);
 		player.playAnimation(Animation.create(2273));
 		player.getActionSender().sendMessage("You rake the plot of land.");
-		World.submit(new Task(3000) {
+		World.submit(new Task(3000, "farming") {
 			@Override
 			public void execute() {
 				if(! player.isBusy()) {

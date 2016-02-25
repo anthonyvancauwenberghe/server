@@ -37,7 +37,7 @@ public class CheckWaitingVotesTask extends Task {
 
     @Override
     protected void execute() {
-        Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("Waiting votes query", 5, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("Waiting votes query", 20, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized())
@@ -46,7 +46,51 @@ public class CheckWaitingVotesTask extends Task {
                 List<WaitingVote> waitingVotes = DbHub.getDonationsDb().votes().getWaiting();
                 if (waitingVotes == null || waitingVotes.isEmpty())
                     return true;
-                waitingVotes.stream().filter(vote -> World.getPlayerByName(vote.playerName()) != null).collect(Collectors.groupingBy(vote -> World.getPlayerByName(vote.playerName()))).forEach((player, donationList) -> TaskManager.submit(new HandleWaitingVoteTask(player, donationList)));
+                waitingVotes.stream().filter(vote -> World.getPlayerByName(vote.playerName()) != null).collect(Collectors.groupingBy(vote -> World.getPlayerByName(vote.playerName()))).forEach((player, donationList) -> {
+
+                    if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized()) {
+                        stop();
+                        return;
+                    }
+                    if (donationList == null || donationList.isEmpty())
+                        return;
+                    if (donationList.stream().filter(vote -> !vote.processed()).count() < 1)
+                        return;
+                    boolean runelocus = false;
+                    boolean rspslist = false;
+                    boolean topg = false;
+                    int runelocusVotes = 0;
+                    int rspslistVotes = 0;
+                    int topgVotes = 0;
+
+                    /**
+                     * First we'll gather for all votes if they're processed or not.
+                     */
+                    for (WaitingVote vote : donationList) {
+                        if (!vote.processed() && DbHub.getDonationsDb().votes().process(vote)) {
+                            if (vote.runelocus() && !vote.runelocusProcessed()) {
+                                if (DbHub.getDonationsDb().votes().processRunelocus(vote))
+                                    runelocusVotes++;
+                            }
+                            if (vote.topg() && !vote.topgProcessed()) {
+                                if (DbHub.getDonationsDb().votes().processTopg(vote))
+                                    topgVotes++;
+                            }
+                            if (vote.rspslist() && !vote.rspslistProcessed()) {
+                                if (DbHub.getDonationsDb().votes().processRspslist(vote))
+                                    rspslistVotes++;
+                            }
+                        }
+                        if (vote.runelocus())
+                            runelocus = true;
+                        if (vote.rspslist())
+                            rspslist = true;
+                        if (vote.topg())
+                            topg = true;
+
+                        TaskManager.submit(new HandleWaitingVoteTask(player, donationList, runelocus, topg, rspslist, runelocusVotes, topgVotes, rspslistVotes));
+                    }
+                });
                 return true;
             }
         });

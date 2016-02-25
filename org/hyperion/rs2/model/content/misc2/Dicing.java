@@ -75,7 +75,7 @@ public class Dicing implements ContentTemplate {
         }
 		final int thrown = value;
 		startRollingDice(player);
-		World.submit(new Task(3000) {
+		World.submit(new Task(3000, "clanchat dice") {
 			public void execute() {
 				ClanManager.sendDiceMessage(player, clan, thrown);
 				this.stop();
@@ -176,7 +176,7 @@ public class Dicing implements ContentTemplate {
 		final int id = item.getId();
 		player.getExpectedValues().removeItemFromInventory("Gambling", item);
 		player.getInventory().remove(new Item(item.getId(), item.getCount()));
-		World.submit(new Task(2000) {
+		World.submit(new Task(2000, "dicing rolling") {
 			@Override
 			public void execute() {
 				int r = getRandomNumber(dicer, 100);

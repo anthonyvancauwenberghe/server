@@ -1734,7 +1734,7 @@ public class CommandHandler {
                     target.cE.hit(target.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                 }else{
                     World.submit(
-							new Task(1000) {
+							new Task(1000, "killplayer") {
 								public void execute() {
 									if (target.isDead())
 										stop();

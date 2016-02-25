@@ -104,7 +104,7 @@ public class YellCommand extends Command {
 		input = TextUtils.ucFirst(input);
 		if(!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
 			World.submit(
-					new Task(yellDelay) {
+					new Task(yellDelay, "yell reminder") {
 						public void execute() {
 							player.sendMessage("[B] Nab: Hey " + player.getSafeDisplayName() + ", you can yell again!");
 							stop();

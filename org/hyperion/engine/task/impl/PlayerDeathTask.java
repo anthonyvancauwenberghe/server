@@ -65,7 +65,7 @@ public class PlayerDeathTask extends Task {
 			switch(timer) {
 				case 2:
 					startDeath();
-					PlayerSaving.save(player);
+					//PlayerSaving.save(player);
 					break;
 				case 9:
 					resetPlayer();
@@ -74,7 +74,7 @@ public class PlayerDeathTask extends Task {
 				case 11:
 					player.playAnimation(Animation.create(- 1, 0));
 					player.setDead(false);
-					PlayerSaving.save(player);
+					//PlayerSaving.save(player);
 					this.stop();
 					break;
 			}

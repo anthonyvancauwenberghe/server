@@ -742,7 +742,6 @@ public class Combat {
                 if (!combatEntity.getOpponent().getPlayer().isActive()
                         || combatEntity.getOpponent().getPlayer().isHidden()) {
                     resetAttack(combatEntity);
-                    System.out.println("Resetting attack");
                     return false;
                 }
             }

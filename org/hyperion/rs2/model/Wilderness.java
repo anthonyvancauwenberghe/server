@@ -44,7 +44,7 @@ public class Wilderness {
 		final int maxX = maxX2;
 		final int maxY = maxY2;
 		final Obelisk o2 = randomObelisk();
-		World.submit(new Task(3000) {
+		World.submit(new Task(3000, "wilderness tele") {
 			public int timer = 2;
 
 			@Override

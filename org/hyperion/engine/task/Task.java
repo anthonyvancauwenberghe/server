@@ -90,7 +90,7 @@ public abstract class Task {
         if (running && --countdown == 0) {
             long startTime = System.currentTimeMillis();
             execute();
-            if(System.currentTimeMillis() - startTime > 50) {
+            if(System.currentTimeMillis() - startTime > 50 && !getClass().getSimpleName().equals("PunishmentExpirationTask")) {
                 Server.getLogger().log(Level.INFO, "Task '" + getKey() + "' with class '" + getClass().getSimpleName() + "' with delay " + getDelay() + " took " + (System.currentTimeMillis() - startTime) + "ms to execute.");
             }
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);

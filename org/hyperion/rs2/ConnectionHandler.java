@@ -122,21 +122,25 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		Server.getLoader().getEngine().submitLogic(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogic(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 5, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if (session.containsAttribute("player")) {
-					Player p = (Player) session.getAttribute("player");
-					if (p != null) {
-						if (!p.loggedOut) {
-							World.unregister(p);
+					Player player = (Player)session.getAttribute("player");
+					if (player != null) {
+						if (!player.loggedOut) {
+							World.unregister(player);
 						}
-					} else
-						System.out.println("Tried to logout player but the player was null..");
+					}
 				}
 				return true;
 			}
-        });
+
+			@Override
+			public void stopTask() {
+				session.close(true);
+			}
+		});
 	}
 
 	@Override

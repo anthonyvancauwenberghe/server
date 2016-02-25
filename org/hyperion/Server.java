@@ -22,7 +22,6 @@ public class Server {
     private final static Logger logger = Logger.getLogger(Configuration.getString(NAME));
     private final static GameLoader loader = new GameLoader(Configuration.getInt(PORT));
     private final static Uptime uptime = new Uptime();
-    private final static ServerStatistics stats = new ServerStatistics();
     private static CharFileEncryption charFileEncryption;
     private static boolean updating = false;
 
@@ -30,10 +29,6 @@ public class Server {
 
     public static Uptime getUptime() {
         return uptime;
-    }
-
-    public static ServerStatistics getStats() {
-        return stats;
     }
 
     public static CharFileEncryption getCharFileEncryption() {

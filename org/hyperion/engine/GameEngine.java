@@ -65,6 +65,7 @@ public final class GameEngine implements Runnable {
             try {
                 taskResult.get(logicTask.getTimeout(), logicTask.getTimeUnit());
             } catch(TimeoutException e) {
+                logicTask.stopTask();
                 taskResult.cancel(true);
                 Server.getLogger().warning("Engine logic task '" + logicTask.getTaskName() + "' took too long, cancelled.");
             }
@@ -100,18 +101,18 @@ public final class GameEngine implements Runnable {
     /**
      * This executes a IO task as soon as the thread has any space.
      * This will return the object that is asked from the IO task.
-     * @param ioTask The task to execute.
+     * @param sqlTask The task to execute.
      * @return The result of the executed task.
      */
-    public <T> Optional<T> submitSql(EngineTask<T> ioTask) {
+    public <T> Optional<T> submitSql(EngineTask<T> sqlTask) {
         try {
-            Future<T> taskResult = SqlService.submit(ioTask);
+            Future<T> taskResult = SqlService.submit(sqlTask);
             try {
-                return Optional.of(taskResult.get(ioTask.getTimeout(), ioTask.getTimeUnit()));
+                return Optional.of(taskResult.get(sqlTask.getTimeout(), sqlTask.getTimeUnit()));
             } catch(TimeoutException e) {
                 taskResult.cancel(true);
-                ioTask.stopTask();
-                Server.getLogger().warning("Engine Sql task '" + ioTask.getTaskName() + "' took too long, cancelled.");
+                sqlTask.stopTask();
+                Server.getLogger().warning("Engine Sql task '" + sqlTask.getTaskName() + "' took too long, cancelled.");
             }
         } catch(Exception e) {
             e.printStackTrace();

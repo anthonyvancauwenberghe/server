@@ -22,7 +22,7 @@ public class FileLogging {
     public static void savePlayerLog(final Player player, final String... lines) {
         if(true)
             return;
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file for player " + player.getName(), 1, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitIO(new EngineTask("Write log to file for player " + player.getName(), 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 writeToFile("characters/" + player.getName().toLowerCase(), lines);
@@ -34,7 +34,7 @@ public class FileLogging {
     public static void saveGameLog(final String filePath, final String... lines) {
         if(true)
             return;
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Write log to file " + filePath, 1, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitIO(new EngineTask("Write log to file " + filePath, 1, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 writeToFile(filePath, lines);

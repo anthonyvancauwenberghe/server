@@ -22,7 +22,7 @@ public class PathTest {
 
 	public final static int maxRegionSize = 25;//*2 in reality
 
-	public static Path getPath(int x, int y, int toX, int toY) {
+	public static synchronized Path getPath(int x, int y, int toX, int toY) {
 		try {
 			baseX = x - maxRegionSize;
 			baseY = y - maxRegionSize;

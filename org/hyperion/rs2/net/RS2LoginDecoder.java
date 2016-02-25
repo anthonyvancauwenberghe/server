@@ -181,7 +181,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submitIO(new EngineTask("Player loading and logging in for " + playerDetails.getName(), 2, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Player loading and logging in for " + playerDetails.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 Player player = new Player(playerDetails);

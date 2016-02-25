@@ -135,8 +135,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 	}
 
 	@Override
-	public void sessionIdle(IoSession session, IdleStatus status)
-			throws Exception {
+	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
 		Object playerobject = session.getAttribute("player");
 		if(playerobject != null) {
 			Player player = (Player) playerobject;

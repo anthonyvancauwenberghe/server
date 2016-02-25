@@ -64,11 +64,12 @@ public final class GameEngine implements Runnable {
             Future taskResult = logicService.submit(logicTask);
             try {
                 taskResult.get(logicTask.getTimeout(), logicTask.getTimeUnit());
-            } catch(TimeoutException e) {
+            } catch (TimeoutException e) {
                 logicTask.stopTask();
                 taskResult.cancel(true);
-                Server.getLogger().warning("Engine logic task '" + logicTask.getTaskName() + "' took too long, cancelled.");
             }
+        } catch(InterruptedException ex) {
+            Server.getLogger().warning("Engine logic task '" + logicTask.getTaskName() + "' took too long, interrupted.");
         } catch(Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_logic_errors.txt", e);
@@ -89,8 +90,9 @@ public final class GameEngine implements Runnable {
             } catch(TimeoutException e) {
                 taskResult.cancel(true);
                 ioTask.stopTask();
-                Server.getLogger().warning("Engine IO task '" + ioTask.getTaskName() + "' took too long, cancelled.");
             }
+        } catch(InterruptedException ex) {
+            Server.getLogger().warning("Engine IO task '" + ioTask.getTaskName() + "' took too long, cancelled.");
         } catch(Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_io_errors.txt", e);
@@ -112,8 +114,9 @@ public final class GameEngine implements Runnable {
             } catch(TimeoutException e) {
                 taskResult.cancel(true);
                 sqlTask.stopTask();
-                Server.getLogger().warning("Engine Sql task '" + sqlTask.getTaskName() + "' took too long, cancelled.");
             }
+        } catch(InterruptedException ex) {
+            Server.getLogger().warning("Engine Sql task '" + sqlTask.getTaskName() + "' took too long, cancelled.");
         } catch(Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_sql_errors.txt", e);

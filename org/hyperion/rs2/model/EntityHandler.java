@@ -77,9 +77,8 @@ public class EntityHandler {
     private static void register(Player player) {
         Packet packet = new PacketBuilder().put((byte)LoginResponse.SUCCESSFUL_LOGIN.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket();
         player.getSession().write(packet);
-
-        HostGateway.enter(player.getShortIP());
         ConnectionHandler.removeIp(player.getShortIP());
+        HostGateway.enter(player.getShortIP());
         if(!World.getPlayers().add(player)) {
             player.getSession().close(true);
             return;
@@ -263,7 +262,7 @@ public class EntityHandler {
 
         if(player.getName().equalsIgnoreCase("nab"))
             ClanManager.joinClanChat(player, "help", false);
-        
+
         TaskManager.submit(new Task(Time.FIVE_SECONDS, player) {
             @Override
             protected void execute() {
@@ -324,17 +323,10 @@ public class EntityHandler {
     }
 
     private static boolean deregister(Player player) {
-        if (System.currentTimeMillis() - player.getExtraData().getLong("lastUnregister") < 1000)
+        if(!World.getPlayers().remove(player) && World.getPlayers().contains(player))
             return false;
-        if(!World.getPlayers().contains(player) || !World.getPlayers().remove(player)) {
-            player.getSession().close(true);
-            player.destroy();
-            return false;
-        }
         System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
-        player.getExtraData().put("lastUnregister", System.currentTimeMillis());
-        if (player.getLogging() != null)
-            Combat.logoutReset(player.cE);
+        Combat.logoutReset(player.cE);
         player.getDungeoneering().fireOnLogout(player);
         player.setActive(false);
         LastManStanding.getLastManStanding().leaveGame(player, true);

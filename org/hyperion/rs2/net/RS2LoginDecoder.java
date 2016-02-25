@@ -217,9 +217,10 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 }
 
                 if(loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
+                    String loginResponseString = loginResponse.name();
                     playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> {
                         future.getSession().close(true);
-                        System.out.println("Session closed for player " + player.getName());
+                        System.out.println("Session closed for player " + player.getName() + " for loginresponse " + loginResponseString);
                     });
                     return true;
                 }

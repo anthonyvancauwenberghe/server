@@ -526,7 +526,7 @@ public class ActionSender {
     }
 
     public ActionSender sendEnterStringInterface(String message) {
-        player.write(new PacketBuilder(187, Type.VARIABLE_SHORT).putRS2String(message).toPacket());
+        player.write(new PacketBuilder(187, Type.VARIABLE_SHORT).toPacket());
         return this;
     }
 

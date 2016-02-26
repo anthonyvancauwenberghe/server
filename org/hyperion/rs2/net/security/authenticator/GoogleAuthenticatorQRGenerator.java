@@ -78,8 +78,6 @@ public final class GoogleAuthenticatorQRGenerator {
      * url-encoded colon, and optional spaces may precede the account name.
      * Neither issuer nor account name may themselves contain a colon.
      * Represented in ABNF according to RFC 5234:
-     * <p/>
-     * label = accountname / issuer (“:” / “%3A”) *”%20” accountname
      *
      * @see <a href="https://code.google.com/p/google-authenticator/wiki/KeyUriFormat">Google Authenticator - KeyUriFormat</a>
      */

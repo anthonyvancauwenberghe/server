@@ -56,9 +56,9 @@ import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.security.EncryptionStandard;
-import org.hyperion.rs2.savingnew.IOData;
-import org.hyperion.rs2.savingnew.PlayerLoading;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.IOData;
+import org.hyperion.rs2.saving.PlayerLoading;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
 

@@ -9,7 +9,7 @@ import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.shops.DonatorShop;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 

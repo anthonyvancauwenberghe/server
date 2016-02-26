@@ -56,7 +56,7 @@ import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
@@ -1084,7 +1084,7 @@ public class CommandHandler {
 				final String line = filterInput(input).trim();
 				final int i = line.indexOf(',');
 				final String target = i == -1 ? line : line.substring(0, i).trim();
-				if (!PlayerSaving.playerExists(target)) {
+				if (!PlayerLoading.playerExists(target)) {
 					player.sendf("Player does not exist: %s", target);
 					return false;
 				}

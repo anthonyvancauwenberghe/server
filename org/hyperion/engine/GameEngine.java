@@ -6,7 +6,7 @@ import org.hyperion.Server;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.util.Optional;
 import java.util.concurrent.*;

@@ -159,6 +159,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private int voteStreak = 0;
 	private int todayVotes = 0;
 	private List<Integer> googleAuthenticatorBackup;
+	private int lastMac;
 
 	/**
 	 * LONG
@@ -2329,5 +2330,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setGoogleAuthenticatorBackup(List<Integer> googleAuthenticatorBackup) {
 		this.googleAuthenticatorBackup = googleAuthenticatorBackup;
+	}
+
+	public int getLastMac() {
+		return lastMac;
+	}
+
+	public void setLastMac(int lastMac) {
+		this.lastMac = lastMac;
 	}
 }

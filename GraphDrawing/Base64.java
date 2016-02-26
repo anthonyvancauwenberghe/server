@@ -422,7 +422,7 @@ public class Base64 {
 	 */
 	void setInitialBuffer(byte[] out, int outPos, int outAvail) {
 		// We can re-use consumer's original output array under
-		// special circumstances, savingnew on some System.arraycopy().
+		// special circumstances, saving on some System.arraycopy().
 		if(out != null && out.length == outAvail) {
 			buffer = out;
 			pos = outPos;

@@ -11,7 +11,7 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 

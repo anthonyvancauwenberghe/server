@@ -21,7 +21,7 @@ import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 

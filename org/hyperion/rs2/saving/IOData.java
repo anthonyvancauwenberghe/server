@@ -1,4 +1,4 @@
-package org.hyperion.rs2.savingnew;
+package org.hyperion.rs2.saving;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -31,6 +31,11 @@ public enum IOData {
     },
     PASSWORD {
         @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+
+        @Override
         public boolean shouldSave(Player player) {
             return player.getPassword() != null;
         }
@@ -46,6 +51,11 @@ public enum IOData {
         }
     },
     RANK {
+        @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+
         @Override
         public boolean shouldSave(Player player) {
             return player.getPlayerRank() != 1;
@@ -155,6 +165,11 @@ public enum IOData {
     },
     GOOGLE_AUTHENTICATOR_KEY {
         @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+
+        @Override
         public boolean shouldSave(Player player) {
             return player.getGoogleAuthenticatorKey() != null;
         }
@@ -170,6 +185,11 @@ public enum IOData {
         }
     },
     GOOGLE_AUTHENTICATOR_BACKUP_CODES {
+        @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+
         @Override
         public boolean shouldSave(Player player) {
             return player.getGoogleAuthenticatorBackup() != null;
@@ -187,6 +207,11 @@ public enum IOData {
     },
     LAST_IP {
         @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+
+        @Override
         public boolean shouldSave(Player player) {
             return player.getFullIP() != null;
         }
@@ -202,6 +227,16 @@ public enum IOData {
         }
     },
     LAST_MAC {
+        @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setLastMac(element.getAsInt());
+        }
+
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
             return new JsonPrimitive(player.getUID());
@@ -1085,7 +1120,7 @@ public enum IOData {
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return builder.toJsonTree(player.getBank().getItems(), new TypeToken<BankItem[]>(){}.getType());
+            return builder.toJsonTree(Arrays.stream(player.getBank().getItems()).filter(item -> item != null).toArray(), new TypeToken<BankItem[]>(){}.getType());
         }
 
         @Override
@@ -1113,11 +1148,15 @@ public enum IOData {
     public final static IOData[] VALUES = values();
     private final static String CHAR_FILE_PATH = "./data/characters";
 
-    private final static Map<String, IOData> bySaveName = Stream.of(VALUES).collect(Collectors.toMap(IOData::toString, Function.identity()));
     private final static Map<String, IOData> priorityLoading = Stream.of(VALUES).filter(IOData::priorityLoading).collect(Collectors.toMap(IOData::toString, Function.identity()));
+    private final static Map<String, IOData> nonPriorityLoading = Stream.of(VALUES).filter(ioData -> !ioData.priorityLoading()).collect(Collectors.toMap(IOData::toString, Function.identity()));
 
-    public static Map<String, IOData> getBySaveName() {
-        return bySaveName;
+    public static Map<String, IOData> getPriorityLoading() {
+        return priorityLoading;
+    }
+
+    public static Map<String, IOData> getNonPriorityLoading() {
+        return nonPriorityLoading;
     }
 
     public static String getCharFilePath() {

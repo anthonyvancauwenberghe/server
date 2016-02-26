@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
 import org.hyperion.Configuration;
-import org.hyperion.rs2.savingnew.IOData;
+import org.hyperion.rs2.saving.IOData;
 
 import java.io.File;
 import java.io.FileReader;

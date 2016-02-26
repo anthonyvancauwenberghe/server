@@ -7,7 +7,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.savingnew.PlayerLoading;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
 

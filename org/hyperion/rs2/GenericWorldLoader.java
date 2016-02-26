@@ -15,8 +15,8 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.PacketBuilder;
-import org.hyperion.rs2.savingnew.PlayerLoading;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerLoading;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.ObservableCollection;
@@ -123,7 +123,7 @@ public class GenericWorldLoader implements WorldLoader {
 		/**
 		 * If we get this far, we're loading the player his actual details to check.
 		 */
-		if(!loadPlayer(player))
+		if(!PlayerLoading.loadPlayer(player, PlayerLoading.LoadingType.PRIORITY_ONLY))
 			return NEW_PLAYER;
 
 		if(!player.getPassword().equals(playerDetails.getPassword())) {
@@ -142,7 +142,7 @@ public class GenericWorldLoader implements WorldLoader {
 		}*/
 
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
-			if(!ALLOWED_IPS.contains(player.getShortIP()))
+			if(!ALLOWED_IPS.contains(player.getShortIP()) && !ALLOWED_IPS.contains(Integer.toString(player.getLastMac())))
 				return INVALID_CREDENTIALS;
 
 		/**
@@ -173,11 +173,6 @@ public class GenericWorldLoader implements WorldLoader {
 
 		LOGIN_ATTEMPTS.remove(player.getName());
 		return SUCCESSFUL_LOGIN;
-	}
-
-	@Override
-	public boolean loadPlayer(Player player) {
-		return PlayerLoading.loadPlayer(player);
 	}
 
 	@Override
@@ -269,7 +264,7 @@ public class GenericWorldLoader implements WorldLoader {
 				String[] parts = filterInput(input).split(",");
 				if(parts.length < 2)
 					throw new Exception();
-				if(org.hyperion.rs2.savingnew.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
+				if(org.hyperion.rs2.saving.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
 					player.getActionSender().sendMessage(Misc.formatPlayerName(parts[0]) + "'s IP has been changed to " + parts[1]);
 				else
 					player.getActionSender().sendMessage("IP could not be changed.");

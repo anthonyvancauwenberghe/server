@@ -1,7 +1,7 @@
 package org.hyperion.engine.task;
 
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 
 import java.util.Iterator;
 import java.util.LinkedList;

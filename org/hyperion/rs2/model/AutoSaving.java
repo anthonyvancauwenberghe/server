@@ -1,6 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 
 public class AutoSaving {
 

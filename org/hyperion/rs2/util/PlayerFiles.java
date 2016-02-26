@@ -1,7 +1,7 @@
 package org.hyperion.rs2.util;
 
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.util.Misc;
 
 public class PlayerFiles {

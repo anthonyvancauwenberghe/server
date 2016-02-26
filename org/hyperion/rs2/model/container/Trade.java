@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TradeChecker;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PushMessage;
 

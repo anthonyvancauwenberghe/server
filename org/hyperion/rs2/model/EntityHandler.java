@@ -33,6 +33,7 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -88,10 +89,18 @@ public class EntityHandler {
         /**
          * We send the player his details.
          */
-        player.write(new PacketBuilder(249)
-                .putByteA(player.isMembers() ? 1 : 0)
-                .putLEShortA(player.getIndex()).toPacket());
+        player.write(new PacketBuilder(249).putByteA(player.isMembers() ? 1 : 0).putLEShortA(player.getIndex()).toPacket());
         player.write(new PacketBuilder(107).toPacket());
+
+        /**
+         * Here we actually start loading the player completely
+         */
+        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Fully load player", 4, TimeUnit.SECONDS) {
+            @Override
+            public Boolean call() throws Exception {
+                return PlayerLoading.loadPlayer(player, PlayerLoading.LoadingType.NON_PRIORITY_ONLY);
+            }
+        });
 
         /**
          * A small bit of code to activate the player their active punishments on login.

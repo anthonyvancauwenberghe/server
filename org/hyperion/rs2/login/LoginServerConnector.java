@@ -8,7 +8,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.savingnew.PlayerLoading;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.rs2.util.PlayerFiles;
@@ -287,7 +287,7 @@ public class LoginServerConnector extends IoHandlerAdapter {
 			} else {
 
 				if(PlayerLoading.playerExists(player.getName())) {
-					PlayerLoading.loadPlayer(player);
+					PlayerLoading.loadPlayer(player, PlayerLoading.LoadingType.PRIORITY_ONLY);
 				} else {
 					player.deserialize(playerData, false);
 				}

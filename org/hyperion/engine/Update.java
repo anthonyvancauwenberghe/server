@@ -5,7 +5,7 @@ import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.savingnew.PlayerSaving;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.util.Time;
 
 import java.io.FileOutputStream;

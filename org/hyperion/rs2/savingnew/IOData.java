@@ -14,6 +14,10 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Gilles on 4/02/2016.
@@ -1109,6 +1113,13 @@ public enum IOData {
     public final static IOData[] VALUES = values();
     private final static String CHAR_FILE_PATH = "./data/characters";
 
+    private final static Map<String, IOData> bySaveName = Stream.of(VALUES).collect(Collectors.toMap(IOData::toString, Function.identity()));
+    private final static Map<String, IOData> priorityLoading = Stream.of(VALUES).filter(IOData::priorityLoading).collect(Collectors.toMap(IOData::toString, Function.identity()));
+
+    public static Map<String, IOData> getBySaveName() {
+        return bySaveName;
+    }
+
     public static String getCharFilePath() {
         return CHAR_FILE_PATH;
     }
@@ -1117,6 +1128,9 @@ public enum IOData {
         return true;
     }
     public abstract JsonElement saveValue(Player player, Gson builder);
+    protected boolean priorityLoading() {
+        return false;
+    }
     public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {}
 
     @Override

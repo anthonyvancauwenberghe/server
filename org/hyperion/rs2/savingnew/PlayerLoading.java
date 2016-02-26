@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
@@ -28,13 +27,13 @@ public class PlayerLoading {
             Gson builder = new GsonBuilder().create();
             JsonObject reader = (JsonObject) fileParser.parse(fileReader);
 
-            Arrays.stream(IOData.VALUES).forEachOrdered(ioData -> {
-                if(reader.has(ioData.toString())) {
-                    JsonElement element = reader.get(ioData.toString());
-                    if(element == null)
-                        return;
+
+
+            reader.entrySet().forEach(jsonEntry -> {
+                IOData ioData = IOData.getBySaveName().get(jsonEntry.getKey());
+                if(ioData != null) {
                     try {
-                        ioData.loadValue(player, element, builder);
+                        ioData.loadValue(player, jsonEntry.getValue(), builder);
                     } catch(Exception e) {
                         e.printStackTrace();
                     }

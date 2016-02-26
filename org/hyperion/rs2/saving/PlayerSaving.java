@@ -30,7 +30,7 @@ public class PlayerSaving {
         try (FileWriter writer = new FileWriter(file)) {
             Gson builder = new GsonBuilder().setPrettyPrinting().create();
             JsonObject object = new JsonObject();
-            Arrays.stream(IOData.VALUES).filter(ioData -> !ioData.shouldSave(player)).forEach(ioData -> {
+            Arrays.stream(IOData.VALUES).filter(ioData -> ioData.shouldSave(player)).forEach(ioData -> {
                 JsonElement toSave = ioData.saveValue(player, builder);
                 if(toSave == null)
                     return;

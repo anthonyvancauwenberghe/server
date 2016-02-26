@@ -355,7 +355,7 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Saving player " + player.getName() + " on logout", 8, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitIO(new EngineTask("Saving player " + player.getName() + " on logout", 8, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 World.getLoader().savePlayer(player);

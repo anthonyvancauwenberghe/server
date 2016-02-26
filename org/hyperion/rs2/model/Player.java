@@ -92,6 +92,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private String[] lastKills = {"", "", "", "", ""};
 	private String password;
 	private String googleAuthenticatorKey;
+	private List<String> googleAuthenticatorBackup;
 
 	/**
 	 * INTEGERS
@@ -158,7 +159,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private int deathCount = 0;
 	private int voteStreak = 0;
 	private int todayVotes = 0;
-	private List<Integer> googleAuthenticatorBackup;
 	private int lastMac;
 
 	/**
@@ -2324,11 +2324,11 @@ public class Player extends Entity implements Persistable, Cloneable {
 		this.googleAuthenticatorKey = googleAuthenticatorKey;
 	}
 
-	public List<Integer> getGoogleAuthenticatorBackup() {
+	public List<String> getGoogleAuthenticatorBackup() {
 		return googleAuthenticatorBackup;
 	}
 
-	public void setGoogleAuthenticatorBackup(List<Integer> googleAuthenticatorBackup) {
+	public void setGoogleAuthenticatorBackup(List<String> googleAuthenticatorBackup) {
 		this.googleAuthenticatorBackup = googleAuthenticatorBackup;
 	}
 

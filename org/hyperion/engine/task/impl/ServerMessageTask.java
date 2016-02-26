@@ -23,7 +23,7 @@ import java.util.logging.Level;
 
 public class ServerMessageTask extends Task {
 
-    private final static long CYCLE_TIME = Time.FIFTEEN_SECONDS;
+    private final static long CYCLE_TIME = Time.ONE_MINUTE;
     private final static String FILE_LOCATION = "./data/json/server_messages.json";
     private final static String DEFAULT_MESSAGE = "Enjoy your time on the server!";
 

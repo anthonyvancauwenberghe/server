@@ -45,9 +45,10 @@ public class Events {
         eventStartTime = 0;
         eventTimeTillStart = 0;
         eventLocation = null;
-        for(Player player : World.getPlayers()) {
+        World.getPlayers().forEach(player -> {
+            player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.EVENT);
             player.getActionSender().sendString("cancel", 32456);
-        }
+        });
     }
 
     public static boolean isEventActive() {

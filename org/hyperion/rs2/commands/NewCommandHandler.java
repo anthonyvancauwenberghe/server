@@ -7,6 +7,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
@@ -152,6 +153,14 @@ public final class NewCommandHandler {
                         ShopManager.open(player, Integer.parseInt(input[0]));
                         return true;
                     }
-                });
+                },
+                new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+                        return true;
+                    }
+                }
+        );
     }
 }

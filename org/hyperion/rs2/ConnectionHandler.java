@@ -148,7 +148,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 	public void sessionOpened(IoSession session) throws Exception {
 		SocketAddress remoteAddress = session.getRemoteAddress();
 		String remoteIp = remoteAddress.toString();
-		Server.getLoader().getEngine().submitIO(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogic(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
 			@Override
 			public Object call() throws Exception {
 				String shortIp = TextUtils.shortIp(remoteIp);

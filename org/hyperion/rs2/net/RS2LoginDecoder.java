@@ -156,8 +156,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 String name = NameUtils.formatName(IoBufferUtils.getRS2String(in)).trim();
                 String pass = IoBufferUtils.getRS2String(in);
-                //TODO ADD AUTHENTICATOR
-                //int authenticationCode = in.getInt();
+                int authenticationCode = in.getInt();
 
                 int[] sessionKey = new int[4];
                 sessionKey[0] = (int) (clientKey >> 32);
@@ -182,7 +181,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     return false;
                 }
                 state = STATE_OPCODE;
-                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, -1, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, authenticationCode, macId, uid, inCipher, outCipher, remoteIp, specialUid));
                 return true;
         }
         in.rewind();
@@ -190,7 +189,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Player loading and logging in for " + playerDetails.getName(), 2, TimeUnit.SECONDS) {
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Player logging in for " + playerDetails.getName(), 3, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 Player player = new Player(playerDetails);
@@ -203,9 +202,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 }
 
                 if(loginResponse != LoginResponse.SUCCESSFUL_LOGIN) {
-                    playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> {
-                        future.getSession().close(true);
-                    });
+                    playerDetails.getSession().write(new PacketBuilder().put((byte)loginResponse.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(true));
                     return true;
                 }
                 player.getSession().setAttribute("player", player);
@@ -214,11 +211,6 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     World.getLoginQueue().add(player);
                 }
                 return true;
-            }
-
-            @Override
-            public void stopTask() {
-                playerDetails.getSession().close(true);
             }
         });
     }

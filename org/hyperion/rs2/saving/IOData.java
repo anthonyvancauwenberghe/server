@@ -197,12 +197,12 @@ public enum IOData {
 
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return builder.toJsonTree(player.getGoogleAuthenticatorBackup(), new TypeToken<List<Integer>>(){}.getType());
+            return builder.toJsonTree(player.getGoogleAuthenticatorBackup(), new TypeToken<List<String>>(){}.getType());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
-            player.setGoogleAuthenticatorBackup(builder.fromJson(element, new TypeToken<List<Integer>>(){}.getType()));
+            player.setGoogleAuthenticatorBackup(builder.fromJson(element, new TypeToken<List<String>>(){}.getType()));
         }
     },
     LAST_IP {

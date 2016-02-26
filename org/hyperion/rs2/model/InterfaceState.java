@@ -4,6 +4,7 @@ import org.hyperion.rs2.model.container.*;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.jge.itf.JGrandExchangeInterface;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
 import org.hyperion.util.Misc;
@@ -338,13 +339,12 @@ public class InterfaceState {
 					}
 				}, "You are not building a new entry right now");
 				return true;
-			/*
 			case "authenticator_confirmation":
 				PlayerAuthenticationGenerator.confirmAuthenticator(player, result);
 				return true;
 			case "authenticator_removal_confirmation":
 				PlayerAuthenticationGenerator.removeAuthenticator(player, result);
-				return true;*/
+				return true;
 			default:
 				return false;
 		}

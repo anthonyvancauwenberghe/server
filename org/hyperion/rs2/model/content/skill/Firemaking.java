@@ -170,7 +170,7 @@ public class Firemaking implements ContentTemplate {
 		logs.put(1517, new Log(1517, 135, 45, 100));
 		logs.put(1515, new Log(1515, 202, 60, 150));
 		logs.put(1513, new Log(1513, 303, 70, 200));
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000,"firemaking") {
 			@Override
 			public void execute() {
 				process();

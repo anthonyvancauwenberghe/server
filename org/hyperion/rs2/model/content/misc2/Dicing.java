@@ -242,7 +242,7 @@ public class Dicing implements ContentTemplate {
 
 	public static void rollPrivateDice(final Player player) {
 		startRollingDice(player);
-		World.submit(new Task(3000) {
+		World.submit(new Task(3000,"dicing") {
 			public void execute() {
 				int thrown = getRandomNumber(player, 100);
 				player.getActionSender().sendMessage("You roll " + thrown + " with your dice.");
@@ -300,7 +300,7 @@ public class Dicing implements ContentTemplate {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        World.submit(new Task(Time.FIVE_MINUTES) {
+        World.submit(new Task(Time.FIVE_MINUTES,"Dicing2") {
             public void execute() {
                 try {
                     final List<String> lines = Files.readAllLines(new File("./data/dontopkp.txt").toPath());

@@ -48,7 +48,7 @@ public class LastManStanding implements ContentTemplate {
 
     private static void startCountdown() {
         counter = 30;
-        World.submit(new Task(1000) {
+        World.submit(new Task(1000,"lastmanstanding") {
             @Override
             public void execute() {
                 if(!getLastManStanding().canJoin) {

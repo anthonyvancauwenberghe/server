@@ -146,7 +146,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.submit(new Task(1200) {
+					World.submit(new Task(1200,"doormanager1") {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {
@@ -224,7 +224,7 @@ public class DoorManager {
 							}
 						}
 					}
-					World.submit(new Task(1200) {
+					World.submit(new Task(1200,"doormanager2") {
 						@Override
 						public void execute() {
 							for(Region reg : RegionManager.getSurroundingRegions(loc)) {

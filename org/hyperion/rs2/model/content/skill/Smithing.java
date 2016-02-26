@@ -203,7 +203,7 @@ public class Smithing implements ContentTemplate {
 			return true;
 		}
 		ContentEntity.startAnimation(client, 898);
-		World.submit(new Task(2500) {
+		World.submit(new Task(2500,"smithing2") {
 			int amm = amm2;
 
 			@Override

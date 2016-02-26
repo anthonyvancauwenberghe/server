@@ -307,7 +307,7 @@ public class Farming implements ContentTemplate {
 		player.getActionSender().sendReplaceObject(x + offset(serverPlant.type), y + offset(serverPlant.type), plant.plotId, 0, 10);
 		player.getFarm().plants.remove(((x * 16) + y));
 		player.getActionSender().sendMessage("You dig up the plot.");
-		World.submit(new Task(500) {
+		World.submit(new Task(500,"farming1") {
 			@Override
 			public void execute() {
 				this.stop();
@@ -472,7 +472,7 @@ public class Farming implements ContentTemplate {
 		//unRakedPatches.put(8338, patch);//spirit tree
 
 
-		World.submit(new Task(30000) {
+		World.submit(new Task(30000,"farming3") {
 			@Override
 			public void execute() {
 				calendar = new GregorianCalendar();

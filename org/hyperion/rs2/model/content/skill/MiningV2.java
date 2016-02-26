@@ -253,7 +253,7 @@ public class MiningV2 implements ContentTemplate {
 		if(cycle2 <= 1)
 			cycle2 = 2;
 		final int cycle = cycle2;
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000,"miningV2") {
 			int cycleCount = cycle;
 
 			@Override
@@ -290,7 +290,7 @@ public class MiningV2 implements ContentTemplate {
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
 							ObjectManager.addObject(blank_rock);
 							rockLocationStatus.put(l, 1);
-							World.submit(new Task(rock.respawn * 1000) {
+							World.submit(new Task(rock.respawn * 1000,"miningV2.1") {
 								@Override
 								public void execute() {
 									ObjectManager.replace(blank_rock, new_rock);

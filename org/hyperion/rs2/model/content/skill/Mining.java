@@ -57,7 +57,7 @@ public class Mining implements ContentTemplate {
 			player.getActionSender().sendMessage(
 					"You examine the rock for ores...");
 			ContentEntity.turnTo(player, x, y);
-			World.submit(new Task(PROSPECTING_DELAY) {
+			World.submit(new Task(PROSPECTING_DELAY,"prospecting") {
 				@Override
 				public void execute() {
 					player.getActionSender().sendMessage(
@@ -124,7 +124,7 @@ public class Mining implements ContentTemplate {
 			ContentEntity.turnTo(player, objectX, objectY);
 			ContentEntity.startAnimation(player,
 					PICKAXE_ANIMATIONS[pickaxe]);
-			World.submit(new Task(MINING_DELAY) {
+			World.submit(new Task(MINING_DELAY,"mining delay") {
 				@Override
 				public void execute() {
 					GameObject g = ObjectManager.getObjectAt(objectX, objectY,
@@ -167,7 +167,7 @@ public class Mining implements ContentTemplate {
 
 									ContentEntity.startAnimation(player, - 1);
 									ObjectManager.addObject(expired);
-									World.submit(new Task(ORE_RESPAWN_TIME) {
+									World.submit(new Task(ORE_RESPAWN_TIME,"Ore respawn Time") {
 										@Override
 										public void execute() {
 											ObjectManager.replace(expired, normal);

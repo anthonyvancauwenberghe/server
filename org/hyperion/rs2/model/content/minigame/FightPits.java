@@ -234,7 +234,7 @@ public class FightPits implements ContentTemplate {
 		return previous != null && previous.getName().equalsIgnoreCase(itemDef.getName());
 	}
 	public void init() throws FileNotFoundException {
-		World.submit(new Task(1000) {
+		World.submit(new Task(1000,"fightpits1") {
 			@Override
 			public void execute() {
 				process();

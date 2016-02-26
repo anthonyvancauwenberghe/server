@@ -87,7 +87,7 @@ public class ObjectClickHandler {
                 Wilderness.useObelisk(player, x, y);
                 break;
             case 5110:
-                World.submit(new Task(100) {
+                World.submit(new Task(100,"objectclickhandler") {
                     @Override
                     public void execute() {
                         if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)

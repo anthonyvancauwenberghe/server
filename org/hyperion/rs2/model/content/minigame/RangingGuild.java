@@ -56,7 +56,7 @@ public class RangingGuild implements ContentTemplate {
 					.getId()));
 			p.face(Location.create(xcoord, ycoord, 0));
 
-			World.submit(new Task(1000) {
+			World.submit(new Task(1000,"rangingGuild1") {
 				public void execute() {
 					int offX = (p.getLocation().getX() - xcoord) * - 1;
 					int offY = (p.getLocation().getY() - ycoord) * - 1;
@@ -68,7 +68,7 @@ public class RangingGuild implements ContentTemplate {
 				}
 			});
 			World.submit(
-					new Task(2000) {
+					new Task(2000,"RangingGuild2") {
 						public void execute() {
 							int hit = Misc.random(10) - Misc.random(p.getSkills().getLevel(4) / 12 + p.getBonus().get(4) / 15);
 							if(hit < 0) {

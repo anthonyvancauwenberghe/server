@@ -29,7 +29,7 @@ public class PickupItemPacketHandler implements PacketHandler {
 		final int itemID = packet.getShort();
 		final int itemX = packet.getLEShort();
 		final Location loc = Location.create(itemX, itemY, 0);
-		World.submit(new Task(600) {
+		World.submit(new Task(600,"pickupitemhandler") {
 			int timeout = 0;
 
 			@Override

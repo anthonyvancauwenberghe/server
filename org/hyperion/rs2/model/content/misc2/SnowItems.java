@@ -54,7 +54,7 @@ public class SnowItems implements ContentTemplate {
 		ContentEntity.playerGfx(player, 1284);//11951
 		player.getInventory().add(new Item(11951, player.getInventory().freeSlots()));
 		player.getActionSender().showInterfaceWalkable(11877);
-		World.submit(new Task(10000) {
+		World.submit(new Task(10000,"snowitems") {
 			public void execute() {
 				player.getActionSender().showInterfaceWalkable(- 1);
 				this.stop();

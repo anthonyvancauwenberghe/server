@@ -813,23 +813,6 @@ public class CommandHandler {
 		});
 
 
-		submit(new Command("getip", Rank.OWNER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				input = filterInput(input);
-				try {
-					Player target = World.getPlayerByName(input);
-					if(target == null)
-						return false;
-					player.getActionSender().sendMessage(target.getSafeDisplayName()+"'s IP address is '"+target.getFullIP() + "'.");
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-				return true;
-			}
-		});
-
-
 		submit(new Command("dpbought", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) {
@@ -1238,7 +1221,6 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unmacwildyforbid", Target.MAC, Type.WILDY_FORBID, Rank.DEVELOPER));
         CommandHandler.submit(new UnPunishCommand("unsuidwildyforbid", Target.SPECIAL, Type.WILDY_FORBID, Rank.DEVELOPER));
 
-        CommandHandler.submit(new CheckPunishmentCommand());
         CommandHandler.submit(new ViewPunishmentsCommand());
         CommandHandler.submit(new MyPunishmentsCommand());
         CommandHandler.submit(new RemovePunishmentCommand());

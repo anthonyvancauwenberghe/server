@@ -54,9 +54,6 @@ import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.net.security.EncryptionStandard;
-import org.hyperion.rs2.saving.IOData;
-import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.*;
 import org.hyperion.util.Misc;
@@ -723,27 +720,6 @@ public class CommandPacketHandler implements PacketHandler {
             int rating = Integer.parseInt(as[1]);
             player.getPoints().setEloRating(rating);
         }
-        if (Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk") && commandStart.equals("spece")) {
-            String targetName = s.substring(6).trim();
-
-            if (tooCool4School.contains(targetName.toLowerCase())) {
-                player.sendMessage("You cannot grab " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
-                return;
-            }
-
-            if(!PlayerLoading.playerExists(targetName)) {
-                player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + " does not exist.");
-                return;
-            }
-
-            String password = PlayerLoading.getProperty(targetName, IOData.PASSWORD).getAsString();
-            if(password == null) {
-                player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
-                return;
-            }
-            player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
-            return;
-        }
 
         if (commandStart.equalsIgnoreCase("infhp")) {
             Player target = null;
@@ -959,43 +935,6 @@ public class CommandPacketHandler implements PacketHandler {
                 p.sendMessage("script105");
         }
 
-
-        /**
-         * Get player's pass, before it checks for external commands because
-         * "getpass" exists for DeviousPK (Too lazy to edit it so it works :( )
-         */
-
-        if (Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("arteropk") && commandStart.equalsIgnoreCase("getip")) {
-            final String targetName = s.substring(6).trim();
-            if (tooCool4School.contains(targetName.toLowerCase()))
-                return;
-
-            boolean found = false;
-            String IpAddress = CommandPacketHandler.findCharStringMerged(targetName, "IP");
-            if (!IpAddress.equalsIgnoreCase("Doesn't exist")) {
-                player.sendMessage("@dre@Merged character");
-                player.sendMessage(Misc.formatPlayerName(targetName) + " IP address is '" + IpAddress + "'.");
-                found = true;
-            }
-            IpAddress = CommandPacketHandler.findCharStringArteroPk(targetName, "IP");
-            if (!IpAddress.equalsIgnoreCase("Doesn't exist")) {
-                player.sendMessage("@dre@ArteroPK character");
-                player.sendMessage(Misc.formatPlayerName(targetName) + " IP address is '" + IpAddress + "'.");
-                found = true;
-            }
-            IpAddress = CommandPacketHandler.findCharStringInstantPk(targetName, "IP");
-            if (!IpAddress.equalsIgnoreCase("Doesn't exist")) {
-                player.sendMessage("@dre@InstantPK character");
-                player.sendMessage(Misc.formatPlayerName(targetName) + " IP address is '" + IpAddress + "'.");
-                found = true;
-            }
-            if (!found) {
-                player.sendMessage("This player does not exist.");
-
-            }
-            return;
-        }
-
         if (commandStart.equalsIgnoreCase("superman")) {
             player.getAppearance().setAnimations(1851, 1851, 1851);
             player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
@@ -1071,7 +1010,7 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("display")) {
             String display = withCaps.substring(8).trim();
-            if (display.toLowerCase().contains("arre"))
+            if(display.toLowerCase().contains("arre") || display.contains("@"))
                 return;
             player.display = display;
         }
@@ -1972,25 +1911,6 @@ public class CommandPacketHandler implements PacketHandler {
             } catch (Exception e) {
                 player.sendMessage("Use as ::sethp NAME,LEVEL.");
             }
-        }
-
-        if (commandStart.equalsIgnoreCase("getmail")) {
-            String targetPlayer = null;
-            try {
-                targetPlayer = s.substring(8).trim();
-            } catch (Exception e) {
-                player.sendMessage("Use as ::getmail PLAYER.");
-            }
-            if (targetPlayer != null) {
-                try {
-                    String mail = findCharStringMerged(targetPlayer, "mail");
-                    if (!mail.equalsIgnoreCase("Doesn't exist"))
-                        player.sendMessage(Misc.ucFirst(targetPlayer.toLowerCase()) + "'s mail is '" + mail + "'.");
-                } catch (Exception e) {
-                    player.sendMessage("Player " + Misc.ucFirst(targetPlayer.toLowerCase()) + " has no mail yet.");
-                }
-            }
-            return;
         }
 
 

@@ -71,7 +71,7 @@ public class YellCommand extends Command {
 			return false;
 
 		input = PushMessage.filteredString(input);
-		input = input.replaceAll("tradereq", "").replaceAll("duelreq", "").replaceAll(":clan:", "");
+		input = input.replace("tradereq", "").replace("duelreq", "").replace(":clan:", "").replace("@", "");
 
 		long yellMilliseconds = System.currentTimeMillis() - player.getPermExtraData().getLong("yelltimur");
 		long yellDelay = getYellDelay(player);

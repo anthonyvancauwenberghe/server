@@ -1,5 +1,7 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
+import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -7,12 +9,13 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.punishment.*;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.saving.IOData;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.util.Misc;
 
 import java.util.concurrent.TimeUnit;
 
-public class PunishCommand extends Command{
+public class PunishCommand extends Command {
 
     private final Combination combination;
 
@@ -33,7 +36,7 @@ public class PunishCommand extends Command{
         }
         final String victimName = parts[0].trim();
         final Player victim = World.getPlayerByName(victimName);
-        if(victimName.isEmpty() || (victim == null)){
+        if(victimName.isEmpty()){
             player.sendf("Unable to find player %s", Misc.ucFirst(victimName.toLowerCase()));
             return false;
         }
@@ -41,10 +44,20 @@ public class PunishCommand extends Command{
             player.sendf("You cannot punish other staff members");
             return false;
         }
-        String ip = victim != null ? victim.getShortIP() : CommandPacketHandler.findCharString(victimName, "IP");
+        String ip = victim != null ? victim.getShortIP() : Server.getLoader().getEngine().submitIO(new EngineTask<String>("Loading IP for player " + victimName, 2, TimeUnit.SECONDS) {
+            @Override
+            public String call() throws Exception {
+                return PlayerLoading.getProperty(victimName, IOData.LAST_IP).get().getAsString();
+            }
+        }).orElse("");
         if(ip.contains("="))//
             ip = ip.substring(ip.indexOf('/')+1, ip.indexOf(':'));//
-        String macStr = victim != null ? Integer.toString(victim.getUID()) : CommandPacketHandler.findCharString(victimName, "Mac");
+        String macStr = victim != null ? Integer.toString(victim.getUID()) : Server.getLoader().getEngine().submitIO(new EngineTask<String>("Loading MAC for player " + victimName, 2, TimeUnit.SECONDS) {
+            @Override
+            public String call() throws Exception {
+                return Integer.toString(PlayerLoading.getProperty(victimName, IOData.LAST_MAC).get().getAsInt());
+            }
+        }).orElse("");
         if(macStr.contains("="))//
             macStr = macStr.substring(macStr.indexOf('=')+1).trim();//
         int mac;

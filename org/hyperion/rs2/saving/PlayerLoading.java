@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 
 /**
@@ -103,7 +104,7 @@ public class PlayerLoading {
     }
 
 
-    public static JsonElement getProperty(String playerName, IOData property) {
+    public static Optional<JsonElement> getProperty(String playerName, IOData property) {
         if(playerName == null || property == null || playerName.trim().isEmpty() ||!playerExists(playerName))
             return null;
 
@@ -113,10 +114,10 @@ public class PlayerLoading {
             JsonParser fileParser = new JsonParser();
             JsonObject reader = (JsonObject)fileParser.parse(fileReader);
             if(reader.has(property.toString()))
-                return reader.get(property.toString());
+                return Optional.of(reader.get(property.toString()));
         } catch(Exception e) {
             Server.getLogger().log(Level.WARNING, String.format("Something went wrong getting the property '%s' from player '%s'.", property, playerName));
         }
-        return null;
+        return Optional.empty();
     }
 }

@@ -1,5 +1,8 @@
 package org.hyperion.rs2.commands;
 
+import com.google.gson.JsonElement;
+import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.util.CommandInput;
@@ -8,12 +11,16 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
+import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
 import org.hyperion.rs2.net.security.EncryptionStandard;
+import org.hyperion.rs2.saving.IOData;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +75,7 @@ public final class NewCommandHandler {
             COMMANDS_USED.put(playerName, new ArrayList<>());
         COMMANDS_USED.get(playerName).add(commandUsed);
 
-        World.submit(new Task(delay,"newcommandhandler") {
+        World.submit(new Task(delay, "newcommandhandler") {
             @Override
             public void execute() {
                 if (COMMANDS_USED.containsKey(playerName))
@@ -162,7 +169,7 @@ public final class NewCommandHandler {
                 new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if(player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
+                        if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
                             player.sendMessage("Don't use the same password again!");
                             return true;
                         }
@@ -173,7 +180,68 @@ public final class NewCommandHandler {
                         player.getExtraData().put("needpasschange", false);
                         return true;
                     }
-                }
+                },
+                new NewCommand("getip", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        String playerIp = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                            @Override
+                            public String call() throws Exception {
+                                Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
+                                if (playerIP.isPresent())
+                                    return playerIP.get().getAsString();
+                                return "";
+                            }
+                        }).get();
+                        if (!playerIp.isEmpty())
+                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s IP is '" + playerIp + "'");
+                        else
+                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded IP");
+                        return true;
+                    }
+                },
+                new NewCommand("getmail", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        String playerMail = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player email", 1, TimeUnit.SECONDS) {
+                            @Override
+                            public String call() throws Exception {
+                                Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
+                                if (playerEmail.isPresent())
+                                    return playerEmail.get().getAsString();
+                                return "";
+                            }
+                        }).get();
+
+                        if (!playerMail.isEmpty())
+                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s mail is '" + playerMail + "'");
+                        else
+                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded mail");
+                        return true;
+                    }
+                },
+                new NewCommand("getpass", Rank.DEVELOPER, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                            String targetName = input[0];
+                            String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                                @Override
+                                public String call() throws Exception {
+                                    Optional<JsonElement> playerIP = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
+                                    if(playerIP.isPresent())
+                                        return playerIP.get().getAsString();
+                                    return "";
+                                }
+                            }).get();
+                            if(password.isEmpty()) {
+                                player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
+                                return true;
+                            }
+                            player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
+                            return true;
+                    }
+                },
+                new CheckPunishmentCommand("checkpunish")
         );
     }
 }

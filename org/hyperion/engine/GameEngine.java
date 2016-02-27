@@ -62,11 +62,13 @@ public final class GameEngine implements Runnable {
     public void submitLogic(EngineTask logicTask) {
         try {
             Future taskResult = logicService.submit(logicTask);
-            try {
-                taskResult.get(logicTask.getTimeout(), logicTask.getTimeUnit());
-            } catch (TimeoutException e) {
-                logicTask.stopTask();
-                taskResult.cancel(true);
+            if(logicTask.isCancellable()) {
+                try {
+                    taskResult.get(logicTask.getTimeout(), logicTask.getTimeUnit());
+                } catch (TimeoutException e) {
+                    logicTask.stopTask();
+                    taskResult.cancel(true);
+                }
             }
         } catch(InterruptedException ex) {
             Server.getLogger().warning("Engine logic task '" + logicTask.getTaskName() + "' took too long, interrupted.");
@@ -85,11 +87,15 @@ public final class GameEngine implements Runnable {
     public <T> Optional<T> submitIO(EngineTask<T> ioTask) {
         try {
             Future<T> taskResult = IOService.submit(ioTask);
-            try {
-                return Optional.of(taskResult.get(ioTask.getTimeout(), ioTask.getTimeUnit()));
-            } catch(TimeoutException e) {
-                taskResult.cancel(true);
-                ioTask.stopTask();
+            if(ioTask.isCancellable()) {
+                try {
+                    return Optional.of(taskResult.get(ioTask.getTimeout(), ioTask.getTimeUnit()));
+                } catch (TimeoutException e) {
+                    taskResult.cancel(true);
+                    ioTask.stopTask();
+                }
+            } else {
+                return Optional.of(taskResult.get());
             }
         } catch(InterruptedException ex) {
             Server.getLogger().warning("Engine IO task '" + ioTask.getTaskName() + "' took too long, cancelled.");
@@ -109,11 +115,15 @@ public final class GameEngine implements Runnable {
     public <T> Optional<T> submitSql(EngineTask<T> sqlTask) {
         try {
             Future<T> taskResult = SqlService.submit(sqlTask);
-            try {
-                return Optional.of(taskResult.get(sqlTask.getTimeout(), sqlTask.getTimeUnit()));
-            } catch(TimeoutException e) {
-                taskResult.cancel(true);
-                sqlTask.stopTask();
+            if(sqlTask.isCancellable()) {
+                try {
+                    return Optional.of(taskResult.get(sqlTask.getTimeout(), sqlTask.getTimeUnit()));
+                } catch (TimeoutException e) {
+                    taskResult.cancel(true);
+                    sqlTask.stopTask();
+                }
+            } else {
+                return Optional.of(taskResult.get());
             }
         } catch(InterruptedException ex) {
             Server.getLogger().warning("Engine Sql task '" + sqlTask.getTaskName() + "' took too long, cancelled.");

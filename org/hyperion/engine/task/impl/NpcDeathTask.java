@@ -215,7 +215,7 @@ public class NpcDeathTask extends Task {
                             chance = 750;
                         if (npcIdForDoubleDrops == npc.getDefinition().getId())
                             chance = 500;
-                        chance *= 0.75;
+                        chance *= 0.9;
                         for (NPCDrop drop : npc.getDefinition().getDrops()) {
                             if (drop == null) continue;
                             if (Combat.random(chance) <= drop.getChance()) {

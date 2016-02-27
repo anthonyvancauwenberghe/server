@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gilles
@@ -72,7 +71,7 @@ public class PlayerDeathTask extends Task {
 					break;
 				case 9:
 					resetPlayer();
-					Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("saving player", 8, TimeUnit.SECONDS) {
+					Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("saving player", false) {
 						@Override
 						public Boolean call() throws Exception {
 							PlayerSaving.save(player);

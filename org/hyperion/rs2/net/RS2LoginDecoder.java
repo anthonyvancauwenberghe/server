@@ -16,7 +16,6 @@ import org.hyperion.rs2.util.NameUtils;
 import org.hyperion.util.Misc;
 
 import java.security.SecureRandom;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Login protocol decoding class.
@@ -156,7 +155,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
 
                 String name = NameUtils.formatName(IoBufferUtils.getRS2String(in)).trim();
                 String pass = IoBufferUtils.getRS2String(in);
-                //int authenticationCode = in.getInt();
+                int authenticationCode = in.getInt();
 
                 int[] sessionKey = new int[4];
                 sessionKey[0] = (int) (clientKey >> 32);
@@ -181,7 +180,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     return false;
                 }
                 state = STATE_OPCODE;
-                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, -1, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, authenticationCode, macId, uid, inCipher, outCipher, remoteIp, specialUid));
                 return true;
         }
         in.rewind();
@@ -189,10 +188,11 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
     }
 
     public void login(final PlayerDetails playerDetails) {
-        Server.getLoader().getEngine().submitLogic(new EngineTask("Player logging in for " + playerDetails.getName(), 3, TimeUnit.SECONDS) {
+        Player player = new Player(playerDetails);
+
+        Server.getLoader().getEngine().submitLogic(new EngineTask("Player logging in for " + playerDetails.getName(), false) {
             @Override
             public Boolean call() throws Exception {
-                Player player = new Player(playerDetails);
                 LoginResponse loginResponse = World.getLoader().checkLogin(player, playerDetails);
 
                 if(loginResponse == LoginResponse.NEW_PLAYER) {
@@ -211,6 +211,15 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     World.getLoginQueue().add(player);
                 }
                 return true;
+            }
+
+            @Override
+            public void stopTask() {
+                if (!World.getLoginQueue().contains(player)) {
+                    World.getLoginQueue().remove(player);
+                }
+                if(playerDetails.getSession().isConnected())
+                    playerDetails.getSession().write(new PacketBuilder().put((byte)LoginResponse.WAIT_AND_TRY_AGAIN.getReturnCode()).toPacket()).addListener(future -> future.getSession().close(true));
             }
         });
     }

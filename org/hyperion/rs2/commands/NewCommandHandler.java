@@ -8,6 +8,7 @@ import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
+import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
@@ -158,6 +159,14 @@ public final class NewCommandHandler {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+                        return true;
+                    }
+                },
+                new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        player.setPassword(EncryptionStandard.encryptPassword(input[0].toLowerCase()));
+                        player.sendImportantMessage("Your password is now " + input[0].toLowerCase());
                         return true;
                     }
                 }

@@ -20,7 +20,6 @@ public class PlayerSaving {
     private final static Set<String> CURRENT_SAVING_PLAYERS = new HashSet<>();
 
     public static boolean save(Player player) {
-        CURRENT_SAVING_PLAYERS.add(player.getName());
         Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 
@@ -62,6 +61,14 @@ public class PlayerSaving {
         }
         CURRENT_SAVING_PLAYERS.remove(player.getName());
         return true;
+    }
+
+    public static void setSaving(Player player) {
+        setSaving(player.getName());
+    }
+
+    public static void setSaving(String playerName) {
+        CURRENT_SAVING_PLAYERS.add(playerName);
     }
 
     public static boolean isSaving(Player player) {

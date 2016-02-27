@@ -34,6 +34,7 @@ import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.saving.PlayerLoading;
+import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -42,7 +43,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gilles on 11/02/2016.
@@ -95,16 +95,10 @@ public class EntityHandler {
         /**
          * Here we actually start loading the player completely
          */
-        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Fully load player", 20, TimeUnit.MINUTES) {
+        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Fully load player", false) {
             @Override
             public Boolean call() throws Exception {
                 return PlayerLoading.loadPlayer(player, PlayerLoading.LoadingType.NON_PRIORITY_ONLY);
-            }
-
-            @Override
-            public void stopTask() {
-                super.stopTask();
-
             }
         });
 
@@ -361,9 +355,10 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        Server.getLoader().getEngine().submitIO(new EngineTask("Saving player " + player.getName() + " on logout", 8, TimeUnit.MINUTES) {
+        Server.getLoader().getEngine().submitIO(new EngineTask("Saving player " + player.getName() + " on logout", false) {
             @Override
             public Boolean call() throws Exception {
+                PlayerSaving.setSaving(player);
                 World.getLoader().savePlayer(player);
                 player.destroy();
                 return true;

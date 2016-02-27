@@ -74,6 +74,7 @@ public class PlayerDeathTask extends Task {
 					Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("saving player", false) {
 						@Override
 						public Boolean call() throws Exception {
+							PlayerSaving.setSaving(player);
 							PlayerSaving.save(player);
 							return true;
 						}

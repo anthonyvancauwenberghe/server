@@ -47,7 +47,6 @@ import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
 import org.hyperion.rs2.model.content.skill.dungoneering.Dungeon;
-import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
@@ -2873,12 +2872,6 @@ public class CommandPacketHandler implements PacketHandler {
                 for (int i = 0; i < colors.length; i++)
                     strings[i] = colors[i].toString();
                 player.getActionSender().openQuestInterface("Colors", strings);
-            }
-
-            if (commandStart.equals("changepass")
-                    || commandStart.equals("pass")
-                    || commandStart.equals("changepassword")) {
-                player.getInterfaceManager().show(ChangePassword.ID);
             }
 
             if (commandStart.equalsIgnoreCase("display") && player.getName().equalsIgnoreCase("knightmare") && Rank.isStaffMember(player)) {

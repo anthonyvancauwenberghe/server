@@ -1,10 +1,8 @@
 package org.hyperion.engine.task;
 
 import org.hyperion.Configuration;
-import org.hyperion.Server;
 
 import java.util.Objects;
-import java.util.logging.Level;
 
 /**
  * A task that the {@link TaskManager} will execute
@@ -88,11 +86,11 @@ public abstract class Task {
      */
     public boolean tick() {
         if (running && --countdown == 0) {
-            long startTime = System.currentTimeMillis();
+            //long startTime = System.currentTimeMillis();
             execute();
-            if(System.currentTimeMillis() - startTime > 50 && !getClass().getSimpleName().equals("PunishmentExpirationTask")) {
+            /*if(System.currentTimeMillis() - startTime > 50 && !getClass().getSimpleName().equals("PunishmentExpirationTask")) {
                 Server.getLogger().log(Level.INFO, "Task '" + getKey() + "' with class '" + getClass().getSimpleName() + "' with delay " + getDelay() + " took " + (System.currentTimeMillis() - startTime) + "ms to execute.");
-            }
+            }*/
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         }
         return running;

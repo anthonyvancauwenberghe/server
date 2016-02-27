@@ -77,6 +77,9 @@ public class GenericWorldLoader implements WorldLoader {
 
 	@Override
 	public LoginResponse checkLogin(Player player, PlayerDetails playerDetails) {
+		if(PlayerSaving.isSaving(player))
+			return WAIT_AND_TRY_AGAIN;
+
 		if(LOGIN_ATTEMPTS.get(player.getName()) == null)
 			LOGIN_ATTEMPTS.put(player.getName(), 0);
 

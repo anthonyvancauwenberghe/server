@@ -22,11 +22,12 @@ public class ShutdownHook extends Thread {
     @Override
     public void run() {
         logger.info("The shutdown hook is processing all required actions...");
+        Server.setUpdating(true);
         World.getPlayers().forEach(Trade::declineTrade);
         Dungeon.activeDungeons.forEach(Dungeon::complete);
-        Server.setUpdating(true);
         World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
         ClanManager.save();
+        Server.getLoader().getEngine().finish();
         logger.info("The shutdown hook actions have been completed, shutting the server down...");
     }
 }

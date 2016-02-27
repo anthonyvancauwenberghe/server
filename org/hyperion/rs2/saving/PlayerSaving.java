@@ -10,12 +10,17 @@ import java.io.FileWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Gilles on 4/02/2016.
  */
 public class PlayerSaving {
+    private final static Set<String> CURRENT_SAVING_PLAYERS = new HashSet<>();
+
     public static boolean save(Player player) {
+        CURRENT_SAVING_PLAYERS.add(player.getName());
         Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
         File file = path.toFile();
 
@@ -27,6 +32,7 @@ public class PlayerSaving {
                 System.out.println("Unable to create directory for player data!");
             }
         }
+
         try (FileWriter writer = new FileWriter(file)) {
             Gson builder = new GsonBuilder().setPrettyPrinting().create();
             JsonObject object = new JsonObject();
@@ -51,9 +57,19 @@ public class PlayerSaving {
             writer.write(builder.toJson(object));
         } catch (Exception e) {
             e.printStackTrace();
+            CURRENT_SAVING_PLAYERS.remove(player.getName());
             return false;
         }
+        CURRENT_SAVING_PLAYERS.remove(player.getName());
         return true;
+    }
+
+    public static boolean isSaving(Player player) {
+        return isSaving(player.getName());
+    }
+
+    public static boolean isSaving(String playerName) {
+        return CURRENT_SAVING_PLAYERS.contains(playerName);
     }
 
     public static boolean replaceProperty(String playerName, String property, Object value) {

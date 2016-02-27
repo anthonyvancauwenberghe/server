@@ -34,7 +34,7 @@ public final class GameEngine implements Runnable {
     /**
      * This thread handles input and output tasks, such as file writing.
      */
-    private final ScheduledExecutorService SqlService = createService("SqlServiceThread");
+    private final ScheduledExecutorService sqlService = createService("SqlServiceThread");
 
     /**
      * The current engine state of the server.
@@ -114,7 +114,7 @@ public final class GameEngine implements Runnable {
      */
     public <T> Optional<T> submitSql(EngineTask<T> sqlTask) {
         try {
-            Future<T> taskResult = SqlService.submit(sqlTask);
+            Future<T> taskResult = sqlService.submit(sqlTask);
             if(sqlTask.isCancellable()) {
                 try {
                     return Optional.of(taskResult.get(sqlTask.getTimeout(), sqlTask.getTimeUnit()));
@@ -141,6 +141,12 @@ public final class GameEngine implements Runnable {
         if(engineState == 600 / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY))
             engineState = DEFAULT_ENGINE_STATE - 1;
         engineState++;
+    }
+
+    public void finish() {
+        logicService.shutdown();
+        sqlService.shutdown();
+        IOService.shutdown();
     }
 
     /**

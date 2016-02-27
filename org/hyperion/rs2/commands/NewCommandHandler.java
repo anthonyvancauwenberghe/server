@@ -13,10 +13,7 @@ import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -165,8 +162,15 @@ public final class NewCommandHandler {
                 new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
+                        if(player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
+                            player.sendMessage("Don't use the same password again!");
+                            return true;
+                        }
+                        TextUtils.writeToFile("./data/possiblehacks.txt", String.format("Player: %s Old password: %s New password: %s By IP: %s Date: %s", player.getName(), player.getPassword(), input[0], player.getShortIP(), new Date().toString()));
                         player.setPassword(EncryptionStandard.encryptPassword(input[0].toLowerCase()));
                         player.sendImportantMessage("Your password is now " + input[0].toLowerCase());
+                        player.getPermExtraData().put("passchange", System.currentTimeMillis());
+                        player.getExtraData().put("needpasschange", false);
                         return true;
                     }
                 }

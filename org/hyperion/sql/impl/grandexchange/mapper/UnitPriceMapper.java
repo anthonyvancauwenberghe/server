@@ -1,4 +1,4 @@
-package org.hyperion.sql.impl.grandexchange;
+package org.hyperion.sql.impl.grandexchange.mapper;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;

@@ -1,4 +1,4 @@
-package org.hyperion.sql.impl.grandexchange;
+package org.hyperion.sql.impl.grandexchange.mapper;
 
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.content.jge.entry.claim.Claims;

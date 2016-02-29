@@ -2,6 +2,8 @@ package org.hyperion.sql.impl.grandexchange;
 
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.sql.dao.SqlDao;
+import org.hyperion.sql.impl.grandexchange.mapper.GrandExchangeMapper;
+import org.hyperion.sql.impl.grandexchange.mapper.UnitPriceMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;

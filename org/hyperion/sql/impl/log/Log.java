@@ -1,5 +1,8 @@
 package org.hyperion.sql.impl.log;
 
+import org.hyperion.rs2.model.Player;
+import org.hyperion.sql.impl.log.type.IPLog;
+
 import java.sql.Timestamp;
 
 /**
@@ -19,7 +22,8 @@ public class Log {
         DEATH_BY_NPC,
         PLAYER_KILL,
         PICKUP_ITEM,
-        GAMBLE;
+        GAMBLE,
+        IP;
 
         public int getFlag() {
             return 1 << (ordinal() + 1);
@@ -44,5 +48,9 @@ public class Log {
 
     protected static Timestamp now() {
         return new Timestamp(System.currentTimeMillis());
+    }
+
+    public static IPLog ipLog(Player player) {
+        return new IPLog(player.getName(), player.getShortIP());
     }
 }

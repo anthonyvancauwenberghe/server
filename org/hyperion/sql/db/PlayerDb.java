@@ -3,6 +3,7 @@ package org.hyperion.sql.db;
 import org.hyperion.Configuration;
 import org.hyperion.sql.impl.achievement.Achievement;
 import org.hyperion.sql.impl.grandexchange.GrandExchange;
+import org.hyperion.sql.impl.log.Logs;
 
 import static org.hyperion.Configuration.ConfigurationObject.*;
 
@@ -13,6 +14,7 @@ public class PlayerDb extends Db {
 
     private Achievement achievements;
     private GrandExchange grandExchange;
+    private Logs logs;
 
     public Achievement getAchievements() {
         return achievements;
@@ -20,6 +22,10 @@ public class PlayerDb extends Db {
 
     public GrandExchange getGrandExchange() {
         return grandExchange;
+    }
+
+    public Logs getLogs() {
+        return logs;
     }
 
     @Override
@@ -46,5 +52,6 @@ public class PlayerDb extends Db {
     protected void postInit() {
         achievements = new Achievement(this);
         grandExchange = new GrandExchange(this);
+        logs = new Logs(this);
     }
 }

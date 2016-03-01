@@ -166,9 +166,13 @@ public final class NewCommandHandler {
                         return true;
                     }
                 },
-                new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
+                new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+"), "password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
+                        if(input[0].length() > 5) {
+                            player.sendMessage("The password has to be at least 5 characters long!");
+                            return true;
+                        }
                         if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
                             player.sendMessage("Don't use the same password again!");
                             return true;

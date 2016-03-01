@@ -35,6 +35,8 @@ import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.sql.impl.log.Log;
+import org.hyperion.sql.impl.log.LogManager;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -78,12 +80,14 @@ public class EntityHandler {
     private static void register(Player player) {
         Packet packet = new PacketBuilder().put((byte)LoginResponse.SUCCESSFUL_LOGIN.getReturnCode()).put((byte) Rank.getPrimaryRankIndex(player)).put((byte) 0).toPacket();
         player.getSession().write(packet);
-        ConnectionHandler.removeIp(player.getShortIP());
-        HostGateway.enter(player.getShortIP());
         if(!World.getPlayers().add(player)) {
             player.getSession().close(true);
             return;
         }
+        ConnectionHandler.removeIp(player.getShortIP());
+        HostGateway.enter(player.getShortIP());
+        LogManager.insertLog(Log.ipLog(player));
+
         System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
 
         /**

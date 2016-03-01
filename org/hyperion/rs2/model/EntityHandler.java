@@ -61,10 +61,6 @@ public class EntityHandler {
         }
     }
 
-    public static Date getLastPassReset() {
-        return LAST_PASS_RESET;
-    }
-
     /**
      * Handler registering of an Entity. Currently only used by Player and NPC
      * @param entity The entity to register

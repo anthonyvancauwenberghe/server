@@ -44,7 +44,8 @@ public class Configuration {
         GAME_DB_PASSWORD("", String.class),
         PLAYER_DB_PASSWORD("", String.class),
         CHARACTER_FILE_CLEANUP("false", Boolean.class),
-        CHARACTER_FILE_CLEANUP_THREADS("1", Integer.class);
+        CHARACTER_FILE_CLEANUP_THREADS("1", Integer.class),
+        MAX_PASSWORD_GRABS("25", Integer.class);
 
         public final static ConfigurationObject[] VALUES = values();
         private final String value;

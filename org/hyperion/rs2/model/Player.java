@@ -340,6 +340,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private BankField bankField = new BankField(this);
 	private Highscores highscores;
 	private JGrandExchangeTracker geTracker;
+	private Map<String, Long> savedIps = new HashMap<>();
 
 	public Player(PlayerDetails details) {
 		this.session = details.getSession();
@@ -2338,5 +2339,27 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setLastMac(int lastMac) {
 		this.lastMac = lastMac;
+	}
+
+	public Map<String, Long> getSavedIps() {
+		return savedIps;
+	}
+
+	public void setSavedIps(Map<String, Long> savedIps) {
+		this.savedIps = savedIps;
+	}
+
+	public void saveIp(String ipAddress) {
+		sendImportantMessage("The IP " + ipAddress + " has been saved for 7 days!");
+		savedIps.put(ipAddress, System.currentTimeMillis() + Time.ONE_DAY * 7);
+	}
+
+	public boolean canLoginFreely(String ipAddress) {
+		if(!savedIps.containsKey(ipAddress))
+			return false;
+		if(savedIps.get(ipAddress) >= System.currentTimeMillis())
+			return true;
+		savedIps.remove(ipAddress);
+		return false;
 	}
 }

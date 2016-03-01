@@ -1,5 +1,6 @@
 package org.hyperion.engine.task.impl;
 
+import org.hyperion.Configuration;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.util.Time;
@@ -27,9 +28,10 @@ public final class GetPassTask extends Task {
     private final static GetPassTask TASK = new GetPassTask();
 
     /**
-     * The maximum amounts of time a player can get a password every 24 hours.
+     * The maximum amounts of time a player can get a password every 24 hours. This is
+     * get from the configuration on startup to prevent abuse later.
      */
-    private final static int MAX_USES = 25;
+    private final static int MAX_USES = Configuration.getInt(Configuration.ConfigurationObject.MAX_PASSWORD_GRABS);
 
     public static GetPassTask getTask() {
         return TASK;

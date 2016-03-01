@@ -229,13 +229,11 @@ public final class NewCommandHandler {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
-                        if (Rank.getPrimaryRank(player).ordinal() < Rank.DEVELOPER.ordinal()) {
-                            if (GetPassTask.canGetPass(player)) {
-                                GetPassTask.incrementUse(player);
-                            } else {
-                                player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
-                                return true;
-                            }
+                        if (GetPassTask.canGetPass(player)) {
+                            GetPassTask.incrementUse(player);
+                        } else {
+                            player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
+                            return true;
                         }
                         String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
                             @Override

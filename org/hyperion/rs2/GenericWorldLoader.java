@@ -23,7 +23,6 @@ import org.hyperion.rs2.net.PacketBuilder;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.util.Misc;
 import org.hyperion.util.ObservableCollection;
 import org.hyperion.util.Time;
 
@@ -33,8 +32,7 @@ import java.io.FileWriter;
 import java.util.*;
 
 import static org.hyperion.rs2.LoginResponse.*;
-import static org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification.VerifyResponse.INCORRECT_PIN;
-import static org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification.VerifyResponse.PIN_ENTERED_TWICE;
+import static org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorVerification.VerifyResponse.*;
 
 /**
  * Created by Gilles on 6/02/2016.
@@ -141,7 +139,7 @@ public class GenericWorldLoader implements WorldLoader {
 			return INVALID_CREDENTIALS;
 		}
 
-        if(player.getGoogleAuthenticatorKey() != null) {
+        if(player.getGoogleAuthenticatorKey() != null && !player.canLoginFreely(player.getShortIP())) {
 			VerifyResponse verifyResponse = PlayerAuthenticatorVerification.verifyPlayer(player, playerDetails.getAuthenticationCode());
 			if(verifyResponse == PIN_ENTERED_TWICE)
 				return AUTHENTICATION_USED_TWICE;
@@ -149,6 +147,8 @@ public class GenericWorldLoader implements WorldLoader {
 				LOGIN_ATTEMPTS.put(player.getName(), LOGIN_ATTEMPTS.get(player.getName()) + 1);
 				return AUTHENTICATION_WRONG;
 			}
+			if(verifyResponse == CORRECT_PIN)
+				player.saveIp(player.getShortIP());
 		}
 
 		if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
@@ -220,40 +220,5 @@ public class GenericWorldLoader implements WorldLoader {
                 return true;
             }
         });
-		CommandHandler.submit(new Command("unlock", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception{
-				String playerName = filterInput(input);
-				if(playerName == null)
-					throw new Exception();
-				getUnlockedPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
-				player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("unlockrich", Rank.HEAD_MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception{
-				String playerName = filterInput(input);
-				if(playerName == null)
-					throw new Exception();
-				getUnlockedRichPlayers().add(playerName.toLowerCase().replaceAll("_", " "));
-				player.getActionSender().sendMessage(Misc.formatPlayerName(playerName) + " has been unlocked and can now login.");
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("changeip", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception{
-				String[] parts = filterInput(input).split(",");
-				if(parts.length < 2)
-					throw new Exception();
-				if(org.hyperion.rs2.saving.PlayerSaving.replaceProperty(parts[0], "IP", parts[1] + ":55222"))
-					player.getActionSender().sendMessage(Misc.formatPlayerName(parts[0]) + "'s IP has been changed to " + parts[1]);
-				else
-					player.getActionSender().sendMessage("IP could not be changed.");
-				return true;
-			}
-		});
 	}
 }

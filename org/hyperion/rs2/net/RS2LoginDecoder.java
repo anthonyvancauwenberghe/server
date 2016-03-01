@@ -156,6 +156,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                 String name = NameUtils.formatName(IoBufferUtils.getRS2String(in)).trim();
                 String pass = IoBufferUtils.getRS2String(in);
                 int authenticationCode = in.getInt();
+                boolean saveIp = in.getInt() == 1;
 
                 int[] sessionKey = new int[4];
                 sessionKey[0] = (int) (clientKey >> 32);
@@ -180,7 +181,7 @@ public class RS2LoginDecoder extends CumulativeProtocolDecoder {
                     return false;
                 }
                 state = STATE_OPCODE;
-                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, authenticationCode, macId, uid, inCipher, outCipher, remoteIp, specialUid));
+                login(new PlayerDetails(session, Misc.formatPlayerName(name), pass, authenticationCode, macId, uid, inCipher, outCipher, remoteIp, specialUid, saveIp));
                 return true;
         }
         in.rewind();

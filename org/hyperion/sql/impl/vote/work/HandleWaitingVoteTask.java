@@ -44,8 +44,8 @@ public class HandleWaitingVoteTask extends Task {
      */
     private final int runelocusVotes, topgVotes, rspslistVotes;
 
-    public HandleWaitingVoteTask(Player player, List<WaitingVote> votes, boolean runelocus, boolean topg, boolean rspslist, int runelocusVotes, int topgVotes, int rspslistVotes) {
-        super(200);
+    public HandleWaitingVoteTask(Player player, long delay, List<WaitingVote> votes, boolean runelocus, boolean topg, boolean rspslist, int runelocusVotes, int topgVotes, int rspslistVotes) {
+        super(delay);
         this.player = player;
         this.votes = votes;
         this.runelocus = runelocus;
@@ -82,7 +82,6 @@ public class HandleWaitingVoteTask extends Task {
             player.sendMessage("You can only vote a maximum of " + MAXIMUM_VOTES_PER_DAY + " times a day without getting", "your votes cleaned, be careful!");
         }
 
-        VoteBonus voteBonus = null;
         int votingPoints = (runelocusVotes * 2) + rspslistVotes + topgVotes;
 
         LocalDate lastVoteBonusDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteBonus()), ZoneId.systemDefault()).toLocalDate();
@@ -90,7 +89,7 @@ public class HandleWaitingVoteTask extends Task {
 
         if (canReceiveBonus) {
             if (runelocus && topg && rspslist) {
-                voteBonus = Misc.randomElement(VoteBonus.VALUES);
+                VoteBonus voteBonus = Misc.randomElement(VoteBonus.VALUES);
                 while (!voteBonus.willApply(player)) {
                     voteBonus = Misc.randomElement(VoteBonus.VALUES);
                 }

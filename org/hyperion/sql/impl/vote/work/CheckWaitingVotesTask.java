@@ -13,6 +13,7 @@ import org.hyperion.util.Time;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,11 @@ public class CheckWaitingVotesTask extends Task {
      */
     private static CheckWaitingVotesTask INSTANCE;
 
+    /**
+     * Whether it's enabled or not
+     */
+    private static boolean enabled = true;
+
     public CheckWaitingVotesTask() {
         super(CYCLE_TIME);
         if(INSTANCE != null)
@@ -40,22 +46,28 @@ public class CheckWaitingVotesTask extends Task {
         Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("Waiting votes query", 20, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
-                if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized())
+                if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized() || !enabled)
                     return false;
 
                 List<WaitingVote> waitingVotes = DbHub.getDonationsDb().votes().getWaiting();
                 if (waitingVotes == null || waitingVotes.isEmpty())
                     return true;
-                waitingVotes.stream().filter(vote -> World.getPlayerByName(vote.playerName()) != null).collect(Collectors.groupingBy(vote -> World.getPlayerByName(vote.playerName()))).forEach((player, donationList) -> {
 
+                Map<Player, List<WaitingVote>> waitingVotesMap = waitingVotes.stream().filter(vote -> World.getPlayerByName(vote.playerName()) != null).collect(Collectors.groupingBy(vote -> World.getPlayerByName(vote.playerName())));
+
+                int i = waitingVotesMap.size();
+                for (Map.Entry<Player, List<WaitingVote>> playerListEntry : waitingVotesMap.entrySet()) {
                     if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized()) {
                         stop();
-                        return;
+                        continue;
                     }
+                    List<WaitingVote> donationList = playerListEntry.getValue();
+                    Player player = playerListEntry.getKey();
+
                     if (donationList == null || donationList.isEmpty())
-                        return;
+                        continue;
                     if (donationList.stream().filter(vote -> !vote.processed()).count() < 1)
-                        return;
+                        continue;
                     boolean runelocus = false;
                     boolean rspslist = false;
                     boolean topg = false;
@@ -88,9 +100,9 @@ public class CheckWaitingVotesTask extends Task {
                         if (vote.topg())
                             topg = true;
 
-                        TaskManager.submit(new HandleWaitingVoteTask(player, donationList, runelocus, topg, rspslist, runelocusVotes, topgVotes, rspslistVotes));
+                        TaskManager.submit(new HandleWaitingVoteTask(player, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY) * i--, donationList, runelocus, topg, rspslist, runelocusVotes, topgVotes, rspslistVotes));
                     }
-                });
+                }
                 return true;
             }
         });
@@ -106,6 +118,14 @@ public class CheckWaitingVotesTask extends Task {
                 return true;
             }
         });
+    }
+
+    public static void toggleEnabled() {
+        enabled = !enabled;
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
     }
 
     public static int getSecondLeft() {

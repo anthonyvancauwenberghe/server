@@ -206,6 +206,7 @@ public final class World {
     }
 
     public static void registerGlobalEvents() {
+        submit(GetPassTask.getTask());
         submit(new PlayerTask36Seconds());
         submit(new PlayerTask1Second());
         submit(new EarnPotentialTask());

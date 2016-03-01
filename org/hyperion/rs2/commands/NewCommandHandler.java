@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.GetPassTask;
 import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
@@ -169,7 +170,7 @@ public final class NewCommandHandler {
                 new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+"), "password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if(input[0].length() > 5) {
+                        if (input[0].length() > 5) {
                             player.sendMessage("The password has to be at least 5 characters long!");
                             return true;
                         }
@@ -227,22 +228,30 @@ public final class NewCommandHandler {
                 new NewCommand("getpass", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                            String targetName = input[0];
-                            String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
-                                @Override
-                                public String call() throws Exception {
-                                    Optional<JsonElement> playerIP = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
-                                    if(playerIP.isPresent())
-                                        return playerIP.get().getAsString();
-                                    return "";
-                                }
-                            }).get();
-                            if(password.isEmpty()) {
-                                player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
+                        String targetName = input[0];
+                        if (Rank.getPrimaryRank(player).ordinal() < Rank.DEVELOPER.ordinal()) {
+                            if (GetPassTask.canGetPass(player)) {
+                                GetPassTask.incrementUse(player);
+                            } else {
+                                player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
                                 return true;
                             }
-                            player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
+                        }
+                        String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                            @Override
+                            public String call() throws Exception {
+                                Optional<JsonElement> playerIP = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
+                                if (playerIP.isPresent())
+                                    return playerIP.get().getAsString();
+                                return "";
+                            }
+                        }).get();
+                        if (password.isEmpty()) {
+                            player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
                             return true;
+                        }
+                        player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
+                        return true;
                     }
                 },
                 new CheckPunishmentCommand("checkpunish")

@@ -118,7 +118,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		Server.getLoader().getEngine().submitLogic(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogin(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if (session.containsAttribute("player")) {
@@ -148,7 +148,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 	public void sessionOpened(IoSession session) throws Exception {
 		SocketAddress remoteAddress = session.getRemoteAddress();
 		String remoteIp = remoteAddress.toString();
-		Server.getLoader().getEngine().submitLogic(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
+		Server.getLoader().getEngine().submitLogin(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
 			@Override
 			public Object call() throws Exception {
 				String shortIp = TextUtils.shortIp(remoteIp);

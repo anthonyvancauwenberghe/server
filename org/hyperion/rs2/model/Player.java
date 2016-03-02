@@ -2350,6 +2350,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void saveIp(String ipAddress) {
+		if(savedIps.containsKey(ipAddress))
+			return;
 		sendImportantMessage("The IP " + ipAddress + " has been saved for 7 days!");
 		savedIps.put(ipAddress, System.currentTimeMillis() + Time.ONE_DAY * 7);
 	}

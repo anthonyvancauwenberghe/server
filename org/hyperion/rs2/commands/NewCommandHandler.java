@@ -4,13 +4,13 @@ import com.google.gson.JsonElement;
 import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.GetPassTask;
 import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
 import org.hyperion.rs2.net.security.EncryptionStandard;
@@ -146,20 +146,6 @@ public final class NewCommandHandler {
      */
     static {
         NewCommandHandler.submit(
-                new NewCommand("isonline", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        player.sendMessage("Player " + TextUtils.optimizeText(input[0]) + " is currently " + (World.getPlayerByName(input[0]) == null ? "offline" : "online"));
-                        return true;
-                    }
-                },
-                new NewCommand("shop", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> integer >= 0, "ShopId", "The ID of the shop, has to be a positive number.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        ShopManager.open(player, Integer.parseInt(input[0]));
-                        return true;
-                    }
-                },
                 new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -189,39 +175,78 @@ public final class NewCommandHandler {
                 new NewCommand("getip", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        String playerIp = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                        String targetName = input[0];
+                        player.sendMessage("Getting " + targetName + "'s ip address... Please be patient.");
+                        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Get player IP", 1, TimeUnit.SECONDS) {
                             @Override
-                            public String call() throws Exception {
+                            public Boolean call() throws Exception {
                                 Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
-                                if (playerIP.isPresent())
-                                    return playerIP.get().getAsString();
-                                return "";
+                                if(player == null)
+                                    return false;
+                                TaskManager.submit(new Task(200, true, "commandresponse") {
+                                    @Override
+                                    protected void execute() {
+                                        if (playerIP.isPresent())
+                                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s IP is '" + playerIP.get().getAsString() + "'");
+                                        else
+                                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded IP");
+                                        stop();
+                                    }
+                                });
+                                return true;
                             }
-                        }).get();
-                        if (!playerIp.isEmpty())
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s IP is '" + playerIp + "'");
-                        else
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded IP");
+
+                            @Override
+                            public void stopTask() {
+                                TaskManager.submit(new Task(200, true, "commandresponse") {
+                                    @Override
+                                    protected void execute() {
+                                        if (player != null)
+                                            player.sendMessage("Request timed out... Please try again at a later point.");
+                                        stop();
+                                    }
+                                });
+                            }
+                        });
                         return true;
                     }
                 },
                 new NewCommand("getmail", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        String playerMail = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player email", 1, TimeUnit.SECONDS) {
+                        String targetName = input[0];
+                        player.sendMessage("Getting " + targetName + "'s e-mail... Please be patient.");
+                        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Get player email", 1, TimeUnit.SECONDS) {
                             @Override
-                            public String call() throws Exception {
+                            public Boolean call() throws Exception {
                                 Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
-                                if (playerEmail.isPresent())
-                                    return playerEmail.get().getAsString();
-                                return "";
+                                if(player == null)
+                                    return false;
+                                TaskManager.submit(new Task(200, true, "commandresponse") {
+                                    @Override
+                                    protected void execute() {
+                                        if (playerEmail.isPresent())
+                                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s mail is '" + playerEmail.get().getAsString() + "'");
+                                        else
+                                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded mail");
+                                        stop();
+                                    }
+                                });
+                                return true;
                             }
-                        }).get();
 
-                        if (!playerMail.isEmpty())
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s mail is '" + playerMail + "'");
-                        else
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded mail");
+                            @Override
+                            public void stopTask() {
+                                TaskManager.submit(new Task(200, true, "commandresponse") {
+                                    @Override
+                                    protected void execute() {
+                                        if (player != null)
+                                            player.sendMessage("Request timed out... Please try again at a later point.");
+                                        stop();
+                                    }
+                                });
+                            }
+                        });
                         return true;
                     }
                 },
@@ -235,20 +260,49 @@ public final class NewCommandHandler {
                             player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
                             return true;
                         }
-                        String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                        player.sendMessage("Getting " + targetName + "'s password... Please be patient.");
+                        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Get player IP", 2, TimeUnit.SECONDS) {
                             @Override
-                            public String call() throws Exception {
-                                Optional<JsonElement> playerIP = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
-                                if (playerIP.isPresent())
-                                    return playerIP.get().getAsString();
-                                return "";
+                            public Boolean call() throws Exception {
+                                Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
+                                Optional<JsonElement> rank = PlayerLoading.getProperty(targetName, IOData.RANK);
+                                if(player.getPlayerRank() < rank.get().getAsLong()) {
+                                    TaskManager.submit(new Task(200, true, "commandresponse") {
+                                        @Override
+                                        protected void execute() {
+                                            player.sendMessage("You cannot get " + targetName + "'s password. Their rank is higher than yours.");
+                                            stop();
+                                        }
+                                    });
+                                    return true;
+                                }
+                                if(player == null)
+                                    return false;
+                                TaskManager.submit(new Task(200, true, "commandresponse") {
+                                    @Override
+                                    protected void execute() {
+                                        if (playerPassword.isPresent())
+                                            player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(playerPassword.get().getAsString()) + "'.");
+                                        else
+                                            player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
+                                        stop();
+                                    }
+                                });
+                                return true;
                             }
-                        }).get();
-                        if (password.isEmpty()) {
-                            player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
-                            return true;
-                        }
-                        player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
+
+                            @Override
+                            public void stopTask() {
+                                TaskManager.submit(new Task(200, true, "commandresponse") {
+                                    @Override
+                                    protected void execute() {
+                                        if (player != null)
+                                            player.sendMessage("Request timed out... Please try again at a later point.");
+                                        stop();
+                                    }
+                                });
+                            }
+                        });
                         return true;
                     }
                 },

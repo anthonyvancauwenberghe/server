@@ -526,7 +526,7 @@ public class ActionSender {
     }
 
     public ActionSender sendEnterStringInterface(String message) {
-        player.write(new PacketBuilder(187, Type.VARIABLE_SHORT).toPacket());
+        player.write(new PacketBuilder(187, Type.VARIABLE_SHORT).putRS2String(message).toPacket());
         return this;
     }
 
@@ -690,8 +690,7 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendMessage(String message) {
-        player.write(new PacketBuilder(253, Type.VARIABLE)
-                .putRS2String(message).toPacket());
+        player.write(new PacketBuilder(253, Type.VARIABLE).putRS2String(message).toPacket());
         return this;
     }
 

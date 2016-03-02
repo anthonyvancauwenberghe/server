@@ -27,6 +27,11 @@ public final class GameEngine implements Runnable {
     private final ScheduledExecutorService logicService = createService("LogicServiceThread");
 
     /**
+     * This is the thread that handles the logic logic, and just that.
+     */
+    private final ScheduledExecutorService loginService = createService("LoginServiceThread", 4);
+
+    /**
      * This thread handles input and output tasks, such as file writing.
      */
     private final ScheduledExecutorService IOService = createService("IoServiceThread");
@@ -75,6 +80,30 @@ public final class GameEngine implements Runnable {
         } catch(Exception e) {
             e.printStackTrace();
             FileLogging.writeError("game_engine_logic_errors.txt", e);
+        }
+    }
+
+    /**
+     * This executes a logic task as soon as the thread has any space.
+     * It is not cancellable over time due to the nature of loading.
+     * @param loginTask The task to execute
+     */
+    public void submitLogin(EngineTask loginTask) {
+        try {
+            Future taskResult = loginService.submit(loginTask);
+            if(loginTask.isCancellable()) {
+                try {
+                    taskResult.get(loginTask.getTimeout(), loginTask.getTimeUnit());
+                } catch (TimeoutException e) {
+                    loginTask.stopTask();
+                    taskResult.cancel(true);
+                }
+            }
+        } catch(InterruptedException ex) {
+            Server.getLogger().warning("Engine login task '" + loginTask.getTaskName() + "' took too long, interrupted.");
+        } catch(Exception e) {
+            e.printStackTrace();
+            FileLogging.writeError("game_engine_login_errors.txt", e);
         }
     }
 
@@ -149,13 +178,24 @@ public final class GameEngine implements Runnable {
         IOService.shutdown();
     }
 
+
     /**
      * This will create a thread with the given name.
      * @param threadName The name for the thread
      * @return The created thread
      */
     public static ScheduledExecutorService createService(String threadName) {
-        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        return createService(threadName, 1);
+    }
+
+    /**
+     * This will create a thread with the given name.
+     * @param threadName The name for the thread.
+     * @param threads The amount of threads this service will use.
+     * @return The created thread
+     */
+    public static ScheduledExecutorService createService(String threadName, int threads) {
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(threads);
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setThreadFactory(new ThreadFactoryBuilder().setNameFormat(threadName).build());
         executor.setKeepAliveTime(45, TimeUnit.SECONDS);

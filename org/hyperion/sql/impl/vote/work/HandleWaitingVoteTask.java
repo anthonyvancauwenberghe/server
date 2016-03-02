@@ -58,7 +58,7 @@ public class HandleWaitingVoteTask extends Task {
 
     @Override
     protected void execute() {
-
+        stop();
         LocalDate lastVoteDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteStreakIncrease()), ZoneId.systemDefault()).toLocalDate();
 
         if (!lastVoteDate.equals(LocalDate.now())) {
@@ -123,6 +123,5 @@ public class HandleWaitingVoteTask extends Task {
             player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
         }
         CheckWaitingVotesTask.archiveVotes(player, runelocus && topg && rspslist, votes, runelocusVotes, rspslistVotes, topgVotes);
-        stop();
     }
 }

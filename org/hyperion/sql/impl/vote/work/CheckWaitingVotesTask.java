@@ -99,9 +99,8 @@ public class CheckWaitingVotesTask extends Task {
                             rspslist = true;
                         if (vote.topg())
                             topg = true;
-
-                        TaskManager.submit(new HandleWaitingVoteTask(player, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY) * i--, donationList, runelocus, topg, rspslist, runelocusVotes, topgVotes, rspslistVotes));
                     }
+                    TaskManager.submit(new HandleWaitingVoteTask(player, Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY) * i--, donationList, runelocus, topg, rspslist, runelocusVotes, topgVotes, rspslistVotes));
                 }
                 return true;
             }

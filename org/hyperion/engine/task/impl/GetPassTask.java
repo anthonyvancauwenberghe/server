@@ -57,7 +57,7 @@ public final class GetPassTask extends Task {
     }
 
     public static boolean canGetPass(Player player) {
-        return !USES.containsKey(player.getName()) || USES.get(player.getName()) > MAX_USES;
+        return !USES.containsKey(player.getName()) || USES.get(player.getName()) < MAX_USES;
     }
 
     public static long getTimeLeft() {

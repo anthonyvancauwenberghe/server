@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
 import com.google.gson.JsonElement;
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
@@ -29,30 +29,31 @@ public class CheckPunishmentCommand extends NewCommand {
         final String targetName = input[0];
         final Player target = World.getPlayerByName(targetName);
         final List<Punishment> punishments = new ArrayList<>();
+
+        final String ip = GameEngine.submitIO(new EngineTask<String>("Loading IP for player " + targetName, 4, TimeUnit.SECONDS) {
+            @Override
+            public String call() throws Exception {
+                Optional<JsonElement> playerIp = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
+                if(playerIp.isPresent())
+                    return playerIp.get().getAsString();
+                return "";
+            }
+        }).get();
+
+        final int uid = GameEngine.submitIO(new EngineTask<Integer>("Loading MAC for player " + targetName, 4, TimeUnit.SECONDS) {
+            @Override
+            public Integer call() throws Exception {
+                Optional<JsonElement> playerMac = PlayerLoading.getProperty(input[0], IOData.LAST_MAC);
+                if(playerMac.isPresent())
+                    return playerMac.get().getAsInt();
+                return -1;
+            }
+        }).get();
+
         for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
             for(final Punishment p : h.getPunishments()){
                 if(p.getTime().isExpired())
                     continue;
-                final String ip = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Loading IP for player " + targetName, 2, TimeUnit.SECONDS) {
-                    @Override
-                    public String call() throws Exception {
-                        Optional<JsonElement> playerIp = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
-                        if(playerIp.isPresent())
-                            return playerIp.get().getAsString();
-                        return "";
-                    }
-                }).get();
-
-                final int uid = Server.getLoader().getEngine().submitIO(new EngineTask<Integer>("Loading MAC for player " + targetName, 2, TimeUnit.SECONDS) {
-                    @Override
-                    public Integer call() throws Exception {
-                        Optional<JsonElement> playerMac = PlayerLoading.getProperty(input[0], IOData.LAST_MAC);
-                        if(playerMac.isPresent())
-                            return playerMac.get().getAsInt();
-                        return -1;
-                    }
-                }).get();
-
                 if(p.getVictimName().equalsIgnoreCase(targetName)){
                     punishments.add(p);
                     continue;

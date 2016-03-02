@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
@@ -44,7 +44,7 @@ public class PunishCommand extends Command {
             player.sendf("You cannot punish other staff members");
             return false;
         }
-        String ip = victim != null ? victim.getShortIP() : Server.getLoader().getEngine().submitIO(new EngineTask<String>("Loading IP for player " + victimName, 2, TimeUnit.SECONDS) {
+        String ip = victim != null ? victim.getShortIP() : GameEngine.submitIO(new EngineTask<String>("Loading IP for player " + victimName, 4, TimeUnit.SECONDS) {
             @Override
             public String call() throws Exception {
                 return PlayerLoading.getProperty(victimName, IOData.LAST_IP).get().getAsString();
@@ -52,7 +52,7 @@ public class PunishCommand extends Command {
         }).orElse("");
         if(ip.contains("="))//
             ip = ip.substring(ip.indexOf('/')+1, ip.indexOf(':'));//
-        String macStr = victim != null ? Integer.toString(victim.getUID()) : Server.getLoader().getEngine().submitIO(new EngineTask<String>("Loading MAC for player " + victimName, 2, TimeUnit.SECONDS) {
+        String macStr = victim != null ? Integer.toString(victim.getUID()) : GameEngine.submitIO(new EngineTask<String>("Loading MAC for player " + victimName, 4, TimeUnit.SECONDS) {
             @Override
             public String call() throws Exception {
                 return Integer.toString(PlayerLoading.getProperty(victimName, IOData.LAST_MAC).get().getAsInt());

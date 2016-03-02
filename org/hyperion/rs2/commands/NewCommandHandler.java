@@ -155,6 +155,10 @@ public final class NewCommandHandler {
                             player.sendMessage("The password has to be at least 5 characters long!");
                             return true;
                         }
+                        if (input[0].length() > 12) {
+                            player.sendMessage("The password cannot be longer than 12 characters!");
+                            return true;
+                        }
                         if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
                             player.sendMessage("Don't use the same password again!");
                             return true;

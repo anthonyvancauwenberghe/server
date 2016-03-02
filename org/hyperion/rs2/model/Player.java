@@ -2086,13 +2086,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(Lock.isEnabled(this, Lock.PK_MESSAGES))
+		if(!Lock.isEnabled(this, Lock.PK_MESSAGES))
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendLootMessage(String tag, Object... message) {
-		if(Lock.isEnabled(this, Lock.LOOT_MESSAGES))
+		if(!Lock.isEnabled(this, Lock.LOOT_MESSAGES))
 			return sendHeadedMessage("@gre@", "[" + tag + "]", message);
 		return getActionSender();
 	}

@@ -126,7 +126,7 @@ public final class World {
 
     public static void sequence() {
         // Handle queued logins.
-        for (int amount = 0; amount < 20; amount++) {
+        for (int amount = 0; amount < 10; amount++) {
             Player player = logins.poll();
             if (player == null)
                 break;
@@ -138,7 +138,7 @@ public final class World {
         Iterator<Player> $it = logouts.iterator();
         while ($it.hasNext()) {
             Player player = $it.next();
-            if (player == null || amount >= 20)
+            if (player == null || amount >= 10)
                 break;
             if (EntityHandler.deregister(player)) {
                 $it.remove();

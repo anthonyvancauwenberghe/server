@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.saving.PlayerSaving;
+import org.hyperion.sql.impl.log.LogManager;
 import org.hyperion.util.Time;
 
 import java.io.FileOutputStream;
@@ -41,6 +42,7 @@ public class Update extends Task {
                 World.getPlayers().stream().filter(player -> player != null).forEach(Trade::declineTrade);
                 World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
                 ClanManager.save();
+                LogManager.flushAll();
                 Server.getLogger().info("Update task finished! Reason for update: " + reason);
                 try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("./data/key.dat"))) {
                     out.writeObject(Server.getCharFileEncryption().getKey());

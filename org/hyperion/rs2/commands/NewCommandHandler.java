@@ -1,8 +1,8 @@
 package org.hyperion.rs2.commands;
 
 import com.google.gson.JsonElement;
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.GetPassTask;
@@ -139,11 +139,6 @@ public final class NewCommandHandler {
         return true;
     }
 
-    /**
-     * SILY EXAMPLECOMMAND JUST TO GIVE YOU THE IDEA, REMOVE IT AFTER SEEING.
-     * ADD ALL COMMAND IN THIS STATIC METHOD TEMPORARILY, I'LL ADD A PROPER INITIALIZER LATER.
-     * ~ GLIS
-     */
     static {
         NewCommandHandler.submit(
                 new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
@@ -156,7 +151,7 @@ public final class NewCommandHandler {
                 new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+"), "password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (input[0].length() > 5) {
+                        if (input[0].length() < 5) {
                             player.sendMessage("The password has to be at least 5 characters long!");
                             return true;
                         }
@@ -176,8 +171,8 @@ public final class NewCommandHandler {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
-                        player.sendMessage("Getting " + targetName + "'s ip address... Please be patient.");
-                        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Get player IP", 1, TimeUnit.SECONDS) {
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s ip address... Please be patient.");
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 1, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
@@ -215,8 +210,8 @@ public final class NewCommandHandler {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
-                        player.sendMessage("Getting " + targetName + "'s e-mail... Please be patient.");
-                        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Get player email", 1, TimeUnit.SECONDS) {
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s e-mail... Please be patient.");
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player email", 1, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
@@ -260,8 +255,8 @@ public final class NewCommandHandler {
                             player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
                             return true;
                         }
-                        player.sendMessage("Getting " + targetName + "'s password... Please be patient.");
-                        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Get player IP", 2, TimeUnit.SECONDS) {
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s password... Please be patient.");
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 2, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);

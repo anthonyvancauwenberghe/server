@@ -1,8 +1,8 @@
 package org.hyperion.sql.impl.vote.work;
 
 import org.hyperion.Configuration;
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.model.Player;
@@ -43,7 +43,7 @@ public class CheckWaitingVotesTask extends Task {
 
     @Override
     protected void execute() {
-        Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("Waiting votes query", 20, TimeUnit.SECONDS) {
+        GameEngine.submitSql(new EngineTask<Boolean>("Waiting votes query", 5, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized() || !enabled)
@@ -108,7 +108,7 @@ public class CheckWaitingVotesTask extends Task {
     }
 
     public static void archiveVotes(Player player, boolean deleteAllProcessed, List<WaitingVote> votes, int runelocusVotes, int rspslistVotes, int topgVotes) {
-        Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("Waitingvotes query", 5, TimeUnit.SECONDS) {
+        GameEngine.submitSql(new EngineTask<Boolean>("Waitingvotes query", 5, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 List<WaitingVote> processedVotes = votes.stream().filter(vote -> vote.processed() && (deleteAllProcessed || !vote.date().toLocalDate().equals(LocalDate.now()))).collect(Collectors.toList());

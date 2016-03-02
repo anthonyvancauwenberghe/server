@@ -2,32 +2,32 @@
 		package org.hyperion.rs2;
 
 		import org.apache.mina.core.service.IoHandlerAdapter;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.hyperion.Server;
-import org.hyperion.engine.EngineTask;
-import org.hyperion.engine.task.Task;
-import org.hyperion.engine.task.TaskManager;
-import org.hyperion.rs2.model.EntityHandler;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.punishment.Combination;
-import org.hyperion.rs2.model.punishment.Punishment;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.net.PacketManager;
-import org.hyperion.rs2.net.RS2CodecFactory;
-import org.hyperion.rs2.util.TextUtils;
+		import org.apache.mina.core.session.IdleStatus;
+		import org.apache.mina.core.session.IoSession;
+		import org.apache.mina.filter.codec.ProtocolCodecFilter;
+		import org.hyperion.engine.EngineTask;
+		import org.hyperion.engine.GameEngine;
+		import org.hyperion.engine.task.Task;
+		import org.hyperion.engine.task.TaskManager;
+		import org.hyperion.rs2.model.EntityHandler;
+		import org.hyperion.rs2.model.Player;
+		import org.hyperion.rs2.model.World;
+		import org.hyperion.rs2.model.punishment.Combination;
+		import org.hyperion.rs2.model.punishment.Punishment;
+		import org.hyperion.rs2.model.punishment.Target;
+		import org.hyperion.rs2.model.punishment.Type;
+		import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
+		import org.hyperion.rs2.net.Packet;
+		import org.hyperion.rs2.net.PacketManager;
+		import org.hyperion.rs2.net.RS2CodecFactory;
+		import org.hyperion.rs2.util.TextUtils;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.SocketAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+		import java.io.FileWriter;
+		import java.io.IOException;
+		import java.net.SocketAddress;
+		import java.util.HashMap;
+		import java.util.Map;
+		import java.util.concurrent.TimeUnit;
 
 /**
  * The <code>ConnectionHandler</code> processes incoming events from MINA,
@@ -98,7 +98,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 				return;
 			}
 		}
-		Server.getLoader().getEngine().submitLogic(new EngineTask("Handle packet " + ((Packet)message).getOpcode() + " for player " + ((Player)session.getAttribute("player")).getName(), 2, TimeUnit.SECONDS) {
+		GameEngine.submitLogic(new EngineTask("Handle packet " + ((Packet)message).getOpcode() + " for player " + ((Player)session.getAttribute("player")).getName(), 2, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if(session.getAttribute("player") != null)
@@ -118,7 +118,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 
 	@Override
 	public void sessionClosed(IoSession session) throws Exception {
-		Server.getLoader().getEngine().submitLogin(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
+		GameEngine.submitLogin(new EngineTask("Closing session for player " + ((Player)session.getAttribute("player")).getName(), 4, TimeUnit.SECONDS) {
 			@Override
 			public Boolean call() throws Exception {
 				if (session.containsAttribute("player")) {
@@ -148,7 +148,7 @@ public class ConnectionHandler extends IoHandlerAdapter {
 	public void sessionOpened(IoSession session) throws Exception {
 		SocketAddress remoteAddress = session.getRemoteAddress();
 		String remoteIp = remoteAddress.toString();
-		Server.getLoader().getEngine().submitLogin(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
+		GameEngine.submitLogin(new EngineTask("Open session for IP " + remoteIp, 4, TimeUnit.SECONDS) {
 			@Override
 			public Object call() throws Exception {
 				String shortIp = TextUtils.shortIp(remoteIp);

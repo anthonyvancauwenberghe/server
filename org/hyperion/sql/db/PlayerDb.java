@@ -53,5 +53,7 @@ public class PlayerDb extends Db {
         achievements = new Achievement(this);
         grandExchange = new GrandExchange(this);
         logs = new Logs(this);
+
+        logs.createTables();
     }
 }

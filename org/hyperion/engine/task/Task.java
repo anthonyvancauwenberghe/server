@@ -1,6 +1,8 @@
 package org.hyperion.engine.task;
 
 import org.hyperion.Configuration;
+import org.hyperion.sql.impl.log.LogManager;
+import org.hyperion.sql.impl.log.type.TaskLog;
 
 import java.util.Objects;
 
@@ -86,11 +88,9 @@ public abstract class Task {
      */
     public boolean tick() {
         if (running && --countdown == 0) {
-            //long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
             execute();
-            /*if(System.currentTimeMillis() - startTime > 50 && !getClass().getSimpleName().equals("PunishmentExpirationTask")) {
-                Server.getLogger().log(Level.INFO, "Task '" + getKey() + "' with class '" + getClass().getSimpleName() + "' with delay " + getDelay() + " took " + (System.currentTimeMillis() - startTime) + "ms to execute.");
-            }*/
+            LogManager.insertLog(TaskLog.taskLog(this, System.currentTimeMillis() - startTime));
             countdown = delay / Configuration.getInt(Configuration.ConfigurationObject.ENGINE_DELAY);
         }
         return running;

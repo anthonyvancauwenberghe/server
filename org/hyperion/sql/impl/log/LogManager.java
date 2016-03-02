@@ -61,7 +61,6 @@ public final class LogManager {
                 MAIN.get(log.getType()).add(log);
                 if (MAIN.get(log.getType()).size() >= BUFFER_SIZE)
                     flushInTask(log.getType());
-                System.out.println(MAIN.get(log.getType()).size());
                 return false;
         }
     }

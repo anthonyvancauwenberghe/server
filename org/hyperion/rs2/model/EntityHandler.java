@@ -126,7 +126,7 @@ public class EntityHandler {
 
         //TODO REMOVE THIS CHECK
         if (LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-            Magic.teleport(player, Edgeville.LOCATION, true);
+            Magic.teleport(player, Edgeville.POSITION, true);
         }
 
         /**
@@ -151,7 +151,7 @@ public class EntityHandler {
                 player.getInventory().add(Item.create(15707));
             if (player.getTutorialProgress() != 28) {
                 if (player.getTutorialProgress() >= 17 && player.getTutorialProgress() <= 20)
-                    Magic.teleport(player, Edgeville.LOCATION, true, false);
+                    Magic.teleport(player, Edgeville.POSITION, true, false);
                 player.setTutorialProgress(28);
             }
             player.sendMessage("@bla@Welcome back to @dre@" + Configuration.getString(Configuration.ConfigurationObject.NAME) + "@bla@.", "@dre@Current bonus: @bla@2x experience, 1.5x droprates, 2x honor points!");
@@ -169,7 +169,7 @@ public class EntityHandler {
         if (player.getPermExtraData().getLong("passchange") < LAST_PASS_RESET.getTime() && player.getCreatedTime() < LAST_PASS_RESET.getTime()) {
             player.getExtraData().put("cantdoshit", true);
             player.sendMessage("Alert##You MUST change your password!##Please do not use the same password as before!");
-            player.setTeleportTarget(Edgeville.LOCATION);
+            player.setTeleportTarget(Edgeville.POSITION);
             player.getExtraData().put("needpasschange", true);
             InterfaceManager.get(6).show(player);
         }
@@ -178,7 +178,7 @@ public class EntityHandler {
             World.getPlayers().stream().filter(p -> p != null && !Lock.isEnabled(p, Lock.STAFF_LOGIN) && p != player).forEach(p -> p.sendStaffMessage(Rank.getPrimaryRank(player).toString() + " " + player.getSafeDisplayName() + " has logged in. Feel free to ask him/her for help!"));
 
 
-        if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
+        if (Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY()) > 0) {
             player.getActionSender().sendPlayerOption("Attack", 2, 1);
             player.attackOption = true;
         } else {
@@ -190,14 +190,14 @@ public class EntityHandler {
             player.getActionSender().sendPlayerOption("Follow", 3, 0);
         if (!player.getPermExtraData().getBoolean("profileoption"))
             player.getActionSender().sendPlayerOption("View profile", 6, 0);
-        if (player.getLocation().getX() >= 3353
-                && player.getLocation().getY() >= 3264
-                && player.getLocation().getX() <= 3385
-                && player.getLocation().getY() <= 3283) {
+        if (player.getPosition().getX() >= 3353
+                && player.getPosition().getY() >= 3264
+                && player.getPosition().getX() <= 3385
+                && player.getPosition().getY() <= 3283) {
             player.getActionSender().sendPlayerOption("Challenge", 5, 0);
             player.duelOption = true;
         } else {
-            if (Rank.hasAbility(player, Rank.MODERATOR) && !player.getLocation().inDuel())
+            if (Rank.hasAbility(player, Rank.MODERATOR) && !player.getPosition().inDuel())
                 player.getActionSender().sendPlayerOption("Moderate", 5, 0);
             else
                 player.getActionSender().sendPlayerOption("null", 5, 0);
@@ -255,8 +255,7 @@ public class EntityHandler {
         player.getGrandExchangeTracker().notifyChanges(false);
         player.getAchievementTracker().load();
 
-        if(player.getName().equalsIgnoreCase("nab"))
-            ClanManager.joinClanChat(player, "help", false);
+        Locations.login(player);
 
         TaskManager.submit(new Task(Time.FIVE_SECONDS, player) {
             @Override
@@ -340,7 +339,7 @@ public class EntityHandler {
             Duel.declineTrade(player);
         } else {
             Duel.finishFullyDuel(player);
-            player.setLocation(Location.create(3360 + Combat.random(17),
+            player.setPosition(Position.create(3360 + Combat.random(17),
                     3274 + Combat.random(3), 0));
         }
         if (LastManStanding.getLastManStanding().gameStarted && LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {

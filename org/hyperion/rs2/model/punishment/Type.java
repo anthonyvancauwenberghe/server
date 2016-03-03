@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.punishment;
 
 import org.hyperion.rs2.model.EntityHandler;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 
@@ -10,7 +10,7 @@ public enum Type {
 
     JAIL{
         public void apply(final Player player){
-            player.setTeleportTarget(Jail.LOCATION);
+            player.setTeleportTarget(Jail.POSITION);
         }
 
         public boolean isApplied(final Player player){
@@ -18,7 +18,7 @@ public enum Type {
         }
 
         public void unapply(final Player player){
-            player.setTeleportTarget(Edgeville.LOCATION);
+            player.setTeleportTarget(Edgeville.POSITION);
         }
     },
     YELL_MUTE{
@@ -61,15 +61,15 @@ public enum Type {
     },
     WILDY_FORBID{
         public void apply(final Player player){
-            player.setTeleportTarget(Jail.LOCATION);
+            player.setTeleportTarget(Jail.POSITION);
         }
 
         public boolean isApplied(final Player player){
-            return !player.getLocation().inPvPArea();
+            return !player.getPosition().inPvPArea();
         }
 
         public void unapply(final Player player){
-            player.setTeleportTarget(Location.create(3087, 3493, 0));
+            player.setTeleportTarget(Position.create(3087, 3493, 0));
         }
     };
 

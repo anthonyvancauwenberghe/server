@@ -1,14 +1,14 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
 
 public class Lumbridge implements ContentTemplate {
 
-	public final static Location LOCATION = Location.create(3221, 3218, 0);
+	public final static Position POSITION = Position.create(3221, 3218, 0);
 
 	@Override
 	public boolean clickObject(Player player, int type, int a, int b, int c,

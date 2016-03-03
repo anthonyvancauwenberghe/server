@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
 
@@ -9,10 +9,10 @@ import org.hyperion.rs2.model.content.skill.agility.Obstacle;
  * Created by Gilles on 12/09/2015.
  */
 public class RockClimbing extends Obstacle {
-    private Location[] start,
+    private Position[] start,
             end;
 
-    public RockClimbing(int objectId, int skillXp, int levelReq, Location[] start, Location[] end, int failRate, Course course, int progress) {
+    public RockClimbing(int objectId, int skillXp, int levelReq, Position[] start, Position[] end, int failRate, Course course, int progress) {
         super(objectId, 844, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
@@ -24,7 +24,7 @@ public class RockClimbing extends Obstacle {
             return false;
         player.getWalkingQueue().setRunningToggled(false);
         for(int i = 0; i < start.length; i++) {
-            if(player.getLocation().getX() == start[i].getX() && player.getLocation().getY() == start[i].getY()) {
+            if(player.getPosition().getX() == start[i].getX() && player.getPosition().getY() == start[i].getY()) {
                 executeObject(player);
             }
         }
@@ -36,7 +36,7 @@ public class RockClimbing extends Obstacle {
     public void succeed(Player player, int tick, String message) {
         int j = 0;
         for(int i = 0; i < start.length; i++) {
-            if(start[i].getX() == player.getLocation().getX() && start[i].getY() == player.getLocation().getY())
+            if(start[i].getX() == player.getPosition().getX() && start[i].getY() == player.getPosition().getY())
                 j = i;
         }
         player.getActionSender().forceMovement(end[j].getX(), end[j].getY(), animId);
@@ -47,7 +47,7 @@ public class RockClimbing extends Obstacle {
     public void fail(Player player, int tick, String message) {
         int j = 0;
         for(int i = 0; i < start.length; i++) {
-            if(start[i].getX() == player.getLocation().getX() && start[i].getY() == player.getLocation().getY())
+            if(start[i].getX() == player.getPosition().getX() && start[i].getY() == player.getPosition().getY())
                 j = i;
         }
         super.fail(player, start[j].distance(end[j]) + 1, message);

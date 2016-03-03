@@ -89,14 +89,14 @@ public class CorporealBeast implements Attack {
 			attack.hit(Combat.random(20)+40, n, false, Constants.MELEE);
 		} else {
 			attack.getPlayer().getActionSender().showInterface(12414);
-			attack.getPlayer().setTeleportTarget(Location.create(3087, 3493, 0));
+			attack.getPlayer().setTeleportTarget(Position.create(3087, 3493, 0));
 			attack.getPlayer().getActionSender().sendMessage("The corporeal beast stomps on you all the way back home...");
 		}
 		
 	}
 	@Override
 	public int handleAttack(final NPC n, final CombatEntity attack) {
-		int distance = attack.getEntity().getLocation().distance(n.getLocation());
+		int distance = attack.getEntity().getPosition().distance(n.getPosition());
 		if(distance < (3 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;
@@ -134,7 +134,7 @@ public class CorporealBeast implements Attack {
 						//find our lockon target
 						int hitId = attack.getSlotId(n);
 						//extra variables - not for release
-						int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+						int distance = attack.getEntity().getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 						int timer = 1;
 						int min = 28;
 						if(distance > 8) {
@@ -150,7 +150,7 @@ public class CorporealBeast implements Attack {
 						//attack.getPlayerByName().getActionSender().createGlobalProjectile(n.cE.getAbsY() + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed + 10, 1824, 99, 35, hitId, slope);
 						for(Player players : RegionManager.getLocalPlayers(n)) {
 							//if(players.getLocation().distance(n.getLocation()) < 8) {
-								distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+								distance = attack.getEntity().getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 								speed = 75 - (distance - 1) * 2;
 								slope = 3 + distance;
 								CombatEntity atk = players.getCombat();
@@ -167,7 +167,7 @@ public class CorporealBeast implements Attack {
 				});
 			}
 			return 5;
-		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 100)) {
+		} else if(n.getPosition().isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 100)) {
 			return 0;
 		} else {
 			return 1;

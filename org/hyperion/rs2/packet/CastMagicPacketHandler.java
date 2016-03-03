@@ -45,7 +45,7 @@ public class CastMagicPacketHandler implements PacketHandler {
 		//System.out.println("spell: " + spell);
 		if(victim != null) {
 
-            if(victim.getLocation().inDuel() || Duel.inDuelLocation(victim))
+            if(victim.getPosition().inDuel() || Duel.inDuelLocation(victim))
             {
                 if(id != player.duelAttackable)
                 {
@@ -58,7 +58,7 @@ public class CastMagicPacketHandler implements PacketHandler {
 			if(victim.getName().equalsIgnoreCase(player.getName()))
 				return;
 
-			if(victim.getLocation().distance(player.getLocation()) <= 8)
+			if(victim.getPosition().distance(player.getPosition()) <= 8)
 				player.getWalkingQueue().reset();
 			if(spell == 30298) {
 				Magic.clickVenganceOther(player, victim);
@@ -83,7 +83,7 @@ public class CastMagicPacketHandler implements PacketHandler {
 		if(victim != null) {
 			if(victim.getDefinition().getId() == 21 || victim.getDefinition().getId() == 2256)
 				return;
-			if(victim.getLocation().distance(player.getLocation()) <= 8)
+			if(victim.getPosition().distance(player.getPosition()) <= 8)
 				player.getWalkingQueue().reset();
 			player.cE.addSpellAttack(spell);
 			player.cE.setOpponent(victim.cE);

@@ -929,7 +929,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void increaseEP() {
-		if(EP == 100 || getLocation().getZ() != 0)
+		if(EP == 100 || getPosition().getZ() != 0)
 			return;
 		int addEP = Misc.random(15) + 15;
 		if(EP + addEP > 100)
@@ -1650,7 +1650,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 							public void execute() {
 								if (loop == 5) {
-									setTeleportTarget(Location.create(3225, 3218, 0));
+									setTeleportTarget(Position.create(3225, 3218, 0));
 									sendMessage("Your ring of life saves you, but is destroyed in the process.");
 									this.stop();
 								}

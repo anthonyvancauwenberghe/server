@@ -28,8 +28,8 @@ public class WildyBossTracker implements ContentTemplate {
     @Override
     public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
         if(WildernessBossTask.currentBoss != null) {
-            if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ()) > 0) {
-                player.sendMessage(compassDirection(player.getLocation().getX(), player.getLocation().getY(), WildernessBossTask.currentBoss.getLocation().getX(), WildernessBossTask.currentBoss.getLocation().getY()));
+            if (Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ()) > 0) {
+                player.sendMessage(compassDirection(player.getPosition().getX(), player.getPosition().getY(), WildernessBossTask.currentBoss.getPosition().getX(), WildernessBossTask.currentBoss.getPosition().getY()));
             } else {
                 player.sendMessage("This item only works in the wilderness.");
             }

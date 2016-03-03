@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.specialareas;
 
 import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.util.Time;
@@ -65,9 +65,9 @@ public abstract class SpecialArea {
 
     public abstract boolean canSpawn();
     public abstract boolean isPkArea();
-    public abstract Location getDefaultLocation();
+    public abstract Position getDefaultLocation();
 
-    public boolean inArea(final Player player) { return inArea(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());}
+    public boolean inArea(final Player player) { return inArea(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());}
     public boolean wildInterface() { return false; }
     public abstract boolean inArea(final int x, final int y, final int z);
     public abstract String canEnter(final Player player);

@@ -233,12 +233,12 @@ public class WalkingQueue {
 		if(walkingQueue == null)
 			return;
 		if(entity instanceof NPC) {
-			Location target = Location.create(x, y, 0);
-			if(target.distance(((NPC) entity).getSpawnLocation()) > 15)
+			Position target = Position.create(x, y, 0);
+			if(target.distance(((NPC) entity).getSpawnPosition()) > 15)
 				return;
 		}
-		int lastX = entity.getLocation().getX();
-		int lastY = entity.getLocation().getY();
+		int lastX = entity.getPosition().getX();
+		int lastY = entity.getPosition().getY();
 		if(currentStep > 0) {
 			lastX = walkingQueue[currentStep - 1].getX();
 			lastY = walkingQueue[currentStep - 1].getY();
@@ -270,8 +270,8 @@ public class WalkingQueue {
 			return;
 		}
 
-		int lastX = entity.getLocation().getX();
-		int lastY = entity.getLocation().getY();
+		int lastX = entity.getPosition().getX();
+		int lastY = entity.getPosition().getY();
 		if(currentStep > 0) {
 			lastX = walkingQueue[currentStep - 1].getX();
 			lastY = walkingQueue[currentStep - 1].getY();
@@ -286,19 +286,13 @@ public class WalkingQueue {
 			currentSize++;
 		}
 	}
-//yup da wast :p
-	public void debug(String s) {
-		Player player = (Player) entity;
-        if(Rank.hasAbility(player,Rank.ADMINISTRATOR) )
-		    player.getActionSender().sendMessage(s);
-        //dit gewoon eens laten runnen, zodra je problemen krijgt op server kan je zien wat het probleem is.
-        // cva nu die inflictdmg
-	}
 
 	public boolean walkingCheck() {
 
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
+
+			Locations.process(entity);
 
 			if(entity.cE.isFrozen() || entity.isDead()) {
 				reset();
@@ -310,10 +304,9 @@ public class WalkingQueue {
                 return false;
             }
 
-            final int wildLevel = Combat.getWildLevel(player
-                    .getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
-            if(! player.duelOption) {
-				if(player.getLocation().inDuel()) {
+            final int wildLevel = Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
+            if(!player.duelOption) {
+				if(player.getPosition().inDuel()) {
 
 					player.getActionSender()
 							.sendPlayerOption("Challenge", 5, 0);
@@ -322,7 +315,7 @@ public class WalkingQueue {
 					}
 					player.duelOption = true;
 				}
-			} else if(!player.getLocation().inDuel()) {
+			} else if(!player.getPosition().inDuel()) {
 	            if((Rank.hasAbility(player, Rank.MODERATOR)))
 					player.getActionSender().sendPlayerOption("Moderate", 5, 0);
 				else
@@ -332,7 +325,7 @@ public class WalkingQueue {
 
 			if(! player.attackOption) {
 
-				if(wildLevel > 0 || Location.inAttackableArea(player)) {
+				if(wildLevel > 0 || Position.inAttackableArea(player)) {
 					player.getActionSender().sendPlayerOption("Attack", 2, 0);
 					player.setCanSpawnSet(false);
 					player.attackOption = true;
@@ -342,7 +335,7 @@ public class WalkingQueue {
 					if(player.isOverloaded())
 						OverloadFactory.applyBoosts(player);
 				}
-			} else if(!Location.inAttackableArea(player)) {
+			} else if(!Position.inAttackableArea(player)) {
 				player.setCanSpawnSet(true);
                 player.cE.getDamageDealt().clear();
 				player.getActionSender().sendPlayerOption("null", 2, 1);
@@ -372,18 +365,18 @@ public class WalkingQueue {
             }
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
-					player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+					player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
 				}
 
 			}
 			if(Jail.inJail(player)) {
-				if(player.getLocation().getX() < 2088 || player.getLocation().getX() > 2107 || player.getLocation().getY() > 4438 || player.getLocation().getY() < 4420) {
-					player.setTeleportTarget(Location.create(2097, 4428, 0), false);
+				if(player.getPosition().getX() < 2088 || player.getPosition().getX() > 2107 || player.getPosition().getY() > 4438 || player.getPosition().getY() < 4420) {
+					player.setTeleportTarget(Position.create(2097, 4428, 0), false);
 				}
 			}
-			if(FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY())) {
+			if(FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY())) {
 				if (!FightPits.inGame(player)) {
-					player.setTeleportTarget(Location.create(2399, 5178, 0), false);
+					player.setTeleportTarget(Position.create(2399, 5178, 0), false);
 				}
 			}
 
@@ -400,20 +393,6 @@ public class WalkingQueue {
 			
 			
 			FightPits.fightPitsCheck(player);
-
-			
-			
-            /*if(player.getLocation().inArdyPvPArea()) {
-                player.setSkulled(true);
-				if(lastCombatLevel != player.getSkills().getCombatLevel() || !inArdyPvp) {
-					lastCombatLevel = player.getSkills().getCombatLevel();
-					player.getActionSender().sendPvPLevel(false);
-					inArdyPvp = true;
-				}
-			} else if(inArdyPvp) {
-				player.getActionSender().sendPvPLevel(true);
-				inArdyPvp = false;
-			}*/
 		}
 		return true;
 	}
@@ -453,7 +432,7 @@ public class WalkingQueue {
 			/*
 			 * Sets the player's new location to be their target.
 			 */
-			entity.setLocation(entity.getTeleportTarget());
+			entity.setPosition(entity.getTeleportTarget());
 
 			// turn on the godwars interface
 			if(entity instanceof Player) {
@@ -501,9 +480,9 @@ public class WalkingQueue {
 		 * Check for a map region change, and if the map region has changed, set
 		 * the appropriate flag so the new map region packet is sent.
 		 */
-		int diffX = entity.getLocation().getX()
+		int diffX = entity.getPosition().getX()
 				- entity.getLastKnownRegion().getRegionX() * 8;
-		int diffY = entity.getLocation().getY()
+		int diffY = entity.getPosition().getY()
 				- entity.getLastKnownRegion().getRegionY() * 8;
 		boolean changed = false;
 		if(diffX < 16) {
@@ -554,7 +533,7 @@ public class WalkingQueue {
 			 */
 			int diffX = Constants.DIRECTION_DELTA_X[p.dir];
 			int diffY = Constants.DIRECTION_DELTA_Y[p.dir];
-			entity.setLocation(entity.getLocation().transform(diffX, diffY, 0));
+			entity.setPosition(entity.getPosition().transform(diffX, diffY, 0));
 			/*
 			 * And return the direction.
 			 */

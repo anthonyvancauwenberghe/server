@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Animation;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.skill.agility.Course;
 import org.hyperion.rs2.model.content.skill.agility.Obstacle;
@@ -12,10 +12,10 @@ import org.hyperion.rs2.model.content.skill.agility.Obstacle;
  * Created by Gilles on 11/09/2015.
  */
 public class ClimbNet extends Obstacle {
-    private Location[]  start,
+    private Position[]  start,
                         end;
 
-    public ClimbNet(int objectId, int skillXp, int levelReq, Location[] start, Location[] end, int failRate, Course course, int progress) {
+    public ClimbNet(int objectId, int skillXp, int levelReq, Position[] start, Position[] end, int failRate, Course course, int progress) {
         super(objectId, 828, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
@@ -26,7 +26,7 @@ public class ClimbNet extends Obstacle {
         if(!super.overCome(player))
             return false;
         for(int i = 0; i < start.length; i++) {
-            if(player.getLocation().getX() == start[i].getX() && player.getLocation().getY() == start[i].getY()) {
+            if(player.getPosition().getX() == start[i].getX() && player.getPosition().getY() == start[i].getY()) {
                 executeObject(player);
                 return true;
             }
@@ -43,10 +43,10 @@ public class ClimbNet extends Obstacle {
             public void execute() {
                 int j = 0;
                 for(int i = 0; i < start.length; i++) {
-                    if(start[i].getX() == player.getLocation().getX() && start[i].getY() == player.getLocation().getY())
+                    if(start[i].getX() == player.getPosition().getX() && start[i].getY() == player.getPosition().getY())
                         j = i;
                 }
-                player.setTeleportTarget(Location.create(end[j].getX(), end[j].getY(), end[j].getZ()));
+                player.setTeleportTarget(Position.create(end[j].getX(), end[j].getY(), end[j].getZ()));
                 this.stop();
             }
         });

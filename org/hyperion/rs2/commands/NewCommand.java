@@ -88,7 +88,7 @@ public abstract class NewCommand {
                 }
             }
         } catch (Exception e) {
-            Server.getLogger().log(Level.WARNING, null, e);//
+            Server.getLogger().log(Level.WARNING, null, e);
             return NEED_ERROR_MESSAGE;
         }
         //If we get here it means that it did pass the tests.

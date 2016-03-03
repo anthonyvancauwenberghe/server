@@ -55,10 +55,10 @@ public class Wilderness {
 							createGfx(player,343,minX+i,minY+j);*/
 					//synchronized(player.getLocalPlayers()) {
 					for(Player p : player.getLocalPlayers()) {
-						createGfx(player, 343, p.getLocation().getX(), p.getLocation().getY());
+						createGfx(player, 343, p.getPosition().getX(), p.getPosition().getY());
 					}
 					//}
-					createGfx(player, 343, player.getLocation().getX(), player.getLocation().getY());
+					createGfx(player, 343, player.getPosition().getX(), player.getPosition().getY());
 				} else if(timer == 1) {
 					for(int j = 0; j < 4; j++) {
 						ObjectManager.removeObject(list2[j]);
@@ -89,25 +89,25 @@ public class Wilderness {
 
 	public static void tele(final Obelisk o2, Player p, int minX, int minY, int maxX, int maxY) {
 		//System.out.println("x: "+minX+" y: "+minY +" x2: "+maxX+" y2: "+maxY);
-		if(p.getLocation().getX() > minX && p.getLocation().getX() < maxX) {
-			if(p.getLocation().getY() > minY && p.getLocation().getY() < maxY) {
+		if(p.getPosition().getX() > minX && p.getPosition().getX() < maxX) {
+			if(p.getPosition().getY() > minY && p.getPosition().getY() < maxY) {
 				if(p.isTeleBlocked()) {
 					p.getActionSender().sendMessage("The teleblock spell prevented you from teleporting..");
 					return;
 				}
 				//teleport and gfx
-				int addX = p.getLocation().getX() - minX;
-				int addY = p.getLocation().getY() - minY;
+				int addX = p.getPosition().getX() - minX;
+				int addY = p.getPosition().getY() - minY;
 				//p.startAnimation(1979);
 				if(p == null || o2 == null)
 					return;
-				p.setTeleportTarget(Location.create(o2.x[0] + addX, o2.y[0] + addY, 0));
+				p.setTeleportTarget(Position.create(o2.x[0] + addX, o2.y[0] + addY, 0));
 			}
 		}
 	}
 
 	public static GameObject replaceGlobalObject(int x, int y, int id, int face, int type) {
-		GameObject gO = new GameObject(GameObjectDefinition.forId(id), Location.create(x, y, 0), type, face);
+		GameObject gO = new GameObject(GameObjectDefinition.forId(id), Position.create(x, y, 0), type, face);
 		ObjectManager.addObject(gO);
 		return gO;
 	}

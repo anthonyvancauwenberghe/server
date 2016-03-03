@@ -1,6 +1,6 @@
 package org.hyperion.rs2.pf;
 
-import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Position;
 
 /**
  * An interface which represents a path finding algorithm.
@@ -12,7 +12,7 @@ public interface PathFinder {
 	/**
 	 * Finds a path between two points.
 	 *
-	 * @param location The central point of the tile map.
+	 * @param position The central point of the tile map.
 	 * @param radius   The radius of the tile map.
 	 * @param map      The map the points are on.
 	 * @param srcX     Source point, x coordinate.
@@ -22,6 +22,6 @@ public interface PathFinder {
 	 * @return A path between two points if such a path exists, or
 	 * <code>null</code> if no path exists.
 	 */
-	public Path findPath(Location location, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY);
+	Path findPath(Position position, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY);
 
 }

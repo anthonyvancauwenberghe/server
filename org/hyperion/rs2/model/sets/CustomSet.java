@@ -1,19 +1,20 @@
 package org.hyperion.rs2.model.sets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.EquipmentReq;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Misc;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class CustomSet {
 
@@ -51,7 +52,7 @@ public class CustomSet {
     }
 
     public boolean apply(final Player player) {
-        if(Location.inAttackableArea(player))
+        if(Position.inAttackableArea(player))
             return false;
         if(FightPits.inGame(player) || FightPits.inPits(player))
             return false;

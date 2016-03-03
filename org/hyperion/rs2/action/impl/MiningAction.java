@@ -18,7 +18,7 @@ public class MiningAction extends HarvestingAction {
 	 *
 	 * @author Graham Edgecombe
 	 */
-	public static enum Pickaxe {
+	public enum Pickaxe {
 
 		/**
 		 * Rune pickaxe.
@@ -96,7 +96,7 @@ public class MiningAction extends HarvestingAction {
 		 * @param level     The required level.
 		 * @param animation The animation id.
 		 */
-		private Pickaxe(int id, int level, int animation) {
+		Pickaxe(int id, int level, int animation) {
 			this.id = id;
 			this.level = level;
 			this.animation = animation;
@@ -135,7 +135,7 @@ public class MiningAction extends HarvestingAction {
 	 *
 	 * @author Graham Edgecombe
 	 */
-	public static enum Node {
+	public enum Node {
 
 		/**
 		 * Copper ore.
@@ -246,7 +246,7 @@ public class MiningAction extends HarvestingAction {
 		 * @param experience The experience per ore.
 		 * @param objects    The object ids.
 		 */
-		private Node(int ore, int level, double experience, int[] objects) {
+		Node(int ore, int level, double experience, int[] objects) {
 			this.objects = objects;
 			this.level = level;
 			this.experience = experience;
@@ -327,8 +327,8 @@ public class MiningAction extends HarvestingAction {
 	 * @param player The player performing the action.#
 	 * @param tree   The tree.
 	 */
-	public MiningAction(Player player, Location location, Node node) {
-		super(player, location);
+	public MiningAction(Player player, Position position, Node node) {
+		super(player, position);
 		this.node = node;
 	}
 

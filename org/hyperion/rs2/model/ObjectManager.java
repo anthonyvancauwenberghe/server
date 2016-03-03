@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
-import static org.hyperion.rs2.model.Location.create;
+import static org.hyperion.rs2.model.Position.create;
 
 /**
  * Manages all of the in-game objects.
@@ -52,7 +52,7 @@ public class ObjectManager {
         try(BufferedReader reader = new BufferedReader(new FileReader("./data/objspawns.cfg"))) {
             reader.lines().forEach(line -> {
                 String parts[] = line.replace("spawn = ", "").split("\t");
-                GAME_OBJECTS.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Location.create(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])), Integer.parseInt(parts[5]), Integer.parseInt(parts[4])));
+                GAME_OBJECTS.add(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Position.create(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])), Integer.parseInt(parts[5]), Integer.parseInt(parts[4])));
             });
             if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
                 Server.getLogger().log(Level.INFO, "Successfully loaded all objects from the file.");
@@ -119,14 +119,14 @@ public class ObjectManager {
                     System.out.println("Object is null!");
                     return;
                 }
-            if (obj.isVisible(p.getLocation())) {
-                p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
+            if (obj.isVisible(p.getPosition())) {
+                p.getActionSender().sendReplaceObject(obj.getPosition(), obj.getDefinition().getId(), obj.getRotation(), obj.getType());
             }
         }
     }
 
     public static void load(Player p) {
-        GAME_OBJECTS.stream().filter(obj -> obj.isVisible(p.getLocation())).forEach(obj -> p.getActionSender().sendReplaceObject(obj.getLocation(), obj.getDefinition().getId(), obj.getRotation(), obj.getType()));
+        GAME_OBJECTS.stream().filter(obj -> obj.isVisible(p.getPosition())).forEach(obj -> p.getActionSender().sendReplaceObject(obj.getPosition(), obj.getDefinition().getId(), obj.getRotation(), obj.getType()));
     }
 
     public static void replace(GameObject obj, GameObject obj2) {
@@ -135,11 +135,11 @@ public class ObjectManager {
     }
 
     public static GameObject getObjectAt(int x, int y, int z) {
-        final Location loc = Location.create(x, y, z);
+        final Position loc = Position.create(x, y, z);
         return getObjectAt(loc);
     }
 
-    public static GameObject getObjectAt(Location loc) {
+    public static GameObject getObjectAt(Position loc) {
         for (GameObject object : GAME_OBJECTS) {
             if (object.isAt(loc))
                 return object;
@@ -147,7 +147,7 @@ public class ObjectManager {
         return null;
     }
 
-    public static boolean objectExist(Location loc, int id) {
+    public static boolean objectExist(Position loc, int id) {
         return true;
     }
 }

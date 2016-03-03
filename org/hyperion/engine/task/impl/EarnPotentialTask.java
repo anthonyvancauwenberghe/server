@@ -22,7 +22,7 @@ public class EarnPotentialTask extends Task {
 	@Override
 	public void execute() {
 		for(Player p : World.getPlayers()) {
-			if(p.getLocation().inPvPArea()) {
+			if(p.getPosition().inPvPArea()) {
 				if(System.currentTimeMillis() - p.getLastEPIncrease() > Time.ONE_HOUR) {
 					p.increaseEP();
 					continue;

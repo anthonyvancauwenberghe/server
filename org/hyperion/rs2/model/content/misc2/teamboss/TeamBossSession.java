@@ -80,11 +80,11 @@ public abstract class TeamBossSession {
     public abstract SpecialArea getArea();
 
     public void sendHome(final Player player) {
-        player.setTeleportTarget(Edgeville.LOCATION);
+        player.setTeleportTarget(Edgeville.POSITION);
     }
 
-    public Location getStartLocation(final int index) {
-        return Location.create(x, y, index * 4);
+    public Position getStartLocation(final int index) {
+        return Position.create(x, y, index * 4);
     }
 
 }

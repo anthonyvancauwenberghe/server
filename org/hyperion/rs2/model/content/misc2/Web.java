@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 
 public class Web implements ContentTemplate {
 
-	public static boolean slash(final Player player, final Location loc, final int objectId, final Item item) {
+	public static boolean slash(final Player player, final Position loc, final int objectId, final Item item) {
 		try {
 			if(item == null) {
 				player.getActionSender().sendMessage("You cannot cut without a weapon!");
@@ -26,7 +26,7 @@ public class Web implements ContentTemplate {
 		return slash(player, loc/*, objectId*/);
 	}
 
-	public static boolean slash(final Player player, final Location loc/*, final int objectId�*/) {
+	public static boolean slash(final Player player, final Position loc/*, final int objectId�*/) {
 		player.face(loc);
 		ContentEntity.startAnimation(player, 451);
 		boolean successful = Misc.random(2) == 0 ? true : false;
@@ -47,7 +47,7 @@ public class Web implements ContentTemplate {
 		return true;
 	}
 
-	public static void refreshWeb(final Player player, final Location loc/*, final GameObject old*/) {
+	public static void refreshWeb(final Player player, final Position loc/*, final GameObject old*/) {
 		World.submit(new Task(20000,"web2") {
 			public void execute() {
 				//ObjectManager.replace(old, new GameObject(GameObjectDefinition.forId(733), loc, 10, 0));
@@ -67,14 +67,14 @@ public class Web implements ContentTemplate {
                 World.submit(new Task(600, "webslashing") {
                     @Override
                     public void execute() {
-                        player.setTeleportTarget(Location.create(3069, 10255, 0));
+                        player.setTeleportTarget(Position.create(3069, 10255, 0));
                         this.stop();
                     }
                 });
                 return true;
             }
 			if(objectId == 733) {
-				return slash(player, Location.create(x, y, 0), objectId, player.getEquipment().get(Equipment.SLOT_WEAPON));
+				return slash(player, Position.create(x, y, 0), objectId, player.getEquipment().get(Equipment.SLOT_WEAPON));
 			}
 
         }

@@ -64,7 +64,7 @@ public class Dungeon {
         }
         start.initialized = true;
         final Point loc = start.definition.randomLoc();
-        final NPC trader = NPCManager.addNPC(Location.create(loc.x, loc.y, start.heightLevel), DungeoneeringManager.TRADER_ID, -1);
+        final NPC trader = NPCManager.addNPC(Position.create(loc.x, loc.y, start.heightLevel), DungeoneeringManager.TRADER_ID, -1);
         start.events.add(trader);
 
     }
@@ -123,7 +123,7 @@ public class Dungeon {
 
         player.getExtraData().put("dungoffer", null);
         ClanManager.leaveChat(player, true, false);
-        player.setLocation(DungeoneeringManager.LOBBY);
+        player.setPosition(DungeoneeringManager.LOBBY);
 
         if (players.size() == 0)
             destroy();

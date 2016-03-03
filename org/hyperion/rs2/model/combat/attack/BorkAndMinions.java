@@ -1,7 +1,9 @@
 package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Attack;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.NPCDefinition;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -53,7 +55,7 @@ public class BorkAndMinions implements Attack {
         n.getCombat().doAtkEmote();
         int tempDamage;
 
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
+        int distance = attack.getEntity().getPosition().distance(n.getPosition());
         if(n.getDefinition().getId() == BORK_ID) {
             if(distance > 2)
                 return 0;

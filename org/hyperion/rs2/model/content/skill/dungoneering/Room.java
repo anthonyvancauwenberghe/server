@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
 import org.hyperion.rs2.model.Damage;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCManager;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.skill.FishingV2;
 import org.hyperion.util.Misc;
 
@@ -89,17 +89,17 @@ public class Room {
     }
 
 
-    public Location getSpawnLocation() {
-        return Location.create(definition.x, definition.y, heightLevel);
+    public Position getSpawnLocation() {
+        return Position.create(definition.x, definition.y, heightLevel);
     }
 
-    public Location getEndLocation() {
-        return Location.create(definition.x_end, definition.y_end, heightLevel);
+    public Position getEndLocation() {
+        return Position.create(definition.x_end, definition.y_end, heightLevel);
     }
 
-    public Location randomLocation() {
+    public Position randomLocation() {
         final Point point = definition.randomLoc();
-        return Location.create(point.x, point.y, heightLevel);
+        return Position.create(point.x, point.y, heightLevel);
     }
 
     public void destroy() {

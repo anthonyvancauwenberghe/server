@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -60,7 +60,7 @@ public class GodCapes implements ContentTemplate {
 	public boolean clickObject(Player player, int type, int a, int b, int c, int d) {
 		if(type == 6) {
 			getCape(player, a);
-			player.face(Location.create(b, c, player.getLocation().getZ()));
+			player.face(Position.create(b, c, player.getPosition().getZ()));
 		}
 		return false;
 	}

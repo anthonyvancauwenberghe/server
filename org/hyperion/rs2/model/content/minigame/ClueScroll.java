@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -40,31 +40,31 @@ public class ClueScroll implements ContentTemplate {
 		boolean found = false;
 		switch(clueId) {
 			case 1:
-				if(Location.create(2906, 3294, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(2906, 3294, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 			case 2:
-				if(Location.create(3290, 3372, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(3290, 3372, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 			case 3:
-				if(Location.create(2696, 3428, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(2696, 3428, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 			case 4:
-				if(Location.create(3092, 3226, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(3092, 3226, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 			case 5:
-				if(Location.create(2617, 3076, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(2617, 3076, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 			case 6:
-				if(Location.create(3043, 3398, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(3043, 3398, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 			case 7:
-				if(Location.create(2970, 3414, 0).isWithinDistance(player.getLocation(), 0))
+				if(Position.create(2970, 3414, 0).isWithinDistance(player.getPosition(), 0))
 					found = true;
 				break;
 		}

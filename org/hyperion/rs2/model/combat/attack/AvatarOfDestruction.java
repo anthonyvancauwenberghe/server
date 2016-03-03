@@ -47,14 +47,14 @@ public class AvatarOfDestruction implements Attack {
         for(final Player player : RegionManager.getLocalPlayers(n)) {
             int hitType = Combat.random(1);
             int tempDamage = CombatCalculation.getCalculatedDamage(n, player, Combat.random(MAX_DAMAGE), hitType, MAX_DAMAGE);
-            if(player.getLocation().distance(n.getLocation()) == 1)
+            if(player.getPosition().distance(n.getPosition()) == 1)
                 tempDamage = 80;
             Combat.npcAttack(n, player.getCombat(), tempDamage, 300, hitType);
             player.getSkills().detractLevel(Skills.PRAYER, tempDamage/5);
 
         }
         n.cE.predictedAtk = System.currentTimeMillis() + 3000;
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
+        int distance = attack.getEntity().getPosition().distance(n.getPosition());
         if(distance <= 10) {
             return 5;
         }

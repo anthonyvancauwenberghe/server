@@ -204,7 +204,7 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public static void fightPitsCheck(Player player) {
-		if(!FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY())
+		if(!FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY())
 				&& inGame(player) && !waitingRoom.contains(player) && !player.joiningPits) {
 			removePlayerFromGame(player, true);
 		}
@@ -563,8 +563,8 @@ public class FightPits implements ContentTemplate {
 	}
 
 	@SuppressWarnings("unused")
-	private void spawnNpc(int i, Location location) {
-		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), 0, i, - 1);
+	private void spawnNpc(int i, Position position) {
+		NPC npc = NPCManager.addNPC(position.getX(), position.getY(), 0, i, - 1);
 		npc.agressiveDis = 150;
 		monsters.add(npc);
 	}
@@ -629,7 +629,7 @@ public class FightPits implements ContentTemplate {
 		if(waitingRoom.contains(player)) {
 			waitingRoom.remove(player);
 			if(flag) {
-				player.setTeleportTarget(Location.create(2399, 5177, 0), false);
+				player.setTeleportTarget(Position.create(2399, 5177, 0), false);
 			}
 		}
 		if(playersInGame.contains(player)) {
@@ -637,7 +637,7 @@ public class FightPits implements ContentTemplate {
 			if(!teamRed.remove(player))
 				teamBlue.remove(player);
 			if(flag) {
-				player.setTeleportTarget(Location.create(2399, 5177, 0), false);
+				player.setTeleportTarget(Position.create(2399, 5177, 0), false);
 				int timeStood = ((400 + startPlayersAmount * 15) - gameTimeLeft)/50;
 				if(timeStood > 12)
 					timeStood = 12;
@@ -703,7 +703,7 @@ public class FightPits implements ContentTemplate {
 				lastChamp = winningTeam;
 				player1.getEquipment().clear();
 				player1.getInventory().clear();
-				player1.setTeleportTarget(Location.create(2399, 5177, 0));
+				player1.setTeleportTarget(Position.create(2399, 5177, 0));
 				player1.getActionSender().showInterfaceWalkable(- 1);
 				if(getReward) {
 					player1.getBank().add(new Item(5020, rewardCount));
@@ -758,12 +758,12 @@ public class FightPits implements ContentTemplate {
 		return playersInGame.contains(player);
 	}
 
-	public static Location getSpawnLoc() {
+	public static Position getSpawnLoc() {
 		int ai = 2386;
 		int ai1 = 5151;
 		int ai2 = 18;
 		int ai3 = 10;
-		return Location.create(ai + Combat.random(ai2), ai1 + Combat.random(ai3), 0);
+		return Position.create(ai + Combat.random(ai2), ai1 + Combat.random(ai3), 0);
 	}
 
 }

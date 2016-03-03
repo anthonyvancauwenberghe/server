@@ -341,7 +341,7 @@ public class Thieving implements ContentTemplate {
 		}
 		if(! isOk || player.isBusy())
 			return;
-		if(npc.getLocation().distance(player.getLocation()) > 2)
+		if(npc.getPosition().distance(player.getPosition()) > 2)
 			return;
 		if(npc.cE.getOpponent() == player.cE) {
 			ContentEntity.sendMessage(player, "You cant do that when the npc is looking.");
@@ -351,7 +351,7 @@ public class Thieving implements ContentTemplate {
 		if(Combat.random(player.getSkills().getLevel(Skills.THIEVING) * 2) >= Combat.random(npc.getDefinition().combat()))
 			successful = true;
 		player.playAnimation(Animation.create(STEAL_ANIM));
-		player.face(npc.getLocation());
+		player.face(npc.getPosition());
 		if(! successful) {
 			player.playGraphics(Graphic.create(STUN_GFX, 6553600));
 			player.cE.setFreezeTimer(STUN_TIMER);
@@ -409,7 +409,7 @@ public class Thieving implements ContentTemplate {
 		player.getActionSender().sendMessage("You steal from the stall.");
 		player.getExtraData().put("stallTimer", System.currentTimeMillis() + 1800);
 		player.playAnimation(Animation.create(STEAL_ANIM));
-		player.face(Location.create(x, y, 0));
+		player.face(Position.create(x, y, 0));
 		NPC guard = getGuard(player);
 		if(guard != null) {
 			guard.forceMessage("What are you doing over there!");
@@ -434,7 +434,7 @@ public class Thieving implements ContentTemplate {
 			}
 			if(! continue2)
 				continue;
-			if(npc.getLocation().distance(player.getLocation()) <= 4 && npc.cE.getOpponent() == null && npc.maxHealth > 0 && npc.health > 0)
+			if(npc.getPosition().distance(player.getPosition()) <= 4 && npc.cE.getOpponent() == null && npc.maxHealth > 0 && npc.health > 0)
 				return npc;
 		}
 		return null;

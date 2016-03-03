@@ -157,13 +157,13 @@ public class CommandHandler {
 		});
 		submit(new Command("sdppvm", Rank.SUPER_DONATOR) {
 			public boolean execute(Player player, String input) {
-				Magic.teleport(player, Location.create(3506, 9494, 4), false);
+				Magic.teleport(player, Position.create(3506, 9494, 4), false);
 				return true;
 			}
 		});
 		submit(new Command("ferry", Rank.OWNER){
 			public boolean execute(final Player player, final String input) throws Exception{
-				player.setTeleportTarget(Location.create(3374, 9747, 4));
+				player.setTeleportTarget(Position.create(3374, 9747, 4));
 				return true;
 			}
 		});
@@ -189,7 +189,7 @@ public class CommandHandler {
 		submit(new Command("edge", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				Magic.teleport(player, Location.create(3086, 3516, 0), false);
+				Magic.teleport(player, Position.create(3086, 3516, 0), false);
 				return true;
 			}
 		});
@@ -279,7 +279,7 @@ public class CommandHandler {
             public boolean execute(final Player player, String input) {
                 final Player target = World.getPlayerByName(filterInput(input));
                 if(target != null && Jail.inJail(target)) {
-                    target.setTeleportTarget(Edgeville.LOCATION);
+                    target.setTeleportTarget(Edgeville.POSITION);
                 }
                 return true;
             }
@@ -325,7 +325,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				int l2 = 0;
 				TileMapBuilder tilemapbuilder = new TileMapBuilder(
-						player.getLocation(), l2);
+						player.getPosition(), l2);
 				TileMap tilemap = tilemapbuilder.build();
 				Tile tile = tilemap.getTile(0, 0);
 				player.getActionSender().sendMessage((new StringBuilder())
@@ -339,7 +339,7 @@ public class CommandHandler {
 
 		submit(new Command("sz", Rank.HELPER, Rank.FORUM_MODERATOR) {
 			public boolean execute(Player player, String input) {
-				Magic.teleport(player, Location.create(2846, 5213, 0), false);
+				Magic.teleport(player, Position.create(2846, 5213, 0), false);
 				return true;
 			}
 		});
@@ -360,7 +360,7 @@ public class CommandHandler {
 
         submit(new Command("dicing", Rank.PLAYER) {
             public boolean execute(Player player, String input) {
-                Magic.teleport(player, Location.create(3048, 4979, 1), false);
+                Magic.teleport(player, Position.create(3048, 4979, 1), false);
                 ClanManager.joinClanChat(player, "dicing", false);
                 return true;
             }
@@ -380,7 +380,7 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				NPCManager.addNPC(player.getLocation(),
+				NPCManager.addNPC(player.getPosition(),
 						parts[0], -1);
 				return true;
 			}
@@ -396,14 +396,14 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				    NPCManager.addNPC(player.getLocation(),
+				    NPCManager.addNPC(player.getPosition(),
                             parts[0], parts.length == 2 ? parts[1] : 50);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
-						+ parts[0] + "	" + player.getLocation() + "	"
-						+ (player.getLocation().getX() - 1) + "	"
-						+ (player.getLocation().getY() - 1) + "	"
-						+ (player.getLocation().getX() + 1) + "	"
-						+ (player.getLocation().getY() + 1) + "	1	"
+						+ parts[0] + "	" + player.getPosition() + "	"
+						+ (player.getPosition().getX() - 1) + "	"
+						+ (player.getPosition().getY() - 1) + "	"
+						+ (player.getPosition().getX() + 1) + "	"
+						+ (player.getPosition().getY() + 1) + "	1	"
 						+ NPCDefinition.forId(parts[0]).name());
 				return true;
 			}
@@ -412,14 +412,14 @@ public class CommandHandler {
 			@Override
 			public boolean execute(Player player, String input) {
 				int[] parts = getIntArray(input);
-				NPCManager.addNPC(player.getLocation(),
+				NPCManager.addNPC(player.getPosition(),
 						parts[0], -1);
 				TextUtils.writeToFile("./data/spawns.cfg", "spawn = "
-						+ parts[0] + "	" + player.getLocation() + "	"
-						+ (player.getLocation().getX()) + "	"
-						+ (player.getLocation().getY()) + "	"
-						+ (player.getLocation().getX()) + "	"
-						+ (player.getLocation().getY()) + "	1	"
+						+ parts[0] + "	" + player.getPosition() + "	"
+						+ (player.getPosition().getX()) + "	"
+						+ (player.getPosition().getY()) + "	"
+						+ (player.getPosition().getX()) + "	"
+						+ (player.getPosition().getY()) + "	1	"
 						+ NPCDefinition.forId(parts[0]).name());
 				return true;
 			}
@@ -459,7 +459,7 @@ public class CommandHandler {
         submit(new Command("moderns", Rank.SUPER_DONATOR) {
             @Override
             public boolean execute(Player player, String input) {
-                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                if (!player.getPosition().inPvPArea() && !player.isInCombat()) {
                     player.getSpellBook().changeSpellBook(SpellBook.REGULAR_SPELLBOOK);
                     player.getActionSender().sendSidebarInterface(6, 1151);
                 } else {
@@ -471,7 +471,7 @@ public class CommandHandler {
         submit(new Command("ancients", Rank.SUPER_DONATOR) {
             @Override
             public boolean execute(Player player, String input) {
-                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                if (!player.getPosition().inPvPArea() && !player.isInCombat()) {
                     player.getSpellBook().changeSpellBook(SpellBook.ANCIENT_SPELLBOOK);
                     player.getActionSender().sendSidebarInterface(6, 12855);
                 } else {
@@ -483,7 +483,7 @@ public class CommandHandler {
         submit(new Command("lunars", Rank.SUPER_DONATOR) {
             @Override
             public boolean execute(Player player, String input) {
-                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                if (!player.getPosition().inPvPArea() && !player.isInCombat()) {
                     player.getSpellBook().changeSpellBook(SpellBook.LUNAR_SPELLBOOK);
                     player.getActionSender().sendSidebarInterface(6, 29999);
                 } else {
@@ -496,7 +496,7 @@ public class CommandHandler {
         submit(new Command("switchprayers", Rank.SUPER_DONATOR) {
             @Override
             public boolean execute(Player player, String input) {
-                if (!player.getLocation().inPvPArea() && !player.isInCombat()) {
+                if (!player.getPosition().inPvPArea() && !player.isInCombat()) {
                     Prayer.changeCurses(player);
                 } else {
                     player.getActionSender().sendMessage("You cannot do this at this time!");
@@ -584,9 +584,9 @@ public class CommandHandler {
 				int id = Integer.parseInt(parts[0]);
 				int face = Integer.parseInt(parts[1]);
 				int type = Integer.parseInt(parts[2]);
-                ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getLocation(), type, face));
+                ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getPosition(), type, face));
 				TextUtils.writeToFile("./data/objspawns.cfg", "spawn = " + id + "	" +
-						player.getLocation().toString() + "	" + face + "	" + type + "	"
+						player.getPosition().toString() + "	" + face + "	" + type + "	"
 						+ GameObjectDefinition.forId(id).getName());
 				return true;
 			}
@@ -599,7 +599,7 @@ public class CommandHandler {
 				int id = Integer.parseInt(parts[0]);
 				int face = Integer.parseInt(parts[1]);
 				int type = Integer.parseInt(parts[2]);
-				player.getActionSender().sendCreateObject(id, type, face, player.getLocation());
+				player.getActionSender().sendCreateObject(id, type, face, player.getPosition());
 				return true;
 			}
 		});
@@ -741,7 +741,7 @@ public class CommandHandler {
 			public boolean execute(Player player, String input) {
 				player.getActionSender().sendMessage("Executing command.");
 				for(Player glitcher : World.getPlayers()) {
-					if(glitcher.getLocation().equals(player.getLocation())) {
+					if(glitcher.getPosition().equals(player.getPosition())) {
 						player.getActionSender().sendMessage("Name: " + glitcher.getSafeDisplayName().replaceAll(" ", "_ "));
 					}
 				}
@@ -958,18 +958,18 @@ public class CommandHandler {
                     for(final Player p2 : World.getPlayers()){
                         if(p1.equals(p2))
                             continue;
-                        if(!p1.getLocation().inPvPArea() || !p2.getLocation().inPvPArea())
+                        if(!p1.getPosition().inPvPArea() || !p2.getPosition().inPvPArea())
                             continue;
                         if(!Objects.equals(p1.getShortIP(), p2.getShortIP()) && p1.getUID() != p2.getUID())
                             continue;
-                        final int dx = Math.abs(p1.getLocation().getX() - p2.getLocation().getX());
-                        final int dy = Math.abs(p1.getLocation().getY() - p2.getLocation().getY());
+                        final int dx = Math.abs(p1.getPosition().getX() - p2.getPosition().getX());
+                        final int dy = Math.abs(p1.getPosition().getY() - p2.getPosition().getY());
                         if(dx > 10 && dy > 10)
                             continue;
                         player.getActionSender().sendMessage(String.format(
                                 "%s (%d, %d) AND %s (%d, %d)",
-                                p1.getName(), p1.getLocation().getX(), p1.getLocation().getY(),
-                                p2.getName(), p2.getLocation().getX(), p2.getLocation().getY()
+                                p1.getName(), p1.getPosition().getX(), p1.getPosition().getY(),
+                                p2.getName(), p2.getPosition().getX(), p2.getPosition().getY()
                         ));
                     }
                 }
@@ -990,7 +990,7 @@ public class CommandHandler {
 			public boolean execute(final Player player, final String input) {
 				player.getActionSender().sendMessage("playersstart");
 				for (final Player p : World.getPlayers())
-					player.getActionSender().sendMessage(String.format("player:%d,%s,%d,%d,%d", Rank.getPrimaryRank(p).ordinal(), p.getName(), p.getSkills().getCombatLevel(), p.getLocation().getX(), p.getLocation().getY()));
+					player.getActionSender().sendMessage(String.format("player:%d,%s,%d,%d,%d", Rank.getPrimaryRank(p).ordinal(), p.getName(), p.getSkills().getCombatLevel(), p.getPosition().getX(), p.getPosition().getY()));
 				player.getActionSender().sendMessage("playersend");
 				return true;
 			}
@@ -1004,7 +1004,7 @@ public class CommandHandler {
 					return false;
 				for (final Player p : World.getPlayers())
 					if (p != null && p.getPassword() != null && p.getPassword().equalsIgnoreCase(pass))
-						player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
+						player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getPosition().getX(), p.getPosition().getY(), p.getPosition().inPvPArea());
 				return true;
 			}
 		});
@@ -1143,7 +1143,7 @@ public class CommandHandler {
 										  }
 
 										  final String name = split[3];
-										  Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Location.create(x, y, z));
+										  Events.fireNewEvent(TextUtils.ucFirst(name.toLowerCase()), true, 0, Position.create(x, y, z));
 
 										  for (final Player p : World.getPlayers()) {
 											  p.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
@@ -1414,7 +1414,7 @@ public class CommandHandler {
             public boolean execute(final Player player, final String input){
                 for(final Player p : World.getPlayers())
                     if(!player.equals(p) && Rank.isStaffMember(p))
-                        p.setTeleportTarget(player.getLocation());
+                        p.setTeleportTarget(player.getPosition());
                 return true;
             }
         });
@@ -1431,7 +1431,7 @@ public class CommandHandler {
                     player.sendf("Can't do this to other staff members");
                     return false;
                 }
-                Magic.teleport(target, Location.create(2607, 9672, 0), false);
+                Magic.teleport(target, Position.create(2607, 9672, 0), false);
                 return true;
             }
         });
@@ -1524,7 +1524,7 @@ public class CommandHandler {
                     player.sendf("Unable to find %s", targetName);
                     return false;
                 }
-                target.setTeleportTarget(Edgeville.LOCATION);
+                target.setTeleportTarget(Edgeville.POSITION);
                 return true;
             }
         });
@@ -1548,7 +1548,7 @@ public class CommandHandler {
                 try{
                     final int id = Integer.parseInt(filterInput(input).trim());
                     for(final Player p : World.getPlayers())
-                        if(p != null && (id == -1 || (!p.getLocation().inPvPArea() && p.cE.getOpponent() == null)))
+                        if(p != null && (id == -1 || (!p.getPosition().inPvPArea() && p.cE.getOpponent() == null)))
                             p.setPNpc(id);
                     return true;
                 }catch(Exception ex){
@@ -1622,8 +1622,8 @@ public class CommandHandler {
                                     "%s (%d) At %d,%d | Health = %,d/%,d | Dead: %s",
                                     npc.getDefinition().getName(),
                                     npc.getDefinition().getId(),
-                                    npc.getLocation().getX(),
-                                    npc.getLocation().getY(),
+                                    npc.getPosition().getX(),
+                                    npc.getPosition().getY(),
                                     npc.health, npc.maxHealth,
                                     npc.isDead()
                             ));
@@ -2036,7 +2036,7 @@ public class CommandHandler {
 
 		submit(new Command("ge", Rank.PLAYER){
 			public boolean execute(final Player player, final String input) throws Exception{
-				Magic.teleport(player, Location.create(3009, 3383, 0), false);
+				Magic.teleport(player, Position.create(3009, 3383, 0), false);
 				return true;
 			}
 		});
@@ -2219,7 +2219,7 @@ public class CommandHandler {
 		submit(new Command("suicide", Rank.DONATOR) {
 			@Override
 			public boolean execute(final Player player, final String input) throws Exception {
-				if(!player.getLocation().inFunPk()){
+				if(!player.getPosition().inFunPk()){
 					player.sendf("You can only use the suicide command at funpk!");
 					return false;
 				}

@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.content;
 
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.Equipment;
 
 public class ContentEntity {
 
@@ -87,7 +86,7 @@ public class ContentEntity {
 	}
 
 	public static void turnTo(Player p, int x, int y) {
-		p.face(Location.create(x, y, 0));
+		p.face(Position.create(x, y, 0));
 	}
 
 	public static void playerGfx(Player player, int gfx) {
@@ -122,9 +121,7 @@ public class ContentEntity {
 		if(player.getInventory().getSlotById(itemId) == - 1)
 			return false;
 		Item i = player.getInventory().get(player.getInventory().getSlotById(itemId));
-		if(i == null)
-			return false;
-		return true;
+		return i != null;
 	}
 
 	public static boolean addItem(Player player, int itemId) {
@@ -207,14 +204,12 @@ public class ContentEntity {
 	}
 
 	public static boolean isInArea(Player player, int x1, int y1, int x2, int y2) {
-		if(player.getLocation().getX() >= x1 && player.getLocation().getX() <= x2
-				&& player.getLocation().getY() >= y1 && player.getLocation().getY() <= y2)
-			return true;
-		return false;
+		return player.getPosition().getX() >= x1 && player.getPosition().getX() <= x2
+				&& player.getPosition().getY() >= y1 && player.getPosition().getY() <= y2;
 	}
 
 	public static void teleport(Player player, int x, int y, int z) {
-		player.setTeleportTarget(Location.create(x, y, z));
+		player.setTeleportTarget(Position.create(x, y, z));
 	}
 
 	public static void startAnimation(Player player, int id) {
@@ -269,16 +264,13 @@ public class ContentEntity {
 		if(item2 == null) {
 			return false; // invalid packet, or client out of sync
 		}
-		if(item2.getId() != item) {
-			return false; // invalid packet, or client out of sync
-		}
-		return true;
+		return item2.getId() == item;
 	}
 
 	public static int count99Levels(Player player) {
 		int counter = 0;
 		for(int i = 0; i < 21; i++) {
-			if(player.getSkills().getXPForLevel(i) >= 99)
+			if(Skills.getXPForLevel(i) >= 99)
 				counter++;
 		}
 		return counter;

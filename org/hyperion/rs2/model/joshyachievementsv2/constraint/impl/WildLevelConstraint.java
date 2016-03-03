@@ -24,9 +24,9 @@ public class WildLevelConstraint implements Constraint{
     }
 
     public boolean constrained(final Player player){
-        final int x = player.getLocation().getX();
-        final int y = player.getLocation().getY();
-        final int z = player.getLocation().getZ();
+        final int x = player.getPosition().getX();
+        final int y = player.getPosition().getY();
+        final int z = player.getPosition().getZ();
         final int level = Combat.getWildLevel(x, y, z);
         return level >= minLevel && level <= (maxLevel < minLevel ? level : maxLevel);
     }

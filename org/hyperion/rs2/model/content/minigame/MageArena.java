@@ -2,9 +2,9 @@ package org.hyperion.rs2.model.content.minigame;
 // Yay
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -51,23 +51,23 @@ public class MageArena implements ContentTemplate {
 			if(oId == 905) {
 				startMinigame(client);
 			} else if(oId != 911)
-				NPCManager.addNPC(client.getLocation().getX() + 3, client.getLocation().getY() + 3, 0, (oId + 1), - 1);
+				NPCManager.addNPC(client.getPosition().getX() + 3, client.getPosition().getY() + 3, 0, (oId + 1), - 1);
 			else
 				wonMinigame(client);
 		} else if(type == 6) {
             if(oId == 9706) {
-                Magic.teleport(client, Location.create(3105, 3951, 0), true);
+                Magic.teleport(client, Position.create(3105, 3951, 0), true);
             } else if(oId == 9707) {
-                Magic.teleport(client, Location.create(3105, 3956, 0), true);
+                Magic.teleport(client, Position.create(3105, 3956, 0), true);
             }
 			else if(oId == 2878 || oId == 2879) {
 				client.getWalkingQueue().reset();
 				if(oId == 2878) {
-					client.getWalkingQueue().addStep(2542, client.getLocation().getY() + 1);
-					client.getWalkingQueue().addStep(2542, client.getLocation().getY() + 2);
+					client.getWalkingQueue().addStep(2542, client.getPosition().getY() + 1);
+					client.getWalkingQueue().addStep(2542, client.getPosition().getY() + 2);
 				} else {
-					client.getWalkingQueue().addStep(2509, client.getLocation().getY() - 1);
-					client.getWalkingQueue().addStep(2509, client.getLocation().getY() - 2);
+					client.getWalkingQueue().addStep(2509, client.getPosition().getY() - 1);
+					client.getWalkingQueue().addStep(2509, client.getPosition().getY() - 2);
 				}
 				client.getWalkingQueue().finish();
 				World.submit(new Task(2000,"magearena1") {

@@ -6,8 +6,8 @@ import org.hyperion.cache.util.ByteBufferUtils;
 import org.hyperion.cache.util.ZipUtils;
 import org.hyperion.rs2.model.GameObject;
 import org.hyperion.rs2.model.GameObjectDefinition;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.ObjectManager;
+import org.hyperion.rs2.model.Position;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -64,7 +64,7 @@ public class LandscapeParser {
 							int type = objOtherInfo >> 2;
 							int rotation = objOtherInfo & 3;
 
-							Location loc = Location.create(localX + x, localY + y, plane);
+							Position loc = Position.create(localX + x, localY + y, plane);
 
 							ObjectManager.objectParsed(new GameObject(GameObjectDefinition.forId(objId), loc, type, rotation));
 						}

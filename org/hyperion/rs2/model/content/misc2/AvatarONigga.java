@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.content.misc2;
 
 import org.hyperion.rs2.model.Animation;
 import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -57,7 +57,7 @@ public class AvatarONigga implements ContentTemplate {
             case 1891:
                 if(player.getPoints().getPkPoints() > 100) {
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 100);
-                    Magic.teleport(player, Location.create(2661, 9634, 0), false);
+                    Magic.teleport(player, Position.create(2661, 9634, 0), false);
                     player.getActionSender().removeChatboxInterface();
                 } else {
                     player.getActionSender().sendDialogue("Zoo keeper", ActionSender.DialogueType.NPC, NPC_ID, Animation.FacialAnimation.HAPPY,

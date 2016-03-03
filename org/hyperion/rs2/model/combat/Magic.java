@@ -174,7 +174,7 @@ public class Magic {
 			attacker.setOpponent(null);
 			return 0;
 		}
-		if(spell.getFreeze() > 0 && attacker.getPlayer().getLocation().disabledMagic() && !attacker.getPlayer().hasBeenInformed) {
+		if(spell.getFreeze() > 0 && attacker.getPlayer().getPosition().disabledMagic() && !attacker.getPlayer().hasBeenInformed) {
 			attacker.getPlayer().getActionSender().sendMessage("@red@The normal hybridding area is at ::13s! (Range is disabled there)");
 			//attacker.getPlayerByName().getActionSender().send
 			// Message("@red@To start hybridding INSTANTLY, go to \"Instant Sets\" in the spawn tab and click 'Hybrid'");
@@ -363,7 +363,7 @@ public class Magic {
 		/**
 		 * Add Experience
 		 */
-		int xpMulti = (attacker.getEntity() instanceof Player && attacker.getPlayer().getLocation().inPvPArea()) ? 2 : (EXPMULTIPLIER * 10);
+		int xpMulti = (attacker.getEntity() instanceof Player && attacker.getPlayer().getPosition().inPvPArea()) ? 2 : (EXPMULTIPLIER * 10);
 		ContentEntity.addSkillXP(attacker.getPlayer(), (spell.getExp()) + (Damage * xpMulti), 6);
 		ContentEntity.addSkillXP(attacker.getPlayer(), 0.33 * (Damage * xpMulti), 3);
 		/**
@@ -398,8 +398,8 @@ public class Magic {
 		int hitId = attacker.getSlotId(attacker.getEntity());
 		// extra proj values - not to be released
 		int speed = 105;
-		int distance = attacker.getEntity().getLocation()
-				.distance(opponent.getEntity().getLocation());
+		int distance = attacker.getEntity().getPosition()
+				.distance(opponent.getEntity().getPosition());
 		int min = 40;
 		min -= (distance - 1) * 8;
 		speed -= min;
@@ -679,14 +679,14 @@ public class Magic {
 		for(Player p : hit.getEntity().getRegion().getPlayers()) {
 			if(caster != p.cE
 					&& Combat.canAtk(caster, p.cE).length() <= 1
-					&& hit.getEntity().getLocation()
-					.isWithinDistance(p.getLocation(), 1)) {
+					&& hit.getEntity().getPosition()
+					.isWithinDistance(p.getPosition(), 1)) {
 				k.add(p.cE);
 			}
 		}
 		for(NPC n : hit.getEntity().getRegion().getNpcs()) {
-			if(hit.getEntity().getLocation()
-					.isWithinDistance(n.getLocation(), 1)
+			if(hit.getEntity().getPosition()
+					.isWithinDistance(n.getPosition(), 1)
 					&& Combat.isInMulti(n.cE) && !(n.summoned && n.ownerId > 0))
 				k.add(n.cE);
 		}
@@ -925,8 +925,8 @@ public class Magic {
 					"You are currently teleblocked.");
 			return;
 		}
-		if(Combat.getWildLevel(player.getLocation().getX(), player
-				.getLocation().getY()) > 20) {
+		if(Combat.getWildLevel(player.getPosition().getX(), player
+				.getPosition().getY()) > 20) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport above level 20 wilderness.");
 			return;
@@ -1169,8 +1169,8 @@ public class Magic {
 		}
 		if(player.isDead())
 			return;
-		if(Combat.getWildLevel(player.getLocation().getX(), player
-				.getLocation().getY()) > 20) {
+		if(Combat.getWildLevel(player.getPosition().getX(), player
+				.getPosition().getY()) > 20) {
 			player.getActionSender().sendMessage(
 					"You cannot teleport above level 20 wilderness.");
 			return;
@@ -1180,7 +1180,7 @@ public class Magic {
 					"You cannot teleport out of jail.");
 			return;
 		}
-        if(player.duelAttackable > 0 || Duel.inDuelLocation(player) || player.getLocation().inDuel()) {
+        if(player.duelAttackable > 0 || Duel.inDuelLocation(player) || player.getPosition().inDuel()) {
             if(Duel.inDuelLocation(player) && player.duelAttackable < 1)
                 Duel.finishFullyDuel(player);
             player.getActionSender().sendMessage("You cannot teleport from duel arena.");
@@ -1202,9 +1202,9 @@ public class Magic {
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return;
 		player.updateTeleportTimer();
-		if((player.getLocation().getX() >= 2814
-				&& player.getLocation().getX() <= 2942
-				&& player.getLocation().getY() >= 5250 && player.getLocation()
+		if((player.getPosition().getX() >= 2814
+				&& player.getPosition().getX() <= 2942
+				&& player.getPosition().getY() >= 5250 && player.getPosition()
 				.getY() <= 5373)
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
@@ -1232,7 +1232,7 @@ public class Magic {
                         player.setTeleportTarget(room.getSpawnLocation());
                         player.getDungeoneering().setCurrentRoom(room);
                     } else {
-                        player.setTeleportTarget(Location.create(x, y, 0));
+                        player.setTeleportTarget(Position.create(x, y, 0));
                     }
                     this.stop();
 					player.inAction = false;
@@ -1246,11 +1246,11 @@ public class Magic {
 		});
 	}
 
-	public static void teleport(Player player, Location loc, boolean force) {
+	public static void teleport(Player player, Position loc, boolean force) {
 		teleport(player, loc.getX(), loc.getY(), loc.getZ(), force, true);
 	}
 	
-	public static void teleport(Player player, Location loc,boolean force,  boolean random) {
+	public static void teleport(Player player, Position loc, boolean force, boolean random) {
 		teleport(player, loc.getX(), loc.getY(), loc.getZ(), force, random);
 	}
 	
@@ -1307,8 +1307,8 @@ public class Magic {
             }
 			if(player.isDead())
 				return;
-			if(Combat.getWildLevel(player.getLocation().getX(), player
-					.getLocation().getY()) > 20) {
+			if(Combat.getWildLevel(player.getPosition().getX(), player
+					.getPosition().getY()) > 20) {
 				player.getActionSender().sendMessage(
 						"You cannot teleport above level 20 wilderness.");
 				return;
@@ -1363,9 +1363,9 @@ public class Magic {
 			delay = 4200;
 		}
 		player.inAction = false;
-		if((player.getLocation().getX() >= 2814
-				&& player.getLocation().getX() <= 2942
-				&& player.getLocation().getY() >= 5250 && player.getLocation()
+		if((player.getPosition().getX() >= 2814
+				&& player.getPosition().getX() <= 2942
+				&& player.getPosition().getY() >= 5250 && player.getPosition()
 				.getY() <= 5373)
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
@@ -1373,7 +1373,7 @@ public class Magic {
 		World.submit(new Task(delay,"magic5") {
 			@Override
 			public void execute() {
-				player.setTeleportTarget(Location.create(x1, y1, z1));
+				player.setTeleportTarget(Position.create(x1, y1, z1));
 				if(player.getSpellBook().isRegular())
 					player.playAnimation(Animation.create(8941, 0));
 				else

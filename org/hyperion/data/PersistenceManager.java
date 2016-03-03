@@ -1,8 +1,7 @@
 package org.hyperion.data;
 
 import com.thoughtworks.xstream.XStream;
-
-import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.Door;
 import org.hyperion.rs2.model.content.misc.*;
 
@@ -33,7 +32,7 @@ public class PersistenceManager {
 		xstream.alias("stall", Stall.class);
 		xstream.alias("runes", Rune.class);
 		xstream.alias("door", Door.class);
-		xstream.alias("location", Location.class);
+		xstream.alias("position", Position.class);
 	}
 
 	public static void save(Object object, OutputStream out) {

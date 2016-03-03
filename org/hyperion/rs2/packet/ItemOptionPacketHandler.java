@@ -167,8 +167,8 @@ public class ItemOptionPacketHandler implements PacketHandler {
 			return;
 		if(player.getInventory().get(itemSlot) == null || player.getInventory().get(itemSlot).getId() != itemId)
 			return;
-		player.face(Location.create(objectX, objectY, 0));
-		if(player.getLocation().distance(Location.create(objectX, objectY, 0)) > 2)
+		player.face(Position.create(objectX, objectY, 0));
+		if(player.getPosition().distance(Position.create(objectX, objectY, 0)) > 2)
 			return;
 		if(ContentManager.handlePacket(14, player, itemId, itemSlot, objectId, - 1))
 			return;

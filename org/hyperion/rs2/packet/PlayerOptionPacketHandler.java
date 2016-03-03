@@ -84,7 +84,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 
 					if(! Combat.processCombat(player.cE))
 						Combat.resetAttack(player.cE);
-					int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());
+					int distance = Misc.distance(player.getPosition().getX(), player.getPosition().getY(), victim.getPosition().getX(), victim.getPosition().getY());
 					if(distance < 8 && (CombatAssistant.getCombatStyle(player.cE) != 8 || player.cE.getNextMagicAtk() > 0)) {
 						player.getWalkingQueue().reset();
 					}
@@ -155,7 +155,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 			if(oldCombat != victim.cE)
 			if(! Combat.processCombat(player.cE))
 				Combat.resetAttack(player.cE);
-			int distance = Misc.distance(player.getLocation().getX(), player.getLocation().getY(), victim.getLocation().getX(), victim.getLocation().getY());
+			int distance = Misc.distance(player.getPosition().getX(), player.getPosition().getY(), victim.getPosition().getX(), victim.getPosition().getY());
 			if(distance < 8 && (CombatAssistant.getCombatStyle(player.cE) != 8 || player.cE.getAutoCastId() > 0)) {
 				player.getWalkingQueue().reset();
 				//player.getActionSender().sendMessage("Reset Queue");
@@ -176,7 +176,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		}
 		Player tradeWith = (Player) World.getPlayers().get(id);
 		if(tradeWith != null && System.currentTimeMillis() - tradeWith.cE.lastHit > 10000 && System.currentTimeMillis() - player.cE.lastHit > 10000 && player.duelAttackable <= 0 && tradeWith.duelAttackable <= 0) {
-			if(player.getLocation().inPvPArea() && ! tradeWith.getLocation().inPvPArea()) {
+			if(player.getPosition().inPvPArea() && ! tradeWith.getPosition().inPvPArea()) {
 				player.getActionSender().sendMessage("You cannot trade a player that is not in the wilderness, when you are");
 				return;
 			}
@@ -241,7 +241,7 @@ public class PlayerOptionPacketHandler implements PacketHandler {
 		 * If moderator and not in the wilderness, send moderation options
 		 * Still sends the options inside pits game
 		 */
-			if(Rank.hasAbility(player, Rank.MODERATOR) && ! player.getLocation().inDuel()) {
+			if(Rank.hasAbility(player, Rank.MODERATOR) && ! player.getPosition().inDuel()) {
 				ModerationOverride.sendModerationOptions(player, player1);
 				player.getActionSender().resetFollow();
 				return;

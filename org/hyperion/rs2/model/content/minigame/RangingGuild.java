@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.DialogueManager;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
@@ -54,13 +54,13 @@ public class RangingGuild implements ContentTemplate {
 			ContentEntity.startAnimation(p, 426);
 			p.cE.doGfx(getDrawBack(p.getEquipment().get(Equipment.SLOT_ARROWS)
 					.getId()));
-			p.face(Location.create(xcoord, ycoord, 0));
+			p.face(Position.create(xcoord, ycoord, 0));
 
 			World.submit(new Task(1000,"rangingGuild1") {
 				public void execute() {
-					int offX = (p.getLocation().getX() - xcoord) * - 1;
-					int offY = (p.getLocation().getY() - ycoord) * - 1;
-					p.getActionSender().createGlobalProjectile(p.getLocation().getX(), p.getLocation().getY(), offX,
+					int offX = (p.getPosition().getX() - xcoord) * - 1;
+					int offY = (p.getPosition().getY() - ycoord) * - 1;
+					p.getActionSender().createGlobalProjectile(p.getPosition().getX(), p.getPosition().getY(), offX,
 							offY, 50, 40,
 							getProjectile(p.getEquipment().get(Equipment.SLOT_ARROWS).getId()),
 							43, 31, 1, 5);

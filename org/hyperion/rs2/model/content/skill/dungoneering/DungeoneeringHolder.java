@@ -40,7 +40,7 @@ public class DungeoneeringHolder {
         final List<Player> copy = new ArrayList<>();
         while(it.hasNext()) {
             final Player p = it.next();
-            if(DungeoneeringManager.cantJoin(p) || !p.getLocation().inDungeonLobby() || p.getSkills().getLevel(Skills.DUNGEONEERING) < chosen.min_level) {
+            if(DungeoneeringManager.cantJoin(p) || !p.getPosition().inDungeonLobby() || p.getSkills().getLevel(Skills.DUNGEONEERING) < chosen.min_level) {
                 p.sendMessage("You didn't meet the requirements to join and have been kicked out!");
                 copy.add(p);
             }
@@ -69,7 +69,7 @@ public class DungeoneeringHolder {
         }
     }
 
-    public Location clickPortal() {
+    public Position clickPortal() {
         if(room == null) return null;
         if(!room.cleared())
             return null;
@@ -77,18 +77,18 @@ public class DungeoneeringHolder {
             currentDungeon.complete();
             return null;
         }
-        final Location location = room.getChild().getSpawnLocation();
+        final Position position = room.getChild().getSpawnLocation();
         setCurrentRoom(room.getChild());
-        return location;
+        return position;
     }
 
-    public Location clickBackPortal() {
+    public Position clickBackPortal() {
         if(room == null) return null;
         if(room.getParent() == null)
             return null;
-        final Location location = room.getParent().getEndLocation();
+        final Position position = room.getParent().getEndLocation();
         setCurrentRoom(room.getParent());
-        return location;
+        return position;
     }
 
     public void loadXP(final Skills skills, boolean toSkill) {

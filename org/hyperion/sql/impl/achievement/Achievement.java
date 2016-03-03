@@ -1,7 +1,7 @@
 package org.hyperion.sql.impl.achievement;
 
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTaskProgress;
 import org.hyperion.sql.DbHub;
@@ -21,7 +21,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
     }
 
     public List<AchievementTaskProgress> loadTaskProgress(final Player player) {
-        return Server.getLoader().getEngine().submitSql(new EngineTask<List<AchievementTaskProgress>>("load task progress for " + player.getName(), 10, TimeUnit.SECONDS) {
+        return GameEngine.submitSql(new EngineTask<List<AchievementTaskProgress>>("load task progress for " + player.getName(), 10, TimeUnit.SECONDS) {
             @Override
             public List<AchievementTaskProgress> call() throws Exception {
                 try(final AchievementDao dao = open()) {
@@ -36,7 +36,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
     }
 
     public boolean updateTaskProgress(final Player player, final AchievementTaskProgress atp) {
-        return Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("save task progress for " + player.getName(), 2, TimeUnit.SECONDS) {
+        return GameEngine.submitSql(new EngineTask<Boolean>("save task progress for " + player.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 try(final AchievementDao dao = open()){
@@ -51,7 +51,7 @@ public class Achievement extends SqlDaoManager<AchievementDao> {
     }
 
     public boolean insertTaskProgress(final Player player, final AchievementTaskProgress atp){
-        return Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("insert task progress for " + player.getName(), 2, TimeUnit.SECONDS) {
+        return GameEngine.submitSql(new EngineTask<Boolean>("insert task progress for " + player.getName(), 2, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 try(final AchievementDao dao = open()){

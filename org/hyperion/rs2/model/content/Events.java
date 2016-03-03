@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.QuestTab;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Magic;
@@ -37,14 +37,14 @@ public class Events {
     /**
      * The location of the event.
      */
-    public static Location eventLocation = null;
+    public static Position eventPosition = null;
 
     public static void resetEvent() {
         eventName = "";
         eventSafe = true;
         eventStartTime = 0;
         eventTimeTillStart = 0;
-        eventLocation = null;
+        eventPosition = null;
         World.getPlayers().forEach(player -> {
             player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.EVENT);
             player.getActionSender().sendString("cancel", 32456);
@@ -55,12 +55,12 @@ public class Events {
         return eventStartTime != 0;
     }
 
-    public static void fireNewEvent(String name, boolean safe, int timeTillStart, Location location) {
+    public static void fireNewEvent(String name, boolean safe, int timeTillStart, Position position) {
         eventName = name;
         eventSafe = safe;
         eventTimeTillStart = timeTillStart;
         eventStartTime = System.currentTimeMillis();
-        eventLocation = location;
+        eventPosition = position;
         for(Player player : World.getPlayers()) {
             player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.EVENT);
             player.getActionSender().sendString(eventName + "," + eventSafe + "," + eventTimeTillStart, 32456);
@@ -68,7 +68,7 @@ public class Events {
     }
 
     public static void joinEvent(Player player) {
-        if(eventLocation == null || !isEventActive()) {
+        if(eventPosition == null || !isEventActive()) {
             player.getActionSender().sendMessage("There was an error joining this event, try again later.");
             player.getActionSender().sendString("cancel", 32456);
             return;
@@ -77,7 +77,7 @@ public class Events {
             LastManStanding.getLastManStanding().enterLobby(player);
             Magic.teleport(player, LastManStanding.getRandomLocation(), false);
         } else {
-            Magic.teleport(player, eventLocation, false);
+            Magic.teleport(player, eventPosition, false);
         }
         player.getActionSender().sendString("cancel", 32456);
     }

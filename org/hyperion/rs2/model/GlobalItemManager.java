@@ -22,23 +22,23 @@ public class GlobalItemManager {
 	public static void displayItems(Player player) {
 		synchronized(GLOBAL_ITEMS) {
 			for(GlobalItem globalItem : GLOBAL_ITEMS) {
-				if((! globalItem.itemHidden || globalItem.owner == player) && globalItem.getItem() != null && player.getLocation().isWithinDistance(globalItem.getLocation(), 64)) {
+				if((! globalItem.itemHidden || globalItem.owner == player) && globalItem.getItem() != null && player.getPosition().isWithinDistance(globalItem.getPosition(), 64)) {
 					//display the item
 					if(! ItemsTradeable.isTradeable(globalItem.getItem().getId()) && globalItem.owner != player) {
 						continue;
 					}
 					//System.out.println("displaying items " + globalItem.getItem().getDefinition().getName());
-					player.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
+					player.getActionSender().createGlobalItem(globalItem.getPosition(), globalItem.getItem());
 				}
 			}
 		}
 	}
 
-	public static GlobalItem getItem(int id, Location loc) {
+	public static GlobalItem getItem(int id, Position loc) {
 		synchronized(GLOBAL_ITEMS) {
 			for(GlobalItem g : GLOBAL_ITEMS) {
 				//System.out.println(""+g.getItem().getId()+", "+g.getLocation().getX()+", "+g.getLocation().getY());
-				if(g.getLocation().distance(loc) == 0) {
+				if(g.getPosition().distance(loc) == 0) {
 					if(g.getItem().getId() == id) {
 						return g;
 					}
@@ -49,7 +49,7 @@ public class GlobalItemManager {
 	}
 
 	public static void newDropItem(Player player, GlobalItem globalItem) {
-		GlobalItem onGround = getItem(globalItem.getItem().getId(), globalItem.getLocation());
+		GlobalItem onGround = getItem(globalItem.getItem().getId(), globalItem.getPosition());
 		if(onGround != null && onGround.getItem().getDefinition().isStackable()) {
 			int count = onGround.getItem().getCount() + globalItem.getItem().getCount();
 			onGround.setNewItem(new Item(onGround.getItem().getId(), count));
@@ -57,8 +57,8 @@ public class GlobalItemManager {
 			synchronized(GLOBAL_ITEMS) {
 				GLOBAL_ITEMS.add(globalItem);
 			}
-			if(player.getLocation().isWithinDistance(globalItem.getLocation(), 64))
-				player.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
+			if(player.getPosition().isWithinDistance(globalItem.getPosition(), 64))
+				player.getActionSender().createGlobalItem(globalItem.getPosition(), globalItem.getItem());
 		}
 	}
 
@@ -74,11 +74,11 @@ public class GlobalItemManager {
 			player.getActionSender().sendMessage("Client is out of sync, Please logout.");
 			return;
 		}
-		GlobalItem globalItem = new GlobalItem(player, player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), new Item(item.getId(), item.getCount()));
+		GlobalItem globalItem = new GlobalItem(player, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), new Item(item.getId(), item.getCount()));
 		synchronized(GLOBAL_ITEMS) {
 			GLOBAL_ITEMS.add(globalItem);
 		}
-		player.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
+		player.getActionSender().createGlobalItem(globalItem.getPosition(), globalItem.getItem());
 		player.getInventory().remove(item);
 	}
 
@@ -91,7 +91,7 @@ public class GlobalItemManager {
 		synchronized(GLOBAL_ITEMS) {
 			for(GlobalItem g : GLOBAL_ITEMS) {
 				//System.out.println(""+g.getItem().getId()+", "+g.getLocation().getX()+", "+g.getLocation().getY());
-				if(g.getLocation().getX() == x && g.getLocation().getY() == y && g.getLocation().getZ() == player.getLocation().getZ()) {
+				if(g.getPosition().getX() == x && g.getPosition().getY() == y && g.getPosition().getZ() == player.getPosition().getZ()) {
 					if(g.getItem().getId() == item) {
 						globalItem = g;
 						break;
@@ -121,15 +121,15 @@ public class GlobalItemManager {
             }
 		} else {
 			//just remove it and pretend it was null
-			player.getActionSender().removeGlobalItem(item, Location.create(x, y, 0));
+			player.getActionSender().removeGlobalItem(item, Position.create(x, y, 0));
 			//player.getActionSender().sendMessage("That item doesn't exist.");
 		}
 	}
 
 	public static void removeItem(GlobalItem globalItem) {
 		for(Player p2 : World.getPlayers()) {
-			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
-				p2.getActionSender().removeGlobalItem(globalItem.getItem(), globalItem.getLocation());
+			if(p2.getPosition().isWithinDistance(globalItem.getPosition(), 64))
+				p2.getActionSender().removeGlobalItem(globalItem.getItem(), globalItem.getPosition());
 		}
 	}
 
@@ -137,8 +137,8 @@ public class GlobalItemManager {
 		for(Player p2 : World.getPlayers()) {
 			if(p2 == globalItem.owner)
 				continue;
-			if(p2.getLocation().isWithinDistance(globalItem.getLocation(), 64))
-				p2.getActionSender().createGlobalItem(globalItem.getLocation(), globalItem.getItem());
+			if(p2.getPosition().isWithinDistance(globalItem.getPosition(), 64))
+				p2.getActionSender().createGlobalItem(globalItem.getPosition(), globalItem.getItem());
 		}
 	}
 

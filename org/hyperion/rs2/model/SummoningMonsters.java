@@ -51,11 +51,11 @@ public class SummoningMonsters {
         refreshSummonTab(p, p.cE.summonedNpc);
 	        /*if(p.cE.summonedNpc.cE.getOpponent() == null)
 				p.cE.summonedNpc.cE.face(p.getLocation().getX(), p.getLocation().getY());*/
-		int distance = Misc.distance(p.getLocation().getX(), p
-				.getLocation().getY(), p.cE.summonedNpc.getLocation().getX(),
-				p.cE.summonedNpc.getLocation().getY());
+		int distance = Misc.distance(p.getPosition().getX(), p
+				.getPosition().getY(), p.cE.summonedNpc.getPosition().getX(),
+				p.cE.summonedNpc.getPosition().getY());
 		if(distance > 8) {
-			Location newlocation = p.getLocation().getCloseLocation();
+			Position newlocation = p.getPosition().getCloseLocation();
 			p.cE.summonedNpc.setTeleportTarget(newlocation);
 			//p.cE.summonedNpc.setLocation(newlocation);
 			p.cE.summonedNpc.ownerId = p.getIndex();
@@ -100,7 +100,7 @@ public class SummoningMonsters {
 			return;
 		}
 		if(Summoning.isBoB(npcID))
-			BoB.dropBoB(p.getLocation(), p);
+			BoB.dropBoB(p.getPosition(), p);
 		for(int i = 0; i < BOB_NPCS.length; i++) {
 			if(BOB_NPCS[i][0] == npcID || BOB_NPCS[i][0] - 1 == npcID)
 				p.setBob(BOB_NPCS[i][1]);
@@ -115,8 +115,8 @@ public class SummoningMonsters {
 	public static void SummonNewNPC2(final Player p, int npcID) {
 
 		final NPC monster = NPCManager
-				.addNPC(p.getLocation().getX(), p.getLocation().getY(),
-						p.getLocation().getZ(), npcID, - 1);
+				.addNPC(p.getPosition().getX(), p.getPosition().getY(),
+						p.getPosition().getZ(), npcID, - 1);
 		p.SummoningCounter = SummoningData.getTimerById(npcID);
 		if(npcID == 6813) {
 			World.submit(new BunyipEvent(p));

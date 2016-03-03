@@ -1,16 +1,8 @@
 package org.hyperion.rs2.model.content.specialareas.impl;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-
-import java.util.Optional;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,10 +1,7 @@
 package org.hyperion.rs2.model.content.specialareas.impl;
 
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Skills;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 
 /**
@@ -36,8 +33,8 @@ public class NewGamePK extends SpecialArea {
     }
 
     @Override
-    public Location getDefaultLocation() {
-        return Location.create(3087, 3515, HEIGHT);
+    public Position getDefaultLocation() {
+        return Position.create(3087, 3515, HEIGHT);
     }
 
     @Override

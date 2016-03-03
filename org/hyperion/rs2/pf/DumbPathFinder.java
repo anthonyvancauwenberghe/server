@@ -1,6 +1,6 @@
 package org.hyperion.rs2.pf;
 
-import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Position;
 
 /**
  * An implementation of a <code>PathFinder</code> which is 'dumb' and only
@@ -11,7 +11,7 @@ import org.hyperion.rs2.model.Location;
 public class DumbPathFinder implements PathFinder {
 
 	@Override
-	public Path findPath(Location location, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY) {
+	public Path findPath(Position position, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY) {
 		int stepX = 0, stepY = 0;
 		if(srcX > dstX && map.getTile(dstX, srcY).isEasternTraversalPermitted() && map.getTile(srcX, srcY).isWesternTraversalPermitted()) {
 			stepX = - 1;

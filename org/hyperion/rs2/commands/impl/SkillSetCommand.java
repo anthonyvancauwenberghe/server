@@ -49,7 +49,7 @@ public class SkillSetCommand extends Command {
 	 */
 	@Override
 	public boolean execute(Player player, String input) {
-		if(player.getLocation().cannotMax())
+		if(player.getPosition().cannotMax())
 			return false;
         if(!ItemSpawning.canSpawn(player))
             return false;
@@ -82,7 +82,7 @@ public class SkillSetCommand extends Command {
 	 * @return
 	 */
 	public static boolean canChangeLevel(Player player) {
-		if(player.getLocation().inPvPArea()) {
+		if(player.getPosition().inPvPArea()) {
 			player.getActionSender().sendMessage(
 					"You cannot use this command in PvP zones.");
 			return false;

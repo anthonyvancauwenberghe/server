@@ -60,7 +60,7 @@ public class Trade {
 			System.out.println("Trading yourself is not good.");
 			return;
 		}
-		if(! player.getLocation().isWithinDistance(player.getLocation(), 3)) {
+		if(! player.getPosition().isWithinDistance(player.getPosition(), 3)) {
 			player.getActionSender().sendMessage("You are too far away to open a trade.");
 			return;
 		}

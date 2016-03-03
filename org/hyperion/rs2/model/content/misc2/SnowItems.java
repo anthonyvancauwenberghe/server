@@ -64,7 +64,7 @@ public class SnowItems implements ContentTemplate {
 
 
 	public static void fireSnowBall(Player player, Player victim) {
-		player.face(victim.getLocation());
+		player.face(victim.getPosition());
 	    int offsetY = (player.cE.getAbsX() - (victim.cE.getAbsX() + victim.cE.getOffsetX())) * -1;
         int offsetX = (player.cE.getAbsY() - (victim.cE.getAbsY() + victim.cE.getOffsetY())) * -1;
 		// Lockon Target

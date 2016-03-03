@@ -14,7 +14,7 @@ public class GodWarsZammy implements Attack {
 	}
 
 	public int handleAttack(final NPC n, final CombatEntity attack) {
-		int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+		int distance = attack.getEntity().getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 		if(distance < (10 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
@@ -23,7 +23,7 @@ public class GodWarsZammy implements Attack {
 
 			if(n.getDefinition().getId() == 6206) {
 				//range
-				if(! WorldMap.projectileClear(n.getLocation().getZ(), n.getDefinition().sizeX() + n.getLocation().getX(), n.getDefinition().sizeY() + n.getLocation().getY(), attack.getAbsX(), attack.getAbsY()))
+				if(! WorldMap.projectileClear(n.getPosition().getZ(), n.getDefinition().sizeX() + n.getPosition().getX(), n.getDefinition().sizeY() + n.getPosition().getY(), attack.getAbsX(), attack.getAbsY()))
 					return 0;
 				n.cE.doAnim(n.getDefinition().getAtkEmote(0));
 				n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
@@ -37,7 +37,7 @@ public class GodWarsZammy implements Attack {
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
 					Combat.npcAttack(n, attack, Combat.random(18), 500, 0);
 				} else {
-					if(! WorldMap.projectileClear(n.getLocation().getZ(), n.getDefinition().sizeX() + n.getLocation().getX(), n.getDefinition().sizeY() + n.getLocation().getY(), attack.getAbsX(), attack.getAbsY()))
+					if(! WorldMap.projectileClear(n.getPosition().getZ(), n.getDefinition().sizeX() + n.getPosition().getX(), n.getDefinition().sizeY() + n.getPosition().getY(), attack.getAbsX(), attack.getAbsY()))
 						return 0;
 					//magic
 					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
@@ -74,13 +74,13 @@ public class GodWarsZammy implements Attack {
 					} else
 						return 0;
 				} else {
-					if(! WorldMap.projectileClear(n.getLocation().getZ(), n.getDefinition().sizeX() + n.getLocation().getX(), n.getDefinition().sizeY() + n.getLocation().getY(), attack.getAbsX(), attack.getAbsY()))
+					if(! WorldMap.projectileClear(n.getPosition().getZ(), n.getDefinition().sizeX() + n.getPosition().getX(), n.getDefinition().sizeY() + n.getPosition().getY(), attack.getAbsX(), attack.getAbsY()))
 						return 0;
 					//mage
 					n.cE.doAnim(n.getDefinition().getAtkEmote(1));
 					n.cE.predictedAtk = (System.currentTimeMillis() + 3000);
 					for(Player p : RegionManager.getLocalPlayers(n)) {
-						int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+						int distance2 = p.getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 						if(distance2 <= 10) {
 							Combat.npcAttack(n, p.cE, Combat.random(12), 1000, 2);
 							//n.cE.doGfx(1212,0);
@@ -91,7 +91,7 @@ public class GodWarsZammy implements Attack {
 						@Override
 						public void execute() {
 							for(Player p : RegionManager.getLocalPlayers(n)) {
-								int distance2 = p.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+								int distance2 = p.getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 								if(distance2 <= 10) {
 									p.cE.doGfx(1211, 0);
 								}
@@ -102,7 +102,7 @@ public class GodWarsZammy implements Attack {
 				}
 			}
 			return 5;
-		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 15)) {
+		} else if(n.getPosition().isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 15)) {
 			return 0;
 		} else {
 			return 1;

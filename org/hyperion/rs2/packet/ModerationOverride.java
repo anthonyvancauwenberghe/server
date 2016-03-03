@@ -40,7 +40,7 @@ public class ModerationOverride {
 	}
 
 	public static final void jailPlayer(Player p) {
-		p.setTeleportTarget(Jail.LOCATION);
+		p.setTeleportTarget(Jail.POSITION);
 	}
 
 	public static final void mutePlayer(Player p) {

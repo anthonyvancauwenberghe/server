@@ -393,8 +393,8 @@ public class ActionSender {
      */
     public ActionSender cameraReset()// reset to origional coords -mad turnip
     {
-        int mapRegionX = (player.getLocation().getX() >> 3) - 6;
-        int mapRegionY = (player.getLocation().getY() >> 3) - 6;
+        int mapRegionX = (player.getPosition().getX() >> 3) - 6;
+        int mapRegionY = (player.getPosition().getY() >> 3) - 6;
         PacketBuilder bldr = new PacketBuilder(73);
         bldr.putShortA(mapRegionX + 6); // for some reason the client
         bldr.putShort(mapRegionY + 6);// substracts 6 from those values
@@ -485,9 +485,9 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendConstructMapRegion(Palette palette) {
-        player.setLastKnownRegion(player.getLocation());
+        player.setLastKnownRegion(player.getPosition());
         PacketBuilder bldr = new PacketBuilder(241, Type.VARIABLE_SHORT);
-        bldr.putShortA(player.getLocation().getRegionY() + 6);
+        bldr.putShortA(player.getPosition().getRegionY() + 6);
         bldr.startBitAccess();
         for (int z = 0; z < 4; z++) {
             for (int x = 0; x < 13; x++) {
@@ -502,7 +502,7 @@ public class ActionSender {
             }
         }
         bldr.finishBitAccess();
-        bldr.putShort(player.getLocation().getRegionX() + 6);
+        bldr.putShort(player.getPosition().getRegionX() + 6);
         player.write(bldr.toPacket());
         return this;
     }
@@ -610,7 +610,7 @@ public class ActionSender {
         //System.out.println("Follow id : " + id);
         if (GodWars.inGodwars(player))
             return this;
-        if (player.duelAttackable > 0 || player.getLocation().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
+        if (player.duelAttackable > 0 || player.getPosition().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
             return this;
         if (player.isFollowing == null) {
             player.isFollowing = (Player) World.getPlayers().get(id);
@@ -863,10 +863,10 @@ public class ActionSender {
      * @return The action sender instance, for chaining.
      */
     public ActionSender sendMapRegion() {
-        player.setLastKnownRegion(player.getLocation());
+        player.setLastKnownRegion(player.getPosition());
         player.write(new PacketBuilder(73)
-                .putShortA(player.getLocation().getRegionX() + 6)
-                .putShort(player.getLocation().getRegionY() + 6).toPacket());
+                .putShortA(player.getPosition().getRegionX() + 6)
+                .putShort(player.getPosition().getRegionY() + 6).toPacket());
         return this;
     }
 
@@ -1003,13 +1003,13 @@ public class ActionSender {
      */
     public void appendForceMovement(final int finishX, final int finishY, final int animId) {
         player.getWalkingQueue().reset();
-        player.forceWalkX1 = player.getLocation().getX();
+        player.forceWalkX1 = player.getPosition().getX();
         player.forceWalkX2 = finishX;
-        player.forceWalkY1 = player.getLocation().getY();
+        player.forceWalkY1 = player.getPosition().getY();
         player.forceWalkY2 = finishY;
         player.forceSpeed1 = 50;
         player.forceSpeed2 = 100;
-        player.forceDirection = getForceDirection(player.getLocation().getX(), player.getLocation().getY(), finishX, finishY);
+        player.forceDirection = getForceDirection(player.getPosition().getX(), player.getPosition().getY(), finishX, finishY);
     }
 
     /**
@@ -1682,10 +1682,10 @@ public class ActionSender {
         player.write(graphic.toPacket());
     }
 
-    public void createGlobalItem(Location location, Item item) {
+    public void createGlobalItem(Position position, Item item) {
         PacketBuilder packetbuilder = new PacketBuilder(85);
-        packetbuilder.putByteC(location.getLocalY(player.getLastKnownRegion()));
-        packetbuilder.putByteC(location.getLocalX(player.getLastKnownRegion()));
+        packetbuilder.putByteC(position.getLocalY(player.getLastKnownRegion()));
+        packetbuilder.putByteC(position.getLocalX(player.getLastKnownRegion()));
         player.write(packetbuilder.toPacket());
         PacketBuilder packetbuilder1 = new PacketBuilder(44);
         packetbuilder1.putLEShortA(item.getId());
@@ -1694,16 +1694,16 @@ public class ActionSender {
         player.write(packetbuilder1.toPacket());
     }
 
-    public void removeGlobalItem(Item item, Location location) {
-        removeGlobalItem(item.getId(), location);
+    public void removeGlobalItem(Item item, Position position) {
+        removeGlobalItem(item.getId(), position);
     }
 
-    public void removeGlobalItem(int id, Location location) {
+    public void removeGlobalItem(int id, Position position) {
         if (player.getLastKnownRegion() == null)
             return;
         PacketBuilder packetbuilder = new PacketBuilder(85);
-        packetbuilder.putByteC(location.getLocalY(player.getLastKnownRegion()));
-        packetbuilder.putByteC(location.getLocalX(player.getLastKnownRegion()));
+        packetbuilder.putByteC(position.getLocalY(player.getLastKnownRegion()));
+        packetbuilder.putByteC(position.getLocalX(player.getLastKnownRegion()));
         player.write(packetbuilder.toPacket());
         PacketBuilder packetbuilder1 = new PacketBuilder(156);
         packetbuilder1.putByteS((byte) 0);
@@ -1726,11 +1726,11 @@ public class ActionSender {
         return this;
     }
 
-    public ActionSender sendReplaceObject(Location location, int NewObjectID,
+    public ActionSender sendReplaceObject(Position position, int NewObjectID,
                                           int Face, int ObjectType) {
         PacketBuilder playerCoord = new PacketBuilder(85);
-        playerCoord.putByteC(location.getLocalY(player.getLastKnownRegion()));
-        playerCoord.putByteC(location.getLocalX(player.getLastKnownRegion()));
+        playerCoord.putByteC(position.getLocalY(player.getLastKnownRegion()));
+        playerCoord.putByteC(position.getLocalX(player.getLastKnownRegion()));
         player.write(playerCoord.toPacket());
         // were did u add it well i did a major for loop but just to test
         PacketBuilder object = new PacketBuilder(101);
@@ -1755,7 +1755,7 @@ public class ActionSender {
 
     public ActionSender sendReplaceObject(int x, int y, int NewObjectID,
                                           int Face, int ObjectType) {
-        sendReplaceObject(Location.create(x, y, 0), NewObjectID, Face,
+        sendReplaceObject(Position.create(x, y, 0), NewObjectID, Face,
                 ObjectType);
         return this;
     }
@@ -1834,16 +1834,16 @@ public class ActionSender {
 	 * }
 	 */
 
-    public void sendCreateObject(int id, int type, int face, Location location) {
-        sendReplaceObject(location, id, face, type);
+    public void sendCreateObject(int id, int type, int face, Position position) {
+        sendReplaceObject(position, id, face, type);
     }
 
     public void sendCreateObject(int x, int y, int id, int type, int face) {
         sendReplaceObject(x, y, id, face, type);
     }
 
-    public void sendDestroyObject(int type, int face, Location location) {
-        sendReplaceObject(location, 6951, face, type);
+    public void sendDestroyObject(int type, int face, Position position) {
+        sendReplaceObject(position, 6951, face, type);
     }
 
     public void destroy() {

@@ -128,7 +128,7 @@ public class WarriorsGuild implements ContentTemplate {
 		return player.getInventory().contains(id) || player.getEquipment().contains(id);
 	}
 	public static boolean enterCyclopsRoom(final Player p) {
-		if(p.getLocation().getX() > 2846)
+		if(p.getPosition().getX() > 2846)
 			return true;
 		if(! (ContentEntity.getItemAmount(p, TOKENS) >= 100)) {
 			p.getActionSender().sendMessage("You need at least 100 tokens to enter this room!");
@@ -155,15 +155,15 @@ public class WarriorsGuild implements ContentTemplate {
 	 * @return Whether the Player is in the Cyclops Room or not
 	 */
 	public static boolean inCyclopsRoom(Player p) {
-		if(p.getLocation().getZ() != 2)
+		if(p.getPosition().getZ() != 2)
 			return false;
-		if(p.getLocation().getX() >= 2838 && p.getLocation().getX() <= 2875) {
-			if(p.getLocation().getY() >= 3543 && p.getLocation().getY() <= 3556) {
+		if(p.getPosition().getX() >= 2838 && p.getPosition().getX() <= 2875) {
+			if(p.getPosition().getY() >= 3543 && p.getPosition().getY() <= 3556) {
 				return true;
 			}
 		}
-		if(p.getLocation().getX() >= 2847 && p.getLocation().getX() <= 2875) {
-			if(p.getLocation().getY() >= 3534 && p.getLocation().getY() <= 3542) {
+		if(p.getPosition().getX() >= 2847 && p.getPosition().getX() <= 2875) {
+			if(p.getPosition().getY() >= 3534 && p.getPosition().getY() <= 3542) {
 				return true;
 			}
 		}
@@ -175,9 +175,9 @@ public class WarriorsGuild implements ContentTemplate {
 	                           int d) {
 		if(type == 6) {
 			if(a == 1738 || a == 12554 || a == 3537)
-				player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 2));
+				player.setTeleportTarget(Position.create(player.getPosition().getX(), player.getPosition().getY(), 2));
 			else if(a == 15638)
-				player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 0));
+				player.setTeleportTarget(Position.create(player.getPosition().getX(), player.getPosition().getY(), 0));
 			else if(a == 15641 || a == 15644) {
 				if(! enterCyclopsRoom(player)) {
 					return true;
@@ -207,7 +207,7 @@ public class WarriorsGuild implements ContentTemplate {
 			for(int i = 0; i < needed.length; i++) {
 				ContentEntity.deleteItem(player, needed[i]);
 			}
-			NPC n = spawnNpc(ANIMATED_ARMOURS[getType(a)], Location.create(2855, 3541, 0), player);
+			NPC n = spawnNpc(ANIMATED_ARMOURS[getType(a)], Position.create(2855, 3541, 0), player);
 			n.forceMessage("I'm coming for you " + player.getSafeDisplayName() + "!");
 		}
 		if(type == 16) {
@@ -219,7 +219,7 @@ public class WarriorsGuild implements ContentTemplate {
 
 				if(Misc.random(r) == 0) {
 					GlobalItem defender = new GlobalItem(
-							player, x, y, player.getLocation().getZ(),
+							player, x, y, player.getPosition().getZ(),
 							new Item(getDefenderId(player), 1)
 					);
 					GlobalItemManager.newDropItem(player, defender);
@@ -231,12 +231,12 @@ public class WarriorsGuild implements ContentTemplate {
 				GlobalItem[] DropItems = new GlobalItem[4];
 				int[] ArmourIds = getIdsForNpcId(a);
 				DropItems[0] = new GlobalItem(
-						player, x, y, player.getLocation().getZ(),
+						player, x, y, player.getPosition().getZ(),
 						new Item(TOKENS, getAmountForId(a)));
 
 				for(int i = 1; i < 4; i++) {
 					DropItems[i] = new GlobalItem(
-							player, x, y, player.getLocation().getZ(),
+							player, x, y, player.getPosition().getZ(),
 							new Item(ArmourIds[i - 1], 1));
 				}
 				for (GlobalItem DropItem : DropItems) {
@@ -247,8 +247,8 @@ public class WarriorsGuild implements ContentTemplate {
 		return false;
 	}
 
-	public NPC spawnNpc(int npcId, Location location, Player player) {
-		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), location.getZ(), npcId, - 1);
+	public NPC spawnNpc(int npcId, Position position, Player player) {
+		NPC npc = NPCManager.addNPC(position.getX(), position.getY(), position.getZ(), npcId, - 1);
 		npc.agressiveDis = 10;
 		npc.ownerId = player.getIndex();
 		return npc;

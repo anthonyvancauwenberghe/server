@@ -10,7 +10,7 @@ public class GameObject {
 	/**
 	 * The location.
 	 */
-	private Location location;
+	private Position position;
 
 	/**
 	 * The definition.
@@ -29,21 +29,21 @@ public class GameObject {
 
     public final boolean onAllHeights;
 
-    public GameObject(GameObjectDefinition definition, Location location, int type, int rotation) {
-        this(definition, location, type, rotation, true);
+    public GameObject(GameObjectDefinition definition, Position position, int type, int rotation) {
+        this(definition, position, type, rotation, true);
     }
 
 	/**
 	 * Creates the game object.
 	 *
 	 * @param definition The definition.
-	 * @param location   The location.
+	 * @param position   The location.
 	 * @param type       The type.
 	 * @param rotation   The rotation.
 	 */
-	public GameObject(GameObjectDefinition definition, Location location, int type, int rotation, boolean onAllHeights) {
+	public GameObject(GameObjectDefinition definition, Position position, int type, int rotation, boolean onAllHeights) {
 		this.definition = definition;
-		this.location = location;
+		this.position = position;
 		this.type = type;
 		this.rotation = rotation;
         this.onAllHeights = onAllHeights;
@@ -53,8 +53,8 @@ public class GameObject {
 	 *
 	 * @return The location.
 	 */
-	public Location getLocation() {
-		return location;
+	public Position getPosition() {
+		return position;
 	}
 
 	/**
@@ -90,11 +90,11 @@ public class GameObject {
      * @param loc
      * @return
      */
-    public boolean isAt(Location loc) {
+    public boolean isAt(Position loc) {
         if(!onAllHeights)
-            return this.location.equals(loc);
+            return this.position.equals(loc);
         else
-            return location.equalsIgnoreHeight(loc);
+            return position.equalsIgnoreHeight(loc);
     }
 
     /**
@@ -103,11 +103,11 @@ public class GameObject {
      * @return
      */
 
-    public boolean isVisible(Location loc) {
+    public boolean isVisible(Position loc) {
         if(!onAllHeights)
-            return loc.isWithinDistance(location, 64);
+            return loc.isWithinDistance(position, 64);
         else
-            return location.distance(loc) < 64 && loc.getZ()%4 == location.getZ()%4;
+            return position.distance(loc) < 64 && loc.getZ()%4 == position.getZ()%4;
     }
 
 }

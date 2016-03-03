@@ -28,7 +28,7 @@ public class NPCManager {
 		return attacks[n.getDefinition().getId()];
 	}
 
-	public static void restoreArea(Location location) throws IOException {
+	public static void restoreArea(Position position) throws IOException {
 
 		String name = "./data/spawnsold.cfg";
 		BufferedReader file = null;
@@ -46,11 +46,11 @@ public class NPCManager {
 					values = values.trim();
 					String[] valuesArray = values.split("\t");
 					int id = Integer.valueOf(valuesArray[0]);
-					Location l = Location.create(
+					Position l = Position.create(
 							Integer.valueOf(valuesArray[1]),
 							Integer.valueOf(valuesArray[2]),
 							Integer.valueOf(valuesArray[3]));
-					if(location.distance(l) <= 64
+					if(position.distance(l) <= 64
 							&& positionMap
 							.get((Integer.valueOf(valuesArray[1]) * 16 + Integer
 									.valueOf(valuesArray[2]) * 4)) == null) {
@@ -283,7 +283,7 @@ public class NPCManager {
 		return array[Misc.random(array.length - 1)];
 	}
 
-	public static NPC addNPC(Location loc, int npcId, int respawnTime) {
+	public static NPC addNPC(Position loc, int npcId, int respawnTime) {
 		NPCDefinition nD = NPCDefinition.forId(npcId);
 		NPC n = new NPC(nD, respawnTime, loc);
 		n.agressiveDis = getAgressiveDistance(npcId);
@@ -294,7 +294,7 @@ public class NPCManager {
 	}
 
 	public static NPC addNPC(int x, int y, int z, int npcId, int respawnTime) {
-		return addNPC(Location.create(x, y, z), npcId, respawnTime);
+		return addNPC(Position.create(x, y, z), npcId, respawnTime);
 	}
 
 	public static int getAgressiveDistance(int npcId) {
@@ -348,8 +348,8 @@ public class NPCManager {
 
 		for(NPC npc1 : RegionManager.getLocalNpcs(npc)) {
 			if(npc != npc1 && ! npc1.isHidden()) {
-				int k1 = npc1.getLocation().getX();
-				int l1 = npc1.getLocation().getY();
+				int k1 = npc1.getPosition().getX();
+				int l1 = npc1.getPosition().getY();
 				WalkingQueue.Point point = npc1.getWalkingQueue()
 						.getPublicPoint();
 				if(point != null) {
@@ -381,7 +381,7 @@ public class NPCManager {
 				for(NPC npc : World.getNpcs()) {
 					if(npc == null)
 						continue;
-					int distance = player.getLocation().distance(npc.getLocation());
+					int distance = player.getPosition().distance(npc.getPosition());
 					if(distance < 5) {
 						player.getActionSender().sendMessage("Npc: " + npc.getDefinition().getId() + " , " + npc.getDefinition().combat());
 					}

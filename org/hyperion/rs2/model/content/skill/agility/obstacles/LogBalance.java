@@ -10,16 +10,16 @@ import org.hyperion.util.Misc;
  * Created by Gilles on 11/09/2015.
  */
 public class LogBalance extends Obstacle {
-    private Location    start,
+    private Position start,
                         end,
                         fail = null;
 
-    public LogBalance(int objectId, int skillXp, int levelReq, Location start, Location end, int failRate, Course course, int progress) {
+    public LogBalance(int objectId, int skillXp, int levelReq, Position start, Position end, int failRate, Course course, int progress) {
         super(objectId, 762, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
     }
-    public LogBalance(int objectId, int skillXp, int levelReq, Location start, Location end, Location fail, int failRate, Course course, int progress) {
+    public LogBalance(int objectId, int skillXp, int levelReq, Position start, Position end, Position fail, int failRate, Course course, int progress) {
         super(objectId, 762, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
@@ -28,7 +28,7 @@ public class LogBalance extends Obstacle {
 
     @Override
     public boolean overCome(Player player) {
-        if(player.getLocation().getX() != start.getX() || player.getLocation().getY() != start.getY())
+        if(player.getPosition().getX() != start.getX() || player.getPosition().getY() != start.getY())
             return false;
         if(!super.overCome(player))
             return false;
@@ -80,7 +80,7 @@ public class LogBalance extends Obstacle {
                     player.getAppearance().setAnimations(a, b, c);
                     player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
                     stop();
-                } else if (player.getLocation().getX() == calculateMiddle(start, end).getX() && player.getLocation().getY() == calculateMiddle(start, end).getY()) {
+                } else if (player.getPosition().getX() == calculateMiddle(start, end).getX() && player.getPosition().getY() == calculateMiddle(start, end).getY()) {
                     player.playAnimation(Animation.create(770));
                 } else if (progress == start.distance(calculateMiddle(start, end)) + 2) {
                     player.getActionSender().forceMovement(calculateMiddle(start, end).getX(), calculateMiddle(start, end).getY());

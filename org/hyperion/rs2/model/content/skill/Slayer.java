@@ -1,13 +1,13 @@
 package org.hyperion.rs2.model.content.skill;
 
-import java.io.FileNotFoundException;
-
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.shops.SlayerShop;
+
+import java.io.FileNotFoundException;
 
 
 /**
@@ -64,15 +64,15 @@ public class Slayer implements ContentTemplate {
         if(type == ClickType.OBJECT_CLICK1) {
             final int objectId = npcId;
             if(objectId == 4493)
-                player.setTeleportTarget(Location.create(3433, 3538, 1));
+                player.setTeleportTarget(Position.create(3433, 3538, 1));
             if(objectId == 4495)
-                player.setTeleportTarget(Location.create(3417, 3541, 2));
+                player.setTeleportTarget(Position.create(3417, 3541, 2));
             if(objectId == 10529)
-                player.setTeleportTarget(Location.create(3427, 3555, 1));
+                player.setTeleportTarget(Position.create(3427, 3555, 1));
             if(objectId == 5126)
-                player.setTeleportTarget(Location.create(3445, 3555, 2));
+                player.setTeleportTarget(Position.create(3445, 3555, 2));
             if(objectId == 9319)
-                player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ() + 1));
+                player.setTeleportTarget(Position.create(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ() + 1));
         }
         return false;
     }

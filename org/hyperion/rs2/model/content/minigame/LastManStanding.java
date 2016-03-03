@@ -21,8 +21,8 @@ public class LastManStanding implements ContentTemplate {
     private List<Participant> finishedPlayers = new ArrayList<>();
     private static List<Participant> topTenPlayers = new ArrayList<>();
 
-    public static Location START = Location.create(3272, 2785, 0);
-    public static Location START_2 = Location.create(3264, 2784, 0);
+    public static Position START = Position.create(3272, 2785, 0);
+    public static Position START_2 = Position.create(3264, 2784, 0);
 
     public boolean gameStarted = false;
     public boolean canJoin = false;
@@ -40,10 +40,10 @@ public class LastManStanding implements ContentTemplate {
         return x <= 3274 && y <= 2809 && y >= 2752 && x >= 3205;
     }
 
-    public static Location getRandomLocation() {
+    public static Position getRandomLocation() {
         int x = Combat.random(25) + 3220;
         int y = Combat.random(25) + 2752;
-        return Location.create(x, y, 0);
+        return Position.create(x, y, 0);
     }
 
     private static void startCountdown() {
@@ -134,7 +134,7 @@ public class LastManStanding implements ContentTemplate {
 
     public void leaveGame(Player player, boolean loseItems) {
         if(participants.remove(player.getName()) != null) {
-            player.setTeleportTarget(Edgeville.LOCATION, false);
+            player.setTeleportTarget(Edgeville.POSITION, false);
             if (gameStarted) {
                 if (loseItems) {
                     player.getPoints().increasePkPoints(500);
@@ -226,7 +226,7 @@ public class LastManStanding implements ContentTemplate {
             if(leader != null)
                 leader.getPlayer().getPoints().increasePkPoints(2000, true);
             winner.getPlayer().getActionSender().sendMessage("You have won this event and are rewarded " + points + " pk points!");
-            winner.getPlayer().setTeleportTarget(Edgeville.LOCATION, false);
+            winner.getPlayer().setTeleportTarget(Edgeville.POSITION, false);
             winner.getPlayer().getActionSender().sendWildLevel(-1);
             finishedPlayers.add(winner);
             finishedPlayers.forEach(p -> removeArrow(p.getPlayer()));
@@ -251,7 +251,7 @@ public class LastManStanding implements ContentTemplate {
     }
 
     public void openInterface(Player player) {
-        if(!hasParticipated(player).isPresent() || player.getLocation().inPvPArea() || player.isInCombat()) {
+        if(!hasParticipated(player).isPresent() || player.getPosition().inPvPArea() || player.isInCombat()) {
             player.sendImportantMessage("LMS event has ended. Do ::top10 to look at the top 10 players.");
             return;
         }

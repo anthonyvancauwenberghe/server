@@ -11,7 +11,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("market", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				Magic.teleport(player, Location.create(3009, 3383, 0), false);
+				Magic.teleport(player, Position.create(3009, 3383, 0), false);
 				return true;
 			}
 		});
@@ -33,7 +33,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("arreplace", Rank.OWNER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				Magic.teleport(player, Location.create(3207, 3219, 2), false);
+				Magic.teleport(player, Position.create(3207, 3219, 2), false);
 				return true;
 			}
 		});
@@ -44,7 +44,7 @@ public class TeleportCommands {
                 input = filterInput(input);
                 final int offX = Integer.parseInt(input.split(" ")[0]);
                 final int offY = Integer.parseInt(input.split(" ")[1]);
-                player.setTeleportTarget(Location.create(player.getLocation().getX() + offX, player.getLocation().getY() + offY, player.getLocation().getZ()));
+                player.setTeleportTarget(Position.create(player.getPosition().getX() + offX, player.getPosition().getY() + offY, player.getPosition().getZ()));
                 return true;
             }
         });
@@ -52,7 +52,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("gdz", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				Magic.teleport(player, Location.create(3287, 3886, 0), false);
+				Magic.teleport(player, Position.create(3287, 3886, 0), false);
 				return true;
 			}
 		});
@@ -60,7 +60,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("skilling", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
-				Magic.teleport(player, Location.create(3810, 2832, 0), false, false);
+				Magic.teleport(player, Position.create(3810, 2832, 0), false, false);
 				return true;
 			}
 		});
@@ -68,7 +68,7 @@ public class TeleportCommands {
         CommandHandler.submit(new Command("nathanplace", Rank.MODERATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
-                Magic.teleport(player, Location.create(2108, 4452, 3), false);
+                Magic.teleport(player, Position.create(2108, 4452, 3), false);
                 return true;
             }
         });
@@ -79,7 +79,7 @@ public class TeleportCommands {
 				String name = filterInput(input);
 				Player victim = World.getPlayerByName(name);
 				if(victim != null) {
-					if(victim.getLocation().inPvPArea()) {
+					if(victim.getPosition().inPvPArea()) {
 						player.getActionSender().sendMessage("You can't teleport people out of the wild!");
 					} else if(victim.duelAttackable > 0) {
 						player.getActionSender().sendMessage("You can't teleport people out of a duel!");
@@ -88,14 +88,14 @@ public class TeleportCommands {
                     } else if(Jail.inJail(victim)) {
 						player.getActionSender().sendMessage("This player is already in jail.");
 					} else
-						victim.setTeleportTarget(Jail.LOCATION);
+						victim.setTeleportTarget(Jail.POSITION);
 				} else {
 					if(name.equalsIgnoreCase("jail")) {
                         if(player.duelAttackable > 0) {
                             player.getActionSender().sendMessage("This player is currently in a duel.");
                             return false;
                         }
-						player.setTeleportTarget(Jail.LOCATION);
+						player.setTeleportTarget(Jail.POSITION);
 					} else
 						player.getActionSender().sendMessage("This player is not online.");
 				}
@@ -113,14 +113,14 @@ public class TeleportCommands {
 					} else if(!Jail.inJail(releasing)) {
 						player.getActionSender().sendMessage("This player is not in jail.");
 					} else
-						releasing.setTeleportTarget(Zanaris.LOCATION);
+						releasing.setTeleportTarget(Zanaris.POSITION);
 				} else {
 					if(name.equalsIgnoreCase("unjail")) {
                         if(player.duelAttackable > 0) {
                             player.getActionSender().sendMessage("This player is currently in a duel.");
                             return false;
                         }
-						player.setTeleportTarget(Zanaris.LOCATION);
+						player.setTeleportTarget(Zanaris.POSITION);
 					} else
 						player.getActionSender().sendMessage("This player is not online.");
 				}
@@ -130,7 +130,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("xteletome", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER))
+				if(player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
 				if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
 					return false;
@@ -146,7 +146,7 @@ public class TeleportCommands {
                         target.getActionSender().sendMessage(player.getSafeDisplayName()+" tried teleporting you to them, you should ask them what they want.");
                         return false;
                     }
-					target.setTeleportTarget(player.getLocation());
+					target.setTeleportTarget(player.getPosition());
 				} else {
 					player.getActionSender().sendMessage("This player is not online.");
 				}
@@ -156,7 +156,7 @@ public class TeleportCommands {
 		CommandHandler.submit(new Command("xteleto", Rank.MODERATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
-				if(player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
+				if(player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR))
 					return false;
                 if(player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER))
                     return false;
@@ -168,7 +168,7 @@ public class TeleportCommands {
                         player.getActionSender().sendMessage("This player is currently in a duel.");
                         return false;
                     }
-					player.setTeleportTarget(x.getLocation());
+					player.setTeleportTarget(x.getPosition());
 				} else {
 					player.getActionSender().sendMessage(
 							"This player is not online.");

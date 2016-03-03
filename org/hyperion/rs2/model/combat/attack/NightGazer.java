@@ -79,7 +79,7 @@ public class NightGazer implements Attack {
             n.cE.predictedAtk = System.currentTimeMillis() + 3000;
             return 5;
         }
-        int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+        int distance = attack.getEntity().getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
         if(distance < (10 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
             n.getCombat().doAtkEmote();
             Combat.npcRangeAttack(n, attack, 1067, 0, false);
@@ -87,7 +87,7 @@ public class NightGazer implements Attack {
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;
             return 5;
         }
-        distance = attack.getEntity().getLocation().distance(n.getLocation());
+        distance = attack.getEntity().getPosition().distance(n.getPosition());
         if(distance <= 8) {
             return 0;
         }

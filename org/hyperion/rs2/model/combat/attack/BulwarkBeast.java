@@ -77,8 +77,8 @@ public class BulwarkBeast implements Attack {
             n.cE.predictedAtk = System.currentTimeMillis() + 3000;
             return 5;
         }
-        int distance = attack.getEntity().getLocation().distance(n.getLocation());
-        if (n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 2)) {
+        int distance = attack.getEntity().getPosition().distance(n.getPosition());
+        if (n.getPosition().isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 2)) {
             n.getCombat().doAtkEmote();
             Combat.npcAttack(n, attack, CombatCalculation.getCalculatedDamage(n, attack.getEntity(), Combat.random(MAX_MELEE_DAMAGE), 0, MAX_MELEE_DAMAGE), 200, 0);
             n.cE.predictedAtk = System.currentTimeMillis() + 2500;

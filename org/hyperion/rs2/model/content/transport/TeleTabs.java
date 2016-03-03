@@ -28,7 +28,7 @@ public class TeleTabs implements ContentTemplate {
 		}
 		if(player.isDead())
 			return;
-		if(Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 20) {
+		if(Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY()) > 20) {
 			player.getActionSender().sendMessage("You cannot teleport above level 20 wilderness.");
 			return;
 		}
@@ -62,7 +62,7 @@ public class TeleTabs implements ContentTemplate {
 		long delay = 1200;
 
 		player.inAction = false;
-		if((player.getLocation().getX() >= 2814 && player.getLocation().getX() <= 2942 && player.getLocation().getY() >= 5250 && player.getLocation().getY() <= 5373)
+		if((player.getPosition().getX() >= 2814 && player.getPosition().getX() <= 2942 && player.getPosition().getY() >= 5250 && player.getPosition().getY() <= 5373)
 				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
 			player.getActionSender().showInterfaceWalkable(- 1);
 		}
@@ -82,7 +82,7 @@ public class TeleTabs implements ContentTemplate {
 		World.submit(new Task(2400,"teletabs2") {
 			@Override
 			public void execute() {
-				player.setTeleportTarget(Location.create(x1, y1, z1));
+				player.setTeleportTarget(Position.create(x1, y1, z1));
 				player.playAnimation(Animation.create(- 1, 0));
 				this.stop();
 			}
@@ -114,13 +114,13 @@ public class TeleTabs implements ContentTemplate {
                 case 18806:
                     final Player opp = p.getBountyHunter().getTarget();
                     if(opp != null) {
-                        final int x = opp.getLocation().getX();
-                        final int y = opp.getLocation().getY();
+                        final int x = opp.getPosition().getX();
+                        final int y = opp.getPosition().getY();
                         final int wildLevel = Combat.getWildLevel(x, y);
                         final boolean inMulti = Combat.isInMulti(opp.cE);
-                        if(opp.getLocation().inPvPArea()) {
+                        if(opp.getPosition().inPvPArea()) {
                             if(wildLevel <= 20 && !inMulti) {
-                                TeleTab(p, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), a);
+                                TeleTab(p, opp.getPosition().getX(), opp.getPosition().getY(), opp.getPosition().getZ(), a);
                             } else {
                                 DialogueManager.openDialogue(p, 171);
                             }

@@ -71,7 +71,7 @@ public class WieldPacketHandler implements PacketHandler {
 					return;
 				}
 						//switch while duel screen is open
-				if(player.getLocation().inDuel())
+				if(player.getPosition().inDuel())
 					Duel.declineTrade(player);
 				if(slot >= 0 && slot < Inventory.SIZE) {
 					Item item = player.getInventory().get(slot);

@@ -50,7 +50,7 @@ public class DungoneeringParty extends Interface {
 
                 for(final String s : playerStrings) {
                     final Player p = World.getPlayerByName(s);
-                    if(p == null || !p.getLocation().inDungeonLobby()) {
+                    if(p == null || !p.getPosition().inDungeonLobby()) {
                         player.sendMessage("%s cannot join party, removed from group", s);
                     } else {
                         if(p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level)
@@ -80,7 +80,7 @@ public class DungoneeringParty extends Interface {
                     player.sendMessage("You cannot invite yourself!");
                     return;
                 }
-                if(p == null || p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level || !p.getLocation().inDungeonLobby()) {
+                if(p == null || p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level || !p.getPosition().inDungeonLobby()) {
                     player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
                     break;
                 }

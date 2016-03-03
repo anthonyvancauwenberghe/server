@@ -7,7 +7,6 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
-import java.security.acl.Owner;
 import java.util.Arrays;
 
 /**
@@ -46,7 +45,7 @@ public class Bank {
     public static void open(Player player, boolean setPin) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
             if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                if (player.getLocation().inPvPArea()) {
+                if (player.getPosition().inPvPArea()) {
                     return;
                 }
                 if (!ItemSpawning.canSpawn(player)) {
@@ -108,7 +107,7 @@ public class Bank {
                 if (!ItemSpawning.canSpawn(player)) {
                     return;
                 }
-                if (player.isInCombat() || player.getLocation().inPvPArea()) {
+                if (player.isInCombat() || player.getPosition().inPvPArea()) {
                     player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
                     return;
                 }
@@ -197,11 +196,11 @@ public class Bank {
                                Container container, boolean inventory, boolean refresh) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
             if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                if (player.getLocation().inPvPArea())
+                if (player.getPosition().inPvPArea())
                     return;
                 if (slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
                     return;
-                if (Location.inAttackableArea(player))
+                if (Position.inAttackableArea(player))
                     return;
                 if (FightPits.inPits(player))
                     return;

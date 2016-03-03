@@ -26,10 +26,10 @@ public abstract class Entity {
 	/**
 	 */
 	//public static final Location DEFAULT_LOCATION = Location.create(2900 + ((int)Math.random()*100), 3300 + ((int)Math.random()*100), 0);//Location.create(3433, 2892, 0);
-	public static Location getDefaultLocation(String type) {
+	public static Position getDefaultLocation(String type) {
 		if(type.toLowerCase().contains("npc"))
-			return Location.create(0, 0, 0);
-		return Location.create(2795, 3321, 0);
+			return Position.create(0, 0, 0);
+		return Position.create(2795, 3321, 0);
 	}
 
 	/**
@@ -40,7 +40,7 @@ public abstract class Entity {
 	/**
 	 * The current location.
 	 */
-	private Location location;
+	private Position position;
 
 	/**
 	 * The entity's first stored hit for updates.
@@ -67,7 +67,7 @@ public abstract class Entity {
 	/**
 	 * The teleportation target.
 	 */
-	private Location teleportTarget = null;
+	private Position teleportTarget = null;
 
 	/**
 	 * The update flags.
@@ -117,7 +117,9 @@ public abstract class Entity {
 	/**
 	 * The last known map region.
 	 */
-	private Location lastKnownRegion = this.getLocation();
+	private Position lastKnownRegion = this.getPosition();
+
+	private Locations.Location location;
 
 	public CombatEntity cE = new CombatEntity((Entity) this);
 
@@ -153,7 +155,7 @@ public abstract class Entity {
 	/**
 	 * The face location.
 	 */
-	private Location face;
+	private Position face;
 
 	/**
 	 * Entity's combat aggressor state.
@@ -170,8 +172,9 @@ public abstract class Entity {
 	 */
 	public Entity() {
 		boolean player = this instanceof Player;
-		setLocation(getDefaultLocation(player ? "human" : "npc"));
-		this.lastKnownRegion = location;
+		setPosition(getDefaultLocation(player ? "human" : "npc"));
+		location = Locations.Location.getLocation(this);
+		this.lastKnownRegion = position;
 		if(player)
 			LoginDebugger.getDebugger().log("1.Made entity:");
 	}
@@ -278,10 +281,10 @@ public abstract class Entity {
 	/**
 	 * Makes this entity face a location.
 	 *
-	 * @param location The location to face.
+	 * @param position The location to face.
 	 */
-	public void face(Location location) {
-		this.face = location;
+	public void face(Position position) {
+		this.face = position;
 		this.updateFlags.flag(UpdateFlag.FACE_COORDINATE);
 	}
 
@@ -308,7 +311,7 @@ public abstract class Entity {
 	 * @return The face location, or <code>null</code> if the entity is not
 	 * facing.
 	 */
-	public Location getFaceLocation() {
+	public Position getFaceLocation() {
 		return face;
 	}
 
@@ -319,6 +322,14 @@ public abstract class Entity {
 	 */
 	public boolean isInteracting() {
 		return interactingEntity != null;
+	}
+
+	public Locations.Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Locations.Location location) {
+		this.location = location;
 	}
 
 	/**
@@ -415,14 +426,14 @@ public abstract class Entity {
 
 	public void vacateSquare() {
 		getWalkingQueue().reset();
-		if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX() - 1, location.getY(), 0)) {
-			getWalkingQueue().addStep(location.getX() - 1, location.getY());
-		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX() + 1, location.getY(), 0)) {
-			getWalkingQueue().addStep(location.getX() + 1, location.getY());
-		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() - 1, 0)) {
-			getWalkingQueue().addStep(location.getX(), location.getY() - 1);
-		} else if(WorldMap.checkPos(location.getZ(), location.getX(), location.getY(), location.getX(), location.getY() + 1, 0)) {
-			getWalkingQueue().addStep(location.getX(), location.getY() + 1);
+		if(WorldMap.checkPos(position.getZ(), position.getX(), position.getY(), position.getX() - 1, position.getY(), 0)) {
+			getWalkingQueue().addStep(position.getX() - 1, position.getY());
+		} else if(WorldMap.checkPos(position.getZ(), position.getX(), position.getY(), position.getX() + 1, position.getY(), 0)) {
+			getWalkingQueue().addStep(position.getX() + 1, position.getY());
+		} else if(WorldMap.checkPos(position.getZ(), position.getX(), position.getY(), position.getX(), position.getY() - 1, 0)) {
+			getWalkingQueue().addStep(position.getX(), position.getY() - 1);
+		} else if(WorldMap.checkPos(position.getZ(), position.getX(), position.getY(), position.getX(), position.getY() + 1, 0)) {
+			getWalkingQueue().addStep(position.getX(), position.getY() + 1);
 		}
 		getWalkingQueue().finish();
 	}
@@ -441,7 +452,7 @@ public abstract class Entity {
 	 *
 	 * @param lastKnownRegion The last known map region.
 	 */
-	public void setLastKnownRegion(Location lastKnownRegion) {
+	public void setLastKnownRegion(Position lastKnownRegion) {
 		this.lastKnownRegion = lastKnownRegion;
 	}
 
@@ -450,7 +461,7 @@ public abstract class Entity {
 	 *
 	 * @return The last known map region.
 	 */
-	public Location getLastKnownRegion() {
+	public Position getLastKnownRegion() {
 		return lastKnownRegion;
 	}
 
@@ -486,15 +497,15 @@ public abstract class Entity {
 	 *
 	 * @return The teleport target.
 	 */
-	public Location getTeleportTarget() {
+	public Position getTeleportTarget() {
 		return teleportTarget;
 	}
 
-	public void setTeleportTarget(Location teleportTarget) {
+	public void setTeleportTarget(Position teleportTarget) {
 		setTeleportTarget(teleportTarget, true, true);
 	}
 
-	public void setTeleportTarget(Location teleportTarget, boolean deathCheck) {
+	public void setTeleportTarget(Position teleportTarget, boolean deathCheck) {
 		setTeleportTarget(teleportTarget, true, deathCheck);
 	}
 
@@ -503,7 +514,7 @@ public abstract class Entity {
 	 *
 	 * @param teleportTarget The target location.
 	 */
-	public void setTeleportTarget(Location teleportTarget, boolean resetDuel, boolean deathCheck) {
+	public void setTeleportTarget(Position teleportTarget, boolean resetDuel, boolean deathCheck) {
 		this.teleportTarget = teleportTarget;
 		if(this instanceof Player) {
 			Player player = (Player) this;
@@ -634,12 +645,12 @@ public abstract class Entity {
 	/**
 	 * Sets the current location.
 	 *
-	 * @param location The current location.
+	 * @param position The current location.
 	 */
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setPosition(Position position) {
+		this.position = position;
 
-		Region newRegion = RegionManager.getRegionByLocation(location);
+		Region newRegion = RegionManager.getRegionByLocation(position);
 		if(newRegion != currentRegion) {
 			if(currentRegion != null) {
 				removeFromRegion(currentRegion);
@@ -689,8 +700,8 @@ public abstract class Entity {
 	 *
 	 * @return The current location.
 	 */
-	public Location getLocation() {
-		return location;
+	public Position getPosition() {
+		return position;
 	}
 
 	/**

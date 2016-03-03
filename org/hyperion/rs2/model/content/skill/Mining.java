@@ -112,7 +112,7 @@ public class Mining implements ContentTemplate {
 				return true;
 			}
 			GameObject g = ObjectManager.getObjectAt(objectX, objectY,
-					player.getLocation().getZ());
+					player.getPosition().getZ());
 			if(g != null && g.getType() == EXPIRED_ORE) {
 				player.getActionSender().sendMessage(
 						"There is no ore currently available in this rock.");
@@ -128,7 +128,7 @@ public class Mining implements ContentTemplate {
 				@Override
 				public void execute() {
 					GameObject g = ObjectManager.getObjectAt(objectX, objectY,
-							player.getLocation().getZ());
+							player.getPosition().getZ());
 
 
 					if(! player.isBusy()) {
@@ -161,9 +161,9 @@ public class Mining implements ContentTemplate {
 
 							if(objectID != 2491) {
 								stop2();
-								if(Edgeville.LOCATION.distance(Location.create(objectX, objectY, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(objectX, objectY, 0)) > 70) {
-									final GameObject expired = new GameObject(GameObjectDefinition.forId(EXPIRED_ORE), Location.create(objectX, objectY, player.getLocation().getZ()), 10, 0);
-									final GameObject normal = new GameObject(GameObjectDefinition.forId(objectID), Location.create(objectX, objectY, player.getLocation().getZ()), 10, 0);
+								if(Edgeville.POSITION.distance(Position.create(objectX, objectY, 0)) > 50 && Position.create(3370, 3240, 0).distance(Position.create(objectX, objectY, 0)) > 70) {
+									final GameObject expired = new GameObject(GameObjectDefinition.forId(EXPIRED_ORE), Position.create(objectX, objectY, player.getPosition().getZ()), 10, 0);
+									final GameObject normal = new GameObject(GameObjectDefinition.forId(objectID), Position.create(objectX, objectY, player.getPosition().getZ()), 10, 0);
 
 									ContentEntity.startAnimation(player, - 1);
 									ObjectManager.addObject(expired);
@@ -338,7 +338,7 @@ public class Mining implements ContentTemplate {
 				return false;
 		}
 		if(id == 1755) {
-			client.setTeleportTarget(Location.create(client.getLocation().getX(), client.getLocation().getY() - 6400, 0));
+			client.setTeleportTarget(Position.create(client.getPosition().getX(), client.getPosition().getY() - 6400, 0));
 			return true;
 		}
 		if(id == 2113) {
@@ -346,7 +346,7 @@ public class Mining implements ContentTemplate {
 				ContentEntity.sendMessage(client, "You need 60 mining to enter the guild.");
 				return true;
 			}
-			client.setTeleportTarget(Location.create(client.getLocation().getX(), client.getLocation().getY() + 6400, 0));
+			client.setTeleportTarget(Position.create(client.getPosition().getX(), client.getPosition().getY() + 6400, 0));
 			return true;
 		}
 		if(type == 6)

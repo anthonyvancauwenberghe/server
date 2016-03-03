@@ -29,9 +29,9 @@ public class LocationConstraint implements Constraint{
     }
 
     public boolean constrained(final Player player){
-        final int x = player.getLocation().getX();
-        final int y = player.getLocation().getY();
-        return (height == -1 || player.getLocation().getZ() == height)
+        final int x = player.getPosition().getX();
+        final int y = player.getPosition().getY();
+        return (height == -1 || player.getPosition().getZ() == height)
                 && x >= minX && y >= minY
                 && x <= maxX && y <= maxY;
     }

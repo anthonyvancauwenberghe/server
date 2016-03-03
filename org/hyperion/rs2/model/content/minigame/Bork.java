@@ -23,13 +23,13 @@ import java.util.concurrent.TimeUnit;
  * Time: 8:15 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Bork  {
+public class Bork {
 
     private static final String KEY = "borkevent";
     private static final String TIME_KEY = "borktime";
 
-    private static final Location TELEPORT_LOCATION = Location.create(3555, 9947, 0);
-    private static final Location BORK_LOCATION = Location.create(3564, 9959, 0);
+    private static final Position TELEPORT_POSITION = Position.create(3555, 9947, 0);
+    private static final Position BORK_POSITION = Position.create(3564, 9959, 0);
     private static final Point[] MINION_LOCATIONS = {
             new Point(3551, 9938), new Point(3563, 9941), new Point(3547, 9957)
     };
@@ -40,7 +40,6 @@ public class Bork  {
 
     static {
         CommandHandler.submit(new Command("bork", Rank.PLAYER) {
-
             public boolean execute(final Player player, final String input) {
                 long delay;
                 if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
@@ -58,7 +57,7 @@ public class Bork  {
                 }
 
                 final int height = player.getIndex() * 4;
-                Magic.teleport(player, TELEPORT_LOCATION.transform(0, 0, height), false);
+                Magic.teleport(player, TELEPORT_POSITION.transform(0, 0, height), false);
 
                 World.submit(new BorkEvent(player));
                 return true;
@@ -102,9 +101,9 @@ public class Bork  {
             //for(; i < CHILD_IDS.length; i++)
                 //player.getActionSender().sendString(CHILD_IDS[i], "");
             final int height = player.getIndex() * 4;
-            npcs.add(NPCManager.addNPC(BORK_LOCATION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1));
+            npcs.add(NPCManager.addNPC(BORK_POSITION.transform(0, 0, height),BorkAndMinions.BORK_ID, -1));
             for(int i = 0; i<3; i++)
-                npcs.add(NPCManager.addNPC(Location.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1));
+                npcs.add(NPCManager.addNPC(Position.create(MINION_LOCATIONS[i].x, MINION_LOCATIONS[i].y, height), BorkAndMinions.MINION_ID, -1));
 
 
         }
@@ -173,7 +172,7 @@ public class Bork  {
         }
         ((BorkEvent)player.getExtraData().get(KEY)).giveReward(false);
         ((BorkEvent)player.getExtraData().get(KEY)).stop();
-        player.setTeleportTarget(Edgeville.LOCATION, false);
+        player.setTeleportTarget(Edgeville.POSITION, false);
         return true;
     }
 
@@ -183,7 +182,7 @@ public class Bork  {
         }
         ((BorkEvent)player.getExtraData().get(KEY)).giveReward(true);
         ((BorkEvent)player.getExtraData().get(KEY)).stop();
-        player.setTeleportTarget(Edgeville.LOCATION, false);
+        player.setTeleportTarget(Edgeville.POSITION, false);
         return true;
 
     }

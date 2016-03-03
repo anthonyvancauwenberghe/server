@@ -1,8 +1,8 @@
 package org.hyperion.engine.task.impl;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.util.Time;
@@ -39,13 +39,13 @@ public class OverloadStatsTask extends Task {
 		 */
 		public static int getBoost(Player player, int skillId) {
 			double boostPercentage = 0;
-			if(Location.inAttackableArea(player))
+			if(Position.inAttackableArea(player))
 				boostPercentage = .15;
 			else
 				boostPercentage = MELEE_PERCENTAGE_BOOST;
 			int bonus = MELEE_BONUS;
 			if(skillId == Skills.RANGED) {
-				if(!Location.inAttackableArea(player))
+				if(!Position.inAttackableArea(player))
 					boostPercentage = NON_MELEE_PERCENTAGE_BOOST;
 				else
 					boostPercentage = .08;

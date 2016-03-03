@@ -1349,7 +1349,7 @@ public class CombatAssistant {
 						proj, startHeight, endHeight, hitId, time, slope);
 		if(weaponId != 4212)
 		Combat.removeArrow(combatEntity.getPlayer(), bowType, combatEntity
-				.getOpponent().getEntity().getLocation());
+				.getOpponent().getEntity().getPosition());
 	}
 
 }

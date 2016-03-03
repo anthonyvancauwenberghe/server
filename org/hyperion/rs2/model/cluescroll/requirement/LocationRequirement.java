@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.cluescroll.requirement;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.cluescroll.util.ClueScrollUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,7 +44,7 @@ public class LocationRequirement extends Requirement{
     }
 
     public boolean apply(final Player player){
-        return player.getLocation().equals(Location.create(x, y, z != -1 ? z : player.getLocation().getZ()));
+        return player.getPosition().equals(Position.create(x, y, z != -1 ? z : player.getPosition().getZ()));
     }
 
     protected void append(final Document doc, final Element root){

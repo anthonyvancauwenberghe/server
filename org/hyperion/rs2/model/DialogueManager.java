@@ -1012,7 +1012,7 @@ public class DialogueManager {
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 154:
-                Magic.teleport(player, Location.create(2594, 3156, 0), false);
+                Magic.teleport(player, Position.create(2594, 3156, 0), false);
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 155:
@@ -1054,7 +1054,7 @@ public class DialogueManager {
 				}
 				break;
 			case 158:
-				Magic.teleport(player, Location.create(2373, 4972, 0), false, false);
+				Magic.teleport(player, Position.create(2373, 4972, 0), false, false);
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 161:
@@ -1143,9 +1143,9 @@ public class DialogueManager {
 			case 173:
 				final Player opp = player.getBountyHunter().getTarget();
 				if(opp != null) {
-					final int x = opp.getLocation().getX();
-					final int y = opp.getLocation().getY();
-                    TeleTabs.TeleTab(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), 18806);
+					final int x = opp.getPosition().getX();
+					final int y = opp.getPosition().getY();
+                    TeleTabs.TeleTab(player, opp.getPosition().getX(), opp.getPosition().getY(), opp.getPosition().getZ(), 18806);
                 }
 				break;
             case 174:
@@ -1262,7 +1262,7 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
 			case 195:
-				Magic.teleport(player, Location.create(2975, 3745, 0), false);
+				Magic.teleport(player, Position.create(2975, 3745, 0), false);
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 196:
@@ -1271,7 +1271,7 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
 			case 197:
-				Magic.teleport(player, Location.create(2979, 3613, 0), false);
+				Magic.teleport(player, Position.create(2979, 3613, 0), false);
 				player.getActionSender().removeChatboxInterface();
 				break;
 			case 198:

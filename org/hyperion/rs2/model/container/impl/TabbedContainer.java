@@ -75,9 +75,10 @@ public class TabbedContainer extends Container {
     }
 
     public synchronized boolean insert(final BankItem bankItem, int slot) {
+        player.getBankField().calculateTabAmounts();
         if(slot == -1 && size() == Bank.SIZE)
             return false;
-        int tabAmount = player.getBankField().getTabAmounts()[bankItem.getTabIndex()];
+        int tabAmount = player.getBankField().getTabAmountsLight()[bankItem.getTabIndex()];
         if(tabAmount >= 350)
             return false;
         if(slot == -1) {

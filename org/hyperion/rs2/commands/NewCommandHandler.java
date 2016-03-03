@@ -249,7 +249,7 @@ public final class NewCommandHandler {
                         return true;
                     }
                 },
-                new NewCommand("getpass", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                new NewCommand("spece", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];

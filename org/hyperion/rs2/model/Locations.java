@@ -30,10 +30,9 @@ public class Locations {
     /**
      * To add a new location;
      * Take the BOTTOM LEFT and the TOP RIGHT corner
-     * Add the bottom left x to the x int
-     * Add the bottom left y to the y int
-     * Add the top right x to the x int
-     * Add the top right y to the y int
+     *
+     * ADD Coordinates bottom left corner
+     * ADD Coordinates top right corner
      *
      * THIS CAN INCLUDE MORE SQUARES THAN JUST ONE. SIMPLY ADD ANOTHER ONE
      * AFTER THE FIRST 2 NUMBERS. SQUARES CAN OVERLAP

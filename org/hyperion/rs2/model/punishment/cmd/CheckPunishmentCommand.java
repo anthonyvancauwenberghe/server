@@ -30,51 +30,47 @@ public class CheckPunishmentCommand extends NewCommand {
         final Player target = World.getPlayerByName(targetName);
         final List<Punishment> punishments = new ArrayList<>();
 
-        final String ip = GameEngine.submitIO(new EngineTask<String>("Loading IP for player " + targetName, 4, TimeUnit.SECONDS) {
+        player.sendMessage("Loading punishments, please be patient...");
+        GameEngine.submitLogic(new EngineTask<Boolean>("Load punishment", 8, TimeUnit.SECONDS) {
             @Override
-            public String call() throws Exception {
+            public Boolean call() throws Exception {
                 Optional<JsonElement> playerIp = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
-                if(playerIp.isPresent())
-                    return playerIp.get().getAsString();
-                return "";
-            }
-        }).get();
+                final String ip = playerIp.isPresent() ? playerIp.get().getAsString() : "";
 
-        final int uid = GameEngine.submitIO(new EngineTask<Integer>("Loading MAC for player " + targetName, 4, TimeUnit.SECONDS) {
-            @Override
-            public Integer call() throws Exception {
                 Optional<JsonElement> playerMac = PlayerLoading.getProperty(input[0], IOData.LAST_MAC);
-                if(playerMac.isPresent())
-                    return playerMac.get().getAsInt();
-                return -1;
-            }
-        }).get();
+                final int uid = playerMac.isPresent() ? playerMac.get().getAsInt() : -1;
 
-        for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
-            for(final Punishment p : h.getPunishments()){
-                if(p.getTime().isExpired())
-                    continue;
-                if(p.getVictimName().equalsIgnoreCase(targetName)){
-                    punishments.add(p);
-                    continue;
+                for(final PunishmentHolder h : PunishmentManager.getInstance().getHolders()){
+                    for(final Punishment p : h.getPunishments()){
+                        if(p.getTime().isExpired())
+                            continue;
+                        if(p.getVictimName().equalsIgnoreCase(targetName)){
+                            punishments.add(p);
+                            continue;
+                        }
+                        if(target != null) {
+                            if(Objects.equals(target.getShortIP(), p.getVictimIp()) || target.getUID() == p.getVictimMac() || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
+                                punishments.add(p);
+                        } else {
+                            if(Objects.equals(ip, p.getVictimIp()) || uid == p.getVictimMac())
+                                punishments.add(p);
+                        }
+                    }
                 }
-                if(target != null) {
-                    if(Objects.equals(target.getShortIP(), p.getVictimIp())
-                            || target.getUID() == p.getVictimMac()
-                            || Arrays.equals(target.specialUid, p.getVictimSpecialUid()))
-                        punishments.add(p);
-                } else {
-                    if(Objects.equals(ip, p.getVictimIp()) || uid == p.getVictimMac())
-                        punishments.add(p);
+                if(punishments.isEmpty()){
+                    player.sendf("%s is not punished", Misc.ucFirst(targetName.toLowerCase()));
+                    return true;
                 }
+                for(final Punishment p : punishments)
+                    p.send(player, false);
+                return true;
             }
-        }
-        if(punishments.isEmpty()){
-            player.sendf("%s is not punished", Misc.ucFirst(targetName.toLowerCase()));
-            return true;
-        }
-        for(final Punishment p : punishments)
-            p.send(player, false);
+
+            @Override
+            public void stopTask() {
+                player.sendMessage("Task timed out... Please try again at a later time.");
+            }
+        });
         return true;
     }
 }

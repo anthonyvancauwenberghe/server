@@ -53,12 +53,10 @@ public enum Type {
         }
 
         public boolean isApplied(final Player player){
-            //empty impl
             return true;
         }
 
         public void unapply(final Player player){
-            //empty implementation
         }
     },
     WILDY_FORBID{

@@ -1,8 +1,9 @@
 package org.hyperion.engine.task.impl;
 
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
@@ -67,11 +68,10 @@ public class PlayerDeathTask extends Task {
 			switch(timer) {
 				case 2:
 					startDeath();
-					//PlayerSaving.save(player);
 					break;
 				case 9:
 					resetPlayer();
-					Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("saving player", false) {
+					GameEngine.submitIO(new EngineTask<Boolean>("saving player", false) {
 						@Override
 						public Boolean call() throws Exception {
 							PlayerSaving.setSaving(player);
@@ -83,7 +83,6 @@ public class PlayerDeathTask extends Task {
 				case 11:
 					player.playAnimation(Animation.create(- 1, 0));
 					player.setDead(false);
-					//PlayerSaving.save(player);
 					this.stop();
 					break;
 			}
@@ -106,9 +105,15 @@ public class PlayerDeathTask extends Task {
 	private void resetPlayer() {
 		player.playAnimation(Animation.create(- 1, 0));
 		player.getCombat().setOpponent(null);
-		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
-			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
-		}
+		TaskManager.submit(new Task(200, "reset skills after death") {
+			@Override
+			protected void execute() {
+				stop();
+				for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
+					player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
+				}
+			}
+		});
 		if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 120000) {
 			player.getSpecBar().setAmount(SpecialBar.FULL);
 			player.getExtraData().put("lastdeath", System.currentTimeMillis());

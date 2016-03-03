@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
@@ -95,7 +95,7 @@ public class EntityHandler {
         /**
          * Here we actually start loading the player completely
          */
-        Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("Fully load player", false) {
+        GameEngine.submitIO(new EngineTask<Boolean>("Fully load player", false) {
             @Override
             public Boolean call() throws Exception {
                 return PlayerLoading.loadPlayer(player, PlayerLoading.LoadingType.NON_PRIORITY_ONLY);
@@ -355,7 +355,7 @@ public class EntityHandler {
         player.getInterfaceState().resetContainers();
         player.isHidden(true);
         HostGateway.exit(player.getShortIP());
-        Server.getLoader().getEngine().submitIO(new EngineTask("Saving player " + player.getName() + " on logout", false) {
+        GameEngine.submitIO(new EngineTask("Saving player " + player.getName() + " on logout", false) {
             @Override
             public Boolean call() throws Exception {
                 PlayerSaving.setSaving(player);

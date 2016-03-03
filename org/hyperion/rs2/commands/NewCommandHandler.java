@@ -176,7 +176,7 @@ public final class NewCommandHandler {
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
                         player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s ip address... Please be patient.");
-                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 1, TimeUnit.SECONDS) {
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 4, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
@@ -215,7 +215,7 @@ public final class NewCommandHandler {
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
                         player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s e-mail... Please be patient.");
-                        GameEngine.submitIO(new EngineTask<Boolean>("Get player email", 1, TimeUnit.SECONDS) {
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player email", 4, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
@@ -260,7 +260,7 @@ public final class NewCommandHandler {
                             return true;
                         }
                         player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s password... Please be patient.");
-                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 2, TimeUnit.SECONDS) {
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 4, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);

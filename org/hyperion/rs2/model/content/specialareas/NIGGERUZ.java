@@ -47,14 +47,6 @@ public abstract class NIGGERUZ extends SpecialArea {
     }
 
     public void initObjects(final List<GameObject> manager) {
-        for(int i = 4680; i <= 4711; i++) {
-            if(i == 4696 || i == 4697) continue;
-            manager.add(new GameObject(DEFINITION, Position.create(2261, i, height), 10, 1, false));
-        }
-
-        manager.add(new GameObject(GameObjectDefinition.forId(6951), Position.create(2271, 4680, height), 4, 0, false));
-
-
     }
 
     public void initNpc(final Map positionMap) {

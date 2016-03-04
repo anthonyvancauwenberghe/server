@@ -36,7 +36,7 @@ public class OSPK extends NIGGERUZ {
 		return "";
 	}
 	
-	private static LinkedList<Integer> exceptions = new LinkedList<Integer>(Arrays.asList(13351));
+	private static LinkedList<Integer> exceptions = new LinkedList<>(Arrays.asList(13351));
 
 	private static boolean valid(int id) {
 		return id < 12000 || exceptions.contains(id);

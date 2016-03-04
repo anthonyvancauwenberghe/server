@@ -252,14 +252,12 @@ public class DoorManager {
 	 * Use this when we're reloading the map region.
 	 */
 	public static void refresh(Player player) {
-		for(Door door : doors.values()) {
-			if(player.getPosition().isWithinDistance(door.getClosedLocation())) {
-				if(door.isOpen())
-					player.getActionSender().sendCreateObject(door.getOpenId(), 0, door.getOpenFace(), door.getOpenLocation());
-				else
-					player.getActionSender().sendCreateObject(door.getClosedId(), 0, door.getClosedFace(), door.getClosedLocation());
-			}
-		}
+		doors.values().stream().filter(door -> player.getPosition().isWithinDistance(door.getClosedLocation())).forEach(door -> {
+			if (door.isOpen())
+				player.getActionSender().sendCreateObject(door.getOpenId(), 0, door.getOpenFace(), door.getOpenLocation());
+			else
+				player.getActionSender().sendCreateObject(door.getClosedId(), 0, door.getClosedFace(), door.getClosedLocation());
+		});
 	}
 
 	private static Map<Position, Door> doors = new HashMap<Position, Door>();

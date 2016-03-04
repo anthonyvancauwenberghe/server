@@ -1,70 +1,10 @@
 package org.hyperion.rs2.commands;
 
-import org.hyperion.Configuration;
-import org.hyperion.Server;
-import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.impl.*;
 import org.hyperion.rs2.logging.FileLogging;
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.challenge.cmd.CreateChallengeCommand;
-import org.hyperion.rs2.model.challenge.cmd.ViewChallengesCommand;
-import org.hyperion.rs2.model.color.Color;
-import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.Container;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.container.bank.Bank;
-import org.hyperion.rs2.model.container.bank.BankItem;
-import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.ContentManager;
-import org.hyperion.rs2.model.content.Events;
-import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.jge.JGrandExchange;
-import org.hyperion.rs2.model.content.jge.entry.Entry;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc.PotionDecanting;
-import org.hyperion.rs2.model.content.misc.RandomSpamming;
-import org.hyperion.rs2.model.content.misc.SpawnServerCommands;
-import org.hyperion.rs2.model.content.misc.Tutorial;
-import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.model.content.misc2.Jail;
-import org.hyperion.rs2.model.content.publicevent.EventCountdownTask;
-import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
-import org.hyperion.rs2.model.content.skill.HunterLooting;
-import org.hyperion.rs2.model.content.skill.Prayer;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.model.customtrivia.cmd.AnswerCustomTriviaCommand;
-import org.hyperion.rs2.model.customtrivia.cmd.CreateCustomTriviaCommand;
-import org.hyperion.rs2.model.customtrivia.cmd.ViewCustomTriviaCommand;
-import org.hyperion.rs2.model.iteminfo.ItemInfo;
-import org.hyperion.rs2.model.itf.InterfaceManager;
-import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
-import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
-import org.hyperion.rs2.model.log.cmd.ClearLogsCommand;
-import org.hyperion.rs2.model.log.cmd.ViewLogStatsCommand;
-import org.hyperion.rs2.model.log.cmd.ViewLogsCommand;
-import org.hyperion.rs2.model.punishment.Target;
-import org.hyperion.rs2.model.punishment.Type;
-import org.hyperion.rs2.model.punishment.cmd.*;
-import org.hyperion.rs2.model.recolor.cmd.RecolorCommand;
-import org.hyperion.rs2.model.recolor.cmd.UncolorAllCommand;
-import org.hyperion.rs2.model.recolor.cmd.UncolorCommand;
-import org.hyperion.rs2.model.recolor.cmd.ViewRecolorsCommand;
-import org.hyperion.rs2.net.ActionSender;
-import org.hyperion.rs2.packet.CommandPacketHandler;
-import org.hyperion.rs2.pf.Tile;
-import org.hyperion.rs2.pf.TileMap;
-import org.hyperion.rs2.pf.TileMapBuilder;
-import org.hyperion.rs2.saving.PlayerLoading;
-import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.*;
+import java.util.HashMap;
 
 /**
  * @author Jack Daniels.
@@ -124,7 +64,7 @@ public class CommandHandler {
 	 * Store all commands here.
 	 */
 	static {
-		SpawnServerCommands.init();
+		/*SpawnServerCommands.init();
 		TeleportCommands.init();
 		submit(new AllToMeCommand("alltome", Rank.DEVELOPER));
 		submit(new GiveDonatorPointsCommand("givedp"));
@@ -141,8 +81,8 @@ public class CommandHandler {
 		submit(new RestartServerCommand());
         submit(new WikiCommand());
 		submit(new SpawnCommand("item"), new SpawnCommand("pickup"), new SpawnCommand("spawn"));
-		submit(new KeywordCommand("setkeyword"));
-        submit(new Command("dp", Rank.DONATOR) {
+		submit(new KeywordCommand("setkeyword"));*/
+        /*submit(new Command("dp", Rank.DONATOR) {
             @Override
             public boolean execute(Player player, String input) throws Exception {
                 DialogueManager.openDialogue(player, 158);
@@ -218,11 +158,9 @@ public class CommandHandler {
                 LastManStanding.getLastManStanding().loadTopTenInterface(player);
                 return true;
             }
-        });
+        });*/
 
-    /* End of deleting commands */
-
-        submit(new Command("disableprofile", Rank.PLAYER) {
+        /*submit(new Command("disableprofile", Rank.PLAYER) {
             @Override
             public boolean execute(final Player player, final String input) {
                 final boolean set;
@@ -231,7 +169,7 @@ public class CommandHandler {
                 return true;
             }
         });
-        /*
+
 
 
             if (commandStart.equalsIgnoreCase("changeclanname")) {
@@ -245,7 +183,7 @@ public class CommandHandler {
 
             }
          */
-		submit(new Command("ks", Rank.PLAYER) {
+		/*submit(new Command("ks", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) throws Exception {
 				player.getActionSender().sendMessage("You are on a @red@" + player.getKillStreak() + "@bla@ killstreak!");
@@ -296,7 +234,7 @@ public class CommandHandler {
             }
         });
 
-		/*submit(new Command("getpass", Rank.DEVELOPER) {
+		submit(new Command("getpass", Rank.DEVELOPER) {
 			@Override
 			public boolean execute(Player player, String input) {
 				if(Rank.hasAbility(player, Rank.DEVELOPER)) {
@@ -320,7 +258,7 @@ public class CommandHandler {
 
 		});
 		*/
-        submit(new Command("tmask", Rank.ADMINISTRATOR) {
+        /*submit(new Command("tmask", Rank.ADMINISTRATOR) {
 			@Override
 			public boolean execute(Player player, String input) {
 				int l2 = 0;
@@ -382,6 +320,7 @@ public class CommandHandler {
 				int[] parts = getIntArray(input);
 				NPCManager.addNPC(player.getLocation(),
 						parts[0], -1);
+						//not gonna add this :x
 				return true;
 			}
 		});
@@ -830,7 +769,7 @@ public class CommandHandler {
 			}
 		});
 
-        submit(new Command("checkpts", Rank.MODERATOR){
+        ubmit(new Command("checkpts", Rank.MODERATOR){
             public boolean execute(final Player player, final String input){
                 final Player target = World.getPlayerByName(filterInput(input));
                 if(target == null)
@@ -994,10 +933,10 @@ public class CommandHandler {
 				player.getActionSender().sendMessage("playersend");
 				return true;
 			}
-		});
-        submit(new VoteCommand());
+		});*/
+        //submit(new VoteCommand());
 
-        submit(new Command("onlinealtsbypass", Rank.DEVELOPER) {
+        /*submit(new Command("onlinealtsbypass", Rank.DEVELOPER) {
 			public boolean execute(final Player player, final String input) {
 				final String pass = filterInput(input);
 				if (pass.isEmpty())
@@ -1007,11 +946,11 @@ public class CommandHandler {
 						player.sendf("%s at %d,%d (PvP Area: %s)", p.getName(), p.getLocation().getX(), p.getLocation().getY(), p.getLocation().inPvPArea());
 				return true;
 			}
-		});
+		});*/
 
-        submit(new ViewPacketActivityCommand());
+        //submit(new ViewPacketActivityCommand());
 
-        submit(new Command("viewprofile", Rank.PLAYER) {
+        /*submit(new Command("viewprofile", Rank.PLAYER) {
 			public boolean execute(final Player player, final String input) {
 				final String targetName = filterInput(input).trim();
 				try {
@@ -1155,7 +1094,7 @@ public class CommandHandler {
 									  }
 									  return false;
 								  }
-							  },
+							  });,
 				new Command("removeevent", Rank.MODERATOR) {
 					@Override
 					public boolean execute(Player player, String input) throws Exception {
@@ -1167,11 +1106,11 @@ public class CommandHandler {
 						}
 						return true;
 					}
-				});
+				});*/
 
 
 
-        CommandHandler.submit(new PunishCommand("jail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
+        /*CommandHandler.submit(new PunishCommand("jail", Target.ACCOUNT, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new PunishCommand("ipjail", Target.IP, Type.JAIL, Rank.HELPER));
         CommandHandler.submit(new PunishCommand("macjail", Target.MAC, Type.JAIL, Rank.MODERATOR));
         CommandHandler.submit(new PunishCommand("suidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
@@ -1223,9 +1162,9 @@ public class CommandHandler {
 
         CommandHandler.submit(new ViewPunishmentsCommand());
         CommandHandler.submit(new MyPunishmentsCommand());
-        CommandHandler.submit(new RemovePunishmentCommand());
+        CommandHandler.submit(new RemovePunishmentCommand());*/
 
-        submit(new GiveIntCommand("givehp", Rank.DEVELOPER) {
+        /*submit(new GiveIntCommand("givehp", Rank.DEVELOPER) {
 			public void process(final Player player, final Player target, final int value) {
 				target.getPoints().setHonorPoints(target.getPoints().getHonorPoints() + value);
 				player.sendf("%s now has %,d honor pts", target.getName(), target.getPoints().getHonorPoints());
@@ -1380,7 +1319,7 @@ public class CommandHandler {
             }
         });
 
-		/*
+
         submit(new Command("rename", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String newName = filterInput(input).trim();
@@ -1410,7 +1349,7 @@ public class CommandHandler {
             }
         });
 		*/
-        submit(new Command("stafftome", Rank.DEVELOPER){
+        /*submit(new Command("stafftome", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 for(final Player p : World.getPlayers())
                     if(!player.equals(p) && Rank.isStaffMember(p))
@@ -1434,12 +1373,12 @@ public class CommandHandler {
                 Magic.teleport(target, Location.create(2607, 9672, 0), false);
                 return true;
             }
-        });
+        });*/
 
-        submit(new ViewChallengesCommand());
-        submit(new CreateChallengeCommand());
+        //submit(new ViewChallengesCommand());
+        //submit(new CreateChallengeCommand());
 
-		submit(new Command("a3place", Rank.MODERATOR){
+		/*submit(new Command("a3place", Rank.MODERATOR){
 			public boolean execute(final Player player, final String input){
 				Magic.teleport(player, 3108, 3159, 3, false);
 				return true;
@@ -1556,16 +1495,16 @@ public class CommandHandler {
                     return false;
                 }
             }
-        });
+        });*/
 
-        submit(new RecolorCommand());
-        submit(new UncolorCommand());
-        submit(new ViewRecolorsCommand());
-        submit(new UncolorAllCommand());
+        //submit(new RecolorCommand());
+        //submit(new UncolorCommand());
+        //submit(new ViewRecolorsCommand());
+        //submit(new UncolorAllCommand());
 
-        submit(new Command("buyshards", Rank.PLAYER){
+        /*submit(new Command("buyshards", Rank.PLAYER){
             public boolean execute(final Player player, final String input){
-                /*final String line = filterInput(input).trim();
+                final String line = filterInput(input).trim();
                 if(line.length() > 6){
                     player.sendf("You could only buy 999,999 at a time");
                     return false;
@@ -1591,7 +1530,7 @@ public class CommandHandler {
                     player.getActionSender().sendMessage("Error buying spirit shards: invalid amount.");
                     //wont print expection anymore
                     return false;
-                }    */
+                }
                 player.sendMessage("Spirit shard packs are available inside the emblem pt store");
                 return true;
             }
@@ -1637,13 +1576,13 @@ public class CommandHandler {
                 }
                 return true;
             }
-        });
+        });*/
 
-        submit(new ViewLogsCommand());
-        submit(new ViewLogStatsCommand());
-        submit(new ClearLogsCommand());
+        //submit(new ViewLogsCommand());
+        //submit(new ViewLogStatsCommand());
+        //submit(new ClearLogsCommand());
 
-        submit(new Command("checkmac", Rank.DEVELOPER){
+        /*submit(new Command("checkmac", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 try{
                     final int mac = Integer.parseInt(filterInput(input).trim());
@@ -1685,7 +1624,7 @@ public class CommandHandler {
             }
         });
 
-        /*submit(new Command("checkpass", Rank.DEVELOPER){
+        submit(new Command("checkpass", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 final String pass = filterInput(input).trim();
                 if(pass.isEmpty()){
@@ -1699,7 +1638,7 @@ public class CommandHandler {
             }
         });*/
 
-        submit(new Command("killplayer", Rank.DEVELOPER){
+        /*submit(new Command("killplayer", Rank.DEVELOPER){
             public boolean execute(final Player player, final String input){
                 String targetName = filterInput(input).trim();
                 boolean isInstant = false;
@@ -1959,7 +1898,7 @@ public class CommandHandler {
                 return false;
             }
         });
-/*
+
 		submit(new Command("lock", Rank.ADMINISTRATOR) {
             public boolean execute(final Player player, final String input) throws Exception {
                 final String targetName = filterInput(input).trim();
@@ -1979,7 +1918,7 @@ public class CommandHandler {
         });
 */
 
-		submit(new Command("reloadunspawnables", Rank.DEVELOPER){
+		/*submit(new Command("reloadunspawnables", Rank.DEVELOPER){
 			public boolean execute(final Player player, final String input) throws Exception{
 				if(ItemInfo.unspawnables.reload())
 					player.sendf("Reloaded %,d unspawnables", ItemInfo.unspawnables.size());
@@ -1997,13 +1936,13 @@ public class CommandHandler {
 					player.sendf("Error reloading untradeables");
 				return true;
 			}
-		});
+		});*/
 
-		submit(new ViewCustomTriviaCommand());
-		submit(new AnswerCustomTriviaCommand());
-		submit(new CreateCustomTriviaCommand());
+		//submit(new ViewCustomTriviaCommand());
+		//submit(new AnswerCustomTriviaCommand());
+		//submit(new CreateCustomTriviaCommand());
 
-		submit(new Command("rexec", Rank.DEVELOPER){
+		/*submit(new Command("rexec", Rank.DEVELOPER){
 			public boolean execute(final Player player, final String input) throws Exception{
 				final String[] args = filterInput(input).split(",");
 				if(args.length != 2){
@@ -2226,7 +2165,7 @@ public class CommandHandler {
 				player.cE.hit(player.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
 				return true;
 			}
-		});
+		});*/
 	}
 
 }

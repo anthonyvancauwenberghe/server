@@ -2,7 +2,7 @@ package org.hyperion.rs2.model.content.misc;
 
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.commands.impl.SkillSetCommand;
+import org.hyperion.rs2.commands.impl.cmd.SkillSetCommand;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.minigame.FightPits;
@@ -10,7 +10,7 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 public class SpawnServerCommands {
 
 	public static void init() {
-		SkillSetCommand.init();
+		SkillSetCommand.initiate();
 		CommandHandler.submit(new Command("max", Rank.PLAYER) {
 			@Override
 			public boolean execute(Player player, String input) {

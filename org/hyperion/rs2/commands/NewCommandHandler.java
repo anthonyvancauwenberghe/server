@@ -1,30 +1,38 @@
 package org.hyperion.rs2.commands;
 
-import com.google.gson.JsonElement;
-import org.hyperion.Server;
-import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.impl.CommandResult;
-import org.hyperion.rs2.commands.util.CommandInput;
+import org.hyperion.rs2.commands.newimpl.AdministratorCommands;
+import org.hyperion.rs2.commands.newimpl.CommunityManagerCommands;
+import org.hyperion.rs2.commands.newimpl.DeveloperCommands;
+import org.hyperion.rs2.commands.newimpl.DonatorCommands;
+import org.hyperion.rs2.commands.newimpl.EventManagerCommands;
+import org.hyperion.rs2.commands.newimpl.ForumModeratorCommands;
+import org.hyperion.rs2.commands.newimpl.GlobalModeratorCommands;
+import org.hyperion.rs2.commands.newimpl.HeadModeratorCommands;
+import org.hyperion.rs2.commands.newimpl.HelperCommands;
+import org.hyperion.rs2.commands.newimpl.HeroCommands;
+import org.hyperion.rs2.commands.newimpl.LegendCommands;
+import org.hyperion.rs2.commands.newimpl.ModeratorCommands;
+import org.hyperion.rs2.commands.newimpl.OwnerCommands;
+import org.hyperion.rs2.commands.newimpl.PlayerCommands;
+import org.hyperion.rs2.commands.newimpl.ServerCommands;
+import org.hyperion.rs2.commands.newimpl.SuperDonatorCommands;
+import org.hyperion.rs2.commands.newimpl.VeteranCommands;
+import org.hyperion.rs2.commands.newimpl.WikiEditorCommands;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.container.ShopManager;
-import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
-import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
-import org.hyperion.rs2.net.security.EncryptionStandard;
-import org.hyperion.rs2.saving.IOData;
-import org.hyperion.rs2.saving.PlayerLoading;
-import org.hyperion.rs2.util.TextUtils;
-import org.hyperion.util.Misc;
-import org.hyperion.util.Time;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by Gilles on 10/02/2016.
+ * Commands rewritten by DrHales
  */
 public final class NewCommandHandler {
 
@@ -43,6 +51,10 @@ public final class NewCommandHandler {
      */
     private final static HashMap<String, List<NewCommand>> COMMANDS = new HashMap<>();
 
+    public static HashMap<String, List<NewCommand>> getCommands() {
+        return COMMANDS;
+    }
+
     /**
      * This map keeps what command which player used. The CommandUsage keeps the time of it's creation,
      * therefor we can keep people from using commands multiple times in a certain time frame.
@@ -51,12 +63,50 @@ public final class NewCommandHandler {
     private final static HashMap<String, List<String>> COMMANDS_USED = new HashMap<>();
 
     /**
+     * Initializes the commands for specific groups. The groups are all defined in the
+     * COMMAND_TYPES array. Add a group to the COMMAND_TYPES array to make them initialize.
+     * Command groups must implement {@link NewCommandExtension}.
+     */
+    static {
+        long initial = System.currentTimeMillis();
+        final NewCommandExtension[] COMMAND_TYPES = {new ServerCommands(),
+                new PlayerCommands(),
+                new HeroCommands(),
+                new LegendCommands(),
+                new VeteranCommands(),
+                new DonatorCommands(),
+                new SuperDonatorCommands(),
+                new WikiEditorCommands(),
+                new EventManagerCommands(),
+                new HelperCommands(),
+                new ForumModeratorCommands(),
+                new ModeratorCommands(),
+                new GlobalModeratorCommands(),
+                new CommunityManagerCommands(),
+                new HeadModeratorCommands(),
+                new AdministratorCommands(),
+                new DeveloperCommands(),
+                new OwnerCommands()};
+        Arrays.stream(COMMAND_TYPES).map(NewCommandExtension::init).forEach(NewCommandHandler::submit);
+        System.out.println(String.format("%,d commands submitted in %,dms", COMMANDS.size(), System.currentTimeMillis() - initial));
+    }
+
+    /**
      * This class adds the submitted command to the map. It does this by submitting them one by one to a help method.
      *
      * @param commands The commands that need submitting.
      */
     public static void submit(NewCommand... commands) {
         Arrays.stream(commands).forEach(NewCommandHandler::submit);
+    }
+
+    /**
+     * This class adds the submitted command to the map. It does this by submitting them one by one to a help method.
+     *
+     * @param commands The commands that need submitting.
+     */
+    public static void submit(Collection<NewCommand> commands) {
+        commands.forEach(NewCommandHandler::submit);
     }
 
     /**
@@ -75,7 +125,7 @@ public final class NewCommandHandler {
             COMMANDS_USED.put(playerName, new ArrayList<>());
         COMMANDS_USED.get(playerName).add(commandUsed);
 
-        World.submit(new Task(delay, "newcommandhandler") {
+        World.submit(new Task(delay) {
             @Override
             public void execute() {
                 if (COMMANDS_USED.containsKey(playerName))
@@ -133,115 +183,8 @@ public final class NewCommandHandler {
             }
         }
         //If after trying neither of the commands worked (and they didn't give their individual message) we give them the possible inputs, but this time filtered.
-        player.sendMessage("The possible combinations for this command with " + parts.length + " arguments are: ");
+        player.sendf("The possible combinations for this command with %,d arguments are: ", parts.length);
         fittingCommands.forEach(command -> player.sendMessage(command.getModelInput()));
         return true;
-    }
-
-    /**
-     * SILY EXAMPLECOMMAND JUST TO GIVE YOU THE IDEA, REMOVE IT AFTER SEEING.
-     * ADD ALL COMMAND IN THIS STATIC METHOD TEMPORARILY, I'LL ADD A PROPER INITIALIZER LATER.
-     * ~ GLIS
-     */
-    static {
-        NewCommandHandler.submit(
-                new NewCommand("isonline", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        player.sendMessage("Player " + TextUtils.optimizeText(input[0]) + " is currently " + (World.getPlayerByName(input[0]) == null ? "offline" : "online"));
-                        return true;
-                    }
-                },
-                new NewCommand("shop", Rank.DEVELOPER, Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> integer >= 0, "ShopId", "The ID of the shop, has to be a positive number.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        ShopManager.open(player, Integer.parseInt(input[0]));
-                        return true;
-                    }
-                },
-                new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
-                        return true;
-                    }
-                },
-                new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
-                            player.sendMessage("Don't use the same password again!");
-                            return true;
-                        }
-                        TextUtils.writeToFile("./data/possiblehacks.txt", String.format("Player: %s Old password: %s New password: %s By IP: %s Date: %s", player.getName(), player.getPassword(), input[0], player.getShortIP(), new Date().toString()));
-                        player.setPassword(EncryptionStandard.encryptPassword(input[0].toLowerCase()));
-                        player.sendImportantMessage("Your password is now " + input[0].toLowerCase());
-                        player.getPermExtraData().put("passchange", System.currentTimeMillis());
-                        player.getExtraData().put("needpasschange", false);
-                        return true;
-                    }
-                },
-                new NewCommand("getip", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        String playerIp = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
-                            @Override
-                            public String call() throws Exception {
-                                Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
-                                if (playerIP.isPresent())
-                                    return playerIP.get().getAsString();
-                                return "";
-                            }
-                        }).get();
-                        if (!playerIp.isEmpty())
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s IP is '" + playerIp + "'");
-                        else
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded IP");
-                        return true;
-                    }
-                },
-                new NewCommand("getmail", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        String playerMail = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player email", 1, TimeUnit.SECONDS) {
-                            @Override
-                            public String call() throws Exception {
-                                Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
-                                if (playerEmail.isPresent())
-                                    return playerEmail.get().getAsString();
-                                return "";
-                            }
-                        }).get();
-
-                        if (!playerMail.isEmpty())
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s mail is '" + playerMail + "'");
-                        else
-                            player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded mail");
-                        return true;
-                    }
-                },
-                new NewCommand("getpass", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                            String targetName = input[0];
-                            String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
-                                @Override
-                                public String call() throws Exception {
-                                    Optional<JsonElement> playerIP = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
-                                    if(playerIP.isPresent())
-                                        return playerIP.get().getAsString();
-                                    return "";
-                                }
-                            }).get();
-                            if(password.isEmpty()) {
-                                player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
-                                return true;
-                            }
-                            player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(password) + "'.");
-                            return true;
-                    }
-                },
-                new CheckPunishmentCommand("checkpunish")
-        );
     }
 }

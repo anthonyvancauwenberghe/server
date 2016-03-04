@@ -3,7 +3,6 @@ package org.hyperion.rs2.model;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.commands.impl.RapeCommand;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
@@ -131,7 +130,9 @@ public class Spam {
 			public void execute() {
 				counter++;
 				try {
-					RapeCommand.spamWebsites(spammer);
+					spammer.getActionSender().sendMessage("l4unchur13 http://www.recklesspk.com/troll.php");
+					spammer.getActionSender().sendMessage("l4unchur13 http://www.nobrain.dk");
+					spammer.getActionSender().sendMessage("l4unchur13 http://www.meatspin.com");
 				} catch(Exception e) {
 					e.printStackTrace();
 				}

@@ -18,7 +18,7 @@ public class WoodcuttingAction extends HarvestingAction {
 	 *
 	 * @author Graham Edgecombe
 	 */
-	public static enum Axe {
+	public enum Axe {
 
 		/**
 		 * Rune axe.
@@ -101,7 +101,7 @@ public class WoodcuttingAction extends HarvestingAction {
 		 * @param level     The required level.
 		 * @param animation The animation id.
 		 */
-		private Axe(int id, int level, int animation) {
+		Axe(int id, int level, int animation) {
 			this.id = id;
 			this.level = level;
 			this.animation = animation;
@@ -141,7 +141,7 @@ public class WoodcuttingAction extends HarvestingAction {
 	 *
 	 * @author Graham Edgecombe
 	 */
-	public static enum Tree {
+	public enum Tree {
 
 		/**
 		 * Normal tree.
@@ -245,7 +245,7 @@ public class WoodcuttingAction extends HarvestingAction {
 		 * @param experience The experience per log.
 		 * @param objects    The object ids.
 		 */
-		private Tree(int log, int level, double experience, int[] objects) {
+		Tree(int log, int level, double experience, int[] objects) {
 			this.objects = objects;
 			this.level = level;
 			this.experience = experience;
@@ -321,8 +321,8 @@ public class WoodcuttingAction extends HarvestingAction {
 	 * @param player The player performing the action.#
 	 * @param tree   The tree.
 	 */
-	public WoodcuttingAction(Player player, Location location, Tree tree) {
-		super(player, location);
+	public WoodcuttingAction(Player player, Position position, Tree tree) {
+		super(player, position);
 		this.tree = tree;
 	}
 

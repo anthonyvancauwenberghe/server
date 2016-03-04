@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.skill.agility.obstacles;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.skill.agility.Course;
@@ -12,10 +12,10 @@ import org.hyperion.rs2.model.content.skill.agility.Obstacle;
  * Created by Gilles on 11/09/2015.
  */
 public class ObstaclePipe extends Obstacle {
-    private Location start,
+    private Position start,
             end;
 
-    public ObstaclePipe(int objectId, int skillXp, int levelReq, Location start, Location end, int failRate, Course course, int progress) {
+    public ObstaclePipe(int objectId, int skillXp, int levelReq, Position start, Position end, int failRate, Course course, int progress) {
         super(objectId, 844, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
@@ -23,7 +23,7 @@ public class ObstaclePipe extends Obstacle {
 
     @Override
     public boolean overCome(Player player) {
-        if(player.getLocation().getX() != start.getX() || player.getLocation().getY() != start.getY())
+        if(player.getPosition().getX() != start.getX() || player.getPosition().getY() != start.getY())
             return false;
         if(!super.overCome(player))
             return false;
@@ -76,7 +76,7 @@ public class ObstaclePipe extends Obstacle {
                             else
                                 coordY = end.getY() - 3;
                         }
-                        player.setTeleportTarget(Location.create(coordX, coordY, player.getLocation().getZ()));
+                        player.setTeleportTarget(Position.create(coordX, coordY, player.getPosition().getZ()));
                     }
                     else if(progress == 2 || progress == 1) {
                         player.getActionSender().forceMovement(end.getX(), end.getY(), animId);
@@ -97,7 +97,7 @@ public class ObstaclePipe extends Obstacle {
     @Override
     public void fail(Player player, int tick, String message) {
         super.fail(player, start.distance(end) + 1, message);
-        Location middle = Obstacle.calculateMiddle(start, end);
+        Position middle = Obstacle.calculateMiddle(start, end);
         player.getActionSender().forceMovement(middle.getX(), middle.getY(), animId);
     }
 

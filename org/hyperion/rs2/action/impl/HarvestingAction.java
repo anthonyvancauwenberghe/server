@@ -22,16 +22,16 @@ public abstract class HarvestingAction extends Action {
 	/**
 	 * The location.
 	 */
-	private Location location;
+	private Position position;
 
 	/**
 	 * Creates the harvesting action for the specified player.
 	 *
 	 * @param player The player to create the action for.
 	 */
-	public HarvestingAction(Player player, Location location) {
+	public HarvestingAction(Player player, Position position) {
 		super(player, 0);
-		this.location = location;
+		this.position = position;
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public abstract class HarvestingAction extends Action {
 			init();
 			if(this.isRunning()) {
 				player.playAnimation(getAnimation());
-				player.face(location);
+				player.face(position);
 			}
 			this.cycles = getCycles();
 			this.totalCycles = cycles;
@@ -161,7 +161,7 @@ public abstract class HarvestingAction extends Action {
 				stop();
 			} else {
 				player.playAnimation(getAnimation());
-				player.face(location);
+				player.face(position);
 			}
 		}
 	}

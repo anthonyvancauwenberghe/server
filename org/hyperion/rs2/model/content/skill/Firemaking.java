@@ -29,7 +29,7 @@ public class Firemaking implements ContentTemplate {
 			ContentEntity.sendMessage(player, "You need a tinderbox to light a fire.");
 			return;
 		}
-		if(fires.get(player.getLocation()) != null)
+		if(fires.get(player.getPosition()) != null)
 			return;
 		final Log log = logs.get(logId);
 		if(log == null)
@@ -62,7 +62,7 @@ public class Firemaking implements ContentTemplate {
 				}
 				ContentEntity.startAnimation(player, - 1);
 				player.getAchievementTracker().itemSkilled(Skills.FIREMAKING, logId, 1);
-				fires.put(player.getLocation(), new Fire(player.getLocation(), ContentEntity.random((log.timer))));
+				fires.put(player.getPosition(), new Fire(player.getPosition(), ContentEntity.random((log.timer))));
 				int obj = 2732;
 				if(logId == 1513) {
 					int r = ContentEntity.random(2);
@@ -74,7 +74,7 @@ public class Firemaking implements ContentTemplate {
 						obj = 11406;
 				}
 				ContentEntity.addSkillXP(player, log.xp * EXPMULTIPLIER, 11);
-				createObject(player.getLocation(), obj);
+				createObject(player.getPosition(), obj);
 				ContentEntity.sendMessage(player, "You light a fire.");
 				try {
 					player.vacateSquare();
@@ -83,7 +83,7 @@ public class Firemaking implements ContentTemplate {
 					this.stop();
 					return;
 				}
-				if(!player.getLocation().inDuel())
+				if(!player.getPosition().inDuel())
 				player.setBusy(false);
 				this.stop();
 			}
@@ -92,42 +92,42 @@ public class Firemaking implements ContentTemplate {
 
 	private void process() {
 		ArrayList<Fire> outFires = new ArrayList<Fire>();
-		for(Map.Entry<Location, Fire> entry : fires.entrySet()) {
+		for(Map.Entry<Position, Fire> entry : fires.entrySet()) {
 			Fire f = entry.getValue();
 			if(f.timer == 0) {
-				removeObject(f.location);
-				sendAshes(f.location);
+				removeObject(f.position);
+				sendAshes(f.position);
 				outFires.add(f);
 			} else
 				f.timer--;
 		}
 		for(Fire f : outFires) {
-			fires.remove(f.location);
+			fires.remove(f.position);
 		}
 		outFires.clear();
 	}
 
-	private void createObject(Location loc, int fire) {
+	private void createObject(Position loc, int fire) {
 		for(Player player : World.getPlayers()) {
 			player.getActionSender().sendCreateObject(fire, 10, 0, loc);
 		}
 	}
 
-	private void removeObject(Location loc) {
+	private void removeObject(Position loc) {
 		for(Player player : World.getPlayers()) {
 			if(player != null)
                 player.getActionSender().sendDestroyObject(10, 0, loc);
 		}
 	}
 
-	private void sendAshes(Location loc) {
+	private void sendAshes(Position loc) {
 		GlobalItem globalItem = new GlobalItem(null, loc, new Item(592, 1));
 		GlobalItemManager.addToItems(globalItem);
 		GlobalItemManager.createItem(globalItem);
 		globalItem.itemHidden = false;
 	}
 
-	private Map<Location, Fire> fires = new HashMap<Location, Fire>();
+	private Map<Position, Fire> fires = new HashMap<Position, Fire>();
 
 	private Map<Integer, Log> logs = new HashMap<Integer, Log>();
 
@@ -146,11 +146,11 @@ public class Firemaking implements ContentTemplate {
 	}
 
 	public static class Fire {
-		public Location location;
+		public Position position;
 		public int timer;
 
-		public Fire(Location loc, int time) {
-			location = loc;
+		public Fire(Position loc, int time) {
+			position = loc;
 			timer = time;
 		}
 	}

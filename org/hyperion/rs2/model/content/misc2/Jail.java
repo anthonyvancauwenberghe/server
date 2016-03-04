@@ -1,14 +1,14 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
 
 public class Jail implements ContentTemplate {
 
-	public static final Location LOCATION = Location.create(2097, 4428, 0);
+	public static final Position POSITION = Position.create(2097, 4428, 0);
 
 	@Override
 	public boolean clickObject(Player player, int type, int a, int b, int c,
@@ -30,8 +30,8 @@ public class Jail implements ContentTemplate {
 	}
 
 	public static boolean inJail(Player player) {
-		if(player.getLocation().getX() >= 2050 && player.getLocation().getX() <= 2130)
-			if(player.getLocation().getY() >= 4400 && player.getLocation().getY() <= 4460)
+		if(player.getPosition().getX() >= 2050 && player.getPosition().getX() <= 2130)
+			if(player.getPosition().getY() >= 4400 && player.getPosition().getY() <= 4460)
 				return true;
 		return false;
 	}

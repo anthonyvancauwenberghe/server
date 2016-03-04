@@ -22,9 +22,11 @@ public class BankField {
     private int tabIndex;
     private int loadTab;
     private final Player player;
+    int[] itemsInTabs = new int[tabAmount];
 
     public BankField(Player player) {
         this.player = Objects.requireNonNull(player, "player");
+        //this.itemsInTabs=calculateTabAmounts();
     }
 
 
@@ -43,11 +45,33 @@ public class BankField {
                     player.getBank().add(item);
                     System.err.println("BANK TAB OVERFLOW SIZE FOR "+player.getName() + " BY ITEM: "+item.getDefinition().getName());
                 }
+                itemsInTabs=sizes.clone();
                 sizes[item.getTabIndex()]++;
             }
 
         }
+        //itemsInTabs=sizes.clone();
         return sizes.clone();
+    }
+    public void calculateTabAmounts() {
+        int[] sizes = new int[tabAmount];
+        for(int i = 0; i < player.getBank().capacity(); i++) {
+            final BankItem item = (BankItem)player.getBank().get(i);
+            if(item != null) {
+                if(item.getTabIndex() >= tabAmount) {
+                    item.setTabSlot(0);
+                    player.getBank().remove(item);
+                    player.getBank().add(item);
+                    System.err.println("BANK TAB OVERFLOW SIZE FOR "+player.getName() + " BY ITEM: "+item.getDefinition().getName());
+                }
+                sizes[item.getTabIndex()]++;
+            }
+
+        }
+        itemsInTabs=sizes.clone();
+    }
+    public int[] getTabAmountsLight() {
+        return itemsInTabs;
     }
 
     public void setLoadError(boolean loadError) {
@@ -64,11 +88,11 @@ public class BankField {
 
     public int getTabForSlot(int slot) {
         int offset = 0;
-        int[] sizes = getTabAmounts();
+        int[] sizes = getTabAmountsLight();
         for (int index = 0; index < sizes.length; index++) {
             if (slot >= offset && slot < offset + sizes[index]) {
                 return index;
-            } else if (getTabAmounts()[index] > 0) {
+            } else if (getTabAmountsLight()[index] > 0) {
                 offset += sizes[index];
             }
         }

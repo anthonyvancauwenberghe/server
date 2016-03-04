@@ -11,19 +11,19 @@ import java.util.Map;
 
 public class Levers implements ContentTemplate {
 
-	private static Map<Location, Lever> LEVERS = new HashMap<Location, Lever>();
+	private static Map<Position, Lever> LEVERS = new HashMap<Position, Lever>();
 
 	private static final Animation LEVER_ANIMATION = Animation.create(2140);
 
 
-	public static boolean handle(final Player player, final Location loc, final int objectId) {
+	public static boolean handle(final Player player, final Position loc, final int objectId) {
 		final Lever lever = LEVERS.get(loc);
 		player.cE.face(loc.getX(), loc.getY() - 1);
 		if(lever == null || objectId == 5961 /*You've already clicked the lever.*/) {
 			return false;
 		}
-		if(lever.targetLocation.getX() == 2539) {
-			if(player.getLocation().getX() < 3090 || player.getLocation().getY() != 3956)
+		if(lever.targetPosition.getX() == 2539) {
+			if(player.getPosition().getX() < 3090 || player.getPosition().getY() != 3956)
 				return false;
 		}
 	    /*
@@ -36,7 +36,7 @@ public class Levers implements ContentTemplate {
 		}
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return false;
-		if(player.getLocation().getX() != loc.getX() || player.getLocation().getY() != loc.getY()) {
+		if(player.getPosition().getX() != loc.getX() || player.getPosition().getY() != loc.getY()) {
 			return false;
 		}
 		player.playAnimation(LEVER_ANIMATION);
@@ -54,7 +54,7 @@ public class Levers implements ContentTemplate {
 
 					@Override
 					public void execute() {
-						player.setTeleportTarget(lever.getTargetLocation());
+						player.setTeleportTarget(lever.getTargetPosition());
 						player.playAnimation(Animation.create(- 1));
 						player.setCanWalk(true);
 						this.stop();
@@ -70,12 +70,12 @@ public class Levers implements ContentTemplate {
 
 	private static class Lever {
 
-		private final Location targetLocation;
+		private final Position targetPosition;
 		private final int direction1;
 		private final int direction2;
 
-		public Location getTargetLocation() {
-			return targetLocation;
+		public Position getTargetPosition() {
+			return targetPosition;
 		}
 
 		public int getDirection1() {
@@ -86,8 +86,8 @@ public class Levers implements ContentTemplate {
 			return direction2;
 		}
 
-		public Lever(Location target, int direction1, int direction2) {
-			this.targetLocation = target;
+		public Lever(Position target, int direction1, int direction2) {
+			this.targetPosition = target;
 			this.direction1 = direction1;
 			this.direction2 = direction2;
 		}
@@ -100,13 +100,13 @@ public class Levers implements ContentTemplate {
 		/*
 		 * King Black Dragon levers.
 		 */
-		LEVERS.put(Location.create(3067, 10253, 0), new Lever(Location.create(2271, 4680, 0), 3, 3));
-		LEVERS.put(Location.create(2271, 4680, 0), new Lever(Location.create(3067, 10253, 0), 3, 3));
+		LEVERS.put(Position.create(3067, 10253, 0), new Lever(Position.create(2271, 4680, 0), 3, 3));
+		LEVERS.put(Position.create(2271, 4680, 0), new Lever(Position.create(3067, 10253, 0), 3, 3));
 		//Mage Bank to Wild
-		LEVERS.put(Location.create(2539, 4712, 0), new Lever(Location.create(3090, 3956, 0), 3, 3));
-		LEVERS.put(Location.create(3090, 3956, 0), new Lever(Location.create(2539, 4712, 0), 0, 0));
+		LEVERS.put(Position.create(2539, 4712, 0), new Lever(Position.create(3090, 3956, 0), 3, 3));
+		LEVERS.put(Position.create(3090, 3956, 0), new Lever(Position.create(2539, 4712, 0), 0, 0));
 
-        LEVERS.put(Location.create(3153, 3923, 0), new Lever(Edgeville.LOCATION, 0, 0));
+        LEVERS.put(Position.create(3153, 3923, 0), new Lever(Edgeville.POSITION, 0, 0));
 		//edgville to magebank
 		//player.getActionAssistant().pullLever(player, x, y, 5961, 0, 3, 3153, 3923, 0);
 
@@ -117,7 +117,7 @@ public class Levers implements ContentTemplate {
 	@Override
 	public boolean clickObject(Player player, int type, int leverId, int xcoord, int ycoord,
 	                           int d) {
-		handle(player, Location.create(xcoord, ycoord, 0), leverId);
+		handle(player, Position.create(xcoord, ycoord, 0), leverId);
 		return false;
 	}
 

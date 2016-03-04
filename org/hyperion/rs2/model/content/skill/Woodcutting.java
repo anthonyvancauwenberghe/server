@@ -86,20 +86,20 @@ public class Woodcutting implements ContentTemplate {
 
 				int walktoX = x;
 				int walktoY = y;
-				if(client.getLocation().getX() < x)
+				if(client.getPosition().getX() < x)
 					walktoX = x + 1;
-				else if(client.getLocation().getX() > x)
+				else if(client.getPosition().getX() > x)
 					walktoX = x - 1;
-				if(client.getLocation().getY() < y)
+				if(client.getPosition().getY() < y)
 					walktoY = y + 1;
-				else if(client.getLocation().getY() > y)
+				else if(client.getPosition().getY() > y)
 					walktoY = y - 1;
 				// TODO Auto-generated method stub
 				client.getWalkingQueue().reset();
 				client.getWalkingQueue().addStep(x, y);
 				client.getWalkingQueue().addStep(walktoX, walktoY);
 				client.getWalkingQueue().finish();
-				ObjectManager.update(new GameObject(GameObjectDefinition.forId(6951), Location.create(x, y, client.getLocation().getZ()), 10, 0));
+				ObjectManager.update(new GameObject(GameObjectDefinition.forId(6951), Position.create(x, y, client.getPosition().getZ()), 10, 0));
 				ContentEntity.startAnimation(client, - 1);
 				this.stop();
 			}
@@ -110,7 +110,7 @@ public class Woodcutting implements ContentTemplate {
 			@Override
 			public void execute() {
 				client.getWalkingQueue().reset();
-				ObjectManager.update(new GameObject(GameObjectDefinition.forId(object), Location.create(x, y, client.getLocation().getZ()), 10, 0));
+				ObjectManager.update(new GameObject(GameObjectDefinition.forId(object), Position.create(x, y, client.getPosition().getZ()), 10, 0));
 				this.stop();
 			}
 
@@ -268,9 +268,9 @@ public class Woodcutting implements ContentTemplate {
 				if(cycle == 0) {
 					client.setBusy(false);
 					stop2();
-					if(Edgeville.LOCATION.distance(Location.create(x, y, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(x, y, 0)) > 70) {
-						final GameObject stump = new GameObject(GameObjectDefinition.forId(TREE_STUMP), Location.create(x, y, client.getLocation().getZ()), 10, 0);
-						final GameObject tree = new GameObject(GameObjectDefinition.forId(object), Location.create(x, y, client.getLocation().getZ()), 10, 0);
+					if(Edgeville.POSITION.distance(Position.create(x, y, 0)) > 50 && Position.create(3370, 3240, 0).distance(Position.create(x, y, 0)) > 70) {
+						final GameObject stump = new GameObject(GameObjectDefinition.forId(TREE_STUMP), Position.create(x, y, client.getPosition().getZ()), 10, 0);
+						final GameObject tree = new GameObject(GameObjectDefinition.forId(object), Position.create(x, y, client.getPosition().getZ()), 10, 0);
 						ObjectManager.addObject(stump);
 						World.submit(new Task(TREE_RESPAWN_TIME,"tree respawn time") {
 

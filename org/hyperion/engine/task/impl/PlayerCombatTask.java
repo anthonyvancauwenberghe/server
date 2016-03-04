@@ -4,8 +4,8 @@ import org.hyperion.engine.task.Task;
 import org.hyperion.map.pathfinding.Path;
 import org.hyperion.map.pathfinding.PathTest;
 import org.hyperion.rs2.logging.FileLogging;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Container;
@@ -39,21 +39,21 @@ public class PlayerCombatTask extends Task {
                 if(player.isFollowing != null) {
                     //System.out.println("Following");
 
-                    int dis = player.getLocation().distance(player.isFollowing.getLocation());
+                    int dis = player.getPosition().distance(player.isFollowing.getPosition());
                     if(dis <= 20 && dis > 1) {
                         try {
-                            int toX = player.isFollowing.getLocation().getX();
-                            int toY = player.isFollowing.getLocation().getY();
+                            int toX = player.isFollowing.getPosition().getX();
+                            int toY = player.isFollowing.getPosition().getY();
                             //System.out.println("X : " + startx + " Y : " + starty);
                             if(player.isFollowing.getWalkingQueue().getPublicPoint() != null) {
                                 toX = player.isFollowing.getWalkingQueue().getPublicPoint().getX();
                                 toY = player.isFollowing.getWalkingQueue().getPublicPoint().getY();
                             }
-                            int baseX = player.getLocation().getX() - 25;
-                            int baseY = player.getLocation().getY() - 25;
+                            int baseX = player.getPosition().getX() - 25;
+                            int baseY = player.getPosition().getY() - 25;
                             player.getWalkingQueue().reset();
                             player.getWalkingQueue().setRunningQueue(true);
-                            Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            Path p = PathTest.getPath(player.getPosition().getX(), player.getPosition().getY(), toX, toY);
                             if(p != null) {
                                 for(int i = 1; i < p.getLength(); i++) {
                                     if((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
@@ -90,8 +90,8 @@ public class PlayerCombatTask extends Task {
             FileLogging.savePlayerLog(player, " Duel TIE against " + opp.getName());
             Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie
             Container.transfer(opp.getDuel(), opp.getInventory());
-            opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
-            player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            opp.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
             return true;
         }
         return false;

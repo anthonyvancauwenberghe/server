@@ -10,7 +10,7 @@ public class NpcUpdateSequence implements UpdateSequence<NPC> {
     public void executePreUpdate(NPC npc) {
         if(npc != null) {
             if(npc.isMapRegionChanging()) {
-                npc.setLastKnownRegion(npc.getLocation());
+                npc.setLastKnownRegion(npc.getPosition());
             }
 
             if(npc.getWalkingQueue() != null)

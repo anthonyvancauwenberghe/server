@@ -50,11 +50,11 @@ public class RegionManager {
 	
 	 public static Collection<Player> getLocalPlayers(Entity entity) {
 		  List<Player> localPlayers = new LinkedList<Player>();
-		  Region[] regions = getSurroundingRegions(entity.getLocation());
+		  Region[] regions = getSurroundingRegions(entity.getPosition());
 		  for(Region region : regions) {
 		   if(region != null) {
 		    for(Player player : region.getPlayers()) {
-		     if(player.getLocation().isWithinDistance(entity.getLocation())) {
+		     if(player.getPosition().isWithinDistance(entity.getPosition())) {
 		      localPlayers.add(player);
 		     }
 		    }
@@ -71,10 +71,10 @@ public class RegionManager {
 	 */
 	public static Collection<NPC> getLocalNpcs(Entity entity) {
 		List<NPC> localPlayers = new LinkedList<NPC>();
-		Region[] regions = getSurroundingRegions(entity.getLocation());
+		Region[] regions = getSurroundingRegions(entity.getPosition());
 		for(Region region : regions) {
 			for(NPC npc : region.getNpcs()) {
-				if(npc.getLocation().isWithinDistance(entity.getLocation())) {
+				if(npc.getPosition().isWithinDistance(entity.getPosition())) {
 					localPlayers.add(npc);
 				}
 			}
@@ -85,12 +85,12 @@ public class RegionManager {
 	/**
 	 * Gets the regions surrounding a location.
 	 *
-	 * @param location The location.
+	 * @param position The location.
 	 * @return The regions surrounding the location.
 	 */
-	public static Region[] getSurroundingRegions(Location location) {
-		int regionX = location.getX() / REGION_SIZE;
-		int regionY = location.getY() / REGION_SIZE;
+	public static Region[] getSurroundingRegions(Position position) {
+		int regionX = position.getX() / REGION_SIZE;
+		int regionY = position.getY() / REGION_SIZE;
 
 //		int regionPositionX = location.getX() % REGION_SIZE;
 //		int regionPositionY = location.getY() % REGION_SIZE;
@@ -135,11 +135,11 @@ public class RegionManager {
 	/**
 	 * Gets a region by location.
 	 *
-	 * @param location The location.
+	 * @param position The location.
 	 * @return The region.
 	 */
-	public static Region getRegionByLocation(Location location) {
-		return getRegion(location.getX() / REGION_SIZE, location.getY() / REGION_SIZE);
+	public static Region getRegionByLocation(Position position) {
+		return getRegion(position.getX() / REGION_SIZE, position.getY() / REGION_SIZE);
 	}
 
 	/**

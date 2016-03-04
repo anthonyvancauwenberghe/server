@@ -66,7 +66,7 @@ public class Combat {
             /**
              * Distance and freezetimer check.
              */
-            int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
+            int distance = combatEntity.getEntity().getPosition().distance((combatEntity.getOpponent().getEntity().getPosition()));
             /*Checks if standing on eachother*/
             if (distance == 0) {
 				/*If standing on eachother and frozen*/
@@ -142,7 +142,7 @@ public class Combat {
                 if (opponent instanceof Player)
                     combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
                 return true;
-            } else if (!WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
+            } else if (!WorldMap.projectileClear(attacker.getPosition(), opponent.getPosition())) {
                 if (opponent instanceof Player)
                     combatEntity.getPlayer().getActionSender().follow(opponent.getIndex(), 1);
                 else
@@ -263,7 +263,7 @@ public class Combat {
                     combatEntity.setAutoCastId(0);
                     return false;
                 }
-                if (distance > 11 || !WorldMap.projectileClear(attacker.getLocation(), opponent.getLocation())) {
+                if (distance > 11 || !WorldMap.projectileClear(attacker.getPosition(), opponent.getPosition())) {
                     if (opponent instanceof Player)
                         combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(), 1);
                     return true;// too far away
@@ -295,12 +295,12 @@ public class Combat {
                 combatEntity.getPlayer().getActionSender().sendMessage("You cannot use range in this duel.");
                 return false;
             }
-            if (bowType != 8 && combatEntity.getPlayer().getLocation().disabledRange()) {
+            if (bowType != 8 && combatEntity.getPlayer().getPosition().disabledRange()) {
                 combatEntity.getPlayer().getActionSender().sendMessage("You cannot use ranged at ::13s, sorry! For tribridding or pure bridding go to ::mb");
                 return false;
             }
             //can't range ppl from afar that are in non range zone
-            if (bowType != 8 && combatEntity.getOpponent() != null && combatEntity.getOpponent().getEntity() instanceof Player && combatEntity.getOpponent().getPlayer().getLocation().disabledRange()) {
+            if (bowType != 8 && combatEntity.getOpponent() != null && combatEntity.getOpponent().getEntity() instanceof Player && combatEntity.getOpponent().getPlayer().getPosition().disabledRange()) {
                 combatEntity.getPlayer().getActionSender().sendMessage("That person is in a no range zone!");
                 return false;
             }
@@ -309,7 +309,7 @@ public class Combat {
                     if (opponent instanceof Player)
                         combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(), 1);
                     return true;// too far away
-                } else if (!WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation())) {
+                } else if (!WorldMap.projectileClear(combatEntity.getEntity().getPosition(), combatEntity.getOpponent().getEntity().getPosition())) {
                     if (combatEntity.getOpponent().getEntity() instanceof Player)
                         combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(), 1);
                     else
@@ -447,13 +447,13 @@ public class Combat {
                 combatEntity.getPlayer().getActionSender().sendMessage("You cannot use melee in this duel.");
                 return false;
             }
-            if (!combatEntity.getEntity().getLocation().isWithinDistance(combatEntity.getOpponent().getEntity().getLocation(), (1 + (combatEntity.canMove() ? 1 : 0)))) {
+            if (!combatEntity.getEntity().getPosition().isWithinDistance(combatEntity.getOpponent().getEntity().getPosition(), (1 + (combatEntity.canMove() ? 1 : 0)))) {
 
                 if (opponent instanceof Player)
                     combatEntity.getPlayer().getActionSender().follow(combatEntity.getOpponent().getEntity().getIndex(), 1);
                 return true;// too far away
             } else {
-                if (!combatEntity.canMove() && combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) == 2)
+                if (!combatEntity.canMove() && combatEntity.getEntity().getPosition().distance(combatEntity.getOpponent().getEntity().getPosition()) == 2)
                     return true;
                 //combatEntity.getPlayer().getWalkingQueue().reset();
             }
@@ -471,7 +471,7 @@ public class Combat {
 			 * combatEntity.getOpponent().getOffsetY())) return true;
 			 */
 
-            if (!WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation()))
+            if (!WorldMap.projectileClear(combatEntity.getEntity().getPosition(), combatEntity.getOpponent().getEntity().getPosition()))
                 return true;
             if (combatEntity.predictedAtk > System.currentTimeMillis()) {
                 return true;// we dont want to reset attack but just
@@ -747,7 +747,7 @@ public class Combat {
             }
             if (combatEntity.getNPC().ownerId >= 1 && combatEntity.getNPC().summoned) {
                 if (combatEntity.getOpponent() != null && combatEntity.getOpponent().getEntity() instanceof Player) {
-                    if (!Location.inAttackableArea(combatEntity.getOpponent().getPlayer()) || !isInMulti(combatEntity.getOpponent())) {
+                    if (!Position.inAttackableArea(combatEntity.getOpponent().getPlayer()) || !isInMulti(combatEntity.getOpponent())) {
                         return false;
                     }
                 }
@@ -759,11 +759,11 @@ public class Combat {
                     }
                 }
             }
-            combatEntity.getNPC().face(combatEntity.getOpponent().getEntity().getLocation());
+            combatEntity.getNPC().face(combatEntity.getOpponent().getEntity().getPosition());
             int type = combatEntity.attack.handleAttack(combatEntity.getNPC(), combatEntity.getOpponent());
             if (type == 1 && combatEntity.getOpponent() != null
                     && combatEntity.getNPC().agressiveDis > 0
-                    && combatEntity.getEntity().getLocation().distance(combatEntity.getOpponent().getEntity().getLocation()) <= combatEntity.getNPC().agressiveDis) {
+                    && combatEntity.getEntity().getPosition().distance(combatEntity.getOpponent().getEntity().getPosition()) <= combatEntity.getNPC().agressiveDis) {
                 type = 0;
             }
             if (type == 5) {
@@ -890,9 +890,9 @@ public class Combat {
         // find our lockon target
         int hitId = attack.getSlotId(n);
         // extra variables - not for release
-        int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX()
-                + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY()
-                + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+        int distance = attack.getEntity().getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX()
+                + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY()
+                + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
         int timer = 1;
         int min = 16;
         if (distance > 8) {
@@ -922,9 +922,9 @@ public class Combat {
             Player p = combatEntity.getPlayer();
             Player opp = opponent.getPlayer();
 
-            if (!Location.inAttackableArea(opp))
+            if (!Position.inAttackableArea(opp))
                 return "This player is not in an attackable area";
-            if (!Location.inAttackableArea(p))
+            if (!Position.inAttackableArea(p))
                 return "You are not in an attackable area";
             if (FightPits.isSameTeam(p, opp))
                 return "Friend, not food";
@@ -1006,7 +1006,7 @@ public class Combat {
                     && combatEntity.getAbsX() <= 2557
                     && combatEntity.getAbsY() >= 3264 && combatEntity.getAbsY() <= 3335)
                     || /* fun pk */
-                    combatEntity.getEntity().getLocation().inFunPk())// fun
+                    combatEntity.getEntity().getPosition().inFunPk())// fun
                 // pk
                 // singles
                 return "1";
@@ -1110,7 +1110,7 @@ public class Combat {
         if (combatEntity == null || combatEntity.getEntity() == null)
             return false;
         if (WildernessBossTask.currentBoss != null)
-            if (Misc.isInCircle(WildernessBossTask.currentBoss.getLocation().getX(), WildernessBossTask.currentBoss.getLocation().getY(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), 10))
+            if (Misc.isInCircle(WildernessBossTask.currentBoss.getPosition().getX(), WildernessBossTask.currentBoss.getPosition().getY(), combatEntity.getEntity().getPosition().getX(), combatEntity.getEntity().getPosition().getY(), 10))
                 return true;
         if ((combatEntity.getAbsX() >= 3136 && combatEntity.getAbsX() <= 3327
                 && combatEntity.getAbsY() >= 3520 && combatEntity.getAbsY() <= 3607)
@@ -1164,7 +1164,7 @@ public class Combat {
                 ||
                 (combatEntity.getAbsX() >= 2256 && combatEntity.getAbsY() >= 4680 &&
                         combatEntity.getAbsX() <= 2287 && combatEntity.getAbsY() <= 4711 && combatEntity.getAbsZ() == 0)
-                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Location.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk()
+                || inNonSpawnMulti(combatEntity.getAbsX(), combatEntity.getAbsY()) || Position.create(combatEntity.getAbsX(), combatEntity.getAbsY(), 0).inFunPk()
                 || (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY()))
                 || (combatEntity.getAbsZ() > 0 && combatEntity.getAbsX() > 3540 && combatEntity.getAbsX() < 3585 && combatEntity.getAbsY() > 9935 && combatEntity.getAbsY() < 9975))
             return true;
@@ -1199,7 +1199,7 @@ public class Combat {
 
         try {
 
-            int dis = combatEntity.getEntity().getLocation().distance(opponent.getEntity().getLocation());
+            int dis = combatEntity.getEntity().getPosition().distance(opponent.getEntity().getPosition());
             if (dis > 20 || dis < 1)
                 return;
 
@@ -1375,17 +1375,17 @@ public class Combat {
     }
 
     public static boolean canAtkDis(final CombatEntity combatEntity, final CombatEntity attack) {
-        int distance = combatEntity.getEntity().getLocation().distance(attack.getEntity().getLocation());
+        int distance = combatEntity.getEntity().getPosition().distance(attack.getEntity().getPosition());
         if (distance > 1) {
             //System.out.println("Distance check can atk " + distance);
-            return WorldMap.projectileClear(combatEntity.getEntity().getLocation(), combatEntity.getOpponent().getEntity().getLocation());
+            return WorldMap.projectileClear(combatEntity.getEntity().getPosition(), combatEntity.getOpponent().getEntity().getPosition());
         } else {
             //System.out.println("Pos check can atk");
-            return WorldMap.checkPos(attack.getEntity().getLocation().getZ(), combatEntity.getEntity().getLocation().getX(), combatEntity.getEntity().getLocation().getY(), attack.getEntity().getLocation().getX(), attack.getEntity().getLocation().getY(), 1);
+            return WorldMap.checkPos(attack.getEntity().getPosition().getZ(), combatEntity.getEntity().getPosition().getX(), combatEntity.getEntity().getPosition().getY(), attack.getEntity().getPosition().getX(), attack.getEntity().getPosition().getY(), 1);
         }
     }
 
-    public static void removeArrow(Player player, int bowType, Location loc) {
+    public static void removeArrow(Player player, int bowType, Position loc) {
         if (player.getEquipment().get(Equipment.SLOT_WEAPON) == null)
             return;
         int slot = Equipment.SLOT_ARROWS;
@@ -1418,9 +1418,9 @@ public class Combat {
             return;
         if (damg > 0) {
             int exp = damg * 4;
-            if (!player.getLocation().inPvPArea())
+            if (!player.getPosition().inPvPArea())
                 exp = damg * 300;
-            if (player.getSkills().getLevelForExp(player.cE.getAtkType()) >= 90 && !player.getLocation().inPvPArea())
+            if (player.getSkills().getLevelForExp(player.cE.getAtkType()) >= 90 && !player.getPosition().inPvPArea())
                 exp = damg * 800;
             if (player.cE.getAtkType() == 3) {
                 player.cE.setAtkType(2);

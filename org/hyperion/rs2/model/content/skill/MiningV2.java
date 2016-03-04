@@ -206,7 +206,7 @@ public class MiningV2 implements ContentTemplate {
 		return null;
 	}
 
-	private Map<Location, Integer> rockLocationStatus = new HashMap<Location, Integer>();
+	private Map<Position, Integer> rockLocationStatus = new HashMap<Position, Integer>();
 
 	@Override
 	public boolean clickObject(Player player, int type, int rockId, int x, int y,
@@ -220,7 +220,7 @@ public class MiningV2 implements ContentTemplate {
 	}
 
 	private void mine(final Player player, final int rockId, final int x, final int y) {
-		final Location l = Location.create(x, y, 0);
+		final Position l = Position.create(x, y, 0);
 		if(rockLocationStatus.get(l) != null && rockId != 2491) {
 			return;
 		}
@@ -285,7 +285,7 @@ public class MiningV2 implements ContentTemplate {
 						xp *= 1.1;
 					ContentEntity.addSkillXP(player, xp, Skills.MINING);
 					if(rock.respawn > 0 && rockId != 2491) {
-						if(Edgeville.LOCATION.distance(Location.create(x, y, 0)) > 50 && Location.create(3370, 3240, 0).distance(Location.create(x, y, 0)) > 70) {
+						if(Edgeville.POSITION.distance(Position.create(x, y, 0)) > 50 && Position.create(3370, 3240, 0).distance(Position.create(x, y, 0)) > 70) {
 							final GameObject blank_rock = new GameObject(GameObjectDefinition.forId(450), l, 10, 0);
 							final GameObject new_rock = new GameObject(GameObjectDefinition.forId(rockId), l, 10, 0);
 							ObjectManager.addObject(blank_rock);

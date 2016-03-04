@@ -80,13 +80,13 @@ public class ActionButtonPacketHandler implements PacketHandler {
             case -29034:
                 final Player opp = player.getBountyHunter().getTarget();
                 if(opp != null) {
-                    final int x = opp.getLocation().getX();
-                    final int y = opp.getLocation().getY();
+                    final int x = opp.getPosition().getX();
+                    final int y = opp.getPosition().getY();
                     final int wildLevel = Combat.getWildLevel(x, y);
                     final boolean inMulti = Combat.isInMulti(opp.cE);
-                    if(opp.getLocation().inPvPArea()) {
+                    if(opp.getPosition().inPvPArea()) {
                         if(wildLevel <= 20 && !inMulti) {
-                            Magic.teleport(player, opp.getLocation().getX(), opp.getLocation().getY(), opp.getLocation().getZ(), false);
+                            Magic.teleport(player, opp.getPosition().getX(), opp.getPosition().getY(), opp.getPosition().getZ(), false);
                         } else {
                             DialogueManager.openDialogue(player, 171);
                         }
@@ -920,7 +920,7 @@ public class ActionButtonPacketHandler implements PacketHandler {
                     player.sendMessage("You don't have a summoned familiar");
                     break;
                 }
-                Location newlocation = player.getLocation().getCloseLocation();
+                Position newlocation = player.getPosition().getCloseLocation();
                 player.cE.summonedNpc.setTeleportTarget(newlocation);
                 player.cE.summonedNpc.playGraphics(Graphic.create(1315));
                 player.cE.summonedNpc.ownerId = player.getIndex();

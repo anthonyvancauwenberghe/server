@@ -1,8 +1,9 @@
 package org.hyperion.engine.task.impl;
 
-import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
@@ -36,7 +37,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class PlayerDeathTask extends Task {
 
 	public static final Map<String, Queue<String>> kills = new HashMap<>();
-	private static final Location DEATH_LOCATION = Location.create(3096, 3471, 0);
+	private static final Position DEATH_POSITION = Position.create(3096, 3471, 0);
 
 	private final Player player;
 
@@ -67,11 +68,10 @@ public class PlayerDeathTask extends Task {
 			switch(timer) {
 				case 2:
 					startDeath();
-					//PlayerSaving.save(player);
 					break;
 				case 9:
 					resetPlayer();
-					Server.getLoader().getEngine().submitIO(new EngineTask<Boolean>("saving player", false) {
+					GameEngine.submitIO(new EngineTask<Boolean>("saving player", false) {
 						@Override
 						public Boolean call() throws Exception {
 							PlayerSaving.setSaving(player);
@@ -83,7 +83,6 @@ public class PlayerDeathTask extends Task {
 				case 11:
 					player.playAnimation(Animation.create(- 1, 0));
 					player.setDead(false);
-					//PlayerSaving.save(player);
 					this.stop();
 					break;
 			}
@@ -106,9 +105,15 @@ public class PlayerDeathTask extends Task {
 	private void resetPlayer() {
 		player.playAnimation(Animation.create(- 1, 0));
 		player.getCombat().setOpponent(null);
-		for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
-			player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
-		}
+		TaskManager.submit(new Task(200, "reset skills after death") {
+			@Override
+			protected void execute() {
+				stop();
+				for(int i = 0; i < Skills.SKILL_COUNT - 3; i++) {
+					player.getSkills().setLevel(i, player.getSkills().getLevelForExp(i));
+				}
+			}
+		});
 		if(System.currentTimeMillis() - player.getExtraData().getLong("lastdeath") > 120000) {
 			player.getSpecBar().setAmount(SpecialBar.FULL);
 			player.getExtraData().put("lastdeath", System.currentTimeMillis());
@@ -125,8 +130,7 @@ public class PlayerDeathTask extends Task {
 		player.cE.setPoisoned(false);
 		player.cE.setFreezeTimer(0);
 		Player killer = player.cE.getKiller();
-		if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) ||
-				(Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
+		if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) || (Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
 			Duel.finishFullyDuel(player);
 		} else if (player.getDungeoneering().inDungeon()) {
 			DungeoneeringManager.handleDying(player);
@@ -139,13 +143,13 @@ public class PlayerDeathTask extends Task {
 					killer.getInventory().add(Item.create(391, 1));
 		} else if(ContentManager.handlePacket(6, player, 32000, - 1, - 1, - 1)) {
 			ContentManager.handlePacket(6, player, 32001, - 1, - 1, - 1);
-		} else if(player.fightCavesWave > 0 && !player.getLocation().inPvPArea()) { //If dying in fight caves
+		} else if(player.fightCavesWave > 0 && !player.getPosition().inPvPArea()) { //If dying in fight caves
 			player.fightCavesWave = 0;
 			player.getActionSender().showInterfaceWalkable(- 1);
-			player.setTeleportTarget(Location.create(2439, 5171, 0), false);
+			player.setTeleportTarget(Position.create(2439, 5171, 0), false);
 			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
 		} else {
-			if(! player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+			if(! player.getPosition().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
 				if(killer != null) {
 					//blood lust system
 					ContentManager.handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
@@ -155,7 +159,7 @@ public class PlayerDeathTask extends Task {
 					 */
 					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
 					BountyPerkHandler.handleSpecialPerk(killer);
-					if(true || killer.getLocation().inPvPArea()) {
+					if(true || killer.getPosition().inPvPArea()) {
 						boolean isDev = false;
 						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal()
 								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
@@ -163,7 +167,7 @@ public class PlayerDeathTask extends Task {
 						if(!isDev) {
 							killer.increaseKillCount();
 							int oldKillerRating = killer.getPoints().getEloRating();
-							if(killer.getLocation().getZ() != PurePk.HEIGHT) {
+							if(killer.getPosition().getZ() != PurePk.HEIGHT) {
 								killer.getPoints().updateEloRating(player.getPoints().getEloRating(), EloRating.WIN);
 								player.getPoints().updateEloRating(oldKillerRating, EloRating.LOSE);
 							}
@@ -237,7 +241,7 @@ public class PlayerDeathTask extends Task {
 				}
 			}
 			if(!inSpecial)
-				player.setTeleportTarget(DEATH_LOCATION, false);
+				player.setTeleportTarget(DEATH_POSITION, false);
 			player.getActionSender().sendMessage(getDeathMessage());
 		}
 		player.setSkulled(false);

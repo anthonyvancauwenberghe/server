@@ -1,15 +1,15 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
 
 public class DonatorsPlace implements ContentTemplate {
 
-	public final static Location LOCATION = Location.create(2313, 9809, 0);
+	public final static Position POSITION = Position.create(2313, 9809, 0);
 
 	@Override
 	public boolean clickObject(Player player, int type, int a, int b, int c,

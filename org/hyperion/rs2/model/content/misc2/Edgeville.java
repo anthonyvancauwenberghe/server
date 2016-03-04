@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 public class Edgeville implements ContentTemplate {
 
 
-	public final static Location LOCATION = Location.create(3087, 3491, 0);
+	public final static Position POSITION = Position.create(3087, 3491, 0);
 
 
 

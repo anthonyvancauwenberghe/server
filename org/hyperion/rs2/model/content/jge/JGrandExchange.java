@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 public class JGrandExchange {
 
-    public static boolean enabled = true;
+    public static boolean enabled = false;
 
     private static JGrandExchange instance;
 

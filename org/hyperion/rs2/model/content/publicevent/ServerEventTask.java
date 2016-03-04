@@ -2,8 +2,8 @@ package org.hyperion.rs2.model.content.publicevent;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.impl.NpcDeathTask;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPCDefinition;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
@@ -18,13 +18,13 @@ public class ServerEventTask extends Task {
     }
 
     public static final CountDownEventBuilder[] builders = new CountDownEventBuilder[]{
-            new CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", FightPits::startEvent, true),
+            new CountDownEventBuilder("Fight pits", "fightpits", Position.create(2399, 5178, 0), "3x Pk points game", FightPits::startEvent, true),
             new CountDownEventBuilder("Hybridding", "hybrid", false),
             new CountDownEventBuilder("OldSchool PK", "ospk", false),
             new CountDownEventBuilder("Pure Pking", "purepk", false),
-            new CountDownEventBuilder(8133, Location.create(2521, 4647, 0)),
-            new CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
-            new CountDownEventBuilder(50, Location.create(2270, 4687, 0)),
+            new CountDownEventBuilder(8133, Position.create(2521, 4647, 0)),
+            new CountDownEventBuilder(8596, Position.create(2660, 9634, 0)),
+            new CountDownEventBuilder(50, Position.create(2270, 4687, 0)),
     };
 
     @Override
@@ -36,12 +36,12 @@ public class ServerEventTask extends Task {
         public final Runnable run;
         public final String command;
         public final String name;
-        public final Location location;
+        public final Position position;
         public final String message;
         public final boolean safe;
 
-        public CountDownEventBuilder(final int npcId, final Location location) {
-            this(NPCDefinition.forId(npcId).getName().replaceAll("_", " "), "the event tab", location, "2x drop rates for 30 minutes", () -> {
+        public CountDownEventBuilder(final int npcId, final Position position) {
+            this(NPCDefinition.forId(npcId).getName().replaceAll("_", " "), "the event tab", position, "2x drop rates for 30 minutes", () -> {
                 NpcDeathTask.npcIdForDoubleDrops = npcId;
                 World.submit(new Task(Time.THIRTY_MINUTES) {
                     public void execute() {
@@ -60,10 +60,10 @@ public class ServerEventTask extends Task {
             this(name, command, area.getDefaultLocation(), "5x Pk points for 30 minutes", () -> area.createEvent(), safe);
         }
 
-        public CountDownEventBuilder(final String name, final String command, final Location location, final String msg, Runnable run, final boolean safe) {
+        public CountDownEventBuilder(final String name, final String command, final Position position, final String msg, Runnable run, final boolean safe) {
             this.name = name;
             this.command = command;
-            this.location = location;
+            this.position = position;
             this.run = run;
             this.message = msg;
             this.safe = safe;

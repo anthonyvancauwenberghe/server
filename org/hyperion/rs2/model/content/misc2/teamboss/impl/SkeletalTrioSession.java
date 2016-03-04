@@ -23,9 +23,9 @@ public class SkeletalTrioSession extends TeamBossSession {
                 //rewards
         },
         new NPC[] {
-                NPCManager.addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11255, -1),
-                NPCManager.addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11254, -1),
-                NPCManager.addNPC(Location.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11253, -1)
+                NPCManager.addNPC(Position.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11255, -1),
+                NPCManager.addNPC(Position.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11254, -1),
+                NPCManager.addNPC(Position.create(LOC_X, LOC_Y, players[0].getIndex() * 4), 11253, -1)
         },
         players);
     }
@@ -66,8 +66,8 @@ public class SkeletalTrioSession extends TeamBossSession {
         }
 
         @Override
-        public Location getDefaultLocation() {
-            return Edgeville.LOCATION;  //To change body of implemented methods use File | Settings | File Templates.
+        public Position getDefaultLocation() {
+            return Edgeville.POSITION;  //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override

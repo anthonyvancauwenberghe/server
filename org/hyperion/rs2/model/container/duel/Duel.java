@@ -41,7 +41,7 @@ public class Duel {
 		}
 		if(player.duelAttackable > 0)
 			return;
-		if(! player.getLocation().isWithinDistance(opponent.getLocation(), 3)) {
+		if(! player.getPosition().isWithinDistance(opponent.getPosition(), 3)) {
 			player.getActionSender().sendMessage("You are too far away to open a duel.");
 			return;
 		}
@@ -429,7 +429,7 @@ public class Duel {
 	}
 	
 	public static boolean inDuelLocation(Player player) {
-		return player != null && inDuelLocation(player.getLocation().getX(), player.getLocation().getY());
+		return player != null && inDuelLocation(player.getPosition().getX(), player.getPosition().getY());
 	}
 	
 	public static boolean inDuelLocation(int x, int y) {
@@ -482,7 +482,7 @@ public class Duel {
 
 	public static void startDueling(final Player player) {
 		//player.getLogging().log("Duel started with " + player.getTrader().getName());
-		if(! player.getLocation().isWithinDistance(player.getTrader().getLocation(), 10))
+		if(! player.getPosition().isWithinDistance(player.getTrader().getPosition(), 10))
 			return;
 		if(! player.onConfirmScreen)
 			return;
@@ -592,8 +592,8 @@ public class Duel {
         }
 		player.cE.setPoisoned(false);
 		opponent.cE.setPoisoned(false);
-        opponent.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
-        player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+        opponent.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+        player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.getActionSender().sendMessage("You have " + (won ? "won" : "lost") + " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);
         healup(player);
@@ -676,8 +676,8 @@ public class Duel {
 			y1 -= 19;
 			y2 -= 19;
 		}
-		player.setTeleportTarget(Location.create(x1, y1, 0), false);
-		player.getTrader().setTeleportTarget(Location.create(x2, y2, 0), false);
+		player.setTeleportTarget(Position.create(x1, y1, 0), false);
+		player.getTrader().setTeleportTarget(Position.create(x2, y2, 0), false);
 	}
 
 }

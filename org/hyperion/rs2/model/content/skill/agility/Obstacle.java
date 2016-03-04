@@ -136,7 +136,7 @@ public class Obstacle {
         player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
     }
 
-    public static Location calculateMiddle(Location start, Location end) {
+    public static Position calculateMiddle(Position start, Position end) {
         int middleX = start.getX();
         int middleY = start.getY();
 
@@ -152,7 +152,7 @@ public class Obstacle {
             else
                 middleY = start.getY() + start.distance(end)/2;
         }
-        return Location.create(middleX, middleY, start.getZ());
+        return Position.create(middleX, middleY, start.getZ());
     }
 
     @Override

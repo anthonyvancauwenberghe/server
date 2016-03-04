@@ -753,7 +753,7 @@ public class WorldMap {
     }
 
 
-    public static boolean projectileClear(Location from, Location to) {
+    public static boolean projectileClear(Position from, Position to) {
         int currentX = from.getX(), currentY = from.getY();
         int newX = from.getX(), newY = from.getY();
         while (currentX != to.getX() || currentY != to.getY()) {

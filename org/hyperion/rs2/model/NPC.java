@@ -22,7 +22,7 @@ public class NPC extends Entity {
 	 */
 	private final NPCDefinition definition;
 
-	public NPC(NPCDefinition npcdefinition, int respawntime, Location loc) {
+	public NPC(NPCDefinition npcdefinition, int respawntime, Position loc) {
 		health = 10;
 		maxHealth = 10;
 		npcDeathTimer = - 1;
@@ -37,8 +37,8 @@ public class NPC extends Entity {
 		}
 		maxHealth = npcdefinition.maxHp();
 		health = npcdefinition.maxHp();
-		spawnLocation = loc;
-		setLocation(loc);
+		spawnPosition = loc;
+		setPosition(loc);
 		isHidden(false);
 	}
 
@@ -46,10 +46,10 @@ public class NPC extends Entity {
 	public String lastAttacker = "";
 
 
-	private final Location spawnLocation;
+	private final Position spawnPosition;
 
-	public Location getSpawnLocation() {
-		return spawnLocation;
+	public Position getSpawnPosition() {
+		return spawnPosition;
 	}
 
 	/**
@@ -131,10 +131,10 @@ public class NPC extends Entity {
 	public int ownerId;
 	public boolean serverKilled;
 
-	public int walkToXMax = getLocation().getX();
-	public int walkToXMin = getLocation().getX();
-	public int walkToYMax = getLocation().getY();
-	public int walkToYMin = getLocation().getY();
+	public int walkToXMax = getPosition().getX();
+	public int walkToXMin = getPosition().getX();
+	public int walkToYMax = getPosition().getY();
+	public int walkToYMin = getPosition().getY();
 	public boolean randomWalk = false;
 	public int bones;
 	public int charm;
@@ -144,22 +144,22 @@ public class NPC extends Entity {
 		if(npc.cE.isFrozen() || ! npc.randomWalk || Combat.random(5) != 1) {
 			return;
 		}
-		int walkToX = npc.getLocation().getX() + (Combat.random(1) == 0 ? 1 : - 1);
-		int walkToY = npc.getLocation().getY() + (Combat.random(1) == 0 ? 1 : - 1);
+		int walkToX = npc.getPosition().getX() + (Combat.random(1) == 0 ? 1 : - 1);
+		int walkToY = npc.getPosition().getY() + (Combat.random(1) == 0 ? 1 : - 1);
 		if(walkToX > npc.walkToXMax)
-			walkToX = npc.getLocation().getX();
+			walkToX = npc.getPosition().getX();
 		else if(walkToX < npc.walkToXMin)
-			walkToX = npc.getLocation().getX();
+			walkToX = npc.getPosition().getX();
 		if(walkToY > npc.walkToYMax)
-			walkToY = npc.getLocation().getY();
+			walkToY = npc.getPosition().getY();
 		else if(walkToY < npc.walkToYMin)
-			walkToY = npc.getLocation().getY();
+			walkToY = npc.getPosition().getY();
 		int size = npc.getDefinition().sizeX() * 2;
 		boolean cant = false;
 		if(size <= 0) size = 1;
 		for(int i = 0; i < size; i++) {
 			for(int i2 = 0; i2 < size; i2++) {
-				if(! WorldMap.checkPos(npc.getLocation().getZ(), npc.getLocation().getX() + i, npc.getLocation().getY() + i2, walkToX + i, walkToY + i2, 0)) {
+				if(! WorldMap.checkPos(npc.getPosition().getZ(), npc.getPosition().getX() + i, npc.getPosition().getY() + i2, walkToX + i, walkToY + i2, 0)) {
 					cant = true;
 				}
 			}

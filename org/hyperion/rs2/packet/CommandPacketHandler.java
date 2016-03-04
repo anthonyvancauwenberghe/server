@@ -101,13 +101,13 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("resetpevents")) {
             ServerEventTask.CountDownEventBuilder[] builders = new ServerEventTask.CountDownEventBuilder[]{
-                    new ServerEventTask.CountDownEventBuilder("Fight pits", "fightpits", Location.create(2399, 5178, 0), "3x Pk points game", () -> FightPits.startEvent(), true),
+                    new ServerEventTask.CountDownEventBuilder("Fight pits", "fightpits", Position.create(2399, 5178, 0), "3x Pk points game", () -> FightPits.startEvent(), true),
                     new ServerEventTask.CountDownEventBuilder("Hybridding", "hybrid", false),
                     new ServerEventTask.CountDownEventBuilder("OldSchool PK", "ospk", false),
                     new ServerEventTask.CountDownEventBuilder("Pure Pking", "purepk", false),
-                    new ServerEventTask.CountDownEventBuilder(8133, Location.create(2521, 4647, 0)),
-                    new ServerEventTask.CountDownEventBuilder(8596, Location.create(2660, 9634, 0)),
-                    new ServerEventTask.CountDownEventBuilder(50, Location.create(2270, 4687, 0))
+                    new ServerEventTask.CountDownEventBuilder(8133, Position.create(2521, 4647, 0)),
+                    new ServerEventTask.CountDownEventBuilder(8596, Position.create(2660, 9634, 0)),
+                    new ServerEventTask.CountDownEventBuilder(50, Position.create(2270, 4687, 0))
             };
             for (int i = 0; i < ServerEventTask.builders.length; i++)
                 ServerEventTask.builders[i] = builders[i];
@@ -560,7 +560,7 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equals("restore")) {
-            NPCManager.restoreArea(player.getLocation());
+            NPCManager.restoreArea(player.getPosition());
             return;
         }
         if (commandStart.equals("anim")) {
@@ -695,10 +695,10 @@ public class CommandPacketHandler implements PacketHandler {
         }
 
         if (commandStart.equals("duel")) {
-            player.setTeleportTarget(Location.create(3375, 3274, 0));
+            player.setTeleportTarget(Position.create(3375, 3274, 0));
         }
         if (commandStart.equals("pits")) {
-            player.setTeleportTarget(Location.create(2399, 5177, 0));
+            player.setTeleportTarget(Position.create(2399, 5177, 0));
         }
     }
 
@@ -830,7 +830,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("startevent")) {
             try {
                 String name = as[1].replaceAll("_", " ");
-                Location eventLoc = player.getLocation();
+                Position eventLoc = player.getPosition();
                 int timeTillStart = Integer.valueOf(as[2]);
                 boolean eventSafe = Boolean.valueOf(as[3]);
                 Events.fireNewEvent(name, eventSafe, timeTillStart, eventLoc);
@@ -888,8 +888,8 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equalsIgnoreCase("summonnpc")) {
             int id = Integer.parseInt(as[1]);
             final NPC monster = NPCManager
-                    .addNPC(player.getLocation().getX(), player.getLocation().getY(),
-                            player.getLocation().getZ(), id, -1);
+                    .addNPC(player.getPosition().getX(), player.getPosition().getY(),
+                            player.getPosition().getZ(), id, -1);
             player.SummoningCounter = 6000;
             monster.ownerId = player.getIndex();
             Combat.follow(monster.getCombat(), player.getCombat());
@@ -1051,25 +1051,25 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.equalsIgnoreCase("wildyboss")) {
             if (WildernessBossTask.currentBoss != null) {
-                player.setTeleportTarget(WildernessBossTask.currentBoss.getLocation());
+                player.setTeleportTarget(WildernessBossTask.currentBoss.getPosition());
             }
         }
         if (commandStart.equals("removeobject")) {
             for (int i = 0; i < 15; i++) {
                 player.getActionSender().sendDestroyObject(i, 0,
-                        player.getLocation());
+                        player.getPosition());
             }
             return;
         }
 
         if (commandStart.startsWith("removeobjects")) {
             int id = Integer.parseInt(as[1]);
-            Location loc = player.getLocation();
+            Position loc = player.getPosition();
             for (int x = loc.getX() - id; x < loc.getX() + id; x++) {
                 for (int y = loc.getY() - id; y < loc.getY() + id; y++) {
                     for (int i = 0; i < 15; i++) {
                         player.getActionSender().sendDestroyObject(i, 0,
-                                Location.create(x, y, loc.getZ()));
+                                Position.create(x, y, loc.getZ()));
                     }
                 }
             }
@@ -1141,7 +1141,7 @@ public class CommandPacketHandler implements PacketHandler {
             final int id = Integer.parseInt(as[1]);
             for (int i = 0; i < 100; i++) {
 
-                NPC npc = NPCManager.addNPC(player.getLocation(), id, -1);
+                NPC npc = NPCManager.addNPC(player.getPosition(), id, -1);
                 npc.cE.hit(npc.health * 5, player, false, Constants.DEFLECT);
 
             }
@@ -1155,7 +1155,7 @@ public class CommandPacketHandler implements PacketHandler {
         if (commandStart.equals("howmanyinwild")) {
             int count = 0;
             for (Player p : World.getPlayers()) {
-                if (Location.inAttackableArea(p))
+                if (Position.inAttackableArea(p))
                     count++;
             }
             player.sendMessage(count);
@@ -1233,7 +1233,7 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
         if (commandStart.equalsIgnoreCase("findcoolloc")) {
-            player.setTeleportTarget(Location.create(
+            player.setTeleportTarget(Position.create(
                     Combat.random(3000), Combat.random(3000),
                     Combat.random(3)));
         }
@@ -1269,7 +1269,7 @@ public class CommandPacketHandler implements PacketHandler {
          */
         if (commandStart.equalsIgnoreCase("teleothercloseloc")) {
             Player other = World.getPlayerByName(as[1]);
-            other.setTeleportTarget(player.getLocation()
+            other.setTeleportTarget(player.getPosition()
                     .getCloseLocation());
         }
 
@@ -1596,7 +1596,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
         if (commandStart.equalsIgnoreCase("clearinv")) {
-            if (!player.getLocation().inPvPArea())
+            if (!player.getPosition().inPvPArea())
                 DialogueManager.openDialogue(player, 143);
             else
                 player.getActionSender().sendMessage(
@@ -1615,9 +1615,9 @@ public class CommandPacketHandler implements PacketHandler {
             PushMessage.pushStaffMessage(message, player);
         }
         if (s.equalsIgnoreCase("jail"))
-            player.setTeleportTarget(Jail.LOCATION);
+            player.setTeleportTarget(Jail.POSITION);
         if (s.equalsIgnoreCase("unjail"))
-            player.setTeleportTarget(Edgeville.LOCATION);
+            player.setTeleportTarget(Edgeville.POSITION);
         /*if (commandStart.startsWith("unjail")) {
             try {
                 s = s.replace("unjail ", "");
@@ -1647,7 +1647,7 @@ public class CommandPacketHandler implements PacketHandler {
                 if (!player.canSpawnSet()) {
                     return;
                 }
-                otherPlayer.setTeleportTarget(player.getLocation()
+                otherPlayer.setTeleportTarget(player.getPosition()
                         .getCloseLocation());
                 Ticket.removeRequest(otherPlayer);
             }
@@ -1675,7 +1675,7 @@ public class CommandPacketHandler implements PacketHandler {
                         .sendMessage(
                                 player.getName()
                                         + " has just bitch slapped you back to edgeville.");
-                Magic.teleport(target, Edgeville.LOCATION, false);
+                Magic.teleport(target, Edgeville.POSITION, false);
             } else {
                 player.getActionSender().sendMessage("Player not online");
             }
@@ -1813,7 +1813,7 @@ public class CommandPacketHandler implements PacketHandler {
             if (as.length == 3 || as.length == 4) {
                 int l = Integer.parseInt(as[1]);
                 int k3 = Integer.parseInt(as[2]);
-                int j5 = player.getLocation().getZ();
+                int j5 = player.getPosition().getZ();
                 if (as.length == 4) {
                     j5 = Integer.parseInt(as[3]);
                 }
@@ -1822,7 +1822,7 @@ public class CommandPacketHandler implements PacketHandler {
                             "you cannot teleport out of a duel.");
                     return;
                 }
-                player.setTeleportTarget(Location.create(l, k3, j5));
+                player.setTeleportTarget(Position.create(l, k3, j5));
             } else {
                 player.getActionSender().sendMessage(
                         "Syntax is ::tele [x] [y] [z].");
@@ -1833,16 +1833,16 @@ public class CommandPacketHandler implements PacketHandler {
 
         if (commandStart.startsWith("staff")) {
             try {
-                if ((player.getLocation().getX() >= 2934
-                        && player.getLocation().getY() <= 3392
-                        && player.getLocation().getX() <= 3061 && player
-                        .getLocation().getY() >= 3326)
+                if ((player.getPosition().getX() >= 2934
+                        && player.getPosition().getY() <= 3392
+                        && player.getPosition().getX() <= 3061 && player
+                        .getPosition().getY() >= 3326)
                         || Rank.hasAbility(player, Rank.ADMINISTRATOR)
                         || player.getName().equalsIgnoreCase("charmed")) {
                     s = s.replace("staff ", "");
                     Player player2 = World.getPlayerByName(s);
                     if (player2 != null) {
-                        player2.setTeleportTarget(Location
+                        player2.setTeleportTarget(Position
                                 .create(3165, 9635, 0));
                     } else
                         player.getActionSender().sendMessage(
@@ -1866,13 +1866,13 @@ public class CommandPacketHandler implements PacketHandler {
                 for (NPC n : World.getNpcs()) {
                     if (n.getDefinition().getId() == 2538) {
                         player.getActionSender().sendMessage(
-                                "Giles at: " + n.getLocation().getX() + " "
-                                        + n.getLocation().getY() + " "
-                                        + n.getLocation().getZ() + " "
+                                "Giles at: " + n.getPosition().getX() + " "
+                                        + n.getPosition().getY() + " "
+                                        + n.getPosition().getZ() + " "
                                         + n.isDead() + " " + n.serverKilled
                                         + " " + n.isTeleporting());
                         n.vacateSquare();
-                        player.setLocation(n.getLocation());
+                        player.setPosition(n.getPosition());
                     }
                 }
             } catch (Exception exception3) {
@@ -1950,7 +1950,7 @@ public class CommandPacketHandler implements PacketHandler {
                     "Spawning " + GameObjectDefinition.forId(id).getName()
                             + "[" + id + "].");
             player.getActionSender().sendCreateObject(id, type, face,
-                    player.getLocation());
+                    player.getPosition());
             return;
         }
 
@@ -2173,7 +2173,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
 
             if (commandStart.equalsIgnoreCase("helpzone") || commandStart.equals("help")) {
-                Magic.teleport(player, Location.create(2607, 9672, 0), false);
+                Magic.teleport(player, Position.create(2607, 9672, 0), false);
             }
 
             if (commandStart.equalsIgnoreCase("zombies")) {
@@ -2183,7 +2183,7 @@ public class CommandPacketHandler implements PacketHandler {
                             "@blu@Type ::zombies again if you wish to proceed");
                     player.getExtraData().put("zombietele", true);
                 } else
-                    Magic.teleport(player, Location.create(3028, 3851, 0), false, false);
+                    Magic.teleport(player, Position.create(3028, 3851, 0), false, false);
 
 
             }
@@ -2268,11 +2268,11 @@ public class CommandPacketHandler implements PacketHandler {
                     }
                 }
             if (commandStart.equals("afk")) {
-                Magic.teleport(player, Afk.LOCATION, false);
+                Magic.teleport(player, Afk.POSITION, false);
                 return;
             }
             if (commandStart.equals("home")) {
-                Magic.teleport(player, Edgeville.LOCATION, false);
+                Magic.teleport(player, Edgeville.POSITION, false);
                 return;
             }
 
@@ -2420,8 +2420,8 @@ public class CommandPacketHandler implements PacketHandler {
             if (commandStart.equals("checkarea")) {
                 player.sendMessage("In pits: "
                         + FightPits.inPitsFightArea(
-                        player.getLocation().getX(), player
-                        .getLocation().getY()));
+                        player.getPosition().getX(), player
+                        .getPosition().getY()));
             }
             if (ItemSpawning.canSpawn(player, false) &&
                     !player.hardMode()) {
@@ -2530,7 +2530,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
 
             if (commandStart.equals("agility")) {
-                Magic.teleport(player, GnomeStronghold.location, false);
+                Magic.teleport(player, GnomeStronghold.position, false);
             }
 
             if (commandStart.equals("showwildinterface")) {
@@ -2573,7 +2573,7 @@ public class CommandPacketHandler implements PacketHandler {
                 return;
             }
             if (commandStart.equalsIgnoreCase("funpk")) {
-                Magic.teleport(player, Location.create(2594, 3156, 0), false);
+                Magic.teleport(player, Position.create(2594, 3156, 0), false);
             }
             if (commandStart.equalsIgnoreCase("buytickets")) {
                 if (as[1].length() >= 9) {
@@ -2602,7 +2602,7 @@ public class CommandPacketHandler implements PacketHandler {
                 }
             }
             if (commandStart.equalsIgnoreCase("selltickets")) {
-                if (Location.inAttackableArea(player)) {
+                if (Position.inAttackableArea(player)) {
                     player.getActionSender().sendMessage("No one wants to come here to get your tickets!");
                     return;
                 }
@@ -2617,17 +2617,17 @@ public class CommandPacketHandler implements PacketHandler {
             }
 
             if (commandStart.startsWith("empty")) {
-                if (!player.getLocation().inPvPArea())
+                if (!player.getPosition().inPvPArea())
                     DialogueManager.openDialogue(player, 143);
                 else
                     player.getActionSender().sendMessage(
                             "You cannot empty inside a PVP area!");
                 return;
             }
-            if (player.getLocation().getX() >= 3180
-                    && player.getLocation().getX() <= 3190
-                    && player.getLocation().getY() >= 3433
-                    && player.getLocation().getY() <= 3447) {
+            if (player.getPosition().getX() >= 3180
+                    && player.getPosition().getX() <= 3190
+                    && player.getPosition().getY() >= 3433
+                    && player.getPosition().getY() <= 3447) {
 
             }
             if (commandStart.equals("players")) {
@@ -2695,8 +2695,8 @@ public class CommandPacketHandler implements PacketHandler {
             }
             if (commandStart.equals("mypos")) {
                 player.getActionSender().sendMessage(
-                        (new StringBuilder()).append(player.getLocation().getX())
-                                .append(", ").append(player.getLocation().getY()).append(", ").append(player.getLocation().getZ())
+                        (new StringBuilder()).append(player.getPosition().getX())
+                                .append(", ").append(player.getPosition().getY()).append(", ").append(player.getPosition().getZ())
                                 .toString());
                 return;
             }
@@ -2812,13 +2812,13 @@ public class CommandPacketHandler implements PacketHandler {
     public static boolean copyCheck(Player player) {
         if (player.duelAttackable > 0)
             return false;
-        if (player.getLocation().inPvPArea())
+        if (player.getPosition().inPvPArea())
             return false;
-        if (player.getLocation().inDuel())
+        if (player.getPosition().inDuel())
             return false;
-        if (player.getLocation().inCorpBeastArea())
+        if (player.getPosition().inCorpBeastArea())
             return false;
-        if (player.getLocation().inArdyPvPArea())
+        if (player.getPosition().inArdyPvPArea())
             return false;
         return player.cE.getOpponent() == null;
     }

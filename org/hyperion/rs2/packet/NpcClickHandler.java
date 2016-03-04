@@ -37,7 +37,7 @@ public class NpcClickHandler {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
 		NPC npc = (NPC) World.getNpcs().get(slot);
-		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
+		if(npc == null || npc.getPosition().distance(player.getPosition()) > 2)
 			return;
 		switch(npc.getDefinition().getId()) {
 			case 494:
@@ -66,16 +66,16 @@ public class NpcClickHandler {
 			return;
 		NPC npc = (NPC) World.getNpcs().get(slot);
 		// System.out.println("Id: "+slot);
-		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
+		if(npc == null || npc.getPosition().distance(player.getPosition()) > 2)
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());
 		player.setInteractingEntity(npc);
 		if(ContentManager.handlePacket(10, player, npc.getDefinition().getId(),
-						npc.getLocation().getX(), npc.getLocation().getY(),
+						npc.getPosition().getX(), npc.getPosition().getY(),
 						slot)) {
 			return;
 		}
-		npc.face(player.getLocation());
+		npc.face(player.getPosition());
 		switch(npc.getDefinition().getId()) {
 			case 4375:
 				PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
@@ -261,11 +261,11 @@ public class NpcClickHandler {
 		if(slot <= 0 || slot >= Constants.MAX_NPCS)
 			return;
 		NPC npc = (NPC) World.getNpcs().get(slot);
-		if(npc == null || npc.getLocation().distance(player.getLocation()) > 2)
+		if(npc == null || npc.getPosition().distance(player.getPosition()) > 2)
 			return;
 		// System.out.println("id: "+npc.getDefinition().getId());
 		if(ContentManager.handlePacket(11, player, npc.getDefinition().getId(),
-						npc.getLocation().getX(), npc.getLocation().getY(),
+						npc.getPosition().getX(), npc.getPosition().getY(),
 						slot))
 			return;
 		switch(npc.getDefinition().getId()) {

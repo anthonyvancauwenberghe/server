@@ -10,12 +10,12 @@ import org.hyperion.util.Misc;
  * Created by Gilles on 11/09/2015.
  */
 public class RopeSwing extends Obstacle{
-    private Location start,
+    private Position start,
                     end,
                     fail;
     private int direction;
 
-    public RopeSwing(int objectId, int skillXp, int levelReq, Location start, Location end, Location fail, int direction, int failRate, Course course, int progress) {
+    public RopeSwing(int objectId, int skillXp, int levelReq, Position start, Position end, Position fail, int direction, int failRate, Course course, int progress) {
         super(objectId, 751, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
@@ -25,7 +25,7 @@ public class RopeSwing extends Obstacle{
 
     @Override
     public boolean overCome(Player player) {
-        if(player.getLocation().getX() != start.getX() || player.getLocation().getY() != start.getY())
+        if(player.getPosition().getX() != start.getX() || player.getPosition().getY() != start.getY())
             return false;
         if(!super.overCome(player))
             return false;
@@ -45,13 +45,13 @@ public class RopeSwing extends Obstacle{
         final int b = player.getAppearance().getWalkAnim();
         final int c = player.getAppearance().getRunAnim();
         if(direction == 0)
-            player.face(Location.create(player.getLocation().getX() + 1, player.getLocation().getY(), player.getLocation().getZ()));
+            player.face(Position.create(player.getPosition().getX() + 1, player.getPosition().getY(), player.getPosition().getZ()));
         if(direction == 1)
-            player.face(Location.create(player.getLocation().getX(), player.getLocation().getY() - 1, player.getLocation().getZ()));
+            player.face(Position.create(player.getPosition().getX(), player.getPosition().getY() - 1, player.getPosition().getZ()));
         if(direction == 2)
-            player.face(Location.create(player.getLocation().getX() - 1, player.getLocation().getY(), player.getLocation().getZ()));
+            player.face(Position.create(player.getPosition().getX() - 1, player.getPosition().getY(), player.getPosition().getZ()));
         if(direction == 3)
-            player.face(Location.create(player.getLocation().getX(), player.getLocation().getY() + 1, player.getLocation().getZ()));
+            player.face(Position.create(player.getPosition().getX(), player.getPosition().getY() + 1, player.getPosition().getZ()));
 
         World.submit(new Task(600) {
             int progress = start.distance(end);
@@ -64,13 +64,13 @@ public class RopeSwing extends Obstacle{
                 }
                 else if(progress == start.distance(end) - 1) {
                     if(direction == 0)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() + 1);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() + 1);
                     if(direction == 1)
-                        player.getActionSender().forceMovement(player.getLocation().getX() + 1, player.getLocation().getY());
+                        player.getActionSender().forceMovement(player.getPosition().getX() + 1, player.getPosition().getY());
                     if(direction == 2)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() - 1);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() - 1);
                     if(direction == 3)
-                        player.getActionSender().forceMovement(player.getLocation().getX() - 1, player.getLocation().getY());
+                        player.getActionSender().forceMovement(player.getPosition().getX() - 1, player.getPosition().getY());
                 }
                 else if(progress == start.distance(end) - 2) {
                     player.getActionSender().forceMovement(end.getX(), end.getY());
@@ -101,17 +101,17 @@ public class RopeSwing extends Obstacle{
                     player.getWalkingQueue().setRunningToggled(true);
                 } else if (progress == start.distance(end) - 1) {
                     if (direction == 0)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() + 1, 768);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() + 1, 768);
                     if (direction == 1)
-                        player.getActionSender().forceMovement(player.getLocation().getX() + 1, player.getLocation().getY(), 768);
+                        player.getActionSender().forceMovement(player.getPosition().getX() + 1, player.getPosition().getY(), 768);
                     if (direction == 2)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() - 1, 768);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() - 1, 768);
                     if (direction == 3)
-                        player.getActionSender().forceMovement(player.getLocation().getX() - 1, player.getLocation().getY(), 768);
+                        player.getActionSender().forceMovement(player.getPosition().getX() - 1, player.getPosition().getY(), 768);
                     if(!message.isEmpty())
                         player.sendMessage(message);
                 } else if  (progress == start.distance(end) - 2) {
-                    player.setTeleportTarget(Location.create(fail.getX(), fail.getY(), fail.getZ()));
+                    player.setTeleportTarget(Position.create(fail.getX(), fail.getY(), fail.getZ()));
                     player.getAgility().appendHit(Misc.random(3) + 3);
                 }
                 else if(progress == 0) {

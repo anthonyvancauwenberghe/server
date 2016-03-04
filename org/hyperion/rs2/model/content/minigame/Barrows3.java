@@ -145,7 +145,7 @@ public class Barrows3 implements ContentTemplate {
 			World.submit(new Task(2000, "barrows teleport") {
 				@Override
 				public void execute() {
-					Magic.teleport(player, Edgeville.LOCATION, true);
+					Magic.teleport(player, Edgeville.POSITION, true);
 					player.getActionSender().showInterfaceWalkable(- 1);
 					this.stop();
 				}
@@ -285,7 +285,7 @@ public class Barrows3 implements ContentTemplate {
 				return true;
 			}
 			if(! client.hasTarget()) {
-				NPC n = NPCManager.addNPC(client.getLocation().getX(), client.getLocation().getY(), client.getLocation().getZ(), npcForCoffin(oId), -1);
+				NPC n = NPCManager.addNPC(client.getPosition().getX(), client.getPosition().getY(), client.getPosition().getZ(), npcForCoffin(oId), -1);
 				n.forceMessage("You dare disturb my slumber!");
 				n.agressiveDis = 7;
 				n.ownerId = client.getIndex();

@@ -63,7 +63,7 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2103);
                 return true;
             case 2103:
-                Magic.teleport(player, Location.create(3803, 2836, 0), true);
+                Magic.teleport(player, Position.create(3803, 2836, 0), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "This is where you can practice almost every skill.",
                         "We have a wide variaty of skills available,",
@@ -85,7 +85,7 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2106);
                 return true;
             case 2106:
-                Magic.teleport(player, Edgeville.LOCATION, true);
+                Magic.teleport(player, Edgeville.POSITION, true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "This is Edgeville, it is the main hub for the server.",
                         "Edgeville offers most of the shops, and ofcourse Pk'ing.");
@@ -93,7 +93,7 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2107);
                 return true;
             case 2107:
-                Magic.teleport(player, Location.create(3087, 3512, 0), true);
+                Magic.teleport(player, Position.create(3087, 3512, 0), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "This is the wilderness above Edgeville,",
                         "a decent amount of the Pk activity takes place here.");
@@ -107,14 +107,14 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2109);
                 return true;
             case 2109:
-                Magic.teleport(player, Location.create(2977, 3611, 24), true);
+                Magic.teleport(player, Position.create(2977, 3611, 24), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "This is @blu@::13s@bla@. This is a Hybrid Pk'ing place.", "We offer multiple specialized Pk'ing places.");
                 player.getInterfaceState().setNextDialogueId(0, 2110);
                 player.setTutorialProgress(11);
                 return true;
             case 2110:
-                Magic.teleport(player, Location.create(2259, 4697, 600), true);
+                Magic.teleport(player, Position.create(2259, 4697, 600), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "This for example is @blu@::ospk@bla@.",
                         "A Pk'ing place that doesn't allow custom items.");
@@ -129,14 +129,14 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2112);
                 return true;
             case 2112:
-                Magic.teleport(player, Location.create(2795, 3321, 0), true);
+                Magic.teleport(player, Position.create(2795, 3321, 0), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "We also offer some PvM, let's go check out some bosses.");
                 player.setTutorialProgress(14);
                 player.getInterfaceState().setNextDialogueId(0, 2113);
                 return true;
             case 2113:
-                Magic.teleport(player, Location.create(2264, 4689, 4), true);
+                Magic.teleport(player, Position.create(2264, 4689, 4), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "This is the King Black Dragon, it's one of the easier bosses.",
                         "It has a couple of very valuable drops.");
@@ -180,7 +180,7 @@ public class Tutorial implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(0, 2119);
                 return true;
             case 2119:
-                Magic.teleport(player, Location.create(2795, 3321, 0), true);
+                Magic.teleport(player, Position.create(2795, 3321, 0), true);
                 player.getActionSender().sendDialogue("Greg the Guide", ActionSender.DialogueType.NPC, 945, Animation.FacialAnimation.DEFAULT,
                         "If you have any more questions, feel free",
                         "to join the clanchat 'help'.",

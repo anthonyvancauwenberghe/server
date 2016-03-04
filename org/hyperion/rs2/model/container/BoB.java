@@ -55,7 +55,7 @@ public class BoB {
 
 	}
 
-	public static void dropBoB(Location loc, Player player) {
+	public static void dropBoB(Position loc, Player player) {
 		if(player == null || player.getBoB() == null || player.isHidden()) return;
 		for(int i = 0; i < player.getBoB().capacity(); i++) {
 			if(player.getBoB().get(i) != null) {
@@ -167,7 +167,7 @@ public class BoB {
 			PushMessage.pushStaffMessage("Trying to deposit into BOB with no summoned npc", player);
 			return;
 		}
-        if(FightPits.inPits(player) || FightPits.inGame(player) || FightPits.inPitsFightArea(player.getLocation().getX(), player.getLocation().getY()))
+        if(FightPits.inPits(player) || FightPits.inGame(player) || FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY()))
             return;
 		if(slot < 0 || slot > container.capacity() || id < 0 || id > ItemDefinition.MAX_ID)
 			return;

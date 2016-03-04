@@ -1,7 +1,7 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
@@ -17,14 +17,14 @@ public class GodWars implements ContentTemplate {
 		if(type == 6) {
 			if(objId == 26293) {
 				player.getActionSender().sendMessage("You climb the rope.");
-				player.setTeleportTarget(Location.create(3433, 2892, 0));
+				player.setTeleportTarget(Position.create(3433, 2892, 0));
 				player.getActionSender().showInterfaceWalkable(- 1);
 			}
 			if (objId == 26425) {
-				if (player.getLocation().getX() == 2863) {
-					player.setTeleportTarget(player.getLocation().transform(1, 0, 0));
+				if (player.getPosition().getX() == 2863) {
+					player.setTeleportTarget(player.getPosition().transform(1, 0, 0));
 				} else {
-					player.setTeleportTarget(player.getLocation().transform(-1, 0, 0));
+					player.setTeleportTarget(player.getPosition().transform(-1, 0, 0));
 				}
 			}
 
@@ -49,10 +49,7 @@ public class GodWars implements ContentTemplate {
 	}
 
 	public static boolean inGodwars(Player player) {
-		if(player.getLocation().getX() >= 2814 && player.getLocation().getX() <= 2942 && player.getLocation().getY() >= 5250 && player.getLocation().getY() <= 5373) {
-			return true;
-		}
-		return false;
+		return player.getPosition().getX() >= 2814 && player.getPosition().getX() <= 2942 && player.getPosition().getY() >= 5250 && player.getPosition().getY() <= 5373;
 	}
 
 	public static GodWars godWars = null;

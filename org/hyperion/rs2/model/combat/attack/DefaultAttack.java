@@ -13,7 +13,7 @@ public class DefaultAttack implements Attack {
 	}
 
 	public int handleAttack(NPC n, CombatEntity attack) {
-		if(Location.create(n.getLocation().getX() + n.cE.getOffsetX(), n.getLocation().getY() + n.cE.getOffsetY(), n.getLocation().getZ()).isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 1 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
+		if(Position.create(n.getPosition().getX() + n.cE.getOffsetX(), n.getPosition().getY() + n.cE.getOffsetY(), n.getPosition().getZ()).isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 1 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				//System.out.println("Predicted attack waiting.");
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
@@ -57,8 +57,8 @@ public class DefaultAttack implements Attack {
 			Combat.npcAttack(n, attack, tempDamage, 500, Constants.MELEE);
 			n.cE.doAtkEmote();
 			return 5;
-		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 9)) {
-			int distance = n.getLocation().distance(n.cE.getOpponent().getEntity().getLocation());
+		} else if(n.getPosition().isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 9)) {
+			int distance = n.getPosition().distance(n.cE.getOpponent().getEntity().getPosition());
 			//System.out.println("Distance between npcs is :" + distance);
 			return 0;
 		} else {

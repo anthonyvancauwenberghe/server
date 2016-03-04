@@ -20,7 +20,7 @@ public class GnomeGliders implements ContentTemplate {
 	//button,x,y,h,move
 	public static final int[][] GLIDER_DATA = {
 			{826, 2848, 3497, 0, 1}, //  TO MOUNTAIN
-			{825, GnomeStronghold.location.getX(), GnomeStronghold.location.getY(), GnomeStronghold.location.getZ(), 2}, // TO GRAND TREE
+			{825, GnomeStronghold.position.getX(), GnomeStronghold.position.getY(), GnomeStronghold.position.getZ(), 2}, // TO GRAND TREE
 			{827, 3321, 3427, 0, 3}, // TO CASTLE
 			{828, 3278, 3212, 0, 4}, // TO DESERT
 			{824, 2894, 2730, 0, 8}, // TO CRASH ISLAND
@@ -49,7 +49,7 @@ public class GnomeGliders implements ContentTemplate {
 
 	private static boolean farFromNpcs(Player player) {
 		for(NPC npc : npcs) {
-			if(player.getLocation().isWithinDistance(npc.getLocation(), 15))
+			if(player.getPosition().isWithinDistance(npc.getPosition(), 15))
 				return false;
 		}
 		return true;
@@ -62,7 +62,7 @@ public class GnomeGliders implements ContentTemplate {
 		player.getActionSender().sendClientConfig(153, getMove(flightId));
 		World.submit(new Task(1800,"gnomegliders1") {
 			public void execute() {
-				player.setTeleportTarget(Location.create(getX(flightId), getY(flightId), getH(flightId)));
+				player.setTeleportTarget(Position.create(getX(flightId), getY(flightId), getH(flightId)));
 				this.stop();
 			}
 		});

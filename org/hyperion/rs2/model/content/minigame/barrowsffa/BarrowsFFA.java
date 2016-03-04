@@ -19,9 +19,9 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     public static BarrowsFFA barrowsFFA;
 
     private static final int HEIGHT_LEVEL = 1602;
-    public static final Location PORTAL_DEFAULT_LOCATION = Location.create(3092, 3485, 0); //where the portal will spawn
-    private static final Location GAME_DEFAULT_LOCATION = Location.create(1867, 4941, HEIGHT_LEVEL); //default location for the game
-    private static final Location LOBBY = Location.create(1862, 4939, 2); // default location to enter lobby
+    public static final Position PORTAL_DEFAULT_POSITION = Position.create(3092, 3485, 0); //where the portal will spawn
+    private static final Position GAME_DEFAULT_POSITION = Position.create(1867, 4941, HEIGHT_LEVEL); //default location for the game
+    private static final Position LOBBY = Position.create(1862, 4939, 2); // default location to enter lobby
     private static final GameObjectDefinition PORTAL_ENTER_OBJECT = GameObjectDefinition.forId(6282); // portal to enter lobby definition
 
     private static final int EXIT_LOBBY_ID = 8883;
@@ -143,15 +143,15 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
     }
 
     @Override
-    public Location getDefaultLocation() {
-        return GAME_DEFAULT_LOCATION.transform(Misc.random(10), Misc.random(10), 0);  //To change body of implemented methods use File | Settings | File Templates.
+    public Position getDefaultLocation() {
+        return GAME_DEFAULT_POSITION.transform(Misc.random(10), Misc.random(10), 0);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean inArea(Player player) {
-        final int x = player.getLocation().getX();
-        final int y = player.getLocation().getY();
-        final int z = player.getLocation().getZ();
+        final int x = player.getPosition().getX();
+        final int y = player.getPosition().getY();
+        final int z = player.getPosition().getZ();
         return inArea(x, y, z) && game.contains(player);  //borders, not implemented
     }
 
@@ -184,7 +184,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
                 player.getInventory().clear();
             }
 
-            player.setTeleportTarget(PORTAL_DEFAULT_LOCATION);
+            player.setTeleportTarget(PORTAL_DEFAULT_POSITION);
             player.getBarrowsFFA().destroy();
 
             player.getActionSender().showInterfaceWalkable(-1);
@@ -225,7 +225,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
         }
 
         if(id == EXIT_LOBBY_ID) {
-            player.face(Location.create(x, y, HEIGHT_LEVEL));
+            player.face(Position.create(x, y, HEIGHT_LEVEL));
             player.playAnimation(Animation.create(7376));
             World.submit(new Task(600, "barrows ffa lobby") {
                 public void execute() {
@@ -305,7 +305,7 @@ public class BarrowsFFA extends SpecialArea implements ContentTemplate{
 
     public static void spawnObject(final List manager) {
         manager.add(
-                new GameObject(PORTAL_ENTER_OBJECT, PORTAL_DEFAULT_LOCATION.transform(0, -1, 0), 10, /*rotation*/ 0, false)); //make a portal 1 space away from people will teleport
+                new GameObject(PORTAL_ENTER_OBJECT, PORTAL_DEFAULT_POSITION.transform(0, -1, 0), 10, /*rotation*/ 0, false)); //make a portal 1 space away from people will teleport
     }
 
 

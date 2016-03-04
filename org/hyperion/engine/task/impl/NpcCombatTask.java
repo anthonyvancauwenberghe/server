@@ -54,7 +54,7 @@ public class NpcCombatTask extends Task {
 						CombatEntity combatEntity = p.getCombat();
 						if(combatEntity.getAbsX() >= 2505 && combatEntity.getAbsY() >= 4630 &&
 								combatEntity.getAbsX() <= 2536 && combatEntity.getAbsY() <= 4658) {
-							if(p.getLocation().getY() <= 4636 || p.getLocation().getY() >= 4655) {
+							if(p.getPosition().getY() <= 4636 || p.getPosition().getY() >= 4655) {
 								CorporealBeast.stomp(npc, p.cE, true);
 							}
 							willHeal = false;
@@ -74,15 +74,15 @@ public class NpcCombatTask extends Task {
 	public static void aggressiveNPCS() {
 		for(NPC npc : World.getNpcs()) {
 			try {
-                if(npc.ownerId < 1 && npc.agressiveDis < 1 && Combat.getWildLevel(npc.getLocation().getX(), npc.getLocation().getY(), npc.getLocation().getZ()) > 20)
+                if(npc.ownerId < 1 && npc.agressiveDis < 1 && Combat.getWildLevel(npc.getPosition().getX(), npc.getPosition().getY(), npc.getPosition().getZ()) > 20)
                     npc.agressiveDis = 3;
 				if(npc.agressiveDis > 0 && npc.getCombat().getOpponent() == null) {
 					//complicated agressecode used for all players
 					int dis = 1000;
 					Player player2 = null;
 					for(Player player4 : RegionManager.getLocalPlayers(npc)) {
-						if(player4 != null && player4.getLocation().distance(npc.getLocation()) < dis && player4.getLocation().distance(npc.getLocation()) < npc.agressiveDis) {
-							dis = player4.getLocation().distance(npc.getLocation());
+						if(player4 != null && player4.getPosition().distance(npc.getPosition()) < dis && player4.getPosition().distance(npc.getPosition()) < npc.agressiveDis) {
+							dis = player4.getPosition().distance(npc.getPosition());
 							player2 = player4;
 						}
 					}

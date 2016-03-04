@@ -103,15 +103,35 @@ public enum IOData {
             player.setGameMode(element.getAsInt());
         }
     },
+    SAVED_IPS {
+        @Override
+        protected boolean priorityLoading() {
+            return true;
+        }
+        @Override
+        public boolean shouldSave(Player player) {
+            return !player.getSavedIps().isEmpty();
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return builder.toJsonTree(player.getSavedIps(), new TypeToken<Map<String, Long>>(){}.getType());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setSavedIps(builder.fromJson(element, new TypeToken<Map<String, Long>>(){}.getType()));
+        }
+    },
     LOCATION {
         @Override
         public JsonElement saveValue(Player player, Gson builder) {
-            return builder.toJsonTree(player.getLocation(), new TypeToken<Location>(){}.getType());
+            return builder.toJsonTree(player.getPosition(), new TypeToken<Position>(){}.getType());
         }
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
-            player.setLocation(builder.fromJson(element, new TypeToken<Location>(){}.getType()));
+            player.setPosition(builder.fromJson(element, new TypeToken<Position>(){}.getType()));
         }
     },
     VERIFY_CODE {

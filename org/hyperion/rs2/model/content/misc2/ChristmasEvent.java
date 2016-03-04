@@ -91,7 +91,7 @@ public class ChristmasEvent implements ContentTemplate {
                 player.getInterfaceState().setNextDialogueId(1, -1);
                 break;
             case 5002:
-                Magic.teleport(player, Location.create(3096, 3509, 1), true);
+                Magic.teleport(player, Position.create(3096, 3509, 1), true);
                 player.getActionSender().removeChatboxInterface();
                 player.getActionSender().sendDialogue("Find the present", ActionSender.DialogueType.PLAYER, 9400, Animation.FacialAnimation.DISTRESSED,
                         "Must be inside one of these crates...");

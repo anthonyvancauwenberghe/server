@@ -10,8 +10,7 @@ import org.hyperion.rs2.net.Packet;
 // Referenced classes of package org.hyperion.rs2.packet:
 //            PacketHandler
 
-public class ReloadRegion
-		implements PacketHandler {
+public class ReloadRegion implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {

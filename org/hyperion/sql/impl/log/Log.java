@@ -1,5 +1,11 @@
 package org.hyperion.sql.impl.log;
 
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.task.Task;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.sql.impl.log.type.IPLog;
+import org.hyperion.sql.impl.log.type.TaskLog;
+
 import java.sql.Timestamp;
 
 /**
@@ -19,7 +25,9 @@ public class Log {
         DEATH_BY_NPC,
         PLAYER_KILL,
         PICKUP_ITEM,
-        GAMBLE;
+        GAMBLE,
+        IP,
+        TASK;
 
         public int getFlag() {
             return 1 << (ordinal() + 1);
@@ -34,15 +42,27 @@ public class Log {
         this.type = type;
     }
 
-    protected Timestamp getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    protected LogType getType() {
+    public LogType getType() {
         return type;
     }
 
     protected static Timestamp now() {
         return new Timestamp(System.currentTimeMillis());
+    }
+
+    public static IPLog ipLog(Player player) {
+        return new IPLog(player.getName(), player.getShortIP());
+    }
+
+    public static TaskLog taskLog(Task task, long executeTime) {
+        return new TaskLog(task.getKey().toString(), executeTime, task.getClass().getSimpleName());
+    }
+
+    public static TaskLog taskLog(EngineTask task, long executeTime) {
+        return new TaskLog(task.getTaskName(), executeTime, task.getClass().getSimpleName());
     }
 }

@@ -23,7 +23,7 @@ public class SteelTitan implements Attack {
 
 	@Override
 	public int handleAttack(NPC n, CombatEntity attack) {
-		int distance = n.getLocation().distance(attack.getEntity().getLocation());
+		int distance = n.getPosition().distance(attack.getEntity().getPosition());
 		if(n.cE.predictedAtk > System.currentTimeMillis())
 			return 6;
 		attack.doAtkEmote();

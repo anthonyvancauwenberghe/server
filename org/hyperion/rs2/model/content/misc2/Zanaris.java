@@ -1,15 +1,13 @@
 package org.hyperion.rs2.model.content.misc2;
 
-import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.container.bank.Bank;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
-import java.io.FileNotFoundException;
-
 public class Zanaris implements ContentTemplate {
 
-	public final static Location LOCATION = Location.create(2395, 4455, 0);
+	public final static Position POSITION = Position.create(2395, 4455, 0);
 
 
 	@Override

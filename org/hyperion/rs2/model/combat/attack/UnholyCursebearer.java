@@ -74,7 +74,7 @@ public class UnholyCursebearer implements Attack {
             return 6;
         }
         n.cE.setFreezeTimer(1000000000);
-        if (n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 10)) {
+        if (n.getPosition().isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 10)) {
             switch (special) {
                 case 0:
                     handleCurseEffect(n);

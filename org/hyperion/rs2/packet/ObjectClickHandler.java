@@ -27,7 +27,7 @@ public class ObjectClickHandler {
         final GameObjectDefinition def = GameObjectDefinition.forId(id);
         int offX = def != null ? 1 + def.getSizeX() : 3;
         int offY = def != null ? 1 + def.getSizeY() : 3;
-        if (!canClick(offX, offY, x, y, p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ())) {
+        if (!canClick(offX, offY, x, y, p.getPosition().getX(), p.getPosition().getY(), p.getPosition().getZ())) {
             p.getActionSender().sendMessage("You are too far away from the object to interact with it!");
             return;
         }
@@ -47,21 +47,21 @@ public class ObjectClickHandler {
     public static void objectClickOne(final Player player, final int id, final int x, final int y) {
         if (id > GameObjectDefinition.MAX_DEFINITIONS || id < 0)
             return;
-        Location loc = Location.create(x, y, player.getLocation().getZ());
+        Position loc = Position.create(x, y, player.getPosition().getZ());
         if (DoorManager.handleDoor(player, loc, id))
             return;
 
-        if (loaded && !objectExist(id, x, y, player.getLocation().getZ()) && !slipObject(id)) {
+        if (loaded && !objectExist(id, x, y, player.getPosition().getZ()) && !slipObject(id)) {
             return;
         }
         // woodcutting
         Tree tree = Tree.forId(id);
-        if (tree != null && player.getLocation().isWithinInteractionDistance(loc)) {
+        if (tree != null && player.getPosition().isWithinInteractionDistance(loc)) {
             player.getActionQueue().addAction(new WoodcuttingAction(player, loc, tree));
         }
         // mining
         Node node = Node.forId(id);
-        if (node != null && player.getLocation().isWithinInteractionDistance(loc)) {
+        if (node != null && player.getPosition().isWithinInteractionDistance(loc)) {
             player.getActionQueue().addAction(new MiningAction(player, loc, node));
         }
         switch (id) {
@@ -72,7 +72,7 @@ public class ObjectClickHandler {
                 }
                 int absY = 3605;
                 absY += player.cE.getAbsY() > absY ? -1 : 1;
-                player.setTeleportTarget(Location.create(player.cE.getAbsX(), absY, player.cE.getAbsZ()));
+                player.setTeleportTarget(Position.create(player.cE.getAbsX(), absY, player.cE.getAbsZ()));
                 break;
             case 2470:
                 DialogueManager.openDialogue(player, 151);
@@ -90,10 +90,10 @@ public class ObjectClickHandler {
                 World.submit(new Task(100,"objectclickhandler") {
                     @Override
                     public void execute() {
-                        if (player.getLocation().getX() == 2649 && player.getLocation().getY() == 9562)
-                            player.setTeleportTarget(Location.create(2647, 9557, 0));
-                        if (player.getLocation().getX() == 2647 && player.getLocation().getY() == 9557)
-                            player.setTeleportTarget(Location.create(2649, 9562, 0));
+                        if (player.getPosition().getX() == 2649 && player.getPosition().getY() == 9562)
+                            player.setTeleportTarget(Position.create(2647, 9557, 0));
+                        if (player.getPosition().getX() == 2647 && player.getPosition().getY() == 9557)
+                            player.setTeleportTarget(Position.create(2649, 9562, 0));
                         this.stop();
                     }
                 });
@@ -103,7 +103,7 @@ public class ObjectClickHandler {
                 World.submit(new Task(600) {
                     @Override
                     public void execute() {
-                        player.setTeleportTarget(Location.create(3017, 3850, 0));
+                        player.setTeleportTarget(Position.create(3017, 3850, 0));
                         this.stop();
                     }
                 });
@@ -126,33 +126,33 @@ public class ObjectClickHandler {
             case 3537:
             case 12554:
             case 1738:
-                player.setTeleportTarget(Location.create(player.getLocation().getX(), player.getLocation().getY(), 2));
+                player.setTeleportTarget(Position.create(player.getPosition().getX(), player.getPosition().getY(), 2));
                 break;
             case 10230://dag ladder
-                player.setTeleportTarget(Location.create(2900, 4449, 0));
+                player.setTeleportTarget(Position.create(2900, 4449, 0));
                 break;
             case 1733:
-                player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() + 6396), 0));
+                player.setTeleportTarget(Position.create((player.getPosition().getX()), (player.getPosition().getY() + 6396), 0));
                 break;
             case 1734:
-                player.setTeleportTarget(Location.create((player.getLocation().getX()), (player.getLocation().getY() - 6396), 0));
+                player.setTeleportTarget(Position.create((player.getPosition().getX()), (player.getPosition().getY() - 6396), 0));
                 break;
             case 1755:
-                if (Combat.getWildLevel(player.getLocation().getX(), player.getLocation().getY()) > 0) {
+                if (Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY()) > 0) {
                     player.playAnimation(Animation.create(828));
-                    player.setTeleportTarget(Location.create(3005, 3962, 0));
+                    player.setTeleportTarget(Position.create(3005, 3962, 0));
                 } else {
                     player.playAnimation(Animation.create(828));
-                    player.setTeleportTarget(Location.create(2884, 3396, 0));
+                    player.setTeleportTarget(Position.create(2884, 3396, 0));
                 }
                 break;
             case 1759:
                 player.playAnimation(Animation.create(828));
-                player.setTeleportTarget(Location.create(2884, 9798, 0));
+                player.setTeleportTarget(Position.create(2884, 9798, 0));
                 break;
             case 14758:
                 player.playAnimation(Animation.create(828));
-                player.setTeleportTarget(Location.create(3005, 10362, 0));
+                player.setTeleportTarget(Position.create(3005, 10362, 0));
                 break;
             case 26384:
                 if (player.godWarsKillCount[0] < 40) {
@@ -160,17 +160,17 @@ public class ObjectClickHandler {
                     return;
                 }
                 player.godWarsKillCount[0] = 0;
-                if (player.getLocation().getY() != 5333 || player.getLocation().getX() < 2850 || player.getLocation().getX() > 2851)
+                if (player.getPosition().getY() != 5333 || player.getPosition().getX() < 2850 || player.getPosition().getX() > 2851)
                     break;
-                player.face(Location.create(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), y, 2));
+                player.face(Position.create(player.getPosition().getX() <= 2850 ? (player.getPosition().getX() + 1) : (player.getPosition().getX() - 1), y, 2));
                 player.playAnimation(Animation.create(7002));
                 World.submit(new Task(1100) {
                     @Override
                     public void execute() {
                         player.getActionSender().sendReplaceObject(x, y, id, 1, 0);
                         player.getWalkingQueue().reset();
-                        player.getWalkingQueue().addStep(player.getLocation().getX(), player.getLocation().getY());
-                        player.getWalkingQueue().addStep(player.getLocation().getX() <= 2850 ? (player.getLocation().getX() + 1) : (player.getLocation().getX() - 1), player.getLocation().getY());
+                        player.getWalkingQueue().addStep(player.getPosition().getX(), player.getPosition().getY());
+                        player.getWalkingQueue().addStep(player.getPosition().getX() <= 2850 ? (player.getPosition().getX() + 1) : (player.getPosition().getX() - 1), player.getPosition().getY());
                         player.getWalkingQueue().finish();
                         this.stop();
                     }
@@ -189,10 +189,10 @@ public class ObjectClickHandler {
             case 26303:
                 if (player.godWarsKillCount[3] >= 40) {
                     player.godWarsKillCount[3] = 0;
-                    if (player.getLocation().getY() <= 5269)
-                        player.setTeleportTarget(Location.create(2872, (player.getLocation().getY() + 10), 2));
+                    if (player.getPosition().getY() <= 5269)
+                        player.setTeleportTarget(Position.create(2872, (player.getPosition().getY() + 10), 2));
                     else
-                        player.setTeleportTarget(Location.create(2872, (player.getLocation().getY() - 10), 2));
+                        player.setTeleportTarget(Position.create(2872, (player.getPosition().getY() - 10), 2));
                 } else {
                     player.getActionSender().sendMessage("You need to slay 40 Armdayl monsters to pass.");
                     return;
@@ -245,9 +245,9 @@ public class ObjectClickHandler {
     }
 
     public static void objectClickTwo(Player player, int id, int x, int y) {
-        Location loc = Location.create(x, y, player.getLocation().getZ());
+        Position loc = Position.create(x, y, player.getPosition().getZ());
         Node node = Node.forId(id);
-        if (node != null && player.getLocation().isWithinInteractionDistance(loc)) {
+        if (node != null && player.getPosition().isWithinInteractionDistance(loc)) {
             player.getActionQueue().addAction(new ProspectingAction(player, loc, node));
             return;
         }
@@ -280,8 +280,8 @@ public class ObjectClickHandler {
     }
 
     public static boolean objectExist(int id, int x, int y, int height) {
-        final Location location = Location.create(x, y, height);
-        return ObjectManager.objectExist(location, id);
+        final Position position = Position.create(x, y, height);
+        return ObjectManager.objectExist(position, id);
 
     }
 

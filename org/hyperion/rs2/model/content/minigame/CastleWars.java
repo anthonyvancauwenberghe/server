@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model.content.minigame;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -62,7 +62,7 @@ public class CastleWars implements ContentTemplate {
 			player.getActionSender().sendMessage("This team currently has too many players.");
 			return;
 		}
-		player.setTeleportTarget(Location.create(2379, 9489, 0));
+		player.setTeleportTarget(Position.create(2379, 9489, 0));
 		waitingRoomSara.add(player);
 		openInterface(player);
 	}
@@ -72,7 +72,7 @@ public class CastleWars implements ContentTemplate {
 			player.getActionSender().sendMessage("This team currently has too many players.");
 			return;
 		}
-		player.setTeleportTarget(Location.create(2421, 9523, 0));
+		player.setTeleportTarget(Position.create(2421, 9523, 0));
 		waitingRoomZammy.add(player);
 		openInterface(player);
 		//add player cape onto them
@@ -230,9 +230,9 @@ public class CastleWars implements ContentTemplate {
 
 	}
 
-	private Location lobby = Location.create(2440, 3090, 0);
-	private Location zammySpawn = Location.create(2373, 3130, 1);
-	private Location saraSpawn = Location.create(2427, 3076, 1);
+	private Position lobby = Position.create(2440, 3090, 0);
+	private Position zammySpawn = Position.create(2373, 3130, 1);
+	private Position saraSpawn = Position.create(2427, 3076, 1);
 
 	private int timeInMinsLeft = 1;
 	private int timeLeft = 60;
@@ -269,12 +269,12 @@ public class CastleWars implements ContentTemplate {
 	}
 
 	public void staircase(Player player, int id) {
-		int x = player.getLocation().getX();
-		int y = player.getLocation().getY();
+		int x = player.getPosition().getX();
+		int y = player.getPosition().getY();
 		if(id == 4415 && x == 2379 && y == 3127)
-			player.setTeleportTarget(Location.create(player.getLocation().getX() + 1, player.getLocation().getY() + 3, player.getLocation().getZ() - 1));
+			player.setTeleportTarget(Position.create(player.getPosition().getX() + 1, player.getPosition().getY() + 3, player.getPosition().getZ() - 1));
 		else if(id == 4415 && x == 2369 && y == 3127)
-			player.setTeleportTarget(Location.create(player.getLocation().getX() + 3, player.getLocation().getY() - 1, player.getLocation().getZ() - 1));
+			player.setTeleportTarget(Position.create(player.getPosition().getX() + 3, player.getPosition().getY() - 1, player.getPosition().getZ() - 1));
 
 
 	}

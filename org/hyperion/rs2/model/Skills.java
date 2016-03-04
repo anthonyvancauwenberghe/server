@@ -394,7 +394,7 @@ public class Skills {
      */
     public int calculateMaxLifePoints() {
         int lifePoints = getLevelForExp(3);
-        if (!Location.inAttackableArea(player)) {
+        if (!Position.inAttackableArea(player)) {
             if (Rank.hasAbility(player, Rank.SUPER_DONATOR)) {
                 lifePoints *= 1.12;
             }

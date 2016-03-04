@@ -47,14 +47,6 @@ public abstract class NIGGERUZ extends SpecialArea {
     }
 
     public void initObjects(final List<GameObject> manager) {
-        for(int i = 4680; i <= 4711; i++) {
-            if(i == 4696 || i == 4697) continue;
-            manager.add(new GameObject(DEFINITION, Location.create(2261, i, height), 10, 1, false));
-        }
-
-        manager.add(new GameObject(GameObjectDefinition.forId(6951), Location.create(2271, 4680, height), 4, 0, false));
-
-
     }
 
     public void initNpc(final Map positionMap) {
@@ -62,14 +54,14 @@ public abstract class NIGGERUZ extends SpecialArea {
         NPCDefinition nD = NPCDefinition.forId(495);
         NPC n = NPCManager.addNPC(getDefaultLocation().transform(-1, -2, 0), 495, -1);
         World.register(n);
-        positionMap.put(n.getLocation().getX() * 16 +
-                n.getLocation().getY() * 4, n);
+        positionMap.put(n.getPosition().getX() * 16 +
+                n.getPosition().getY() * 4, n);
 
     }
 
     @Override
-    public Location getDefaultLocation() {
-        return Location.create(2258, 4696, height);
+    public Position getDefaultLocation() {
+        return Position.create(2258, 4696, height);
     }
 
 

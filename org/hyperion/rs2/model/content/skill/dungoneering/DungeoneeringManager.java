@@ -3,8 +3,8 @@ package org.hyperion.rs2.model.content.skill.dungoneering;
 import org.hyperion.rs2.commands.Command;
 import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
@@ -28,7 +28,7 @@ public class DungeoneeringManager implements ContentTemplate {
 
     private static List<Integer> items;
 
-    public static final Location LOBBY = Location.create(2987, 9637, 0);
+    public static final Position LOBBY = Position.create(2987, 9637, 0);
 
     @Override
     public int[] getValues(int type) {

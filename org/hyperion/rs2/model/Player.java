@@ -340,6 +340,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private BankField bankField = new BankField(this);
 	private Highscores highscores;
 	private JGrandExchangeTracker geTracker;
+	private Map<String, Long> savedIps = new HashMap<>();
 
 	public Player(PlayerDetails details) {
 		this.session = details.getSession();
@@ -928,7 +929,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void increaseEP() {
-		if(EP == 100 || getLocation().getZ() != 0)
+		if(EP == 100 || getPosition().getZ() != 0)
 			return;
 		int addEP = Misc.random(15) + 15;
 		if(EP + addEP > 100)
@@ -1649,7 +1650,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 							public void execute() {
 								if (loop == 5) {
-									setTeleportTarget(Location.create(3225, 3218, 0));
+									setTeleportTarget(Position.create(3225, 3218, 0));
 									sendMessage("Your ring of life saves you, but is destroyed in the process.");
 									this.stop();
 								}
@@ -2085,13 +2086,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public ActionSender sendPkMessage(Object... message) {
-		if(Lock.isEnabled(this, Lock.PK_MESSAGES))
+		if(!Lock.isEnabled(this, Lock.PK_MESSAGES))
 			return sendHeadedMessage("@dbl@", "[APk]", message);
 		return getActionSender();
 	}
 
 	public ActionSender sendLootMessage(String tag, Object... message) {
-		if(Lock.isEnabled(this, Lock.LOOT_MESSAGES))
+		if(!Lock.isEnabled(this, Lock.LOOT_MESSAGES))
 			return sendHeadedMessage("@gre@", "[" + tag + "]", message);
 		return getActionSender();
 	}
@@ -2338,5 +2339,29 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setLastMac(int lastMac) {
 		this.lastMac = lastMac;
+	}
+
+	public Map<String, Long> getSavedIps() {
+		return savedIps;
+	}
+
+	public void setSavedIps(Map<String, Long> savedIps) {
+		this.savedIps = savedIps;
+	}
+
+	public void saveIp(String ipAddress) {
+		if(savedIps.containsKey(ipAddress))
+			return;
+		sendImportantMessage("The IP " + ipAddress + " has been saved for 7 days!");
+		savedIps.put(ipAddress, System.currentTimeMillis() + Time.ONE_DAY * 7);
+	}
+
+	public boolean canLoginFreely(String ipAddress) {
+		if(!savedIps.containsKey(ipAddress))
+			return false;
+		if(savedIps.get(ipAddress) >= System.currentTimeMillis())
+			return true;
+		savedIps.remove(ipAddress);
+		return false;
 	}
 }

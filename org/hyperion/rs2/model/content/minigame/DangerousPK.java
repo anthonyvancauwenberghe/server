@@ -43,8 +43,8 @@ public class DangerousPK implements ContentTemplate {
 		DialogueManager.openDialogue(player, 145);
 	}
 	//send back to entrance area
-	public static Location entrance() {
-		return Location.create(2480, 5175, 0);
+	public static Position entrance() {
+		return Position.create(2480, 5175, 0);
 	}
 	//send to wait area
 	public static void toWaitArea(final Player player) {
@@ -59,7 +59,7 @@ public class DangerousPK implements ContentTemplate {
 		player.playAnimation(Animation.create(7376));
 		World.submit(new Task(1000, "dangerouspk") {
 			public void execute() {
-				player.setTeleportTarget(Location.create(2475, 5214, 0));
+				player.setTeleportTarget(Position.create(2475, 5214, 0));
                 this.stop();
 			}
 		});
@@ -79,8 +79,8 @@ public class DangerousPK implements ContentTemplate {
 	 * Checks if in FFACombat, no location currently
 	 */
 	public static boolean inDangerousPK(Player player) {
-		int x = player.getLocation().getX();
-		int y = player.getLocation().getY();
+		int x = player.getPosition().getX();
+		int y = player.getPosition().getY();
 		return inDangerousPK(x, y);
 	}
 
@@ -96,7 +96,7 @@ public class DangerousPK implements ContentTemplate {
 			@Override
 			public boolean execute(Player player, String input)
 					throws Exception {
-				Magic.teleport(player, Location.create(2399,5178,0), false, false);
+				Magic.teleport(player, Position.create(2399,5178,0), false, false);
 				return true;
 			}
 			

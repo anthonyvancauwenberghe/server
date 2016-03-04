@@ -74,7 +74,7 @@ public class RevAttack implements Attack {
             //System.out.println("Predicted attack waiting.");
             return 6;//we dont want to reset attack but just wait another 500ms or so...
         }
-        final int distance = n.getLocation().distance(attack.getEntity().getLocation());
+        final int distance = n.getPosition().distance(attack.getEntity().getPosition());
         if (Misc.random(5) == 1 && n.health < n.maxHealth / 2) {
             if (attack._getPlayer().isPresent() && attack.getPlayer().getDungeoneering().inDungeon())
                 return 5;
@@ -161,7 +161,7 @@ public class RevAttack implements Attack {
             if (attack instanceof Player)
                 ((Player) attack).sendMessage("You have been frozen!");
         }
-        final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+        final int distance = attack.getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 
         Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.MAGE);
         Combat.npcRangeAttack(n, attack.getCombat(), 1276, 35, false);
@@ -176,7 +176,7 @@ public class RevAttack implements Attack {
         final int maxHit = n.getDefinition().combat() / 4;
         int damage = CombatCalculation.getCalculatedDamage(n, attack, Misc.random(maxHit), Constants.RANGE, maxHit);
 
-        final int distance = attack.getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+        final int distance = attack.getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 
         Combat.npcAttack(n, attack.getCombat(), damage, 300 + distance * 200, Constants.RANGE);
         Combat.npcRangeAttack(n, attack.getCombat(), 1278, 35, false);

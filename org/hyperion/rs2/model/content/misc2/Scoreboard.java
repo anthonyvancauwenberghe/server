@@ -110,7 +110,7 @@ public class Scoreboard implements ContentTemplate {
 
 	@Override
 	public void init() throws FileNotFoundException {
-		ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(3192), Location.create(3084, 3485, 0), 10, 0)); //ScoreBoard
+		ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(3192), Position.create(3084, 3485, 0), 10, 0)); //ScoreBoard
 	}
 
 	@Override

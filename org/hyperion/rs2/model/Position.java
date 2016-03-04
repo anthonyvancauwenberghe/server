@@ -17,7 +17,7 @@ import org.hyperion.util.Misc;
  *
  * @author Graham Edgecombe
  */
-public class Location {
+public class Position {
 
 	/**
 	 * The x coordinate.
@@ -42,8 +42,8 @@ public class Location {
 	 * @param z The z coordinate.
 	 * @return The location.
 	 */
-	public static Location create(int x, int y, int z) {
-		return new Location(x, y, z);
+	public static Position create(int x, int y, int z) {
+		return new Position(x, y, z);
 	}
 
 	/**
@@ -53,19 +53,19 @@ public class Location {
 	 * @param y The y coordinate.
 	 * @param z The z coordinate.
 	 */
-	private Location(int x, int y, int z) {
+	private Position(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	private Location() {
+	private Position() {
 		this(0, 0, 0);
 	}
 
 
-	public Location getCloseLocation() {
-		return new Location(x - 1 + Misc.random(3), y - 1 + Misc.random(3), z);
+	public Position getCloseLocation() {
+		return new Position(x - 1 + Misc.random(3), y - 1 + Misc.random(3), z);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class Location {
 	 * @param l The region the coordinate will be relative to.
 	 * @return The local x coordinate.
 	 */
-	public int getLocalX(Location l) {
+	public int getLocalX(Position l) {
 		return x - 8 * l.getRegionX();
 	}
 
@@ -129,7 +129,7 @@ public class Location {
 	 * @param l The region the coordinate will be relative to.
 	 * @return The local y coordinate.
 	 */
-	public int getLocalY(Location l) {
+	public int getLocalY(Position l) {
 		return y - 8 * l.getRegionY();
 	}
 
@@ -158,7 +158,7 @@ public class Location {
 	 * @return <code>true</code> if the location is in range,
 	 * <code>false</code> if not.
 	 */
-	public boolean isWithinDistance(Location other, int dis) {
+	public boolean isWithinDistance(Position other, int dis) {
 		if(z != other.z) {
 			return false;
 		}
@@ -175,7 +175,7 @@ public class Location {
 	 * @return <code>true</code> if the location is in range,
 	 * <code>false</code> if not.
 	 */
-	public boolean isWithinDistance(Location other) {
+	public boolean isWithinDistance(Position other) {
 		if(z != other.z) {
 			return false;
 		}
@@ -190,7 +190,7 @@ public class Location {
 	 * @return <code>true</code> if the location is in range,
 	 * <code>false</code> if not.
 	 */
-	public boolean isWithinInteractionDistance(Location other) {
+	public boolean isWithinInteractionDistance(Position other) {
 		if(z != other.z) {
 			return false;
 		}
@@ -205,7 +205,7 @@ public class Location {
 	 * @return <code>true</code> if the location is in range,
 	 * <code>false</code> if not.
 	 */
-	public int distance(Location other) {
+	public int distance(Position other) {
 		int deltaX = other.x - x, deltaY = other.y - y;
 		//double dis = Math.sqrt(Math.pow(deltaX, 2D) + Math.pow(deltaY, 2D));
 		double dis = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -221,14 +221,14 @@ public class Location {
 
 	@Override
 	public boolean equals(Object other) {
-		if(! (other instanceof Location)) {
+		if(! (other instanceof Position)) {
 			return false;
 		}
-		Location loc = (Location) other;
+		Position loc = (Position) other;
 		return loc.x == x && loc.y == y && loc.z == z;
 	}
 
-    public boolean equalsIgnoreHeight(Location other) {
+    public boolean equalsIgnoreHeight(Position other) {
         return other.x == x && other.y == y && other.z%4 == z%4;
     }
 
@@ -245,19 +245,19 @@ public class Location {
 	 * @param diffZ Z difference.
 	 * @return The new location.
 	 */
-	public Location transform(int diffX, int diffY, int diffZ) {
-		return Location.create(x + diffX, y + diffY, z + diffZ);
+	public Position transform(int diffX, int diffY, int diffZ) {
+		return Position.create(x + diffX, y + diffY, z + diffZ);
 	}
 
 	/**
 	 * Checks if we're in a specific arena based on location objects.
 	 *
-	 * @param minLocation The min location to check.
-	 * @param maxLocation The max location to check.
+	 * @param minPosition The min location to check.
+	 * @param maxPosition The max location to check.
 	 * @return True if we're in the area, false it not.
 	 */
-	public boolean isInArea(Location minLocation, Location maxLocation) {
-		return isInArea(x, y, z, minLocation.getX(), minLocation.getY(), minLocation.getZ(), maxLocation.getX(), maxLocation.getY(), maxLocation.getZ());
+	public boolean isInArea(Position minPosition, Position maxPosition) {
+		return isInArea(x, y, z, minPosition.getX(), minPosition.getY(), minPosition.getZ(), maxPosition.getX(), maxPosition.getY(), maxPosition.getZ());
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class Location {
 	public static boolean inAttackableArea(Player player) {
 		if(player == null || player.cE == null)
 			return false;
-		return 	player.getLocation().inPvPArea()
+		return 	player.getPosition().inPvPArea()
 				|| ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1)
 				|| player.duelAttackable > 0
 				|| CastleWars.getCastleWars().isInGame(player)

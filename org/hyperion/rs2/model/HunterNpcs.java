@@ -45,7 +45,7 @@ public class HunterNpcs {
 		int y = MIN_Y + Misc.random(MAX_Y - MIN_Y);
 		int impId = getRandomImp();
 		NPC imp = NPCManager
-				.addNPC(Location.create(x, y, 0), impId, - 1);
+				.addNPC(Position.create(x, y, 0), impId, - 1);
 		synchronized(imps) {
 			imps.add(imp);
 		}
@@ -56,7 +56,7 @@ public class HunterNpcs {
 		synchronized(imps) {
 			for(NPC imp : imps) {
 				if(imp.getDefinition().getId() == NpcId) {
-					if(imp.getLocation().equals(Location.create(x, y, 0))) {
+					if(imp.getPosition().equals(Position.create(x, y, 0))) {
 						caughtImp = imp;
 						break;
 					}
@@ -79,12 +79,12 @@ public class HunterNpcs {
 		int walkToX;
 		int walkToY;
 		do {
-			walkToX = npc.getLocation().getX()
+			walkToX = npc.getPosition().getX()
 					+ (Combat.random(1) == 0 ? Misc.random(50) : Misc
 					.random(- 50));
 		} while(walkToX > MAX_X || walkToX < MIN_X);
 		do {
-			walkToY = npc.getLocation().getY()
+			walkToY = npc.getPosition().getY()
 					+ (Combat.random(1) == 0 ? Misc.random(50) : Misc
 					.random(- 50));
 		} while(walkToY > MAX_Y || walkToY < MIN_Y);

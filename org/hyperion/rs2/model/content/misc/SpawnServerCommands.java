@@ -30,23 +30,23 @@ public class SpawnServerCommands {
 	private static void max(Player player) {
         if(!ItemSpawning.canSpawn(player))
             return;
-		if(player.getLocation().cannotMax()) {
+		if(player.getPosition().cannotMax()) {
 			player.sendMessage("You cannot max here!");
 			return;
 		}
 		if(FightPits.inGame(player))
 			return;
-		if(player.getLocation().inPvPArea()) {
+		if(player.getPosition().inPvPArea()) {
 			player.getActionSender().sendMessage(
 					"You cannot do that in PvP zones.");
 			return;
 		}
-        else if(player.getLocation().inCorpBeastArea()) {
+        else if(player.getPosition().inCorpBeastArea()) {
             player.getActionSender().sendMessage(
                     "You feel the presence of a mighty beast and you're too scared to max.");
             return;
         }
-		else if(player.getLocation().inFunPk()) {
+		else if(player.getPosition().inFunPk()) {
 			player.getActionSender().sendMessage(
 					"Don't be a pussy and fight like a man.");
 			return;

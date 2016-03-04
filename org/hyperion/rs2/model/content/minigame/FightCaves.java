@@ -1,9 +1,9 @@
 package org.hyperion.rs2.model.content.minigame;
 
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.NPCManager;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
@@ -127,8 +127,8 @@ public class FightCaves
 			player.fightCavesKills--;
 			if(j == 2630) {
 				//System.out.println("spawning extra");
-				spawnNpc(2738, Location.create(k, l, player.getIndex() * 4), player);
-				spawnNpc(2738, Location.create(k + 2, l, player.getIndex() * 4), player);
+				spawnNpc(2738, Position.create(k, l, player.getIndex() * 4), player);
+				spawnNpc(2738, Position.create(k + 2, l, player.getIndex() * 4), player);
 			}
 			if(j != 2745 && player.fightCavesKills == 0) {
 				player.fightCavesWave++;
@@ -142,7 +142,7 @@ public class FightCaves
 	}
 
 	public void startCaves(Player player, int i) {
-		player.setTeleportTarget(Location.create(2400, 5093, player.getIndex() * 4));
+		player.setTeleportTarget(Position.create(2400, 5093, player.getIndex() * 4));
 		player.getActionSender().sendMessage("Prepare Yourself, the waves will start in 15 seconds.");
 		player.fightCavesWave = i;
 		player.fightCavesKills = 0;
@@ -153,7 +153,7 @@ public class FightCaves
 
 	public void quitCaves(Player player) {
 		player.getActionSender().showInterfaceWalkable(- 1);
-		player.setTeleportTarget(Location.create(2439, 5171, 0));
+		player.setTeleportTarget(Position.create(2439, 5171, 0));
 	}
 
 	public void spawnWave(Player player, int i) {
@@ -173,14 +173,14 @@ public class FightCaves
 		player.getActionSender().sendString(4536, (new StringBuilder()).append("Wave: ").append(i).toString());
 	}
 
-	public NPC spawnNpc(int i, Location location, Player player) {
-		NPC npc = NPCManager.addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
+	public NPC spawnNpc(int i, Position position, Player player) {
+		NPC npc = NPCManager.addNPC(position.getX(), position.getY(), player.getIndex() * 4, i, - 1);
 		npc.agressiveDis = 150;
 		npc.ownerId = player.getIndex();
 		return npc;
 	}
 
-	public Location getSpawnLoc() {
+	public Position getSpawnLoc() {
 		int ai[] = {
 				2404, 2375, 2373, 2388, 2413
 		};
@@ -194,7 +194,7 @@ public class FightCaves
 				12, 15, 15, 33, 10
 		};
 		int i = Combat.random(ai.length - 1);
-		return Location.create(ai[i] + Combat.random(ai2[i]), ai1[i] + Combat.random(ai3[i]), 0);
+		return Position.create(ai[i] + Combat.random(ai2[i]), ai1[i] + Combat.random(ai3[i]), 0);
 	}
 
 }

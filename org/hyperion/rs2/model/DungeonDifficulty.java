@@ -1,16 +1,7 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.NPC;
-import org.hyperion.rs2.model.NPCDefinition;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.combat.attack.RevAttack;
-import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +21,7 @@ public enum DungeonDifficulty {
     private final int[] monsters, bosses;
     public final long time;
 
-    private DungeonDifficulty(final int coins ,final int spawns, final int rooms,  final int min_level, final int xp, final long time, final int[] bosses, final int... monsters) {
+    DungeonDifficulty(final int coins, final int spawns, final int rooms, final int min_level, final int xp, final long time, final int[] bosses, final int... monsters) {
         this.coins = coins;
         this.min_level = min_level;
         this.spawns = spawns;
@@ -58,7 +49,7 @@ public enum DungeonDifficulty {
         public final int size;
         public final double multiplier;
         public final double multi_time;
-        private DungeonSize(final int size, final double multiplier, final double multi) {
+        DungeonSize(final int size, final double multiplier, final double multi) {
             this.size = size;
             this.multiplier = multiplier;
             this.multi_time = multi;

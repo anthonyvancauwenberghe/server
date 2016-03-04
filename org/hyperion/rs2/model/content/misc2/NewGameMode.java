@@ -161,7 +161,7 @@ public class NewGameMode implements ContentTemplate {
                 DialogueManager.openDialogue(player, 2100);
                 return true;
             case 10003:
-                Magic.teleport(player, Edgeville.LOCATION, true);
+                Magic.teleport(player, Edgeville.POSITION, true);
                 player.getActionSender().sendDialogue("Select an option", ActionSender.DialogueType.OPTION,1, Animation.FacialAnimation.DEFAULT,
                         "Normal mode (recommended)", "Hard mode");
                 player.getInterfaceState().setNextDialogueId(0, 10001);

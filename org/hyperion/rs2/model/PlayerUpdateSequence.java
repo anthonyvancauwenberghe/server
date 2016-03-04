@@ -68,20 +68,20 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 
             try {
                 if (player.isFollowing != null) {
-                    int dis = player.getLocation().distance(player.isFollowing.getLocation());
+                    int dis = player.getPosition().distance(player.isFollowing.getPosition());
                     if (dis <= 20 && dis > 1) {
                         try {
-                            int toX = player.isFollowing.getLocation().getX();
-                            int toY = player.isFollowing.getLocation().getY();
+                            int toX = player.isFollowing.getPosition().getX();
+                            int toY = player.isFollowing.getPosition().getY();
                             if (player.isFollowing.getWalkingQueue().getPublicPoint() != null) {
                                 toX = player.isFollowing.getWalkingQueue().getPublicPoint().getX();
                                 toY = player.isFollowing.getWalkingQueue().getPublicPoint().getY();
                             }
-                            int baseX = player.getLocation().getX() - 25;
-                            int baseY = player.getLocation().getY() - 25;
+                            int baseX = player.getPosition().getX() - 25;
+                            int baseY = player.getPosition().getY() - 25;
                             player.getWalkingQueue().reset();
                             player.getWalkingQueue().setRunningQueue(true);
-                            Path p = PathTest.getPath(player.getLocation().getX(), player.getLocation().getY(), toX, toY);
+                            Path p = PathTest.getPath(player.getPosition().getX(), player.getPosition().getY(), toX, toY);
                             if (p != null) {
                                 for (int i = 1; i < p.getLength(); i++) {
                                     if ((baseX + p.getX(i)) != toX || (baseY + p.getY(i)) != toY)
@@ -117,8 +117,8 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             FileLogging.savePlayerLog(player, " Duel TIE against " + opp.getName());
             Container.transfer(player.getDuel(), player.getInventory());//jet is a smartie
             Container.transfer(opp.getDuel(), opp.getInventory());
-            opp.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
-            player.setTeleportTarget(Location.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            opp.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+            player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
             return true;
         }
         return false;
@@ -142,7 +142,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     packet.putBits(8, player.getLocalPlayers().size());
                     for (Iterator<Player> it$ = player.getLocalPlayers().iterator(); it$.hasNext(); ) {
                         Player otherPlayer = it$.next();
-                        if (World.getPlayers().contains(otherPlayer) && !otherPlayer.isTeleporting() && otherPlayer.getLocation().isWithinDistance(player.getLocation()) && !otherPlayer.isHidden()) {
+                        if (World.getPlayers().contains(otherPlayer) && !otherPlayer.isTeleporting() && otherPlayer.getPosition().isWithinDistance(player.getPosition()) && !otherPlayer.isHidden()) {
                             if (updateBlock.size() + packet.size() >= MAX_PACKET_SIZE) {
                                 break;
                             }
@@ -194,7 +194,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                     packet.putBits(8, player.getLocalNPCs().size());
                     for (Iterator<NPC> it$ = player.getLocalNPCs().iterator(); it$.hasNext(); ) {
                         NPC npc = it$.next();
-                        if (World.getNpcs().contains(npc) && !npc.isTeleporting() && !npc.isHidden() && npc.getLocation().isWithinDistance(player.getLocation())) {
+                        if (World.getNpcs().contains(npc) && !npc.isTeleporting() && !npc.isHidden() && npc.getPosition().isWithinDistance(player.getPosition())) {
                             updateNPCMovement(packet, npc);
                             if (npc.getUpdateFlags().isUpdateRequired()) {
                                 updateNPC(updateBlock, npc);
@@ -288,8 +288,8 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * Calculate the x and y offsets.
 		 */
-        int yPos = npc.getLocation().getY() - player.getLocation().getY();
-        int xPos = npc.getLocation().getX() - player.getLocation().getX();
+        int yPos = npc.getPosition().getY() - player.getPosition().getY();
+        int xPos = npc.getPosition().getX() - player.getPosition().getX();
 
 		/*
 		 * And write them.
@@ -383,7 +383,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
             //packet.putLEShortA();
         }
         if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
-            Location loc = npc.getFaceLocation();
+            Position loc = npc.getFaceLocation();
             if (loc == null) {
                 packet.putLEShort(0);
                 packet.putLEShort(0);
@@ -498,8 +498,8 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 		/*
 		 * Calculate the x and y offsets.
 		 */
-        int yPos = otherPlayer.getLocation().getY() - player.getLocation().getY();
-        int xPos = otherPlayer.getLocation().getX() - player.getLocation().getX();
+        int yPos = otherPlayer.getPosition().getY() - player.getPosition().getY();
+        int xPos = otherPlayer.getPosition().getX() - player.getPosition().getX();
 
 		/*
 		 * Write the x and y offsets.
@@ -698,7 +698,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
                 appendPlayerAppearanceUpdate(block, player, otherPlayer);
             }
             if (flags.get(UpdateFlags.UpdateFlag.FACE_COORDINATE)) {
-                Location loc = otherPlayer.getFaceLocation();
+                Position loc = otherPlayer.getFaceLocation();
                 if (loc == null) {
                     block.putLEShortA(0);
                     block.putLEShort(0);
@@ -784,12 +784,12 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
     }
 
     public void appendForceMovement(PacketBuilder block, Player otherPlayer) {
-        Location loc = Location.create(otherPlayer.forceWalkX1, otherPlayer.forceWalkY1, 0);
-        Location loc2 = Location.create(otherPlayer.forceWalkX2, otherPlayer.forceWalkY2, 0);
-        block.putByteS((byte) (loc.getLocalX(otherPlayer.getLocation())));
-        block.putByteS((byte) (loc.getLocalY(otherPlayer.getLocation())));
-        block.putByteS((byte) (loc2.getLocalX(otherPlayer.getLocation())));
-        block.putByteS((byte) (loc2.getLocalY(otherPlayer.getLocation())));
+        Position loc = Position.create(otherPlayer.forceWalkX1, otherPlayer.forceWalkY1, 0);
+        Position loc2 = Position.create(otherPlayer.forceWalkX2, otherPlayer.forceWalkY2, 0);
+        block.putByteS((byte) (loc.getLocalX(otherPlayer.getPosition())));
+        block.putByteS((byte) (loc.getLocalY(otherPlayer.getPosition())));
+        block.putByteS((byte) (loc2.getLocalX(otherPlayer.getPosition())));
+        block.putByteS((byte) (loc2.getLocalY(otherPlayer.getPosition())));
         block.putLEShortA(otherPlayer.forceSpeed1);
         block.putShortA(otherPlayer.forceSpeed2);
         block.putByteS((byte) otherPlayer.forceDirection);
@@ -993,7 +993,7 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * This is the new player height.
 			 */
-            packet.putBits(2, player.getLocation().getZ());
+            packet.putBits(2, player.getPosition().getZ());
 
 			/*
 			 * This indicates that the client should discard the walking queue.
@@ -1008,8 +1008,8 @@ public class PlayerUpdateSequence implements UpdateSequence<Player> {
 			/*
 			 * These are the positions.
 			 */
-            packet.putBits(7, player.getLocation().getLocalY(player.getLastKnownRegion()));
-            packet.putBits(7, player.getLocation().getLocalX(player.getLastKnownRegion()));
+            packet.putBits(7, player.getPosition().getLocalY(player.getLastKnownRegion()));
+            packet.putBits(7, player.getPosition().getLocalX(player.getLastKnownRegion()));
         } else {
 			/*
 			 * Otherwise, check if the player moved.

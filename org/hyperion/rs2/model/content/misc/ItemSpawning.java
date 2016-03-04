@@ -3,8 +3,8 @@ package org.hyperion.rs2.model.content.misc;
 import org.hyperion.Configuration;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
@@ -111,7 +111,7 @@ public class ItemSpawning {
             if(msg)player.getActionSender().sendMessage("You cannot spawn items here.");
             return false;
         }
-        if(player.getLocation().inPvPArea()) {
+        if(player.getPosition().inPvPArea()) {
             if(msg)player.getActionSender().sendMessage(
                     "You cannot do that in a PvP area.");
             return false;
@@ -129,7 +129,7 @@ public class ItemSpawning {
 //        }
         if(player.getExtraData().getBoolean("cantteleport"))
             return false;
-        if(player.getLocation().inDungeonLobby())
+        if(player.getPosition().inDungeonLobby())
             return false;
         if(ContentManager.handlePacket(ClickType.OBJECT_CLICK1
                 , player, ClickId.CAN_TELEPORT))
@@ -140,14 +140,14 @@ public class ItemSpawning {
             return false;
         }
         if((player.cE.getAbsX() >= 2256 && player.cE.getAbsY() >= 4680 &&
-                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getLocation().distance(Location.create(3068, 10256, 0)) < 8) {
-            if(player.getLocation().getZ() == 0) {
+                player.cE.getAbsX() <= 2287 && player.cE.getAbsY() <= 4711) || player.getPosition().distance(Position.create(3068, 10256, 0)) < 8) {
+            if(player.getPosition().getZ() == 0) {
                 if(msg)player.sendMessage("It's too hot in here to do that!");
             return false;
             }
         }
 
-        if(Combat.inNonSpawnMulti(player.getLocation().getX(), player.getLocation().getY()))
+        if(Combat.inNonSpawnMulti(player.getPosition().getX(), player.getPosition().getY()))
             return false;
         if(player.getLastAttack().timeSinceLastAttack() < 5000) {
             if(msg)player.getActionSender().sendMessage("Aren't you a little preoccupied to be doing that?");

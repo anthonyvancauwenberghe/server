@@ -125,7 +125,7 @@ public class BountyHunter {
 	}
 	
 	public boolean levelCheck(Player p) {
-		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getLocation().getZ() == p.getLocation().getZ() && player.getUID() != p.getUID();
+		return Math.abs(p.getCombat().getCombat() - player.getCombat().getCombat()) < 12 && player.getPosition().getZ() == p.getPosition().getZ() && player.getUID() != p.getUID();
 	}
 	
 	public boolean wildLevelCheck(final Player opp) {
@@ -149,7 +149,7 @@ public class BountyHunter {
     public static boolean applicable2(Player player) {
         if(player == null)
             return false;
-        return player.getLocation().inPvPArea() && !player.getLocation().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY()) && !Lock.isEnabled(player, Lock.BOUNTY_HUNTER) && !BountyHunterLogout.isBlocked(player);
+        return player.getPosition().inPvPArea() && !player.getPosition().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY()) && !Lock.isEnabled(player, Lock.BOUNTY_HUNTER) && !BountyHunterLogout.isBlocked(player);
     }
 	
 	public static void fireLogout(final Player player) {
@@ -182,8 +182,8 @@ public class BountyHunter {
 	}
 	
 	public void handleBHDrops(final Player opp) {
-        GlobalItem gI = new GlobalItem(player, opp.getLocation().getX(),
-                opp.getLocation().getY(), opp.getLocation().getZ(),
+        GlobalItem gI = new GlobalItem(player, opp.getPosition().getX(),
+                opp.getPosition().getY(), opp.getPosition().getZ(),
                 Item.create(Emblem.BASE_ID, 1));
         GlobalItemManager.newDropItem(player, gI);
         upgradeEmblem();

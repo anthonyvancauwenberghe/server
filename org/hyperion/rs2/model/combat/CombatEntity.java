@@ -325,15 +325,15 @@ public class CombatEntity {
 
 
 	public int getAbsX() {
-		return getEntity().getLocation().getX();
+		return getEntity().getPosition().getX();
 	}
 
 	public int getAbsY() {
-		return getEntity().getLocation().getY();
+		return getEntity().getPosition().getY();
 	}
 
 	public int getAbsZ() {
-		return getEntity().getLocation().getZ();
+		return getEntity().getPosition().getZ();
 	}
 
 	public int getCombat() {
@@ -402,11 +402,11 @@ public class CombatEntity {
 	}
 
 	public void face(int x, int y) {
-		getEntity().face(Location.create(x, y, 0));
+		getEntity().face(Position.create(x, y, 0));
 	}
 
 	public void face(int x, int y, boolean test) {
-		getEntity().face(Location.create(x, y, 0));
+		getEntity().face(Position.create(x, y, 0));
 	}
 
 	public int getSlotId(Entity e) {

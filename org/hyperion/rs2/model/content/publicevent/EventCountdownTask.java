@@ -1,8 +1,8 @@
 package org.hyperion.rs2.model.content.publicevent;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.Events;
 
@@ -11,7 +11,7 @@ public class EventCountdownTask extends Task {
     final Runnable run;
     final String command;
     final String name;
-    final Location location;
+    final Position position;
     final String message;
     final boolean safe;
 
@@ -21,14 +21,14 @@ public class EventCountdownTask extends Task {
 		super(1000);
         this.name = builder.name;
         this.command = builder.command;
-        this.location = builder.location;
+        this.position = builder.position;
         this.run = builder.run;
         this.message = builder.message;
         this.safe = builder.safe;
 	}
 	public void execute() {
 		if(counter == 120) {
-			Events.fireNewEvent(name, safe, counter, location);
+			Events.fireNewEvent(name, safe, counter, position);
             World.getPlayers().stream().forEach(p -> p.sendServerMessage(name + " event is starting in 2 minutes!"));
 		}
 		if(--counter == 0) {

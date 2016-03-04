@@ -64,7 +64,7 @@ public class SpecialAttacks {
 	                              int maxDamg, final int weaponId, int currentdistance,
 	                              int combatStyle) {
 		CombatEntity combatEntity = player.getCombat();
-		int distance = combatEntity.getEntity().getLocation().distance((combatEntity.getOpponent().getEntity().getLocation()));
+		int distance = combatEntity.getEntity().getPosition().distance((combatEntity.getOpponent().getEntity().getPosition()));
 		int playerGfx = - 1;
 		int specialDis = - 1;
 		int oppGfx = - 1;
@@ -338,14 +338,14 @@ public class SpecialAttacks {
 				return false;
 		}
 
-		if(ranged && (player.getLocation().disabledRange() || player.duelRule[DuelRules.RANGE.ordinal()])) {
+		if(ranged && (player.getPosition().disabledRange() || player.duelRule[DuelRules.RANGE.ordinal()])) {
 			player.getActionSender().sendMessage("You cannot used ranged weapons here!");
 			return false;
 		}
 	    /*
 		 * If opponent is too far, don't attack yet.
 		 */
-		if(! player.getLocation().isWithinDistance(player.cE.getOpponent().getEntity().getLocation(),
+		if(! player.getPosition().isWithinDistance(player.cE.getOpponent().getEntity().getPosition(),
 				(specialDis + (player.cE.canMove() ? 1 : 0)))) {
 			player.specOn = true;
 			if(player.cE.getOpponent().getEntity() instanceof Player)
@@ -560,7 +560,7 @@ public class SpecialAttacks {
 			case 15702:
 			case 15703:
 			case 15704:
-				if(player.getLocation().disabledRange())
+				if(player.getPosition().disabledRange())
 					return false;
 				// ContentEntity.startAnimation(combatEntity.getPlayerByName(), 426);
 				int clientSpeed;
@@ -940,7 +940,7 @@ public class SpecialAttacks {
 				});
 				break;**/
 			case 859:
-				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getLocation().disabledRange())
+				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getPosition().disabledRange())
 					return false;
 				// ContentEntity.startAnimation(combatEntity.getPlayerByName(), 426);
 				if(currentdistance <= 1) {
@@ -1083,7 +1083,7 @@ public class SpecialAttacks {
 				break;
 			case 861:
 				// TODO
-				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getLocation().disabledRange())
+				if(!Rank.hasAbility(player, Rank.DEVELOPER) || player.getPosition().disabledRange())
 					return false;
 				// ContentEntity.startAnimation(combatEntity.getPlayerByName(), 426);
 				if(currentdistance <= 1) {

@@ -1,6 +1,6 @@
 package org.hyperion.rs2.pf;
 
-import org.hyperion.rs2.model.Location;
+import org.hyperion.rs2.model.Position;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -147,9 +147,7 @@ public class AStarPathFinder implements PathFinder {
 				return false;
 			if(x != other.x)
 				return false;
-			if(y != other.y)
-				return false;
-			return true;
+			return y == other.y;
 		}
 
 		@Override
@@ -165,7 +163,7 @@ public class AStarPathFinder implements PathFinder {
 	private Set<Node> open = new HashSet<Node>();
 
 	@Override
-	public Path findPath(Location location, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY) {
+	public Path findPath(Position position, int radius, TileMap map, int srcX, int srcY, int dstX, int dstY) {
 		if(dstX < 0 || dstY < 0 || dstX >= map.getWidth() || dstY >= map.getHeight()) {
 			return null; // out of range
 		}
@@ -246,10 +244,10 @@ public class AStarPathFinder implements PathFinder {
 		Path p = new Path();
 		Node n = nodes[dstX][dstY];
 		while(n != nodes[srcX][srcY]) {
-			p.addPoint(new Point(n.getX() + location.getX() - radius, n.getY() + location.getY() - radius));
+			p.addPoint(new Point(n.getX() + position.getX() - radius, n.getY() + position.getY() - radius));
 			n = n.getParent();
 		}
-		p.addPoint(new Point(srcX + location.getX() - radius, srcY + location.getY() - radius));
+		p.addPoint(new Point(srcX + position.getX() - radius, srcY + position.getY() - radius));
 
 		return p;
 	}

@@ -2,9 +2,9 @@ package org.hyperion.rs2.model.combat.attack;
 
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.Attack;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.NPC;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatCalculation;
 import org.hyperion.rs2.model.combat.CombatEntity;
@@ -18,7 +18,7 @@ public class KBD implements Attack {
 	}
 
 	public int handleAttack(NPC n, CombatEntity attack) {
-		int distance = attack.getEntity().getLocation().distance((Location.create(n.cE.getEntity().getLocation().getX() + n.cE.getOffsetX(), n.cE.getEntity().getLocation().getY() + n.cE.getOffsetY(), n.cE.getEntity().getLocation().getZ())));
+		int distance = attack.getEntity().getPosition().distance((Position.create(n.cE.getEntity().getPosition().getX() + n.cE.getOffsetX(), n.cE.getEntity().getPosition().getY() + n.cE.getOffsetY(), n.cE.getEntity().getPosition().getZ())));
 		if(distance < (12 + ((n.getDefinition().sizeX() + n.getDefinition().sizeY()) / 2))) {
 			if(n.cE.predictedAtk > System.currentTimeMillis()) {
 				return 6;//we dont want to reset attack but just wait another 500ms or so...
@@ -85,7 +85,7 @@ public class KBD implements Attack {
             }
 
 			return 5;
-		} else if(n.getLocation().isWithinDistance(n.cE.getOpponent().getEntity().getLocation(), 15)) {
+		} else if(n.getPosition().isWithinDistance(n.cE.getOpponent().getEntity().getPosition(), 15)) {
 			return 0;
 		} else {
 			return 1;

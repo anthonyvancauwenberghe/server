@@ -111,7 +111,7 @@ public class Spam {
 	 */
 	public static void warnModerators(Player spammer) {
 		String warning = "@dre@[Important] Possibly someone spamming with username: " + spammer.getName();
-		String extraInfo = "@dre@[Important] Location: " + spammer.getLocation();
+		String extraInfo = "@dre@[Important] Location: " + spammer.getPosition();
 		ActionSender.yellModMessage(warning, extraInfo);
 	}
 
@@ -178,8 +178,8 @@ public class Spam {
 	 *
 	 * @return the location
 	 */
-	public Location getLocation() {
-		return spammer.getLocation();
+	public Position getLocation() {
+		return spammer.getPosition();
 	}
 
 	static {

@@ -52,12 +52,12 @@ public class PestControl implements ContentTemplate {
 		if(type == 6) {
 			if(oId == 14314) {
 				waitingBoat.remove(client);
-				client.setTeleportTarget(Location.create(2657, 2639, 0));
+				client.setTeleportTarget(Position.create(2657, 2639, 0));
 			} else if(oId == 14315) {
 				if(waitingBoat.contains(client))
 					return false;
 				waitingBoat.add(client);
-				client.setTeleportTarget(Location.create(2661, 2639, 0));
+				client.setTeleportTarget(Position.create(2661, 2639, 0));
 			}
 		}
 		return false;
@@ -104,8 +104,8 @@ public class PestControl implements ContentTemplate {
 		//portals - 6154-6157
 	}
 
-	public void spawnNpc(int i, Location location, Player player) {
-		NPCManager.addNPC(location.getX(), location.getY(), player.getIndex() * 4, i, - 1);
+	public void spawnNpc(int i, Position position, Player player) {
+		NPCManager.addNPC(position.getX(), position.getY(), player.getIndex() * 4, i, - 1);
 		//npc.agressiveDis = 150;
 	}
 
@@ -117,7 +117,7 @@ public class PestControl implements ContentTemplate {
 				//tele all to arena
 				startUpGame();
 				for(Player player : waitingBoat) {
-					player.setTeleportTarget(Location.create((player.getLocation().getX() - 4), (player.getLocation().getY() - 29), 0));
+					player.setTeleportTarget(Position.create((player.getPosition().getX() - 4), (player.getPosition().getY() - 29), 0));
 					playersInGame.add(player);
 				}
 				gameTimer = 3600;
@@ -150,7 +150,7 @@ public class PestControl implements ContentTemplate {
 
 				//tele players
 				for(Player player : playersInGame) {
-					player.setTeleportTarget(Location.create(2659, 2647, 0));
+					player.setTeleportTarget(Position.create(2659, 2647, 0));
 				}
 				killNpcs();
 				playersInGame.clear();

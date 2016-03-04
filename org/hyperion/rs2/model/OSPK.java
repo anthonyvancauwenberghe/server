@@ -1,10 +1,9 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
+
 import java.util.Arrays;
 import java.util.LinkedList;
-
-import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 
 public class OSPK extends NIGGERUZ {
 
@@ -14,7 +13,7 @@ public class OSPK extends NIGGERUZ {
 
 
 	public static GameObject loadObjects() {
-		return new GameObject(GameObjectDefinition.forId(2470),Location.create(3085, 3515, 0), 10, 1);
+		return new GameObject(GameObjectDefinition.forId(2470), Position.create(3085, 3515, 0), 10, 1);
 	}
 	
 	public String canEnter(Player player) {
@@ -37,9 +36,7 @@ public class OSPK extends NIGGERUZ {
 		return "";
 	}
 	
-	private static LinkedList<Integer> exceptions = new LinkedList<Integer>(Arrays.asList(new Integer[]{
-		13351
-	}));
+	private static LinkedList<Integer> exceptions = new LinkedList<>(Arrays.asList(13351));
 
 	private static boolean valid(int id) {
 		return id < 12000 || exceptions.contains(id);

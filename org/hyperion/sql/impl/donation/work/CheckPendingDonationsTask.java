@@ -16,8 +16,20 @@ import java.util.stream.Collectors;
 
 public class CheckPendingDonationsTask extends Task {
 
+    /**
+     * The time the task will put in-between each execution.
+     */
     private final static long DELAY = Time.ONE_MINUTE * 2;
+
+    /**
+     * The instance, so we can request the time left.
+     */
     private static CheckPendingDonationsTask INSTANCE;
+
+    /**
+     * Whether it's enabled or not
+     */
+    private static boolean enabled = true;
 
     public CheckPendingDonationsTask() {
         super(DELAY);
@@ -31,7 +43,7 @@ public class CheckPendingDonationsTask extends Task {
         Server.getLoader().getEngine().submitSql(new EngineTask<Boolean>("Donation query", 5, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
-                if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized())
+                if (!DbHub.initialized() || !DbHub.getDonationsDb().isInitialized() || !enabled)
                     return false;
 
                 List<Donation> donations = DbHub.getDonationsDb().donations().getActive();
@@ -41,6 +53,14 @@ public class CheckPendingDonationsTask extends Task {
                 return true;
             }
         });
+    }
+
+    public static void toggleEnabled() {
+        enabled = !enabled;
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
     }
 
     public static int getSecondLeft() {

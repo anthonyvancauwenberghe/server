@@ -1,8 +1,6 @@
 package org.hyperion.rs2.model.content;
 
-import org.hyperion.rs2.model.GameObject;
-import org.hyperion.rs2.model.Location;
-import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.model.Position;
 
 /**
  * Represents a door.
@@ -31,8 +29,8 @@ public class Door {
 	 *
 	 * @return The open door location.
 	 */
-	public Location getOpenLocation() {
-		return locations[0];
+	public Position getOpenLocation() {
+		return positions[0];
 	}
 
 	/**
@@ -40,8 +38,8 @@ public class Door {
 	 *
 	 * @return The closed door location.
 	 */
-	public Location getClosedLocation() {
-		return locations[1];
+	public Position getClosedLocation() {
+		return positions[1];
 	}
 
 	/**
@@ -49,8 +47,8 @@ public class Door {
 	 *
 	 * @return The secondary open door location.
 	 */
-	public Location getSecondOpenLocation() {
-		return locations[2];
+	public Position getSecondOpenLocation() {
+		return positions[2];
 	}
 
 	/**
@@ -58,8 +56,8 @@ public class Door {
 	 *
 	 * @return The secondary closed door location.
 	 */
-	public Location getSecondClosedLocation() {
-		return locations[3];
+	public Position getSecondClosedLocation() {
+		return positions[3];
 	}
 
 	/**
@@ -67,8 +65,8 @@ public class Door {
 	 *
 	 * @return The walk to location.
 	 */
-	public Location getWalkTo() {
-		return locations[2];
+	public Position getWalkTo() {
+		return positions[2];
 	}
 
 	/**
@@ -76,8 +74,8 @@ public class Door {
 	 *
 	 * @return The secondary walk to location.
 	 */
-	public Location getSecondaryWalkTo() {
-		return locations[3];
+	public Position getSecondaryWalkTo() {
+		return positions[3];
 	}
 
 	/**
@@ -85,8 +83,8 @@ public class Door {
 	 *
 	 * @return All the locations used for this door.
 	 */
-	public Location[] getLocations() {
-		return locations;
+	public Position[] getPositions() {
+		return positions;
 	}
 
 	/**
@@ -220,7 +218,7 @@ public class Door {
 		return type;
 	}
 
-	private Location[] locations;
+	private Position[] positions;
 
 	private int[] faces;
 
@@ -233,7 +231,7 @@ public class Door {
 	private DoorType type;
 
 
-	public static enum DoorType {
+	public enum DoorType {
 		NORMAL,
 		NORMALFORCE,
 		DOUBLE,

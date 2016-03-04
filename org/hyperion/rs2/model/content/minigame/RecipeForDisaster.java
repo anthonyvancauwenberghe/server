@@ -21,7 +21,7 @@ public class RecipeForDisaster implements ContentTemplate {
 	                           int d) {
 		if(type == 6) {
 			if(a == 12356) {
-				if(player.getLocation().getY() < 4000)
+				if(player.getPosition().getY() < 4000)
 					startRFD(player);
 				else
 					leaveRFD(player);
@@ -78,14 +78,14 @@ public class RecipeForDisaster implements ContentTemplate {
 			return;
 		}
 		player.resetPrayers();
-		player.setTeleportTarget(Location.create(1899, 5363, 2));
+		player.setTeleportTarget(Position.create(1899, 5363, 2));
 		player.getActionSender().sendMessage(
 				"Prepare Yourself, the waves will start in a few seconds.");
 		spawnWave(player, player.RFDLevel);
 	}
 
 	public void leaveRFD(Player player) {
-		player.setTeleportTarget(Location.create(3209, 3225, 0));
+		player.setTeleportTarget(Position.create(3209, 3225, 0));
 	}
 
 	public void spawnWave(final Player player, final int rfdlevel) {
@@ -97,23 +97,23 @@ public class RecipeForDisaster implements ContentTemplate {
 		});
 	}
 
-	public NPC spawnNpc(int npcid, Location location, Player player) {
+	public NPC spawnNpc(int npcid, Position position, Player player) {
 		NPC npc = NPCManager
-				.addNPC(location.getX(), location.getY(), location.getZ(),
+				.addNPC(position.getX(), position.getY(), position.getZ(),
 						npcid, - 1);
 		npc.agressiveDis = 150;
 		npc.ownerId = player.getIndex();
 		return npc;
 	}
 
-	public Location getLocation() {
-		return Location.create(1898 + Misc.random(4), 5352 + Misc.random(4), 2);
+	public Position getLocation() {
+		return Position.create(1898 + Misc.random(4), 5352 + Misc.random(4), 2);
 	}
 
 	public static boolean inRFD(Player player) {
-		if(player.getLocation().getX() > 2000 || player.getLocation().getX() < 1800) {
+		if(player.getPosition().getX() > 2000 || player.getPosition().getX() < 1800) {
 			return false;
 		}
-		return !(player.getLocation().getY() > 5400 || player.getLocation().getY() < 5300);
+		return !(player.getPosition().getY() > 5400 || player.getPosition().getY() < 5300);
 	}
 }

@@ -64,7 +64,7 @@ public class Server {
             Console console = System.console();
             if (console == null) {
                 logger.log(Level.WARNING, "Using default password.");
-                charFileEncryption = new CharFileEncryption("ArtDev7!DevArt8!");
+                charFileEncryption = new CharFileEncryption("Glis1234Glis1234");
             } else {
                 boolean correctPass = false;
                 while (!correctPass) {

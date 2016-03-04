@@ -216,7 +216,7 @@ public class Prayer implements ContentTemplate {
 		final int speed = 70;
 		final int slope = 0;
 		final int time = 24;
-		final int distance = player.getLocation().distance(victim.getEntity().getLocation());
+		final int distance = player.getPosition().distance(victim.getEntity().getPosition());
 		if(distance < 20)
 			player.getActionSender().createGlobalProjectile(player.cE.getAbsY(), player.cE.getAbsX(), offsetY, offsetX, 50, speed, 2263, 20, 9, hitId, time, slope);
 	    /* UNTIL THIS */
@@ -513,16 +513,16 @@ public class Prayer implements ContentTemplate {
 			}
 			if (p2.getId() == 30) {
 				//12567 ,2213
-				if(!p.getLocation().inPvPArea())
+				if(!p.getPosition().inPvPArea())
 					ContentEntity.startAnimation(p, 12567);
 				ContentEntity.playerGfx(p, 2213, 0);
 			} else if (p2.getId() == 35) {
 				ContentEntity.playerGfx(p, 2266, 0);
-				if(!p.getLocation().inPvPArea())
+				if(!p.getPosition().inPvPArea())
 					ContentEntity.startAnimation(p, 12589);
 			} else if (p2.getId() == 49) {
 				ContentEntity.playerGfx(p, 2226, 0);
-				if(!p.getLocation().inPvPArea())
+				if(!p.getPosition().inPvPArea())
 					ContentEntity.startAnimation(p, 12565);
 				//IMPORTANT LINE OF CODE! p.canLeech.clear();
 			}

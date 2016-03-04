@@ -1,6 +1,9 @@
 package org.hyperion.rs2.model.content.specialareas.impl;
 
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.GameObject;
+import org.hyperion.rs2.model.Item;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.pf.Point;
@@ -32,7 +35,7 @@ public class HybridZone extends NIGGERUZ {
 
     public void check(final Player player) {
         final String enter = canEnter(player);
-        if(inTheWild(player.getLocation()) && enter.length() > 1) {
+        if(inTheWild(player.getPosition()) && enter.length() > 1) {
             exit(player);
             player.sendMessage(enter);
         }
@@ -53,13 +56,13 @@ public class HybridZone extends NIGGERUZ {
 
         for(int x = cornerSW.getX() ;x <= cornerNE.getX(); x++) {
             if(x != 2976 && x != 2977 )
-                list.add(new GameObject(DEFINITION, Location.create(x, cornerSW.getY(), height), 10, 2, false));
-            list.add(new GameObject(DEFINITION, Location.create(x, cornerNE.getY(), height), 10, 0, false));
+                list.add(new GameObject(DEFINITION, Position.create(x, cornerSW.getY(), height), 10, 2, false));
+            list.add(new GameObject(DEFINITION, Position.create(x, cornerNE.getY(), height), 10, 0, false));
         }
 
         for(int y = cornerSW.getY(); y < cornerNE.getY(); y++) {
-            list.add(new GameObject(DEFINITION, Location.create(cornerNE.getX(), y, height), 10, 1, false));
-            list.add(new GameObject(DEFINITION, Location.create(cornerSW.getX(), y, height), 10, 3, false));
+            list.add(new GameObject(DEFINITION, Position.create(cornerNE.getX(), y, height), 10, 1, false));
+            list.add(new GameObject(DEFINITION, Position.create(cornerSW.getX(), y, height), 10, 3, false));
 
         }
 
@@ -68,8 +71,8 @@ public class HybridZone extends NIGGERUZ {
     }
 
     @Override
-    public Location getDefaultLocation() {
-        return Location.create(2975, 3610, height);
+    public Position getDefaultLocation() {
+        return Position.create(2975, 3610, height);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class HybridZone extends NIGGERUZ {
                 (x > cornerSW.getX() && y >= cornerSW.getY() && x <= cornerNE.getX() && y <= cornerNE.getY()) ;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public boolean inTheWild(Location l) {
+    public boolean inTheWild(Position l) {
         return l.getZ() == height && l.inPvPArea();
     }
 

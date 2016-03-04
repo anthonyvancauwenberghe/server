@@ -10,12 +10,12 @@ import org.hyperion.util.Misc;
  * Created by Gilles on 12/09/2015.
  */
 public class SteppingStone extends Obstacle {
-    private Location start,
+    private Position start,
             end,
             fail;
     private int direction;
 
-    public SteppingStone(int objectId, int skillXp, int levelReq, Location start, Location end, Location fail, int direction, int failRate, Course course, int progress) {
+    public SteppingStone(int objectId, int skillXp, int levelReq, Position start, Position end, Position fail, int direction, int failRate, Course course, int progress) {
         super(objectId, 769, levelReq, skillXp, failRate, course, progress);
         this.start = start;
         this.end = end;
@@ -25,7 +25,7 @@ public class SteppingStone extends Obstacle {
 
     @Override
     public boolean overCome(Player player) {
-        if(player.getLocation().getX() != start.getX() || player.getLocation().getY() != start.getY())
+        if(player.getPosition().getX() != start.getX() || player.getPosition().getY() != start.getY())
             return false;
         if(!super.overCome(player))
             return false;
@@ -63,13 +63,13 @@ public class SteppingStone extends Obstacle {
                 }
                 else if(0 == progress %3) {
                     if(direction == 0)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() + 1);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() + 1);
                     if(direction == 1)
-                        player.getActionSender().forceMovement(player.getLocation().getX() + 1, player.getLocation().getY());
+                        player.getActionSender().forceMovement(player.getPosition().getX() + 1, player.getPosition().getY());
                     if(direction == 2)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() - 1);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() - 1);
                     if(direction == 3)
-                        player.getActionSender().forceMovement(player.getLocation().getX() - 1, player.getLocation().getY());
+                        player.getActionSender().forceMovement(player.getPosition().getX() - 1, player.getPosition().getY());
                 }
                 progress--;
             }
@@ -92,25 +92,25 @@ public class SteppingStone extends Obstacle {
                 if (progress == 0) {
                     if (!message.isEmpty())
                         player.sendMessage(message);
-                    player.setTeleportTarget(Location.create(fail.getX(), fail.getY(), fail.getZ()));
+                    player.setTeleportTarget(Position.create(fail.getX(), fail.getY(), fail.getZ()));
                     player.getAgility().appendHit(Misc.random(3) + 3);
                     reset(player);
                     player.getAppearance().setAnimations(a, b, c);
                     player.getUpdateFlags().flag(UpdateFlags.UpdateFlag.APPEARANCE);
                     stop();
                 }
-                else if (player.getLocation().getX() == calculateMiddle(start, end).getX() && player.getLocation().getY() == calculateMiddle(start, end).getY()) {
+                else if (player.getPosition().getX() == calculateMiddle(start, end).getX() && player.getPosition().getY() == calculateMiddle(start, end).getY()) {
                     player.playAnimation(Animation.create(770));
                 }
                 else if (0 == progress % 3) {
                     if (direction == 0)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() + 1);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() + 1);
                     if (direction == 1)
-                        player.getActionSender().forceMovement(player.getLocation().getX() + 1, player.getLocation().getY());
+                        player.getActionSender().forceMovement(player.getPosition().getX() + 1, player.getPosition().getY());
                     if (direction == 2)
-                        player.getActionSender().forceMovement(player.getLocation().getX(), player.getLocation().getY() - 1);
+                        player.getActionSender().forceMovement(player.getPosition().getX(), player.getPosition().getY() - 1);
                     if (direction == 3)
-                        player.getActionSender().forceMovement(player.getLocation().getX() - 1, player.getLocation().getY());
+                        player.getActionSender().forceMovement(player.getPosition().getX() - 1, player.getPosition().getY());
                 }
                 progress--;
             }

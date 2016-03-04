@@ -65,8 +65,8 @@ public class TicketManager {
         if(tick != null) {
             final Player p = World.getPlayerByName(tick.name);
             if(p != null) {
-                if(!p.getLocation().inDuel() && !p.getLocation().inPvPArea()  && !Jail.inJail(p) && !p.getDungeoneering().inDungeon()) {
-                    Magic.teleport(p, player.getLocation(), true);
+                if(!p.getPosition().inDuel() && !p.getPosition().inPvPArea()  && !Jail.inJail(p) && !p.getDungeoneering().inDungeon()) {
+                    Magic.teleport(p, player.getPosition(), true);
                     remove(tick);
                 }
                         else {

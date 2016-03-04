@@ -22,7 +22,7 @@ public class DeathDrops {
 	public static final List<Integer> FOOD = Arrays.asList(391, 15272, 385);
 	
 	private static boolean dontDrop(Player player) {
-		return dontDropRank(player.getPlayerRank()) || player.getLocation().inFunPk();
+		return dontDropRank(player.getPlayerRank()) || player.getPosition().inFunPk();
 	}
 	private static boolean dontDropRank(long l) {
 		return Rank.getPrimaryRank(l).ordinal() >= Rank.DEVELOPER.ordinal();
@@ -42,7 +42,7 @@ public class DeathDrops {
 		Item epItems = EPDrops.getEPItem(killer.EP);
 		if(epItems != null) {
 			killer.removeEP();
-			GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), epItems));
+			GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(), epItems));
 		}
 
         List<Item> droppingItems = dropItems(player, DangerousPK.inDangerousPK(player));
@@ -55,17 +55,17 @@ public class DeathDrops {
                 break;
             }
             if(killer.getGameMode() <= player.getGameMode())
-			    GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), item));
+			    GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(), item));
             else {
                 int price = (int)(NewGameMode.getUnitPrice(item) * NewGameMode.SELL_REDUCTION);
                 if(price > 1)
-                    GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(),
+                    GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(),
                         Item.create(995, price)));
             }
         }
 
         if(killer.hardMode() && !player.isNewlyCreated()) {
-            GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), Item.create(995, 200_000)));
+            GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(), Item.create(995, 200_000)));
         }
 
 		final Item[] dropped = droppingItems.toArray(new Item[droppingItems.size()]);
@@ -161,7 +161,7 @@ public class DeathDrops {
 		boolean[] invSlot = player.invSlot.clone();
 		boolean[] equipSlot = player.equipSlot.clone();
 		List<Item> keepItems = new LinkedList<Item>();
-		int keeping = player.getLocation().inFunPk() ? 
+		int keeping = player.getPosition().inFunPk() ?
 			player.getInventory().size() + player.getEquipment().size() :
 			((player.isSkulled() ? 0 : 3) + (player.getPrayers().isProtectingItem() ? 1 : 0));
 		for(int i = 0; i < keeping; i++) {
@@ -188,7 +188,7 @@ public class DeathDrops {
 
 		if(Rank.getPrimaryRank(killer).ordinal() >= Rank.ADMINISTRATOR.ordinal())
 			return;
-		if(killer.getLocation().inFunPk() || player.getLocation().inFunPk() || (player.getLocation().getX() == 3221 && player.getLocation().getY() == 3218)) {
+		if(killer.getPosition().inFunPk() || player.getPosition().inFunPk() || (player.getPosition().getX() == 3221 && player.getPosition().getY() == 3218)) {
             return;
         }
 		player.resetDeathItemsVariables();
@@ -219,7 +219,7 @@ public class DeathDrops {
 				killer.removeEP();
 				if(Rank.hasAbility(killer, Rank.OWNER))
 					System.out.println("Ep item: " + ItemDefinition.forId(EPItem.getId()).getName());
-				GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), EPItem));
+				GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(), EPItem));
 			}
 		}
 		LinkedList<Item> delayedDrops = new LinkedList<Item>();
@@ -233,7 +233,7 @@ public class DeathDrops {
 				if(ItemSpawning.allowedMessage(dropItem.getId()).length() <= 1)
 					delayedDrops.add(dropItem);
 				else
-					GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), dropItem));
+					GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(), dropItem));
 			} else {
 				/**
 				 * Following id's should not be dropped.
@@ -268,7 +268,7 @@ public class DeathDrops {
 			}
 		}
 		for(Item delayedItem : delayedDrops) {
-			GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getLocation(), delayedItem));
+			GlobalItemManager.newDropItem(killer, new GlobalItem(killer, player.getPosition(), delayedItem));
 		}
 		for(Item keepItem : keepItems) {
 			if(keepItem != null)

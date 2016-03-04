@@ -1,25 +1,25 @@
 package org.hyperion.rs2.action.impl;
 
 import org.hyperion.rs2.action.Action;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 
 public abstract class InspectAction extends Action {
 
 	/**
 	 * The location.
 	 */
-	private Location location;
+	private Position position;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param player
-	 * @param location
+	 * @param position
 	 */
-	public InspectAction(Player player, Location location) {
+	public InspectAction(Player player, Position position) {
 		super(player, 0);
-		this.location = location;
+		this.position = position;
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public abstract class InspectAction extends Action {
 			this.setDelay(getInspectDelay());
 			init();
 			if(this.isRunning()) {
-				player.face(location);
+				player.face(position);
 			}
 		} else {
 			giveRewards(player);

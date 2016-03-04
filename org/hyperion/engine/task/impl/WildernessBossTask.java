@@ -15,9 +15,9 @@ public class WildernessBossTask extends Task {
     public static final int NECKLACE_ID = 19888;
     public static final int RING_ID = 20054;
 
-    private static final Location[] SPAWN_POINTS = { Location.create(3064, 3774, 0),
-            Location.create(3144, 3778, 0), Location.create(3255, 3884, 0),
-            Location.create(3133, 3846, 0), Location.create(3006, 3825, 0)
+    private static final Position[] SPAWN_POINTS = { Position.create(3064, 3774, 0),
+            Position.create(3144, 3778, 0), Position.create(3255, 3884, 0),
+            Position.create(3133, 3846, 0), Position.create(3006, 3825, 0)
     };
 
     private static final int[] BOSS_IDS = {10141, 9752, 10106, 10126};

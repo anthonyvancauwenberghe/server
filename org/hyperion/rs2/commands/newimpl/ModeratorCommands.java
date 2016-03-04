@@ -65,7 +65,7 @@ public class ModeratorCommands implements NewCommandExtension {
                             return true;
                         }
                         final String event = input[4].trim();
-                        Events.fireNewEvent(TextUtils.ucFirst(event.toLowerCase()), true, 0, Location.create(x, y, z));
+                        Events.fireNewEvent(TextUtils.ucFirst(event.toLowerCase()), true, 0, Position.create(x, y, z));
                         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
                             target.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
                             target.sendServerMessage("Click it int the questtab to join in!");
@@ -79,19 +79,19 @@ public class ModeratorCommands implements NewCommandExtension {
                         for (final Player primary : World.getPlayers()) {
                             for (final Player secondary : World.getPlayers()) {
                                 if (primary.equals(secondary)
-                                        || (!primary.getLocation().inPvPArea() || !secondary.getLocation().inPvPArea())
+                                        || (!primary.getPosition().inPvPArea() || !secondary.getPosition().inPvPArea())
                                         || (!Objects.equals(primary.getShortIP(), secondary.getShortIP()) && primary.getUID() != secondary.getUID())) {
                                     continue;
                                 }
-                                final int x = Math.abs(primary.getLocation().getX() - secondary.getLocation().getX());
-                                final int y = Math.abs(primary.getLocation().getY() - secondary.getLocation().getY());
+                                final int x = Math.abs(primary.getPosition().getX() - secondary.getPosition().getX());
+                                final int y = Math.abs(primary.getPosition().getY() - secondary.getPosition().getY());
                                 if (x > 10 && y > 10) {
                                     continue;
                                 }
                                 player.sendf("%s (%d,%d,%d) & %s (%d,%d,%d)",
                                         TextUtils.optimizeText(primary.getName()), TextUtils.optimizeText(secondary.getName()),
-                                        primary.getLocation().getX(), primary.getLocation().getY(), primary.getLocation().getZ(),
-                                        secondary.getLocation().getX(), secondary.getLocation().getY(), secondary.getLocation().getZ());
+                                        primary.getPosition().getX(), primary.getPosition().getY(), primary.getPosition().getZ(),
+                                        secondary.getPosition().getX(), secondary.getPosition().getY(), secondary.getPosition().getZ());
                             }
                         }
                         return true;
@@ -127,7 +127,7 @@ public class ModeratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("Executing Command.");
-                        World.getPlayers().stream().filter(target -> target.getLocation().equals(player.getLocation())).forEach(target -> {
+                        World.getPlayers().stream().filter(target -> target.getPosition().equals(player.getPosition())).forEach(target -> {
                             player.sendf("[Name]: %s", target.getSafeDisplayName().replaceAll(" ", "_ "));
                         });
                         return true;
@@ -165,9 +165,9 @@ public class ModeratorCommands implements NewCommandExtension {
                 new NewCommand("xteleto", Rank.MODERATOR, new CommandInput<String>(string -> World.getPlayerByName(string) != null, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR)
+                        if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR)
                                 || player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-                            player.sendf("You are currently %s.", player.getLocation().inPvPArea() ? "in a PVP area" :
+                            player.sendf("You are currently %s.", player.getPosition().inPvPArea() ? "in a PVP area" :
                                     player.duelAttackable > 0 ? "in a Duel" : "unable to perform this command.");
                             return true;
                         }
@@ -176,16 +176,16 @@ public class ModeratorCommands implements NewCommandExtension {
                             player.sendf("Player is currently %s.", target.duelAttackable > 0 ? "in a duel" : "unavailable");
                             return true;
                         }
-                        player.setTeleportTarget(target.getLocation());
+                        player.setTeleportTarget(target.getPosition());
                         return true;
                     }
                 },
                 new NewCommand("xteletome", Rank.MODERATOR, new CommandInput<String>(string -> World.getPlayerByName(string) != null, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER)
+                        if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER)
                                 || player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-                            player.sendf("You are currently %s.", player.getLocation().inPvPArea() ? "in a PVP area" :
+                            player.sendf("You are currently %s.", player.getPosition().inPvPArea() ? "in a PVP area" :
                             player.duelAttackable > 0 ? "in a duel" : "unable to perform this command");
                             return true;
                         }
@@ -195,7 +195,7 @@ public class ModeratorCommands implements NewCommandExtension {
                             player.sendf("Player is currently %s.", target.duelAttackable > 0 ? "in a duel" : "unavailable");
                             return true;
                         }
-                        target.setTeleportTarget(player.getLocation());
+                        target.setTeleportTarget(player.getPosition());
                         return true;
                     }
                 }

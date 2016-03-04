@@ -11,9 +11,9 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
-import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.saving.IOData;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
@@ -178,7 +178,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         int id = Integer.parseInt(input[0].trim());
                         int face = Integer.parseInt(input[1].trim());
                         int type = Integer.parseInt(input[2].trim());
-                        player.getActionSender().sendCreateObject(id, type, face, player.getLocation());
+                        player.getActionSender().sendCreateObject(id, type, face, player.getPosition());
                         return true;
                     }
                 },
@@ -215,7 +215,7 @@ public class AdministratorCommands implements NewCommandExtension {
                 new NewCommand("tmask", Rank.ADMINISTRATOR) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        TileMapBuilder builder = new TileMapBuilder(player.getLocation(), 0);
+                        TileMapBuilder builder = new TileMapBuilder(player.getPosition(), 0);
                         TileMap map = builder.build();
                         Tile tile = map.getTile(0, 0);
                         player.sendf("N: %s, E: %s, S: %s, W: %s", tile.isNorthernTraversalPermitted(), tile.isEasternTraversalPermitted(), tile.isSouthernTraversalPermitted(), tile.isWesternTraversalPermitted());
@@ -290,7 +290,7 @@ public class AdministratorCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         final int x = Integer.parseInt(input[0].trim());
                         final int y = Integer.parseInt(input[1].trim());
-                        player.setTeleportTarget(Location.create(player.getLocation().getX() + x, player.getLocation().getY() + y, player.getLocation().getZ()));
+                        player.setTeleportTarget(Position.create(player.getPosition().getX() + x, player.getPosition().getY() + y, player.getPosition().getZ()));
                         return true;
                     }
                 },

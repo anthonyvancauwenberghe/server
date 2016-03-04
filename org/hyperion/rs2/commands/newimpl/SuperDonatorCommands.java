@@ -2,7 +2,6 @@ package org.hyperion.rs2.commands.newimpl;
 
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
-import org.hyperion.rs2.model.Location;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.SpellBook;
@@ -39,7 +38,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new NewCommand("switchprayers", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inPvPArea() && player.isInCombat()) {
+                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
                             player.sendMessage("You cannot do this at this time.");
                             return true;
                         }
@@ -50,7 +49,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new NewCommand("lunars", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inPvPArea() && player.isInCombat()) {
+                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
                             player.sendMessage("You cannot do this at this time.");
                             return true;
                         }
@@ -62,7 +61,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new NewCommand("ancnients", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inPvPArea() && player.isInCombat()) {
+                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
                             player.sendMessage("You cannot do this at this time.");
                             return true;
                         }
@@ -74,7 +73,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new NewCommand("moderns", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inPvPArea() && player.isInCombat()) {
+                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
                             player.sendMessage("You cannot do this at this time.");
                             return true;
                         }

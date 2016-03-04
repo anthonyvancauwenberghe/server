@@ -55,6 +55,8 @@ public class Locations {
                 return Bork.doDeath(player);
             }
         },
+
+        DUEL_ARENA_WAITING_ROOM(new int[])
         DEFAULT(null, null);
 
         /**

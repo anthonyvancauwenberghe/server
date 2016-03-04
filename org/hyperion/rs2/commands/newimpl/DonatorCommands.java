@@ -23,7 +23,7 @@ public class DonatorCommands implements NewCommandExtension {
                 new NewCommand("suicide", Rank.DONATOR, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getLocation().inFunPk()) {
+                        if (player.getPosition().inFunPk()) {
                             player.cE.hit(player.getSkills().getLevel(Skills.HITPOINTS), player, true, Constants.MELEE);
                             return true;
                         }

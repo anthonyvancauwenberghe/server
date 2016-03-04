@@ -45,7 +45,7 @@ public class SkillSetCommand extends NewCommand {
     }
 
     public boolean execute(final Player player, final String[] input) {
-        if (player.getLocation().cannotMax()
+        if (player.getPosition().cannotMax()
                 || !ItemSpawning.canSpawn(player)
                 || !canChangeLevel(player)) {
             player.sendMessage("You cannot do this right now.");
@@ -61,7 +61,7 @@ public class SkillSetCommand extends NewCommand {
     }
 
     public static boolean canChangeLevel(Player player) {
-        return (!player.getLocation().inPvPArea()
+        return (!player.getPosition().inPvPArea()
                 || !(player.duelAttackable > 0)
                 || !FightPits.inGame(player)
                 || !(player.getEquipment().size() > 0));

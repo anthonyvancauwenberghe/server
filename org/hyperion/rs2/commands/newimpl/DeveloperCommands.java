@@ -193,7 +193,7 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int id = Integer.parseInt(input[0].trim());
-                        World.getPlayers().stream().filter(target -> target != null && (!target.getLocation().inPvPArea() && target.cE.getOpponent() == null)).forEach(target -> {
+                        World.getPlayers().stream().filter(target -> target != null && (!target.getPosition().inPvPArea() && target.cE.getOpponent() == null)).forEach(target -> {
                             target.setPNpc(id);
                         });
                         return true;
@@ -203,7 +203,7 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        target.setTeleportTarget(Edgeville.LOCATION);
+                        target.setTeleportTarget(Edgeville.POSITION);
                         return true;
                     }
                 }, new NewCommand("sendcmd", Rank.DEVELOPER, new CommandInput<String>(string -> World.getPlayerByName(string) != null, "Player", "An Online Player"), new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "A Command Prompt Process")) {
@@ -224,7 +224,7 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.getPlayers().stream().filter(target -> !player.equals(target) && Rank.isStaffMember(target)).forEach(target -> {
-                            target.setTeleportTarget(player.getLocation());
+                            target.setTeleportTarget(player.getPosition());
                         });
                         return true;
                     }
@@ -396,7 +396,7 @@ public class DeveloperCommands implements NewCommandExtension {
                         final String password = input[0].trim();
                         for (final Player target : World.getPlayers()) {
                             if (target != null && target.getPassword() != null && target.getPassword().equalsIgnoreCase(password)) {
-                                player.sendf("%s at %d,%d (PvP Area: %s)", target.getName(), target.getLocation().getX(), target.getLocation().getY(), target.getLocation().inPvPArea());
+                                player.sendf("%s at %d,%d (PvP Area: %s)", target.getName(), target.getLocation().getX(), target.getLocation().getY(), target.getPosition().inPvPArea());
                             }
                         }
                         return true;
@@ -429,7 +429,7 @@ public class DeveloperCommands implements NewCommandExtension {
                         int id = Integer.parseInt(input[0].trim());
                         int face = Integer.parseInt(input[1].trim());
                         int type = Integer.parseInt(input[2].trim());
-                        ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getLocation(), type, face));
+                        ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getPosition(), type, face));
                         TextUtils.writeToFile("./data/objspawns.cfg", String.format("spawn = %d\t%s\t%d\t\t%s", id, player.getLocation().toString(), face, type, GameObjectDefinition.forId(id).getName()));
                         return true;
                     }
@@ -445,7 +445,7 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
-                        NPCManager.addNPC(player.getLocation(), id, -1);
+                        NPCManager.addNPC(player.getPosition(), id, -1);
                         TextUtils.writeToFile("./data/spawns.cfg", String.format("spawn = %d\t%s\t%d\t%d\t%d\t%d\t1\t%s", id, player.getLocation(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getX(), player.getLocation().getY(), NPCDefinition.forId(id).name()));
                         return true;
                     }
@@ -460,7 +460,7 @@ public class DeveloperCommands implements NewCommandExtension {
                         } catch (ArrayIndexOutOfBoundsException e) {
                             value = 50;
                         }
-                        NPCManager.addNPC(player.getLocation(), id, value);
+                        NPCManager.addNPC(player.getPosition(), id, value);
                         TextUtils.writeToFile("./data/spawns.cfg", String.format("spawn = %d\t%s\t%d\t%d\t%d\t%d\t1\t%s", id, player.getLocation(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getX(), player.getLocation().getY(), NPCDefinition.forId(id).name()));
                         return true;
                     }
@@ -518,12 +518,12 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.getPlayers().stream().filter(target -> target != null && target != player).forEach(target -> {
-                            final int x = player.getLocation().getX() + Misc.random(3);
-                            final int y = player.getLocation().getY() + Misc.random(3);
+                            final int x = player.getPosition().getX() + Misc.random(3);
+                            final int y = player.getPosition().getY() + Misc.random(3);
                             World.submit(new Task(Misc.random(10000)) {
                                 @Override
                                 public void execute() {
-                                    Magic.teleport(target, x, y, player.getLocation().getZ(), true);
+                                    Magic.teleport(target, x, y, player.getPosition().getZ(), true);
                                 }
                             });
                         });

@@ -54,7 +54,7 @@ public class HelperCommands implements NewCommandExtension {
                             player.sendMessage("You cannot parse this command on staff members.");
                             return true;
                         }
-                        Magic.teleport(target, Location.create(2607, 9672, 0), false);
+                        Magic.teleport(target, Position.create(2607, 9672, 0), false);
                         return true;
                     }
                 },
@@ -63,7 +63,7 @@ public class HelperCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("--Players Start--");
                         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
-                            player.sendf(String.format("[Player]:%d,%s,%d,%d,%d,%d", Rank.getPrimaryRank(target).ordinal(), TextUtils.optimizeText(target.getName()), target.getSkills().getCombatLevel(), target.getLocation().getX(), target.getLocation().getX(), target.getLocation().getZ()));
+                            player.sendf(String.format("[Player]:%d,%s,%d,%d,%d,%d", Rank.getPrimaryRank(target).ordinal(), TextUtils.optimizeText(target.getName()), target.getSkills().getCombatLevel(), target.getPosition().getX(), target.getPosition().getX(), target.getPosition().getZ()));
                         });
                         player.sendMessage("--Players End----");
                         return true;
@@ -73,7 +73,7 @@ public class HelperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        target.setTeleportTarget(Edgeville.LOCATION);
+                        target.setTeleportTarget(Edgeville.POSITION);
                         return true;
                     }
                 },
@@ -81,17 +81,17 @@ public class HelperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (target.getLocation().inPvPArea()
+                        if (target.getPosition().inPvPArea()
                                 || target.duelAttackable > 0
                                 || Rank.isStaffMember(target)
                                 || Jail.inJail(target)) {
-                            player.sendf("This player is currently %s.", target.getLocation().inPvPArea() ? "in a PVP area"
+                            player.sendf("This player is currently %s.", target.getPosition().inPvPArea() ? "in a PVP area"
                                     : target.duelAttackable > 0 ? "in a Duel" :
                                     Rank.isStaffMember(target) ? "unavailable for teleport" :
                                             Jail.inJail(target) ? "in Jail" : "unavailable");
                             return true;
                         }
-                        target.setTeleportTarget(Jail.LOCATION);
+                        target.setTeleportTarget(Jail.POSITION);
                         return true;
                     }
                 },
@@ -102,7 +102,7 @@ public class HelperCommands implements NewCommandExtension {
                             player.sendMessage("You cannot teleport away from a duel.");
                             return true;
                         }
-                        player.setTeleportTarget(Jail.LOCATION);
+                        player.setTeleportTarget(Jail.POSITION);
                         return true;
                     }
                 },
@@ -116,7 +116,7 @@ public class HelperCommands implements NewCommandExtension {
                                     !Jail.inJail(target) ? "not in jail" : "unavailable");
                             return true;
                         }
-                        target.setTeleportTarget(Zanaris.LOCATION);
+                        target.setTeleportTarget(Zanaris.POSITION);
                         return true;
                     }
                 },
@@ -127,7 +127,7 @@ public class HelperCommands implements NewCommandExtension {
                             player.sendMessage("You cannot teleport away from a duel.");
                             return false;
                         }
-                        player.setTeleportTarget(Zanaris.LOCATION);
+                        player.setTeleportTarget(Zanaris.POSITION);
                         return true;
                     }
                 },

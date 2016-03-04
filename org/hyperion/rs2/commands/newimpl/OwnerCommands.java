@@ -155,7 +155,7 @@ public class OwnerCommands implements NewCommandExtension {
                 new NewCommand("ferry", Rank.OWNER) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.setTeleportTarget(Location.create(3374, 9747, 4));
+                        player.setTeleportTarget(Position.create(3374, 9747, 4));
                         return true;
                     }
                 },

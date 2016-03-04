@@ -199,7 +199,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new NewCommand("dicing", Rank.PLAYER, Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        Magic.teleport(player, Location.create(3048, 4979, 1), false);
+                        Magic.teleport(player, Position.create(3048, 4979, 1), false);
                         ClanManager.joinClanChat(player, "dicing", false);
                         return true;
                     }

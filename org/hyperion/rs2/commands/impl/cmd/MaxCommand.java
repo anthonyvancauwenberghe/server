@@ -24,11 +24,11 @@ public class MaxCommand extends NewCommand {
 
     public boolean execute(final Player player, final String[] input) {
         if (!ItemSpawning.canSpawn(player)
-                || player.getLocation().cannotMax()
+                || player.getPosition().cannotMax()
                 || FightPits.inGame(player)
-                || player.getLocation().inPvPArea()
-                || player.getLocation().inCorpBeastArea()
-                || player.getLocation().inFunPk()
+                || player.getPosition().inPvPArea()
+                || player.getPosition().inCorpBeastArea()
+                || player.getPosition().inFunPk()
                 || player.duelAttackable > 0) {
             player.sendMessage("You cannot do that here.");
             return true;

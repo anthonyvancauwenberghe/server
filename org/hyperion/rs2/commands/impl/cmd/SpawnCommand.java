@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.util.CommandInput;
+import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
@@ -27,15 +28,16 @@ public class SpawnCommand extends NewCommand {
     private static final Map<String, Integer> keywords = loadKeywords();
 
     public SpawnCommand(String key) {
-        super(key, Rank.PLAYER, Time.ONE_SECOND, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Item ID or Keyword"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "An Amount Above 0"));
+        super(key, Rank.PLAYER, 0, new CommandInput<Integer>(ItemSpawning::canSpawn, "Integer", "Spawnable Item ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Item Amount"));
+        //super(key, Rank.PLAYER, Time.ONE_SECOND, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "An Amount Above 0"));
     }
 
-    private static void spawnItem(Player player, String key, int amount) {
-        if (keywords.get(key) != null) {
-            int id = keywords.get(key);
-            ItemSpawning.spawnItem(player, id, amount);
-        } else {
-            int id = Integer.parseInt(key);
+    private static void spawnItem(Player player, int key, int amount) {
+        //if (keywords.get(key) != null) {
+        //    int id = keywords.get(key);
+        //    ItemSpawning.spawnItem(player, id, amount);
+        //} else {
+            final int id = key;
             ItemSpawning.spawnItem(player, id, amount);
             if (keywords.containsValue(id)) {
                 String possible = keywords.entrySet().stream().filter(value -> value.getValue() == id).map(Map.Entry::getKey).findAny().orElse(null);
@@ -43,7 +45,7 @@ public class SpawnCommand extends NewCommand {
                     player.sendf("You could also have used the command ::item %s,%d", possible, amount);
                 }
             }
-        }
+        //}
     }
 
     public static void setKeyword(String keyword, int id) {
@@ -96,7 +98,7 @@ public class SpawnCommand extends NewCommand {
     }
 
     public boolean execute(final Player player, final String[] input) {
-
+        spawnItem(player, Integer.parseInt(input[0]), Integer.parseInt(input[1]));
         return true;
     }
 

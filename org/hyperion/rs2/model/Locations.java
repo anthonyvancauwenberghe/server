@@ -55,18 +55,26 @@ public class Locations {
                 return Bork.doDeath(player);
             }
         },
-        DUEL_ARENA_WAITING_ROOM(new int[]{3355, 3360, 3361, 3373, 3374, 3379}, new int[]{3267, 3279, 3272, 3279, 3267, 3286}, false, false, true, false, true, true),
-            //want me to show you how to push again?
-            //?
-            //You don't have to fill in the content here, I'll do that as it's quite confusing for most and we have a tight deadline on this, so ye :p
-            //mk uh
-            //specific areas needing to be mapped?
-            //Duel arena (each INSIDE AREA, and VERY ACCURATE, otherwise we'll have dupes)
-            //Home maybe
-            //Bork (alrdy done)
-            //GWD
-            //Other bosses
-            //Other special areas (funpk, bridding)
+        DUEL_ARENA_CHALLENGING_AREA(new int[]{3355, 3360, 3361, 3373, 3374, 3379}, new int[]{3267, 3279, 3272, 3279, 3267, 3286}, false, false, true, false, true, true, Rank.PLAYER),
+
+        EDGEVILLE_BANK_AREA(new int[]{3091, 3094, 3090, 3090, 3095, 3098}, new int[]{3488, 3499, 3494, 3496, 3494, 3499}, false, false, true, false, true, true, Rank.PLAYER),
+        EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.PLAYER),
+        AFK_AREA(new int[]{2138, 2164}, new int[]{5091, 5106}, false, true, true, true, true, true, Rank.PLAYER),
+        EASTS_BANK_AREA(new int[]{2971, 2983}, new int[]{3605, 3616}, false, true, false, false, true, true, Rank.PLAYER),
+        SUPER_DONATOR_AREA(new int[]{2028, 2045}, new int[]{4517, 4541}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
+        /*Godwars*/
+        GRAARDOR_ROOM(new int[]{2864, 2876, 2869, 2871}, new int[]{5351, 5369, 5370, 5372}, true, true, false, false, false, false, Rank.PLAYER),
+        KREE_ARRA_ROOM(new int[]{2824, 2842, 2821, 2823}, new int[]{5296, 5308, 5301, 5303}, true, true, false, false, false, false, Rank.PLAYER),
+        TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, false, false, false, false, false, false, Rank.PLAYER),
+        ZILYANA_ROOM(new int[]{2889, 2907, 2885, 2888}, new int[]{5258, 5276, 5267, 5270}, true, true, false, false, false, false, Rank.PLAYER),
+
+
+        //Duel arena (each INSIDE AREA, and VERY ACCURATE, otherwise we'll have dupes)
+        //Home maybe
+        //Bork (alrdy done)
+        //GWD
+        //Other bosses
+        //Other special areas (funpk, bridding)
 
         //Main difference in this version is that I sped up pathfinding a buttload
         DEFAULT(null, null);

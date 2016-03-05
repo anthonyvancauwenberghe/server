@@ -186,16 +186,29 @@ public class ModeratorCommands implements NewCommandExtension {
                         if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER)
                                 || player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                             player.sendf("You are currently %s.", player.getPosition().inPvPArea() ? "in a PVP area" :
-                            player.duelAttackable > 0 ? "in a duel" : "unable to perform this command");
+                                    player.duelAttackable > 0 ? "in a duel" : "unable to perform this command");
                             return true;
                         }
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (target.duelAttackable > 0 && !Rank.hasAbility(player,  Rank.DEVELOPER)
+                        if (target.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER)
                                 || !Rank.hasAbility(player, Rank.getPrimaryRank(target)) && Rank.isStaffMember(target)) {
                             player.sendf("Player is currently %s.", target.duelAttackable > 0 ? "in a duel" : "unavailable");
                             return true;
                         }
                         target.setTeleportTarget(player.getPosition());
+                        return true;
+                    }
+                },
+                new NewCommand("xtele", Rank.MODERATOR, 0, new CommandInput<Integer>(integer -> integer > 0, "Integer", "X"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Y"), new CommandInput<Integer>(integer -> integer > -1, "Integer", "Z")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR)
+                                || player.duelAttackable > 0 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                            player.sendf("You are currently %s.", player.getPosition().inPvPArea() ? "in a PVP area" :
+                                    player.duelAttackable > 0 ? "in a Duel" : "unable to perform this command.");
+                            return true;
+                        }
+                        player.setTeleportTarget(Position.create(Integer.parseInt(input[0].trim()), Integer.parseInt(input[1].trim()), Integer.parseInt(input[2].trim())));
                         return true;
                     }
                 }

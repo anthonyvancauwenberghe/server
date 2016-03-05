@@ -606,6 +606,16 @@ public class DeveloperCommands implements NewCommandExtension {
                         ShopManager.open(player, Integer.parseInt(input[0]));
                         return true;
                     }
+                },
+                new NewCommand("ctele", Rank.DEVELOPER, new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "z"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "x"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "y"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "x"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "y")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        int x = Integer.parseInt(input[1].trim()) << 6 | Integer.parseInt(input[3].trim());
+                        int y = Integer.parseInt(input[2].trim()) << 6 | Integer.parseInt(input[4].trim());
+                        int z = Integer.parseInt(input[0].trim());
+                        player.setTeleportTarget(Position.create(x, y, z));
+                        return true;
+                    }
                 }
         );
     }

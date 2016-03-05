@@ -8,17 +8,11 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.EloRating;
-import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
-import org.hyperion.rs2.model.content.minigame.Bork;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
-import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
-import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
@@ -130,26 +124,7 @@ public class PlayerDeathTask extends Task {
 		player.cE.setPoisoned(false);
 		player.cE.setFreezeTimer(0);
 		Player killer = player.cE.getKiller();
-		if((player.duelAttackable > 0 || (killer != null && killer.duelAttackable > 0)) || (Duel.inDuelLocation(killer) || Duel.inDuelLocation(player)) || player.hasDuelTimer()) {    //If dying in duel arena
-			Duel.finishFullyDuel(player);
-		} else if (player.getDungeoneering().inDungeon()) {
-			DungeoneeringManager.handleDying(player);
-		} else if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-			LastManStanding.getLastManStanding().deathCheck(player, killer);
-		} else if (Bork.doDeath(player)) {
-		} else if(ContentManager.handlePacket(6, player, ClickId.ATTACKABLE)) {
-			if(ContentManager.handlePacket(6, player, ClickId.FIGHT_PITS_DEATH))
-				if(killer != null) //in fight pits death, reward player
-					killer.getInventory().add(Item.create(391, 1));
-		} else if(ContentManager.handlePacket(6, player, 32000, - 1, - 1, - 1)) {
-			ContentManager.handlePacket(6, player, 32001, - 1, - 1, - 1);
-		} else if(player.fightCavesWave > 0 && !player.getPosition().inPvPArea()) { //If dying in fight caves
-			player.fightCavesWave = 0;
-			player.getActionSender().showInterfaceWalkable(- 1);
-			player.setTeleportTarget(Position.create(2439, 5171, 0), false);
-			player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
-		} else {
-			if(! player.getPosition().inFunPk() && !LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+		if(!player.getLocation().onDeath(player)) {
 				if(killer != null) {
 					//blood lust system
 					ContentManager.handlePacket(6, player, 38000, killer.getClientIndex(), - 1, - 1);
@@ -232,15 +207,6 @@ public class PlayerDeathTask extends Task {
 				} else {
 					DeathDrops.dropsAtDeath(player, player);
 				}
-			}
-			boolean inSpecial = false;
-			for(SpecialArea area : SpecialAreaHolder.getAreas()) {
-				if(area.inArea(player) && area instanceof NIGGERUZ) {
-					inSpecial = true;
-					player.setTeleportTarget(area.getDefaultLocation(), false);
-				}
-			}
-			if(!inSpecial)
 				player.setTeleportTarget(DEATH_POSITION, false);
 			player.getActionSender().sendMessage(getDeathMessage());
 		}

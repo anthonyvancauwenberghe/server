@@ -320,6 +320,7 @@ public class EntityHandler {
         if(!World.getPlayers().remove(player))
             return !World.getPlayers().contains(player);
         System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
+        Locations.logout(player);
         Combat.logoutReset(player.cE);
         player.getDungeoneering().fireOnLogout(player);
         player.setActive(false);

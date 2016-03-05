@@ -1,24 +1,16 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.engine.task.impl.OverloadStatsTask.OverloadFactory;
 import org.hyperion.engine.task.impl.PlayerDeathTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
-import org.hyperion.rs2.model.content.minigame.DangerousPK;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.minigame.GodWars;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc2.Jail;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.util.DirectionUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Map;
 
 /**
  * <p>
@@ -288,15 +280,14 @@ public class WalkingQueue {
 	}
 
 	public boolean walkingCheck() {
-
 		if(entity instanceof Player) {
 			Player player = (Player) entity;
-
 			Locations.process(entity);
 
 			if(entity.cE.isFrozen() || entity.isDead()) {
 				reset();
 			}
+
             if(player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
                 if(player.duelAttackable <= 0) {
                     World.submit(new PlayerDeathTask(player));
@@ -304,95 +295,11 @@ public class WalkingQueue {
                 return false;
             }
 
-            final int wildLevel = Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
-            if(!player.duelOption) {
-				if(player.getPosition().inDuel()) {
-
-					player.getActionSender()
-							.sendPlayerOption("Challenge", 5, 0);
-					if (player.getNpcState()) {
-						player.setPNpc(-1);
-					}
-					player.duelOption = true;
-				}
-			} else if(!player.getPosition().inDuel()) {
-	            if((Rank.hasAbility(player, Rank.MODERATOR)))
-					player.getActionSender().sendPlayerOption("Moderate", 5, 0);
-				else
-					player.getActionSender().sendPlayerOption("null", 5, 0);
-				player.duelOption = false;
-			}
-
-			if(! player.attackOption) {
-
-				if(wildLevel > 0 || Position.inAttackableArea(player)) {
-					player.getActionSender().sendPlayerOption("Attack", 2, 0);
-					player.setCanSpawnSet(false);
-					player.attackOption = true;
-					if (player.getNpcState()) {
-						player.setPNpc(-1);
-					}
-					if(player.isOverloaded())
-						OverloadFactory.applyBoosts(player);
-				}
-			} else if(!Position.inAttackableArea(player)) {
-				player.setCanSpawnSet(true);
-                player.cE.getDamageDealt().clear();
-				player.getActionSender().sendPlayerOption("null", 2, 1);
-				player.attackOption = false;
-			}
-
-			if(! player.isInMuli && Combat.isInMulti(player.cE)) {
-				player.isInMuli = true;
-				player.getActionSender().sendMultiZone(1);
-			} else if(player.isInMuli && ! Combat.isInMulti(player.cE)) {
-				player.isInMuli = false;
-				player.getActionSender().sendMultiZone(0);
-			}
-			if(player.wildernessLevel != wildLevel && !DangerousPK.inDangerousPK(player)) {
-					player.wildernessLevel = wildLevel;
-                boolean special = false;
-                for(SpecialArea area : SpecialAreaHolder.getAreas()) {
-                    if(!area.wildInterface() && area.inArea(player))
-                        special = true;
-                }
-                if(!special || wildLevel == -1)
-				    player.getActionSender().sendWildLevel(player.wildernessLevel);
-
-			} 
-			if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                player.getActionSender().sendLastManStandingStatus(true);
-            }
 			if(Duel.inDuelLocation(player)) {
 				if(player.duelAttackable <= 0) {
 					player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
 				}
-
 			}
-			if(Jail.inJail(player)) {
-				if(player.getPosition().getX() < 2088 || player.getPosition().getX() > 2107 || player.getPosition().getY() > 4438 || player.getPosition().getY() < 4420) {
-					player.setTeleportTarget(Position.create(2097, 4428, 0), false);
-				}
-			}
-			if(FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY())) {
-				if (!FightPits.inGame(player)) {
-					player.setTeleportTarget(Position.create(2399, 5178, 0), false);
-				}
-			}
-
-            for(final Map.Entry<String, SpecialArea> area : SpecialAreaHolder.getAll()) {
-                area.getValue().check(player);
-
-
-            }
-			
-			if(DangerousPK.inDangerousPK(player)) {
-				player.wildernessLevel = 12;
-				player.getActionSender().sendPvPLevel(false);
-			}
-			
-			
-			FightPits.fightPitsCheck(player);
 		}
 		return true;
 	}

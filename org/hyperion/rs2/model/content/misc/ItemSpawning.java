@@ -58,8 +58,10 @@ public class ItemSpawning {
 	 * @param amount
 	 */
 	public static void spawnItem(Player player, int id, int amount) {
-        if(!ItemSpawning.canSpawn(player))
-            return;
+        if(!player.getLocation().isSpawningAllowed()) {
+			player.sendMessage("You cannot spawn items here.");
+			return;
+		}
 		String message = allowedMessage(id);
 		if(message.length() > 0) {
 			player.getActionSender().sendMessage(message);

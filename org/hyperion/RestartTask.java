@@ -20,8 +20,8 @@ public class RestartTask extends TimerTask {
 
     public static void submitRestartTask() {
         Timer timer = new Timer();
-        RESTART_TIME.set(Calendar.HOUR_OF_DAY, 6);
-        RESTART_TIME.set(Calendar.MINUTE, 28);
+        RESTART_TIME.set(Calendar.HOUR_OF_DAY, 3);
+        RESTART_TIME.set(Calendar.MINUTE, 0);
         RESTART_TIME.set(Calendar.SECOND, 0);
         if(System.currentTimeMillis() > RESTART_TIME.getTimeInMillis()){
             RESTART_TIME.add(Calendar.DATE, 1);

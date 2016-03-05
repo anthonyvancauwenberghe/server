@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.net.ActionSender;
 
 import java.io.FileNotFoundException;
@@ -38,8 +37,8 @@ public class Firemaking implements ContentTemplate {
 			ContentEntity.sendMessage(player, "You need " + log.level + " firemaking to light this log.");
 			return;
 		}
-        if(Jail.inJail(player)){
-            ContentEntity.sendMessage(player, "You cannot do this while in jail.");
+        if(player.getLocation().isFiremakingAllowed()){
+			player.sendMessage("You cannot light a fire in this area.");
             return;
         }
         if(Duel.inDuelLocation(player) || player.duelAttackable > 0){

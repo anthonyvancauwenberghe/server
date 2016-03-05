@@ -23,6 +23,7 @@ import org.hyperion.util.Misc;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Magic Class
@@ -116,13 +117,9 @@ public class Magic {
 	
 	public static int castSpell(final CombatEntity attacker, final CombatEntity opp, int spellId) {
 		if(attacker.getEntity().isDead() || opp.getEntity().isDead())
-			return 0;
-		String message = Combat.canAtk(attacker, opp);
-		if(message.length() > 1) {
-			attacker.getPlayer().getActionSender().sendMessage(message);
-			return 0;
-		}
-
+			return SPELL_FAIL;
+		if(!Combat.canAttack(attacker, opp))
+			return SPELL_FAIL;
         if (opp.getEntity() instanceof NPC) {
             String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
             for (String familiarName : FAMILIARS)
@@ -571,7 +568,7 @@ public class Magic {
 					"You need more runes to cast Vengeance Other.");
 			return;
 		}
-		if(Combat.canAtk(caster.cE, player2.cE).length() > 1)
+		if(!Combat.canAttack(caster.cE, player2.cE))
 			return;
 		if(! player2.vengeance) {
 			if(System.currentTimeMillis() > player2.lastVeng + 30000) {
@@ -676,14 +673,7 @@ public class Magic {
 			k.add(hit);
 			return k;
 		}
-		for(Player p : hit.getEntity().getRegion().getPlayers()) {
-			if(caster != p.cE
-					&& Combat.canAtk(caster, p.cE).length() <= 1
-					&& hit.getEntity().getPosition()
-					.isWithinDistance(p.getPosition(), 1)) {
-				k.add(p.cE);
-			}
-		}
+		k.addAll(hit.getEntity().getRegion().getPlayers().stream().filter(p -> caster != p.cE && Combat.canAttack(caster, p.cE) && hit.getEntity().getPosition().isWithinDistance(p.getPosition(), 1)).map(p -> p.cE).collect(Collectors.toList()));
 		for(NPC n : hit.getEntity().getRegion().getNpcs()) {
 			if(hit.getEntity().getPosition()
 					.isWithinDistance(n.getPosition(), 1)

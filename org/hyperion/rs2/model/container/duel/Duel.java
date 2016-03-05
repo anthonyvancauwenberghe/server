@@ -49,10 +49,10 @@ public class Duel {
 			player.getActionSender().sendMessage("You can't duel during an update.");
 			return;
 		}
-        if(player.getUID() == opponent.getUID()){
+        /*if(player.getUID() == opponent.getUID()){
 			player.sendf("You cannot duel yourself!");
             return;
-        }
+        }*/
 		player.setBusy(true);
 		opponent.setBusy(true);
 		player.currentInterfaceStatus = 2;
@@ -481,25 +481,12 @@ public class Duel {
 	}
 
 	public static void startDueling(final Player player) {
-		//player.getLogging().log("Duel started with " + player.getTrader().getName());
 		if(! player.getPosition().isWithinDistance(player.getTrader().getPosition(), 10))
 			return;
 		if(! player.onConfirmScreen)
 			return;
         if(player.duelAttackable > 0)
             return;
-        /*player.getLogManager().add(
-                LogEntry.duel(
-                        player,
-                        player.getTrader()
-                )
-        );
-        player.getTrader().getLogManager().add(
-                LogEntry.duel(
-                        player,
-                        player.getTrader()
-                )
-        );*/
 		player.setOverloaded(false);
 		player.getTrader().setOverloaded(false);
 		player.getExtraData().remove(OverloadStatsTask.KEY);
@@ -550,6 +537,8 @@ public class Duel {
                 player.getTrader().getWalkingQueue().finish();
                 player.getTrader().getWalkingQueue().reset();
 				if(timer == 0) {
+					player.getActionSender().sendPlayerOption("Attack", 2, 0);
+					player.getTrader().getActionSender().sendPlayerOption("Attack", 2, 0);
 					player.forceMessage("FIGHT!");
 					player.getTrader().forceMessage("FIGHT!");
 					player.duelAttackable = player.getTrader().getIndex();
@@ -590,6 +579,8 @@ public class Duel {
             Container.transfer(opponent.getDuel(), player.getInventory());
             AchievementHandler.progressAchievement(player, "Duel");
         }
+		player.getActionSender().sendPlayerOption("null", 2, 0);
+		player.getTrader().getActionSender().sendPlayerOption("null", 2, 0);
 		player.cE.setPoisoned(false);
 		opponent.cE.setPoisoned(false);
         opponent.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
@@ -612,8 +603,6 @@ public class Duel {
 		try {
 			Player player1 = player.getTrader();
 			if(player1 != null) {
-                //player1.getLogManager().add(LogEntry.duelResult(player1, player));
-                //player.getLogManager().add(LogEntry.duelResult(player1, player));
                 finishDuel(player1, player, true);
                 finishDuel(player, player1, false);
             } else {

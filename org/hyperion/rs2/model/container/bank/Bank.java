@@ -44,18 +44,8 @@ public class Bank {
      */
     public static void open(Player player, boolean setPin) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
-            if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                if (player.getPosition().inPvPArea()) {
-                    return;
-                }
-                if (!ItemSpawning.canSpawn(player)) {
-                    return;
-                }
-                if (FightPits.inPits(player))
-                    return;
-            } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()
-                    || (LastManStanding.getLastManStanding().participants.get(player) != null && LastManStanding.getLastManStanding().participants.get(player).getDeaths() > 0 )) {
-                player.getActionSender().sendMessage("You can only bank before the game starts. ");
+            if(!player.getLocation().isBankingAllowed()) {
+                player.sendMessage("You cannot bank in this location.");
                 return;
             }
         }

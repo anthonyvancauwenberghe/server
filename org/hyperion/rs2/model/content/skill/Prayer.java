@@ -156,7 +156,6 @@ public class Prayer implements ContentTemplate {
 		}
 		if(p.getPrayers().isEnabled(47)) {
 			p.cE.doGfx(2259, 0);
-			//synchronized(p.getLocalPlayers()){
 			if(p.getCombat().getOpponent() != null) {
                 p.getCombat().getOpponent()._getPlayer().ifPresent(player -> {
                     if(!player.isDead())
@@ -164,8 +163,7 @@ public class Prayer implements ContentTemplate {
                 });
             }
 			for(Player player : p.getLocalPlayers()) {
-				if(player.cE != null && ! player.isDead()
-						&& Combat.canAtk(p.cE, player.cE).length() <= 2) {
+				if(player.cE != null && ! player.isDead() && Combat.canAttack(p.cE, player.cE)) {
                     if(player.cE.equals(p.getCombat().getOpponent()))
                         continue;
 					player.cE.doGfx(2260, 0);
@@ -173,7 +171,6 @@ public class Prayer implements ContentTemplate {
                     player.inflictDamage(new Damage.Hit(damage, Damage.HitType.NORMAL_DAMAGE, Constants.EMPTY));
 				}
 			}
-			//}
 		}
 	}
 

@@ -1,6 +1,10 @@
 package org.hyperion.rs2.model;
 
+import org.hyperion.engine.task.impl.OverloadStatsTask;
+import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.minigame.Bork;
+import org.hyperion.rs2.model.content.minigame.FightPits;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.util.Misc;
 
 /**
@@ -15,7 +19,7 @@ public class Locations {
     public static void login(Player player) {
         player.setLocation(Location.getLocation(player));
         player.getLocation().login(player);
-        player.getLocation().enter(player);
+        player.getLocation().enterArea(player);
     }
 
     /**
@@ -36,47 +40,225 @@ public class Locations {
      *
      * THIS CAN INCLUDE MORE SQUARES THAN JUST ONE. SIMPLY ADD ANOTHER ONE
      * AFTER THE FIRST 2 NUMBERS. SQUARES CAN OVERLAP
-     * AND IT WILL TAKE THE LATER INITIALIZED AS PRIORITY.
+     * AND IT WILL TAKE THE FIRST INITIALIZED AS PRIORITY.
      */
     public enum Location {
         BORK(new int[]{3490, 3585}, new int[]{9915, 9970}, true, true, false, false, false, false) {
-            @Override
-            public void login(Player player) {
-                Bork.doDeath(player);
-            }
-
-            @Override
-            public void logout(Player player) {
-                Bork.doDeath(player);
-            }
-
             @Override
             public boolean onDeath(Player player) {
                 return Bork.doDeath(player);
             }
         },
-        DUEL_ARENA_CHALLENGING_AREA(new int[]{3355, 3360, 3361, 3373, 3374, 3379}, new int[]{3267, 3279, 3272, 3279, 3267, 3286}, false, false, true, false, true, true, Rank.PLAYER),
-
-        EDGEVILLE_BANK_AREA(new int[]{3091, 3094, 3090, 3090, 3095, 3098}, new int[]{3488, 3499, 3494, 3496, 3494, 3499}, false, false, true, false, true, true, Rank.PLAYER),
-        EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.PLAYER),
+        EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.OWNER),
         AFK_AREA(new int[]{2138, 2164}, new int[]{5091, 5106}, false, true, true, true, true, true, Rank.PLAYER),
         EASTS_BANK_AREA(new int[]{2971, 2983}, new int[]{3605, 3616}, false, true, false, false, true, true, Rank.PLAYER),
         SUPER_DONATOR_AREA(new int[]{2028, 2045}, new int[]{4517, 4541}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
-        /*Godwars*/
         GRAARDOR_ROOM(new int[]{2864, 2876, 2869, 2871}, new int[]{5351, 5369, 5370, 5372}, true, true, false, false, false, false, Rank.PLAYER),
         KREE_ARRA_ROOM(new int[]{2824, 2842, 2821, 2823}, new int[]{5296, 5308, 5301, 5303}, true, true, false, false, false, false, Rank.PLAYER),
         TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, false, false, false, false, false, false, Rank.PLAYER),
         ZILYANA_ROOM(new int[]{2889, 2907, 2885, 2888}, new int[]{5258, 5276, 5267, 5270}, true, true, false, false, false, false, Rank.PLAYER),
+        WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930}, true, true, true, true, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.setCanSpawnSet(false);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    if (player.isOverloaded())
+                        OverloadStatsTask.OverloadFactory.applyBoosts(player);
+                }
+            }
 
+            @Override
+            public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(-1);
+                player.wildernessLevel = -1;
+            }
 
-        //Duel arena (each INSIDE AREA, and VERY ACCURATE, otherwise we'll have dupes)
-        //Home maybe
-        //Bork (alrdy done)
-        //GWD
-        //Other bosses
-        //Other special areas (funpk, bridding)
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
+                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
+                if(combatDifference < 0)
+                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
 
-        //Main difference in this version is that I sped up pathfinding a buttload
+                if (combatDifference <= difference && difference > 0)
+                    return true;
+                if(difference <= 0) {
+                    player.sendMessage("Your opponent is not in the wilderness.");
+                } else {
+                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
+                }
+                return false;
+            }
+
+            @Override
+            public void process(Player player) {
+                int wildLevel = -1;
+                int absX = player.getPosition().getX();
+                int absY = player.getPosition().getY();
+                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+                    wildLevel = (((absY - 10340) / 8) + 3);
+                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+                    wildLevel = (((absY - 3520) / 8) + 3);
+                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
+                    wildLevel = 57;
+                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
+                    wildLevel = 53;
+
+                if(player.wildernessLevel != wildLevel) {
+                    player.wildernessLevel = wildLevel;
+                    if (wildLevel != -1)
+                        player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+            }
+        },
+        WILDERNESS(new int[]{2941, 3392, 2986, 3012, 3653, 3706, 3650, 3653}, new int[]{3520, 3968, 10338, 10366, 3441, 3538, 3457, 3472}, false, true, true, true, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.setCanSpawnSet(false);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    if (player.isOverloaded())
+                        OverloadStatsTask.OverloadFactory.applyBoosts(player);
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(-1);
+                player.wildernessLevel = -1;
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
+                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
+                if(combatDifference < 0)
+                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
+
+                if (combatDifference <= difference && difference > 0)
+                    return true;
+                if(difference <= 0) {
+                    player.sendMessage("Your opponent is not in the wilderness.");
+                } else {
+                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
+                }
+                return false;
+            }
+
+            @Override
+            public void process(Player player) {
+                int wildLevel = -1;
+                int absX = player.getPosition().getX();
+                int absY = player.getPosition().getY();
+                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+                    wildLevel = (((absY - 10340) / 8) + 3);
+                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+                    wildLevel = (((absY - 3520) / 8) + 3);
+                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
+                    wildLevel = 57;
+                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
+                    wildLevel = 53;
+
+                if(player.wildernessLevel != wildLevel) {
+                    player.wildernessLevel = wildLevel;
+                    if (wildLevel != -1)
+                        player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+            }
+        },
+        FIGHT_CAVES(new int[]{2360, 2445}, new int[]{5045, 5125}, true, true, false, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean onDeath(Player player) {
+                player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
+                return true;
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.fightCavesWave = 0;
+                player.getActionSender().showInterfaceWalkable(- 1);
+                player.setTeleportTarget(Position.create(2439, 5171, 0), false);
+            }
+        },
+        FIGHT_PITS(new int[]{2370, 2425}, new int[]{5133, 5167}, true, true, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean onDeath(Player player) {
+                return FightPits.pitsDeath(player);
+            }
+
+            @Override
+            public void enter(Player player) {
+                if(!FightPits.inGame(player)) {
+                    player.setTeleportTarget(Position.create(2399, 5178, 0), false);
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                FightPits.fightPitsCheck(player);
+            }
+        },
+        FIGHT_PITS_WAIT_ROOM(new int[]{2393, 2404}, new int[]{5168, 5176}, false, false, false, false, false, false, Rank.PLAYER),
+        DUEL_ARENA(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean onDeath(Player player) {
+                if (player.duelAttackable > 0) {
+                    Duel.finishFullyDuel(player);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void enter(Player player) {
+                if(!player.duelOption) {
+                    player.getActionSender().sendPlayerOption("Challenge", 5, 0);
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    player.duelOption = true;
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                if((Rank.hasAbility(player, Rank.MODERATOR)))
+                    player.getActionSender().sendPlayerOption("Moderate", 5, 0);
+                else
+                    player.getActionSender().sendPlayerOption("null", 5, 0);
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                if (player.duelAttackable > 0) {
+                    if (target.getIndex() == player.duelAttackable) {
+                        return true;
+                    } else {
+                        player.sendMessage("This is not your opponent!");
+                    }
+                }
+                return false;
+            }
+        },
+        BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, true, true, true, true, true, Rank.PLAYER),
+        JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER),
         DEFAULT(null, null);
 
         /**
@@ -176,14 +358,27 @@ public class Locations {
         public void login(Player player) {}
 
         /**
+         * This is the default call when a player enters an area. This code
+         * checks if they have the rank, and then pass the player on
+         * to the area-specific code.
+         * @param player The player
+         */
+        public final void enterArea(Player player) {
+            if(!Rank.hasAbility(player, getMinimumRank())) {
+                player.setTeleportTarget(Edgeville.POSITION);
+                return;
+            }
+            //This is a temp block of code for TESTING
+            player.sendMessage("Now entering: @dre@" + Misc.ucFirst(name()));
+            enter(player);
+        }
+
+        /**
          * This determines what happens when the player enters an area.
          * This can be left empty, and only needs to be overwritten if it does something
          * @param player The player
          */
-        public void enter(Player player) {
-            //This is a temp block of code for TESTING
-            player.sendMessage("Now entering: @dre@" + Misc.ucFirst(name()));
-        }
+        public void enter(Player player) {}
 
         /**
          * This determines what happens when the player leaves an area.
@@ -288,7 +483,7 @@ public class Locations {
                 else
                     player.getActionSender().sendMultiZone(1);
                 prev.leave(((Player)gc));
-                gc.getLocation().enter(((Player)gc));
+                gc.getLocation().enterArea(((Player)gc));
             }
         }
     }

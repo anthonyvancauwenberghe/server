@@ -940,25 +940,6 @@ public class CommandPacketHandler implements PacketHandler {
             player.getUpdateFlags().flag(UpdateFlag.APPEARANCE);
         }
 
-        if (commandStart.equalsIgnoreCase("setlevel")) {
-            try {
-                String[] args = s.substring(9).trim().split(",");
-                Player thePlay = World.getPlayerByName(args[0]);
-                int skill = Integer.parseInt(args[1]);
-                int level = Integer.parseInt(args[2]);
-                if (thePlay != null) {
-                    thePlay.getSkills().setLevel(skill, level);
-                    if (level <= 99) {
-                        thePlay.getSkills().setExperience(skill,
-                                Skills.getXPForLevel(level) + 5);
-                    }
-                } else
-                    player.sendf("%s is not online", args[0]);
-            } catch (Exception e) {
-                player.sendMessage("Format for the command is ::setlevel name,skillid,level");
-            }
-        }
-
         /**
          * w8ing to test spec is a drag!
          *
@@ -1023,6 +1004,25 @@ public class CommandPacketHandler implements PacketHandler {
     private void processDeveloperCommands(final Player player,
                                           String commandStart, String s, String withCaps, String[] as) {
 
+
+        if (commandStart.equalsIgnoreCase("setlevel")) {
+            try {
+                String[] args = s.substring(9).trim().split(",");
+                Player thePlay = World.getPlayerByName(args[0]);
+                int skill = Integer.parseInt(args[1]);
+                int level = Integer.parseInt(args[2]);
+                if (thePlay != null) {
+                    thePlay.getSkills().setLevel(skill, level);
+                    if (level <= 99) {
+                        thePlay.getSkills().setExperience(skill,
+                                Skills.getXPForLevel(level) + 5);
+                    }
+                } else
+                    player.sendf("%s is not online", args[0]);
+            } catch (Exception e) {
+                player.sendMessage("Format for the command is ::setlevel name,skillid,level");
+            }
+        }
         if(commandStart.equalsIgnoreCase("finishclue")) {
             try {
                 final ClueScroll clue = ClueScrollManager.getInInventory(player);

@@ -204,8 +204,7 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public static void fightPitsCheck(Player player) {
-		if(!FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY())
-				&& inGame(player) && !waitingRoom.contains(player) && !player.joiningPits) {
+		if(!FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY()) && inGame(player) && !waitingRoom.contains(player) && !player.joiningPits) {
 			removePlayerFromGame(player, true);
 		}
 		if(player.joiningPits)
@@ -350,25 +349,28 @@ public class FightPits implements ContentTemplate {
 				return waitingRoom.contains(player) || inGame(player) || player.getDungeoneering().inDungeon();
 			}
 			if(clickId == ClickId.FIGHT_PITS_DEATH) {
-
-                if(!FightPits.inGame(player))
-                    return false;
-                if(player.getExtraData().getInt("pitdeaths") >= 2)
-				    removePlayerFromGame(player, true);
-                else {
-                    player.getExtraData().put("pitdeaths", player.getExtraData().getInt("pitdeaths") + 1);
-                    player.getInventory().clear();
-                    player.getEquipment().clear();
-                    spawnItems(player);
-                    if(teamRed.contains(player))
-                        player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(RED_CAPE));
-                    else
-                        player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(BLUE_CAPE));
-                    player.setTeleportTarget(getSpawnLoc(), false);
-                }
 			}
 		}
 		if(clickType != ClickType.NPC_DEATH) ;
+		return true;
+	}
+
+	public static boolean pitsDeath(Player player) {
+		if (!FightPits.inGame(player))
+			return false;
+		if (player.getExtraData().getInt("pitdeaths") >= 2) {
+			removePlayerFromGame(player, true);
+		} else {
+			player.getExtraData().put("pitdeaths", player.getExtraData().getInt("pitdeaths") + 1);
+			player.getInventory().clear();
+			player.getEquipment().clear();
+			spawnItems(player);
+			if(teamRed.contains(player))
+				player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(RED_CAPE));
+			else
+				player.getEquipment().set(Equipment.SLOT_CAPE, Item.create(BLUE_CAPE));
+			player.setTeleportTarget(getSpawnLoc(), false);
+		}
 		return true;
 	}
 	

@@ -11,9 +11,7 @@ import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.clan.ClanManager;
-import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.minigame.Participant;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -607,29 +605,19 @@ public class ActionSender {
     }
 
     public ActionSender follow(int id, int type) {
-        //System.out.println("Follow id : " + id);
-        if (GodWars.inGodwars(player))
-            return this;
-        if (player.duelAttackable > 0 || player.getPosition().inDuel() || Duel.inDuelLocation(player) || player.getAgility().isBusy())
+        if (!player.getLocation().isFollowingAllowed() || player.getAgility().isBusy())
             return this;
         if (player.isFollowing == null) {
             player.isFollowing = (Player) World.getPlayers().get(id);
-            if (player.isFollowing == null) // if the player index returns null player, shouldn't be following
+            if (player.isFollowing == null)
                 return this;
             player.isFollowing.beingFollowed = player;
             Combat.follow(player.cE, player.isFollowing.cE);
-            // System.out.println("Follow method");
-			/*
-			 * PacketBuilder bldr = new PacketBuilder(175); bldr.putShort(id);
-			 * bldr.put((byte)type); bldr.putShort(10);
-			 * player.write(bldr.toPacket());
-			 */
         }
         return this;
     }
 
     public ActionSender resetFollow() {
-        // System.out.println("Resetting follow");
         if (player.isFollowing != null) {
             player.isFollowing.beingFollowed = null;
             player.isFollowing = null;

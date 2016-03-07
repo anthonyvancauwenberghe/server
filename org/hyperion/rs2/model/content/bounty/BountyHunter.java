@@ -244,8 +244,8 @@ public class BountyHunter {
         return emblemPoints;
     }
 
-    public int setEmblemPoints(final int points) {
-        return emblemPoints = points;
+    public void setEmblemPoints(final int points) {
+        emblemPoints = points;
     }
-	
+
 }

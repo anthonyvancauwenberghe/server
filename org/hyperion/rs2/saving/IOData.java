@@ -602,6 +602,20 @@ public enum IOData {
             player.getPoints().setVotingPoints(element.getAsInt());
         }
     },
+    EMBLEM_POINTS {
+        @Override
+        public boolean shouldSave(Player player) { return player.getBountyHunter().getEmblemPoints() != 0; }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return new JsonPrimitive(player.getBountyHunter().getEmblemPoints());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) {
+            player.getBountyHunter().setEmblemPoints(element.getAsInt());
+        }
+    },
     HONOR_POINTS {
         @Override
         public boolean shouldSave(Player player) {

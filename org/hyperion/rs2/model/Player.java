@@ -1636,29 +1636,27 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 		/** Ring of life */
 		if (Combat.ringOfLifeEqupped(this) && !Combat.usingPhoenixNecklace(this)) {
-			if (duelAttackable < 1 && !Duel.inDuelLocation(this)) {
+			if(getLocation().canTeleport(this)) {
 				final int newhp = getSkills().getLevel(3) - damg;
-				if (newhp < Math.floor(getSkills().calculateMaxLifePoints() * .13) && newhp > 0) {  //10% of hp
-					if (!Duel.inDuelLocation(this) || !isTeleBlocked()) { //Ring of life surpasses teleblocks n shit, also it was just wrong lol
-						getEquipment().set(Equipment.SLOT_RING, null);
-						getWalkingQueue().reset();
-						ContentEntity.playerGfx(this, 1684);
-						ContentEntity.startAnimation(this, 9603);
-						extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
-						World.submit(new Task(200,"combatimmunity") {
-							int loop = 0;
+				if (newhp < Math.floor(getSkills().calculateMaxLifePoints() * .13) && newhp > 0) {
+					getEquipment().set(Equipment.SLOT_RING, null);
+					getWalkingQueue().reset();
+					ContentEntity.playerGfx(this, 1684);
+					ContentEntity.startAnimation(this, 9603);
+					extraData.put("combatimmunity", System.currentTimeMillis() + 4000L);
+					World.submit(new Task(200, "combatimmunity") {
+						int loop = 0;
 
-							public void execute() {
-								if (loop == 5) {
-									setTeleportTarget(Position.create(3225, 3218, 0));
-									sendMessage("Your ring of life saves you, but is destroyed in the process.");
-									this.stop();
-								}
-								loop++;
+						public void execute() {
+							if (loop == 5) {
+								setTeleportTarget(Position.create(3225, 3218, 0));
+								sendMessage("Your ring of life saves you, but is destroyed in the process.");
+								this.stop();
 							}
-						});
-						return 0;
-					}
+							loop++;
+						}
+					});
+					return 0;
 				}
 			}
 		}

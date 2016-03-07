@@ -6,7 +6,6 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.Magic;
-import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.net.Packet;
 
 public class CastMagicPacketHandler implements PacketHandler {
@@ -44,17 +43,9 @@ public class CastMagicPacketHandler implements PacketHandler {
 		int spell = packet.getLEShort();
 		//System.out.println("spell: " + spell);
 		if(victim != null) {
-
-            if(victim.getPosition().inDuel() || Duel.inDuelLocation(victim))
-            {
-                if(id != player.duelAttackable)
-                {
-                    player.sendMessage("You cannot do this to this player");
-                    return;
-                }
-
-            }
-
+			if(!player.getLocation().canAttack(player, victim)) {
+				return;
+			}
 			if(victim.getName().equalsIgnoreCase(player.getName()))
 				return;
 

@@ -51,17 +51,14 @@ public class Bank {
         }
         player.resetingPin = false;
         if (player.bankPin != null && !player.bankPin.equals("null")) {
-            if ((player.bankPin.length() < 4 && setPin)
-                    || (player.bankPin.length() >= 4 && !player.bankPin
-                    .equals(player.enterPin))) {
+            if ((player.bankPin.length() < 4 && setPin) || (player.bankPin.length() >= 4 && !player.bankPin.equals(player.enterPin))) {
                 BankPin.loadUpPinInterface(player);
                 return;
             }
         }
         player.getActionSender().sendInterfaceInventory(5292, PLAYER_INVENTORY_INTERFACE - 1);
         player.getInterfaceState().addListener(player.getBank(), new BankContainerListener(player));
-        player.getInterfaceState().addListener(player.getInventory(),
-                new InterfaceContainerListener(player, PLAYER_INVENTORY_INTERFACE));
+        player.getInterfaceState().addListener(player.getInventory(), new InterfaceContainerListener(player, PLAYER_INVENTORY_INTERFACE));
         player.getBank().shift();
         player.getBankField().setBanking(true);
         player.openedBoB = false;
@@ -94,11 +91,11 @@ public class Bank {
                     return;
                 }
 
-                if (!ItemSpawning.canSpawn(player)) {
+                if (!player.getLocation().isBankingAllowed()) {
                     return;
                 }
-                if (player.isInCombat() || player.getPosition().inPvPArea()) {
-                    player.getActionSender().sendMessage("You cannot do this in combat or in pvp area!");
+                if (player.isInCombat()) {
+                    player.getActionSender().sendMessage("You cannot do this in combat!");
                     return;
                 }
             } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()) {
@@ -182,8 +179,7 @@ public class Bank {
         deposit(player, slot, id, amount, player.getInventory(), inventory, true);
     }
 
-    public static void deposit(Player player, int slot, int id, int amount,
-                               Container container, boolean inventory, boolean refresh) {
+    public static void deposit(Player player, int slot, int id, int amount, Container container, boolean inventory, boolean refresh) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
             if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
                 if (player.getPosition().inPvPArea())

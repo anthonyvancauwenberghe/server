@@ -2,9 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.engine.task.impl.PlayerDeathTask;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.Equipment;
-import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.minigame.GodWars;
 import org.hyperion.rs2.util.DirectionUtils;
 
@@ -294,11 +292,6 @@ public class WalkingQueue {
                     World.submit(new PlayerDeathTask(player));
                 }
                 return false;
-            }
-
-            if (Duel.inDuelLocation(player)
-                    && player.duelAttackable < 1) {
-                player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
             }
         }
         return true;

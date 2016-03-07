@@ -134,7 +134,6 @@ public class PlayerDeathTask extends Task {
 					 */
 					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
 					BountyPerkHandler.handleSpecialPerk(killer);
-					if(true || killer.getPosition().inPvPArea()) {
 						boolean isDev = false;
 						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal()
 								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
@@ -200,8 +199,6 @@ public class PlayerDeathTask extends Task {
 							player.resetKillStreak();
 							player.resetBounty();
 						}
-
-					}
 					//DeathDrops.dropAllItems(player, killer);
 					DeathDrops.dropsAtDeath(player, killer);
 				} else {

@@ -13,7 +13,6 @@ import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
 import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.NameUtils;
-import org.hyperion.util.Misc;
 
 // Referenced classes of package org.hyperion.rs2.model.container:
 //            Container
@@ -428,15 +427,6 @@ public class Duel {
 		}
 	}
 	
-	public static boolean inDuelLocation(Player player) {
-		return player != null && (player.getLocation().equals(Locations.Location.DUEL_ARENA_NW)
-				|| player.getLocation().equals(Locations.Location.DUEL_ARENA_NE)
-				|| player.getLocation().equals(Locations.Location.DUEL_ARENA_MW)
-				|| player.getLocation().equals(Locations.Location.DUEL_ARENA_ME)
-				|| player.getLocation().equals(Locations.Location.DUEL_ARENA_SW)
-				|| player.getLocation().equals(Locations.Location.DUEL_ARENA_SE));
-	}
-	
 	public static void declineTrade(Player player) {
 		player.onConfirmScreen = false;
 		//player.cannotSwitch = false;
@@ -532,8 +522,6 @@ public class Duel {
                 player.getTrader().getWalkingQueue().finish();
                 player.getTrader().getWalkingQueue().reset();
 				if(timer == 0) {
-					player.getActionSender().sendPlayerOption("Attack", 2, 0);
-					player.getTrader().getActionSender().sendPlayerOption("Attack", 2, 0);
 					player.forceMessage("FIGHT!");
 					player.getTrader().forceMessage("FIGHT!");
 					player.duelAttackable = player.getTrader().getIndex();
@@ -574,8 +562,6 @@ public class Duel {
             Container.transfer(opponent.getDuel(), player.getInventory());
             AchievementHandler.progressAchievement(player, "Duel");
         }
-		player.getActionSender().sendPlayerOption("null", 2, 0);
-		player.getTrader().getActionSender().sendPlayerOption("null", 2, 0);
 		player.cE.setPoisoned(false);
 		opponent.cE.setPoisoned(false);
         opponent.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);

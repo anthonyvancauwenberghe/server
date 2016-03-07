@@ -95,7 +95,6 @@ public class Bork {
             time = ORIGINAL_TIME;
             player.getPermExtraData().put(TIME_KEY, System.currentTimeMillis());
             player.getActionSender().showInterfaceWalkable(INTERFACE_ID);
-            player.getExtraData().put("cantteleport", true);
             player.getExtraData().put(KEY, this);
             player.getActionSender().sendString(CHILD_IDS[0], "Kill BORK");
             //for(; i < CHILD_IDS.length; i++)
@@ -148,7 +147,6 @@ public class Bork {
             //remove all variables
             player.getActionSender().removeAllInterfaces();
             player.getActionSender().showInterfaceWalkable(-1);
-            player.getExtraData().put("cantteleport", false);
             player.getExtraData().remove(KEY);
             //kill all npcs
             for(NPC npc : npcs) {

@@ -305,12 +305,18 @@ public class Locations {
                     player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
                     return;
                 }
-                player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.attackOption = true;
+                }
             }
 
             @Override
             public void leave(Player player) {
-                player.getActionSender().sendPlayerOption("null", 2, 0);
+                if(player.attackOption) {
+                    player.getActionSender().sendPlayerOption("null", 2, 0);
+                    player.attackOption = false;
+                }
             }
 
             @Override

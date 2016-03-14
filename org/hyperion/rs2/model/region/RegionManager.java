@@ -1,8 +1,9 @@
 package org.hyperion.rs2.model.region;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.Entity;
+import org.hyperion.rs2.model.NPC;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Position;
 
 import java.util.*;
 
@@ -162,12 +163,5 @@ public class RegionManager {
 
 
 	static {
-		CommandHandler.submit(new Command("howmanyinregion", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("In region: " + player.getRegion().getPlayers().size());
-				return true;
-			}
-		});
 	}
 }

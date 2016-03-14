@@ -1,5 +1,5 @@
 package org.hyperion.rs2.commands.newimpl;
-
+//<editor-fold defaultstate="collapsed" desc="Imports">
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.util.CommandInput;
@@ -8,25 +8,30 @@ import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.authentication.PlayerAuthenticationGenerator;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
+import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
+import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
 
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.List;
-
+//</editor-fold>
 /**
  * Created by DrHales on 2/29/2016.
  */
 public class HelperCommands implements NewCommandExtension {
-
+    //<editor-fold defaultstate="collapsed" desc="Rank">
+    private final Rank rank = Rank.HELPER;
+    //</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("gestats", Rank.HELPER, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
+                new NewCommand("gestats", rank, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("Grand Exchange is current %s@bla@.", JGrandExchange.enabled ? "@gre@Enabled" : "@red@Disabled");
@@ -46,7 +51,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("help", Rank.HELPER, new CommandInput<String>(string -> World.getPlayerByName(string) != null, "Player", "An Online Player")) {
+                new NewCommand("help", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -58,7 +63,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("players2", Rank.HELPER) {
+                new NewCommand("players2", rank) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("--Players Start--");
@@ -69,15 +74,17 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("removejail", Rank.HELPER, new CommandInput<String>(string -> World.getPlayerByName(string) != null && Jail.inJail(World.getPlayerByName(string)), "Player", "An Online Player in Jail")) {
+                new NewCommand("removejail", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player in Jail")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        target.setTeleportTarget(Edgeville.POSITION);
+                        if (Jail.inJail(target)) {
+                            target.setTeleportTarget(Edgeville.POSITION);
+                        }
                         return true;
                     }
                 },
-                new NewCommand("jail", Rank.HELPER, new CommandInput<String>(string -> World.getPlayerByName(string) != null, "Player", "An Online Player")) {
+                new NewCommand("jail", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -95,7 +102,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("tojail", Rank.HELPER) {
+                new NewCommand("tojail", rank) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.duelAttackable > 0) {
@@ -106,7 +113,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("unjail", Rank.HELPER, new CommandInput<String>(string -> World.getPlayerByName(string) != null, "Player", "An Online Player")) {
+                new NewCommand("unjail", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -120,10 +127,10 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("tounjail", Rank.HELPER) {
+                new NewCommand("tounjail", rank) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if(player.duelAttackable > 0) {
+                        if (player.duelAttackable > 0) {
                             player.sendMessage("You cannot teleport away from a duel.");
                             return false;
                         }
@@ -131,14 +138,72 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
+                new NewCommand("authenticator", rank, Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
                         return true;
                     }
+                },
+                new NewCommand("checktickets", rank) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        /*Ticket.checkTickets(player);
+                        TicketManager.display(player);
+                        player.write(Interface.createStatePacket(Interface.SHOW, 3));*/
+                        player.sendMessage("'CheckTickets' is currently disabled.");
+                        return true;
+                    }
+                },
+                new NewCommand("syell", rank, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Message")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        PushMessage.pushStaffMessage(input[0].trim(), player);
+                        return true;
+                    }
+                },
+                new NewCommand("assist", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        if (!player.canSpawnSet()) {
+                            player.sendMessage("You are too busy to be assisting people.");
+                            return true;
+                        }
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        if (!target.canSpawnSet()) {
+                            player.sendMessage("Cannot assist this player at this time.");
+                            return true;
+                        }
+                        if (!Ticket.hasTicket(target)) {
+                            player.sendMessage("This player has not asked for help.");
+                            return true;
+                        }
+                        target.setTeleportTarget(player.getPosition().getCloseLocation());
+                        Ticket.removeRequest(target);
+                        return true;
+                    }
+                },
+                new NewCommand("clearnulls", rank) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        World.getPlayers().stream().filter(target -> target == null).forEach(target -> {
+                            World.getPlayers().remove(target);
+                        });
+                        player.sendMessage("Null Players Cleared.");
+                        return true;
+                    }
+                },
+                new NewCommand("display", rank, new CommandInput<String>(string -> !string.trim().isEmpty() && !string.toLowerCase().contains("arre") || !string.toLowerCase().contains("jet") || !string.toLowerCase().contains("ferry"), "String", "Display Name")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        if (player.getName().toLowerCase().equals("knightmare")) {
+                            String value = input[0].trim();
+                            player.display = Character.toString(value.charAt(0)).toUpperCase() + value.substring(1);
+                        }
+                        return true;
+                    }
                 }
         );
     }
-
+    //</editor-fold>
 }

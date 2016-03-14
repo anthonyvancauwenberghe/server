@@ -1,8 +1,6 @@
 package cluescrolleditor.util;
 
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 
 public final class EditorUtils {

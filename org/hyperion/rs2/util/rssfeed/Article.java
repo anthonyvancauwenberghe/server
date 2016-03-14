@@ -1,10 +1,9 @@
 package org.hyperion.rs2.util.rssfeed;
 
 import org.hyperion.util.Misc;
-import org.jsoup.*;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.Date;

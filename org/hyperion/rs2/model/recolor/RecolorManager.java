@@ -1,12 +1,13 @@
 package org.hyperion.rs2.model.recolor;
 
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.UpdateFlags;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.UpdateFlags;
 
 public class RecolorManager {
 

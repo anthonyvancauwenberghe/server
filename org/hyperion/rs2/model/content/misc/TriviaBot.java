@@ -79,21 +79,6 @@ public class TriviaBot {
 		loadQuestions();
 		updateQuestion();
 		World.submit(TRIVIA_EVENT);
-		CommandHandler.submit(new Command("answer", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				String answer = input.replace("answer ", "");
-				sayAnswer(player, answer);
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("howmanytrivia", Rank.MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("There are currently " + getPlayersAmount() + " people playing");
-				return true;
-			}
-		});
 	}
 
 	/**

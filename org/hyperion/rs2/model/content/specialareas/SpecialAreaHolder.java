@@ -1,11 +1,16 @@
 package org.hyperion.rs2.model.content.specialareas;
 
 import org.hyperion.rs2.commands.CommandHandler;
+import org.hyperion.rs2.commands.NewCommand;
+import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.model.OSPK;
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.minigame.barrowsffa.BarrowsFFA;
 import org.hyperion.rs2.model.content.specialareas.impl.HybridZone;
 import org.hyperion.rs2.model.content.specialareas.impl.NewGamePK;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
+import org.hyperion.util.Time;
 
 import java.util.*;
 
@@ -26,9 +31,16 @@ public class SpecialAreaHolder {
         map.put("hybrid", new HybridZone());
         map.put("ospk", new OSPK());
 
-        for(final Map.Entry<String, SpecialArea> area : map.entrySet()) {
-            CommandHandler.submit(area.getValue().command(area.getKey()));
-        }
+        map.entrySet().stream().forEach(area -> {
+            NewCommandHandler.submit(
+                    new NewCommand(area.getValue().command(area.getKey()).getKey(), Rank.PLAYER, Time.FIFTEEN_SECONDS) {
+                        @Override
+                        protected boolean execute(Player player, String[] input) {
+                            return true;
+                        }
+                    }
+            );
+        });
     }
 
     public static Optional<SpecialArea> get(final String key) {
@@ -46,7 +58,14 @@ public class SpecialAreaHolder {
     public static void put(final String command, final SpecialArea area, boolean cmd) {
         map.put(command, area);
         if(cmd)
-            CommandHandler.submit(area.command(command));
+            NewCommandHandler.submit(
+                    new NewCommand(area.command(command).getKey()) {
+                        @Override
+                        protected boolean execute(Player player, String[] input) {
+                            return true;
+                        }
+                    }
+            );
     }
 
 }

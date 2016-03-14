@@ -1,8 +1,6 @@
 package org.hyperion.rs2.model.container;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.SpiritShields;
 import org.hyperion.rs2.model.content.misc2.MysteryBox;
@@ -636,7 +634,7 @@ public class ShopManager {
 	 * @param name
 	 * @throws IOException
 	 */
-	private static void loadShops(String name) throws IOException {
+	public static void loadShops(String name) throws IOException {
 		BufferedReader in = new BufferedReader(new FileReader(name));
 		String line;
 		int counter = 0;
@@ -710,14 +708,6 @@ public class ShopManager {
 	}
 
 	static {
-		CommandHandler.submit(new Command("reloadshops", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				loadShops("./data/newshops.cfg");
-				player.getActionSender().sendMessage("Reloaded");
-				return true;
-			}
-		});
 		try {
 			loadShops("./data/newshops.cfg");
 		} catch(Exception e) {

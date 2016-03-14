@@ -1,7 +1,5 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
@@ -30,15 +28,6 @@ import java.util.LinkedList;
 public class ActionButtonPacketHandler implements PacketHandler {
 
 	static {
-		CommandHandler.submit(new Command("doaction", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				input = filterInput(input);
-				int button = Integer.parseInt(input);
-				handle(player, button);
-				return true;
-			}
-		});
 	}
 
 	@Override

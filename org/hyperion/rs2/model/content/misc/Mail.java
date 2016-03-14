@@ -78,22 +78,6 @@ public class Mail {
 	}
 
 	static {
-		CommandHandler.submit(new Command("getmail", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				System.out.println("Mail:" + player.getMail());
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("setmail", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				input = input.replaceAll("setmail ", "");
-				player.getMail().setTempmail(input);
-				//System.out.println(input);
-				return true;
-			}
-		});
 	}
 
 }

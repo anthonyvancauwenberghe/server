@@ -2,11 +2,8 @@ package org.hyperion.rs2.model.combat;
 
 import org.hyperion.util.Time;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 public class LastAttacker {
 

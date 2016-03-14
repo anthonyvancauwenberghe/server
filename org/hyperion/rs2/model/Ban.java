@@ -2,6 +2,7 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
+
 import java.text.DecimalFormat;
 
 public class Ban {

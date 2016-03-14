@@ -1,6 +1,6 @@
 package cluescrolleditor.res;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 public final class Res {
 

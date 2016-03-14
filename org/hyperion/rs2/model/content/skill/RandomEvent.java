@@ -34,13 +34,6 @@ public class RandomEvent {
     };
 
     static {
-        CommandHandler.submit(new Command("triggerrandom", Rank.DEVELOPER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                RandomEvent.triggerRandom(player, false);
-                return false;
-            }
-        });
     }
 
     Map<Integer, Integer> answers = new HashMap<>();

@@ -1,11 +1,11 @@
 package org.hyperion.rs2.util;
 
+import sun.misc.BASE64Encoder;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-
-import sun.misc.BASE64Encoder;
 
 /**
  *

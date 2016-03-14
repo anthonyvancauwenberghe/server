@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.container;
 
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 
 import java.util.HashMap;
 import java.util.Map;

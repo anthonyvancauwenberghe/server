@@ -10,23 +10,17 @@ import cluescrolleditor.editor.requirement.editor.list.RequirementList;
 import cluescrolleditor.editor.reward.editor.RewardEditor;
 import cluescrolleditor.editor.reward.editor.list.RewardList;
 import cluescrolleditor.util.EditorUtils;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
+
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class ClueScrollEditor extends JPanel implements ChangeListener, ItemListener, DocumentListener{
 

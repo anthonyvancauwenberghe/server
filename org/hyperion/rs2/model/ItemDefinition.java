@@ -1,7 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.weapons.Weapon;
 import org.hyperion.rs2.model.combat.weapons.WeaponManager;
 import org.hyperion.rs2.model.container.Equipment;
@@ -107,7 +105,7 @@ public class ItemDefinition {
 		loadItems();
 	}
 
-	private static void loadItems() {
+	public static void loadItems() {
 		try (BufferedReader in = new BufferedReader(new FileReader(CONFIG_FILE))) {
 			String line;
 			while ((line = in.readLine()) != null) {
@@ -490,14 +488,6 @@ public class ItemDefinition {
 
 
 	static {
-		CommandHandler.submit(new Command("reloaditems", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				ItemDefinition.loadItems();
-				player.getActionSender().sendMessage("Reloaded");
-				return true;
-			}
-		});
 	}
 
 }

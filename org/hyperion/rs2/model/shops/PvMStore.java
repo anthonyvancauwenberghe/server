@@ -1,7 +1,6 @@
 package org.hyperion.rs2.model.shops;
 
 import org.hyperion.rs2.model.Item;
-import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.Container;
 

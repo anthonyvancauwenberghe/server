@@ -2,8 +2,6 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.Configuration;
 import org.hyperion.Server;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.content.specialareas.NIGGERUZ;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
@@ -375,20 +373,6 @@ public class NPCManager {
 	}
 
 	static {
-		CommandHandler.submit(new Command("npcids", Rank.MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				for(NPC npc : World.getNpcs()) {
-					if(npc == null)
-						continue;
-					int distance = player.getPosition().distance(npc.getPosition());
-					if(distance < 5) {
-						player.getActionSender().sendMessage("Npc: " + npc.getDefinition().getId() + " , " + npc.getDefinition().combat());
-					}
-				}
-				return true;
-			}
-		});
 	}
 
 }

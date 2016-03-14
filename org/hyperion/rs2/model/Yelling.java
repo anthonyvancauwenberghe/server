@@ -1,8 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-
 public class Yelling {
 
 	public static final String[] COLOUR_SUFFICES = {
@@ -90,17 +87,5 @@ public class Yelling {
 	}
 
 	static {
-		CommandHandler.submit(new Command("testcolors", Rank.PLAYER) {
-
-			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				for(String suffix : COLOUR_SUFFICES) {
-					player.getActionSender().sendMessage("@" + suffix + "@[Owner][Graham]:Testing message :" + suffix);
-				}
-				return false;
-			}
-
-		});
 	}
 }

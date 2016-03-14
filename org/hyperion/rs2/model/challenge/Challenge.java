@@ -1,9 +1,10 @@
 package org.hyperion.rs2.model.challenge;
 
-import java.util.Random;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.util.Random;
 
 public class Challenge {
 

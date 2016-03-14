@@ -1,9 +1,8 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @author Arsen Maxyutov.
@@ -255,18 +254,6 @@ public class Prayers {
 	}
 
 	static {
-		CommandHandler.submit(new Command("prayers", Rank.PLAYER) {
-
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				for(int i = 0; i < Prayers.SIZE; i++) {
-					if(player.getPrayers().isEnabled(i))
-						player.getActionSender().sendMessage("Active prayer: " + i);
-				}
-				return true;
-			}
-
-		});
 	}
 
 	public void disableFor(int time, int... prayers) {

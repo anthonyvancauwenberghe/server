@@ -1,10 +1,7 @@
 package org.hyperion.rs2.model.container;
 
-import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.misc2.RunePouch;
-
-import java.util.ArrayList;
 
 /**
  * Created by User on 3/22/2015.

@@ -2,32 +2,12 @@ package org.hyperion.rs2.commands;
 
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.impl.CommandResult;
-import org.hyperion.rs2.commands.newimpl.AdministratorCommands;
-import org.hyperion.rs2.commands.newimpl.CommunityManagerCommands;
-import org.hyperion.rs2.commands.newimpl.DeveloperCommands;
-import org.hyperion.rs2.commands.newimpl.DonatorCommands;
-import org.hyperion.rs2.commands.newimpl.EventManagerCommands;
-import org.hyperion.rs2.commands.newimpl.ForumModeratorCommands;
-import org.hyperion.rs2.commands.newimpl.GlobalModeratorCommands;
-import org.hyperion.rs2.commands.newimpl.HeadModeratorCommands;
-import org.hyperion.rs2.commands.newimpl.HelperCommands;
-import org.hyperion.rs2.commands.newimpl.HeroCommands;
-import org.hyperion.rs2.commands.newimpl.LegendCommands;
-import org.hyperion.rs2.commands.newimpl.ModeratorCommands;
-import org.hyperion.rs2.commands.newimpl.OwnerCommands;
-import org.hyperion.rs2.commands.newimpl.PlayerCommands;
-import org.hyperion.rs2.commands.newimpl.ServerCommands;
-import org.hyperion.rs2.commands.newimpl.SuperDonatorCommands;
-import org.hyperion.rs2.commands.newimpl.VeteranCommands;
-import org.hyperion.rs2.commands.newimpl.WikiEditorCommands;
+import org.hyperion.rs2.commands.newimpl.*;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +33,12 @@ public final class NewCommandHandler {
 
     public static HashMap<String, List<NewCommand>> getCommands() {
         return COMMANDS;
+    }
+
+    private static final HashMap<Rank, List<NewCommand>> commands_list = new HashMap();
+
+    public static final HashMap<Rank, List<NewCommand>> getCommandsList() {
+        return commands_list;
     }
 
     /**
@@ -115,9 +101,16 @@ public final class NewCommandHandler {
      * @param command The command to add to the map.
      */
     private static void submit(NewCommand command) {
-        if (!COMMANDS.containsKey(command.getKey()))
+        if (!COMMANDS.containsKey(command.getKey())) {
             COMMANDS.put(command.getKey(), new ArrayList<>());
+        } else {
+            System.out.println(String.format("[INFO]: Skipped Submitting Command Twice; [%s]: %s", command.getRank(), command.getKey()));
+        }
         COMMANDS.get(command.getKey()).add(command);
+        if (!commands_list.containsKey(command.getRank()))
+            commands_list.put(command.getRank(), new ArrayList<>());
+        if (!commands_list.get(command.getRank()).contains(command))
+            commands_list.get(command.getRank()).add(command);
     }
 
     private static void commandUsed(String playerName, String commandUsed, long delay) {

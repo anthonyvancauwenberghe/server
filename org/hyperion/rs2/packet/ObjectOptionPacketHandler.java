@@ -2,7 +2,6 @@ package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.net.Packet;
-import org.hyperion.rs2.util.PushMessage;
 
 /**
  * Object option packet handler.

@@ -323,6 +323,10 @@ public class DungeoneeringManager implements ContentTemplate {
         return items;
     }
 
+    public static void setItems(List<Integer> value) {
+        items = value;
+    }
+
     public static int randomItem() {
         return getItems().get(Misc.random(getItems().size() - 1));
     }
@@ -334,13 +338,6 @@ public class DungeoneeringManager implements ContentTemplate {
     }
 
     static {
-        CommandHandler.submit(new Command("resetparse", Rank.PLAYER) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                items = parse();
-                return true;
-            }
-        });
     }
 
 }

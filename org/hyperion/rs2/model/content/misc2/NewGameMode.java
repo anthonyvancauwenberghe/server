@@ -70,6 +70,10 @@ public class NewGameMode implements ContentTemplate {
 
     private static final Map<Integer, Integer> prices;
 
+    public static final Map<Integer, Integer> getPrices() {
+        return prices;
+    }
+
     static {
         prices = new TreeMap<Integer, Integer>();
         try(final BufferedReader reader = new BufferedReader(new FileReader(new File("./data/prices.txt")))) {
@@ -189,58 +193,5 @@ public class NewGameMode implements ContentTemplate {
     }
 
     static {
-        CommandHandler.submit(new Command("getprice", Rank.PLAYER) {
-            @Override
-            public boolean execute(final Player p, final String command) {
-                int[] id = getIntArray(command);
-                p.sendf("Price of %s costs %,df coins, it sells for %,d coins.", ItemDefinition.forId(id[0]).getName(), getUnitPrice(id[0]), (int)(getUnitPrice(id[0]) * SELL_REDUCTION));
-                p.sendMessage("Incorrect? Please contact an admin");
-                return true;
-            }
-        });
-        CommandHandler.submit(new Command("sellitem", Rank.PLAYER) {
-
-            @Override public boolean execute(final Player player, String input) {
-                int[] parts = getIntArray(input);
-                int id = parts[0];
-                if(!ItemSpawning.canSpawn(id)) {
-                    player.sendMessage("You cannot sell this for coins");
-                }
-                int amount = parts.length == 2 ? parts[1] : 1;
-                if(amount > 1000 || amount < 1) {
-                    player.sendMessage("Amount is too small or too large");
-                    return false;
-                }
-
-                int price = (int)(getUnitPrice(id) * SELL_REDUCTION);
-                int amountsold = player.getInventory().remove(Item.create(id, amount));
-                long $money = price * amountsold;
-                if($money > Integer.MAX_VALUE) {
-                    player.sendMessage("You have sold too much of this item");
-                }
-                if(amountsold > 0) {
-                    return player.getInventory().add(Item.create(995, price * amountsold));
-                }
-                return false;
-
-            }
-
-        });
-
-        CommandHandler.submit(new Command("setitemprice", Rank.ADMINISTRATOR) {
-            @Override public boolean execute(final Player player, final String input) {
-
-                try {
-                    int[] array = getIntArray(input);
-                    int id = array[0];
-                    int price = array[1];
-                    prices.put(id, price);
-                }catch(Exception e) {
-                    player.sendMessage("Unable to add price");
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
     }
 }

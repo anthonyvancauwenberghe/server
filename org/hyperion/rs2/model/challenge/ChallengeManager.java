@@ -1,9 +1,10 @@
 package org.hyperion.rs2.model.challenge;
 
+import org.hyperion.rs2.model.Player;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import org.hyperion.rs2.model.Player;
 
 public final class ChallengeManager {
 

@@ -80,14 +80,5 @@ public class SnowItems implements ContentTemplate {
 	}
 
 	static {
-		CommandHandler.submit(new Command("testimps", Rank.ADMINISTRATOR) {
-
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				player.getExtraData().put("impscaught", 20);
-				return true;
-			}
-
-		});
 	}
 }

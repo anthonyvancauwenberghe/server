@@ -2,8 +2,6 @@ package org.hyperion.rs2.model;
 
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.Constants;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.UpdateFlags.UpdateFlag;
 import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Trade;
@@ -587,13 +585,6 @@ public abstract class Entity {
 	//}
 
 	static {
-		CommandHandler.submit(new Command("getlocalplayers", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("Localplayers: " + player.getLocalPlayers().size());
-				return true;
-			}
-		});
 	}
 
 	/**

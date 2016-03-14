@@ -28,55 +28,34 @@ public class Bork {
     private static final String KEY = "borkevent";
     private static final String TIME_KEY = "borktime";
 
+    public static final String getTimeKey() {
+        return TIME_KEY;
+    }
+
     private static final Position TELEPORT_POSITION = Position.create(3555, 9947, 0);
+
+    public static final Position getTeleportPosition() {
+        return TELEPORT_POSITION;
+    }
+
     private static final Position BORK_POSITION = Position.create(3564, 9959, 0);
     private static final Point[] MINION_LOCATIONS = {
             new Point(3551, 9938), new Point(3563, 9941), new Point(3547, 9957)
     };
     private static final long DELAY = Time.TEN_HOURS/2L;
 
+    public static final long getDelay() {
+        return DELAY;
+    }
+
     private static final int INTERFACE_ID = 6568;
     private static final int[] CHILD_IDS = {6569, 6570, 6572, 6664};
 
     static {
-        CommandHandler.submit(new Command("bork", Rank.PLAYER) {
-            public boolean execute(final Player player, final String input) {
-                long delay;
-                if((delay = System.currentTimeMillis() - player.getPermExtraData().getLong(TIME_KEY)) < DELAY) {
-                    player.sendf("You must wait %d more minutes to kill Bork", TimeUnit.MINUTES.convert(DELAY - delay, TimeUnit.MILLISECONDS));
-                    return true;
-                } else if(player.getTotalOnlineTime() < Time.ONE_HOUR * 6)  {
-                    player.sendf("You need at least 6 hours of online time to attempt Bork");
-                    return true;
-                }
-
-                if(!ItemSpawning.canSpawn(player)) {
-                    player.sendMessage("You can't start bork here");
-                    return false;
-
-                }
-
-                final int height = player.getIndex() * 4;
-                Magic.teleport(player, TELEPORT_POSITION.transform(0, 0, height), false);
-
-                World.submit(new BorkEvent(player));
-                return true;
-            }
-
-        });
-
-        CommandHandler.submit(new Command("resetbork", Rank.DEVELOPER) {
-
-            public boolean execute(final Player player, final String input) {
-                player.getPermExtraData().put(TIME_KEY, 0L);
-                return true;
-            }
-
-        });
     }
 
 
-    private static final class BorkEvent extends Task {
+    public static final class BorkEvent extends Task {
         private static final double PKP_MULTIPLIER = 5;
         private static final double TOKEN_MULTIPLIER = 1;
         /**

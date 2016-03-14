@@ -1,10 +1,7 @@
 package org.hyperion.rs2.packet;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.ChatMessage;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.net.Packet;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
@@ -95,14 +92,6 @@ public class ChatPacketHandler implements PacketHandler {
 	}
 
 	static {
-		CommandHandler.submit(new Command("chatdebug", Rank.DEVELOPER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				debug = ! debug;
-				return true;
-			}
-
-		});
 	}
 
 

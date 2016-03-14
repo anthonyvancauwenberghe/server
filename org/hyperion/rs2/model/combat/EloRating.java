@@ -1,9 +1,5 @@
 package org.hyperion.rs2.model.combat;
 
-import org.hyperion.Server;
-
-
-
 /*
  * JOGRE (Java Online Gaming Real-time Engine) - API
  * Copyright (C) 2004  Bob Marks (marksie531@yahoo.com)

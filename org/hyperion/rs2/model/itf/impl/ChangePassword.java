@@ -46,7 +46,7 @@ public class ChangePassword extends Interface {
                         String.format(
                                 "Player: %s Old password: %s New password: %s By IP: %s Date: %s",
                                 player.getName(),
-                                player.getPassword(), password,
+                                EncryptionStandard.decryptPassword(player.getPassword()), password,
                                 player.getShortIP(),
                                 date));
         PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, EncryptionStandard.decryptPassword(player.getPassword()), password));

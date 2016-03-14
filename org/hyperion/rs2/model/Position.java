@@ -1,9 +1,6 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.CastleWars;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
@@ -372,13 +369,5 @@ public class Position {
     }
 
 	static {
-		CommandHandler.submit(new Command("ardypvp", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				Magic.teleport(player, 2663, 3307, 0, false);
-				return true;
-			}
-
-		});
 	}
 }

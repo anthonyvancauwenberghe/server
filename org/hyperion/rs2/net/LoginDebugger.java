@@ -1,10 +1,6 @@
 package org.hyperion.rs2.net;
 
 import debug.Debugger;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.util.Time;
 
 import java.io.File;
@@ -64,51 +60,6 @@ public class LoginDebugger extends Debugger {
 
 
 	static {
-		CommandHandler.submit(new Command("sendloginlogs",
-				Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				int counter = 0;
-				for(String log : LoginDebugger.getDebugger().getLogs()) {
-					if(counter++ > 100) {
-						break;
-					}
-					player.getActionSender().sendMessage(log);
-				}
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("enablelogindebugger",
-				Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				getDebugger().setEnabled(true);
-				player.getActionSender().sendMessage("Enabled");
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("disablelogindebugger",
-				Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				getDebugger().setEnabled(false);
-				player.getActionSender().sendMessage("Disabled");
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("dumploginlogs",
-				Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				boolean succesful = LoginDebugger.getDebugger().dumpLogs();
-				if(succesful)
-					player.getActionSender().sendMessage("Succesfully dumped");
-				else
-					player.getActionSender().sendMessage("Was not able to dump..");
-				return true;
-			}
-		});
-
 	}
 
 }

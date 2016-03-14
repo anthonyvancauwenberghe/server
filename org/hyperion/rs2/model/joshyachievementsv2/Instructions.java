@@ -1,9 +1,10 @@
 package org.hyperion.rs2.model.joshyachievementsv2;
 
+import org.hyperion.rs2.model.Player;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.hyperion.rs2.model.Player;
 
 public class Instructions{
 

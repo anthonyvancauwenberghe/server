@@ -258,6 +258,11 @@ public final class World {
             return op.isPresent() ? op.get() : null;
     }
 
+    public static boolean playerIsOnline(String name) {
+        Optional<Player> op = players.search(p -> p != null && p.getName().toLowerCase().equals(name.toLowerCase().replaceAll("_", " ")));
+        return op.isPresent();
+    }
+
     /**
      * Attempts to gracefully close a session
      *

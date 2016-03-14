@@ -1,11 +1,7 @@
 package org.hyperion.rs2.model;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.net.ActionSender;
-import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 import java.util.Arrays;
@@ -183,47 +179,6 @@ public class Spam {
 	}
 
 	static {
-		CommandHandler.submit(new Command("teletospammer", Rank.MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				LinkedList<Spam> spammers = new LinkedList<Spam>();
-				for(Player spammer : World.getPlayers()) {
-					if(spammer.getSpam().isSpamming()) {
-						spammers.add(spammer.getSpam());
-					}
-				}
-				if(spammers.size() > 0) {
-					int randomIdx = Misc.random(spammers.size() - 1);
-					Spam spam = spammers.get(randomIdx);
-					Magic.teleport(player, spam.getLocation(), true);
-				} else {
-					player.getActionSender().sendMessage("No spammers online..");
-				}
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("huntspammers", Rank.MODERATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getSpam().setHunting(true);
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("banallspammers", Rank.MODERATOR) {
-
-			@Override
-			public boolean execute(Player player, String input) throws Exception {
-				for(Player target : World.getPlayers()) {
-                    if (target != null) {
-                        if (target.getSpam().isSpamming())
-                            target.getSpam().punish();
-                    }
-                }
-				return true;
-			}
-
-		});
-
 	}
 
 }

@@ -91,26 +91,6 @@ public class DangerousPK implements ContentTemplate {
 	
 	
 	static {
-		CommandHandler.submit(new Command("fightpits", Rank.PLAYER) {
-
-			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				Magic.teleport(player, Position.create(2399,5178,0), false, false);
-				return true;
-			}
-			
-		});
-		CommandHandler.submit(new Command("dangerouspk", Rank.PLAYER) {
-
-			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				Magic.teleport(player, 2480, 5174, 0, false, false);
-				return true;
-			}
-			
-		});
 	}
 
 }

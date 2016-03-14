@@ -33,14 +33,6 @@ public class HelpInterface extends Interface {
     }
 
     static {
-        CommandHandler.submit(new Command("checktickets", Rank.HELPER) {
-            @Override
-            public boolean execute(final Player player, final String input) {
-                TicketManager.display(player);
-                player.write(Interface.createStatePacket(SHOW, ID));
-                return true;
-            }
-        });
     }
 
 

@@ -6,21 +6,13 @@ import cluescrolleditor.cluescroll.requirement.Requirement;
 import cluescrolleditor.cluescroll.reward.Reward;
 import cluescrolleditor.editor.ClueScrollEditor;
 import cluescrolleditor.res.Res;
-import java.awt.BorderLayout;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 
 public class ToolBar extends JToolBar implements ActionListener{
 

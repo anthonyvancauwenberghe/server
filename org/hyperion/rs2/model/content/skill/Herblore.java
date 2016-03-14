@@ -488,18 +488,5 @@ public class Herblore implements ContentTemplate {
 	}
 
 	static {
-		CommandHandler.submit(new Command("maxskills", Rank.ADMINISTRATOR) {
-
-			@Override
-			public boolean execute(Player player, String input)
-					throws Exception {
-				for(int i = 0; i < Skills.SKILL_COUNT; i++) {
-					player.getSkills().setLevel(i, 99);
-					player.getSkills().setExperience(i, 200000000);
-				}
-				return false;
-			}
-
-		});
 	}
 }

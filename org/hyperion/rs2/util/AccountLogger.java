@@ -1,15 +1,9 @@
 package org.hyperion.rs2.util;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -90,6 +84,10 @@ public class AccountLogger {
 
 	private static Map<String, Object> dupers = new HashMap<String, Object>();
 
+	public static Map<String, Object> getDupers() {
+		return dupers;
+	}
+
 	static {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(DUPERS_FILE));
@@ -101,28 +99,6 @@ public class AccountLogger {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		CommandHandler.submit(new Command("setwatched", Rank.MODERATOR) {
-
-			@Override
-			public boolean execute(Player player, String input) {
-				input = filterInput(input);
-				dupers.put(input, new Object());
-				Player duper = World.getPlayerByName(input);
-				if(duper != null) {
-					duper.getLogging().setWatched(true);
-				}
-				try {
-					BufferedWriter out = new BufferedWriter(new FileWriter(DUPERS_FILE, true));
-					out.write(input);
-					out.newLine();
-					out.close();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-				return true;
-			}
-
-		});
 	}
 
 	public static class Status {

@@ -157,14 +157,6 @@ public class Barrows3 implements ContentTemplate {
 	}
 
 	static {
-		CommandHandler.submit(new Command("clearwalkinterface", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().showInterfaceWalkable(- 1);
-				return true;
-			}
-
-		});
 	}
 
 	public void clickStairs(final Player player, final int id) {

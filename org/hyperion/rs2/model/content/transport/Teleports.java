@@ -249,12 +249,5 @@ public class Teleports implements ContentTemplate {
 	}
 
 	static {
-		CommandHandler.submit(new Command("easts", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				Magic.teleport(player, 3358, 3673, 0, false);
-				return true;
-			}
-		});
 	}
 }

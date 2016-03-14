@@ -4,7 +4,6 @@ import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 
 public class SetHandler {

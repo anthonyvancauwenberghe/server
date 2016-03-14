@@ -36,12 +36,5 @@ public class AskForHelp extends Interface {
     }
 
     static {
-        CommandHandler.submit(new Command("reqhelp", Rank.PLAYER) {
-            @Override
-            public boolean execute(final Player player, final String input) {
-                player.write(Interface.createStatePacket(SHOW, ID));
-                return true;
-            }
-        });
     }
 }

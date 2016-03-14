@@ -2,7 +2,6 @@ package org.hyperion.rs2.model.sets;
 
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.content.minigame.FightPits;
 
 /**
  * Created with IntelliJ IDEA.

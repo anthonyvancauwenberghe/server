@@ -9,8 +9,6 @@ import com.sun.javafx.beans.event.AbstractNotifyListener;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.PlayerDetails;
 import org.hyperion.rs2.model.Rank;
@@ -61,6 +59,10 @@ public class GenericWorldLoader implements WorldLoader {
 	private final static ObservableCollection<String> ALLOWED_IPS = loadList(ALLOWED_IPS_DIR);
 	private final static Map<String, Integer> LOGIN_ATTEMPTS = new HashMap<>();
 	private final static Set<String> BLOCKED_PLAYERS = new HashSet<>();
+
+	public final static ObservableCollection<String> getAllowedIps() {
+		return ALLOWED_IPS;
+	}
 
 	private final static int MAXIMUM_LOGIN_ATTEMPTS = 5;
 
@@ -209,16 +211,5 @@ public class GenericWorldLoader implements WorldLoader {
 
 
 	static {
-        CommandHandler.submit(new Command("addip", Rank.ADMINISTRATOR) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception{
-                String ipAddress = filterInput(input);
-                if(ipAddress == null)
-                    throw new Exception();
-                ALLOWED_IPS.add(ipAddress.toLowerCase().replaceAll("_", " "));
-                player.getActionSender().sendMessage("The IP address '" + ipAddress + "' has been added to the list.");
-                return true;
-            }
-        });
 	}
 }

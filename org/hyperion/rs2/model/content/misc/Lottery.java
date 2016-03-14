@@ -25,6 +25,10 @@ public class Lottery {
 
 	private static int correctGuess = Misc.random(MAX_GUESS);
 
+	public static int getGuessesCounter() {
+		return guessesCounter;
+	}
+
 	public static void checkGuess(Player player, int guess) {
 		if(player.getPoints().getDonatorPoints() < 1) {
 			player.getActionSender().sendMessage("@blu@You need at least 1 donator point to gamble.");
@@ -46,38 +50,6 @@ public class Lottery {
 	}
 
 	public static void init() {
-		CommandHandler.submit(new Command("howmanyguesses", Rank.ADMINISTRATOR) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("Counter: " + guessesCounter);
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("guessnumber", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				int guess = - 1;
-				try {
-					guess = Integer.parseInt(input.replace("guessnumber ", ""));
-				} catch(Exception e) {
-					player.getActionSender().sendMessage("@blu@Please enter a value between 0 and " + MAX_GUESS);
-					return false;
-				}
-				if(guess < MIN_GUESS || guess > MAX_GUESS) {
-					player.getActionSender().sendMessage("@blu@Please enter a value between 0 and " + MAX_GUESS);
-					return false;
-				}
-				checkGuess(player, guess);
-				return true;
-			}
-		});
-		CommandHandler.submit(new Command("lotteryinfo", Rank.PLAYER) {
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().openLotteryInformation();
-				return true;
-			}
-		});
 		if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
 			Server.getLogger().log(Level.INFO, "Lottery has successfully loaded.");
 	}

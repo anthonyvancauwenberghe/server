@@ -1,18 +1,14 @@
 package org.hyperion.rs2.model.log;
 
+import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 
 public class LogManager {
 

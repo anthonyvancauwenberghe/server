@@ -1,10 +1,7 @@
 package org.hyperion.rs2.util;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.content.jge.entry.Entry;
 import org.hyperion.rs2.model.shops.DonatorShop;
@@ -168,14 +165,5 @@ public class AccountValue {
 	}
 
 	static {
-		CommandHandler.submit(new Command("accountvalue", Rank.PLAYER) {
-
-			@Override
-			public boolean execute(Player player, String input) {
-				player.getActionSender().sendMessage("Acc value: " + player.getAccountValue().getTotalValue());
-				return true;
-			}
-
-		});
 	}
 }

@@ -1,8 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -69,14 +66,6 @@ public class ServerTimeManager {
     }
 
     static {
-        CommandHandler.submit(new Command("dumpservtimes", Rank.MODERATOR) {
-            @Override
-            public boolean execute(Player player, String input) throws Exception {
-                ServerTimeManager.getSingleton().dumpValues();
-                player.getActionSender().sendMessage("Dumped all values.");
-                return true;
-            }
-        });
     }
 
 }

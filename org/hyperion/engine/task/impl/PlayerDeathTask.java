@@ -13,8 +13,6 @@ import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -167,7 +165,6 @@ public class PlayerDeathTask extends Task {
 								killer.increaseKillStreak();
 							}
 							killer.getAchievementTracker().playerKill();
-							//AchievementHandler.progressAchievement(player, "Kill");
 							killer.addLastKill(player.getName());
 							int pkpIncrease = (int) Math.pow(player.getKillCount(), .8);
 							if (pkpIncrease > 400)
@@ -175,10 +172,6 @@ public class PlayerDeathTask extends Task {
 
 							int pointsToAdd = ((player.wildernessLevel / 2 + player.getBounty()) + pkpIncrease);
 
-							for(SpecialArea area: SpecialAreaHolder.getAreas()) {
-								if(area.inEvent() && area.inArea(player))
-									pointsToAdd *= 4;
-							}
 							if(player.getKillStreak() >= 6) {
 								AchievementHandler.progressAchievement(player, "Killstreak");
 								for(Player p : World.getPlayers())

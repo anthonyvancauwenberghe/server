@@ -174,9 +174,7 @@ public class PlayerDeathTask extends Task {
 
 							if(player.getKillStreak() >= 6) {
 								AchievementHandler.progressAchievement(player, "Killstreak");
-								for(Player p : World.getPlayers())
-									if(p != null)
-										p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+								World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills."));
 							}
 							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
 							if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
@@ -199,6 +197,8 @@ public class PlayerDeathTask extends Task {
 				}
 				player.setTeleportTarget(DEATH_POSITION, false);
 			player.getActionSender().sendMessage(getDeathMessage());
+		} else {
+			player.setDead(false);
 		}
 		player.setSkulled(false);
 		player.resetPrayers();

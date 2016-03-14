@@ -223,6 +223,7 @@ public class Locations {
             @Override
             public boolean onDeath(Player player) {
                 player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
+                player.setTeleportTarget(Position.create(2439, 5171, 0), false);
                 return true;
             }
 
@@ -230,7 +231,6 @@ public class Locations {
             public void leave(Player player) {
                 player.fightCavesWave = 0;
                 player.getActionSender().showInterfaceWalkable(- 1);
-                player.setTeleportTarget(Position.create(2439, 5171, 0), false);
             }
 
             @Override

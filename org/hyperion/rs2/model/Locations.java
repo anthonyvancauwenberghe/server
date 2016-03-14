@@ -266,7 +266,7 @@ public class Locations {
             public void leave(Player player) {
                 FightPits.fightPitsCheck(player);
                 if(player.attackOption) {
-                    player.getActionSender().sendPlayerOption("null", 2, 0);
+                    player.getActionSender().sendPlayerOption("null", 2, 1);
                     player.attackOption = false;
                 }
             }
@@ -306,6 +306,7 @@ public class Locations {
                     return;
                 }
                 if(!player.attackOption) {
+                    player.sendMessage("Assigning you the attack option.");
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.attackOption = true;
                 }
@@ -314,7 +315,7 @@ public class Locations {
             @Override
             public void leave(Player player) {
                 if(player.attackOption) {
-                    player.getActionSender().sendPlayerOption("null", 2, 0);
+                    player.getActionSender().sendPlayerOption("null", 2, 1);
                     player.attackOption = false;
                 }
             }

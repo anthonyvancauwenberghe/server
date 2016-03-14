@@ -52,6 +52,28 @@ public class Locations {
         },
         FUN_PK_AREA(new int[]{2586, 2602, 2603, 2606, 2581, 2585}, new int[]{3151, 3172, 3151, 3172, 3151, 3172}, true, true, true, false, false, false, Rank.PLAYER) {
             @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                }
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                return true;
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+            }
+
+            @Override
             public boolean onDeath(Player player) {
                 player.setTeleportTarget(Position.create(2594, 3157, 0));
                 return false;

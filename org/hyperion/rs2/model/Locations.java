@@ -285,7 +285,6 @@ public class Locations {
                     return;
                 }
                 if(!player.attackOption) {
-                    player.sendMessage("Assigning you the attack option.");
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.attackOption = true;
                 }
@@ -294,7 +293,7 @@ public class Locations {
             @Override
             public void leave(Player player) {
                 if(player.attackOption) {
-                    player.getActionSender().sendPlayerOption("null", 2, 1);
+                    player.getActionSender().sendPlayerOption("null", 2, 0);
                     player.attackOption = false;
                 }
             }
@@ -330,7 +329,7 @@ public class Locations {
             @Override
             public void enter(Player player) {
                 if(!player.duelOption) {
-                    player.getActionSender().sendPlayerOption("Challenge", 5, 0);
+                    player.getActionSender().sendPlayerOption("Challenge", 5, 1);
                     if (player.getNpcState()) {
                         player.setPNpc(-1);
                     }
@@ -340,10 +339,13 @@ public class Locations {
 
             @Override
             public void leave(Player player) {
-                if((Rank.hasAbility(player, Rank.MODERATOR)))
-                    player.getActionSender().sendPlayerOption("Moderate", 5, 0);
-                else
-                    player.getActionSender().sendPlayerOption("null", 5, 0);
+                if(player.duelOption) {
+                    if ((Rank.hasAbility(player, Rank.MODERATOR)))
+                        player.getActionSender().sendPlayerOption("Moderate", 5, 0);
+                    else
+                        player.getActionSender().sendPlayerOption("null", 5, 0);
+                    player.duelOption = false;
+                }
             }
         },
         BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, true, true, true, true, true, Rank.PLAYER),

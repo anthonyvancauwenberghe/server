@@ -357,7 +357,7 @@ public class Locations {
             }
         },
         JAIL_FULL_AREA(new int[]{2065, 2111}, new int[]{4416, 4455}, false, false, false, false, true, true, Rank.HELPER),
-        DEFAULT(null, null);
+        DEFAULT(null, null, false, true, true, true, true, true);
 
         /**
          * The corners, from low to high

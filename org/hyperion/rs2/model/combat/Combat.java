@@ -933,7 +933,7 @@ public class Combat {
         } else if (combatEntity.getEntity() instanceof NPC && opponent.getEntity() instanceof Player) {
             NPC npc = combatEntity.getNPC();
             Player player = opponent.getPlayer();
-            return npc.getLocation().isMulti() && player.getLocation().isMulti() || !(npc.ownerId > 0 && player.getIndex() != npc.ownerId) && opponent.getOpponent() == combatEntity || System.currentTimeMillis() - combatEntity.lastHit < 9000 && System.currentTimeMillis() - opponent.lastHit < 5000;
+            return (npc.getLocation().isMulti() && player.getLocation().isMulti()) || (!(npc.ownerId > 0 && player.getIndex() != npc.ownerId) && opponent.getOpponent() == combatEntity) || (System.currentTimeMillis() - combatEntity.lastHit < 9000 && System.currentTimeMillis() - opponent.lastHit < 5000);
 
             /**
              * Player vs Npc combat

@@ -50,22 +50,22 @@ public class Locations {
                 return Bork.doDeath(player);
             }
         },
-        FUNPK_AREA(new int[]{2586, 2602, 2603, 2606, 2581, 2585}, new int[]{3151, 3172, 3151, 3172, 3151, 3172}, true, true, true, false, false, false, Rank.PLAYER),
-        CORPOREAL_BEAST_AREA(new int[]{2499, 2537}, new int[]{4628, 4666}, true, true, true, false, false, false, Rank.PLAYER),
-        MAGE_BANK(new int[]{2528, 2550, 2499, 2523}, new int[]{4708, 4725, 4680, 4733}, false, true, true, false, true, true, Rank.PLAYER),
+        FUN_PK_AREA(new int[]{2586, 2602, 2603, 2606, 2581, 2585}, new int[]{3151, 3172, 3151, 3172, 3151, 3172}, true, true, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean onDeath(Player player) {
+                player.setTeleportTarget(Position.create(2594, 3157, 0));
+                return false;
+            }
+        },
 
         EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.OWNER),
-        EDGEVILLE_BANK_AREA(new int[]{3091, 3094, 3095, 3098, 3090, 3090}, new int[]{3488, 3499, 3494, 3499, 3494, 3496}, false, false, false, false, true, true, Rank.PLAYER),
-        EDGEVILLE_RESPAWN_AREA(new int[]{3092, 3097}, new int[]{3468, 3473}, false, false, false, false, false, true, Rank.PLAYER),
-        EDGVILLE_TOWN_AREA(new int[]{3071, 3129}, new int[]{3464, 3519}, false, true, true, false, true, true, Rank.PLAYER),
         AFK_AREA(new int[]{2138, 2164}, new int[]{5091, 5106}, false, true, true, true, true, true, Rank.PLAYER),
-        EASTS_BANK_AREA(new int[]{2971, 2983}, new int[]{3605, 3616}, false, true, false, false, true, true, Rank.PLAYER),
         DONATOR_PLACE_AREA(new int[]{2344, 2389}, new int[]{4938, 4987}, false, true, true, false, true, true, Rank.DONATOR),
         SUPER_DONATOR_AREA(new int[]{2028, 2045}, new int[]{4517, 4541}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
         SUPER_DONATOR_PVM_AREA(new int[]{3464, 3511}, new int[]{9478, 9524}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
         GRAARDOR_ROOM(new int[]{2864, 2876, 2869, 2871}, new int[]{5351, 5369, 5370, 5372}, true, true, false, false, false, false, Rank.PLAYER),
         KREE_ARRA_ROOM(new int[]{2824, 2842, 2821, 2823}, new int[]{5296, 5308, 5301, 5303}, true, true, false, false, false, false, Rank.PLAYER),
-        TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, false, false, false, false, false, false, Rank.PLAYER),
+        TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, true, false, false, false, false, false, Rank.PLAYER),
         ZILYANA_ROOM(new int[]{2889, 2907, 2885, 2888}, new int[]{5258, 5276, 5267, 5270}, true, true, false, false, false, false, Rank.PLAYER),
         WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930}, true, true, true, true, false, false, Rank.PLAYER) {
             @Override
@@ -348,7 +348,7 @@ public class Locations {
                 }
             }
         },
-        BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, true, true, true, true, true, Rank.PLAYER),
+        BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
         JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public boolean canTeleport(Player player) {

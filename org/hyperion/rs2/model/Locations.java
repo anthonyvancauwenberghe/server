@@ -277,27 +277,6 @@ public class Locations {
             }
         },
         FIGHT_PITS_WAIT_ROOM(new int[]{2393, 2404}, new int[]{5168, 5176}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
-
-            @Override
-            public void enter(Player player) {
-                if(!player.duelOption) {
-                    player.getActionSender().sendPlayerOption("Challenge", 5, 0);
-                    if (player.getNpcState()) {
-                        player.setPNpc(-1);
-                    }
-                    player.duelOption = true;
-                }
-            }
-
-            @Override
-            public void leave(Player player) {
-                if((Rank.hasAbility(player, Rank.MODERATOR)))
-                    player.getActionSender().sendPlayerOption("Moderate", 5, 0);
-                else
-                    player.getActionSender().sendPlayerOption("null", 5, 0);
-            }
-        },
         DUEL_ARENA(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3248, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
@@ -344,6 +323,27 @@ public class Locations {
                 }
                 player.sendMessage("This is not your opponent!");
                 return false;
+            }
+        },
+        DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
+
+            @Override
+            public void enter(Player player) {
+                if(!player.duelOption) {
+                    player.getActionSender().sendPlayerOption("Challenge", 5, 0);
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    player.duelOption = true;
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                if((Rank.hasAbility(player, Rank.MODERATOR)))
+                    player.getActionSender().sendPlayerOption("Moderate", 5, 0);
+                else
+                    player.getActionSender().sendPlayerOption("null", 5, 0);
             }
         },
         BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, true, true, true, true, true, Rank.PLAYER),

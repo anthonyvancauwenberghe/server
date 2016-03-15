@@ -238,7 +238,7 @@ public final class NewCommandHandler {
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
                                 Optional<JsonElement> rank = PlayerLoading.getProperty(targetName, IOData.RANK);
-                                if(player.getPlayerRank() < rank.get().getAsLong()) {
+                                if(Rank.hasAbility(rank.get().getAsLong(), Rank.getPrimaryRank(player))) {
                                     player.sendMessage("You cannot get " + targetName + "'s password. Their rank is higher than yours.");
                                     return true;
                                 }

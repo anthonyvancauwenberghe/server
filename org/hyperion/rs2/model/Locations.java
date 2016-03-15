@@ -50,22 +50,45 @@ public class Locations {
                 return Bork.doDeath(player);
             }
         },
-        FUNPK_AREA(new int[]{2586, 2602, 2603, 2606, 2581, 2585}, new int[]{3151, 3172, 3151, 3172, 3151, 3172}, true, true, true, false, false, false, Rank.PLAYER),
-        CORPOREAL_BEAST_AREA(new int[]{2499, 2537}, new int[]{4628, 4666}, true, true, true, false, false, false, Rank.PLAYER),
-        MAGE_BANK(new int[]{2528, 2550, 2499, 2523}, new int[]{4708, 4725, 4680, 4733}, false, true, true, false, true, true, Rank.PLAYER),
+        FUN_PK_AREA(new int[]{2586, 2602, 2603, 2606, 2581, 2585}, new int[]{3151, 3172, 3151, 3172, 3151, 3172}, true, true, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                }
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                return true;
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+            }
+
+            @Override
+            public boolean onDeath(Player player) {
+                player.setDead(false);
+                player.setTeleportTarget(Position.create(2594, 3157, 0));
+                return true;
+            }
+        },
 
         EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.OWNER),
-        EDGEVILLE_BANK_AREA(new int[]{3091, 3094, 3095, 3098, 3090, 3090}, new int[]{3488, 3499, 3494, 3499, 3494, 3496}, false, false, false, false, true, true, Rank.PLAYER),
-        EDGEVILLE_RESPAWN_AREA(new int[]{3092, 3097}, new int[]{3468, 3473}, false, false, false, false, false, true, Rank.PLAYER),
-        EDGVILLE_TOWN_AREA(new int[]{3071, 3129}, new int[]{3464, 3519}, false, true, true, false, true, true, Rank.PLAYER),
         AFK_AREA(new int[]{2138, 2164}, new int[]{5091, 5106}, false, true, true, true, true, true, Rank.PLAYER),
-        EASTS_BANK_AREA(new int[]{2971, 2983}, new int[]{3605, 3616}, false, true, false, false, true, true, Rank.PLAYER),
         DONATOR_PLACE_AREA(new int[]{2344, 2389}, new int[]{4938, 4987}, false, true, true, false, true, true, Rank.DONATOR),
         SUPER_DONATOR_AREA(new int[]{2028, 2045}, new int[]{4517, 4541}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
         SUPER_DONATOR_PVM_AREA(new int[]{3464, 3511}, new int[]{9478, 9524}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
         GRAARDOR_ROOM(new int[]{2864, 2876, 2869, 2871}, new int[]{5351, 5369, 5370, 5372}, true, true, false, false, false, false, Rank.PLAYER),
         KREE_ARRA_ROOM(new int[]{2824, 2842, 2821, 2823}, new int[]{5296, 5308, 5301, 5303}, true, true, false, false, false, false, Rank.PLAYER),
-        TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, false, false, false, false, false, false, Rank.PLAYER),
+        TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, true, false, false, false, false, false, Rank.PLAYER),
         ZILYANA_ROOM(new int[]{2889, 2907, 2885, 2888}, new int[]{5258, 5276, 5267, 5270}, true, true, false, false, false, false, Rank.PLAYER),
         WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930}, true, true, true, true, false, false, Rank.PLAYER) {
             @Override
@@ -107,6 +130,19 @@ public class Locations {
                     player.sendMessage("You need to go deeper into the wilderness to attack this player.");
                 }
                 return false;
+            }
+
+            @Override
+            public boolean canTeleport(Player player) {
+                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                    player.sendMessage("You cannot teleport above level 20 wilderness.");
+                    return false;
+                }
+                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
+                    player.removeEP();
+                }
+                return true;
             }
 
             @Override
@@ -173,6 +209,19 @@ public class Locations {
             }
 
             @Override
+            public boolean canTeleport(Player player) {
+                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                    player.sendMessage("You cannot teleport above level 20 wilderness.");
+                    return false;
+                }
+                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
+                    player.removeEP();
+                }
+                return true;
+            }
+
+            @Override
             public void process(Player player) {
                 int wildLevel = -1;
                 int absX = player.getPosition().getX();
@@ -197,6 +246,7 @@ public class Locations {
             @Override
             public boolean onDeath(Player player) {
                 player.getActionSender().sendMessage("Too bad, you didn't complete fight caves!");
+                player.setTeleportTarget(Position.create(2439, 5171, 0), false);
                 return true;
             }
 
@@ -204,7 +254,12 @@ public class Locations {
             public void leave(Player player) {
                 player.fightCavesWave = 0;
                 player.getActionSender().showInterfaceWalkable(- 1);
-                player.setTeleportTarget(Position.create(2439, 5171, 0), false);
+            }
+
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport from the Fight Caves.");
+                return false;
             }
         },
         FIGHT_PITS(new int[]{2370, 2425}, new int[]{5133, 5167}, true, true, true, false, false, false, Rank.PLAYER) {
@@ -218,33 +273,60 @@ public class Locations {
                 if(!FightPits.inGame(player)) {
                     player.setTeleportTarget(Position.create(2399, 5178, 0), false);
                 }
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.attackOption = true;
+                }
+            }
+
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport from the Fight Pits.");
+                return false;
             }
 
             @Override
             public void leave(Player player) {
                 FightPits.fightPitsCheck(player);
+                if(player.attackOption) {
+                    player.getActionSender().sendPlayerOption("null", 2, 1);
+                    player.attackOption = false;
+                }
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                return FightPits.inGame(player) && !FightPits.isSameTeam(player, target);
             }
         },
         FIGHT_PITS_WAIT_ROOM(new int[]{2393, 2404}, new int[]{5168, 5176}, false, false, false, false, false, false, Rank.PLAYER),
-
-        DUEL_ARENA_LOBBY(new int[]{3355, 3360, 3361, 3373, 3374, 3379}, new int[]{3267, 3279, 3272, 3279, 3267, 3286}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_BANK(new int[]{3380, 3384}, new int[]{3267, 3271}, false, false, true, false, true, true, Rank.PLAYER),
-        /*100% accurate Duel Arena arenas mapping*/
-        DUEL_ARENA_NW(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351}, new int[]{3250, 3252, 3249, 3253, 3248, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_NE(new int[]{3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_MW(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351}, new int[]{3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_ME(new int[]{3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_SW(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351}, new int[]{3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_SE(new int[]{3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA_LEDGE(new int[]{3329, 3330, 3360, 3361, 3391, 3392, 3329, 3392, 3329, 3392, 3329, 3392, 3329, 3392, 3357, 3364, 3358, 3363, 3359, 3362, 3357, 3364, 3358, 3363, 3359, 3362}, new int[]{3203, 3261, 3203, 3261, 3203, 3261, 3203, 3204, 3222, 3223, 3241, 3242, 3260, 3261, 3221, 3224, 3220, 3225, 3219, 3226, 3240, 3243, 3239, 3244, 3238, 3245}, false, false, false, false, true, true, Rank.PLAYER),
-        /*If a player isn't in an arena, & if a player isn't in the ledge then they're between them & get sent out*/
-        DUEL_ARENA_INVALID(new int[]{3329, 3392}, new int[]{3203, 3261}, false, false, false, false, false, false, Rank.DEVELOPER) {
+        DUEL_ARENA(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3248, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+                if(player.duelAttackable <= 0) {
+                    player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+                    return;
+                }
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.attackOption = true;
+                }
             }
-        },
-        DUEL_ARENA(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
+
+            @Override
+            public void leave(Player player) {
+                if(player.attackOption) {
+                    player.getActionSender().sendPlayerOption("null", 2, 0);
+                    player.attackOption = false;
+                }
+            }
+
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport while being in a duel!");
+                return false;
+            }
+
             @Override
             public boolean onDeath(Player player) {
                 if (player.duelAttackable > 0) {
@@ -255,9 +337,22 @@ public class Locations {
             }
 
             @Override
+            public boolean canAttack(Player player, Player target) {
+                if (player.duelAttackable > 0) {
+                    if (target.getIndex() == player.duelAttackable) {
+                        return true;
+                    }
+                }
+                player.sendMessage("This is not your opponent!");
+                return false;
+            }
+        },
+        DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
+
+            @Override
             public void enter(Player player) {
                 if(!player.duelOption) {
-                    player.getActionSender().sendPlayerOption("Challenge", 5, 0);
+                    player.getActionSender().sendPlayerOption("Challenge", 5, 1);
                     if (player.getNpcState()) {
                         player.setPNpc(-1);
                     }
@@ -267,28 +362,25 @@ public class Locations {
 
             @Override
             public void leave(Player player) {
-                if((Rank.hasAbility(player, Rank.MODERATOR)))
-                    player.getActionSender().sendPlayerOption("Moderate", 5, 0);
-                else
-                    player.getActionSender().sendPlayerOption("null", 5, 0);
-            }
-
-            @Override
-            public boolean canAttack(Player player, Player target) {
-                if (player.duelAttackable > 0) {
-                    if (target.getIndex() == player.duelAttackable) {
-                        return true;
-                    } else {
-                        player.sendMessage("This is not your opponent!");
-                    }
+                if(player.duelOption) {
+                    if ((Rank.hasAbility(player, Rank.MODERATOR)))
+                        player.getActionSender().sendPlayerOption("Moderate", 5, 0);
+                    else
+                        player.getActionSender().sendPlayerOption("null", 5, 0);
+                    player.duelOption = false;
                 }
+            }
+        },
+        BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
+        JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport out of jail.");
                 return false;
             }
         },
-        BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, true, true, true, true, true, Rank.PLAYER),
-        JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER),
         JAIL_FULL_AREA(new int[]{2065, 2111}, new int[]{4416, 4455}, false, false, false, false, true, true, Rank.HELPER),
-        DEFAULT(null, null);
+        DEFAULT(null, null, false, true, true, true, true, true);
 
         /**
          * The corners, from low to high
@@ -429,6 +521,10 @@ public class Locations {
          * @param player The player
          */
         public void process(Player player) {}
+
+        public boolean canTeleport(Player player) {
+            return true;
+        }
 
         /**
          * Gets called when the player dies. This can be overwritten to make the

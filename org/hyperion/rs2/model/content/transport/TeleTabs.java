@@ -3,11 +3,8 @@ package org.hyperion.rs2.model.content.transport;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
-import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.ContentTemplate;
-import org.hyperion.rs2.model.content.misc2.Jail;
 
 import java.io.FileNotFoundException;
 
@@ -22,38 +19,15 @@ public class TeleTabs implements ContentTemplate {
 			player.getActionSender().sendMessage("You are currently teleblocked.");
 			return;
 		}
-		if(Jail.inJail(player) && !Rank.isStaffMember(player)) {
-			player.getActionSender().sendMessage("You cannot teleport out of jail.");
-			return;
-		}
+
 		if(player.isDead())
 			return;
-		if(Combat.getWildLevel(player.getPosition().getX(), player.getPosition().getY()) > 20) {
-			player.getActionSender().sendMessage("You cannot teleport above level 20 wilderness.");
-			return;
-		}
-		if(player.duelAttackable > 0 || Duel.inDuelLocation(player)) {
-            if(Duel.inDuelLocation(player) && player.duelAttackable < 1)
-                Duel.finishFullyDuel(player);
-			player.getActionSender().sendMessage("You cannot teleport from duel arena.");
-			return;
-		}
-		if(ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1) || ContentManager.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
-			player.getActionSender().sendMessage("You cannot teleport from fight pits.");
-			return;
-		}
+
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return;
-		player.updateTeleportTimer();
-		if(player.cE.getOpponent() != null) {
-			player.getActionSender().sendMessage("You have lost EP because you have teleported during combat.");
-			player.removeEP();
-		}
 
-        if(player.getExtraData().getBoolean("cantteleport")) {
-            player.sendMessage("You can't teleport in this event");
-            return;
-        }
+		if(!player.getLocation().canTeleport(player))
+			return;
 
 		ContentEntity.deleteItem(player, id);
 		final int x1 = x;

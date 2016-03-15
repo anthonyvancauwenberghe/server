@@ -13,8 +13,6 @@ import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.bounty.place.BountyHandler;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.pvptasks.TaskHandler;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.specialareas.impl.PurePk;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -134,7 +132,6 @@ public class PlayerDeathTask extends Task {
 					 */
 					killer.sendMessage(sendKillMessage(player.getSafeDisplayName()));
 					BountyPerkHandler.handleSpecialPerk(killer);
-					if(true || killer.getPosition().inPvPArea()) {
 						boolean isDev = false;
 						if(Rank.getPrimaryRank(killer).ordinal() >= Rank.DEVELOPER.ordinal()
 								|| Rank.getPrimaryRank(player).ordinal() >= Rank.DEVELOPER.ordinal())
@@ -168,7 +165,6 @@ public class PlayerDeathTask extends Task {
 								killer.increaseKillStreak();
 							}
 							killer.getAchievementTracker().playerKill();
-							//AchievementHandler.progressAchievement(player, "Kill");
 							killer.addLastKill(player.getName());
 							int pkpIncrease = (int) Math.pow(player.getKillCount(), .8);
 							if (pkpIncrease > 400)
@@ -176,15 +172,9 @@ public class PlayerDeathTask extends Task {
 
 							int pointsToAdd = ((player.wildernessLevel / 2 + player.getBounty()) + pkpIncrease);
 
-							for(SpecialArea area: SpecialAreaHolder.getAreas()) {
-								if(area.inEvent() && area.inArea(player))
-									pointsToAdd *= 4;
-							}
 							if(player.getKillStreak() >= 6) {
 								AchievementHandler.progressAchievement(player, "Killstreak");
-								for(Player p : World.getPlayers())
-									if(p != null)
-										p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills.");
+								World.getPlayers().stream().filter(p -> p != null).forEach(p -> p.sendPkMessage(killer.getSafeDisplayName() + " has just ended " + player.getSafeDisplayName() + "'s rampage of " + player.getKillStreak() + " kills."));
 							}
 							handlePkpTransfer(killer, player, pointsToAdd > 0 ? pointsToAdd : 5);
 							if(Rank.hasAbility(killer, Rank.SUPER_DONATOR))
@@ -200,8 +190,6 @@ public class PlayerDeathTask extends Task {
 							player.resetKillStreak();
 							player.resetBounty();
 						}
-
-					}
 					//DeathDrops.dropAllItems(player, killer);
 					DeathDrops.dropsAtDeath(player, killer);
 				} else {
@@ -209,6 +197,8 @@ public class PlayerDeathTask extends Task {
 				}
 				player.setTeleportTarget(DEATH_POSITION, false);
 			player.getActionSender().sendMessage(getDeathMessage());
+		} else {
+			player.setDead(false);
 		}
 		player.setSkulled(false);
 		player.resetPrayers();

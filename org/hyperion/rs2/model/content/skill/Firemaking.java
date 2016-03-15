@@ -3,7 +3,6 @@ package org.hyperion.rs2.model.content.skill;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
-import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.net.ActionSender;
@@ -37,12 +36,8 @@ public class Firemaking implements ContentTemplate {
 			ContentEntity.sendMessage(player, "You need " + log.level + " firemaking to light this log.");
 			return;
 		}
-        if(player.getLocation().isFiremakingAllowed()){
+        if(!player.getLocation().isFiremakingAllowed()){
 			player.sendMessage("You cannot light a fire in this area.");
-            return;
-        }
-        if(Duel.inDuelLocation(player) || player.duelAttackable > 0){
-            ContentEntity.sendMessage(player, "You cannot do this in duel arena.");
             return;
         }
 		ContentEntity.deleteItem(player, logId);

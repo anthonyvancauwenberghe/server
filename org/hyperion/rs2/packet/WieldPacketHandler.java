@@ -2,6 +2,7 @@ package org.hyperion.rs2.packet;
 
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
+import org.hyperion.rs2.model.Locations;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
 import org.hyperion.rs2.model.combat.CombatAssistant;
@@ -66,7 +67,7 @@ public class WieldPacketHandler implements PacketHandler {
 		}
 		switch(interfaceId) {
 			case Inventory.INTERFACE:
-				if((player.cannotSwitch || player.duelRule[DuelRules.SWITCH.ordinal()]) && (player.duelAttackable > 0 || Duel.inDuelLocation(player))) {
+				if((player.cannotSwitch || player.duelRule[DuelRules.SWITCH.ordinal()]) && (player.duelAttackable > 0 || player.getLocation() == Locations.Location.DUEL_ARENA)) {
 					player.getActionSender().sendMessage("You cannot switch in this duel!");
 					return;
 				}

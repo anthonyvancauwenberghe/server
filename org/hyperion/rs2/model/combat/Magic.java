@@ -7,12 +7,9 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
 import org.hyperion.rs2.model.content.minigame.DangerousPK;
 import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
-import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
@@ -911,25 +908,12 @@ public class Magic {
 
 	public static void openTeleMenu(final Player player, int menu) {
 		if(player.isTeleBlocked()) {
-			player.getActionSender().sendMessage(
-					"You are currently teleblocked.");
+			player.getActionSender().sendMessage("You are currently teleblocked.");
 			return;
 		}
-		if(Combat.getWildLevel(player.getPosition().getX(), player
-				.getPosition().getY()) > 20) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport above level 20 wilderness.");
+		if(!player.getLocation().canTeleport(player))
 			return;
-		}
-		if(player.duelAttackable > 0 || Duel.inDuelLocation(player)) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from duel arena.");
-			return;
-		}
-		if(ContentManager.handlePacket(6, player, 30000, - 1, - 1, - 1) || ContentManager.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
-			player.getActionSender().sendMessage("You cannot teleport from fight pits.");
-			return;
-		}
+
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return;
 		player.getExtraData().put("teleMenu", menu);
@@ -1049,25 +1033,15 @@ public class Magic {
 		else if(player.getSpellBook().toInteger() == SpellBook.LUNAR_SPELLBOOK)
 			player.getActionSender().sendSidebarInterface(6, 29999);
 		if(player.isTeleBlocked()) {
-			player.getActionSender().sendMessage(
-					"You are currently teleblocked.");
-			return;
-		}
-		if(player.duelAttackable > 0) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from duel arena.");
-			return;
-		}
-		if(ContentManager
-				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| ContentManager
-				.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from fight pits.");
+			player.getActionSender().sendMessage("You are currently teleblocked.");
 			return;
 		}
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return;
+
+		if(!player.getLocation().canTeleport(player)) {
+			return;
+		}
 		button = button - 3001;
 		int menu = (Integer) player.getExtraData().get("teleMenu");
 		if(menu == 0) {
@@ -1148,49 +1122,20 @@ public class Magic {
 		player.getActionSender().resetFollow();
 		final int x = (3085 + Misc.random(2));
 		final int y = (3491 + Misc.random(2));
-        if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {
-            player.getActionSender().sendMessage("You cannot teleport in this minigame.");
-            return;
-        }
+
 		if(player.isTeleBlocked()) {
-			player.getActionSender().sendMessage(
-					"You are currently teleblocked.");
+			player.getActionSender().sendMessage("You are currently teleblocked.");
 			return;
 		}
 		if(player.isDead())
 			return;
-		if(Combat.getWildLevel(player.getPosition().getX(), player
-				.getPosition().getY()) > 20) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport above level 20 wilderness.");
-			return;
-		}
-		if(Jail.inJail(player)) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport out of jail.");
-			return;
-		}
-        if(player.duelAttackable > 0 || Duel.inDuelLocation(player) || player.getPosition().inDuel()) {
-            if(Duel.inDuelLocation(player) && player.duelAttackable < 1)
-                Duel.finishFullyDuel(player);
-            player.getActionSender().sendMessage("You cannot teleport from duel arena.");
-            return;
-        }
 
-		if(!player.getDungeoneering().inDungeon() && (ContentManager
-				.handlePacket(6, player, 30000, - 1, - 1, - 1)
-				|| ContentManager
-				.handlePacket(6, player, 30001, - 1, - 1, - 1))) {
-			player.getActionSender().sendMessage(
-					"You cannot teleport from fight pits.");
-			return;
-		}
-        if(player.getExtraData().getBoolean("cantteleport")) {
-            player.sendMessage("You can't teleport in this event");
-            return;
-        }
 		if(player.getTimeSinceLastTeleport() < 1600)
 			return;
+
+		if(!player.getLocation().canTeleport(player))
+			return;
+
 		player.updateTeleportTimer();
 		if((player.getPosition().getX() >= 2814
 				&& player.getPosition().getX() <= 2942
@@ -1252,15 +1197,12 @@ public class Magic {
 	public static void teleport(final Player player, int x, int y, int z,
 	                            boolean force, boolean random) {
 		if(! force) {
-            if(LastManStanding.inLMSArea(player.cE.getAbsX(),player.cE.getAbsY())) {
-                player.getActionSender().sendMessage("You cannot teleport in this minigame.");
-                return;
-            }
 			if(player.getAgility().isBusy())
 				return;
+
 			if(DangerousPK.inDangerousPK(player)) {
                 if(player.getPoints().getPkPoints() > 75) {
-                    player.sendMessage("You loose 75 PKT upon teleporting!");
+                    player.sendMessage("You lose 75 PKT upon teleporting!");
                     player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 75);
                 } else {
                     player.sendMessage("You need 75 PKT to teleport!");
@@ -1272,65 +1214,27 @@ public class Magic {
 				y += Combat.random(2);
 			}
 
-			/*
-			 * if(player.tutIsland != 10){ player.getActionSender().sendMessage(
-			 * "You must finish tutorial island first."); return; }
-			 */
-			if(player.onConfirmScreen) {
-				player.getActionSender().sendMessage(
-						"You can't teleport right now.");
-				return;
-			}
-			if(player.isTeleBlocked()) {
-				player.getActionSender().sendMessage(
-						"You are currently teleblocked.");
-				return;
-			}
-			if(Jail.inJail(player) && !Rank.isStaffMember(player)) {
-				player.getActionSender().sendMessage(
-						"You cannot teleport out of jail.");
-				return;
-			}
-            if(LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
-                player.getActionSender().sendMessage("You cannot teleport out of this event!");
-                return;
-            }
 			if(player.isDead())
 				return;
-			if(Combat.getWildLevel(player.getPosition().getX(), player
-					.getPosition().getY()) > 20) {
-				player.getActionSender().sendMessage(
-						"You cannot teleport above level 20 wilderness.");
+
+			if(player.onConfirmScreen) {
+				player.sendMessage("You can't teleport right now.");
 				return;
 			}
-			if(player.duelAttackable > 0 || Duel.inDuelLocation(player)) {
-				player.getActionSender().sendMessage(
-						"You cannot teleport from duel arena.");
+
+			if(player.isTeleBlocked()) {
+				player.sendMessage("You are currently teleblocked.");
 				return;
 			}
-			if(ContentManager
-					.handlePacket(6, player, 30000, - 1, - 1, - 1)
-					|| ContentManager
-					.handlePacket(6, player, 30001, - 1, - 1, - 1)) {
-				player.getActionSender().sendMessage(
-						"You cannot teleport here.");
-				return;
-			}
+
 			if(player.getTimeSinceLastTeleport() < 1600)
 				return;
-			player.updateTeleportTimer();
-			if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
-				player.getActionSender()
-						.sendMessage(
-								"@blu@You have lost EP because you have teleported during combat.");
-				player.removeEP();
-			}
-		}
 
-        if(player.getExtraData().getBoolean("cantteleport")) {
-            player.sendMessage("You can't teleport in this event");
-            return;
-        }
+			if(!player.getLocation().canTeleport(player))
+				return;
+
+			player.updateTeleportTimer();
+		}
 
         Duel.declineTrade(player);
 
@@ -1338,7 +1242,7 @@ public class Magic {
 		final int y1 = y;
 		final int z1 = z;
 		int delay = 1400;
-		// anim 714
+
 		if(player.getSpellBook().isRegular()) {
 			player.playGraphics(Graphic.create(1576, 6553635));// perfect !
 			player.playAnimation(Animation.create(8939, 0));
@@ -1353,13 +1257,6 @@ public class Magic {
 			delay = 4200;
 		}
 		player.inAction = false;
-		if((player.getPosition().getX() >= 2814
-				&& player.getPosition().getX() <= 2942
-				&& player.getPosition().getY() >= 5250 && player.getPosition()
-				.getY() <= 5373)
-				&& (x < 2814 || x > 2942 || y < 5250 || y > 5373)) {
-			player.getActionSender().showInterfaceWalkable(- 1);
-		}
 		World.submit(new Task(delay,"magic5") {
 			@Override
 			public void execute() {

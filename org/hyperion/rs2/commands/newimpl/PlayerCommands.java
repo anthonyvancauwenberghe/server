@@ -857,13 +857,15 @@ public class PlayerCommands implements NewCommandExtension {
                         int amount = Integer.parseInt(input[0].trim());
                         if (player.getPoints().getPkPoints() > (amount * 10)) {
                             player.getPoints().setPkPoints(player.getPoints().getPkPoints() - (amount * 10));
-                            final Item item = new Item(5020, amount);
+                            final Item item = Item.create(5020, amount);
                             if (!player.getInventory().add(item)) {
                                 player.getBank().add(item);
                                 player.sendf("%,d Pk Tickets have been added to your bank.");
+                                return true;
                             } else {
                                 player.getInventory().add(item);
                                 player.sendf("%,d Pk Tickets have been added to your inventory.");
+                                return true;
                             }
                         } else {
                             player.sendMessage("You don't have enough Pkp for this.");

@@ -35,9 +35,9 @@ public final class NewCommandHandler {
         return COMMANDS;
     }
 
-    private static final HashMap<Rank, List<NewCommand>> commands_list = new HashMap();
+    private static final HashMap<Rank, List<NewCommand>> commands_list = new HashMap<>();
 
-    public static final HashMap<Rank, List<NewCommand>> getCommandsList() {
+    public static HashMap<Rank, List<NewCommand>> getCommandsList() {
         return commands_list;
     }
 

@@ -284,13 +284,26 @@ public class Barrows3 implements ContentTemplate {
 				client.getActionSender().sendMessage("It appears to be empty.");
 				return true;
 			}
-			if(! client.hasTarget()) {
-				NPC n = NPCManager.addNPC(client.getPosition().getX(), client.getPosition().getY(), client.getPosition().getZ(), npcForCoffin(oId), -1);
-				n.forceMessage("You dare disturb my slumber!");
-				n.agressiveDis = 7;
-				n.ownerId = client.getIndex();
-				World.register(n);
-				client.setHasTarget(true);
+			if(!client.hasTarget()) {
+				boolean found = false;
+				for(int i = 1; i <= World.npcs.size(); i++) {
+					if(World.npcs.get(i) != null) {
+						NPC npc = (NPC) World.npcs.get(i);
+						if (npc.ownerId == client.getIndex() && client.cE.summonedNpc != npc) {
+							npc.forceMessage("I'm not done with you " + client.getSafeDisplayName() + "!");
+							found = true;
+							break;
+						}
+					}
+				}
+				if(!found) {
+					NPC n = NPCManager.addNPC(client.getPosition().getX(), client.getPosition().getY(), client.getPosition().getZ(), npcForCoffin(oId), -1);
+					n.forceMessage("You dare disturb my slumber!");
+					n.agressiveDis = 7;
+					n.ownerId = client.getIndex();
+					World.register(n);
+					client.setHasTarget(true);
+				}
 			}
 		}
 		return true;

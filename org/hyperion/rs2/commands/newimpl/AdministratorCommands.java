@@ -3,7 +3,9 @@ package org.hyperion.rs2.commands.newimpl;
 import com.google.gson.JsonElement;
 import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.GetPassTask;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
@@ -22,7 +24,6 @@ import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.LoginDebugger;
 import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.packet.ActionButtonPacketHandler;
-import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.pf.Tile;
 import org.hyperion.rs2.pf.TileMap;
 import org.hyperion.rs2.pf.TileMapBuilder;
@@ -70,6 +71,95 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
+                new NewCommand("getip", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        String targetName = input[0];
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s ip address... Please be patient.");
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 4, TimeUnit.SECONDS) {
+                            @Override
+                            public Boolean call() throws Exception {
+                                Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
+                                if(player == null)
+                                    return false;
+                                if (playerIP.isPresent())
+                                    player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s IP is '" + playerIP.get().getAsString() + "'");
+                                else
+                                    player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded IP");
+                                return true;
+                            }
+
+                            @Override
+                            public void stopTask() {
+                                player.sendMessage("Request timed out... Please try again at a later point.");
+                            }
+                        });
+                        return true;
+                    }
+                },
+                new NewCommand("getmail", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        String targetName = input[0];
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s e-mail... Please be patient.");
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player email", 4, TimeUnit.SECONDS) {
+                            @Override
+                            public Boolean call() throws Exception {
+                                Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
+                                if(player == null)
+                                    return true;
+                                if (playerEmail.isPresent())
+                                    player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + "'s mail is '" + playerEmail.get().getAsString() + "'");
+                                else
+                                    player.sendMessage("Player " + Misc.formatPlayerName(input[0]) + " has no recorded mail");
+                                return true;
+                            }
+
+                            @Override
+                            public void stopTask() {
+                                player.sendMessage("Request timed out... Please try again at a later point.");
+                            }
+                        });
+                        return true;
+                    }
+                },
+                new NewCommand("spece", Rank.ADMINISTRATOR, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        String targetName = input[0];
+                        if (GetPassTask.canGetPass(player)) {
+                            GetPassTask.incrementUse(player);
+                        } else {
+                            player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
+                            return true;
+                        }
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s password... Please be patient.");
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 4, TimeUnit.SECONDS) {
+                            @Override
+                            public Boolean call() throws Exception {
+                                Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
+                                Optional<JsonElement> rank = PlayerLoading.getProperty(targetName, IOData.RANK);
+                                if(Rank.hasAbility(rank.get().getAsLong(), Rank.getPrimaryRank(player))) {
+                                    player.sendMessage("You cannot get " + targetName + "'s password. Their rank is higher than yours.");
+                                    return true;
+                                }
+                                if(player == null)
+                                    return true;
+                                if (playerPassword.isPresent())
+                                    player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(playerPassword.get().getAsString()) + "'.");
+                                else
+                                    player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
+                                return true;
+                            }
+
+                            @Override
+                            public void stopTask() {
+                                player.sendMessage("Request timed out... Please try again at a later point.");
+                            }
+                        });
+                        return true;
+                    }
+                },
                 new NewCommand("getverifycode", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -105,7 +195,7 @@ public class AdministratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String name = input[0].trim();
-                        String pin = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player Bank Pin", 1, TimeUnit.SECONDS) {
+                        String pin = GameEngine.submitIO(new EngineTask<String>("Get player Bank Pin", 1, TimeUnit.SECONDS) {
                             @Override
                             public String call() throws Exception {
                                 Optional<JsonElement> playerPin = PlayerLoading.getProperty(name, IOData.BANK_PIN);
@@ -313,7 +403,7 @@ public class AdministratorCommands implements NewCommandExtension {
                 new NewCommand("getip", rank, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        String playerIp = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                        String playerIp = GameEngine.submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
                             @Override
                             public String call() throws Exception {
                                 Optional<JsonElement> playerIP = PlayerLoading.getProperty(input[0], IOData.LAST_IP);
@@ -332,7 +422,7 @@ public class AdministratorCommands implements NewCommandExtension {
                 new NewCommand("getmail", rank, Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        String playerMail = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player email", 1, TimeUnit.SECONDS) {
+                        String playerMail = GameEngine.submitIO(new EngineTask<String>("Get player email", 1, TimeUnit.SECONDS) {
                             @Override
                             public String call() throws Exception {
                                 Optional<JsonElement> playerEmail = PlayerLoading.getProperty(input[0], IOData.E_MAIL);
@@ -353,7 +443,7 @@ public class AdministratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
-                        String password = Server.getLoader().getEngine().submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
+                        String password = GameEngine.submitIO(new EngineTask<String>("Get player IP", 1, TimeUnit.SECONDS) {
                             @Override
                             public String call() throws Exception {
                                 Optional<JsonElement> playerIP = PlayerLoading.getProperty(targetName, IOData.PASSWORD);

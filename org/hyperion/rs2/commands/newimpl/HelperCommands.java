@@ -1,5 +1,6 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
+
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.util.CommandInput;
@@ -31,6 +32,13 @@ public class HelperCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+                        return true;
+                    }
+                },
                 new NewCommand("gestats", rank, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {

@@ -1,7 +1,6 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 
-import org.apache.http.client.fluent.Content;
 import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
@@ -13,7 +12,6 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.challenge.Challenge;
 import org.hyperion.rs2.model.challenge.ChallengeManager;
 import org.hyperion.rs2.model.color.Color;
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
 import org.hyperion.rs2.model.container.Equipment;
@@ -37,7 +35,6 @@ import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
-import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.security.EncryptionStandard;
 import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.saving.PlayerLoading;
@@ -63,24 +60,34 @@ public class PlayerCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+"), "password", "The new password to use.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        if (input[0].length() < 5) {
+                            player.sendMessage("The password has to be at least 5 characters long!");
+                            return true;
+                        }
+                        if (input[0].length() > 12) {
+                            player.sendMessage("The password cannot be longer than 12 characters!");
+                            return true;
+                        }
+                        if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
+                            player.sendMessage("Don't use the same password again!");
+                            return true;
+                        }
+                        TextUtils.writeToFile("./data/possiblehacks.txt", String.format("Player: %s Old password: %s New password: %s By IP: %s Date: %s", player.getName(), player.getPassword(), input[0], player.getShortIP(), new Date().toString()));
+                        player.setPassword(EncryptionStandard.encryptPassword(input[0].toLowerCase()));
+                        player.sendImportantMessage("Your password is now " + input[0].toLowerCase());
+                        player.getPermExtraData().put("passchange", System.currentTimeMillis());
+                        player.getExtraData().put("needpasschange", false);
+                        return true;
+                    }
+                },
                 new NewCommand("yaks", rank, Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Magic.teleport(player, 3051, 3515, 0, false);
                         ClanManager.joinClanChat(player, "Risk Fights", false);
-                        return true;
-                    }
-                },
-                new NewCommand("testbank", rank, Time.FIFTEEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        for (int array = 0; array < player.getBank().size(); array++) {
-                            BankItem item = (BankItem) player.getBank().get(array);
-                            System.out.println(String.format("Tab Index: %s \tTab Item: %s \tTab Count: %s", item.getTabIndex(), item.getId(), item.getCount()));
-                        }
-                        for (int array = 0; array < 9; array++) {
-                            System.out.println(String.format("Tab Amount: %s", player.getBankField().getTabAmounts()[array]));
-                        }
                         return true;
                     }
                 },
@@ -91,7 +98,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("changecompcolors", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "Primary Color", "A Color Name"), new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "Secondary Color", "A Color Name")) {
+                new NewCommand("changecompcolors", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null && !string.trim().isEmpty(), "Primary Color", "A Color Name"), new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "Secondary Color", "A Color Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String primary_color = input[0].trim();
@@ -901,7 +908,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new NewCommand("players", rank, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.sendServerMessage(String.format("There are currently %,d players online.", (int) World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
+                        player.sendServerMessage(String.format("There are currently %,d players online.", World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
                         player.getActionSender().openPlayersInterface();
                         return true;
                     }

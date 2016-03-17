@@ -1,5 +1,6 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
+
 import org.hyperion.Server;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
@@ -14,7 +15,6 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
-import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.AccountLogger;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
@@ -25,12 +25,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 //</editor-fold>
+
 /**
  * Created by Drhales on 2/29/2016.
  */
 public class ModeratorCommands implements NewCommandExtension {
     //<editor-fold defaultstate="collapsed" desc="Rank">
     private final Rank rank = Rank.MODERATOR;
+
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
@@ -479,13 +481,6 @@ public class ModeratorCommands implements NewCommandExtension {
                         target.getSlayer().resetTask();
                         player.sendf("You have succesfully reset '%s'; Their slayer task.", TextUtils.optimizeText(target.getName()));
                         player.sendf("Your slayer task has been reset by '%s'.", TextUtils.optimizeText(player.getName()));
-                        return true;
-                    }
-                },
-                new NewCommand("alts", rank, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-
                         return true;
                     }
                 }

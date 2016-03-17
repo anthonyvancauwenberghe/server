@@ -7,6 +7,8 @@ import org.hyperion.sql.impl.log.type.IPLog;
 import org.hyperion.sql.impl.log.type.TaskLog;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by Gilles on 29/02/2016.
@@ -36,6 +38,7 @@ public class Log {
 
     private final Timestamp timestamp;
     private final LogType type;
+    private final static DateFormat TIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
 
     protected Log(final Timestamp timestamp, final LogType type) {
         this.timestamp = timestamp;
@@ -44,6 +47,10 @@ public class Log {
 
     public Timestamp getTimestamp() {
         return timestamp;
+    }
+
+    public String getFormattedTimestamp() {
+        return TIME_FORMAT.format(getTimestamp());
     }
 
     public LogType getType() {

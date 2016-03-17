@@ -35,36 +35,22 @@ import static org.hyperion.rs2.model.content.authentication.PlayerAuthenticatorV
 /**
  * Created by Gilles on 6/02/2016.
  */
-public class GenericWorldLoader implements WorldLoader {
-
-	/**
-	 * TEMP
-	 */
-	private final static Set<String> unlockedPlayers = new HashSet<>();
-
-	private final static Set<String> unlockedRichPlayers = new HashSet<>();
-
-	public static Set<String> getUnlockedPlayers() {
-		return unlockedPlayers;
-	}
-
-	public static Set<String> getUnlockedRichPlayers() {
-		return unlockedRichPlayers;
-	}
-	/**
-	 * END OF TEMP
-	 */
+public final class GenericWorldLoader implements WorldLoader {
 
 	private final static String ALLOWED_IPS_DIR = "./data/json/allowed_ips.json";
 	private final static ObservableCollection<String> ALLOWED_IPS = loadList(ALLOWED_IPS_DIR);
 	private final static Map<String, Integer> LOGIN_ATTEMPTS = new HashMap<>();
 	private final static Set<String> BLOCKED_PLAYERS = new HashSet<>();
 
-	public final static ObservableCollection<String> getAllowedIps() {
+    private final static int MAXIMUM_LOGIN_ATTEMPTS = 5;
+
+	public static ObservableCollection<String> getAllowedIps() {
 		return ALLOWED_IPS;
 	}
 
-	private final static int MAXIMUM_LOGIN_ATTEMPTS = 5;
+	public static boolean isIpAllowed(String ip) {
+		return getAllowedIps().contains(ip);
+	}
 
 	static {
 		ALLOWED_IPS.addListener(new AbstractNotifyListener() {

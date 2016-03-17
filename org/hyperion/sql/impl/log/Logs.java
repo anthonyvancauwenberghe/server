@@ -8,7 +8,9 @@ import org.hyperion.sql.db.Db;
 import org.hyperion.sql.impl.log.type.IPLog;
 import org.hyperion.sql.impl.log.type.TaskLog;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -61,5 +63,25 @@ public class Logs extends SqlDaoManager<LogDao> {
                 ex.printStackTrace();
         }
         return true;
+    }
+
+    public List<IPLog> getAltsByIp(String ip) {
+        try(final LogDao dao = open()) {
+            return dao.getAltsForIp(ip);
+        } catch(Exception ex) {
+            if (DbHub.isConsoleDebug())
+                ex.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<IPLog> getIpForPlayer(String playerName) {
+        try(final LogDao dao = open()) {
+            return dao.getIpForPlayer(playerName);
+        } catch(Exception ex) {
+            if (DbHub.isConsoleDebug())
+                ex.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

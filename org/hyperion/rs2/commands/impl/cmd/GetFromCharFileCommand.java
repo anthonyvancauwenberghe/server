@@ -21,30 +21,27 @@ public class GetFromCharFileCommand extends NewCommand {
 
     private final IOData ioData;
 
-    public GetFromCharFileCommand(String key, Rank rank, long delay, IOData ioData, CommandInput... requiredInput) {
-        super(key, rank, delay, requiredInput);
+    public GetFromCharFileCommand(String key, Rank rank, long delay, IOData ioData) {
+        super(key, rank, delay, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system."));
         this.ioData = ioData;
     }
 
-    public GetFromCharFileCommand(String key, long delay, IOData ioData, CommandInput... requiredInput) {
-        super(key, delay, requiredInput);
-        this.ioData = ioData;
+    public GetFromCharFileCommand(String key, long delay, IOData ioData) {
+        this(key, Rank.PLAYER, delay, ioData);
     }
 
-    public GetFromCharFileCommand(String key, IOData ioData, CommandInput... requiredInput) {
-        super(key, requiredInput);
-        this.ioData = ioData;
+    public GetFromCharFileCommand(String key, IOData ioData) {
+        this(key, Rank.PLAYER, ioData);
     }
 
-    public GetFromCharFileCommand(String key, Rank rank, IOData ioData, CommandInput... requiredInput) {
-        super(key, rank, requiredInput);
-        this.ioData = ioData;
+    public GetFromCharFileCommand(String key, Rank rank, IOData ioData) {
+        this(key, rank, 0, ioData);
     }
 
     @Override
     public boolean execute(Player player, String[] input) {
         String targetName = input[0];
-        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s " + ioData.toString().replace("_", " ").toLowerCase() + " address... Please be patient.");
+        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s " + ioData.toString().replace("_", " ").toLowerCase() + "... Please be patient.");
         GameEngine.submitIO(new EngineTask<Boolean>("Get player " + ioData, 4, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {

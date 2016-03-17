@@ -97,8 +97,9 @@ public class Configuration {
             Map<ConfigurationObject, String> configuration = new Gson().fromJson(object, new TypeToken<HashMap<ConfigurationObject, String>>() {}.getType());
             boolean hasToSave = ConfigurationObject.VALUES.length != configuration.size();
             Arrays.stream(ConfigurationObject.VALUES).forEach(configurationObject -> {
-                if (!configuration.containsKey(configurationObject))
+                if (!configuration.containsKey(configurationObject)) {
                     configuration.put(configurationObject, configurationObject.getValue());
+                }
             });
             if(hasToSave)
                 saveConfiguration();
@@ -121,11 +122,9 @@ public class Configuration {
         }
 
         //Treemap so it keeps the order in the file itself, making it cleaner to edit.
-        Map<ConfigurationObject, String> defaultConfigFile;
-        if (CONFIGURATIONS == null)
-            defaultConfigFile = new TreeMap<>();
-        else
-            defaultConfigFile = new TreeMap<>(CONFIGURATIONS);
+        Map<ConfigurationObject, String> defaultConfigFile = new TreeMap<>();
+        if (CONFIGURATIONS != null)
+            CONFIGURATIONS.forEach(defaultConfigFile::put);
         Arrays.stream(ConfigurationObject.VALUES).filter(value -> !defaultConfigFile.containsKey(value)).forEach(value -> defaultConfigFile.put(value, value.getValue()));
 
         try (FileWriter writer = new FileWriter(CONFIGURATION_FILE)) {

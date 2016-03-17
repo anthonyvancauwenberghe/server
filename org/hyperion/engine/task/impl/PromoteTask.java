@@ -12,7 +12,7 @@ import java.time.ZoneId;
 
 public class PromoteTask extends Task {
 
-	public static final long CYCLE_TIME = Time.ONE_MINUTE * 2;
+	public static final long CYCLE_TIME = Time.ONE_MINUTE * 5;
 
 	public PromoteTask() {
 		super(CYCLE_TIME);
@@ -24,10 +24,9 @@ public class PromoteTask extends Task {
 				boolean gaveMessage = false;
 				if(player.getLastVoteStreakIncrease() > 0) {
 					LocalDate lastVoteDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteStreakIncrease()), ZoneId.systemDefault()).toLocalDate();
-					if (!lastVoteDate.equals(LocalDate.now())) {
+					if (!lastVoteDate.equals(LocalDate.now()))
 						player.sendServerMessage("Don't forget to vote again using the ::vote command!");
-						gaveMessage = true;
-					}
+					gaveMessage = true;
 				}
 				if(!gaveMessage)
 					player.sendServerMessage("Remember to vote using the ::vote command!");

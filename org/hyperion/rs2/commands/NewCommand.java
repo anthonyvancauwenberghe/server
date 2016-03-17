@@ -1,8 +1,8 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.Server;
-import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.util.CommandInput;
+import org.hyperion.rs2.commands.util.CommandResult;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.jsoup.helper.StringUtil;
@@ -10,7 +10,7 @@ import org.jsoup.helper.StringUtil;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import static org.hyperion.rs2.commands.impl.CommandResult.*;
+import static org.hyperion.rs2.commands.util.CommandResult.*;
 
 /**
  * A command is made so only the execute part can be overwritten, the rest should be done in the constructor.

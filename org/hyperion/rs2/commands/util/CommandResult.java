@@ -1,4 +1,4 @@
-package org.hyperion.rs2.commands.impl;
+package org.hyperion.rs2.commands.util;
 
 /**
  * Created by Gilles on 10/02/2016.

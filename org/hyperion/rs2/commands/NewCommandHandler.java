@@ -1,8 +1,8 @@
 package org.hyperion.rs2.commands;
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.commands.impl.CommandResult;
 import org.hyperion.rs2.commands.newimpl.*;
+import org.hyperion.rs2.commands.util.CommandResult;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;

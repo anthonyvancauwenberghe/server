@@ -1159,7 +1159,9 @@ public enum IOData {
 
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.getBank().setFiringEvents(false);
             Arrays.stream((BankItem[])builder.fromJson(element, new TypeToken<BankItem[]>(){}.getType())).filter(bankItem -> bankItem != null).forEach(bankItem -> player.getBank().add(new BankItem(bankItem.getTabIndex(), bankItem.getId(), bankItem.getCount())));
+            player.getBank().setFiringEvents(true);
         }
     },
     FRIENDS {

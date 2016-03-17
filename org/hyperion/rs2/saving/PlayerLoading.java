@@ -106,7 +106,7 @@ public class PlayerLoading {
 
     public static Optional<JsonElement> getProperty(String playerName, IOData property) {
         if(playerName == null || property == null || playerName.trim().isEmpty() ||!playerExists(playerName))
-            return null;
+            return Optional.empty();
 
         File file = new File(IOData.getCharFilePath(), playerName.toLowerCase() + ".json");
 

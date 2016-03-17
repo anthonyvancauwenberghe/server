@@ -97,7 +97,7 @@ public class AdministratorCommands implements NewCommandExtension {
                             return true;
                         }
                         player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s password... Please be patient.");
-                        GameEngine.submitIO(new EngineTask<Boolean>("Get player IP", 4, TimeUnit.SECONDS) {
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player password", 10, TimeUnit.SECONDS) {
                             @Override
                             public Boolean call() throws Exception {
                                 Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);

@@ -453,7 +453,7 @@ public class Locations {
         /**
          * The corners, from low to high
          */
-        private final int[] x, y;
+        private final int[] x, y, z;
         /**
          * Is the area multi or not
          */
@@ -484,16 +484,21 @@ public class Locations {
         private final Rank minimumRank;
 
         Location(int[] x, int[] y) {
-            this(x, y, false, false, false, false, false, false, Rank.PLAYER);
+            this(x, y, new int[]{}, false, false, false, false, false, false, Rank.PLAYER);
         }
 
         Location(int[] x, int[] y, boolean multi, boolean summonAllowed, boolean followingAllowed, boolean firemakingAllowed, boolean bankingAllowed, boolean spawningAllowed) {
-            this(x, y, multi, summonAllowed, followingAllowed, firemakingAllowed, bankingAllowed, spawningAllowed, Rank.PLAYER);
+            this(x, y, new int[]{}, multi, summonAllowed, followingAllowed, firemakingAllowed, bankingAllowed, spawningAllowed, Rank.PLAYER);
         }
 
         Location(int[] x, int[] y, boolean multi, boolean summonAllowed, boolean followingAllowed, boolean firemakingAllowed, boolean bankingAllowed, boolean spawningAllowed, Rank minimumRank) {
+            this(x, y, new int[]{}, multi, summonAllowed, followingAllowed, firemakingAllowed, bankingAllowed, spawningAllowed, minimumRank);
+        }
+
+        Location(int[] x, int[] y, int[] z, boolean multi, boolean summonAllowed, boolean followingAllowed, boolean firemakingAllowed, boolean bankingAllowed, boolean spawningAllowed, Rank minimumRank) {
             this.x = x;
             this.y = y;
+            this.z = z;
             this.multi = multi;
             this.summonAllowed = summonAllowed;
             this.followingAllowed = followingAllowed;
@@ -509,6 +514,10 @@ public class Locations {
 
         public final int[] getY() {
             return y;
+        }
+
+        public final int[] getZ() {
+            return z;
         }
 
         public final boolean isMulti() {
@@ -590,6 +599,14 @@ public class Locations {
          */
         public void process(Player player) {}
 
+        /**
+         * Tells whether or not the player can teleport.
+         * This can be given checks and other values.
+         * This must also provide feedback messages by itself.
+         *
+         * @param player The player to check
+         * @return True when able to teleport, false when not.
+         */
         public boolean canTeleport(Player player) {
             return true;
         }
@@ -625,7 +642,6 @@ public class Locations {
             return false;
         }
 
-
         /**
          * STATIC
          */
@@ -634,7 +650,7 @@ public class Locations {
         public static boolean inLocation(Entity gc, Location location) {
             if(location == Location.DEFAULT)
                 return getLocation(gc) == Location.DEFAULT;
-            return inLocation(gc.getPosition().getX(), gc.getPosition().getY(), location);
+            return inLocation(gc.getPosition().getX(), gc.getPosition().getY(), gc.getPosition().getZ(), location);
         }
 
         public static Location getLocation(Entity gc) {
@@ -646,9 +662,19 @@ public class Locations {
             return Location.DEFAULT;
         }
 
-        public static boolean inLocation(int absX, int absY, Location location) {
+        public static boolean inLocation(int absX, int absY, int absZ, Location location) {
+            if(location.getZ().length != 0) {
+                boolean onRightZ = false;
+                for(int z : location.getZ())
+                    if(absZ == z) {
+                        onRightZ = true;
+                        break;
+                    }
+                if(!onRightZ)
+                    return false;
+            }
             int checks = location.getX().length - 1;
-            for(int i = 0; i <= checks; i+=2) {
+            for(int i = 0; i <= checks; i += 2) {
                 if(absX >= location.getX()[i] && absX <= location.getX()[i + 1]) {
                     if(absY >= location.getY()[i] && absY <= location.getY()[i + 1]) {
                         return true;

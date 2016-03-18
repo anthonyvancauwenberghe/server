@@ -929,6 +929,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void increaseEP() {
+		if (getLocation().equals(Locations.Location.FUN_PK_AREA)) {
+			return;
+		}
 		if(EP == 100 || getPosition().getZ() != 0)
 			return;
 		int addEP = Misc.random(15) + 15;

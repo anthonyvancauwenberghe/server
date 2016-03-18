@@ -81,7 +81,9 @@ public class TeleTabs implements ContentTemplate {
 				case 8010:
 					TeleTab(p, 2756, 3479, 0, a);
 					break;
-				//case 8011: TeleTab(p,2661,3306,0,a); break;
+				case 8011:
+					TeleTab(p, 2661, 3306, 0, a);
+					break;
 				case 8012:
 					TeleTab(p, 2549, 3113, 0, a);
 					break;

@@ -76,7 +76,7 @@ public class Locations {
             @Override
             public boolean onDeath(Player player) {
                 player.setDead(false);
-                player.setTeleportTarget(Position.create(2594, 3157, 0));
+                player.setTeleportTarget(Position.create(3096, 3471, 0));
                 return true;
             }
         },
@@ -107,12 +107,74 @@ public class Locations {
 
             @Override
             public void leave(Player player) {
-                player.setCanSpawnSet(true);
-                player.cE.getDamageDealt().clear();
-                player.getActionSender().sendPlayerOption("null", 2, 1);
-                player.attackOption = false;
-                player.getActionSender().sendWildLevel(-1);
-                player.wildernessLevel = -1;
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
+                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
+                if(combatDifference < 0)
+                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
+
+                if (combatDifference <= difference && difference > 0)
+                    return true;
+                if(difference <= 0) {
+                    player.sendMessage("Your opponent is not in the wilderness.");
+                } else {
+                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
+                }
+                return false;
+            }
+
+            @Override
+            public boolean canTeleport(Player player) {
+                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                    player.sendMessage("You cannot teleport above level 20 wilderness.");
+                    return false;
+                }
+                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
+                    player.removeEP();
+                }
+                return true;
+            }
+
+            @Override
+            public void process(Player player) {
+                int wildLevel = -1;
+                int absX = player.getPosition().getX();
+                int absY = player.getPosition().getY();
+                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+                    wildLevel = (((absY - 10340) / 8) + 3);
+                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+                    wildLevel = (((absY - 3520) / 8) + 3);
+                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
+                    wildLevel = 57;
+                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
+                    wildLevel = 53;
+
+                if(player.wildernessLevel != wildLevel) {
+                    player.wildernessLevel = wildLevel;
+                    if (wildLevel != -1)
+                        player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+            }
+        },
+        KBD_WILDERNESS_ENTRANCE(new int[]{3070, 3064}, new int[]{10253, 10260}, false, true, true, false, false, false, Rank.PLAYER) {
+        },
+        WILDERNESS_DUNGEON(new int[]{3010, 3058}, new int[]{10306, 10349}, false, true, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.setCanSpawnSet(false);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    if (player.isOverloaded())
+                        OverloadStatsTask.OverloadFactory.applyBoosts(player);
+                }
             }
 
             @Override
@@ -371,6 +433,12 @@ public class Locations {
                 }
             }
         },
+        GUTHANS_BARROWS(new int[]{3565, 3574}, new int[]{9683, 9691}, false, false, false, false, false, false, Rank.PLAYER),
+        KHARILS_BARROWS(new int[]{3546, 3556}, new int[]{9679, 9687}, false, false, false, false, false, false, Rank.PLAYER),
+        DHAROKS_BARROWS(new int[]{3569, 3578}, new int[]{9703, 9709}, false, false, false, false, false, false, Rank.PLAYER),
+        TORAGS_BARROWS(new int[]{3534, 3544}, new int[]{9700, 9707}, false, false, false, false, false, false, Rank.PLAYER),
+        VERACS_BARROWS(new int[]{3550, 3559}, new int[]{9711, 9718}, false, false, false, false, false, false, Rank.PLAYER),
+        AHRIMS_BARROWS(new int[]{3551, 3560}, new int[]{9695, 9703}, false, false, false, false, false, false, Rank.PLAYER),
         BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
         JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override

@@ -33,6 +33,10 @@ public class MaxCommand extends NewCommand {
             player.sendMessage("You cannot do that here.");
             return true;
         }
+        if (player.getEquipment().size() > 0) {
+            player.sendMessage("Please remove your equipment before changing combat levels.");
+            return true;
+        }
         for (int array = 0; array <= 6; array++) {
             player.getSkills().setLevel(array, 99);
             player.getSkills().setExperience(array, Math.max(13100000, player.getSkills().getExperience(array)));

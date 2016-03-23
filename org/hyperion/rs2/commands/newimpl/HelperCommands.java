@@ -14,7 +14,6 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
 import org.hyperion.rs2.util.PushMessage;
-import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Time;
 
 import java.util.Arrays;
@@ -68,17 +67,6 @@ public class HelperCommands implements NewCommandExtension {
                             return true;
                         }
                         Magic.teleport(target, Position.create(2607, 9672, 0), false);
-                        return true;
-                    }
-                },
-                new NewCommand("players2", rank) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        player.sendMessage("--Players Start--");
-                        World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
-                            player.sendf(String.format("[Player]:%d,%s,%d,%d,%d,%d", Rank.getPrimaryRank(target).ordinal(), TextUtils.optimizeText(target.getName()), target.getSkills().getCombatLevel(), target.getPosition().getX(), target.getPosition().getX(), target.getPosition().getZ()));
-                        });
-                        player.sendMessage("--Players End----");
                         return true;
                     }
                 },

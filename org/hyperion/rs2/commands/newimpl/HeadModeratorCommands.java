@@ -59,6 +59,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         final Player target = World.getPlayerByName(input[0].trim());
                         int level = Integer.parseInt(input[1].trim());
                         target.getSkills().setLevel(Skills.HITPOINTS, level);
+                        player.sendf("You have set %s's hitpoints to %,d.", TextUtils.optimizeText(target.getName()), level);
                         target.sendf("%s set your hitpoints to %,d.", TextUtils.optimizeText(player.getName()), level);
                         return true;
                     }

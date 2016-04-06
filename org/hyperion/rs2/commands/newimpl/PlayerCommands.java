@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
  * Created by DrHales on 2/29/2016.
  */
 public class PlayerCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed" desc="Commands List">
+    //<editor-fold defaultstate="collapsed" desc="Rank">
     private final Rank rank = Rank.PLAYER;
 
     //</editor-fold>

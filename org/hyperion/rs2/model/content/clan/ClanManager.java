@@ -103,7 +103,7 @@ public class ClanManager {
 				(!FightPits.teamRed.contains(player) && nameStr.equalsIgnoreCase("Team Red")))
 			return false;
 		if(nameStr.equalsIgnoreCase("staff")
-				&& !Rank.hasAbility(player, Rank.MODERATOR)) {
+				&& !Rank.hasAbility(player, Rank.HELPER)) {
 			player.sendClanMessage("Only staff can join this clan chat.");
 			return false;
 		}

@@ -138,7 +138,7 @@ public class DeveloperCommands implements NewCommandExtension {
                         final int id = Integer.parseInt(input[0]);
                         ItemDefinition definition = ItemDefinition.forId(id);
                         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
-                            final int count = target.getBank().getCount(id) + target.getInventory().getCount(id);
+                            final int count = target.getBank().getCount(id) + target.getInventory().getCount(id) + target.getEquipment().getCount(id);
                             if (count > 0) {
                                 player.sendf("%s has %,d %s", TextUtils.optimizeText(target.getName()), count, definition.getName());
                             }

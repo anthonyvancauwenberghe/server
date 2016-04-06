@@ -8,6 +8,8 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.util.Misc;
 
+import java.util.Arrays;
+
 /**
  * Created by Gilles on 3/03/2016.
  */
@@ -90,7 +92,72 @@ public class Locations {
         KREE_ARRA_ROOM(new int[]{2824, 2842, 2821, 2823}, new int[]{5296, 5308, 5301, 5303}, true, true, false, false, false, false, Rank.PLAYER),
         TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, true, false, false, false, false, false, Rank.PLAYER),
         ZILYANA_ROOM(new int[]{2889, 2907, 2885, 2888}, new int[]{5258, 5276, 5267, 5270}, true, true, false, false, false, false, Rank.PLAYER),
-        WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930}, true, true, true, true, false, false, Rank.PLAYER) {
+        KBD_AREA(new int[]{2256, 2287}, new int[]{4680, 4711}, new int[]{0}, true, true, true, false, false, false, Rank.PLAYER),
+        PURE_PK_BANK_AREA(new int[]{2256, 2261}, new int[]{4680, 4711}, new int[]{444}, false, false, false, false, true, true, Rank.PLAYER),
+        PURE_PK_AREA(new int[]{2262, 2287}, new int[]{4680, 4711}, new int[]{444}, false, false, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.setCanSpawnSet(false);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    if (player.isOverloaded())
+                        OverloadStatsTask.OverloadFactory.applyBoosts(player);
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(-1);
+                player.wildernessLevel = -1;
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
+                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
+                if(combatDifference < 0)
+                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
+
+                if (combatDifference <= difference && difference > 0)
+                    return true;
+                if(difference <= 0) {
+                    player.sendMessage("Your opponent is not in the wilderness.");
+                } else {
+                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
+                }
+                return false;
+            }
+
+            @Override
+            public void process(Player player) {
+                int wildLevel = -1;
+                int absX = player.getPosition().getX();
+                int absY = player.getPosition().getY();
+                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+                    wildLevel = (((absY - 10340) / 8) + 3);
+                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+                    wildLevel = (((absY - 3520) / 8) + 3);
+                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
+                    wildLevel = 57;
+                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
+                    wildLevel = 53;
+
+                if(player.wildernessLevel != wildLevel) {
+                    player.wildernessLevel = wildLevel;
+                    if (wildLevel != -1)
+                        player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+            }
+        },
+        WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008, 2992, 3006}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930, 10340, 10364}, true, true, true, true, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
                 if(!player.attackOption) {
@@ -160,7 +227,71 @@ public class Locations {
                 }
             }
         },
-        KBD_WILDERNESS_ENTRANCE(new int[]{3070, 3064}, new int[]{10253, 10260}, false, true, true, false, false, false, Rank.PLAYER) {
+        KBD_WILDERNESS_ENTRANCE(new int[]{3063, 3070}, new int[]{10253, 10261}, new int[]{0}, false, true, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if(!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.setCanSpawnSet(false);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    if (player.isOverloaded())
+                        OverloadStatsTask.OverloadFactory.applyBoosts(player);
+                }
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
+                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
+                if(combatDifference < 0)
+                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
+
+                if (combatDifference <= difference && difference > 0)
+                    return true;
+                if(difference <= 0) {
+                    player.sendMessage("Your opponent is not in the wilderness.");
+                } else {
+                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
+                }
+                return false;
+            }
+
+            @Override
+            public boolean canTeleport(Player player) {
+                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                    player.sendMessage("You cannot teleport above level 20 wilderness.");
+                    return false;
+                }
+                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
+                    player.removeEP();
+                }
+                return true;
+            }
+
+            @Override
+            public void process(Player player) {
+                int wildLevel = -1;
+                int absX = player.getPosition().getX();
+                int absY = player.getPosition().getY();
+                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+                    wildLevel = (((absY - 10340) / 8) + 3);
+                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+                    wildLevel = (((absY - 3520) / 8) + 3);
+                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
+                    wildLevel = 57;
+                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
+                    wildLevel = 53;
+
+                if(player.wildernessLevel != wildLevel) {
+                    player.wildernessLevel = wildLevel;
+                    if (wildLevel != -1)
+                        player.getActionSender().sendWildLevel(player.wildernessLevel);
+                }
+            }
         },
         WILDERNESS_DUNGEON(new int[]{3010, 3058}, new int[]{10306, 10349}, false, true, true, false, false, false, Rank.PLAYER) {
             @Override
@@ -175,6 +306,16 @@ public class Locations {
                     if (player.isOverloaded())
                         OverloadStatsTask.OverloadFactory.applyBoosts(player);
                 }
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(-1);
+                player.wildernessLevel = -1;
             }
 
             @Override

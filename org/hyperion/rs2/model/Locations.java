@@ -520,12 +520,12 @@ public class Locations {
                 }
             }
         },
-        GUTHANS_BARROWS(new int[]{3565, 3574}, new int[]{9683, 9691}, false, false, false, false, false, false, Rank.PLAYER),
-        KHARILS_BARROWS(new int[]{3546, 3556}, new int[]{9679, 9687}, false, false, false, false, false, false, Rank.PLAYER),
-        DHAROKS_BARROWS(new int[]{3569, 3578}, new int[]{9703, 9709}, false, false, false, false, false, false, Rank.PLAYER),
-        TORAGS_BARROWS(new int[]{3534, 3544}, new int[]{9700, 9707}, false, false, false, false, false, false, Rank.PLAYER),
-        VERACS_BARROWS(new int[]{3550, 3559}, new int[]{9711, 9718}, false, false, false, false, false, false, Rank.PLAYER),
-        AHRIMS_BARROWS(new int[]{3551, 3560}, new int[]{9695, 9703}, false, false, false, false, false, false, Rank.PLAYER),
+        GUTHANS_BARROWS(new int[]{3565, 3574}, new int[]{9683, 9691}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
+        KHARILS_BARROWS(new int[]{3546, 3556}, new int[]{9679, 9687}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
+        DHAROKS_BARROWS(new int[]{3569, 3578}, new int[]{9703, 9709}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
+        TORAGS_BARROWS(new int[]{3534, 3544}, new int[]{9700, 9707}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
+        VERACS_BARROWS(new int[]{3550, 3559}, new int[]{9711, 9718}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
+        AHRIMS_BARROWS(new int[]{3551, 3560}, new int[]{9695, 9703}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
         BARROWS(new int[]{3520, 3598, 3543, 3584, 3543, 3560}, new int[]{9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
         JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override

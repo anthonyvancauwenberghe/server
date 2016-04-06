@@ -102,12 +102,12 @@ public class Barrows3 implements ContentTemplate {
     }
 
     private static boolean inLocation(final Player player, int id) {
-        return (id == 6771
-                ? player.getLocation().equals(Locations.Location.VERACS_BARROWS) : id == 6772
-                ? player.getLocation().equals(Locations.Location.GUTHANS_BARROWS) : id == 6773
-                ? player.getLocation().equals(Locations.Location.TORAGS_BARROWS) : id == 6821
-                ? player.getLocation().equals(Locations.Location.AHRIMS_BARROWS) : id == 6822
-                ? player.getLocation().equals(Locations.Location.KHARILS_BARROWS) : id == 6823
+        return (id == 6771 || id == 6703
+                ? player.getLocation().equals(Locations.Location.VERACS_BARROWS) : id == 6772 || id == 6706
+                ? player.getLocation().equals(Locations.Location.GUTHANS_BARROWS) : id == 6773 || id == 6704
+                ? player.getLocation().equals(Locations.Location.TORAGS_BARROWS) : id == 6821 || id == 6702
+                ? player.getLocation().equals(Locations.Location.AHRIMS_BARROWS) : id == 6822 || id == 6705
+                ? player.getLocation().equals(Locations.Location.KHARILS_BARROWS) : id == 6823 || id == 6707
                 ? player.getLocation().equals(Locations.Location.DHAROKS_BARROWS) : false);
     }
 

@@ -21,9 +21,8 @@ import org.hyperion.rs2.net.Packet.Type;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A utility class for sending packets.
@@ -750,13 +749,15 @@ public class ActionSender {
         for (int QUEST_MENU_ID : QUEST_MENU_IDS) {
             sendString(QUEST_MENU_ID, "");
         }
+        List<Player> players = World.getPlayers().stream().collect(Collectors.toList());
+        Collections.shuffle(players);
         for (; (i + 1) <= World.getPlayers().size(); i++) {
             if (i >= 99) {
                 sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 98) + " players");
                 break;
             }
             if (World.getPlayers().get((i + 1)) != null) {
-                p3 = (Player) World.getPlayers().get((i + 1));
+                p3 = players.get((i + 1));
                 if (p3.isHidden())
                     continue;
                 String s = p3.getSafeDisplayName();

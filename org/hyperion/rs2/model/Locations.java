@@ -80,7 +80,7 @@ public class Locations {
             @Override
             public boolean onDeath(Player player) {
                 player.setDead(false);
-                player.setTeleportTarget(Position.create(3096, 3471, 0));
+                player.setPosition(Position.create(3096, 3471, 0));
                 return true;
             }
         },
@@ -145,6 +145,8 @@ public class Locations {
                     player.wildernessLevel = wildLevel;
                     if (wildLevel != -1)
                         player.getActionSender().sendWildLevel(player.wildernessLevel);
+                    else
+                        player.getActionSender().sendWildLevel(-1);
                 }
             }
         },

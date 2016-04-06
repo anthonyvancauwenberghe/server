@@ -751,7 +751,7 @@ public class ActionSender {
         }
         List<Player> players = World.getPlayers().stream().collect(Collectors.toList());
         Collections.shuffle(players);
-        for (; (i + 1) <= World.getPlayers().size(); i++) {
+        for (; (i + 1) < World.getPlayers().size(); i++) {
             if (i >= 99) {
                 sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 98) + " players");
                 break;

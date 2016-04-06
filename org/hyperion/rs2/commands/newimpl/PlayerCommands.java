@@ -908,7 +908,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new NewCommand("players", rank, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.sendServerMessage(String.format("There are currently %,d players online.", (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 1));
+                        player.sendServerMessage(String.format("There are currently %,d players online.", (int)(World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 1));
                         player.getActionSender().openPlayersInterface();
                         return true;
                     }

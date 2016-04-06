@@ -109,13 +109,14 @@ public class YellCommand extends NewCommand {
                     }
             );
         }
+        final String finalMessage = message;
         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
             if (!Lock.isEnabled(target, Lock.YELL)) {
                 String value;
                 if (!Lock.isEnabled(target, Lock.YELL_TITLES)) {
-                    value = suffix + input;
+                    value = suffix + finalMessage;
                 } else {
-                    value = suffixWithoutTitles + input;
+                    value = suffixWithoutTitles + finalMessage;
                 }
                 target.sendMessage(value);
             }

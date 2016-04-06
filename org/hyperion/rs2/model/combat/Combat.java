@@ -907,6 +907,8 @@ public class Combat {
     }
 
     public static boolean canAttack(CombatEntity combatEntity, CombatEntity opponent) {
+        if(combatEntity == null || opponent == null)
+            return false;
         if (combatEntity.getAbsZ() != opponent.getAbsZ())
             return false;
 

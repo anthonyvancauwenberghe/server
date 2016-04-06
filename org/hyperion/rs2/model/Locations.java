@@ -17,6 +17,7 @@ public class Locations {
 
     /**
      * Gets called on login to do the required actions, and assign a player his original location.
+     *
      * @param player The player
      */
     public static void login(Player player) {
@@ -28,6 +29,7 @@ public class Locations {
     /**
      * Gets called on logout to clean up after a player, to make sure he is not in instanced
      * places for example.
+     *
      * @param player The player
      */
     public static void logout(Player player) {
@@ -37,10 +39,10 @@ public class Locations {
     /**
      * To add a new location;
      * Take the BOTTOM LEFT and the TOP RIGHT corner
-     *
+     * <p>
      * ADD Coordinates bottom left corner
      * ADD Coordinates top right corner
-     *
+     * <p>
      * THIS CAN INCLUDE MORE SQUARES THAN JUST ONE. SIMPLY ADD ANOTHER ONE
      * AFTER THE FIRST 2 NUMBERS. SQUARES CAN OVERLAP
      * AND IT WILL TAKE THE FIRST INITIALIZED AS PRIORITY.
@@ -55,7 +57,7 @@ public class Locations {
         FUN_PK_AREA(new int[]{2586, 2602, 2603, 2606, 2581, 2585}, new int[]{3151, 3172, 3151, 3172, 3151, 3172}, true, true, true, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.attackOption = true;
                     if (player.getNpcState()) {
@@ -97,7 +99,7 @@ public class Locations {
         PURE_PK_AREA(new int[]{2262, 2287}, new int[]{4680, 4711}, new int[]{444}, false, false, true, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.setCanSpawnSet(false);
                     player.attackOption = true;
@@ -123,12 +125,12 @@ public class Locations {
             public boolean canAttack(Player player, Player target) {
                 int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
                 int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if(combatDifference < 0)
+                if (combatDifference < 0)
                     combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
 
                 if (combatDifference <= difference && difference > 0)
                     return true;
-                if(difference <= 0) {
+                if (difference <= 0) {
                     player.sendMessage("Your opponent is not in the wilderness.");
                 } else {
                     player.sendMessage("You need to go deeper into the wilderness to attack this player.");
@@ -138,19 +140,8 @@ public class Locations {
 
             @Override
             public void process(Player player) {
-                int wildLevel = -1;
-                int absX = player.getPosition().getX();
-                int absY = player.getPosition().getY();
-                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
-                    wildLevel = (((absY - 10340) / 8) + 3);
-                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-                    wildLevel = (((absY - 3520) / 8) + 3);
-                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
-                    wildLevel = 57;
-                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
-                    wildLevel = 53;
-
-                if(player.wildernessLevel != wildLevel) {
+                int wildLevel = getWildernessLevel(player);
+                if (player.wildernessLevel != wildLevel) {
                     player.wildernessLevel = wildLevel;
                     if (wildLevel != -1)
                         player.getActionSender().sendWildLevel(player.wildernessLevel);
@@ -160,7 +151,7 @@ public class Locations {
         WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008, 2992, 3006}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930, 10340, 10364}, true, true, true, true, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.setCanSpawnSet(false);
                     player.attackOption = true;
@@ -180,12 +171,12 @@ public class Locations {
             public boolean canAttack(Player player, Player target) {
                 int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
                 int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if(combatDifference < 0)
+                if (combatDifference < 0)
                     combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
 
                 if (combatDifference <= difference && difference > 0)
                     return true;
-                if(difference <= 0) {
+                if (difference <= 0) {
                     player.sendMessage("Your opponent is not in the wilderness.");
                 } else {
                     player.sendMessage("You need to go deeper into the wilderness to attack this player.");
@@ -195,11 +186,11 @@ public class Locations {
 
             @Override
             public boolean canTeleport(Player player) {
-                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                     player.sendMessage("You cannot teleport above level 20 wilderness.");
                     return false;
                 }
-                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
                     player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
                     player.removeEP();
                 }
@@ -208,19 +199,8 @@ public class Locations {
 
             @Override
             public void process(Player player) {
-                int wildLevel = -1;
-                int absX = player.getPosition().getX();
-                int absY = player.getPosition().getY();
-                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
-                    wildLevel = (((absY - 10340) / 8) + 3);
-                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-                    wildLevel = (((absY - 3520) / 8) + 3);
-                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
-                    wildLevel = 57;
-                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
-                    wildLevel = 53;
-
-                if(player.wildernessLevel != wildLevel) {
+                int wildLevel = getWildernessLevel(player);
+                if (player.wildernessLevel != wildLevel) {
                     player.wildernessLevel = wildLevel;
                     if (wildLevel != -1)
                         player.getActionSender().sendWildLevel(player.wildernessLevel);
@@ -230,7 +210,7 @@ public class Locations {
         KBD_WILDERNESS_ENTRANCE(new int[]{3063, 3070}, new int[]{10253, 10261}, new int[]{0}, false, true, true, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.setCanSpawnSet(false);
                     player.attackOption = true;
@@ -246,12 +226,12 @@ public class Locations {
             public boolean canAttack(Player player, Player target) {
                 int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
                 int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if(combatDifference < 0)
+                if (combatDifference < 0)
                     combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
 
                 if (combatDifference <= difference && difference > 0)
                     return true;
-                if(difference <= 0) {
+                if (difference <= 0) {
                     player.sendMessage("Your opponent is not in the wilderness.");
                 } else {
                     player.sendMessage("You need to go deeper into the wilderness to attack this player.");
@@ -261,11 +241,11 @@ public class Locations {
 
             @Override
             public boolean canTeleport(Player player) {
-                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                     player.sendMessage("You cannot teleport above level 20 wilderness.");
                     return false;
                 }
-                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
                     player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
                     player.removeEP();
                 }
@@ -274,19 +254,8 @@ public class Locations {
 
             @Override
             public void process(Player player) {
-                int wildLevel = -1;
-                int absX = player.getPosition().getX();
-                int absY = player.getPosition().getY();
-                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
-                    wildLevel = (((absY - 10340) / 8) + 3);
-                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-                    wildLevel = (((absY - 3520) / 8) + 3);
-                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
-                    wildLevel = 57;
-                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
-                    wildLevel = 53;
-
-                if(player.wildernessLevel != wildLevel) {
+                int wildLevel = getWildernessLevel(player);
+                if (player.wildernessLevel != wildLevel) {
                     player.wildernessLevel = wildLevel;
                     if (wildLevel != -1)
                         player.getActionSender().sendWildLevel(player.wildernessLevel);
@@ -296,7 +265,7 @@ public class Locations {
         WILDERNESS_DUNGEON(new int[]{3010, 3058}, new int[]{10306, 10349}, false, true, true, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.setCanSpawnSet(false);
                     player.attackOption = true;
@@ -322,12 +291,12 @@ public class Locations {
             public boolean canAttack(Player player, Player target) {
                 int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
                 int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if(combatDifference < 0)
+                if (combatDifference < 0)
                     combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
 
                 if (combatDifference <= difference && difference > 0)
                     return true;
-                if(difference <= 0) {
+                if (difference <= 0) {
                     player.sendMessage("Your opponent is not in the wilderness.");
                 } else {
                     player.sendMessage("You need to go deeper into the wilderness to attack this player.");
@@ -337,11 +306,11 @@ public class Locations {
 
             @Override
             public boolean canTeleport(Player player) {
-                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                     player.sendMessage("You cannot teleport above level 20 wilderness.");
                     return false;
                 }
-                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
                     player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
                     player.removeEP();
                 }
@@ -350,19 +319,8 @@ public class Locations {
 
             @Override
             public void process(Player player) {
-                int wildLevel = -1;
-                int absX = player.getPosition().getX();
-                int absY = player.getPosition().getY();
-                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
-                    wildLevel = (((absY - 10340) / 8) + 3);
-                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-                    wildLevel = (((absY - 3520) / 8) + 3);
-                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
-                    wildLevel = 57;
-                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
-                    wildLevel = 53;
-
-                if(player.wildernessLevel != wildLevel) {
+                int wildLevel = getWildernessLevel(player);
+                if (player.wildernessLevel != wildLevel) {
                     player.wildernessLevel = wildLevel;
                     if (wildLevel != -1)
                         player.getActionSender().sendWildLevel(player.wildernessLevel);
@@ -372,7 +330,7 @@ public class Locations {
         WILDERNESS(new int[]{2941, 3392, 2986, 3012, 3653, 3706, 3650, 3653}, new int[]{3520, 3968, 10338, 10366, 3441, 3538, 3457, 3472}, false, true, true, true, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.setCanSpawnSet(false);
                     player.attackOption = true;
@@ -398,12 +356,12 @@ public class Locations {
             public boolean canAttack(Player player, Player target) {
                 int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
                 int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if(combatDifference < 0)
+                if (combatDifference < 0)
                     combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
 
                 if (combatDifference <= difference && difference > 0)
                     return true;
-                if(difference <= 0) {
+                if (difference <= 0) {
                     player.sendMessage("Your opponent is not in the wilderness.");
                 } else {
                     player.sendMessage("You need to go deeper into the wilderness to attack this player.");
@@ -413,11 +371,11 @@ public class Locations {
 
             @Override
             public boolean canTeleport(Player player) {
-                if(player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                     player.sendMessage("You cannot teleport above level 20 wilderness.");
                     return false;
                 }
-                if(player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
                     player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
                     player.removeEP();
                 }
@@ -426,19 +384,8 @@ public class Locations {
 
             @Override
             public void process(Player player) {
-                int wildLevel = -1;
-                int absX = player.getPosition().getX();
-                int absY = player.getPosition().getY();
-                if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
-                    wildLevel = (((absY - 10340) / 8) + 3);
-                else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-                    wildLevel = (((absY - 3520) / 8) + 3);
-                else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
-                    wildLevel = 57;
-                else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
-                    wildLevel = 53;
-
-                if(player.wildernessLevel != wildLevel) {
+                int wildLevel = getWildernessLevel(player);
+                if (player.wildernessLevel != wildLevel) {
                     player.wildernessLevel = wildLevel;
                     if (wildLevel != -1)
                         player.getActionSender().sendWildLevel(player.wildernessLevel);
@@ -456,7 +403,7 @@ public class Locations {
             @Override
             public void leave(Player player) {
                 player.fightCavesWave = 0;
-                player.getActionSender().showInterfaceWalkable(- 1);
+                player.getActionSender().showInterfaceWalkable(-1);
             }
 
             @Override
@@ -473,10 +420,10 @@ public class Locations {
 
             @Override
             public void enter(Player player) {
-                if(!FightPits.inGame(player)) {
+                if (!FightPits.inGame(player)) {
                     player.setTeleportTarget(Position.create(2399, 5178, 0), false);
                 }
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.attackOption = true;
                 }
@@ -491,7 +438,7 @@ public class Locations {
             @Override
             public void leave(Player player) {
                 FightPits.fightPitsCheck(player);
-                if(player.attackOption) {
+                if (player.attackOption) {
                     player.getActionSender().sendPlayerOption("null", 2, 1);
                     player.attackOption = false;
                 }
@@ -506,11 +453,11 @@ public class Locations {
         DUEL_ARENA(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3248, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if(player.duelAttackable <= 0) {
+                if (player.duelAttackable <= 0) {
                     player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
                     return;
                 }
-                if(!player.attackOption) {
+                if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.attackOption = true;
                 }
@@ -518,7 +465,7 @@ public class Locations {
 
             @Override
             public void leave(Player player) {
-                if(player.attackOption) {
+                if (player.attackOption) {
                     player.getActionSender().sendPlayerOption("null", 2, 0);
                     player.attackOption = false;
                 }
@@ -551,10 +498,9 @@ public class Locations {
             }
         },
         DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
-
             @Override
             public void enter(Player player) {
-                if(!player.duelOption) {
+                if (!player.duelOption) {
                     player.getActionSender().sendPlayerOption("Challenge", 5, 1);
                     if (player.getNpcState()) {
                         player.setPNpc(-1);
@@ -565,7 +511,7 @@ public class Locations {
 
             @Override
             public void leave(Player player) {
-                if(player.duelOption) {
+                if (player.duelOption) {
                     if ((Rank.hasAbility(player, Rank.MODERATOR)))
                         player.getActionSender().sendPlayerOption("Moderate", 5, 0);
                     else
@@ -580,7 +526,7 @@ public class Locations {
         TORAGS_BARROWS(new int[]{3534, 3544}, new int[]{9700, 9707}, false, false, false, false, false, false, Rank.PLAYER),
         VERACS_BARROWS(new int[]{3550, 3559}, new int[]{9711, 9718}, false, false, false, false, false, false, Rank.PLAYER),
         AHRIMS_BARROWS(new int[]{3551, 3560}, new int[]{9695, 9703}, false, false, false, false, false, false, Rank.PLAYER),
-        BARROWS(new int[] {3520, 3598, 3543, 3584, 3543, 3560}, new int[] {9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
+        BARROWS(new int[]{3520, 3598, 3543, 3584, 3543, 3560}, new int[]{9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
         JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public boolean canTeleport(Player player) {
@@ -692,18 +638,21 @@ public class Locations {
         /**
          * This determines what happens on login.
          * This can be left empty, and only needs to be overwritten if it does something
+         *
          * @param player The player
          */
-        public void login(Player player) {}
+        public void login(Player player) {
+        }
 
         /**
          * This is the default call when a player enters an area. This code
          * checks if they have the rank, and then pass the player on
          * to the area-specific code.
+         *
          * @param player The player
          */
         public final void enterArea(Player player) {
-            if(!Rank.hasAbility(player, getMinimumRank())) {
+            if (!Rank.hasAbility(player, getMinimumRank())) {
                 player.setTeleportTarget(Edgeville.POSITION);
                 return;
             }
@@ -715,30 +664,38 @@ public class Locations {
         /**
          * This determines what happens when the player enters an area.
          * This can be left empty, and only needs to be overwritten if it does something
+         *
          * @param player The player
          */
-        public void enter(Player player) {}
+        public void enter(Player player) {
+        }
 
         /**
          * This determines what happens when the player leaves an area.
          * This can be left empty, and only needs to be overwritten if it does something
+         *
          * @param player The player
          */
-        public void leave(Player player) {}
+        public void leave(Player player) {
+        }
 
         /**
          * This determines what happens when the player logs out in an area.
          * This can be left empty, and only needs to be overwritten if it does something
+         *
          * @param player The player
          */
-        public void logout(Player player) {}
+        public void logout(Player player) {
+        }
 
         /**
          * Gets called every time the player moves. This can be used to for
          * example show an interface.
+         *
          * @param player The player
          */
-        public void process(Player player) {}
+        public void process(Player player) {
+        }
 
         /**
          * Tells whether or not the player can teleport.
@@ -755,6 +712,7 @@ public class Locations {
         /**
          * Gets called when the player dies. This can be overwritten to make the
          * player do special actions.
+         *
          * @param player The player
          * @return {@link true} when it can ignore the other death events. This will
          * cancel out item loss, and all other normal death sequencing, including teleporting away.
@@ -766,8 +724,9 @@ public class Locations {
 
         /**
          * Gets called when an npc is killed in this area.
+         *
          * @param killer The player
-         * @param npc The npc that got killed
+         * @param npc    The npc that got killed
          * @return {@link true} when it can stop executing the other npc death code. Usefull for example in bork.
          */
         public boolean handleKilledNPC(Player killer, NPC npc) {
@@ -789,35 +748,35 @@ public class Locations {
 
         //TODO MAKE THIS MORE EFFICIENT
         public static boolean inLocation(Entity gc, Location location) {
-            if(location == Location.DEFAULT)
+            if (location == Location.DEFAULT)
                 return getLocation(gc) == Location.DEFAULT;
             return inLocation(gc.getPosition().getX(), gc.getPosition().getY(), gc.getPosition().getZ(), location);
         }
 
         public static Location getLocation(Entity gc) {
-            for(Location location : Location.values()) {
-                if(location != Location.DEFAULT)
-                    if(inLocation(gc, location))
+            for (Location location : Location.values()) {
+                if (location != Location.DEFAULT)
+                    if (inLocation(gc, location))
                         return location;
             }
             return Location.DEFAULT;
         }
 
         public static boolean inLocation(int absX, int absY, int absZ, Location location) {
-            if(location.getZ().length != 0) {
+            if (location.getZ().length != 0) {
                 boolean onRightZ = false;
-                for(int z : location.getZ())
-                    if(absZ == z) {
+                for (int z : location.getZ())
+                    if (absZ == z) {
                         onRightZ = true;
                         break;
                     }
-                if(!onRightZ)
+                if (!onRightZ)
                     return false;
             }
             int checks = location.getX().length - 1;
-            for(int i = 0; i <= checks; i += 2) {
-                if(absX >= location.getX()[i] && absX <= location.getX()[i + 1]) {
-                    if(absY >= location.getY()[i] && absY <= location.getY()[i + 1]) {
+            for (int i = 0; i <= checks; i += 2) {
+                if (absX >= location.getX()[i] && absX <= location.getX()[i + 1]) {
+                    if (absY >= location.getY()[i] && absY <= location.getY()[i + 1]) {
                         return true;
                     }
                 }
@@ -828,23 +787,37 @@ public class Locations {
 
     public static void process(Entity gc) {
         Location newLocation = Location.getLocation(gc);
-        if(gc.getLocation() == newLocation) {
-            if(gc instanceof Player) {
+        if (gc.getLocation() == newLocation) {
+            if (gc instanceof Player) {
                 Player player = (Player) gc;
                 gc.getLocation().process(player);
             }
         } else {
             Location prev = gc.getLocation();
             gc.setLocation(newLocation);
-            if(gc instanceof Player) {
-                Player player = (Player)gc;
-                if(!newLocation.isMulti())
+            if (gc instanceof Player) {
+                Player player = (Player) gc;
+                if (!newLocation.isMulti())
                     player.getActionSender().sendMultiZone(0);
                 else
                     player.getActionSender().sendMultiZone(1);
-                prev.leave(((Player)gc));
-                gc.getLocation().enterArea(((Player)gc));
+                prev.leave(((Player) gc));
+                gc.getLocation().enterArea(((Player) gc));
             }
         }
+    }
+
+    private static int getWildernessLevel(Player player) {
+        int absX = player.getPosition().getX();
+        int absY = player.getPosition().getY();
+        if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
+            return (((absY - 10340) / 8) + 3);
+        else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
+            return (((absY - 3520) / 8) + 3);
+        else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
+            return 57;
+        else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
+            return 53;
+        return -1;
     }
 }

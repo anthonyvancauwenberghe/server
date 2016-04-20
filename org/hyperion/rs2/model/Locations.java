@@ -6,9 +6,12 @@ import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.util.Misc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Gilles on 3/03/2016.
@@ -117,37 +120,18 @@ public class Locations {
                 player.cE.getDamageDealt().clear();
                 player.getActionSender().sendPlayerOption("null", 2, 1);
                 player.attackOption = false;
-                player.getActionSender().sendWildLevel(-1);
-                player.wildernessLevel = -1;
+                player.getActionSender().sendWildLevel(getWildernessLevel(player));
+                player.wildernessLevel = getWildernessLevel(player);
             }
 
             @Override
             public boolean canAttack(Player player, Player target) {
-                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
-                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if (combatDifference < 0)
-                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
-
-                if (combatDifference <= difference && difference > 0)
-                    return true;
-                if (difference <= 0) {
-                    player.sendMessage("Your opponent is not in the wilderness.");
-                } else {
-                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
-                }
-                return false;
+                return validWildernessDifference(player, target);
             }
 
             @Override
             public void process(Player player) {
-                int wildLevel = getWildernessLevel(player);
-                if (player.wildernessLevel != wildLevel) {
-                    player.wildernessLevel = wildLevel;
-                    if (wildLevel != -1)
-                        player.getActionSender().sendWildLevel(player.wildernessLevel);
-                    else
-                        player.getActionSender().sendWildLevel(-1);
-                }
+                processWilderness(player);
             }
         },
         WILDERNESS_MULTI(new int[]{3004, 3063, 3134, 3325, 3196, 3325, 3149, 3325, 3149, 3215, 3215, 3400, 3014, 3215, 2989, 3008, 2992, 3006}, new int[]{3601, 3716, 3523, 3648, 3646, 3781, 3781, 3845, 3845, 3903, 3845, 4000, 3856, 3903, 3914, 3930, 10340, 10364}, true, true, true, true, false, false, Rank.PLAYER) {
@@ -167,46 +151,27 @@ public class Locations {
 
             @Override
             public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(getWildernessLevel(player));
+                player.wildernessLevel = getWildernessLevel(player);
             }
 
             @Override
             public boolean canAttack(Player player, Player target) {
-                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
-                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if (combatDifference < 0)
-                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
-
-                if (combatDifference <= difference && difference > 0)
-                    return true;
-                if (difference <= 0) {
-                    player.sendMessage("Your opponent is not in the wilderness.");
-                } else {
-                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
-                }
-                return false;
+                return validWildernessDifference(player, target);
             }
 
             @Override
             public boolean canTeleport(Player player) {
-                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-                    player.sendMessage("You cannot teleport above level 20 wilderness.");
-                    return false;
-                }
-                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
-                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
-                    player.removeEP();
-                }
-                return true;
+                return canWildernessTeleport(player);
             }
 
             @Override
             public void process(Player player) {
-                int wildLevel = getWildernessLevel(player);
-                if (player.wildernessLevel != wildLevel) {
-                    player.wildernessLevel = wildLevel;
-                    if (wildLevel != -1)
-                        player.getActionSender().sendWildLevel(player.wildernessLevel);
-                }
+                processWilderness(player);
             }
         },
         KBD_WILDERNESS_ENTRANCE(new int[]{3063, 3070}, new int[]{10253, 10261}, new int[]{0}, false, true, true, false, false, false, Rank.PLAYER) {
@@ -225,43 +190,28 @@ public class Locations {
             }
 
             @Override
-            public boolean canAttack(Player player, Player target) {
-                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
-                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if (combatDifference < 0)
-                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
+            public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(getWildernessLevel(player));
+                player.wildernessLevel = getWildernessLevel(player);
+            }
 
-                if (combatDifference <= difference && difference > 0)
-                    return true;
-                if (difference <= 0) {
-                    player.sendMessage("Your opponent is not in the wilderness.");
-                } else {
-                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
-                }
-                return false;
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                return validWildernessDifference(player, target);
             }
 
             @Override
             public boolean canTeleport(Player player) {
-                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-                    player.sendMessage("You cannot teleport above level 20 wilderness.");
-                    return false;
-                }
-                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
-                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
-                    player.removeEP();
-                }
-                return true;
+                return canWildernessTeleport(player);
             }
 
             @Override
             public void process(Player player) {
-                int wildLevel = getWildernessLevel(player);
-                if (player.wildernessLevel != wildLevel) {
-                    player.wildernessLevel = wildLevel;
-                    if (wildLevel != -1)
-                        player.getActionSender().sendWildLevel(player.wildernessLevel);
-                }
+                processWilderness(player);
             }
         },
         WILDERNESS_DUNGEON(new int[]{3010, 3058}, new int[]{10306, 10349}, false, true, true, false, false, false, Rank.PLAYER) {
@@ -285,48 +235,23 @@ public class Locations {
                 player.cE.getDamageDealt().clear();
                 player.getActionSender().sendPlayerOption("null", 2, 1);
                 player.attackOption = false;
-                player.getActionSender().sendWildLevel(-1);
-                player.wildernessLevel = -1;
+                player.getActionSender().sendWildLevel(getWildernessLevel(player));
+                player.wildernessLevel = getWildernessLevel(player);
             }
 
             @Override
             public boolean canAttack(Player player, Player target) {
-                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
-                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if (combatDifference < 0)
-                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
-
-                if (combatDifference <= difference && difference > 0)
-                    return true;
-                if (difference <= 0) {
-                    player.sendMessage("Your opponent is not in the wilderness.");
-                } else {
-                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
-                }
-                return false;
+                return validWildernessDifference(player, target);
             }
 
             @Override
             public boolean canTeleport(Player player) {
-                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-                    player.sendMessage("You cannot teleport above level 20 wilderness.");
-                    return false;
-                }
-                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
-                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
-                    player.removeEP();
-                }
-                return true;
+                return canWildernessTeleport(player);
             }
 
             @Override
             public void process(Player player) {
-                int wildLevel = getWildernessLevel(player);
-                if (player.wildernessLevel != wildLevel) {
-                    player.wildernessLevel = wildLevel;
-                    if (wildLevel != -1)
-                        player.getActionSender().sendWildLevel(player.wildernessLevel);
-                }
+                processWilderness(player);
             }
         },
         WILDERNESS(new int[]{2941, 3392, 2986, 3012, 3653, 3706, 3650, 3653}, new int[]{3520, 3968, 10338, 10366, 3441, 3538, 3457, 3472}, false, true, true, true, false, false, Rank.PLAYER) {
@@ -350,48 +275,23 @@ public class Locations {
                 player.cE.getDamageDealt().clear();
                 player.getActionSender().sendPlayerOption("null", 2, 1);
                 player.attackOption = false;
-                player.getActionSender().sendWildLevel(-1);
-                player.wildernessLevel = -1;
+                player.getActionSender().sendWildLevel(getWildernessLevel(player));
+                player.wildernessLevel = getWildernessLevel(player);
             }
 
             @Override
             public boolean canAttack(Player player, Player target) {
-                int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
-                int combatDifference = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
-                if (combatDifference < 0)
-                    combatDifference = target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel();
-
-                if (combatDifference <= difference && difference > 0)
-                    return true;
-                if (difference <= 0) {
-                    player.sendMessage("Your opponent is not in the wilderness.");
-                } else {
-                    player.sendMessage("You need to go deeper into the wilderness to attack this player.");
-                }
-                return false;
+                return validWildernessDifference(player, target);
             }
 
             @Override
             public boolean canTeleport(Player player) {
-                if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-                    player.sendMessage("You cannot teleport above level 20 wilderness.");
-                    return false;
-                }
-                if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
-                    player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
-                    player.removeEP();
-                }
-                return true;
+                return canWildernessTeleport(player);
             }
 
             @Override
             public void process(Player player) {
-                int wildLevel = getWildernessLevel(player);
-                if (player.wildernessLevel != wildLevel) {
-                    player.wildernessLevel = wildLevel;
-                    if (wildLevel != -1)
-                        player.getActionSender().sendWildLevel(player.wildernessLevel);
-                }
+                processWilderness(player);
             }
         },
         FIGHT_CAVES(new int[]{2360, 2445}, new int[]{5045, 5125}, true, true, false, false, false, false, Rank.PLAYER) {
@@ -532,11 +432,19 @@ public class Locations {
         JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public boolean canTeleport(Player player) {
-                player.sendMessage("You cannot teleport out of jail.");
-                return false;
+                if (!Rank.hasAbility(player, Rank.HELPER)) {
+                    player.sendMessage("You cannot teleport out of jail.");
+                    return false;
+                }
+                return true;
             }
         },
-        JAIL_FULL_AREA(new int[]{2065, 2111}, new int[]{4416, 4455}, false, false, false, false, true, true, Rank.HELPER),
+        JAIL_FULL_AREA(new int[]{2065, 2111}, new int[]{4416, 4455}, false, false, false, false, true, true, Rank.HELPER) {
+            @Override
+            public void enter(Player player) {
+                player.setTeleportTarget(Jail.POSITION);
+            }
+        },
         DEFAULT(null, null, false, true, true, true, true, true);
 
         /**
@@ -749,16 +657,14 @@ public class Locations {
          */
 
         //TODO MAKE THIS MORE EFFICIENT
-        public static boolean inLocation(Entity gc, Location location) {
-            if (location == Location.DEFAULT)
-                return getLocation(gc) == Location.DEFAULT;
-            return inLocation(gc.getPosition().getX(), gc.getPosition().getY(), gc.getPosition().getZ(), location);
+        public static boolean inLocation(Entity entity, Location location) {
+            return location != Location.DEFAULT ? inLocation(entity.getPosition().getX(), entity.getPosition().getY(), entity.getPosition().getZ(), location) : getLocation(entity) == Location.DEFAULT;
         }
 
-        public static Location getLocation(Entity gc) {
+        public static Location getLocation(Entity entity) {
             for (Location location : Location.values()) {
                 if (location != Location.DEFAULT)
-                    if (inLocation(gc, location))
+                    if (inLocation(entity, location))
                         return location;
             }
             return Location.DEFAULT;
@@ -766,13 +672,13 @@ public class Locations {
 
         public static boolean inLocation(int absX, int absY, int absZ, Location location) {
             if (location.getZ().length != 0) {
-                boolean onRightZ = false;
-                for (int z : location.getZ())
-                    if (absZ == z) {
-                        onRightZ = true;
+                boolean height = false;
+                for (int array : location.getZ())
+                    if (absZ == array) {
+                        height = true;
                         break;
                     }
-                if (!onRightZ)
+                if (!height)
                     return false;
             }
             int checks = location.getX().length - 1;
@@ -787,39 +693,65 @@ public class Locations {
         }
     }
 
-    public static void process(Entity gc) {
-        Location newLocation = Location.getLocation(gc);
-        if (gc.getLocation() == newLocation) {
-            if (gc instanceof Player) {
-                Player player = (Player) gc;
-                gc.getLocation().process(player);
+    public static void process(Entity entity) {
+        final Location current = Location.getLocation(entity);
+        if (entity.getLocation().equals(current)) {
+            if (entity instanceof Player) {
+                entity.getLocation().process((Player) entity);
             }
         } else {
-            Location prev = gc.getLocation();
-            gc.setLocation(newLocation);
-            if (gc instanceof Player) {
-                Player player = (Player) gc;
-                if (!newLocation.isMulti())
-                    player.getActionSender().sendMultiZone(0);
-                else
-                    player.getActionSender().sendMultiZone(1);
-                prev.leave(((Player) gc));
-                gc.getLocation().enterArea(((Player) gc));
+            final Location previous = entity.getLocation();
+            entity.setLocation(current);
+            if (entity instanceof Player) {
+                final Player player = (Player) entity;
+                player.getActionSender().sendMultiZone(current.isMulti() ? 1 : 0);
+                previous.leave(player);
+                entity.getLocation().enterArea(player);
             }
         }
     }
 
-    private static int getWildernessLevel(Player player) {
-        int absX = player.getPosition().getX();
-        int absY = player.getPosition().getY();
-        if ((absY >= 10340 && absY <= 10364 && absX <= 3008 && absX >= 2992))
-            return (((absY - 10340) / 8) + 3);
-        else if ((absY >= 3520 && absY <= 3967 && absX <= 3392 && absX >= 2942))
-            return (((absY - 3520) / 8) + 3);
-        else if (absY <= 10349 && absX >= 3010 && absX <= 3058 && absY >= 10306)
-            return 57;
-        else if (absX >= 3064 && absX <= 3070 && absY >= 10252 && absY <= 10260)
-            return 53;
-        return -1;
+    private static int getWildernessLevel(final Player player) {
+        final int x = player.getPosition().getX();
+        final int y = player.getPosition().getY();
+        return (y >= 10340 && y <= 10364 && x <= 3008 && x >= 2992) ? ((y - 10340) / 8) + 3
+                : (y >= 3520 && y <= 3967 && x <= 3392 && x >= 2942) ? (((y - 3520) / 8) + 3)
+                : (y <= 10349 && x >= 3010 && x <= 3058 && y >= 10306) ? 57
+                : (x >= 3064 && x <= 3070 && y >= 10252 && y <= 10260) ? 53
+                : -1;
     }
+
+    private static boolean validWildernessDifference(final Player player, final Player target) {
+        final int combat = player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel() < 0
+                ? target.getSkills().getCombatLevel() - player.getSkills().getCombatLevel()
+                : player.getSkills().getCombatLevel() - target.getSkills().getCombatLevel();
+        final int difference = Math.min(player.wildernessLevel, target.wildernessLevel);
+        if (combat <= difference && difference > 0) {
+            return true;
+        }
+        player.sendMessage(difference <= 0 ? "Your opponent is not in the wilderness." : "You need to go deeper into the wilderness to attack this player.");
+        return false;
+    }
+
+    private static boolean canWildernessTeleport(final Player player) {
+        if (player.wildernessLevel > 20 && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+            player.sendMessage("You cannot teleport above level 20 wilderness.");
+            return false;
+        } else if (player.cE.getOpponent() != null && player.wildernessLevel > 0) {
+            player.removeEP();
+            player.sendMessage("@blu@You have lost EP because you have teleported during combat.");
+        }
+        return true;
+    }
+
+    private static void processWilderness(final Player player) {
+        final int level = getWildernessLevel(player);
+        if (player.wildernessLevel != level) {
+            player.wildernessLevel = level;
+            if (level != -1) {
+                player.getActionSender().sendWildLevel(player.wildernessLevel);
+            }
+        }
+    }
+
 }

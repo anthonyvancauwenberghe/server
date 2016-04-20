@@ -31,7 +31,7 @@ public class CommunityManagerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("createtrivia", Rank.COMMUNITY_MANAGER, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Trivia Question"), new CommandInput<String>(string -> string.trim() != null, "String", "Trivia Answer"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
+                new NewCommand("createtrivia", Rank.COMMUNITY_MANAGER, new CommandInput<String>(string -> string != null, "String", "Trivia Question"), new CommandInput<String>(string -> string != null, "String", "Trivia Answer"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String question = input[0].trim();

@@ -1,5 +1,6 @@
 package org.hyperion.rs2.commands;
 
+import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.newimpl.*;
 import org.hyperion.rs2.commands.util.CommandResult;
@@ -12,7 +13,6 @@ import java.util.stream.Collectors;
 
 /**
  * Created by Gilles on 10/02/2016.
- * Commands rewritten by DrHales
  */
 public final class NewCommandHandler {
 
@@ -35,10 +35,10 @@ public final class NewCommandHandler {
         return COMMANDS;
     }
 
-    private static final HashMap<Rank, List<NewCommand>> commands_list = new HashMap<>();
+    private static final HashMap<Rank, List<String>> COMMANDS_LIST = new HashMap<>();
 
-    public static HashMap<Rank, List<NewCommand>> getCommandsList() {
-        return commands_list;
+    public static HashMap<Rank, List<String>> getCommandsList() {
+        return COMMANDS_LIST;
     }
 
     /**
@@ -74,7 +74,7 @@ public final class NewCommandHandler {
                 new DeveloperCommands(),
                 new OwnerCommands()};
         Arrays.stream(COMMAND_TYPES).map(NewCommandExtension::init).forEach(NewCommandHandler::submit);
-        System.out.println(String.format("%,d commands submitted in %,dms", COMMANDS.size(), System.currentTimeMillis() - initial));
+        Server.getLogger().info(String.format("%,d commands submitted in %,dms", COMMANDS.size(), System.currentTimeMillis() - initial));
     }
 
     /**
@@ -104,13 +104,14 @@ public final class NewCommandHandler {
         if (!COMMANDS.containsKey(command.getKey())) {
             COMMANDS.put(command.getKey(), new ArrayList<>());
         } else {
-            System.out.println(String.format("[INFO]: Skipped Submitting Command Twice; [%s]: %s", command.getRank(), command.getKey()));
+            System.out.println(String.format("\n[Already Submitted]:%s,%s", command.getKey(), command.getRank()));
+            COMMANDS.get(command.getKey()).stream().forEach(value -> System.out.println(String.format("\t[Command]:%s\n", value.getKey(), value.getRank())));
         }
         COMMANDS.get(command.getKey()).add(command);
-        if (!commands_list.containsKey(command.getRank()))
-            commands_list.put(command.getRank(), new ArrayList<>());
-        if (!commands_list.get(command.getRank()).contains(command))
-            commands_list.get(command.getRank()).add(command);
+        if (!COMMANDS_LIST.containsKey(command.getRank()))
+            COMMANDS_LIST.put(command.getRank(), new ArrayList<>());
+        if (!COMMANDS_LIST.get(command.getRank()).contains(command))
+            COMMANDS_LIST.get(command.getRank()).add(command.getKey());
     }
 
     private static void commandUsed(String playerName, String commandUsed, long delay) {

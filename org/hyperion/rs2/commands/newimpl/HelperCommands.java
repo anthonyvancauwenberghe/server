@@ -31,13 +31,6 @@ public class HelperCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("authenticator", Rank.HELPER, Time.FIVE_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
-                        return true;
-                    }
-                },
                 new NewCommand("gestats", rank, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -151,7 +144,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("syell", rank, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Message")) {
+                new NewCommand("syell", rank, new CommandInput<String>(string -> string != null, "String", "Message")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PushMessage.pushStaffMessage(input[0].trim(), player);
@@ -189,7 +182,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("display", rank, new CommandInput<String>(string -> !string.trim().isEmpty() && !string.toLowerCase().contains("arre") || !string.toLowerCase().contains("jet") || !string.toLowerCase().contains("ferry"), "String", "Display Name")) {
+                new NewCommand("kdisplay", rank, new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") || !string.toLowerCase().contains("jet") || !string.toLowerCase().contains("ferry"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getName().toLowerCase().equals("knightmare")) {

@@ -27,11 +27,11 @@ public class GetFromCharFileCommand extends NewCommand {
     }
 
     public GetFromCharFileCommand(String key, long delay, IOData ioData) {
-        this(key, Rank.PLAYER, delay, ioData);
+        this(key, Rank.ADMINISTRATOR, delay, ioData);
     }
 
     public GetFromCharFileCommand(String key, IOData ioData) {
-        this(key, Rank.PLAYER, ioData);
+        this(key, Rank.ADMINISTRATOR, ioData);
     }
 
     public GetFromCharFileCommand(String key, Rank rank, IOData ioData) {

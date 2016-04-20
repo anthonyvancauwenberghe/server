@@ -26,8 +26,10 @@ import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
+import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
+import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.punishment.Combination;
@@ -60,29 +62,6 @@ public class PlayerCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("changepass", Rank.PLAYER, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+"), "password", "The new password to use.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        if (input[0].length() < 5) {
-                            player.sendMessage("The password has to be at least 5 characters long!");
-                            return true;
-                        }
-                        if (input[0].length() > 12) {
-                            player.sendMessage("The password cannot be longer than 12 characters!");
-                            return true;
-                        }
-                        if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
-                            player.sendMessage("Don't use the same password again!");
-                            return true;
-                        }
-                        TextUtils.writeToFile("./data/possiblehacks.txt", String.format("Player: %s Old password: %s New password: %s By IP: %s Date: %s", player.getName(), player.getPassword(), input[0], player.getShortIP(), new Date().toString()));
-                        player.setPassword(EncryptionStandard.encryptPassword(input[0].toLowerCase()));
-                        player.sendImportantMessage("Your password is now " + input[0].toLowerCase());
-                        player.getPermExtraData().put("passchange", System.currentTimeMillis());
-                        player.getExtraData().put("needpasschange", false);
-                        return true;
-                    }
-                },
                 new NewCommand("yaks", rank, Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -98,7 +77,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("changecompcolors", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null && !string.trim().isEmpty(), "Primary Color", "A Color Name"), new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "Secondary Color", "A Color Name")) {
+                new NewCommand("changecompcolors", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "Primary Color", "A Color Name"), new CommandInput<String>(string -> string != null, "Secondary Color", "A Color Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String primary_color = input[0].trim();
@@ -215,13 +194,6 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("ospk", rank, Time.TEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        SpecialAreaHolder.get("ospk").ifPresent(s -> s.enter(player));
-                        return true;
-                    }
-                },
                 new NewCommand("dicing", rank, Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -265,11 +237,13 @@ public class PlayerCommands implements NewCommandExtension {
                 new NewCommand("combine", rank, Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        PotionDecanting.decantPotions(player);
+                        if (!Position.inAttackableArea(player)) {
+                            PotionDecanting.decantPotions(player);
+                        }
                         return true;
                     }
                 },
-                new NewCommand("wiki", rank, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Wiki Shortcut")) {
+                new NewCommand("wiki", rank, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null, "String", "Wiki Shortcut")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String shortcut = input[0].trim();
@@ -295,7 +269,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("answertrivia", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Custom Trivia Answer")) {
+                new NewCommand("answertrivia", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Custom Trivia Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         CustomTriviaManager.processAnswer(player, input[0].trim());
@@ -417,21 +391,21 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("getmail", rank, Time.FIFTEEN_SECONDS) {
+                new NewCommand("mymail", rank, Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Mail]: %d", player.getMail());
                         return true;
                     }
                 },
-                new NewCommand("setmail", rank, Time.ONE_MINUTE, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "e-Mail")) {
+                new NewCommand("setmail", rank, Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "e-Mail")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getMail().setTempmail(input[0].trim());
                         return true;
                     }
                 },
-                new NewCommand("answer", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Trivia Answer")) {
+                new NewCommand("answer", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Trivia Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         TriviaBot.sayAnswer(player, input[0].trim());
@@ -479,9 +453,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new NewCommand("reqhelp", rank, Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        //player.write(Interface.createStatePacket(SHOW, ID));
-                        /*Disabled due to obfuscated client*/
-                        player.sendMessage("'ReqHelp' is currently disabled.");
+                        player.write(Interface.createStatePacket(Interface.SHOW, 3));
                         return true;
                     }
                 },
@@ -497,30 +469,25 @@ public class PlayerCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
                         final List<String> commands = new ArrayList<>();
-                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().forEach(command -> commands.add(command.getKey())));
+                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().forEach(command -> commands.add(command)));
+                        Collections.sort(commands, String.CASE_INSENSITIVE_ORDER);
+                        player.getActionSender().displayCommands(commands);
                         return true;
                     }
                 },
-                new NewCommand("findcommand", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "A Command Phrase to Search for")) {
+                new NewCommand("findcommand", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "A Command Phrase to Search for")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].toLowerCase().trim();
                         final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
-                        Collections.sort(list, (one, two) -> two.ordinal() - one.ordinal());
-                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().filter(command -> command.getKey().toLowerCase().contains(value)).forEach(command -> player.sendf("[%s]:%s", rank, command.getKey())));
+                        final List<String> commands = new ArrayList<>();
+                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().filter(command -> command.toLowerCase().contains(value)).forEach(command -> commands.add(command.replace(value, String.format("@red@%s@bla@", value)))));
+                        Collections.sort(commands, String.CASE_INSENSITIVE_ORDER);
+                        player.getActionSender().displayCommands(commands);
                         return true;
                     }
                 },
-                new NewCommand("printcmds", rank, Time.FIFTEEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
-                        Collections.sort(list, (one, two) -> two.ordinal() - one.ordinal());
-                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().forEach(command -> player.sendf("[%s]:%s", rank, command.getKey())));
-                        return true;
-                    }
-                },
-                new NewCommand("settag", rank, Time.THIRTY_SECONDS, new CommandInput<String>(string -> !string.trim().isEmpty() && !(string.length() > 14) && !(Yelling.isValidTitle(string).length() > 1), "String", "Yell Tag")) {
+                new NewCommand("settag", rank, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null && !(string.length() > 14) && !(Yelling.isValidTitle(string).length() > 1), "String", "Yell Tag")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPoints().getDonatorPointsBought() < 25000) {
@@ -533,7 +500,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("challenge", rank, Time.TEN_SECONDS, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Challenge Answer")) {
+                new NewCommand("challenge", rank, Time.TEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "Challenge Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();
@@ -684,32 +651,18 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("nameitem", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Item Name")) {
+                new NewCommand("nameitem", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Item Phrase")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].toLowerCase().trim();
-                        final int max = Rank.hasAbility(player, Rank.DEVELOPER) ? 20000 : ItemSpawning.MAX_ID;
-                        int count = 0;
-                        List<Item> list = new ArrayList<>();
-                        for (int array = max; array > 0; array++) {
-                            if (ItemDefinition.forId(array) != null
-                                    && ItemDefinition.forId(array).getName().toLowerCase().contains(value)) {
-                                list.add(new Item(array));
-                                count++;
-                                if (count == 30) {
-                                    break;
-                                }
-                            }
-                        }
+                        final List<ItemDefinition> list = new ArrayList<>();
+                        Arrays.asList(ItemDefinition.definitions).stream().filter(def -> def != null && def.getName().toLowerCase().contains(value)).forEach(list::add);
                         if (list.isEmpty()) {
-                            player.sendf("No items found with the name '%s'", value);
+                            player.sendf("No items found with the phrase '@red@%s@bla@'", value);
                             return true;
                         }
-                        Item items[] = new Item[list.size()];
-                        for (Item array : list) {
-                            items[--count] = array;
-                        }
-                        player.getActionSender().displayItems(items);
+                        Collections.sort(list, (one, two) -> one.getId() - two.getId());
+                        player.getActionSender().displayItems(list);
                         return true;
                     }
                 },
@@ -854,28 +807,30 @@ public class PlayerCommands implements NewCommandExtension {
                 new NewCommand("myopp", rank, Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.sendf("[Oponent]: %s", player.cE.getOpponent());
+                        player.sendf("[Opponent]: %s", player.cE.getOpponent());
                         return true;
                     }
                 },
                 new NewCommand("buytickets", rank, Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < 100000, "Integer", "Pk Tickets Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        int amount = Integer.parseInt(input[0].trim());
-                        if (player.getPoints().getPkPoints() > (amount * 10)) {
-                            player.getPoints().setPkPoints(player.getPoints().getPkPoints() - (amount * 10));
-                            final Item item = Item.create(5020, amount);
-                            if (!player.getInventory().add(item)) {
-                                player.getBank().add(item);
-                                player.sendf("%,d Pk Tickets have been added to your bank.");
-                                return true;
+                        if (!Position.inAttackableArea(player)) {
+                            int amount = Integer.parseInt(input[0].trim());
+                            if (player.getPoints().getPkPoints() > (amount * 10)) {
+                                player.getPoints().setPkPoints(player.getPoints().getPkPoints() - (amount * 10));
+                                final Item item = Item.create(5020, amount);
+                                if (player.getInventory().hasRoomFor(item)) {
+                                    player.getInventory().add(item);
+                                    player.sendf("%,d Pk Tickets have been added to your inventory.", item.getCount());
+                                    return true;
+                                } else {
+                                    player.getBank().add(item);
+                                    player.sendf("%,d Pk Tickets have been added to your bank.", item.getCount());
+                                    return true;
+                                }
                             } else {
-                                player.getInventory().add(item);
-                                player.sendf("%,d Pk Tickets have been added to your inventory.");
-                                return true;
+                                player.sendMessage("You don't have enough Pkp for this.");
                             }
-                        } else {
-                            player.sendMessage("You don't have enough Pkp for this.");
                         }
                         return true;
                     }
@@ -922,7 +877,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("switchoption", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Player Option")) {
+                new NewCommand("switchoption", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Player Option")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String option = input[0].toLowerCase().trim();
@@ -960,7 +915,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("reqhelp", rank, Time.ONE_MINUTE, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Help Reason")) {
+                new NewCommand("reqticket", rank, Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "Help Reason")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (System.currentTimeMillis() - player.lastTickReq() < 60000) {
@@ -1005,7 +960,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("verify", rank, 0, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "Verification Code")) {
+                new NewCommand("verify", rank, 0, new CommandInput<String>(string -> string != null, "String", "Verification Code")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();

@@ -40,7 +40,7 @@ public class WikiCommand extends NewCommand {
     }
 
     public WikiCommand() {
-        super("wikishortcut", Rank.MODERATOR, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "New Wiki Shortcut"), new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "New Wiki Link"));
+        super("wikishortcut", Rank.MODERATOR, new CommandInput<String>(string -> string != null, "String", "New Wiki Shortcut"), new CommandInput<String>(string -> string != null, "String", "New Wiki Link"));
     }
 
     public boolean execute(final Player player, final String[] input) {

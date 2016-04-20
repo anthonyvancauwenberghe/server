@@ -127,6 +127,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         final Player target = World.getPlayerByName(input[0].trim());
                         target.setKillCount(0);
                         target.setDeathCount(0);
+                        player.sendf("You have reset %s's KDR.", TextUtils.optimizeText(target.getName()));
                         return true;
                     }
                 }

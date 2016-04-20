@@ -58,7 +58,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("createevent", rank, new CommandInput<Integer>(integer -> integer > 0 && integer < 15000, "X", "An Amount between 0 & 15000"), new CommandInput<Integer>(integer -> integer > 0 && integer < 15000, "Y", "An Amount between 0 & 15000"), new CommandInput<Integer>(integer -> integer > -1 && integer < 100, "Z", "An Amount between -1 & 100"), new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "Event", "A new Event name")) {
+                new NewCommand("createevent", rank, new CommandInput<Integer>(integer -> integer > 0 && integer < 15000, "X", "An Amount between 0 & 15000"), new CommandInput<Integer>(integer -> integer > 0 && integer < 15000, "Y", "An Amount between 0 & 15000"), new CommandInput<Integer>(integer -> integer > -1 && integer < 100, "Z", "An Amount between -1 & 100"), new CommandInput<String>(string -> string != null, "Event", "A new Event name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (Events.eventName != null
@@ -150,7 +150,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("setkeyword", rank, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Item Keyword"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
+                new NewCommand("setkeyword", rank, new CommandInput<String>(string -> string != null, "String", "Item Keyword"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String keyword = input[0].trim();
@@ -461,7 +461,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("namenpc", rank, new CommandInput<String>(string -> !string.trim().isEmpty(), "String", "NPC Name")) {
+                new NewCommand("namenpc", rank, new CommandInput<String>(string -> string != null, "String", "NPC Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();

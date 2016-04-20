@@ -25,7 +25,7 @@ public class YellCommand extends NewCommand {
     public static int minYellRank = 0;
 
     public YellCommand() {
-        super("yell", Rank.PLAYER, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string.trim() != null && !string.trim().isEmpty(), "String", "Input Message"));
+        super("yell", Rank.PLAYER, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null, "String", "Input Message"));
     }
 
     private int getYellDelay(Player player) {

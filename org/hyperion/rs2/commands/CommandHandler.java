@@ -1140,7 +1140,7 @@ public class CommandHandler {
         CommandHandler.submit(new UnPunishCommand("unmacjail", Target.MAC, Type.JAIL, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidjail", Target.SPECIAL, Type.JAIL, Rank.DEVELOPER));
 
-        CommandHandler.submit(new UnPunishCommand("unyellmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.HELPER));
+        CommandHandler.submit(new UnPunishCommand("unyeot llmute", Target.ACCOUNT, Type.YELL_MUTE, Rank.HELPER));
         CommandHandler.submit(new UnPunishCommand("unipyellmute", Target.IP, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unmacyellmute", Target.MAC, Type.YELL_MUTE, Rank.MODERATOR));
         CommandHandler.submit(new UnPunishCommand("unsuidyellmute", Target.SPECIAL, Type.YELL_MUTE, Rank.DEVELOPER));

@@ -3,6 +3,7 @@ package org.hyperion.rs2.net;
 import org.hyperion.Configuration;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.Constants;
+import org.hyperion.rs2.action.Action;
 import org.hyperion.rs2.model.Animation.FacialAnimation;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.Palette.PaletteTile;
@@ -818,6 +819,39 @@ public class ActionSender {
         }
         showInterface(8134);
         return this;
+    }
+
+    public void displayCommands(final List<String> list) {
+        sendString(8144, String.format("@dre@Commands List @bla@[@gre@%,d@bla@]", list.size()));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            sendString(array, String.format("::%s", list.get(count)));
+            count++;
+            if (count == list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
+    }
+
+    public void displayItems(final List<ItemDefinition> list) {
+        sendString(8144, String.format("@dre@Items List @bla@[@gre@%,d@bla@]", list.size()));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            final ItemDefinition definition = list.get(count);
+            sendString(array, String.format("%d:%s%s", definition.getId(), TextUtils.titleCase(definition.getName()), definition.isNoted() ? " - [Noted]" : ""));
+            count++;
+            if (count == list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
     }
 
     public ActionSender openItemsKeptOnDeathInterface(Player player) {

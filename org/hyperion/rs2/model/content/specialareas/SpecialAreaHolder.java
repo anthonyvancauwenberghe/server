@@ -36,6 +36,7 @@ public class SpecialAreaHolder {
                     new NewCommand(area.getValue().command(area.getKey()).getKey(), Rank.PLAYER, Time.FIFTEEN_SECONDS) {
                         @Override
                         protected boolean execute(Player player, String[] input) {
+                            SpecialAreaHolder.get(area.getKey()).ifPresent(area -> area.enter(player));
                             return true;
                         }
                     }

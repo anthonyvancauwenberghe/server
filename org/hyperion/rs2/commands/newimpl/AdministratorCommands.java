@@ -657,7 +657,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.contains("@"), "String", "Display Name")) {
+                new AdministratorCommand("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim();

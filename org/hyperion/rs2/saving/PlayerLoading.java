@@ -70,7 +70,7 @@ public class PlayerLoading {
      * @return Whether the player exists and is loaded or not
      */
     private static boolean loadPlayer(Player player, Map<String, IOData> ioDataMap) {
-        Path path = Paths.get(IOData.getCharFilePath(), player.getName().toLowerCase() + ".json");
+        Path path = Paths.get(IOData.getCharFilePath(), String.format("%s.json", player.getName().toLowerCase()));
         File file = path.toFile();
 
         if (!file.exists()) {
@@ -108,7 +108,7 @@ public class PlayerLoading {
         if(playerName == null || property == null || playerName.trim().isEmpty() ||!playerExists(playerName))
             return Optional.empty();
 
-        File file = new File(IOData.getCharFilePath(), playerName.toLowerCase() + ".json");
+        File file = new File(IOData.getCharFilePath(), String.format("%s.json", playerName.toLowerCase()));
 
         try (FileReader fileReader = new FileReader(file)) {
             JsonParser fileParser = new JsonParser();

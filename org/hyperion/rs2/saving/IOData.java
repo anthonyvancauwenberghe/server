@@ -11,6 +11,7 @@ import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.sets.CustomSet;
 
 import java.util.Arrays;
 import java.util.List;
@@ -1144,6 +1145,17 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
             player.getEquipment().setItems(builder.fromJson(element, new TypeToken<Item[]>(){}.getType()));
+        }
+    },
+    SAVE_SETS {
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return builder.toJsonTree(player.getCustomSetHolder().getCustomSets(), new TypeToken<CustomSet[]>(){}.getType());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.getCustomSetHolder().setCustomSets(builder.fromJson(element.getAsJsonArray(), CustomSet[].class));
         }
     },
     BANK {

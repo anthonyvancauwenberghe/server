@@ -24,7 +24,15 @@ public class CustomSetHolder {
         System.out.println(holder.toString());
     }
 
-    private final CustomSet[] sets = new CustomSet[3];
+    private CustomSet[] sets = new CustomSet[3];
+
+    public CustomSet[] getCustomSets() {
+        return sets;
+    }
+
+    public void setCustomSets(final CustomSet[] value) {
+        sets = value;
+    }
 
     private final Player player;
 
